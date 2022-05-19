@@ -1,0 +1,321 @@
+{% extends 'base.html.twig' %}
+{% block morecss %}
+    <link href="{{ asset("movie.css") }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}myTvTime::{{ movie.title }}{% endblock %}
+{% block body %}
+    {#        {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+    <div class="container">
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        {% if movie.backdrop_path %}
+            <div class="movie-header">
+                <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" class="d-block w-100" alt="{{ movie.title }}">
+            </div>
+        {% endif %}
+        <div class="movie-info">
+            <div class="movie-detail">
+                <div class="title">{{ movie.title }}</div>
+                <div class="original_title">{{ 'Original Title'|trans }} : {{ movie.original_title }}</div>
+                <div class="genres">
+                    {% for genre in movie.genres %}
+                        <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
+                    {% endfor %}
+                </div>
+                {% if movie.overview | length %}
+                    <div class="overview">
+                        {{ 'Overview'|trans }} :
+                        {{ movie.overview }}
+                    </div>
+                {% endif %}
+                {% if movie.runtime %}
+                    <div class="runtime">
+                        {{ 'Runtime'|trans }} :
+                        {% if movie.runtime//60 > 0 %}
+                            {{ movie.runtime//60 }}
+                            {% if movie.runtime//60>1 %}{{ 'Hours'|trans }}{% else %}{{ 'Hour'|trans }}{% endif %}
+                        {% endif %}
+                        {{ movie.runtime%60 }} {{ 'Minute'|trans }}{% if movie.runtime%60>1 %}s{% endif %}
+                    </div>
+                {% endif %}
+                {% if movie.revenue > 0 %}
+                    <div class="revenue">
+                        {{ 'Revenue'|trans }} : {{ movie.revenue }}$
+                    </div>
+                {% endif %}
+                <div class="vote">
+                    {{ 'Average Vote'|trans }} : {{ movie.vote_average }}.
+                    {{ 'Vote Count'|trans }} : {{ movie.vote_count }}
+                </div>
+                {% if movie.homepage | length %}
+                    <div class="homepage">
+                        {{ 'Home Page'|trans }} : <a href="{{ movie.homepage }}" target="_blank">{{ movie.homepage }}</a>
+                    </div>
+                {% endif %}
+                {% if movie.imdb_id | length %}
+                    <div class="imdb">
+                        <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">{{ 'IMDB Page'|trans }}</a>
+                    </div>
+                {% endif %}
+
+                {% if dates is empty %}
+                    <div class="date">
+                        {{ 'Release Date'|trans }} : {{ movie.release_date|date("d/m/Y") }}
+                    </div>
+                {% else %}
+                    <div class="release-dates">
+                        <h2>{{ 'Release Dates'|trans }}</h2>
+                        {% for location in dates %}
+                            <div class="country">
+                                <div class="name">{{ location.iso_3166_1|country_name(locale) }}</div>
+                                <div class="dates">
+                                    {% for date in location.release_dates %}
+                                        <div class="event">
+                                            <div class="type">{{ date.type|trans }}{% if date.note|length %} - {{ date.note }}{% endif %}</div>
+                                            <div class="date">{{ date.release_date|date('d/m/Y') }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if movie.production_companies %}
+                    <h2>{{ 'Production'|trans }}</h2>
+                    <div class="productions">
+                        {{ 'Production Companies'|trans }} :
+                        <ul>
+                            {% for cie in movie.production_companies %}
+                                <li class="production">
+                                    <div class="cie-detail">
+                                        <div>{{ cie.name }} ({{ cie.origin_country|country_name(locale) }})</div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if movie.production_countries %}
+                    <div class="productions">
+                        {{ 'Production Countries'|trans }} :
+                        <ul>
+                            {% for country in movie.production_countries %}
+                                <li class="production">{{ country.iso_3166_1 |country_name(locale) }} {# ({{ country.name }}) #}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+            </div>
+            <div class="movie-poster">
+                {% if movie.poster_path %}
+                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% else %}
+                    <img src="/images/default/noposter_dark.png" class="d-block w-100" alt="{{ movie.title }}">
+                {% endif %}
+            </div>
+        </div>
+
+        {% if recommendations is not empty %}
+            <h2>{{ 'Recommendations'|trans }}</h2>
+            <div class="recommendations">
+                {% for recommendation in recommendations %}
+                    <div class="recommendation">
+                        <a href="{{ path('app_movie', {id: recommendation.id}) }}">
+                            <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if cast is not empty %}
+            <h2>{{ 'Casting'|trans }}</h2>
+            <div class="cast">
+                {% for actor in cast %}
+                    <div class="actor" id="{{ actor.id }}">
+                        {% if actor.profile_path | length %}
+                            <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')"></div>
+                        {% else %}
+                            <div class="profile"></div>
+                        {% endif %}
+                        <div class="name">{{ actor.name }}</div>
+                        <div class="character">{{ actor.character }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if crew is not empty %}
+            <h2>{{ 'Crew'|trans }}</h2>
+            <div class="crew">
+                {% for member in crew %}
+                    <div class="member" id="{{ member.id }}">
+                        {% if member.profile_path | length %}
+                            <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')"></div>
+                        {% else %}
+                            <div class="profile"></div>
+                        {% endif %}
+                        <div class="job">{{ member.job }}</div>
+                        <div class="name">{{ member.name }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="modal" id="personModal" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Name</h5>
+                        {#                        <div>{{ 'Also known as'|trans }}</div> : <div class="also_known_as"></div> #}
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="person-modal">
+                            <div class="person-infos">
+                                <div class="biography">{{ 'Biography'|trans }} :
+                                    <div></div>
+                                </div>
+                                <div class="birthday">{{ 'Birthday'|trans }} : <span></span></div>
+                                <div class="death-day">{{ 'Death-day'|trans }} : <span></span></div>
+                                <div class="homepage">{{ 'Home Page'|trans }} : <span></span></div>
+                                <div class="imdb-page">{{ 'Personal IMDB Page'|trans }} : <span></span></div>
+                                <div class="known-for-department">{{ 'Known for Department'|trans }} : <span></span></div>
+                                <div class="place-of-birth">{{ 'Place of Birth'|trans }} : <span></span></div>
+                            </div>
+                            <div class="person-profile"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        $(function () {
+            $('.profile').hover(function () {
+                    let frame = $(this).parent();
+                    let is_actor = $(frame).hasClass('actor');
+
+                    $(frame).find('.name').css('color', '#0087e8');
+                    if (is_actor) {
+                        $(frame).find('.character').css('color', '#0087e8');
+                    } else {
+                        $(frame).find('.job').css('color', '#0087e8');
+                    }
+                },
+                function () {
+                    let frame = $(this).parent();
+                    let is_actor = $(frame).hasClass('actor');
+
+                    $(frame).find('.name').css('color', '#bdbdbd');
+                    if (is_actor) {
+                        $(frame).find('.character').css('color', '#bdbdbd');
+                    } else {
+                        $(frame).find('.job').css('color', '#bdbdbd');
+                    }
+                })
+            $('.profile').click(function () {
+                let frame = $(this).parent();
+                let id = $(frame).attr('id');
+
+                $.ajax({
+                    url: "{{ path('profile_infos') }}",
+                    method: 'GET',
+                    data: {id: id, locale: "{{ locale }}"},
+                    success: function (data) {
+                        console.log(data)
+                        let locale = data['locale'];
+                        let person = data['person'];
+                        let name = person['name'],
+                            // also_known_as = person['also_known_as'],
+                            biography = person['biography'],
+                            birthday = person['birthday'],
+                            death_day = person['death-day'],
+                            homepage = person['homepage'],
+                            imdbpage = person['imdb_id'],
+                            known_for_department = person['known_for_department'],
+                            place_of_birth = person['place_of_birth'],
+                            profile_path = person['profile_path'],
+                            gender = person['gender'];
+                        let department = data['department'];
+                        // console.log(department);
+
+                        $('.modal-title').html(name);
+                        // $('.also_known_as').html(also_known_as);
+                        if (biography && biography.length) {
+                            $('.biography div').html(biography);
+                        } else {
+                            $('.biography div').html('<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+
+                            $.ajax({
+                                url: "{{ path('imdb_infos') }}",
+                                method: 'GET',
+                                data: {name: name, locale: "{{ locale }}"},
+                                success: function (imdb) {
+                                    if (imdb['success']) {
+                                        let imdb_infos = imdb['person'];
+                                        // console.log(imdb_infos);
+                                        $(".biography div").html(
+                                            '<div>' +
+                                                imdb_infos['summary'] +
+                                            '</div>' +
+                                            '<div style="color: #eee;font-style: italic;">' +
+                                                imdb_infos['translated'] +
+                                            '</div>');
+
+                                    } else
+                                        $('.biography').css('display', 'none');
+                                }
+                            })
+                        }
+                        if (birthday && birthday.length) $('.birthday span').html(dateFormat(birthday, locale)); else $('.birthday').css('display', 'none');
+                        if (death_day && death_day.length) $('.death-day span').html(dateFormat(death_day, locale)); else $('.death-day').css('display', 'none');
+                        if (homepage && homepage.length) $('.homepage span').html('<a href="' + homepage + '" target="_blank">' + homepage + '</a>'); else $('.homepage').css('display', 'none');
+                        if (imdbpage && imdbpage.length) $('.imdb-page span').html('<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'); else $('.imdb-page').css('display', 'none');
+                        if (place_of_birth && place_of_birth.length) $('.place-of-birth span').html(place_of_birth); else $('.place-of-birth').css('display', 'none');
+
+                        if (known_for_department && known_for_department.length) {
+                            if (locale === 'en' || department[locale][known_for_department] === undefined) {
+                                $('.known-for-department span').html('<span style="color: ' + (locale === 'en' ? 'green' : 'red') + '">' + known_for_department + '</span>');
+                            } else {
+                                $('.known-for-department span').html(department[locale][known_for_department][gender]);
+                            }
+                        } else {
+                            $('.known-for-department').css('display', 'none');
+                        }
+
+                        $('.person-profile').html('<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">')
+
+                        new bootstrap.Modal(document.getElementById('personModal'), {}).show();
+                    }
+                })
+            })
+
+            function dateFormat(date, locale) {
+                // 1996/06/02
+                // if (locale === 'fr') {
+                return date.substring(8, 10) + '/' + date.substring(5, 7) + '/' + date.substring(0, 4);
+                // }
+                // if (locale === 'de') {
+                //     return date.substring(8, 2) + '/' + date.substring(6, 2) + '/' + date.substring(0, 3);
+                // }
+                // if (locale === 'en') {
+                //     return date.substring(8, 2) + '/' + date.substring(6, 2) + '/' + date.substring(0, 3);
+                // }
+                // if (locale === 'es') {
+                //     return date.substring(8, 2) + '/' + date.substring(6, 2) + '/' + date.substring(0, 3);
+                // }
+                // return date;
+            }
+        })
+    </script>
+{% endblock %}

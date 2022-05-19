@@ -1,0 +1,129 @@
+# Home Header
+Movies: Filme
+Tv Shows: Fernsehshows
+Series: Serien
+Search Movies by: Filme suchen nach
+Genre: Genre
+Date: Datum
+Welcome: Willkommen
+Logout: Abmelden
+
+# Registration
+Register: Registrieren
+Registration: Registrierung
+Connexion: Verbindung
+There is already an account with this email: Es gibt bereits ein Konto mit dieser E-Mail
+You should agree to our terms.: Sie sollten unseren Bedingungen zustimmen.
+Your password should be at least: Ihr Passwort sollte mindestens
+characters: Zeichen lang sein
+Please Confirm your Email: Bitte bestätigen ihre E-mail
+Your email address has been verified.: Ihre E-Mail-Adresse wurde verifiziert.
+Cheers: Beifall
+
+# Home Paginator
+First Page : Erste Seite
+Last Page: Letzte Seite
+Previous Page: Vorherige Seite
+Next Page: Nächste Seite
+Page: Seite
+Total Pages: Seitenzahl
+Total Results: Anzahl der Ergebnisse
+
+# Movies by genre
+Movies by genre: Filme nach Genre
+
+# Movies by Year
+Movies by Year: Filme nach Jahr
+Year: Jahr
+
+# Movie Detail
+Original Title: Originaltitel
+Overview: Überblick
+Release Date: Erscheinungsdatum
+Release Dates: Erscheinungsdaten
+Runtime: Laufzeit
+Revenue: Revenue
+Average Vote: Durchschnittliche Stimme
+Vote Count: Stimmen zählen
+Home Page: Startseite
+IMDB Page: IMDB-Seite
+Personal IMDB Page: IMDB-Seite
+Production: Produktion
+Production Companies:  Produktionsfirmen
+Production Countries: Produktionsländer
+Crew: Besatzung
+Casting: Casting
+Recommendations: Empfehlungen
+Hour: Stunde
+Minute: Minute
+Hours: Stunden
+Minutes: Minuten
+Premiere: Premiere
+Theatrical (limited): Kinostart (begrenzt)
+Theatrical: Kinostart
+Digital: Digital
+Physical: Physikalisch
+TV: TV
+Created by: Erstellt von
+
+# Tv Show Detail
+Name: Name
+Episode Run Time: Episodenlaufzeit
+Number of Episodes: Anzahl der Folgen
+Number of Seasons: Anzahl der Staffeln
+First Air Date: Erstes Sendedatum
+Last Air Date: Letztes Sendedatum
+Last Episode to air: Letzte Episode zum Ausstrahlen
+Air Date: Luftdatum
+Episode Count: Anzahl der Episoden
+Episode Number: Folge Nummer
+Season Number: Staffelnummer
+Season Name: Staffelname
+Last Episode Name: Name der letzten Folge
+See Details: Siehe Details
+Episode Name: Name der Folge
+Season: Staffel
+Seasons: Staffeln
+Episode: Folge
+Guests: Gäste
+
+# Person
+Also known as: Auch bekannt als
+Biography: Biographie
+Birthday: Geburtstag
+Death-day: Todestag
+Known for Department: Bekannt für Abteilung
+Place of Birth: Geburtsort
+Close: Schließen
+
+#Series
+Creation: Année de création
+View: Auf
+on: nachschauen
+Country: Land
+Network: Netzwerk
+Showrunner: Showrunner
+Status: Status
+Continuing: In Produktion
+Ended: Fertig
+
+# Serie's Genres
+Action: Action
+Adventure: Abenteuer
+Animation: Animation
+Anime: Anime
+Comedy: Komödie
+Crime: Verbrechen
+Drama: Drama
+Family: Familie
+Fantasy: Fantasie
+History: Historie
+Horror: Horror
+Mini-Series: Miniserie
+Mystery: Geheimnis
+Romance: Romanze
+Science Fiction: Science-Fiction
+Sport: Sport
+Suspense: Spannung
+Thriller: Thriller
+War: Krieg

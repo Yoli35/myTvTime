@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}my TvTime{% endblock %}
+
+{% block body %}
+{#    {% set dRoute = dRoutes[route] %}#}
+    {#                                          v C'est le nom de la route quand on revient de la partie admin #}
+    {#    {% set dRoute = route == 'app_home' or 'app_admin_dashboard_index' ? 'app_movie':route == 'app_home_series' ? 'app_show':'app_tv' %} #}
+    {% set discovers = route == 'app_home_series' ? discovers.shows:discovers.results %}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+    {#    {{ dump(app.user) }} #}
+    <div class="container">
+
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        {% if route == 'app_home' %}
+            <div class="search">
+                <div class="search-label">{{ 'Search Movies by'|trans }}</div>
+                <div class="btn-toolbar" role="toolbar" aria-label="{{ 'Toolbar with button groups'|trans }}">
+                    <div class="btn-group me-2" role="group" aria-label="{{ 'First group'|trans }}">
+                        <a href="{{ path('app_movies_search', {query: 'Recherche par nom'}) }}" class="btn btn-outline-secondary">{{ 'Name'|trans }}</a>
+                        <a href="{{ path('app_movies_by_genre', {genres: '1'}) }}" class="btn btn-outline-secondary">{{ 'Genre'|trans }}</a>
+                        <a href="{{ path('app_movies_by_date', {date: '2022'}) }}" class="btn btn-outline-secondary">{{ 'Date'|trans }}</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="home-discovers">
+            <div class="home-discovers-content">
+                {% for discover in discovers %}
+                    {% set dTitle = route in ['app_home', 'app_home_series', 'app_admin_dashboard_index'] ? discover.title: discover.name %}
+                    {% set dDate = route == 'app_home' ? discover.release_date : route == 'app_home_tv' ? discover.first_air_date: '' %}
+                    <div class="home-discover">
+                        <a href="{{ path(dRoute, {id: discover.id}) }}">
+                            {% if discover.poster_path is defined and discover.poster_path|length %}
+                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ dTitle }}">
+                            {% elseif discover.images is defined and discover.images.poster|length %}
+                                <img src="{{ discover.images.poster }}" class="d-block w-100" alt="{{ dTitle }}">
+                            {% else %}
+                                <img src="{{ asset('noposter_dark') }}" class="d-block w-100" alt="{{ dTitle }}">
+                            {% endif %}
+                            <div class="home-discover-title">{{ dTitle }}</div>
+                            {% if dDate|length %}
+                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ dDate|date("d/m/Y") }}</div>
+                            {% endif %}
+                            {% if discover.platforms is defined %}
+                                {% if discover.platforms %}
+                                    {% if discover.platforms.svod is defined %}
+                                        <img src="{{ discover.platforms.svod.logo }}" alt="{{ discover.platforms.svod.name }}" class="logo">
+                                    {% endif %}
+                                    {#                                    {% if discover.platforms.vod is defined %} #}
+                                    {#                                        {% for v in discover.platforms.vod %} #}
+                                    {#                                            <img src="{{ v.logo }}" alt="{{ v.name }}" class="logo"> #}
+                                    {#                                        {% endfor %} #}
+                                    {#                                    {% endif %} #}
+                                {% endif %}
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ include('blocks/pageDiscoverFooter.html.twig') }}
+        </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}

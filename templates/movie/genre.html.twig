@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+{% block morecss %}
+    <link href="{{ asset("movie.css") }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}myTvTime::{{ 'Movies by genre'|trans }}{% endblock %}
+{% block body %}
+    {#    {{ dump() }} #}
+    <div class="container">
+        {{ include('blocks/pageHeader.html.twig') }}
+        <div class="select_genres">
+            {% for key, genre in possible_genres.genres %}
+                <div id="{{ genre.id }}" class="genre{{ genre.id in current_genres ? ' active':'' }}">{{ genre.name }}</div>
+            {% endfor %}
+        </div>
+        <div class="home-discovers">
+            <div class="home-discovers-content">
+                {% for discover in discovers.results %}
+                    <div class="home-discover">
+                        <a href="{{ path('app_movie', {id: discover.id}) }}">
+                            {% if discover.poster_path %}
+                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}">
+                            {% else %}
+                                <img src="/images/default/noposter_dark.png" class="d-block w-100" alt="{{ discover.title }}">
+                            {% endif %}
+                            <div class="home-discover-title">{{ discover.title }}</div>
+                            {% if discover.release_date is defined %}
+                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|date("d/m/Y") }}</div>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ include('blocks/pageGenreFooter.html.twig') }}
+        </div>
+        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        $(function () {
+            $('.genre').click(function () {
+                if ($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                } else {
+                    $(this).addClass('active')
+                }
+                let list = '',
+                    url = '{{ path(route, {page: 1, genres: 28}) }}';
+
+                $('.genre').each(function () {
+                    if ($(this).hasClass('active')) {
+                        list += $(this).attr('id') + ',';
+                    }
+                })
+                list = list.substring(0, list.length - 1);
+                url = url.substring(0, url.length-2) + list;
+                window.location.href = url;
+            })
+        })
+    </script>
+{% endblock %}

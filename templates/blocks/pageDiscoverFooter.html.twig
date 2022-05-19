@@ -1,0 +1,65 @@
+{% if route != 'app_home_series' %}
+    {% set page = pages.page %}
+    {% set max = pages.total_pages>1000?1000:pages.total_pages %}
+    <div class="home-discovers-footer">
+        {% if max > 1 %}
+            <div class="pages">
+                {% if page > 6 %}
+                    <div class="ends"><a href="{{ path(route, {page: '1'}) }}"><i class="bi bi-chevron-bar-left"></i>&nbsp;{{ 'First Page'|trans }}</a></div>
+                {% endif %}
+                {% if page > 1 %}
+                    <div class="ends"><a href="{{ path(route, {page: page-1}) }}"><i class="bi bi-chevron-left"></i>&nbsp;{{ 'Previous Page'|trans }}</a></div>
+                {% endif %}
+                {% if max >= 10 %}
+                    {% if page <= 5 %}
+                        {% for p in 1..10 %}
+                            {% if p == page %}
+                                <div class="page active">{{ p }}</div>
+                            {% else %}
+                                <div class="page"><a href="{{ path(route, {page: p}) }}">{{ p }}</a></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if page > 5 and page < max-5 %}
+                        {% for p in page-5..page+4 %}
+                            {% if p == page %}
+                                <div class="page active">{{ p }}</div>
+                            {% else %}
+                                <div class="page"><a href="{{ path(route, {page: p}) }}">{{ p }}</a></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if page >= max-5 %}
+                        {% for p in max-10..max %}
+                            {% if p == page %}
+                                <div class="page active">{{ p }}</div>
+                            {% else %}
+                                <div class="page"><a href="{{ path(route, {page: p}) }}">{{ p }}</a></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+                {% if page < max-1 %}
+                    <div class="ends"><a href="{{ path(route, {page: page+1}) }}">{{ 'Next Page'|trans }}&nbsp;<i class="bi bi-chevron-right"></i></a></div>
+                {% endif %}
+                {% if page < max %}
+                    <div class="ends"><a href="{{ path(route, {page: max}) }}">{{ 'Last Page'|trans }}&nbsp;<i class="bi bi-chevron-bar-right"></i></a></div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="home-discovers-footer-infos">
+        <div>{{ 'Page'|trans }} : {{ pages.page }}</div>
+        <div>{{ 'Total Pages'|trans }} : {{ pages.total_pages }}</div>
+        <div>{{ 'Total Results'|trans }} : {{ pages.total_results }}</div>
+    </div>
+{% else %}
+    <div class="home-discovers-footer">
+        <div class="pages">
+            {% if page > 1 %}
+                <div class="page"><a href="{{ path(route, {page: page-1}) }}">{{ 'Previous Page'|trans }}</a></div>
+            {% endif %}
+            <div class="page"><a href="{{ path(route, {page: page+1}) }}">{{ 'Next Page'|trans }}</a></div>
+        </div>
+    </div>
+{% endif %}

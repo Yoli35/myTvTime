@@ -1,0 +1,14 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+<label for="User_avatar" class="form-control-label">Avatar</label>
+<div class="form-widget">
+    <input type="text" id="User_avatar" name="User[avatar]" data-ea-align="left" class="form-control" value="{{ field.value }}"/>
+</div>
+<div class="">
+    {% if field.value|length %}
+        <img src="{{ asset('usersAvatarPath') }}{{ field.value }}">
+    {% else %}
+        <img src="{{ asset('userAccountNoAvatar') }}">
+    {% endif %}
+</div>

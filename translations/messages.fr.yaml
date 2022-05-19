@@ -1,0 +1,169 @@
+# Home Header
+Movies: Films
+Tv Shows: Émissions
+Series: Séries
+Search Movies by: Recherche de film par
+Genre: Genre
+Date: Date
+Welcome: Bienvenue
+Toolbar with button groups: Barre d'outil de la recherche de film
+First group: Groupe d'outil de recherche
+Another action: Admin
+Logout: Déconnexion
+
+# Registration
+Register: S'enregistrer
+Registration: Enregistrement
+Email: Adresse email
+Username: Nom d'utilisateur
+Password: Mot de passe
+Agree terms: Accepter les conditions d'utilisation
+Connexion: Connexion
+There is already an account with this email: Il existe déjà un compte associé à cet email
+You should agree to our terms.: Vous devez accepter nos conditions.
+Your password should be at least: Votre mot de passe doit comporter au moins
+characters: caractères
+Please Confirm your Email: Veuillez confirmer votre email
+Hi! Please confirm your email!: Salut ! Merci de confirmer votre adresse email !
+Please confirm your email address by clicking the following link: Merci de confirmer votre adresse email en cliquant sur ce lien
+Confirm my Email: Confirmer mon adresse email
+This link will expire in: Ce lien expirera dans
+Cheers: À la vôtre !
+Your email address has been verified.: Votre adresse email a été vérifiée.
+
+# Home Paginator
+First Page: Première page
+Last Page: Dernière page
+Previous Page: Page précédente
+Next Page: Page suivante
+Page: Page
+Total Pages: Nombre de page
+Total Results: Nombre de résultat
+
+# Movies by name
+Movies Search Result: Résultat de la recherche
+
+# Movies by genre
+Movies by genre: Films par genre
+
+# Movies by Year
+Movies by Year: Films par année
+Year: Année
+
+# Movie Detail
+Original Title: Titre original
+Overview: Résumé
+Release Date: Date de sortie
+Release Dates: Dates de sortie
+Runtime: Durée
+Revenue: Revenus
+Average Vote: Moyenne
+Vote Count: Nombre de vote
+Home Page: Site web
+IMDB Page: Le film sur Imdb
+Personal IMDB Page: Page IMDB
+Production: Production
+Production Companies: Compagnies de production
+Production Countries: Pays de production
+Crew: Équipe technique
+Casting: Distribution
+Recommendations: Recommendations
+Hour: heure
+Minute: minute
+Hours: heures
+Minutes: minutes
+Premiere: Première
+Theatrical (limited): Sortie en salle (limité)
+Theatrical: Sortie en salle
+Digital: Digitale
+Physical: Physique
+TV: Télévision
+Created by: Crée par
+
+# Tv Show Detail
+Name: Nom
+Episode Run Time: Durée des épisodes
+Number of Episodes: Nombre d'épisodes
+Number of Seasons: Nombre de saisons
+First Air Date: Date de première diffusion
+Last Air Date: Date de dernière diffusion
+Last Episode to air: Dernier Épisode diffusé
+Air Date: Date de diffusion
+Episode Count: Nombre d'épisode
+Episode Number: Numéro de l'épisode
+Season Number: Numéro de la saison
+Season Name: Nom de la saison
+Last Episode Name: Titre
+See Details: Voir les détails
+Episode Name: Nom de l'épisode
+Season: Saison
+Seasons: Saisons
+Episode: Épisode
+Guests: Invités
+
+# Person
+Also known as: Aussi connu•e comme
+Biography: Biographie
+Birthday: Date de naissance
+Death-day: Date du décès
+Known for Department: Métier
+Place of Birth: Lieu de naissance
+Close: Fermer
+
+#Series
+Creation: Année de création
+View on: Regarder sur
+Country: Pays
+Network: Network
+Showrunner: Show Runner
+Status: Statut
+Continuing: En cours
+Ended: Terminé
+
+# Serie's Genres
+Action: Action
+Adventure: Aventure
+Animation: Animation
+Anime: Anime
+Comedy: Comédie
+Crime: Crime
+Drama: Drame
+Family: Famille
+Fantasy: Fantastique
+History: Historique
+Horror: Horreur
+Mini-Series: Mini-séries
+Mystery: Mystère
+Romance: Romance
+Science Fiction: Science-Fiction
+Sport: Sport
+Suspense: Suspense
+Thriller: Thriller
+War: Guerre
+
+# User Account
+"User Account": Compte utilisateur
+"My Account": Mon compte
+
+# Admin
+Dashboard: Tableau de bord
+Users: Utilisateurs
+Entities: Entités
+Settings: Règlages
+Image Configuration: Configuration image
+Genres: Genres
+Other: Autre
+Homepage: Page d'accueil
+ID: ID
+Genre Id: Genre Id
+ImageConfig: ImageConfig
+Base Url: Base Url
+Secure Base Url: Secure Base Url
+Backdrop Sizes: Backdrop Sizes
+Logo Sizes: Logo Sizes
+Poster Sizes: Poster Sizes
+Profile Sizes: Profile Sizes
+User: Utilisateur
+Is Verified: Vérifié
+Avatar: Avatar
+Banner: Bannière

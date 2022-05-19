@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block morecss %}
+    <link href="{{ asset("movie.css") }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}myTvTime::{{ 'Movies Search Result'|trans }}{% endblock %}
+{% block body %}
+    {#    {{ dump() }} #}
+    <div class="container">
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <div class="search-by-name">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                <input id="search-query" type="text" class="form-control" value="{{ query }}" placeholder="{{ 'Name'|trans }}" aria-label="{{ 'Name'|trans }}" aria-describedby="basic-addon1">
+            </div>
+        </div>
+
+        <div class="home-discovers">
+            <div class="home-discovers-content">
+                {% for discover in discovers.results %}
+                    <div class="home-discover">
+                        <a href="{{ path('app_movie', {id: discover.id}) }}">
+                            {% if discover.poster_path %}
+                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}">
+                            {% else %}
+                                <img src="/images/default/noposter_dark.png" class="d-block w-100" alt="{{ discover.title }}">
+                            {% endif %}
+                            <div class="home-discover-title">{{ discover.title }}</div>
+                            {% if discover.release_date is defined %}
+                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|date("d/m/Y") }}</div>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ include('blocks/pageSearchFooter.html.twig') }}
+        </div>
+        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        $(function () {
+            let search = $('#search-query');
+            let query, url = '{{ path(route) }}';
+
+            $(search).change(function () {
+                query = $(search).val();
+                if (query.length > 2) {
+                    url = url + '/' + query;
+                    console.log(url);
+                    window.location.href = url;
+                }
+            });
+        })
+    </script>
+{% endblock %}

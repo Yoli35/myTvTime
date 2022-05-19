@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% block morecss %}
+    <link href="{{ asset("movie.css") }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}myTvTime::{{ 'Movies by Year'|trans }}{% endblock %}
+{% block morejs %}
+    <script>
+        $(function () {
+            let year = $('select');
+            let initialValue = $(year).val(), newValue = 0,
+                url = '{{ path(route, {page: 1, date: date}) }}';
+
+            $(year).change(function (e) {
+                newValue = $(year).val();
+                if (newValue !== initialValue) {
+                    url = url.substring(0, url.length - 4) + newValue + '/1';
+                    console.log(url);
+                    window.location.href = url;
+                }
+            });
+        })
+    </script>
+{% endblock %}
+
+{% block body %}
+    {#    {{ dump() }} #}
+    <div class="container">
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <div class="date_select">
+            <div class="label">{{ 'Year'|trans }}</div>
+            <form>
+                <select id="year" class="form-select" aria-label="Date selection">
+                    {% for year in years %}
+                        <option value="{{ year }}"{% if year == date %} selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        <div class="home-discovers">
+            <div class="home-discovers-content">
+                {% for discover in discovers.results %}
+                    <div class="home-discover">
+                        <a href="{{ path('app_movie', {id: discover.id}) }}">
+                            {% if discover.poster_path %}
+                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}">
+                            {% else %}
+                                <img src="/images/default/noposter_dark.png" class="d-block w-100" alt="{{ discover.title }}">
+                            {% endif %}
+                            <div class="home-discover-title">{{ discover.title }}</div>
+                            {% if discover.release_date is defined %}
+                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|date("d/m/Y") }}</div>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ include('blocks/pageDateFooter.html.twig') }}
+        </div>
+        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
+{% endblock %}

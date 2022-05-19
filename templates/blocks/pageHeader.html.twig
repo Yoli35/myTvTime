@@ -1,0 +1,74 @@
+{% set movies_route = ['app_home', 'app_movie', 'app_movies_by_genre', 'app_movies_by_date', 'app_movies_search'] %}
+{% set series_route = ['app_home_series', 'app_show'] %}
+{% set tv_route = ['app_home_tv', 'app_tv', 'app_season', 'app_episode'] %}
+{% set user_route = ['app_user_account'] %}
+{% set user = app.user %}
+{% set path = app.request.pathInfo %}
+
+{# {{ dump() }} #}
+
+<div class="home-header">
+    <div class="home-header-top">
+        {% if user is null %}
+            <div class="connexion">
+                <a href="{{ path('app_register') }}">{{ 'Register'|trans }}</a> |
+                <a href="{{ path('app_login') }}">{{ 'Connexion'|trans }}</a>
+            </div>
+        {% else %}
+            {# User Menu #}
+            <div class="dropdown">
+                <div class="user-menu" id="dropdownMenuUser" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user.avatar is defined and  user.avatar|length %}
+                        <img src="{{ asset('usersAvatarPath') }}{{ user.avatar }}">
+                    {% else %}
+                        {% if route in movies_route %}<img src="{{ asset('userMoviesNoAvatar') }}" alt="">{% endif %}
+                        {% if route in series_route %}<img src="{{ asset('userSeriesNoAvatar') }}" alt="">{% endif %}
+                        {% if route in tv_route %}<img src="{{ asset('userTvNoAvatar') }}" alt="">{% endif %}
+                        {% if route in user_route %}<img src="{{ asset('userAccountNoAvatar') }}" alt="">{% endif %}
+                    {% endif %}
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuUser">
+                    <li><span class="dropdown-item-text">{{ 'Welcome'|trans }}&nbsp;{{ user.username }}&nbsp;!</span></li>
+                    <li><a class="dropdown-item" href="{{ path('app_profile') }}">{{ 'My Account'|trans }}</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a class="dropdown-item" href="{{ path('app_admin_dashboard_index') }}">{{ 'Another action'|trans }}</a></li>
+                    {% endif %}
+                    <li><a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a></li>
+                </ul>
+            </div>
+        {% endif %}
+        <div class="locale">
+            <ul>
+                <li><a href="/fr{{ path[3:] }}">Fr</a></li>
+                <li><a href="/en{{ path[3:] }}">En</a></li>
+                <li><a href="/de{{ path[3:] }}">De</a></li>
+                <li><a href="/es{{ path[3:] }}">Es</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="home-header-bottom">
+        <div class="logo"><a href="{{ path('app_home') }}">my TvTime</a></div>
+        <div class="home-links">
+            <div class="home-link">
+                {% if route in movies_route %}
+                    <div class="active"></div>{% endif %}
+                <a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a>
+            </div>
+            <div class="home-series-link">
+                <a href="{{ path('app_home_series') }}">{{ 'Series'|trans }}</a>
+                {% if route in series_route %}
+                    <div class="active"></div>{% endif %}
+            </div>
+            <div class="home-tv-link">
+                <a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a>
+                {% if route in tv_route %}
+                    <div class="active"></div>{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message|trans }}
+    </div>
+{% endfor %}

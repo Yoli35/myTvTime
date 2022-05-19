@@ -1,0 +1,166 @@
+# Home Header
+Movies: Movies
+Tv Shows: Tv Shows
+Series: Series
+Search Movies by: Search Movies by
+Genre: Genre
+Date: Date
+Welcome: Welcome
+Logout: Logout
+
+# Registration
+Register: Register
+Registration: Registration
+Connexion: Connexion
+There is already an account with this email: There is already an account with this email
+You should agree to our terms.: You should agree to our terms.
+Your password should be at least: Your password should be at least
+characters: characters
+Please Confirm your Email: Please Confirm your Email
+Your email address has been verified.: Your email address has been verified.
+Email: Adresse email
+Username: Nom d'utilisateur
+Password: Mot de passe
+Agree terms: Accepter les conditions d'utilisation
+Hi! Please confirm your email!: Salut ! Merci de confirmer votre adresse email !
+Please confirm your email address by clicking the following link: Merci de confirmer votre adresse email en cliquant sur ce lien
+Confirm my Email: Confirmer mon adresse email
+This link will expire in: Ce lien expirera dans
+Cheers: À la vôtre !
+
+# Home Paginator
+First Page : First Page
+Last Page: Last Page
+Previous Page: Previous Page
+Next Page: Next Page
+Page: Page
+Total Pages: Total Pages
+Total Results: Total Results
+
+# Movies by name
+Movies Search Result: Résultat de la recherche
+
+# Movies by genre
+Movies by genre: Movies by genre
+
+# Movies by Year
+Movies by Year: Movies by Year
+Year: Year
+
+# Movie Detail
+Original Title: Original Title
+Overview: Overview
+Release Date: Release Date
+Release Dates: Release Dates
+Runtime: Runtime
+Revenue: Revenue
+Average Vote: Average Vote
+Vote Count: Vote Count
+Home Page: Home Page
+IMDB Page: IMDB Page
+Personal IMDB Page: IMDB Page
+Production: Production
+Production Companies:  Production Companies
+Production Countries: Production Countries
+Crew: Crew
+Casting: Casting
+Recommendations: Recommendations
+Hour: Hour
+Minute: Minute
+Hours: Hours
+Minutes: Minutes
+Premiere: Premiere
+Theatrical (limited): Theatrical (limited)
+Theatrical: Theatrical
+Digital: Digital
+Physical: Physical
+TV: TV
+Created by: Created by
+
+# Tv Show Detail
+Name: Name
+Episode Run Time: Episode Runtime
+Number of Episodes: Number of Episodes
+Number of Seasons: Number of Seasons
+First Air Date: First Air Date
+Last Air Date: Last Air Date
+Last Episode to air: Last Episode to air
+Air Date: Air Date
+Episode Count: Episode Count
+Episode Number: Episode Number
+Season Number: Season Number
+Season Name: Season Name
+Last Episode Name: Last Episode Name
+See Details: See Details
+Episode Name: Episode Name
+Season: Season
+Seasons: Seasons
+Episode: Episode
+Guests: Guests
+
+# Person
+Also known as: Also known as
+Biography: Biography
+Birthday: Birthday
+Death-day: Death-day
+Known for Department: Known for Department
+Place of Birth: Place of Birth
+Close: Close
+
+#Series
+Creation: Creation
+View on: View on
+Country: Country
+Network: Network
+Showrunner: Showrunner
+Status: Status
+Continuing: Continuing
+Ended: Ended
+
+# Serie's Genres
+Action: Action
+Adventure: Adventure
+Animation: Animation
+Anime: Anime
+Comedy: Comédy
+Crime: Crime
+Drama: Drama
+Family: Family
+Fantasy: Fantasy
+History: History
+Horror: Horror
+Mini-Series: Mini-Series
+Mystery: Mystery
+Romance: Romance
+Science Fiction: Science Fiction
+Sport: Sport
+Suspense: Suspense
+Thriller: Thriller
+War: War
+
+# User Account
+User Account: User Account
+My Account: My Account
+
+# Admin
+Dashboard: Dashboard
+Users: Users
+Entities: Entities
+Settings: Settings
+Image Configuration: Image Configuration
+Genres: Genres
+Other: Other
+Homepage: Homepage
+ID: ID
+Genre Id: Genre Id
+ImageConfig: ImageConfig
+Base Url: Base Url
+Secure Base Url: Secure Base Url
+Backdrop Sizes: Backdrop Sizes
+Logo Sizes: Logo Sizes
+Poster Sizes: Poster Sizes
+Profile Sizes: Profile Sizes
+User: User
+Is Verified: Is Veified
+Avatar: Avatar
+Banner: Banner

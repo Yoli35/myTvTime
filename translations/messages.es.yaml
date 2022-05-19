@@ -1,0 +1,127 @@
+# Home Header
+Movies: Películas
+Tv Shows: Programa de televisión
+Series: Series
+Search Movies by: Buscar películas por
+Genre: Género
+Date: Fecha
+Welcome: Bienvenida
+Logout: Cerrar sesión
+
+# Registration
+Register: Registro
+Registration: Registro
+Connexion: Conexión
+There is already an account with this email: Ya existe una cuenta con este correo
+You should agree to our terms.: Debe aceptar nuestros términos.
+Your password should be at least: Su contraseña debe tener al menos
+characters: caracteres
+Please Confirm your Email: Por favor, confirma tu email
+Your email address has been verified.: Tu dirección de email ha sido verificada.
+
+# Home Paginator
+First Page: Primera página
+Last Page: Última página
+Previous Page: Página anterior
+Next Page: Página siguiente
+Page: Página
+Total Pages: Número de páginas
+Total Results: Número de resultados
+
+# Movies by genre
+Movies by genre:  Películas por género
+
+# Movies by Year
+Movies by Year: Películas por año
+Year: Año
+
+# Movie Detail
+Original Title: Titulo original
+Overview: Resumen
+Release Date: Fecha de lanzamiento
+Release Dates: Fechas de lanzamiento
+Runtime: Duración
+Revenue: Ingresos
+Average Vote: Voto promedio
+Vote Count: Recuento de votos
+Home Page: Página de inicio
+IMDB Page: Página de IMDB
+Personal IMDB Page: Página de IMDB
+Production: Producción
+Production Companies: Compañías de producción
+Production Countries: Países de producción
+Crew: Tripulación
+Casting: Fundición
+Recommendations: Recomendaciones
+Hour: hora
+Minute: minuto
+Hours: horas
+Minutes: minutos
+Premiere: Estreno
+Theatrical (limited): Estreno en cines (limitado)
+Theatrical: Estreno en cines
+Digital: Digital
+Physical: Físico
+TV: Televisión
+Created by: Creado por
+
+# Tv Show Detail
+Name: Apellido
+Episode Run Time: Duración del episodio
+Number of Episodes: Número de episodios
+Number of Seasons: Número de temporadas
+First Air Date: Primera fecha de emisión
+Last Air Date: Última fecha de emisión
+Last Episode to air: Último episodio emitido
+Air Date: Fecha de emisión
+Episode Count: Recuento de episodios
+Episode Number: Número de episodio
+Season Number: Numéro de la saison
+Season Name: Número de temporada
+Last Episode Name: Nombre del último episodio
+See Details: Ver detalles
+Episode Name: Nombre del episodio
+Season: Temporada
+Seasons: Temporadas
+Episode: Episodio
+Guests: Invitadas / Invitados especiales
+
+#Person
+Also known as: También conocido como
+Biography: Biografía
+Birthday: Cumpleaños
+Death-day: Día de la muerte
+Known for Department: Conocido por departamento
+Place of Birth: Lugar de nacimiento
+Close: Cerca
+
+#Series
+Creation: Creación
+View on: Ver en
+Country: País
+Network: Red
+Showrunner: Showrunner
+Status: Estado
+Continuing: Continuo
+Ended: Terminado
+
+# Serie's Genres
+Action: Acción
+Adventure: Aventura
+Animation: Animación
+Anime: Anime
+Comedy: Comedia
+Crime: Policíaca
+Drama: Drama
+Family: Familia
+Fantasy: Fantasía
+History: Historia
+Horror: Horror
+Mini-Series: Miniserie
+Mystery: Misterio
+Romance: Romance
+Science Fiction: Ciencia Ficción
+Sport: Deporte
+Suspense: Suspenso
+Thriller: Thriller
+War: Guerra

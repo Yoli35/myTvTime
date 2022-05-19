@@ -1,0 +1,260 @@
+<?php
+
+namespace App\Service;
+
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
+class CallTmdbService
+{
+    private HttpClientInterface $client;
+
+    public function __construct(HttpClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function discoverMovies($page, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=popularity.desc&include_adult=true&include_video=false&page='.$page.'&with_watch_monetization_types=flatrate',
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function moviesByGenres($page, $genres, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=popularity.desc&include_adult=true&include_video=false&page='.$page.'&with_genres='.$genres.'&with_watch_monetization_types=flatrate'
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function moviesByDate($page, $date, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=popularity.desc&include_adult=true&include_video=false&page='.$page.'&primary_release_year='.$date.'&with_watch_monetization_types=flatrate'
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function moviesSearch($page, $query, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/search/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&page='.$page.'&query='.$query.'&include_adult=false'
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getGenres($locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/genre/movie/list?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function discoverTV($page, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/discover/tv?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=release_date.desc&page='.$page.'&timezone=Europe%2FParis&include_null_first_air_dates=false&watch_region=FR&with_watch_monetization_types=flatrate&with_status=0&with_type=0',
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getMovie($movieId, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/movie/'.$movieId.'?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale,
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getTv($showId, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/tv/'.$showId.'?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale,
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getMovieCredits($movieId, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/movie/'.$movieId.'/credits?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale,
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getTvCredits($tvId, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/tv/'.$tvId.'/credits?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale,
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getTvSeason($tvId, $seasonNumber, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/tv/'.$tvId.'/season/'.$seasonNumber.'?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale,
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getTvEpisode($tvId, $seasonNumber, $episodeNumber, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/tv/'.$tvId.'/season/'.$seasonNumber.'/episode/'.$episodeNumber.'?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale,
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getMovieRecommendations($movieId, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/movie/'.$movieId.'/recommendations?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&page=1'.$locale,
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getMovieReleaseDates($movieId): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/movie/'.$movieId.'/release_dates?api_key=f7e3c5fe794d565b471334c9c5ecaf96',
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getCountries(): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/configuration/countries?api_key=f7e3c5fe794d565b471334c9c5ecaf96',
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getPerson($id, $locale): ?string
+    {
+        dump($id, $locale);
+        if ($id && $locale) {
+            $response = $this->client->request('GET', 'https://api.themoviedb.org/3/person/' . $id . '?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language=' . $locale,);
+            return $response->getContent();
+        }
+        return null;
+    }
+}

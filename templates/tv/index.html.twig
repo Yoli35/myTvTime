@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+{% block morecss %}
+    <link href="{{ asset("tv.css") }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}myTvTime::{{ tv.name }}{% endblock %}
+{% block body %}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+    <div class="container">
+        {{ include('blocks/pageHeader.html.twig') }}
+        {% if tv.backdrop_path %}
+            <div class="tv-header">
+                <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ tv.backdrop_path }}" class="d-block w-100" alt="{{ tv.name }}">
+            </div>
+        {% endif %}
+        <div class="tv-info">
+            <div class="tv-detail">
+                <h1>{{ tv.name }}</h1>
+                <div class="genres">
+                    {% for genre in tv.genres %}
+                        <div class="genre">{{ genre.name }}</div>
+                    {% endfor %}
+                </div>
+                <div class="overview">
+                    {{ 'Overview'|trans }} :<br>
+                    <span class="data">{{ tv.overview }}</span>
+                </div>
+
+                {% if tv.episode_run_time is not empty %}
+                    <div class="episode_run_time">{{ 'Episode Run Time'|trans }} : <span class="data">{{ tv.episode_run_time.0 }} minutes</span></div>
+                {% endif %}
+                <div class="number_of_episodes">{{ 'Number of Episodes'|trans }} : <span class="data">{{ tv.number_of_episodes }}</span></div>
+                <div class="number_of_seasons">{{ 'Number of Seasons'|trans }} : <span class="data">{{ tv.number_of_seasons }}</span></div>
+                <div class="original_title">{{ 'Original Title'|trans }} : <span class="data">{{ tv.original_name }}</span></div>
+                <div class="date">
+                    {{ 'First Air Date'|trans }} : <span class="data">{{ tv.first_air_date|date("d/m/Y") }}</span>
+                </div>
+                <div class="date">
+                    {{ 'Last Air Date'|trans }} : <span class="data">{{ tv.last_air_date|date("d/m/Y") }}</span>
+                </div>
+                <div class="last_episode_to_air">
+                    <span class="label">{{ 'Last Episode to air'|trans }} : </span><span class="data">{{ tv.last_episode_to_air.name }}</span>
+                    <div class="date">
+                        {{ 'Air Date'|trans }} : <span class="data">{{ tv.last_episode_to_air.air_date|date("d/m/Y") }}</span>
+                    </div>
+                    <div class="episode_number">
+                        {{ 'Episode Number'|trans }} : <span class="data">{{ tv.last_episode_to_air.episode_number }}</span>
+                    </div>
+                    <div class="season_number">
+                        {{ 'Season Number'|trans }} : <span class="data">{{ tv.last_episode_to_air.season_number }}</span>
+                    </div>
+                    {#                    "id" => 3428047 #}
+                    <div class="overview">
+                        {{ 'Overview'|trans }} : <span class="data">{{ tv.last_episode_to_air.overview }}</span>
+                    </div>
+                    {#                    "production_code" => "" #}
+                    {#                    "still_path" => "/eXjvQGuZ2pvZSJitvikmWT9Q75f.jpg" #}
+                    {#                    "vote_average" => 0.0 #}
+                    {#                    "vote_count" => 0 #}
+                </div>
+                <div class="vote">
+                    {{ 'Average Vote'|trans }} : <span class="data">{{ tv.vote_average }}</span>.
+                </div>
+                <div class="vote">
+                    {{ 'Vote Count'|trans }} : <span class="data">{{ tv.vote_count }}</span>
+                </div>
+                {% if tv.homepage | length %}
+                    <div class="homepage">
+                        {{ 'Home Page'|trans }} : <a href="{{ tv.homepage }}" target="_blank"><span class="data">{{ tv.homepage }}</span></a>
+                    </div>
+                {% endif %}
+                {% if tv.production_companies %}
+                    <div class="productions">
+                        {{ 'Production Companies'|trans }} :
+                        <ul>
+                            {% for cie in tv.production_companies %}
+                                <li class="production">
+                                    <div class="cie-detail">
+                                        <div>{{ cie.name }} ({{ cie.origin_country|country_name(locale) }})</div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if tv.production_countries %}
+                    <div class="productions">
+                        {{ 'Production Countries'|trans }} :
+                        <ul>
+                            {% for country in tv.production_countries %}
+                                <li class="production">{{ country.iso_3166_1|country_name(locale) }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="tv-poster">
+                {% if tv.poster_path %}
+                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ tv.poster_path }}" alt="{{ tv.name }}">
+                {% else %}
+                    <img src="/images/default/noposter_dark.png" alt="{{ tv.name }}">
+                {% endif %}
+            </div>
+        </div>
+        {% if tv.seasons is not empty %}
+            <h2>{{ 'Seasons'|trans }}</h2>
+            <div class="seasons">
+                {% for season in tv.seasons %}
+                    <div class="season">
+                        <div class="season-detail">
+                            <div class="name">{{ 'Name'|trans }} : <span class="data">{{ season.name }}</span></div>
+                            <div class="air_date">{{ 'Air Date'|trans }} : <span class="data">{{ season.air_date|date("d/m/Y") }}</span></div>
+                            <div class="episode_count">{{ 'Episode Count'|trans }} : <span class="data">{{ season.episode_count }}</span></div>
+                            <div class="season_number">{{ 'Season Number'|trans }} : <span class="data">{{ season.season_number }}</span></div>
+                            {% if season.overview %}
+                                <div class="overview">{{ 'Overview'|trans }} : {{ season.overview }}</div>
+                            {% endif %}
+                            <div class="link"><a href="{{ path('app_season', {id: tv.id, season_number: season.season_number}) }}">{{ 'See Details'|trans }}</a></div>
+                        </div>
+                        {% if season.poster_path %}
+                            <div class="season-poster">
+                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ season.poster_path }}" alt="{{ season.name }}">
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if tv.created_by is not empty %}
+            <h2>{{ 'Created by'|trans }}</h2>
+            <div class="cast">
+                {% for creator in tv.created_by %}
+                    <div class="actor">
+                        <div class="profile">
+                            {% if creator.profile_path | length %}
+                                <img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ creator.profile_path }}" alt="{{ creator.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="name">{{ creator.name }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if cast is not empty %}
+            <h2>{{ 'Casting'|trans }}</h2>
+            <div class="cast">
+                {% for actor in cast %}
+                    <div class="actor">
+                        <div class="profile">
+                            {% if actor.profile_path | length %}
+                                <img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}" alt="{{ actor.name }}">
+                                {#                        {% else %} #}
+                                {#                            <img src="/images/default/profile.jpg" alt="{{ actor.name }}"> #}
+                            {% endif %}
+                        </div>
+                        <div class="name">{{ actor.name }}</div>
+                        <div class="character">{{ actor.character }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if crew is not empty %}
+            <h2>{{ 'Crew'|trans }}</h2>
+            <div class="crew">
+                {% for member in crew %}
+                    <div class="member">
+                        <div class="profile">
+                            {% if member.profile_path | length %}
+                                <img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}" alt="{{ member.name }}">
+                                {#                        {% else %} #}
+                                {#                            <img src="{{ asset('noProfilePic') }}" alt="{{ member.name }}"> #}
+                                {#                            <img src="/images/default/profile.jpg" alt="{{ member.name }}"> #}
+                            {% endif %}
+                        </div>
+                        <div class="job">{{ member.job }}</div>
+                        <div class="name">{{ member.name }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
+{% endblock %}
