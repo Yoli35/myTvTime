@@ -3,12 +3,9 @@
 {% block title %}my TvTime{% endblock %}
 
 {% block body %}
-{#    {% set dRoute = dRoutes[route] %}#}
-    {#                                          v C'est le nom de la route quand on revient de la partie admin #}
-    {#    {% set dRoute = route == 'app_home' or 'app_admin_dashboard_index' ? 'app_movie':route == 'app_home_series' ? 'app_show':'app_tv' %} #}
+
     {% set discovers = route == 'app_home_series' ? discovers.shows:discovers.results %}
-    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
-    {#    {{ dump(app.user) }} #}
+
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -49,11 +46,6 @@
                                     {% if discover.platforms.svod is defined %}
                                         <img src="{{ discover.platforms.svod.logo }}" alt="{{ discover.platforms.svod.name }}" class="logo">
                                     {% endif %}
-                                    {#                                    {% if discover.platforms.vod is defined %} #}
-                                    {#                                        {% for v in discover.platforms.vod %} #}
-                                    {#                                            <img src="{{ v.logo }}" alt="{{ v.name }}" class="logo"> #}
-                                    {#                                        {% endfor %} #}
-                                    {#                                    {% endif %} #}
                                 {% endif %}
                             {% endif %}
                         </a>
