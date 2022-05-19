@@ -24,7 +24,7 @@ class ProfileController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
-    #[Route('/{_locale}/profile', name: 'app_profile', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/user/profile', name: 'app_user_profile', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request, BetaSeriesService $betaSeriesService): Response
     {
         $user = $this->getUser();

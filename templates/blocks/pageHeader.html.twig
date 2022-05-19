@@ -29,7 +29,7 @@
                 </div>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuUser">
                     <li><span class="dropdown-item-text">{{ 'Welcome'|trans }}&nbsp;{{ user.username }}&nbsp;!</span></li>
-                    <li><a class="dropdown-item" href="{{ path('app_profile') }}">{{ 'My Account'|trans }}</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_user_profile') }}">{{ 'My Account'|trans }}</a></li>
                     {% if is_granted('ROLE_ADMIN') %}
                         <li><a class="dropdown-item" href="{{ path('app_admin_dashboard_index') }}">{{ 'Another action'|trans }}</a></li>
                     {% endif %}

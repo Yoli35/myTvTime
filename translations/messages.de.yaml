@@ -6,19 +6,30 @@ Search Movies by: Filme suchen nach
 Genre: Genre
 Date: Datum
 Welcome: Willkommen
+Toolbar with button groups: Filmsuche Symbolleiste
+First group: Gruppe Suchwerkzeuge
+Another action: Easy Admin
 Logout: Abmelden
 
 # Registration
 Register: Registrieren
 Registration: Registrierung
+Email: E-Mail
+Username: Benutzername
+Password: Passwort
+Agree terms: Bedingungen zustimmen
 Connexion: Verbindung
 There is already an account with this email: Es gibt bereits ein Konto mit dieser E-Mail
 You should agree to our terms.: Sie sollten unseren Bedingungen zustimmen.
 Your password should be at least: Ihr Passwort sollte mindestens
 characters: Zeichen lang sein
 Please Confirm your Email: Bitte bestätigen ihre E-mail
-Your email address has been verified.: Ihre E-Mail-Adresse wurde verifiziert.
+Hi! Please confirm your email!: Hallo! Bitte bestätigen Sie Ihre E-Mail!
+Please confirm your email address by clicking the following link: Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Link klicken
+Confirm my Email: Bestätigen Sie meine E-Mail
+This link will expire in %d% heure: Dieser Link wird in %d% Stunde ablaufen
 Cheers: Beifall
+Your email address has been verified.: Ihre E-Mail-Adresse wurde verifiziert.
 
 # Home Paginator
 First Page : Erste Seite
@@ -127,3 +138,30 @@ Sport: Sport
 Suspense: Spannung
 Thriller: Thriller
 War: Krieg
+
+# User Account
+User Account: Benutzerkonto
+My Account: Mein Konto
+
+# Admin
+Dashboard: Tableau de bord
+Users: Utilisateurs
+Entities: Entités
+Settings: Règlages
+Image Configuration: Configuration image
+Genres: Genres
+Other: Autre
+Homepage: Page d'accueil
+ID: ID
+Genre Id: Genre Id
+ImageConfig: ImageConfig
+Base Url: Base Url
+Secure Base Url: Secure Base Url
+Backdrop Sizes: Backdrop Sizes
+Logo Sizes: Logo Sizes
+Poster Sizes: Poster Sizes
+Profile Sizes: Profile Sizes
+User: Utilisateur
+Is Verified: Vérifié
+Avatar: Avatar
+Banner: Bannière
