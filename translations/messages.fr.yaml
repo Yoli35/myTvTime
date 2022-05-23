@@ -144,6 +144,9 @@ War: Guerre
 # User Account
 "User Account": Compte utilisateur
 "My Account": Mon compte
+"Profile Image (JPG, PNG file)": Image de profil (au format jpg ou png)
+"Banner Image (JPG, PNG file)": Image de bannière (au format jpg ou png)
+"Update Profile": Mettre à jour le profil
 
 # Admin
 Dashboard: Tableau de bord

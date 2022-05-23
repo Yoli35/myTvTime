@@ -7,6 +7,9 @@ parameters:
     router.request_context.scheme: 'https'
     asset.request_context.secure: true
 
+    avatars_directory: '%kernel.project_dir%/public/images/users/avatars'
+    banners_directory: '%kernel.project_dir%/public/images/users/banners'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -24,3 +27,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: ['%avatars_directory%', '%banners_directory%']

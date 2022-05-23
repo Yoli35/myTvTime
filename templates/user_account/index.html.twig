@@ -5,6 +5,7 @@
     <link href="{{ asset("user.css") }}" rel="stylesheet">
 {% endblock %}
 {% block body %}
+    {#    {{ dump() }} #}
     <div class="container">
         {{ include('blocks/pageHeader.html.twig') }}
         <div class="user-account">
@@ -29,7 +30,52 @@
                     <img src="{{ asset('userAccountNoAvatar') }}">
                 {% endif %}
             </div>
+            <div class="details">
+                {{ form_start(form) }}
+
+                <div class="row">
+                    <div class="col-6">{{ form_row(form.email) }}</div>
+                    <div class="col-6">{{ form_row(form.username) }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">{{ form_row(form.avatar) }}</div>
+                    <div class="col-6">{{ form_row(form.banner) }}</div>
+                </div>
+                <div class="row">
+                    {{ form_row(form.save) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
         </div>
 
     </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        $(function () {
+            let inputAvatar = $('#user_avatar');
+            let inputBanner = $('#user_banner');
+
+            $(inputAvatar).mouseout(function () {
+                $('.avatar img').css('border', '4px solid #dbdbdb');
+                $('.avatar').css('filter', 'none');
+            })
+
+            $(inputAvatar).mouseenter(function () {
+                $('.avatar img').css('border', '4px solid #D81F26');
+                $('.avatar').css('filter', 'sepia(0.8)');
+            })
+
+            $(inputBanner).mouseout(function () {
+                $('.banner').css('border', '4px solid #dbdbdb');
+                $('.banner').css('filter', 'none');
+            })
+
+            $(inputBanner).mouseenter(function () {
+                $('.banner').css('border', '4px solid #D81F26');
+                $('.banner').css('filter', 'sepia(0.8)');
+            })
+        })
+    </script>
 {% endblock %}

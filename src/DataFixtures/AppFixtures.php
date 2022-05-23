@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Company;
 use App\Entity\Creator;
+use App\Entity\Genre;
 use App\Entity\ImageConfig;
 use App\Entity\Movie;
 use App\Entity\MovieCollection;
@@ -18,7 +19,6 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\Genre;
 
 
 class AppFixtures extends Fixture

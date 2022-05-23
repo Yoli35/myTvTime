@@ -6,17 +6,29 @@ Search Movies by: Buscar películas por
 Genre: Género
 Date: Fecha
 Welcome: Bienvenida
+Toolbar with button groups: Barra de búsqueda de películas
+First group: Grupo de herramientas de búsqueda
+Another action: Easy Admin
 Logout: Cerrar sesión
 
 # Registration
 Register: Registro
 Registration: Registro
+Email: Dirección electrónica
+Username: Nombre de usuario
+Password: Contraseña
+Agree terms: Aceptar las condiciones de uso
 Connexion: Conexión
 There is already an account with this email: Ya existe una cuenta con este correo
 You should agree to our terms.: Debe aceptar nuestros términos.
 Your password should be at least: Su contraseña debe tener al menos
 characters: caracteres
 Please Confirm your Email: Por favor, confirma tu email
+Hi! Please confirm your email!: Hola, confirme su dirección de correo electrónico.
+Please confirm your email address by clicking the following link: Confirme su dirección de correo electrónico haciendo clic en este enlace
+Confirm my Email: Confirmar mi dirección de correo electrónico
+This link will expire in: Este enlace expirará en
+Cheers: ¡Por ti!
 Your email address has been verified.: Tu dirección de email ha sido verificada.
 
 # Home Paginator
@@ -27,6 +39,9 @@ Next Page: Página siguiente
 Page: Página
 Total Pages: Número de páginas
 Total Results: Número de resultados
+
+# Movies by name
+Movies Search Result: Resultado de la búsqueda
 
 # Movies by genre
 Movies by genre:  Películas por género
@@ -125,3 +140,33 @@ Sport: Deporte
 Suspense: Suspenso
 Thriller: Thriller
 War: Guerra
+
+# User Account
+User Account: Actualizar el perfil
+My Account: Mi cuenta
+Profile Image (JPG, PNG file): Imagen de perfil (archivo JPG, PNG)
+Banner Image (JPG, PNG file): Imagen del banner (archivo JPG, PNG)
+Update Profile: Actualizar el perfil
+
+# Admin
+Dashboard: Tablero de mandos
+Users: Usuarios
+Entities: Entidades
+Settings: Configuración
+Image Configuration: Configuración de la imagen
+Genres: Géneros
+Other: Otros
+Homepage: Página de inicio
+ID: ID
+Genre Id: Genre Id
+ImageConfig: ImageConfig
+Base Url: Url base
+Secure Base Url: Url base segura
+Backdrop Sizes: Tamaños de telón de fondo
+Logo Sizes: Tamaños de logotipo
+Poster Sizes: Tamaños de póster
+Profile Sizes: Tamaños de perfil
+User: Usuario
+Is Verified: Se verifica
+Avatar: Avatar
+Banner: Bannière
