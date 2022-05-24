@@ -142,11 +142,33 @@ Thriller: Thriller
 War: Guerre
 
 # User Account
-"User Account": Compte utilisateur
-"My Account": Mon compte
-"Profile Image (JPG, PNG file)": Image de profil (au format jpg ou png)
-"Banner Image (JPG, PNG file)": Image de bannière (au format jpg ou png)
-"Update Profile": Mettre à jour le profil
+User Account: Compte utilisateur
+My Account: Mon compte
+City: Ville
+Zip code: Code postal
+Profile Image (JPG, PNG file): Image de profil (au format jpg ou png)
+Banner Image (JPG, PNG file): Image de bannière (au format jpg ou png)
+
+# Weather
+Update Profile: Mettre à jour le profil
+Sunrise: Lever
+Sunset: Coucher
+Last updated: Dernière mise à jour
+Feelslike: Ressenti
+Visibility: Visibilité
+UV: Indice UV
+Wind: Vent
+Direction: Direction
+Precipitation: Précipitation
+Humidity: Humidité
+Pressure: Pression atmosphérique
+km/h: km/h
+Gust: Rafale
+Millibars: millibars
+Patchy rain possible: Pluie éparse possible
+Moderate rain: Pluie modérée
+Sunny: Ensoleillé
+Moderate or heavy rain with thunder: Pluie forte à modérée avec tonerre par endroit
 
 # Admin
 Dashboard: Tableau de bord

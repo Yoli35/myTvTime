@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Service\BetaSeriesService;
 use App\Service\FileUploader;
+use App\Service\WeatherService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
@@ -31,7 +32,7 @@ class ProfileController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route('/{_locale}/user/profile', name: 'app_user_profile', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, BetaSeriesService $betaSeriesService): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, WeatherService $weatherService, BetaSeriesService $betaSeriesService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -67,6 +68,21 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_user_profile');
         }
 
+        $weather = [];
+        $astro = [];
+        if ($user->getCity()) {
+            $locale = $request->getLocale();
+            $standing = $weatherService->getLocalWeather($user->getCity(), $locale);
+            $weather = json_decode($standing, true, 512, 0);
+            $standing = $weatherService->getLocalAstronomy($user->getCity(), date("Y-m-d"), $locale);
+            $astro = json_decode($standing, true, 512, 0);
+            $standing = $weatherService->getLocalForecast($user->getCity(), date("Y-m-d"), 4, $locale);
+            $forecast = json_decode($standing, true, 512, 0);
+            dump($forecast);
+        }
+        else {
+            $astro['astronomy']['astro'] = [];
+        }
         $banner = [];
         if ($user->getBanner() == null) {
             $banner = $this->setRandomBanner($betaSeriesService);
@@ -75,6 +91,8 @@ class ProfileController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'banner' => $banner,
+            'weather' => $weather,
+            'astro' => $astro['astronomy']['astro']
         ]);
     }
 

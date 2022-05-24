@@ -146,6 +146,24 @@ Profile Image (JPG, PNG file): Profilfoto (im jpg- oder pong-Format)
 Banner Image (JPG, PNG file): Bannerfoto (im jpg- oder pong-Format)
 Update Profile: Profil aktualisieren
 
+# Weather
+Last updated: Zuletzt aktualisiert
+Feelslike: Fühlt sich an wie
+Precipitation: Niederschlag
+Humidity: Luftfeuchtigkeit
+Pressure: Druck
+Millibars: Millibar
+Visibility: Sichtbarkeit
+UV: UV
+Wind: Wind
+km/h: km/h
+Direction: Richtung
+Gust: Böe
+Sunrise: Aufgang
+Sunset: Untergang
+City: Stadt
+Zip code: Postleitzahl
+
 # Admin
 Dashboard: Tableau de bord
 Users: Utilisateurs

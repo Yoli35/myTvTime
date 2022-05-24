@@ -148,6 +148,24 @@ Profile Image (JPG, PNG file): Imagen de perfil (archivo JPG, PNG)
 Banner Image (JPG, PNG file): Imagen del banner (archivo JPG, PNG)
 Update Profile: Actualizar el perfil
 
+# Weather
+Last updated: Última actualización
+Feelslike: Se siente como
+Precipitation: Precipitación
+Humidity: Humedad
+Pressure: Presión
+Millibars: Milibares
+Visibility: Visibilidad
+UV: UV
+Wind: Viento
+km/h: km/h
+Direction: Dirección
+Gust: Ráfaga
+Sunrise: Salida del sol
+Sunset: Puesta de sol
+City: Ciudad
+Zip code: Código postal
+
 # Admin
 Dashboard: Tablero de mandos
 Users: Usuarios

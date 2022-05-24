@@ -1,0 +1,79 @@
+{% if weather is not empty %}
+    <div class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
+        <div class="city">{{ weather.location.name }}</div>
+        <div class="region-country">
+            <div>{{ weather.location.region }}</div>
+            -
+            <div>{{ weather.location.country }}</div>
+        </div>
+        <div class="last_updated">{{ 'Last updated'|trans }} : {{ weather.current.last_updated|date("d/m/Y G:i") }}</div>
+        <div class="temperature">{{ weather.current.temp_c|round ~ '°' }}</div>
+        <div class="feelslike">{{ 'Feelslike'|trans }} : {{ weather.current.feelslike_c|round ~ '°' }}</div>
+        <div class="condition">
+            <img src="{{ weather.current.condition.icon }}" alt="">
+            <div>{{ weather.current.condition.text }}</div>
+        </div>
+        <div class="humidity">
+            <div>{{ 'Precipitation'|trans }} : {{ weather.current.precip_mm ~ 'mm' }}</div>
+            <div>{{ 'Humidity'|trans }} : {{ weather.current.humidity ~ '%' }}</div>
+        </div>
+        <div class="humidity">
+            <div>{{ 'Pressure'|trans }} : {{ weather.current.pressure_mb }} {{ 'Millibars'|trans }}</div>
+        </div>
+        <div class="visibility-uv">
+            <div>{{ 'Visibility'|trans }} : {{ weather.current.vis_km ~ 'km' }}</div>
+            <div>{{ 'UV'|trans }} : {{ weather.current.uv }}</div>
+        </div>
+        <div class="wind">
+            <i class="bi bi-wind"></i>
+            <div>{{ 'Wind'|trans }} : {{ weather.current.wind_kph }}{{ 'km/h'|trans }}</div>
+            <div>{{ 'Direction'|trans }} : {{ weather.current.wind_dir }} ({{ weather.current.wind_degree ~ '°' }})</div>
+        </div>
+        <div class="wind">
+            <div>{{ 'Gust'|trans }} : {{ weather.current.gust_kph }}{{ 'km/h'|trans }}</div>
+        </div>
+        <div class="sun">
+            <i class="bi bi-sun"></i>
+            <div>{{ 'Sunrise'|trans }} : {{ astro.sunrise|date("G:i") }}</div>
+            <div>{{ 'Sunset'|trans }} : {{ astro.sunset|date("G:i") }}</div>
+        </div>
+        <div class="moon">
+            <i class="bi bi-moon"></i>
+            <div>{{ 'Sunrise'|trans }} : {{ astro.moonrise|date("G:i") }}</div>
+            <div>{{ 'Sunset'|trans }} : {{ astro.moonset|date("G:i") }}</div>
+        </div>
+    </div>
+{% endif %}
+
+{% block morejs %}
+    <script>
+        $(function () {
+            let toggle = $('.toggle');
+
+            $(toggle).click(function () {
+
+                if ($(toggle).hasClass('open')) {
+                    $(toggle).removeClass('open');
+                    $(toggle).html('<i class="bi bi-plus-circle">');
+                    $('.region-country').hide();
+                    $('.feelslike').hide();
+                    $('.humidity').hide();
+                    $('.visibility-uv').hide();
+                    $('.wind').hide();
+                    $('.sun').hide();
+                    $('.moon').hide();
+                } else {
+                    $(toggle).addClass('open');
+                    $(toggle).html('<i class="bi bi-dash-circle">');
+                    $('.region-country').show();
+                    $('.feelslike').show();
+                    $('.humidity').show();
+                    $('.visibility-uv').show();
+                    $('.wind').show();
+                    $('.sun').show();
+                    $('.moon').show();
+                }
+            })
+        })
+    </script>
+{% endblock %}

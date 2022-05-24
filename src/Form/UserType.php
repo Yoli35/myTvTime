@@ -26,6 +26,15 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'col-6'],
             ])
 //            ->add('isVerified')
+            ->add('city', TextType::class, [
+                'attr' => ['class' => 'col-6'],
+            ])
+            ->add('zipCode', TextType::class, [
+                'attr' => ['class' => 'col-3'],
+            ])
+            ->add('country', TextType::class, [
+                'attr' => ['class' => 'col-3'],
+            ])
             ->add('avatar', FileType::class, [
                 'label' => 'Profile Image (JPG, PNG file)',
                 // unmapped means that this field is not associated to any entity property
@@ -41,6 +50,7 @@ class UserType extends AbstractType
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/png',
+                            'image/webp',
                         ],
                         'mimeTypesMessage' => 'Please upload a valid JPEG or PNG image',
                     ])
@@ -56,6 +66,7 @@ class UserType extends AbstractType
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/png',
+                            'image/webp',
                         ],
                         'mimeTypesMessage' => 'Please upload a valid JPEG or PNG image',
                     ])
