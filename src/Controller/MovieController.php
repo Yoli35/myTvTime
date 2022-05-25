@@ -34,11 +34,6 @@ class MovieController extends AbstractController
     #[Route('/{_locale}/movie/{id}', name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request, $id, ManagerRegistry $doctrine, Service\CallTmdbService $callTmdbService, HomeController $homeController): Response
     {
-        // Clé d'API (v3 auth)
-        //      f7e3c5fe794d565b471334c9c5ecaf96
-        // Jeton d'accès en lecture à l'API (v4 auth)
-        //      eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2UzYzVmZTc5NGQ1NjViNDcxMzM0YzljNWVjYWY5NiIsInN1YiI6IjYyMDJiZjg2ZTM4YmQ4MDA5MWVjOWIzOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9-8i4TOkKXtPZE_nkXk1ZvAlbDYgAdtcrCR6R8Dv3Wg
-
         $movieId = $id;
         $locale = $request->getLocale();
         $standing = $callTmdbService->getMovie($movieId, $locale);
@@ -78,22 +73,26 @@ class MovieController extends AbstractController
 
     public function getLocaleDates($dates, $countries, $locale): array
     {
-        $locales = ['fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'], 'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'], 'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'], 'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']];
+        $locales = [
+            'fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
+            'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'],
+            'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'],
+            'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']
+        ];
 
         $types = [1 => 'Premiere', 2 => 'Theatrical (limited)', 3 => 'Theatrical', 4 => 'Digital', 5 => 'Physical', 6 => 'TV'];
         $localeDates = [];
         $c = [];
 
-        for ($i = 0; $i < count($countries); $i++) {
-            $c[$countries[$i]['iso_3166_1']] = $countries[$i]['english_name'];
+        foreach ($countries as $country) {
+            $c[$country['iso_3166_1']] = $country['english_name'];
         }
 
-        for ($i = 0; $i < count($dates); $i++) {
-            $d = $dates[$i];
+        foreach ($dates as $d) {
             if (in_array($d['iso_3166_1'], $locales[$locale])) {
                 $d['country'] = $c[$d['iso_3166_1']];
-                for ($j = 0; $j < count($d['release_dates']); $j++) {
-                    $d['release_dates'][$j]['type'] = $types[$d['release_dates'][$j]['type']];
+                foreach ($d['release_dates'] as &$release_date) {
+                    $release_date['type'] = $types[$release_date['type']];
                 }
                 $localeDates[] = $d;
             }

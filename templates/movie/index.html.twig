@@ -72,7 +72,7 @@
                                 <div class="dates">
                                     {% for date in location.release_dates %}
                                         <div class="event">
-                                            <div class="type">{{ date.type|trans }}{% if date.note|length %} - {{ date.note }}{% endif %}</div>
+                                            <div class="type">{{ date.type|trans }}{% if date.note is defined and date.note|length %} - {{ date.note }}{% endif %}</div>
                                             <div class="date">{{ date.release_date|date('d/m/Y') }}</div>
                                         </div>
                                     {% endfor %}
@@ -232,7 +232,6 @@
                     method: 'GET',
                     data: {id: id, locale: "{{ locale }}"},
                     success: function (data) {
-                        console.log(data)
                         let locale = data['locale'];
                         let person = data['person'];
                         let name = person['name'],

@@ -10,6 +10,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CallTmdbService
 {
+    // Clé d'API (v3 auth)
+    //      f7e3c5fe794d565b471334c9c5ecaf96
+    // Jeton d'accès en lecture à l'API (v4 auth)
+    //      eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2UzYzVmZTc5NGQ1NjViNDcxMzM0YzljNWVjYWY5NiIsInN1YiI6IjYyMDJiZjg2ZTM4YmQ4MDA5MWVjOWIzOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9-8i4TOkKXtPZE_nkXk1ZvAlbDYgAdtcrCR6R8Dv3Wg
+
     private HttpClientInterface $client;
 
     public function __construct(HttpClientInterface $client)
