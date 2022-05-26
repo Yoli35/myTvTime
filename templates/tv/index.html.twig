@@ -16,14 +16,6 @@
         <div class="tv-info">
             <div class="tv-detail">
                 <h1>{{ tv.name }}</h1>
-                {#                "networks" => array:1 [▼ #}
-                {#                0 => array:4 [▼ #}
-                {#                "name" => "Apple TV+" #}
-                {#                "id" => 2552 #}
-                {#                "logo_path" => "/4KAy34EHvRM25Ih8wb82AuGU7zJ.png" #}
-                {#                "origin_country" => "US" #}
-                {#                ] #}
-                {#                ] #}
                 {% if tv.networks is not empty %}
                     {% for network in tv.networks %}
                         <div class="platform">

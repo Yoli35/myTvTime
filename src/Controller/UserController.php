@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserMovie;
 use App\Form\UserType;
 use App\Service\BetaSeriesService;
 use App\Service\FileUploader;
@@ -22,7 +23,7 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class ProfileController extends AbstractController
+class UserController extends AbstractController
 {
     /**
      * @throws TransportExceptionInterface
@@ -84,6 +85,45 @@ class ProfileController extends AbstractController
             'user' => $user,
             'banner' => $banner,
             'weather' => $forecast,
+        ]);
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    #[Route('/{_locale}/user/movies', name: 'app_user_movies', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function userMovies(Request $request, ManagerRegistry $doctrine, HomeController $homeController, WeatherService $weatherService): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movies = [];
+
+        $repoUM = $doctrine->getRepository(UserMovie::class);
+        $userMovies = $repoUM->findAll();
+        foreach ($userMovies as $userMovie) {
+            $users = $userMovie->getUsers();
+            foreach ($users as $u) {
+                if ($u->getId() == $user->getId()) {
+                    $movies[] = $userMovie;
+                }
+            }
+        }
+        $imageConfig = $homeController->getImageConfig($doctrine);
+
+        $forecast = [];
+        if ($user->getCity()) {
+            $locale = $request->getLocale();
+            $standing = $weatherService->getLocalForecast($user->getCity(), 3, $locale);
+            $forecast = json_decode($standing, true, 512, 0);
+        }
+
+        return $this->render('user_account/user_movies.html.twig', [
+            'discovers' => $movies,
+            'weather' => $forecast,
+            'imageConfig' => $imageConfig,
         ]);
     }
 

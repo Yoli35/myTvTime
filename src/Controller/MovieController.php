@@ -4,7 +4,10 @@ namespace App\Controller;
 
 //use App\Entity\ImageConfig;
 //use App\Entity\Movie;
+use App\Entity\User;
+use App\Entity\UserMovie;
 use App\Service;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Google\ApiCore\ApiException;
 use Google\ApiCore\ValidationException;
@@ -48,21 +51,23 @@ class MovieController extends AbstractController
         $countries = json_decode($standing, true, 512, 0);
         $imageConfig = $homeController->getImageConfig($doctrine);
 
+        /** @var User $user */
+        $user = $this->getUser();
+        $hasBeenSeen = false;
+        if ($user) {
+            foreach ($user->getMovies() as $movie) {
+                if ($id == $movie->getMovieDbId()) {
+                    $hasBeenSeen = true;
+                }
+            }
+        }
+
         $cast = $credits['cast'];
         $crew = $credits['crew'];
 //        $crew = usort($credits['crew'], 'memberCmp');
         $releaseDates = $this->getLocaleDates($releaseDates['results'], $countries, $locale);
 
-        return $this->render('movie/index.html.twig', [
-            'movie' => $movieDetail,
-            'recommendations' => $recommendations['results'],
-            'dates' => $releaseDates,
-//          'countries' => $countries,
-            'cast' => $cast,
-            'crew' => $crew,
-            'imageConfig' => $imageConfig,
-            'locale' => $locale,
-        ]);
+        return $this->render('movie/index.html.twig', ['movie' => $movieDetail, 'recommendations' => $recommendations['results'], 'dates' => $releaseDates, 'hasBeenSeen' => $hasBeenSeen, 'cast' => $cast, 'crew' => $crew, 'imageConfig' => $imageConfig, 'locale' => $locale,]);
     }
 
     #[Assert\Callback]
@@ -73,12 +78,7 @@ class MovieController extends AbstractController
 
     public function getLocaleDates($dates, $countries, $locale): array
     {
-        $locales = [
-            'fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
-            'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'],
-            'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'],
-            'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']
-        ];
+        $locales = ['fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'], 'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'], 'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'], 'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']];
 
         $types = [1 => 'Premiere', 2 => 'Theatrical (limited)', 3 => 'Theatrical', 4 => 'Digital', 5 => 'Physical', 6 => 'TV'];
         $localeDates = [];
@@ -119,13 +119,7 @@ class MovieController extends AbstractController
         $currentGenres = explode(',', $genres); // "Action,Adventure" => ['Action', 'Adventure']
         $imageConfig = $homeController->getImageConfig($doctrine);
 
-        return $this->render('movie/genre.html.twig', [
-            'discovers' => $discovers,
-            'genres' => $genres,
-            'possible_genres' => $possibleGenres,
-            'current_genres' => $currentGenres,
-            'imageConfig' => $imageConfig,
-            ]);
+        return $this->render('movie/genre.html.twig', ['discovers' => $discovers, 'genres' => $genres, 'possible_genres' => $possibleGenres, 'current_genres' => $currentGenres, 'imageConfig' => $imageConfig,]);
     }
 
     /**
@@ -148,12 +142,7 @@ class MovieController extends AbstractController
             $years[] = $i;
         }
 
-        return $this->render('movie/date.html.twig', [
-            'discovers' => $discovers,
-            'date' => $date,
-            'years' => $years,
-            'imageConfig' => $imageConfig,
-            ]);
+        return $this->render('movie/date.html.twig', ['discovers' => $discovers, 'date' => $date, 'years' => $years, 'imageConfig' => $imageConfig,]);
     }
 
     /**
@@ -165,9 +154,9 @@ class MovieController extends AbstractController
     #[Route('/{_locale}/movie/search/{query}/{page}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1, 'query' => ''])]
     public function moviesSearch(Request $request, $page, $query, ManagerRegistry $doctrine, Service\CallTmdbService $callTmdbService, HomeController $homeController): Response
     {
-        if ($query == 'Recherche par nom') $query ='';
+        if ($query == 'Recherche par nom') $query = '';
         $locale = $request->getLocale();
-        $discovers = ['results'=> [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
+        $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         if ($query && strlen($query)) {
             $standing = $callTmdbService->moviesSearch($page, $query, $locale);
             $discovers = json_decode($standing, true, 512, 0);
@@ -175,11 +164,7 @@ class MovieController extends AbstractController
 
         $imageConfig = $homeController->getImageConfig($doctrine);
 
-        return $this->render('movie/search.html.twig', [
-            'query' => $query,
-            'discovers' => $discovers,
-            'imageConfig' => $imageConfig,
-            ]);
+        return $this->render('movie/search.html.twig', ['query' => $query, 'discovers' => $discovers, 'imageConfig' => $imageConfig,]);
     }
 
     /**
@@ -197,12 +182,7 @@ class MovieController extends AbstractController
         $person = json_decode($standing, true);
         $department = ['fr' => ['Acting' => ['Acteur', 'Actrice', 'Acteur'], 'ADR Mixer' => ['Mixeur ADR (post-synchro)', 'Mixer ADR (post-synchro)', 'Mixer ADR (post-synchro)'], 'Art Direction' => ['Direction artistique', 'Direction artistique', 'Direction artistique'], 'Assistant Director' => ['Assistant réalisateur', 'Assistante réalisatrice', 'Assistant réalisateur'], 'Casting' => ['Distribution', 'Distribution', 'Distribution'], 'Costume Design' => ['Créateur de costumes', 'Créatrice de costumes', 'Créateur de costumes'], 'Costume Supervisor' => ['Superviseur des costumes', 'Superviseuse des costumes', 'Superviseur des costumes'], 'Director of Photography' => ['Directeur de la photographie', 'Directrice de la photographie', 'Directeur de la photographie'], 'Editing' => ['Édition', 'Édition', 'Édition'], 'Editor' => ['Éditeur', 'Éditrice', 'Éditeur'], 'Executive Producer' => ['Producteur délégué', 'Productrice déléguée', 'Producteur délégué'], 'Foley Artist' => ['Bruiteur', 'Bruiteuse', 'Bruiteur'], 'Line producer' => ['Producteur exécutif', 'Productrice exécutive', 'Producteur exécutif'], 'Makeup Artist' => ['Maquilleur', 'Maquilleuse', 'Maquilleur'], 'Music Supervisor' => ['Superviseur musical', 'Superviseuse musical', 'Superviseur musical'], 'Original Music Composer' => ['Compositeur de musique originale', 'Compositrice de musique originale', 'Compositeur de musique originale'], 'Producer' => ['Producteur', 'Productrice', 'Producteur'], 'Production Design' => ['Conception de production', 'Conception de production', 'Conception de production'], 'Screenplay' => ['Scénario', 'Scénario', 'Scénario'], 'Screenstory' => ['Scénario', 'Scénario', 'Scénario'], 'Set Decoration' => ['Décorateur', 'Décoratrice', 'Décorateur'], 'Set Designer' => ['Scénographe', 'Scénographe', 'Scénographe'], 'Set Dresser' => ['Habilleur', 'Habilleuse', 'Habilleur'], 'Set Manager' => ['Régisseur', 'Régisseuse', 'Régisseur'], 'Sound' => ['Son', 'Son', 'Son'], 'Sound Effects Editor' => ['Éditeur d\'effets sonores', 'Éditeur d\'effets sonores', 'Éditeur d\'effets sonores'], 'Sound Mixer' => ['Ingénieur du son', 'Ingénieure du son', 'Ingénieur du son'], 'Sound Re-Recording Mixer' => ['Mixeur son', 'Mixeuse son', 'Mixeur son'], 'Still Photographer' => ['Photographe de plateau', 'Photographe de plateau', 'Photographe de plateau'], 'Stunt' => ['Cascadeur', 'Cascadeuse', 'Cascadeur'], 'Supervising Art Director' => ['Directeur artistique superviseur', 'Directrice artistique superviseure', 'Directeur artistique superviseur'], 'Supervising Sound Editor' => ['Supervision du montage son', 'Supervision du montage son', 'Supervision du montage son'], 'VFX Artist' => ['Artiste d\'effets visuels', 'Artiste d\'effets visuels', 'Artiste d\'effets visuels'], 'Visual Effects' => ['Effets visuels', 'Effets visuels', 'Effets visuels'], 'Visual Effects Producer' => ['Producteur Effets visuels', 'Producteur Effets visuels', 'Producteur Effets visuels'], 'Visual Effects Supervisor' => ['Superviseur Effets visuels', 'Superviseuse Effets visuels', 'Superviseur Effets visuels'], 'Writing' => ['Écriture', 'Écriture', 'Écriture']], 'de' => ['Acting' => ['Schauspieler', 'Schauspielerin', 'Schauspieler'], 'ADR Mixer' => ['ADR-Mix (post-synchro)', 'ADR-Mix (post-synchro)', 'ADR-Mix (post-synchro)'], 'Art Direction' => ['Künstlerische Leitung ', 'Künstlerische Leitung ', 'Künstlerische Leitung '], 'Assistant Director' => ['Regieassistent ', 'Regieassistentin ', 'Regieassistent '], 'Casting' => ['Casting', 'Casting', 'Casting'], 'Costume Design' => ['Kostümbildner', 'Kostümbildnerin', 'Kostümbildner'], 'Costume Supervisor' => ['Supervisor für Kostüme', 'Supervisorin für Kostüme', 'Supervisor für Kostüme'], 'Director of Photography' => ['Direktor für Fotografie', 'Direktorin für Fotografie', 'Direktor für Fotografie'], 'Editing' => ['', '', ''], 'Editor' => ['', '', ''], 'Executive Producer' => ['', '', ''], 'Foley Artist' => ['', '', ''], 'Makeup Artist' => ['', '', ''], 'Music Supervisor' => ['', '', ''], 'Original Music Composer' => ['', '', ''], 'Producer' => ['', '', ''], 'Production Design' => ['', '', ''], 'Screenplay' => ['', '', ''], 'Screenstory' => ['', '', ''], 'Set Decoration' => ['', '', ''], 'Set Designer' => ['', '', ''], 'Set Dresser' => ['', '', ''], 'Sound Effects Editor' => ['', '', ''], 'Sound Mixer' => ['', '', ''], 'Sound Re-Recording Mixer' => ['', '', ''], 'Still Photographer' => ['', '', ''], 'Supervising Art Director' => ['', '', ''], 'Supervising Sound Editor' => ['', '', ''], 'VFX Artist' => ['', '', ''], 'Visual Effects' => ['', '', ''], 'Visual Effects Producer' => ['', '', ''], 'Visual Effects Supervisor' => ['', '', ''],], 'es' => ['Acting' => ['Actor', 'Actress', 'Actor'], 'ADR Mixer' => ['Mezcla ADR (post-sincronización)', 'Mezcla ADR (post-sincronización)', 'Mezcla ADR (post-sincronización)'], 'Art Direction' => ['Dirección artística', 'Dirección artística', 'Dirección artística'], 'Assistant Director' => ['Asistente de dirección', 'Asistente de dirección', 'Asistente de dirección'], 'Casting' => ['Casting', 'Casting', 'Casting'], 'Costume Design' => ['Diseñador de vestuario', 'Diseñadora de vestuario', 'Diseñador de vestuario'], 'Costume Supervisor' => ['Supervisor de vestuario', 'Supervisora de vestuario', 'Supervisor de vestuario'], 'Director of Photography' => ['Director de fotografía', 'Director de fotografía', 'Director de fotografía'], 'Editing' => ['', '', ''], 'Editor' => ['', '', ''], 'Executive Producer' => ['', '', ''], 'Foley Artist' => ['', '', ''], 'Makeup Artist' => ['', '', ''], 'Music Supervisor' => ['', '', ''], 'Original Music Composer' => ['', '', ''], 'Producer' => ['', '', ''], 'Production Design' => ['', '', ''], 'Screenplay' => ['', '', ''], 'Screenstory' => ['', '', ''], 'Set Decoration' => ['', '', ''], 'Set Designer' => ['', '', ''], 'Set Dresser' => ['', '', ''], 'Sound Effects Editor' => ['', '', ''], 'Sound Mixer' => ['', '', ''], 'Sound Re-Recording Mixer' => ['', '', ''], 'Still Photographer' => ['', '', ''], 'Supervising Art Director' => ['', '', ''], 'Supervising Sound Editor' => ['', '', ''], 'VFX Artist' => ['', '', ''], 'Visual Effects' => ['', '', ''], 'Visual Effects Producer' => ['', '', ''], 'Visual Effects Supervisor' => ['', '', ''],],];
 
-        return $this->json([
-            'success' => true,
-            'person' => $person,
-            'department' => $department,
-            'locale' => $locale,
-            ]);
+        return $this->json(['success' => true, 'person' => $person, 'department' => $department, 'locale' => $locale,]);
     }
 
     /**
@@ -249,9 +229,61 @@ class MovieController extends AbstractController
             $success = false;
         }
 
-        return $this->json([
-            'success' => $success,
-            'person' => $person,
-            ]);
+        return $this->json(['success' => $success, 'person' => $person,]);
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    #[Route('/movie/add', name: 'app_movie_add')]
+    public function addMovieToUser(Request $request, Service\CallTmdbService $callTmdbService, ManagerRegistry $doctrine, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+
+        $locale = $request->getLocale();
+        $standing = $callTmdbService->getMovie($movieId, $locale);
+        $movieDetail = json_decode($standing, true, 512, 0);
+
+        $userMovie = $doctrine->getRepository(UserMovie::class)->findOneBy(['movieDbId' => $movieId]);
+
+        if (!$userMovie) {
+            $userMovie = new UserMovie();
+            $userMovie->setTitle($movieDetail['title']);
+            $userMovie->setOriginalTitle($movieDetail['original_title']);
+            $userMovie->setPosterPath($movieDetail['poster_path']);
+            $userMovie->setReleaseDate($movieDetail['release_date']);
+            $userMovie->setMovieDbId($movieDetail['id']);
+        }
+        $userMovie->addUser($user);
+        $entityManager->persist($userMovie);
+        $entityManager->flush();
+
+        return $this->json([]);
+    }
+
+    #[Route('/movie/remove', name: 'app_movie_remove')]
+    public function removeMovieToUser(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+
+        $userMovie = $doctrine->getRepository(UserMovie::class)->findOneBy(['movieDbId' => $movieId]);
+
+        dump($userMovie);
+
+        if ($userMovie) {
+            $userMovie->removeUser($user);
+            $entityManager->persist($userMovie);
+            $entityManager->flush();
+        }
+
+
+        return $this->json(['/movie/remove' => 'success']);
     }
 }

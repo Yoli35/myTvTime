@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\ImageConfig;
+use App\Entity\User;
+use App\Entity\UserMovie;
 use App\Service;
 use Doctrine\Persistence\ManagerRegistry;
 use JetBrains\PhpStorm\ArrayShape;
@@ -34,8 +36,21 @@ class HomeController extends AbstractController
     #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es', 'page'=>1])]
     public function index(Request $request, Service\CallTmdbService $callTmdbService, ManagerRegistry $doctrine): Response
     {
-//        $user = $this->getUser();
-
+        /** @var User $user */
+        $user = $this->getUser();
+        $userMovieIds = [];
+        if ($user) {
+            $repoUM = $doctrine->getRepository(UserMovie::class);
+            $userMovies = $repoUM->findAll();
+            foreach ($userMovies as $userMovie) {
+                $users = $userMovie->getUsers();
+                foreach ($users as $u) {
+                    if ($u->getId() == $user->getId()) {
+                        $userMovieIds[] = $userMovie->getMovieDbId();
+                    }
+                }
+            }
+        }
         $page = $request->query->getInt('page', 1);
         $locale = $request->getLocale();
         $standing = $callTmdbService->discoverMovies($page, $locale);
@@ -50,16 +65,11 @@ class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'discovers' => $discovers,
+            'userMovies' => $userMovieIds,
             'imageConfig' => $imageConfig,
             'pages' => $pages,
             'dRoute' => 'app_movie'
         ]);
-//        dRoutes = [
-//            'app_home'=> 'app_movie',
-//            'app_admin_dashboard_index'=> 'app_movie',
-//            'app_home_series'=> 'app_show',
-//            'app_home_tv'=> 'app_tv'
-//        ]
     }
 
     #[ArrayShape(['url' => "string", 'backdrop_sizes' => "array", 'logo_sizes' => "array", 'poster_sizes' => "array", 'profile_sizes' => "array", 'still_sizes' => "array"])]

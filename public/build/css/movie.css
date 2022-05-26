@@ -1,0 +1,227 @@
+.movie-header {
+    border-radius: 1em;
+    overflow: auto;
+    position: relative;
+}
+
+.movie-header .has-been-seen {
+    bottom: 2em;
+    background-color: #333;
+    border-radius: 50%;
+    color: #dbdbdb;
+    cursor: pointer;
+    font-size: 2em;
+    padding: 0 .2em;
+    position: absolute;
+    right: 2em;
+}
+
+.movie-header .has-been-seen.yes {
+    color: #11d08e;
+}
+
+.movie-info {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2em;
+}
+
+.movie-detail {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.movie-detail > .title {
+    color: #f2f2f2;
+    font-size: 2em;
+    font-weight: bold;
+    margin-right: auto;
+    padding: .5em;
+}
+
+.movie-detail > .genres {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-right: auto;
+}
+
+.movie-detail > .genres > .genre {
+    border: 5px solid #8a8a8a;
+    border-radius: 18px;
+    margin: 10px;
+}
+
+.movie-detail > .genres > .genre a {
+    color: #8a8a8a;
+    height: 100%;
+    padding: .25em 1em;
+    text-decoration: none;
+    width: 100%;
+}
+
+.movie-detail > .original_title,
+.movie-detail > .date,
+.movie-detail > .runtime,
+.movie-detail > .revenue,
+.movie-detail > .vote,
+.movie-detail > .homepage,
+.movie-detail > .imdb {
+    padding-left: 20px;
+}
+
+.movie-detail > .homepage > a,
+.movie-detail > .imdb > a {
+    color: #f2f2f2;
+    text-decoration: none;
+}
+
+.movie-detail > .overview {
+    padding: 20px;
+}
+
+.movie-detail > .productions {
+    padding: 20px 20px 0 20px;
+}
+
+.movie-detail > .productions > ul {
+    list-style-type: none;
+}
+
+.movie-detail > .productions > .production {
+    display: flex;
+    flex-direction: row;
+}
+
+.movie-detail > .productions > .production > .cie-detail {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.movie-poster {
+    display: flex;
+    margin-bottom: auto;
+    margin-left: auto;
+}
+
+.movie-poster > img {
+    border: 8px solid #f2f2f2;
+}
+
+.recommendations {
+    background-color: #383838;
+    border: 4px solid#767676;
+    border-radius: 1em;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: 20em;
+    overflow-y: scroll;
+}
+
+.recommendation {
+    align-items: center;
+    border: 4px solid #bdbdbd;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: .5em;
+}
+
+.release-dates {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+.release-dates > .country {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1em;
+}
+
+.release-dates > .country >.dates {
+    display: flex;
+    flex-direction: column;
+    padding-left: .5em;
+}
+
+.release-dates > .country >.dates > .event > .type::after {
+    content: '   :';
+}
+
+.release-dates > .country >.dates > .event > .date {
+    color: #0087e8;
+    font-weight: bold;
+    padding-left: 1em;
+}
+
+.release-dates > .country >.dates > .event {
+    display: flex;
+    flex-direction: row;
+    padding: .25em;
+}
+
+.person-modal {
+    display: flex;
+    flex-direction: row;
+}
+
+.person-infos {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.person-infos > .biography {
+    padding-right: 1em;
+}
+
+.person-infos > .biography > div > div {
+    margin: .5em;
+}
+
+.person-infos > .imdb-page {
+    align-items: center;
+    display: flex;
+}
+
+.person-infos >.imdb-page > span > a {
+    background-image: url("/images/imdb.png");
+    background-size: cover;
+    display: block;
+    height: 27px;
+    margin-left: 2em;
+    width: 64px;
+}
+
+.person-profile {
+    margin-left: auto;
+}
+
+.select_genres {
+    background-color: #111;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 1em;
+}
+
+.select_genres > .genre {
+    border: 5px solid #8a8a8a;
+    border-radius: 18px;
+    cursor: grab;
+    margin: 10px;
+    padding: .25em 1em;
+}
+
+.select_genres > .active {
+    border: 5px solid #0087e8;
+    color: #0087e8;
+}

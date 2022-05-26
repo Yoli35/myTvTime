@@ -1,0 +1,332 @@
+.tv-header {
+
+}
+
+.tv-info {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2em;
+}
+
+.tv-detail {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-right: 2em;
+}
+
+.tv-detail > .title {
+    color: #f2f2f2;
+    font-size: 2em;
+    font-weight: bold;
+    margin-right: auto;
+    padding: .5em;
+}
+
+.tv-detail > .genres {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-right: auto;
+}
+
+.tv-detail > .genres > .genre {
+    color: #ca8a04; /* Symfony footer */
+    border: 5px solid #ca8a04; /* Symfony footer */
+    border-radius: 18px;
+    margin: 10px;
+    padding: 0 20px;
+}
+
+.tv-detail > .episode_run_time,
+.tv-detail > .number_of_episodes,
+.tv-detail > .number_of_seasons,
+.tv-detail > .original_title,
+.tv-detail > .date,
+.tv-detail > .vote,
+.tv-detail > .last_episode_to_air,
+.tv-detail > .episode_number,
+.tv-detail > .season_number,
+.tv-detail > .homepage,
+.tv-detail > .imdb {
+    padding-left: 1em;
+}
+
+.tv-detail > .original_title > .data,
+.tv-detail > .episode_run_time > .data,
+.tv-detail > .number_of_episodes > .data,
+.tv-detail > .number_of_seasons > .data,
+.tv-detail > .date > .data,
+.tv-detail > .vote > .data,
+.tv-detail > .last_episode_to_air > .data,
+.tv-detail > .last_episode_to_air > .date > .data,
+.tv-detail > .last_episode_to_air > .episode_number > .data,
+.tv-detail > .last_episode_to_air > .season_number > .data,
+.tv-detail > .data {
+    color: #ca8a04; /* Symfony footer */
+}
+
+.tv-detail > .homepage > a {
+    color: #ca8a04; /* Symfony footer */
+    text-decoration: none;
+}
+
+.tv-detail > .overview {
+    padding: 1em;
+}
+
+.tv-detail > .last_episode_to_air {
+    padding: 1em 0 1em 2em;
+}
+
+.tv-detail > .last_episode_to_air > .label {
+    margin: 0 0 0 -1em;
+}
+
+.tv-detail > .productions {
+    padding: 20px 20px 0 20px;
+}
+
+.tv-detail > .productions > ul {
+    list-style-type: none;
+}
+
+.tv-detail > .productions > .production {
+    display: flex;
+    flex-direction: row;
+}
+
+.tv-detail > .productions > .production > .cie-detail {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+h1 > a, h2 > a {
+    text-decoration: none;
+}
+.seasons {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: .75em;
+    justify-content: center;
+}
+
+.seasons > .season {
+    border: 2px #bdbdbd solid;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: row;
+    margin: 1em;
+    padding: 1em;
+}
+
+.seasons > .season > .season-detail {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1em;
+}
+
+.seasons > .season > .season-detail > .overview {
+    /*max-width: 16em;*/
+}
+
+.seasons > .season > .season-detail > .link {
+    border: 2px #bdbdbd solid;
+    border-radius: 1.25em;
+    margin: auto auto 0 auto;
+    padding: .75em 1.25em;
+}
+
+.seasons > .season > .season-detail > .link:hover {
+    border-color: #ca8a04; /* Symfony footer */
+}
+
+.seasons > .season > .season-detail > .link > a {
+    color: #bdbdbd;
+    text-decoration: none;
+}
+
+.seasons > .season > .season-detail > .link > a:hover {
+    color: #ca8a04; /* Symfony footer */
+}
+
+.seasons > .season > .season-detail > .name > .data,
+.seasons > .season > .season-detail > .air_date > .data,
+.seasons > .season > .season-detail > .episode_count > .data,
+.seasons > .season > .season-detail > .season_number > .data {
+    color: #ca8a04; /* Symfony footer */
+}
+
+.tv-poster {
+    display: flex;
+    margin-bottom: auto;
+    margin-left: auto;
+}
+
+.tv-poster > img {
+    border: 8px solid #f2f2f2;
+}
+
+
+.season-info {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2em;
+}
+
+.season-detail {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.season-detail > .season-name {
+    color: #f2f2f2;
+    font-size: 2em;
+    font-weight: bold;
+    margin-right: auto;
+    padding: .5em;
+}
+
+.season-detail > .air-date,
+.season-detail > .season-number,
+.season-detail > .overview {
+    padding-left: 20px;
+}
+
+.season-detail > .air-date > .data,
+.season-detail > .season-number > .data {
+    color: #ca8a04; /* Symfony footer */
+}
+
+.episode-info > h1 > a >,
+.episode-info > h2 > a > .data,
+.episode-info > h1 > a:hover >,
+.episode-info > h2 > a:hover > .data {
+    color: #ca8a04; /* Symfony footer */
+}
+
+.episodes {
+    padding-right: 2em;
+}
+
+.episode {
+    border: 2px solid #bdbdbd;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: row;
+    font-size: .75em;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+.episode > .detail {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+}
+
+.episode > .detail > .name {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding-top: 1em;
+}
+
+.episode > .detail > .air-date,
+.episode > .detail > .episode-number,
+.episode > .detail > .overview {
+    padding-left: 1em;
+}
+
+.episode > .detail > .overview {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.episode > .detail > .guests-label {
+    font-size: 1.5em;
+    padding-top: 1em;
+}
+
+.episode > .detail > .guests {
+    background-color: #383838;
+    border: 4px solid#767676;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-height: 16em;
+    overflow-y: scroll;
+    padding: 1em;
+}
+
+.episode > .detail > .guests > .guest {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+}
+
+.episode > .detail > .guests > .guest > .profile {
+    background-image: url("/images/default/profile.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    min-height: 68px;
+    width: 45px;
+}
+
+.episode > .detail > .guests > .guest > .profile > img {
+    height: 68px;
+    width: 45px;
+}
+
+.episode > .detail > .guests > .guest > .name {
+    font-size: .75em;
+    font-weight: bold;
+    margin-top: auto;
+}
+
+.episode > .detail > .guests > .guest > .known-for {
+    font-size: .75em;
+}
+
+.episode > .detail > .air-date > .data {
+    color: #ca8a04; /* Symfony footer */
+}
+
+.episode > .poster > img {
+    border: 4px solid #bdbdbd;
+}
+
+.episode > .poster {
+    display: flex;
+    justify-content: center;
+    margin: auto 0 auto auto;
+}
+
+
+.episode > .detail > .link {
+    border: 2px #bdbdbd solid;
+    border-radius: 1.25em;
+    margin: 1em auto 0 0;
+    padding: .75em 1.25em;
+}
+
+.episode > .detail > .link:hover {
+    border-color: #ca8a04; /* Symfony footer */
+}
+
+.episode > .detail > .link > a {
+    color: #bdbdbd;
+    text-decoration: none;
+}
+
+.episode > .detail > .link > a:hover {
+    color: #ca8a04; /* Symfony footer */
+}

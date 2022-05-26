@@ -8,6 +8,8 @@ Date: Date
 Welcome: Bienvenue
 Toolbar with button groups: Barre d'outil de la recherche de film
 First group: Groupe d'outil de recherche
+My Account: Mon compte
+My Movies: Mes films
 Another action: Easy Admin
 Logout: Déconnexion
 
@@ -143,7 +145,6 @@ War: Guerre
 
 # User Account
 User Account: Compte utilisateur
-My Account: Mon compte
 City: Ville
 Zip code: Code postal
 Profile Image (JPG, PNG file): Image de profil (au format jpg ou png)

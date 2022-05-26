@@ -28,7 +28,7 @@
                 {% for discover in discovers %}
                     {% set dTitle = route in ['app_home', 'app_home_series', 'app_admin_dashboard_index'] ? discover.title: discover.name %}
                     {% set dDate = route == 'app_home' ? discover.release_date : route == 'app_home_tv' ? discover.first_air_date: '' %}
-                    <div class="home-discover">
+                    <div class="home-discover" id="{{ discover.id }}">
                         <a href="{{ path(dRoute, {id: discover.id}) }}">
                             {% if discover.poster_path is defined and discover.poster_path|length %}
                                 <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ dTitle }}">
@@ -49,6 +49,12 @@
                                 {% endif %}
                             {% endif %}
                         </a>
+                        {# Badges on seen Movies #}
+                        {% if route == 'app_home' and app.user is not null %}
+                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}" id="{{ discover.id }}">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
@@ -58,4 +64,5 @@
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
+    <script src="{{ asset('select-movie.js') }}"></script>
 {% endblock %}

@@ -1,0 +1,21 @@
+{
+  "app.css": "/build/css/app.css",
+  "movie.css": "/build/css/movie.css",
+  "series.css": "/build/css/series.css",
+  "tv.css": "/build/css/tv.css",
+  "user.css": "/build/css/user.css",
+  "select-movie.js": "/build/js/select-movie.js",
+  "flag_fr": "/images/france-flag-square-icon-64.png",
+  "flag_en": "/images/united-kingdom-flag-square-icon-64.png",
+  "flag_de": "/images/germany-flag-square-icon-64.png",
+  "flag_es": "/images/spain-flag-square-icon-64.png",
+  "noProfilePic": "/images/default/profile.jpg",
+  "noposter_dark": "/images/default/noposter_dark.png",
+  "userMoviesNoAvatar": "/images/default/logo-user-movies.png",
+  "userSeriesNoAvatar": "/images/default/logo-user-series.png",
+  "userTvNoAvatar": "/images/default/logo-user-tv.png",
+  "userAccountNoAvatar": "/images/default/logo-user-account.png",
+  "usersAvatarPath": "/images/users/avatars/",
+  "usersBannerPath": "/images/users/banners/",
+  "bannerPosters": "/images/banners/"
+}

@@ -1,7 +1,7 @@
 {% set movies_route = ['app_home', 'app_movie', 'app_movies_by_genre', 'app_movies_by_date', 'app_movies_search'] %}
 {% set series_route = ['app_home_series', 'app_show'] %}
 {% set tv_route = ['app_home_tv', 'app_tv', 'app_season', 'app_episode'] %}
-{% set user_route = ['app_user_account'] %}
+{% set user_route = ['app_user_account', 'app_user_movies'] %}
 {% set user = app.user %}
 {% set path = app.request.pathInfo %}
 
@@ -30,6 +30,7 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuUser">
                     <li><span class="dropdown-item-text">{{ 'Welcome'|trans }}&nbsp;{{ user.username }}&nbsp;!</span></li>
                     <li><a class="dropdown-item" href="{{ path('app_user_profile') }}">{{ 'My Account'|trans }}</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_user_movies') }}">{{ 'My Movies'|trans }}</a></li>
                     {% if is_granted('ROLE_ADMIN') %}
                         <li><a class="dropdown-item" href="{{ path('app_admin_dashboard_index') }}">{{ 'Another action'|trans }}</a></li>
                     {% endif %}

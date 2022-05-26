@@ -12,6 +12,9 @@
         {% if movie.backdrop_path %}
             <div class="movie-header">
                 <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" class="d-block w-100" alt="{{ movie.title }}">
+                <div class="has-been-seen{% if hasBeenSeen %} yes{% endif %}" id="{{ movie.id }}">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
             </div>
         {% endif %}
         <div class="movie-info">
@@ -197,6 +200,7 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
+    <script src="{{ asset('select-movie.js') }}"></script>
 {% endblock %}
 {% block morejs %}
     <script>
