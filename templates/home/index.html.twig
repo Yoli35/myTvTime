@@ -39,7 +39,7 @@
                             {% endif %}
                             <div class="home-discover-title">{{ dTitle }}</div>
                             {% if dDate|length %}
-                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ dDate|date("d/m/Y") }}</div>
+                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ dDate|format_date('short') }}</div>
                             {% endif %}
                             {% if discover.platforms is defined %}
                                 {% if discover.platforms %}

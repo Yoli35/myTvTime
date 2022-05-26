@@ -22,8 +22,10 @@
                         <div class="title">{{ user }}</div>
                     {% endif %}
                 {% endif %}
-                {{ include('blocks/weather.html.twig') }}
-                <div class="toggle open"><i class="bi bi-dash-circle"></i></div>
+                {% if weather is not empty %}
+                    {{ include('blocks/weather.html.twig') }}
+                    <div class="toggle open"><i class="bi bi-dash-circle"></i></div>
+                {% endif %}
             </div>
             <div class="avatar">
                 {% if user.avatar %}
@@ -63,6 +65,7 @@
         $(function () {
             let inputAvatar = $('#user_avatar');
             let inputBanner = $('#user_banner');
+            let banner = $('.banner');
 
             $(inputAvatar).mouseout(function () {
                 $('.avatar img').css('border', '4px solid #dbdbdb');
@@ -75,13 +78,13 @@
             })
 
             $(inputBanner).mouseout(function () {
-                $('.banner').css('border', '4px solid #dbdbdb');
-                $('.banner').css('filter', 'none');
+                $(banner).css('border', '4px solid #dbdbdb');
+                $(banner).css('filter', 'none');
             })
 
             $(inputBanner).mouseenter(function () {
-                $('.banner').css('border', '4px solid #D81F26');
-                $('.banner').css('filter', 'sepia(0.8)');
+                $(banner).css('border', '4px solid #D81F26');
+                $(banner).css('filter', 'sepia(0.8)');
             })
         })
     </script>

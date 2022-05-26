@@ -6,23 +6,26 @@
             -
             <div>{{ weather.location.country }}</div>
         </div>
-        <div class="last_updated">{{ 'Last updated'|trans }} : {{ weather.current.last_updated|date("d/m/Y G:i") }}</div>
+        {#        <div class="last_updated">{{ 'Last updated'|trans }} : {{ weather.current.last_updated|date("d/m/Y G:i") }}</div> #}
+        <div class="last_updated">
+            {{ weather.current.last_updated|format_date('full') }}
+        </div>
         <div class="temperature">{{ weather.current.temp_c|round ~ '°' }}</div>
-        <div class="feelslike">{{ 'Feelslike'|trans }} : {{ weather.current.feelslike_c|round ~ '°' }}</div>
+        <div class="feelslike"><i class="bi bi-thermometer-half"></i> {{ 'Feelslike'|trans }} : {{ weather.current.feelslike_c|round ~ '°' }}</div>
         <div class="condition">
             <img src="{{ weather.current.condition.icon }}" alt="">
             <div>{{ weather.current.condition.text }}</div>
         </div>
         <div class="humidity">
-            <div>{{ 'Precipitation'|trans }} : {{ weather.current.precip_mm ~ 'mm' }}</div>
-            <div>{{ 'Humidity'|trans }} : {{ weather.current.humidity ~ '%' }}</div>
+            <div><i class="bi bi-cloud-drizzle"></i> {{ 'Precipitation'|trans }} : {{ weather.current.precip_mm ~ 'mm' }}</div>
+            <div><i class="bi bi-droplet"></i> {{ 'Humidity'|trans }} : {{ weather.current.humidity ~ '%' }}</div>
         </div>
         <div class="humidity">
             <div>{{ 'Pressure'|trans }} : {{ weather.current.pressure_mb }} {{ 'Millibars'|trans }}</div>
         </div>
         <div class="visibility-uv">
-            <div>{{ 'Visibility'|trans }} : {{ weather.current.vis_km ~ 'km' }}</div>
-            <div>{{ 'UV'|trans }} : {{ weather.current.uv }}</div>
+            <div><i class="bi bi-eye"></i> {{ 'Visibility'|trans }} : {{ weather.current.vis_km ~ 'km' }}</div>
+            <div><i class="bi bi-sun-fill"></i> {{ 'UV'|trans }} : {{ weather.current.uv }}</div>
         </div>
         <div class="wind">
             <i class="bi bi-wind"></i>
@@ -34,13 +37,13 @@
         </div>
         <div class="sun">
             <i class="bi bi-sun"></i>
-            <div>{{ 'Sunrise'|trans }} : {{ astro.sunrise|date("G:i") }}</div>
-            <div>{{ 'Sunset'|trans }} : {{ astro.sunset|date("G:i") }}</div>
+            <div>{{ 'Sunrise'|trans }} : {{ weather.forecast.forecastday.0.astro.sunrise|date("G:i") }}</div>
+            <div>{{ 'Sunset'|trans }} : {{ weather.forecast.forecastday.0.astro.sunset|date("G:i") }}</div>
         </div>
         <div class="moon">
             <i class="bi bi-moon"></i>
-            <div>{{ 'Sunrise'|trans }} : {{ astro.moonrise|date("G:i") }}</div>
-            <div>{{ 'Sunset'|trans }} : {{ astro.moonset|date("G:i") }}</div>
+            <div>{{ 'Sunrise'|trans }} : {{ weather.forecast.forecastday.0.astro.moonrise|date("G:i") }}</div>
+            <div>{{ 'Sunset'|trans }} : {{ weather.forecast.forecastday.0.astro.moonset|date("G:i") }}</div>
         </div>
     </div>
 {% endif %}
@@ -55,6 +58,9 @@
                 if ($(toggle).hasClass('open')) {
                     $(toggle).removeClass('open');
                     $(toggle).html('<i class="bi bi-plus-circle">');
+                    $('.weather').css('flex-direction', 'row');
+                    $('.weather').css('padding', '1em 1em 0 1em');
+                    $('.temperature').css('font-size', '2em');
                     $('.region-country').hide();
                     $('.feelslike').hide();
                     $('.humidity').hide();
@@ -65,6 +71,9 @@
                 } else {
                     $(toggle).addClass('open');
                     $(toggle).html('<i class="bi bi-dash-circle">');
+                    $('.weather').css('flex-direction', 'column');
+                    $('.weather').css('padding', '1em');
+                    $('.temperature').css('font-size', '5em');
                     $('.region-country').show();
                     $('.feelslike').show();
                     $('.humidity').show();

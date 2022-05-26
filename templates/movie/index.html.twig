@@ -61,7 +61,7 @@
 
                 {% if dates is empty %}
                     <div class="date">
-                        {{ 'Release Date'|trans }} : {{ movie.release_date|date("d/m/Y") }}
+                        {{ 'Release Date'|trans }} : {{ movie.release_date|format_date('short') }}
                     </div>
                 {% else %}
                     <div class="release-dates">
@@ -73,7 +73,7 @@
                                     {% for date in location.release_dates %}
                                         <div class="event">
                                             <div class="type">{{ date.type|trans }}{% if date.note is defined and date.note|length %} - {{ date.note }}{% endif %}</div>
-                                            <div class="date">{{ date.release_date|date('d/m/Y') }}</div>
+                                            <div class="date">{{ date.release_date|format_date('short') }}</div>
                                         </div>
                                     {% endfor %}
                                 </div>

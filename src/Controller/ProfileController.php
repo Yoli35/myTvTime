@@ -68,20 +68,12 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_user_profile');
         }
 
-        $weather = [];
-        $astro = [];
+        $forecast = [];
         if ($user->getCity()) {
             $locale = $request->getLocale();
-            $standing = $weatherService->getLocalWeather($user->getCity(), $locale);
-            $weather = json_decode($standing, true, 512, 0);
-            $standing = $weatherService->getLocalAstronomy($user->getCity(), date("Y-m-d"), $locale);
-            $astro = json_decode($standing, true, 512, 0);
-            $standing = $weatherService->getLocalForecast($user->getCity(), date("Y-m-d"), 4, $locale);
+            $standing = $weatherService->getLocalForecast($user->getCity(), 3, $locale);
             $forecast = json_decode($standing, true, 512, 0);
-            dump($forecast);
-        }
-        else {
-            $astro['astronomy']['astro'] = [];
+//            dump($forecast);
         }
         $banner = [];
         if ($user->getBanner() == null) {
@@ -91,8 +83,7 @@ class ProfileController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'banner' => $banner,
-            'weather' => $weather,
-            'astro' => $astro['astronomy']['astro']
+            'weather' => $forecast,
         ]);
     }
 

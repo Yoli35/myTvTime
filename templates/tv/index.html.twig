@@ -5,7 +5,7 @@
 
 {% block title %}myTvTime::{{ tv.name }}{% endblock %}
 {% block body %}
-    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
     <div class="container">
         {{ include('blocks/pageHeader.html.twig') }}
         {% if tv.backdrop_path %}
@@ -16,6 +16,21 @@
         <div class="tv-info">
             <div class="tv-detail">
                 <h1>{{ tv.name }}</h1>
+                {#                "networks" => array:1 [▼ #}
+                {#                0 => array:4 [▼ #}
+                {#                "name" => "Apple TV+" #}
+                {#                "id" => 2552 #}
+                {#                "logo_path" => "/4KAy34EHvRM25Ih8wb82AuGU7zJ.png" #}
+                {#                "origin_country" => "US" #}
+                {#                ] #}
+                {#                ] #}
+                {% if tv.networks is not empty %}
+                    {% for network in tv.networks %}
+                        <div class="platform">
+                            <div class="view">{{ 'View on'|trans }} {{ network.name }}</div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 <div class="genres">
                     {% for genre in tv.genres %}
                         <div class="genre">{{ genre.name }}</div>
@@ -33,15 +48,15 @@
                 <div class="number_of_seasons">{{ 'Number of Seasons'|trans }} : <span class="data">{{ tv.number_of_seasons }}</span></div>
                 <div class="original_title">{{ 'Original Title'|trans }} : <span class="data">{{ tv.original_name }}</span></div>
                 <div class="date">
-                    {{ 'First Air Date'|trans }} : <span class="data">{{ tv.first_air_date|date("d/m/Y") }}</span>
+                    {{ 'First Air Date'|trans }} : <span class="data">{{ tv.first_air_date|format_date('short') }}</span>
                 </div>
                 <div class="date">
-                    {{ 'Last Air Date'|trans }} : <span class="data">{{ tv.last_air_date|date("d/m/Y") }}</span>
+                    {{ 'Last Air Date'|trans }} : <span class="data">{{ tv.last_air_date|format_date('short') }}</span>
                 </div>
                 <div class="last_episode_to_air">
                     <span class="label">{{ 'Last Episode to air'|trans }} : </span><span class="data">{{ tv.last_episode_to_air.name }}</span>
                     <div class="date">
-                        {{ 'Air Date'|trans }} : <span class="data">{{ tv.last_episode_to_air.air_date|date("d/m/Y") }}</span>
+                        {{ 'Air Date'|trans }} : <span class="data">{{ tv.last_episode_to_air.air_date|format_date('short') }}</span>
                     </div>
                     <div class="episode_number">
                         {{ 'Episode Number'|trans }} : <span class="data">{{ tv.last_episode_to_air.episode_number }}</span>
@@ -96,7 +111,7 @@
             </div>
             <div class="tv-poster">
                 {% if tv.poster_path %}
-                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ tv.poster_path }}" alt="{{ tv.name }}">
+                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ tv.poster_path }}" alt="{{ tv.name }}">
                 {% else %}
                     <img src="/images/default/noposter_dark.png" alt="{{ tv.name }}">
                 {% endif %}
@@ -109,7 +124,7 @@
                     <div class="season">
                         <div class="season-detail">
                             <div class="name">{{ 'Name'|trans }} : <span class="data">{{ season.name }}</span></div>
-                            <div class="air_date">{{ 'Air Date'|trans }} : <span class="data">{{ season.air_date|date("d/m/Y") }}</span></div>
+                            <div class="air_date">{{ 'Air Date'|trans }} : <span class="data">{{ season.air_date|format_date('short') }}</span></div>
                             <div class="episode_count">{{ 'Episode Count'|trans }} : <span class="data">{{ season.episode_count }}</span></div>
                             <div class="season_number">{{ 'Season Number'|trans }} : <span class="data">{{ season.season_number }}</span></div>
                             {% if season.overview %}

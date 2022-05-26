@@ -11,7 +11,7 @@
         <div class="season-info">
             <div class="season-detail">
                 <h1 style="padding-right: 1em;">{{ tv }} : <span class="data">{{ season.name }}</span></h1>
-                <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ season.air_date|date('d/m/Y') }}</span></div>
+                <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ season.air_date|format_date('short') }}</span></div>
                 <div class="season-number">{{ 'Season Number'|trans }} : <span class="data">{{ season.season_number }}</span></div>
                 {% if season.overview %}
                     <div class="overview">{{ 'Overview'|trans }} : {{ season.overview }}</div>
@@ -21,7 +21,7 @@
                         <div class="episode">
                             <div class="detail">
                                 <div class="name">{{ 'Episode'|trans }} {{ episode.episode_number }} : {{ episode.name }}</div>
-                                <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ episode.air_date|date("d/m/Y") }}</span></div>
+                                <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ episode.air_date|format_date('short') }}</span></div>
                                 {% if episode.overview | length %}
                                     <div class="overview">{{ 'Overview'|trans }} : {{ episode.overview }}</div>
                                 {% endif %}

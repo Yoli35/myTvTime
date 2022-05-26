@@ -20,7 +20,7 @@
                 <div class="episode">
                     <div class="detail">
                         <div class="name">{{ 'Episode'|trans }} {{ episode.episode_number }} : {{ episode.name }}</div>
-                        <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ episode.air_date|date("d/m/Y") }}</span></div>
+                        <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ episode.air_date|format_date('short') }}</span></div>
                         {% if episode.overview | length %}
                             <div class="overview">{{ 'Overview'|trans }} : {{ episode.overview }}</div>
                         {% endif %}
