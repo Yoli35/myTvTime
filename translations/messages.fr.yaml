@@ -150,6 +150,20 @@ Zip code: Code postal
 Profile Image (JPG, PNG file): Image de profil (au format jpg ou png)
 Banner Image (JPG, PNG file): Image de bannière (au format jpg ou png)
 Watched Films: Films regardés
+"Time spent watching TV:":	"Temps passé à regarder : "
+minutes: minutes
+minute: minute
+i.e.: c.à.d
+years: années
+year: année
+mounths: mois
+mounth: mois
+days: jours
+day: jour
+hours: heures
+hour: heure
+and: and
+
 # Weather
 Update Profile: Mettre à jour le profil
 Sunrise: Lever

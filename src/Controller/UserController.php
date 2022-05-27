@@ -104,6 +104,17 @@ class UserController extends AbstractController
         $movies = $repoUM->findUserMovies($user->getId());
         $imageConfig = $homeController->getImageConfig($doctrine);
 
+        $total = 0;
+        foreach ($movies as $movie) {
+            $total += $movie['runtime'];
+        }
+        $runtime['total'] = $total;
+        $runtime['minutes'] = $total % 60;
+        $runtime['hours'] = floor($total/60) % 24;
+        $runtime['days'] = floor($total/60/24) % 30.41666667;
+        $runtime['mounths'] = floor($total/60/24/30.41666667) % 12;
+        $runtime['years'] = floor($total/60/24/365);
+
         $forecast = [];
         if ($user->getCity()) {
             $locale = $request->getLocale();
@@ -113,6 +124,7 @@ class UserController extends AbstractController
 
         return $this->render('user_account/user_movies.html.twig', [
             'discovers' => $movies,
+            'runtime' => $runtime,
             'weather' => $forecast,
             'imageConfig' => $imageConfig,
         ]);

@@ -258,6 +258,7 @@ class MovieController extends AbstractController
             $userMovie->setPosterPath($movieDetail['poster_path']);
             $userMovie->setReleaseDate($movieDetail['release_date']);
             $userMovie->setMovieDbId($movieDetail['id']);
+            $userMovie->setRuntime($movieDetail['runtime']);
         }
         $userMovie->addUser($user);
         $entityManager->persist($userMovie);

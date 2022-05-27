@@ -33,6 +33,9 @@ class UserMovie
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'movies')]
     private $users;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $runtime;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -126,6 +129,18 @@ class UserMovie
         if ($this->users->removeElement($user)) {
             $user->removeMovie($this);
         }
+
+        return $this;
+    }
+
+    public function getRuntime(): ?int
+    {
+        return $this->runtime;
+    }
+
+    public function setRuntime(?int $runtime): self
+    {
+        $this->runtime = $runtime;
 
         return $this;
     }

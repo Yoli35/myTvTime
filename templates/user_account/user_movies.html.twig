@@ -41,6 +41,22 @@
             </div>
             <div class="user-movies">
                 <h1>{{ 'Watched Films'|trans }} : {{ discovers|length }}</h1>
+                <h4>{{ 'Time spent watching TV:'|trans }}
+                    {{ runtime.total }}
+                    {{ 'minutes'|trans }}
+                    {{ 'i.e.'|trans }}
+                    {% if runtime.years > 1 %}{{ runtime.years }} {{ 'years'|trans }}{% endif %}
+                    {% if runtime.years == 1 %}{{ runtime.years }} {{ 'year'|trans }}{% endif %}
+                    {% if runtime.mounths > 1 %}{{ runtime.mounths }} {{ 'mounths'|trans }}{% endif %}
+                    {% if runtime.mounths == 1 %}{{ runtime.mounths }} {{ 'mounth'|trans }}{% endif %}
+                    {% if runtime.days > 1 %}{{ runtime.days }} {{ 'days'|trans }}{% endif %}
+                    {% if runtime.days == 1 %}{{ runtime.days }} {{ 'day'|trans }}{% endif %}
+                    {% if runtime.hours > 1 %}{{ runtime.hours }} {{ 'hours'|trans }}{% endif %}
+                    {% if runtime.hours == 1 %}{{ runtime.hours }} {{ 'hour'|trans }}{% endif %}
+                    {{ 'and'|trans }}
+                    {% if runtime.minutes > 1 %}{{ runtime.minutes }} {{ 'minutes'|trans }}{% endif %}
+                    {% if runtime.minutes < 2 %}{{ runtime.minutes }} {{ 'minute'|trans }}{% endif %}
+                </h4>
                 <div class="home-discovers-content">
                     {% for discover in discovers %}
                         <div class="home-discover" id="{{ discover.movie_db_id }}">
