@@ -56,7 +56,6 @@ class WeatherService
      */
     public function getLocalForecast($location, $days, $locale): ?string
     {
-        dump('https://api.weatherapi.com/v1/forecast.json?key=a790df8a650b4ec8ab145453222405&q='.$location.'&days='.$days.'&lang='.$locale);
         $response = $this->client->request(
             'GET',
             'https://api.weatherapi.com/v1/forecast.json?key=a790df8a650b4ec8ab145453222405&q='.$location.'&days='.$days.'&lang='.$locale);

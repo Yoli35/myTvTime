@@ -19,22 +19,27 @@ class UserType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'attr' => ['class' => 'col-6'],
+                'required' => true,
             ])
 //            ->add('roles')
 //            ->add('password')
             ->add('username', TextType::class, [
                 'attr' => ['class' => 'col-6'],
+                'required' => true,
             ])
 //            ->add('isVerified')
             ->add('city', TextType::class, [
                 'attr' => ['class' => 'col-6'],
-            ])
+                 'required' => false,
+           ])
             ->add('zipCode', TextType::class, [
                 'attr' => ['class' => 'col-3'],
+                'required' => false,
             ])
             ->add('country', TextType::class, [
                 'attr' => ['class' => 'col-3'],
-            ])
+                 'required' => false,
+           ])
             ->add('avatar', FileType::class, [
                 'label' => 'Profile Image (JPG, PNG file)',
                 // unmapped means that this field is not associated to any entity property

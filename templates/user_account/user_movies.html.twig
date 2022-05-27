@@ -8,7 +8,7 @@
 {% set user = app.user %}
 
 {% block body %}
-{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -40,17 +40,18 @@
                 {% endif %}
             </div>
             <div class="user-movies">
+                <h1>{{ 'Watched Films'|trans }} : {{ discovers|length }}</h1>
                 <div class="home-discovers-content">
                     {% for discover in discovers %}
-                        <div class="home-discover" id="{{ discover.movieDbId }}">
-                            <a href="{{ path('app_movie', {id: discover.movieDbId}) }}">
-                                {% if discover.posterPath is defined and discover.posterPath|length %}
-                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.posterPath }}" class="d-block w-100" alt="{{ discover.title }}">
+                        <div class="home-discover" id="{{ discover.movie_db_id }}">
+                            <a href="{{ path('app_movie', {id: discover.movie_db_id}) }}">
+                                {% if discover.poster_path is defined and discover.poster_path|length %}
+                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}">
                                 {% else %}
                                     <img src="{{ asset('noposter_dark') }}" class="d-block w-100" alt="{{ discover.title }}">
                                 {% endif %}
                                 <div class="home-discover-title">{{ discover.title }}</div>
-                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.releaseDate|format_date('short') }}</div>
+                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|format_date('short') }}</div>
                             </a>
                         </div>
                     {% endfor %}

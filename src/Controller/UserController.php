@@ -99,18 +99,9 @@ class UserController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $movies = [];
 
         $repoUM = $doctrine->getRepository(UserMovie::class);
-        $userMovies = $repoUM->findAll();
-        foreach ($userMovies as $userMovie) {
-            $users = $userMovie->getUsers();
-            foreach ($users as $u) {
-                if ($u->getId() == $user->getId()) {
-                    $movies[] = $userMovie;
-                }
-            }
-        }
+        $movies = $repoUM->findUserMovies($user->getId());
         $imageConfig = $homeController->getImageConfig($doctrine);
 
         $forecast = [];

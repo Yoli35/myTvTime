@@ -16,9 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserMovieRepository extends ServiceEntityRepository
 {
+    private ManagerRegistry $registry;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserMovie::class);
+        $this->registry = $registry;
     }
 
     public function add(UserMovie $entity, bool $flush = false): void
@@ -63,4 +66,15 @@ class UserMovieRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findUserMovies($userId): array
+    {
+        $sql = 'SELECT * FROM `user_movie` t0 INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` WHERE t1.`user_id` = '.$userId.' ORDER BY t0.`release_date` DESC';
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
 }
