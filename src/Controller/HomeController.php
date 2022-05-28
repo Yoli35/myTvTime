@@ -41,14 +41,9 @@ class HomeController extends AbstractController
         $userMovieIds = [];
         if ($user) {
             $repoUM = $doctrine->getRepository(UserMovie::class);
-            $userMovies = $repoUM->findAll();
+            $userMovies = $repoUM->findUserMovies($user->getId());
             foreach ($userMovies as $userMovie) {
-                $users = $userMovie->getUsers();
-                foreach ($users as $u) {
-                    if ($u->getId() == $user->getId()) {
-                        $userMovieIds[] = $userMovie->getMovieDbId();
-                    }
-                }
+                $userMovieIds[] = $userMovie['movie_db_id'];
             }
         }
         $page = $request->query->getInt('page', 1);
