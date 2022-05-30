@@ -42,6 +42,10 @@ Page: Page
 Total Pages: Nombre de page
 Total Results: Nombre de résultat
 
+# Movies
+Sort: Tri
+Sort selection: Sélection du tri
+
 # Movies by name
 Movies Search Result: Résultat de la recherche
 
@@ -81,6 +85,11 @@ Digital: Digitale
 Physical: Physique
 TV: Télévision
 Created by: Crée par
+
+# Collection
+Films: Films
+Belongs to Collection: Collection
+See the Collection: Voir la collection
 
 # Tv Show Detail
 Name: Nom
@@ -149,6 +158,7 @@ City: Ville
 Zip code: Code postal
 Profile Image (JPG, PNG file): Image de profil (au format jpg ou png)
 Banner Image (JPG, PNG file): Image de bannière (au format jpg ou png)
+Search: Recherche
 Watched Films: Films regardés
 "Time spent watching TV:":	"Temps passé à regarder : "
 minutes: minutes
@@ -170,6 +180,8 @@ Sunrise: Lever
 Sunset: Coucher
 Last updated: Dernière mise à jour
 Feelslike: Ressenti
+Min: Min
+Max: Max
 Visibility: Visibilité
 UV: Indice UV
 Wind: Vent

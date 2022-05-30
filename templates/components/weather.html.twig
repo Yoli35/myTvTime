@@ -1,3 +1,5 @@
+{% set weather = this.forecast %}
+
 {% if weather is not empty %}
     <div class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
         <div class="city">{{ weather.location.name }}</div>
@@ -50,7 +52,43 @@
             <div>{{ 'Sunset'|trans }} : {{ weather.forecast.forecastday.0.astro.moonset|date("G:i") }}</div>
         </div>
     </div>
+    <div class="toggle open"><i class="bi bi-dash-circle"></i></div>
 {% endif %}
+<script>
+    $(function () {
+        let toggle = $('.toggle');
 
-{% block morejs %}
-{% endblock %}
+        $(toggle).click(function () {
+
+            if ($(toggle).hasClass('open')) {
+                $(toggle).removeClass('open');
+                $(toggle).html('<i class="bi bi-plus-circle">');
+                $('.weather').css('flex-direction', 'row');
+                $('.weather').css('padding', '1em 1em 0 1em');
+                $('.temperature').css('font-size', '2em');
+                $('.last_updated').hide();
+                $('.region-country').hide();
+                $('.feelslike').hide();
+                $('.humidity').hide();
+                $('.visibility-uv').hide();
+                $('.wind').hide();
+                $('.sun').hide();
+                $('.moon').hide();
+            } else {
+                $(toggle).addClass('open');
+                $(toggle).html('<i class="bi bi-dash-circle">');
+                $('.weather').css('flex-direction', 'column');
+                $('.weather').css('padding', '1em');
+                $('.temperature').css('font-size', '5em');
+                $('.last_updated').show();
+                $('.region-country').show();
+                $('.feelslike').show();
+                $('.humidity').show();
+                $('.visibility-uv').show();
+                $('.wind').show();
+                $('.sun').show();
+                $('.moon').show();
+            }
+        })
+    })
+</script>

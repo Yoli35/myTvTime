@@ -69,7 +69,25 @@ class UserMovieRepository extends ServiceEntityRepository
 
     public function findUserMovies($userId): array
     {
-        $sql = 'SELECT * FROM `user_movie` t0 INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` WHERE t1.`user_id` = '.$userId.' ORDER BY t0.`release_date` DESC';
+        $sql = 'SELECT * FROM `user_movie` t0 '
+            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            .'WHERE t1.`user_id` = '.$userId.' '
+            .'ORDER BY t0.`release_date` DESC';
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
+    public function searchUserMovies($userId, $query): array
+    {
+        $sql = 'SELECT * FROM `user_movie` t0 '
+            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            .'WHERE t1.`user_id` = '.$userId.' '
+            .'AND t0.title LIKE "%'.$query.'%" '
+            .'ORDER BY t0.`release_date` DESC';
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

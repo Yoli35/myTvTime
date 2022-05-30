@@ -1,4 +1,4 @@
-{% set movies_route = ['app_home', 'app_movie', 'app_movies_by_genre', 'app_movies_by_date', 'app_movies_search'] %}
+{% set movies_route = ['app_home', 'app_movie', 'app_movie_collection', 'app_movies_by_genre', 'app_movies_by_date', 'app_movies_search'] %}
 {% set series_route = ['app_home_series', 'app_show'] %}
 {% set tv_route = ['app_home_tv', 'app_tv', 'app_season', 'app_episode'] %}
 {% set user_route = ['app_user_account', 'app_user_movies'] %}
@@ -7,7 +7,7 @@
 
 {# {{ dump() }} #}
 
-<div class="home-header" style="background-image: url('{{ asset('bannerPosters') ~ 'banner-' ~ random(1,9) ~ '.jpg' }}')">
+<div class="home-header" style="background-image: url('/images/banners/banner-{{ random(1,9) }}.jpg')">
     <div class="home-header-top">
         {% if user is null %}
             <div class="connexion">
@@ -19,12 +19,12 @@
             <div class="dropdown">
                 <div class="user-menu" id="dropdownMenuUser" data-bs-toggle="dropdown" aria-expanded="false">
                     {% if user.avatar is defined and  user.avatar|length %}
-                        <img src="{{ asset('usersAvatarPath') }}{{ user.avatar }}">
+                        <img src="/images/users/avatars/{{ user.avatar }}">
                     {% else %}
-                        {% if route in movies_route %}<img src="{{ asset('userMoviesNoAvatar') }}" alt="">{% endif %}
-                        {% if route in series_route %}<img src="{{ asset('userSeriesNoAvatar') }}" alt="">{% endif %}
-                        {% if route in tv_route %}<img src="{{ asset('userTvNoAvatar') }}" alt="">{% endif %}
-                        {% if route in user_route %}<img src="{{ asset('userAccountNoAvatar') }}" alt="">{% endif %}
+                        {% if route in movies_route %}<img src="/images/default/no_avatar_movies.png" alt="">{% endif %}
+                        {% if route in series_route %}<img src="/images/default/no_avatar_series.png" alt="">{% endif %}
+                        {% if route in tv_route %}<img src="/images/default/no_avatar_tv.png" alt="">{% endif %}
+                        {% if route in user_route %}<img src="/images/default/no_avatar_account.png" alt="">{% endif %}
                     {% endif %}
                 </div>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuUser">

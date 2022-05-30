@@ -33,7 +33,7 @@ class HomeController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es', 'page'=>1])]
+    #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es', 'page'=>1, 'sort_by'=>'popularity.desc'])]
     public function index(Request $request, Service\CallTmdbService $callTmdbService, ManagerRegistry $doctrine): Response
     {
         /** @var User $user */
@@ -46,9 +46,31 @@ class HomeController extends AbstractController
                 $userMovieIds[] = $userMovie['movie_db_id'];
             }
         }
+
+        $sort_by = $request->query->get('sort', 'popularity.desc');
+        $sorts = [
+            'sort_by' => $sort_by,
+            'options' => [
+                'Ascending Popularity' => 'popularity.asc',
+                'Descending Popularity' => 'popularity.desc',
+                'Ascending Release Date' => 'release_date.asc',
+                'Descending Release Date' => 'release_date.desc',
+                'Ascending Revenue' => 'revenue.asc',
+                'Descending Revenue' => 'revenue.desc',
+                'Ascending Primary Release Date' => 'primary_release_date.asc',
+                'Descending Primary Release Date' => 'primary_release_date.desc',
+                'Ascending Original Title' => 'original_title.asc',
+                'Descending Original Title' => 'original_title.desc',
+                'Ascending Vote Average' => 'vote_average.asc',
+                'Descending Vote Average' => 'vote_average.desc',
+                'Ascending Vote Count' => 'vote_count.asc',
+                'Descending Vote Count' => 'vote_count.desc'
+            ]
+        ];
+
         $page = $request->query->getInt('page', 1);
         $locale = $request->getLocale();
-        $standing = $callTmdbService->discoverMovies($page, $locale);
+        $standing = $callTmdbService->discoverMovies($page, $sort_by, $locale);
         $discovers = json_decode($standing, true, 512, 0);
         $imageConfig = $this->getImageConfig($doctrine);
 
@@ -58,11 +80,19 @@ class HomeController extends AbstractController
             'total_results' => $discovers['total_results']
         ];
 
+        // Certains films ne possèdent pas tous les champs …
+        foreach ($discovers['results'] as $discover) {
+            if (!array_key_exists('release_date', $discover)) {
+                $discover['release_date'] = "Not documented";
+            }
+        }
+
         return $this->render('home/index.html.twig', [
             'discovers' => $discovers,
             'userMovies' => $userMovieIds,
             'imageConfig' => $imageConfig,
             'pages' => $pages,
+            'sorts' => $sorts,
             'dRoute' => 'app_movie'
         ]);
     }

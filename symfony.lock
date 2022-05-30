@@ -533,6 +533,12 @@
     "symfony/uid": {
         "version": "v6.0.3"
     },
+    "symfony/ux-live-component": {
+        "version": "v2.1.1"
+    },
+    "symfony/ux-twig-component": {
+        "version": "v2.1.1"
+    },
     "symfony/validator": {
         "version": "6.0",
         "recipe": {

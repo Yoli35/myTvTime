@@ -1,21 +1,9 @@
 {
-  "app.css": "/build/css/app.css",
-  "movie.css": "/build/css/movie.css",
-  "series.css": "/build/css/series.css",
-  "tv.css": "/build/css/tv.css",
-  "user.css": "/build/css/user.css",
-  "select-movie.js": "/build/js/select-movie.js",
-  "flag_fr": "/images/france-flag-square-icon-64.png",
-  "flag_en": "/images/united-kingdom-flag-square-icon-64.png",
-  "flag_de": "/images/germany-flag-square-icon-64.png",
-  "flag_es": "/images/spain-flag-square-icon-64.png",
-  "noProfilePic": "/images/default/profile.jpg",
-  "noposter_dark": "/images/default/noposter_dark.png",
-  "userMoviesNoAvatar": "/images/default/logo-user-movies.png",
-  "userSeriesNoAvatar": "/images/default/logo-user-series.png",
-  "userTvNoAvatar": "/images/default/logo-user-tv.png",
-  "userAccountNoAvatar": "/images/default/logo-user-account.png",
-  "usersAvatarPath": "/images/users/avatars/",
-  "usersBannerPath": "/images/users/banners/",
-  "bannerPosters": "/images/banners/"
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-live-compo-a3142f.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-live-compo-a3142f.js",
+  "build/images/profile_dark.jpg": "/build/images/profile_dark.e4a9c4de.jpg",
+  "build/images/profile.jpg": "/build/images/profile.5be114a0.jpg",
+  "build/images/imdb.png": "/build/images/imdb.9a7477bf.png"
 }

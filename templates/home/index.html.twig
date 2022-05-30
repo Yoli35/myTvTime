@@ -20,6 +20,29 @@
                         <a href="{{ path('app_movies_by_date', {date: '2022'}) }}" class="btn btn-outline-secondary">{{ 'Date'|trans }}</a>
                     </div>
                 </div>
+                <div class="sort_select">
+                    <div class="label">{{ 'Sort'|trans }}</div>
+                    <form>
+                        <select id="sort" class="form-select" aria-label="{{ 'Sort selection'|trans }}">
+                            {% for key, sort in sorts.options %}
+                                <option value="{{ sort }}"{% if sort == sorts.sort_by %} selected{% endif %}>{{ key|raw }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                    <script>
+                        $(function () {
+                            let sort = $('select');
+                            let initialValue = $(sort).val(), newValue = 'popularity.desc';
+
+                            $(sort).change(function (e) {
+                                newValue = $(sort).val();
+                                if (newValue !== initialValue) {
+                                    window.location.href = '{{ path(route) }}?sort=' + newValue + '&page=1';
+                                }
+                            });
+                        })
+                    </script>
+                </div>
             </div>
         {% endif %}
 
@@ -35,7 +58,7 @@
                             {% elseif discover.images is defined and discover.images.poster|length %}
                                 <img src="{{ discover.images.poster }}" class="d-block w-100" alt="{{ dTitle }}">
                             {% else %}
-                                <img src="{{ asset('noposter_dark') }}" class="d-block w-100" alt="{{ dTitle }}">
+                                <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ dTitle }}">
                             {% endif %}
                             <div class="home-discover-title">{{ dTitle }}</div>
                             {% if dDate|length %}
@@ -64,5 +87,4 @@
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
-    <script src="{{ asset('select-movie.js') }}"></script>
 {% endblock %}

@@ -25,7 +25,21 @@ class TvController extends AbstractController
     public function indexTv(Request $request, Service\CallTmdbService $callTmdbService, HomeController $homeController, ManagerRegistry $doctrine): Response
     {
         $page = $request->query->getInt('page', 1);
+        $sort_by = $request->query->get('sort', 'popularity.desc');
         $locale = $request->getLocale();
+
+        $sorts = [
+            'sort_by' => $sort_by,
+            'options' => [
+                'Descending Vote Average' => 'vote_average.desc',
+                'Ascending Vote Average' => 'vote_average.asc',
+                'Descending First Air Date' => 'first_air_date.desc',
+                'Ascending First Air Date' => 'first_air_date.asc',
+                'Descending Popularity' => 'popularity.desc',
+                'Ascending Popularity' => 'popularity.asc'
+            ]
+        ];
+
         $standing = $callTmdbService->discoverTv($page, $locale);
         $discovers = json_decode($standing, true, 512, 0);
         $imageConfig = $homeController->getImageConfig($doctrine);
@@ -35,6 +49,7 @@ class TvController extends AbstractController
             'discovers' => $discovers,
             'imageConfig' => $imageConfig,
             'pages' => $pages,
+            'sorts' => $sorts,
             'dRoute' => 'app_tv',
         ]);
     }

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block morecss %}
-    <link href="{{ asset("movie.css") }}" rel="stylesheet">
+{#    <link href="{{ asset("movie.css") }}" rel="stylesheet">#}
 {% endblock %}
 
 {% block title %}myTvTime::{{ 'Movies by Year'|trans }}{% endblock %}
@@ -15,7 +15,7 @@
                 newValue = $(year).val();
                 if (newValue !== initialValue) {
                     url = url.substring(0, url.length - 4) + newValue + '/1';
-                    console.log(url);
+                    // console.log(url);
                     window.location.href = url;
                 }
             });

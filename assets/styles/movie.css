@@ -16,6 +16,11 @@
     right: 2em;
 }
 
+.part .movie-header .has-been-seen {
+    bottom: 1em;
+    right: 1em;
+}
+
 .movie-header .has-been-seen.yes {
     color: #11d08e;
 }
@@ -32,7 +37,7 @@
     flex-wrap: wrap;
 }
 
-.movie-detail > .title {
+.movie-detail .title {
     color: #f2f2f2;
     font-size: 2em;
     font-weight: bold;
@@ -40,20 +45,20 @@
     padding: .5em;
 }
 
-.movie-detail > .genres {
+.movie-detail .genres {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     margin-right: auto;
 }
 
-.movie-detail > .genres > .genre {
+.movie-detail .genres .genre {
     border: 5px solid #8a8a8a;
     border-radius: 18px;
     margin: 10px;
 }
 
-.movie-detail > .genres > .genre a {
+.movie-detail .genres .genre a {
     color: #8a8a8a;
     height: 100%;
     padding: .25em 1em;
@@ -61,43 +66,41 @@
     width: 100%;
 }
 
-.movie-detail > .original_title,
-.movie-detail > .date,
-.movie-detail > .runtime,
-.movie-detail > .revenue,
-.movie-detail > .vote,
-.movie-detail > .homepage,
-.movie-detail > .imdb {
+.movie-detail .original_title,
+.movie-detail .date,
+.movie-detail .runtime,
+.movie-detail .revenue,
+.movie-detail .vote,
+.movie-detail .homepage,
+.movie-detail .imdb {
     padding-left: 20px;
 }
 
-.movie-detail > .homepage > a,
-.movie-detail > .imdb > a {
+.movie-detail a {
     color: #f2f2f2;
     text-decoration: none;
 }
 
-.movie-detail > .overview {
+.movie-detail .overview {
     padding: 20px;
 }
 
-.movie-detail > .productions {
+.movie-detail .productions {
     padding: 20px 20px 0 20px;
 }
 
-.movie-detail > .productions > ul {
+.movie-detail .productions > ul {
     list-style-type: none;
 }
 
-.movie-detail > .productions > .production {
+.movie-detail .productions .production {
     display: flex;
     flex-direction: row;
 }
 
-.movie-detail > .productions > .production > .cie-detail {
+.movie-detail .productions .production .cie-detail {
     display: flex;
     flex-direction: column;
-    padding: 20px;
 }
 
 .movie-poster {
@@ -191,7 +194,7 @@
 }
 
 .person-infos >.imdb-page > span > a {
-    background-image: url("/images/imdb.png");
+    background-image: url("../../public/images/interface/imdb.png");
     background-size: cover;
     display: block;
     height: 27px;

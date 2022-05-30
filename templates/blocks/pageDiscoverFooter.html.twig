@@ -5,10 +5,10 @@
         {% if max > 1 %}
             <div class="pages">
                 {% if page > 6 %}
-                    <div class="ends"><a href="{{ path(route, {page: '1'}) }}"><i class="bi bi-chevron-bar-left"></i>&nbsp;{{ 'First Page'|trans }}</a></div>
+                    <div class="ends"><a href="{{ path(route, {page: '1', sort: sorts.sort_by}) }}"><i class="bi bi-chevron-bar-left"></i>&nbsp;{{ 'First Page'|trans }}</a></div>
                 {% endif %}
                 {% if page > 1 %}
-                    <div class="ends"><a href="{{ path(route, {page: page-1}) }}"><i class="bi bi-chevron-left"></i>&nbsp;{{ 'Previous Page'|trans }}</a></div>
+                    <div class="ends"><a href="{{ path(route, {page: page-1, sort: sorts.sort_by}) }}"><i class="bi bi-chevron-left"></i>&nbsp;{{ 'Previous Page'|trans }}</a></div>
                 {% endif %}
                 {% if max >= 10 %}
                     {% if page <= 5 %}
@@ -16,7 +16,7 @@
                             {% if p == page %}
                                 <div class="page active">{{ p }}</div>
                             {% else %}
-                                <div class="page"><a href="{{ path(route, {page: p}) }}">{{ p }}</a></div>
+                                <div class="page"><a href="{{ path(route, {page: p, sort: sorts.sort_by}) }}">{{ p }}</a></div>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
@@ -25,7 +25,7 @@
                             {% if p == page %}
                                 <div class="page active">{{ p }}</div>
                             {% else %}
-                                <div class="page"><a href="{{ path(route, {page: p}) }}">{{ p }}</a></div>
+                                <div class="page"><a href="{{ path(route, {page: p, sort: sorts.sort_by}) }}">{{ p }}</a></div>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
@@ -34,16 +34,16 @@
                             {% if p == page %}
                                 <div class="page active">{{ p }}</div>
                             {% else %}
-                                <div class="page"><a href="{{ path(route, {page: p}) }}">{{ p }}</a></div>
+                                <div class="page"><a href="{{ path(route, {page: p, sort: sorts.sort_by}) }}">{{ p }}</a></div>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
                 {% endif %}
                 {% if page < max-1 %}
-                    <div class="ends"><a href="{{ path(route, {page: page+1}) }}">{{ 'Next Page'|trans }}&nbsp;<i class="bi bi-chevron-right"></i></a></div>
+                    <div class="ends"><a href="{{ path(route, {page: page+1, sort: sorts.sort_by}) }}">{{ 'Next Page'|trans }}&nbsp;<i class="bi bi-chevron-right"></i></a></div>
                 {% endif %}
                 {% if page < max %}
-                    <div class="ends"><a href="{{ path(route, {page: max}) }}">{{ 'Last Page'|trans }}&nbsp;<i class="bi bi-chevron-bar-right"></i></a></div>
+                    <div class="ends"><a href="{{ path(route, {page: max, sort: sorts.sort_by}) }}">{{ 'Last Page'|trans }}&nbsp;<i class="bi bi-chevron-bar-right"></i></a></div>
                 {% endif %}
             </div>
         {% endif %}

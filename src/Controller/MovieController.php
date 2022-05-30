@@ -4,6 +4,7 @@ namespace App\Controller;
 
 //use App\Entity\ImageConfig;
 //use App\Entity\Movie;
+use App\Entity\Genre;
 use App\Entity\User;
 use App\Entity\UserMovie;
 use App\Service;
@@ -41,12 +42,16 @@ class MovieController extends AbstractController
         $locale = $request->getLocale();
         $standing = $callTmdbService->getMovie($movieId, $locale);
         $movieDetail = json_decode($standing, true, 512, 0);
+
         $standing = $callTmdbService->getMovieRecommendations($movieId, $locale);
         $recommendations = json_decode($standing, true, 512, 0);
+
         $standing = $callTmdbService->getMovieCredits($movieId, $locale);
         $credits = json_decode($standing, true);
+
         $standing = $callTmdbService->getMovieReleaseDates($movieId);
         $releaseDates = json_decode($standing, true, 512, 0);
+
         $standing = $callTmdbService->getCountries();
         $countries = json_decode($standing, true, 512, 0);
         $imageConfig = $homeController->getImageConfig($doctrine);
@@ -67,7 +72,16 @@ class MovieController extends AbstractController
 //        $crew = usort($credits['crew'], 'memberCmp');
         $releaseDates = $this->getLocaleDates($releaseDates['results'], $countries, $locale);
 
-        return $this->render('movie/index.html.twig', ['movie' => $movieDetail, 'recommendations' => $recommendations['results'], 'dates' => $releaseDates, 'hasBeenSeen' => $hasBeenSeen, 'cast' => $cast, 'crew' => $crew, 'imageConfig' => $imageConfig, 'locale' => $locale,]);
+        return $this->render('movie/index.html.twig', [
+            'movie' => $movieDetail,
+            'recommendations' => $recommendations['results'],
+            'dates' => $releaseDates,
+            'hasBeenSeen' => $hasBeenSeen,
+            'cast' => $cast,
+            'crew' => $crew,
+            'imageConfig' => $imageConfig,
+            'locale' => $locale,
+        ]);
     }
 
     #[Assert\Callback]
@@ -99,6 +113,57 @@ class MovieController extends AbstractController
         }
 
         return $localeDates;
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    #[Route('/{_locale}/movie/collection/{id}', 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function movieCollction(Request $request, $id, ManagerRegistry $doctrine, Service\CallTmdbService $callTmdbService, HomeController $homeController): Response
+    {
+        $locale = $request->getLocale();
+        $standing = $callTmdbService->getMovieCollection($id, $locale);
+        $collection = json_decode($standing, true, 512, 0);
+
+        $repoG = $doctrine->getRepository(Genre::class);
+        /** @var Genre [] $genresEntity */
+        $genresEntity = $repoG->findAll();
+        $genres = [];
+        foreach ($genresEntity as $genre) {
+            $genres[$genre->getGenreId()] = $genre->getName();
+        }
+        foreach ($collection['parts'] as &$part) {
+            $part['genres'] = [];
+            $genre = [];
+            foreach ($part['genre_ids'] as $genre_id) {
+                $genre = ['id'=> $genre_id, 'name' => $genres[$genre_id]];
+                $part['genres'][] = $genre;
+            }
+        }
+
+        $imageConfig = $homeController->getImageConfig($doctrine);
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $userMovieIds = [];
+        if ($user) {
+            $repoUM = $doctrine->getRepository(UserMovie::class);
+            $userMovies = $repoUM->findUserMovies($user->getId());
+            foreach ($userMovies as $userMovie) {
+                $userMovieIds[] = $userMovie['movie_db_id'];
+            }
+        }
+
+        return $this->render('movie/collection.html.twig', [
+            'collection' => $collection,
+            'userMovies' => $userMovieIds,
+            'genres' => $genres,
+            'imageConfig' => $imageConfig,
+        ]);
+
     }
 
     /**
@@ -154,6 +219,17 @@ class MovieController extends AbstractController
     #[Route('/{_locale}/movie/search/{query}/{page}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1, 'query' => ''])]
     public function moviesSearch(Request $request, $page, $query, ManagerRegistry $doctrine, Service\CallTmdbService $callTmdbService, HomeController $homeController): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $userMovieIds = [];
+        if ($user) {
+            $repoUM = $doctrine->getRepository(UserMovie::class);
+            $userMovies = $repoUM->findUserMovies($user->getId());
+            foreach ($userMovies as $userMovie) {
+                $userMovieIds[] = $userMovie['movie_db_id'];
+            }
+        }
+
         if ($query == 'Recherche par nom') $query = '';
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
@@ -164,7 +240,13 @@ class MovieController extends AbstractController
 
         $imageConfig = $homeController->getImageConfig($doctrine);
 
-        return $this->render('movie/search.html.twig', ['query' => $query, 'discovers' => $discovers, 'imageConfig' => $imageConfig,]);
+        dump($discovers);
+        return $this->render('movie/search.html.twig', [
+            'query' => $query,
+            'discovers' => $discovers,
+            'userMovies' => $userMovieIds,
+            'imageConfig' => $imageConfig,
+            ]);
     }
 
     /**
@@ -275,8 +357,6 @@ class MovieController extends AbstractController
         $movieId = $request->query->get('movie_db_id');
 
         $userMovie = $doctrine->getRepository(UserMovie::class)->findOneBy(['movieDbId' => $movieId]);
-
-        dump($userMovie);
 
         if ($userMovie) {
             $userMovie->removeUser($user);

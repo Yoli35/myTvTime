@@ -9,3 +9,7 @@ kernel:
 dashboard:
     path: /admin
     controller: App\Controller\Admin\DashboardController::index
+
+live_component:
+    resource: '@LiveComponentBundle/Resources/config/routing/live_component.xml'
+    prefix: '/{_locale}'

@@ -272,7 +272,7 @@ h1 > a, h2 > a {
 }
 
 .episode > .detail > .guests > .guest > .profile {
-    background-image: url("/images/default/profile.jpg");
+    background-image: url("../../public/images/default/profile.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

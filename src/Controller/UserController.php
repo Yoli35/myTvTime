@@ -69,13 +69,13 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_profile');
         }
 
-        $forecast = [];
-        if ($user->getCity()) {
-            $locale = $request->getLocale();
-            $standing = $weatherService->getLocalForecast($user->getCity(), 3, $locale);
-            $forecast = json_decode($standing, true, 512, 0);
-//            dump($forecast);
-        }
+//        $forecast = [];
+//        if ($user->getCity()) {
+//            $locale = $request->getLocale();
+//            $standing = $weatherService->getLocalForecast($user->getCity(), 3, $locale);
+//            $forecast = json_decode($standing, true, 512, 0);
+////            dump($forecast);
+//        }
         $banner = [];
         if ($user->getBanner() == null) {
             $banner = $this->setRandomBanner($betaSeriesService);
@@ -84,7 +84,8 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'banner' => $banner,
-            'weather' => $forecast,
+//            'weather' => $forecast,
+//            'locale' => $locale,
         ]);
     }
 
@@ -115,17 +116,17 @@ class UserController extends AbstractController
         $runtime['mounths'] = floor($total/60/24/30.41666667) % 12;
         $runtime['years'] = floor($total/60/24/365);
 
-        $forecast = [];
-        if ($user->getCity()) {
-            $locale = $request->getLocale();
-            $standing = $weatherService->getLocalForecast($user->getCity(), 3, $locale);
-            $forecast = json_decode($standing, true, 512, 0);
-        }
+//        $forecast = [];
+//        if ($user->getCity()) {
+//            $locale = $request->getLocale();
+//            $standing = $weatherService->getLocalForecast($user->getCity(), 3, $locale);
+//            $forecast = json_decode($standing, true, 512, 0);
+//        }
 
         return $this->render('user_account/user_movies.html.twig', [
             'discovers' => $movies,
             'runtime' => $runtime,
-            'weather' => $forecast,
+//            'weather' => $forecast,
             'imageConfig' => $imageConfig,
         ]);
     }

@@ -7,6 +7,12 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+import './styles/movie.css';
+import './styles/series.css';
+import './styles/tv.css';
+import './styles/user.css';
+
+import './js/select-movie';
 
 // start the Stimulus application
 import './bootstrap';

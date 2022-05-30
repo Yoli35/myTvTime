@@ -28,11 +28,11 @@ class CallTmdbService
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function discoverMovies($page, $locale): ?string
+    public function discoverMovies($page, $sort, $locale): ?string
     {
         $response = $this->client->request(
             'GET',
-            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=popularity.desc&include_adult=true&include_video=false&page='.$page.'&with_watch_monetization_types=flatrate',
+            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by='.$sort.'&include_adult=false&include_video=false&page='.$page.'&with_watch_monetization_types=flatrate',
         );
         return $response->getContent();
     }
@@ -105,6 +105,12 @@ class CallTmdbService
      */
     public function discoverTV($page, $locale): ?string
     {
+        //
+        // https://www.themoviedb.org/tv/81322-the-time-traveler-s-wife
+        // Série "The Time Traveler's Wife" TMDB.TV
+        // TODO
+        //   Get Series from TMDB !!!
+
         $response = $this->client->request(
             'GET',
             'https://api.themoviedb.org/3/discover/tv?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=release_date.desc&page='.$page.'&timezone=Europe%2FParis&include_null_first_air_dates=false&watch_region=FR&with_watch_monetization_types=flatrate&with_status=0&with_type=0',
@@ -123,6 +129,21 @@ class CallTmdbService
         $response = $this->client->request(
             'GET',
             'https://api.themoviedb.org/3/movie/'.$movieId.'?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale,
+        );
+        return $response->getContent();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getMovieCollection($collectionId, $locale): ?string
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://api.themoviedb.org/3/collection/'.$collectionId.'?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale,
         );
         return $response->getContent();
     }

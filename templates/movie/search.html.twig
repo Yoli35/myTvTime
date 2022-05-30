@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block morecss %}
-    <link href="{{ asset("movie.css") }}" rel="stylesheet">
+{#    <link href="{{ asset("movie.css") }}" rel="stylesheet">#}
 {% endblock %}
 
 {% block title %}myTvTime::{{ 'Movies Search Result'|trans }}{% endblock %}
@@ -12,7 +12,7 @@
         <div class="search-by-name">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                <input id="search-query" type="text" class="form-control" value="{{ query }}" placeholder="{{ 'Name'|trans }}" aria-label="{{ 'Name'|trans }}" aria-describedby="basic-addon1">
+                <input id="search-query" type="text" autofocus class="form-control" value="{{ query }}" placeholder="{{ 'Name'|trans }}" aria-label="{{ 'Name'|trans }}" aria-describedby="basic-addon1">
             </div>
         </div>
 
@@ -27,10 +27,16 @@
                                 <img src="/images/default/noposter_dark.png" class="d-block w-100" alt="{{ discover.title }}">
                             {% endif %}
                             <div class="home-discover-title">{{ discover.title }}</div>
-                            {% if discover.release_date is defined %}
-                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|date("d/m/Y") }}</div>
+                            {% if discover.release_date is defined and discover.release_date|length %}
+                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|format_date('short') }}</div>
                             {% endif %}
                         </a>
+                        {# Badges on seen Movies #}
+                        {% if app.user is not null %}
+                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}" id="{{ discover.id }}">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
@@ -38,6 +44,7 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
+    <script src="{{ asset('select-movie.js') }}"></script>
 {% endblock %}
 {% block morejs %}
     <script>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block morecss %}
-    <link href="{{ asset("tv.css") }}" rel="stylesheet">
+{#    <link href="{{ asset("tv.css") }}" rel="stylesheet">#}
 {% endblock %}
 
 {% block title %}myTvTime::{{ tv.name }}{% endblock %}
@@ -105,7 +105,7 @@
                 {% if tv.poster_path %}
                     <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ tv.poster_path }}" alt="{{ tv.name }}">
                 {% else %}
-                    <img src="/images/default/noposter_dark.png" alt="{{ tv.name }}">
+                    <img src="/images/default/no_poster_dark.png" alt="{{ tv.name }}">
                 {% endif %}
             </div>
         </div>
