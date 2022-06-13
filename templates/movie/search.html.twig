@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block morecss %}
-{#    <link href="{{ asset("movie.css") }}" rel="stylesheet">#}
+    {#    <link href="{{ asset("movie.css") }}" rel="stylesheet"> #}
 {% endblock %}
 
 {% block title %}myTvTime::{{ 'Movies Search Result'|trans }}{% endblock %}
@@ -10,9 +10,45 @@
         {{ include('blocks/pageHeader.html.twig') }}
 
         <div class="search-by-name">
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                <input id="search-query" type="text" autofocus class="form-control" value="{{ query }}" placeholder="{{ 'Name'|trans }}" aria-label="{{ 'Name'|trans }}" aria-describedby="basic-addon1">
+            <div class="row">
+                <div class="col-lg-3 col-md-1 col-sm"></div>
+                <div class="col-lg-6 col-md-10 col-sm-12">
+                    <form id="search">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                            <input id="search-query" type="text" autofocus class="form-control" value="{{ query }}" placeholder="{{ 'Name'|trans }}" aria-label="{{ 'Name'|trans }}" aria-describedby="basic-addon1">
+                            <input id="search-year" type="text" autofocus class="form-control" value="{{ year }}" placeholder="{{ 'Year'|trans }}" aria-label="{{ 'Year'|trans }}" aria-describedby="basic-addon1">
+                            <button id="search-submit" type="submit">{{ 'Search'|trans }}</button>
+                        </div>
+                    </form>
+                    <script>
+                        $(function () {
+                            let form = $('#search');
+                            // let submit = $('#search-submit');
+                            let search = $('#search-query');
+                            let year = $('#search-year');
+                            let query, url = '{{ path(route) }}' + '/1';
+
+                            $(search).select();
+
+                            // $(submit).click(validate);
+                            $(form).submit(function (e) {
+                                query = $(search).val();
+                                let y = $(year).val();
+                                if (query.length) {
+                                    url += '/' + query;
+                                    if (y.length) {
+                                        url += '/' + y;
+                                    }
+                                    console.log(url);
+                                    window.location.href = url;
+                                }
+                                e.preventDefault();
+                            })
+                        })
+                    </script>
+                </div>
+                <div class="col-lg-3 col-md-1 col-sm"></div>
             </div>
         </div>
 
@@ -24,7 +60,7 @@
                             {% if discover.poster_path %}
                                 <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}">
                             {% else %}
-                                <img src="/images/default/noposter_dark.png" class="d-block w-100" alt="{{ discover.title }}">
+                                <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ discover.title }}">
                             {% endif %}
                             <div class="home-discover-title">{{ discover.title }}</div>
                             {% if discover.release_date is defined and discover.release_date|length %}
@@ -44,22 +80,6 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
-    <script src="{{ asset('select-movie.js') }}"></script>
 {% endblock %}
 {% block morejs %}
-    <script>
-        $(function () {
-            let search = $('#search-query');
-            let query, url = '{{ path(route) }}';
-
-            $(search).change(function () {
-                query = $(search).val();
-                if (query.length > 2) {
-                    url = url + '/' + query;
-                    console.log(url);
-                    window.location.href = url;
-                }
-            });
-        })
-    </script>
 {% endblock %}

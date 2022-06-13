@@ -6,17 +6,17 @@
         <div class="pages">
             {% if max >= 10 %}
                     {% if page > 6 %}
-                        <div class="ends"><a href="{{ path(route, {page: 1, query: query}) }}"><i class="bi bi-chevron-bar-left"></i>&nbsp;{{ 'First Page'|trans }}</a></div>
+                        <div class="ends"><a href="{{ path(route, {page: 1, query: query, year: year}) }}"><i class="bi bi-chevron-bar-left"></i>&nbsp;{{ 'First Page'|trans }}</a></div>
                     {% endif %}
                     {% if page > 1 %}
-                        <div class="ends"><a href="{{ path(route, {page: page-1, query: query}) }}"><i class="bi bi-chevron-left"></i>&nbsp;{{ 'Previous Page'|trans }}</a></div>
+                        <div class="ends"><a href="{{ path(route, {page: page-1, query: query, year: year}) }}"><i class="bi bi-chevron-left"></i>&nbsp;{{ 'Previous Page'|trans }}</a></div>
                     {% endif %}
                 {% if page <= 5 %}
                     {% for p in 1..10 %}
                         {% if p == page %}
                             <div class="page active">{{ p }}</div>
                         {% else %}
-                            <div class="page"><a href="{{ path(route, {page: p, query: query}) }}">{{ p }}</a></div>
+                            <div class="page"><a href="{{ path(route, {page: p, query: query, year: year}) }}">{{ p }}</a></div>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
@@ -25,7 +25,7 @@
                         {% if p == page %}
                             <div class="page active">{{ p }}</div>
                         {% else %}
-                            <div class="page"><a href="{{ path(route, {page: p, query: query}) }}">{{ p }}</a></div>
+                            <div class="page"><a href="{{ path(route, {page: p, query: query, year: year}) }}">{{ p }}</a></div>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
@@ -34,22 +34,22 @@
                         {% if p == page %}
                             <div class="page active">{{ p }}</div>
                         {% else %}
-                            <div class="page"><a href="{{ path(route, {page: p, query: query}) }}">{{ p }}</a></div>
+                            <div class="page"><a href="{{ path(route, {page: p, query: query, year: year}) }}">{{ p }}</a></div>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
                 {% if page < max-1 %}
-                    <div class="ends"><a href="{{ path(route, {page: page+1, query: query}) }}">{{ 'Next Page'|trans }}&nbsp;<i class="bi bi-chevron-right"></i></a></div>
+                    <div class="ends"><a href="{{ path(route, {page: page+1, query: query, year: year}) }}">{{ 'Next Page'|trans }}&nbsp;<i class="bi bi-chevron-right"></i></a></div>
                 {% endif %}
                 {% if page < max %}
-                    <div class="ends"><a href="{{ path(route, {page: max, query: query}) }}">{{ 'Last Page'|trans }}&nbsp;<i class="bi bi-chevron-bar-right"></i></a></div>
+                    <div class="ends"><a href="{{ path(route, {page: max, query: query, year: year}) }}">{{ 'Last Page'|trans }}&nbsp;<i class="bi bi-chevron-bar-right"></i></a></div>
                 {% endif %}
             {% else %}
                 {% for p in 1..max %}
                     {% if p == page %}
                         <div class="page active">{{ p }}</div>
                     {% else %}
-                        <div class="page"><a href="{{ path(route, {page: p, query: query}) }}">{{ p }}</a></div>
+                        <div class="page"><a href="{{ path(route, {page: p, query: query, year: year}) }}">{{ p }}</a></div>
                     {% endif %}
                 {% endfor %}
             {% endif %}

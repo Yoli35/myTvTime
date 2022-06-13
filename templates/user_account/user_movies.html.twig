@@ -56,23 +56,12 @@
                 </h4>
 
                 <div class="search-block">
-                    {{ component('user_movie_search', {class:'search', movies: discovers, config: imageConfig}) }}
+                    {{ component('user_movie_search', {class: 'search', id: user.id, poster_url: imageConfig.url, poster_size: imageConfig.poster_sizes.3}) }}
                 </div>
 
                 <div class="home-discovers-content">
                     {% for discover in discovers %}
-                        {{ include('blocks/movie/discover.html.twig', {discover: discover, imageConfig: imageConfig}) }}
-                        {#                        <div class="home-discover" id="{{ discover.movie_db_id }}"> #}
-                        {#                            <a href="{{ path('app_movie', {id: discover.movie_db_id}) }}"> #}
-                        {#                                {% if discover.poster_path is defined and discover.poster_path|length %} #}
-                        {#                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}"> #}
-                        {#                                {% else %} #}
-                        {#                                    <img src="{{ asset('noposter_dark') }}" class="d-block w-100" alt="{{ discover.title }}"> #}
-                        {#                                {% endif %} #}
-                        {#                                <div class="home-discover-title">{{ discover.title }}</div> #}
-                        {#                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|format_date('short') }}</div> #}
-                        {#                            </a> #}
-                        {#                        </div> #}
+                        {{ include('blocks/movie/discover.html.twig', {discover: discover, poster_url: imageConfig.url, poster_size: imageConfig.poster_sizes.3}) }}
                     {% endfor %}
                 </div>
             </div>

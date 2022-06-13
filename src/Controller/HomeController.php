@@ -81,9 +81,9 @@ class HomeController extends AbstractController
         ];
 
         // Certains films ne possèdent pas tous les champs …
-        foreach ($discovers['results'] as $discover) {
+        foreach ($discovers['results'] as &$discover) {
             if (!array_key_exists('release_date', $discover)) {
-                $discover['release_date'] = "Not documented";
+                $discover['release_date'] = "";
             }
         }
 

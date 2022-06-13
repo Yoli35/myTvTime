@@ -67,6 +67,9 @@ class MovieController extends AbstractController
             }
         }
 
+        if (!array_key_exists('release_date', $movieDetail)) {
+            $movieDetail['release_date'] = "";
+        }
         $cast = $credits['cast'];
         $crew = $credits['crew'];
 //        $crew = usort($credits['crew'], 'memberCmp');
@@ -92,7 +95,12 @@ class MovieController extends AbstractController
 
     public function getLocaleDates($dates, $countries, $locale): array
     {
-        $locales = ['fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'], 'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'], 'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'], 'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']];
+        $locales = [
+            'fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
+            'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'],
+            'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'],
+            'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']
+        ];
 
         $types = [1 => 'Premiere', 2 => 'Theatrical (limited)', 3 => 'Theatrical', 4 => 'Digital', 5 => 'Physical', 6 => 'TV'];
         $localeDates = [];
@@ -216,8 +224,8 @@ class MovieController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[Route('/{_locale}/movie/search/{query}/{page}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1, 'query' => ''])]
-    public function moviesSearch(Request $request, $page, $query, ManagerRegistry $doctrine, Service\CallTmdbService $callTmdbService, HomeController $homeController): Response
+    #[Route('/{_locale}/search/movie/{page}/{query}/{year}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1, 'query' => '', 'year' => 'all'])]
+    public function moviesSearch(Request $request, $page, $query, $year,  ManagerRegistry $doctrine, Service\CallTmdbService $callTmdbService, HomeController $homeController): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -230,19 +238,18 @@ class MovieController extends AbstractController
             }
         }
 
-        if ($query == 'Recherche par nom') $query = '';
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         if ($query && strlen($query)) {
-            $standing = $callTmdbService->moviesSearch($page, $query, $locale);
+            $standing = $callTmdbService->moviesSearch($page, $query, $year, $locale);
             $discovers = json_decode($standing, true, 512, 0);
         }
 
         $imageConfig = $homeController->getImageConfig($doctrine);
 
-        dump($discovers);
         return $this->render('movie/search.html.twig', [
             'query' => $query,
+            'year' => $year,
             'discovers' => $discovers,
             'userMovies' => $userMovieIds,
             'imageConfig' => $imageConfig,
@@ -291,7 +298,20 @@ class MovieController extends AbstractController
             $summary = $translator->trans($person['summary']);
 
             if ($locale !== 'en') {
-                $config = ['credentials' => ["type" => "service_account", "project_id" => "mytvtime-349019", "private_key_id" => "001b2f815d020608bcf09f3278e808fa0c52a6b7", "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyXis5yVetkdre\niZqN7yrzy0kIydA4G/g9Wyh+b6VpOEz2kFjG5tIcibsEh8TP1mHPn0N95zovYv9S\n4bR3xfz1TJq9rxiVDgBLiKqQj/r8quLup0Uows3NohxtommAx2MybUrd+hngbzFD\nom+ELBty1TW3bZOz5kTpwdLKfrS5BgPdR01bJCPFn4STcc9gxGJAKXHDBF1+nbTk\n6c7vWBvKJUR8mxY20FfNEVeCoNAfBfyne2ZqOO5G8LOGFoYSjx0hNib84eB1cGCg\ncV+Ue/cpxyd3mn2v4maScs0CdAXhEAUKlQLMgCrnBUInu7lb4rfO4WJCvcg4Lr1+\nCIp62cK1AgMBAAECggEABj1GDNDuuLsb6WHt3p4ppfqL9Ps+ReAwmFDag0W7hwk5\no/xbpqWHXwkwWhG3wD9zD3S2Qy61+ddgMBGGIxRxa1FBLnZ0CS7CsuG2ebUXpgQC\nSS/fuvPJiDJuBSXDxAX1gduR3V70zcWF9yQ0+24hjaxIo0B5hLb+3SBzE7NH9hrh\nTmA3kyenwIrrzu/n+sM/edQZIj0r3Irhg3oO48UJS7HrDWwssTfHhZoE89oMNZBy\nqthl3nYkjcHtC1PuYLeg+gLyoVucoGE71zqACvbD9RjCHnlUHbgO6Q+DnKjwmLRj\nSC6qwUp/ZjxLFIYGuOjKj1nqQaU+RYdcJ/zJmIbGFwKBgQDbD7w8QWYUCo31uXE+\nf5tR8/UBV7bphcBuMGb2EJEA0ifT5Se0ePnT8PW0EtZf/TYEG0wxKIcFZVIVaeFp\nbh1fpj13rwwo+EN1n5EAbMK+A+AiLeJR8shwKirooddEuVVKm7hDH/Q2i4IoaZCO\naxBurr6WwX3HycEcY+RDQYcwRwKBgQDQcc4SyjVyCGExvGLX8ArxPsvdpixxmmvt\nKbL9vXP1+wl47b6+xf4vuxr2XWvZFoQtjrCNUqrRKbQxF+k1zpkxfP1qM/TfvxNS\nPsIw32I+BWH/2JrnVh+kpxpP5Quc2MgS+nQfUqAW5JBMSxUV9EgZbVuCsLWKwhvs\nU++6mSYPIwKBgCRiP6xuXEr12dA3RbTQsvZwo3/elrXAjk5+4Yr7A2p0fUL3a5nR\nAgWOnvCStGJrBv61nfkINyzRQEnoNRUywdQyI0FupIFlgqbVotrENbAjqqVio5Vi\n0qG2jzvmLX/vnFfw9zDG7OPmVe7qYaUV6TvI8ETPzFlTjCxv9uioyJBfAoGAHn7H\n20/iCdDYB2K8Q0NHFoxNXxwUnHovF/9lxGGXOYGEnUCLC3YD/g+tniWExbnZlKCv\ni71waDFlv1j0MX8MQoU6vfLj/GgD96Be4K+Nu+0lrTyPTRD4iCo6Wz3zOPsuKjii\nDIMWEMNXqRHC//dBJRcusCwSIz7KvwR4qiAFxWkCgYEAsCRAxJrGJMrh41nGLink\nGBP8NsWxysJi2ObeKmWWGnu7Gr7Vc7TYNVAsYBIoRHEhhUrSxz+VgJnVDPW7aC5p\nncR3Q7gHMd91wRJD3muP0ocDkPrZXiqdK9oiEbhU33KJGR9OD1Dvpcxvvhhyfgi5\npB++X6dH68Y7UIC8hM2i7GY=\n-----END PRIVATE KEY-----\n", "client_email" => "translate@mytvtime-349019.iam.gserviceaccount.com", "client_id" => "106684530697242476361", "auth_uri" => "https://accounts.google.com/o/oauth2/auth", "token_uri" => "https://oauth2.googleapis.com/token", "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs", "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/translate%40mytvtime-349019.iam.gserviceaccount.com"]];
+                $config = [
+                    'credentials' => [
+                        "type" => "service_account",
+                        "project_id" => "mytvtime-349019",
+                        "private_key_id" => "001b2f815d020608bcf09f3278e808fa0c52a6b7",
+                        "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyXis5yVetkdre\niZqN7yrzy0kIydA4G/g9Wyh+b6VpOEz2kFjG5tIcibsEh8TP1mHPn0N95zovYv9S\n4bR3xfz1TJq9rxiVDgBLiKqQj/r8quLup0Uows3NohxtommAx2MybUrd+hngbzFD\nom+ELBty1TW3bZOz5kTpwdLKfrS5BgPdR01bJCPFn4STcc9gxGJAKXHDBF1+nbTk\n6c7vWBvKJUR8mxY20FfNEVeCoNAfBfyne2ZqOO5G8LOGFoYSjx0hNib84eB1cGCg\ncV+Ue/cpxyd3mn2v4maScs0CdAXhEAUKlQLMgCrnBUInu7lb4rfO4WJCvcg4Lr1+\nCIp62cK1AgMBAAECggEABj1GDNDuuLsb6WHt3p4ppfqL9Ps+ReAwmFDag0W7hwk5\no/xbpqWHXwkwWhG3wD9zD3S2Qy61+ddgMBGGIxRxa1FBLnZ0CS7CsuG2ebUXpgQC\nSS/fuvPJiDJuBSXDxAX1gduR3V70zcWF9yQ0+24hjaxIo0B5hLb+3SBzE7NH9hrh\nTmA3kyenwIrrzu/n+sM/edQZIj0r3Irhg3oO48UJS7HrDWwssTfHhZoE89oMNZBy\nqthl3nYkjcHtC1PuYLeg+gLyoVucoGE71zqACvbD9RjCHnlUHbgO6Q+DnKjwmLRj\nSC6qwUp/ZjxLFIYGuOjKj1nqQaU+RYdcJ/zJmIbGFwKBgQDbD7w8QWYUCo31uXE+\nf5tR8/UBV7bphcBuMGb2EJEA0ifT5Se0ePnT8PW0EtZf/TYEG0wxKIcFZVIVaeFp\nbh1fpj13rwwo+EN1n5EAbMK+A+AiLeJR8shwKirooddEuVVKm7hDH/Q2i4IoaZCO\naxBurr6WwX3HycEcY+RDQYcwRwKBgQDQcc4SyjVyCGExvGLX8ArxPsvdpixxmmvt\nKbL9vXP1+wl47b6+xf4vuxr2XWvZFoQtjrCNUqrRKbQxF+k1zpkxfP1qM/TfvxNS\nPsIw32I+BWH/2JrnVh+kpxpP5Quc2MgS+nQfUqAW5JBMSxUV9EgZbVuCsLWKwhvs\nU++6mSYPIwKBgCRiP6xuXEr12dA3RbTQsvZwo3/elrXAjk5+4Yr7A2p0fUL3a5nR\nAgWOnvCStGJrBv61nfkINyzRQEnoNRUywdQyI0FupIFlgqbVotrENbAjqqVio5Vi\n0qG2jzvmLX/vnFfw9zDG7OPmVe7qYaUV6TvI8ETPzFlTjCxv9uioyJBfAoGAHn7H\n20/iCdDYB2K8Q0NHFoxNXxwUnHovF/9lxGGXOYGEnUCLC3YD/g+tniWExbnZlKCv\ni71waDFlv1j0MX8MQoU6vfLj/GgD96Be4K+Nu+0lrTyPTRD4iCo6Wz3zOPsuKjii\nDIMWEMNXqRHC//dBJRcusCwSIz7KvwR4qiAFxWkCgYEAsCRAxJrGJMrh41nGLink\nGBP8NsWxysJi2ObeKmWWGnu7Gr7Vc7TYNVAsYBIoRHEhhUrSxz+VgJnVDPW7aC5p\nncR3Q7gHMd91wRJD3muP0ocDkPrZXiqdK9oiEbhU33KJGR9OD1Dvpcxvvhhyfgi5\npB++X6dH68Y7UIC8hM2i7GY=\n-----END PRIVATE KEY-----\n",
+                        "client_email" => "translate@mytvtime-349019.iam.gserviceaccount.com",
+                        "client_id" => "106684530697242476361",
+                        "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
+                        "token_uri" => "https://oauth2.googleapis.com/token",
+                        "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
+                        "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/translate%40mytvtime-349019.iam.gserviceaccount.com"
+                    ]
+                ];
 
                 $person['translated'] = '';
                 $translationClient = new TranslationServiceClient($config);

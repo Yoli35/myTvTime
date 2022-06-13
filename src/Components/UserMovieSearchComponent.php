@@ -2,6 +2,8 @@
 
 namespace App\Components;
 
+use App\Repository\UserMovieRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
@@ -12,33 +14,34 @@ class UserMovieSearchComponent
     use DefaultActionTrait;
 
     #[LiveProp(writable: true)]
-    public string $query = '';
+    public string $query = 'iron';
     #[LiveProp]
-    public array $movies = [];
+    public int $id;
     #[LiveProp]
-    public array $config = [];
+    public string $poster_size;
+    #[LiveProp]
+    public string $poster_url;
 
-    public function __construct()
+    private ObjectRepository $repoUM;
+
+    public function __construct(UserMovieRepository $repoUM)
     {
-        $this->n = 0;
+        $this->repoUM = $repoUM;
     }
 
-    public function mount($movies, $config): void
+    public function mount($id, $poster_url, $poster_size): void
     {
-        $this->movies = $movies;
-        $this->config = $config;
+        $this->id = $id;
+        $this->poster_url = $poster_url;
+        $this->poster_size = $poster_size;
     }
 
-    public function getUserMovies(): array
+    public function movie_results(): array
     {
         $results = [];
         if (strlen($this->query)) {
-            foreach ($this->movies as $movie) {
-                if (strlen(stristr($movie['title'], $this->query))) {
-                    $results[] = $movie;
-                }
-            }
+            $results = $this->repoUM->searchUserMovies($this->id, $this->query);
         }
-        return array_reverse($results);
+        return $results;
     }
 }

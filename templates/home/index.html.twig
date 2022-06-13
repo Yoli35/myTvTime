@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}my TvTime{% endblock %}
+{% block title %}{{ 'my TvTime' }}{% endblock %}
 
 {% block body %}
 
@@ -15,7 +15,7 @@
                 <div class="search-label">{{ 'Search Movies by'|trans }}</div>
                 <div class="btn-toolbar" role="toolbar" aria-label="{{ 'Toolbar with button groups'|trans }}">
                     <div class="btn-group me-2" role="group" aria-label="{{ 'First group'|trans }}">
-                        <a href="{{ path('app_movies_search', {query: 'Recherche par nom'}) }}" class="btn btn-outline-secondary">{{ 'Name'|trans }}</a>
+                        <a href="{{ path('app_movies_search', {query: ''}) }}" class="btn btn-outline-secondary">{{ 'Name'|trans }}</a>
                         <a href="{{ path('app_movies_by_genre', {genres: '1'}) }}" class="btn btn-outline-secondary">{{ 'Genre'|trans }}</a>
                         <a href="{{ path('app_movies_by_date', {date: '2022'}) }}" class="btn btn-outline-secondary">{{ 'Date'|trans }}</a>
                     </div>
@@ -34,7 +34,7 @@
                             let sort = $('select');
                             let initialValue = $(sort).val(), newValue = 'popularity.desc';
 
-                            $(sort).change(function (e) {
+                            $(sort).change(function () {
                                 newValue = $(sort).val();
                                 if (newValue !== initialValue) {
                                     window.location.href = '{{ path(route) }}?sort=' + newValue + '&page=1';

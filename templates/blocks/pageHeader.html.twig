@@ -1,6 +1,7 @@
 {% set movies_route = ['app_home', 'app_movie', 'app_movie_collection', 'app_movies_by_genre', 'app_movies_by_date', 'app_movies_search'] %}
 {% set series_route = ['app_home_series', 'app_show'] %}
 {% set tv_route = ['app_home_tv', 'app_tv', 'app_season', 'app_episode'] %}
+{% set youtube_route = ['app_youtube'] %}
 {% set user_route = ['app_user_account', 'app_user_movies'] %}
 {% set user = app.user %}
 {% set path = app.request.pathInfo %}
@@ -63,6 +64,11 @@
             <div class="home-tv-link">
                 <a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a>
                 {% if route in tv_route %}
+                    <div class="active"></div>{% endif %}
+            </div>
+            <div class="home-youtube-link">
+                <a href="{{ path('app_youtube') }}">{{ 'Youtube' }}</a>
+                {% if route in youtube_route %}
                     <div class="active"></div>{% endif %}
             </div>
         </div>

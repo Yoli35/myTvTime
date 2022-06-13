@@ -43,13 +43,37 @@
         </div>
         <div class="sun">
             <i class="bi bi-sun"></i>
-            <div>{{ 'Sunrise'|trans }} : {{ weather.forecast.forecastday.0.astro.sunrise|date("G:i") }}</div>
-            <div>{{ 'Sunset'|trans }} : {{ weather.forecast.forecastday.0.astro.sunset|date("G:i") }}</div>
+            <div>{{ 'Sunrise'|trans }} :
+                {% if weather.forecast.forecastday.0.astro.sunrise == 'No sunrise' %}
+                    {{ 'No sunrise'|trans }}
+                {% else %}
+                    {{ weather.forecast.forecastday.0.astro.sunrise|date("G:i") }}
+                {% endif %}
+            </div>
+            <div>{{ 'Sunset'|trans }} :
+                {% if weather.forecast.forecastday.0.astro.sunset == 'No sunset' %}
+                    {{ 'No sunset'|trans }}
+                {% else %}
+                    {{ weather.forecast.forecastday.0.astro.sunset|date("G:i") }}
+                {% endif %}
+            </div>
         </div>
         <div class="moon">
             <i class="bi bi-moon"></i>
-            <div>{{ 'Sunrise'|trans }} : {{ weather.forecast.forecastday.0.astro.moonrise|date("G:i") }}</div>
-            <div>{{ 'Sunset'|trans }} : {{ weather.forecast.forecastday.0.astro.moonset|date("G:i") }}</div>
+            <div>{{ 'Sunrise'|trans }} :
+                {% if weather.forecast.forecastday.0.astro.moonrise == 'No moonrise' %}
+                    {{ 'No moonrise'|trans }}
+                {% else %}
+                    {{ weather.forecast.forecastday.0.astro.moonrise|date("G:i") }}
+                {% endif %}
+            </div>
+            <div>{{ 'Sunset'|trans }} :
+                {% if weather.forecast.forecastday.0.astro.moonset == 'No moonset' %}
+                    {{ 'No moonset'|trans }}
+                {% else %}
+                    {{ weather.forecast.forecastday.0.astro.moonset|date("G:i") }}
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="toggle open"><i class="bi bi-dash-circle"></i></div>

@@ -3,10 +3,10 @@
         <input type="search" name="query" value="{{ query }}" data-action="live#update" autofocus>
     </label>
 
-    {% if this.usermovies is not empty %}
+    {% if this.movie_results is not empty %}
         <div class="result">
-            {% for item in this.usermovies %}
-                {{ include('blocks/movie/discover.html.twig', {discover: item, imageConfig: this.config}) }}
+            {% for item in this.movie_results %}
+                {{ include('blocks/movie/discover.html.twig', {discover: item, poster_url:this.poster_url, poster_size:this.poster_size}) }}
             {% endfor %}
         </div>
     {% endif %}
