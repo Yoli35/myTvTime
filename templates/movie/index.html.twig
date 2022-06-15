@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block morecss %}
-{#    <link href="{{ asset("movie.css") }}" rel="stylesheet">#}
+    {#    <link href="{{ asset("movie.css") }}" rel="stylesheet"> #}
 {% endblock %}
 
 {% block title %}myTvTime::{{ movie.title }}{% endblock %}
 {% block body %}
-{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
         {{ include('blocks/pageHeader.html.twig') }}
 
@@ -18,7 +18,7 @@
             </div>
         {% endif %}
         <div class="movie-info">
-            <div class="row">
+            <div class="row w-100">
                 <div class="col-8">
                     <div class="movie-detail">
                         <div class="row">
@@ -62,12 +62,21 @@
                                 </div>
                                 {% if movie.homepage | length %}
                                     <div class="homepage">
-                                        {{ 'Home Page'|trans }} : <a href="{{ movie.homepage }}" target="_blank">{{ movie.homepage }}</a>
+                                        {{ 'Home Page'|trans }} :
+                                        <a href="{{ movie.homepage }}" target="_blank">
+                                        <span data-descr="{{ 'Visit the official Movie Website'|trans }}">
+                                            {{ movie.homepage }}&nbsp;<i class="bi bi-link-45deg"></i>
+                                         </span>
+                                        </a>
                                     </div>
                                 {% endif %}
                                 {% if movie.imdb_id | length %}
                                     <div class="imdb">
-                                        <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">{{ 'IMDB Page'|trans }}</a>
+                                        <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">
+                                        <span data-descr="{{ 'Visit the Movie Page on IMDB'|trans }}">
+                                            {{ 'IMDB Page'|trans }}&nbsp;<i class="bi bi-link-45deg"></i>
+                                        </span>
+                                        </a>
                                     </div>
                                 {% endif %}
 
@@ -98,25 +107,26 @@
                                     <h2>{{ 'Production'|trans }}</h2>
                                     <div class="productions">
                                         {{ 'Production Companies'|trans }} :
-                                        <ul>
+                                        <div>
                                             {% for cie in movie.production_companies %}
-                                                <li class="production">
-                                                    <div class="cie-detail">
-                                                        <div>{{ cie.name }} ({{ cie.origin_country|country_name(locale) }})</div>
-                                                    </div>
-                                                </li>
+                                                <div class="production">
+                                                    {#                                                    <div class="cie-detail"> #}
+                                                    <div>{{ cie.name }}</div>
+                                                    {#                                                        <div>{{ cie.name }} {% if cie.origin_country %} ({{ cie.origin_country|country_name(locale) }}) {% endif %}</div> #}
+                                                    {#                                                    </div> #}
+                                                </div>
                                             {% endfor %}
-                                        </ul>
+                                        </div>
                                     </div>
                                 {% endif %}
                                 {% if movie.production_countries %}
                                     <div class="productions">
                                         {{ 'Production Countries'|trans }} :
-                                        <ul>
+                                        <div>
                                             {% for country in movie.production_countries %}
-                                                <li class="production">{{ country.iso_3166_1 |country_name(locale) }} {# ({{ country.name }}) #}</li>
+                                                <div class="production">{{ country.iso_3166_1 |country_name(locale) }} {# ({{ country.name }}) #}</div>
                                             {% endfor %}
-                                        </ul>
+                                        </div>
                                     </div>
                                 {% endif %}
                             </div>
@@ -162,7 +172,15 @@
                 {% for recommendation in recommendations %}
                     <div class="recommendation">
                         <a href="{{ path('app_movie', {id: recommendation.id}) }}">
-                            <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
+                            {% if recommendation.poster_path %}
+                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
+                            {% else %}
+                                <div class="no-poster">
+                                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
+                                    <div class="title">{{ recommendation.title }}</div>
+                                    <div class="original-title">{{ recommendation.original_title }}</div>
+                                </div>
+                            {% endif %}
                         </a>
                     </div>
                 {% endfor %}

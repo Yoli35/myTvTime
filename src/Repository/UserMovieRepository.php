@@ -86,7 +86,7 @@ class UserMovieRepository extends ServiceEntityRepository
         $sql = 'SELECT * FROM `user_movie` t0 '
             .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
             .'WHERE t1.`user_id` = '.$userId.' '
-            .'AND t0.title LIKE "%'.$query.'%" '
+            .'AND (t0.title LIKE "%'.$query.'%" OR t0.original_title LIKE "%'.$query.'%")'
             .'ORDER BY t0.`release_date` DESC';
 
         $em = $this->registry->getManager();

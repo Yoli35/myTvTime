@@ -66,6 +66,8 @@ Revenue: Revenus
 Average Vote: Moyenne
 Vote Count: Nombre de vote
 Home Page: Site web
+Visit the official Movie Website: Visiter le site officiel du film
+Visit the Movie Page on IMDB: Visiter la page du film sur IMDB
 IMDB Page: Le film sur Imdb
 Personal IMDB Page: Page IMDB
 Production: Production
@@ -151,6 +153,12 @@ Sport: Sport
 Suspense: Suspense
 Thriller: Thriller
 War: Guerre
+
+# YoutubeVideo
+Videos: vidéos
+No Videos at this Time: Aucune vidéo pour l'instant
+Youtube Link: Lien Youtube
+Published at: Publiée le
 
 # User Account
 User Account: Compte utilisateur
@@ -242,3 +250,4 @@ User: Utilisateur
 Is Verified: Vérifié
 Avatar: Avatar
 Banner: Bannière
+

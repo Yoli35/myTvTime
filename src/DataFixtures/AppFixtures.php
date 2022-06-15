@@ -16,6 +16,7 @@ use App\Entity\TvEpisodeToAir;
 use App\Entity\TvSeason;
 use App\Entity\TvShow;
 use App\Entity\User;
+use App\Entity\YoutubeVideoThumbnailDimension;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -42,51 +43,14 @@ class AppFixtures extends Fixture
 
         $this->addMovies($manager);
 
+        $this->addYoutubeThumbnailsDimensions($manager);
+
         $this->addAdmin($manager);
     }
 
     private function addConfig(ObjectManager $manager)
     {
-        $config = [
-            "base_url" => "http://image.tmdb.org/t/p/",
-            "secure_base_url" => "https://image.tmdb.org/t/p/",
-            "backdrop_sizes" => [
-                "w300",
-                "w780",
-                "w1280",
-                "original"
-            ],
-            "logo_sizes" => [
-                "w45",
-                "w92",
-                "w154",
-                "w185",
-                "w300",
-                "w500",
-                "original"
-            ],
-            "poster_sizes" => [
-                "w92",
-                "w154",
-                "w185",
-                "w342",
-                "w500",
-                "w780",
-                "original"
-            ],
-            "profile_sizes" => [
-                "w45",
-                "w185",
-                "h632",
-                "original"
-            ],
-            "still_sizes" => [
-                "w92",
-                "w185",
-                "w300",
-                "original"
-            ]
-        ];
+        $config = ["base_url" => "http://image.tmdb.org/t/p/", "secure_base_url" => "https://image.tmdb.org/t/p/", "backdrop_sizes" => ["w300", "w780", "w1280", "original"], "logo_sizes" => ["w45", "w92", "w154", "w185", "w300", "w500", "original"], "poster_sizes" => ["w92", "w154", "w185", "w342", "w500", "w780", "original"], "profile_sizes" => ["w45", "w185", "h632", "original"], "still_sizes" => ["w92", "w185", "w300", "original"]];
 
         $imageConfig = new ImageConfig();
         $imageConfig->setBaseUrl($config["base_url"]);
@@ -103,27 +67,7 @@ class AppFixtures extends Fixture
 
     private function addGenres(ObjectManager $manager)
     {
-        $genres = [
-            [28, "Action"],
-            [12, "Adventure"],
-            [16, "Animation"],
-            [35, "Comedy"],
-            [80, "Crime"],
-            [99, "Documentary"],
-            [18, "Drama"],
-            [10751, "Family"],
-            [14, "Fantasy"],
-            [36, "History"],
-            [27, "Horror"],
-            [10402, "Music"],
-            [9648, "Mystery"],
-            [10749, "Romance"],
-            [878, "Science Fiction"],
-            [10770, "TV Movie"],
-            [53, "Thriller"],
-            [10752, "War"],
-            [37, "Western"],
-        ];
+        $genres = [[28, "Action"], [12, "Adventure"], [16, "Animation"], [35, "Comedy"], [80, "Crime"], [99, "Documentary"], [18, "Drama"], [10751, "Family"], [14, "Fantasy"], [36, "History"], [27, "Horror"], [10402, "Music"], [9648, "Mystery"], [10749, "Romance"], [878, "Science Fiction"], [10770, "TV Movie"], [53, "Thriller"], [10752, "War"], [37, "Western"],];
 
         $count = count($genres);
 
@@ -154,20 +98,7 @@ class AppFixtures extends Fixture
 
     private function addCompanies(ObjectManager $manager)
     {
-        $production_companies = [
-            ["id" => 923,
-                "logo_path" => "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png",
-                "name" => "Legendary Pictures",
-                "origin_country" => "US"],
-            ["id" => 9996,
-                "logo_path" => "/3tvBqYsBhxWeHlu62SIJ1el93O7.png",
-                "name" => "Syncopy",
-                "origin_country" => "GB"],
-            ["id" => 13769,
-                "logo_path" => "",
-                "name" => "Lynda Obst Productions",
-                "origin_country" => ""]
-        ];
+        $production_companies = [["id" => 923, "logo_path" => "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png", "name" => "Legendary Pictures", "origin_country" => "US"], ["id" => 9996, "logo_path" => "/3tvBqYsBhxWeHlu62SIJ1el93O7.png", "name" => "Syncopy", "origin_country" => "GB"], ["id" => 13769, "logo_path" => "", "name" => "Lynda Obst Productions", "origin_country" => ""]];
 
         $count = count($production_companies);
 
@@ -185,12 +116,7 @@ class AppFixtures extends Fixture
 
     private function addCountries(ObjectManager $manager)
     {
-        $production_countries = [
-            ["iso_3166_1" => "GB",
-                "name" => "United Kingdom"],
-            ["iso_3166_1" => "US",
-                "name" => "United States of America"]
-        ];
+        $production_countries = [["iso_3166_1" => "GB", "name" => "United Kingdom"], ["iso_3166_1" => "US", "name" => "United States of America"]];
         $count = count($production_countries);
 
         for ($i = 0; $i < $count; $i++) {
@@ -205,11 +131,7 @@ class AppFixtures extends Fixture
 
     private function addLanguages(ObjectManager $manager)
     {
-        $spoken_languages = [
-            ["english_name" => "English",
-                "iso_639_1" => "en",
-                "name" => "English"]
-        ];
+        $spoken_languages = [["english_name" => "English", "iso_639_1" => "en", "name" => "English"]];
         $count = count($spoken_languages);
 
         for ($i = 0; $i < $count; $i++) {
@@ -225,141 +147,7 @@ class AppFixtures extends Fixture
 
     private function addMovies(ObjectManager $manager)
     {
-        $movies = [
-            ["adult" => false,
-                "backdrop_path" => "/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
-                "belongs_to_collection" => null,
-                "budget" => 165000000,
-                "genres" => [
-                    ["id" => 12],
-                    ["id" => 18],
-                    ["id" => 878]],
-                "homepage" => "https://interstellar.withgoogle.com/",
-                "id" => 157336,
-                "imdb_id" => "tt0816692",
-                "original_language" => "en",
-                "original_title" => "Interstellar",
-                "overview" => "Dans un futur proche, face à une Terre exsangue, un groupe d’explorateurs utilise un vaisseau interstellaire pour franchir un trou de ver permettant de parcourir des distances jusque‐là infranchissables. Leur but : trouver un nouveau foyer pour l’humanité.",
-                "popularity" => 158.447,
-                "poster_path" => "/1pnigkWWy8W032o9TKDneBa3eVK.jpg",
-                "production_companies" => [
-                    ["id" => 923],
-                    ["id" => 9996],
-                    ["id" => 13769],
-                ],
-                "production_countries" => [
-                    ["iso_3166_1" => "GB"],
-                    ["iso_3166_1" => "US"],
-                ],
-                "release_date" => "2014-11-05",
-                "revenue" => 701729206,
-                "runtime" => 169,
-                "spoken_languages" => [
-                    ["iso_639_1" => "en"],
-                ],
-                "status" => "Released",
-                "tagline" => "L’Homme est né sur Terre, rien ne l’oblige à y mourir.",
-                "title" => "Interstellar",
-                "video" => false,
-                "vote_average" => 8.4,
-                "vote_count" => 27762
-            ],
-            ["adult" => false,
-                "backdrop_path" => "/jtVl3nN5bJ4t7pgakLfGJmOrqZm.jpg",
-                "belongs_to_collection" => [
-                    "id" => 726871,
-                    "name" => "Dune - Saga",
-                    "poster_path" => "/c1AiZTXyyzmPOlTLSubp7CEeYj.jpg",
-                    "backdrop_path" => "/iCFFmXkK5FdIzqZyyQQEdpkTo8C.jpg"
-                ],
-                "budget" => 165000000,
-                "genres" => [
-                    ["id" => 878,
-                        "name" => "Science-Fiction"],
-                    ["id" => 12,
-                        "name" => "Aventure"]
-                ],
-                "homepage" => "https://www.dunemovie.com/",
-                "id" => 438631,
-                "imdb_id" => "tt1160419",
-                "original_language" => "en",
-                "original_title" => "Dune",
-                "overview" => "L'histoire de Paul Atreides, jeune homme aussi doué que brillant, voué à connaître un destin hors du commun qui le dépasse totalement. Car, s'il veut préserver l'avenir de sa famille et de son peuple, il devra se rendre sur Dune, la planète la plus dangereuse de l'Univers. Mais aussi la seule à même de fournir la ressource la plus précieuse capable de décupler la puissance de l'Humanité. Tandis que des forces maléfiques se disputent le contrôle de cette planète, seuls ceux qui parviennent à dominer leur peur pourront survivre…",
-                "popularity" => 529.791,
-                "poster_path" => "/qpyaW4xUPeIiYA5ckg5zAZFHvsb.jpg",
-                "production_companies" => [[
-                    "id" => 923,
-                    "logo_path" => "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png",
-                    "name" => "Legendary Pictures",
-                    "origin_country" => "US"
-                ]],
-                "production_countries" => [[
-                    "iso_3166_1" => "US",
-                    "name" => "United States of America"
-                ]],
-                "release_date" => "2021-09-15",
-                "revenue" => 399000000,
-                "runtime" => 155,
-                "spoken_languages" => [
-                    ["english_name" => "Mandarin",
-                        "iso_639_1" => "zh",
-                        "name" => "普通话"],
-                    ["english_name" => "English",
-                        "iso_639_1" => "en",
-                        "name" => "English"]
-                ],
-                "status" => "Released",
-                "tagline" => "Au-delà de la peur, le destin attend.",
-                "title" => "Dune",
-                "video" => false,
-                "vote_average" => 7.9,
-                "vote_count" => 6158
-            ],
-            ["adult" => false,
-                "backdrop_path" => "/5wJ2tckpvwcxGCAgZiccodwEJpf.jpg",
-                "belongs_to_collection" => null,
-                "budget" => 40000000,
-                "genres" => [
-                    ["id" => 28,
-                        "name" => "Action"],
-                    ["id" => 878,
-                        "name" => "Science-Fiction"],
-                    ["id" => 12,
-                        "name" => "Aventure"]
-                ],
-                "homepage" => "",
-                "id" => 841,
-                "imdb_id" => "tt0087182",
-                "original_language" => "en",
-                "original_title" => "Dune",
-                "overview" => "En l'an 10191, la substance la plus importante est l'Épice. Elle ne se trouve que sur une seule planète, Arakis, connue aussi sous le nom de Dune. La famille Atréide vient à gouverner cette planète mais son ennemi, la dynastie des Harkonnen lui tend un piège dès son arrivée. Paul, le fils du Duc Leto Atréide se réfugie alors dans le désert avec sa mère et y rencontre les Fremens, peuple caché dans le désert attendant l'arrivée d'un Messie...",
-                "popularity" => 51.959,
-                "poster_path" => "/nCFApKqbqRDdGc3YylVf3VsTHcg.jpg",
-                "production_companies" => [
-                    ["id" => 10308,
-                        "logo_path" => null,
-                        "name" => "Dino De Laurentiis Company",
-                        "origin_country" => "US"]
-                ],
-                "production_countries" => [
-                    ["iso_3166_1" => "US",
-                        "name" => "United States of America"]
-                ],
-                "release_date" => "1984-12-14",
-                "revenue" => 30925690,
-                "runtime" => 140,
-                "spoken_languages" => [
-                    ["english_name" => "English",
-                        "iso_639_1" => "en",
-                        "name" => "English"]
-                ],
-                "status" => "Released",
-                "tagline" => "Un monde au-delà de vos rêves. Un film au-delà de votre imagination.",
-                "title" => "Dune",
-                "video" => false,
-                "vote_average" => 6.2,
-                "vote_count" => 2120
-            ]];
+        $movies = [["adult" => false, "backdrop_path" => "/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg", "belongs_to_collection" => null, "budget" => 165000000, "genres" => [["id" => 12], ["id" => 18], ["id" => 878]], "homepage" => "https://interstellar.withgoogle.com/", "id" => 157336, "imdb_id" => "tt0816692", "original_language" => "en", "original_title" => "Interstellar", "overview" => "Dans un futur proche, face à une Terre exsangue, un groupe d’explorateurs utilise un vaisseau interstellaire pour franchir un trou de ver permettant de parcourir des distances jusque‐là infranchissables. Leur but : trouver un nouveau foyer pour l’humanité.", "popularity" => 158.447, "poster_path" => "/1pnigkWWy8W032o9TKDneBa3eVK.jpg", "production_companies" => [["id" => 923], ["id" => 9996], ["id" => 13769],], "production_countries" => [["iso_3166_1" => "GB"], ["iso_3166_1" => "US"],], "release_date" => "2014-11-05", "revenue" => 701729206, "runtime" => 169, "spoken_languages" => [["iso_639_1" => "en"],], "status" => "Released", "tagline" => "L’Homme est né sur Terre, rien ne l’oblige à y mourir.", "title" => "Interstellar", "video" => false, "vote_average" => 8.4, "vote_count" => 27762], ["adult" => false, "backdrop_path" => "/jtVl3nN5bJ4t7pgakLfGJmOrqZm.jpg", "belongs_to_collection" => ["id" => 726871, "name" => "Dune - Saga", "poster_path" => "/c1AiZTXyyzmPOlTLSubp7CEeYj.jpg", "backdrop_path" => "/iCFFmXkK5FdIzqZyyQQEdpkTo8C.jpg"], "budget" => 165000000, "genres" => [["id" => 878, "name" => "Science-Fiction"], ["id" => 12, "name" => "Aventure"]], "homepage" => "https://www.dunemovie.com/", "id" => 438631, "imdb_id" => "tt1160419", "original_language" => "en", "original_title" => "Dune", "overview" => "L'histoire de Paul Atreides, jeune homme aussi doué que brillant, voué à connaître un destin hors du commun qui le dépasse totalement. Car, s'il veut préserver l'avenir de sa famille et de son peuple, il devra se rendre sur Dune, la planète la plus dangereuse de l'Univers. Mais aussi la seule à même de fournir la ressource la plus précieuse capable de décupler la puissance de l'Humanité. Tandis que des forces maléfiques se disputent le contrôle de cette planète, seuls ceux qui parviennent à dominer leur peur pourront survivre…", "popularity" => 529.791, "poster_path" => "/qpyaW4xUPeIiYA5ckg5zAZFHvsb.jpg", "production_companies" => [["id" => 923, "logo_path" => "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png", "name" => "Legendary Pictures", "origin_country" => "US"]], "production_countries" => [["iso_3166_1" => "US", "name" => "United States of America"]], "release_date" => "2021-09-15", "revenue" => 399000000, "runtime" => 155, "spoken_languages" => [["english_name" => "Mandarin", "iso_639_1" => "zh", "name" => "普通话"], ["english_name" => "English", "iso_639_1" => "en", "name" => "English"]], "status" => "Released", "tagline" => "Au-delà de la peur, le destin attend.", "title" => "Dune", "video" => false, "vote_average" => 7.9, "vote_count" => 6158], ["adult" => false, "backdrop_path" => "/5wJ2tckpvwcxGCAgZiccodwEJpf.jpg", "belongs_to_collection" => null, "budget" => 40000000, "genres" => [["id" => 28, "name" => "Action"], ["id" => 878, "name" => "Science-Fiction"], ["id" => 12, "name" => "Aventure"]], "homepage" => "", "id" => 841, "imdb_id" => "tt0087182", "original_language" => "en", "original_title" => "Dune", "overview" => "En l'an 10191, la substance la plus importante est l'Épice. Elle ne se trouve que sur une seule planète, Arakis, connue aussi sous le nom de Dune. La famille Atréide vient à gouverner cette planète mais son ennemi, la dynastie des Harkonnen lui tend un piège dès son arrivée. Paul, le fils du Duc Leto Atréide se réfugie alors dans le désert avec sa mère et y rencontre les Fremens, peuple caché dans le désert attendant l'arrivée d'un Messie...", "popularity" => 51.959, "poster_path" => "/nCFApKqbqRDdGc3YylVf3VsTHcg.jpg", "production_companies" => [["id" => 10308, "logo_path" => null, "name" => "Dino De Laurentiis Company", "origin_country" => "US"]], "production_countries" => [["iso_3166_1" => "US", "name" => "United States of America"]], "release_date" => "1984-12-14", "revenue" => 30925690, "runtime" => 140, "spoken_languages" => [["english_name" => "English", "iso_639_1" => "en", "name" => "English"]], "status" => "Released", "tagline" => "Un monde au-delà de vos rêves. Un film au-delà de votre imagination.", "title" => "Dune", "video" => false, "vote_average" => 6.2, "vote_count" => 2120]];
 
         $count = count($movies);
         $repoG = $manager->getRepository(Genre::class);
@@ -447,102 +235,7 @@ class AppFixtures extends Fixture
     private function addTvShows(ObjectManager $manager)
     {
 
-        $tvShows = ["adult" => false,
-            "backdrop_path" => "/yVZESlkDTihnGB0qa9MLWCop9Xf.jpg",
-            "created_by" => [
-                ["id" => 1456588,
-                    "credit_id" => "602c6fb3223e20003f95c70e",
-                    "name" => "Darío Madrona",
-                    "gender" => 2,
-                    "profile_path" => null]
-            ],
-            "episode_run_time" => [
-                60
-            ],
-            "first_air_date" => "2021-10-07",
-            "genres" => [
-                ["id" => 9648,
-                    "name" => "Mystère"],
-                ["id" => 18,
-                    "name" => "Drame"]
-            ],
-            "homepage" => "https=>//www.peacocktv.com/stream-tv/one-of-us-is-lying",
-            "id" => 118958,
-            "in_production" => true,
-            "languages" => [
-                "en"
-            ],
-            "last_air_date" => "2021-10-21",
-            "last_episode_to_air" =>
-                ["air_date" => "2021-10-21",
-                    "episode_number" => 8,
-                    "id" => 3241298,
-                    "name" => "",
-                    "overview" => "",
-                    "production_code" => "",
-                    "season_number" => 1,
-                    "still_path" => "/cuoUndYBim95oK0cYJJUvKxl7Yi.jpg",
-                    "vote_average" => 9.0,
-                    "vote_count" => 1],
-            "name" => "Qui ment ?",
-            "next_episode_to_air" => null,
-            "networks" => [
-                ["name" => "Peacock",
-                    "id" => 3353,
-                    "logo_path" => "/gIAcGTjKKr0KOHL5s4O36roJ8p7.png",
-                    "origin_country" => "US"]
-            ],
-            "number_of_episodes" => 8,
-            "number_of_seasons" => 2,
-            "origin_country" => [
-                "US"
-            ],
-            "original_language" => "en",
-            "original_name" => "One of Us Is Lying",
-            "overview" => "Quand un lycéen qui s'apprêtait à dévoiler des secrets croustillants sur ses camarades décède, les quatre adolescents qui étaient à ses côtés au moment du drame deviennent de potentiels suspects. Qui est coupable ? Qui ment ? Une chose est sûre, tout le monde a quelque chose à cacher...",
-            "popularity" => 108.532,
-            "poster_path" => "/hKMpbHY7xqFKaBR8W7jE61JlQB6.jpg",
-            "production_companies" => [
-                ["id" => 7938,
-                    "logo_path" => "/8I52qpy2Dp48gD9Jf6W1D6E7Imo.png",
-                    "name" => "UCP",
-                    "origin_country" => "US"],
-                ["id" => 64716,
-                    "logo_path" => null,
-                    "name" => "Five More Minutes Productions",
-                    "origin_country" => ""]
-            ],
-            "production_countries" => [
-                ["iso_3166_1" => "US",
-                    "name" => "United States of America"]
-            ],
-            "seasons" => [
-                ["air_date" => "2021-10-07",
-                    "episode_count" => 8,
-                    "id" => 181989,
-                    "name" => "Saison 1",
-                    "overview" => "",
-                    "poster_path" => "/hKMpbHY7xqFKaBR8W7jE61JlQB6.jpg",
-                    "season_number" => 1],
-                ["air_date" => null,
-                    "episode_count" => 0,
-                    "id" => 244767,
-                    "name" => "Saison 2",
-                    "overview" => "",
-                    "poster_path" => null,
-                    "season_number" => 2]
-            ],
-            "spoken_languages" => [
-                ["english_name" => "English",
-                    "iso_639_1" => "en",
-                    "name" => "English"]
-            ],
-            "status" => "Returning Series",
-            "tagline" => "Cinq entrent en retenue, seuls quatre en sortent vivants.",
-            "type" => "Miniseries",
-            "vote_average" => 7.0,
-            "vote_count" => 26
-        ];
+        $tvShows = ["adult" => false, "backdrop_path" => "/yVZESlkDTihnGB0qa9MLWCop9Xf.jpg", "created_by" => [["id" => 1456588, "credit_id" => "602c6fb3223e20003f95c70e", "name" => "Darío Madrona", "gender" => 2, "profile_path" => null]], "episode_run_time" => [60], "first_air_date" => "2021-10-07", "genres" => [["id" => 9648, "name" => "Mystère"], ["id" => 18, "name" => "Drame"]], "homepage" => "https=>//www.peacocktv.com/stream-tv/one-of-us-is-lying", "id" => 118958, "in_production" => true, "languages" => ["en"], "last_air_date" => "2021-10-21", "last_episode_to_air" => ["air_date" => "2021-10-21", "episode_number" => 8, "id" => 3241298, "name" => "", "overview" => "", "production_code" => "", "season_number" => 1, "still_path" => "/cuoUndYBim95oK0cYJJUvKxl7Yi.jpg", "vote_average" => 9.0, "vote_count" => 1], "name" => "Qui ment ?", "next_episode_to_air" => null, "networks" => [["name" => "Peacock", "id" => 3353, "logo_path" => "/gIAcGTjKKr0KOHL5s4O36roJ8p7.png", "origin_country" => "US"]], "number_of_episodes" => 8, "number_of_seasons" => 2, "origin_country" => ["US"], "original_language" => "en", "original_name" => "One of Us Is Lying", "overview" => "Quand un lycéen qui s'apprêtait à dévoiler des secrets croustillants sur ses camarades décède, les quatre adolescents qui étaient à ses côtés au moment du drame deviennent de potentiels suspects. Qui est coupable ? Qui ment ? Une chose est sûre, tout le monde a quelque chose à cacher...", "popularity" => 108.532, "poster_path" => "/hKMpbHY7xqFKaBR8W7jE61JlQB6.jpg", "production_companies" => [["id" => 7938, "logo_path" => "/8I52qpy2Dp48gD9Jf6W1D6E7Imo.png", "name" => "UCP", "origin_country" => "US"], ["id" => 64716, "logo_path" => null, "name" => "Five More Minutes Productions", "origin_country" => ""]], "production_countries" => [["iso_3166_1" => "US", "name" => "United States of America"]], "seasons" => [["air_date" => "2021-10-07", "episode_count" => 8, "id" => 181989, "name" => "Saison 1", "overview" => "", "poster_path" => "/hKMpbHY7xqFKaBR8W7jE61JlQB6.jpg", "season_number" => 1], ["air_date" => null, "episode_count" => 0, "id" => 244767, "name" => "Saison 2", "overview" => "", "poster_path" => null, "season_number" => 2]], "spoken_languages" => [["english_name" => "English", "iso_639_1" => "en", "name" => "English"]], "status" => "Returning Series", "tagline" => "Cinq entrent en retenue, seuls quatre en sortent vivants.", "type" => "Miniseries", "vote_average" => 7.0, "vote_count" => 26];
 
         $count = count($tvShows);
         $repoC = $manager->getRepository(Creator::class);
@@ -710,5 +403,21 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         $this->addReference(self::ADMIN_USER_REFERENCE, $user);
+    }
+
+    private function addYoutubeThumbnailsDimensions(ObjectManager $manager)
+    {
+        $ytThumbnailDims = [["default", 90, 120], ["medium", 180, 320], ["high", 360, 480], ["standard", 480, 640], ["maxres", 720, 1280]];
+
+        foreach ($ytThumbnailDims as $ytThumbnailDim) {
+
+            $dim = new YoutubeVideoThumbnailDimension();
+            $dim->setName($ytThumbnailDim[0]);
+            $dim->setHeight($ytThumbnailDim[1]);
+            $dim->setWidth($ytThumbnailDim[2]);
+
+            $manager->persist($dim);
+        }
+        $manager->flush();
     }
 }

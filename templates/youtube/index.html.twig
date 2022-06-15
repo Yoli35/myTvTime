@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'my TvTime::Youtube' }}{% endblock %}
+{% block title %}{{ 'my TvTime::YoutubeVideo' }}{% endblock %}
 {% set user = app.user %}
 
 {% block body %}
@@ -9,7 +9,18 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/rgoiGAbm6vM" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="yt-videos">
+            {{ component('youtube_add_video', {class: 'search', 'id': user.id}) }}
+            {#            {% for video in videos %} #}
+            {#                <div class="yt-video"> #}
+            {#                    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.link }}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" #}
+            {#                            allowfullscreen></iframe> #}
+            {#                    <div class="date">{{ video.published|format_date('full')|capitalize }}</div> #}
+            {#                </div> #}
+            {#            {% endfor %} #}
+        </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
 {% endblock %}

@@ -23,10 +23,6 @@
                         <div class="title">{{ user }}</div>
                     {% endif %}
                 {% endif %}
-                {#                {% if weather is not empty %} #}
-                {#                    {{ include('blocks/weather.html.twig') }} #}
-                {#                    <div class="toggle open"><i class="bi bi-dash-circle"></i></div> #}
-                {#                {% endif %} #}
                 {{ component('weather') }}
             </div>
             <div class="avatar">

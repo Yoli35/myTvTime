@@ -1,0 +1,42 @@
+<div {{ attributes }}>
+    <h1>{{ this.video_results|length }} {{ 'Videos'|trans }}</h1>
+    <div class="parameters">
+        <label>{{ 'Youtube Link'|trans }} :
+            <input type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
+        </label>
+    </div>
+    {% if this.video_results is not empty %}
+        <div class="result">
+            {% for item in this.video_results %}
+                <div class="yt-video">
+                    <div class="thumbnail">
+                        <img src="{{ item.thumbnailMediumPath }}" alt="{{ item.title }}">
+                        {% if item.contentDuration < 3600 %}
+                            <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[3:] }}</div>
+                        {% else %}
+                            <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium') }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="details">
+                        <div class="channel">
+                            <span data-descr="{{ item.channel.title }}">
+                                {% if item.channel.thumbnailDefaultUrl %}
+                                    <img src="{{ item.channel.thumbnailDefaultUrl }}" alt="{{ item.channel.title }}" class="w-100">
+                                {% else %}
+                                    {{ item.channel.title|first }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="infos">
+                            <div class="info">{{ item.title }}</div>
+                            <div class="info">{{ 'Published at'|trans }} : {{ item.publishedAt|format_date('short') }}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
+    {% endif %}
+</div>
+

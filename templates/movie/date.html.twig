@@ -47,11 +47,11 @@
                             {% if discover.poster_path %}
                                 <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}">
                             {% else %}
-                                <img src="/images/default/noposter_dark.png" class="d-block w-100" alt="{{ discover.title }}">
+                                <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ discover.title }}">
                             {% endif %}
                             <div class="home-discover-title">{{ discover.title }}</div>
                             {% if discover.release_date is defined %}
-                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|date("d/m/Y") }}</div>
+                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|format_date('short') }}</div>
                             {% endif %}
                         </a>
                     </div>

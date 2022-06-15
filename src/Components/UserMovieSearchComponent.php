@@ -14,7 +14,7 @@ class UserMovieSearchComponent
     use DefaultActionTrait;
 
     #[LiveProp(writable: true)]
-    public string $query = 'iron';
+    public string $query = '';
     #[LiveProp]
     public int $id;
     #[LiveProp]

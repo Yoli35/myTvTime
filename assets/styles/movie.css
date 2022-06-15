@@ -81,26 +81,53 @@
     text-decoration: none;
 }
 
+.movie-detail a span[data-descr] {
+    position: relative;
+}
+
+.movie-detail a span[data-descr]:hover::after {
+    background-color: #1c1c1c;
+    border: 2px #bdbdbd solid;
+    border-radius: .5em;
+    color: #dbdbdb;
+    content: attr(data-descr);
+    font-family: 'Montserrat', sans-serif;
+    font-size: .75em;
+    font-weight: 100;
+    left: 0;
+    min-width: 12.5em;
+    padding: .75em;
+    position: absolute;
+    top: 1.5em;
+    z-index: 1;
+}
+
 .movie-detail .overview {
     padding: 20px;
 }
 
 .movie-detail .productions {
-    padding: 20px 20px 0 20px;
+    padding: 20px 0 0 20px;
 }
 
-.movie-detail .productions > ul {
+.movie-detail .productions > div {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     list-style-type: none;
 }
 
 .movie-detail .productions .production {
+    background-color: rgba(128, 128, 128, 0.5);
+    border-radius: .5em;
     display: flex;
     flex-direction: row;
-}
-
-.movie-detail .productions .production .cie-detail {
-    display: flex;
-    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    font-size: .75em;
+    font-weight: 100;
+    margin: .5em .5em 0 0;
+    padding: .25em .5em;
 }
 
 .movie-poster {
@@ -115,7 +142,7 @@
 
 .recommendations {
     background-color: #383838;
-    border: 4px solid#767676;
+    border: 4px solid #767676;
     border-radius: 1em;
     align-items: center;
     display: flex;
@@ -125,13 +152,40 @@
     overflow-y: scroll;
 }
 
+.recommendation .no-poster {
+    position: relative;
+}
+
+.recommendation .no-poster .title {
+    color: #dbdbdb;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
+    position: absolute;
+    text-align: center;
+    top: 1em;
+    width: 100%;
+}
+
+.recommendation .no-poster .original-title {
+    bottom: 1em;
+    color: #dbdbdb;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
 .recommendation {
     align-items: center;
     border: 4px solid #bdbdbd;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    height: 14.5em;
     margin: .5em;
+    overflow: hidden;
+    width: 10em;
 }
 
 .release-dates {
@@ -147,25 +201,27 @@
     padding-left: 1em;
 }
 
-.release-dates > .country >.dates {
+.release-dates > .country > .dates {
     display: flex;
     flex-direction: column;
     padding-left: .5em;
 }
 
-.release-dates > .country >.dates > .event > .type::after {
-    content: '   :';
+.release-dates > .country > .dates > .event > .type::after {
+    content: ' :';
 }
 
-.release-dates > .country >.dates > .event > .date {
+.release-dates > .country > .dates > .event > .date {
     color: #0087e8;
     font-weight: bold;
     padding-left: 1em;
 }
 
-.release-dates > .country >.dates > .event {
+.release-dates > .country > .dates > .event {
+    align-items: flex-end;
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
     padding: .25em;
 }
 
@@ -193,7 +249,7 @@
     display: flex;
 }
 
-.person-infos >.imdb-page > span > a {
+.person-infos > .imdb-page > span > a {
     background-image: url("../../public/images/interface/imdb.png");
     background-size: cover;
     display: block;
@@ -227,4 +283,13 @@
 .select_genres > .active {
     border: 5px solid #0087e8;
     color: #0087e8;
+}
+
+.collection-parts {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
+}
+
+.collection-parts .part {
+    margin-bottom: 2em;
 }

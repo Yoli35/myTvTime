@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Youtube;
+use App\Entity\YoutubeChannelThumbnailDimension;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Youtube>
+ * @extends ServiceEntityRepository<YoutubeChannelThumbnailDimension>
  *
- * @method Youtube|null find($id, $lockMode = null, $lockVersion = null)
- * @method Youtube|null findOneBy(array $criteria, array $orderBy = null)
- * @method Youtube[]    findAll()
- * @method Youtube[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method YoutubeChannelThumbnailDimension|null find($id, $lockMode = null, $lockVersion = null)
+ * @method YoutubeChannelThumbnailDimension|null findOneBy(array $criteria, array $orderBy = null)
+ * @method YoutubeChannelThumbnailDimension[]    findAll()
+ * @method YoutubeChannelThumbnailDimension[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class YoutubeRepository extends ServiceEntityRepository
+class YoutubeChannelThumbnailDimensionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Youtube::class);
+        parent::__construct($registry, YoutubeChannelThumbnailDimension::class);
     }
 
-    public function add(Youtube $entity, bool $flush = false): void
+    public function add(YoutubeChannelThumbnailDimension $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class YoutubeRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Youtube $entity, bool $flush = false): void
+    public function remove(YoutubeChannelThumbnailDimension $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class YoutubeRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Youtube[] Returns an array of Youtube objects
+//     * @return YoutubeChannelThumbnailDimension[] Returns an array of YoutubeChannelThumbnailDimension objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class YoutubeRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Youtube
+//    public function findOneBySomeField($value): ?YoutubeChannelThumbnailDimension
 //    {
 //        return $this->createQueryBuilder('y')
 //            ->andWhere('y.exampleField = :val')
