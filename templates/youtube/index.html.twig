@@ -10,14 +10,7 @@
         {{ include('blocks/pageHeader.html.twig') }}
 
         <div class="yt-videos">
-            {{ component('youtube_add_video', {class: 'search', 'id': user.id}) }}
-            {#            {% for video in videos %} #}
-            {#                <div class="yt-video"> #}
-            {#                    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.link }}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" #}
-            {#                            allowfullscreen></iframe> #}
-            {#                    <div class="date">{{ video.published|format_date('full')|capitalize }}</div> #}
-            {#                </div> #}
-            {#            {% endfor %} #}
+            {{ component('youtube_add_video', {class: 'search', 'id': user.id, 'preview': preview, 'locale': locale}) }}
         </div>
 
         {{ include('blocks/pageFooter.html.twig') }}

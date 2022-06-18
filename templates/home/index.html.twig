@@ -6,9 +6,9 @@
 
     {% set discovers = route == 'app_home_series' ? discovers.shows:discovers.results %}
 
-    <div class="container">
+    {{ include('blocks/pageHeader.html.twig') }}
 
-        {{ include('blocks/pageHeader.html.twig') }}
+    <div class="container">
 
         {% if route == 'app_home' %}
             <div class="search">

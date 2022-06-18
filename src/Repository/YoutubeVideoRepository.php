@@ -48,8 +48,8 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->andWhere('y.userId = :val')
             ->setParameter('val', $userId)
             ->orderBy('y.publishedAt', 'DESC')
-            ->setFirstResult(($page - 1) * 20)
-            ->setMaxResults(20)
+            ->setFirstResult(($page - 1) * 120)
+            ->setMaxResults(120)
             ->getQuery()
             ->getResult()
         ;

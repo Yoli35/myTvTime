@@ -1,3 +1,8 @@
+a {
+    color: #bdbdbd!important;
+    text-decoration: none;
+}
+
 h1, h1 > a, h2, h2 > a {
     color: #30393d;
 }
@@ -7,15 +12,12 @@ h2 {
 }
 
 .logo {
-    /*color: #ca8a04;*/
-    font-size: 2em;
-    font-weight: bold;
-    text-shadow: 0 .25em .25em rgba(0, 0, 0, 0.5);
 }
 
-.logo a {
-    color: #bdbdbd;
-    text-decoration: none;
+.logo span {
+    color: #cbaa4f;
+    font-size: 1em;
+    font-weight: bold;
 }
 
 .home-header {
@@ -92,15 +94,23 @@ h2 {
 .locale {
     display: flex;
     flex-direction: row;
-    color: #bdbdbd;
+    padding-left: 1em;
 }
 
-.locale li {
-    background-size: cover;
+.locale a {
+    border: 2px solid #bdbdbd;
+    border-radius: 50%;
+    display: block;
+    height: 2em;
+    margin-right: 1em;
+    width: 2em;
+}
+
+.locale a img {
+    border-radius: 50%;
     display: inline;
-    padding: 0 0 0 .2em;
-    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.75);
-    width: 32px;
+    height: 28px; /* 2em - 4px (border) */
+    width: 28px;
 }
 
 .locale li:nth-child(-n+3)::after {
@@ -119,7 +129,7 @@ h2 {
     align-items: center;
     display: flex;
     background-color: #0087e8;
-    border-radius: 2em 0 0 2em;
+    border-radius: .25em 0 0 .25em;
     border-right: 1px solid #fff;
     font-size: 1.5em;
     justify-content: center;
@@ -146,15 +156,15 @@ h2 {
     border-right: 1px solid #fff;
     font-size: 1.5em;
     justify-content: center;
-    padding-right: 1em;
+    padding: 0 1em;
 }
 
 .home-youtube-link {
     align-items: center;
     display: flex;
-    background-color: #ff0000; /* YoutubeVideo Red */;
+    background-color: #ff0000; /* Youtube Red */;
     border-left: 1px solid #fff;
-    border-radius: 0 2em 2em 0;
+    border-radius: 0 .25em .25em 0;
     font-size: 1.5em;
     justify-content: center;
     padding-right: 1em;
@@ -505,6 +515,10 @@ h2 {
     :root {
         --bs-body-bg: #1c1c1c;
         --bs-body-color: white;
+    }
+
+    a {
+        color: #bdbdbd!important;
     }
 
     .container,
