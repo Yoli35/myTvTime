@@ -1,59 +1,61 @@
-.tv-detail > .genres > .genre {
-    color: #D81F26; /* Netflix Red */
-    border: 5px solid #D81F26; /* Netflix Red */
+.series-header {
 }
-.tv-detail > .platform {
+
+.series-info {
+    margin-top: 2em;
+}
+
+.series-detail {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    margin-bottom: 2em;
 }
 
-.tv-detail > .platform > img {
-    height: 3em;
-    width: 3em;
+.series-detail .genres {
+    margin: .5em 0 0 -.25em;
 }
 
-.tv-detail > .original_title > .data,
-.tv-detail > .episode_run_time > .data,
-.tv-detail > .number_of_episodes > .data,
-.tv-detail > .number_of_seasons > .data,
-.tv-detail > .creation > .data,
-.tv-detail .item > .data,
-.tv-detail > .data {
-    color: #D81F26; /* Netflix Red */
+.series-detail .genre {
+    color: #a94449;
+    border-color: #a94449;
 }
 
-.tv-detail .item,
-.tv-detail .creation{
-    padding-left: 1em;
+.series-detail .data {
+    color: #a94449;
 }
 
-.tv-detail .item img {
-    border: 2px solid #bdbdbd;
-    border-radius: 1em;
-    margin-left: 2em;
-    max-height: 6em;
+.series-detail .item {
+    padding: .5em 0 0 0;
 }
 
-.tv-poster > img {
+.series-poster > img {
     max-width: 20em;
 }
 
-.tv-detail .trailer {
+.series-detail .trailer {
     border: 4px solid #bdbdbd;
-    margin-right: 1em;
+    margin: 1em 0;
 }
 
 .platform {
     align-items: center;
-    background-color: #000;
-    border-radius: 1em;
+    background-color: #a94449;
+    border-radius: 1.75em;
     display: flex;
     flex-direction: row;
     justify-content: center;
     margin-right: auto;
+    padding: 0 .3em;
 }
+
 .platform > .view {
     font-weight: bold;
-    padding: 1em;
+    padding: .5em;
     text-transform: uppercase;
+}
+
+.platform > img {
+    border-radius: 50%;
+    height: 2em;
+    width: 2em;
 }

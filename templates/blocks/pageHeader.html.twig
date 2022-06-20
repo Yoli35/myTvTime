@@ -11,26 +11,26 @@
     <div class="container">
         <a class="navbar-brand logo" href="{{ path('app_home') }}"><span>{{ 'myTvTime' }}</span></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="" style="color: #cbaa4f; font-size: 1.5em;"><i class="bi bi-list"></i></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav w-100 mb-2 mb-lg-0">
-                <li class="nav-item">
+                <li class="nav-item mt-2">
                     <a class="nav-link" href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mt-2">
                     <a class="nav-link" href="{{ path('app_home_series') }}">{{ 'Series'|trans }}</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mt-2">
                     <a class="nav-link" href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mt-2">
                     <a class="nav-link{% if user is null %} disabled{% endif %}" href="{{ path('app_youtube') }}">{{ 'Youtube' }}</a>
                 </li>
-                <li class="nav-item dropdown" style="margin-left: auto">
+                <li class="nav-item dropdown mt-2 user-menu">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {% if user.avatar is defined and  user.avatar|length %}
-                            <img class="user-menu" src="/images/users/avatars/{{ user.avatar }}">
+                            <img class="user-menu-img" src="/images/users/avatars/{{ user.avatar }}">
                         {% else %}
                             <i class="bi bi-person-circle"></i>
                         {% endif %}

@@ -192,7 +192,13 @@ class MovieController extends AbstractController
         $currentGenres = explode(',', $genres); // "Action,Adventure" => ['Action', 'Adventure']
         $imageConfig = $homeController->getImageConfig($doctrine);
 
-        return $this->render('movie/genre.html.twig', ['discovers' => $discovers, 'genres' => $genres, 'possible_genres' => $possibleGenres, 'current_genres' => $currentGenres, 'imageConfig' => $imageConfig,]);
+        return $this->render('movie/genre.html.twig', [
+            'discovers' => $discovers,
+            'genres' => $genres,
+            'possible_genres' => $possibleGenres,
+            'current_genres' => $currentGenres,
+            'imageConfig' => $imageConfig,
+        ]);
     }
 
     /**

@@ -19,7 +19,7 @@
         {% endif %}
         <div class="movie-info">
             <div class="row w-100">
-                <div class="col-8">
+                <div class="col-lg-8 col-12">
                     <div class="movie-detail">
                         <div class="row">
                             <div class="col">
@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-lg-6 col-12">
                                 {% if movie.runtime %}
                                     <div class="runtime">
                                         {{ 'Runtime'|trans }} :
@@ -110,10 +110,7 @@
                                         <div>
                                             {% for cie in movie.production_companies %}
                                                 <div class="production">
-                                                    {#                                                    <div class="cie-detail"> #}
                                                     <div>{{ cie.name }}</div>
-                                                    {#                                                        <div>{{ cie.name }} {% if cie.origin_country %} ({{ cie.origin_country|country_name(locale) }}) {% endif %}</div> #}
-                                                    {#                                                    </div> #}
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -130,7 +127,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            <div class="col-6">
+                            <div class="col-lg-6 col-12">
                                 {#    "id" => 2344
                                           "name" => "The Matrix Collection"
                                           "poster_path" => "/bV9qTVHTVf0gkW0j7p7M0ILD4pG.jpg"
@@ -145,7 +142,7 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">{{ movie.belongs_to_collection.name }}</h5>
                                                 <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt="">
-                                                <a href="{{ path('app_movie_collection', {id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary">{{ 'See the Collection'|trans }}</a>
+                                                <a href="{{ path('app_movie_collection', {id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -154,7 +151,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-lg-4 col-12">
                     <div class="movie-poster">
                         {% if movie.poster_path %}
                             <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ movie.poster_path }}" alt="{{ movie.title }}">

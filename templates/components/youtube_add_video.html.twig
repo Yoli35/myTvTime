@@ -1,29 +1,35 @@
 <div {{ attributes }}>
-    <h1>{{ this.video_results.count }} {{ 'Videos'|trans }}</h1>
+    <h1>
+        {{ this.video_results.count }}
+        {% if this.video_results.count > 1 %}
+            {{ 'Videos'|trans }}
+        {% else %}
+            {{ 'Video'|trans }}
+        {% endif %}
+    </h1>
     <h5>{{ this.video_results.seconds2human }}</h5>
     <div class="parameters">
         <div class="row">
-            <div class="col-5">
+            <div class="col-xl-5 col-lg-4 col-sm-12 mb-sm-4 mb-lg-0">
                 <div class="d-flex align-items-center justify-content-center h-100 w-100">
-                    <div>
-                        <label>{{ 'Youtube Link'|trans }} :
-                            <input id="" type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
-                        </label>
-                        {#                <button id="paste" class="btn btn-primary btn-sm" style="background-color: #0d9488"><i class="bi bi-box-arrow-left"></i></button> #}
-                    </div>
+                    <label>{{ 'Youtube Link'|trans }} :
+                        <input id="" type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
+                    </label>
                 </div>
             </div>
-            <div class="col-7 flex-column justify-content-center">
+            <div class="col-xl-7 col-lg-8 col-sm-12">
                 <div class="row">
-                    <div class="col-4">
-                        <img src="{{ this.getLinkPreview.url }}" alt="{{ this.getLinkPreview.title }}" class="w-100">
-                    </div>
-                    <div class="col-8 example">
+                    <div class="col-lg-8 col-sm-12 example">
                         <b>{{ 'For example'|trans }} :</b>
                         <div class="text-center">{{ this.getLinkPreview.title }}</div>
                         <a href="https://youtu.be/{{ preview }}" target="_blank"><span><span>{{ preview }}</span></span></a>
                         <a href="https://youtu.be/{{ preview }}" target="_blank"><span>https://youtu.be/<span>{{ preview }}</span></span></a>
                         <a href="https://youtu.be/{{ preview }}" target="_blank"><span>https://www.youtube.com/watch?v=<span>{{ preview }}</span></span></a>
+                    </div>
+                    <div class="col-lg-4 col-sm-12 example-thumbnail">
+                        <div>
+                            <img src="{{ this.getLinkPreview.url }}" alt="{{ this.getLinkPreview.title }}" class="w-100">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -32,33 +38,48 @@
     {% if this.video_results.count %}
         <div class="result">
             {% for item in this.video_results.videos %}
-                <a href="{{ path('app_youtube_video', {v: item.id}) }}">
-                    <div class="yt-video">
+                <div class="yt-video">
+                    <a href="{{ path('app_youtube_video', {id: item.id}) }}">
                         <div class="thumbnail">
                             <img src="{{ item.thumbnailMediumPath }}" alt="{{ item.title }}">
-                            {% if item.contentDuration < 3600 %}
-                                <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[3:] }}</div>
+                            {% if item.contentDuration < 36000 %} {# < 10:00:00 => 0:00:00 #}
+                                {% if item.contentDuration < 3600 %} {# < 01:00:00 => 00:00 #}
+                                    {% if item.contentDuration < 600 %} {# < 00:10:00 => 0:00 #}
+                                        <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[4:] }}</div>
+                                    {% else %}
+                                        <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[3:] }}</div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[1:] }}</div>
+                                {% endif %}
                             {% else %}
                                 <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium') }}</div>
                             {% endif %}
                         </div>
                         <div class="details">
                             <div class="channel">
-                            <span data-descr="{{ item.channel.title }}">
-                                {% if item.channel.thumbnailDefaultUrl %}
-                                    <img src="{{ item.channel.thumbnailDefaultUrl }}" alt="{{ item.channel.title }}" class="w-100">
+                                {% if item.channel.customUrl %}
+                                    {% set url = item.channel.customUrl %}
                                 {% else %}
-                                    {{ item.channel.title|first }}
+                                    {% set url = item.channel.youtubeId %}
                                 {% endif %}
-                            </span>
+                                <a href="https://www.youtube.com/c/{{ url }}" target="_blank">
+                                    <span data-descr="{{ item.channel.title }}">
+                                        {% if item.channel.thumbnailDefaultUrl %}
+                                            <img src="{{ item.channel.thumbnailDefaultUrl }}" alt="{{ item.channel.title }}" class="w-100">
+                                        {% else %}
+                                            {{ item.channel.title|first }}
+                                        {% endif %}
+                                    </span>
+                                </a>
                             </div>
                             <div class="infos">
                                 <div class="info">{{ item.title }}</div>
                                 <div class="info">{{ 'Published at'|trans }} : {{ item.publishedAt|format_date('short') }}</div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             {% endfor %}
         </div>
     {% else %}

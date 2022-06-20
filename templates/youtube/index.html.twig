@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'my TvTime::YoutubeVideo' }}{% endblock %}
+{% block title %}{{ 'my TvTime::Youtube' }}{% endblock %}
 {% set user = app.user %}
 
 {% block body %}
@@ -10,7 +10,7 @@
         {{ include('blocks/pageHeader.html.twig') }}
 
         <div class="yt-videos">
-            {{ component('youtube_add_video', {class: 'search', 'id': user.id, 'preview': preview, 'locale': locale}) }}
+            {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'locale': locale}) }}
         </div>
 
         {{ include('blocks/pageFooter.html.twig') }}

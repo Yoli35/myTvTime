@@ -8,6 +8,8 @@ Date: Fecha
 Welcome: Bienvenida
 Toolbar with button groups: Barra de búsqueda de películas
 First group: Grupo de herramientas de búsqueda
+My Account: Mi cuenta
+My Movies: Mis películas
 Another action: Easy Admin
 Logout: Cerrar sesión
 
@@ -142,6 +144,11 @@ Thriller: Thriller
 War: Guerra
 
 # Youtube
+Videos: videos
+Video: video
+No Videos at this Time: No hay vídeos por el momento
+Lien Youtube: YLink Youtube
+Publiée le: Publicado en
 Time spent watching Youtube: Tiempo dedicado a ver Youtube
 secondes i.e.: segundos, es decir,
 mounth: mes
@@ -160,7 +167,6 @@ or: o
 
 # User Account
 User Account: Actualizar el perfil
-My Account: Mi cuenta
 Profile Image (JPG, PNG file): Imagen de perfil (archivo JPG, PNG)
 Banner Image (JPG, PNG file): Imagen del banner (archivo JPG, PNG)
 Update Profile: Actualizar el perfil

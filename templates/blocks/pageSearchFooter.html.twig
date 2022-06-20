@@ -1,6 +1,62 @@
 {% set page = discovers.page %}
 {% set max = discovers.total_pages>1000?1000:discovers.total_pages %}
 
+<div class="btn-group btn-group-sm" role="group" aria-label="{{ 'Search Film by Name Paginator' }}">
+    {% if page > 6 %}
+        <a class="btn btn-secondary" href="{{ path(route, {page: '1', query: query, year: year}) }}"><i class="bi bi-chevron-bar-left"></i></a>
+    {% endif %}
+    {% if page > 1 %}
+        <a class="btn btn-secondary" href="{{ path(route, {page: page-1, query: query, year: year}) }}"><i class="bi bi-chevron-left"></i></a>
+    {% endif %}
+
+    {% if max >= 10 %}
+        {% if page <= 5 %}
+            {% for p in 1..10 %}
+                {% if p == page %}
+                    <a class="btn btn-outline-secondary" href="#">{{ p }}</a>
+                {% else %}
+                    <a class="btn btn-secondary" href="{{ path(route, {page: p, query: query, year: year}) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if page > 5 and page < max-5 %}
+            {% for p in page-5..page+4 %}
+                {% if p == page %}
+                    <a class="btn btn-outline-secondary" href="#">{{ p }}</a>
+                {% else %}
+                    <a class="btn btn-secondary" href="{{ path(route, {page: p, query: query, year: year}) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if page >= max-5 %}
+            {% for p in max-10..max %}
+                {% if p == page %}
+                    <a class="btn btn-outline-secondary" href="#">{{ p }}</a>
+                {% else %}
+                    <a class="btn btn-secondary" href="{{ path(route, {page: p, query: query, year: year}) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        {% for p in 1..max %}
+            {% if p == page %}
+                <a class="btn btn-outline-secondary" href="#">{{ p }}</a>
+            {% else %}
+                <a class="btn btn-secondary" href="{{ path(route, {page: p, query: query, year: year}) }}">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if page < max-1 %}
+        <a class="btn btn-secondary" href="{{ path(route, {page: page+1, query: query, year: year}) }}"><i class="bi bi-chevron-right"></i></a>
+    {% endif %}
+    {% if page < max-5 %}
+        <a class="btn btn-secondary" href="{{ path(route, {page: max, query: query, year: year}) }}"><i class="bi bi-chevron-bar-right"></i></a>
+    {% endif %}
+
+</div>
+
+{#
 <div class="home-discovers-footer">
     {% if max > 1 %}
         <div class="pages">
@@ -56,6 +112,7 @@
         </div>
     {% endif %}
 </div>
+#}
 <div class="home-discovers-footer-infos">
     <div>{{ 'Page'|trans }} : {{ discovers.page }}</div>
     <div>{{ 'Total Pages'|trans }} : {{ discovers.total_pages }}</div>

@@ -46,16 +46,12 @@
 }
 
 .movie-detail .genres {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     margin-right: auto;
 }
 
-.movie-detail .genres .genre {
-    border: 5px solid #8a8a8a;
-    border-radius: 18px;
-    margin: 10px;
+.movie-detail .genre {
+    border-color: #8a8a8a;
+    color: #8a8a8a;
 }
 
 .movie-detail .genres .genre a {
@@ -132,6 +128,7 @@
 
 .movie-poster {
     display: flex;
+    justify-content: center;
     margin-bottom: auto;
     margin-left: auto;
 }
@@ -273,16 +270,14 @@
 }
 
 .select_genres > .genre {
-    border: 5px solid #8a8a8a;
-    border-radius: 18px;
+    border-color: #8a8a8a;
+    color: #8a8a8a;
     cursor: grab;
-    margin: 10px;
-    padding: .25em 1em;
 }
 
 .select_genres > .active {
-    border: 5px solid #0087e8;
-    color: #0087e8;
+    border-color: #5e9ac5;
+    color: #5e9ac5;
 }
 
 .collection-parts {

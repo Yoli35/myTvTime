@@ -5,6 +5,7 @@
 .tv-info {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     margin-top: 2em;
 }
 
@@ -12,7 +13,6 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    margin-right: 2em;
 }
 
 .tv-detail > .title {
@@ -23,51 +23,35 @@
     padding: .5em;
 }
 
-.tv-detail > .genres {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+.tv-detail .genres {
     margin-right: auto;
 }
 
-.tv-detail > .genres > .genre {
-    color: #ca8a04; /* Symfony footer */
-    border: 5px solid #ca8a04; /* Symfony footer */
-    border-radius: 18px;
-    margin: 10px;
-    padding: 0 20px;
+.tv-detail .genre {
+    color: #c6a647;
+    border-color: #c6a647;
 }
 
-.tv-detail > .episode_run_time,
-.tv-detail > .number_of_episodes,
-.tv-detail > .number_of_seasons,
-.tv-detail > .original_title,
-.tv-detail > .date,
-.tv-detail > .vote,
-.tv-detail > .last_episode_to_air,
-.tv-detail > .episode_number,
-.tv-detail > .season_number,
-.tv-detail > .homepage,
-.tv-detail > .imdb {
+.tv-detail .episode_run_time,
+.tv-detail .number_of_episodes,
+.tv-detail .number_of_seasons,
+.tv-detail .original_title,
+.tv-detail .date,
+.tv-detail .vote,
+.tv-detail .last_episode_to_air,
+.tv-detail .episode_number,
+.tv-detail .season_number,
+.tv-detail .homepage,
+.tv-detail .imdb {
     padding-left: 1em;
 }
 
-.tv-detail > .original_title > .data,
-.tv-detail > .episode_run_time > .data,
-.tv-detail > .number_of_episodes > .data,
-.tv-detail > .number_of_seasons > .data,
-.tv-detail > .date > .data,
-.tv-detail > .vote > .data,
-.tv-detail > .last_episode_to_air > .data,
-.tv-detail > .last_episode_to_air > .date > .data,
-.tv-detail > .last_episode_to_air > .episode_number > .data,
-.tv-detail > .last_episode_to_air > .season_number > .data,
-.tv-detail > .data {
-    color: #ca8a04; /* Symfony footer */
+.tv-detail .data {
+    color: #c6a647; /* Symfony footer */
 }
 
 .tv-detail > .homepage > a {
-    color: #ca8a04; /* Symfony footer */
+    color: #c6a647; /* Symfony footer */
     text-decoration: none;
 }
 
@@ -161,13 +145,16 @@ h1 > a, h2 > a {
 }
 
 .tv-poster {
+    align-items: center;
     display: flex;
-    margin-bottom: auto;
-    margin-left: auto;
+    justify-content: center;
+    height: 100%;
 }
 
 .tv-poster > img {
     border: 8px solid #f2f2f2;
+    display: block;
+    width: 100%;
 }
 
 

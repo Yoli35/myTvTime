@@ -4,7 +4,7 @@
 {% set user = app.user %}
 
 {% block body %}
-    {% if app.debug=='dev' %}{{ dump() }}{% endif %}
+{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -24,12 +24,19 @@
                         <div class="date">{{ 'Published at'|trans }} : {{ video.publishedAt|format_date('full')|capitalize }}</div>
                         <div class="description">{{ video.description|nl2br }}</div>
                         <div class="channel">
+                            {% if video.channel.customUrl %}
+                                {% set url = video.channel.customUrl %}
+                            {% else %}
+                                {% set url = video.channel.youtubeId %}
+                            {% endif %}
                             <div class="thumbnail">
-                                {% if video.channel.thumbnailDefaultUrl %}
-                                    <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
-                                {% else %}
-                                    {{ video.channel.title|first }}
-                                {% endif %}
+                                <a href="https://www.youtube.com/c/{{ url }}" target="_blank">
+                                    {% if video.channel.thumbnailDefaultUrl %}
+                                        <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
+                                    {% else %}
+                                        {{ video.channel.title|first }}
+                                    {% endif %}
+                                </a>
                             </div>
                             <div class="title">{{ video.channel.title }}</div>
                         </div>

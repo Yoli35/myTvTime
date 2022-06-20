@@ -47,7 +47,7 @@ class CallTmdbService
     {
         $response = $this->client->request(
             'GET',
-            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=popularity.desc&include_adult=true&include_video=false&page='.$page.'&with_genres='.$genres.'&with_watch_monetization_types=flatrate'
+            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=popularity.desc&include_adult=false&include_video=false&page='.$page.'&with_genres='.$genres.'&with_watch_monetization_types=flatrate'
         );
         return $response->getContent();
     }
@@ -62,7 +62,7 @@ class CallTmdbService
     {
         $response = $this->client->request(
             'GET',
-            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=popularity.desc&include_adult=true&include_video=false&page='.$page.'&primary_release_year='.$date.'&with_watch_monetization_types=flatrate'
+            'https://api.themoviedb.org/3/discover/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language='.$locale.'&sort_by=popularity.desc&include_adult=false&include_video=false&page='.$page.'&primary_release_year='.$date.'&with_watch_monetization_types=flatrate'
         );
         return $response->getContent();
     }

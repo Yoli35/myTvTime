@@ -1,8 +1,4 @@
 {% extends 'base.html.twig' %}
-{% block morecss %}
-{#    <link href="{{ asset("tv.css") }}" rel="stylesheet">#}
-{#    <link href="{{ asset("series.css") }}" rel="stylesheet">#}
-{% endblock %}
 
 {% block title %}myTvTime::{{ 'Series|trans' }}{% endblock %}
 
@@ -10,7 +6,8 @@
     <div class="container">
         {#        {{ dump() }} #}
         {{ include('blocks/pageHeader.html.twig') }}
-        <div class="tv-header">
+
+        <div class="series-header">
             {% if show.images.show %}
                 <img src="{{ show.images.show }}" class="d-block w-100" alt="{{ show.title }}">
             {% elseif show.images.banner %}
@@ -18,103 +15,99 @@
             {% endif %}
         </div>
 
-        {#        "id" => 28533 #}
-        {#        "thetvdb_id" => 395494 #}
-        {#        "imdb_id" => "tt10638036" #}
-        {#        "themoviedb_id" => 124834 #}
-        {#        "slug" => "heartstopper" #}
-        {#    "title" => "Heartstopper" #}
-        {#    "original_title" => "Heartstopper" #}
-        {#    "description" => "Dans cette série initiatique sur fond d'histoires d'amour et d'études, les ados Charlie et Nick découvrent une facette inattendue de leur amitié improbable." #}
-        {#    "seasons" => "1" #}
-        {#        "seasons_details" => array:1 [▶] #}
-        {#    "episodes" => "9" #}
-        {#        "followers" => "3352" #}
-        {#        "comments" => "15" #}
-        {#        "similars" => "5" #}
-        {#        "characters" => "0" #}
-        {#    "creation" => "2022" #}
-        {#    "showrunner" => array:3 [ #}
-        {#          "id" => "186237" #}
-        {#          "name" => "Alice Oseman" #}
-        {#          "picture" => "https://pictures.betaseries.com/persons/1Eru1xdPcRmFjaBGQSVcEBNtYzt.jpg" #}
-        {#     ] #}
-        {#    "genres" => array:2 [▶] #}
-        {#    "length" => "29" #}
-        {#    "network" => "Netflix" #}
-        {#    "country" => "Royaume-Uni" #}
-        {#        "rating" => "" #}
-        {#        "status" => "Continuing" #}
-        {#        "language" => "en" #}
-        {#        "notes" => array:3 [▶] #}
-        {#        "in_account" => false #}
-        {#        "images" => array:4 [▶] #}
-        {#        "aliases" => array:2 [▶] #}
-        {#        "social_links" => [] #}
-        {#        "user" => array:8 [▶] #}
-        {#    "next_trailer" => "x89ztn8" #}
-        {#    "next_trailer_host" => "dailymotion" #}
+        {#
+        "id" => 28533
+        "thetvdb_id" => 395494
+        "imdb_id" => "tt10638036"
+        "themoviedb_id" => 124834
+        "slug" => "heartstopper"
+    "title" => "Heartstopper"
+    "original_title" => "Heartstopper"
+    "description" => "Dans cette série initiatique sur fond d'histoires d'amour et d'études, les ados Charlie et Nick découvrent une facette inattendue de leur amitié improbable."
+    "seasons" => "1"
+        "seasons_details" => array:1 [▶]
+    "episodes" => "9"
+        "followers" => "3352"
+        "comments" => "15"
+        "similars" => "5"
+        "characters" => "0"
+    "creation" => "2022"
+    "showrunner" => array:3 [
+          "id" => "186237"
+          "name" => "Alice Oseman"
+          "picture" => "https://pictures.betaseries.com/persons/1Eru1xdPcRmFjaBGQSVcEBNtYzt.jpg"
+     ]
+    "genres" => array:2 [▶]
+    "length" => "29"
+    "network" => "Netflix"
+    "country" => "Royaume-Uni"
+        "rating" => ""
+        "status" => "Continuing"
+        "language" => "en"
+        "notes" => array:3 [▶]
+        "in_account" => false
+        "images" => array:4 [▶]
+        "aliases" => array:2 [▶]
+        "social_links" => []
+        "user" => array:8 [▶]
+    "next_trailer" => "x89ztn8"
+    "next_trailer_host" => "dailymotion"
+        #}
 
-        <div class="tv-info">
-            <div class="tv-detail">
-                <h1>{{ show.title }}</h1>
-                {% if show.title != show.original_title %}
-                    <h3>{{ 'Original Title'|trans }} : {{ show.original_title }}</h3>
-                {% endif %}
-                {% if show.platforms %}
-                    <div class="platform">
-                        <div class="view">{{ 'View on'|trans }} {{ show.platforms.svod.name }}</div>
-                        <img src="{{ show.platforms.svod.logo }}" alt="{{ show.platforms.svod.name }}">
-                    </div>
-                {% endif %}
-                <div class="genres">
-                    {% for eng, fr in show.genres %}
-                        <div class="genre">{{ eng|trans }}</div>
-                    {% endfor %}
-                </div>
-                <div class="overview">
-                    {{ 'Overview'|trans }} :<br>
-                    <span class="data">{{ show.description }}</span>
-                </div>
-
-                <div class="row">
-                    <div class="col-5">
+        <div class="series-info">
+            <div class="row">
+                <div class="col-lg-7 col-12">
+                    <div class="series-detail">
+                        <h1>{{ show.title }}</h1>
+                        {% if show.title != show.original_title %}
+                            <h3>{{ 'Original Title'|trans }} : {{ show.original_title }}</h3>
+                        {% endif %}
+                        {% if show.platforms %}
+                            <div class="platform">
+                                <div class="view">{{ 'View on'|trans }} {{ show.platforms.svod.name }}</div>
+                                <img src="{{ show.platforms.svod.logo }}" alt="{{ show.platforms.svod.name }}">
+                            </div>
+                        {% endif %}
+                        <div class="genres">
+                            {% for eng, fr in show.genres %}
+                                <div class="genre">{{ eng|trans }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="item">
+                            <h6>{{ 'Overview'|trans }} :</h6>
+                            <span class="data">{{ show.description }}</span>
+                        </div>
                         <div class="item">{{ 'Country'|trans }} : <span class="data">{{ show.country }}</span></div>
                         <div class="item">{{ 'Network'|trans }} : <span class="data">{{ show.network }}</span></div>
                         <div class="item">{{ 'Creation'|trans }} : <span class="data">{{ show.creation }}</span></div>
-                        <div class="item">{{ 'Episode Run Time'|trans }} : <span class="data">{{ show.length }} minutes</span></div>
+                        <div class="item">{{ 'Episode Run Time'|trans }} : <span class="data">{{ show.length }} {{ 'minutes'|trans }}</span></div>
                         <div class="item">{{ 'Number of Episodes'|trans }} : <span class="data">{{ show.episodes }}</span></div>
                         <div class="item">{{ 'Number of Seasons'|trans }} : <span class="data">{{ show.seasons }}</span></div>
                         <div class="item">{{ 'Status'|trans }} : <span class="data">{{ show.status|trans }}</span></div>
                         {% if show.showrunner is not empty %}
-                            <div class="item">
-                                {{ 'Showrunner'|trans }} : <span class="data">{{ show.showrunner.name }}</span>
-                            {% if show.showrunner.picture %}
-                                <img src="{{ show.showrunner.picture }}">
-                            {% endif %}
-                            </div>
+                            <div class="item">{{ 'Showrunner'|trans }} : <span class="data">{{ show.showrunner.name }}</span></div>
                         {% endif %}
-                    </div>
-                    {% if show.next_trailer|length %}
-                        <div class="col-7">
+                        {% if show.next_trailer|length %}
                             <div class="trailer">
                                 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-                                    <iframe style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden" frameborder="0" type="text/html"
+                                    <iframe style="width:100%;height:100%;position:absolute;left:0;top:0;overflow:hidden" type="text/html"
                                             src="https://www.dailymotion.com/embed/video/{{ show.next_trailer }}"
                                             width="100%"
                                             height="100%" allowfullscreen></iframe>
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-            <div class="tv-poster">
-                {% if show.images.poster %}
-                    <img src="{{ show.images.poster }}" alt="{{ show.title }}">
-                {% else %}
-                    <img src="{{ asset('noposter_dark') }}" alt="{{ show.title }}">
-                {% endif %}
+                <div class="col-lg-5 col-12">
+                    <div class="tv-poster">
+                        {% if show.images.poster %}
+                            <img src="{{ show.images.poster }}" alt="{{ show.title }}">
+                        {% else %}
+                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ show.title }}">
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -58,10 +58,10 @@ class YoutubeController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/{_locale}/youtube/video', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function video(Request $request, YoutubeVideoRepository $repository): Response
+    #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function video(Request $request, $id, YoutubeVideoRepository $repository): Response
     {
-        $videoId = $request->query->get('v');
+        $videoId = $id;
 
         $video = $repository->find($videoId);
 

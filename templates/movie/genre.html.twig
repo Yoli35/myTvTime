@@ -21,7 +21,7 @@
                             {% if discover.poster_path %}
                                 <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}">
                             {% else %}
-                                <img src="/images/default/noposter_dark.png" class="d-block w-100" alt="{{ discover.title }}">
+                                <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ discover.title }}">
                             {% endif %}
                             <div class="home-discover-title">{{ discover.title }}</div>
                             {% if discover.release_date is defined %}
@@ -53,7 +53,7 @@
                         list += $(this).attr('id') + ',';
                     }
                 })
-                list = list.substring(0, list.length - 1);
+                list = list.length ? list.substring(0, list.length - 1) : '1';
                 url = url.substring(0, url.length-2) + list;
                 window.location.href = url;
             })
