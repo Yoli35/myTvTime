@@ -3,9 +3,11 @@
 }
 
 .tv-info {
+    /*
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    */
     margin-top: 2em;
 }
 
@@ -89,6 +91,7 @@
 h1 > a, h2 > a {
     text-decoration: none;
 }
+
 .seasons {
     align-items: center;
     display: flex;
@@ -99,18 +102,19 @@ h1 > a, h2 > a {
 }
 
 .seasons > .season {
-    border: 2px #bdbdbd solid;
+    background-color: #eee;
     border-radius: 1em;
     display: flex;
     flex-direction: row;
     margin: 1em;
-    padding: 1em;
+    overflow: hidden;
 }
 
 .seasons > .season > .season-detail {
     display: flex;
     flex-direction: column;
-    margin-right: 1em;
+    padding: 1em;
+    width: 50%;
 }
 
 .seasons > .season > .season-detail > .overview {
@@ -142,6 +146,14 @@ h1 > a, h2 > a {
 .seasons > .season > .season-detail > .episode_count > .data,
 .seasons > .season > .season-detail > .season_number > .data {
     color: #ca8a04; /* Symfony footer */
+}
+
+.seasons .season .season-poster {
+    width: 50%;
+}
+
+.seasons .season .season-poster img {
+    object-fit: cover;
 }
 
 .tv-poster {
@@ -201,13 +213,13 @@ h1 > a, h2 > a {
 }
 
 .episode {
-    border: 2px solid #bdbdbd;
+    background-color: #ccc;
     border-radius: 1em;
     display: flex;
-    flex-direction: row;
+    flex-direction: column-reverse;
     font-size: .75em;
     margin-top: 1em;
-    padding: 1em;
+    overflow: hidden;
 }
 
 .episode > .detail {
@@ -240,7 +252,7 @@ h1 > a, h2 > a {
 
 .episode > .detail > .guests {
     background-color: #383838;
-    border: 4px solid#767676;
+    border: 4px solid #767676;
     border-radius: 1em;
     display: flex;
     flex-direction: row;
@@ -287,14 +299,15 @@ h1 > a, h2 > a {
     color: #ca8a04; /* Symfony footer */
 }
 
-.episode > .poster > img {
-    border: 4px solid #bdbdbd;
-}
-
 .episode > .poster {
     display: flex;
     justify-content: center;
-    margin: auto 0 auto auto;
+}
+
+.episode > .poster > img {
+    display: block;
+    height: auto;
+    width: 100%;
 }
 
 
@@ -316,4 +329,37 @@ h1 > a, h2 > a {
 
 .episode > .detail > .link > a:hover {
     color: #ca8a04; /* Symfony footer */
+}
+
+@media (min-width: 991.98px) {
+
+    .episode {
+        flex-direction: row;
+    }
+
+    .episode > .detail {
+        width: 67%;
+    }
+
+    .episode > .poster {
+        display: flex;
+        justify-content: center;
+        max-width: 33%;
+        overflow: hidden;
+    }
+
+    .episode > .poster > img {
+        object-fit: cover;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .episode {
+        background-color: #444;
+    }
+
+    .seasons > .season {
+        background-color: #444;
+    }
 }

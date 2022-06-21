@@ -1,5 +1,5 @@
 a {
-    color: #bdbdbd !important;
+    color: #383838 !important;
     text-decoration: none;
 }
 
@@ -47,6 +47,9 @@ h2 {
 }
 
 .home-footer {
+}
+
+.home-footer {
     align-items: center;
     background-color: #ca8a04; /* Symfony footer */
     border-radius: 1em;
@@ -56,6 +59,10 @@ h2 {
     margin: 1em 0;
     padding: 1em;
     width: 100%;
+}
+
+.home-footer .logo .a {
+    color: #f2f2f2 !important;
 }
 
 .connexion {
@@ -73,7 +80,7 @@ h2 {
     margin-left: auto;
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 992px) {
 
     .user-menu {
         margin-left: 0;
@@ -266,6 +273,10 @@ h2 {
     margin: 2em;
 }
 
+.home-discover img {
+    border-radius: .5em;
+}
+
 .home-discover {
     align-items: center;
     display: flex;
@@ -403,77 +414,103 @@ h2 {
     margin-left: auto;
 }
 
-.cast {
-    align-items: center;
+.cast, .crew {
     background-color: #383838;
-    border: 4px solid #767676;
+}
+
+.cast, .crew {
+    align-items: center;
+    background-color: #eee;
     border-radius: 1em;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    justify-content: space-around;
     max-height: 20em;
     min-height: 16em;
     overflow-y: scroll;
 }
 
-.cast > .title {
+.cast .title,
+.crew .title {
     font-size: 1.5em;
 }
 
-.cast > .actor {
+.cast .actor,
+.crew .member {
     align-items: center;
+    /*
     border: 2px solid #f2f2f2;
     border-radius: .75em;
+    */
     cursor: grab;
     display: flex;
     flex-direction: column;
     height: 14em;
     margin: .5em .5em;
-    overflow: hidden;
-    transition: border-radius .25s, margin .25s, height .25s, width .25s;
+    /*overflow: hidden;*/
+    /*transition: border-radius .25s, margin .25s, height .25s, width .25s;*/
     /*transition: margin .25s, width .25s;*/
     width: 7em;
 }
 
+/*
 .cast > .actor:hover {
     border-radius: 50%;
     height: 8em;
     margin: .5em 1em;
     width: 6em;
 }
+*/
 
 /*.cast > .actor:hover {*/
 /*    margin: 0;*/
 /*    width: 8em;*/
 /*}*/
 
-.cast > .actor > .profile {
+.cast .actor .profile,
+.crew .member .profile {
     background-image: url("../../public/images/default/profile.jpg");
     background-position: top;
     background-repeat: no-repeat;
-    background-size: contain;
-    height: 100%;
-    min-height: 138px;
+    background-size: cover;
+    /*border: 2px solid #dbdbdb;*/
+    border-radius: .5em;
+    height: 10em;
+    /*min-height: 138px;*/
+    overflow: hidden;
+    transition: border-radius .125s;
     width: 100%;
 }
 
-.cast > .actor > .profile > img {
+.cast .actor .profile:hover,
+.crew .member .profile:hover {
+    border-radius: 50%;
+}
+
+.cast .actor .profile img,
+.crew .member .profile img{
     height: auto;
     width: 100%;
 }
 
-.cast > .actor > .name {
+.cast .actor .name,
+.crew .member .name {
     font-size: .75em;
     font-weight: bold;
-    margin-top: auto;
+    /*margin-top: auto;*/
     text-align: center;
 }
 
-.cast > .actor > .character {
+.cast .actor .character,
+.crew .member .job {
     font-size: .5em;
     text-align: center;
 }
 
+/*
 .crew {
     align-items: center;
     background-color: #383838;
@@ -533,13 +570,13 @@ h2 {
     text-align: center;
     margin-top: auto;
 }
-
+*/
 
 @media (prefers-color-scheme: dark) {
 
     :root {
         --bs-body-bg: #1c1c1c;
-        --bs-body-color: white;
+        --bs-body-color: #dbdbdb;
     }
 
     a {
@@ -583,6 +620,10 @@ h2 {
 
     img {
         filter: grayscale(20%);
+    }
+
+    .cast, .crew {
+        background-color: #383838;
     }
 
     .cast > .actor > .profile,

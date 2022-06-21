@@ -23,6 +23,22 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.user-account .avatar {
+    bottom: 2em;
+    height: 12em;
+    position: absolute;
+    right: 2em;
+    width: 12em;
+}
+
+.user-account .avatar > img {
+    border: 4px solid #bdbdbd;
+    border-radius: 50%;
+    height: 100%;
+    transition: border-color .25s, filter .25s;
+    width: auto;
+}
+
 .weather {
     align-items: center;
     background-color: rgba(0, 127, 191, 0.85);
@@ -99,22 +115,6 @@
     width: 100%;
 }
 
-.user-account .avatar {
-    height: 12em;
-    margin-top: -14em;
-    margin-left: auto;
-    margin-right: 2em;
-    width: 12em;
-}
-
-.user-account .avatar > img{
-    border: 4px solid #bdbdbd;
-    border-radius: 50%;
-    height: 100%;
-    transition: border-color .25s, filter .25s;
-    width: auto;
-}
-
 .user-account .details {
     margin-top: 4em;
 }
@@ -135,6 +135,9 @@
 }
 
 .user-movies .search {
+    background-color: #eee;
+    border: 4px solid #dbdbdb;
+    border-radius: .5em;
     display: flex;
     flex-direction: column;
     padding: 1em;
@@ -145,7 +148,7 @@
 
 .user-movies .search .result {
     align-items: center;
-    background-color: #444;
+    background-color: #eee;
     border: 4px solid #dbdbdb;
     border-radius: 1em;
     display: flex;
@@ -159,4 +162,12 @@
     position: absolute;
     top: 4em;
     width: 45em;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .user-movies .search,
+    .user-movies .search .result {
+        background-color: #444;
+    }
 }

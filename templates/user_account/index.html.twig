@@ -9,28 +9,9 @@
     <div class="container">
         {{ include('blocks/pageHeader.html.twig') }}
         <div class="user-account">
-            <div class="banner">
-                {% if user.banner %}
-                    <img src="/images/users/banners/{{ user.banner }}">
-                    <div class="title">{{ user }}</div>
-                {% else %}
-                    {% if banner is not empty %}
-                        <img src="{{ banner.image }}" class="" alt="">
-                        <div class="title">{{ banner.title }}</div>
-                    {% else %}
-                        <img src="/images/default/no_banner_dark.png">
-                        <div class="title">{{ user }}</div>
-                    {% endif %}
-                {% endif %}
-                {{ component('weather') }}
-            </div>
-            <div class="avatar">
-                {% if user.avatar %}
-                    <img src="/images/users/avatars/{{ user.avatar }}">
-                {% else %}
-                    <img src="/images/default/no_avatar.png">
-                {% endif %}
-            </div>
+
+            {{ include('blocks/user_account/banner.html.twig') }}
+
             <div class="details">
                 {{ form_start(form) }}
 
@@ -54,6 +35,8 @@
                 {{ form_end(form) }}
             </div>
         </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
 {% endblock %}

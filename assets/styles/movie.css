@@ -38,7 +38,6 @@
 }
 
 .movie-detail .title {
-    color: #f2f2f2;
     font-size: 2em;
     font-weight: bold;
     margin-right: auto;
@@ -72,10 +71,12 @@
     padding-left: 20px;
 }
 
+/*
 .movie-detail a {
     color: #f2f2f2;
     text-decoration: none;
 }
+*/
 
 .movie-detail a span[data-descr] {
     position: relative;
@@ -138,25 +139,26 @@
 }
 
 .recommendations {
-    background-color: #383838;
-    border: 4px solid #767676;
+    background-color: #eee;
     border-radius: 1em;
     align-items: center;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-around;
     max-height: 20em;
+    padding: .5em;
     overflow-y: scroll;
 }
 
 .recommendation .no-poster {
+    color: #dbdbdb;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
     position: relative;
 }
 
 .recommendation .no-poster .title {
-    color: #dbdbdb;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 100;
     position: absolute;
     text-align: center;
     top: 1em;
@@ -165,17 +167,19 @@
 
 .recommendation .no-poster .original-title {
     bottom: 1em;
-    color: #dbdbdb;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 100;
     position: absolute;
     text-align: center;
     width: 100%;
 }
 
+.recommendation img {
+    border-radius: .5em;
+}
+
 .recommendation {
     align-items: center;
-    border: 4px solid #bdbdbd;
+    /*border: 4px solid #bdbdbd;*/
+    border-radius: .5em;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -204,6 +208,7 @@
     padding-left: .5em;
 }
 
+/*
 .release-dates > .country > .dates > .event > .type::after {
     content: ' :';
 }
@@ -213,6 +218,7 @@
     font-weight: bold;
     padding-left: 1em;
 }
+*/
 
 .release-dates > .country > .dates > .event {
     align-items: flex-end;
@@ -287,4 +293,27 @@
 
 .collection-parts .part {
     margin-bottom: 2em;
+}
+
+.collection .card {
+    background-color: #eee;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .movie-detail .title {
+        color: #f2f2f2;
+    }
+
+    .collection .card {
+        background-color: #383838;
+    }
+
+    .movie-detail .title {
+        color: #f2f2f2;
+    }
+
+    .recommendations {
+        background-color: #383838;
+    }
 }

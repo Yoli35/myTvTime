@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block morecss %}
-{#    <link href="{{ asset("tv.css") }}" rel="stylesheet">#}
+    {#    <link href="{{ asset("tv.css") }}" rel="stylesheet"> #}
 {% endblock %}
 
 {% block title %}myTvTime::{{ season.name }}{% endblock %}
@@ -9,56 +9,62 @@
     <div class="container">
         {{ include('blocks/pageHeader.html.twig') }}
         <div class="season-info">
-            <div class="season-detail">
-                <h1 style="padding-right: 1em;">{{ tv }} : <span class="data">{{ season.name }}</span></h1>
-                <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ season.air_date|format_date('short') }}</span></div>
-                <div class="season-number">{{ 'Season Number'|trans }} : <span class="data">{{ season.season_number }}</span></div>
-                {% if season.overview %}
-                    <div class="overview">{{ 'Overview'|trans }} : {{ season.overview }}</div>
-                {% endif %}
-                <div class="episodes">
-                    {% for episode in season.episodes %}
-                        <div class="episode">
-                            <div class="detail">
-                                <div class="name">{{ 'Episode'|trans }} {{ episode.episode_number }} : {{ episode.name }}</div>
-                                <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ episode.air_date|format_date('short') }}</span></div>
-                                {% if episode.overview | length %}
-                                    <div class="overview">{{ 'Overview'|trans }} : {{ episode.overview }}</div>
-                                {% endif %}
-                                {% if episode.crew is not empty %}
-                                {% endif %}
-                                {% if episode.guest_stars is not empty %}
-                                    <div class="guests-label"> {{ 'Guests'|trans }}</div>
-                                    <div class="guests">
+            <div class="row">
+                <div class="col-lg-7 col-12 order-lg-first order-last">
+                    <div class="season-detail">
+                        <h1 style="padding-right: 1em;">{{ tv }} : <span class="data">{{ season.name }}</span></h1>
+                        <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ season.air_date|format_date('short') }}</span></div>
+                        <div class="season-number">{{ 'Season Number'|trans }} : <span class="data">{{ season.season_number }}</span></div>
+                        {% if season.overview %}
+                            <div class="overview">{{ 'Overview'|trans }} : {{ season.overview }}</div>
+                        {% endif %}
+                        <div class="episodes">
+                            {% for episode in season.episodes %}
+                                <div class="episode">
+                                    <div class="detail">
+                                        <div class="name">{{ 'Episode'|trans }} {{ episode.episode_number }} : {{ episode.name }}</div>
+                                        <div class="air-date">{{ 'Air Date'|trans }} : <span class="data">{{ episode.air_date|format_date('short') }}</span></div>
+                                        {% if episode.overview | length %}
+                                            <div class="overview">{{ 'Overview'|trans }} : {{ episode.overview }}</div>
+                                        {% endif %}
+                                        {% if episode.crew is not empty %}
+                                        {% endif %}
+                                        {% if episode.guest_stars is not empty %}
+                                            <div class="guests-label"> {{ 'Guests'|trans }}</div>
+                                            <div class="guests">
 
-                                        {% for guest in episode.guest_stars %}
-                                            <div class="guest">
-                                                <div class="profile">
-                                                    {% if guest.profile_path | length %}
-                                                        <img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.0 }}{{ guest.profile_path }}" alt="{{ tv }} | {{ guest.name }}">
-                                                    {% endif %}
-                                                </div>
-                                                <div class="name">{{ guest.name }}</div>
-                                                <div class="known-for">{{ guest.known_for_department }}</div>
+                                                {% for guest in episode.guest_stars %}
+                                                    <div class="guest">
+                                                        <div class="profile">
+                                                            {% if guest.profile_path | length %}
+                                                                <img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.0 }}{{ guest.profile_path }}" alt="{{ tv }} | {{ guest.name }}">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="name">{{ guest.name }}</div>
+                                                        <div class="known-for">{{ guest.known_for_department }}</div>
+                                                    </div>
+                                                {% endfor %}
                                             </div>
-                                        {% endfor %}
+                                        {% endif %}
+                                        <div class="link"><a href="{{ path('app_episode', {id: tv_id, season_number: season.season_number, episode_number: episode.episode_number}) }}">{{ 'See Details'|trans }}</a></div>
                                     </div>
-                                {% endif %}
-                                <div class="link"><a href="{{ path('app_episode', {id: tv_id, season_number: season.season_number, episode_number: episode.episode_number}) }}">{{ 'See Details'|trans }}</a></div>
-                            </div>
-                            <div class="poster">
-                                {% if episode.still_path | length %}
-                                    <img src="{{ imageConfig.url }}{{ imageConfig.still_sizes.2 }}{{ episode.still_path }}" alt="{{ tv }} | {{ episode.name }}">
-                                {% endif %}
-                            </div>
+                                    <div class="poster">
+                                        {% if episode.still_path | length %}
+                                            <img src="{{ imageConfig.url }}{{ imageConfig.still_sizes.3 }}{{ episode.still_path }}" alt="{{ tv }} | {{ episode.name }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                    </div>
                 </div>
-            </div>
-            <div class="show-poster">
-                {% if season.poster_path | length %}
-                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ season.poster_path }}" alt="{{ season.name }}">
-                {% endif %}
+                <div class="col-lg-5 col-12 order-lg-last order-first">
+                    <div class="show-poster d-flex justify-content-center">
+                        {% if season.poster_path | length %}
+                            <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ season.poster_path }}" alt="{{ season.name }}">
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
         {{ include('blocks/pageFooter.html.twig') }}

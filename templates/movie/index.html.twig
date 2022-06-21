@@ -19,7 +19,7 @@
         {% endif %}
         <div class="movie-info">
             <div class="row w-100">
-                <div class="col-lg-8 col-12">
+                <div class="col-lg-7 col-12">
                     <div class="movie-detail">
                         <div class="row">
                             <div class="col">
@@ -38,7 +38,6 @@
                                 {% endif %}
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-lg-6 col-12">
                                 {% if movie.runtime %}
@@ -93,8 +92,7 @@
                                                 <div class="dates">
                                                     {% for date in location.release_dates %}
                                                         <div class="event">
-                                                            <div class="type">{{ date.type|trans }}{% if date.note is defined and date.note|length %} - {{ date.note }}{% endif %}</div>
-                                                            <div class="date">{{ date.release_date|format_date('short') }}</div>
+                                                            {{ date.type|trans }}{% if date.note is defined and date.note|length %}&nbsp;-&nbsp;{{ date.note }}{% endif %}&nbsp;:&nbsp;{{ date.release_date|format_date('short') }}
                                                         </div>
                                                     {% endfor %}
                                                 </div>
@@ -127,15 +125,15 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            <div class="col-lg-6 col-12">
-                                {#    "id" => 2344
+                            {% if movie.belongs_to_collection %}
+                                <div class="col-lg-6 col-12">
+                                    {#    "id" => 2344
                                           "name" => "The Matrix Collection"
                                           "poster_path" => "/bV9qTVHTVf0gkW0j7p7M0ILD4pG.jpg"
                                           "backdrop_path" => "/bRm2DEgUiYciDw3myHuYFInD7la.jpg" #}
-                                {% if movie.belongs_to_collection %}
                                     <h2>{{ 'Belongs to Collection'|trans }}</h2>
                                     <div class="collection">
-                                        <div class="card bg-dark text-center" style="width: 100%;">
+                                        <div class="card text-center" style="width: 100%;">
                                             {% if movie.belongs_to_collection.backdrop_path %}
                                                 <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" class="card-img-top" alt="movie.belongs_to_collection.name">
                                             {% endif %}
@@ -146,12 +144,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% endif %}
-                            </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-12">
+                <div class="col-lg-5 col-12">
                     <div class="movie-poster">
                         {% if movie.poster_path %}
                             <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
@@ -255,28 +253,30 @@
 {% block morejs %}
     <script>
         $(function () {
-            $('.profile').hover(function () {
-                    let frame = $(this).parent();
-                    let is_actor = $(frame).hasClass('actor');
+            /*
+                        $('.profile').hover(function () {
+                                let frame = $(this).parent();
+                                let is_actor = $(frame).hasClass('actor');
 
-                    $(frame).find('.name').css('color', '#0087e8');
-                    if (is_actor) {
-                        $(frame).find('.character').css('color', '#0087e8');
-                    } else {
-                        $(frame).find('.job').css('color', '#0087e8');
-                    }
-                },
-                function () {
-                    let frame = $(this).parent();
-                    let is_actor = $(frame).hasClass('actor');
+                                $(frame).find('.name').css('color', '#ca8a04');
+                                if (is_actor) {
+                                    $(frame).find('.character').css('color', '#ca8a04');
+                                } else {
+                                    $(frame).find('.job').css('color', '#ca8a04');
+                                }
+                            },
+                            function () {
+                                let frame = $(this).parent();
+                                let is_actor = $(frame).hasClass('actor');
 
-                    $(frame).find('.name').css('color', '#bdbdbd');
-                    if (is_actor) {
-                        $(frame).find('.character').css('color', '#bdbdbd');
-                    } else {
-                        $(frame).find('.job').css('color', '#bdbdbd');
-                    }
-                })
+                                $(frame).find('.name').css('color', '#bdbdbd');
+                                if (is_actor) {
+                                    $(frame).find('.character').css('color', '#bdbdbd');
+                                } else {
+                                    $(frame).find('.job').css('color', '#bdbdbd');
+                                }
+                            })
+            */
             $('.profile').click(function () {
                 let frame = $(this).parent();
                 let id = $(frame).attr('id');

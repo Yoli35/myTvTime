@@ -1,0 +1,20 @@
+<div class="banner">
+    {% if user.banner %}
+        <img src="/images/users/banners/{{ user.banner }}" alt="">
+    {% else %}
+        {% if banner is not empty %}
+            <img src="{{ banner.image }}" class="" alt="">
+        {% else %}
+            <img src="/images/default/no_banner_dark.png">
+        {% endif %}
+    {% endif %}
+    <div class="title">{{ user }}</div>
+    <div class="avatar">
+        {% if user.avatar %}
+            <img src="/images/users/avatars/{{ user.avatar }}">
+        {% else %}
+            <img src="/images/default/no_avatar.png">
+        {% endif %}
+    </div>
+    {{ component('weather') }}
+</div>
