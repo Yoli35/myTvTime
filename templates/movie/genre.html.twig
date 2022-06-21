@@ -7,7 +7,16 @@
 {% block body %}
     {#    {{ dump() }} #}
     <div class="container">
+
         {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ 'Search by Genre'|trans }}">{{ 'Search by Genre'|trans }}</li>
+            </ol>
+        </nav>
+
         <div class="select_genres">
             {% for key, genre in possible_genres.genres %}
                 <div id="{{ genre.id }}" class="genre{{ genre.id in current_genres ? ' active':'' }}">{{ genre.name }}</div>

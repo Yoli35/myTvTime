@@ -81,6 +81,17 @@ class UserMovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAll();
     }
 
+    public function findUserMovieIds($userId): array
+    {
+        $sql = 'SELECT `movie_db_id` FROM `user_movie` t0 '
+            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            .'WHERE t1.`user_id` = '.$userId;
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()->fetchAll();
+    }
+
     public function searchUserMovies($userId, $query): array
     {
         $sql = 'SELECT * FROM `user_movie` t0 '

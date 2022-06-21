@@ -8,7 +8,16 @@
 {% block body %}
 
     <div class="container">
+
         {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_movie', {id: movie.id}) }}">{{ movie.title }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ 'Collection'|trans }}">{{ 'Collection'|trans }}</li>
+            </ol>
+        </nav>
 
         {% if collection.backdrop_path %}
             <div class="movie-header">

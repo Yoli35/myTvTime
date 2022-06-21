@@ -7,7 +7,15 @@
 {% block body %}
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
+
         {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ movie.title }}">{{ movie.title }}</li>
+            </ol>
+        </nav>
 
         {% if movie.backdrop_path %}
             <div class="movie-header">
@@ -140,7 +148,7 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">{{ movie.belongs_to_collection.name }}</h5>
                                                 <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt="">
-                                                <a href="{{ path('app_movie_collection', {id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a>
+                                                <a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a>
                                             </div>
                                         </div>
                                     </div>

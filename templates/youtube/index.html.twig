@@ -9,6 +9,13 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ 'My Youtube Videos'|trans }}">{{ 'My Youtube Videos'|trans }}</li>
+            </ol>
+        </nav>
+
         <div class="yt-videos">
             {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'locale': locale}) }}
         </div>

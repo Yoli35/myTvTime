@@ -2,12 +2,26 @@
 
 {% block title %}{{ 'my TvTime::YoutubeVideo' }}{% endblock %}
 {% set user = app.user %}
+{% if video.channel.customUrl %}
+    {% set url = 'c/' ~ video.channel.customUrl %}
+{% else %}
+    {% set url = 'channel/' ~ video.channel.youtubeId %}
+{% endif %}
 
 {% block body %}
 {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_youtube') }}">{{ 'My Youtube Videos'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="https://www.youtube.com/{{ url }}" target="_blank">{{ video.channel.title }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ video.title }}">{{ video.title }}</li>
+            </ol>
+        </nav>
 
         <div class="yt-video-page">
             <div class="row">
@@ -24,13 +38,8 @@
                         <div class="date">{{ 'Published at'|trans }} : {{ video.publishedAt|format_date('full')|capitalize }}</div>
                         <div class="description">{{ video.description|nl2br }}</div>
                         <div class="channel">
-                            {% if video.channel.customUrl %}
-                                {% set url = video.channel.customUrl %}
-                            {% else %}
-                                {% set url = video.channel.youtubeId %}
-                            {% endif %}
                             <div class="thumbnail">
-                                <a href="https://www.youtube.com/c/{{ url }}" target="_blank">
+                                <a href="https://www.youtube.com/{{ url }}" target="_blank">
                                     {% if video.channel.thumbnailDefaultUrl %}
                                         <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
                                     {% else %}

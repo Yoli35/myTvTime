@@ -8,6 +8,14 @@
     {#    {{ dump() }} #}
     <div class="container">
         {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ 'My Account'|trans }}">{{ 'My Account'|trans }}</li>
+            </ol>
+        </nav>
+
         <div class="user-account">
 
             {{ include('blocks/user_account/banner.html.twig') }}

@@ -5,9 +5,20 @@
 
 {% block title %}myTvTime::{{ season.name }}{% endblock %}
 {% block body %}
-    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
     <div class="container">
+
         {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_tv', {id: tv_id}) }}">{{ tv }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ season.name }}">{{ season.name }}</li>
+            </ol>
+        </nav>
+
         <div class="season-info">
             <div class="row">
                 <div class="col-lg-7 col-12 order-lg-first order-last">

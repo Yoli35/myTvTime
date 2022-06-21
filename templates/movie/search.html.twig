@@ -7,7 +7,15 @@
 {% block body %}
     {#    {{ dump() }} #}
     <div class="container">
+
         {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ 'Search by Name'|trans }}">{{ 'Search by Name'|trans }}</li>
+            </ol>
+        </nav>
 
         <div class="search-by-name">
             <div class="row">

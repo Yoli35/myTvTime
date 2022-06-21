@@ -3,12 +3,29 @@
 {% block title %}{{ 'my TvTime' }}{% endblock %}
 
 {% block body %}
+{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
 
     {% set discovers = route == 'app_home_series' ? discovers.shows:discovers.results %}
 
-    {{ include('blocks/pageHeader.html.twig') }}
-
     <div class="container">
+
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                {% if route == 'app_home' %}
+                    <li class="breadcrumb-item active" aria-current="{{ 'Homepage'|trans }}">{{ 'Homepage'|trans }}</li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                {% endif %}
+                {% if route == 'app_home_tv' %}
+                    <li class="breadcrumb-item active" aria-current="{{ 'Tv Shows'|trans }}">{{ 'Tv Shows'|trans }}</li>
+                {% endif %}
+                {% if route == 'app_home_series' %}
+                    <li class="breadcrumb-item active" aria-current="{{ 'Series'|trans }}">{{ 'Series'|trans }}</li>
+                {% endif %}
+            </ol>
+        </nav>
 
         {% if route == 'app_home' %}
             <div class="search">

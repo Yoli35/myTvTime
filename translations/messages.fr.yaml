@@ -3,6 +3,9 @@ Movies: Films
 Tv Shows: Émissions
 Series: Séries
 Search Movies by: Recherche de film par
+Search by Name: Recherche par nom
+Search by Genre: Recherche par genre
+Search by Date: Recherche par date
 Genre: Genre
 Date: Date
 Welcome: Bienvenue
@@ -12,6 +15,7 @@ My Account: Mon compte
 My Movies: Mes films
 Another action: Easy Admin
 Logout: Déconnexion
+Navigation: Navigation
 
 # Registration
 Register: S'enregistrer
@@ -91,6 +95,7 @@ Created by: Crée par
 # Collection
 Films: Films
 Belongs to Collection: Collection
+Collection: Collection
 See the Collection: Voir la collection
 
 # Tv Show Detail
@@ -155,6 +160,7 @@ Thriller: Thriller
 War: Guerre
 
 # YoutubeVideo
+My Youtube Videos: Mes vidéos Youtube
 Videos: vidéos
 Video: vidéo
 No Videos at this Time: Aucune vidéo pour l'instant

@@ -7,6 +7,14 @@
         {#        {{ dump() }} #}
         {{ include('blocks/pageHeader.html.twig') }}
 
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_home_series') }}">{{ 'Series'|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ show.title }}">{{ show.title }}</li>
+            </ol>
+        </nav>
+
         <div class="series-header">
             {% if show.images.show %}
                 <img src="{{ show.images.show }}" class="d-block w-100" alt="{{ show.title }}">

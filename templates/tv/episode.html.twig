@@ -7,7 +7,19 @@
 {% block body %}
 {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
     <div class="container">
+
         {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_tv', {id: tv.id}) }}">{{ tv.name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_season', {id: tv.id, season_number: season.season_number}) }}">{{ season.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ episode.name }}">{{ episode.name }}</li>
+            </ol>
+        </nav>
+
         <div class="episode-info">
             <h1><a href="{{ path('app_tv', {id: tv.id}) }}">{{ tv.name }}</a></h1>
             <h2>
