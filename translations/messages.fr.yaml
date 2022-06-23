@@ -23,6 +23,7 @@ Registration: Enregistrement
 Email: Adresse email
 Username: Nom d'utilisateur
 Password: Mot de passe
+Repeat Password: Confirmer le mot de passe
 Agree terms: Accepter les conditions d'utilisation
 Connexion: Connexion
 There is already an account with this email: Il existe déjà un compte associé à cet email
@@ -187,8 +188,8 @@ minute: minute
 i.e.: c.à.d
 years: années
 year: année
-mounths: mois
-mounth: mois
+months: mois
+month: mois
 days: jours
 day: jour
 hours: heures
@@ -219,7 +220,7 @@ Sunny: Ensoleillé
 Moderate or heavy rain with thunder: Pluie forte à modérée avec tonerre par endroit
 Monday: Lundi
 Tuesday: Mardi
-Wenesday: Mercredi
+Wednesday: Mercredi
 Thursday: Jeudi
 Friday: Vendredi
 Saturday: Samedi
@@ -230,7 +231,7 @@ March: Mars
 April: Avril
 May: Mai
 June: Juin
-Jully: Juillet
+July: Juillet
 August: Août
 September: Septembre
 October: Octobre
@@ -245,7 +246,7 @@ No moonset: Pas de coucher
 Dashboard: Tableau de bord
 Users: Utilisateurs
 Entities: Entités
-Settings: Règlages
+Settings: Réglages
 Image Configuration: Configuration image
 Genres: Genres
 Other: Autre
@@ -263,4 +264,7 @@ User: Utilisateur
 Is Verified: Vérifié
 Avatar: Avatar
 Banner: Bannière
+
+# Others
+None: Aucun
 

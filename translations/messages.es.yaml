@@ -20,6 +20,7 @@ Registration: Registro
 Email: Dirección electrónica
 Username: Nombre de usuario
 Password: Contraseña
+Repeat Password: Confirmar contraseña
 Agree terms: Aceptar las condiciones de uso
 Connexion: Conexión
 There is already an account with this email: Ya existe una cuenta con este correo
@@ -213,3 +214,7 @@ User: Usuario
 Is Verified: Se verifica
 Avatar: Avatar
 Banner: Bannière
+
+# Others
+None: Ninguno
+

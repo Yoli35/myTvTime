@@ -35,9 +35,14 @@ class WeatherComponent extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $forecast = [];
-        if ($user->getCity()) {
-            $standing = $this->weatherService->getLocalForecast($user->getCity(), 3, $locale);
+        if ($user->getZipCode()) {
+            $standing = $this->weatherService->getLocalForecast($user->getZipCode(), 3, $locale);
             $forecast = json_decode($standing, true, 512, 0);
+        } else {
+            if ($user->getCity()) {
+                $standing = $this->weatherService->getLocalForecast($user->getCity(), 3, $locale);
+                $forecast = json_decode($standing, true, 512, 0);
+            }
         }
         return $forecast;
     }

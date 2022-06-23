@@ -27,6 +27,7 @@ Your email address has been verified.: Your email address has been verified.
 Email: Adresse email
 Username: Nom d'utilisateur
 Password: Mot de passe
+Repeat Password: Confirm Password
 Agree terms: Accepter les conditions d'utilisation
 Hi! Please confirm your email!: Salut ! Merci de confirmer votre adresse email !
 Please confirm your email address by clicking the following link: Merci de confirmer votre adresse email en cliquant sur ce lien
@@ -213,3 +214,7 @@ User: User
 Is Verified: Is Veified
 Avatar: Avatar
 Banner: Banner
+
+# Others
+None: None
+

@@ -28,6 +28,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $password;
 
+/*    private string $plainPassword;
+    private string $confirmPlainPassword;*/
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $username;
 
@@ -117,6 +120,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+/*
+    public function getPlainPassword(): string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $password): self
+    {
+        $this->plainPassword = $password;
+
+        return $this;
+    }
+
+    public function getConfirmPlainPassword(): string
+    {
+        return $this->confirmPlainPassword;
+    }
+
+    public function setConfirmPlainPassword(string $password): self
+    {
+        $this->confirmPlainPassword = $password;
+
+        return $this;
+    }*/
 
     /**
      * @see UserInterface

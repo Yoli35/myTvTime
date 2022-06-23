@@ -75,10 +75,14 @@ class YoutubeAddVideoComponent
     {
 
         // https://www.youtube.com/watch?v=at9h35V8rtQ
+        // https://www.youtube.com/shorts/7KFxzeyse2g
         // https://youtu.be/at9h35V8rtQ
         $thisLink = $this->link;
 
-        if (in_array(strlen($thisLink), [28, 43])) {
+        if (str_contains($thisLink, 'https://www.youtube.com/watch?v=') ||
+            str_contains($thisLink, 'https://www.youtube.com/shorts/') ||
+            str_contains($thisLink, 'https://youtu.be/')) //        if (in_array(strlen($thisLink), [28, 42, 43]))
+        {
             $thisLink = substr($thisLink, -11);
         }
 
@@ -204,43 +208,46 @@ class YoutubeAddVideoComponent
 
     private function seconds2human($ss): string
     {
-        $l = $this->locale;
-        $words = ["timeSpent1" => ["en" => "Time spent watching Youtube", "fr" => "Temps passé devant youtube", "es" => "Tiempo dedicado a ver Youtube", "de" => "Zeit, die Sie mit Youtube verbracht haben"], "timeSpent2" => ["en" => "secondes i.e.", "fr" => "secondes c.à.d.", "es" => "segundos, es decir,", "de" => "Sekunden d.h."], "mounth" => ["en" => "mounth", "fr" => "mois", "es" => "mes", "de" => "Monat"], "mounths" => ["en" => "mounths", "fr" => "mois", "es" => "meses", "de" => "Monate"], "day" => ["en" => "day", "fr" => "jour", "es" => "día", "de" => "Tag"], "days" => ["en" => "days", "fr" => "jours", "es" => "días", "de" => "Tage"], "hour" => ["en" => "hour", "fr" => "heure", "es" => "hora", "de" => "Stunde"], "hours" => ["en" => "hours", "fr" => "heures", "es" => "horas", "de" => "Stunden"], "minute" => ["en" => "minute", "fr" => "minute", "es" => "minuto", "de" => "Minute"], "minutes" => ["en" => "minutes", "fr" => "minutes", "es" => "minutos", "de" => "Minuten"], "seconde" => ["en" => "seconde", "fr" => "seconde", "es" => "segundo", "de" => "Sekunde"], "secondes" => ["en" => "secondes", "fr" => "secondes", "es" => "segundos", "de" => "Sekunden"], "and" => ["en" => "and", "fr" => "et", "es" => "y", "de" => "und"],];
-        $s = $ss % 60;
-        $m = intval(floor(($ss % 3600) / 60));
-        $h = intval(floor(($ss % 86400) / 3600));
-        $d = intval(floor(($ss % 2592000) / 86400));
-        $M = intval(floor($ss / 2592000));
+        if ($ss) {
+            $l = $this->locale;
+            $words = ["timeSpent1" => ["en" => "Time spent watching Youtube", "fr" => "Temps passé devant youtube", "es" => "Tiempo dedicado a ver Youtube", "de" => "Zeit, die Sie mit Youtube verbracht haben"], "timeSpent2" => ["en" => "secondes i.e.", "fr" => "secondes c.à.d.", "es" => "segundos, es decir,", "de" => "Sekunden d.h."], "mounth" => ["en" => "mounth", "fr" => "mois", "es" => "mes", "de" => "Monat"], "mounths" => ["en" => "mounths", "fr" => "mois", "es" => "meses", "de" => "Monate"], "day" => ["en" => "day", "fr" => "jour", "es" => "día", "de" => "Tag"], "days" => ["en" => "days", "fr" => "jours", "es" => "días", "de" => "Tage"], "hour" => ["en" => "hour", "fr" => "heure", "es" => "hora", "de" => "Stunde"], "hours" => ["en" => "hours", "fr" => "heures", "es" => "horas", "de" => "Stunden"], "minute" => ["en" => "minute", "fr" => "minute", "es" => "minuto", "de" => "Minute"], "minutes" => ["en" => "minutes", "fr" => "minutes", "es" => "minutos", "de" => "Minuten"], "seconde" => ["en" => "seconde", "fr" => "seconde", "es" => "segundo", "de" => "Sekunde"], "secondes" => ["en" => "secondes", "fr" => "secondes", "es" => "segundos", "de" => "Sekunden"], "and" => ["en" => "and", "fr" => "et", "es" => "y", "de" => "und"],];
+            $s = $ss % 60;
+            $m = intval(floor(($ss % 3600) / 60));
+            $h = intval(floor(($ss % 86400) / 3600));
+            $d = intval(floor(($ss % 2592000) / 86400));
+            $M = intval(floor($ss / 2592000));
 
-        $result = $words['timeSpent1'][$l] . " : " . $ss . " " . $words['timeSpent2'][$l] . " ";
-        if ($M) {
-            $result .= $M . " " . ($M > 1 ? $words['mounths'][$l] : $words['mounth'][$l]);
-        }
-        if ($d) {
+            $result = $words['timeSpent1'][$l] . " : " . $ss . " " . $words['timeSpent2'][$l] . " ";
             if ($M) {
-                $result .= ($s || $m || $h) ? ", " : " " . $words['and'][$l] . " ";
+                $result .= $M . " " . ($M > 1 ? $words['mounths'][$l] : $words['mounth'][$l]);
             }
-            $result .= $d . " " . ($d > 1 ? $words['days'][$l] : $words['day'][$l]);
-        }
-        if ($h > 0) {
-            if ($M || $d) {
-                $result .= ($s || $m) ? ", " : " " . $words['and'][$l] . " ";
+            if ($d) {
+                if ($M) {
+                    $result .= ($s || $m || $h) ? ", " : " " . $words['and'][$l] . " ";
+                }
+                $result .= $d . " " . ($d > 1 ? $words['days'][$l] : $words['day'][$l]);
             }
-            $result .= $h . " " . ($h > 1 ? $words['hours'][$l] : $words['hour'][$l]);
-        }
-        if ($m) {
-            if ($M || $d || $h) {
-                $result .= ($s) ? ", " : " " . $words['and'][$l] . " ";
+            if ($h > 0) {
+                if ($M || $d) {
+                    $result .= ($s || $m) ? ", " : " " . $words['and'][$l] . " ";
+                }
+                $result .= $h . " " . ($h > 1 ? $words['hours'][$l] : $words['hour'][$l]);
             }
-            $result .= $m . " " . ($m > 1 ? $words['minutes'][$l] : $words['minute'][$l]);
-        }
-        if ($s) {
-            if ($M || $d || $h || $m) {
-                $result .= " " . $words['and'][$l] . " ";
+            if ($m) {
+                if ($M || $d || $h) {
+                    $result .= ($s) ? ", " : " " . $words['and'][$l] . " ";
+                }
+                $result .= $m . " " . ($m > 1 ? $words['minutes'][$l] : $words['minute'][$l]);
             }
-            $result .= $s . " " . ($s > 1 ? $words['secondes'][$l] : $words['seconde'][$l]);
+            if ($s) {
+                if ($M || $d || $h || $m) {
+                    $result .= " " . $words['and'][$l] . " ";
+                }
+                $result .= $s . " " . ($s > 1 ? $words['secondes'][$l] : $words['seconde'][$l]);
+            }
+            return $result;
         }
-        return $result;
+        return "";
     }
 //
 //    /**

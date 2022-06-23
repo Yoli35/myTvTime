@@ -21,7 +21,7 @@
             {{ include('blocks/user_account/banner.html.twig') }}
 
             <div class="user-movies">
-                <h1>{{ 'Watched Films'|trans }} : {{ discovers|length }}</h1>
+                <h1>{{ 'Watched Films'|trans }} : {{ discovers|length ? discovers|length : 'None'|trans }}</h1>
 
                 <h4>{{ 'Time spent watching TV:'|trans }}
                     {{ runtime.total }}
