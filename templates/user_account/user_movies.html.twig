@@ -29,8 +29,8 @@
                     {{ 'i.e.'|trans }}
                     {% if runtime.years > 1 %}{{ runtime.years }} {{ 'years'|trans }}{% endif %}
                     {% if runtime.years == 1 %}{{ runtime.years }} {{ 'year'|trans }}{% endif %}
-                    {% if runtime.mounths > 1 %}{{ runtime.mounths }} {{ 'mounths'|trans }}{% endif %}
-                    {% if runtime.mounths == 1 %}{{ runtime.mounths }} {{ 'mounth'|trans }}{% endif %}
+                    {% if runtime.mounths > 1 %}{{ runtime.mounths }} {{ 'months'|trans }}{% endif %}
+                    {% if runtime.mounths == 1 %}{{ runtime.mounths }} {{ 'month'|trans }}{% endif %}
                     {% if runtime.days > 1 %}{{ runtime.days }} {{ 'days'|trans }}{% endif %}
                     {% if runtime.days == 1 %}{{ runtime.days }} {{ 'day'|trans }}{% endif %}
                     {% if runtime.hours > 1 %}{{ runtime.hours }} {{ 'hours'|trans }}{% endif %}

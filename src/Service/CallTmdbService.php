@@ -75,7 +75,7 @@ class CallTmdbService
      */
     public function moviesSearch($page, $query, $year, $locale): ?string
     {
-        if ($year != 'all' && $year > 1873) {
+        if ($year != 'none') {
             $response = $this->client->request(
                 'GET',
                 'https://api.themoviedb.org/3/search/movie?api_key=f7e3c5fe794d565b471334c9c5ecaf96&language=' . $locale . '&page=' . $page . '&query=' . $query . '&year=' . $year . '&include_adult=false'

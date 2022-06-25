@@ -3,7 +3,7 @@
     {#    <link href="{{ asset("movie.css") }}" rel="stylesheet"> #}
 {% endblock %}
 
-{% block title %}myTvTime::{{ 'Movies Search Result'|trans }}{% endblock %}
+{% block title %}myTvTime::{{ 'Movies'|trans }}::{{ 'Search by Name'|trans }}{% if discovers.page %}::{{ 'Page'|trans }} {{ discovers.page }}{% endif %}{% endblock %}
 {% block body %}
     {#    {{ dump() }} #}
     <div class="container">
@@ -17,48 +17,28 @@
             </ol>
         </nav>
 
-        <div class="search-by-name">
-            <div class="row">
-                <div class="col-lg-3 col-md-1 col-sm"></div>
-                <div class="col-lg-6 col-md-10 col-sm-12">
-                    <form id="search">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                            <input id="search-query" type="text" autofocus class="form-control" value="{{ query }}" placeholder="{{ 'Name'|trans }}" aria-label="{{ 'Name'|trans }}" aria-describedby="basic-addon1">
-                            <input id="search-year" type="text" autofocus class="form-control" value="{{ year }}" placeholder="{{ 'Year'|trans }}" aria-label="{{ 'Year'|trans }}" aria-describedby="basic-addon1">
-                            <button id="search-submit" type="submit">{{ 'Search'|trans }}</button>
-                        </div>
-                    </form>
-                    <script>
-                        $(function () {
-                            let form = $('#search');
-                            // let submit = $('#search-submit');
-                            let search = $('#search-query');
-                            let year = $('#search-year');
-                            let query, url = '{{ path(route) }}' + '/1';
-
-                            $(search).select();
-
-                            // $(submit).click(validate);
-                            $(form).submit(function (e) {
-                                query = $(search).val();
-                                let y = $(year).val();
-                                if (query.length) {
-                                    url += '/' + query;
-                                    if (y.length) {
-                                        url += '/' + y;
-                                    }
-                                    console.log(url);
-                                    window.location.href = url;
-                                }
-                                e.preventDefault();
-                            })
-                        })
-                    </script>
+        <div class="row">
+            <div class="col-lg-3 col-md-1 col-sm"></div>
+            <div class="col-lg-6 col-md-10 col-sm-12">
+                {{ form_start(form) }}
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                    {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
+                    {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
+                    {{ form_widget(form.save, { 'label': 'Search', 'attr': {'class': 'btn btn-secondary'} }) }}
                 </div>
-                <div class="col-lg-3 col-md-1 col-sm"></div>
+                {{ form_end(form) }}
             </div>
+            <div class="col-lg-3 col-md-1 col-sm"></div>
         </div>
+
+        {% if discovers.total_results > 0 %}
+            <div class="row">
+                <div class="home-discovers-footer-infos fs-4">
+                    <div>{{ 'Movie Search Result'|trans }} : {{ discovers.total_results }} {{ ((discovers.total_results > 1) ? 'Movies'|trans : 'Movie'|trans) }}</div>
+                </div>
+            </div>
+        {% endif %}
 
         <div class="home-discovers">
             <div class="home-discovers-content">

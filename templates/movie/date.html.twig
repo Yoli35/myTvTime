@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block morecss %}
-{#    <link href="{{ asset("movie.css") }}" rel="stylesheet">#}
+    {#    <link href="{{ asset("movie.css") }}" rel="stylesheet"> #}
 {% endblock %}
 
 {% block title %}myTvTime::{{ 'Movies by Year'|trans }}{% endblock %}
@@ -32,18 +32,21 @@
         <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-                <li class="breadcrumb-item active" aria-current="{{ 'Search by Date'|trans }}">{{ 'Search by Date'|trans }}</li>
+                <li class="breadcrumb-item active"
+                    aria-current="{{ 'Search by Date'|trans }}">{{ 'Search by Date'|trans }}</li>
             </ol>
         </nav>
 
         <div class="date_select">
-            <div class="label">{{ 'Year'|trans }}</div>
             <form>
-                <select id="year" class="form-select" aria-label="Date selection">
-                    {% for year in years %}
-                        <option value="{{ year }}"{% if year == date %} selected{% endif %}>{{ year }}</option>
-                    {% endfor %}
-                </select>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text">{{ 'Year'|trans }}</span>
+                    <select id="year" class="form-select form-select-sm" aria-label="Date selection">
+                        {% for year in years %}
+                            <option value="{{ year }}"{% if year == date %} selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </form>
         </div>
 
@@ -53,15 +56,25 @@
                     <div class="home-discover">
                         <a href="{{ path('app_movie', {id: discover.id}) }}">
                             {% if discover.poster_path %}
-                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ discover.title }}">
+                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}"
+                                     class="d-block w-100" alt="{{ discover.title }}">
                             {% else %}
-                                <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ discover.title }}">
+                                <img src="/images/default/no_poster_dark.png" class="d-block w-100"
+                                     alt="{{ discover.title }}">
                             {% endif %}
                             <div class="home-discover-title">{{ discover.title }}</div>
                             {% if discover.release_date is defined %}
-                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|format_date('short') }}</div>
+                                <div class="home-discover-date">{{ 'Release Date'|trans }}
+                                    : {{ discover.release_date|format_date('short') }}</div>
                             {% endif %}
                         </a>
+                        {# Badges on seen Movies #}
+                        {% if app.user is not null %}
+                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}"
+                                 id="{{ discover.id }}">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

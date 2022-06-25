@@ -3,6 +3,9 @@ Movies: Películas
 Tv Shows: Programa de televisión
 Series: Series
 Search Movies by: Buscar películas por
+Search by Name: Buscar por nombre
+Search by Genre: Buscar por género
+Search by Year: Buscar por año
 Genre: Género
 Date: Fecha
 Welcome: Bienvenida
@@ -46,6 +49,8 @@ Total Results: Número de resultados
 
 # Movies by name
 Movies Search Result: Resultado de la búsqueda
+Movie Search Result: Resultado de la búsqueda
+Select a Year: Seleccione un año
 
 # Movies by genre
 Movies by genre:  Películas por género
@@ -173,6 +178,7 @@ User Account: Actualizar el perfil
 Profile Image (JPG, PNG file): Imagen de perfil (archivo JPG, PNG)
 Banner Image (JPG, PNG file): Imagen del banner (archivo JPG, PNG)
 Update Profile: Actualizar el perfil
+Search: Buscar
 
 # Weather
 Last updated: Última actualización

@@ -37,6 +37,12 @@
                                 <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ discover.release_date|date("d/m/Y") }}</div>
                             {% endif %}
                         </a>
+                        {# Badges on seen Movies #}
+                        {% if app.user is not null %}
+                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}" id="{{ discover.id }}">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

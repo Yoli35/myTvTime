@@ -52,7 +52,9 @@ Sort: Tri
 Sort selection: Sélection du tri
 
 # Movies by name
-Movies Search Result: Résultat de la recherche
+Movie Search Result: Résultat de la recherche
+Movies Search Result: Movies Search Result
+Select a Year: Sélectionner une année
 
 # Movies by genre
 Movies by genre: Films par genre
@@ -180,7 +182,7 @@ City: Ville
 Zip code: Code postal
 Profile Image (JPG, PNG file): Image de profil (au format jpg ou png)
 Banner Image (JPG, PNG file): Image de bannière (au format jpg ou png)
-Search: Recherche
+Search: Rechercher
 Watched Films: Films regardés
 "Time spent watching TV:":	"Temps passé à regarder : "
 minutes: minutes

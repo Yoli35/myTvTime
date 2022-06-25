@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Genre;
 use App\Entity\User;
 use App\Entity\UserMovie;
+use App\Form\MovieByNameType;
 use App\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -196,6 +197,7 @@ class MovieController extends AbstractController
 
         return $this->render('movie/genre.html.twig', [
             'discovers' => $discovers,
+            'userMovies' => $this->getUserMovieIds($doctrine),
             'genres' => $genres,
             'possible_genres' => $possibleGenres,
             'current_genres' => $currentGenres,
@@ -223,7 +225,13 @@ class MovieController extends AbstractController
             $years[] = $i;
         }
 
-        return $this->render('movie/date.html.twig', ['discovers' => $discovers, 'date' => $date, 'years' => $years, 'imageConfig' => $imageConfig,]);
+        return $this->render('movie/date.html.twig', [
+            'discovers' => $discovers,
+            'userMovies' => $this->getUserMovieIds($doctrine),
+            'date' => $date,
+            'years' => $years,
+            'imageConfig' => $imageConfig,
+            ]);
     }
 
     /**
@@ -232,36 +240,52 @@ class MovieController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[Route('/{_locale}/search/movie/{page}/{query}/{year}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1, 'query' => '', 'year' => 'all'])]
-    public function moviesSearch(Request $request, $page, $query, $year,  ManagerRegistry $doctrine, Service\CallTmdbService $callTmdbService, HomeController $homeController): Response
+    #[Route('/{_locale}/search/movie/{page}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    public function moviesSearch(Request $request, $page,  ManagerRegistry $doctrine, Service\CallTmdbService $callTmdbService, HomeController $homeController): Response
+    {
+        $locale = $request->getLocale();
+        $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
+        $query = $request->query->get('query')?:'';
+        $year = $request->query->get('year')?:'none';
+        $imageConfig = $homeController->getImageConfig($doctrine);
+
+        $form = $this->createForm(MovieByNameType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $form->getData();
+            $query = $result['query'];
+            $year = $result['year'];
+            // Si une nouvelle recherche est lancée, on retourne à la première page
+            $page = 1;
+        }
+        if ($query && strlen($query)) {
+            $standing = $callTmdbService->moviesSearch($page, $query, $year, $locale);
+            $discovers = json_decode($standing, true, 512, 0);
+        }
+
+        return $this->render('movie/search.html.twig', [
+            'form' => $form->createView(),
+            'query' => $query,
+            'year' => $year,
+            'discovers' => $discovers,
+            'userMovies' => $this->getUserMovieIds($doctrine),
+            'imageConfig' => $imageConfig,
+            ]);
+    }
+
+    public function getUserMovieIds($doctrine): array
     {
         /** @var User $user */
         $user = $this->getUser();
         $userMovieIds = [];
         if ($user) {
             $repoUM = $doctrine->getRepository(UserMovie::class);
-            $userMovies = $repoUM->findUserMovies($user->getId());
+            $userMovies = $repoUM->findUserMovieIds($user->getId());
             foreach ($userMovies as $userMovie) {
                 $userMovieIds[] = $userMovie['movie_db_id'];
             }
         }
-
-        $locale = $request->getLocale();
-        $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
-        if ($query && strlen($query)) {
-            $standing = $callTmdbService->moviesSearch($page, $query, $year, $locale);
-            $discovers = json_decode($standing, true, 512, 0);
-        }
-
-        $imageConfig = $homeController->getImageConfig($doctrine);
-
-        return $this->render('movie/search.html.twig', [
-            'query' => $query,
-            'year' => $year,
-            'discovers' => $discovers,
-            'userMovies' => $userMovieIds,
-            'imageConfig' => $imageConfig,
-            ]);
+        return $userMovieIds;
     }
 
     /**

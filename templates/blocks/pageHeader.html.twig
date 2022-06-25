@@ -51,11 +51,13 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li>
+                            {% set params = '' %}
+                            {% if route in ['app_movies_search'] %} {% set params = '?query='~query~'&year='~year %} {% endif %}
                             <div class="locale">
-                                <a href="/fr{{ path[3:] }}"><img src="/images/interface/fr.png"></a>
-                                <a href="/en{{ path[3:] }}"><img src="/images/interface/en.png"></a>
-                                <a href="/de{{ path[3:] }}"><img src="/images/interface/de.png"></a>
-                                <a href="/es{{ path[3:] }}"><img src="/images/interface/es.png"></a>
+                                <a href="/fr{{ path[3:]~params }}"><img src="/images/interface/fr.png"></a>
+                                <a href="/en{{ path[3:]~params }}"><img src="/images/interface/en.png"></a>
+                                <a href="/de{{ path[3:]~params }}"><img src="/images/interface/de.png"></a>
+                                <a href="/es{{ path[3:]~params }}"><img src="/images/interface/es.png"></a>
                             </div>
                         </li>
                         <li>

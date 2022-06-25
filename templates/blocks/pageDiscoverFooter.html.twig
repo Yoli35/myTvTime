@@ -56,61 +56,6 @@
         {% endif %}
     </div>
 
- {#   <div class="home-discovers-footer">
-        {% if max > 1 %}
-            <div class="pages">
-                {% if page > 6 %}
-                    <div class="ends"><a href="{{ path(route, {page: '1', sort: sorts.sort_by}) }}"><i class="bi bi-chevron-bar-left"></i>&nbsp;{{ 'First Page'|trans }}</a></div>
-                {% endif %}
-                {% if page > 1 %}
-                    <div class="ends"><a href="{{ path(route, {page: page-1, sort: sorts.sort_by}) }}"><i class="bi bi-chevron-left"></i>&nbsp;{{ 'Previous Page'|trans }}</a></div>
-                {% endif %}
-                {% if max >= 10 %}
-                    {% if page <= 5 %}
-                        {% for p in 1..10 %}
-                            {% if p == page %}
-                                <div class="page active">{{ p }}</div>
-                            {% else %}
-                                <div class="page"><a href="{{ path(route, {page: p, sort: sorts.sort_by}) }}">{{ p }}</a></div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if page > 5 and page < max-5 %}
-                        {% for p in page-5..page+4 %}
-                            {% if p == page %}
-                                <div class="page active">{{ p }}</div>
-                            {% else %}
-                                <div class="page"><a href="{{ path(route, {page: p, sort: sorts.sort_by}) }}">{{ p }}</a></div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if page >= max-5 %}
-                        {% for p in max-10..max %}
-                            {% if p == page %}
-                                <div class="page active">{{ p }}</div>
-                            {% else %}
-                                <div class="page"><a href="{{ path(route, {page: p, sort: sorts.sort_by}) }}">{{ p }}</a></div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                {% else %}
-                    {% for p in 1..max %}
-                        {% if p == page %}
-                            <div class="page active">{{ p }}</div>
-                        {% else %}
-                            <div class="page"><a href="{{ path(route, {page: p, sort: sorts.sort_by}) }}">{{ p }}</a></div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                {% if page < max-1 %}
-                    <div class="ends"><a href="{{ path(route, {page: page+1, sort: sorts.sort_by}) }}">{{ 'Next Page'|trans }}&nbsp;<i class="bi bi-chevron-right"></i></a></div>
-                {% endif %}
-                {% if page < max-5 %}
-                    <div class="ends"><a href="{{ path(route, {page: max, sort: sorts.sort_by}) }}">{{ 'Last Page'|trans }}&nbsp;<i class="bi bi-chevron-bar-right"></i></a></div>
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>#}
     <div class="home-discovers-footer-infos">
         <div>{{ 'Page'|trans }} : {{ pages.page }}</div>
         <div>{{ 'Total Pages'|trans }} : {{ pages.total_pages }}</div>

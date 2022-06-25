@@ -3,6 +3,9 @@ Movies: Movies
 Tv Shows: Tv Shows
 Series: Series
 Search Movies by: Search Movies by
+Search by Name: Search by Name
+Search by Genre: Search by Genre
+Search by Date: Search by Date
 Genre: Genre
 Date: Date
 Welcome: Welcome
@@ -45,7 +48,9 @@ Total Pages: Total Pages
 Total Results: Total Results
 
 # Movies by name
-Movies Search Result: Résultat de la recherche
+Movie Search Result: Movie Search Result
+Movies Search Result: Movies Search Result
+Select a Year: Select a Year
 
 # Movies by genre
 Movies by genre: Movies by genre
@@ -154,8 +159,8 @@ Youtube Link: Youtube Link
 Published at: Published at
 Time spent watching Youtube: Time spent watching Youtube
 secondes i.e.: secondes i.e.
-mounth: mounth
-mounths: mounths
+month: month
+months: months
 day: day
 days: days
 hour: hour
@@ -173,10 +178,11 @@ User Account: User Account
 Profile Image (JPG, PNG file): Profile Image (JPG, PNG file)
 Banner Image (JPG, PNG file): Banner Image (JPG, PNG file)
 Update Profile: Update Profile
+Search: Search
 
 #weather
 Last updated: Last updated
-Feelslike: Feelslike
+Feelslike: Feels like
 Precipitation: Precipitation
 Humidity: Humidity
 Pressure: Pressure

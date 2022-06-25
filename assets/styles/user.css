@@ -136,7 +136,7 @@
 
 .user-movies .search {
     background-color: #eee;
-    border: 4px solid #dbdbdb;
+    border: 2px solid #dbdbdb;
     border-radius: .5em;
     display: flex;
     flex-direction: column;
@@ -148,8 +148,8 @@
 
 .user-movies .search .result {
     align-items: center;
-    background-color: #eee;
-    border: 4px solid #dbdbdb;
+    background-color: rgba(238, 238, 238, 0.75);
+    border: 2px solid #dbdbdb;
     border-radius: 1em;
     display: flex;
     flex-direction: row;

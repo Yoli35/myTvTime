@@ -3,6 +3,9 @@ Movies: Filme
 Tv Shows: Fernsehshows
 Series: Serien
 Search Movies by: Filme suchen nach
+Search by Name: Suche nach Name
+Search by Genre: Suche nach Genre
+Search by Date: Suche nach Jahre
 Genre: Genre
 Date: Datum
 Welcome: Willkommen
@@ -43,6 +46,11 @@ Next Page: Nächste Seite
 Page: Seite
 Total Pages: Seitenzahl
 Total Results: Anzahl der Ergebnisse
+
+# Movies by name
+Movie Search Result: Filme Suchergebnis
+Movies Search Result: Filme Suchergebnis
+Select a Year: Wählen Sie ein Jahr
 
 # Movies by genre
 Movies by genre: Filme nach Genre
@@ -171,6 +179,7 @@ User Account: Benutzerkonto
 Profile Image (JPG, PNG file): Profilfoto (im jpg- oder pong-Format)
 Banner Image (JPG, PNG file): Bannerfoto (im jpg- oder pong-Format)
 Update Profile: Profil aktualisieren
+Search: Suchen
 
 # Weather
 Last updated: Zuletzt aktualisiert
