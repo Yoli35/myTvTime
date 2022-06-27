@@ -1,5 +1,5 @@
-a {
-    color: #383838 !important;
+a, a:hover, a:visited, .nav-link  {
+    color: #383838;
     text-decoration: none;
 }
 
@@ -578,8 +578,8 @@ h2 {
         --bs-body-color: #dbdbdb;
     }
 
-    a {
-        color: #bdbdbd !important;
+    a, a:hover, a:visited, .nav-link  {
+        color: #bdbdbd;
     }
 
     .container,

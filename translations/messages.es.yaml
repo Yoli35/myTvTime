@@ -37,6 +37,7 @@ Confirm my Email: Confirmar mi dirección de correo electrónico
 This link will expire in: Este enlace expirará en
 Cheers: ¡Por ti!
 Your email address has been verified.: Tu dirección de email ha sido verificada.
+Keep me logged in: Mantenerme conectado
 
 # Home Paginator
 First Page: Primera página
@@ -152,8 +153,9 @@ War: Guerra
 
 # Youtube
 My Youtube Videos: Mis vídeos en Youtube
-Videos: videos
-Video: video
+No: No hay
+Videos: vídeos
+Video: vídeo
 No Videos at this Time: No hay vídeos por el momento
 Lien Youtube: YLink Youtube
 Publiée le: Publicado en

@@ -13,13 +13,17 @@
                             <p class="card-text">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
                         {% endif %}
                         <div class="input-group mb-3">
-                            <label for="username"><span class="input-group-text" id="basic-addon1">Email:</span> </label>
-                            <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" placeholder="{{ 'Email' }}" aria-label="Username" aria-describedby="basic-addon1">
+                            <label for="username"><span class="input-group-text" id="basic-addon1">{{ 'Email'|trans }}:</span> </label>
+                            <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" placeholder="{{ 'Email'|trans }}" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                         <div class="input-group mb-3">
-                            <label for="password"><span class="input-group-text" id="basic-addon1">{{ 'Password:'|trans }}</span> </label>
-                            <input type="password" id="password" name="_password" value="{{ last_username }}" class="form-control" placeholder="{{ 'Password' }}" aria-label="Password" aria-describedby="basic-addon1">
+                            <label for="password"><span class="input-group-text" id="basic-addon1">{{ 'Password'|trans }}:</span> </label>
+                            <input type="password" id="password" name="_password" value="{{ last_username }}" class="form-control" placeholder="{{ 'Password'|trans }}" aria-label="Password" aria-describedby="basic-addon1">
                         </div>
+                        <label>
+                            <input type="checkbox" name="_remember_me" checked/>
+                            {{ 'Keep me logged in'|trans }}
+                        </label>
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                     </div>
 

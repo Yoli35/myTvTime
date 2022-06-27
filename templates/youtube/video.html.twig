@@ -36,7 +36,7 @@
                     <div class="details">
                         <div class="title">{{ video.title }}</div>
                         <div class="date">{{ 'Published at'|trans }} : {{ video.publishedAt|format_date('full')|capitalize }}</div>
-                        <div class="description">{{ video.description|nl2br }}</div>
+                        <div class="description">{{ description|raw }}</div>
                         <div class="channel">
                             <div class="thumbnail">
                                 <a href="https://www.youtube.com/{{ url }}" target="_blank">

@@ -1,6 +1,6 @@
 <div {{ attributes }}>
     <h1>
-        {{ this.video_results.count }}
+        {{ this.video_results.count ?: 'No'|trans }}
         {% if this.video_results.count > 1 %}
             {{ 'Videos'|trans }}
         {% else %}
