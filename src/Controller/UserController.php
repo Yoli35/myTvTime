@@ -3,21 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\UserMovie;
 use App\Form\UserType;
+use App\Repository\UserMovieRepository;
 use App\Service\BetaSeriesService;
 use App\Service\FileUploader;
+use App\Service\ImageConfiguration;
 use App\Service\WeatherService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Config\Doctrine\Orm\EntityManagerConfig;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -33,7 +31,7 @@ class UserController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route('/{_locale}/user/profile', name: 'app_user_profile', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, WeatherService $weatherService, BetaSeriesService $betaSeriesService): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, BetaSeriesService $betaSeriesService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -69,13 +67,6 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_profile');
         }
 
-//        $forecast = [];
-//        if ($user->getCity()) {
-//            $locale = $request->getLocale();
-//            $standing = $weatherService->getLocalForecast($user->getCity(), 3, $locale);
-//            $forecast = json_decode($standing, true, 512, 0);
-////            dump($forecast);
-//        }
         $banner = [];
         if ($user->getBanner() == null) {
             $banner = $this->setRandomBanner($betaSeriesService);
@@ -84,26 +75,27 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'banner' => $banner,
-//            'weather' => $forecast,
-//            'locale' => $locale,
         ]);
     }
 
     /**
-     * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/user/movies', name: 'app_user_movies', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function userMovies(Request $request, ManagerRegistry $doctrine, HomeController $homeController, WeatherService $weatherService): Response
+    public function userMovies(Request $request, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
+        /** TODO  Export Movie List as a json file */
+        /** TODO  Progressive Load of Movie List */
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /** @var User $user */
         $user = $this->getUser();
 
-        $repoUM = $doctrine->getRepository(UserMovie::class);
-        $movies = $repoUM->findUserMovies($user->getId());
-        $imageConfig = $homeController->getImageConfig($doctrine);
+        $movies = $userMovieRepository->findUserMovies($user->getId());
+        $imageConfig = $imageConfiguration->getConfig();
 
         $total = 0;
         foreach ($movies as $movie) {
@@ -113,20 +105,12 @@ class UserController extends AbstractController
         $runtime['minutes'] = $total % 60;
         $runtime['hours'] = floor($total/60) % 24;
         $runtime['days'] = floor($total/60/24) % 30.41666667;
-        $runtime['mounths'] = floor($total/60/24/30.41666667) % 12;
+        $runtime['months'] = floor($total/60/24/30.41666667) % 12;
         $runtime['years'] = floor($total/60/24/365);
-
-//        $forecast = [];
-//        if ($user->getCity()) {
-//            $locale = $request->getLocale();
-//            $standing = $weatherService->getLocalForecast($user->getCity(), 3, $locale);
-//            $forecast = json_decode($standing, true, 512, 0);
-//        }
 
         return $this->render('user_account/user_movies.html.twig', [
             'discovers' => $movies,
             'runtime' => $runtime,
-//            'weather' => $forecast,
             'imageConfig' => $imageConfig,
         ]);
     }

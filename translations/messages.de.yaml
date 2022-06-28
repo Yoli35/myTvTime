@@ -162,8 +162,8 @@ Youtube Link: Youtube-Link
 Published at: Veröffentlicht am
 Time spent watching Youtube: Zeit, die Sie mit Youtube verbracht haben
 secondes i.e.: Sekunden d.h.
-mounth: Monat
-mounths: Monate
+month: Monat
+months: Monate
 day: Tag
 days: Tage
 hour: Stunde
@@ -212,7 +212,7 @@ Other: Autre
 Homepage: Page d'accueil
 ID: ID
 Genre Id: Genre Id
-ImageConfig: ImageConfig
+ImageConfig: ImageConfiguration
 Base Url: Base Url
 Secure Base Url: Secure Base Url
 Backdrop Sizes: Backdrop Sizes

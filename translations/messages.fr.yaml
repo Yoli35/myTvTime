@@ -257,7 +257,7 @@ Other: Autre
 Homepage: Page d'accueil
 ID: ID
 Genre Id: Genre Id
-ImageConfig: ImageConfig
+ImageConfig: ImageConfiguration
 Base Url: Base Url
 Secure Base Url: Secure Base Url
 Backdrop Sizes: Backdrop Sizes

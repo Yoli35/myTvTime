@@ -20,7 +20,7 @@ class ImageConfigRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return ImageConfig[] Returns an array of ImageConfig objects
+    //  * @return ImageConfig[] Returns an array of ImageConfiguration objects
     //  */
     /*
     public function findByExampleField($value)

@@ -1,4 +1,7 @@
-.series-header {
+.series-header img {
+    border-radius: .5em;
+    display: block;
+    width: 100%;
 }
 
 .series-info {

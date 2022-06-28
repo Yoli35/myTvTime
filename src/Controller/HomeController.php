@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\ImageConfig;
 use App\Entity\User;
-use App\Entity\UserMovie;
-use App\Service;
-use Doctrine\Persistence\ManagerRegistry;
-use JetBrains\PhpStorm\ArrayShape;
+use App\Repository\UserMovieRepository;
+use App\Service\CallTmdbService;
+use App\Service\ImageConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,14 +32,13 @@ class HomeController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es', 'page'=>1, 'sort_by'=>'popularity.desc'])]
-    public function index(Request $request, Service\CallTmdbService $callTmdbService, ManagerRegistry $doctrine): Response
+    public function index(Request $request, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
         $user = $this->getUser();
         $userMovieIds = [];
         if ($user) {
-            $repoUM = $doctrine->getRepository(UserMovie::class);
-            $userMovies = $repoUM->findUserMovies($user->getId());
+            $userMovies = $userMovieRepository->findUserMovies($user->getId());
             foreach ($userMovies as $userMovie) {
                 $userMovieIds[] = $userMovie['movie_db_id'];
             }
@@ -122,8 +119,8 @@ class HomeController extends AbstractController
 
         $page = $request->query->getInt('page', 1);
         $standing = $callTmdbService->discoverMovies($page, $sort_by, $locale);
-        $discovers = json_decode($standing, true, 512, 0);
-        $imageConfig = $this->getImageConfig($doctrine);
+        $discovers = json_decode($standing, true);
+        $imageConfig = $imageConfiguration->getConfig();
 
         $pages = [
             'page' => $discovers['page'],
@@ -146,28 +143,5 @@ class HomeController extends AbstractController
             'sorts' => $sorts,
             'dRoute' => 'app_movie'
         ]);
-    }
-
-    #[ArrayShape(['url' => "string", 'backdrop_sizes' => "array", 'logo_sizes' => "array", 'poster_sizes' => "array", 'profile_sizes' => "array", 'still_sizes' => "array"])]
-    public function getImageConfig($doctrine): ?array
-    {
-        $repoC = $doctrine->getRepository(ImageConfig::class);
-
-        $config = $repoC->findAll();
-        $c = $config[0];
-        $backdropSizes = $c->getBackdropSizes();
-        $logoSizes = $c->getLogoSizes();
-        $posterSizes = $c->getPosterSizes();
-        $profileSizes = $c->getProfileSizes();
-        $stillSizes = $c->getStillSizes();
-
-        return [
-            'url' => $c->getSecureBaseUrl(),
-            'backdrop_sizes' => $backdropSizes,
-            'logo_sizes' => $logoSizes,
-            'poster_sizes' => $posterSizes,
-            'profile_sizes' => $profileSizes,
-            'still_sizes' => $stillSizes
-        ];
     }
 }
