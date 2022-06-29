@@ -42,6 +42,13 @@
 
                 <div class="search-block">
                     {{ component('user_movie_search', {class: 'search', id: user.id, poster_url: imageConfig.url, poster_size: imageConfig.poster_sizes.3}) }}
+                    <div class="export">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" id="export-button" class="btn btn-outline-secondary" data-id="{{ user.id }}" name="export-list">{{ 'Export'|trans }}</button>
+                        <button type="button" id="append-button" class="btn btn-outline-secondary" data-id="{{ user.id }}" name="append-list">{{ 'Append'|trans }}</button>
+                    </div>
+                    </div>
+
                 </div>
 
                 <div class="home-discovers-content">
@@ -55,4 +62,116 @@
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
+
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'Export'|trans }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="export-result"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
+                    <button id="export-copy" type="button" class="btn btn-primary">{{ 'Copy'|trans }} <i class="bi bi-clipboard2-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="appendModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'Append'|trans }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="json" class="form-label">{{ 'Select a Movie List File (.json)' }}</label>
+                    <input type="file" id="json" name="json" accept="application/json" class="form-control form-control-sm">
+                    <div class="append-result"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
+                    <button id="append-add" type="button" class="btn btn-primary" disabled>{{ 'Add'|trans }} <i class="bi bi-download"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+{% block morejs %}
+    <script>
+        $(function () {
+            let json;
+            $('#export-button').click(function () {
+                let id = $(this).data('id');
+                let result = $('.modal-body').find('.export-result');
+                let count, movies, sample;
+
+                $.ajax({
+                    url: "{{ path('app_personal_movies_export') }}",
+                    method: 'GET',
+                    data: {id: id},
+                    success: function (data) {
+                        count = data['count'];
+                        movies = data['movies'];
+                        json = data['json'];
+                        sample = data['sample'];
+
+                        $(result).append('<div class="sample">' + sample + '</div>');
+                        for (let i = 0; i < count; i++) {
+                            $(result).append('<div class="result-item">' + movies[i]['title'] + '</div>')
+                        }
+                        new bootstrap.Modal(document.getElementById('exportModal'), {}).show();
+                    }
+                })
+            })
+            $('#export-copy').click(function () {
+                navigator.clipboard.writeText(json).then(function () {
+                    /* presse-papiers modifié avec succès */
+                    alert('Copied! (' + json.length + ' caractères)')
+                }, function () {
+                    /* échec de l’écriture dans le presse-papiers */
+                    alert('Rejected!')
+                }).catch(err => alert(err));
+            })
+            $('#append-button').click(function () {
+                let preview = $('.append-result');
+
+                $(preview).empty();
+                new bootstrap.Modal(document.getElementById('appendModal'), {}).show();
+            })
+
+            $('input[name="json"]').change(function () {
+                let json,content;
+                let preview = $('.append-result');
+                let add = $('#append-add');
+                let url = "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}";
+                let fr = new FileReader();
+                fr.onload = function () {
+                    json = fr.result;
+                }
+                fr.onloadend = function () {
+                    content = JSON.parse(json);
+                    $(preview).empty();
+                    $(add).attr('disabled', 'disabled');
+
+                    if (content['total_results']) {
+                        for (let i = 0; i < content['total_results']; i++) {
+                            let item = content['results'][i];
+                            $(preview).append('<div class="result-item"><img src="' + url + item['poster_path'] + '" alt="' + item['title'] + '"><div class="name">' + item['title'] + '</div><div class="check-add"></div></div>')
+                        }
+                        $('.check-add').click(function () {
+                            $(this).toggleClass('active');
+                        });
+                        $(add).removeAttr('disabled');
+                    }
+                }
+                fr.readAsText(this.files[0]);
+            })
+        })
+    </script>
+{% endblock %}
+

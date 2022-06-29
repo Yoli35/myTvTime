@@ -194,11 +194,11 @@
             <h2>{{ 'Casting'|trans }}</h2>
             <div class="cast">
                 {% for actor in cast %}
-                    <div class="actor" id="{{ actor.id }}">
+                    <div class="actor">
                         {% if actor.profile_path | length %}
-                            <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')"></div>
+                            <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
                         {% else %}
-                            <div class="profile"></div>
+                            <div class="profile" data-id="{{ actor.id }}"></div>
                         {% endif %}
                         <div class="name">{{ actor.name }}</div>
                         <div class="character">{{ actor.character }}</div>
@@ -211,11 +211,11 @@
             <h2>{{ 'Crew'|trans }}</h2>
             <div class="crew">
                 {% for member in crew %}
-                    <div class="member" id="{{ member.id }}">
+                    <div class="member">
                         {% if member.profile_path | length %}
-                            <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')"></div>
+                            <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')" data-id="{{ member.id }}"></div>
                         {% else %}
-                            <div class="profile"></div>
+                            <div class="profile" data-id="{{ member.id }}"></div>
                         {% endif %}
                         <div class="job">{{ member.job }}</div>
                         <div class="name">{{ member.name }}</div>
@@ -256,38 +256,12 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
-    <script src="{{ asset('select-movie.js') }}"></script>
 {% endblock %}
 {% block morejs %}
     <script>
         $(function () {
-            /*
-                        $('.profile').hover(function () {
-                                let frame = $(this).parent();
-                                let is_actor = $(frame).hasClass('actor');
-
-                                $(frame).find('.name').css('color', '#ca8a04');
-                                if (is_actor) {
-                                    $(frame).find('.character').css('color', '#ca8a04');
-                                } else {
-                                    $(frame).find('.job').css('color', '#ca8a04');
-                                }
-                            },
-                            function () {
-                                let frame = $(this).parent();
-                                let is_actor = $(frame).hasClass('actor');
-
-                                $(frame).find('.name').css('color', '#bdbdbd');
-                                if (is_actor) {
-                                    $(frame).find('.character').css('color', '#bdbdbd');
-                                } else {
-                                    $(frame).find('.job').css('color', '#bdbdbd');
-                                }
-                            })
-            */
             $('.profile').click(function () {
-                let frame = $(this).parent();
-                let id = $(frame).attr('id');
+                let id = $(this).data('id');
 
                 $.ajax({
                     url: "{{ path('profile_infos') }}",

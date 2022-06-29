@@ -509,68 +509,6 @@ h2 {
     text-align: center;
 }
 
-/*
-.crew {
-    align-items: center;
-    background-color: #383838;
-    border: 4px solid #767676;
-    border-radius: 1em;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-height: 20em;
-    min-height: 16em;
-    overflow-y: scroll;
-}
-
-.crew > .member {
-    align-items: center;
-    border: 2px solid #f2f2f2;
-    border-radius: .75em;
-    display: flex;
-    flex-direction: column;
-    height: 14em;
-    margin: .5em .5em;
-    overflow: hidden;
-    transition: border-radius .25s, margin .25s, height .25s, width .25s;
-    width: 7em;
-}
-
-.crew > .member:hover {
-    border-radius: 50%;
-    height: 8em;
-    margin: .5em 1em;
-    width: 6em;
-}
-
-.crew > .member > .profile {
-    background-image: url("../../public/images/default/profile.jpg");
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: contain;
-    height: 100%;
-    min-height: 138px;
-    width: 100%;
-}
-
-.crew > .member > .profile > img {
-    height: auto;
-    width: 100%;
-}
-
-.crew > .member > .name {
-    font-size: .75em;
-    font-weight: bold;
-    text-align: center;
-}
-
-.crew > .member > .job {
-    font-size: .5em;
-    text-align: center;
-    margin-top: auto;
-}
-*/
-
 @media (prefers-color-scheme: dark) {
 
     :root {

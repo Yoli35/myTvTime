@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +31,7 @@ class UserController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[IsGranted('ROLE_USER')]
-    #[Route('/{_locale}/user/profile', name: 'app_user_profile', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/personal/profile', name: 'app_personal_profile', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, BetaSeriesService $betaSeriesService): Response
     {
         /** @var User $user */
@@ -64,7 +65,7 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_profile');
+            return $this->redirectToRoute('app_personal_profile');
         }
 
         $banner = [];
@@ -83,7 +84,7 @@ class UserController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[Route('/{_locale}/user/movies', name: 'app_user_movies', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/personal/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
     public function userMovies(Request $request, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** TODO  Export Movie List as a json file */
@@ -113,6 +114,57 @@ class UserController extends AbstractController
             'runtime' => $runtime,
             'imageConfig' => $imageConfig,
         ]);
+    }
+
+    #[Route('/{_locale}/personal/movies/export', name: 'app_personal_movies_export', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function export(Request $request, UserMovieRepository $userMovieRepository): JsonResponse
+    {
+        $id = $request->query->get('id');
+        $locale = $request->getLocale();
+        $movies = $userMovieRepository->findAllUserMovies($id);
+        $count = count($movies);
+        $json = '{"total_results":'.$count.',"results":'.json_encode($movies).'}';
+        $sample = '{<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;<span>"total_results":</span> ' . $count . ',<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;<span>"results":</span> [<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"id":</span> '.$movies[0]['id'].',<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"title":</span> "'.$movies[0]['title'].'",<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"original_title":</span> "'.$movies[0]['original_title'].'",<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"poster_path":</span> "\\'.$movies[0]['poster_path'].'"<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"release_date":</span> "'.$movies[0]['release_date'].'"<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"movie_db_id":</span> '.$movies[0]['movie_db_id'].'<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"runtime":</span> '.$movies[0]['runtime'].'<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_id":</span> '.$movies[0]['user_id'].'<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_movie_id":</span> '.$movies[0]['user_movie_id'].'<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}';
+
+        if ($count > 1) {
+
+            if ($count > 2) {
+                switch ($locale) {
+                    case 'fr':     $sample .= ',<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>[...] /* et '.($count-2).' autre'.($count>3?'s':'').' */</i><br>'; break;
+                    case 'en':     $sample .= ',<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>[...] /* and '.($count-2).' more */</i><br>'; break;
+                    case 'de':     $sample .= ',<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>[...] /* und '.($count-2).' '.($count>3?'andere':'weiterer').' */</i><br>'; break;
+                    case 'es':     $sample .= ',<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>[...] /* y otro'.($count>3?'s ':' ').($count-2).' */</i><br>'; break;
+                }
+            }
+            $sample .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"id":</span> '.$movies[$count-1]['id'].',<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"title":</span> "'.$movies[$count-1]['title'].'",<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"original_title":</span> "'.$movies[$count-1]['original_title'].'",<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"poster_path":</span> "\\'.$movies[$count-1]['poster_path'].'"<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"release_date":</span> "'.$movies[$count-1]['release_date'].'"<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"movie_db_id":</span> '.$movies[$count-1]['movie_db_id'].'<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"runtime":</span> '.$movies[$count-1]['runtime'].'<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_id":</span> '.$movies[$count-1]['user_id'].'<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_movie_id":</span> '.$movies[$count-1]['user_movie_id'].'<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}';
+        }
+
+        $sample .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>}';
+
+        return $this->json(['count' => $count, 'movies' => $movies, 'json' => $json, 'sample' => $sample]);
     }
 
     /**

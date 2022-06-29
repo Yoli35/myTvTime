@@ -5,7 +5,6 @@ namespace App\Components;
 use App\Entity\User;
 use App\Service\WeatherService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -15,8 +14,6 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent('weather')]
 class WeatherComponent extends AbstractController
 {
-    public array $weather;
-
     private WeatherService $weatherService;
 
     public function __construct(WeatherService $weatherService)
