@@ -9,6 +9,7 @@ parameters:
 
     avatars_directory: '%kernel.project_dir%/public/images/users/avatars'
     banners_directory: '%kernel.project_dir%/public/images/users/banners'
+    movie_list_directory: '%kernel.project_dir%/public/movielist'
 
 services:
     # default configuration for services in *this* file

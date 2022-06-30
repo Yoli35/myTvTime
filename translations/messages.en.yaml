@@ -186,8 +186,11 @@ Max: Max
 Watched Films: Watched Films
 "Time spent watching TV:": "Time spent watching TV:"
 i.e.: i.e.
-Export: Export
+Export: Export the movie list
+Append: Append a movie list
 Copy: Copy
+Add: Add
+Download: Download
 
 #weather
 Last updated: Last updated

@@ -112,6 +112,7 @@ class UserController extends AbstractController
         return $this->render('user_account/user_movies.html.twig', [
             'discovers' => $movies,
             'runtime' => $runtime,
+            'locale' => $request->getLocale(),
             'imageConfig' => $imageConfig,
         ]);
     }
@@ -124,18 +125,19 @@ class UserController extends AbstractController
         $movies = $userMovieRepository->findAllUserMovies($id);
         $count = count($movies);
         $json = '{"total_results":'.$count.',"results":'.json_encode($movies).'}';
+
         $sample = '{<br>'
             .'&nbsp;&nbsp;&nbsp;&nbsp;<span>"total_results":</span> ' . $count . ',<br>'
             .'&nbsp;&nbsp;&nbsp;&nbsp;<span>"results":</span> [<br>'
             .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"id":</span> '.$movies[0]['id'].',<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"title":</span> "'.$movies[0]['title'].'",<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"original_title":</span> "'.$movies[0]['original_title'].'",<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"poster_path":</span> "\\'.$movies[0]['poster_path'].'"<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"release_date":</span> "'.$movies[0]['release_date'].'"<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"movie_db_id":</span> '.$movies[0]['movie_db_id'].'<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"runtime":</span> '.$movies[0]['runtime'].'<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_id":</span> '.$movies[0]['user_id'].'<br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"id":</span> '.$movies[0]['id'].'<span>,</span><br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"title":</span> "'.$movies[0]['title'].'"<span>,</span><br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"original_title":</span> "'.$movies[0]['original_title'].'"<span>,</span><br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"poster_path":</span> "\\'.$movies[0]['poster_path'].'"<span>,</span><br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"release_date":</span> "'.$movies[0]['release_date'].'"<span>,</span><br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"movie_db_id":</span> '.$movies[0]['movie_db_id'].',<span>,</span><br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"runtime":</span> '.$movies[0]['runtime'].'<span>,</span><br>'
+            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_id":</span> '.$movies[0]['user_id'].'<span>,</span><br>'
             .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_movie_id":</span> '.$movies[0]['user_movie_id'].'<br>'
             .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}';
 
@@ -150,21 +152,66 @@ class UserController extends AbstractController
                 }
             }
             $sample .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"id":</span> '.$movies[$count-1]['id'].',<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"title":</span> "'.$movies[$count-1]['title'].'",<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"original_title":</span> "'.$movies[$count-1]['original_title'].'",<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"poster_path":</span> "\\'.$movies[$count-1]['poster_path'].'"<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"release_date":</span> "'.$movies[$count-1]['release_date'].'"<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"movie_db_id":</span> '.$movies[$count-1]['movie_db_id'].'<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"runtime":</span> '.$movies[$count-1]['runtime'].'<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_id":</span> '.$movies[$count-1]['user_id'].'<br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"id":</span> '.$movies[$count-1]['id'].'<span>,</span><br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"title":</span> "'.$movies[$count-1]['title'].'"<span>,</span><br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"original_title":</span> "'.$movies[$count-1]['original_title'].'"<span>,</span><br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"poster_path":</span> "\\'.$movies[$count-1]['poster_path'].'"<span>,</span><br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"release_date":</span> "'.$movies[$count-1]['release_date'].'"<span>,</span><br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"movie_db_id":</span> '.$movies[$count-1]['movie_db_id'].'<span>,</span><br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"runtime":</span> '.$movies[$count-1]['runtime'].'<span>,</span><br>'
+                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_id":</span> '.$movies[$count-1]['user_id'].'<span>,</span><br>'
                 .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_movie_id":</span> '.$movies[$count-1]['user_movie_id'].'<br>'
                 .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}';
         }
 
         $sample .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>}';
 
-        return $this->json(['count' => $count, 'movies' => $movies, 'json' => $json, 'sample' => $sample]);
+        /** @var User $user */
+        $user = $this->getUser();
+        $dir = $this->getParameter('movie_list_directory');
+        $filename = $this->getFilename($user);
+
+        $file = fopen($dir . '/' . $filename, "w");
+        fwrite($file, $json);
+        fclose($file);
+
+        $url = $this->generateUrl('app_json');// . $filename;
+        dump($url);
+
+        return $this->json([
+            'count' => $count,
+            'movies' => $movies,
+            'json' => $json,
+            'url' => $url,
+            'file' => $filename,
+            'sample' => $sample
+        ]);
+    }
+
+    #[Route('/movielist/', name: 'app_json')]
+    public function jsonUrl()
+    {
+
+    }
+
+    #[Route('/{_locale}/personal/movies/ids', name: 'app_json_ids', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function jsonUserMovieIds(MovieController $movieController, UserMovieRepository $userMovieRepository): JsonResponse
+    {
+        return $this->json([
+            'movie_ids' => $movieController->getUserMovieIds($userMovieRepository),
+        ]);
+    }
+
+    private function getFilename($user): string
+    {
+        if ($user->getUsername()) {
+            $filename = strtolower($user->getUsername());
+        } else {
+            $email = explode('@', $user->getEmail());
+            $filename = $email[0];
+        }
+        $filename .= '_' . date("YmdHis") . '.json';
+        return $filename;
     }
 
     /**

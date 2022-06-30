@@ -44,9 +44,9 @@
                     {{ component('user_movie_search', {class: 'search', id: user.id, poster_url: imageConfig.url, poster_size: imageConfig.poster_sizes.3}) }}
                     <div class="export">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" id="export-button" class="btn btn-outline-secondary" data-id="{{ user.id }}" name="export-list">{{ 'Export'|trans }}</button>
-                        <button type="button" id="append-button" class="btn btn-outline-secondary" data-id="{{ user.id }}" name="append-list">{{ 'Append'|trans }}</button>
-                    </div>
+                            <button type="button" id="export-button" class="btn btn-secondary" data-id="{{ user.id }}" name="export-list">{{ 'Export'|trans }}</button>
+                            <button type="button" id="append-button" class="btn btn-secondary" data-id="{{ user.id }}" name="append-list">{{ 'Append'|trans }}</button>
+                        </div>
                     </div>
 
                 </div>
@@ -75,6 +75,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
+                    <button id="export-file" type="button" class="btn btn-primary"><a href="#" download="" id="json-link">{{ 'Download'|trans }} <i class="bi bi-file-arrow-down"></i></a></button>
                     <button id="export-copy" type="button" class="btn btn-primary">{{ 'Copy'|trans }} <i class="bi bi-clipboard2-plus"></i></button>
                 </div>
             </div>
@@ -91,6 +92,7 @@
                 <div class="modal-body">
                     <label for="json" class="form-label">{{ 'Select a Movie List File (.json)' }}</label>
                     <input type="file" id="json" name="json" accept="application/json" class="form-control form-control-sm">
+                    <div class="append-infos"></div>
                     <div class="append-result"></div>
                 </div>
                 <div class="modal-footer">
@@ -104,11 +106,12 @@
 {% block morejs %}
     <script>
         $(function () {
-            let json;
+            let json, ids, preview, infos;
+
             $('#export-button').click(function () {
                 let id = $(this).data('id');
                 let result = $('.modal-body').find('.export-result');
-                let count, movies, sample;
+                let count, movies, url, file, sample;
 
                 $.ajax({
                     url: "{{ path('app_personal_movies_export') }}",
@@ -118,7 +121,11 @@
                         count = data['count'];
                         movies = data['movies'];
                         json = data['json'];
+                        url = data['url'];
+                        file = data['file'];
                         sample = data['sample'];
+
+                        $('#json-link').attr({'href': url + file, 'download': file});
 
                         $(result).append('<div class="sample">' + sample + '</div>');
                         for (let i = 0; i < count; i++) {
@@ -129,42 +136,88 @@
                 })
             })
             $('#export-copy').click(function () {
+                let string = JSON.stringify(json, null, '\t');
                 navigator.clipboard.writeText(json).then(function () {
                     /* presse-papiers modifié avec succès */
-                    alert('Copied! (' + json.length + ' caractères)')
+                    alert('Copied! (' + string.length + ' caractères)')
                 }, function () {
                     /* échec de l’écriture dans le presse-papiers */
                     alert('Rejected!')
                 }).catch(err => alert(err));
             })
             $('#append-button').click(function () {
-                let preview = $('.append-result');
-
+                preview = $('.append-result');
+                infos = $('.append-infos');
                 $(preview).empty();
+                $(infos).empty();
+                $(infos).css('padding', '0');
+
+                $.ajax({
+                    url: "{{ path('app_json_ids') }}",
+                    method: 'GET',
+                    success: function (data) {
+                        ids = data['movie_ids'];
+                    }
+                })
                 new bootstrap.Modal(document.getElementById('appendModal'), {}).show();
             })
 
             $('input[name="json"]').change(function () {
-                let json,content;
-                let preview = $('.append-result');
+                let json, content, count = 0;
                 let add = $('#append-add');
                 let url = "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}";
                 let fr = new FileReader();
+                let locale = '{{ locale }}';
+                let txt = {
+                    'count': {'fr': 'Cette liste contient', 'en': 'This list counts', 'de': 'Diese Liste enthält', 'es': 'Esta lista contiene'},
+                    'movies': {'fr': 'films', 'en': 'movies', 'de': 'Filme', 'es': 'películas'},
+                    'movie': {'fr': 'film', 'en': 'movie', 'de': 'Film', 'es': 'película'},
+                    'present': {'fr': 'déjà présent dans ta vidéothèque a été retiré de la liste.', 'en': 'already in your video library has been removed from the list.', 'de': 'wurde aus der Liste entfernt, weil er in deiner Videothek vorhanden ist.', 'es': 'ha sido eliminada de la lista porque está presente en su videoteca'},
+                    'presents': {'fr': 'déjà présents dans ta vidéothèque ont été retirés de la liste.', 'en': 'already in your video library have been removed from the list.', 'de': 'wurden aus der Liste entfernt, weil sie in deiner Videothek vorhanden sind.', 'es': 'han sido eliminadas de la lista porque están presentes en su videoteca '},
+                    '': {'fr': '', 'en': '', 'de': '', 'es': ''},
+                    'space': ' '
+                }
                 fr.onload = function () {
                     json = fr.result;
                 }
                 fr.onloadend = function () {
                     content = JSON.parse(json);
                     $(preview).empty();
+                    $(infos).empty();
                     $(add).attr('disabled', 'disabled');
 
                     if (content['total_results']) {
                         for (let i = 0; i < content['total_results']; i++) {
                             let item = content['results'][i];
-                            $(preview).append('<div class="result-item"><img src="' + url + item['poster_path'] + '" alt="' + item['title'] + '"><div class="name">' + item['title'] + '</div><div class="check-add"></div></div>')
+                            if (!ids.includes(item['movie_db_id'])) {
+                                $(preview).append('<div class="result-item"><img src="' + url + item['poster_path'] + '" alt="' + item['title'] + '"><div class="name">' + item['title'] + '</div><div class="check-add" data-id="' + item['id'] + '" data-tmdb="' + item['movie_db_id'] + '"></div></div>');
+                                count++;
+                            }
                         }
+                        $(infos).css('padding', '.5em');
+                        let delta = content['total_results'] - count;
+                        $(infos).append('<div class="info">'+ txt.count[locale] + txt.space + content['total_results'] + txt.space + txt.movies[locale] + '.</div>');
+                        if (delta) {
+                            $(infos).append('<div class="info">' + delta + txt.space + txt[(delta>1)?'movies':'movie'][locale] + txt.space + (delta>1?txt.presents[locale]:txt.present[locale]) + '</div>');
+                        }
+                        $(infos).append(
+                            '<div class="select">' +
+                                '<div class="btn-group btn-group-sm" role="group" aria-label="Select - Unselect">' +
+                                    '<button name="select-all" type="button" class="btn btn-primary">Select all</button>' +
+                                    '<button name="unselect-all" type="button" class="btn btn-secondary">Unselect all</button>' +
+                                '</div>' +
+                            '</div>');
+
                         $('.check-add').click(function () {
                             $(this).toggleClass('active');
+                        });
+
+                        $('button[name="select-all"]').click(function () {
+                            $('.check-add').addClass('active');
+                        });
+
+                        $('button[name="unselect-all"]').click(function () {
+                            $('.check-add').removeClass('active');
                         });
                         $(add).removeAttr('disabled');
                     }
