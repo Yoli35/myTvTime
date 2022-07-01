@@ -124,47 +124,47 @@ class UserController extends AbstractController
         $locale = $request->getLocale();
         $movies = $userMovieRepository->findAllUserMovies($id);
         $count = count($movies);
-        $json = '{"total_results":'.$count.',"results":'.json_encode($movies).'}';
-
+        $json = $this->formatJson('{"total_results":'.$count.',"results":'.json_encode($movies).'}');
+        $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
         $sample = '{<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;<span>"total_results":</span> ' . $count . ',<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;<span>"results":</span> [<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"id":</span> '.$movies[0]['id'].'<span>,</span><br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"title":</span> "'.$movies[0]['title'].'"<span>,</span><br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"original_title":</span> "'.$movies[0]['original_title'].'"<span>,</span><br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"poster_path":</span> "\\'.$movies[0]['poster_path'].'"<span>,</span><br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"release_date":</span> "'.$movies[0]['release_date'].'"<span>,</span><br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"movie_db_id":</span> '.$movies[0]['movie_db_id'].',<span>,</span><br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"runtime":</span> '.$movies[0]['runtime'].'<span>,</span><br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_id":</span> '.$movies[0]['user_id'].'<span>,</span><br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_movie_id":</span> '.$movies[0]['user_movie_id'].'<br>'
-            .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}';
+            .$tab.'<span>"total_results":</span> ' . $count . ',<br>'
+            .$tab.'<span>"results":</span> [<br>'
+            .$tab.$tab.'{<br>'
+            .$tab.$tab.$tab.'<span>"id":</span> '.$movies[0]['id'].'<span>,</span><br>'
+            .$tab.$tab.$tab.'<span>"title":</span> "'.$movies[0]['title'].'"<span>,</span><br>'
+            .$tab.$tab.$tab.'<span>"original_title":</span> "'.$movies[0]['original_title'].'"<span>,</span><br>'
+            .$tab.$tab.$tab.'<span>"poster_path":</span> "\\'.$movies[0]['poster_path'].'"<span>,</span><br>'
+            .$tab.$tab.$tab.'<span>"release_date":</span> "'.$movies[0]['release_date'].'"<span>,</span><br>'
+            .$tab.$tab.$tab.'<span>"movie_db_id":</span> '.$movies[0]['movie_db_id'].',<span>,</span><br>'
+            .$tab.$tab.$tab.'<span>"runtime":</span> '.$movies[0]['runtime'].'<span>,</span><br>'
+            .$tab.$tab.$tab.'<span>"user_id":</span> '.$movies[0]['user_id'].'<span>,</span><br>'
+            .$tab.$tab.$tab.'<span>"user_movie_id":</span> '.$movies[0]['user_movie_id'].'<br>'
+            .$tab.$tab.'}';
 
         if ($count > 1) {
 
             if ($count > 2) {
                 switch ($locale) {
-                    case 'fr':     $sample .= ',<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>[...] /* et '.($count-2).' autre'.($count>3?'s':'').' */</i><br>'; break;
-                    case 'en':     $sample .= ',<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>[...] /* and '.($count-2).' more */</i><br>'; break;
-                    case 'de':     $sample .= ',<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>[...] /* und '.($count-2).' '.($count>3?'andere':'weiterer').' */</i><br>'; break;
-                    case 'es':     $sample .= ',<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>[...] /* y otro'.($count>3?'s ':' ').($count-2).' */</i><br>'; break;
+                    case 'fr':     $sample .= ',<br>'.$tab.$tab.'<i>[...] /* et '.($count-2).' autre'.($count>3?'s':'').' */</i><br>'; break;
+                    case 'en':     $sample .= ',<br>'.$tab.$tab.'<i>[...] /* and '.($count-2).' more */</i><br>'; break;
+                    case 'de':     $sample .= ',<br>'.$tab.$tab.'<i>[...] /* und '.($count-2).' '.($count>3?'andere':'weiterer').' */</i><br>'; break;
+                    case 'es':     $sample .= ',<br>'.$tab.$tab.'<i>[...] /* y otro'.($count>3?'s ':' ').($count-2).' */</i><br>'; break;
                 }
             }
-            $sample .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"id":</span> '.$movies[$count-1]['id'].'<span>,</span><br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"title":</span> "'.$movies[$count-1]['title'].'"<span>,</span><br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"original_title":</span> "'.$movies[$count-1]['original_title'].'"<span>,</span><br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"poster_path":</span> "\\'.$movies[$count-1]['poster_path'].'"<span>,</span><br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"release_date":</span> "'.$movies[$count-1]['release_date'].'"<span>,</span><br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"movie_db_id":</span> '.$movies[$count-1]['movie_db_id'].'<span>,</span><br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"runtime":</span> '.$movies[$count-1]['runtime'].'<span>,</span><br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_id":</span> '.$movies[$count-1]['user_id'].'<span>,</span><br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>"user_movie_id":</span> '.$movies[$count-1]['user_movie_id'].'<br>'
-                .'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}';
+            $sample .= $tab.$tab.'{<br>'
+                .$tab.$tab.$tab.'<span>"id":</span> '.$movies[$count-1]['id'].'<span>,</span><br>'
+                .$tab.$tab.$tab.'<span>"title":</span> "'.$movies[$count-1]['title'].'"<span>,</span><br>'
+                .$tab.$tab.$tab.'<span>"original_title":</span> "'.$movies[$count-1]['original_title'].'"<span>,</span><br>'
+                .$tab.$tab.$tab.'<span>"poster_path":</span> "\\'.$movies[$count-1]['poster_path'].'"<span>,</span><br>'
+                .$tab.$tab.$tab.'<span>"release_date":</span> "'.$movies[$count-1]['release_date'].'"<span>,</span><br>'
+                .$tab.$tab.$tab.'<span>"movie_db_id":</span> '.$movies[$count-1]['movie_db_id'].'<span>,</span><br>'
+                .$tab.$tab.$tab.'<span>"runtime":</span> '.$movies[$count-1]['runtime'].'<span>,</span><br>'
+                .$tab.$tab.$tab.'<span>"user_id":</span> '.$movies[$count-1]['user_id'].'<span>,</span><br>'
+                .$tab.$tab.$tab.'<span>"user_movie_id":</span> '.$movies[$count-1]['user_movie_id'].'<br>'
+                .$tab.$tab.'}';
         }
 
-        $sample .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>}';
+        $sample .= '<br>'.$tab.']<br>}';
 
         /** @var User $user */
         $user = $this->getUser();
@@ -176,7 +176,6 @@ class UserController extends AbstractController
         fclose($file);
 
         $url = $this->generateUrl('app_json');// . $filename;
-        dump($url);
 
         return $this->json([
             'count' => $count,
@@ -212,6 +211,73 @@ class UserController extends AbstractController
         }
         $filename .= '_' . date("YmdHis") . '.json';
         return $filename;
+    }
+
+    public function formatJson($json, $indentChars = null): string
+    {
+        $il = strlen($json);
+        $tab = $indentChars ?: "    ";
+        $newJson = "";
+        $indentLevel = 0;
+        $inString = false;
+
+        for ($i=0; $i < $il; $i++)
+        {
+            $currentChar = $json[$i];
+
+            switch ($currentChar) {
+                case '{':
+                case '[':
+                    if (!$inString) {
+                        $newJson .= $currentChar . "\n" . str_repeat($tab, $indentLevel + 1);
+                        $indentLevel++;
+                    } else {
+                        $newJson .= $currentChar;
+                    }
+                    break;
+                case '}':
+                case ']':
+                    if (!$inString) {
+                        $indentLevel--;
+                        $newJson .= "\n" . str_repeat($tab, $indentLevel) . $currentChar;
+                    } else {
+                        $newJson .= $currentChar;
+                    }
+                    break;
+                case ',':
+                    if (!$inString) {
+                        $newJson .= ",\n" . str_repeat($tab, $indentLevel);
+                    } else {
+                        $newJson .= $currentChar;
+                    }
+                    break;
+                case ':':
+                    if (!$inString) {
+                        $newJson .= ": ";
+                    } else {
+                        $newJson .= $currentChar;
+                    }
+                    break;
+                case ' ':
+                case "\n":
+                case "\t":
+                    if ($inString) {
+                        $newJson .= $currentChar;
+                    }
+                    break;
+                case '"':
+                    if ($i > 0 && $json[$i - 1] !== '\\') {
+                        $inString = !$inString;
+                    }
+                    $newJson .= $currentChar;
+                    break;
+                default:
+                    $newJson .= $currentChar;
+                    break;
+            }
+        }
+
+        return $newJson;
     }
 
     /**
