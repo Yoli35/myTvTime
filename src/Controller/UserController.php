@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserMovie;
 use App\Form\UserType;
 use App\Repository\UserMovieRepository;
 use App\Service\BetaSeriesService;
+use App\Service\CallTmdbService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
 use App\Service\WeatherService;
@@ -87,7 +89,6 @@ class UserController extends AbstractController
     #[Route('/{_locale}/personal/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
     public function userMovies(Request $request, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
-        /** TODO  Export Movie List as a json file */
         /** TODO  Progressive Load of Movie List */
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -115,6 +116,25 @@ class UserController extends AbstractController
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfig,
         ]);
+    }
+
+    /**
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    #[Route('/{_locale}/personal/movies/add', name: 'app_personnel_movie_add', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function add(Request $request, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager, MovieController $movieController): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+        $progressValue = $request->query->get('progress_value');
+        $locale = $request->getLocale();
+
+        $userMovie = $movieController->addMovie($user, $movieId, $locale, $callTmdbService, $userMovieRepository, $entityManager);
+
+        return $this->json(['title' => $userMovie->getTitle(), 'progress_value' => $progressValue]);
     }
 
     #[Route('/{_locale}/personal/movies/export', name: 'app_personal_movies_export', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -175,7 +195,7 @@ class UserController extends AbstractController
         fwrite($file, $json);
         fclose($file);
 
-        $url = $this->generateUrl('app_json');// . $filename;
+        $url = $this->generateUrl('app_json');
 
         return $this->json([
             'count' => $count,
@@ -191,6 +211,15 @@ class UserController extends AbstractController
     public function jsonUrl()
     {
 
+    }
+
+    #[Route('/{_locale}/movielist/cleanup', name: 'app_json_cleanup', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function cleanup(Request $request): JsonResponse
+    {
+        $ret = unlink($this->getParameter('movie_list_directory') . '/' . $request->query->get('filename'));
+        return $this->json([
+            'result' => $ret,
+        ]);
     }
 
     #[Route('/{_locale}/personal/movies/ids', name: 'app_json_ids', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -213,6 +242,14 @@ class UserController extends AbstractController
         return $filename;
     }
 
+    /*
+     * Manual formatter taken straight from https://github.com/umbrae/jsonlintdotcom
+     *      -> https://github.com/umbrae/jsonlintdotcom/blob/master/c/js/jsl.format.js
+     * From Javascript to Php
+     * Provide json reformatting in a character-by-character approach, so that even
+     * invalid JSON may be reformatted (to the best of its ability).
+     */
+
     public function formatJson($json, $indentChars = null): string
     {
         $il = strlen($json);
@@ -221,8 +258,7 @@ class UserController extends AbstractController
         $indentLevel = 0;
         $inString = false;
 
-        for ($i=0; $i < $il; $i++)
-        {
+        for ($i = 0; $i < $il; $i++) {
             $currentChar = $json[$i];
 
             switch ($currentChar) {
@@ -289,7 +325,7 @@ class UserController extends AbstractController
     public function setRandomBanner(BetaSeriesService $betaSeriesService): array
     {
         $standing = $betaSeriesService->showsList(rand(1, 10));
-        $discovers = json_decode($standing, true, 512, 0);
+        $discovers = json_decode($standing, true);
         $discover = $discovers['shows'][rand(0, 19)];
         $banner['image'] = $discover['images']['show'] ? : $discover['images']['banner'];
         $banner['title'] = $discover['title'];

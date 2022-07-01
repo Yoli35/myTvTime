@@ -1,5 +1,11 @@
-a, a:hover, a:visited, .nav-link  {
+a, a:visited,
+.nav-link, .nav-link:focus   {
     color: #383838;
+    text-decoration: none;
+}
+
+a:hover, .nav-link:hover   {
+    color: #5b3b16;
     text-decoration: none;
 }
 
@@ -516,8 +522,14 @@ h2 {
         --bs-body-color: #dbdbdb;
     }
 
-    a, a:hover, a:visited, .nav-link  {
+    a, a:visited,
+    .nav-link, .nav-link:focus {
         color: #bdbdbd;
+    }
+
+    a:hover, .nav-link:hover   {
+        color: #d08530;
+        text-decoration: none;
     }
 
     .container,

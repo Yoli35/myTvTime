@@ -84,7 +84,7 @@
 
     <div class="modal fade" id="appendModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content position-relative">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ 'Append'|trans }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -99,6 +99,14 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
                     <button id="append-add" type="button" class="btn btn-primary" disabled>{{ 'Add'|trans }} <i class="bi bi-download"></i></button>
                 </div>
+                <div class="append-progress">
+                    <div class="progress">
+                        <div class="label">{{ 'Progress'|trans }} :</div>
+                        <div class="bar">
+                            <div class="value"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -106,7 +114,7 @@
 {% block morejs %}
     <script>
         $(function () {
-            let json, ids, preview, infos;
+            let json, ids, preview, infos, exportFile;
 
             $('#export-button').click(function () {
                 let id = $(this).data('id');
@@ -132,6 +140,8 @@
                             $(result).append('<div class="result-item">' + movies[i]['title'] + '</div>')
                         }
                         new bootstrap.Modal(document.getElementById('exportModal'), {}).show();
+
+                        exportFile = file;
                     }
                 })
             })
@@ -161,7 +171,6 @@
                 })
                 new bootstrap.Modal(document.getElementById('appendModal'), {}).show();
             })
-
             $('input[name="json"]').change(function () {
                 let json, content, count = 0;
                 let add = $('#append-add');
@@ -174,6 +183,7 @@
                     'movie': {'fr': 'film', 'en': 'movie', 'de': 'Film', 'es': 'película'},
                     'present': {'fr': 'déjà présent dans ta vidéothèque a été retiré de la liste.', 'en': 'already in your video library has been removed from the list.', 'de': 'wurde aus der Liste entfernt, weil er in deiner Videothek vorhanden ist.', 'es': 'ha sido eliminada de la lista porque está presente en su videoteca'},
                     'presents': {'fr': 'déjà présents dans ta vidéothèque ont été retirés de la liste.', 'en': 'already in your video library have been removed from the list.', 'de': 'wurden aus der Liste entfernt, weil sie in deiner Videothek vorhanden sind.', 'es': 'han sido eliminadas de la lista porque están presentes en su videoteca '},
+                    'none': {'fr': 'Aucun film à ajouter', 'en': 'No film to add', 'de': 'Keine Filme hinzufügen', 'es': 'No hay que añadir ninguna película'},
                     '': {'fr': '', 'en': '', 'de': '', 'es': ''},
                     'space': ' '
                 }
@@ -200,13 +210,20 @@
                         if (delta) {
                             $(infos).append('<div class="info">' + delta + txt.space + txt[(delta>1)?'movies':'movie'][locale] + txt.space + (delta>1?txt.presents[locale]:txt.present[locale]) + '</div>');
                         }
-                        $(infos).append(
-                            '<div class="select">' +
-                                '<div class="btn-group btn-group-sm" role="group" aria-label="Select - Unselect">' +
-                                    '<button name="select-all" type="button" class="btn btn-primary">Select all</button>' +
-                                    '<button name="unselect-all" type="button" class="btn btn-secondary">Unselect all</button>' +
-                                '</div>' +
-                            '</div>');
+                        if (count) {
+                            $(infos).append(
+                                '<div class="select">' +
+                                '   <div class="btn-group btn-group-sm" role="group" aria-label="Select - Unselect">' +
+                                '       <button name="select-all" type="button" class="btn btn-primary">Select all</button>' +
+                                '       <button name="unselect-all" type="button" class="btn btn-secondary">Unselect all</button>' +
+                                '   </div>' +
+                                '</div>');
+                        }
+                        else {
+                            $(infos).append(
+                                '<div class="none">' + txt.none[locale] + '</div>'
+                            );
+                        }
 
                         $('.check-add').click(function () {
                             $(this).toggleClass('active');
@@ -223,6 +240,54 @@
                     }
                 }
                 fr.readAsText(this.files[0]);
+            })
+            $('#append-add').click(function () {
+                let selected = $('.check-add.active');
+                let progress = $('.append-progress');
+                let value = $('.value');
+                let i, n = selected.length, pv = 0;
+
+                $(progress).css('display', 'flex');
+                $(value).css('width', '0%');
+
+                for (i=0; i<n; i++) {
+                    let movie = selected[i];
+                    let tmdb_id = $(movie).data('tmdb');
+                    let val = (100 * (i / n)).toFixed();
+                    console.log(val);
+
+                    $.ajax({
+                        url: "{{ path('app_personnel_movie_add') }}",
+                        method: 'GET',
+                        data: {movie_db_id: tmdb_id, progress_value: val},
+                        success: function (data) {
+                            pv++;
+                            $(value).css('width', (100 * (pv / n)).toFixed() + '%');
+                            console.log(data['title'] + ' - ' + data['progress_value'] + '%');
+
+                            if (pv === n) {
+                                setTimeout(() => {
+                                    console.log("Ajout terminé.");
+                                    $(progress).css('display', 'none');
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        }
+                    })
+                }
+            })
+
+            const myModalEl = document.getElementById('exportModal')
+            myModalEl.addEventListener('hidden.bs.modal', event => {
+
+                $.ajax({
+                    url: "{{ path('app_json_cleanup') }}",
+                    method: 'GET',
+                    data: {filename: exportFile},
+                    success: function (data) {
+                        console.log(data['result'])
+                    }
+                })
             })
         })
     </script>

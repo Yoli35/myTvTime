@@ -354,19 +354,25 @@ class MovieController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/movie/add', name: 'app_movie_add')]
-    public function addMovieToUser(Request $request, CallTmdbService $callTmdbService, ManagerRegistry $doctrine, EntityManagerInterface $entityManager): JsonResponse
+    public function addMovieToUser(Request $request, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         $movieId = $request->query->get('movie_db_id');
-
         $locale = $request->getLocale();
-        $standing = $callTmdbService->getMovie($movieId, $locale);
-        $movieDetail = json_decode($standing, true, 512, 0);
 
-        $userMovie = $doctrine->getRepository(UserMovie::class)->findOneBy(['movieDbId' => $movieId]);
+        $userMovie = $this->addMovie($user, $movieId, $locale, $callTmdbService, $userMovieRepository, $entityManager);
+        return $this->json(['title' => $userMovie->getTitle()]);
+    }
+
+    public function addMovie($user, $movieId, $locale, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager):UserMovie
+    {
+        $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
 
         if (!$userMovie) {
+            $standing = $callTmdbService->getMovie($movieId, $locale);
+            $movieDetail = json_decode($standing, true);
+
             $userMovie = new UserMovie();
             $userMovie->setTitle($movieDetail['title']);
             $userMovie->setOriginalTitle($movieDetail['original_title']);
@@ -379,7 +385,7 @@ class MovieController extends AbstractController
         $entityManager->persist($userMovie);
         $entityManager->flush();
 
-        return $this->json([]);
+        return $userMovie;
     }
 
     #[Route('/movie/remove', name: 'app_movie_remove')]

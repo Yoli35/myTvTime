@@ -50,7 +50,7 @@ class YoutubeController extends AbstractController
         $videoId = $id;
         $video = $repository->find($videoId);
         $description = nl2br($video->getDescription());
-        $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@#_-]+)@i', '$1<a href="$2" target="_blank">$2</a>', $description);
+        $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i', '$1<a href="$2" target="_blank">$2</a>', $description);
         $description = preg_replace('#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#','<a href="mailto:$1">$1</a>', $description);
 
 
