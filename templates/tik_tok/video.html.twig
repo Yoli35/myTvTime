@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'my TvTime::YoutubeVideo' }}{% endblock %}
+{% set user = app.user %}
+{% block morecss %}
+    <link href="/css/tiktok.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    <div class="container">
+
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_tik_tok') }}">{{ 'My TikTok Videos'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ video.authorUrl }}" target="_blank">{{ video.authorName }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ video.title }}">{{ video.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="tt-video-page">
+            <div class="row">
+                <div class="col-md-10 offset-md-1 col-sm-12 offset-sm-0">
+                    <div class="video">
+                        {{ video.html|raw }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}

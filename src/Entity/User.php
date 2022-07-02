@@ -55,9 +55,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'users')]
     private $movies;
 
+    #[ORM\ManyToMany(targetEntity: TikTokVideo::class, inversedBy: 'users')]
+    private $tiktoks;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
+        $this->tiktoks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -264,6 +268,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeMovie(UserMovie $movie): self
     {
         $this->movies->removeElement($movie);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TikTokVideo>
+     */
+    public function getTiktoks(): Collection
+    {
+        return $this->tiktoks;
+    }
+
+    public function addTiktok(TikTokVideo $tiktok): self
+    {
+        if (!$this->tiktoks->contains($tiktok)) {
+            $this->tiktoks[] = $tiktok;
+        }
+
+        return $this;
+    }
+
+    public function removeTiktok(TikTokVideo $tiktok): self
+    {
+        $this->tiktoks->removeElement($tiktok);
 
         return $this;
     }

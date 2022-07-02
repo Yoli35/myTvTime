@@ -16,6 +16,10 @@ My Movies: Mis películas
 Another action: Easy Admin
 Logout: Cerrar sesión
 Navigation: Navegación
+French: Francés
+English: Inglés
+German: Alemán
+Spanish: Español
 
 # Registration
 Register: Registro
@@ -174,6 +178,10 @@ secondes: segundos
 and: y
 For example: Por ejemplo
 or: o
+
+#TikTok
+My TikTok Videos: Mis vídeos de TikTok
+TikTok Link: Enlace de TikTok
 
 # User Account
 User Account: Actualizar el perfil

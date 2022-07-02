@@ -27,10 +27,13 @@
                 <li class="nav-item mt-2">
                     <a class="nav-link{% if user is null %} disabled{% endif %}" href="{{ path('app_youtube') }}">{{ 'Youtube' }}</a>
                 </li>
+                <li class="nav-item mt-2">
+                    <a class="nav-link{% if user is null %} disabled{% endif %}" href="{{ path('app_tik_tok') }}">{{ 'TikTok' }}</a>
+                </li>
                 <li class="nav-item dropdown mt-2 user-menu">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {% if user.avatar is defined and  user.avatar|length %}
-                            <img class="user-menu-img" src="/images/users/avatars/{{ user.avatar }}">
+                            <img class="user-menu-img" src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username }}">
                         {% else %}
                             <i class="bi bi-person-circle"></i>
                         {% endif %}
@@ -54,10 +57,10 @@
                             {% set params = '' %}
                             {% if route in ['app_movies_search'] %} {% set params = '?query='~query~'&year='~year %} {% endif %}
                             <div class="locale">
-                                <a href="/fr{{ path[3:]~params }}"><img src="/images/interface/fr.png"></a>
-                                <a href="/en{{ path[3:]~params }}"><img src="/images/interface/en.png"></a>
-                                <a href="/de{{ path[3:]~params }}"><img src="/images/interface/de.png"></a>
-                                <a href="/es{{ path[3:]~params }}"><img src="/images/interface/es.png"></a>
+                                <a href="/fr{{ path[3:]~params }}"><img src="/images/interface/fr.png" alt="{{ 'French'|trans }}"></a>
+                                <a href="/en{{ path[3:]~params }}"><img src="/images/interface/en.png" alt="{{ 'English'|trans }}"></a>
+                                <a href="/de{{ path[3:]~params }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}"></a>
+                                <a href="/es{{ path[3:]~params }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}"></a>
                             </div>
                         </li>
                         <li>

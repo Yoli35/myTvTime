@@ -1,0 +1,120 @@
+.tt-videos {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    margin: 1em;
+}
+
+.tt-videos-none {
+    background-color: #808080;
+    border-radius: .25em;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3em;
+    font-weight: normal;
+    margin: 2em;
+    padding: 1em 2em;
+    text-align: center;
+}
+
+.tt-videos .getter {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.tt-videos .parameters {
+    align-items: center;
+    background-color: #f8d1d1;
+    border-radius: .5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 0 1em;
+    padding: 1em;
+    width: 80%;
+}
+
+.tt-videos .parameters label {
+    margin-left: 0;
+}
+
+.tt-videos .result {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tt-video {
+    align-items: center;
+    background-color: #f8d1d1;
+    border-radius: .5em;
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+    overflow: hidden;
+}
+
+.tt-videos .thumbnail img {
+    height: auto;
+    width: 20em;
+}
+
+.tt-video .details {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: .5em;
+    width: 20em;
+}
+
+.tt-video .author,
+.tt-video-page .details .author .thumbnail {
+    align-items: center;
+    background-color: #c94b4b;
+    border: 2px solid #bdbdbd;
+    border-radius: 50%;
+    display: flex;
+    height: 2em;
+    flex: none;
+    font-size: 2em;
+    font-weight: 400;
+    justify-content: center;
+    width: 2em;
+}
+
+.tt-video .author img,
+.tt-video-page .details .author .thumbnail img {
+    border-radius: 50%;
+}
+
+.tt-video .infos {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1em;
+}
+
+.tt-video .info {
+    font-family: 'Montserrat', sans-serif;
+    font-size: .75em;
+    font-weight: 400;
+}
+
+.tt-video-page {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+.tt-video-page .details {
+
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .tt-videos .parameters {
+        background-color: #3c2424;
+    }
+
+    .tt-video {
+        background-color: #3c2424;
+    }
+}

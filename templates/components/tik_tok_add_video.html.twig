@@ -1,0 +1,48 @@
+<div {{ attributes }}>
+    <h1>
+        {{ this.tik_tok_results.count ?: 'No'|trans }}
+        {% if this.tik_tok_results.count > 1 %}
+            {{ 'Videos'|trans }}
+        {% else %}
+            {{ 'Video'|trans }}
+        {% endif %}
+    </h1>
+    {#    <h5>{{ this.tik_tok_results.seconds2human }}</h5> #}
+    <div class="parameters">
+        <div class="row">
+            <div class="col align-items-center justify-content-center h-100 w-100">
+                <label>{{ 'TikTok Link'|trans }} :
+                    <input id="" type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
+                </label>
+            </div>
+        </div>
+    </div>
+    {% if this.tik_tok_results.count %}
+        <div class="result">
+            {% for item in this.tik_tok_results.videos %}
+                <div class="tt-video">
+                    <a href="{{ path('app_tik_tok_video', {id: item.id}) }}">
+                        <div class="thumbnail">
+                            <img src="{{ item.thumbnail_url }}" alt="{{ item.title }}">
+                        </div>
+                        <div class="details">
+                            <div class="author">
+                                <a href="{{ item.author_url }}" target="_blank">
+                                    <span data-descr="{{ item.author_name }}">
+                                        {{ item.author_name|first }}
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="infos">
+                                <div class="info">{{ item.title }}</div>
+                                <div class="info">{{ 'Added at'|trans }} : {{ item.added_at|format_date('short') }}</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
+    {% endif %}
+</div>

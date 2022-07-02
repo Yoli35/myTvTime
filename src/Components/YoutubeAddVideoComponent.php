@@ -81,7 +81,7 @@ class YoutubeAddVideoComponent
 
         if (str_contains($thisLink, 'https://www.youtube.com/watch?v=') ||
             str_contains($thisLink, 'https://www.youtube.com/shorts/') ||
-            str_contains($thisLink, 'https://youtu.be/')) //        if (in_array(strlen($thisLink), [28, 42, 43]))
+            str_contains($thisLink, 'https://youtu.be/'))
         {
             $thisLink = substr($thisLink, -11);
         }
@@ -102,7 +102,7 @@ class YoutubeAddVideoComponent
 
                 if ($channel == null) {
 
-                    $channelListResponse = $this->getChannellSnippet($snippet['channelId']);
+                    $channelListResponse = $this->getChannelSnippet($snippet['channelId']);
                     $items = $channelListResponse->getItems();
                     $item = $items[0];
                     $snippet = $item['snippet'];
@@ -189,7 +189,7 @@ class YoutubeAddVideoComponent
         return $this->service_YouTube->videos->listVideos('contentDetails, snippet', ['id' => $videoId]);
     }
 
-    private function getChannellSnippet($channelId): ChannelListResponse
+    private function getChannelSnippet($channelId): ChannelListResponse
     {
         return $this->service_YouTube->channels->listChannels('snippet', ['id' => $channelId]);
     }

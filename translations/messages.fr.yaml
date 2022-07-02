@@ -16,6 +16,10 @@ My Movies: Mes films
 Another action: Easy Admin
 Logout: Déconnexion
 Navigation: Navigation
+French: Français
+English: Anglais
+German: Allemand
+Spanish: Espagnol
 
 # Registration
 Register: S'enregistrer
@@ -177,6 +181,11 @@ seconde: seconde
 secondes: secondes
 For example: Par exemple
 or: ou
+
+#TikTok
+My TikTok Videos: Mes vidéos TikTok
+TikTok Link: Lien TikTok
+Added at: Ajoutée le
 
 # User Account
 User Account: Compte utilisateur
