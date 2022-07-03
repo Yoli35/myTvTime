@@ -11,10 +11,15 @@ a:hover, .nav-link:hover   {
 
 h1, h1 > a, h2, h2 > a {
     color: #30393d;
+    font-weight: 100;
 }
 
 h2 {
     margin-top: .5em;
+}
+
+h4 {
+    font-weight: 100;
 }
 
 .logo {
@@ -266,6 +271,7 @@ h2 {
     align-items: center;
     display: flex;
     flex-direction: column;
+    font-weight: 100;
     justify-content: center;
     width: 100%;
 }
@@ -304,7 +310,7 @@ h2 {
 
 .home-discover-title {
     color: #254e5f;
-    font-weight: bold;
+    /*font-weight: bold;*/
     margin-top: auto;
     text-align: center;
 }

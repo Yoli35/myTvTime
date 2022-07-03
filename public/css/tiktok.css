@@ -59,7 +59,7 @@ body {
 
 .tt-videos .thumbnail img {
     height: auto;
-    width: 20em;
+    width: 15em;
 }
 
 .tt-video .details {
@@ -68,7 +68,7 @@ body {
     flex-direction: row;
     justify-content: flex-start;
     padding: .5em;
-    width: 20em;
+    width: 15em;
 }
 
 .tt-video .author,

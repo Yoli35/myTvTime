@@ -124,6 +124,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    font-weight: 100;
     justify-content: center;
     margin-top: 3em;
     width: 100%;
@@ -212,6 +213,7 @@
     background-color: #0d5e42;
     border-radius: .25em;
     color: #0dcaf0;
+    cursor: pointer;
     margin: .125em;
     padding: 0 .25em;
 }
@@ -219,6 +221,11 @@
 .export-result .result-item:hover {
     background-color: #ffe4ab;
     color: #073f53;
+}
+
+.export-result .result-item.active {
+    background-color: #3487bb;
+    color: #c8f1ff;
 }
 
 .append-infos {

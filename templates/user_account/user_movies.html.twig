@@ -142,6 +142,10 @@
                         new bootstrap.Modal(document.getElementById('exportModal'), {}).show();
 
                         exportFile = file;
+
+                        $('.result-item').click(function () {
+                            $(this).toggleClass("active")
+                        })
                     }
                 })
             })
