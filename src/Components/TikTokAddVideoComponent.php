@@ -6,6 +6,8 @@ use App\Entity\TikTokVideo;
 use App\Entity\User;
 use App\Repository\TikTokVideoRepository;
 use App\Service\TikTokService;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -29,17 +31,22 @@ class TikTokAddVideoComponent
     private User $user;
     private TikTokService $tikTokService;
     private TikTokVideoRepository $tikTokVideoRepository;
+    private EntityManagerInterface $entityManager;
+    private array $videos = [];
 
-    public function __construct(Security $security, TikTokService $tikTokService, TikTokVideoRepository $tikTokVideoRepository)
+    public function __construct(Security $security, TikTokService $tikTokService, TikTokVideoRepository $tikTokVideoRepository, EntityManagerInterface $entityManager)
     {
         $this->user = $security->getUser();
         $this->tikTokService = $tikTokService;
         $this->tikTokVideoRepository = $tikTokVideoRepository;
+        $this->entityManager = $entityManager;
+        
     }
 
     public function mount($locale): void
     {
         $this->locale = $locale;
+        $this->videos = $this->tikTokVideoRepository->findUserTikToksByDate($this->user->getId());
     }
 
     /**
@@ -51,29 +58,23 @@ class TikTokAddVideoComponent
     #[ArrayShape(['videos' => "array", 'count' => "int"])]
     public function tik_tok_results(): array
     {
-        // https://www.tiktok.com/@thebillykeogh/video/7105165118501113134?is_from_webapp=1&sender_device=pc
-        // https://www.tiktok.com/@scout2015/video/6718335390845095173
-        // https://www.tiktok.com/@thebillykeogh/video/7028634202757451055?is_from_webapp=1&sender_device=pc&web_id=7113996049588979205
         $thisLink = $this->link;
-        dump($thisLink);
+        $is_there_a_new_one = false;
 
         if (str_contains($thisLink, "https://www.tiktok.com/") && str_contains($thisLink, "video")) {
-            dump('Seems to be a TikTok video link');
 
             $hasParam = strpos($thisLink, '?');
             if ($hasParam) {
                 $thisLink = substr($thisLink, 0, $hasParam);
             }
-            dump($hasParam, $thisLink);
 
             $videoId = substr($thisLink, -19);
-            dump($videoId);
 
             $video = $this->tikTokVideoRepository->findBy(['videoId' => $videoId]);
 
             if ($video == null) {
                 $tiktok = json_decode($this->tikTokService->getVideo($thisLink), true);
-                dump($tiktok);
+
                 $video = new TikTokVideo();
                 $video->setVersion($tiktok['version']);
                 $video->setType($tiktok['type']);
@@ -89,13 +90,50 @@ class TikTokAddVideoComponent
                 $video->setThumbnailHeight($tiktok['thumbnail_height']);
                 $video->setProviderUrl($tiktok['provider_url']);
                 $video->setProviderName($tiktok['provider_name']);
-                $video->setAddedAt(new \DateTimeImmutable());
+                $addedAt = new \DateTimeImmutable();
+                $video->setAddedAt($addedAt->setTimezone((new \DateTime())->getTimezone()));
                 $video->addUser($this->user);
 
                 $this->tikTokVideoRepository->add($video, true);
+
+                $is_there_a_new_one = true;
             }
         }
-        $videos = $this->tikTokVideoRepository->findUserTikToksByDate($this->user->getId());
-        return ['videos' => $videos, 'count' => count($videos)];
+
+        if (!count($this->videos) || $is_there_a_new_one) {
+            $this->videos = $this->tikTokVideoRepository->findUserTikToksByDate($this->user->getId());
+        }
+        return ['videos' => $this->videos, 'count' => count($this->videos)];
+    }
+
+    public function thumbnail($item):string
+    {
+        // https://p16-sign-va.tiktokcdn.com/obj/tos-maliva-p-0068/6de148409b5d4a1fb4e752a0a2dd8001?x-expires=1656820800&x-signature=LV%2BoEEUMowEgWFRsWb97JEZfQDg%3D
+        $tiktok = $item['tiktok'];
+        $videoId = $tiktok['video_id'];
+
+        //
+        // Les liens des thumbnails expirent au bout de quelques heures
+        //
+        $thumbnail = $tiktok['thumbnail_url'];
+        $x_expires = intval(substr($thumbnail, strpos($thumbnail, "x-expires") + 10, 10));
+
+        $date = new DateTime();
+        $now = $date->getTimestamp();
+
+        //
+        // Si c'est le cas, mise à jour de la vidéo avec un nouveau lien
+        //
+        if ($now >= $x_expires) {
+            $link = $tiktok['author_url'] . '/video/' . $tiktok['video_id'];
+            $tiktok = json_decode($this->tikTokService->getVideo($link), true);
+
+            /** @var TikTokVideo $video */
+            $video = $this->tikTokVideoRepository->findOneBy(['videoId' => $videoId]);
+            $video->setThumbnailUrl($tiktok['thumbnail_url']);
+            $this->entityManager->persist($video);
+            $this->entityManager->flush();
+        }
+        return $tiktok['thumbnail_url'];
     }
 }

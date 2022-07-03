@@ -18,7 +18,16 @@
                 <li class="breadcrumb-item active" aria-current="{{ 'My TikTok Videos'|trans }}">{{ 'My TikTok Videos'|trans }}</li>
             </ol>
         </nav>
-
+        <script>
+            $(function () {
+                let link = $('input[name="link"]');
+                $(link).change(function () {
+                    setTimeout(function () {
+                        $(link).val("");
+                    }, 1000);
+                })
+            })
+        </script>
         <div class="tt-videos">
             {{ component('tik_tok_add_video', {class: 'getter', 'id': user.id, 'locale': locale}) }}
         </div>

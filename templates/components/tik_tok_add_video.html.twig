@@ -1,18 +1,13 @@
 <div {{ attributes }}>
-    <h1>
-        {{ this.tik_tok_results.count ?: 'No'|trans }}
-        {% if this.tik_tok_results.count > 1 %}
-            {{ 'Videos'|trans }}
-        {% else %}
-            {{ 'Video'|trans }}
-        {% endif %}
+    <h1 style="font-weight: 100">
+        {{ this.tik_tok_results.count ?: 'No'|trans }} {{ this.tik_tok_results.count > 1 ? 'Videos'|trans : 'Video'|trans }}
     </h1>
     {#    <h5>{{ this.tik_tok_results.seconds2human }}</h5> #}
     <div class="parameters">
         <div class="row">
             <div class="col align-items-center justify-content-center h-100 w-100">
                 <label>{{ 'TikTok Link'|trans }} :
-                    <input id="" type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
+                    <input id="link" type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
                 </label>
             </div>
         </div>
@@ -23,7 +18,7 @@
                 <div class="tt-video">
                     <a href="{{ path('app_tik_tok_video', {id: item.id}) }}">
                         <div class="thumbnail">
-                            <img src="{{ item.thumbnail_url }}" alt="{{ item.title }}">
+                            <img src="{{ this.thumbnail({tiktok: item}) }}" alt="{{ item.title }}">
                         </div>
                         <div class="details">
                             <div class="author">
@@ -35,7 +30,7 @@
                             </div>
                             <div class="infos">
                                 <div class="info">{{ item.title }}</div>
-                                <div class="info">{{ 'Added at'|trans }} : {{ item.added_at|format_date('short') }}</div>
+                                <div class="info mt-2">{{ 'Added at'|trans }} : {{ item.added_at|format_datetime('full', 'medium') }}</div>
                             </div>
                         </div>
                     </a>

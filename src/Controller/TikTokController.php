@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TikTokController extends AbstractController
 {
-    #[Route('/tik/tok', name: 'app_tik_tok')]
+    #[Route('/{_locale}/tik/tok', name: 'app_tik_tok', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

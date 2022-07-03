@@ -57,7 +57,7 @@ class TikTokVideo
     #[ORM\Column(type: 'string', length: 255)]
     private $providerName;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'datetime')]
     private $addedAt;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'tiktoks')]

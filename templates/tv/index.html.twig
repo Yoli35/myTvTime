@@ -57,26 +57,30 @@
                         <div class="date">
                             {{ 'Last Air Date'|trans }} : <span class="data">{{ tv.last_air_date|format_date('short') }}</span>
                         </div>
-                        <div class="last_episode_to_air">
-                            <span class="label">{{ 'Last Episode to air'|trans }} : </span><span class="data">{{ tv.last_episode_to_air.name }}</span>
-                            <div class="date">
-                                {{ 'Air Date'|trans }} : <span class="data">{{ tv.last_episode_to_air.air_date|format_date('short') }}</span>
+                        {% if tv.last_episode_to_air %}
+                            <div class="last_episode_to_air">
+                                <span class="label">{{ 'Last Episode to air'|trans }} : </span><span class="data">{{ tv.last_episode_to_air.name }}</span>
+                                <div class="date">
+                                    {{ 'Air Date'|trans }} : <span class="data">{{ tv.last_episode_to_air.air_date|format_date('short') }}</span>
+                                </div>
+                                <div class="episode_number">
+                                    {{ 'Episode Number'|trans }} : <span class="data">{{ tv.last_episode_to_air.episode_number }}</span>
+                                </div>
+                                <div class="season_number">
+                                    {{ 'Season Number'|trans }} : <span class="data">{{ tv.last_episode_to_air.season_number }}</span>
+                                </div>
+                                {% if tv.last_episode_to_air.still_path %}
+                                    <div class="still">
+                                        <img src="{{ imageConfig.url }}{{ imageConfig.still_sizes.3 }}{{ tv.last_episode_to_air.still_path }}" class="d-block w-100" alt="{{ tv.last_episode_to_air.name }}">
+                                    </div>
+                                {% endif %}
+                                {% if tv.last_episode_to_air.overview %}
+                                <div class="overview">
+                                    {{ 'Overview'|trans }} : <span class="data">{{ tv.last_episode_to_air.overview }}</span>
+                                </div>
+                                {% endif %}
                             </div>
-                            <div class="episode_number">
-                                {{ 'Episode Number'|trans }} : <span class="data">{{ tv.last_episode_to_air.episode_number }}</span>
-                            </div>
-                            <div class="season_number">
-                                {{ 'Season Number'|trans }} : <span class="data">{{ tv.last_episode_to_air.season_number }}</span>
-                            </div>
-                            {#                    "id" => 3428047 #}
-                            <div class="overview">
-                                {{ 'Overview'|trans }} : <span class="data">{{ tv.last_episode_to_air.overview }}</span>
-                            </div>
-                            {#                    "production_code" => "" #}
-                            {#                    "still_path" => "/eXjvQGuZ2pvZSJitvikmWT9Q75f.jpg" #}
-                            {#                    "vote_average" => 0.0 #}
-                            {#                    "vote_count" => 0 #}
-                        </div>
+                        {% endif %}
                         <div class="vote">
                             {{ 'Average Vote'|trans }} : <span class="data">{{ tv.vote_average }}</span>.
                         </div>

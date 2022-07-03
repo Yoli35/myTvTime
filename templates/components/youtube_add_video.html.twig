@@ -1,13 +1,6 @@
 <div {{ attributes }}>
-    <h1>
-        {{ this.video_results.count ?: 'No'|trans }}
-        {% if this.video_results.count > 1 %}
-            {{ 'Videos'|trans }}
-        {% else %}
-            {{ 'Video'|trans }}
-        {% endif %}
-    </h1>
-    <h5>{{ this.video_results.seconds2human }}</h5>
+    <h1 style="font-weight: 100">{{ this.video_results.count ?: 'No'|trans }} {{ this.video_results.count > 1 ? 'Videos'|trans : 'Video'|trans }}</h1>
+    <h5 style="font-weight: 100">{{ this.video_results.seconds2human }}</h5>
     <div class="parameters">
         <div class="row">
             <div class="col-xl-5 col-lg-4 col-sm-12 mb-sm-4 mb-lg-0">
