@@ -120,6 +120,15 @@
                 let id = $(this).data('id');
                 let result = $('.modal-body').find('.export-result');
                 let count, movies, url, file, sample;
+                let locale = '{{ locale }}';
+                let txt = {
+                    'aria_select_group': {'fr': 'Boutons de sélection', 'en': 'Selection buttons', 'de': 'Auswahlknöpfe', 'es': 'Botones de selección'},
+                    'aria_select_all': {'fr': 'Tout sélectionner', 'en': 'Select all', 'de': 'Alle auswählen', 'es': 'Seleccionar todo'},
+                    'aria_deselect_all': {'fr': 'Tout désélectionner', 'en': 'Deselect all', 'de': 'Alles abwählen', 'es': 'De seleccionar todo'},
+                    'select_all': {'fr': 'Tout sélectionner', 'en': 'Select all', 'de': 'Alle auswählen', 'es': 'Seleccionar todo'},
+                    'deselect_all': {'fr': 'Tout désélectionner', 'en': 'Deselect all', 'de': 'Alles abwählen', 'es': 'De seleccionar todo'},
+                    '': {'fr': '', 'en': '', 'de': '', 'es': ''},
+                }
 
                 $.ajax({
                     url: "{{ path('app_personal_movies_export') }}",
@@ -136,15 +145,35 @@
                         $('#json-link').attr({'href': url + file, 'download': file});
 
                         $(result).append('<div class="sample">' + sample + '</div>');
+
+                        $(result).append(
+                            '<div class="selection">' +
+                            '   <div class="btn-group btn-group-sm" role="group" aria-label="' + txt.aria_select_group[locale] + '">' +
+                            '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.aria_select_all[locale] + '">' + txt.select_all[locale] + '</button>' +
+                            '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.aria_deselect_all[locale] + '">' + txt.deselect_all[locale] + '</button>' +
+                            '   </div>' +
+                            '</div>');
+
                         for (let i = 0; i < count; i++) {
-                            $(result).append('<div class="result-item">' + movies[i]['title'] + '</div>')
+                            $(result).append('<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '">' + movies[i]['title'] + '</div>')
                         }
                         new bootstrap.Modal(document.getElementById('exportModal'), {}).show();
 
                         exportFile = file;
 
                         $('.result-item').click(function () {
-                            $(this).toggleClass("active")
+                            $(this).toggleClass("active");
+                            updateSample();
+                        })
+
+                        $('#export-select').click(function () {
+                            $('.result-item').addClass("active");
+                            updateSample();
+                        })
+
+                        $('#export-deselect').click(function () {
+                            $('.result-item').removeClass("active");
+                            updateSample();
                         })
                     }
                 })
@@ -210,9 +239,9 @@
                         }
                         $(infos).css('padding', '.5em');
                         let delta = content['total_results'] - count;
-                        $(infos).append('<div class="info">'+ txt.count[locale] + txt.space + content['total_results'] + txt.space + txt.movies[locale] + '.</div>');
+                        $(infos).append('<div class="info">' + txt.count[locale] + txt.space + content['total_results'] + txt.space + txt.movies[locale] + '.</div>');
                         if (delta) {
-                            $(infos).append('<div class="info">' + delta + txt.space + txt[(delta>1)?'movies':'movie'][locale] + txt.space + (delta>1?txt.presents[locale]:txt.present[locale]) + '</div>');
+                            $(infos).append('<div class="info">' + delta + txt.space + txt[(delta > 1) ? 'movies' : 'movie'][locale] + txt.space + (delta > 1 ? txt.presents[locale] : txt.present[locale]) + '</div>');
                         }
                         if (count) {
                             $(infos).append(
@@ -222,8 +251,7 @@
                                 '       <button name="unselect-all" type="button" class="btn btn-secondary">Unselect all</button>' +
                                 '   </div>' +
                                 '</div>');
-                        }
-                        else {
+                        } else {
                             $(infos).append(
                                 '<div class="none">' + txt.none[locale] + '</div>'
                             );
@@ -254,7 +282,7 @@
                 $(progress).css('display', 'flex');
                 $(value).css('width', '0%');
 
-                for (i=0; i<n; i++) {
+                for (i = 0; i < n; i++) {
                     let movie = selected[i];
                     let tmdb_id = $(movie).data('tmdb');
                     let val = (100 * (i / n)).toFixed();
@@ -293,6 +321,10 @@
                     }
                 })
             })
+
+            function updateSample() {
+
+            }
         })
     </script>
 {% endblock %}

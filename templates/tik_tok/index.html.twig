@@ -2,9 +2,6 @@
 
 {% block title %}{{ 'my TvTime::TikTok' }}{% endblock %}
 {% set user = app.user %}
-{% block morecss %}
-    <link href="/css/tiktok.css" rel="stylesheet">
-{% endblock %}
 
 {% block body %}
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
@@ -12,12 +9,17 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
-                <li class="breadcrumb-item active" aria-current="{{ 'My TikTok Videos'|trans }}">{{ 'My TikTok Videos'|trans }}</li>
-            </ol>
-        </nav>
+        <div class="container">
+            <nav aria-label="{{ 'Navigation'|trans }}" style="--bs-breadcrumb-divider: '◦';">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="{{ 'My TikTok Videos'|trans }}">{{ 'My TikTok Videos'|trans }}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="tt-videos">
+            {{ component('tik_tok_add_video', {class: 'getter', 'id': user.id, 'locale': locale}) }}
+        </div>
         <script>
             $(function () {
                 let link = $('input[name="link"]');
@@ -28,9 +30,6 @@
                 })
             })
         </script>
-        <div class="tt-videos">
-            {{ component('tik_tok_add_video', {class: 'getter', 'id': user.id, 'locale': locale}) }}
-        </div>
 
         {{ include('blocks/pageFooter.html.twig') }}
 

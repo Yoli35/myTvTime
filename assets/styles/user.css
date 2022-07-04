@@ -209,6 +209,15 @@
     color: #ffe4ab;
 }
 
+.export-result .selection {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 1em;
+    width: 100%;
+}
+
 .export-result .result-item {
     background-color: #0d5e42;
     border-radius: .25em;

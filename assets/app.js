@@ -12,6 +12,7 @@ import './styles/series.css';
 import './styles/tv.css';
 import './styles/user.css';
 import './styles/youtube.css';
+import './styles/tiktok.css';
 
 import './js/select-movie';
 
