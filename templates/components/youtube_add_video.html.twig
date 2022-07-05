@@ -1,19 +1,19 @@
 <div {{ attributes }}>
-    <h1 style="font-weight: 100">{{ this.video_results.count ?: 'No'|trans }} {{ this.video_results.count > 1 ? 'Videos'|trans : 'Video'|trans }}</h1>
-    <h5 style="font-weight: 100">{{ this.video_results.seconds2human }}</h5>
-    <div class="container">
+    <h1>{{ this.video_results.count ?: 'No'|trans }} {{ this.video_results.count > 1 ? 'Videos'|trans : 'Video'|trans }}</h1>
+    <h5>{{ this.video_results.seconds2human }}</h5>
+{#    <div style="max-width: 768px">#}
         <div class="parameters">
             <div class="row">
                 <div class="col-xl-5 col-lg-4 col-sm-12 mb-sm-4 mb-lg-0">
                     <div class="d-flex align-items-center justify-content-center h-100 w-100">
-                        <label>{{ 'Youtube Link'|trans }} :
+                        <label>{{ 'Link'|trans }} :
                             <input id="" type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
                         </label>
                     </div>
                 </div>
                 <div class="col-xl-7 col-lg-8 col-sm-12">
                     <div class="row">
-                        <div class="col-lg-8 col-sm-12 example">
+                        <div class="col-lg-7 col-sm-12 example">
                             <b>{{ 'For example'|trans }} :</b>
                             <div class="text-center">{{ this.getLinkPreview.title }}</div>
                             <a href="https://youtu.be/{{ preview }}" target="_blank"><span><span>{{ preview }}</span></span></a>
@@ -21,7 +21,7 @@
                             <a href="https://youtu.be/7KFxzeyse2g" target="_blank"><span>https://www.youtube.com/shorts/<span>7KFxzeyse2g</span></span></a>
                             <a href="https://youtu.be/{{ preview }}" target="_blank"><span>https://www.youtube.com/watch?v=<span>{{ preview }}</span></span></a>
                         </div>
-                        <div class="col-lg-4 col-sm-12 example-thumbnail">
+                        <div class="col-lg-5 col-sm-12 example-thumbnail">
                             <div>
                                 <img src="{{ this.getLinkPreview.url }}" alt="{{ this.getLinkPreview.title }}" class="w-100">
                             </div>
@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+{#        </div>#}
     </div>
     {% if this.video_results.count %}
         <div class="result">

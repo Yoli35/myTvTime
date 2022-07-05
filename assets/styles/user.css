@@ -7,28 +7,32 @@
     border: 4px solid #dbdbdb;
     border-radius: 1em;
     display: flex;
-    overflow: auto;
+    margin-bottom: 6em;
     position: relative;
-    transition: border-color .25s, filter .25s;
+    transition: border-color .25s, filter .25s, margin-bottom .25s;
     width: 100%;
 }
 
+.user-account .banner img {
+    border-radius: .75em;
+}
+
 .user-account .banner > .title {
-    bottom: 1em;
+    bottom: 0;
     color: #f2f2f2;
-    font-size: 3em;
+    font-size: 2em;
     font-weight: bold;
-    left: 2em;
+    left: .5em;
     position: absolute;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .user-account .avatar {
-    bottom: 2em;
-    height: 12em;
+    bottom: 0;
+    height: 6em;
     position: absolute;
-    right: 2em;
-    width: 12em;
+    right: 0;
+    width: 6em;
 }
 
 .user-account .avatar > img {
@@ -40,30 +44,37 @@
 }
 
 .weather {
-    align-items: center;
     background-color: rgba(0, 127, 191, 0.85);
     border: 4px solid #dbdbdb;
     border-radius: 1em;
+    bottom: -6em;
     color: #f2f2f2;
+    position: absolute;
+    transition: bottom .25s;
+    width: 100%;
+}
+
+.weather .content {
+    align-items: center;
     display: flex;
     flex-direction: column;
     font-size: 1em;
     font-weight: bold;
+    height: 100%;
     padding: 1em;
-    right: 2em;
-    position: absolute;
-    top: 2em;
+    position: relative;
+    width: 100%;
 }
 
-.user-account .banner .toggle {
+.weather .toggle {
     background-color: transparent;
     color: #f2f2f2;
     cursor: pointer;
     font-size: 1em;
     font-weight: bold;
-    right: 3em;
+    right: 1em;
     position: absolute;
-    top: 3em;
+    top: 1em;
 }
 
 .weather .city {
@@ -119,7 +130,6 @@
     margin-top: 4em;
 }
 
-
 .user-movies {
     align-items: center;
     display: flex;
@@ -130,10 +140,14 @@
     width: 100%;
 }
 
+.user-movies h4 {
+    text-align: center;
+}
+
 .user-movies .search-block {
     align-items: center;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-evenly;
     width: 100%;
 }
@@ -171,10 +185,9 @@
 .user-movies .export {
     display: flex;
     flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
     font-size: .75em;
     font-weight: 400;
-    padding: 1em;
+    margin-top: 1em;
     position: relative;
     top: 0;
     z-index: 2;
@@ -195,10 +208,12 @@
     border-radius: .5em;
     color: #5eead4;
     font-family: 'Courier Prime', monospace;
-    font-size: 1em;
-    margin: 0 1em 1em 1em;
+    font-size: .75em;
+    margin: 0 0 1em 0;
+    max-width: 640px;
+    overflow-x: scroll;
     padding: 1em;
-    width: calc(100% - 2em);
+    width: 100%;
 }
 
 .export-result .sample span {
@@ -361,6 +376,71 @@
     height: 100%;
     overflow: hidden;
     width: 50%;
+}
+
+.user-movies .home-discover {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 .125em .25em .125em;
+    padding: 0;
+    position: relative;
+    width: 9.5em;
+}
+
+@media (min-width: 575.98px) {
+}
+
+@media (min-width: 767.98px) {
+
+    .user-account .banner {
+        margin-bottom: unset;
+    }
+
+    .user-account .banner > .title {
+        bottom: 1em;
+        font-size: 3em;
+        left: 2em;
+    }
+
+    .user-account .avatar {
+        bottom: 2em;
+        height: 12em;
+        right: 2em;
+        width: 12em;
+    }
+
+    .weather {
+        bottom: unset;
+        right: 2em;
+        top: 2em;
+        width: unset;
+    }
+
+    .user-movies .search-block {
+        flex-direction: row;
+    }
+
+    .user-movies .export {
+        margin-top: unset;
+        padding: 1em;
+    }
+
+    .user-movies .home-discover {
+        margin: 0 .5em 1em .5em;
+        padding: .25em;
+        width: 12em;
+    }
+}
+
+@media (min-width: 991.98px) {
+}
+
+@media (min-width: 1199.98px) {
+}
+
+@media (min-width: 1399.98px) {
 }
 
 @media (prefers-color-scheme: dark) {

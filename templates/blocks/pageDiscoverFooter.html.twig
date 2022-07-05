@@ -62,12 +62,10 @@
         <div>{{ 'Total Results'|trans }} : {{ pages.total_results }}</div>
     </div>
 {% else %}
-    <div class="home-discovers-footer">
-        <div class="pages">
-            {% if page > 1 %}
-                <div class="page"><a href="{{ path(route, {page: page-1}) }}">{{ 'Previous Page'|trans }}</a></div>
-            {% endif %}
-            <div class="page"><a href="{{ path(route, {page: page+1}) }}">{{ 'Next Page'|trans }}</a></div>
-        </div>
+    <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'Series Paginator' }}">
+        {% if page > 1 %}
+            <a class="btn btn-secondary" href="{{ path(route, {page: page-1}) }}">{{ 'Previous Page'|trans }}</a>
+        {% endif %}
+        <a class="btn btn-secondary" href="{{ path(route, {page: page+1}) }}">{{ 'Next Page'|trans }}</a>
     </div>
 {% endif %}
