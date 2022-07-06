@@ -115,6 +115,7 @@
     <script>
         $(function () {
             let json, ids, preview, infos, exportFile;
+            let user_id = {{ user.id }};
 
             $('#export-button').click(function () {
                 let id = $(this).data('id');
@@ -163,17 +164,17 @@
 
                         $('.result-item').click(function () {
                             $(this).toggleClass("active");
-                            updateSample();
+                            updateSample($('.result-item'));
                         })
 
                         $('#export-select').click(function () {
                             $('.result-item').addClass("active");
-                            updateSample();
+                            updateSample($('.result-item'));
                         })
 
                         $('#export-deselect').click(function () {
                             $('.result-item').removeClass("active");
-                            updateSample();
+                            updateSample($('.result-item'));
                         })
                     }
                 })
@@ -322,7 +323,26 @@
                 })
             })
 
-            function updateSample() {
+            function updateSample(items) {
+
+                let ids = [];
+                for (let idx = 0; idx < items.length; idx++) {
+                    if ($(items[idx]).hasClass('active')) {
+                        ids.push($(items[idx]).data('movie-id'));
+                    }
+                }
+                if (ids.length === items.length) {
+                    ids = [];
+                }
+
+                $.ajax({
+                    url: "{{ path('app_json_sample') }}",
+                    method: 'GET',
+                    data: {user_id: user_id, ids: ids, filename: exportFile},
+                    success: function (data) {
+                        $('.sample').html(data['sample']);
+                    }
+                })
 
             }
         })

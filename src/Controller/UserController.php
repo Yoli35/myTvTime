@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\UserMovie;
 use App\Form\UserType;
 use App\Repository\UserMovieRepository;
+use App\Repository\UserRepository;
 use App\Service\BetaSeriesService;
 use App\Service\CallTmdbService;
 use App\Service\FileUploader;
@@ -140,62 +141,16 @@ class UserController extends AbstractController
     #[Route('/{_locale}/personal/movies/export', name: 'app_personal_movies_export', requirements: ['_locale' => 'fr|en|de|es'])]
     public function export(Request $request, UserMovieRepository $userMovieRepository): JsonResponse
     {
-        $id = $request->query->get('id');
-        $locale = $request->getLocale();
-        $movies = $userMovieRepository->findAllUserMovies($id);
-        $count = count($movies);
-        $json = $this->formatJson('{"total_results":'.$count.',"results":'.json_encode($movies).'}');
-        $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
-        $sample = '{<br>'
-            .$tab.'<span>"total_results":</span> ' . $count . ',<br>'
-            .$tab.'<span>"results":</span> [<br>'
-            .$tab.$tab.'{<br>'
-            .$tab.$tab.$tab.'<span>"id":</span> '.$movies[0]['id'].'<span>,</span><br>'
-            .$tab.$tab.$tab.'<span>"title":</span> "'.$movies[0]['title'].'"<span>,</span><br>'
-            .$tab.$tab.$tab.'<span>"original_title":</span> "'.$movies[0]['original_title'].'"<span>,</span><br>'
-            .$tab.$tab.$tab.'<span>"poster_path":</span> "\\'.$movies[0]['poster_path'].'"<span>,</span><br>'
-            .$tab.$tab.$tab.'<span>"release_date":</span> "'.$movies[0]['release_date'].'"<span>,</span><br>'
-            .$tab.$tab.$tab.'<span>"movie_db_id":</span> '.$movies[0]['movie_db_id'].',<span>,</span><br>'
-            .$tab.$tab.$tab.'<span>"runtime":</span> '.$movies[0]['runtime'].'<span>,</span><br>'
-            .$tab.$tab.$tab.'<span>"user_id":</span> '.$movies[0]['user_id'].'<span>,</span><br>'
-            .$tab.$tab.$tab.'<span>"user_movie_id":</span> '.$movies[0]['user_movie_id'].'<br>'
-            .$tab.$tab.'}';
-
-        if ($count > 1) {
-
-            if ($count > 2) {
-                switch ($locale) {
-                    case 'fr':     $sample .= ',<br>'.$tab.$tab.'<i>[...] /* et '.($count-2).' autre'.($count>3?'s':'').' */</i><br>'; break;
-                    case 'en':     $sample .= ',<br>'.$tab.$tab.'<i>[...] /* and '.($count-2).' more */</i><br>'; break;
-                    case 'de':     $sample .= ',<br>'.$tab.$tab.'<i>[...] /* und '.($count-2).' '.($count>3?'andere':'weiterer').' */</i><br>'; break;
-                    case 'es':     $sample .= ',<br>'.$tab.$tab.'<i>[...] /* y otro'.($count>3?'s ':' ').($count-2).' */</i><br>'; break;
-                }
-            }
-            $sample .= $tab.$tab.'{<br>'
-                .$tab.$tab.$tab.'<span>"id":</span> '.$movies[$count-1]['id'].'<span>,</span><br>'
-                .$tab.$tab.$tab.'<span>"title":</span> "'.$movies[$count-1]['title'].'"<span>,</span><br>'
-                .$tab.$tab.$tab.'<span>"original_title":</span> "'.$movies[$count-1]['original_title'].'"<span>,</span><br>'
-                .$tab.$tab.$tab.'<span>"poster_path":</span> "\\'.$movies[$count-1]['poster_path'].'"<span>,</span><br>'
-                .$tab.$tab.$tab.'<span>"release_date":</span> "'.$movies[$count-1]['release_date'].'"<span>,</span><br>'
-                .$tab.$tab.$tab.'<span>"movie_db_id":</span> '.$movies[$count-1]['movie_db_id'].'<span>,</span><br>'
-                .$tab.$tab.$tab.'<span>"runtime":</span> '.$movies[$count-1]['runtime'].'<span>,</span><br>'
-                .$tab.$tab.$tab.'<span>"user_id":</span> '.$movies[$count-1]['user_id'].'<span>,</span><br>'
-                .$tab.$tab.$tab.'<span>"user_movie_id":</span> '.$movies[$count-1]['user_movie_id'].'<br>'
-                .$tab.$tab.'}';
-        }
-
-        $sample .= '<br>'.$tab.']<br>}';
-
         /** @var User $user */
         $user = $this->getUser();
-        $dir = $this->getParameter('movie_list_directory');
-        $filename = $this->getFilename($user);
+        $id = $request->query->get('id');
+        $movies = $userMovieRepository->findAllUserMovies($id);
+        $count = count($movies);
+        $json = $this->formatJson('{"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
 
-        $file = fopen($dir . '/' . $filename, "w");
-        fwrite($file, $json);
-        fclose($file);
-
+        $filename = $this->saveFile($json, $user);
         $url = $this->generateUrl('app_json');
+        $sample = $this->sample($request, $userMovieRepository, $id, null);
 
         return $this->json([
             'count' => $count,
@@ -211,6 +166,25 @@ class UserController extends AbstractController
     public function jsonUrl()
     {
 
+    }
+
+    #[Route('/{_locale}/movielist/updateSample', name: 'app_json_sample', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function updateSample(Request $request, UserMovieRepository $userMovieRepository, UserRepository $userRepository): JsonResponse
+    {
+        $userId = $request->get('user_id');
+        $ids = $request->get('ids');
+        $filename = $request->get('filename');
+
+        $sample = $this->sample($request, $userMovieRepository, $userId, $ids);
+
+        $movies = $this->userMoviesFromList($userId, $userMovieRepository, $ids);
+        $count = count($movies);
+        $json = $this->formatJson('{"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
+        $this->saveFile($json, $userRepository->find($userId), $filename);
+
+        return $this->json([
+            'sample' => $sample,
+        ]);
     }
 
     #[Route('/{_locale}/movielist/cleanup', name: 'app_json_cleanup', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -230,6 +204,20 @@ class UserController extends AbstractController
         ]);
     }
 
+    private function saveFile(string $json, User $user, string $filename = null): string
+    {
+        $dir = $this->getParameter('movie_list_directory');
+        if (!$filename) {
+            $filename = $this->getFilename($user);
+        }
+
+        $file = fopen($dir . '/' . $filename, "w");
+        fwrite($file, $json);
+        fclose($file);
+
+        return $filename;
+    }
+
     private function getFilename($user): string
     {
         if ($user->getUsername()) {
@@ -242,6 +230,62 @@ class UserController extends AbstractController
         return $filename;
     }
 
+    private function sample(Request $request, UserMovieRepository $userMovieRepository, int $user_id, mixed $ids):string
+    {
+        $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
+
+        $movies = $this->userMoviesFromList($user_id, $userMovieRepository, $ids);
+        $count = count($movies);
+
+        $sample = '{<br>'.$tab.'"total_results": ' . $count . ',<br>'.$tab.'"results":';
+        if ($count == 1) {
+            $sample .= ' [<br>'.$tab.$tab;
+            $sample .= $this->formatJson(json_encode($movies[0]), 2, $tab, '<br>');
+            $sample .= '<br>'.$tab.']';
+        }
+        if ($count == 2) {
+            $sample .= ' ' . $this->formatJson(json_encode($movies), 1, $tab, '<br>');
+        }
+        if ($count > 2) {
+            $sample .= ' [<br>'.$tab.$tab;
+            $sample .= $this->formatJson(json_encode($movies[0]), 2, $tab, '<br>');
+
+            $sample .= $this->andOther($request->getLocale(), $count, $tab).$tab.$tab;
+
+            $sample .= $this->formatJson(json_encode($movies[$count - 1]), 2, $tab, '<br>');
+            $sample .= '<br>'.$tab.']';
+        }
+        $sample .= '<br>}';
+
+        return preg_replace(
+            ['#.("\w*"):\s("[a-zA-Z0-9\s\\\/\'.,:-]*"),#', '#.("\w*"):\s(\d*)#'],
+            ['<span class="key">$1</span>: <span class="value-alpha">$2</span>,', '<span class="key">$1</span>: <span class="value-digit">$2</span>'],
+            $sample);
+    }
+
+    private function userMoviesFromList(int $userId, UserMovieRepository $userMovieRepository, mixed $list): array
+    {
+        if ($list==null) {
+            $list = [];
+            $userMovies = $userMovieRepository->findUserMovieIds($userId);
+            foreach ($userMovies as $userMovie) {
+                $list[] = $userMovie['movie_db_id'];
+            }
+        }
+        return $userMovieRepository->getUserMovieFromIdList($userId, $list);
+    }
+
+    private function andOther($locale, $count, $tab):string
+    {
+        return match ($locale) {
+            'fr' => ',<br>' . $tab . $tab . '<i>[...] /* et ' . ($count - 2) . ' autre' . ($count > 3 ? 's' : '') . ' */</i><br>',
+            'en' => ',<br>' . $tab . $tab . '<i>[...] /* and ' . ($count - 2) . ' more */</i><br>',
+            'de' => ',<br>' . $tab . $tab . '<i>[...] /* und ' . ($count - 2) . ' ' . ($count > 3 ? 'andere' : 'weiterer') . ' */</i><br>',
+            'es' => ',<br>' . $tab . $tab . '<i>[...] /* y otro' . ($count > 3 ? 's ' : ' ') . ($count - 2) . ' */</i><br>',
+            default => '',
+        };
+    }
+
     /*
      * Manual formatter taken straight from https://github.com/umbrae/jsonlintdotcom
      *      -> https://github.com/umbrae/jsonlintdotcom/blob/master/c/js/jsl.format.js
@@ -249,13 +293,12 @@ class UserController extends AbstractController
      * Provide json reformatting in a character-by-character approach, so that even
      * invalid JSON may be reformatted (to the best of its ability).
      */
-
-    public function formatJson($json, $indentChars = null): string
+    private function formatJson($json, $indentLevel = 0, $indentChars = null, $newLine = null): string
     {
         $il = strlen($json);
         $tab = $indentChars ?: "    ";
+        $nl = $newLine ?: "\n";
         $newJson = "";
-        $indentLevel = 0;
         $inString = false;
 
         for ($i = 0; $i < $il; $i++) {
@@ -265,7 +308,7 @@ class UserController extends AbstractController
                 case '{':
                 case '[':
                     if (!$inString) {
-                        $newJson .= $currentChar . "\n" . str_repeat($tab, $indentLevel + 1);
+                        $newJson .= $currentChar . $nl . str_repeat($tab, $indentLevel + 1);
                         $indentLevel++;
                     } else {
                         $newJson .= $currentChar;
@@ -275,14 +318,14 @@ class UserController extends AbstractController
                 case ']':
                     if (!$inString) {
                         $indentLevel--;
-                        $newJson .= "\n" . str_repeat($tab, $indentLevel) . $currentChar;
+                        $newJson .= $nl . str_repeat($tab, $indentLevel) . $currentChar;
                     } else {
                         $newJson .= $currentChar;
                     }
                     break;
                 case ',':
                     if (!$inString) {
-                        $newJson .= ",\n" . str_repeat($tab, $indentLevel);
+                        $newJson .= "," . $nl . str_repeat($tab, $indentLevel);
                     } else {
                         $newJson .= $currentChar;
                     }

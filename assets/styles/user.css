@@ -204,24 +204,32 @@
 }
 
 .export-result .sample {
-    background-color: #444;
+    background-color: #f0f0f0;
     border-radius: .5em;
-    color: #5eead4;
+    color: #545454;
     font-family: 'Courier Prime', monospace;
-    font-size: .75em;
+    font-size: 1em;
     margin: 0 0 1em 0;
-    max-width: 640px;
+    max-width: 800px;
     overflow-x: scroll;
     padding: 1em;
     width: 100%;
 }
 
-.export-result .sample span {
-    color: #ccabff;
+.export-result .sample span.key {
+    color: #a600a6;
+}
+
+.export-result .sample span.value-alpha {
+    color: #007800;
+}
+
+.export-result .sample span.value-digit {
+    color: #0000db;
 }
 
 .export-result .sample i {
-    color: #ffe4ab;
+    color: #e99e00;
 }
 
 .export-result .selection {
@@ -448,5 +456,26 @@
     .user-movies .search,
     .user-movies .search .result {
         background-color: #444;
+    }
+
+    .export-result .sample {
+        background-color: #444;
+        color: #5eead4;
+    }
+
+    .export-result .sample span.key {
+        color: #f493f4;
+    }
+
+    .export-result .sample span.value-alpha {
+        color: #5bbf5b;
+    }
+
+    .export-result .sample span.value-digit {
+        color: #55b1fc;
+    }
+
+    .export-result .sample i {
+        color: #ffe4ab;
     }
 }
