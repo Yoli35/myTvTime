@@ -37,45 +37,49 @@
             </ol>
         </nav>
 
-        <div class="date_select">
-            <form>
-                <div class="input-group input-group-sm mb-3">
-                    <span class="input-group-text">{{ 'Year'|trans }}</span>
-                    <select id="year" class="form-select form-select-sm" aria-label="Date selection">
-                        {% for year in years %}
-                            <option value="{{ year }}"{% if year == date %} selected{% endif %}>{{ year }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </form>
+        <div class="search">
+            <div class="date_select">
+                <form>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">{{ 'Year'|trans }}</span>
+                        <select id="year" class="form-select form-select-sm" aria-label="Date selection">
+                            {% for year in years %}
+                                <option value="{{ year }}"{% if year == date %} selected{% endif %}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="home-discovers">
-            <div class="home-discovers-content">
+            <div class="content">
                 {% for discover in discovers.results %}
-                    <div class="home-discover">
-                        <a href="{{ path('app_movie', {id: discover.id}) }}">
-                            {% if discover.poster_path %}
-                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}"
-                                     class="d-block w-100" alt="{{ discover.title }}">
-                            {% else %}
-                                <img src="/images/default/no_poster_dark.png" class="d-block w-100"
-                                     alt="{{ discover.title }}">
-                            {% endif %}
-                            <div class="home-discover-title">{{ discover.title }}</div>
-                            {% if discover.release_date is defined %}
-                                <div class="home-discover-date">{{ 'Release Date'|trans }}
-                                    : {{ discover.release_date|format_date('short') }}</div>
-                            {% endif %}
-                        </a>
-                        {# Badges on seen Movies #}
-                        {% if app.user is not null %}
-                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}"
-                                 id="{{ discover.id }}">
-                                <i class="bi bi-check-circle-fill"></i>
-                            </div>
-                        {% endif %}
-                    </div>
+                    {% if discover.poster_path is defined and discover.poster_path|length %}
+                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
+                    {% else %}
+                        {% set poster = "/images/default/no_poster_dark.png" %}
+                    {% endif %}
+                    {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.id}) }}
+
+                    {#                    <div class="home-discover"> #}
+                    {#                        <a href="{{ path('app_movie', {id: discover.id}) }}"> #}
+                    {#                            {% if discover.poster_path %} #}
+                    {#                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" #}
+                    {#                                     class="d-block w-100" alt="{{ discover.title }}"> #}
+                    {#                            {% else %} #}
+                    {#                                <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ discover.title }}"> #}
+                    {#                            {% endif %} #}
+                    {#                            <div class="title">{{ discover.title }}</div> #}
+                    {#                            {% if discover.release_date is defined %} #}
+                    {#                                <div class="date">{{ 'Release Date'|trans }} : {{ discover.release_date|format_date('short') }}</div> #}
+                    {#                            {% endif %} #}
+                    {#                        </a> #}
+                    {#                        #}{# Badges on seen Movies #}
+                    {#                        {% if app.user is not null %} #}
+                    {#                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}"  id="{{ discover.id }}"><i class="bi bi-check-circle-fill"></i></div> #}
+                    {#                        {% endif %} #}
+                    {#                    </div> #}
                 {% endfor %}
             </div>
             {{ include('blocks/pageDateFooter.html.twig') }}

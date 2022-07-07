@@ -116,6 +116,7 @@ class UserController extends AbstractController
             'runtime' => $runtime,
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfig,
+            'dRoute' => 'app_movie',
         ]);
     }
 

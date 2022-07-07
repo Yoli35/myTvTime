@@ -179,6 +179,7 @@ class MovieController extends AbstractController
             'possible_genres' => $possibleGenres,
             'current_genres' => $currentGenres,
             'imageConfig' => $imageConfig,
+            'dRoute' => 'app_movie',
         ]);
     }
 
@@ -208,7 +209,8 @@ class MovieController extends AbstractController
             'date' => $date,
             'years' => $years,
             'imageConfig' => $imageConfig,
-            ]);
+            'dRoute' => 'app_movie',
+        ]);
     }
 
     /**
@@ -247,7 +249,8 @@ class MovieController extends AbstractController
             'discovers' => $discovers,
             'userMovies' => $this->getUserMovieIds($userMovieRepository),
             'imageConfig' => $imageConfig,
-            ]);
+            'dRoute' => 'app_movie',
+        ]);
     }
 
     public function getUserMovieIds(UserMovieRepository $userMovieRepository): array

@@ -4,7 +4,7 @@
 {% set user = app.user %}
 
 {% block body %}
-    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -51,10 +51,13 @@
 
                 </div>
 
-                <div class="home-discovers-content">
-                    {% for discover in discovers %}
-                        {{ include('blocks/movie/discover.html.twig', {discover: discover, poster_url: imageConfig.url, poster_size: imageConfig.poster_sizes.3}) }}
-                    {% endfor %}
+                <div class="home-discovers">
+                    <div class="content">
+                        {% for discover in discovers %}
+                            {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
+                            {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.movie_db_id}) }}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,7 +123,7 @@
             $('#export-button').click(function () {
                 let id = $(this).data('id');
                 let result = $('.modal-body').find('.export-result');
-                let count, movies, url, file, sample;
+                let count, movies, url, file, sample, result_item;
                 let locale = '{{ locale }}';
                 let txt = {
                     'aria_select_group': {'fr': 'Boutons de sélection', 'en': 'Selection buttons', 'de': 'Auswahlknöpfe', 'es': 'Botones de selección'},
@@ -158,23 +161,25 @@
                         for (let i = 0; i < count; i++) {
                             $(result).append('<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '">' + movies[i]['title'] + '</div>')
                         }
-                        new bootstrap.Modal(document.getElementById('exportModal'), {}).show();
+                        $.Modal(document.getElementById('exportModal'), {}).show();
 
                         exportFile = file;
 
-                        $('.result-item').click(function () {
+                        result_item = $('.result-item');
+
+                        $(result_item).click(function () {
                             $(this).toggleClass("active");
-                            updateSample($('.result-item'));
+                            updateSample($(result_item));
                         })
 
                         $('#export-select').click(function () {
-                            $('.result-item').addClass("active");
-                            updateSample($('.result-item'));
+                            $(result_item).addClass("active");
+                            updateSample($(result_item));
                         })
 
                         $('#export-deselect').click(function () {
-                            $('.result-item').removeClass("active");
-                            updateSample($('.result-item'));
+                            $(result_item).removeClass("active");
+                            updateSample($(result_item));
                         })
                     }
                 })
@@ -203,7 +208,7 @@
                         ids = data['movie_ids'];
                     }
                 })
-                new bootstrap.Modal(document.getElementById('appendModal'), {}).show();
+                new $.Modal(document.getElementById('appendModal'), {}).show();
             })
             $('input[name="json"]').change(function () {
                 let json, content, count = 0;

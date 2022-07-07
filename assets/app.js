@@ -6,15 +6,20 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
-import './styles/movie.css';
-import './styles/series.css';
-import './styles/tv.css';
-import './styles/user.css';
-import './styles/youtube.css';
-import './styles/tiktok.css';
+import './styles/app.scss';
+import './styles/movie.scss';
+import './styles/series.scss';
+import './styles/tv.scss';
+import './styles/user.scss';
+import './styles/youtube.scss';
+import './styles/tiktok.scss';
 
 import './js/select-movie';
 
+import 'bootstrap';
+// import bsCustomFileInput from 'bs-custom-file-input';
+
 // start the Stimulus application
 import './bootstrap';
+
+// bsCustomFileInput.init();

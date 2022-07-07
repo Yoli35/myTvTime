@@ -73,38 +73,47 @@
         {% endif %}
 
         <div class="home-discovers">
-            <div class="home-discovers-content">
+            <div class="content">
                 {% for discover in discovers %}
                     {% set dTitle = route in ['app_home', 'app_home_series', 'app_admin_dashboard_index'] ? discover.title: discover.name %}
                     {% set dDate = route == 'app_home' ? discover.release_date : route == 'app_home_tv' ? discover.first_air_date: '' %}
-                    <div class="home-discover" id="{{ discover.id }}">
-                        <a href="{{ path(dRoute, {id: discover.id}) }}">
-                            {% if discover.poster_path is defined and discover.poster_path|length %}
-                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" class="d-block w-100" alt="{{ dTitle }}">
-                            {% elseif discover.images is defined and discover.images.poster|length %}
-                                <img src="{{ discover.images.poster }}" class="d-block w-100" alt="{{ dTitle }}">
-                            {% else %}
-                                <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ dTitle }}">
-                            {% endif %}
-                            <div class="home-discover-title">{{ dTitle }}</div>
-                            {% if dDate|length %}
-                                <div class="home-discover-date">{{ 'Release Date'|trans }} : {{ dDate|format_date('short') }}</div>
-                            {% endif %}
-                            {% if discover.platforms is defined %}
-                                {% if discover.platforms %}
-                                    {% if discover.platforms.svod is defined %}
-                                        <img src="{{ discover.platforms.svod.logo }}" alt="{{ discover.platforms.svod.name }}" class="logo">
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                        </a>
-                        {# Badges on seen Movies #}
-                        {% if route == 'app_home' and app.user is not null %}
-                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}" id="{{ discover.id }}">
-                                <i class="bi bi-check-circle-fill"></i>
-                            </div>
-                        {% endif %}
-                    </div>
+                    {% if discover.poster_path is defined and discover.poster_path|length %}
+                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
+                    {% elseif discover.images is defined and discover.images.poster|length %}
+                        {% set poster = discover.images.poster %}
+                    {% else %}
+                        {% set poster = "/images/default/no_poster_dark.png" %}
+                    {% endif %}
+                    {{ include('blocks/movie/discover.html.twig', { title: dTitle, poster: poster, id: discover.id}) }}
+
+{#                    <div class="home-discover" id="{{ discover.id }}">#}
+{#                        <a href="{{ path(dRoute, {id: discover.id}) }}">#}
+{#                            {% if discover.poster_path is defined and discover.poster_path|length %}#}
+{#                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" alt="{{ dTitle }}">#}
+{#                            {% elseif discover.images is defined and discover.images.poster|length %}#}
+{#                                <img src="{{ discover.images.poster }}" alt="{{ dTitle }}">#}
+{#                            {% else %}#}
+{#                                <img src="/images/default/no_poster_dark.png" alt="{{ dTitle }}">#}
+{#                            {% endif %}#}
+{#                            <div class="title">{{ dTitle }}</div>#}
+{#                            {% if dDate|length %}#}
+{#                                <div class="date">{{ 'Release Date'|trans }} : {{ dDate|format_date('short') }}</div>#}
+{#                            {% endif %}#}
+{#                            {% if discover.platforms is defined %}#}
+{#                                {% if discover.platforms %}#}
+{#                                    {% if discover.platforms.svod is defined %}#}
+{#                                        <img src="{{ discover.platforms.svod.logo }}" alt="{{ discover.platforms.svod.name }}" class="logo">#}
+{#                                    {% endif %}#}
+{#                                {% endif %}#}
+{#                            {% endif %}#}
+{#                        </a>#}
+{#                        #}{# Badges on seen Movies #}
+{#                        {% if route == 'app_home' and app.user is not null %}#}
+{#                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}" id="{{ discover.id }}">#}
+{#                                <i class="bi bi-check-circle-fill"></i>#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                    </div>#}
                 {% endfor %}
             </div>
             {{ include('blocks/pageDiscoverFooter.html.twig') }}

@@ -249,27 +249,6 @@
     margin-left: auto;
 }
 
-.select_genres {
-    background-color: #111;
-    border-radius: 1em;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    padding: 1em;
-}
-
-.select_genres > .genre {
-    border-color: #8a8a8a;
-    color: #8a8a8a;
-    cursor: grab;
-}
-
-.select_genres > .active {
-    border-color: #5e9ac5;
-    color: #5e9ac5;
-}
-
 .collection-parts {
     font-weight: 100;
 }
