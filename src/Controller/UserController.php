@@ -82,6 +82,12 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/phpinfo', name: 'app_php_info', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function phpInfo(): Response
+    {
+        return $this->redirect('/phpinfo.php');
+    }
+
     /**
      * @throws ServerExceptionInterface
      * @throws RedirectionExceptionInterface
@@ -174,17 +180,21 @@ class UserController extends AbstractController
     {
         $userId = $request->get('user_id');
         $ids = $request->get('ids');
+        $ids = json_decode($ids, true);
         $filename = $request->get('filename');
 
         $sample = $this->sample($request, $userMovieRepository, $userId, $ids);
 
         $movies = $this->userMoviesFromList($userId, $userMovieRepository, $ids);
         $count = count($movies);
-        $json = $this->formatJson('{"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
+        $jsonMovies = json_encode($movies);
+        $json = '{"total_results":' . $count . ',"results":' . $jsonMovies . '}';
+        $json = $this->formatJson($json);
         $this->saveFile($json, $userRepository->find($userId), $filename);
 
         return $this->json([
             'sample' => $sample,
+            'json' => $json,
         ]);
     }
 

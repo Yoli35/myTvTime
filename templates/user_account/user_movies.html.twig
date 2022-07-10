@@ -115,13 +115,16 @@
     </div>
 {% endblock %}
 {% block morejs %}
-    <script>
+    <script type="module">
+        // import { Modal } from '../../../node_modules/bootstrap';
+
         $(function () {
             let json, ids, preview, infos, exportFile;
             let user_id = {{ user.id }};
 
             $('#export-button').click(function () {
                 let id = $(this).data('id');
+                let exportModal = $('#exportModal');
                 let result = $('.modal-body').find('.export-result');
                 let count, movies, url, file, sample, result_item;
                 let locale = '{{ locale }}';
@@ -148,8 +151,8 @@
 
                         $('#json-link').attr({'href': url + file, 'download': file});
 
+                        $(result).empty();
                         $(result).append('<div class="sample">' + sample + '</div>');
-
                         $(result).append(
                             '<div class="selection">' +
                             '   <div class="btn-group btn-group-sm" role="group" aria-label="' + txt.aria_select_group[locale] + '">' +
@@ -161,7 +164,11 @@
                         for (let i = 0; i < count; i++) {
                             $(result).append('<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '">' + movies[i]['title'] + '</div>')
                         }
-                        $.Modal(document.getElementById('exportModal'), {}).show();
+
+                        // new Modal('#exportModal').show();
+                        $(exportModal).css('background-color', 'rgba(189,115,189,0.75)');
+                        $(exportModal).css('display', 'block');
+                        $(exportModal).css('opacity', '1');
 
                         exportFile = file;
 
@@ -180,6 +187,23 @@
                         $('#export-deselect').click(function () {
                             $(result_item).removeClass("active");
                             updateSample($(result_item));
+                        })
+
+                        let exportCloseButtons = $(exportModal).find('button[data-bs-dismiss="modal"]');
+                        $(exportCloseButtons).click(function () {
+                            $(exportModal).css('opacity', '0');
+                            setTimeout(function (){
+                                $(exportModal).css('display', 'none');
+                            }, 150)
+
+                            $.ajax({
+                                url: "{{ path('app_json_cleanup') }}",
+                                method: 'GET',
+                                data: {filename: exportFile},
+                                success: function (data) {
+                                    console.log(data['result'])
+                                }
+                            })
                         })
                     }
                 })
@@ -208,7 +232,18 @@
                         ids = data['movie_ids'];
                     }
                 })
-                new $.Modal(document.getElementById('appendModal'), {}).show();
+                let appendModal = $('#appendModal');
+                $(appendModal).css('transition', 'background-color .45s');
+                $(appendModal).css('display', 'unset');
+                $(appendModal).css('opacity', '1');
+                $(appendModal).css('background-color', 'rgba(189,115,189,0.25)');
+                let appendCloseButtons = $(appendModal).find('button[data-bs-dismiss="modal"]');
+                $(appendCloseButtons).click(function () {
+                    $(appendModal).css('opacity', '0');
+                    setTimeout(function (){
+                        $(appendModal).css('display', 'none');
+                    }, 150)
+                })
             })
             $('input[name="json"]').change(function () {
                 let json, content, count = 0;
@@ -315,6 +350,7 @@
                 }
             })
 
+
             const myModalEl = document.getElementById('exportModal')
             myModalEl.addEventListener('hidden.bs.modal', event => {
 
@@ -343,9 +379,10 @@
                 $.ajax({
                     url: "{{ path('app_json_sample') }}",
                     method: 'GET',
-                    data: {user_id: user_id, ids: ids, filename: exportFile},
+                    data: {user_id: user_id, ids: JSON.stringify(ids), filename: exportFile},
                     success: function (data) {
                         $('.sample').html(data['sample']);
+                        json = data['json'];
                     }
                 })
 

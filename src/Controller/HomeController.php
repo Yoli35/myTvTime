@@ -22,7 +22,6 @@ class HomeController extends AbstractController
     public function home(Request $request): RedirectResponse
     {
         $locale = $request->getLocale();
-//        return $this->redirect('/'.$locale);
         return $this->redirectToRoute('app_home', ['_locale' => $locale]);
     }
     /**
