@@ -1,16 +1,16 @@
 {% if weather is not empty %}
     <div class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
         <div class="city">{{ weather.location.name }}</div>
-        <div class="region-country">
+        <div class="item">
             <div>{{ weather.location.region }}</div>
             -
             <div>{{ weather.location.country }}</div>
         </div>
-        <div class="last_updated">
+        <div class="item">
             {{ weather.current.last_updated|format_date('full') }}
         </div>
         <div class="temperature">{{ weather.current.temp_c|round ~ '°' }}</div>
-        <div class="feelslike">
+        <div class="item">
             <i class="bi bi-thermometer-half"></i>
             {{ 'Min'|trans }} : {{ weather.forecast.forecastday.0.day.mintemp_c|round ~ '°' }}
             {{ 'Max'|trans }} : {{ weather.forecast.forecastday.0.day.maxtemp_c|round ~ '°' }}
@@ -20,31 +20,31 @@
             <img src="{{ weather.current.condition.icon }}" alt="">
             <div>{{ weather.current.condition.text }}</div>
         </div>
-        <div class="humidity">
+        <div class="item">
             <div><i class="bi bi-cloud-drizzle"></i> {{ 'Precipitation'|trans }} : {{ weather.current.precip_mm ~ 'mm' }}</div>
             <div><i class="bi bi-droplet"></i> {{ 'Humidity'|trans }} : {{ weather.current.humidity ~ '%' }}</div>
         </div>
-        <div class="humidity">
+        <div class="item">
             <div>{{ 'Pressure'|trans }} : {{ weather.current.pressure_mb }} {{ 'Millibars'|trans }}</div>
         </div>
-        <div class="visibility-uv">
+        <div class="item">
             <div><i class="bi bi-eye"></i> {{ 'Visibility'|trans }} : {{ weather.current.vis_km ~ 'km' }}</div>
             <div><i class="bi bi-sun-fill"></i> {{ 'UV'|trans }} : {{ weather.current.uv }}</div>
         </div>
-        <div class="wind">
+        <div class="item">
             <i class="bi bi-wind"></i>
             <div>{{ 'Wind'|trans }} : {{ weather.current.wind_kph }}{{ 'km/h'|trans }}</div>
             <div>{{ 'Direction'|trans }} : {{ weather.current.wind_dir }} ({{ weather.current.wind_degree ~ '°' }})</div>
         </div>
-        <div class="wind">
+        <div class="item">
             <div>{{ 'Gust'|trans }} : {{ weather.current.gust_kph }}{{ 'km/h'|trans }}</div>
         </div>
-        <div class="sun">
+        <div class="item">
             <i class="bi bi-sun"></i>
             <div>{{ 'Sunrise'|trans }} : {{ weather.forecast.forecastday.0.astro.sunrise|date("G:i") }}</div>
             <div>{{ 'Sunset'|trans }} : {{ weather.forecast.forecastday.0.astro.sunset|date("G:i") }}</div>
         </div>
-        <div class="moon">
+        <div class="item">
             <i class="bi bi-moon"></i>
             <div>{{ 'Sunrise'|trans }} : {{ weather.forecast.forecastday.0.astro.moonrise|date("G:i") }}</div>
             <div>{{ 'Sunset'|trans }} : {{ weather.forecast.forecastday.0.astro.moonset|date("G:i") }}</div>

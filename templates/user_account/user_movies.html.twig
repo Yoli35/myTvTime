@@ -4,7 +4,7 @@
 {% set user = app.user %}
 
 {% block body %}
-{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -192,7 +192,7 @@
                         let exportCloseButtons = $(exportModal).find('button[data-bs-dismiss="modal"]');
                         $(exportCloseButtons).click(function () {
                             $(exportModal).css('opacity', '0');
-                            setTimeout(function (){
+                            setTimeout(function () {
                                 $(exportModal).css('display', 'none');
                             }, 150)
 
@@ -240,7 +240,7 @@
                 let appendCloseButtons = $(appendModal).find('button[data-bs-dismiss="modal"]');
                 $(appendCloseButtons).click(function () {
                     $(appendModal).css('opacity', '0');
-                    setTimeout(function (){
+                    setTimeout(function () {
                         $(appendModal).css('display', 'none');
                     }, 150)
                 })
