@@ -7,6 +7,56 @@
 {% set path = app.request.pathInfo %}
 
 {# {{ dump() }} #}
+
+<nav class="nav-menu">
+    <a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a>
+    <a href="{{ path('app_home_series') }}">{{ 'Series'|trans }}</a>
+    <a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a>
+    <hr class="divider">
+    {% if user is null %}
+        <a href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>
+        <a href="{{ path('app_login') }}">{{ 'Connexion'|trans }}</a>
+    {% else %}
+        <span class="welcome">{{ 'Welcome'|trans }}&nbsp;{{ user.username }}&nbsp;!</span>
+        <a href="{{ path('app_personal_profile') }}">{{ 'My Account'|trans }}</a>
+        <a href="{{ path('app_personal_movies') }}">{{ 'My Movies'|trans }}</a>
+        <a href="{{ path('app_youtube') }}">{{ 'Youtube' }}</a>
+        <a href="{{ path('app_tik_tok') }}">{{ 'TikTok' }}</a>
+        <hr class="divider">
+        <div class="locale">
+            {% set params = '' %}
+            {% if route in ['app_movies_search'] %} {% set params = '?query='~query~'&year='~year %} {% endif %}
+            <a href="/fr{{ path[3:]~params }}"><img src="/images/interface/fr.png" alt="{{ 'French'|trans }}"></a>
+            <a href="/en{{ path[3:]~params }}"><img src="/images/interface/en.png" alt="{{ 'English'|trans }}"></a>
+            <a href="/de{{ path[3:]~params }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}"></a>
+            <a href="/es{{ path[3:]~params }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}"></a>
+        </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <hr class="divider">
+            <a href="{{ path('app_admin_dashboard_index') }}">{{ 'Another action'|trans }}</a>
+            <a href="{{ path('app_php_info') }}">{{ 'Php Info'|trans }}</a>
+        {% endif %}
+    {% endif %}
+</nav>
+<button type="button" aria-label="toggle curtain navigation" class="nav-toggler">
+    <span class="line l1"></span>
+    <span class="line l2"></span>
+    <span class="line l3"></span>
+</button>
+<script>
+    const hamburgerButton = document.querySelector('.nav-toggler');
+    const navigation = document.querySelector('nav');
+
+    hamburgerButton.addEventListener("click", toggleNav);
+
+    function toggleNav() {
+        hamburgerButton.classList.toggle("active");
+        navigation.classList.toggle("active");
+    }
+</script>
+
+{#
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand logo" href="{{ path('app_home') }}"><span>{{ 'myTvTime' }}</span></a>
@@ -73,6 +123,8 @@
         </div>
     </div>
 </nav>
+#}
+
 {% for message in app.flashes('success') %}
     <div class="alert alert-success" role="alert">
         {{ message|trans }}
