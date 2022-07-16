@@ -18,8 +18,6 @@ class UserMovieSearchComponent
     #[LiveProp]
     public int $id;
     #[LiveProp]
-    public string $poster_size;
-    #[LiveProp]
     public string $poster_url;
 
     private ObjectRepository $repoUM;
@@ -32,8 +30,7 @@ class UserMovieSearchComponent
     public function mount($id, $poster_url, $poster_size): void
     {
         $this->id = $id;
-        $this->poster_url = $poster_url;
-        $this->poster_size = $poster_size;
+        $this->poster_url = $poster_url . $poster_size;
     }
 
     public function movie_results(): array

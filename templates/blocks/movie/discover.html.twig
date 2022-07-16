@@ -1,5 +1,5 @@
 <div class="home-discover" id="{{ id }}">
-    <a href="{{ path(dRoute, {id: id}) }}">
+    <a href="{{ path(route, {id: id}) }}">
         <img src="{{ poster }}" alt="{{ title }}">
         <div class="title">{{ title }}</div>
         {% if discover.release_date is defined and discover.release_date|length %}

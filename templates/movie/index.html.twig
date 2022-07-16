@@ -330,7 +330,17 @@
 
                         $('.person-profile').html('<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">')
 
-                        new bootstrap.Modal(document.getElementById('personModal'), {}).show();
+                        // new bootstrap.Modal(document.getElementById('personModal'), {}).show();
+                        let personModal = $('#personModal');
+                        $(personModal).css('display', 'unset');
+                        $(personModal).css('opacity', '1');
+                        let personCloseButtons = $(personModal).find('button[data-bs-dismiss="modal"]');
+                        $(personCloseButtons).click(function () {
+                            $(personModal).css('opacity', '0');
+                            setTimeout(function () {
+                                $(personModal).css('display', 'none');
+                            }, 150)
+                        })
                     }
                 })
             })

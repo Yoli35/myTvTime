@@ -55,7 +55,7 @@
                     <div class="content">
                         {% for discover in discovers %}
                             {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
-                            {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.movie_db_id}) }}
+                            {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.movie_db_id, route: 'app_movie' }) }}
                         {% endfor %}
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                 let id = $(this).data('id');
                 let exportModal = $('#exportModal');
                 let result = $('.modal-body').find('.export-result');
-                let count, movies, url, file, sample, result_item;
+                let count, movies, url, file, sample, result_items;
                 let locale = '{{ locale }}';
                 let txt = {
                     'aria_select_group': {'fr': 'Boutons de sélection', 'en': 'Selection buttons', 'de': 'Auswahlknöpfe', 'es': 'Botones de selección'},
@@ -134,6 +134,8 @@
                     'aria_deselect_all': {'fr': 'Tout désélectionner', 'en': 'Deselect all', 'de': 'Alles abwählen', 'es': 'De seleccionar todo'},
                     'select_all': {'fr': 'Tout sélectionner', 'en': 'Select all', 'de': 'Alle auswählen', 'es': 'Seleccionar todo'},
                     'deselect_all': {'fr': 'Tout désélectionner', 'en': 'Deselect all', 'de': 'Alles abwählen', 'es': 'De seleccionar todo'},
+                    'filter': {'fr': 'Filtre par nom', 'en': 'Filter by name', 'de': 'Nach Namen filtern', 'es': 'Filtrar por nombre'},
+                    'movie_name': {'fr': 'Titre de film', 'en': 'Movie title', 'de': 'Filmtitel', 'es': 'Título de la película'},
                     '': {'fr': '', 'en': '', 'de': '', 'es': ''},
                 }
 
@@ -155,38 +157,47 @@
                         $(result).append('<div class="sample">' + sample + '</div>');
                         $(result).append(
                             '<div class="selection">' +
-                            '   <div class="btn-group btn-group-sm" role="group" aria-label="' + txt.aria_select_group[locale] + '">' +
+                            // '   <div class="btn-group btn-group-sm" role="group" aria-label="' + txt.aria_select_group[locale] + '">' +
+                            '   <div class="input-group w-75">' +
+                            '       <span class="input-group-text">' + txt.filter[locale] + '</span>' +
+                            '       <input type="text" id="export-filter" class="form-control" placeholder="' + txt.movie_name[locale] + '" aria-label="' + txt.filter[locale] + '" style="width: 15em">' +
                             '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.aria_select_all[locale] + '">' + txt.select_all[locale] + '</button>' +
                             '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.aria_deselect_all[locale] + '">' + txt.deselect_all[locale] + '</button>' +
                             '   </div>' +
                             '</div>');
 
                         for (let i = 0; i < count; i++) {
-                            $(result).append('<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '">' + movies[i]['title'] + '</div>')
+                            $(result).append('<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '" data-title="' + movies[i]['title'] + '" data-original="' + movies[i]['original_title'] + '">' + movies[i]['title'] + '</div>')
                         }
 
                         // new Modal('#exportModal').show();
-                        $(exportModal).css('background-color', 'rgba(189,115,189,0.75)');
+                        $(exportModal).css('background-color', 'rgba(189,115,189,0.25)');
                         $(exportModal).css('display', 'block');
                         $(exportModal).css('opacity', '1');
 
                         exportFile = file;
 
-                        result_item = $('.result-item');
+                        result_items = $('.result-item');
 
-                        $(result_item).click(function () {
+                        $(result_items).click(function () {
                             $(this).toggleClass("active");
-                            updateSample($(result_item));
+                            updateSample($(result_items));
                         })
 
                         $('#export-select').click(function () {
-                            $(result_item).addClass("active");
-                            updateSample($(result_item));
+                            $(result_items).addClass("active");
+                            updateSample($(result_items));
                         })
 
                         $('#export-deselect').click(function () {
-                            $(result_item).removeClass("active");
-                            updateSample($(result_item));
+                            $(result_items).removeClass("active");
+                            updateSample($(result_items));
+                        })
+
+                        $('#export-filter').on('input', function () {
+                            let needle = $(this).val();
+                            filter(result_items, needle);
+                            updateSample(result_items);
                         })
 
                         let exportCloseButtons = $(exportModal).find('button[data-bs-dismiss="modal"]');
@@ -201,7 +212,7 @@
                                 method: 'GET',
                                 data: {filename: exportFile},
                                 success: function (data) {
-                                    console.log(data['result'])
+                                    // console.log(data['result'])
                                 }
                             })
                         })
@@ -327,7 +338,7 @@
                     let movie = selected[i];
                     let tmdb_id = $(movie).data('tmdb');
                     let val = (100 * (i / n)).toFixed();
-                    console.log(val);
+                    // console.log(val);
 
                     $.ajax({
                         url: "{{ path('app_personnel_movie_add') }}",
@@ -336,11 +347,11 @@
                         success: function (data) {
                             pv++;
                             $(value).css('width', (100 * (pv / n)).toFixed() + '%');
-                            console.log(data['title'] + ' - ' + data['progress_value'] + '%');
+                            // console.log(data['title'] + ' - ' + data['progress_value'] + '%');
 
                             if (pv === n) {
                                 setTimeout(() => {
-                                    console.log("Ajout terminé.");
+                                    // console.log("Ajout terminé.");
                                     $(progress).css('display', 'none');
                                     window.location.reload();
                                 }, 1000);
@@ -350,7 +361,6 @@
                 }
             })
 
-
             const myModalEl = document.getElementById('exportModal')
             myModalEl.addEventListener('hidden.bs.modal', event => {
 
@@ -359,10 +369,35 @@
                     method: 'GET',
                     data: {filename: exportFile},
                     success: function (data) {
-                        console.log(data['result'])
+                        // console.log(data['result'])
                     }
                 })
             })
+
+            function filter(items, needle) {
+                let title, original, count, idx;
+                count = items.length;
+
+                if (needle.length) {
+                    for (idx = 0; idx < count; idx++) {
+                        title = $(items[idx]).data('title');
+                        original = $(items[idx]).data('original');
+                        title = (typeof title === 'number') ? title.toString() : title.toLowerCase();
+                        original = (typeof original === 'number') ? original.toString() : original.toLowerCase();
+
+                        if (title.includes(needle) === false && original.includes(needle) === false) {
+                            $(items[idx]).css('display', 'none');
+                            $(items[idx]).removeClass('active');
+                        } else {
+                            $(items[idx]).css('display', 'block');
+                            $(items[idx]).addClass('active');
+                        }
+                    }
+                } else {
+                    $(items).css('display', 'block');
+                    $(items).removeClass('active');
+                }
+            }
 
             function updateSample(items) {
 

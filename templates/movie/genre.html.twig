@@ -30,7 +30,7 @@
                     {% else %}
                         {% set poster = "/images/default/no_poster_dark.png" %}
                     {% endif %}
-                    {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.id}) }}
+                    {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.id, route: 'app_movie' }) }}
 
 {#                    <div class="home-discover">#}
 {#                        <a href="{{ path('app_movie', {id: discover.id}) }}">#}

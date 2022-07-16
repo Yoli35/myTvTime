@@ -6,7 +6,8 @@
     {% if this.movie_results is not empty %}
         <div class="result">
             {% for item in this.movie_results %}
-                {{ include('blocks/movie/discover.html.twig', {discover: item, poster_url:this.poster_url, poster_size:this.poster_size}) }}
+                {%  set poster = this.poster_url ~ item.poster_path %}
+                {{ include('blocks/movie/discover.html.twig', { title: item.title, poster: poster, id: item.id, route: 'app_movie' }) }}
             {% endfor %}
         </div>
     {% endif %}

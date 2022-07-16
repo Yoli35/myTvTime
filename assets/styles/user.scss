@@ -154,12 +154,13 @@
             flex-direction: row;
             flex-wrap: wrap;
             justify-content: center;
+            left: -.25em;
             max-height: 30em;
             overflow: hidden;
             overflow-y: scroll;
             padding: 1em;
             position: absolute;
-            top: 4em;
+            top: 4.125em;
             width: 45em;
         }
     }
