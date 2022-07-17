@@ -153,16 +153,16 @@
                 text-align: center;
                 z-index: 1;
             }
+        }
 
-            .infos {
-                display: flex;
-                flex-direction: column;
-                padding-left: 1em;
+        .infos {
+            display: flex;
+            flex-direction: column;
+            padding-left: 1em;
 
-                .info {
-                    font-size: .75em;
-                    font-weight: 400;
-                }
+            .info {
+                font-size: .75em;
+                font-weight: 400;
             }
         }
     }
