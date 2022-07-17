@@ -1,13 +1,15 @@
 <div {{ attributes }}>
-    <label>{{ 'Search'|trans }} :
-        <input type="search" name="query" value="{{ query }}" data-action="live#update" autofocus>
-    </label>
+    <form data-model="*">
+        <label>{{ 'Search'|trans }} :
+            <input type="search" name="query" value="{{ query }}" autofocus>
+        </label>
+    </form>
 
     {% if this.movie_results is not empty %}
         <div class="result">
             {% for item in this.movie_results %}
                 {%  set poster = this.poster_url ~ item.poster_path %}
-                {{ include('blocks/movie/discover.html.twig', { title: item.title, poster: poster, id: item.id, route: 'app_movie' }) }}
+                {{ include('blocks/movie/discover.html.twig', { title: item.title, poster: poster, id: item.movie_db_id, route: 'app_movie' }) }}
             {% endfor %}
         </div>
     {% endif %}

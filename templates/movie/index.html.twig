@@ -193,38 +193,42 @@
         {% if cast is not empty %}
             <h2>{{ 'Casting'|trans }}</h2>
             <div class="cast">
-                {% for actor in cast %}
-                    <div class="actor">
-                        {% if actor.profile_path | length %}
-                            <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
-                        {% else %}
-                            <div class="profile" data-id="{{ actor.id }}"></div>
-                        {% endif %}
-                        <div class="name">{{ actor.name }}</div>
-                        <div class="character">{{ actor.character }}</div>
-                    </div>
-                {% endfor %}
+                <div class="content">
+                    {% for actor in cast %}
+                        <div class="actor" data-bs-toggle="modal" data-bs-target="#personModal">
+                            {% if actor.profile_path | length %}
+                                <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
+                            {% else %}
+                                <div class="profile" data-id="{{ actor.id }}"></div>
+                            {% endif %}
+                            <div class="name">{{ actor.name }}</div>
+                            <div class="character">{{ actor.character }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endif %}
 
         {% if crew is not empty %}
             <h2>{{ 'Crew'|trans }}</h2>
             <div class="crew">
-                {% for member in crew %}
-                    <div class="member">
-                        {% if member.profile_path | length %}
-                            <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')" data-id="{{ member.id }}"></div>
-                        {% else %}
-                            <div class="profile" data-id="{{ member.id }}"></div>
-                        {% endif %}
-                        <div class="job">{{ member.job }}</div>
-                        <div class="name">{{ member.name }}</div>
-                    </div>
-                {% endfor %}
+                <div class="content">
+                    {% for member in crew %}
+                        <div class="member" data-bs-toggle="modal" data-bs-target="#personModal">
+                            {% if member.profile_path | length %}
+                                <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')" data-id="{{ member.id }}"></div>
+                            {% else %}
+                                <div class="profile" data-id="{{ member.id }}"></div>
+                            {% endif %}
+                            <div class="job">{{ member.job }}</div>
+                            <div class="name">{{ member.name }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endif %}
 
-        <div class="modal" id="personModal" tabindex="-1">
+        <div class="modal fade" id="personModal" tabindex="-1">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -331,16 +335,16 @@
                         $('.person-profile').html('<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">')
 
                         // new bootstrap.Modal(document.getElementById('personModal'), {}).show();
-                        let personModal = $('#personModal');
-                        $(personModal).css('display', 'unset');
-                        $(personModal).css('opacity', '1');
-                        let personCloseButtons = $(personModal).find('button[data-bs-dismiss="modal"]');
-                        $(personCloseButtons).click(function () {
-                            $(personModal).css('opacity', '0');
-                            setTimeout(function () {
-                                $(personModal).css('display', 'none');
-                            }, 150)
-                        })
+                        // let personModal = $('#personModal');
+                        // $(personModal).css('display', 'unset');
+                        // $(personModal).css('opacity', '1');
+                        // let personCloseButtons = $(personModal).find('button[data-bs-dismiss="modal"]');
+                        // $(personCloseButtons).click(function () {
+                        //     $(personModal).css('opacity', '0');
+                        //     setTimeout(function () {
+                        //         $(personModal).css('display', 'none');
+                        //     }, 150)
+                        // })
                     }
                 })
             })

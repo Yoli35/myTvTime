@@ -7,9 +7,11 @@
         <div class="parameters">
             <div class="row">
                 <div class="col align-items-center justify-content-center h-100 w-100">
-                    <label>{{ 'TikTok Link'|trans }} :
-                        <input id="link" type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
-                    </label>
+                    <form data-model="*">
+                        <label>{{ 'TikTok Link'|trans }} :
+                            <input id="link" type="search" name="link" value="{{ link }}" autofocus>
+                        </label>
+                    </form>
                 </div>
             </div>
         </div>

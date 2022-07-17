@@ -87,9 +87,20 @@ main {
     }
 
     .welcome {
+        align-items: center;
         background: #0d94887f;
-        border-radius: 1em;
-        padding: .25em .75em;
+        border-radius: 1.5em;
+        display: flex;
+        padding: .25em .25em .25em .75em;
+
+        .avatar {
+            border: 2px solid #bdbdbd;
+            border-radius: 50%;
+            cursor: pointer;
+            height: 2em;
+            margin-left: 1em;
+            width: 2em;
+        }
     }
 
     .divider {
@@ -382,58 +393,63 @@ h4 {
     border-radius: 1em;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
-    justify-content: space-around;
-    max-height: 20em;
-    min-height: 16em;
-    overflow-y: scroll;
+    justify-content: center;
+    width: 100%;
 
-    .title {
-        font-size: 1.5em;
-    }
-
-    .actor, .member {
+    .content {
         align-items: center;
-        cursor: grab;
         display: flex;
-        flex-direction: column;
-        height: 14em;
-        margin: .5em .5em;
-        width: 7em;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin: 0 auto;
+        max-height: 20em;
+        min-height: 16em;
+        overflow-y: scroll;
 
-        .profile {
-            background-image: url("../../public/images/default/profile.jpg");
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            border-radius: .5em;
-            height: 10em;
-            overflow: hidden;
-            transition: border-radius .25s, height .25s;
-            width: 100%;
+        .actor, .member {
+            align-items: center;
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            height: 14em;
+            margin: .5em .5em;
+            width: 7em;
 
-            &:hover {
-                border-radius: 50%;
-                height: 15em;
-            }
-
-            img {
-                height: auto;
+            .profile {
+                background-image: url("../../public/images/default/profile.jpg");
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                border-radius: .5em;
+                height: 10em;
+                overflow: hidden;
+                transition: border-radius .25s, height .25s;
                 width: 100%;
+
+                &:hover {
+                    border-radius: 50%;
+                    height: 15em;
+                }
+
+                img {
+                    height: auto;
+                    width: 100%;
+                }
             }
-        }
 
-        .name {
-            font-size: .75em;
-            font-weight: bold;
-            text-align: center;
-        }
+            .name {
+                font-size: .75em;
+                font-weight: bold;
+                text-align: center;
+            }
 
-        .character, .job {
-            font-size: .5em;
-            text-align: center;
+            .character, .job {
+                font-size: .5em;
+                text-align: center;
+            }
         }
     }
 }

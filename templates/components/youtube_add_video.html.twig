@@ -6,9 +6,11 @@
             <div class="row w-100">
                 <div class="col-xl-5 col-lg-4 col-sm-12 mb-sm-4 mb-lg-0">
                     <div class="d-flex align-items-center justify-content-center h-100 w-100">
-                        <label>{{ 'Link'|trans }} :
-                            <input id="" type="search" name="link" value="{{ link }}" data-action="live#update" autofocus>
-                        </label>
+                        <form data-model="*">
+                            <label>{{ 'Link'|trans }} :
+                                <input id="" type="search" name="link" value="{{ link }}" autofocus>
+                            </label>
+                        </form>
                     </div>
                 </div>
                 <div class="col-xl-7 col-lg-8 col-sm-12">

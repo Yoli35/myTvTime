@@ -14,11 +14,15 @@ framework:
                     multiplier: 2
             failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
+            liip_imagine: '%env(MESSENGER_TRANSPORT_DSN)%'
+            sync: 'sync://'
 
         routing:
             Symfony\Component\Mailer\Messenger\SendEmailMessage: async
             Symfony\Component\Notifier\Message\ChatMessage: async
             Symfony\Component\Notifier\Message\SmsMessage: async
+            'Liip\ImagineBundle\Message\WarmupCache': liip_imagine
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
+

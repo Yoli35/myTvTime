@@ -12,7 +12,6 @@ $(function () {
                 data: {movie_db_id: movie_id},
                 success: function (data) {
                     $(badge).removeClass('yes');
-                    console.log(data);
                 }
             });
         }

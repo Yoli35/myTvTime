@@ -1,0 +1,4 @@
+# config/packages/liip_imagine.yaml
+
+liip_imagine:
+  messenger: true

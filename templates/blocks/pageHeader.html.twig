@@ -17,7 +17,12 @@
         <a href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>
         <a href="{{ path('app_login') }}">{{ 'Connexion'|trans }}</a>
     {% else %}
-        <span class="welcome">{{ 'Welcome'|trans }}&nbsp;{{ user.username }}&nbsp;!</span>
+        <span class="welcome">
+            {{ 'Welcome'|trans }}&nbsp;{{ user.username }}&nbsp;!
+            {% if user.avatar is defined and  user.avatar|length %}
+                <img class="avatar" src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username }}">
+            {% endif %}
+        </span>
         <a href="{{ path('app_personal_profile') }}">{{ 'My Account'|trans }}</a>
         <a href="{{ path('app_personal_movies') }}">{{ 'My Movies'|trans }}</a>
         <a href="{{ path('app_youtube') }}">{{ 'Youtube' }}</a>
@@ -37,6 +42,10 @@
             <a href="{{ path('app_admin_dashboard_index') }}">{{ 'Another action'|trans }}</a>
             <a href="{{ path('app_php_info') }}">{{ 'Php Info'|trans }}</a>
         {% endif %}
+
+        <hr class="divider">
+        <a href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
+
     {% endif %}
 </nav>
 <button type="button" aria-label="toggle curtain navigation" class="nav-toggler">
