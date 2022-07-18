@@ -1,5 +1,7 @@
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+@import "variables";
+
+.tt-header {
+    @include banner("../images/tiktok-header1.jpg");
 }
 
 .tt-videos {
@@ -129,7 +131,88 @@ body {
 
 }
 
+@media (min-width: 575.98px) {
+    .tt-header {
+        .banner {
+            background-image: url("../images/tiktok-header2.jpg");
+            height: 120px;
+            width: 100%;
+            .nav-breadcrumb {
+                bottom: -2em;
+                left: 1em;
+            }
+        }
+    }
+}
+
+@media (min-width: 767.98px) {
+    .tt-header {
+        .banner {
+            background-image: url("../images/tiktok-header3.jpg");
+            height: 160px;
+            width: 100%;
+            .nav-breadcrumb {
+                bottom: -1em;
+                left: 1em;
+            }
+        }
+    }
+}
+
+@media (min-width: 991.98px) {
+    .tt-header {
+        .banner {
+            background-image: url("../images/tiktok-header4.jpg");
+            height: 240px;
+            width: 100%;
+            .nav-breadcrumb {
+                bottom: 0;
+                left: 1em;
+            }
+        }
+    }
+}
+
+@media (min-width: 1199.98px) {
+    .tt-header {
+        .banner {
+            background-image: url("../images/tiktok-header5.jpg");
+            height: 320px;
+            width: 100%;
+            .nav-breadcrumb {
+                bottom: 0;
+                left: 1em;
+            }
+        }
+    }
+}
+
+@media (min-width: 1399.98px) {
+    .tt-header {
+        .banner {
+            background-image: url("../images/tiktok-header6.jpg");
+            height: 320px;
+            width: 80%;
+            .nav-breadcrumb {
+                bottom: 0;
+                left: 1em;
+            }
+        }
+    }
+}
+
 @media (prefers-color-scheme: dark) {
+
+    .tt-header {
+        .banner {
+            .nav-breadcrumb {
+                .breadcrumb {
+                    background-color: transparent;
+                    padding: 0;
+                }
+            }
+        }
+    }
 
     .tt-videos .parameters {
         background-color: #3c2424;

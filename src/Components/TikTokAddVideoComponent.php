@@ -58,7 +58,11 @@ class TikTokAddVideoComponent
     #[ArrayShape(['videos' => "array", 'count' => "int"])]
     public function tik_tok_results(): array
     {
+        // https://vm.tiktok.com/ZMNHRpwad/?k=1
+        // https://www.tiktok.com/@jessicamartinez62s/video/7119662902562376965?is_from_webapp=1&sender_device=pc
         $thisLink = $this->link;
+        $videoId = "";
+        $valid = false;
         $is_there_a_new_one = false;
 
         if (str_contains($thisLink, "https://www.tiktok.com/") && str_contains($thisLink, "video")) {
@@ -67,8 +71,11 @@ class TikTokAddVideoComponent
             if ($hasParam) {
                 $thisLink = substr($thisLink, 0, $hasParam);
             }
-
             $videoId = substr($thisLink, -19);
+            $valid = true;
+        }
+
+        if ($valid) {
 
             $video = $this->tikTokVideoRepository->findBy(['videoId' => $videoId]);
 

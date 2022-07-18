@@ -1,1 +1,31 @@
-$font-family-title: Georgia, Times, 'New Roman', serif;
+@mixin banner($image) {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-top: 1em;
+
+    .banner {
+        background-image: url($image);
+        background-position: left center;
+        background-size: cover;
+        border-radius: 1em;
+        height: 100px;
+        position: relative;
+        transition: width .5s;
+        width: 100%;
+
+        .nav-breadcrumb {
+            bottom: -2em;
+            left: -1em;
+            padding: .25em .75em;
+            position: absolute;
+
+            .breadcrumb {
+                background-color: #efefef;
+                padding: 0 .5em;
+            }
+        }
+    }
+}
+
+

@@ -9,14 +9,19 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        <div class="container">
-            <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="{{ 'My TikTok Videos'|trans }}">{{ 'My TikTok Videos'|trans }}</li>
-                </ol>
-            </nav>
+        <div class="tt-header">
+            <div class="banner">
+                <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
+                    <div class="container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                            <li class="breadcrumb-item active" aria-current="{{ 'My TikTok Videos'|trans }}">{{ 'My TikTok Videos'|trans }}</li>
+                        </ol>
+                    </div>
+                </nav>
+            </div>
         </div>
+
         <div class="tt-videos">
             {{ component('tik_tok_add_video', {class: 'getter', 'id': user.id, 'locale': locale}) }}
         </div>
