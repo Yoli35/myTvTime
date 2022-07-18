@@ -9,14 +9,18 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-            <div class="container">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="{{ 'My Youtube Videos'|trans }}">{{ 'My Youtube Videos'|trans }}</li>
-                </ol>
+        <div class="yt-header">
+            <div class="banner">
+                <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
+                    <div class="container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
+                            <li class="breadcrumb-item active" aria-current="{{ 'My Youtube Videos'|trans }}">{{ 'My Youtube Videos'|trans }}</li>
+                        </ol>
+                    </div>
+                </nav>
             </div>
-        </nav>
+        </div>
 
         <div class="yt-videos">
             {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'locale': locale}) }}

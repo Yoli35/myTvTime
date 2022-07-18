@@ -1,3 +1,32 @@
+.yt-header {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-top: 1em;
+
+    .banner {
+        background-image: url("../images/yt-header1.png");
+        background-position: left center;
+        background-size: cover;
+        border-radius: 1em;
+        height: 100px;
+        position: relative;
+        width: 100%;
+
+        .nav-breadcrumb {
+            bottom: -2em;
+            left: -1em;
+            padding: .25em .75em;
+            position: absolute;
+
+            .breadcrumb {
+                background-color: #efefef;
+                padding: 0 .5em;
+            }
+        }
+    }
+}
+
 .yt-videos {
     font-weight: 400;
     margin: 1em;
@@ -22,26 +51,15 @@
         background-color: #dbdbdb;
         border-radius: .5em;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-evenly;
         margin: 0 auto;
         padding: 1em;
 
-        label {
-            margin-left: 0;
-        }
+        .input {
 
-        .example-thumbnail {
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            div {
-                border-radius: .25em;
-                height: 5.625em;
-                overflow: hidden;
-                width: 10em;
+            label {
+                margin-left: 0;
             }
         }
 
@@ -50,18 +68,32 @@
             display: flex;
             flex-direction: column;
             font-size: .75em;
-        }
+            padding: 1em;
 
-        a {
-            text-decoration: none;
-        }
-
-        span {
-            color: #085d55;
+            a {
+                text-decoration: none;
+            }
 
             span {
-                color: #12b7a9;
-                font-weight: bold;
+                color: #085d55;
+
+                span {
+                    color: #12b7a9;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .thumbnail {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            img {
+                border-radius: .25em;
+                height: 5.625em;
+                width: 10em;
             }
         }
     }
@@ -81,6 +113,24 @@
     margin: 2em;
     padding: 1em 2em;
     text-align: center;
+}
+
+@mixin thumbnail {
+    align-items: center;
+    background-color: #0d9488;
+    border: 2px solid #bdbdbd;
+    border-radius: 50%;
+    display: flex;
+    height: 2em;
+    flex: none;
+    font-size: 2em;
+    font-weight: 400;
+    justify-content: center;
+    width: 2em;
+
+    img {
+        border-radius: 50%;
+    }
 }
 
 .yt-video {
@@ -117,21 +167,7 @@
         width: 20em;
 
         .channel {
-            align-items: center;
-            background-color: #0d9488;
-            border: 2px solid #bdbdbd;
-            border-radius: 50%;
-            display: flex;
-            height: 2em;
-            flex: none;
-            font-size: 2em;
-            font-weight: 400;
-            justify-content: center;
-            width: 2em;
-
-            img {
-                border-radius: 50%;
-            }
+            @include thumbnail;
 
             span[data-descr] {
                 position: relative;
@@ -174,22 +210,36 @@
     .video {
         height: 324px;
         width: 576px;
+        iframe {
+            height: 100%;
+            width: 100%;
+        }
     }
 
     .details {
+        .title {
+            font-size: 1.5em;
+            font-weight: 400;
+            padding-top: 1em;
+        }
+
+        .description {
+            a {
+                color: #0d5e42;
+            }
+        }
+
         .channel {
-            .thumbnail {
-                align-items: center;
-                background-color: #0d9488;
-                border: 2px solid #bdbdbd;
-                border-radius: 50%;
-                display: flex;
-                height: 2em;
-                flex: none;
-                font-size: 2em;
+            align-items: baseline;
+            display: flex;
+            flex-direction: row;
+
+            .title {
                 font-weight: 400;
-                justify-content: center;
-                width: 2em;
+                padding-left: 1em;
+            }
+            .thumbnail {
+                @include thumbnail;
             }
         }
     }
@@ -200,6 +250,19 @@
         .video {
             height: 240px; /* 239,625 */
             width: 426px;
+        }
+    }
+
+    .yt-header {
+
+        .banner {
+            height: 120px;
+            width: 100%;
+
+            .nav-breadcrumb {
+                bottom: -2em;
+                left: 1em;
+            }
         }
     }
 
@@ -224,10 +287,27 @@
         }
     }
 
+    .yt-header {
+
+        .banner {
+            height: 160px;
+            width: 100%;
+
+            .nav-breadcrumb {
+                bottom: -1em;
+                left: 1em;
+            }
+        }
+    }
+
     .yt-videos {
         .parameters {
-            flex-direction: column;
+            flex-direction: row;
             width: 100%;
+
+            .example {
+                padding: 0 1em;
+            }
         }
     }
 
@@ -242,6 +322,19 @@
         .video {
             height: 437px; /* 436,5 */
             width: 776px;
+        }
+    }
+
+    .yt-header {
+
+        .banner {
+            height: 240px;
+            width: 100%;
+
+            .nav-breadcrumb {
+                bottom: 0;
+                left: 1em;
+            }
         }
     }
 
@@ -271,6 +364,19 @@
         }
     }
 
+    .yt-header {
+
+        .banner {
+            height: 320px;
+            width: 100%;
+
+            .nav-breadcrumb {
+                bottom: 0;
+                left: 1em;
+            }
+        }
+    }
+
     .yt-videos {
         .parameters {
             flex-direction: row;
@@ -293,6 +399,19 @@
         }
     }
 
+    .yt-header {
+
+        .banner {
+            height: 320px;
+            width: 80%;
+
+            .nav-breadcrumb {
+                bottom: 0;
+                left: 1em;
+            }
+        }
+    }
+
     .yt-videos {
         .parameters {
             flex-direction: row;
@@ -307,47 +426,21 @@
     /*}*/
 }
 
-.yt-video-page {
-    .video {
-        iframe {
-            height: 100%;
-            width: 100%;
-        }
-    }
-
-    .details {
-        .title {
-            font-size: 1.5em;
-            font-weight: 400;
-            padding-top: 1em;
-        }
-
-        .description {
-            a {
-                color: #0d5e42;
-            }
-        }
-
-        .channel {
-            align-items: baseline;
-            display: flex;
-            flex-direction: row;
-
-            .thumbnail {
-                /* line 102 */
-            }
-
-            .title {
-                font-weight: 400;
-                padding-left: 1em;
-            }
-        }
-    }
-}
-
 @media (prefers-color-scheme: dark) {
 
+    .yt-header {
+        .banner {
+            .nav-breadcrumb {
+                .breadcrumb {
+                    background-color: transparent;
+                    padding: 0;
+                }
+            }
+        }
+    }
+
     .yt-videos {
+
         .parameters {
             background-color: #2f2f2f;
 
