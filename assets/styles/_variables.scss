@@ -28,4 +28,20 @@
     }
 }
 
+@mixin author {
+    align-items: center;
+    background-color: #c94b4b;
+    border: 2px solid #bdbdbd;
+    border-radius: 50%;
+    display: flex;
+    height: 2em;
+    flex: none;
+    font-size: 2em;
+    font-weight: 400;
+    justify-content: center;
+    width: 2em;
 
+    img {
+        border-radius: 50%;
+    }
+}

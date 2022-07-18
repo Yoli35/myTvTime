@@ -5,9 +5,34 @@
 }
 
 .tt-videos {
-    /*font-family: 'Montserrat', sans-serif;*/
     font-weight: 400;
     margin: 1em;
+
+    .getter {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+    .parameters {
+        align-items: center;
+        background-color: #f8d1d1;
+        border-radius: .5em;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin: 0 auto;
+        padding: 1em;
+        width: 80%;
+
+        label {
+            margin-left: 0;
+        }
+    }
+    .result {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 
 .tt-videos-none {
@@ -21,34 +46,6 @@
     text-align: center;
 }
 
-.tt-videos .getter {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-}
-
-.tt-videos .parameters {
-    align-items: center;
-    background-color: #f8d1d1;
-    border-radius: .5em;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    margin: 0 auto;
-    padding: 1em;
-    width: 80%;
-}
-
-.tt-videos .parameters label {
-    margin-left: 0;
-}
-
-.tt-videos .result {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
 .tt-video {
     align-items: center;
     background-color: #f8d1d1;
@@ -57,78 +54,63 @@
     flex-direction: column;
     margin: 1em;
     overflow: hidden;
-}
+    width: 14em;
 
-.tt-videos .thumbnail {
-    position: relative;
-}
+    .thumbnail {
+        position: relative;
+        width: 14em;
 
-.tt-videos .thumbnail img {
-    height: auto;
-    width: 15em;
-}
+        img {
+            height: 27em;
+            width: auto;
+        }
+        .title {
+            bottom: .5em;
+            color: #f3e8ff;
+            font-size: .75em;
+            padding: 0.25em;
+            position: absolute;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.75);
 
-.tt-videos .thumbnail .title {
-    bottom: .5em;
-    color: #f3e8ff;
-    font-size: .75em;
-    padding: 0.25em;
-    position: absolute;
-    text-shadow: 0px 1px 2px rgba(0,0,0,0.75);
-}
+            &hover {
+                color: #2f1d26;
+            }
+        }
+    }
 
-.tt-videos .thumbnail .title:hover {
-    color: #2f1d26;
-}
+    .details {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: .5em;
+        width: 14em;
 
-.tt-video .details {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: .5em;
-    width: 15em;
-}
+        .author {
+            @include author;
+        }
 
-.tt-video .author,
-.tt-video-page .details .author .thumbnail {
-    align-items: center;
-    background-color: #c94b4b;
-    border: 2px solid #bdbdbd;
-    border-radius: 50%;
-    display: flex;
-    height: 2em;
-    flex: none;
-    font-size: 2em;
-    font-weight: 400;
-    justify-content: center;
-    width: 2em;
-}
-
-.tt-video .author img,
-.tt-video-page .details .author .thumbnail img {
-    border-radius: 50%;
-}
-
-.tt-video .infos {
-    display: flex;
-    flex-direction: column;
-    padding-left: 1em;
-}
-
-.tt-video .info {
-    /*font-family: 'Montserrat', sans-serif;*/
-    font-size: .75em;
-    font-weight: 400;
+        .infos {
+            display: flex;
+            flex-direction: column;
+            padding-left: 1em;
+            .info {
+                font-size: .75em;
+                font-weight: 400;
+            }
+        }
+    }
 }
 
 .tt-video-page {
-    /*font-family: 'Montserrat', sans-serif;*/
     font-weight: 400;
-}
-
-.tt-video-page .details {
-
+    .details {
+        .author {
+            .thumbnail {
+                @include author;
+            }
+        }
+    }
 }
 
 @media (min-width: 575.98px) {
@@ -155,6 +137,15 @@
                 bottom: -1em;
                 left: 1em;
             }
+        }
+    }
+    .tt-video {
+        width: 15em;
+        .thumbnail {
+            width: 15em;
+        }
+        .details {
+            width: 15em;
         }
     }
 }
@@ -214,11 +205,12 @@
         }
     }
 
-    .tt-videos .parameters {
-        background-color: #3c2424;
-    }
-
-    .tt-video {
-        background-color: #3c2424;
+    .tt-videos {
+        .parameters {
+            background-color: #3c2424;
+        }
+        .tt-video {
+            background-color: #3c2424;
+        }
     }
 }
