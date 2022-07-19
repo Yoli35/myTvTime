@@ -12,33 +12,56 @@
         align-items: center;
         display: flex;
         flex-direction: column;
-    }
-    .parameters {
-        align-items: center;
-        background-color: #f8d1d1;
-        border-radius: .5em;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        margin: 0 auto;
-        padding: 1em;
-        width: 80%;
 
-        label {
-            margin-left: 0;
+        .parameters {
+            align-items: center;
+            background-color: #f8d1d1;
+            border-radius: .5em;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            margin: 0 auto;
+            padding: 1em;
+            width: 80%;
+
+            .input {
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 1em;
+
+                label {
+                    margin-left: 0;
+                }
+            }
+
+            .example {
+                background-image: url("../images/tiktok-link.png");
+                background-position: center center;
+                background-size: cover;
+                border-radius: .5em;
+                height: 5em;
+                width: 20em;
+            }
         }
-    }
-    .result {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+
+        .result {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .see-more {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+        }
     }
 }
 
 .tt-videos-none {
     background-color: #808080;
     border-radius: .25em;
-    /*font-family: 'Montserrat', sans-serif;*/
     font-size: 3em;
     font-weight: normal;
     margin: 2em;
@@ -64,13 +87,14 @@
             height: 27em;
             width: auto;
         }
+
         .title {
             bottom: .5em;
             color: #f3e8ff;
             font-size: .75em;
             padding: 0.25em;
             position: absolute;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.75);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
 
             &hover {
                 color: #2f1d26;
@@ -94,6 +118,7 @@
             display: flex;
             flex-direction: column;
             padding-left: 1em;
+
             .info {
                 font-size: .75em;
                 font-weight: 400;
@@ -104,6 +129,7 @@
 
 .tt-video-page {
     font-weight: 400;
+
     .details {
         .author {
             .thumbnail {
@@ -117,8 +143,9 @@
     .tt-header {
         .banner {
             background-image: url("../images/tiktok-header2.jpg");
-            height: 120px;
+            height: 180px;
             width: 100%;
+
             .nav-breadcrumb {
                 bottom: -2em;
                 left: 1em;
@@ -131,19 +158,32 @@
     .tt-header {
         .banner {
             background-image: url("../images/tiktok-header3.jpg");
-            height: 160px;
+            height: 240px;
             width: 100%;
+
             .nav-breadcrumb {
                 bottom: -1em;
                 left: 1em;
             }
         }
     }
+    .tt-videos {
+        .getter {
+            .parameters {
+                flex-direction: row;
+                .input {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
     .tt-video {
         width: 15em;
+
         .thumbnail {
             width: 15em;
         }
+
         .details {
             width: 15em;
         }
@@ -154,8 +194,9 @@
     .tt-header {
         .banner {
             background-image: url("../images/tiktok-header4.jpg");
-            height: 240px;
+            height: 320px;
             width: 100%;
+
             .nav-breadcrumb {
                 bottom: 0;
                 left: 1em;
@@ -167,9 +208,10 @@
 @media (min-width: 1199.98px) {
     .tt-header {
         .banner {
-            background-image: url("../images/tiktok-header5.jpg");
-            height: 320px;
+            background-image: url("../images/tiktok-header6.jpg");
+            height: 360px;
             width: 100%;
+
             .nav-breadcrumb {
                 bottom: 0;
                 left: 1em;
@@ -181,9 +223,10 @@
 @media (min-width: 1399.98px) {
     .tt-header {
         .banner {
-            background-image: url("../images/tiktok-header6.jpg");
-            height: 320px;
-            width: 80%;
+            background-image: url("../images/tiktok-header5.jpg");
+            height: 400px;
+            width: 100%;
+
             .nav-breadcrumb {
                 bottom: 0;
                 left: 1em;
@@ -206,9 +249,12 @@
     }
 
     .tt-videos {
-        .parameters {
-            background-color: #3c2424;
+        .getter {
+            .parameters {
+                background-color: #3c2424;
+            }
         }
+
         .tt-video {
             background-color: #3c2424;
         }

@@ -2,6 +2,10 @@
 
 namespace App\Service;
 
+use Symfony\Component\HttpClient\Exception\ClientException;
+use Symfony\Component\HttpClient\Exception\RedirectionException;
+use Symfony\Component\HttpClient\Exception\ServerException;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -25,11 +29,22 @@ class TikTokService
      */
     public function getVideo($link): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://www.tiktok.com/oembed?url=' . $link,
-        );
-        return $response->getContent();
+        $response = null;
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://www.tiktok.com/oembed?url=' . $link,
+            );
+        } catch (TransportException $transportException) {
+            dump($transportException->getMessage());
+        } catch (ServerException $serverException) {
+            dump($serverException->getMessage());
+        } catch (RedirectionException $redirectionException) {
+            dump($redirectionException->getMessage());
+        } catch (ClientException $clientException) {
+            dump($clientException->getMessage());
+        }
+        return $response?->getContent();
     }
 
 }

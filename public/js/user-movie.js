@@ -94,23 +94,6 @@ function initButtons(locale, paths, id, url) {
                     filter(result_items, needle);
                     updateSample(result_items);
                 })
-
-                // let exportCloseButtons = $(exportModal).find('button[data-bs-dismiss="modal"]');
-                // $(exportCloseButtons).click(function () {
-                //     $(exportModal).css('opacity', '0');
-                //     setTimeout(function () {
-                //         $(exportModal).css('display', 'none');
-                //     }, 150)
-                //
-                //     $.ajax({
-                //         url: _json_cleanup,
-                //         method: 'GET',
-                //         data: {filename: exportFile},
-                //         success: function (data) {
-                //             // console.log(data['result'])
-                //         }
-                //     })
-                // })
             }
         })
     })

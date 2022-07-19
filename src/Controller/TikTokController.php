@@ -2,11 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\TikTokVideo;
 use App\Repository\TikTokVideoRepository;
+use App\Repository\UserRepository;
+use App\Service\TikTokService;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class TikTokController extends AbstractController
 {
@@ -30,5 +39,60 @@ class TikTokController extends AbstractController
                 'video' => $video,
             ]
         );
+    }
+
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    #[Route('/tiktok/more', name: 'app_tik_tok_more')]
+    public function getMore(Request $request, TikTokService $tikTokService, TikTokVideoRepository $tikTokVideoRepository, EntityManagerInterface $entityManager): Response
+    {
+        $id = $request->query->get('id');
+        $offset = $request->query->get('offset');
+
+        $videos = $tikTokVideoRepository->findUserTikToksByDate($id, $offset);
+        $update = false;
+        $inc = 0;
+
+        foreach ($videos as $video) {
+
+            $videoId = $video['video_id'];
+
+            $thumbnail = $video['thumbnail_url'];
+            $x_expires = intval(substr($thumbnail, strpos($thumbnail, "x-expires") + 10, 10));
+
+            $date = new DateTime();
+            $now = $date->getTimestamp();
+
+            /** @var TikTokVideo $video */
+            $video = $tikTokVideoRepository->findOneBy(['videoId' => $videoId]);
+
+            if ($now >= $x_expires) {
+                $link = $video['author_url'] . '/video/' . $video['video_id'];
+                $standing = $tikTokService->getVideo($link);
+                if ($standing) {
+                    $tiktok = json_decode($standing, true);
+                    $video->setThumbnailUrl($tiktok['thumbnail_url']);
+                    $video->setThumbnailHasExpired(true);
+
+                    $videos[$inc]['thumbnail_url'] = $tiktok['thumbnail_url'];
+                    $videos[$inc]['thumbnail_has_expired'] = false;
+                } else {
+                    $video->setThumbnailHasExpired(true);
+                }
+                $entityManager->persist($video);
+                $entityManager->flush();
+                $update = true;
+            }
+            $inc++;
+        }
+        return $this->json([
+            'results' => $videos,
+            'update' => $update,
+        ]);
     }
 }

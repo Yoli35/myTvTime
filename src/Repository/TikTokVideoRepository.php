@@ -42,12 +42,27 @@ class TikTokVideoRepository extends ServiceEntityRepository
         }
     }
 
-    public function findUserTikToksByDate($userId): array
+    public function findUserTikToksByDate($userId, $offset = 0): array
     {
         $sql = 'SELECT * FROM `tik_tok_video` t0 '
             .'INNER JOIN `user_tik_tok_video` t1 ON t1.`tik_tok_video_id`=t0.`id` '
             .'WHERE t1.`user_id` = '.$userId.' '
-            .'ORDER BY t0.`added_at` DESC';
+            .'ORDER BY t0.`added_at` DESC '
+            .'LIMIT 20 '
+            .'OFFSET ' . $offset;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
+    public function countUserTikToks($userId): array
+    {
+        $sql = 'SELECT COUNT(*) AS `count` FROM `tik_tok_video` t0 '
+            .'INNER JOIN `user_tik_tok_video` t1 ON t1.`tik_tok_video_id`=t0.`id` '
+            .'WHERE t1.`user_id` = '.$userId;
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

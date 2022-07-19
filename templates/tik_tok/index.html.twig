@@ -2,6 +2,7 @@
 
 {% block title %}{{ 'my TvTime::TikTok' }}{% endblock %}
 {% set user = app.user %}
+{% set total_results = 0 %}
 
 {% block body %}
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
@@ -25,18 +26,22 @@
         <div class="tt-videos">
             {{ component('tik_tok_add_video', {class: 'getter', 'id': user.id, 'locale': locale}) }}
         </div>
-        <script>
-            $(function () {
-                let link = $('input[name="link"]');
-                $(link).change(function () {
-                    setTimeout(function () {
-                        $(link).val("");
-                    }, 1000);
-                })
-            })
-        </script>
 
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
+{% endblock %}
+{% block morejs %}
+    <script src="/js/tiktok.js"></script>
+    <script>
+        $(function () {
+            initTiktok(
+                "{{ locale }}",
+                [
+                    "{{ path('app_tik_tok_more') }}",
+                    "{{ path('app_tik_tok_video', {id: 0 }) }}",
+                ],
+                {{ user.id }});
+        })
+    </script>
 {% endblock %}

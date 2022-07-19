@@ -51,6 +51,9 @@ class TikTokVideo
     #[ORM\Column(type: 'string', length: 255)]
     private $thumbnailUrl;
 
+    #[ORM\Column]
+    private ?bool $thumbnailHasExpired = null;
+
     #[ORM\Column(type: 'string', length: 255)]
     private $providerUrl;
 
@@ -276,6 +279,18 @@ class TikTokVideo
         if ($this->users->removeElement($user)) {
             $user->removeTiktok($this);
         }
+
+        return $this;
+    }
+
+    public function isThumbnailHasExpired(): ?bool
+    {
+        return $this->thumbnailHasExpired;
+    }
+
+    public function setThumbnailHasExpired(bool $thumbnailHasExpired): self
+    {
+        $this->thumbnailHasExpired = $thumbnailHasExpired;
 
         return $this;
     }

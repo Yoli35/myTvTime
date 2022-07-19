@@ -1,23 +1,23 @@
+{% set total_results = this.tik_tok_results.count %}
 <div {{ attributes }}>
-    <h1 style="font-weight: 100">
-        {{ this.tik_tok_results.count ?: 'No'|trans }} {{ this.tik_tok_results.count > 1 ? 'Videos'|trans : 'Video'|trans }}
+    <h1 style="font-weight: 100" id="h1" data-total-results="{{ total_results }}">
+        {{ total_results ?: 'No'|trans }} {{ total_results > 1 ? 'Videos'|trans : 'Video'|trans }}
     </h1>
-    {#    <h5>{{ this.tik_tok_results.seconds2human }}</h5> #}
+
     <div class="container">
         <div class="parameters">
-            <div class="row">
-                <div class="col align-items-center justify-content-center h-100 w-100">
-                    <form data-model="*">
-                        <label>{{ 'TikTok Link'|trans }} :
-                            <input id="link" type="search" name="link" value="{{ link }}" autofocus>
-                        </label>
-                    </form>
-                </div>
+            <div class="input">
+                <form data-model="*">
+                    <label>{{ 'TikTok Link'|trans }} :
+                        <input id="link" type="search" name="link" value="{{ link }}" autofocus>
+                    </label>
+                </form>
             </div>
+            <div class="example"></div>
         </div>
     </div>
-    {% if this.tik_tok_results.count %}
-        <div class="result">
+    {% if total_results %}
+        <div id="result" class="result">
             {% for item in this.tik_tok_results.videos %}
                 <div class="tt-video">
                     <a href="{{ path('app_tik_tok_video', {id: item.id}) }}">
@@ -40,6 +40,11 @@
                     </a>
                 </div>
             {% endfor %}
+            {% if total_results > (this.tik_tok_results.videos|length) %}
+                <div id="see-more" class="see-more">
+                    <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
+                </div>
+            {% endif %}
         </div>
     {% else %}
         <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
