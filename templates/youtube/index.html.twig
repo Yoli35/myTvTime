@@ -30,3 +30,23 @@
 
     </div>
 {% endblock %}
+{% block morejs %}
+    <script>
+        $(function () {
+
+            const myLink = document.getElementById('link');
+            myLink.addEventListener("input", () => {
+                setTimeout(function () {
+                    $(myLink).val("");
+                }, 2000);
+            });
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === 'visible') {
+                    myLink.focus();
+                    myLink.select();
+                }
+            });
+        })
+
+    </script>
+{% endblock %}

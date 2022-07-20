@@ -5,6 +5,7 @@ namespace App\Components;
 use App\Entity\User;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
+use App\Repository\UserRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
 use DateInterval;
@@ -17,6 +18,7 @@ use Google_Client;
 use Google_Service_YouTube;
 use JetBrains\PhpStorm\ArrayShape;
 //use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
@@ -33,10 +35,12 @@ class YoutubeAddVideoComponent
     public string $locale = '';
     #[LiveProp]
     public string $preview = '';
+    #[LiveProp]
+    public int $user_id = 0;
 
 //    private TranslationServiceClient $translationClient;
 //    private TranslatorInterface $translator;
-    private User $user;
+    private UserRepository $userRepository;
     private YoutubeVideoRepository $repoYTV;
     private YoutubeChannelRepository $repoYTC;
     private Google_Service_YouTube $service_YouTube;
@@ -44,12 +48,12 @@ class YoutubeAddVideoComponent
     /**
      * @throws Exception
      */
-    public function __construct(Security $security, YoutubeVideoRepository $repoYTV, YoutubeChannelRepository $repoYTC)
+    public function __construct(UserRepository $userRepository, YoutubeVideoRepository $repoYTV, YoutubeChannelRepository $repoYTC)
     {
+        $this->userRepository = $userRepository;
         $this->repoYTV = $repoYTV;
         $this->repoYTC = $repoYTC;
 
-        $this->user = $security->getUser();
 
         $client = new Google_Client();
         $client->setApplicationName('mytvtime');
@@ -60,8 +64,9 @@ class YoutubeAddVideoComponent
         $this->service_YouTube = new Google_Service_YouTube($client);
     }
 
-    public function mount($preview, $locale): void
+    public function mount($id, $preview, $locale): void
     {
+        $this->user_id = $id;
         $this->locale = $locale;
         $this->preview = $preview;
     }
@@ -88,7 +93,7 @@ class YoutubeAddVideoComponent
 
         if (strlen($thisLink) == 11) {
 
-            $link = $this->repoYTV->findBy(['link' => $thisLink, 'userId' => $this->user->getId()]);
+            $link = $this->repoYTV->findBy(['link' => $thisLink, 'userId' => $this->userRepository->find($this->user_id)]);
 
             // Si le lien n'a pas déjà été ajouté
             if ($link == null) {
@@ -134,7 +139,7 @@ class YoutubeAddVideoComponent
 
                 $new = new YoutubeVideo();
                 $new->setLink($item->id);
-                $new->setUserId($this->user->getId());
+                $new->setUserId($this->user_id);
                 $new->setCategoryId($snippet['categoryId']);
                 $new->setChannel($channel);
                 $new->setDefaultAudioLanguage($snippet['defaultAudioLanguage'] ?: "");
@@ -153,12 +158,12 @@ class YoutubeAddVideoComponent
                 $new->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
                 $new->setContentProjection($contentDetails['projection']);
 
-
                 $this->repoYTV->add($new, true);
+//                $this->addFlash('success', 'A new video has just been added : "' . $snippet['title'] .'"');
             }
         }
         /** @var YoutubeVideo[] $videos */
-        $videos = $this->repoYTV->findAllByDate($this->user->getId());
+        $videos = $this->repoYTV->findAllByDate($this->user_id);
         $total = 0;
         foreach ($videos as $video) {
             $total += $video->getContentDuration();

@@ -72,7 +72,7 @@ class TikTokController extends AbstractController
             $video = $tikTokVideoRepository->findOneBy(['videoId' => $videoId]);
 
             if ($now >= $x_expires) {
-                $link = $video['author_url'] . '/video/' . $video['video_id'];
+                $link = $video->getAuthorUrl() . '/video/' . $video->getVideoId();
                 $standing = $tikTokService->getVideo($link);
                 if ($standing) {
                     $tiktok = json_decode($standing, true);

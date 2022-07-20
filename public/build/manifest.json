@@ -1,8 +1,11 @@
 {
   "build/app.css": "/build/app.css",
   "build/app.js": "/build/app.js",
+  "build/notyf.css": "/build/notyf.css",
+  "build/notyf.js": "/build/notyf.js",
   "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_bootstrap_dist_js_boo-569abd.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_bootstrap_dist_js_boo-569abd.js",
+  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-live-compo-b96226.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-live-compo-b96226.js",
+  "build/vendors-node_modules_notyf_notyf_min_css-node_modules_notyf_notyf_es_js.js": "/build/vendors-node_modules_notyf_notyf_min_css-node_modules_notyf_notyf_es_js.js",
   "build/images/yt-header1.png": "/build/images/yt-header1.59e36dde.png",
   "build/images/tiktok-header6.jpg": "/build/images/tiktok-header6.3dcdca83.jpg",
   "build/images/tiktok-link.png": "/build/images/tiktok-link.e005f345.png",
@@ -13,5 +16,8 @@
   "build/images/tiktok-header2.jpg": "/build/images/tiktok-header2.5d6c4fc1.jpg",
   "build/images/profile_dark.jpg": "/build/images/profile_dark.e4a9c4de.jpg",
   "build/images/profile.jpg": "/build/images/profile.5be114a0.jpg",
-  "build/images/imdb.png": "/build/images/imdb.9a7477bf.png"
+  "build/images/imdb.png": "/build/images/imdb.9a7477bf.png",
+  "build/vendors-node_modules_core-js_internals_array-iteration_js-node_modules_core-js_internals_dom--711a0d.js": "/build/vendors-node_modules_core-js_internals_array-iteration_js-node_modules_core-js_internals_dom--711a0d.js",
+  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-live-compo-20aa85.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-live-compo-20aa85.js",
+  "build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_web_do-e225f3.js": "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_web_do-e225f3.js"
 }

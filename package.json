@@ -22,6 +22,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "bs-modal": "^1.0.5"
+        "bs-modal": "^1.0.5",
+        "notyf": "^3.10.0"
     }
 }
