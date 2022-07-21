@@ -50,10 +50,7 @@
             justify-content: center;
 
             .see-more {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-                width: 100%;
+                @include flex-100;
             }
         }
     }

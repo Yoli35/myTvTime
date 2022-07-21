@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\RedirectionException;
 use Symfony\Component\HttpClient\Exception\ServerException;
@@ -27,7 +28,8 @@ class TikTokService
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function getVideo($link): ?string
+    #[ArrayShape(['code' => "int", 'content' => "null|string"])]
+    public function getVideo($link): ?array
     {
         $response = null;
         try {
@@ -44,7 +46,12 @@ class TikTokService
         } catch (ClientException $clientException) {
             dump($clientException->getMessage());
         }
-        return $response?->getContent();
+        $statusCode = $response->getStatusCode();
+        dump($statusCode);
+        return [
+            'code' => $statusCode,
+            'content' => $statusCode == 200 ? $response->getContent() : null
+        ];
     }
 
 }

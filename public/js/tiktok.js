@@ -39,6 +39,7 @@ function initTiktok(locale, paths, id) {
 
             const h1 = document.getElementById('h1');
             const videos = document.getElementsByClassName('tt-video');
+            const options = {weekday: "long", year: 'numeric', month: 'long', day: 'numeric', hour12: false};
 
             total_results = parseInt(h1.getAttribute('data-total-results'));
             let current_results = videos.length;
@@ -85,7 +86,7 @@ function initTiktok(locale, paths, id) {
                         info.setAttribute("class", "info mt-2");
                         let dateT = result['added_at'].substring(0, 10) + 'T' + result['added_at'].substring(11, 19);
                         let added = new Date(dateT);
-                        info.appendChild(document.createTextNode(txt.added_at[_locale] + ' : ' + added.toLocaleString()));
+                        info.appendChild(document.createTextNode(txt.added_at[_locale] + ' : ' + added.toLocaleTimeString(undefined, options)));
                         infos.appendChild(info);
                         details.appendChild(author);
                         details.appendChild(infos);

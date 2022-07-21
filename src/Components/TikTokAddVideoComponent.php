@@ -3,14 +3,12 @@
 namespace App\Components;
 
 use App\Entity\TikTokVideo;
-use App\Entity\User;
 use App\Repository\TikTokVideoRepository;
 use App\Repository\UserRepository;
 use App\Service\TikTokService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\ArrayShape;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -59,7 +57,7 @@ class TikTokAddVideoComponent
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[ArrayShape(['videos' => "array", 'count' => "int"])]
+    #[ArrayShape(['videos' => "array", 'count' => "int", 'flash' => "array"])]
     public function tik_tok_results(): array
     {
         // https://vm.tiktok.com/ZMNHRpwad/?k=1
@@ -85,44 +83,54 @@ class TikTokAddVideoComponent
 
             if ($video == null) {
                 $standing = $this->tikTokService->getVideo($thisLink);
-                // https://www.tiktok.com/@leoobbrown/video/7089218681154145542?is_from_webapp=1&sender_device=pc&web_id=7113996049588979205
-                // dump($standing);
-                $tiktok = json_decode($standing, true);
+                if ($standing['code'] == 200) {
+                    // https://www.tiktok.com/@leoobbrown/video/7089218681154145542?is_from_webapp=1&sender_device=pc&web_id=7113996049588979205
+                    // dump($standing);
+                    $tiktok = json_decode($standing['content'], true);
 
-                $video = new TikTokVideo();
-                $video->setVersion($tiktok['version']);
-                $video->setType($tiktok['type']);
-                $video->setVideoId($videoId);
-                $video->setTitle($tiktok['title']);
-                $video->setAuthorUrl($tiktok['author_url']);
-                $video->setAuthorName($tiktok['author_name']);
-                $video->setWidth($tiktok['width']);
-                $video->setHeight($tiktok['height']);
-                $video->setHtml($tiktok['html']);
-                $video->setThumbnailUrl($tiktok['thumbnail_url']);
-                $video->setThumbnailHasExpired(false);
-                $video->setThumbnailWidth($tiktok['thumbnail_width']);
-                $video->setThumbnailHeight($tiktok['thumbnail_height']);
-                $video->setProviderUrl($tiktok['provider_url']);
-                $video->setProviderName($tiktok['provider_name']);
-                $addedAt = new \DateTimeImmutable();
-                $video->setAddedAt($addedAt->setTimezone((new \DateTime())->getTimezone()));
-                $video->addUser($this->userRepository->find($this->id));
+                    $video = new TikTokVideo();
+                    $video->setVersion($tiktok['version']);
+                    $video->setType($tiktok['type']);
+                    $video->setVideoId($videoId);
+                    $video->setTitle($tiktok['title']);
+                    $video->setAuthorUrl($tiktok['author_url']);
+                    $video->setAuthorName($tiktok['author_name']);
+                    $video->setWidth($tiktok['width']);
+                    $video->setHeight($tiktok['height']);
+                    $video->setHtml($tiktok['html']);
+                    $video->setThumbnailUrl($tiktok['thumbnail_url']);
+                    $video->setThumbnailHasExpired(false);
+                    $video->setThumbnailWidth($tiktok['thumbnail_width']);
+                    $video->setThumbnailHeight($tiktok['thumbnail_height']);
+                    $video->setProviderUrl($tiktok['provider_url']);
+                    $video->setProviderName($tiktok['provider_name']);
+                    $addedAt = new \DateTimeImmutable();
+                    $video->setAddedAt($addedAt->setTimezone((new \DateTime())->getTimezone()));
+                    $video->addUser($this->userRepository->find($this->id));
 
-                $this->tikTokVideoRepository->add($video, true);
+                    $this->tikTokVideoRepository->add($video, true);
 
-                $is_there_a_new_one = true;
+                    $is_there_a_new_one = true;
+                    $flash = ['status' => 'Success', 'message' => 'La vidéo a bien été ajoutée'];
+                }
+                else {
+                    $flash = ['status' => 'Error', 'message' => 'La vidéo n\'a pu être ajoutée'];
+                }
             }
+            else {
+                $flash = ['status' => 'Notice', 'message' => 'La vidéo a déjà été ajoutée précédemment'];
+            }
+        }
+        else {
+            $flash = ['status' => 'Error', 'message' => 'Le lien n\'est pas valide : ' . $this->link];
         }
 
         if (!count($this->videos) || $is_there_a_new_one) {
             $this->videos = $this->tikTokVideoRepository->findUserTikToksByDate($this->id);
-//            $this->videos = $this->tikTokVideoRepository->findUserTikToksByDate($this->user->getId());
         }
         $count = $this->tikTokVideoRepository->countUserTikToks($this->id);
-//        $count = $this->tikTokVideoRepository->countUserTikToks($this->user->getId());
 
-        return ['videos' => $this->videos, 'count' => $count[0]['count']];
+        return ['videos' => $this->videos, 'count' => $count[0]['count'], 'flash' => $flash];
     }
 
     /**
@@ -134,7 +142,6 @@ class TikTokAddVideoComponent
     public function thumbnail($item): string
     {
         // https://p16-sign-va.tiktokcdn.com/obj/tos-maliva-p-0068/6de148409b5d4a1fb4e752a0a2dd8001?x-expires=1656820800&x-signature=LV%2BoEEUMowEgWFRsWb97JEZfQDg%3D
-
         $tiktok = $item['tiktok'];
         $videoId = $tiktok['video_id'];
         $expired = false;
@@ -157,17 +164,19 @@ class TikTokAddVideoComponent
 
             $link = $tiktok['author_url'] . '/video/' . $tiktok['video_id'];
             $standing = $this->tikTokService->getVideo($link);
-            if ($standing) {
-                $tiktok = json_decode($standing, true);
+            if ($standing['code'] == 200) {
+                $tiktok = json_decode($standing['content'], true);
                 $video->setThumbnailUrl($tiktok['thumbnail_url']);
                 $video->setThumbnailHasExpired(false);
             } else {
+                $video->setThumbnailUrl('/images/default/tiktok_dark.jpg');
                 $video->setThumbnailHasExpired(true);
                 $expired = true;
             }
             $this->entityManager->persist($video);
             $this->entityManager->flush();
         }
+
         return $expired ? '/images/default/tiktok_dark.jpg' : $tiktok['thumbnail_url'];
     }
 }

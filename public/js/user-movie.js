@@ -3,7 +3,7 @@
 let json, ids, preview, infos, exportFile;
 let _user_id;
 let _locale;
-let _personal_movies_export, _json_ids, _personnel_movie_add, _json_cleanup, _json_sample;
+let _personal_movies_export, _json_ids, _personnel_movie_add, _json_cleanup, _json_sample, _movie_page, _movies_more;
 let _url;
 
 function initButtons(locale, paths, id, url) {
@@ -15,6 +15,8 @@ function initButtons(locale, paths, id, url) {
     _personnel_movie_add = paths[2];
     _json_cleanup = paths[3];
     _json_sample = paths[4];
+    _movie_page = paths[5].substring(0, paths[5].length - 1);
+    _movies_more = paths[6];
     _url = url;
 
     $('#export-button').click(function () {
@@ -249,7 +251,70 @@ function initButtons(locale, paths, id, url) {
             success: function () {
             }
         })
-    })
+    });
+
+    const moreButton = document.getElementById('more');
+    const seeMore = document.getElementById('see-more');
+    const videoList = document.getElementById('content');
+    const txt = {
+        'release_date': {'fr': 'Date de sortie ', 'en': 'Release date', 'de': 'Erscheinungsdatum', 'es': 'Fecha de lanzamiento'},
+        '': {'fr': '', 'en': '', 'de': '', 'es': ''},
+    }
+
+    if (moreButton) {
+
+        moreButton.addEventListener('click', () => {
+
+            const h1 = document.getElementById('h1');
+            const videos = document.getElementsByClassName('home-discover');
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+            total_results = parseInt(h1.getAttribute('data-total-results'));
+            let current_results = videos.length;
+
+            $.ajax({
+                url: _movies_more,
+                method: 'GET',
+                data: {id: _user_id, offset: current_results},
+                success: function (data) {
+                    let results = data['results'];
+                    let count = results.length;
+
+                    for (let i = 0; i < count; i++) {
+                        let result = results[i];
+                        let newVideo = document.createElement("div");
+                        newVideo.setAttribute("class", "home-discover");
+                        newVideo.setAttribute("id", result['movie_db_id']);
+                        let aVideo = document.createElement("a");
+                        aVideo.setAttribute("href", _movie_page + result['movie_db_id'].toString());
+                        let img = document.createElement("img");
+                        img.setAttribute("src", url + result['poster_path']);
+                        img.setAttribute("alt", result['title']);
+                        let title = document.createElement("div");
+                        title.setAttribute("class", "title");
+                        title.appendChild(document.createTextNode(result['title']));
+                        let date = document.createElement("div");
+                        date.setAttribute("class", "date");
+                        let dateT = result['release_date'];
+                        let released = new Date(dateT);
+                        date.appendChild(document.createTextNode(txt.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
+                        aVideo.appendChild(img);
+                        aVideo.appendChild(title);
+                        aVideo.appendChild(date);
+                        newVideo.appendChild(aVideo);
+
+                        videoList.insertBefore(newVideo, seeMore);
+                    }
+                    //
+                    // If everything is displayed, we make the 'See more results' button disappear
+                    //
+                    if (current_results + count === total_results) {
+                        seeMore.setAttribute("style", "display: none;");
+                    }
+                }
+            })
+        });
+    }
 }
 
 function filter(items, needle) {

@@ -45,3 +45,10 @@
         border-radius: 50%;
     }
 }
+
+@mixin flex-100 {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}

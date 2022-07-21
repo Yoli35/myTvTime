@@ -74,8 +74,8 @@ class TikTokController extends AbstractController
             if ($now >= $x_expires) {
                 $link = $video->getAuthorUrl() . '/video/' . $video->getVideoId();
                 $standing = $tikTokService->getVideo($link);
-                if ($standing) {
-                    $tiktok = json_decode($standing, true);
+                if ($standing['code'] == 200) {
+                    $tiktok = json_decode($standing['content'], true);
                     $video->setThumbnailUrl($tiktok['thumbnail_url']);
                     $video->setThumbnailHasExpired(true);
 

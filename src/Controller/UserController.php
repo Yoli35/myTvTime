@@ -106,9 +106,10 @@ class UserController extends AbstractController
         $movies = $userMovieRepository->findUserMovies($user->getId());
         $imageConfig = $imageConfiguration->getConfig();
 
+        $items = $userMovieRepository->getUserMoviesRuntime($user->getId());
         $total = 0;
-        foreach ($movies as $movie) {
-            $total += $movie['runtime'];
+        foreach ($items as $item) {
+            $total += $item['runtime'];
         }
         $runtime['total'] = $total;
         $runtime['minutes'] = $total % 60;
@@ -119,10 +120,19 @@ class UserController extends AbstractController
 
         return $this->render('user_account/user_movies.html.twig', [
             'discovers' => $movies,
+            'count' => count($items),
             'runtime' => $runtime,
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfig,
             'dRoute' => 'app_movie',
+        ]);
+    }
+
+    #[Route('/personal/movies/more', name: 'app_personal_movies_more')]
+    public function userMoviesMore(Request $request, UserMovieRepository $userMovieRepository): Response
+    {
+        return $this->json([
+            'results' => $userMovieRepository->findUserMovies($request->query->get('id'), $request->query->get('offset')),
         ]);
     }
 

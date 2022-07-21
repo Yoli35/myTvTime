@@ -1,5 +1,5 @@
 @import '~bootstrap/scss/bootstrap';
-//@import './variables';
+@import "variables";
 
 body {
     display: flex;
@@ -307,6 +307,10 @@ h4 {
         flex-wrap: wrap;
         justify-content: space-evenly;
         margin: 2em;
+
+        .see-more {
+            @include flex-100;
+        }
     }
 
     .footer-infos {
