@@ -70,6 +70,9 @@ class YoutubeVideo
     #[ORM\ManyToOne(targetEntity: YoutubeChannel::class, inversedBy: 'youtubeVideos')]
     private $channel;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $addedAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -299,6 +302,18 @@ class YoutubeVideo
     public function setChannel(?YoutubeChannel $channel): self
     {
         $this->channel = $channel;
+
+        return $this;
+    }
+
+    public function getAddedAt(): ?\DateTimeImmutable
+    {
+        return $this->addedAt;
+    }
+
+    public function setAddedAt(\DateTimeImmutable $addedAt): self
+    {
+        $this->addedAt = $addedAt;
 
         return $this;
     }

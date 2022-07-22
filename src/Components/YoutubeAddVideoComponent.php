@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
 use DateInterval;
+
 //use Google\ApiCore\ValidationException;
 //use Google\Cloud\Translate\V3\TranslationServiceClient;
 use Google\Exception;
@@ -17,6 +18,7 @@ use Google\Service\YouTube\VideoListResponse;
 use Google_Client;
 use Google_Service_YouTube;
 use JetBrains\PhpStorm\ArrayShape;
+
 //use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -86,8 +88,7 @@ class YoutubeAddVideoComponent
 
         if (str_contains($thisLink, 'https://www.youtube.com/watch?v=') ||
             str_contains($thisLink, 'https://www.youtube.com/shorts/') ||
-            str_contains($thisLink, 'https://youtu.be/'))
-        {
+            str_contains($thisLink, 'https://youtu.be/')) {
             $thisLink = substr($thisLink, -11);
         }
 
@@ -157,6 +158,8 @@ class YoutubeAddVideoComponent
                 $new->setContentDimension($contentDetails['dimension']);
                 $new->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
                 $new->setContentProjection($contentDetails['projection']);
+                $addedAt = new \DateTimeImmutable();
+                $new->setAddedAt($addedAt->setTimezone((new \DateTime())->getTimezone()));
 
                 $this->repoYTV->add($new, true);
 //                $this->addFlash('success', 'A new video has just been added : "' . $snippet['title'] .'"');
@@ -168,8 +171,13 @@ class YoutubeAddVideoComponent
         foreach ($videos as $video) {
             $total += $video->getContentDuration();
         }
+        if (count($videos)) {
+            $last = $videos[count($videos) - 1]->getAddedAt();
+        } else {
+            $last = new \DateTimeImmutable("now");
+        }
 
-        return ['videos' => $videos, 'count' => count($videos), 'seconds2human' => $this->seconds2human($total)];
+        return ['videos' => $videos, 'count' => count($videos), 'last' => $last, 'seconds2human' => $this->seconds2human($total)];
     }
 
     public function getLinkPreview(): array|null
@@ -181,10 +189,10 @@ class YoutubeAddVideoComponent
         $thumbnails = (array)$snippet['thumbnails'];
 
         if (array_key_exists('medium', $thumbnails))
-            return ['url'=>$thumbnails['medium']['url'], 'title'=>$snippet['title']];
+            return ['url' => $thumbnails['medium']['url'], 'title' => $snippet['title']];
 
         if (array_key_exists('default', $thumbnails))
-            return ['url'=>$thumbnails['default']['url'], 'title'=>$snippet['title']];
+            return ['url' => $thumbnails['default']['url'], 'title' => $snippet['title']];
 
         return null;
     }

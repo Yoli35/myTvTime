@@ -15,6 +15,7 @@
 
         h1 {
             font-weight: 100;
+            text-align: center;
         }
 
         h5 {
@@ -29,48 +30,81 @@
         border-radius: .5em;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
         margin: 0 auto;
-        padding: 1em;
+        overflow: hidden;
 
-        .input {
+        .header {
+            align-items: center;
+            background-color: #085d55;
+            border-bottom: 1px solid #12b7a9;
+            color: #12b7a9;
+            display: flex;
+            font-size: 1em;
+            font-weight: 100;
+            justify-content: center;
+            padding: .25em .5em;
+            width: 100%;
 
-            label {
-                margin-left: 0;
+            div {
+                margin-left: auto;
             }
         }
 
-        .example {
+        .content {
             align-items: center;
             display: flex;
             flex-direction: column;
-            font-size: .75em;
+            justify-content: space-around;
             padding: 1em;
+            width: 100%;
 
-            a {
-                text-decoration: none;
-            }
+            .input {
+                align-items: center;
+                background-color: #444;
+                border-radius: .5em;
+                display: flex;
+                justify-content: center;
+                padding: .5em;
 
-            span {
-                color: #085d55;
-
-                span {
-                    color: #12b7a9;
-                    font-weight: bold;
+                label {
+                    margin-left: 0;
                 }
             }
-        }
 
-        .thumbnail {
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            .example {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                font-size: .75em;
+                padding: 1em;
 
-            img {
-                border-radius: .25em;
-                height: 5.625em;
-                width: 10em;
+                a {
+                    text-decoration: none;
+                }
+
+                span {
+                    color: #085d55;
+
+                    span {
+                        color: #12b7a9;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            .thumbnail {
+                align-items: center;
+                background-color: #444;
+                border-radius: .5em;
+                display: flex;
+                justify-content: center;
+                padding: .5em;
+
+                img {
+                    border-radius: .25em;
+                    height: 5.625em;
+                    width: 10em;
+                }
             }
         }
     }
@@ -92,6 +126,7 @@
     text-align: center;
 }
 
+/*
 @mixin thumbnail {
     align-items: center;
     background-color: #0d9488;
@@ -109,6 +144,7 @@
         border-radius: 50%;
     }
 }
+*/
 
 .yt-video {
     align-items: center;
@@ -144,7 +180,7 @@
         width: 20em;
 
         .channel {
-            @include thumbnail;
+            @include author(#0d9488);
 
             span[data-descr] {
                 position: relative;
@@ -187,6 +223,7 @@
     .video {
         height: 324px;
         width: 576px;
+
         iframe {
             height: 100%;
             width: 100%;
@@ -215,8 +252,9 @@
                 font-weight: 400;
                 padding-left: 1em;
             }
+
             .thumbnail {
-                @include thumbnail;
+                @include author(#0d9488);
             }
         }
     }
@@ -245,8 +283,11 @@
 
     .yt-videos {
         .parameters {
-            flex-direction: column;
             width: 100%;
+
+            .content {
+                flex-direction: column;
+            }
         }
     }
 
@@ -279,11 +320,14 @@
 
     .yt-videos {
         .parameters {
-            flex-direction: row;
             width: 100%;
 
-            .example {
-                padding: 0 1em;
+            .content {
+                flex-direction: row;
+
+                .example {
+                    padding: 0 1em;
+                }
             }
         }
     }
@@ -317,13 +361,17 @@
 
     .yt-videos {
         .parameters {
-            flex-direction: row;
-            padding: 1em 0;
-            width: 100%;
+            width: 90%;
 
-            label {
-                margin-left: 1em;
+            .content {
+                flex-direction: row;
+                padding: 1em 0;
+
+                label {
+                    margin-left: 1em;
+                }
             }
+
         }
     }
 
@@ -356,9 +404,12 @@
 
     .yt-videos {
         .parameters {
-            flex-direction: row;
-            padding: 1em;
-            width: 100%;
+            width: 80%;
+
+            .content {
+                flex-direction: row;
+                padding: 1em;
+            }
         }
     }
 
@@ -391,9 +442,12 @@
 
     .yt-videos {
         .parameters {
-            flex-direction: row;
-            padding: 1em;
             width: 80%;
+
+            .content {
+                flex-direction: row;
+                padding: 1em;
+            }
         }
     }
 

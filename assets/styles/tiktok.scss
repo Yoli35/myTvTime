@@ -108,7 +108,7 @@
         width: 14em;
 
         .author {
-            @include author;
+            @include author(#c94b4b);
         }
 
         .infos {
@@ -130,7 +130,7 @@
     .details {
         .author {
             .thumbnail {
-                @include author;
+                @include author(#c94b4b);
             }
         }
     }

@@ -28,9 +28,9 @@
     }
 }
 
-@mixin author {
+@mixin author($bg) {
     align-items: center;
-    background-color: #c94b4b;
+    background-color: $bg;
     border: 2px solid #bdbdbd;
     border-radius: 50%;
     display: flex;

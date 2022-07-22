@@ -39,16 +39,16 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         }
     }
 
-    public function findAllByDate($userId, $page = 1): array
+    public function findAllByDate($userId, $offset = 0): array
     {
-        if ($page < 1) {
-            $page = 1;
+        if ($offset < 0) {
+            $offset = 0;
         }
         return $this->createQueryBuilder('y')
             ->andWhere('y.userId = :val')
             ->setParameter('val', $userId)
             ->orderBy('y.publishedAt', 'DESC')
-            ->setFirstResult(($page - 1) * 120)
+            ->setFirstResult($offset)
             ->setMaxResults(120)
             ->getQuery()
             ->getResult()
