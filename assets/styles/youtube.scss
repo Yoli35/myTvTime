@@ -114,6 +114,10 @@
         flex-wrap: wrap;
         justify-content: center;
     }
+
+    .see-more {
+        @include flex-100;
+    }
 }
 
 .yt-videos-none {

@@ -77,7 +77,7 @@ class YoutubeAddVideoComponent
      * @throws Exception
      * @throws \Exception
      */
-    #[ArrayShape(['videos' => "\App\Entity\YoutubeVideo[]", 'count' => "int", 'seconds2human' => "string"])]
+    #[ArrayShape(['videos' => "\App\Entity\YoutubeVideo[]", 'count' => "int", 'last' => "DateTimeImmutable", 'seconds2human' => "string"])]
     public function video_results(): array
     {
 
@@ -165,19 +165,24 @@ class YoutubeAddVideoComponent
 //                $this->addFlash('success', 'A new video has just been added : "' . $snippet['title'] .'"');
             }
         }
-        /** @var YoutubeVideo[] $videos */
-        $videos = $this->repoYTV->findAllByDate($this->user_id);
+        /** @var YoutubeVideo[] $items */
+        $items = $this->repoYTV->getUserYTVideosRuntime($this->user_id);
         $total = 0;
-        foreach ($videos as $video) {
-            $total += $video->getContentDuration();
+        foreach ($items as $item) {
+            $total += $item['content_duration'];
         }
+        /** @var YoutubeVideo[] $videos */
+        $videos = $this->repoYTV->findAllByDate($this->user_id); // Au max les 20 premières
+
         if (count($videos)) {
-            $last = $videos[count($videos) - 1]->getAddedAt();
+            $firstAddedVideo = $this->repoYTV->firstAddedYTVideo($this->user_id);
+            $last = $firstAddedVideo->getAddedAt();
         } else {
             $last = new \DateTimeImmutable("now");
         }
+        $count = $this->repoYTV->countUserYTVideos($this->user_id);
 
-        return ['videos' => $videos, 'count' => count($videos), 'last' => $last, 'seconds2human' => $this->seconds2human($total)];
+        return ['videos' => $videos, 'count' => $count[0]['count'], 'last' => $last, 'seconds2human' => $this->seconds2human($total)];
     }
 
     public function getLinkPreview(): array|null

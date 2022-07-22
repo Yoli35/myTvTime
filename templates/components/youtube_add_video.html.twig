@@ -1,5 +1,7 @@
 <div {{ attributes }}>
-    <h1>{{ this.video_results.count ?: 'No'|trans }} {{ this.video_results.count > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ this.video_results.last|format_date('short') }}</h1>
+    <h1 id="h1" data-total-results="{{ this.video_results.count }}">
+        {{ this.video_results.count ?: 'No'|trans }} {{ this.video_results.count > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ this.video_results.last|format_date('short') }}
+    </h1>
     <h5>{{ this.video_results.seconds2human }}</h5>
     <div class="parameters">
         <div class="header">
@@ -28,7 +30,7 @@
         </div>
     </div>
     {% if this.video_results.count %}
-        <div class="result">
+        <div id="result" class="result">
             {% for item in this.video_results.videos %}
                 <div class="yt-video">
                     <a href="{{ path('app_youtube_video', {id: item.id}) }}">
@@ -73,12 +75,28 @@
                     </a>
                 </div>
             {% endfor %}
+            {% if this.video_results.count > (this.video_results.videos|length) %}
+                <div id="see-more" class="see-more">
+                    <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
+                </div>
+            {% endif %}
         </div>
     {% else %}
         <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
     {% endif %}
 </div>
+<script src="/js/youtube.js"></script>
 <script>
+    $(function () {
+        initYoutube(
+            {{ app.user.id }},
+            "{{ locale }}",
+            [
+                "{{ path('app_youtube_video', {id: 0}) }}",
+                "{{ path('app_youtube_more') }}"
+            ],
+        );
+    })
     // document.addEventListener("visibilitychange", function() {
     //     if (document.visibilityState === 'visible') {
     //         var input = document.getElementsByName("link");

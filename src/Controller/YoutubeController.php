@@ -28,6 +28,14 @@ class YoutubeController extends AbstractController
         ]);
     }
 
+    #[Route('/youtube/more', name: 'app_youtube_more')]
+    public function userMoviesMore(Request $request, YoutubeVideoRepository $youtubeVideoRepository): Response
+    {
+        return $this->json([
+            'results' => $youtubeVideoRepository->findAllByDate($request->query->get('id'), $request->query->get('offset')),
+        ]);
+    }
+
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
     public function video($id, YoutubeVideoRepository $repository): Response
     {

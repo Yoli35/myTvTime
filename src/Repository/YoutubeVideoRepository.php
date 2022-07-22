@@ -16,9 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class YoutubeVideoRepository extends ServiceEntityRepository
 {
+    private ManagerRegistry $registry;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, YoutubeVideo::class);
+        $this->registry = $registry;
     }
 
     public function add(YoutubeVideo $entity, bool $flush = false): void
@@ -49,10 +52,49 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->setParameter('val', $userId)
             ->orderBy('y.publishedAt', 'DESC')
             ->setFirstResult($offset)
-            ->setMaxResults(120)
+            ->setMaxResults(20)
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function countUserYTVideos($userId): array
+    {
+        $sql = 'SELECT COUNT(*) AS `count` FROM `youtube_video` t0 '
+//            .'INNER JOIN `user_tik_tok_video` t1 ON t1.`tik_tok_video_id`=t0.`id` '
+            .'WHERE t0.`user_id` = '.$userId;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
+    public function getUserYTVideosRuntime($userId): array
+    {
+        $sql = 'SELECT `content_duration` FROM `youtube_video` t0 '
+//            .'INNER JOIN `user_tik_tok_video` t1 ON t1.`tik_tok_video_id`=t0.`id` '
+            .'WHERE t0.`user_id` = '.$userId;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
+    public function firstAddedYTVideo($userId):YoutubeVideo
+    {
+        $result = $this->createQueryBuilder('y')
+            ->andWhere('y.userId = :val')
+            ->setParameter('val', $userId)
+            ->orderBy('y.addedAt', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+            ;
+        return $result[0];
     }
 
 //    /**
