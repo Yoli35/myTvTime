@@ -31,8 +31,17 @@
     </div>
 {% endblock %}
 {% block morejs %}
+    <script src="/js/youtube.js"></script>
     <script>
         $(function () {
+            initYoutube(
+                    {{ app.user.id }},
+                "{{ locale }}",
+                [
+                    "{{ path('app_youtube_video', {id: 0}) }}",
+                    "{{ path('app_youtube_more') }}"
+                ]
+            );
 
             const myLink = document.getElementById('link');
             myLink.addEventListener("input", () => {

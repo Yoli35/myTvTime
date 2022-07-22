@@ -48,14 +48,6 @@ class YoutubeChannel
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
     private $country;
 
-    #[ORM\OneToMany(mappedBy: 'channel', targetEntity: YoutubeVideo::class)]
-    private $youtubeVideos;
-
-    public function __construct()
-    {
-        $this->youtubeVideos = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -189,36 +181,6 @@ class YoutubeChannel
     public function setCountry(?string $country): self
     {
         $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, YoutubeVideo>
-     */
-    public function getYoutubeVideos(): Collection
-    {
-        return $this->youtubeVideos;
-    }
-
-    public function addYoutubeVideo(YoutubeVideo $youtubeVideo): self
-    {
-        if (!$this->youtubeVideos->contains($youtubeVideo)) {
-            $this->youtubeVideos[] = $youtubeVideo;
-            $youtubeVideo->setChannel($this);
-        }
-
-        return $this;
-    }
-
-    public function removeYoutubeVideo(YoutubeVideo $youtubeVideo): self
-    {
-        if ($this->youtubeVideos->removeElement($youtubeVideo)) {
-            // set the owning side to null (unless already changed)
-            if ($youtubeVideo->getChannel() === $this) {
-                $youtubeVideo->setChannel(null);
-            }
-        }
 
         return $this;
     }

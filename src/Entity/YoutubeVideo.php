@@ -67,7 +67,7 @@ class YoutubeVideo
     #[ORM\Column(type: 'string', length: 16)]
     private $contentProjection;
 
-    #[ORM\ManyToOne(targetEntity: YoutubeChannel::class, inversedBy: 'youtubeVideos')]
+    #[ORM\ManyToOne(targetEntity: YoutubeChannel::class)]
     private $channel;
 
     #[ORM\Column]

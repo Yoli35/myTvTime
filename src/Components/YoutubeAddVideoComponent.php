@@ -2,26 +2,23 @@
 
 namespace App\Components;
 
-use App\Entity\User;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
-use App\Repository\UserRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
 use DateInterval;
 
 //use Google\ApiCore\ValidationException;
 //use Google\Cloud\Translate\V3\TranslationServiceClient;
+use DateTime;
+use DateTimeImmutable;
 use Google\Exception;
 use Google\Service\YouTube\ChannelListResponse;
 use Google\Service\YouTube\VideoListResponse;
 use Google_Client;
 use Google_Service_YouTube;
-use JetBrains\PhpStorm\ArrayShape;
 
 //use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
@@ -39,20 +36,32 @@ class YoutubeAddVideoComponent
     public string $preview = '';
     #[LiveProp]
     public int $user_id = 0;
+    #[LiveProp]
+    public string $preview_url = "";
+    #[LiveProp]
+    public string $preview_title = "";
+    #[LiveProp]
+    public int $videoCount = 0;
+    #[LiveProp]
+    public array $videos = [];
+    #[LiveProp]
+    public DateTimeImmutable $firstView;
+    #[LiveProp]
+    public string $time2Human = "";
 
+    private int $totalRuntime = 0;
 //    private TranslationServiceClient $translationClient;
 //    private TranslatorInterface $translator;
-    private UserRepository $userRepository;
     private YoutubeVideoRepository $repoYTV;
     private YoutubeChannelRepository $repoYTC;
     private Google_Service_YouTube $service_YouTube;
 
+
     /**
      * @throws Exception
      */
-    public function __construct(UserRepository $userRepository, YoutubeVideoRepository $repoYTV, YoutubeChannelRepository $repoYTC)
+    public function __construct(YoutubeVideoRepository $repoYTV, YoutubeChannelRepository $repoYTC)
     {
-        $this->userRepository = $userRepository;
         $this->repoYTV = $repoYTV;
         $this->repoYTC = $repoYTC;
 
@@ -71,16 +80,21 @@ class YoutubeAddVideoComponent
         $this->user_id = $id;
         $this->locale = $locale;
         $this->preview = $preview;
+
+        $this->videos = $this->getVideos();
+        $this->videoCount = $this->getVideosCount();
+        $this->totalRuntime = $this->getTotalRuntime();
+        $this->firstView = $this->getFirstView();
+        $this->time2Human = $this->getTime2human();
+        list($this->preview_url, $this->preview_title) = $this->get_preview();
     }
 
     /**
      * @throws Exception
      * @throws \Exception
      */
-    #[ArrayShape(['videos' => "\App\Entity\YoutubeVideo[]", 'count' => "int", 'last' => "DateTimeImmutable", 'seconds2human' => "string"])]
-    public function video_results(): array
+    public function newVideo(): array
     {
-
         // https://www.youtube.com/watch?v=at9h35V8rtQ
         // https://www.youtube.com/shorts/7KFxzeyse2g
         // https://youtu.be/at9h35V8rtQ
@@ -94,7 +108,7 @@ class YoutubeAddVideoComponent
 
         if (strlen($thisLink) == 11) {
 
-            $link = $this->repoYTV->findBy(['link' => $thisLink, 'userId' => $this->userRepository->find($this->user_id)]);
+            $link = $this->repoYTV->findBy(['link' => $thisLink, 'userId' => $this->user_id]);
 
             // Si le lien n'a pas déjà été ajouté
             if ($link == null) {
@@ -138,54 +152,75 @@ class YoutubeAddVideoComponent
                 $localised = $snippet['localized'];
                 $contentDetails = $item['contentDetails'];
 
-                $new = new YoutubeVideo();
-                $new->setLink($item->id);
-                $new->setUserId($this->user_id);
-                $new->setCategoryId($snippet['categoryId']);
-                $new->setChannel($channel);
-                $new->setDefaultAudioLanguage($snippet['defaultAudioLanguage'] ?: "");
-                $new->setDescription($snippet['description']);
-                $new->setPublishedAt(date_create_immutable($snippet['publishedAt']));
-                $new->setTitle($snippet['title']);
-                if (array_key_exists('default', $thumbnails)) $new->setThumbnailDefaultPath($thumbnails['default']['url']);
-                if (array_key_exists('medium', $thumbnails)) $new->setThumbnailMediumPath($thumbnails['medium']['url']);
-                if (array_key_exists('high', $thumbnails)) $new->setThumbnailHighPath($thumbnails['high']['url']);
-                if (array_key_exists('standard', $thumbnails)) $new->setThumbnailStandardPath($thumbnails['standard']['url']);
-                if (array_key_exists('maxres', $thumbnails)) $new->setThumbnailMaxresPath($thumbnails['maxres']['url']);
-                $new->setLocalizedDescription($localised['description']);
-                $new->setLocalizedTitle($localised['title']);
-                $new->setContentDefinition($contentDetails['definition']);
-                $new->setContentDimension($contentDetails['dimension']);
-                $new->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
-                $new->setContentProjection($contentDetails['projection']);
-                $addedAt = new \DateTimeImmutable();
-                $new->setAddedAt($addedAt->setTimezone((new \DateTime())->getTimezone()));
+                $newVideo = new YoutubeVideo();
+                $newVideo->setLink($item->id);
+                $newVideo->setUserId($this->user_id);
+                $newVideo->setCategoryId($snippet['categoryId']);
+                $newVideo->setChannel($channel);
+                $newVideo->setDefaultAudioLanguage($snippet['defaultAudioLanguage'] ?: "");
+                $newVideo->setDescription($snippet['description']);
+                $newVideo->setPublishedAt(date_create_immutable($snippet['publishedAt']));
+                $newVideo->setTitle($snippet['title']);
+                if (array_key_exists('default', $thumbnails)) $newVideo->setThumbnailDefaultPath($thumbnails['default']['url']);
+                if (array_key_exists('medium', $thumbnails)) $newVideo->setThumbnailMediumPath($thumbnails['medium']['url']);
+                if (array_key_exists('high', $thumbnails)) $newVideo->setThumbnailHighPath($thumbnails['high']['url']);
+                if (array_key_exists('standard', $thumbnails)) $newVideo->setThumbnailStandardPath($thumbnails['standard']['url']);
+                if (array_key_exists('maxres', $thumbnails)) $newVideo->setThumbnailMaxresPath($thumbnails['maxres']['url']);
+                $newVideo->setLocalizedDescription($localised['description']);
+                $newVideo->setLocalizedTitle($localised['title']);
+                $newVideo->setContentDefinition($contentDetails['definition']);
+                $newVideo->setContentDimension($contentDetails['dimension']);
+                $newVideo->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
+                $newVideo->setContentProjection($contentDetails['projection']);
+                $addedAt = new DateTimeImmutable();
+                $newVideo->setAddedAt($addedAt->setTimezone((new DateTime())->getTimezone()));
 
-                $this->repoYTV->add($new, true);
-//                $this->addFlash('success', 'A new video has just been added : "' . $snippet['title'] .'"');
+                $this->repoYTV->add($newVideo, true);
+
+                $this->videos = $this->getVideos();
+                $this->videoCount = $this->getVideosCount();
+                $this->totalRuntime = $this->getTotalRuntime();
+                $this->time2Human = $this->getTime2human();
             }
         }
+        return $this->videos;
+    }
+
+    public function getVideosCount(): int
+    {
+        $count = $this->repoYTV->countUserYTVideos($this->user_id);
+        return $count[0]['count'];
+    }
+
+    public function getVideos(): array
+    {
+        return $this->repoYTV->findAllByDate($this->user_id); // Au max les 20 premières
+    }
+
+    public function getTotalRuntime(): int
+    {
         /** @var YoutubeVideo[] $items */
         $items = $this->repoYTV->getUserYTVideosRuntime($this->user_id);
         $total = 0;
         foreach ($items as $item) {
             $total += $item['content_duration'];
         }
-        /** @var YoutubeVideo[] $videos */
-        $videos = $this->repoYTV->findAllByDate($this->user_id); // Au max les 20 premières
 
-        if (count($videos)) {
+        return $total;
+    }
+
+    public function getFirstView(): ?DateTimeImmutable
+    {
+        if (count($this->videos)) {
             $firstAddedVideo = $this->repoYTV->firstAddedYTVideo($this->user_id);
             $last = $firstAddedVideo->getAddedAt();
         } else {
-            $last = new \DateTimeImmutable("now");
+            $last = new DateTimeImmutable("now");
         }
-        $count = $this->repoYTV->countUserYTVideos($this->user_id);
-
-        return ['videos' => $videos, 'count' => $count[0]['count'], 'last' => $last, 'seconds2human' => $this->seconds2human($total)];
+        return $last;
     }
 
-    public function getLinkPreview(): array|null
+    public function get_preview(): array|null
     {
         $videoListResponse = $this->getVideoSnippet($this->preview);
         $items = $videoListResponse->getItems();
@@ -194,12 +229,12 @@ class YoutubeAddVideoComponent
         $thumbnails = (array)$snippet['thumbnails'];
 
         if (array_key_exists('medium', $thumbnails))
-            return ['url' => $thumbnails['medium']['url'], 'title' => $snippet['title']];
+            return [$thumbnails['medium']['url'], $snippet['title']];
 
         if (array_key_exists('default', $thumbnails))
-            return ['url' => $thumbnails['default']['url'], 'title' => $snippet['title']];
+            return [$thumbnails['default']['url'], $snippet['title']];
 
-        return null;
+        return ['', ''];
     }
 
     private function getVideoSnippet($videoId): VideoListResponse
@@ -224,8 +259,10 @@ class YoutubeAddVideoComponent
         return $hours_to_seconds + $minutes_to_seconds + $seconds;
     }
 
-    private function seconds2human($ss): string
+    private function getTime2human(): string
     {
+        $ss = $this->totalRuntime;
+
         if ($ss) {
             $l = $this->locale;
             $words = ["timeSpent1" => ["en" => "Time spent watching Youtube", "fr" => "Temps passé devant youtube", "es" => "Tiempo dedicado a ver Youtube", "de" => "Zeit, die Sie mit Youtube verbracht haben"], "timeSpent2" => ["en" => "secondes i.e.", "fr" => "secondes c.à.d.", "es" => "segundos, es decir,", "de" => "Sekunden d.h."], "month" => ["en" => "month", "fr" => "mois", "es" => "mes", "de" => "Monat"], "months" => ["en" => "months", "fr" => "mois", "es" => "meses", "de" => "Monate"], "day" => ["en" => "day", "fr" => "jour", "es" => "día", "de" => "Tag"], "days" => ["en" => "days", "fr" => "jours", "es" => "días", "de" => "Tage"], "hour" => ["en" => "hour", "fr" => "heure", "es" => "hora", "de" => "Stunde"], "hours" => ["en" => "hours", "fr" => "heures", "es" => "horas", "de" => "Stunden"], "minute" => ["en" => "minute", "fr" => "minute", "es" => "minuto", "de" => "Minute"], "minutes" => ["en" => "minutes", "fr" => "minutes", "es" => "minutos", "de" => "Minuten"], "seconde" => ["en" => "seconde", "fr" => "seconde", "es" => "segundo", "de" => "Sekunde"], "secondes" => ["en" => "secondes", "fr" => "secondes", "es" => "segundos", "de" => "Sekunden"], "and" => ["en" => "and", "fr" => "et", "es" => "y", "de" => "und"],];

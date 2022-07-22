@@ -1,15 +1,9 @@
-let json, ids, preview, infos, exportFile;
-let _user_id;
-let _locale;
-let _yt_video_page, _yt_videos_more;
-let _yt_id_url;
-
 function initYoutube(id, locale, paths) {
 
-    _user_id = id;
-    _locale = locale;
-    _yt_video_page = paths[0].substring(0, paths[0].length - 1);;
-    _yt_videos_more = paths[1];
+    const _user_id = id;
+    const _locale = locale;
+    const _yt_video_page = paths[0].substring(0, paths[0].length - 1);;
+    const _yt_videos_more = paths[1];
 
     const moreButton = document.getElementById('more');
     const seeMore = document.getElementById('see-more');
@@ -41,29 +35,33 @@ function initYoutube(id, locale, paths) {
                         let result = results[i];
                         let newVideo = document.createElement("div");
                         newVideo.setAttribute("class", "yt-video");
-                        newVideo.setAttribute("id", result['id']);
                         let aVideo = document.createElement("a");
                         aVideo.setAttribute("href", _yt_video_page + result['id'].toString());
                         let thumbnail = document.createElement("div");
                         thumbnail.setAttribute("class", "thumbnail");
                         let img = document.createElement("img");
-                        img.setAttribute("src", result['thumbnail_medium_path']);
+                        img.setAttribute("src", result['thumbnailMediumPath']);
                         img.setAttribute("alt", result['title']);
                         // Ajouter la durée
+                        let duration = document.createElement("div");
+                        duration.setAttribute("class", "duration");
+                        duration.appendChild(document.createTextNode(duration2Time(result['contentDuration'])));
                         thumbnail.appendChild(img);
+                        thumbnail.appendChild(duration);
                         let details = document.createElement("div");
                         details.setAttribute("class", "details");
                         let channel = document.createElement("div");
                         channel.setAttribute("class", "channel");
                         let aChannel = document.createElement("a");
-                        aChannel.setAttribute("href", result['channel']['custom_url'] ? _yt_custom_url : _yt_id_url);
+                        aChannel.setAttribute("href", 'https://www.youtube.com/c/' + (result['channel']['customUrl'] === null) ? result['channel']['youtubeId'] : result['channel']['customUrl']);
                         aChannel.setAttribute("target", "_blank");
                         let span = document.createElement("span");
                         span.setAttribute("data-descr", result['channel']['title']);
-                        if (result['channel']['thumbnail_default_url']) {
+                        if (result['channel']['thumbnailDefaultUrl']) {
                             let imgChannel = document.createElement("img");
-                            imgChannel.setAttribute("src", result['channel']['thumbnail_default_url']);
+                            imgChannel.setAttribute("src", result['channel']['thumbnailDefaultUrl']);
                             imgChannel.setAttribute("alt", result['channel']['title']);
+                            imgChannel.setAttribute("class", "w-100")
                             span.appendChild(imgChannel);
                         }
                         else {
@@ -80,7 +78,7 @@ function initYoutube(id, locale, paths) {
                         infos.appendChild(info);
                         info = document.createElement("div");
                         info.setAttribute("class", "info");
-                        let dateT = result['published_at'];
+                        let dateT = result['publishedAt'];
                         let released = new Date(dateT);
                         info.appendChild(document.createTextNode(txt.published_at[_locale] + ' : ' + released.toLocaleDateString(undefined, options)));
                         infos.appendChild(info);
@@ -88,8 +86,8 @@ function initYoutube(id, locale, paths) {
                         details.appendChild(infos);
 
                         aVideo.appendChild(thumbnail);
-                        aVideo.appendChild(details);
                         newVideo.appendChild(aVideo);
+                        newVideo.appendChild(details);
 
                         videoList.insertBefore(newVideo, seeMore);
                     }
@@ -105,3 +103,24 @@ function initYoutube(id, locale, paths) {
     }
 }
 
+function duration2Time(duration) {
+
+    let time;
+    let hours = Math.floor(duration / 3600);
+    let minutes = Math.floor(duration / 60);
+    let secondes = (duration % 60);
+
+    if (hours > 0 || minutes > 0) {
+        secondes = (secondes < 10) ? '0' + secondes.toString() : secondes.toString();
+    }
+    if (hours > 0) {
+        minutes = (minutes < 10) ? '0' + minutes.toString() : minutes.toString();
+        time = hours.toString() + ':' + minutes;
+    }
+    else {
+        time = minutes.toString();
+    }
+    time += ':' + secondes;
+
+    return time;
+}

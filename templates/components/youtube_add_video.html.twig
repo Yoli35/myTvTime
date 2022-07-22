@@ -1,8 +1,18 @@
+{% set newVideo = this.newVideo %}
+{% set videos = this.videos %}
+{% set count = this.videoCount %}
+{% set beginning = this.firstView %}
+{% set time_2_human = this.time2Human %}
+
+{% set preview_url = this.preview_url %}
+{% set preview_title = this.preview_title %}
+
+{#{{ dump() }}#}
 <div {{ attributes }}>
-    <h1 id="h1" data-total-results="{{ this.video_results.count }}">
-        {{ this.video_results.count ?: 'No'|trans }} {{ this.video_results.count > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ this.video_results.last|format_date('short') }}
+    <h1 id="h1" data-total-results="{{ count }}">
+        {{ count ?: 'No'|trans }} {{ count > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ beginning|format_date('short') }}
     </h1>
-    <h5>{{ this.video_results.seconds2human }}</h5>
+    <h5>{{ time_2_human }}</h5>
     <div class="parameters">
         <div class="header">
             {{ 'Add a Youtube video'|trans }}
@@ -18,20 +28,20 @@
             </div>
             <div class="example">
                 <b>{{ 'For example'|trans }} :</b>
-                <div class="text-center">{{ this.getLinkPreview.title }}</div>
+                <div class="text-center">{{ preview_title }}</div>
                 <a href="https://youtu.be/{{ preview }}" target="_blank"><span><span>{{ preview }}</span></span></a>
                 <a href="https://youtu.be/{{ preview }}" target="_blank"><span>https://youtu.be/<span>{{ preview }}</span></span></a>
                 <a href="https://youtu.be/7KFxzeyse2g" target="_blank"><span>https://www.youtube.com/shorts/<span>7KFxzeyse2g</span></span></a>
                 <a href="https://youtu.be/{{ preview }}" target="_blank"><span>https://www.youtube.com/watch?v=<span>{{ preview }}</span></span></a>
             </div>
             <div class="thumbnail">
-                <img src="{{ this.getLinkPreview.url }}" alt="{{ this.getLinkPreview.title }}">
+                <img src="{{ preview_url }}" alt="{{ preview_title }}">
             </div>
         </div>
     </div>
-    {% if this.video_results.count %}
+    {% if videos|length %}
         <div id="result" class="result">
-            {% for item in this.video_results.videos %}
+            {% for item in videos %}
                 <div class="yt-video">
                     <a href="{{ path('app_youtube_video', {id: item.id}) }}">
                         <div class="thumbnail">
@@ -75,7 +85,7 @@
                     </a>
                 </div>
             {% endfor %}
-            {% if this.video_results.count > (this.video_results.videos|length) %}
+            {% if count > (videos|length) %}
                 <div id="see-more" class="see-more">
                     <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
                 </div>
@@ -85,35 +95,3 @@
         <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
     {% endif %}
 </div>
-<script src="/js/youtube.js"></script>
-<script>
-    $(function () {
-        initYoutube(
-            {{ app.user.id }},
-            "{{ locale }}",
-            [
-                "{{ path('app_youtube_video', {id: 0}) }}",
-                "{{ path('app_youtube_more') }}"
-            ],
-        );
-    })
-    // document.addEventListener("visibilitychange", function() {
-    //     if (document.visibilityState === 'visible') {
-    //         var input = document.getElementsByName("link");
-    //         // input.focus();
-    //         // input.select();
-    //         navigator.clipboard.readText().then(
-    //             clipText => input.val = clipText);
-    //     }
-    // });
-
-    // let pasteBtn = document.getElementById("paste");
-    // let input = document.getElementsByName("link");
-    //
-    // pasteBtn.onclick = function () {
-    //     navigator.clipboard.readText()
-    //         .then(text => {
-    //             input.value = text;
-    //         })
-    // };
-</script>
