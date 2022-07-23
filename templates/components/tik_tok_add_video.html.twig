@@ -4,17 +4,15 @@
         {{ total_results ?: 'No'|trans }} {{ total_results > 1 ? 'Videos'|trans : 'Video'|trans }}
     </h1>
 
-    <div class="container">
-        <div class="parameters">
-            <div class="input">
-                <form data-model="*">
-                    <label>{{ 'TikTok Link'|trans }} :
-                        <input id="link" type="search" name="link" value="{{ link }}" autofocus>
-                    </label>
-                </form>
-            </div>
-            <div class="example"></div>
+    <div class="parameters">
+        <div class="input">
+            <form data-model="*">
+                <label>{{ 'TikTok Link'|trans }} :
+                    <input id="link" type="search" name="link" value="{{ link }}" autofocus>
+                </label>
+            </form>
         </div>
+        <div class="example"></div>
     </div>
     {% if total_results %}
         <div id="result" class="result">

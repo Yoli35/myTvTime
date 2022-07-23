@@ -22,7 +22,7 @@
             justify-content: space-evenly;
             margin: 0 auto;
             padding: 1em;
-            width: 80%;
+            width: 100%;
 
             .input {
                 display: flex;
@@ -197,6 +197,13 @@
             .nav-breadcrumb {
                 bottom: 0;
                 left: 1em;
+            }
+        }
+    }
+    .tt-videos {
+        .getter {
+            .parameters {
+                width: 80%;
             }
         }
     }
