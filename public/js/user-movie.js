@@ -56,7 +56,7 @@ function initButtons(locale, paths, id, url) {
                     '<div class="selection">' +
                     '   <div class="input-group w-75">' +
                     '       <span class="input-group-text">' + txt.filter[_locale] + '</span>' +
-                    '       <input type="text" id="export-filter" class="form-control" placeholder="' + txt.movie_name[_locale] + '" aria-label="' + txt.filter[_locale] + '" style="width: 15em">' +
+                    '       <input type="search" id="export-filter" class="form-control" placeholder="' + txt.movie_name[_locale] + '" aria-label="' + txt.filter[_locale] + '" style="width: 15em">' +
                     '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.aria_select_all[_locale] + '">' + txt.select_all[_locale] + '</button>' +
                     '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.aria_deselect_all[_locale] + '">' + txt.deselect_all[_locale] + '</button>' +
                     '   </div>' +

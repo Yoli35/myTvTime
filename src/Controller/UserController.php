@@ -27,6 +27,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class UserController extends AbstractController
 {
+    private string $json_header = '"json_format":"myTvTime","json_version":"1.0",';
     /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
@@ -163,7 +164,7 @@ class UserController extends AbstractController
         $id = $request->query->get('id');
         $movies = $userMovieRepository->findAllUserMovies($id);
         $count = count($movies);
-        $json = $this->formatJson('{"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
+        $json = $this->formatJson('{'.$this->json_header.'"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
 
         $filename = $this->saveFile($json, $user);
         $url = $this->generateUrl('app_json');
@@ -198,7 +199,7 @@ class UserController extends AbstractController
         $movies = $this->userMoviesFromList($userId, $userMovieRepository, $ids);
         $count = count($movies);
         $jsonMovies = json_encode($movies);
-        $json = '{"total_results":' . $count . ',"results":' . $jsonMovies . '}';
+        $json = '{'.$this->json_header.'"total_results":' . $count . ',"results":' . $jsonMovies . '}';
         $json = $this->formatJson($json);
         $this->saveFile($json, $userRepository->find($userId), $filename);
 
@@ -258,7 +259,7 @@ class UserController extends AbstractController
         $movies = $this->userMoviesFromList($user_id, $userMovieRepository, $ids);
         $count = count($movies);
 
-        $sample = '{<br>'.$tab.'"total_results": ' . $count . ',<br>'.$tab.'"results":';
+        $sample = $this->formatJson('{'.$this->json_header.'"total_results":'.$count.',"results":', 0, $tab, '<br>');
         if ($count == 1) {
             $sample .= ' [<br>'.$tab.$tab;
             $sample .= $this->formatJson(json_encode($movies[0]), 2, $tab, '<br>');
