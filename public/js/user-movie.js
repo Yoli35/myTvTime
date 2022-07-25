@@ -19,6 +19,20 @@ function initButtons(id, locale, paths, url) {
     _movies_more = paths[6];
     _url = url;
 
+
+    const userMovieLink = document.getElementById('query');
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === 'visible') {
+            userMovieLink.focus();
+            userMovieLink.select();
+        }
+    });
+    setTimeout( () => {
+        userMovieLink.focus();
+        userMovieLink.select();
+    }, 1000);
+
+
     $('#export-button').click(function () {
 
         let exportModal = $('#exportModal');

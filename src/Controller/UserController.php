@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\LocaleSwitcher;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -26,6 +27,11 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class UserController extends AbstractController
 {
     private string $json_header = '"json_format":"myTvTime","json_version":"1.0",';
+
+    public function __construct(
+        private readonly LocaleSwitcher $localeSwitcher,
+    ) {}
+
     /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
@@ -67,6 +73,13 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+//            $currentLocale = $this->localeSwitcher->getLocale();
+            $userPreferredLanguage = $user->getPreferredLanguage();
+//
+//            if ($currentLocale != $userPreferredLanguage) {
+                $this->localeSwitcher->setLocale($userPreferredLanguage);
+//            }
+
             return $this->redirectToRoute('app_personal_profile');
         }
 
@@ -95,8 +108,6 @@ class UserController extends AbstractController
     #[Route('/{_locale}/personal/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
     public function userMovies(Request $request, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
-        /** TODO  Progressive Load of Movie List */
-
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var User $user */

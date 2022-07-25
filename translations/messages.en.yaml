@@ -32,16 +32,16 @@ Your password should be at least: Your password should be at least
 characters: characters
 Please Confirm your Email: Please Confirm your Email
 Your email address has been verified.: Your email address has been verified.
-Email: Adresse email
-Username: Nom d'utilisateur
-Password: Mot de passe
+Email: Email
+Username: Username
+Password: Password
 Repeat Password: Confirm Password
-Agree terms: Accepter les conditions d'utilisation
-Hi! Please confirm your email!: Salut ! Merci de confirmer votre adresse email !
-Please confirm your email address by clicking the following link: Merci de confirmer votre adresse email en cliquant sur ce lien
-Confirm my Email: Confirmer mon adresse email
-This link will expire in: Ce lien expirera dans
-Cheers: À la vôtre !
+Agree terms: Agree terms
+Hi! Please confirm your email!: Hi! Please confirm your email!
+Please confirm your email address by clicking the following link: Please confirm your email address by clicking the following link
+Confirm my Email: Confirm my Email
+This link will expire in: This link will expire in
+Cheers: Cheers
 Keep me logged in: Keep me logged in
 
 # Home Paginator
@@ -192,6 +192,7 @@ See more results: See more results
 
 # User Account
 User Account: User Account
+Preferred language: Preferred language
 Profile Image (JPG, PNG file): Profile Image (JPG, PNG file)
 Banner Image (JPG, PNG file): Banner Image (JPG, PNG file)
 Update Profile: Update Profile
@@ -210,6 +211,7 @@ Progress: Progress
 Download: Download
 
 #weather
+Now: Now
 Last updated: Last updated
 Feelslike: Feels like
 Precipitation: Precipitation

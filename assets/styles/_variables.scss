@@ -46,9 +46,22 @@
     }
 }
 
+@mixin flex-row($items: center, $content: center) {
+    align-items: $items;
+    display: flex;
+    justify-content: $content;
+}
+
 @mixin flex-100 {
     align-items: center;
     display: flex;
     justify-content: center;
     width: 100%;
+}
+
+@mixin flex-col($items: center, $content: center) {
+    align-items: $items;
+    display: flex;
+    flex-direction: column;
+    justify-content: $content;
 }

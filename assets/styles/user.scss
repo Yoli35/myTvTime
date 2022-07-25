@@ -1,3 +1,5 @@
+@import "variables";
+
 .user-account {
 
     .banner {
@@ -67,15 +69,44 @@
     width: 100%;
 
     .content {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
+        @include flex-col();
         font-size: 1em;
         font-weight: bold;
         height: 100%;
         padding: 1em;
         position: relative;
         width: 100%;
+
+        .vertical,
+        .content-row {
+            @include flex-col();
+        }
+
+        .hours {
+            @include flex-row(center,auto);
+            margin-bottom: 1em;
+            margin-top: 1em;
+            overflow-x: scroll;
+            width: 20em;
+            .h24 {
+                @include flex-row();
+                .hour {
+                    @include flex-col();
+                    background-color: #0e74907f;
+                    border-radius: .25em;
+                    color: #f2f2f2;
+                    font-size: .75em;
+                    font-weight: 100;
+                    margin: 0 .25em;
+                    overflow: hidden;
+                    padding: .25em;
+                    img {
+                        height: 29px;
+                        width: 29px;
+                    }
+                }
+            }
+        }
     }
 
     .toggle {
@@ -103,10 +134,7 @@
     }
 
     .condition {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+        @include flex-row();
     }
 
     .item {
@@ -122,11 +150,8 @@
 }
 
 .user-movies {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    @include flex-col();
     font-weight: 100;
-    justify-content: center;
     margin-top: 3em;
     width: 100%;
 
@@ -135,10 +160,7 @@
     }
 
     .search-block {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
+        @include flex-col(center, space-evenly);
         width: 100%;
     }
 
@@ -154,14 +176,11 @@
         z-index: 2;
 
         .result {
-            align-items: center;
+            @include flex-row;
             background-color: rgba(238, 238, 238, 0.75);
             border: 2px solid #dbdbdb;
             border-radius: 1em;
-            display: flex;
-            flex-direction: row;
             flex-wrap: wrap;
-            justify-content: center;
             left: -.25em;
             max-height: 30em;
             overflow: hidden;
@@ -185,6 +204,7 @@
     }
 
     .home-discover {
+        @include flex-col();
         align-items: center;
         display: flex;
         flex-direction: column;
@@ -197,11 +217,8 @@
 }
 
 .export-result {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
+    @include flex-row();
     flex-wrap: wrap;
-    justify-content: center;
     max-height: 49rem;
     overflow-y: scroll;
 
@@ -235,10 +252,7 @@
     }
 
     .selection {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+        @include flex-row();
         margin-bottom: 1em;
         width: 100%;
     }
@@ -292,12 +306,9 @@
 }
 
 .append-result {
-    align-items: stretch;
+    @include flex-row(stretch, center);
     color: #dbdbdb;
-    display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
     max-height: 49rem;
     overflow-y: scroll;
 
@@ -312,11 +323,9 @@
         width: 10em;
 
         .name {
-            align-items: center;
-            display: flex;
+            @include flex-row();
             font-size: .75em;
             height: 100%;
-            justify-content: center;
             padding: .25em;
             text-align: center;
             width: 100%;
@@ -356,14 +365,11 @@
     position: absolute;
 
     .progress {
-        align-items: center;
+        @include flex-row(center, space-evenly);
         background-color: #0d9488;
         border-radius: .5em;
         color: #dbdbdb;
-        display: flex;
-        flex-direction: row;
         height: 4em;
-        justify-content: space-evenly;
         padding: 1em;
 
         .label {

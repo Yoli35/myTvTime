@@ -1,79 +1,109 @@
 {% set weather = this.forecast %}
-
 {% if weather is not empty %}
     <div class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
+{#        {{ dump(weather.forecast.forecastday.0) }}#}
         <div class="content">
-            <div class="city">{{ weather.location.name }}</div>
-            <div class="item">
-                <div>{{ weather.location.region }}</div>
-                -
-                <div>{{ weather.location.country }}</div>
-            </div>
-            <div class="item">
-                {{ weather.current.last_updated|format_date('full') }}
-            </div>
-            <div class="temperature">{{ weather.current.temp_c|round ~ '°' }}</div>
-            <div class="item">
-                <i class="bi bi-thermometer-half"></i>
-                {{ 'Min'|trans }} : {{ weather.forecast.forecastday.0.day.mintemp_c|round ~ '°' }}
-                {{ 'Max'|trans }} : {{ weather.forecast.forecastday.0.day.maxtemp_c|round ~ '°' }}
-                {{ 'Feelslike'|trans }} : {{ weather.current.feelslike_c|round ~ '°' }}
-            </div>
-            <div class="condition">
-                <img src="{{ weather.current.condition.icon }}" alt="">
-                <div>{{ weather.current.condition.text }}</div>
-            </div>
-            <div class="item">
-                <div><i class="bi bi-cloud-drizzle"></i> {{ 'Precipitation'|trans }} : {{ weather.current.precip_mm ~ 'mm' }}</div>
-                <div><i class="bi bi-droplet"></i> {{ 'Humidity'|trans }} : {{ weather.current.humidity ~ '%' }}</div>
-            </div>
-            <div class="item">
-                <div>{{ 'Pressure'|trans }} : {{ weather.current.pressure_mb }} {{ 'Millibars'|trans }}</div>
-            </div>
-            <div class="item">
-                <div><i class="bi bi-eye"></i> {{ 'Visibility'|trans }} : {{ weather.current.vis_km ~ 'km' }}</div>
-                <div><i class="bi bi-sun-fill"></i> {{ 'UV'|trans }} : {{ weather.current.uv }}</div>
-            </div>
-            <div class="item">
-                <i class="bi bi-wind"></i>
-                <div>{{ 'Wind'|trans }} : {{ weather.current.wind_kph }}{{ 'km/h'|trans }}</div>
-                <div>{{ 'Direction'|trans }} : {{ weather.current.wind_dir }} ({{ weather.current.wind_degree ~ '°' }})</div>
-            </div>
-            <div class="item">
-                <div>{{ 'Gust'|trans }} : {{ weather.current.gust_kph }}{{ 'km/h'|trans }}</div>
-            </div>
-            <div class="item">
-                <i class="bi bi-sun"></i>
-                <div>{{ 'Sunrise'|trans }} :
-                    {% if weather.forecast.forecastday.0.astro.sunrise == 'No sunrise' %}
-                        {{ 'No sunrise'|trans }}
-                    {% else %}
-                        {{ weather.forecast.forecastday.0.astro.sunrise|date("G:i") }}
-                    {% endif %}
+            <div class="content-row">
+                <div class="city">{{ weather.location.name }}</div>
+                <div class="vertical">
+                    <div class="item">
+                        <div>{{ weather.location.region }}</div>
+                        -
+                        <div>{{ weather.location.country }}</div>
+                    </div>
+                    <div class="item">
+                        {{ weather.current.last_updated|format_date('full') }}
+                    </div>
                 </div>
-                <div>{{ 'Sunset'|trans }} :
-                    {% if weather.forecast.forecastday.0.astro.sunset == 'No sunset' %}
-                        {{ 'No sunset'|trans }}
-                    {% else %}
-                        {{ weather.forecast.forecastday.0.astro.sunset|date("G:i") }}
-                    {% endif %}
+                <div class="temperature">{{ weather.current.temp_c|round ~ '°' }}</div>
+                <div class="vertical">
+                    <div class="item">
+                        <i class="bi bi-thermometer-half"></i>
+                        {{ 'Min'|trans }} : {{ weather.forecast.forecastday.0.day.mintemp_c|round ~ '°' }}
+                        {{ 'Max'|trans }} : {{ weather.forecast.forecastday.0.day.maxtemp_c|round ~ '°' }}
+                        {{ 'Feelslike'|trans }} : {{ weather.current.feelslike_c|round ~ '°' }}
+                    </div>
+                </div>
+                <div class="condition">
+                    <img src="{{ weather.current.condition.icon }}" alt="">
+                    <div class="vertical">{{ weather.current.condition.text }}</div>
+                </div>
+                <div class="vertical">
+                    <div class="item">
+                        <div><i class="bi bi-cloud-drizzle"></i> {{ 'Precipitation'|trans }} : {{ weather.current.precip_mm ~ 'mm' }}</div>
+                        <div><i class="bi bi-droplet"></i> {{ 'Humidity'|trans }} : {{ weather.current.humidity ~ '%' }}</div>
+                    </div>
+                    <div class="item">
+                        <div>{{ 'Pressure'|trans }} : {{ weather.current.pressure_mb }} {{ 'Millibars'|trans }}</div>
+                    </div>
+                    <div class="item">
+                        <div><i class="bi bi-eye"></i> {{ 'Visibility'|trans }} : {{ weather.current.vis_km ~ 'km' }}</div>
+                        <div><i class="bi bi-sun-fill"></i> {{ 'UV'|trans }} : {{ weather.current.uv }}</div>
+                    </div>
+                    <div class="item">
+                        <i class="bi bi-wind"></i>
+                        <div>{{ 'Wind'|trans }} : {{ weather.current.wind_kph }}{{ 'km/h'|trans }}</div>
+                        <div>{{ 'Direction'|trans }} : {{ weather.current.wind_dir }} ({{ weather.current.wind_degree ~ '°' }})</div>
+                    </div>
+                    <div class="item">
+                        <div>{{ 'Gust'|trans }} : {{ weather.current.gust_kph }}{{ 'km/h'|trans }}</div>
+                    </div>
+                    <div class="item">
+                        <i class="bi bi-sun"></i>
+                        <div>{{ 'Sunrise'|trans }} :
+                            {% if weather.forecast.forecastday.0.astro.sunrise == 'No sunrise' %}
+                                {{ 'No sunrise'|trans }}
+                            {% else %}
+                                {{ weather.forecast.forecastday.0.astro.sunrise|date("G:i") }}
+                            {% endif %}
+                        </div>
+                        <div>{{ 'Sunset'|trans }} :
+                            {% if weather.forecast.forecastday.0.astro.sunset == 'No sunset' %}
+                                {{ 'No sunset'|trans }}
+                            {% else %}
+                                {{ weather.forecast.forecastday.0.astro.sunset|date("G:i") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="bi bi-moon"></i>
+                        <div>{{ 'Sunrise'|trans }} :
+                            {% if weather.forecast.forecastday.0.astro.moonrise == 'No moonrise' %}
+                                {{ 'No moonrise'|trans }}
+                            {% else %}
+                                {{ weather.forecast.forecastday.0.astro.moonrise|date("G:i") }}
+                            {% endif %}
+                        </div>
+                        <div>{{ 'Sunset'|trans }} :
+                            {% if weather.forecast.forecastday.0.astro.moonset == 'No moonset' %}
+                                {{ 'No moonset'|trans }}
+                            {% else %}
+                                {{ weather.forecast.forecastday.0.astro.moonset|date("G:i") }}
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="item">
-                <i class="bi bi-moon"></i>
-                <div>{{ 'Sunrise'|trans }} :
-                    {% if weather.forecast.forecastday.0.astro.moonrise == 'No moonrise' %}
-                        {{ 'No moonrise'|trans }}
-                    {% else %}
-                        {{ weather.forecast.forecastday.0.astro.moonrise|date("G:i") }}
-                    {% endif %}
-                </div>
-                <div>{{ 'Sunset'|trans }} :
-                    {% if weather.forecast.forecastday.0.astro.moonset == 'No moonset' %}
-                        {{ 'No moonset'|trans }}
-                    {% else %}
-                        {{ weather.forecast.forecastday.0.astro.moonset|date("G:i") }}
-                    {% endif %}
+            <div class="content-row">
+                <div class="hours">
+                    <div class="h24">
+                        {% set now = "now"|date("H") %}
+                        {% for hour in weather.forecast.forecastday.0.hour %}
+                            {% set time = hour.time[11:2] %}
+                            <div class="hour" {% if hour.is_day == 0 %}style="background-color: rgba(43,50,52,0.5)"{% endif %}>
+                                <div>{{ time }}h</div>
+                                <div><img src="{{ hour.condition.icon }}" alt="{{ hour.condition.text }}"></div>
+                                <div>{{ hour.temp_c|round }}°C</div>
+                            </div>
+                            {% if time <= now and time+1 > now %}
+                                <button class="btn hour" id="now" {% if hour.is_day == 0 %}style="background-color: rgba(43,50,52,0.5)"{% endif %}>
+                                    <div>{{ "now"|date("H:i") }}</div>
+                                    <div><img src="{{ weather.current.condition.icon }}" alt="{{ weather.current.condition.text }}"></div>
+                                    <div>{{ 'Now'|trans }}</div>
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
             <div class="toggle open"><i class="bi bi-dash-circle"></i></div>
@@ -86,12 +116,16 @@
         let toggle = $('.toggle');
         let weather = $('.weather');
         let content = $(weather).find('.content');
+        let row = $(weather).find('.content-row');
         let windowWidth = window.innerWidth;
-        let nIntervId = setInterval(windowWidthChanged, 125);
+
+        document.getElementById("now").focus();
+
+        setInterval(windowWidthChanged, 125);
 
         $(toggle).click(weather_toggle);
 
-            weather_toggle();
+        weather_toggle();
 
         function weather_toggle() {
 
@@ -101,42 +135,24 @@
                 $(toggle).removeClass('open');
                 $(toggle).html('<i class="bi bi-plus-circle">');
                 if (windowWidth < 767.98) {
-                    $(banner).css('margin-bottom', '6em');
-                    $(weather).css('bottom', '-6em');
+                    $(banner).css('margin-bottom', '13em');
+                    $(weather).css('bottom', '-13em');
                 }
-                // else {
-                //     $(banner).attr('style', '');
-                //     $(banner).css('margin-bottom', 'unset');
-                //     $(weather).attr('style', '');
-                //     $(weather).css('bottom', 'unset');
-                //     $(weather).css('right', '2em');
-                //     $(weather).css('top', '2em');
-                //     $(weather).css('width', 'unset');
-                // }
-                $(content).css('flex-direction', 'row');
+                $(row).css('flex-direction', 'row');
                 $(content).css('padding', '1em 1em 0 1em');
                 $('.temperature').css('font-size', '2em');
-                $('.item').hide();
+                $('.vertical').hide();
             } else {
                 $(toggle).addClass('open');
                 $(toggle).html('<i class="bi bi-dash-circle">');
-                $(content).css('flex-direction', 'column');
                 if (windowWidth < 767.98) {
                     $(banner).css('margin-bottom', '26em');
                     $(weather).css('bottom', '-26em');
                 }
-                // else {
-                //     $(banner).attr('style', '');
-                //     $(banner).css('margin-bottom', 'unset');
-                //     $(weather).attr('style', '');
-                //     $(weather).css('bottom', 'unset');
-                //     $(weather).css('right', '2em');
-                //     $(weather).css('top', '2em');
-                //     $(weather).css('width', 'unset');
-                // }
+                $(row).css('flex-direction', 'column');
                 $(content).css('padding', '1em');
                 $('.temperature').css('font-size', '5em');
-                $('.item').show();
+                $('.vertical').show();
             }
         }
 
@@ -153,11 +169,10 @@
                         $(banner).css('margin-bottom', '26em');
                         $(weather).css('bottom', '-26em');
                     } else {
-                        $(banner).css('margin-bottom', '6em');
-                        $(weather).css('bottom', '-6em');
+                        $(banner).css('margin-bottom', '13em');
+                        $(weather).css('bottom', '-13em');
                     }
-                }
-                else {
+                } else {
                     $(banner).attr('style', '');
                     $(weather).attr('style', '');
                 }

@@ -2,9 +2,12 @@
 
 namespace App\Form;
 
+use App\Config\PreferredLanguage;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,16 +33,25 @@ class UserType extends AbstractType
 //            ->add('isVerified')
             ->add('city', TextType::class, [
                 'attr' => ['class' => 'col-6'],
-                 'required' => false,
-           ])
+                'required' => false,
+            ])
             ->add('zipCode', TextType::class, [
                 'attr' => ['class' => 'col-3'],
                 'required' => false,
             ])
             ->add('country', TextType::class, [
                 'attr' => ['class' => 'col-3'],
-                 'required' => false,
-           ])
+                'required' => false,
+            ])
+            ->add('preferredLanguage', ChoiceType::class, [
+                'choices' => [
+                    'French' => 'fr',
+                    'English' => 'en',
+                    'German' => 'de',
+                    'Spanish' => 'es'
+                ],
+                'expanded' => false,
+            ])
             ->add('avatar', FileType::class, [
                 'label' => 'Profile Image (JPG, PNG file)',
                 // unmapped means that this field is not associated to any entity property
@@ -80,8 +92,7 @@ class UserType extends AbstractType
             ->add('save', SubmitType::class, [
                 'label' => 'Update Profile',
                 'attr' => ['class' => 'btn-success float-end'],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

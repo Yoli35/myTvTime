@@ -12,6 +12,19 @@ function initYoutube(id, locale, paths) {
         'published_at': {'fr': 'Publiée le', 'en': 'Published at', 'de': 'Veröffentlicht am', 'es': 'Publicado en'},
     }
 
+    const ytLink = document.getElementById('link');
+    ytLink.addEventListener("input", () => {
+        setTimeout(function () {
+            $(ytLink).val("");
+        }, 2000);
+    });
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === 'visible') {
+            ytLink.focus();
+            ytLink.select();
+        }
+    });
+
     if (moreButton) {
 
         moreButton.addEventListener('click', () => {

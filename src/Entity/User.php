@@ -17,40 +17,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    private string $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private array $roles = [];
 
     #[ORM\Column(type: 'string')]
     private string $password;
 
-/*    private string $plainPassword;
-    private string $confirmPlainPassword;*/
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $username;
+    private ?string $username;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $avatar;
+    private ?string $avatar;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $banner;
+    private ?string $banner;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $city;
+    private ?string $city;
 
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
-    private $zipCode;
+    private ?string $zipCode;
 
     #[ORM\Column(type: 'string', length: 32, nullable: true)]
-    private $country;
+    private ?string $country;
+
+    #[ORM\Column(length: 8, nullable: true)]
+    private ?string $preferredLanguage = null;
 
     #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'users')]
     private $movies;
@@ -88,7 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**
@@ -124,30 +124,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-/*
-    public function getPlainPassword(): string
-    {
-        return $this->plainPassword;
-    }
-
-    public function setPlainPassword(string $password): self
-    {
-        $this->plainPassword = $password;
-
-        return $this;
-    }
-
-    public function getConfirmPlainPassword(): string
-    {
-        return $this->confirmPlainPassword;
-    }
-
-    public function setConfirmPlainPassword(string $password): self
-    {
-        $this->confirmPlainPassword = $password;
-
-        return $this;
-    }*/
 
     /**
      * @see UserInterface
@@ -292,6 +268,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeTiktok(TikTokVideo $tiktok): self
     {
         $this->tiktoks->removeElement($tiktok);
+
+        return $this;
+    }
+
+    public function getPreferredLanguage(): ?string
+    {
+        return $this->preferredLanguage;
+    }
+
+    public function setPreferredLanguage(string $preferredLanguage): self
+    {
+        $this->preferredLanguage = $preferredLanguage;
 
         return $this;
     }
