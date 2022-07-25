@@ -6,7 +6,7 @@ let _locale;
 let _personal_movies_export, _json_ids, _personnel_movie_add, _json_cleanup, _json_sample, _movie_page, _movies_more;
 let _url;
 
-function initButtons(locale, paths, id, url) {
+function initButtons(id, locale, paths, url) {
 
     _user_id = id;
     _locale = locale;
@@ -21,7 +21,6 @@ function initButtons(locale, paths, id, url) {
 
     $('#export-button').click(function () {
 
-        let id = $(this).data('id');
         let exportModal = $('#exportModal');
         let result = $('.modal-body').find('.export-result');
         let count, movies, url, file, sample, result_items;
@@ -36,68 +35,68 @@ function initButtons(locale, paths, id, url) {
             '': {'fr': '', 'en': '', 'de': '', 'es': ''},
         }
 
-        $.ajax({
-            url: _personal_movies_export,
-            method: 'GET',
-            data: {id: id},
-            success: function (data) {
-                count = data['count'];
-                movies = data['movies'];
-                json = data['json'];
-                url = data['url'];
-                file = data['file'];
-                sample = data['sample'];
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const data = JSON.parse(this.response);
+            count = data['count'];
+            movies = data['movies'];
+            json = data['json'];
+            url = data['url'];
+            file = data['file'];
+            sample = data['sample'];
 
-                $('#json-link').attr({'href': url + file, 'download': file});
+            $('#json-link').attr({'href': url + file, 'download': file});
 
-                $(result).empty();
-                $(result).append('<div class="sample">' + sample + '</div>');
-                $(result).append(
-                    '<div class="selection">' +
-                    '   <div class="input-group w-75">' +
-                    '       <span class="input-group-text">' + txt.filter[_locale] + '</span>' +
-                    '       <input type="search" id="export-filter" class="form-control" placeholder="' + txt.movie_name[_locale] + '" aria-label="' + txt.filter[_locale] + '" style="width: 15em">' +
-                    '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.aria_select_all[_locale] + '">' + txt.select_all[_locale] + '</button>' +
-                    '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.aria_deselect_all[_locale] + '">' + txt.deselect_all[_locale] + '</button>' +
-                    '   </div>' +
-                    '</div>');
+            $(result).empty();
+            $(result).append('<div class="sample">' + sample + '</div>');
+            $(result).append(
+                '<div class="selection">' +
+                '   <div class="input-group w-75">' +
+                '       <span class="input-group-text">' + txt.filter[_locale] + '</span>' +
+                '       <input type="search" id="export-filter" class="form-control" placeholder="' + txt.movie_name[_locale] + '" aria-label="' + txt.filter[_locale] + '" style="width: 15em">' +
+                '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.aria_select_all[_locale] + '">' + txt.select_all[_locale] + '</button>' +
+                '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.aria_deselect_all[_locale] + '">' + txt.deselect_all[_locale] + '</button>' +
+                '   </div>' +
+                '</div>');
 
-                for (let i = 0; i < count; i++) {
-                    $(result).append('<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '" data-title="' + movies[i]['title'] + '" data-original="' + movies[i]['original_title'] + '">' + movies[i]['title'] + '</div>')
-                }
-
-                // console.log(Modal);
-                // new Modal('#exportModal').show();
-                $(exportModal).css('background-color', 'rgba(189,115,189,0.25)');
-                // $(exportModal).css('display', 'block');
-                // $(exportModal).css('opacity', '1');
-
-                exportFile = file;
-
-                result_items = $('.result-item');
-
-                $(result_items).click(function () {
-                    $(this).toggleClass("active");
-                    updateSample($(result_items));
-                })
-
-                $('#export-select').click(function () {
-                    $(result_items).addClass("active");
-                    updateSample($(result_items));
-                })
-
-                $('#export-deselect').click(function () {
-                    $(result_items).removeClass("active");
-                    updateSample($(result_items));
-                })
-
-                $('#export-filter').on('input', function () {
-                    let needle = $(this).val();
-                    filter(result_items, needle);
-                    updateSample(result_items);
-                })
+            for (let i = 0; i < count; i++) {
+                $(result).append('<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '" data-title="' + movies[i]['title'] + '" data-original="' + movies[i]['original_title'] + '">' + movies[i]['title'] + '</div>')
             }
-        })
+
+            // console.log(Modal);
+            // new Modal('#exportModal').show();
+            $(exportModal).css('background-color', 'rgba(189,115,189,0.25)');
+            // $(exportModal).css('display', 'block');
+            // $(exportModal).css('opacity', '1');
+
+            exportFile = file;
+
+            result_items = $('.result-item');
+
+            $(result_items).click(function () {
+                $(this).toggleClass("active");
+                updateSample($(result_items));
+            })
+
+            $('#export-select').click(function () {
+                $(result_items).addClass("active");
+                updateSample($(result_items));
+            })
+
+            $('#export-deselect').click(function () {
+                $(result_items).removeClass("active");
+                updateSample($(result_items));
+            })
+
+            $('#export-filter').on('input', function () {
+                let needle = $(this).val();
+                filter(result_items, needle);
+                updateSample(result_items);
+            })
+        }
+
+        xhr.open("GET", _personal_movies_export + '?id=' + _user_id);
+        xhr.send();
     })
 
     $('#export-copy').click(function () {
@@ -127,16 +126,7 @@ function initButtons(locale, paths, id, url) {
         })
         let appendModal = $('#appendModal');
         $(appendModal).css('transition', 'background-color .45s');
-        // $(appendModal).css('display', 'unset');
-        // $(appendModal).css('opacity', '1');
         $(appendModal).css('background-color', 'rgba(189,115,189,0.25)');
-        // let appendCloseButtons = $(appendModal).find('button[data-bs-dismiss="modal"]');
-        // $(appendCloseButtons).click(function () {
-        //     $(appendModal).css('opacity', '0');
-        //     setTimeout(function () {
-        //         $(appendModal).css('display', 'none');
-        //     }, 150)
-        // })
     })
 
     $('input[name="json"]').change(function () {
@@ -242,7 +232,7 @@ function initButtons(locale, paths, id, url) {
     })
 
     const myModalEl = document.getElementById('exportModal')
-    myModalEl.addEventListener('hidden.bs.modal', event => {
+    myModalEl.addEventListener('hidden.bs.modal', () => {
 
         $.ajax({
             url: _json_cleanup,

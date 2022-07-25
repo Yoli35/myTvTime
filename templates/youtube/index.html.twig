@@ -33,7 +33,7 @@
 {% block morejs %}
     <script src="/js/youtube.js"></script>
     <script>
-        $(function () {
+        window.onload = () => {
             initYoutube(
                     {{ app.user.id }},
                 "{{ locale }}",
@@ -55,7 +55,7 @@
                     myLink.select();
                 }
             });
-        })
+        }
 
     </script>
 {% endblock %}

@@ -46,8 +46,8 @@
                     {{ component('user_movie_search', {class: 'search', id: user.id, poster_url: imageConfig.url, poster_size: imageConfig.poster_sizes.3}) }}
                     <div class="export">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" id="export-button" class="btn btn-secondary" data-id="{{ user.id }}" name="export-list" data-bs-toggle="modal" data-bs-target="#exportModal">{{ 'Export'|trans }}</button>
-                            <button type="button" id="append-button" class="btn btn-secondary" data-id="{{ user.id }}" name="append-list" data-bs-toggle="modal" data-bs-target="#appendModal">{{ 'Append'|trans }}</button>
+                            <button type="button" id="export-button" class="btn btn-secondary" name="export-list" data-bs-toggle="modal" data-bs-target="#exportModal">{{ 'Export'|trans }}</button>
+                            <button type="button" id="append-button" class="btn btn-secondary" name="append-list" data-bs-toggle="modal" data-bs-target="#appendModal">{{ 'Append'|trans }}</button>
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="json" class="form-label">{{ 'Select a Movie List File (.json)' }}</label>
+                    <label for="json" class="form-label">{{ 'Select a Movie List File (.json)'|trans }}</label>
                     <input type="file" id="json" name="json" accept="application/json" class="form-control form-control-sm">
                     <div class="append-infos"></div>
                     <div class="append-result"></div>
@@ -124,9 +124,9 @@
 {% block morejs %}
     <script src="/js/user-movie.js"></script>
     <script>
-        $(function () {
-
+        window.onload = () => {
             initButtons(
+                {{ user.id }},
                 "{{ locale }}",
                 [
                     "{{ path('app_personal_movies_export') }}",
@@ -137,10 +137,9 @@
                     "{{ path('app_movie', {id: 0}) }}",
                     "{{ path('app_personal_movies_more') }}"
                 ],
-                {{ user.id }},
                 "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}",
             );
-        })
+        }
     </script>
 {% endblock %}
 

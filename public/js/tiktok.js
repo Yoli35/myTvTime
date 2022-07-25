@@ -44,66 +44,66 @@ function initTiktok(locale, paths, id) {
             total_results = parseInt(h1.getAttribute('data-total-results'));
             let current_results = videos.length;
 
-            $.ajax({
-                url: _tik_tok_more,
-                method: 'GET',
-                data: {id: _user_id, offset: current_results},
-                success: function (data) {
-                    let results = data['results'];
-                    let count = results.length;
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                const response = JSON.parse(this.response);
+                const results = response['results'];
+                const count = results.length;
 
-                    for (let i = 0; i < count; i++) {
-                        let result = results[i];
-                        let newVideo = document.createElement("div");
-                        newVideo.setAttribute("class", "tt-video");
-                        let aVideo = document.createElement("a");
-                        aVideo.setAttribute("href", _tik_tok_video + result['id'].toString());
-                        let thumbnail = document.createElement("div");
-                        thumbnail.setAttribute("class", "thumbnail");
-                        let img = document.createElement("img");
-                        img.setAttribute("src", result['thumbnail_url']);
-                        img.setAttribute("alt", result['title']);
-                        let title = document.createElement("div");
-                        title.setAttribute("class", "title");
-                        title.appendChild(document.createTextNode(result['title']));
-                        thumbnail.appendChild(img);
-                        thumbnail.appendChild(title);
-                        let details = document.createElement("div");
-                        details.setAttribute("class", "details");
-                        let author = document.createElement("div");
-                        author.setAttribute("class", "author");
-                        let aAuthor = document.createElement('a');
-                        aAuthor.setAttribute("href", result['author_url']);
-                        aAuthor.setAttribute("target", "_blank");
-                        let span = document.createElement("span");
-                        span.setAttribute("data_desc", result['author_name']);
-                        span.appendChild(document.createTextNode(result['author_name'].charAt(0)));
-                        aAuthor.appendChild(span);
-                        author.appendChild(aAuthor);
-                        let infos = document.createElement("div");
-                        infos.setAttribute("class", "infos");
-                        let info = document.createElement("div");
-                        info.setAttribute("class", "info mt-2");
-                        let dateT = result['added_at'].substring(0, 10) + 'T' + result['added_at'].substring(11, 19);
-                        let added = new Date(dateT);
-                        info.appendChild(document.createTextNode(txt.added_at[_locale] + ' : ' + added.toLocaleTimeString(undefined, options)));
-                        infos.appendChild(info);
-                        details.appendChild(author);
-                        details.appendChild(infos);
-                        aVideo.appendChild(thumbnail);
-                        aVideo.appendChild(details);
-                        newVideo.appendChild(aVideo);
+                for (let i = 0; i < count; i++) {
+                    let result = results[i];
+                    let newVideo = document.createElement("div");
+                    newVideo.setAttribute("class", "tt-video");
+                    let aVideo = document.createElement("a");
+                    aVideo.setAttribute("href", _tik_tok_video + result['id'].toString());
+                    let thumbnail = document.createElement("div");
+                    thumbnail.setAttribute("class", "thumbnail");
+                    let img = document.createElement("img");
+                    img.setAttribute("src", result['thumbnail_url']);
+                    img.setAttribute("alt", result['title']);
+                    let title = document.createElement("div");
+                    title.setAttribute("class", "title");
+                    title.appendChild(document.createTextNode(result['title']));
+                    thumbnail.appendChild(img);
+                    thumbnail.appendChild(title);
+                    let details = document.createElement("div");
+                    details.setAttribute("class", "details");
+                    let author = document.createElement("div");
+                    author.setAttribute("class", "author");
+                    let aAuthor = document.createElement('a');
+                    aAuthor.setAttribute("href", result['author_url']);
+                    aAuthor.setAttribute("target", "_blank");
+                    let span = document.createElement("span");
+                    span.setAttribute("data_desc", result['author_name']);
+                    span.appendChild(document.createTextNode(result['author_name'].charAt(0)));
+                    aAuthor.appendChild(span);
+                    author.appendChild(aAuthor);
+                    let infos = document.createElement("div");
+                    infos.setAttribute("class", "infos");
+                    let info = document.createElement("div");
+                    info.setAttribute("class", "info mt-2");
+                    let dateT = result['added_at'].substring(0, 10) + 'T' + result['added_at'].substring(11, 19);
+                    let added = new Date(dateT);
+                    info.appendChild(document.createTextNode(txt.added_at[_locale] + ' : ' + added.toLocaleTimeString(undefined, options)));
+                    infos.appendChild(info);
+                    details.appendChild(author);
+                    details.appendChild(infos);
+                    aVideo.appendChild(thumbnail);
+                    aVideo.appendChild(details);
+                    newVideo.appendChild(aVideo);
 
-                        videoList.insertBefore(newVideo, seeMore);
-                    }
-                    //
-                    // If everything is displayed, we make the 'See more results' button disappear
-                    //
-                    if (current_results + count === total_results) {
-                        seeMore.setAttribute("style", "display: none;");
-                    }
+                    videoList.insertBefore(newVideo, seeMore);
                 }
-            })
+                //
+                // If everything is displayed, we make the 'See more results' button disappear
+                //
+                if (current_results + count === total_results) {
+                    seeMore.setAttribute("style", "display: none;");
+                }
+            }
+
+            xhr.open("GET", _tik_tok_more + '?id=' + _user_id + '&offset=' + current_results);
+            xhr.send();
         });
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\UserMovie;
 use App\Form\UserType;
 use App\Repository\UserMovieRepository;
 use App\Repository\UserRepository;
@@ -11,7 +10,6 @@ use App\Service\BetaSeriesService;
 use App\Service\CallTmdbService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
-use App\Service\WeatherService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -162,29 +160,49 @@ class UserController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $id = $request->query->get('id');
-        $movies = $userMovieRepository->findAllUserMovies($id);
+        $movies = $this->movie2export($userMovieRepository->findAllUserMovies($id));
         $count = count($movies);
         $json = $this->formatJson('{'.$this->json_header.'"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
 
         $filename = $this->saveFile($json, $user);
-        $url = $this->generateUrl('app_json');
+    //    $url = $this->generateUrl('app_json');
         $sample = $this->sample($request, $userMovieRepository, $id, null);
 
         return $this->json([
             'count' => $count,
             'movies' => $movies,
             'json' => $json,
-            'url' => $url,
+            'url' => '/movielist/',
             'file' => $filename,
             'sample' => $sample
         ]);
     }
 
-    #[Route('/movielist/', name: 'app_json')]
+    function movie2export($movies):array
+    {
+        $exports = [];
+        $count = count($movies);
+        for ($i=0;$i<$count;$i++) {
+
+            $movie = $movies[$i];
+            $export['id'] = $movie['id'];
+            $export['title'] = $movie['title'];
+            $export['original_title'] = $movie['original_title'];
+            $export['poster_path'] = $movie['poster_path'];
+            $export['release_date'] = $movie['release_date'];
+            $export['movie_db_id'] = $movie['movie_db_id'];
+            $export['runtime'] = $movie['runtime'];
+
+            $exports[] = $export;
+        }
+        return $exports;
+    }
+
+/*    #[Route('/movielist/', name: 'app_json')]
     public function jsonUrl()
     {
 
-    }
+    }*/
 
     #[Route('/{_locale}/movielist/updateSample', name: 'app_json_sample', requirements: ['_locale' => 'fr|en|de|es'])]
     public function updateSample(Request $request, UserMovieRepository $userMovieRepository, UserRepository $userRepository): JsonResponse
@@ -196,7 +214,7 @@ class UserController extends AbstractController
 
         $sample = $this->sample($request, $userMovieRepository, $userId, $ids);
 
-        $movies = $this->userMoviesFromList($userId, $userMovieRepository, $ids);
+        $movies = $this->movie2export($this->userMoviesFromList($userId, $userMovieRepository, $ids));
         $count = count($movies);
         $jsonMovies = json_encode($movies);
         $json = '{'.$this->json_header.'"total_results":' . $count . ',"results":' . $jsonMovies . '}';
@@ -256,7 +274,7 @@ class UserController extends AbstractController
     {
         $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
 
-        $movies = $this->userMoviesFromList($user_id, $userMovieRepository, $ids);
+        $movies = $this->movie2export($this->userMoviesFromList($user_id, $userMovieRepository, $ids));
         $count = count($movies);
 
         $sample = $this->formatJson('{'.$this->json_header.'"total_results":'.$count.',"results":', 0, $tab, '<br>');
