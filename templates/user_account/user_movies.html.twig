@@ -124,7 +124,7 @@
 {% block morejs %}
     <script src="/js/user-movie.js"></script>
     <script>
-        window.onload = () => {
+        window.addEventListener("DOMContentLoaded", () => {
             initButtons(
                 {{ user.id }},
                 "{{ locale }}",
@@ -139,7 +139,7 @@
                 ],
                 "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}",
             );
-        }
+        })
     </script>
 {% endblock %}
 

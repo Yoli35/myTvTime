@@ -15,12 +15,17 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 class WeatherComponent extends AbstractController
 {
     private WeatherService $weatherService;
+    private string $locale;
 
     public function __construct(WeatherService $weatherService)
     {
         $this->weatherService = $weatherService;
     }
 
+    public function mount($locale)
+    {
+        $this->locale = $locale;
+    }
     /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
@@ -47,5 +52,10 @@ class WeatherComponent extends AbstractController
 //            }
 //        }
         return $forecast;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }

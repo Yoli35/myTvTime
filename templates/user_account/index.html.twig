@@ -51,7 +51,8 @@
 {% endblock %}
 {% block morejs %}
     <script>
-        $(function () {
+        window.addEventListener("DOMContentLoaded", () => {
+
             let inputAvatar = $('#user_avatar');
             let inputBanner = $('#user_banner');
             let banner = $('.banner');

@@ -1,4 +1,5 @@
 {% set weather = this.forecast %}
+{% set locale = this.getLocale %}
 {% if weather is not empty %}
     <div id="weather" class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
 {#        {{ dump(weather.forecast.forecastday.0) }}#}
@@ -87,20 +88,46 @@
             <div class="content-row">
                 <div class="hours">
                     <div class="h24">
-                        {% set now = "now"|date("H") %}
+                        {% set now = "now"|date("G") %}
+                        {% if weather.forecast.forecastday.0.astro.sunrise == 'No sunrise' %}
+                            {% set sunrise = -1 %}
+                        {% else %}
+                            {% set sunrise = weather.forecast.forecastday.0.astro.sunrise|date("G") %}
+                            {% set sunrise_minutes = weather.forecast.forecastday.0.astro.sunrise|date("i") %}
+                        {% endif %}
+                        {% if weather.forecast.forecastday.0.astro.sunrise == 'No sunset' %}
+                            {% set sunset = -1 %}
+                        {% else %}
+                            {% set sunset = weather.forecast.forecastday.0.astro.sunset|date("G") %}
+                            {% set sunset_minutes = weather.forecast.forecastday.0.astro.sunset|date("i") %}
+                        {% endif %}
                         {% for hour in weather.forecast.forecastday.0.hour %}
                             {% set time = hour.time[11:2] %}
-                            <div class="hour" {% if hour.is_day == 0 %}style="background-color: rgba(43,50,52,0.5)"{% endif %}>
+                            <div class="hour"{% if hour.is_day == 0 %} style="background-color: rgba(43,50,52,0.5)"{% endif %}>
                                 <div>{{ time }}h</div>
                                 <div><img src="{{ hour.condition.icon }}" alt="{{ hour.condition.text }}"></div>
                                 <div>{{ hour.temp_c|round }}°C</div>
                             </div>
                             {% if time <= now and time+1 > now %}
-                                <button class="btn hour" id="now" {% if hour.is_day == 0 %}style="background-color: rgba(43,50,52,0.5)"{% endif %}>
-                                    <div>{{ "now"|date("H:i") }}</div>
+                                <button class="btn hour" id="now"{% if hour.is_day == 0 %} style="background-color: rgba(43,50,52,0.5)"{% endif %}>
+                                    <div>{{ "now"|date("G:i") }}</div>
                                     <div><img src="{{ weather.current.condition.icon }}" alt="{{ weather.current.condition.text }}"></div>
                                     <div>{{ 'Now'|trans }}</div>
                                 </button>
+                            {% endif %}
+                            {% if time <= sunrise and time+1 > sunrise %}
+                                <div id="sunrise" class="hour" data-sunrise="{{ sunrise }}" data-sunrise-minutes="{{ sunrise_minutes }}">
+                                    <div>{{ weather.forecast.forecastday.0.astro.sunrise|date("G:i") }}</div>
+                                    <div style="font-size: 1.75em;"><i class="bi bi-sunrise"></i></div>
+                                    <div>{{ 'Sunrise'|trans }}</div>
+                                </div>
+                            {% endif %}
+                            {% if time <= sunset and time+1 > sunset %}
+                                <div id="sunset" class="hour" data-sunset="{{ sunset }}" data-sunset-minutes="{{ sunset_minutes }}">
+                                    <div>{{ weather.forecast.forecastday.0.astro.sunset|date("G:i") }}</div>
+                                    <div style="font-size: 1.75em;"><i class="bi bi-sunset"></i></div>
+                                    <div>{{ 'Sunset'|trans }}</div>
+                                </div>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -111,7 +138,8 @@
     </div>
 {% endif %}
 <script>
-    // window.onload = () => {
+    // https://api.weatherapi.com/v1/forecast.json?key=a790df8a650b4ec8ab145453222405&q=Nantes&days=3&lang=fr
+    window.addEventListener("DOMContentLoaded", () => {
         const banner = document.getElementById("user-banner");
         const avatar = document.getElementById("user-avatar");
         const toggle = document.getElementById("toggler");
@@ -121,8 +149,26 @@
         const vertical = document.getElementsByClassName("vertical");
         const temperature = document.getElementById("weather-temp");
         let windowWidth = window.innerWidth;
+        let startDate = new Date();
+        let hour = startDate.getHours();
+        let minutes = startDate.getMinutes();
+        const now = document.getElementById("now");
+        const h24 = now.parentNode;
+        const sunrise = document.getElementById("sunrise");
+        const sunset = document.getElementById("sunset");
+        const sunriseHour = parseInt(sunrise.getAttribute("data-sunrise"));
+        const sunsetHour = parseInt(sunset.getAttribute("data-sunset"));
+        const sunriseMinutes = parseInt(sunrise.getAttribute("data-sunrise-minutes"));
+        const sunsetMinutes = parseInt(sunset.getAttribute("data-sunset-minutes"));
+        let isSunriseHour = (hour === sunriseHour),
+            isSunsetHour = (hour === sunsetHour),
+            isBeforeSunrise = isSunriseHour,
+            isBeforeSunset = isSunsetHour;
 
-        document.getElementById("now").focus();
+        setTimeout( () => {
+            now.focus();
+            setInterval(updateNow, 5000)
+        }, 500);
 
         setInterval(windowWidthChanged, 125);
 
@@ -193,5 +239,63 @@
                 }
             }
         }
-    // }
+
+        function updateNow() {
+
+            const d = new Date();
+            let currentHour = d.getHours();
+
+            now.firstElementChild.innerHTML = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+
+            if (currentHour !== hour) {
+                hour = currentHour;
+                let next = now.nextElementSibling;
+                h24.removeChild(now);
+                if (currentHour === 0) {
+                    next = h24.firstChild;
+                    h24.insertBefore(now, next);
+                }
+                if (currentHour < 23)
+                {
+                    next = next.nextElementSibling;
+                    h24.insertBefore(now, next);
+                }
+                else {
+                    h24.appendChild(now);
+                }
+                isSunriseHour = (hour === sunriseHour);
+                isSunsetHour = (hour === sunsetHour);
+                isBeforeSunrise = isSunriseHour;
+                isBeforeSunset = isSunsetHour;
+            }
+
+            if (isSunriseHour) {
+                if (isBeforeSunrise) {
+                    let currentMinutes = d.getMinutes();
+                    if (currentMinutes >= sunriseMinutes) {
+                        isBeforeSunrise = false;
+                        h24.removeChild(now);
+                        let next = sunrise.nextElementSibling;
+                        h24.insertBefore(now, next);
+                    }
+                }
+            }
+            if (isSunsetHour) {
+                if (isBeforeSunset) {
+                    let currentMinutes = d.getMinutes();
+                    if (currentMinutes >= sunsetMinutes) {
+                        isBeforeSunset = false;
+                        h24.removeChild(now);
+                        if (sunsetHour < 23) {
+                            let next = sunset.nextElementSibling;
+                            h24.insertBefore(now, next);
+                        }
+                        else {
+                            h24.appendChild(now);
+                        }
+                    }
+                }
+            }
+        }
+    })
 </script>

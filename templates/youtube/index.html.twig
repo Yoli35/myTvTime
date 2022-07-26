@@ -33,7 +33,7 @@
 {% block morejs %}
     <script src="/js/youtube.js"></script>
     <script>
-        window.onload = () => {
+        window.addEventListener("DOMContentLoaded", () => {
             initYoutube(
                     {{ app.user.id }},
                 "{{ locale }}",
@@ -42,7 +42,6 @@
                     "{{ path('app_youtube_more') }}"
                 ]
             );
-        }
-
+        })
     </script>
 {% endblock %}
