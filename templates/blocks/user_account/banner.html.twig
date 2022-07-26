@@ -1,4 +1,4 @@
-<div class="banner">
+<div id="user-banner" class="banner">
     {% if user.banner %}
         <img src="/images/users/banners/{{ user.banner }}" alt="">
     {% else %}
@@ -9,7 +9,7 @@
         {% endif %}
     {% endif %}
     <div class="title">{{ user }}</div>
-    <div class="avatar">
+    <div id="user-avatar" class="avatar">
         {% if user.avatar %}
             <img src="/images/users/avatars/{{ user.avatar }}">
         {% else %}

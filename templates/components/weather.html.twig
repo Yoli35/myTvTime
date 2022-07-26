@@ -1,8 +1,8 @@
 {% set weather = this.forecast %}
 {% if weather is not empty %}
-    <div class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
+    <div id="weather" class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
 {#        {{ dump(weather.forecast.forecastday.0) }}#}
-        <div class="content">
+        <div id="weather-content" class="content">
             <div class="content-row">
                 <div class="city">{{ weather.location.name }}</div>
                 <div class="vertical">
@@ -12,10 +12,10 @@
                         <div>{{ weather.location.country }}</div>
                     </div>
                     <div class="item">
-                        {{ weather.current.last_updated|format_date('full') }}
+                        <div>{{ weather.current.last_updated|format_date('full') }}</div>
                     </div>
                 </div>
-                <div class="temperature">{{ weather.current.temp_c|round ~ '°' }}</div>
+                <div id="weather-temp" class="temperature">{{ weather.current.temp_c|round ~ '°' }}</div>
                 <div class="vertical">
                     <div class="item">
                         <i class="bi bi-thermometer-half"></i>
@@ -106,24 +106,27 @@
                     </div>
                 </div>
             </div>
-            <div class="toggle open"><i class="bi bi-dash-circle"></i></div>
+            <div id="toggler" class="toggle open"><i class="bi bi-dash-circle"></i></div>
         </div>
     </div>
 {% endif %}
 <script>
-    $(function () {
-        let banner = $('.banner');
-        let toggle = $('.toggle');
-        let weather = $('.weather');
-        let content = $(weather).find('.content');
-        let row = $(weather).find('.content-row');
+    // window.onload = () => {
+        const banner = document.getElementById("user-banner");
+        const avatar = document.getElementById("user-avatar");
+        const toggle = document.getElementById("toggler");
+        const weather = document.getElementById("weather");
+        const content = document.getElementById("weather-content");
+        const row = document.getElementsByClassName("content-row");
+        const vertical = document.getElementsByClassName("vertical");
+        const temperature = document.getElementById("weather-temp");
         let windowWidth = window.innerWidth;
 
         document.getElementById("now").focus();
 
         setInterval(windowWidthChanged, 125);
 
-        $(toggle).click(weather_toggle);
+        toggle.addEventListener("click", weather_toggle);
 
         weather_toggle();
 
@@ -131,28 +134,36 @@
 
             windowWidth = window.innerWidth;
 
-            if ($(toggle).hasClass('open')) {
-                $(toggle).removeClass('open');
-                $(toggle).html('<i class="bi bi-plus-circle">');
+            if (toggle.classList.contains("open")) {
+                toggle.classList.remove("open");
+                toggle.innerHTML = '<i class="bi bi-plus-circle">';
                 if (windowWidth < 767.98) {
-                    $(banner).css('margin-bottom', '13em');
-                    $(weather).css('bottom', '-13em');
+                    banner.setAttribute("style", "margin-bottom: 13em");
+                    weather.setAttribute("style", "bottom: -13em");
+                    avatar.setAttribute("style", "right: .5em");
                 }
-                $(row).css('flex-direction', 'row');
-                $(content).css('padding', '1em 1em 0 1em');
-                $('.temperature').css('font-size', '2em');
-                $('.vertical').hide();
+                else {
+                    avatar.setAttribute("style", "right: 2em");
+                }
+                for (let i=0;i<row.length;i++) row.item(i).setAttribute("style", "flex-direction: row");
+                content.setAttribute("style", "padding: 1em 1em 0 1em");
+                temperature.setAttribute("style", "font-size: 3em");
+                for (let i=0;i<vertical.length;i++) vertical.item(i).setAttribute("style", "display: none");
             } else {
-                $(toggle).addClass('open');
-                $(toggle).html('<i class="bi bi-dash-circle">');
+                toggle.classList.add("open");
+                toggle.innerHTML = '<i class="bi bi-dash-circle">';
                 if (windowWidth < 767.98) {
-                    $(banner).css('margin-bottom', '26em');
-                    $(weather).css('bottom', '-26em');
+                    banner.setAttribute("style", "margin-bottom: 32em");
+                    weather.setAttribute("style", "bottom: -32em");
+                    avatar.setAttribute("style", "right: .5em");
                 }
-                $(row).css('flex-direction', 'column');
-                $(content).css('padding', '1em');
-                $('.temperature').css('font-size', '5em');
-                $('.vertical').show();
+                else {
+                    avatar.setAttribute("style", "right: 26em");
+                }
+                for (let i=0;i<row.length;i++) row.item(i).setAttribute("style", "flex-direction: column");
+                content.setAttribute("style", "padding: 1em");
+                temperature.setAttribute("style", "font-size: 5em");
+                for (let i=0;i<vertical.length;i++) vertical.item(i).setAttribute("style", "display: block");
             }
         }
 
@@ -165,18 +176,22 @@
                 windowWidth = currentWidth;
 
                 if (windowWidth < 767.98) {
-                    if ($(toggle).hasClass('open')) {
-                        $(banner).css('margin-bottom', '26em');
-                        $(weather).css('bottom', '-26em');
+                    if (toggle.classList.contains("open")) {
+                        banner.setAttribute("style", "margin-bottom: 32em");
+                        weather.setAttribute("style", "bottom: -32em");
+                        avatar.setAttribute("style", "right: .5em");
                     } else {
-                        $(banner).css('margin-bottom', '13em');
-                        $(weather).css('bottom', '-13em');
+                        banner.setAttribute("style", "margin-bottom: 13em");
+                        weather.setAttribute("style", "bottom: -13em");
                     }
                 } else {
-                    $(banner).attr('style', '');
-                    $(weather).attr('style', '');
+                    banner.removeAttribute("style");
+                    weather.removeAttribute("style");
+                    if (toggle.classList.contains("open")) {
+                        avatar.setAttribute("style", "right: 26em");
+                    }
                 }
             }
         }
-    })
+    // }
 </script>

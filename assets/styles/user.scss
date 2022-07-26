@@ -35,21 +35,112 @@
             position: absolute;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
-    }
 
-    .avatar {
-        bottom: 0.5em;
-        height: 6em;
-        position: absolute;
-        right: 0.5em;
-        width: 6em;
+        .avatar {
+            bottom: 0.5em;
+            height: 6em;
+            position: absolute;
+            right: 0.5em;
+            transition: right .25s cubic-bezier(.5,0,.5,1);
+            width: 6em;
 
-        img {
-            border: 4px solid #bdbdbd;
-            border-radius: 50%;
-            height: 100%;
-            transition: border-color .25s, filter .25s;
-            width: auto;
+            img {
+                border: 4px solid #bdbdbd;
+                border-radius: 50%;
+                height: 100%;
+                transition: border-color .25s, filter .25s;
+                width: auto;
+            }
+        }
+
+        .weather {
+            background-color: rgba(0, 127, 191, 0.85);
+            border: 4px solid #dbdbdb;
+            border-radius: 1em;
+            bottom: -6em;
+            color: #f2f2f2;
+            position: absolute;
+            transition: bottom .25s;
+            width: 100%;
+
+            .content {
+                @include flex-col();
+                font-size: 1em;
+                font-weight: bold;
+                height: 100%;
+                padding: 1em;
+                position: relative;
+                width: 100%;
+
+                .vertical,
+                .content-row {
+                    @include flex-col();
+                }
+
+                .city {
+                    font-size: 1.5em;
+                    font-weight: 300;
+                }
+
+                .temperature {
+                    font-size: 5em;
+                    font-weight: 100;
+                    margin-bottom: -.3em;
+                    margin-top: -.2em;
+                    padding: 0 .5em;
+                }
+
+                .condition {
+                    @include flex-row();
+                }
+
+                .item {
+                    @include flex-row();
+                    font-size: .75em;
+                    font-weight: 200;
+
+                    div {
+                        padding: 0 .5em;
+                    }
+                }
+
+                .hours {
+                    @include flex-row(center,auto);
+                    margin-bottom: 1em;
+                    margin-top: 1em;
+                    overflow-x: scroll;
+                    width: 20em;
+                    .h24 {
+                        @include flex-row();
+                        .hour {
+                            @include flex-col();
+                            background-color: #0e74907f;
+                            border-radius: .25em;
+                            color: #f2f2f2;
+                            font-size: .75em;
+                            font-weight: 100;
+                            margin: 0 .25em;
+                            overflow: hidden;
+                            padding: .25em;
+                            img {
+                                height: 29px;
+                                width: 29px;
+                            }
+                        }
+                    }
+                }
+
+                .toggle {
+                    background-color: transparent;
+                    color: #f2f2f2;
+                    cursor: pointer;
+                    font-size: 1em;
+                    font-weight: bold;
+                    right: 1em;
+                    position: absolute;
+                    top: 1em;
+                }
+            }
         }
     }
 
@@ -58,96 +149,6 @@
     }
 }
 
-.weather {
-    background-color: rgba(0, 127, 191, 0.85);
-    border: 4px solid #dbdbdb;
-    border-radius: 1em;
-    bottom: -6em;
-    color: #f2f2f2;
-    position: absolute;
-    transition: bottom .25s;
-    width: 100%;
-
-    .content {
-        @include flex-col();
-        font-size: 1em;
-        font-weight: bold;
-        height: 100%;
-        padding: 1em;
-        position: relative;
-        width: 100%;
-
-        .vertical,
-        .content-row {
-            @include flex-col();
-        }
-
-        .hours {
-            @include flex-row(center,auto);
-            margin-bottom: 1em;
-            margin-top: 1em;
-            overflow-x: scroll;
-            width: 20em;
-            .h24 {
-                @include flex-row();
-                .hour {
-                    @include flex-col();
-                    background-color: #0e74907f;
-                    border-radius: .25em;
-                    color: #f2f2f2;
-                    font-size: .75em;
-                    font-weight: 100;
-                    margin: 0 .25em;
-                    overflow: hidden;
-                    padding: .25em;
-                    img {
-                        height: 29px;
-                        width: 29px;
-                    }
-                }
-            }
-        }
-    }
-
-    .toggle {
-        background-color: transparent;
-        color: #f2f2f2;
-        cursor: pointer;
-        font-size: 1em;
-        font-weight: bold;
-        right: 1em;
-        position: absolute;
-        top: 1em;
-    }
-
-    .city {
-        font-size: 1.5em;
-        font-weight: 300;
-    }
-
-    .temperature {
-        font-size: 5em;
-        font-weight: 100;
-        margin-bottom: -.3em;
-        margin-top: -.2em;
-        padding: 0 .5em;
-    }
-
-    .condition {
-        @include flex-row();
-    }
-
-    .item {
-        display: flex;
-        flex-direction: row;
-        font-size: .75em;
-        font-weight: 200;
-
-        div {
-            padding: 0 .5em;
-        }
-    }
-}
 
 .user-movies {
     @include flex-col();
@@ -418,19 +419,19 @@
                 font-size: 3em;
                 left: 2em;
             }
-        }
 
-        .avatar {
-            bottom: 1em;
-            right: 1em;
-        }
-    }
+            .avatar {
+                bottom: 1em;
+                right: 1em;
+            }
 
-    .weather {
-        bottom: unset;
-        right: 2em;
-        top: 2em;
-        width: unset;
+            .weather {
+                bottom: unset;
+                right: 2em;
+                top: 2em;
+                width: unset;
+            }
+        }
     }
 
     .user-movies {
@@ -458,13 +459,13 @@
 
         .banner {
             height: 24em;
-        }
 
-        .avatar {
-            bottom: 2em;
-            height: 12em;
-            right: 2em;
-            width: 12em;
+            .avatar {
+                bottom: 2em;
+                height: 12em;
+                right: 2em;
+                width: 12em;
+            }
         }
     }
 }
