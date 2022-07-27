@@ -11,12 +11,12 @@
         margin-bottom: 6em;
         position: relative;
         transition:
-                border-color .25s,
-                filter .25s,
-                margin-bottom .25s,
-                background-position .5s cubic-bezier(.5,0,.5,1),
-                height .5s cubic-bezier(.5,0,.5,1),
-                width .5s cubic-bezier(.5,0,.5,1);
+                border-color $transition-delay,
+                filter $transition-delay,
+                margin-bottom $transition-delay,
+                background-position $transition-delay cubic-bezier(.5,0,.5,1),
+                height $transition-delay cubic-bezier(.5,0,.5,1),
+                width $transition-delay cubic-bezier(.5,0,.5,1);
         width: 100%;
 
         img {
@@ -41,14 +41,14 @@
             height: 6em;
             position: absolute;
             right: 0.5em;
-            transition: right .25s cubic-bezier(.5,0,.5,1);
+            transition: right $transition-delay cubic-bezier(.5,0,.5,1);
             width: 6em;
 
             img {
                 border: 4px solid #bdbdbd;
                 border-radius: 50%;
                 height: 100%;
-                transition: border-color .25s, filter .25s;
+                transition: border-color $transition-delay, filter $transition-delay;
                 width: auto;
             }
         }
@@ -60,7 +60,7 @@
             bottom: -6em;
             color: #f2f2f2;
             position: absolute;
-            transition: bottom .25s;
+            transition: bottom $transition-delay;
             width: 100%;
 
             .content {
@@ -112,19 +112,28 @@
                     width: 20em;
                     .h24 {
                         @include flex-row();
+                        padding: .5em 0;
                         .hour {
                             @include flex-col();
                             background-color: #0e74907f;
-                            border-radius: .25em;
+                            border: none;
+                            border-radius: .4em;
                             color: #f2f2f2;
                             font-size: .75em;
                             font-weight: 100;
                             margin: 0 .25em;
+                            outline: none;
                             overflow: hidden;
                             padding: .25em;
+                            transform: scale(1);
+                            transition: $transition-delay;
                             img {
                                 height: 29px;
                                 width: 29px;
+                            }
+                            &:hover,
+                            &:focus {
+                                transform: scale(1.25);
                             }
                         }
                     }

@@ -109,7 +109,7 @@
                                 <div>{{ hour.temp_c|round }}°C</div>
                             </div>
                             {% if time <= now and time+1 > now %}
-                                <button class="btn hour" id="now"{% if hour.is_day == 0 %} style="background-color: rgba(43,50,52,0.5)"{% endif %}>
+                                <button class="hour" id="now"{% if hour.is_day == 0 %} style="background-color: rgba(43,50,52,0.5)"{% endif %}>
                                     <div>{{ "now"|date("G:i") }}</div>
                                     <div><img src="{{ weather.current.condition.icon }}" alt="{{ weather.current.condition.text }}"></div>
                                     <div>{{ 'Now'|trans }}</div>

@@ -53,29 +53,34 @@
     <script>
         window.addEventListener("DOMContentLoaded", () => {
 
-            let inputAvatar = $('#user_avatar');
-            let inputBanner = $('#user_banner');
-            let banner = $('.banner');
+            setTimeout( () => {
+                document.querySelector('#user_email').focus();
+            }, 1000);
 
-            $(inputAvatar).mouseout(function () {
-                $('.avatar img').css('border', '4px solid #dbdbdb');
-                $('.avatar').css('filter', 'none');
-            })
+            const inputAvatar = document.querySelector('#user_avatar');
+            const inputBanner = document.querySelector('#user_banner');
+            const banner = document.querySelector('#user-banner');
+            const avatar = document.querySelector('#user-avatar');
 
-            $(inputAvatar).mouseenter(function () {
-                $('.avatar img').css('border', '4px solid #D81F26');
-                $('.avatar').css('filter', 'sepia(0.8)');
-            })
+            inputAvatar.addEventListener("mouseout", () => {
+                avatar.firstElementChild.removeAttribute("style");
+                avatar.removeAttribute("style");
+            });
 
-            $(inputBanner).mouseout(function () {
-                $(banner).css('border', '4px solid #dbdbdb');
-                $(banner).css('filter', 'none');
-            })
+            inputAvatar.addEventListener("mouseenter", () => {
+                avatar.firstElementChild.setAttribute("style", "border-color: #D81F26");
+                avatar.setAttribute("style", "filter: sepia(0.8)");
+            });
 
-            $(inputBanner).mouseenter(function () {
-                $(banner).css('border', '4px solid #D81F26');
-                $(banner).css('filter', 'sepia(0.8)');
-            })
+            inputBanner.addEventListener("mouseout", () => {
+                banner.firstElementChild.removeAttribute("style");
+                banner.removeAttribute("style");
+            });
+
+            inputBanner.addEventListener("mouseenter", () => {
+                banner.firstElementChild.setAttribute("style", "border-color: #D81F26");
+                banner.setAttribute("style", "filter: sepia(0.8)");
+            });
         })
     </script>
 {% endblock %}

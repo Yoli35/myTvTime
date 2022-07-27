@@ -3,7 +3,7 @@
 let json, ids, preview, infos, exportFile;
 let _user_id;
 let _locale;
-let _personal_movies_export, _json_ids, _personnel_movie_add, _json_cleanup, _json_sample, _movie_page, _movies_more;
+let _personal_movies_export, _json_ids, _personal_movie_add, _json_cleanup, _json_sample, _movie_page, _movies_more;
 let _url;
 
 function initButtons(id, locale, paths, url) {
@@ -12,7 +12,7 @@ function initButtons(id, locale, paths, url) {
     _locale = locale;
     _personal_movies_export = paths[0];
     _json_ids = paths[1];
-    _personnel_movie_add = paths[2];
+    _personal_movie_add = paths[2];
     _json_cleanup = paths[3];
     _json_sample = paths[4];
     _movie_page = paths[5].substring(0, paths[5].length - 1);
@@ -20,7 +20,7 @@ function initButtons(id, locale, paths, url) {
     _url = url;
 
 
-    const userMovieLink = document.getElementById('query');
+    const userMovieLink = document.querySelector('#query');
     document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === 'visible') {
             userMovieLink.focus();
@@ -32,11 +32,14 @@ function initButtons(id, locale, paths, url) {
         userMovieLink.select();
     }, 1000);
 
+    const exportButton = document.querySelector('#export-button');
+    const appendButton = document.querySelector("#append-button");
+    const exportModal = document.querySelector('#exportModal');
+    const appendModal = document.querySelector("#appendModal");
 
-    $('#export-button').click(function () {
+    exportButton.addEventListener("click", () => {
 
-        let exportModal = $('#exportModal');
-        let result = $('.modal-body').find('.export-result');
+        let result = exportModal.querySelector('.export-result');
         let count, movies, url, file, sample, result_items;
         let txt = {
             'aria_select_group': {'fr': 'Boutons de sélection', 'en': 'Selection buttons', 'de': 'Auswahlknöpfe', 'es': 'Botones de selección'},
@@ -59,11 +62,18 @@ function initButtons(id, locale, paths, url) {
             file = data['file'];
             sample = data['sample'];
 
-            $('#json-link').attr({'href': url + file, 'download': file});
+            // $('#json-link').attr({'href': url + file, 'download': file});
+            exportModal.querySelector("#json-link").setAttribute("href", url + file);
+            exportModal.querySelector("#json-link").setAttribute("download", file);
 
-            $(result).empty();
-            $(result).append('<div class="sample">' + sample + '</div>');
-            $(result).append(
+            // $(result).empty();
+            while (result.lastChild) {
+                result.removeChild(result.lastChild);
+            }
+            // $(result).append('<div class="sample">' + sample + '</div>');
+            result.innerHTML += '<div class="sample">' + sample + '</div>';
+            // $(result).append(
+            result.innerHTML +=
                 '<div class="selection">' +
                 '   <div class="input-group w-75">' +
                 '       <span class="input-group-text">' + txt.filter[_locale] + '</span>' +
@@ -71,49 +81,78 @@ function initButtons(id, locale, paths, url) {
                 '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.aria_select_all[_locale] + '">' + txt.select_all[_locale] + '</button>' +
                 '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.aria_deselect_all[_locale] + '">' + txt.deselect_all[_locale] + '</button>' +
                 '   </div>' +
-                '</div>');
+                '</div>';
+            // );
 
             for (let i = 0; i < count; i++) {
-                $(result).append('<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '" data-title="' + movies[i]['title'] + '" data-original="' + movies[i]['original_title'] + '">' + movies[i]['title'] + '</div>')
+                // $(result).append(
+                result.innerHTML +=
+                    '<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '" data-title="' + movies[i]['title'] + '" data-original="' + movies[i]['original_title'] + '">' + movies[i]['title'] + '</div>';
+                // )
             }
 
             // console.log(Modal);
             // new Modal('#exportModal').show();
-            $(exportModal).css('background-color', 'rgba(189,115,189,0.25)');
+            // $(exportModal).css('background-color', 'rgba(189,115,189,0.25)');
+            exportModal.setAttribute("style", "background-color: rgba(189,11,189,0.25");
             // $(exportModal).css('display', 'block');
             // $(exportModal).css('opacity', '1');
 
             exportFile = file;
 
-            result_items = $('.result-item');
+            // result_items = $('.result-item');
+            result_items = exportModal.querySelectorAll(".result-item");
 
-            $(result_items).click(function () {
-                $(this).toggleClass("active");
-                updateSample($(result_items));
+            // $(result_items).click(function () {
+            //     $(this).toggleClass("active");
+            //     updateSample($(result_items));
+            // })
+            result_items.forEach((item) => {
+                item.addEventListener("click", () => {
+                    item.classList.toggle("active");
+                    updateSample(result_items);
+                })
             })
 
-            $('#export-select').click(function () {
-                $(result_items).addClass("active");
-                updateSample($(result_items));
-            })
+            // $('#export-select').click(function () {
+            //     $(result_items).addClass("active");
+            //     updateSample($(result_items));
+            // })
+            exportModal.querySelector("#export-select").addEventListener("click",  () => {
+                result_items.forEach((item) => {
+                    item.classList.add("active");
+                });
+                updateSample(result_items);
+            });
 
-            $('#export-deselect').click(function () {
-                $(result_items).removeClass("active");
-                updateSample($(result_items));
-            })
+            // $('#export-deselect').click(function () {
+            //     $(result_items).removeClass("active");
+            //     updateSample($(result_items));
+            // })
+            exportModal.querySelector("#export-deselect").addEventListener("click",  () => {
+                result_items.forEach((item) => {
+                    item.classList.remove("active");
+                });
+                updateSample(result_items);
+            });
 
-            $('#export-filter').on('input', function () {
-                let needle = $(this).val();
+            // $('#export-filter').on('input', function () {
+            //     let needle = $(this).val();
+            //     filter(result_items, needle);
+            //     updateSample(result_items);
+            // })
+            exportModal.querySelector("#export-filter").addEventListener("oninput", function () {
+                let needle = this.value;
                 filter(result_items, needle);
                 updateSample(result_items);
-            })
+            });
         }
-
         xhr.open("GET", _personal_movies_export + '?id=' + _user_id);
         xhr.send();
-    })
+    });
 
-    $('#export-copy').click(function () {
+    exportModal.querySelector("#export-copy").addEventListener("click", function() {
+    // $('#export-copy').click(function () {
         let string = JSON.stringify(json, null, '\t');
         navigator.clipboard.writeText(json).then(function () {
             /* presse-papiers modifié avec succès */
@@ -122,30 +161,53 @@ function initButtons(id, locale, paths, url) {
             /* échec de l’écriture dans le presse-papiers */
             alert('Rejected!')
         }).catch(err => alert(err));
-    })
+    });
 
-    $('#append-button').click(function () {
-        preview = $('.append-result');
-        infos = $('.append-infos');
-        $(preview).empty();
-        $(infos).empty();
-        $(infos).css('padding', '0');
+    // $('#append-button').click(function () {
+    appendButton.addEventListener("click", function () {
+    //     preview = $('.append-result');
+    //     infos = $('.append-infos');
+        preview = appendModal.querySelector(".append-result");
+        infos = appendModal.querySelector(".append-infos");
+        // $(preview).empty();
+        while (preview.lastChild) {
+            preview.removeChild(preview.lastChild);
+        }
+        // $(infos).empty();
+        while (infos.lastChild) {
+            infos.removeChild(infos.lastChild);
+        }
+        // $(infos).css('padding', '0');
+        infos.setAttribute("style", "padding: 0");
 
-        $.ajax({
-            url: _json_ids,
-            method: 'GET',
-            success: function (data) {
-                ids = data['movie_ids'];
-            }
-        })
-        let appendModal = $('#appendModal');
-        $(appendModal).css('transition', 'background-color .45s');
-        $(appendModal).css('background-color', 'rgba(189,115,189,0.25)');
-    })
+        // $.ajax({
+        //     url: _json_ids,
+        //     method: 'GET',
+        //     success: function (data) {
+        //         ids = data['movie_ids'];
+        //     }
+        // })
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const data = JSON.parse(this.response);
+            ids = data['movie_ids'];
+        }
+        xhr.open("GET", _json_ids);
+        xhr.send();
 
-    $('input[name="json"]').change(function () {
+        // let appendModal = $('#appendModal');
+        // $(appendModal).css('transition', 'background-color .45s');
+        // $(appendModal).css('background-color', 'rgba(189,115,189,0.25)');
+        appendModal.setAttribute("style", "transition: background-color .45s");
+        appendModal.setAttribute("style", "background-color: rgba(189,115,189,0.25)");
+    });
+
+    // $('input[name="json"]').change(function () {
+    appendModal.querySelector("input[name='json']").addEventListener("change", function () {
+        // let add = $('#append-add');
+        const add = appendModal.querySelector("#append-add");
+
         let json, content, count = 0;
-        let add = $('#append-add');
         let fr = new FileReader();
         let txt = {
             'count': {'fr': 'Cette liste contient', 'en': 'This list counts', 'de': 'Diese Liste enthält', 'es': 'Esta lista contiene'},
@@ -157,104 +219,158 @@ function initButtons(id, locale, paths, url) {
             '': {'fr': '', 'en': '', 'de': '', 'es': ''},
             'space': ' '
         }
+
         fr.onload = function () {
             json = fr.result;
         }
         fr.onloadend = function () {
             content = JSON.parse(json);
-            $(preview).empty();
-            $(infos).empty();
-            $(add).attr('disabled', 'disabled');
+            // $(preview).empty();
+            while (preview.lastChild) {
+                preview.removeChild(preview.lastChild);
+            }
+            // $(infos).empty();
+            while (infos.lastChild) {
+                infos.removeChild(infos.lastChild);
+            }
+
+            // $(add).attr('disabled', 'disabled');
+            add.setAttribute("style", "disabled: disabled");
 
             if (content['total_results']) {
                 for (let i = 0; i < content['total_results']; i++) {
                     let item = content['results'][i];
                     if (!ids.includes(item['movie_db_id'])) {
-                        $(preview).append('<div class="result-item"><img src="' + _url + item['poster_path'] + '" alt="' + item['title'] + '"><div class="name">' + item['title'] + '</div><div class="check-add" data-id="' + item['id'] + '" data-tmdb="' + item['movie_db_id'] + '"></div></div>');
+                        // $(preview).append('<div class="result-item"><img src="' + _url + item['poster_path'] + '" alt="' + item['title'] + '"><div class="name">' + item['title'] + '</div><div class="check-add" data-id="' + item['id'] + '" data-tmdb="' + item['movie_db_id'] + '"></div></div>');
+                        preview.innerHTML += '<div class="result-item"><img src="' + _url + item['poster_path'] + '" alt="' + item['title'] + '"><div class="name">' + item['title'] + '</div><div class="check-add" data-id="' + item['id'] + '" data-tmdb="' + item['movie_db_id'] + '"></div></div>';
                         count++;
                     }
                 }
-                $(infos).css('padding', '.5em');
+                // $(infos).css('padding', '.5em');
+                preview.setAttribute("style", "padding: .5em");
                 let delta = content['total_results'] - count;
-                $(infos).append('<div class="info">' + txt.count[_locale] + txt.space + content['total_results'] + txt.space + txt.movies[_locale] + '.</div>');
+                // $(infos).append('<div class="info">' + txt.count[_locale] + txt.space + content['total_results'] + txt.space + txt.movies[_locale] + '.</div>');
+                infos.innerHTML += '<div class="info">' + txt.count[_locale] + txt.space + content['total_results'] + txt.space + txt.movies[_locale] + '.</div>';
                 if (delta) {
-                    $(infos).append('<div class="info">' + delta + txt.space + txt[(delta > 1) ? 'movies' : 'movie'][_locale] + txt.space + (delta > 1 ? txt.presents[_locale] : txt.present[_locale]) + '</div>');
+                    // $(infos).append('<div class="info">' + delta + txt.space + txt[(delta > 1) ? 'movies' : 'movie'][_locale] + txt.space + (delta > 1 ? txt.presents[_locale] : txt.present[_locale]) + '</div>');
+                    infos.innerHTML += '<div class="info">' + delta + txt.space + txt[(delta > 1) ? 'movies' : 'movie'][_locale] + txt.space + (delta > 1 ? txt.presents[_locale] : txt.present[_locale]) + '</div>';
                 }
                 if (count) {
-                    $(infos).append(
+                    // $(infos).append(
+                    infos.innerHTML +=
                         '<div class="select">' +
                         '   <div class="btn-group btn-group-sm" role="group" aria-label="Select - Unselect">' +
                         '       <button name="select-all" type="button" class="btn btn-primary">Select all</button>' +
                         '       <button name="unselect-all" type="button" class="btn btn-secondary">Unselect all</button>' +
                         '   </div>' +
-                        '</div>');
+                        '</div>';
+                    // );
+
+                    // $('.check-add').click(function () {
+                    //     $(this).toggleClass('active');
+                    // });
+                    const checkAdds = appendModal.querySelectorAll(".check-add");
+                    checkAdds.forEach((item) => {
+                        item.addEventListener("click", () => {
+                            item.classList.toggle("active");
+                        });
+                    });
+
+                    // $('button[name="select-all"]').click(function () {
+                    //     $('.check-add').addClass('active');
+                    // });
+                    appendModal.querySelector('button[name="select-all"]').addEventListener("click",  () => {
+                        checkAdds.forEach((item) => {
+                            item.classList.add("active");
+                        });
+                    });
+
+                    // $('button[name="unselect-all"]').click(function () {
+                    //     $('.check-add').removeClass('active');
+                    // });
+                    appendModal.querySelector('button[name="unselect-all"]').addEventListener("click",  () => {
+                        checkAdds.forEach((item) => {
+                            item.classList.remove("active");
+                        });
+                    });
+
+                    // $(add).removeAttr('disabled');
+                    add.removeAttribute("style");
                 } else {
-                    $(infos).append(
-                        '<div class="none">' + txt.none[_locale] + '</div>'
-                    );
+                    // $(infos).append(
+                    infos.innerHTML +=
+                        '<div class="none">' + txt.none[_locale] + '</div>';
+                    // );
                 }
-
-                $('.check-add').click(function () {
-                    $(this).toggleClass('active');
-                });
-
-                $('button[name="select-all"]').click(function () {
-                    $('.check-add').addClass('active');
-                });
-
-                $('button[name="unselect-all"]').click(function () {
-                    $('.check-add').removeClass('active');
-                });
-                $(add).removeAttr('disabled');
             }
         }
         fr.readAsText(this.files[0]);
-    })
+    });
 
-    $('#append-add').click(function () {
-        let selected = $('.check-add.active');
-        let progress = $('.append-progress');
-        let value = $('.value');
+    // $('#append-add').click(function () {
+    appendModal.querySelector("#append-add").addEventListener("click", () => {
+        // let selected = $('.check-add.active');
+        const selected = appendModal.querySelectorAll('.check-add.active');
+        // let progress = $('.append-progress');
+        const progress = appendModal.querySelector('.append-progress');
+        // let value = $('.value');
+        const value = progress.querySelector('.value');
         let i, n = selected.length, pv = 0;
 
-        $(progress).css('display', 'flex');
-        $(value).css('width', '0%');
+        // $(progress).css('display', 'flex');
+        progress.setAttribute("style", "display: flex");
+        // $(value).css('width', '0%');
+        value.setAttribute("style", "width: 0%");
 
         for (i = 0; i < n; i++) {
             let movie = selected[i];
-            let tmdb_id = $(movie).data('tmdb');
+            // let tmdb_id = $(movie).data('tmdb');
+            let tmdb_id = movie.getAttribute("data-tmdb");
             let val = (100 * (i / n)).toFixed();
 
-            $.ajax({
-                url: _personnel_movie_add,
-                method: 'GET',
-                data: {movie_db_id: tmdb_id, progress_value: val},
-                success: function () {
-                    pv++;
-                    $(value).css('width', (100 * (pv / n)).toFixed() + '%');
+            // $.ajax({
+            //     url: _personal_movie_add,
+            //     method: 'GET',
+            //     data: {movie_db_id: tmdb_id, progress_value: val},
+            //     success: function () {
+            //         pv++;
+            //         $(value).css('width', (100 * (pv / n)).toFixed() + '%');
+            //
+            //         if (pv === n) {
+            //             setTimeout(() => {
+            //                 // Ajout terminé.
+            //                 $(progress).css('display', 'none');
+            //                 window.location.reload();
+            //             }, 1000);
+            //         }
+            //     }
+            // })
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                pv++;
+                // $(value).css('width', (100 * (pv / n)).toFixed() + '%');
+                value.setAttribute("style", "width" + (100 * (pv / n)).toFixed() + "%");
 
-                    if (pv === n) {
-                        setTimeout(() => {
-                            // Ajout terminé.
-                            $(progress).css('display', 'none');
-                            window.location.reload();
-                        }, 1000);
-                    }
+                if (pv === n) {
+                    setTimeout(() => {
+                        // Ajout terminé.
+                        // $(progress).css('display', 'none');
+                        progress.removeAttribute("style");
+                        window.location.reload();
+                    }, 1000);
                 }
-            })
-        }
-    })
-
-    const myModalEl = document.getElementById('exportModal')
-    myModalEl.addEventListener('hidden.bs.modal', () => {
-
-        $.ajax({
-            url: _json_cleanup,
-            method: 'GET',
-            data: {filename: exportFile},
-            success: function () {
             }
-        })
+            xhr.open("GET", _personal_movie_add + '?movie_db_id=' + tmdb_id + '&progress_value=' + val);
+            xhr.send();
+        }
+    });
+
+    exportModal.addEventListener('hidden.bs.modal', () => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+        }
+        xhr.open("GET", _json_cleanup + '?filename=' + exportFile);
+        xhr.send();
     });
 
     const moreButton = document.getElementById('more');
@@ -276,47 +392,47 @@ function initButtons(id, locale, paths, url) {
             total_results = parseInt(h1.getAttribute('data-total-results'));
             let current_results = videos.length;
 
-            $.ajax({
-                url: _movies_more,
-                method: 'GET',
-                data: {id: _user_id, offset: current_results},
-                success: function (data) {
-                    let results = data['results'];
-                    let count = results.length;
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                const data = JSON.parse(this.response);
+                let results = data['results'];
+                let count = results.length;
 
-                    for (let i = 0; i < count; i++) {
-                        let result = results[i];
-                        let newVideo = document.createElement("div");
-                        newVideo.setAttribute("class", "home-discover");
-                        newVideo.setAttribute("id", result['movie_db_id']);
-                        let aVideo = document.createElement("a");
-                        aVideo.setAttribute("href", _movie_page + result['movie_db_id'].toString());
-                        let img = document.createElement("img");
-                        img.setAttribute("src", url + result['poster_path']);
-                        img.setAttribute("alt", result['title']);
-                        let title = document.createElement("div");
-                        title.setAttribute("class", "title");
-                        title.appendChild(document.createTextNode(result['title']));
-                        let date = document.createElement("div");
-                        date.setAttribute("class", "date");
-                        let dateT = result['release_date'];
-                        let released = new Date(dateT);
-                        date.appendChild(document.createTextNode(txt.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
-                        aVideo.appendChild(img);
-                        aVideo.appendChild(title);
-                        aVideo.appendChild(date);
-                        newVideo.appendChild(aVideo);
+                for (let i = 0; i < count; i++) {
+                    let result = results[i];
+                    let newVideo = document.createElement("div");
+                    newVideo.setAttribute("class", "home-discover");
+                    newVideo.setAttribute("id", result['movie_db_id']);
+                    let aVideo = document.createElement("a");
+                    aVideo.setAttribute("href", _movie_page + result['movie_db_id'].toString());
+                    let img = document.createElement("img");
+                    img.setAttribute("src", url + result['poster_path']);
+                    img.setAttribute("alt", result['title']);
+                    let title = document.createElement("div");
+                    title.setAttribute("class", "title");
+                    title.appendChild(document.createTextNode(result['title']));
+                    let date = document.createElement("div");
+                    date.setAttribute("class", "date");
+                    let dateT = result['release_date'];
+                    let released = new Date(dateT);
+                    date.appendChild(document.createTextNode(txt.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
+                    aVideo.appendChild(img);
+                    aVideo.appendChild(title);
+                    aVideo.appendChild(date);
+                    newVideo.appendChild(aVideo);
 
-                        videoList.insertBefore(newVideo, seeMore);
-                    }
-                    //
-                    // If everything is displayed, we make the 'See more results' button disappear
-                    //
-                    if (current_results + count === total_results) {
-                        seeMore.setAttribute("style", "display: none;");
-                    }
+                    videoList.insertBefore(newVideo, seeMore);
                 }
-            })
+                //
+                // If everything is displayed, we make the 'See more results' button disappear
+                //
+                if (current_results + count === total_results) {
+                    seeMore.setAttribute("style", "display: none;");
+                }
+            }
+            xhr.open("GET", _movies_more + '?id=' + _user_id + '&offset=' + current_results);
+            xhr.send();
+
         });
     }
 }
@@ -349,23 +465,23 @@ function filter(items, needle) {
 function updateSample(items) {
 
     let ids = [];
-    for (let idx = 0; idx < items.length; idx++) {
-        if ($(items[idx]).hasClass('active')) {
-            ids.push($(items[idx]).data('movie-id'));
+
+    items.forEach( (item) => {
+        if (item.classList.contains("active")) {
+            ids.push(item.getAttribute("data-movie-id"));
         }
-    }
+    })
     if (ids.length === items.length) {
         ids = [];
     }
 
-    $.ajax({
-        url: _json_sample,
-        method: 'GET',
-        data: {user_id: _user_id, ids: JSON.stringify(ids), filename: exportFile},
-        success: function (data) {
-            $('.sample').html(data['sample']);
-            json = data['json'];
-        }
-    })
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        const data = JSON.parse(this.response);
+        document.querySelector('.sample').innerHTML = data['sample'];
+        json = data['json'];
+    }
+    xhr.open("GET", _json_sample + "?user_id=" + _user_id + "&ids=" + JSON.stringify(ids) + "&filename=" + exportFile);
+    xhr.send();
 }
 

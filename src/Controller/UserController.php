@@ -91,6 +91,7 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
             'banner' => $banner,
+            'locale' => $request->getLocale(),
         ]);
     }
 
