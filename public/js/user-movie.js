@@ -6,6 +6,10 @@ let _locale;
 let _personal_movies_export, _json_ids, _personal_movie_add, _json_cleanup, _json_sample, _movie_page, _movies_more;
 let _url;
 
+// more videos variables
+let userMovieList, total_videos, displayed_videos, more_video_controller, loading_more_videos;
+/* let debug_more_videos; */
+
 function initButtons(id, locale, paths, url) {
 
     _user_id = id;
@@ -18,7 +22,6 @@ function initButtons(id, locale, paths, url) {
     _movie_page = paths[5].substring(0, paths[5].length - 1);
     _movies_more = paths[6];
     _url = url;
-
 
     const userMovieLink = document.querySelector('#query');
     document.addEventListener("visibilitychange", () => {
@@ -380,68 +383,19 @@ function initButtons(id, locale, paths, url) {
         xhr.send();
     });
 
-    const moreButton = document.getElementById('more');
-    const seeMore = document.getElementById('see-more');
-    const videoList = document.getElementById('content');
-    const txt = {
-        'release_date': {'fr': 'Date de sortie ', 'en': 'Release date', 'de': 'Erscheinungsdatum', 'es': 'Fecha de lanzamiento'},
-        '': {'fr': '', 'en': '', 'de': '', 'es': ''},
+    // more videos event listener
+     userMovieList = document.querySelector("#content");
+     total_videos = parseInt(document.querySelector("h1").getAttribute("data-total-results"));
+     displayed_videos = document.querySelectorAll(".home-discover").length;
+     // debug_more_videos = document.querySelector(".debug-more-video");
+     loading_more_videos = false;
+
+    if (displayed_videos < total_videos) {
+        moreVideos();
+        more_video_controller = new AbortController();
+        window.addEventListener("scroll", moreVideos, { signal: more_video_controller.signal });
     }
 
-    if (moreButton) {
-
-        moreButton.addEventListener('click', () => {
-
-            const h1 = document.getElementById('h1');
-            const videos = document.getElementsByClassName('home-discover');
-            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-
-            total_results = parseInt(h1.getAttribute('data-total-results'));
-            let current_results = videos.length;
-
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                const data = JSON.parse(this.response);
-                let results = data['results'];
-                let count = results.length;
-
-                for (let i = 0; i < count; i++) {
-                    let result = results[i];
-                    let newVideo = document.createElement("div");
-                    newVideo.setAttribute("class", "home-discover");
-                    newVideo.setAttribute("id", result['movie_db_id']);
-                    let aVideo = document.createElement("a");
-                    aVideo.setAttribute("href", _movie_page + result['movie_db_id'].toString());
-                    let img = document.createElement("img");
-                    img.setAttribute("src", url + result['poster_path']);
-                    img.setAttribute("alt", result['title']);
-                    let title = document.createElement("div");
-                    title.setAttribute("class", "title");
-                    title.appendChild(document.createTextNode(result['title']));
-                    let date = document.createElement("div");
-                    date.setAttribute("class", "date");
-                    let dateT = result['release_date'];
-                    let released = new Date(dateT);
-                    date.appendChild(document.createTextNode(txt.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
-                    aVideo.appendChild(img);
-                    aVideo.appendChild(title);
-                    aVideo.appendChild(date);
-                    newVideo.appendChild(aVideo);
-
-                    videoList.insertBefore(newVideo, seeMore);
-                }
-                //
-                // If everything is displayed, we make the 'See more results' button disappear
-                //
-                if (current_results + count === total_results) {
-                    seeMore.setAttribute("style", "display: none;");
-                }
-            }
-            xhr.open("GET", _movies_more + '?id=' + _user_id + '&offset=' + current_results);
-            xhr.send();
-
-        });
-    }
 }
 
 function filter(items, needle) {
@@ -450,22 +404,24 @@ function filter(items, needle) {
 
     if (needle.length) {
         for (idx = 0; idx < count; idx++) {
-            title = $(items[idx]).data('title');
-            original = $(items[idx]).data('original');
+            title = items[idx].getAttribute("data-title");
+            original = items[idx].getAttribute("data-original");
             title = (typeof title === 'number') ? title.toString() : title.toLowerCase();
             original = (typeof original === 'number') ? original.toString() : original.toLowerCase();
 
             if (title.includes(needle) === false && original.includes(needle) === false) {
-                $(items[idx]).css('display', 'none');
-                $(items[idx]).removeClass('active');
+                items[idx].setAttribute("style", "display: none");
+                items[idx].classList.remove('active');
             } else {
-                $(items[idx]).css('display', 'block');
-                $(items[idx]).addClass('active');
+                items[idx].setAttribute("style", "display: block");
+                items[idx].classList.add('active');
             }
         }
     } else {
-        $(items).css('display', 'block');
-        $(items).removeClass('active');
+        items.forEach( (item) => {
+            item.setAttribute("style", "display: block");
+            item.classList.remove('active');
+        });
     }
 }
 
@@ -492,3 +448,77 @@ function updateSample(items) {
     xhr.send();
 }
 
+function moreVideos()
+{
+    const txt = {
+        'release_date': {'fr': 'Date de sortie ', 'en': 'Release date', 'de': 'Erscheinungsdatum', 'es': 'Fecha de lanzamiento'},
+        '': {'fr': '', 'en': '', 'de': '', 'es': ''},
+    }
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+    // debug_more_videos.querySelector("#last-video").innerText = userMovieList.lastElementChild.getAttribute("data-title");
+    // debug_more_videos.querySelector("#video-count").innerText = displayed_videos;
+
+    if (!loading_more_videos) {
+
+        if (is_visible(userMovieList.lastElementChild)) {
+
+            loading_more_videos = true;
+
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                const data = JSON.parse(this.response);
+                let results = data['results'];
+                let count = results.length;
+
+                for (let i = 0; i < count; i++) {
+                    let result = results[i];
+                    let newVideo = document.createElement("div");
+                    newVideo.setAttribute("class", "home-discover");
+                    newVideo.setAttribute("id", result['movie_db_id']);
+                    newVideo.setAttribute("data-title", result['title']);
+                    let aVideo = document.createElement("a");
+                    aVideo.setAttribute("href", _movie_page + result['movie_db_id'].toString());
+                    let img = document.createElement("img");
+                    img.setAttribute("src", _url + result['poster_path']);
+                    img.setAttribute("alt", result['title']);
+                    let title = document.createElement("div");
+                    title.setAttribute("class", "title");
+                    title.appendChild(document.createTextNode(result['title']));
+                    let date = document.createElement("div");
+                    date.setAttribute("class", "date");
+                    let dateT = result['release_date'] + 'T00:00:00';
+                    let released = new Date(dateT);
+                    date.appendChild(document.createTextNode(txt.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
+                    aVideo.appendChild(img);
+                    aVideo.appendChild(title);
+                    aVideo.appendChild(date);
+                    newVideo.appendChild(aVideo);
+
+                    userMovieList.appendChild(newVideo);
+                }
+                displayed_videos += count;
+                //
+                // If everything is displayed, abort the event listener
+                //
+                if (displayed_videos === total_videos) {
+                    more_video_controller.abort();
+                }
+                loading_more_videos = false;
+
+                // debug_more_videos.querySelector("#last-video").innerText = userMovieList.lastElementChild.getAttribute("data-title");
+                // debug_more_videos.querySelector("#video-count").innerText = displayed_videos;
+            }
+            xhr.open("GET", _movies_more + '?id=' + _user_id + '&offset=' + displayed_videos);
+            xhr.send();
+        }
+    }
+}
+
+function is_visible(el) {
+
+    let middle_of_element = el.offsetTop + (el.offsetHeight / 2);
+    let bottom_of_screen = window.scrollY + window.innerHeight;
+
+    return (bottom_of_screen > middle_of_element);
+}

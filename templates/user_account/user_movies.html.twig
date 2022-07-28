@@ -2,7 +2,30 @@
 
 {% block title %}{{ 'my TvTime' }}{% endblock %}
 {% set user = app.user %}
-
+{% block morecss %}
+{#
+    <style>
+        body {
+            position: relative;
+        }
+        .debug-more-video {
+            background-color: #aa5500;
+            border-radius: .5em;
+            bottom: 0;
+            color: #dbdbdb;
+            font-size: .75em;
+            font-weight: 200;
+            padding: .5em;
+            position: fixed;
+            left: 0;
+        }
+        .debug-more-video span {
+            color: #c2e9f1;
+            font-weight: bold;
+        }
+    </style>
+#}
+{% endblock %}
 {% block body %}
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
@@ -59,11 +82,6 @@
                             {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
                             {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.movie_db_id, route: 'app_movie' }) }}
                         {% endfor %}
-                        {% if count > (discovers|length) %}
-                            <div id="see-more" class="see-more">
-                                <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
-                            </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -73,6 +91,10 @@
 
     </div>
 
+{#    <div class="debug-more-video">#}
+{#        <div class="variable">Last video : <span id="last-video"></span></div>#}
+{#        <div class="variable">Count : <span id="video-count"></span></div>#}
+{#    </div>#}
 
     <div class="modal fade" id="exportModal" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -124,6 +146,7 @@
 {% block morejs %}
     <script src="/js/user-movie.js"></script>
     <script>
+
         window.addEventListener("DOMContentLoaded", () => {
             initButtons(
                 {{ user.id }},

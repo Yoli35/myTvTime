@@ -26,6 +26,7 @@ class WeatherComponent extends AbstractController
     {
         $this->locale = $locale;
     }
+
     /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
@@ -38,7 +39,7 @@ class WeatherComponent extends AbstractController
         $user = $this->getUser();
         $forecast = [];
         $location = $user->getCity() ?: "" . " " . $user->getZipCode() ?: "";
-        if (strlen($location)) {
+        if (strlen($location) > 1) {
             $standing = $this->weatherService->getLocalForecast($location, 7, $locale);
             $forecast = json_decode($standing, true);
         }
