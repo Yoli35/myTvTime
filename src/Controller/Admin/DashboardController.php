@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Genre;
 use App\Entity\ImageConfig;
 use App\Entity\User;
+use App\Entity\UserMovie;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -52,6 +53,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::section('Users');
         yield MenuItem::linkToCrud('Users', 'fa fa-user', User::class);
+        yield MenuItem::section('Movies');
+        yield MenuItem::linkToCrud('Movies', 'fa fa-movie', UserMovie::class);
         yield MenuItem::section('Entities');
         yield MenuItem::subMenu('Settings', 'fa fa-sliders')->setSubItems([
             MenuItem::linkToCrud('Image Configuration', 'fa fa-image', ImageConfig::class),

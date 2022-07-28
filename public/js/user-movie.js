@@ -86,9 +86,16 @@ function initButtons(id, locale, paths, url) {
 
             for (let i = 0; i < count; i++) {
                 // $(result).append(
-                result.innerHTML +=
-                    '<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '" data-title="' + movies[i]['title'] + '" data-original="' + movies[i]['original_title'] + '">' + movies[i]['title'] + '</div>';
+                //     '<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '" data-title="' + movies[i]['title'] + '" data-original="' + movies[i]['original_title'] + '">' + movies[i]['title'] + '</div>';
                 // )
+                // 100 x faster than innerHtml = "<div class...>"
+                let div = document.createElement("div");
+                div.setAttribute("class", "result-item");
+                div.setAttribute("data-movie-id", movies[i]['movie_db_id']);
+                div.setAttribute("data-title", movies[i]['title']);
+                div.setAttribute("data-original", movies[i]['original_title']);
+                div.appendChild(document.createTextNode(movies[i]['title']));
+                result.appendChild(div);
             }
 
             // console.log(Modal);
@@ -141,7 +148,7 @@ function initButtons(id, locale, paths, url) {
             //     filter(result_items, needle);
             //     updateSample(result_items);
             // })
-            exportModal.querySelector("#export-filter").addEventListener("oninput", function () {
+            exportModal.querySelector("#export-filter").addEventListener("input", function () {
                 let needle = this.value;
                 filter(result_items, needle);
                 updateSample(result_items);
@@ -235,7 +242,7 @@ function initButtons(id, locale, paths, url) {
             }
 
             // $(add).attr('disabled', 'disabled');
-            add.setAttribute("style", "disabled: disabled");
+            add.setAttribute("disabled", "");
 
             if (content['total_results']) {
                 for (let i = 0; i < content['total_results']; i++) {
@@ -295,7 +302,7 @@ function initButtons(id, locale, paths, url) {
                     });
 
                     // $(add).removeAttr('disabled');
-                    add.removeAttribute("style");
+                    add.removeAttribute("disabled");
                 } else {
                     // $(infos).append(
                     infos.innerHTML +=
@@ -349,7 +356,7 @@ function initButtons(id, locale, paths, url) {
             xhr.onload = function () {
                 pv++;
                 // $(value).css('width', (100 * (pv / n)).toFixed() + '%');
-                value.setAttribute("style", "width" + (100 * (pv / n)).toFixed() + "%");
+                value.setAttribute("style", "width: " + (100 * (pv / n)).toFixed() + "%");
 
                 if (pv === n) {
                     setTimeout(() => {

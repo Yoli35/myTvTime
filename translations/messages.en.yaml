@@ -135,12 +135,12 @@ Status: Status
 Continuing: Continuing
 Ended: Ended
 
-# Serie's Genres
+# Serie Genres
 Action: Action
 Adventure: Adventure
 Animation: Animation
 Anime: Anime
-Comedy: Comédy
+Comedy: Comedy
 Crime: Crime
 Drama: Drama
 Family: Family
@@ -248,9 +248,12 @@ Logo Sizes: Logo Sizes
 Poster Sizes: Poster Sizes
 Profile Sizes: Profile Sizes
 User: User
-Is Verified: Is Veified
+Is Verified: Is Verified
 Avatar: Avatar
 Banner: Banner
+UserMovie: UserMovie
+Title: Title
+Movie Db Id: Movie Db Id
 
 # Others
 None: None

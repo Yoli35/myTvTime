@@ -140,6 +140,14 @@ nav.active {
 
 .nav-breadcrumb {
     margin: 1em;
+    .breadcrumb {
+        .breadcrumb-item {
+            span {
+                color: #7b7b7b;
+                font-variant: small-caps;
+            }
+        }
+    }
 }
 
 .navbar-brand, .nav-link {

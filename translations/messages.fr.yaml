@@ -147,7 +147,7 @@ Status: Statut
 Continuing: En cours
 Ended: Terminé
 
-# Serie's Genres
+# Serie Genres
 Action: Action
 Adventure: Aventure
 Animation: Animation
@@ -245,7 +245,7 @@ Millibars: millibars
 Patchy rain possible: Pluie éparse possible
 Moderate rain: Pluie modérée
 Sunny: Ensoleillé
-Moderate or heavy rain with thunder: Pluie forte à modérée avec tonerre par endroit
+Moderate or heavy rain with thunder: Pluie forte à modérée avec tonnerre par endroit
 Monday: Lundi
 Tuesday: Mardi
 Wednesday: Mercredi
@@ -292,6 +292,9 @@ User: Utilisateur
 Is Verified: Vérifié
 Avatar: Avatar
 Banner: Bannière
+UserMovie: UserMovie
+Title: Titre
+Movie Db Id: Movie Db Id
 
 # Others
 None: Aucun
