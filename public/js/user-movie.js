@@ -7,7 +7,7 @@ let _personal_movies_export, _json_ids, _personal_movie_add, _json_cleanup, _jso
 let _url;
 
 // more videos variables
-let userMovieList, total_videos, displayed_videos, more_video_controller, loading_more_videos;
+let userMovieList, total_videos, displayed_videos, more_video_controller, loading_more_videos, nav_to_top, nav_to_top_visible;
 
 function initButtons(id, locale, paths, url) {
 
@@ -384,10 +384,12 @@ function initButtons(id, locale, paths, url) {
 
     // more videos event listener
     userMovieList = document.querySelector("#content");
+    nav_to_top = document.querySelector(".nav-to-top");
     total_videos = parseInt(document.querySelector("h1").getAttribute("data-total-results"));
     displayed_videos = document.querySelectorAll(".home-discover").length;
     // debug_more_videos = document.querySelector(".debug-more-video");
     loading_more_videos = false;
+    nav_to_top_visible = false;
 
     if (displayed_videos < total_videos) {
         moreVideos();
@@ -513,6 +515,11 @@ function moreVideos() {
                     })
                     loading_more_videos = false;
                 }, 600);
+
+                if (!nav_to_top_visible) {
+                    nav_to_top.setAttribute("style", "display: block; opacity: 1;");
+                    nav_to_top_visible = true;
+                }
                 //
                 // If everything is displayed, abort the event listener
                 //

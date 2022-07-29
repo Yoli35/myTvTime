@@ -7,9 +7,12 @@
     border-radius: 50%;
     bottom: 1em;
     cursor: pointer;
+    display: none;
     height: 3em;
+    opacity: 0;
     right: 1em;
     position: fixed;
+    transition: opacity 1s ease-in-out;
     width: 3em;
 }
 
