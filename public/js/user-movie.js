@@ -8,7 +8,6 @@ let _url;
 
 // more videos variables
 let userMovieList, total_videos, displayed_videos, more_video_controller, loading_more_videos;
-/* let debug_more_videos; */
 
 function initButtons(id, locale, paths, url) {
 
@@ -30,7 +29,7 @@ function initButtons(id, locale, paths, url) {
             userMovieLink.select();
         }
     });
-    setTimeout( () => {
+    setTimeout(() => {
         userMovieLink.focus();
         userMovieLink.select();
     }, 1000);
@@ -128,7 +127,7 @@ function initButtons(id, locale, paths, url) {
             //     $(result_items).addClass("active");
             //     updateSample($(result_items));
             // })
-            exportModal.querySelector("#export-select").addEventListener("click",  () => {
+            exportModal.querySelector("#export-select").addEventListener("click", () => {
                 result_items.forEach((item) => {
                     item.classList.add("active");
                 });
@@ -139,7 +138,7 @@ function initButtons(id, locale, paths, url) {
             //     $(result_items).removeClass("active");
             //     updateSample($(result_items));
             // })
-            exportModal.querySelector("#export-deselect").addEventListener("click",  () => {
+            exportModal.querySelector("#export-deselect").addEventListener("click", () => {
                 result_items.forEach((item) => {
                     item.classList.remove("active");
                 });
@@ -161,8 +160,8 @@ function initButtons(id, locale, paths, url) {
         xhr.send();
     });
 
-    exportModal.querySelector("#export-copy").addEventListener("click", function() {
-    // $('#export-copy').click(function () {
+    exportModal.querySelector("#export-copy").addEventListener("click", function () {
+        // $('#export-copy').click(function () {
         let string = JSON.stringify(json, null, '\t');
         navigator.clipboard.writeText(json).then(function () {
             /* presse-papiers modifié avec succès */
@@ -175,8 +174,8 @@ function initButtons(id, locale, paths, url) {
 
     // $('#append-button').click(function () {
     appendButton.addEventListener("click", function () {
-    //     preview = $('.append-result');
-    //     infos = $('.append-infos');
+        //     preview = $('.append-result');
+        //     infos = $('.append-infos');
         preview = appendModal.querySelector(".append-result");
         infos = appendModal.querySelector(".append-infos");
         // $(preview).empty();
@@ -289,7 +288,7 @@ function initButtons(id, locale, paths, url) {
                     // $('button[name="select-all"]').click(function () {
                     //     $('.check-add').addClass('active');
                     // });
-                    appendModal.querySelector('button[name="select-all"]').addEventListener("click",  () => {
+                    appendModal.querySelector('button[name="select-all"]').addEventListener("click", () => {
                         checkAdds.forEach((item) => {
                             item.classList.add("active");
                         });
@@ -298,7 +297,7 @@ function initButtons(id, locale, paths, url) {
                     // $('button[name="unselect-all"]').click(function () {
                     //     $('.check-add').removeClass('active');
                     // });
-                    appendModal.querySelector('button[name="unselect-all"]').addEventListener("click",  () => {
+                    appendModal.querySelector('button[name="unselect-all"]').addEventListener("click", () => {
                         checkAdds.forEach((item) => {
                             item.classList.remove("active");
                         });
@@ -384,18 +383,26 @@ function initButtons(id, locale, paths, url) {
     });
 
     // more videos event listener
-     userMovieList = document.querySelector("#content");
-     total_videos = parseInt(document.querySelector("h1").getAttribute("data-total-results"));
-     displayed_videos = document.querySelectorAll(".home-discover").length;
-     // debug_more_videos = document.querySelector(".debug-more-video");
-     loading_more_videos = false;
+    userMovieList = document.querySelector("#content");
+    total_videos = parseInt(document.querySelector("h1").getAttribute("data-total-results"));
+    displayed_videos = document.querySelectorAll(".home-discover").length;
+    // debug_more_videos = document.querySelector(".debug-more-video");
+    loading_more_videos = false;
 
     if (displayed_videos < total_videos) {
         moreVideos();
         more_video_controller = new AbortController();
-        window.addEventListener("scroll", moreVideos, { signal: more_video_controller.signal });
+        window.addEventListener("scroll", moreVideos, {signal: more_video_controller.signal});
     }
 
+    // nav to top
+    document.querySelector(".nav-to-top").addEventListener("click", function (e) {
+        e.preventDefault();
+        document.querySelector("html").scrollTop = 0;
+        // document.querySelector("html").animate( {
+        //     scrollTop: 0
+        // }, 800);
+    })
 }
 
 function filter(items, needle) {
@@ -418,7 +425,7 @@ function filter(items, needle) {
             }
         }
     } else {
-        items.forEach( (item) => {
+        items.forEach((item) => {
             item.setAttribute("style", "display: block");
             item.classList.remove('active');
         });
@@ -429,7 +436,7 @@ function updateSample(items) {
 
     let ids = [];
 
-    items.forEach( (item) => {
+    items.forEach((item) => {
         if (item.classList.contains("active")) {
             ids.push(item.getAttribute("data-movie-id"));
         }
@@ -448,16 +455,12 @@ function updateSample(items) {
     xhr.send();
 }
 
-function moreVideos()
-{
+function moreVideos() {
     const txt = {
         'release_date': {'fr': 'Date de sortie ', 'en': 'Release date', 'de': 'Erscheinungsdatum', 'es': 'Fecha de lanzamiento'},
         '': {'fr': '', 'en': '', 'de': '', 'es': ''},
     }
-    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-
-    // debug_more_videos.querySelector("#last-video").innerText = userMovieList.lastElementChild.getAttribute("data-title");
-    // debug_more_videos.querySelector("#video-count").innerText = displayed_videos;
+    const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
 
     if (!loading_more_videos) {
 
@@ -474,9 +477,10 @@ function moreVideos()
                 for (let i = 0; i < count; i++) {
                     let result = results[i];
                     let newVideo = document.createElement("div");
-                    newVideo.setAttribute("class", "home-discover");
                     newVideo.setAttribute("id", result['movie_db_id']);
-                    newVideo.setAttribute("data-title", result['title']);
+                    newVideo.setAttribute("class", "home-discover");
+                    newVideo.setAttribute("style", "opacity: 0; transform: scale(" + Math.random() + ") rotate(" + (((Math.random() * 720).toFixed()) - 360) + "deg)");
+                    // newVideo.setAttribute("data-title", result['title']);
                     let aVideo = document.createElement("a");
                     aVideo.setAttribute("href", _movie_page + result['movie_db_id'].toString());
                     let img = document.createElement("img");
@@ -498,16 +502,23 @@ function moreVideos()
                     userMovieList.appendChild(newVideo);
                 }
                 displayed_videos += count;
+                setTimeout(() => {
+                    userMovieList.querySelectorAll(".home-discover[style]").forEach((item) => {
+                        item.setAttribute("style", "opacity: 1.0; transform: scale(1.0) rotate(0deg");
+                    })
+                }, 500)
+                setTimeout(() => {
+                    userMovieList.querySelectorAll(".home-discover[style]").forEach((item) => {
+                        item.removeAttribute("style");
+                    })
+                    loading_more_videos = false;
+                }, 600);
                 //
                 // If everything is displayed, abort the event listener
                 //
                 if (displayed_videos === total_videos) {
                     more_video_controller.abort();
                 }
-                loading_more_videos = false;
-
-                // debug_more_videos.querySelector("#last-video").innerText = userMovieList.lastElementChild.getAttribute("data-title");
-                // debug_more_videos.querySelector("#video-count").innerText = displayed_videos;
             }
             xhr.open("GET", _movies_more + '?id=' + _user_id + '&offset=' + displayed_videos);
             xhr.send();

@@ -3,28 +3,6 @@
 {% block title %}{{ 'my TvTime' }}{% endblock %}
 {% set user = app.user %}
 {% block morecss %}
-{#
-    <style>
-        body {
-            position: relative;
-        }
-        .debug-more-video {
-            background-color: #aa5500;
-            border-radius: .5em;
-            bottom: 0;
-            color: #dbdbdb;
-            font-size: .75em;
-            font-weight: 200;
-            padding: .5em;
-            position: fixed;
-            left: 0;
-        }
-        .debug-more-video span {
-            color: #c2e9f1;
-            font-weight: bold;
-        }
-    </style>
-#}
 {% endblock %}
 {% block body %}
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
@@ -91,10 +69,7 @@
 
     </div>
 
-{#    <div class="debug-more-video">#}
-{#        <div class="variable">Last video : <span id="last-video"></span></div>#}
-{#        <div class="variable">Count : <span id="video-count"></span></div>#}
-{#    </div>#}
+    <div class="nav-to-top"></div>
 
     <div class="modal fade" id="exportModal" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">

@@ -1,5 +1,18 @@
 @import "variables";
 
+.nav-to-top {
+    background-color: #0d9488e6;
+    background-image: url("../images/arrow-up-circle-outline.png");
+    background-position: center center;
+    border-radius: 50%;
+    bottom: 1em;
+    cursor: pointer;
+    height: 3em;
+    right: 1em;
+    position: fixed;
+    width: 3em;
+}
+
 .user-account {
 
     .banner {
@@ -222,6 +235,7 @@
         margin: 0 .125em .25em .125em;
         padding: 0;
         position: relative;
+        transition: opacity .5s ease-out, transform .5s ease-out;
         width: 9.5em;
     }
 }
@@ -469,13 +483,6 @@
 
         .banner {
             height: 24em;
-
-            .avatar {
-                bottom: 2em;
-                height: 12em;
-                right: 2em;
-                width: 12em;
-            }
         }
     }
 }
@@ -488,6 +495,12 @@
             height: 30em;
         }
 
+        .avatar {
+            bottom: 2em;
+            height: 12em;
+            right: 2em;
+            width: 12em;
+        }
     }
 }
 
