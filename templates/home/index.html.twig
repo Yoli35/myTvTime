@@ -49,29 +49,16 @@
                         <a href="{{ path('app_movies_by_date', {date: '2022'}) }}" class="btn btn-outline-secondary">{{ 'Date'|trans }}</a>
                     </div>
                 </div>
-                <div class="sort_select">
-                    <div class="label">{{ 'Sort'|trans }}</div>
-                    <form>
+                <form>
+                    <div class="sort_select">
+                        <div class="label">{{ 'Sort'|trans }}</div>
                         <select id="sort" class="form-select form-select-sm" aria-label="{{ 'Sort selection'|trans }}">
                             {% for key, sort in sorts.options %}
                                 <option value="{{ sort }}"{% if sort == sorts.sort_by %} selected{% endif %}>{{ key|raw }}</option>
                             {% endfor %}
                         </select>
-                    </form>
-                    <script>
-                        $(function () {
-                            let sort = $('select');
-                            let initialValue = $(sort).val(), newValue = 'popularity.desc';
-
-                            $(sort).change(function () {
-                                newValue = $(sort).val();
-                                if (newValue !== initialValue) {
-                                    window.location.href = '{{ path(route) }}?sort=' + newValue + '&page=1';
-                                }
-                            });
-                        })
-                    </script>
-                </div>
+                    </div>
+                </form>
             </div>
         {% endif %}
 
@@ -101,9 +88,16 @@
 {% block morejs %}
     <script>
         window.addEventListener("DOMContentLoaded", () => {
-            setTimeout( () => {
+            setTimeout(() => {
                 document.querySelector(".home-header").setAttribute("style", "background-position-y: top");
             }, 10);
+            const select = document.querySelector("#sort");
+            select.addEventListener("change", function () {
+                let value = select.options[select.selectedIndex].value;
+                window.location.href = '{{ path(route) }}?sort=' + value + '&page=1';
+            });
         })
+    </script>
+    })
     </script>
 {% endblock %}

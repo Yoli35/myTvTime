@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Rating;
 use App\Entity\User;
 use App\Entity\UserMovie;
 use App\Form\MovieByNameType;
 use App\Repository\GenreRepository;
+use App\Repository\RatingRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\CallImdbService;
 use App\Service\CallTmdbService;
@@ -366,6 +368,43 @@ class MovieController extends AbstractController
 
         $userMovie = $this->addMovie($user, $movieId, $locale, $callTmdbService, $userMovieRepository, $entityManager);
         return $this->json(['title' => $userMovie->getTitle()]);
+    }
+
+    #[Route('/movie/set/rating', name: 'app_movie_set_rating')]
+    public function setMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie');
+        $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
+        $vote = $request->query->get('rating');
+        $result = "update";
+
+        $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
+
+        if (!$rating) {
+            $rating = new Rating();
+            $rating->setUser($user);
+            $rating->setMovie($movie);
+            $result = "create";
+        }
+        $rating->setValue($vote);
+        $entityManager->persist($rating);
+        $entityManager->flush();
+
+        return $this->json(['result' => $result]);
+    }
+
+    #[Route('/movie/get/rating', name: 'app_movie_get_rating')]
+    public function getMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie');
+        $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
+        $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
+
+        return $this->json(['vote' => $rating ? $rating->getValue() : 0]);
     }
 
     public function addMovie($user, $movieId, $locale, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager):UserMovie

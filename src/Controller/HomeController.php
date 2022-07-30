@@ -43,7 +43,8 @@ class HomeController extends AbstractController
             }
         }
 
-        $options['fr'] = [
+        $options = [
+        'fr' => [
             'Popularité ↑ (du moins vers le plus)' => 'popularity.asc',
             'Popularité ↓ (du plus vers le moins)' => 'popularity.desc',
             'Date de sortie ↑' => 'release_date.asc',
@@ -58,8 +59,8 @@ class HomeController extends AbstractController
             'Moyenne des votes ↓' => 'vote_average.desc',
             'Nombre de votes ↑' => 'vote_count.asc',
             'Nombre de votes ↓' => 'vote_count.desc'
-        ];
-        $options['en'] = [
+        ],
+        'en' => [
             'Ascending Popularity' => 'popularity.asc',
             'Descending Popularity' => 'popularity.desc',
             'Ascending Release Date' => 'release_date.asc',
@@ -74,8 +75,8 @@ class HomeController extends AbstractController
             'Descending Vote Average' => 'vote_average.desc',
             'Ascending Vote Count' => 'vote_count.asc',
             'Descending Vote Count' => 'vote_count.desc'
-        ];
-        $options['de'] = [
+        ],
+        'de' => [
             'Aufsteigende Popularität' => 'popularity.asc',
             'Absteigende Popularität' => 'popularity.desc',
             'Aufsteigendes Veröffentlichungsdatum' => 'release_date.asc',
@@ -90,8 +91,8 @@ class HomeController extends AbstractController
             'Absteigender Stimmendurchschnitt' => 'vote_average.desc',
             'Aufsteigende Stimmenzahl' => 'vote_count.asc',
             'Absteigende Stimmenzahl' => 'vote_count.desc'
-        ];
-        $options['es'] = [
+        ],
+        'es' => [
             'Popularidad ascendente' => 'popularity.asc',
             'Popularidad descendente' => 'popularity.desc',
             'Fecha de lanzamiento ascendente' => 'release_date.asc',
@@ -106,18 +107,17 @@ class HomeController extends AbstractController
             'Media de votos descendente' => 'vote_average.desc',
             'Recuento de votos ascendente' => 'vote_count.asc',
             'Recuento de votos descendente' => 'vote_count.desc'
+        ]
         ];
-
         $locale = $request->getLocale();
-
-        $sort_by = $request->query->get('sort', 'popularity.desc');
+        $sortBy = $request->query->get('sort', 'popularity.desc');
         $sorts = [
-            'sort_by' => $sort_by,
+            'sort_by' => $sortBy,
             'options' => $options[$locale],
         ];
 
         $page = $request->query->getInt('page', 1);
-        $standing = $callTmdbService->discoverMovies($page, $sort_by, $locale);
+        $standing = $callTmdbService->discoverMovies($page, $sortBy, $locale);
         $discovers = json_decode($standing, true);
         $imageConfig = $imageConfiguration->getConfig();
 

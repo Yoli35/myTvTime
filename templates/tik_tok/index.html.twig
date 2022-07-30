@@ -34,14 +34,15 @@
 {% block morejs %}
     <script src="/js/tiktok.js"></script>
     <script>
-        window.onload = () => {
+        window.addEventListener("DOMContentLoaded", () => {
             initTiktok(
                 "{{ locale }}",
                 [
                     "{{ path('app_tik_tok_more') }}",
                     "{{ path('app_tik_tok_video', {id: 0 }) }}",
                 ],
-                {{ user.id }});
-        }
+                {{ user.id }}
+            );
+        })
     </script>
 {% endblock %}
