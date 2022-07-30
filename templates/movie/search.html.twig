@@ -10,9 +10,12 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
+        <div class="home-header bg{{ random(5) }}"></div>
+
         <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                {{ include('blocks/movie/bracket.html.twig') }}
                 <li class="breadcrumb-item active" aria-current="{{ 'Search by Name'|trans }}">{{ 'Search by Name'|trans }}</li>
             </ol>
         </nav>
@@ -41,6 +44,7 @@
         {% endif %}
 
         <div class="home-discovers">
+            {{ include('blocks/searchPaging.html.twig') }}
             <div class="content">
                 {% for discover in discovers.results %}
                     {% if discover.poster_path is defined and discover.poster_path|length %}
@@ -49,30 +53,17 @@
                         {% set poster = "/images/default/no_poster_dark.png" %}
                     {% endif %}
                     {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.id, route: 'app_movie' }) }}
-
-{#                    <div class="home-discover">#}
-{#                        <a href="{{ path('app_movie', {id: discover.id}) }}">#}
-{#                            {% if discover.poster_path %}#}
-{#                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" alt="{{ discover.title }}">#}
-{#                            {% else %}#}
-{#                                <img src="/images/default/no_poster_dark.png" alt="{{ discover.title }}">#}
-{#                            {% endif %}#}
-{#                            <div class="title">{{ discover.title }}</div>#}
-{#                            {% if discover.release_date is defined and discover.release_date|length %}#}
-{#                                <div class="date">{{ 'Release Date'|trans }} : {{ discover.release_date|format_date('short') }}</div>#}
-{#                            {% endif %}#}
-{#                        </a>#}
-{#                        #}{# Badges on seen Movies #}
-{#                        {% if app.user is not null %}#}
-{#                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}" id="{{ discover.id }}"><i class="bi bi-check-circle-fill"></i></div>#}
-{#                        {% endif %}#}
-{#                    </div>#}
                 {% endfor %}
             </div>
-            {{ include('blocks/pageSearchFooter.html.twig') }}
+            {{ include('blocks/searchPaging.html.twig') }}
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
 {% endblock %}
 {% block morejs %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            document.querySelector(".home-header").setAttribute("style", "background-position-y: center");
+        })
+    </script>
 {% endblock %}

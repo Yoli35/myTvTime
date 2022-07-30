@@ -54,10 +54,10 @@ $transition-delay: .5s;
     justify-content: $content;
 }
 
-@mixin flex-100 {
-    align-items: center;
+@mixin flex-100($items: center, $content: center) {
+    align-items: $items;
     display: flex;
-    justify-content: center;
+    justify-content: $content;
     width: 100%;
 }
 

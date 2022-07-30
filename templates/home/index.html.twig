@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block body %}
-{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
 
     {% set discovers = route == 'app_home_series' ? discovers.shows:discovers.results %}
 
@@ -20,6 +20,9 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
+        {% if route == 'app_home' %}
+            <div class="home-header bg{{ random(5) }}"></div>
+        {% endif %}
         <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
             <ol class="breadcrumb">
                 {% if route == 'app_home' %}
@@ -73,6 +76,7 @@
         {% endif %}
 
         <div class="home-discovers">
+            {{ include('blocks/discoverPaging.html.twig') }}
             <div class="content">
                 {% for discover in discovers %}
                     {% set dTitle = route in ['app_home', 'app_home_series', 'app_admin_dashboard_index'] ? discover.title: discover.name %}
@@ -85,41 +89,21 @@
                         {% set poster = "/images/default/no_poster_dark.png" %}
                     {% endif %}
                     {{ include('blocks/movie/discover.html.twig', { title: dTitle, poster: poster, id: discover.id, route: dRoute }) }}
-
-{#                    <div class="home-discover" id="{{ discover.id }}">#}
-{#                        <a href="{{ path(dRoute, {id: discover.id}) }}">#}
-{#                            {% if discover.poster_path is defined and discover.poster_path|length %}#}
-{#                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ discover.poster_path }}" alt="{{ dTitle }}">#}
-{#                            {% elseif discover.images is defined and discover.images.poster|length %}#}
-{#                                <img src="{{ discover.images.poster }}" alt="{{ dTitle }}">#}
-{#                            {% else %}#}
-{#                                <img src="/images/default/no_poster_dark.png" alt="{{ dTitle }}">#}
-{#                            {% endif %}#}
-{#                            <div class="title">{{ dTitle }}</div>#}
-{#                            {% if dDate|length %}#}
-{#                                <div class="date">{{ 'Release Date'|trans }} : {{ dDate|format_date('short') }}</div>#}
-{#                            {% endif %}#}
-{#                            {% if discover.platforms is defined %}#}
-{#                                {% if discover.platforms %}#}
-{#                                    {% if discover.platforms.svod is defined %}#}
-{#                                        <img src="{{ discover.platforms.svod.logo }}" alt="{{ discover.platforms.svod.name }}" class="logo">#}
-{#                                    {% endif %}#}
-{#                                {% endif %}#}
-{#                            {% endif %}#}
-{#                        </a>#}
-{#                        #}{# Badges on seen Movies #}
-{#                        {% if route == 'app_home' and app.user is not null %}#}
-{#                            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}" id="{{ discover.id }}">#}
-{#                                <i class="bi bi-check-circle-fill"></i>#}
-{#                            </div>#}
-{#                        {% endif %}#}
-{#                    </div>#}
                 {% endfor %}
             </div>
-            {{ include('blocks/pageDiscoverFooter.html.twig') }}
+            {{ include('blocks/discoverPaging.html.twig') }}
         </div>
 
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout( () => {
+                document.querySelector(".home-header").setAttribute("style", "background-position-y: top");
+            }, 10);
+        })
+    </script>
 {% endblock %}

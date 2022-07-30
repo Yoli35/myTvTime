@@ -140,12 +140,20 @@ nav.active {
 
 .nav-breadcrumb {
     margin: 1em;
+
     .breadcrumb {
         .breadcrumb-item {
             span {
-                color: #7b7b7b;
+                color: #7b5b7b;
+                font-size: .75em;
                 font-variant: small-caps;
+                font-weight: 100;
             }
+        }
+
+        .bracket {
+            color: #383838;
+            padding: 0 .5em;
         }
     }
 }
@@ -194,13 +202,44 @@ h4 {
     }
 }
 
+.home-header {
+    background-position: center bottom;
+    background-size: cover;
+    border-radius: 1em;
+    height: 20em;
+    margin: 1em 0;
+    transition: background-position 1s;
+    width: 100%;
+}
+
+.bg0 {
+    background-image: url("../images/header.000.png");
+}
+
+.bg1 {
+    background-image: url("../images/header.001.png");
+}
+
+.bg2 {
+    background-image: url("../images/header.002.png");
+}
+
+.bg3 {
+    background-image: url("../images/header.003.png");
+}
+
+.bg4 {
+    background-image: url("../images/header.004.png");
+}
+
+.bg5 {
+    background-image: url("../images/header.005.png");
+}
+
 .home-footer {
-    align-items: center;
+    @include flex-col();
     background-color: #ca8a04; /* Symfony footer */
     border-radius: 1em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     margin: 1em 0;
     padding: 1em;
     width: 100%;
@@ -226,48 +265,23 @@ h4 {
 }
 
 .login {
-    align-items: center;
-    display: flex;
+    @include flex-row();
     height: 100%;
-    justify-content: center;
     width: 100%;
 }
-/*
-
-.locale {
-    display: flex;
-    flex-direction: row;
-    padding-left: 1em;
-
-    a {
-        border: 2px solid #bdbdbd;
-        border-radius: 50%;
-        display: block;
-        height: 2em;
-        margin-right: 1em;
-        width: 2em;
-
-        img {
-            border-radius: 50%;
-            display: inline;
-            height: 28px; !* 2em - 4px (border) *!
-            width: 28px;
-        }
-    }
-}
-*/
 
 .genres {
-    display: flex;
-    flex-direction: row;
+    @include flex-row();
     flex-wrap: wrap;
+    margin-bottom: 2em;
+    padding-left: 1.25em;
 
     .genre {
-        border: 5px solid #8a8a8a;
-        border-radius: 18px;
+        border: .125em solid #8a8a8a;
+        border-radius: 1em;
         cursor: pointer;
         margin: .25em;
-        padding: .125em 1em;
+        padding: 0 .5em;
     }
 
     .active {
@@ -277,11 +291,9 @@ h4 {
 }
 
 .search {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
+    @include flex-row();
     flex-wrap: wrap;
-    justify-content: center;
+    margin-bottom: 1em;
 
     .search-label {
         margin-right: 1em;
@@ -289,10 +301,7 @@ h4 {
 
     .date_select,
     .sort_select {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+        @include flex-row();
         margin: 1em;
 
         .label {
@@ -302,18 +311,13 @@ h4 {
 }
 
 .home-discovers {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    @include flex-col();
     font-weight: 100;
-    justify-content: center;
     width: 100%;
 
     .content {
-        display: flex;
-        flex-direction: row;
+        @include flex-row(unset, space-evenly);
         flex-wrap: wrap;
-        justify-content: space-evenly;
         margin: 2em;
 
         .see-more {
@@ -322,10 +326,7 @@ h4 {
     }
 
     .footer-infos {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        width: 100%;
+        @include flex-100();
 
         div {
             color: #142b34;
@@ -336,21 +337,16 @@ h4 {
 }
 
 .home-discover {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    @include flex-col();
     font-size: .75em;
     font-weight: 100;
-    justify-content: center;
     margin: 0 10px 20px 10px;
     padding: 4px;
     position: relative;
     width: 12em;
 
     a {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
+        @include flex-col(center, unset);
         height: 100%;
         text-decoration: none;
         width: 100%;
@@ -400,38 +396,30 @@ h4 {
 }
 
 .cast, .crew {
-    align-items: center;
+    @include flex-row();
     background-color: #eee;
     border-radius: 1em;
-    display: flex;
-    flex-direction: row;
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
-    justify-content: center;
     width: 100%;
 
     .content {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
+        @include flex-row(center, flex-start);
         flex-wrap: wrap;
-        justify-content: flex-start;
         margin: 0 auto;
         max-height: 20em;
         min-height: 16em;
         overflow-y: scroll;
 
         .actor, .member {
-            align-items: center;
+            @include flex-col(center, unset);
             cursor: grab;
-            display: flex;
-            flex-direction: column;
             height: 14em;
             margin: .5em .5em;
             width: 7em;
 
             .profile {
-                background-image: url("../../public/images/default/profile.jpg");
+                background-image: url("../images/profile.jpg");
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-size: cover;
@@ -512,6 +500,14 @@ h4 {
         }
     }
 
+    .nav-breadcrumb {
+        .breadcrumb {
+            .bracket {
+                color: #dbdbdb;
+            }
+        }
+    }
+
     .home-discover {
         a {
             .title {
@@ -536,7 +532,7 @@ h4 {
         background-color: #383838;
 
         .profile {
-            background-image: url("../../public/images/default/profile_dark.jpg");
+            background-image: url("../images/profile_dark.jpg");
         }
     }
 
@@ -545,7 +541,7 @@ h4 {
             .guests {
                 .guest {
                     .profile {
-                        background-image: url("../../public/images/default/profile_dark.jpg");
+                        background-image: url("../images/profile_dark.jpg");
                     }
                 }
             }
