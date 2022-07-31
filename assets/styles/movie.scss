@@ -1,30 +1,68 @@
 @import "variables";
 
-.notification {
-    border-radius: .5em;
-    color: #dbdbdb;
-    opacity: 0;
-    padding: 1em 2em;
+.notifications {
+    @include flex-col(flex-end, center);
     position: fixed;
     right: 8em;
     top: 1em;
-    transition: opacity .5s;
 
-    &.success {
-        background-color: #84a47e;
+    &.debug {
+        border: 2px dashed #dbdbdb;
+        border-radius: .5em;
     }
-    &.error {
-        background-color: #a67a7a;
-    }
-    &.info {
-        background-color: #9a9a9a;
+
+    .notification {
+        border-radius: .5em;
+        color: #dbdbdb;
+        margin-bottom: 1em;
+        opacity: 0;
+        padding: 1em 2em;
+
+        &.success {
+            background-color: #84a47edf;
+            border: 2px solid #84a47e;
+        }
+
+        &.error {
+            background-color: #a67a7adF;
+            border: 2px solid #a67a7a;
+        }
+
+        &.info {
+            background-color: #9a9a9adf;
+            border: 2px solid #9a9a9a;
+        }
+
+        &.init {
+            transform: translate(25em, 0);
+        }
+
+        &.start {
+            transition: opacity .5s, transform .5s;
+        }
+
+        &.visible {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
     }
 }
 
 .movie-header {
     border-radius: 1em;
+    opacity: 0;
     overflow: auto;
     position: relative;
+    transform: translate(0, -100%);
+
+    &.start {
+        transition: opacity .5s, transform .5s;
+    }
+
+    &.visible {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
 
     .user {
         @include flex-row(center, center);
@@ -33,26 +71,7 @@
         right: 2em;
 
         .rating {
-            @include flex-row();
-            background-color: #11d08e;
-            border-radius: 1.5em;
-            height: 3em;
-            margin-right: 1em;
-            width: 12em;
-
-            .star {
-                background-image: url("../images/star-outline.png");
-                background-size: cover;
-                height: 2em;
-                width: 2em;
-
-                &.ok {
-                    background-image: url("../images/star.png");
-                }
-                &:hover {
-                    transform: scale(1.25);
-                }
-            }
+            @include rating();
         }
     }
 }

@@ -1,0 +1,335 @@
+let _profile_infos, _imdb_infos, _add_movie, _remove_movie, _get_movie_rating, _set_movie_rating;
+let _loc;
+const txt = {
+    'rating': {
+        'vote': {
+            'fr': 'Merci pour votre vote !',
+            'en': 'Thank you for your vote!',
+            'es': 'Gracias por su voto.',
+            'de': 'Vielen Dank für Ihre Stimme!',
+        },
+        'create': {
+            'fr': 'Nouveau vote pour ce film !',
+            'en': 'New vote for this movie!',
+            'es': '¡Nuevo voto para esta película!',
+            'de': 'Neue Stimme für diesen Film!',
+        },
+        'update': {
+            'fr': 'Le vote pour ce film a bien été mis à jour.',
+            'en': 'The vote for this film has been updated.',
+            'es': 'El voto para esta película ha sido actualizado.',
+            'de': 'Die Abstimmung für diesen Film wurde tatsächlich aktualisiert.',
+        }
+    },
+    'movie': {
+        'add': {
+            'fr': 'Ce film a été ajouté à votre liste de films vus avec succès !',
+            'en': 'This movie has been added to your list of movies successfully viewed!',
+            'es': '¡Esta película ha sido añadida a tu lista de películas vistas con éxito!',
+            'de': 'Dieser Film wurde erfolgreich zu Ihrer Liste der gesehenen Filme hinzugefügt!',
+        },
+        'rating': {
+            'fr': 'Vous pouvez désormais évaluer ce film ★★★☆☆ !',
+            'en': 'You can now rate this movie ★★★☆☆!',
+            'es': '¡Ya puedes calificar esta película ★★★☆☆!',
+            'de': 'Sie können diesen Film jetzt bewerten ★★★☆☆!',
+        },
+        'remove': {
+            'fr': 'Le film a été retiré de votre liste de films vus ainsi que son éventuelle évaluation (★★★☆☆).',
+            'en': 'The movie has been removed from your list of movies seen as well as its possible rating (★★★☆☆).',
+            'es': 'La película ha sido eliminada de su lista de películas vistas y de su posible calificación (★★★☆☆).',
+            'de': 'Der Film wurde aus Ihrer Liste der gesehenen Filme entfernt, ebenso wie seine eventuelle Bewertung (★★★☆☆).',
+        }
+    }
+}
+
+function initMovieStuff(paths, locale) {
+    // querySelectorAll renvoie une nodeList, vide si aucune correspondance n'est trouvée
+    const profiles = document.querySelectorAll(".profile");
+    const has_been_seen = document.querySelectorAll(".has-been-seen");
+    const movie_headers = document.querySelectorAll(".movie-header");
+
+    _loc = locale
+    _profile_infos = paths[0];
+    _imdb_infos = paths[1];
+    _add_movie = paths[2];
+    _remove_movie = paths[3];
+    _get_movie_rating = paths[4];
+    _set_movie_rating = paths[5];
+
+    initNotifications();
+
+    movie_headers.forEach(movie_header => {
+        movie_header.classList.add("start");
+        setTimeout(() => {
+            movie_header.classList.add("visible");
+        }, 100);
+    });
+
+    has_been_seen.forEach(badge => {
+        badge.addEventListener("click", toggleSeenStatus);
+        if (badge.classList.contains("yes")) {
+            getMovieRating(badge);
+        }
+    })
+
+    profiles.forEach(profile => {
+        profile.addEventListener("click", getProfile);
+    });
+}
+
+function getProfile(e) {
+    let id = e.target.getAttribute("data-id").toString();
+
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        const data = JSON.parse(this.response);
+        let locale = data['locale'];
+        let person = data['person'];
+        let name = person['name'],
+            // also_known_as = person['also_known_as'],
+            biography = person['biography'],
+            birthday = person['birthday'],
+            death_day = person['death-day'],
+            homepage = person['homepage'],
+            imdbpage = person['imdb_id'],
+            known_for_department = person['known_for_department'],
+            place_of_birth = person['place_of_birth'],
+            profile_path = person['profile_path'],
+            gender = person['gender'];
+        let department = data['department'];
+        // console.log(department);
+
+        // $('.modal-title').html(name);
+        document.querySelector(".modal-title").innerHTML = name;
+        // $('.also_known_as').html(also_known_as);
+        if (biography && biography.length) {
+            // $('.biography div').html(biography);
+            document.querySelector(".biography div").innerHTML = biography;
+        } else {
+            // $('.biography div').html('<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+            document.querySelector(".biography div").innerHTML = '<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+
+            const xhr2 = new XMLHttpRequest();
+            xhr2.onload = function (r) {
+                console.log({r});
+                const imdb = JSON.parse(this.response);
+                if (imdb['success']) {
+                    let imdb_infos = imdb['person'];
+                    // console.log(imdb_infos);
+                    // $(".biography div").html(
+                    document.querySelector(".biography div").innerHTML =
+                        '<div>' +
+                        imdb_infos['summary'] +
+                        '</div>' +
+                        '<div style="color: #eee;font-style: italic;">' +
+                        imdb_infos['translated'] +
+                        '</div>';
+                } else
+                    document.querySelector(".biography div").setAttribute("style", "display: none");
+            }
+            xhr2.open("GET", _imdb_infos + "?name=" + name + "&locale=" + locale);
+            xhr2.send();
+        }
+        // if (birthday && birthday.length) $('.birthday span').html(dateFormat(birthday, locale)); else $('.birthday').css('display', 'none');
+        if (birthday && birthday.length) document.querySelector(".birthday span").innerHTML = birthday.toLocaleString(); else document.querySelector(".birthday").setAttribute("style", "display: none");
+        // if (death_day && death_day.length) $('.death-day span').html(dateFormat(death_day, locale)); else $('.death-day').css('display', 'none');
+        if (death_day && death_day.length) document.querySelector(".death-day span").innerHTML = death_day.toLocaleString(); else document.querySelector(".death-day").setAttribute("style", "display: none");
+        // if (homepage && homepage.length) $('.homepage span').html('<a href="' + homepage + '" target="_blank">' + homepage + '</a>'); else $('.homepage').css('display', 'none');
+        if (homepage && homepage.length) document.querySelector(".homepage span").innerHTML = '<a href="' + homepage + '" target="_blank">' + homepage + '</a>'; else document.querySelector(".homepage").setAttribute("style", "display: none");
+        // if (imdbpage && imdbpage.length) $('.imdb-page span').html('<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'); else $('.imdb-page').css('display', 'none');
+        if (imdbpage && imdbpage.length) document.querySelector(".imdb-page span").innerHTML = '<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'; else document.querySelector(".imdb-page").setAttribute("style", "display: none");
+        // if (place_of_birth && place_of_birth.length) $('.place-of-birth span').html(place_of_birth); else $('.place-of-birth').css('display', 'none');
+        if (place_of_birth && place_of_birth.length) document.querySelector(".place-of-birth span").innerHTML = place_of_birth; else document.querySelector(".place-of-birth").setAttribute("style", "display: none");
+
+        if (known_for_department && known_for_department.length) {
+            if (locale === 'en' || department[locale][known_for_department] === undefined) {
+                // $('.known-for-department span').html('<span style="color: ' + (locale === 'en' ? 'green' : 'red') + '">' + known_for_department + '</span>');
+                document.querySelector(".known-for-department span").innerHTML = '<span style="color: ' + (locale === 'en' ? 'green' : 'red') + '">' + known_for_department + '</span>';
+            } else {
+                // $('.known-for-department span').html(department[locale][known_for_department][gender]);
+                document.querySelector(".known-for-department span").innerHTML = department[locale][known_for_department][gender];
+            }
+        } else {
+            // $('.known-for-department').css('display', 'none');
+            document.querySelector(".known-for-department").setAttribute("style", "display: none");
+        }
+
+        // $('.person-profile').html('<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">');
+        document.querySelector(".person-profile").innerHTML = '<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">';
+    }
+    xhr.open("GET", _profile_infos + "?id=" + id + "&locale=" + _loc);
+    xhr.send();
+}
+
+function toggleSeenStatus(e) {
+
+    let badge = e.target.parentElement;
+
+    if (badge.classList.contains("yes")) {
+        removeMovie(badge);
+    } else {
+        addMovie(badge);
+    }
+}
+
+function addMovie(badge) {
+
+    const id = badge.getAttribute("id");
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+
+        badge.classList.add("yes");
+        let r = getMovieRating(badge);
+        addNotification(txt.movie.add[_loc], "success");
+        if (r) addNotification(txt.movie.rating[_loc], "info");
+    }
+    xhr.open("GET", _add_movie + "?movie_db_id=" + id);
+    xhr.send();
+}
+
+function removeMovie(badge) {
+
+    const id = badge.getAttribute("id");
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+
+        badge.classList.remove("yes");
+        terminateRating(badge);
+        addNotification(txt.movie.remove[_loc], "info");
+    }
+    xhr.open("GET", _remove_movie + "?movie_db_id=" + id);
+    xhr.send();
+}
+
+function getMovieRating(badge) {
+    const user = badge.parentElement;
+    const rating = user.querySelector(".rating");
+    if (rating) {
+        const id = rating.getAttribute("id");
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const data = JSON.parse(this.response);
+            let vote = data['vote'];
+            user.setAttribute("data-rating", vote);
+            initRating(badge);
+        }
+        xhr.open("GET", _get_movie_rating + "?movie_db_id=" + id);
+        xhr.send();
+        return true;
+    }
+    return false;
+}
+
+function setMovieRating(e) {
+    const star = e.target;
+    const rating = star.parentElement;
+    const user = rating.parentElement;
+    const id = rating.getAttribute("id");
+    const movieRating = star.getAttribute("data-rate");
+    user.setAttribute("data-rating", movieRating);
+    setStars(user);
+
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        const data = JSON.parse(this.response);
+        let message;
+        switch (data['result']) {
+            case 'create':
+                message = txt.rating.create[_loc];
+                break;
+            case 'update':
+                message = txt.rating.update[_loc];
+                break;
+        }
+        addNotification(txt.rating.vote[_loc], "success");
+        addNotification(message, "success");
+    }
+    xhr.open("GET", _set_movie_rating + "?movie_db_id=" + id + "&rating=" + movieRating.toString());
+    xhr.send();
+}
+
+function initRating(badge) {
+    const user = badge.parentElement;
+    const rating = user.querySelector(".rating");
+    const stars = rating.querySelectorAll(".star");
+    stars.forEach(star => {
+        // star.addEventListener("mouseover", hoverStars);
+        // star.addEventListener("mouseleave", setStars);
+        star.addEventListener("click", setMovieRating);
+    })
+    setStars(user);
+    rating.classList.add("visible");
+}
+
+function terminateRating(badge) {
+    const user = badge.parentElement;
+    const rating = user.querySelector(".rating");
+    if (rating) {
+        const stars = rating.querySelectorAll(".star");
+        stars.forEach(star => {
+            // star.removeEventListener("mouseover", hoverStars);
+            // star.removeEventListener("mouseleave", setStars);
+            star.removeEventListener("click", setMovieRating);
+        })
+        rating.classList.remove("visible");
+    }
+}
+
+function setStars(user) {
+    const rating = user.querySelector(".rating");
+    const stars = rating.querySelectorAll(".star");
+    const movieRating = user.getAttribute("data-rating");
+    let index = 1;
+
+    stars.forEach(star => {
+        if (index++ <= movieRating) {
+            star.classList.add("ok");
+        } else {
+            star.classList.remove("ok");
+        }
+    })
+}
+
+function hoverStars(e) {
+    const star = e.target;
+    const rating = star.parentElement;
+    let rate = star.getAttribute("data-rate");
+
+    let stars = rating.children;
+
+    for (let i = 0; i < 5; i++) {
+        stars[i].classList.remove("ok");
+    }
+    for (let i = 1; i <= rate; i++) {
+        let s = stars[i - 1];
+        s.classList.add("ok");
+    }
+}
+
+function initNotifications() {
+    const notifications = document.createElement("div");
+    notifications.classList.add("notifications");
+    document.querySelector("body").appendChild(notifications);
+}
+
+function addNotification(message, type) {
+    const notifications = document.querySelector(".notifications");
+    let notification = document.createElement("div");
+
+    notification.classList.add("notification", type);
+    notification.appendChild(document.createTextNode(message));
+    notifications.appendChild(notification);
+    notification.classList.add("init");
+    notification.classList.add("start");
+
+    setTimeout(() => {
+        notification.classList.add("visible");
+    }, 100);
+    setTimeout(() => {
+        notification.classList.remove("visible");
+        setTimeout(() => {
+            notifications.removeChild(notification);
+        }, 500)
+    }, 5000);
+}

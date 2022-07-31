@@ -120,8 +120,16 @@
 {% endblock %}
 {% block morejs %}
     <script src="/js/user-movie.js"></script>
+    <script src="/js/select-movie.js"></script>
     <script>
-
+        const paths = [
+            "{{ path('profile_infos') }}",
+            "{{ path('imdb_infos') }}",
+            "{{ path('app_movie_add') }}",
+            "{{ path('app_movie_remove') }}",
+            "{{ path('app_movie_get_rating') }}",
+            "{{ path('app_movie_set_rating') }}",
+        ];
         window.addEventListener("DOMContentLoaded", () => {
             initButtons(
                 {{ user.id }},
@@ -137,6 +145,7 @@
                 ],
                 "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}",
             );
+            initMovieStuff(paths, "{{ locale }}");
         })
     </script>
 {% endblock %}

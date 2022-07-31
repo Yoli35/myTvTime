@@ -5,20 +5,27 @@
 
 {% block title %}myTvTime::{{ 'Movies by Year'|trans }}{% endblock %}
 {% block morejs %}
+    <script src="/js/select-movie.js"></script>
     <script>
-        $(function () {
-            let year = $('select');
+        const paths = [
+            "{{ path('profile_infos') }}",
+            "{{ path('imdb_infos') }}",
+            "{{ path('app_movie_add') }}",
+            "{{ path('app_movie_remove') }}",
+            "{{ path('app_movie_get_rating') }}",
+            "{{ path('app_movie_set_rating') }}",
+        ];
+        window.addEventListener("DOMContentLoaded", () => {
+            let year = document.querySelector('#year');
             let initialValue = $(year).val(), newValue = 0,
                 url = '{{ path(route, {page: 1, date: date}) }}';
 
-            $(year).change(function (e) {
-                newValue = $(year).val();
-                if (newValue !== initialValue) {
-                    url = url.substring(0, url.length - 4) + newValue + '/1';
-                    // console.log(url);
-                    window.location.href = url;
-                }
+            year.addEventListener("change", function () {
+                newValue = year.options[year.selectedIndex].value;
+                url = url.substring(0, url.length - 4) + newValue + '/1';
+                window.location.href = url;
             });
+            initMovieStuff(paths, "{{ locale }}");
         })
     </script>
 {% endblock %}

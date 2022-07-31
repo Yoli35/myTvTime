@@ -271,7 +271,7 @@ h4 {
 }
 
 .genres {
-    @include flex-row();
+    @include flex-row(center, flex-start);
     flex-wrap: wrap;
     margin-bottom: 2em;
     padding-left: 1.25em;
@@ -379,15 +379,22 @@ h4 {
         }
     }
 
-    .has-been-seen {
-        background-color: #333;
-        border-radius: 50%;
-        color: #dbdbdb;
-        cursor: pointer;
-        padding: 0 .2em;
+    .user {
+        @include flex-row(center, center);
+        left: -1em;
         position: absolute;
-        right: 1em;
-        top: 1em;
+        top: 0;
+
+        .has-been-seen {
+            background-color: #333;
+            border-radius: 50%;
+            color: #dbdbdb;
+            cursor: pointer;
+            padding: 0 .2em;
+        }
+        .rating {
+            @include rating();
+        }
     }
 
     .has-been-seen.yes {

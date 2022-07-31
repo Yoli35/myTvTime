@@ -107,7 +107,7 @@ class UserController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/personal/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function userMovies(Request $request, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
+    public function userMovies(Request $request, UserMovieRepository $userMovieRepository, MovieController $movieController, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -131,6 +131,7 @@ class UserController extends AbstractController
 
         return $this->render('user_account/user_movies.html.twig', [
             'discovers' => $movies,
+            'userMovies' => $movieController->getUserMovieIds($userMovieRepository),
             'count' => count($items),
             'runtime' => $runtime,
             'locale' => $request->getLocale(),

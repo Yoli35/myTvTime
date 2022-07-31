@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block morecss %}
-{#    <link href="{{ asset("movie.css") }}" rel="stylesheet">#}
+    {#    <link href="{{ asset("movie.css") }}" rel="stylesheet"> #}
 {% endblock %}
 
 {% block title %}myTvTime::{{ collection.name }}{% endblock %}
@@ -54,8 +54,15 @@
                                                 {% else %}
                                                     <img src="/images/default/no_banner_dark.png" class="d-block w-100" alt="{{ collection.name }}">
                                                 {% endif %}
-                                                <div class="has-been-seen{% if part.id in userMovies %} yes{% endif %}" id="{{ part.id }}">
-                                                    <i class="bi bi-check-circle-fill"></i>
+                                                <div class="user">
+                                                    <div class="rating" id="{{ part.id }}">
+                                                        <div class="star" data-rate="1"></div>
+                                                        <div class="star" data-rate="2"></div>
+                                                        <div class="star" data-rate="3"></div>
+                                                        <div class="star" data-rate="4"></div>
+                                                        <div class="star" data-rate="5"></div>
+                                                    </div>
+                                                    <div class="has-been-seen{% if part.id in userMovies %} yes{% endif %}" id="{{ part.id }}"><i class="bi bi-check-circle-fill"></i></div>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -112,4 +119,22 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block morejs %}
+    <script src="/js/select-movie.js"></script>
+    <script>
+        const paths = [
+            "{{ path('profile_infos') }}",
+            "{{ path('imdb_infos') }}",
+            "{{ path('app_movie_add') }}",
+            "{{ path('app_movie_remove') }}",
+            "{{ path('app_movie_get_rating') }}",
+            "{{ path('app_movie_set_rating') }}",
+        ];
+
+        window.addEventListener("DOMContentLoaded", () => {
+            initMovieStuff(paths, "{{ locale }}");
+        })
+    </script>
 {% endblock %}

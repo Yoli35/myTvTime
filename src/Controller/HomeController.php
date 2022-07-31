@@ -37,7 +37,7 @@ class HomeController extends AbstractController
         $user = $this->getUser();
         $userMovieIds = [];
         if ($user) {
-            $userMovies = $userMovieRepository->findUserMovies($user->getId());
+            $userMovies = $userMovieRepository->findUserMovieIds($user->getId());
             foreach ($userMovies as $userMovie) {
                 $userMovieIds[] = $userMovie['movie_db_id'];
             }
@@ -140,7 +140,8 @@ class HomeController extends AbstractController
             'imageConfig' => $imageConfig,
             'pages' => $pages,
             'sorts' => $sorts,
-            'dRoute' => 'app_movie'
+            'dRoute' => 'app_movie',
+            'locale' => $request->getLocale()
         ]);
     }
 }

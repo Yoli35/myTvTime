@@ -14,7 +14,7 @@ import './styles/user.scss';
 import './styles/youtube.scss';
 import './styles/tiktok.scss';
 
-import './js/select-movie';
+// import './js/select-movie';
 
 import 'bootstrap';
 

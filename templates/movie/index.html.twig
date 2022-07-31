@@ -22,15 +22,13 @@
             <div class="movie-header">
                 <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" class="d-block w-100" alt="{{ movie.title }}">
                 <div class="user">
-                    {% if hasBeenSeen %}
-                        <div class="rating">
-                            <div class="star" data-rate="1"></div>
-                            <div class="star" data-rate="2"></div>
-                            <div class="star" data-rate="3"></div>
-                            <div class="star" data-rate="4"></div>
-                            <div class="star" data-rate="5"></div>
-                        </div>
-                    {% endif %}
+                    <div class="rating" id="{{ movie.id }}">
+                        <div class="star" data-rate="1"></div>
+                        <div class="star" data-rate="2"></div>
+                        <div class="star" data-rate="3"></div>
+                        <div class="star" data-rate="4"></div>
+                        <div class="star" data-rate="5"></div>
+                    </div>
                     <div class="has-been-seen{% if hasBeenSeen %} yes{% endif %}" id="{{ movie.id }}"><i class="bi bi-check-circle-fill"></i></div>
                 </div>
             </div>
@@ -145,10 +143,6 @@
                             </div>
                             {% if movie.belongs_to_collection %}
                                 <div class="col-lg-6 col-12">
-                                    {#    "id" => 2344
-                                          "name" => "The Matrix Collection"
-                                          "poster_path" => "/bV9qTVHTVf0gkW0j7p7M0ILD4pG.jpg"
-                                          "backdrop_path" => "/bRm2DEgUiYciDw3myHuYFInD7la.jpg" #}
                                     <h2>{{ 'Belongs to Collection'|trans }}</h2>
                                     <div class="collection">
                                         <div class="card text-center" style="width: 100%;">
@@ -270,184 +264,21 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
-    <div class="notification"></div>
 {% endblock %}
 {% block morejs %}
+    <script src="/js/select-movie.js"></script>
     <script>
-        let movieRating;
+        const paths = [
+            "{{ path('profile_infos') }}",
+            "{{ path('imdb_infos') }}",
+            "{{ path('app_movie_add') }}",
+            "{{ path('app_movie_remove') }}",
+            "{{ path('app_movie_get_rating') }}",
+            "{{ path('app_movie_set_rating') }}",
+        ];
+
         window.addEventListener("DOMContentLoaded", () => {
-
-
-            const profiles = document.querySelectorAll(".profile");
-            const rating = document.querySelector(".rating");
-
-            profiles.forEach(profile => {
-                profile.addEventListener("click", getProfile);
-            })
-
-            if (rating !== undefined) {
-
-                rating.setAttribute("style", "opacity: 0");
-                getMovieRating(rating);
-            }
+            initMovieStuff(paths, "{{ locale }}");
         })
-
-        function getProfile(e) {
-            let id = e.target.getAttribute("data-id").toString();
-
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                const data = JSON.parse(this.response);
-                let locale = data['locale'];
-                let person = data['person'];
-                let name = person['name'],
-                    // also_known_as = person['also_known_as'],
-                    biography = person['biography'],
-                    birthday = person['birthday'],
-                    death_day = person['death-day'],
-                    homepage = person['homepage'],
-                    imdbpage = person['imdb_id'],
-                    known_for_department = person['known_for_department'],
-                    place_of_birth = person['place_of_birth'],
-                    profile_path = person['profile_path'],
-                    gender = person['gender'];
-                let department = data['department'];
-                // console.log(department);
-
-                // $('.modal-title').html(name);
-                document.querySelector(".modal-title").innerHTML = name;
-                // $('.also_known_as').html(also_known_as);
-                if (biography && biography.length) {
-                    // $('.biography div').html(biography);
-                    document.querySelector(".biography div").innerHTML = biography;
-                } else {
-                    // $('.biography div').html('<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>');
-                    document.querySelector(".biography div").innerHTML = '<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-
-                    const xhr2 = new XMLHttpRequest();
-                    xhr2.onload = function () {
-                        const imdb = JSON.parse(this.response);
-                        if (imdb['success']) {
-                            let imdb_infos = imdb['person'];
-                            // console.log(imdb_infos);
-                            // $(".biography div").html(
-                            document.querySelector(".biography div").innerHTML =
-                                '<div>' +
-                                imdb_infos['summary'] +
-                                '</div>' +
-                                '<div style="color: #eee;font-style: italic;">' +
-                                imdb_infos['translated'] +
-                                '</div>';
-                        } else
-                            document.querySelector(".biography div").setAttribute("style", "display: none");
-                    }
-                    xhr2.open("GET", {{ 'imdb_infos' }} +"?name=" + name + "&locale=" + {{ locale }});
-                    xhr2.send();
-                }
-                // if (birthday && birthday.length) $('.birthday span').html(dateFormat(birthday, locale)); else $('.birthday').css('display', 'none');
-                if (birthday && birthday.length) document.querySelector(".birthday span").innerHTML = birthday.toLocaleString(); else document.querySelector(".birthday").setAttribute("style", "display: none");
-                // if (death_day && death_day.length) $('.death-day span').html(dateFormat(death_day, locale)); else $('.death-day').css('display', 'none');
-                if (death_day && death_day.length) document.querySelector(".death-day span").innerHTML = death_day.toLocaleString(); else document.querySelector(".death-day").setAttribute("style", "display: none");
-                // if (homepage && homepage.length) $('.homepage span').html('<a href="' + homepage + '" target="_blank">' + homepage + '</a>'); else $('.homepage').css('display', 'none');
-                if (homepage && homepage.length) document.querySelector(".homepage span").innerHTML = '<a href="' + homepage + '" target="_blank">' + homepage + '</a>'; else document.querySelector(".homepage").setAttribute("style", "display: none");
-                // if (imdbpage && imdbpage.length) $('.imdb-page span').html('<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'); else $('.imdb-page').css('display', 'none');
-                if (imdbpage && imdbpage.length) document.querySelector(".imdb-page span").innerHTML = '<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'; else document.querySelector(".imdb-page").setAttribute("style", "display: none");
-                // if (place_of_birth && place_of_birth.length) $('.place-of-birth span').html(place_of_birth); else $('.place-of-birth').css('display', 'none');
-                if (place_of_birth && place_of_birth.length) document.querySelector(".place-of-birth span").innerHTML = place_of_birth; else document.querySelector(".place-of-birth").setAttribute("style", "display: none");
-
-                if (known_for_department && known_for_department.length) {
-                    if (locale === 'en' || department[locale][known_for_department] === undefined) {
-                        // $('.known-for-department span').html('<span style="color: ' + (locale === 'en' ? 'green' : 'red') + '">' + known_for_department + '</span>');
-                        document.querySelector(".known-for-department span").innerHTML = '<span style="color: ' + (locale === 'en' ? 'green' : 'red') + '">' + known_for_department + '</span>';
-                    } else {
-                        // $('.known-for-department span').html(department[locale][known_for_department][gender]);
-                        document.querySelector(".known-for-department span").innerHTML = department[locale][known_for_department][gender];
-                    }
-                } else {
-                    // $('.known-for-department').css('display', 'none');
-                    document.querySelector(".known-for-department").setAttribute("style", "display: none");
-                }
-
-                {# $('.person-profile').html('<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">'); #}
-                document.querySelector(".person-profile").innerHTML = '<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">';
-            }
-            xhr.open("GET", {{ 'profile_infos' }} +"?id=" + id + "&locale=" + {{ locale }});
-            xhr.send();
-        }
-
-        function setStars() {
-            const stars = document.querySelectorAll(".star");
-            let index = 1;
-
-            stars.forEach(star => {
-                if (index++ <= movieRating) {
-                    star.classList.add("ok");
-                } else {
-                    star.classList.remove("ok");
-                }
-            })
-        }
-
-        function getMovieRating(rating) {
-
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                const data = JSON.parse(this.response);
-                movieRating = data['vote'];
-
-                const stars = rating.querySelectorAll(".star");
-                stars.forEach(star => {
-                    star.addEventListener("mouseover", hoverStars);
-                    star.addEventListener("mouseleave", setStars);
-                    star.addEventListener("click", setMovieRating);
-                })
-
-                setStars();
-                rating.setAttribute("style", "opacity: 1");
-            }
-            xhr.open("GET", "{{ path('app_movie_get_rating') }}?movie={{ movie.id }}");
-            xhr.send();
-        }
-
-        function setMovieRating(e) {
-            const star = e.target;
-            movieRating = star.getAttribute("data-rate");
-
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                const data = JSON.parse(this.response);
-                const notification = document.querySelector(".notification");
-                let message;
-                switch (data['result']) {
-                    case 'create': message = "Nouveau vote pour ce film !"; break;
-                    case 'update': message = "le vote pour ce film a bien été mis à jour."; break;
-                }
-                notification.innerHTML = message;
-                notification.classList.remove("error", "info");
-                notification.classList.add("success");
-                notification.setAttribute("style", "opacity: 1");
-                setTimeout( () => {
-                    notification.removeAttribute("style");
-                }, 10000);
-            }
-            xhr.open("GET", "{{ path('app_movie_set_rating') }}?movie={{ movie.id }}&rating=" + movieRating.toString());
-            xhr.send();
-        }
-
-        function hoverStars(e) {
-            const star = e.target;
-            const rating = star.parentElement;
-            let rate = star.getAttribute("data-rate");
-
-            let stars = rating.children;
-
-            for (let i = 0; i < 5; i++) {
-                stars[i].classList.remove("ok");
-            }
-            for (let i = 1; i <= rate; i++) {
-                let s = stars[i - 1];
-                s.classList.add("ok");
-            }
-        }
     </script>
 {% endblock %}

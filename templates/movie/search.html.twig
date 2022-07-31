@@ -61,9 +61,19 @@
     </div>
 {% endblock %}
 {% block morejs %}
+    <script src="/js/select-movie.js"></script>
     <script>
+        const paths = [
+            "{{ path('profile_infos') }}",
+            "{{ path('imdb_infos') }}",
+            "{{ path('app_movie_add') }}",
+            "{{ path('app_movie_remove') }}",
+            "{{ path('app_movie_get_rating') }}",
+            "{{ path('app_movie_set_rating') }}",
+        ];
         window.addEventListener("DOMContentLoaded", () => {
             document.querySelector(".home-header").setAttribute("style", "background-position-y: center");
+            initMovieStuff(paths, "{{ locale }}");
         })
     </script>
 {% endblock %}

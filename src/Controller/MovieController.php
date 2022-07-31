@@ -152,6 +152,7 @@ class MovieController extends AbstractController
             'userMovies' => $this->getUserMovieIds($userMovieRepository),
             'genres' => $genres,
             'imageConfig' => $imageConfig,
+            'locale' => $request->getLocale(),
         ]);
 
     }
@@ -182,6 +183,7 @@ class MovieController extends AbstractController
             'current_genres' => $currentGenres,
             'imageConfig' => $imageConfig,
             'dRoute' => 'app_movie',
+            'locale' => $locale,
         ]);
     }
 
@@ -212,6 +214,7 @@ class MovieController extends AbstractController
             'years' => $years,
             'imageConfig' => $imageConfig,
             'dRoute' => 'app_movie',
+            'locale' => $locale,
         ]);
     }
 
@@ -252,6 +255,7 @@ class MovieController extends AbstractController
             'userMovies' => $this->getUserMovieIds($userMovieRepository),
             'imageConfig' => $imageConfig,
             'dRoute' => 'app_movie',
+            'locale' => $locale,
         ]);
     }
 
@@ -370,43 +374,6 @@ class MovieController extends AbstractController
         return $this->json(['title' => $userMovie->getTitle()]);
     }
 
-    #[Route('/movie/set/rating', name: 'app_movie_set_rating')]
-    public function setMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $movieId = $request->query->get('movie');
-        $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
-        $vote = $request->query->get('rating');
-        $result = "update";
-
-        $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
-
-        if (!$rating) {
-            $rating = new Rating();
-            $rating->setUser($user);
-            $rating->setMovie($movie);
-            $result = "create";
-        }
-        $rating->setValue($vote);
-        $entityManager->persist($rating);
-        $entityManager->flush();
-
-        return $this->json(['result' => $result]);
-    }
-
-    #[Route('/movie/get/rating', name: 'app_movie_get_rating')]
-    public function getMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $movieId = $request->query->get('movie');
-        $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
-        $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
-
-        return $this->json(['vote' => $rating ? $rating->getValue() : 0]);
-    }
-
     public function addMovie($user, $movieId, $locale, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager):UserMovie
     {
         $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
@@ -445,7 +412,43 @@ class MovieController extends AbstractController
             $entityManager->flush();
         }
 
-
         return $this->json(['/movie/remove' => 'success']);
+    }
+
+    #[Route('/movie/set/rating', name: 'app_movie_set_rating')]
+    public function setMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+        $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
+        $vote = $request->query->get('rating');
+        $result = "update";
+
+        $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
+
+        if (!$rating) {
+            $rating = new Rating();
+            $rating->setUser($user);
+            $rating->setMovie($movie);
+            $result = "create";
+        }
+        $rating->setValue($vote);
+        $entityManager->persist($rating);
+        $entityManager->flush();
+
+        return $this->json(['result' => $result]);
+    }
+
+    #[Route('/movie/get/rating', name: 'app_movie_get_rating')]
+    public function getMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+        $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
+        $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
+
+        return $this->json(['vote' => $rating ? $rating->getValue() : 0]);
     }
 }

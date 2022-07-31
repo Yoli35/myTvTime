@@ -48,6 +48,37 @@ $transition-delay: .5s;
     }
 }
 
+@mixin rating() {
+    @include flex-row();
+    background-color: #11d08e7f;
+    border: .125em solid #11d08e;
+    border-radius: 1.5em;
+    height: 3em;
+    margin-right: 1em;
+    opacity: 0;
+    transition: opacity .5s;
+    width: 12em;
+
+    &.visible {
+        opacity: 1;
+    }
+
+    .star {
+        background-image: url("../images/star-outline.png");
+        background-size: cover;
+        height: 2em;
+        width: 2em;
+
+        &.ok {
+            background-image: url("../images/star.png");
+        }
+
+        &:hover {
+            transform: scale(1.25);
+        }
+    }
+}
+
 @mixin flex-row($items: center, $content: center) {
     align-items: $items;
     display: flex;
