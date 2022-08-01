@@ -278,7 +278,7 @@
         ];
 
         window.addEventListener("DOMContentLoaded", () => {
-            initMovieStuff(paths, "{{ locale }}");
+            initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}", "{{ locale }}");
         })
     </script>
 {% endblock %}

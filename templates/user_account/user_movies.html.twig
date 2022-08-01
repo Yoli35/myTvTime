@@ -5,7 +5,7 @@
 {% block morecss %}
 {% endblock %}
 {% block body %}
-    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -145,7 +145,7 @@
                 ],
                 "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}",
             );
-            initMovieStuff(paths, "{{ locale }}");
+            initMovieStuff(paths, "", "{{ locale }}");
         })
     </script>
 {% endblock %}

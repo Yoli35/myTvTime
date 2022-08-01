@@ -1,4 +1,7 @@
-let _profile_infos, _imdb_infos, _add_movie, _remove_movie, _get_movie_rating, _set_movie_rating;
+let _profile_infos, _imdb_infos,
+    _add_movie, _remove_movie,
+    _get_movie_rating, _set_movie_rating,
+    _profile_url;
 let _loc;
 const txt = {
     'rating': {
@@ -43,7 +46,7 @@ const txt = {
     }
 }
 
-function initMovieStuff(paths, locale) {
+function initMovieStuff(paths, profileUrl, locale) {
     // querySelectorAll renvoie une nodeList, vide si aucune correspondance n'est trouvée
     const profiles = document.querySelectorAll(".profile");
     const has_been_seen = document.querySelectorAll(".has-been-seen");
@@ -56,6 +59,7 @@ function initMovieStuff(paths, locale) {
     _remove_movie = paths[3];
     _get_movie_rating = paths[4];
     _set_movie_rating = paths[5];
+    _profile_url = profileUrl;
 
     initNotifications();
 
@@ -111,9 +115,10 @@ function getProfile(e) {
             document.querySelector(".biography div").innerHTML = '<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>';
 
             const xhr2 = new XMLHttpRequest();
-            xhr2.onload = function (r) {
-                console.log({r});
-                const imdb = JSON.parse(this.response);
+            xhr2.onload = function (result) {
+                // console.log(JSON.parse(r.target.response));
+                const imdb = JSON.parse(result.target.response);
+                // console.log(imdb);
                 if (imdb['success']) {
                     let imdb_infos = imdb['person'];
                     // console.log(imdb_infos);
@@ -156,7 +161,7 @@ function getProfile(e) {
         }
 
         // $('.person-profile').html('<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">');
-        document.querySelector(".person-profile").innerHTML = '<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">';
+        document.querySelector(".person-profile").innerHTML = '<img src="' + _profile_url + profile_path + '" alt="' + name + '">';
     }
     xhr.open("GET", _profile_infos + "?id=" + id + "&locale=" + _loc);
     xhr.send();
@@ -210,8 +215,8 @@ function getMovieRating(badge) {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
             const data = JSON.parse(this.response);
-            let vote = data['vote'];
-            user.setAttribute("data-rating", vote);
+            let eval = data['rating'];
+            user.setAttribute("data-rating", eval);
             initRating(badge);
         }
         xhr.open("GET", _get_movie_rating + "?movie_db_id=" + id);
@@ -291,6 +296,7 @@ function setStars(user) {
     })
 }
 
+/*
 function hoverStars(e) {
     const star = e.target;
     const rating = star.parentElement;
@@ -306,6 +312,7 @@ function hoverStars(e) {
         s.classList.add("ok");
     }
 }
+*/
 
 function initNotifications() {
     const notifications = document.createElement("div");

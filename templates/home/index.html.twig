@@ -106,7 +106,7 @@
                 let value = select.options[select.selectedIndex].value;
                 window.location.href = '{{ path(route) }}?sort=' + value + '&page=1';
             });
-            initMovieStuff(paths, "{{ locale }}");
+            initMovieStuff(paths, "", "{{ locale }}");
         })
     </script>
     })

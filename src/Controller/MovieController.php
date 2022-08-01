@@ -449,6 +449,6 @@ class MovieController extends AbstractController
         $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
         $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
 
-        return $this->json(['vote' => $rating ? $rating->getValue() : 0]);
+        return $this->json(['rating' => $rating ? $rating->getValue() : 0]);
     }
 }

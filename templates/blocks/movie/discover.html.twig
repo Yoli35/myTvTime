@@ -15,7 +15,7 @@
                 <div class="star" data-rate="4"></div>
                 <div class="star" data-rate="5"></div>
             </div>
-            <div class="has-been-seen{% if discover.id in userMovies %} yes{% endif %}" id="{{ id }}"><i class="bi bi-check-circle-fill"></i></div>
+            <div class="has-been-seen{% if id in userMovies %} yes{% endif %}" id="{{ id }}"><i class="bi bi-check-circle-fill"></i></div>
         </div>
     {% endif %}
 </div>

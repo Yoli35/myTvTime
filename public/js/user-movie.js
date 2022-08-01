@@ -499,7 +499,31 @@ function moreVideos() {
                     aVideo.appendChild(img);
                     aVideo.appendChild(title);
                     aVideo.appendChild(date);
+                    let user = document.createElement("div");
+                    user.classList.add("user");
+                    user.setAttribute("style", "transform: scale(.5)");
+                    let rating = document.createElement("div");
+                    rating.classList.add("rating");
+                    rating.setAttribute("id", result['movie_db_id']);
+                    for (let j=1;j<=5;j++) {
+                        let star = document.createElement("div");
+                        star.classList.add("star");
+                        star.setAttribute("data-rate", j);
+                        rating.appendChild(star);
+                    }
+                    let seen = document.createElement("div");
+                    seen.classList.add("has-been-seen", "yes");
+                    seen.setAttribute("id", result['movie_db_id']);
+                    let check = document.createElement("i");
+                    check.classList.add("bi", "bi-check-circle-fill");
+                    seen.appendChild(check);
+                    user.appendChild(rating);
+                    user.appendChild(seen);
+
                     newVideo.appendChild(aVideo);
+                    newVideo.appendChild(user);
+
+                    getMovieRating(seen);
 
                     userMovieList.appendChild(newVideo);
                 }
