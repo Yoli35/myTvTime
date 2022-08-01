@@ -25,6 +25,12 @@ const txt = {
         }
     },
     'movie': {
+        'release_date': {
+            'fr': 'Date de sortie ',
+            'en': 'Release date',
+            'de': 'Erscheinungsdatum',
+            'es': 'Fecha de lanzamiento'
+        },
         'add': {
             'fr': 'Ce film a été ajouté à votre liste de films vus avec succès !',
             'en': 'This movie has been added to your list of movies successfully viewed!',
@@ -43,7 +49,88 @@ const txt = {
             'es': 'La película ha sido eliminada de su lista de películas vistas y de su posible calificación (★★★☆☆).',
             'de': 'Der Film wurde aus Ihrer Liste der gesehenen Filme entfernt, ebenso wie seine eventuelle Bewertung (★★★☆☆).',
         }
-    }
+    },
+    'ui': {
+        'aria_select_group': {
+            'fr': 'Boutons de sélection',
+            'en': 'Selection buttons',
+            'de': 'Auswahlknöpfe',
+            'es': 'Botones de selección'
+        },
+        'aria_select_all': {
+            'fr': 'Tout sélectionner',
+            'en': 'Select all',
+            'de': 'Alle auswählen',
+            'es': 'Seleccionar todo'
+        },
+        'aria_deselect_all': {
+            'fr': 'Tout désélectionner',
+            'en': 'Deselect all',
+            'de': 'Alles abwählen',
+            'es': 'De seleccionar todo'
+        },
+        'select_all': {
+            'fr': 'Tout sélectionner',
+            'en': 'Select all',
+            'de': 'Alle auswählen',
+            'es': 'Seleccionar todo'
+        },
+        'deselect_all': {
+            'fr': 'Tout désélectionner',
+            'en': 'Deselect all',
+            'de': 'Alles abwählen',
+            'es': 'De seleccionar todo'
+        },
+        'filter': {
+            'fr': 'Filtre par nom',
+            'en': 'Filter by name',
+            'de': 'Nach Namen filtern',
+            'es': 'Filtrar por nombre'
+        },
+        'movie_name': {
+            'fr': 'Titre de film',
+            'en': 'Movie title',
+            'de': 'Filmtitel',
+            'es': 'Título de la película'
+        },
+        'count': {
+            'fr': 'Cette liste contient',
+            'en': 'This list counts',
+            'de': 'Diese Liste enthält',
+            'es': 'Esta lista contiene'
+        },
+        'movies': {
+            'fr': 'films',
+            'en': 'movies',
+            'de': 'Filme',
+            'es': 'películas'
+        },
+        'movie': {
+            'fr': 'film',
+            'en': 'movie',
+            'de': 'Film',
+            'es': 'película'
+        },
+        'present': {
+            'fr': 'déjà présent dans ta vidéothèque a été retiré de la liste.',
+            'en': 'already in your video library has been removed from the list.',
+            'de': 'wurde aus der Liste entfernt, weil er in deiner Videothek vorhanden ist.',
+            'es': 'ha sido eliminada de la lista porque está presente en su videoteca'
+        },
+        'presents': {
+            'fr': 'déjà présents dans ta vidéothèque ont été retirés de la liste.',
+            'en': 'already in your video library have been removed from the list.',
+            'de': 'wurden aus der Liste entfernt, weil sie in deiner Videothek vorhanden sind.',
+            'es': 'han sido eliminadas de la lista porque están presentes en su videoteca'
+        },
+        'none': {
+            'fr': 'Aucun film à ajouter',
+            'en': 'No film to add',
+            'de': 'Keine Filme hinzufügen',
+            'es': 'No hay que añadir ninguna película'
+        },
+        'space': ' ',
+    },
 }
 
 function initMovieStuff(paths, profileUrl, locale) {
@@ -259,8 +346,8 @@ function initRating(badge) {
     const rating = user.querySelector(".rating");
     const stars = rating.querySelectorAll(".star");
     stars.forEach(star => {
-        // star.addEventListener("mouseover", hoverStars);
-        // star.addEventListener("mouseleave", setStars);
+        star.addEventListener("mouseover", hoverStars);
+        star.addEventListener("mouseleave", leaveStars);
         star.addEventListener("click", setMovieRating);
     })
     setStars(user);
@@ -273,8 +360,8 @@ function terminateRating(badge) {
     if (rating) {
         const stars = rating.querySelectorAll(".star");
         stars.forEach(star => {
-            // star.removeEventListener("mouseover", hoverStars);
-            // star.removeEventListener("mouseleave", setStars);
+            star.removeEventListener("mouseover", hoverStars);
+            star.removeEventListener("mouseleave", leaveStars);
             star.removeEventListener("click", setMovieRating);
         })
         rating.classList.remove("visible");
@@ -296,7 +383,6 @@ function setStars(user) {
     })
 }
 
-/*
 function hoverStars(e) {
     const star = e.target;
     const rating = star.parentElement;
@@ -312,7 +398,13 @@ function hoverStars(e) {
         s.classList.add("ok");
     }
 }
-*/
+
+function leaveStars(e) {
+    const star = e.target;
+    const rating = star.parentElement;
+    const user = rating.parentElement;
+    setStars(user);
+}
 
 function initNotifications() {
     const notifications = document.createElement("div");

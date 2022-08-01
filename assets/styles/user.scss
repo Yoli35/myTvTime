@@ -250,7 +250,9 @@
     overflow-y: scroll;
 
     .sample {
-        background-color: #f0f0f0;
+        //background-color: #f0f0f0;
+        background: #f6e2f6;
+        background: linear-gradient(225deg, #f6e2f6 0%, #f0f0f0 100%);
         border-radius: .5em;
         color: #545454;
         font-family: 'Courier Prime', monospace;
@@ -535,7 +537,9 @@
     .export-result {
 
         .sample {
-            background-color: #444;
+            //background-color: #444;
+            background: rgb(68,68,68);
+            background: linear-gradient(225deg, rgba(83,66,83,1) 0%, rgba(68,68,68,1) 100%);
             color: #5eead4;
 
             span.key {

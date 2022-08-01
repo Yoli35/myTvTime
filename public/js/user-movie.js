@@ -1,5 +1,3 @@
-// import * as Modal from 'bootstrap/js/dist/modal';
-
 let json, ids, preview, infos, exportFile;
 let _user_id;
 let _locale;
@@ -43,16 +41,6 @@ function initButtons(id, locale, paths, url) {
 
         let result = exportModal.querySelector('.export-result');
         let count, movies, url, file, sample, result_items;
-        let txt = {
-            'aria_select_group': {'fr': 'Boutons de sélection', 'en': 'Selection buttons', 'de': 'Auswahlknöpfe', 'es': 'Botones de selección'},
-            'aria_select_all': {'fr': 'Tout sélectionner', 'en': 'Select all', 'de': 'Alle auswählen', 'es': 'Seleccionar todo'},
-            'aria_deselect_all': {'fr': 'Tout désélectionner', 'en': 'Deselect all', 'de': 'Alles abwählen', 'es': 'De seleccionar todo'},
-            'select_all': {'fr': 'Tout sélectionner', 'en': 'Select all', 'de': 'Alle auswählen', 'es': 'Seleccionar todo'},
-            'deselect_all': {'fr': 'Tout désélectionner', 'en': 'Deselect all', 'de': 'Alles abwählen', 'es': 'De seleccionar todo'},
-            'filter': {'fr': 'Filtre par nom', 'en': 'Filter by name', 'de': 'Nach Namen filtern', 'es': 'Filtrar por nombre'},
-            'movie_name': {'fr': 'Titre de film', 'en': 'Movie title', 'de': 'Filmtitel', 'es': 'Título de la película'},
-            '': {'fr': '', 'en': '', 'de': '', 'es': ''},
-        }
 
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -78,10 +66,10 @@ function initButtons(id, locale, paths, url) {
             result.innerHTML +=
                 '<div class="selection">' +
                 '   <div class="input-group w-75">' +
-                '       <span class="input-group-text">' + txt.filter[_locale] + '</span>' +
-                '       <input type="search" id="export-filter" class="form-control" placeholder="' + txt.movie_name[_locale] + '" aria-label="' + txt.filter[_locale] + '" style="width: 15em">' +
-                '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.aria_select_all[_locale] + '">' + txt.select_all[_locale] + '</button>' +
-                '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.aria_deselect_all[_locale] + '">' + txt.deselect_all[_locale] + '</button>' +
+                '       <span class="input-group-text">' + txt.ui.filter[_locale] + '</span>' +
+                '       <input type="search" id="export-filter" class="form-control" placeholder="' + txt.ui.movie_name[_locale] + '" aria-label="' + txt.ui.filter[_locale] + '" style="width: 15em">' +
+                '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.ui.aria_select_all[_locale] + '">' + txt.ui.select_all[_locale] + '</button>' +
+                '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.ui.aria_deselect_all[_locale] + '">' + txt.ui.deselect_all[_locale] + '</button>' +
                 '   </div>' +
                 '</div>';
             // );
@@ -103,7 +91,8 @@ function initButtons(id, locale, paths, url) {
             // console.log(Modal);
             // new Modal('#exportModal').show();
             // $(exportModal).css('background-color', 'rgba(189,115,189,0.25)');
-            exportModal.setAttribute("style", "background-color: rgba(189,11,189,0.25");
+            // exportModal.setAttribute("style", "background-color: rgba(189,11,189,0.25)");
+            exportModal.setAttribute("style", "background-color: rgba(189, 141, 189, 0.25)");
             // $(exportModal).css('display', 'block');
             // $(exportModal).css('opacity', '1');
 
@@ -160,8 +149,8 @@ function initButtons(id, locale, paths, url) {
         xhr.send();
     });
 
+    // $('#export-copy').click(function () {
     exportModal.querySelector("#export-copy").addEventListener("click", function () {
-        // $('#export-copy').click(function () {
         let string = JSON.stringify(json, null, '\t');
         navigator.clipboard.writeText(json).then(function () {
             /* presse-papiers modifié avec succès */
@@ -208,7 +197,7 @@ function initButtons(id, locale, paths, url) {
         // $(appendModal).css('transition', 'background-color .45s');
         // $(appendModal).css('background-color', 'rgba(189,115,189,0.25)');
         appendModal.setAttribute("style", "transition: background-color .45s");
-        appendModal.setAttribute("style", "background-color: rgba(189,115,189,0.25)");
+        appendModal.setAttribute("style", "background-color: rgba(189, 141, 189, 0.25)");
     });
 
     // $('input[name="json"]').change(function () {
@@ -218,16 +207,6 @@ function initButtons(id, locale, paths, url) {
 
         let json, content, count = 0;
         let fr = new FileReader();
-        let txt = {
-            'count': {'fr': 'Cette liste contient', 'en': 'This list counts', 'de': 'Diese Liste enthält', 'es': 'Esta lista contiene'},
-            'movies': {'fr': 'films', 'en': 'movies', 'de': 'Filme', 'es': 'películas'},
-            'movie': {'fr': 'film', 'en': 'movie', 'de': 'Film', 'es': 'película'},
-            'present': {'fr': 'déjà présent dans ta vidéothèque a été retiré de la liste.', 'en': 'already in your video library has been removed from the list.', 'de': 'wurde aus der Liste entfernt, weil er in deiner Videothek vorhanden ist.', 'es': 'ha sido eliminada de la lista porque está presente en su videoteca'},
-            'presents': {'fr': 'déjà présents dans ta vidéothèque ont été retirés de la liste.', 'en': 'already in your video library have been removed from the list.', 'de': 'wurden aus der Liste entfernt, weil sie in deiner Videothek vorhanden sind.', 'es': 'han sido eliminadas de la lista porque están presentes en su videoteca '},
-            'none': {'fr': 'Aucun film à ajouter', 'en': 'No film to add', 'de': 'Keine Filme hinzufügen', 'es': 'No hay que añadir ninguna película'},
-            '': {'fr': '', 'en': '', 'de': '', 'es': ''},
-            'space': ' '
-        }
 
         fr.onload = function () {
             json = fr.result;
@@ -259,18 +238,18 @@ function initButtons(id, locale, paths, url) {
                 preview.setAttribute("style", "padding: .5em");
                 let delta = content['total_results'] - count;
                 // $(infos).append('<div class="info">' + txt.count[_locale] + txt.space + content['total_results'] + txt.space + txt.movies[_locale] + '.</div>');
-                infos.innerHTML += '<div class="info">' + txt.count[_locale] + txt.space + content['total_results'] + txt.space + txt.movies[_locale] + '.</div>';
+                infos.innerHTML += '<div class="info">' + txt.ui.count[_locale] + txt.ui.space + content['total_results'] + txt.ui.space + txt.ui.movies[_locale] + '.</div>';
                 if (delta) {
                     // $(infos).append('<div class="info">' + delta + txt.space + txt[(delta > 1) ? 'movies' : 'movie'][_locale] + txt.space + (delta > 1 ? txt.presents[_locale] : txt.present[_locale]) + '</div>');
-                    infos.innerHTML += '<div class="info">' + delta + txt.space + txt[(delta > 1) ? 'movies' : 'movie'][_locale] + txt.space + (delta > 1 ? txt.presents[_locale] : txt.present[_locale]) + '</div>';
+                    infos.innerHTML += '<div class="info">' + delta + txt.ui.space + txt.ui[(delta > 1) ? 'movies' : 'movie'][_locale] + txt.ui.space + (delta > 1 ? txt.ui.presents[_locale] : txt.ui.present[_locale]) + '</div>';
                 }
                 if (count) {
                     // $(infos).append(
                     infos.innerHTML +=
                         '<div class="select">' +
-                        '   <div class="btn-group btn-group-sm" role="group" aria-label="Select - Unselect">' +
-                        '       <button name="select-all" type="button" class="btn btn-primary">Select all</button>' +
-                        '       <button name="unselect-all" type="button" class="btn btn-secondary">Unselect all</button>' +
+                        '   <div class="btn-group btn-group-sm" role="group" aria-label="' + txt.ui.aria_select_group[_locale] + '">' +
+                        '       <button name="select-all" type="button" class="btn btn-primary">' + txt.ui.select_all[_locale] + '</button>' +
+                        '       <button name="unselect-all" type="button" class="btn btn-secondary">' + txt.ui.deselect_all[_locale] + '</button>' +
                         '   </div>' +
                         '</div>';
                     // );
@@ -308,7 +287,7 @@ function initButtons(id, locale, paths, url) {
                 } else {
                     // $(infos).append(
                     infos.innerHTML +=
-                        '<div class="none">' + txt.none[_locale] + '</div>';
+                        '<div class="none">' + txt.ui.none[_locale] + '</div>';
                     // );
                 }
             }
@@ -357,13 +336,11 @@ function initButtons(id, locale, paths, url) {
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 pv++;
-                // $(value).css('width', (100 * (pv / n)).toFixed() + '%');
                 value.setAttribute("style", "width: " + (100 * (pv / n)).toFixed() + "%");
 
                 if (pv === n) {
                     setTimeout(() => {
                         // Ajout terminé.
-                        // $(progress).css('display', 'none');
                         progress.removeAttribute("style");
                         window.location.reload();
                     }, 1000);
@@ -458,10 +435,6 @@ function updateSample(items) {
 }
 
 function moreVideos() {
-    const txt = {
-        'release_date': {'fr': 'Date de sortie ', 'en': 'Release date', 'de': 'Erscheinungsdatum', 'es': 'Fecha de lanzamiento'},
-        '': {'fr': '', 'en': '', 'de': '', 'es': ''},
-    }
     const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
 
     if (!loading_more_videos) {
@@ -495,7 +468,7 @@ function moreVideos() {
                     date.setAttribute("class", "date");
                     let dateT = result['release_date'] + 'T00:00:00';
                     let released = new Date(dateT);
-                    date.appendChild(document.createTextNode(txt.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
+                    date.appendChild(document.createTextNode(txt.movie.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
                     aVideo.appendChild(img);
                     aVideo.appendChild(title);
                     aVideo.appendChild(date);
@@ -508,7 +481,7 @@ function moreVideos() {
                     for (let j=1;j<=5;j++) {
                         let star = document.createElement("div");
                         star.classList.add("star");
-                        star.setAttribute("data-rate", j);
+                        star.setAttribute("data-rate", j.toString());
                         rating.appendChild(star);
                     }
                     let seen = document.createElement("div");
