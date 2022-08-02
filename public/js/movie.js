@@ -154,7 +154,7 @@ function initMovieStuff(paths, profileUrl, locale) {
         movie_header.classList.add("start");
         setTimeout(() => {
             movie_header.classList.add("visible");
-        }, 100);
+        }, 10);
     });
 
     has_been_seen.forEach(badge => {

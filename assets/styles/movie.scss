@@ -55,6 +55,11 @@
     position: relative;
     transform: translate(0, -100%);
 
+    &.no-header {
+        height: 5em;
+        width: 100%;
+    }
+
     &.start {
         transition: opacity .5s, transform .5s;
     }
