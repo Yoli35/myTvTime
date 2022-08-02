@@ -453,7 +453,7 @@ function moreVideos() {
                     let result = results[i];
                     let newVideo = document.createElement("div");
                     newVideo.setAttribute("id", result['movie_db_id']);
-                    newVideo.setAttribute("class", "home-discover");
+                    newVideo.classList.add("home-discover");
                     newVideo.setAttribute("style", "opacity: 0; transform: scale(" + Math.random() + ") rotate(" + (((Math.random() * 720).toFixed()) - 360) + "deg)");
                     // newVideo.setAttribute("data-title", result['title']);
                     let aVideo = document.createElement("a");
@@ -490,24 +490,28 @@ function moreVideos() {
                     let check = document.createElement("i");
                     check.classList.add("bi", "bi-check-circle-fill");
                     seen.appendChild(check);
+
                     user.appendChild(rating);
                     user.appendChild(seen);
 
                     newVideo.appendChild(aVideo);
                     newVideo.appendChild(user);
 
-                    getMovieRating(seen);
-
                     userMovieList.appendChild(newVideo);
+
+                    let lastAdded = userMovieList.lastElementChild;
+                    seen = lastAdded.querySelector(".yes");
+                    seen.addEventListener("click", toggleSeenStatus);
+                    getMovieRating(seen);
                 }
                 displayed_videos += count;
                 setTimeout(() => {
                     userMovieList.querySelectorAll(".home-discover[style]").forEach((item) => {
                         item.setAttribute("style", "opacity: 1.0; transform: scale(1.0) rotate(0deg");
                     })
-                }, 500)
+                }, 500);
                 setTimeout(() => {
-                    userMovieList.querySelectorAll(".home-discover[style]").forEach((item) => {
+                    userMovieList.querySelectorAll(".home-discover[style]").forEach(item => {
                         item.removeAttribute("style");
                     })
                     loading_more_videos = false;

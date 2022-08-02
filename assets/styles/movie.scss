@@ -45,6 +45,10 @@
             opacity: 1;
             transform: translate(0, 0);
         }
+
+        &.end {
+            transform: scale(0.1);
+        }
     }
 }
 

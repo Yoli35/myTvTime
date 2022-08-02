@@ -428,7 +428,10 @@ function addNotification(message, type) {
     setTimeout(() => {
         notification.classList.remove("visible");
         setTimeout(() => {
-            notifications.removeChild(notification);
-        }, 500)
+            notification.classList.add("end");
+            setTimeout(() => {
+                notifications.removeChild(notification);
+            }, 10)
+        }, 500);
     }, 5000);
 }
