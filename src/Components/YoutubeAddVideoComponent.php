@@ -12,6 +12,7 @@ use DateInterval;
 //use Google\Cloud\Translate\V3\TranslationServiceClient;
 use DateTime;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use Google\Exception;
 use Google\Service\YouTube\ChannelListResponse;
 use Google\Service\YouTube\VideoListResponse;
@@ -52,6 +53,7 @@ class YoutubeAddVideoComponent
     private int $totalRuntime = 0;
 //    private TranslationServiceClient $translationClient;
 //    private TranslatorInterface $translator;
+    private EntityManagerInterface $entityManager;
     private YoutubeVideoRepository $repoYTV;
     private YoutubeChannelRepository $repoYTC;
     private Google_Service_YouTube $service_YouTube;
@@ -60,11 +62,11 @@ class YoutubeAddVideoComponent
     /**
      * @throws Exception
      */
-    public function __construct(YoutubeVideoRepository $repoYTV, YoutubeChannelRepository $repoYTC)
+    public function __construct(YoutubeVideoRepository $repoYTV, YoutubeChannelRepository $repoYTC, EntityManagerInterface $entityManager)
     {
         $this->repoYTV = $repoYTV;
         $this->repoYTC = $repoYTC;
-
+        $this->entityManager = $entityManager;
 
         $client = new Google_Client();
         $client->setApplicationName('mytvtime');
@@ -120,29 +122,40 @@ class YoutubeAddVideoComponent
 
                 $channel = $this->repoYTC->findOneBy(['youtubeId' => $snippet['channelId']]);
 
+                $channelListResponse = $this->getChannelSnippet($snippet['channelId']);
+                $items = $channelListResponse->getItems();
+                $item = $items[0];
+                $snippet = $item['snippet'];
+                $thumbnails = (array)$snippet['thumbnails'];
+                $localised = $snippet['localized'];
+                $already_exist = true;
+
                 if ($channel == null) {
-
-                    $channelListResponse = $this->getChannelSnippet($snippet['channelId']);
-                    $items = $channelListResponse->getItems();
-                    $item = $items[0];
-                    $snippet = $item['snippet'];
-                    $thumbnails = (array)$snippet['thumbnails'];
-                    $localised = $snippet['localized'];
-
                     $channel = new YoutubeChannel();
-                    $channel->setYoutubeId($item['id']);
-                    $channel->setTitle($snippet['title']);
-                    $channel->setDescription($snippet['description']);
-                    $channel->setCustomUrl($snippet['customUrl']);
-                    $channel->setPublishedAt(date_create_immutable($snippet['publishedAt']));
-                    if (array_key_exists('default', $thumbnails)) $channel->setThumbnailDefaultUrl($thumbnails['default']['url']);
-                    if (array_key_exists('medium', $thumbnails)) $channel->setThumbnailMediumUrl($thumbnails['medium']['url']);
-                    if (array_key_exists('high', $thumbnails)) $channel->setThumbnailHighUrl($thumbnails['high']['url']);
-                    $channel->setLocalizedDescription($localised['description']);
-                    $channel->setLocalizedTitle($localised['title']);
-                    $channel->setCountry($snippet['country']);
+                    $already_exist = false;
+                }
+                //
+                // if channel already stored in db, it might have change everything
+                // so update all infos
+                //
+                $channel->setYoutubeId($item['id']);
+                $channel->setTitle($snippet['title']);
+                $channel->setDescription($snippet['description']);
+                $channel->setCustomUrl($snippet['customUrl']);
+                $channel->setPublishedAt(date_create_immutable($snippet['publishedAt']));
+                if (array_key_exists('default', $thumbnails)) $channel->setThumbnailDefaultUrl($thumbnails['default']['url']);
+                if (array_key_exists('medium', $thumbnails)) $channel->setThumbnailMediumUrl($thumbnails['medium']['url']);
+                if (array_key_exists('high', $thumbnails)) $channel->setThumbnailHighUrl($thumbnails['high']['url']);
+                $channel->setLocalizedDescription($localised['description']);
+                $channel->setLocalizedTitle($localised['title']);
+                $channel->setCountry($snippet['country']);
 
+                if (!$already_exist) {
                     $this->repoYTC->add($channel, true);
+                }
+                else {
+                    $this->entityManager->persist($channel);
+                    $this->entityManager->flush();
                 }
 
                 $items = $videoListResponse->getItems();
