@@ -1,0 +1,191 @@
+@import "variables";
+
+.blog {
+    @include flex-col(flex-start, center);
+    padding-top: 1em;
+
+    .header {
+        background-image: url("../images/blog-header.jpg");
+        background-position: center center;
+        background-size: cover;
+        border-radius: 1em;
+        height: 20em;
+        width: 100%;
+    }
+
+    .nothing {
+        @include flex-100();
+        margin: 4em 0;
+
+        .to-show {
+            background-color: #0d9488;
+            border-radius: 1em;
+            color: #abcccc;
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 2em 4em;
+        }
+    }
+
+    display: block;
+    width: 100%;
+
+    .article {
+        @include flex-col();
+        background-color: #bcdddd;
+        border-radius: 1em;
+        margin-top: 1em;
+        overflow: hidden;
+
+        .banner {
+            background-position: center center;
+            background-size: cover;
+            border-radius: 1em 1em 0 0;
+            height: 5em;
+            width: 100%;
+
+            &.full {
+                height: 15em;
+            }
+        }
+
+        .apercu {
+            @include flex-100(center, flex-start);
+            padding: 1em;
+
+            .thumbnail {
+                height: 3em;
+                width: 3em;
+
+                img {
+                    border: 4px solid #123333;
+                    border-radius: 50%;
+                    height: 3em;
+                    object-fit: cover;
+                    width: 3em;
+                }
+            }
+
+            .presentation {
+                @include flex-col(flex-start, center);
+                flex: 1;
+                margin-left: 1em;
+
+                .title-author {
+                    @include flex-100(baseline, flex-start);
+                }
+
+                .title {
+                    color: #123333;
+                    flex: 1;
+                    font-size: 1.5em;
+                    font-weight: bold;
+                }
+
+                .author {
+                    color: #456666;
+                    font-size: 1em;
+                    margin-left: auto;
+                }
+
+                .abstract {
+                    color: #012222;
+                    font-size: .75em;
+                    font-weight: 200;
+
+                    &.full {
+                        font-size: 1em;
+                        margin-top: 2em;
+
+                        .left {
+                            border-radius: .25em;
+                            display: inline-block;
+                            float: left;
+                            height: auto;
+                            margin: 0 1em 1em 0;
+                        }
+
+                        .right {
+                            border-radius: .25em;
+                            display: inline-block;
+                            float: right;
+                            height: auto;
+                            margin: 0 0 1em 1em;
+                        }
+
+                        .center {
+                            border-radius: .25em;
+                            height: auto;
+                            width: 100%;
+                        }
+                    }
+                }
+
+                .dates {
+                    @include flex-100(center, flex-start);
+
+                    .date {
+                        color: #456666;
+                        font-size: .5em;
+                        font-weight: 200;
+                        margin-right: 1em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 767.98px) {
+}
+
+@media (min-width: 991.98px) {
+}
+
+@media (min-width: 1199.98px) {
+    .blog {
+        margin: 0 calc(50% - 32em);
+        max-width: 64em;
+    }
+}
+
+@media (min-width: 1399.98px) {
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .blog {
+        .article {
+            background-color: #012222;
+
+            .apercu {
+
+                .thumbnail {
+                    img {
+                        border: 2px solid #abcccc;
+                    }
+                }
+
+                .presentation {
+                    .title {
+                        color: #abcccc;
+                    }
+
+                    .author {
+                        color: #789999;
+                    }
+
+                    .abstract {
+                        color: #bcdddd;
+                    }
+
+                    .dates {
+                        .date {
+                            color: #789999;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

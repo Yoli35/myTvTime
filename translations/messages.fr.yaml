@@ -1,3 +1,10 @@
+# Blog
+Blog: Blog
+Nothing to show yet: Rien à afficher pour l'instant
+Created at: Créé le
+Modified at: Modifié le
+By: Par
+
 # Home Header
 Movies: Films
 Tv Shows: Émissions
@@ -295,6 +302,19 @@ Banner: Bannière
 UserMovie: UserMovie
 Title: Titre
 Movie Db Id: Movie Db Id
+article: article
+articles: articles
+Images: Images
+Youtube Videos: Vidéos Youtube
+Youtube: Youtube
+Tik Tok Videos: Vidéos Tik Tok
+Tik Tok: Tik Tok
+Is Published: Publié
+Abstract: Résumé
+Content: Contenu
+Thumbnail: Vignette
+files: fichiers
+Article Images: Images de l'article
 
 # Others
 None: Aucun

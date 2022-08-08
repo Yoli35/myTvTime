@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime::{{ 'Blog'|trans }}{% endblock %}
+{% block morecss %}
+<style>
+    body, .container {
+        background-color: #011616;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <div class="blog">
+            <div class="header"></div>
+
+            <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                    {{ include('blocks/movie/bracket.html.twig') }}
+                    <li class="breadcrumb-item active">{{ 'Blog'|trans }}</li>
+                </ol>
+            </nav>
+
+            {% if articles|length %}
+                {% for article in articles %}
+                    {{ include('/blocks/article/apercu.html.twig') }}
+                {% endfor %}
+            {% else %}
+                <div class="nothing">
+                    <div class="to-show">
+                        {{ 'Nothing to show yet'|trans }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+<div class="article">
+    {% if article.banner %}
+        <div class="banner" style="background-image: url('/images/articles/banners/{{ article.banner }}')"></div>
+    {% endif %}
+    <div class="apercu">
+        {% if article.thumbnail %}
+            <div class="thumbnail">
+                <img src="/images/articles/thumbnails/{{ article.thumbnail }}" alt="{{ article.title }}">
+            </div>
+        {% endif %}
+        <div class="presentation">
+            <div class="title-author">
+                <div><a href="{{ path('app_blog_article', {id: article.id}) }}" class="title">{{ article.title }}</a></div>
+                <div class="author">{{ 'By'|trans }} {{ article.user.username?:article.user.email }}</div>
+            </div>
+            <div class="abstract">{{ article.abstract }}</div>
+            <div class="dates">
+                <div class="date">{{ 'Created at'|trans }} : {{ article.createdAt|format_datetime() }}</div>
+                <div class="date">{{ 'Modified at'|trans }} : {{ article.modifiedAt|format_datetime() }}</div>
+                <div class="date">{{ 'Published at'|trans }} : {{ article.publishedAt|format_datetime() }}</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -13,6 +13,7 @@ import './styles/tv.scss';
 import './styles/user.scss';
 import './styles/youtube.scss';
 import './styles/tiktok.scss';
+import './styles/article.scss';
 
 // import './js/movie';
 

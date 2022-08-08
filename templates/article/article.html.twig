@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime::{{ 'Blog'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                {{ include('blocks/movie/bracket.html.twig') }}
+                <li class="breadcrumb-item"><a href="{{ path('app_blog') }}">{{ 'Blog'|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="{{ article.title }}">{{ article.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="blog">
+            <div class="article">
+                {% if article.banner %}
+                    <div class="banner full" style="background-image: url('/images/articles/banners/{{ article.banner }}')"></div>
+                {% endif %}
+                <div class="apercu">
+{#                    {% if article.thumbnail %}#}
+{#                        <div class="thumbnail">#}
+{#                            <img src="/images/articles/thumbnails/{{ article.thumbnail }}">#}
+{#                        </div>#}
+{#                    {% endif %}#}
+                    <div class="presentation">
+                        <div class="title-author">
+                            <div class="title">{{ article.title }}</div>
+                            <div class="author">{{ 'By'|trans }} {{ article.user.username?:article.user.email }}</div>
+                        </div>
+                        <div class="dates">
+                            <div class="date">{{ 'Created at'|trans }} : {{ article.createdAt|format_datetime() }}</div>
+                            <div class="date">{{ 'Modified at'|trans }} : {{ article.modifiedAt|format_datetime() }}</div>
+                            <div class="date">{{ 'Published at'|trans }} : {{ article.publishedAt|format_datetime() }}</div>
+                        </div>
+                        <div class="abstract full">{{ content|raw|nl2br }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}
