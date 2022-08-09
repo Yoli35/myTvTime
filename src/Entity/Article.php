@@ -34,7 +34,7 @@ class Article
     private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $modifiedAt = null;
+    private ?DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $publishedAt = null;
@@ -121,14 +121,14 @@ class Article
         return $this;
     }
 
-    public function getModifiedAt(): ?DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
-        return $this->modifiedAt;
+        return $this->updatedAt;
     }
 
-    public function setModifiedAt(DateTimeImmutable $modifiedAt): self
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): self
     {
-        $this->modifiedAt = $modifiedAt;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

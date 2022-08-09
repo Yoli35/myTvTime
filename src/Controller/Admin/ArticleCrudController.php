@@ -68,7 +68,7 @@ class ArticleCrudController extends AbstractCrudController
 
         $article->setUser($this->getUser());
         $article->setCreatedAt($datetime);
-        $article->setModifiedAt($datetime);
+        $article->setUpdatedAt($datetime);
         $article->setPublishedAt($datetime);
 
         return $article;
@@ -76,6 +76,9 @@ class ArticleCrudController extends AbstractCrudController
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        /** @var Article $entityInstance */
+        $entityInstance->setUpdatedAt(new DateTimeImmutable());
+
         $entityManager->persist($entityInstance);
         $entityManager->flush();
     }
