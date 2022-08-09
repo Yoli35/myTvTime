@@ -52,27 +52,26 @@ class DashboardController extends AbstractDashboardController
         $context = $this->adminContextProvider->getContext();
         $locale = $context->getRequest()->getLocale();
 
-
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Dashboard', 'fa-light fa-toolbox');
         yield MenuItem::section('Users');
         yield MenuItem::linkToCrud('Users', 'fa fa-user', User::class);
         yield MenuItem::section('Blog');
-        yield MenuItem::linkToCrud('articles', 'fa fa-movie', Article::class);
+        yield MenuItem::linkToCrud('articles', 'fa-solid fa-newspaper', Article::class);
         yield MenuItem::linkToCrud('Images', 'fa fa-image', ArticleImage::class);
         yield MenuItem::section('Movies');
-        yield MenuItem::linkToCrud('Movies', 'fa fa-movie', UserMovie::class);
+        yield MenuItem::linkToCrud('Movies', 'fa-solid fa-film', UserMovie::class);
         yield MenuItem::section('Youtube Videos');
-        yield MenuItem::linkToCrud('Youtube', 'fa fa-youtube', YoutubeVideo::class);
+        yield MenuItem::linkToCrud('Youtube', 'fa-brands fa-youtube', YoutubeVideo::class);
         yield MenuItem::section('Tik Tok Videos');
-        yield MenuItem::linkToCrud('Tik Tok', 'fa fa-movie', TikTokVideo::class);
+        yield MenuItem::linkToCrud('Tik Tok', 'fa-brands fa-tiktok', TikTokVideo::class);
         yield MenuItem::section('Entities');
         yield MenuItem::subMenu('Settings', 'fa fa-sliders')->setSubItems([
             MenuItem::linkToCrud('Image Configuration', 'fa fa-image', ImageConfig::class),
             MenuItem::linkToCrud('Genres', 'fa fa-file-text', Genre::class),
         ]);
         yield MenuItem::section('Other');
-        yield MenuItem::linkToUrl('Homepage', 'fa fa-rocket', '/');
-        yield MenuItem::linkToUrl('Blog', 'fa fa-rocket', '/'.$locale.'/blog');
-        yield MenuItem::linkToLogout('Logout', 'fa fa-rocket');
+        yield MenuItem::linkToUrl('Homepage', 'fa-solid fa-house', '/');
+        yield MenuItem::linkToUrl('Blog', 'fa-solid fa-blog', '/'.$locale.'/blog');
+        yield MenuItem::linkToLogout('Logout', 'fa-solid fa-arrow-right-from-bracket');
     }
 }
