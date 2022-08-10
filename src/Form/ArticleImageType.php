@@ -1,11 +1,13 @@
 <?php
 
+
 namespace App\Form;
 
 use App\Entity\ArticleImage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class ArticleImageType extends AbstractType
 {
@@ -13,8 +15,14 @@ class ArticleImageType extends AbstractType
     {
         $builder
             ->add('path')
-            ->add('article')
-        ;
+            ->add('article', null, [
+                'required' => true,
+            ])
+            ->add('drop', DropzoneType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['data-controller' => 'mydropzone'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

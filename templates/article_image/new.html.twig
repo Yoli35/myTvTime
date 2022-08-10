@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'New ArticleImage'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <div class="blog">
+            <div class="header"></div>
+
+            <h1>{{ 'Create new ArticleImage'|trans }}</h1>
+
+            {{ include('article_image/_form.html.twig', {'button_label': 'Save'|trans, 'icon': 'fa-download'|raw}) }}
+
+            <div class="back-delete">
+                <button class="btn btn-secondary">
+                    <a href="{{ path('app_article_image_index') }}">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        {{ 'back to list'|trans }}
+                    </a>
+                </button>
+            </div>
+        </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
+
+    </div>
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+
+            const drop = document.querySelector('#article_image_drop');
+            const path = document.querySelector('#article_image_path');
+
+            drop.addEventListener('change', () => {
+                path.value = drop.files[0].name;
+            })
+        })
+    </script>
+{% endblock %}

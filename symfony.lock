@@ -568,6 +568,9 @@
     "symfony/uid": {
         "version": "v6.0.3"
     },
+    "symfony/ux-dropzone": {
+        "version": "v2.3.0"
+    },
     "symfony/ux-live-component": {
         "version": "v2.1.1"
     },

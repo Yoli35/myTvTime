@@ -16,6 +16,7 @@ import './styles/tiktok.scss';
 import './styles/article.scss';
 
 // import './js/movie';
+import './js/mydropzone_controller'
 
 import 'bootstrap';
 

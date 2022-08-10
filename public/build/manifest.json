@@ -5,7 +5,7 @@
   "build/notyf.js": "/build/notyf.js",
   "build/runtime.js": "/build/runtime.js",
   "build/vendors-node_modules_core-js_internals_array-iteration_js-node_modules_core-js_internals_dom--711a0d.js": "/build/vendors-node_modules_core-js_internals_array-iteration_js-node_modules_core-js_internals_dom--711a0d.js",
-  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-live-compo-20aa85.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-live-compo-20aa85.js",
+  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-9c8b4d.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-9c8b4d.js",
   "build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_web_do-e225f3.js": "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_web_do-e225f3.js",
   "build/images/header.005.png": "/build/images/header.005.b641c1e5.png",
   "build/images/header.000.png": "/build/images/header.000.a0743e7b.png",
@@ -27,5 +27,9 @@
   "build/images/imdb.png": "/build/images/imdb.9a7477bf.png",
   "build/images/arrow-up-circle-outline.png": "/build/images/arrow-up-circle-outline.137a27d1.png",
   "build/images/star-outline.png": "/build/images/star-outline.3e7dbff2.png",
-  "build/images/star.png": "/build/images/star.16ef0d59.png"
+  "build/images/star.png": "/build/images/star.16ef0d59.png",
+  "build/fonts/fa-solid-900.ttf": "/build/fonts/fa-solid-900.422cfe28.ttf",
+  "build/fonts/fa-solid-900.woff2": "/build/fonts/fa-solid-900.64d495f5.woff2",
+  "build/fonts/fa-brands-400.ttf": "/build/fonts/fa-brands-400.aff1938a.ttf",
+  "build/fonts/fa-brands-400.woff2": "/build/fonts/fa-brands-400.a914b121.woff2"
 }

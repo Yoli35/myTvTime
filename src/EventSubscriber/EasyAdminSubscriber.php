@@ -28,6 +28,5 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         }
 
         $images = $entity->getArticleImages();
-        dump($images);
     }
 }

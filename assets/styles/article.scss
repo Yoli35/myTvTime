@@ -1,4 +1,7 @@
 @import "variables";
+@import "../fontawesome/scss/fontawesome.scss";
+@import "../fontawesome/scss/solid.scss";
+@import "../fontawesome/scss/brands.scss";
 
 .blog {
     @include flex-col(flex-start, center);
@@ -135,6 +138,53 @@
             }
         }
     }
+
+    .table {
+        border-bottom: unset;
+
+        img {
+            border: 2px solid #bcdddd;
+            border-radius: .25em;
+            height: 3em;
+            overflow: hidden;
+            width: auto;
+        }
+    }
+
+    .form {
+        margin: 2em 0;
+        width: 100%;
+
+        .dropzone-container {
+            border-radius: 1em;
+        }
+
+        .dropzone-preview-image {
+            border: 2px solid #bcdddd;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .save {
+            @include flex-100(center, flex-end);
+        }
+    }
+
+    .back-delete {
+        @include flex-100(center, flex-end)
+    }
+
+    .preview {
+        border-radius: 1em;
+        overflow: hidden;
+        width: 100%;
+
+        img {
+            display: block;
+            object-fit: cover;
+            width: 100%;
+        }
+    }
 }
 
 @media (min-width: 767.98px) {
@@ -147,6 +197,21 @@
     .blog {
         margin: 0 calc(50% - 32em);
         max-width: 64em;
+
+        .form {
+            margin: 2em 16em;
+            max-width: 32em;
+        }
+
+        .preview {
+            margin: 2em 16em;
+            max-width: 32em;
+        }
+
+        .back-delete {
+            margin: 2em 16em;
+            max-width: 32em;
+        }
     }
 }
 
@@ -187,6 +252,10 @@
                     }
                 }
             }
+        }
+
+        .table {
+            color: #bcdddd;
         }
     }
 }

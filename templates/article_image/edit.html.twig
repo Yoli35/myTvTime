@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Edit ArticleImage'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <div class="blog">
+            <div class="header"></div>
+
+            <h1>{{ 'Edit ArticleImage'|trans }}</h1>
+
+            <div class="preview">
+                <img src="/images/articles/images/{{ article_image.path }}" alt="{{ article_image.path }}">
+            </div>
+
+            {{ include('article_image/_form.html.twig', {'button_label': 'Update'|trans, 'icon': 'fa-pen-to-square'|raw}) }}
+
+            <div class="back-delete">
+                {{ include('article_image/_delete_form.html.twig') }}
+            </div>
+
+        </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}

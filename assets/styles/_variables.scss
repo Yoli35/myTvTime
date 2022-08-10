@@ -1,4 +1,5 @@
 $transition-delay: .5s;
+$fa-font-path: "../webfonts";
 
 @mixin banner($image) {
     align-items: center;

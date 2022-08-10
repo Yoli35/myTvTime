@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ArticleImage index{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        {{ include('blocks/pageHeader.html.twig') }}
+
+        <div class="blog">
+            <div class="header"></div>
+
+            <h1>{{ 'ArticleImage index'|trans }}</h1>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Path</th>
+                    <th>Article</th>
+                    <th>Image</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for article_image in article_images %}
+                    <tr>
+                        <td>{{ article_image.id }}</td>
+                        <td>{{ article_image.path }}</td>
+                        <td>{{ article_image.article.title }}</td>
+                        <td style="display: flex; justify-content: center"><img src="/images/articles/images/{{ article_image.path }}" alt=""></td>
+                        <td>
+                            <a href="{{ path('app_article_image_show', {'id': article_image.id}) }}">{{ 'show'|trans }}</a>
+                            <a href="{{ path('app_article_image_edit', {'id': article_image.id}) }}">{{ 'edit'|trans }}</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">{{ 'no records found'|trans }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{{ path('app_article_image_new') }}">{{ 'Create new'|trans }}</a>
+
+            {{ include('blocks/pageFooter.html.twig') }}
+
+        </div>
+    </div>
+{% endblock %}

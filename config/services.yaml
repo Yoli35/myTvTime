@@ -9,6 +9,7 @@ parameters:
 
     avatars_directory: '%kernel.project_dir%/public/images/users/avatars'
     banners_directory: '%kernel.project_dir%/public/images/users/banners'
+    article_images_directory: '%kernel.project_dir%/public/images/articles/images'
     movie_list_directory: '%kernel.project_dir%/public/movielist'
 
 services:
@@ -31,4 +32,4 @@ services:
 
     App\Service\FileUploader:
         arguments:
-            $targetDirectory: ['%avatars_directory%', '%banners_directory%']
+            $targetDirectory: ['%avatars_directory%', '%banners_directory%', '%article_images_directory%']
