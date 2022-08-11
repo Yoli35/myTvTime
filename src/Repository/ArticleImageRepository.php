@@ -16,9 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ArticleImageRepository extends ServiceEntityRepository
 {
+    private ManagerRegistry $registry;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ArticleImage::class);
+        $this->registry = $registry;
     }
 
     public function add(ArticleImage $entity, bool $flush = false): void
@@ -54,13 +57,22 @@ class ArticleImageRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?ArticleImage
-//    {
+    public function findOneById($value): ?Array
+    {
+        $sql = 'SELECT * FROM `article_image` t0 '
+            .'WHERE t0.`id` = '.$value;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        $results = $resultSet->fetchAll();
+        return $results[0];
 //        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
+//            ->andWhere('a.id = :val')
 //            ->setParameter('val', $value)
 //            ->getQuery()
 //            ->getOneOrNullResult()
 //        ;
-//    }
+    }
 }

@@ -33,9 +33,9 @@
                             <div class="author">{{ 'By'|trans }} {{ article.user.username?:article.user.email }}</div>
                         </div>
                         <div class="dates">
-                            <div class="date">{{ 'Created at'|trans }} : {{ article.createdAt|format_datetime() }}</div>
-                            <div class="date">{{ 'Updated at'|trans }} : {{ article.updatedAt|format_datetime() }}</div>
-                            <div class="date">{{ 'Published at'|trans }} : {{ article.publishedAt|format_datetime() }}</div>
+                            <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div>
+                            <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div>
+                            <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div>
                         </div>
                         <div class="abstract full">{{ content|raw|nl2br }}</div>
                     </div>

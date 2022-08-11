@@ -28,10 +28,11 @@
                         <td>{{ article_image.id }}</td>
                         <td>{{ article_image.path }}</td>
                         <td>{{ article_image.article.title }}</td>
-                        <td style="display: flex; justify-content: center"><img src="/images/articles/images/{{ article_image.path }}" alt=""></td>
+                        <td><div class="thumbnail"><img src="/images/articles/images/{{ article_image.path }}" alt=""></div></td>
                         <td>
-                            <a href="{{ path('app_article_image_show', {'id': article_image.id}) }}">{{ 'show'|trans }}</a>
-                            <a href="{{ path('app_article_image_edit', {'id': article_image.id}) }}">{{ 'edit'|trans }}</a>
+                            {#                            <a href="{{ path('app_article_image_show', {'id': article_image.id}) }}">{{ 'show'|trans }}</a> #}
+                            <i id="show-{{ article_image.id }}" class="fa-solid fa-eye" data-path="{{ article_image.path }}"></i>
+                            <a href="{{ path('app_article_image_edit', {'id': article_image.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
                         </td>
                     </tr>
                 {% else %}
@@ -42,10 +43,46 @@
                 </tbody>
             </table>
 
-            <a href="{{ path('app_article_image_new') }}">{{ 'Create new'|trans }}</a>
+            <div class="btn btn-secondary">
+                <a href="{{ path('app_article_image_new') }}">{{ 'Create new'|trans }}</a>
+            </div>
 
             {{ include('blocks/pageFooter.html.twig') }}
 
+            <div class="show">
+                <div class="close"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <script>
+                window.addEventListener("DOMContentLoaded", () => {
+                    const showButtons = document.querySelectorAll('[id^="show-"]');
+                    const showModal = document.querySelector(".show");
+                    const close = document.querySelector(".close");
+
+                    showButtons.forEach(showButton => {
+                        showButton.addEventListener("click", (e) => {
+                            const path = showButton.getAttribute("data-path");
+                            const imageShow = document.createElement("img");
+                            imageShow.setAttribute("src", "/images/articles/images/" + path);
+                            showModal.append(imageShow);
+                            showModal.classList.add("visible");
+                            setTimeout(() => {
+                                imageShow.classList.add("visible");
+                            }, 10);
+                        })
+                    })
+
+                    close.addEventListener("click", () => {
+                        const imageShow = showModal.lastElementChild;
+                        setTimeout(() => {
+                            imageShow.classList.remove(("visible"));
+                        }, 10);
+                        setTimeout(() => {
+                            imageShow.remove();
+                            showModal.classList.remove("visible");
+                        }, 400);
+                    })
+                })
+            </script>
         </div>
     </div>
 {% endblock %}

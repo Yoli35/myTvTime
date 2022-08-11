@@ -142,6 +142,11 @@
     .table {
         border-bottom: unset;
 
+        .thumbnail {
+            @include flex-100();
+            height: 100%;
+        }
+
         img {
             border: 2px solid #bcdddd;
             border-radius: .25em;
@@ -183,6 +188,55 @@
             display: block;
             object-fit: cover;
             width: 100%;
+        }
+    }
+
+    i[id^=show-] {
+        cursor: pointer;
+    }
+
+    .show {
+        @include flex-100(center, center);
+        background-color: #00000000;
+        display: none;
+        inset: 0;
+        opacity: 0;
+        position: absolute;
+        transition: background-color .5s, opacity .5s;
+
+        &.visible {
+            background-color: #bcdddd7f;
+            display: flex;
+            opacity: 1;
+        }
+
+        .close {
+            align-items: center;
+            background-color: #bcdddd;
+            border-radius: 50%;
+            color: #123333;
+            cursor: pointer;
+            display: flex;
+            height: 1.5em;
+            justify-content: center;
+            position: absolute;
+            right: 1em;
+            top: 1em;
+            width: 1.5em;
+        }
+
+        img {
+            border: .5em solid #bcdddd;
+            border-radius: 1em;
+            max-height: 80%;
+            max-width: 80%;
+            object-fit: cover;
+            transform: translateY(-140%);
+            transition: transform .5s;
+
+            &.visible {
+                transform: translateY(0);
+            }
         }
     }
 }
@@ -256,6 +310,12 @@
 
         .table {
             color: #bcdddd;
+        }
+
+        .show {
+            &.visible {
+                background-color: #1233337f;
+            }
         }
     }
 }

@@ -47,21 +47,21 @@ class ArticleImageController extends AbstractController
         ]);
     }
 
-    #[Route('/article/images/{id}', name: 'app_article_image_show', methods: ['GET'])]
-    public function show(ArticleImage $articleImage): Response
-    {
-        return $this->render('article_image/show.html.twig', [
-            'article_image' => $articleImage,
-        ]);
-    }
-
-    #[Route('/article/images/{id}/edit', name: 'app_article_image_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, ArticleImage $articleImage, ArticleImageRepository $articleImageRepository): Response
+    #[Route('/article/images/edit/{id}', name: 'app_article_image_edit', methods: ['GET', 'POST'])]
+    public function edit($id, Request $request, ArticleImage $articleImage, ArticleImageRepository $articleImageRepository): Response
     {
         $form = $this->createForm(ArticleImageType::class, $articleImage);
         $form->handleRequest($request);
 
+        $absolutePath = $this->getParameter('article_images_directory');
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $prevEntityState = $articleImageRepository->findOneById($id);
+            if (strcmp($prevEntityState['path'], $articleImage->getPath())) {
+                rename($absolutePath . '/' . $prevEntityState['path'], $absolutePath . '/' . $articleImage->getPath());
+            }
+
             $articleImageRepository->add($articleImage, true);
 
             return $this->redirectToRoute('app_article_image_index', [], Response::HTTP_SEE_OTHER);
@@ -77,6 +77,10 @@ class ArticleImageController extends AbstractController
     public function delete(Request $request, ArticleImage $articleImage, ArticleImageRepository $articleImageRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $articleImage->getId(), $request->request->get('_token'))) {
+
+            $absolutePath = $this->getParameter('article_images_directory');
+            unlink($absolutePath . '/' . $articleImage->getPath());
+
             $articleImageRepository->remove($articleImage, true);
         }
 
