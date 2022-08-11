@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\YoutubeVideoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: YoutubeVideoRepository::class)]
@@ -72,6 +74,14 @@ class YoutubeVideo
 
     #[ORM\Column]
     private ?\DateTimeImmutable $addedAt = null;
+
+    #[ORM\ManyToMany(targetEntity: YoutubeVideoTag::class, mappedBy: 'ytVideos')]
+    private Collection $tags;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -314,6 +324,33 @@ class YoutubeVideo
     public function setAddedAt(\DateTimeImmutable $addedAt): self
     {
         $this->addedAt = $addedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, YoutubeVideoTag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(YoutubeVideoTag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addYtVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(YoutubeVideoTag $tag): self
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeYtVideo($this);
+        }
 
         return $this;
     }
