@@ -9,7 +9,7 @@
 {% endif %}
 
 {% block body %}
-{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -24,32 +24,27 @@
         </nav>
 
         <div class="yt-video-page">
-            <div class="row">
-                <div class="col-md-10 offset-md-1 col-sm-12 offset-sm-0">
-                    <div class="video">
-                        <iframe src="https://www.youtube.com/embed/{{ video.link }}" title="{{ video.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                </div>
+            <div class="video">
+                <iframe src="https://www.youtube.com/embed/{{ video.link }}" title="{{ video.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-            <div class="row">
-                <div class="col-md-10 offset-md-1 col-sm-12 offset-sm-0">
-                    <div class="details">
-                        <div class="title">{{ video.title }}</div>
-                        <div class="date">{{ 'Published at'|trans }} : {{ video.publishedAt|format_date('full')|capitalize }}</div>
-                        <div class="description">{{ description|raw }}</div>
-                        <div class="channel">
-                            <div class="thumbnail">
-                                <a href="https://www.youtube.com/{{ url }}" target="_blank">
-                                    {% if video.channel.thumbnailDefaultUrl %}
-                                        <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
-                                    {% else %}
-                                        {{ video.channel.title|first }}
-                                    {% endif %}
-                                </a>
-                            </div>
-                            <div class="title">{{ video.channel.title }}</div>
-                        </div>
+            <div class="details">
+                <div class="title-tags">
+                    <div class="title">{{ video.title }}</div>
+                    {{ component('youtube_video_tags', {class: 'tags', 'id': user.id, 'video': video.id}) }}
+                </div>
+                <div class="date">{{ 'Published at'|trans }} : {{ video.publishedAt|format_date('full')|capitalize }}</div>
+                <div class="description">{{ description|raw }}</div>
+                <div class="channel">
+                    <div class="thumbnail">
+                        <a href="https://www.youtube.com/{{ url }}" target="_blank">
+                            {% if video.channel.thumbnailDefaultUrl %}
+                                <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
+                            {% else %}
+                                {{ video.channel.title|first }}
+                            {% endif %}
+                        </a>
                     </div>
+                    <div class="title">{{ video.channel.title }}</div>
                 </div>
             </div>
         </div>

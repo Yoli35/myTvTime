@@ -1,0 +1,29 @@
+<div {{ attributes }}>
+    <div class="add-tag">
+        <form data-model="*">
+            <label for="new-tag">
+                <input id="new-tag" type="search" name="tag_query" value="{{ tag_query }}" autofocus>
+            </label>
+            {% if this.results|length %}
+                <div class="results">
+                    {% for item in this.results %}
+                        <div class="item" onclick="copyValue(this)">{{ item }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="add"><i class="fa-solid fa-circle-plus"></i></div>
+        </form>
+    </div>
+    {% for tag in this.videoTags %}
+        <div class="tag">{{ tag }}
+            <div class="close" data-id="{{ tag.id }}"><i class="fa-solid fa-circle-xmark"></i></div>
+        </div>
+    {% endfor %}
+</div>
+<script>
+
+    function copyValue(item) {
+        const input = document.querySelector("#new-tag");
+        input.value = item.innerText;
+    }
+</script>

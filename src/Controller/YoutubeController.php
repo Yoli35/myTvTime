@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\YoutubeVideo;
+use App\Form\YoutubeVideoType;
 use App\Repository\YoutubeVideoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +39,7 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function video($id, YoutubeVideoRepository $repository): Response
+    public function video(Request $request, $id, YoutubeVideoRepository $repository, YoutubeVideo $youtubeVideo): Response
     {
         $videoId = $id;
         $video = $repository->find($videoId);
@@ -45,6 +47,18 @@ class YoutubeController extends AbstractController
         $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i', '$1<a href="$2" target="_blank">$2</a>', $description);
         $description = preg_replace('#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#','<a href="mailto:$1">$1</a>', $description);
 
+//        $tags = $youtubeVideo->getTags();
+//        foreach ($tags as $tag) {
+//            dump($tag);
+//        }
+//        dump($tags);
+//        $form = $this->createForm(YoutubeVideoType::class, $youtubeVideo);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+////            $repository->add($video, true);
+//            dump($video);
+//        }
 
         return $this->render('youtube/video.html.twig', [
                 'video' => $video,

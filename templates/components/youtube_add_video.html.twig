@@ -7,7 +7,7 @@
 {% set preview_url = this.preview_url %}
 {% set preview_title = this.preview_title %}
 
-{#{{ dump() }}#}
+{# {{ dump() }} #}
 <div {{ attributes }}>
     <h1 id="h1" data-total-results="{{ count }}">
         {{ count ?: 'No'|trans }} {{ count > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ beginning|format_date('short') }}
@@ -16,7 +16,10 @@
     <div class="parameters">
         <div class="header">
             {{ 'Add a Youtube video'|trans }}
-            <div><i class="bi bi-file-play-fill"></i><sup><i class="bi bi-plus"></i></sup></div>
+            <div>
+                <i class="fa-brands fa-youtube"></i>
+                <i class="fa-solid fa-circle-plus"></i>
+            </div>
         </div>
         <div class="content">
             <div class="input">
@@ -39,6 +42,7 @@
             </div>
         </div>
     </div>
+
     {% if videos|length %}
         <div id="result" class="result">
             {% for item in videos %}
@@ -59,6 +63,12 @@
                             {% else %}
                                 <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium') }}</div>
                             {% endif %}
+                            <div class="tags">
+                                {% for tag in item.tags %}
+                                    <div class="tag">{% for word in tag|split(' ') %} {{ word|capitalize }} {% endfor %}</div>
+                                {% endfor %}
+                            </div>
+
                         </div>
                         <div class="details">
                             <div class="channel">

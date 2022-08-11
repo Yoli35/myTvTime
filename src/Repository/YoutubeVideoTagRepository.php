@@ -39,20 +39,20 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('y')
-//            ->andWhere('y.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('y.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
+     */
+    public function findByLabel($query): array
+    {
+        return $this->createQueryBuilder('y')
+            ->andWhere('y.label like :val')
+            ->setParameter('val', '%'.$query.'%')
+            ->orderBy('y.label', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    public function findOneBySomeField($value): ?YoutubeVideoTag
 //    {

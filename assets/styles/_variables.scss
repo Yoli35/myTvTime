@@ -79,6 +79,19 @@ $fa-font-path: "../webfonts";
         }
     }
 }
+@mixin yt-header {
+    @include flex-100();
+    background-color: #085d55;
+    border-bottom: 1px solid #12b7a9;
+    color: #12b7a9;
+    font-size: 1em;
+    font-weight: 100;
+    padding: .25em .5em;
+
+    div {
+        margin-left: auto;
+    }
+}
 
 @mixin flex-row($items: center, $content: center) {
     align-items: $items;

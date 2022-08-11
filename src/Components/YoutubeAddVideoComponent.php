@@ -54,18 +54,18 @@ class YoutubeAddVideoComponent
 //    private TranslationServiceClient $translationClient;
 //    private TranslatorInterface $translator;
     private EntityManagerInterface $entityManager;
-    private YoutubeVideoRepository $repoYTV;
-    private YoutubeChannelRepository $repoYTC;
+    private YoutubeVideoRepository $videoRepository;
+    private YoutubeChannelRepository $channelRepository;
     private Google_Service_YouTube $service_YouTube;
 
 
     /**
      * @throws Exception
      */
-    public function __construct(YoutubeVideoRepository $repoYTV, YoutubeChannelRepository $repoYTC, EntityManagerInterface $entityManager)
+    public function __construct(YoutubeVideoRepository $videoRepository, YoutubeChannelRepository $channelRepository, EntityManagerInterface $entityManager)
     {
-        $this->repoYTV = $repoYTV;
-        $this->repoYTC = $repoYTC;
+        $this->videoRepository = $videoRepository;
+        $this->channelRepository = $channelRepository;
         $this->entityManager = $entityManager;
 
         $client = new Google_Client();
@@ -110,7 +110,7 @@ class YoutubeAddVideoComponent
 
         if (strlen($thisLink) == 11) {
 
-            $link = $this->repoYTV->findBy(['link' => $thisLink, 'userId' => $this->user_id]);
+            $link = $this->videoRepository->findBy(['link' => $thisLink, 'userId' => $this->user_id]);
 
             // Si le lien n'a pas déjà été ajouté
             if ($link == null) {
@@ -120,7 +120,7 @@ class YoutubeAddVideoComponent
                 $item = $items[0];
                 $snippet = $item['snippet'];
 
-                $channel = $this->repoYTC->findOneBy(['youtubeId' => $snippet['channelId']]);
+                $channel = $this->channelRepository->findOneBy(['youtubeId' => $snippet['channelId']]);
 
                 $channelListResponse = $this->getChannelSnippet($snippet['channelId']);
                 $items = $channelListResponse->getItems();
@@ -150,13 +150,7 @@ class YoutubeAddVideoComponent
                 $channel->setLocalizedTitle($localised['title']);
                 $channel->setCountry($snippet['country']);
 
-                if (!$already_exist) {
-                    $this->repoYTC->add($channel, true);
-                }
-                else {
-                    $this->entityManager->persist($channel);
-                    $this->entityManager->flush();
-                }
+                $this->channelRepository->add($channel, true);
 
                 $items = $videoListResponse->getItems();
                 $item = $items[0];
@@ -188,7 +182,7 @@ class YoutubeAddVideoComponent
                 $addedAt = new DateTimeImmutable();
                 $newVideo->setAddedAt($addedAt->setTimezone((new DateTime())->getTimezone()));
 
-                $this->repoYTV->add($newVideo, true);
+                $this->videoRepository->add($newVideo, true);
 
                 $this->videos = $this->getVideos();
                 $this->videoCount = $this->getVideosCount();
@@ -201,19 +195,19 @@ class YoutubeAddVideoComponent
 
     public function getVideosCount(): int
     {
-        $count = $this->repoYTV->countUserYTVideos($this->user_id);
+        $count = $this->videoRepository->countUserYTVideos($this->user_id);
         return $count[0]['count'];
     }
 
     public function getVideos(): array
     {
-        return $this->repoYTV->findAllByDate($this->user_id); // Au max les 20 premières
+        return $this->videoRepository->findAllByDate($this->user_id); // Au max les 20 premières
     }
 
     public function getTotalRuntime(): int
     {
         /** @var YoutubeVideo[] $items */
-        $items = $this->repoYTV->getUserYTVideosRuntime($this->user_id);
+        $items = $this->videoRepository->getUserYTVideosRuntime($this->user_id);
         $total = 0;
         foreach ($items as $item) {
             $total += $item['content_duration'];
@@ -225,7 +219,7 @@ class YoutubeAddVideoComponent
     public function getFirstView(): ?DateTimeImmutable
     {
         if (count($this->videos)) {
-            $firstAddedVideo = $this->repoYTV->firstAddedYTVideo($this->user_id);
+            $firstAddedVideo = $this->videoRepository->firstAddedYTVideo($this->user_id);
             $last = $firstAddedVideo->getAddedAt();
         } else {
             $last = new DateTimeImmutable("now");
