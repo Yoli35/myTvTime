@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\YoutubeVideo;
+use App\Entity\YoutubeVideoTag;
 use App\Form\YoutubeVideoType;
 use App\Repository\YoutubeVideoRepository;
+use App\Repository\YoutubeVideoTagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +33,7 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/youtube/more', name: 'app_youtube_more')]
-    public function userMoviesMore(Request $request, YoutubeVideoRepository $youtubeVideoRepository): Response
+    public function moreVideos(Request $request, YoutubeVideoRepository $youtubeVideoRepository): Response
     {
         return $this->json([
             'results' => $youtubeVideoRepository->findAllByDate($request->query->get('id'), $request->query->get('offset')),
@@ -39,43 +41,91 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function video(Request $request, $id, YoutubeVideoRepository $repository, YoutubeVideo $youtubeVideo): Response
+    public function video(YoutubeVideoTagRepository $repository, YoutubeVideo $youtubeVideo): Response
     {
-        $videoId = $id;
-        $video = $repository->find($videoId);
-        $description = nl2br($video->getDescription());
+        $tags = $repository->findAll();
+        $description = nl2br($youtubeVideo->getDescription());
         $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i', '$1<a href="$2" target="_blank">$2</a>', $description);
         $description = preg_replace('#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#','<a href="mailto:$1">$1</a>', $description);
 
-//        $tags = $youtubeVideo->getTags();
-//        foreach ($tags as $tag) {
-//            dump($tag);
-//        }
-//        dump($tags);
-//        $form = $this->createForm(YoutubeVideoType::class, $youtubeVideo);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-////            $repository->add($video, true);
-//            dump($video);
-//        }
-
         return $this->render('youtube/video.html.twig', [
-                'video' => $video,
+                'video' => $youtubeVideo,
                 'description' => $description,
+                'other_tags' => array_diff($tags, $youtubeVideo->getTags()->toArray()),
             ]
         );
+    }
+
+    #[Route('/{_locale}/youtube/video/add/tag/{id}/{tag}', name: 'app_youtube_video_add_tag', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function addTag($tag, YoutubeVideo $youtubeVideo, YoutubeVideoTagRepository $tagRepository, YoutubeVideoRepository $videoRepository): Response
+    {
+        $existingTags = $tagRepository->findAll();
+        $newTagId = -1;
+        $fromList = false; // Was the tag in the list <datalist>
+
+        $videoTags = $youtubeVideo->getTags()->toArray();
+        if (!in_array($tag, $videoTags)) {
+
+            $newTag = $tagRepository->findOneBy(['label' => $tag]);
+
+            if (!$newTag) {
+                $newTag = new YoutubeVideoTag();
+                $newTag->setLabel($tag);
+                $tagRepository->add($newTag, true);
+                $newTag = $tagRepository->findOneBy(['label' => $tag]);
+            }
+            else {
+                $fromList = true;
+            }
+            $youtubeVideo->addTag($newTag);
+            $videoRepository->add($youtubeVideo, true);
+            $newTagId = $newTag->getId();
+        }
+
+        $others_tags = [];
+        $diff = array_diff($existingTags, $youtubeVideo->getTags()->toArray());
+        foreach ($diff as $t) {
+            $others_tags[] = $t->getLabel();
+        }
+
+        return $this->json([
+            "new_tag" => $tag,
+            "new_tag_id" => $newTagId,
+            "other_tags" => $others_tags,
+            "rebuild_list" => $fromList,
+        ]);
+    }
+
+    #[Route('/{_locale}/youtube/video/remove/tag/{id}/{tag}', name: 'app_youtube_video_remove_tag', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function removeTag($id, $tag, YoutubeVideo $youtubeVideo, YoutubeVideoRepository $videoRepository, YoutubeVideoTagRepository $tagRepository): Response
+    {
+        dump($youtubeVideo);
+
+        $videoTag = $tagRepository->find($tag);
+        $youtubeVideo->removeTag($videoTag);
+        $videoRepository->add($youtubeVideo, true);
+//        $tagRepository->add($videoTag, true);
+
+        $videoTags = [];
+        $tags = $youtubeVideo->getTags()->toArray();
+        foreach ($tags as $t) {
+            $videoTags[] = $t->getLabel();
+        }
+
+        return $this->json([
+            'tags' => $videoTags,
+        ]);
     }
 
     private function urlsToLinks($text): array|string|null
     {
         return preg_replace(
             array(
-            '/(?(?=<a[^>]*>.+<\/a>) (?:<a[^>]*>.+<\/a>) | ([^="\']?)((?:https?|ftp|bf2|):\/\/[^<> \n\r]+) )/iex',
+            '/(?(?=<a[^>]*>.+<\/a>) (?:<a[^>]*>.+<\/a>) | ([^="\']?)((?:https?|ftp|bf2|):\/\/[^<> \n\r]+) )/ix',
             '/<a([^>]*)target="?[^"\']+"?/i',
             '/<a([^>]+)>/i',
-            '/(^|\s)(www.[^<> \n\r]+)/iex',
-            '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+) (\\.[A-Za-z0-9-]+)*)/iex'
+            '/(^|\s)(www.[^<> \n\r]+)/ix',
+            '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+) (\\.[A-Za-z0-9-]+)*)/ix'
             ),
             array(
                 "stripslashes((strlen('\\2')>0?'\\1<a href=\"\\2\">\\2</a>\\3':'\\0'))",

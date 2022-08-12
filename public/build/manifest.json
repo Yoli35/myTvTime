@@ -16,9 +16,13 @@
   "build/images/yt-header1.png": "/build/images/yt-header1.59e36dde.png",
   "build/images/tiktok-header6.jpg": "/build/images/tiktok-header6.3dcdca83.jpg",
   "build/images/blog-header.jpg": "/build/images/blog-header.2116da3a.jpg",
+  "build/fonts/fa-solid-900.ttf": "/build/fonts/fa-solid-900.422cfe28.ttf",
   "build/images/tiktok-link.png": "/build/images/tiktok-link.e005f345.png",
+  "build/fonts/fa-brands-400.ttf": "/build/fonts/fa-brands-400.aff1938a.ttf",
+  "build/fonts/fa-solid-900.woff2": "/build/fonts/fa-solid-900.64d495f5.woff2",
   "build/images/tiktok-header3.jpg": "/build/images/tiktok-header3.31b2a098.jpg",
   "build/images/tiktok-header5.jpg": "/build/images/tiktok-header5.4662e987.jpg",
+  "build/fonts/fa-brands-400.woff2": "/build/fonts/fa-brands-400.a914b121.woff2",
   "build/images/tiktok-header4.jpg": "/build/images/tiktok-header4.8573f3f0.jpg",
   "build/images/tiktok-header1.jpg": "/build/images/tiktok-header1.087005de.jpg",
   "build/images/tiktok-header2.jpg": "/build/images/tiktok-header2.5d6c4fc1.jpg",
@@ -27,9 +31,5 @@
   "build/images/imdb.png": "/build/images/imdb.9a7477bf.png",
   "build/images/arrow-up-circle-outline.png": "/build/images/arrow-up-circle-outline.137a27d1.png",
   "build/images/star-outline.png": "/build/images/star-outline.3e7dbff2.png",
-  "build/images/star.png": "/build/images/star.16ef0d59.png",
-  "build/fonts/fa-solid-900.ttf": "/build/fonts/fa-solid-900.422cfe28.ttf",
-  "build/fonts/fa-solid-900.woff2": "/build/fonts/fa-solid-900.64d495f5.woff2",
-  "build/fonts/fa-brands-400.ttf": "/build/fonts/fa-brands-400.aff1938a.ttf",
-  "build/fonts/fa-brands-400.woff2": "/build/fonts/fa-brands-400.a914b121.woff2"
+  "build/images/star.png": "/build/images/star.16ef0d59.png"
 }

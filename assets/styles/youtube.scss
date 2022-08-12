@@ -309,7 +309,7 @@
                         cursor: pointer;
                         position: absolute;
                         right: .25em;
-                        top: .15em;
+                        top: .125em;
                     }
                 }
 
@@ -320,14 +320,19 @@
                     color: #abcccc;
                     font-size: 1em;
                     font-weight: 100;
-                    padding: 0 1.5em 0 .5em;
-                    margin-left: .25em;
+                    padding: 1px 1.5em 1px .5em; /* -> same height as input */
+                    margin: 2px 0 2px .25em;
                     position: relative;
+
+                    &.new {
+                        background-color: #5d5508;
+                    }
 
                     .close {
                         @include flex-row();
                         border-radius: 50%;
                         cursor: pointer;
+                        font-size: .75em;
                         position: absolute;
                         right: .15em;
                         top: .15em;

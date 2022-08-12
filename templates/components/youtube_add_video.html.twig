@@ -65,7 +65,8 @@
                             {% endif %}
                             <div class="tags">
                                 {% for tag in item.tags %}
-                                    <div class="tag">{% for word in tag|split(' ') %} {{ word|capitalize }} {% endfor %}</div>
+                                    <div class="tag">{{ tag }}</div>
+{#                                    <div class="tag">{% for word in tag|split(' ') %} {{ word|capitalize }} {% endfor %}</div>#}
                                 {% endfor %}
                             </div>
 
