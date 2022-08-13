@@ -31,6 +31,10 @@ class YoutubeAddVideoComponent
 
     #[LiveProp(writable: true)]
     public string $link = '';
+    #[LiveProp(writable: true)]
+    public bool $page = false;
+    #[LiveProp]
+    public int $justAdded = 0;
     #[LiveProp]
     public string $locale = '';
     #[LiveProp]
@@ -89,6 +93,8 @@ class YoutubeAddVideoComponent
         $this->firstView = $this->getFirstView();
         $this->time2Human = $this->getTime2human();
         list($this->preview_url, $this->preview_title) = $this->get_preview();
+//        dump($this->videos, $this->page, $this->user_id);
+
     }
 
     /**
@@ -101,6 +107,7 @@ class YoutubeAddVideoComponent
         // https://www.youtube.com/shorts/7KFxzeyse2g
         // https://youtu.be/at9h35V8rtQ
         $thisLink = $this->link;
+        $this->justAdded = 0;
 
         if (str_contains($thisLink, 'https://www.youtube.com/watch?v=') ||
             str_contains($thisLink, 'https://www.youtube.com/shorts/') ||
@@ -184,11 +191,23 @@ class YoutubeAddVideoComponent
 
                 $this->videoRepository->add($newVideo, true);
 
+                $this->justAdded = $newVideo->getId();
+//                dump($this->page, $this->justAdded);
+
                 $this->videos = $this->getVideos();
                 $this->videoCount = $this->getVideosCount();
                 $this->totalRuntime = $this->getTotalRuntime();
                 $this->time2Human = $this->getTime2human();
             }
+        }
+        $firstVideo = $this->videos[0];
+//        dump($this->videos, $firstVideo, $this->page, $this->user_id);
+        if (gettype($firstVideo)=='array') {
+
+            $this->videos = $this->getVideos();
+            $this->videoCount = $this->getVideosCount();
+            $this->totalRuntime = $this->getTotalRuntime();
+            $this->time2Human = $this->getTime2human();
         }
         return $this->videos;
     }

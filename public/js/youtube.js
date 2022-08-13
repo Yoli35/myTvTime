@@ -25,6 +25,15 @@ function initYoutube(id, locale, paths) {
         }
     });
 
+    setInterval(() => {
+        const redirect = document.querySelector(".redirect");
+        if (redirect) {
+            const video = redirect.getAttribute("data-id");
+            redirect.remove();
+            window.location.href = _yt_video_page + video;
+        }
+    }, 1000);
+
     if (moreButton) {
 
         moreButton.addEventListener('click', () => {

@@ -47,9 +47,16 @@
                 border-radius: .5em;
                 padding: .5em;
 
-                label {
-                    margin-left: 0;
+                .link {
+                    label {
+                        margin-left: 0;
+                    }
                 }
+
+                .page {
+                    @include flex-100(center, center);
+                    height: 1.5em;
+                    padding-top: .5em;                }
             }
 
             .example {
