@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\YoutubeVideoRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,67 +14,67 @@ class YoutubeVideo
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $link;
+    private ?string $link;
 
     #[ORM\Column(type: 'integer')]
-    private $userId;
+    private ?int $userId;
 
     #[ORM\Column(type: 'integer')]
-    private $categoryId;
+    private ?int $categoryId;
 
     #[ORM\Column(type: 'string', length: 8, nullable: true)]
-    private $defaultAudioLanguage;
+    private ?string $defaultAudioLanguage;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $description;
+    private ?string $description;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $publishedAt;
+    private ?DateTimeImmutable $publishedAt;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private ?string $title;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $thumbnailDefaultPath;
+    private ?string $thumbnailDefaultPath;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $thumbnailMediumPath;
+    private ?string $thumbnailMediumPath;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $thumbnailHighPath;
+    private ?string $thumbnailHighPath;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $thumbnailStandardPath;
+    private ?string $thumbnailStandardPath;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $thumbnailMaxresPath;
+    private ?string $thumbnailMaxresPath;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $localizedDescription;
+    private ?string $localizedDescription;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $localizedTitle;
+    private ?string $localizedTitle;
 
     #[ORM\Column(type: 'string', length: 8)]
-    private $contentDefinition;
+    private ?string $contentDefinition;
 
     #[ORM\Column(type: 'string', length: 8)]
-    private $contentDimension;
+    private ?string $contentDimension;
 
     #[ORM\Column(type: 'integer')]
-    private $contentDuration;
+    private ?string $contentDuration;
 
     #[ORM\Column(type: 'string', length: 16)]
-    private $contentProjection;
+    private ?string $contentProjection;
 
     #[ORM\ManyToOne(targetEntity: YoutubeChannel::class)]
-    private $channel;
+    private ?YoutubeChannel $channel;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $addedAt = null;
+    private ?DateTimeImmutable $addedAt = null;
 
     #[ORM\ManyToMany(targetEntity: YoutubeVideoTag::class, mappedBy: 'ytVideos')]
     private Collection $tags;
@@ -148,12 +149,12 @@ class YoutubeVideo
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTimeImmutable
+    public function getPublishedAt(): ?DateTimeImmutable
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(\DateTimeImmutable $publishedAt): self
+    public function setPublishedAt(DateTimeImmutable $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
 
@@ -316,12 +317,12 @@ class YoutubeVideo
         return $this;
     }
 
-    public function getAddedAt(): ?\DateTimeImmutable
+    public function getAddedAt(): ?DateTimeImmutable
     {
         return $this->addedAt;
     }
 
-    public function setAddedAt(\DateTimeImmutable $addedAt): self
+    public function setAddedAt(DateTimeImmutable $addedAt): self
     {
         $this->addedAt = $addedAt;
 

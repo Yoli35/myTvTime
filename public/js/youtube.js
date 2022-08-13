@@ -31,13 +31,13 @@ function initYoutube(id, locale, paths) {
 
             const h1 = document.getElementById('h1');
             const videos = document.getElementsByClassName('yt-video');
-            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+            const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
 
             total_results = parseInt(h1.getAttribute('data-total-results'));
             let current_results = videos.length;
 
             const xhr = new XMLHttpRequest();
-            xhr.onload = function() {
+            xhr.onload = function () {
                 const response = JSON.parse(this.response);
                 const results = response['results'];
                 const count = results.length;
@@ -59,6 +59,15 @@ function initYoutube(id, locale, paths) {
                     duration.appendChild(document.createTextNode(duration2Time(result['contentDuration'])));
                     thumbnail.appendChild(img);
                     thumbnail.appendChild(duration);
+                    if (result['tags'].length) {
+                        let tags = document.createElement("div");
+                        tags.classList.add("tags");
+                        result['tags'].forEach(tag => {
+                            let tagButton = newTagElement(tag);
+                            tags.appendChild(tagButton);
+                        })
+                        thumbnail.appendChild(tags);
+                    }
                     let details = document.createElement("div");
                     details.setAttribute("class", "details");
                     let channel = document.createElement("div");
@@ -74,8 +83,7 @@ function initYoutube(id, locale, paths) {
                         imgChannel.setAttribute("alt", result['channel']['title']);
                         imgChannel.setAttribute("class", "w-100")
                         span.appendChild(imgChannel);
-                    }
-                    else {
+                    } else {
                         let fChannel = document.createTextNode(result['channel']['title'].charAt(0));
                         span.appendChild(fChannel);
                     }
@@ -116,6 +124,25 @@ function initYoutube(id, locale, paths) {
     }
 }
 
+function newTagElement(tag, list = false) {
+
+    let newTagButton = document.createElement("div");
+    newTagButton.classList.add("tag");
+    newTagButton.appendChild(document.createTextNode('#' + tag['label']));
+    
+    if (list) {
+        let closeButton = document.createElement("div");
+        closeButton.classList.add("close");
+        closeButton.setAttribute("data-id", tag['id']);
+        let circleXMark = document.createElement("i");
+        circleXMark.classList.add("fa-solid", "fa-circle-xmark");
+        closeButton.appendChild(circleXMark);
+        newTagButton.appendChild(closeButton);
+    }
+
+    return newTagButton;
+}
+
 function duration2Time(duration) {
 
     let time;
@@ -129,8 +156,7 @@ function duration2Time(duration) {
     if (hours > 0) {
         minutes = (minutes < 10) ? '0' + minutes.toString() : minutes.toString();
         time = hours.toString() + ':' + minutes;
-    }
-    else {
+    } else {
         time = minutes.toString();
     }
     time += ':' + secondes;

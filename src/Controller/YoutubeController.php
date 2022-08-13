@@ -35,8 +35,39 @@ class YoutubeController extends AbstractController
     #[Route('/youtube/more', name: 'app_youtube_more')]
     public function moreVideos(Request $request, YoutubeVideoRepository $youtubeVideoRepository): Response
     {
+        /** @var YoutubeVideo [] $vids */
+        $vids = $youtubeVideoRepository->findAllByDate($request->query->get('id'), $request->query->get('offset'));
+        $videos = [];
+
+        foreach ($vids as $vid) {
+
+            $video = [];
+            $video['id'] = $vid->getId();
+            $video['thumbnailMediumPath'] = $vid->getThumbnailMediumPath();
+            $video['title'] = $vid->getTitle();
+            $video['contentDuration'] = $vid->getContentDuration();
+            $video['publishedAt'] = $vid->getPublishedAt();
+            $video['channel'] = [];
+            $video['channel']['title'] = $vid->getChannel()->getTitle();
+            $video['channel']['customUrl'] = $vid->getChannel()->getCustomUrl();
+            $video['channel']['youtubeId'] = $vid->getChannel()->getYoutubeId();
+            $video['channel']['thumbnailDefaultUrl'] = $vid->getChannel()->getThumbnailDefaultUrl();
+
+            $video['tags'] = [];
+            $tags = $vid->getTags();
+            foreach ($tags as $tag) {
+                $serializedTag = [];
+                $serializedTag['id'] = $tag->getId();
+                $serializedTag['label'] = $tag->getLabel();
+                $video['tags'][] = $serializedTag;
+            }
+
+            $videos[] = $video;
+        }
+        dump($videos);
+
         return $this->json([
-            'results' => $youtubeVideoRepository->findAllByDate($request->query->get('id'), $request->query->get('offset')),
+            'results' => $videos,
         ]);
     }
 
