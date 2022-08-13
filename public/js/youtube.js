@@ -129,7 +129,7 @@ function newTagElement(tag, list = false) {
     let newTagButton = document.createElement("div");
     newTagButton.classList.add("tag");
     newTagButton.appendChild(document.createTextNode('#' + tag['label']));
-    
+
     if (list) {
         let closeButton = document.createElement("div");
         closeButton.classList.add("close");

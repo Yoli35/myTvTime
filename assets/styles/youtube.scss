@@ -259,7 +259,7 @@
     .details {
 
         .title-tags {
-            @include flex-100(center, flex-start);
+            @include flex-col(flex-start, flex-start);
 
             .title {
                 font-size: 1.5em;
@@ -270,7 +270,6 @@
             .tags {
                 @include flex-row(center, flex-end);
                 flex-wrap: wrap;
-                margin-left: auto;
 
                 .add-tag {
                     position: relative;
@@ -325,7 +324,7 @@
                     position: relative;
 
                     &.new {
-                        background-color: #5d5508;
+                        background-color: #c36d00;
                     }
 
                     .close {

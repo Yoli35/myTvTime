@@ -74,7 +74,7 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
     public function video(YoutubeVideoTagRepository $repository, YoutubeVideo $youtubeVideo): Response
     {
-        $tags = $repository->findAll();
+        $tags = $repository->findAllByLabel();
         $description = nl2br($youtubeVideo->getDescription());
         $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i', '$1<a href="$2" target="_blank">$2</a>', $description);
         $description = preg_replace('#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#','<a href="mailto:$1">$1</a>', $description);

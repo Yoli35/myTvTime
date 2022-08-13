@@ -54,6 +54,18 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
+     */
+    public function findAllByLabel(): array
+    {
+        return $this->createQueryBuilder('y')
+            ->orderBy('y.label', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    public function findOneBySomeField($value): ?YoutubeVideoTag
 //    {
 //        return $this->createQueryBuilder('y')

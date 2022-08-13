@@ -86,13 +86,30 @@
             const videoTags = document.querySelectorAll(".tag");
             const delTags = document.querySelectorAll(".close");
 
-            addTag.addEventListener("click", () => {
+            addTag.addEventListener("click", addNewTag);
+            input.addEventListener("keyup", ({key}) => {
+                // console.log(key);
+                // console.log({key});
+                if (key === "Enter") {
+                    addNewTag();
+                }
+            })
+
+            delTags.forEach(delTag => {
+                delTag.addEventListener("click", () => {
+                    removeTag(delTag);
+                });
+            });
+
+            function addNewTag() {
                 const newTag = input.value;
+
+                if (newTag.length === 0) return;
 
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     const response = JSON.parse(this.response);
-                    console.log({response});
+                    // console.log({response});
 
                     if (response['new_tag_id'] > 0) {
                         let newTagButton = document.createElement("div");
@@ -111,6 +128,9 @@
                         else {
                             tags.appendChild(newTagButton);
                         }
+                        closeButton.addEventListener("click", () => {
+                            removeTag(closeButton);
+                        });
                         if (response['rebuild_list']) {
                             while (tagList.lastElementChild) {
                                 tagList.removeChild(tagList.lastElementChild);
@@ -128,23 +148,20 @@
 
                 xhr.open("GET", _yt_video_add_tag.substring(0, _yt_video_add_tag.length - 3) + newTag.capitalize());
                 xhr.send();
+            }
 
-            })
+            function removeTag(tag) {
+                const tagId = tag.getAttribute("data-id");
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    const response = JSON.parse(this.response);
+                    // console.log({response});
+                    tags.removeChild(tag.parentElement);
+                }
 
-            delTags.forEach(delTag => {
-                delTag.addEventListener("click", () => {
-                    const tagId = delTag.getAttribute("data-id");
-                    const xhr = new XMLHttpRequest();
-                    xhr.onload = function () {
-                        const response = JSON.parse(this.response);
-                        console.log({response});
-                        tags.removeChild(delTag.parentElement);
-                    }
-
-                    xhr.open("GET", _yt_video_remove_tag.substring(0, _yt_video_remove_tag.length - 1) + tagId);
-                    xhr.send();
-                });
-            });
+                xhr.open("GET", _yt_video_remove_tag.substring(0, _yt_video_remove_tag.length - 1) + tagId);
+                xhr.send();
+            }
         });
 
         Object.defineProperty(String.prototype, 'capitalize', {
