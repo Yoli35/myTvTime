@@ -76,7 +76,54 @@ main {
     width: 100vw;
     z-index: 120;
 
-    a, span {
+    > a {
+        display: block;
+        font-size: 2em;
+        font-weight: 100;
+        text-align: center;
+        transition: all .5s;
+        width: 100%;
+
+        &::before {
+            content: '︎☆︎☆︎☆︎☆︎☆︎';
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(2em);
+            transition: all .5s;
+        }
+
+        &::after {
+            content: '︎☆︎☆︎☆︎☆︎☆︎';
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(-2em);
+            transition: all .25s;
+        }
+
+        &:hover {
+            background-color: #abcccc;
+            color: #123333;
+            font-weight: bold;
+
+            &::before {
+                content: '✭✭✭✭✭';
+                left: 0;
+                opacity: 1;
+                padding-right: 1em;
+                transform: translateX(-1em);
+            }
+
+            &::after {
+                content: '︎✭✭✭✭✭';
+                opacity: 1;
+                padding-left: 1em;
+                right: 0;
+                transform: translateX(1em);
+            }
+        }
+    }
+
+    span {
         display: block;
         font-size: 2em;
         font-weight: 100;
@@ -392,6 +439,7 @@ h4 {
             cursor: pointer;
             padding: 0 .2em;
         }
+
         .rating {
             @include rating();
         }

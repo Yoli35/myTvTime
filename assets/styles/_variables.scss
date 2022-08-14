@@ -96,12 +96,14 @@ $fa-font-path: "../webfonts";
 @mixin flex-row($items: center, $content: center) {
     align-items: $items;
     display: flex;
+    flex-direction: row;
     justify-content: $content;
 }
 
 @mixin flex-100($items: center, $content: center) {
     align-items: $items;
     display: flex;
+    flex-direction: row;
     justify-content: $content;
     width: 100%;
 }

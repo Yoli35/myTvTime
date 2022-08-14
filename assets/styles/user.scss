@@ -26,13 +26,12 @@
         height: 12em;
         margin-bottom: 6em;
         position: relative;
-        transition:
-                border-color $transition-delay,
-                filter $transition-delay,
-                margin-bottom $transition-delay,
-                background-position $transition-delay cubic-bezier(.5,0,.5,1),
-                height $transition-delay cubic-bezier(.5,0,.5,1),
-                width $transition-delay cubic-bezier(.5,0,.5,1);
+        transition: border-color $transition-delay,
+        filter $transition-delay,
+        margin-bottom $transition-delay,
+        background-position $transition-delay cubic-bezier(.5, 0, .5, 1),
+        height $transition-delay cubic-bezier(.5, 0, .5, 1),
+        width $transition-delay cubic-bezier(.5, 0, .5, 1);
         width: 100%;
 
         img {
@@ -57,7 +56,7 @@
             height: 6em;
             position: absolute;
             right: 0.5em;
-            transition: right $transition-delay cubic-bezier(.5,0,.5,1);
+            transition: right $transition-delay cubic-bezier(.5, 0, .5, 1);
             width: 6em;
 
             img {
@@ -121,14 +120,16 @@
                 }
 
                 .hours {
-                    @include flex-row(center,auto);
+                    @include flex-row(center, auto);
                     margin-bottom: 1em;
                     margin-top: 1em;
                     overflow-x: scroll;
                     width: 20em;
+
                     .h24 {
                         @include flex-row();
                         padding: .5em 0;
+
                         .hour {
                             @include flex-col();
                             background-color: #0e74907f;
@@ -143,10 +144,12 @@
                             padding: .25em;
                             transform: scale(1);
                             transition: $transition-delay;
+
                             img {
                                 height: 29px;
                                 width: 29px;
                             }
+
                             &:hover,
                             &:focus {
                                 transform: scale(1.25);
@@ -173,7 +176,6 @@
         margin-top: 4em;
     }
 }
-
 
 .user-movies {
     @include flex-col();
@@ -538,8 +540,8 @@
 
         .sample {
             //background-color: #444;
-            background: rgb(68,68,68);
-            background: linear-gradient(225deg, rgba(83,66,83,1) 0%, rgba(68,68,68,1) 100%);
+            background: rgb(68, 68, 68);
+            background: linear-gradient(225deg, rgba(83, 66, 83, 1) 0%, rgba(68, 68, 68, 1) 100%);
             color: #5eead4;
 
             span.key {

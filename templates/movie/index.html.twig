@@ -5,7 +5,7 @@
 
 {% block title %}myTvTime::{{ movie.title }}{% endblock %}
 {% block body %}
-{#        {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    {#        {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -29,142 +29,134 @@
             </div>
         {% endif %}
         <div class="movie-info">
-            <div class="row w-100">
-                <div class="col-lg-7 col-12">
-                    <div class="movie-detail">
-                        <div class="row">
-                            <div class="col">
-                                <div class="title">{{ movie.title }}</div>
-                                <div class="original_title">{{ 'Original Title'|trans }} : {{ movie.original_title }}</div>
-                                <div class="genres">
-                                    {% for genre in movie.genres %}
-                                        <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
-                                    {% endfor %}
-                                </div>
-                                {% if movie.overview | length %}
-                                    <div class="overview">
-                                        {{ 'Overview'|trans }} :
-                                        {{ movie.overview }}
-                                    </div>
-                                {% endif %}
-                            </div>
+            <div class="movie-detail">
+                <div class="part-1">
+                    <h1 class="title">{{ movie.title }}</h1>
+                    <div class="info">{{ 'Original Title'|trans }} : {{ movie.original_title }}</div>
+                    <div class="genres">
+                        {% for genre in movie.genres %}
+                            <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
+                        {% endfor %}
+                    </div>
+                    {% if movie.overview | length %}
+                        <div class="overview">
+                            {{ 'Overview'|trans }} :
+                            {{ movie.overview }}
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-12">
-                                {% if movie.runtime %}
-                                    <div class="runtime">
-                                        {{ 'Runtime'|trans }} :
-                                        {% if movie.runtime//60 > 0 %}
-                                            {{ movie.runtime//60 }}
-                                            {% if movie.runtime//60>1 %}{{ 'Hours'|trans }}{% else %}{{ 'Hour'|trans }}{% endif %}
-                                        {% endif %}
-                                        {{ movie.runtime%60 }} {{ 'Minute'|trans }}{% if movie.runtime%60>1 %}s{% endif %}
-                                    </div>
+                    {% endif %}
+                </div>
+                <div class="part-2">
+                    <div class="part-2L">
+                        {% if movie.runtime %}
+                            <div class="info">
+                                {{ 'Runtime'|trans }} :
+                                {% if movie.runtime//60 > 0 %}
+                                    {{ movie.runtime//60 }}
+                                    {% if movie.runtime//60>1 %}{{ 'Hours'|trans }}{% else %}{{ 'Hour'|trans }}{% endif %}
                                 {% endif %}
-                                {% if movie.revenue > 0 %}
-                                    <div class="revenue">
-                                        {{ 'Revenue'|trans }} : {{ movie.revenue }}$
-                                    </div>
-                                {% endif %}
-                                <div class="vote">
-                                    {{ 'Average Vote'|trans }} : {{ movie.vote_average }}.
-                                    {{ 'Vote Count'|trans }} : {{ movie.vote_count }}
-                                </div>
-                                {% if movie.homepage | length %}
-                                    <div class="homepage">
-                                        {{ 'Home Page'|trans }} :
-                                        <a href="{{ movie.homepage }}" target="_blank">
+                                {{ movie.runtime%60 }} {{ 'Minute'|trans }}{% if movie.runtime%60>1 %}s{% endif %}
+                            </div>
+                        {% endif %}
+                        {% if movie.revenue > 0 %}
+                            <div class="info">
+                                {{ 'Revenue'|trans }} : {{ movie.revenue }}$
+                            </div>
+                        {% endif %}
+                        <div class="infos">
+                            <div>{{ 'Average Vote'|trans }} : {{ movie.vote_average }}</div>
+                            <div>{{ 'Vote Count'|trans }} : {{ movie.vote_count }}</div>
+                        </div>
+                        {% if movie.homepage | length %}
+                            <div class="info">
+                                {{ 'Home Page'|trans }} :
+                                <a href="{{ movie.homepage }}" target="_blank">
                                         <span data-descr="{{ 'Visit the official Movie Website'|trans }}">
                                             {{ movie.homepage }}&nbsp;<i class="bi bi-link-45deg"></i>
                                          </span>
-                                        </a>
-                                    </div>
-                                {% endif %}
-                                {% if movie.imdb_id | length %}
-                                    <div class="imdb">
-                                        <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if movie.imdb_id | length %}
+                            <div class="info">
+                                <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">
                                         <span data-descr="{{ 'Visit the Movie Page on IMDB'|trans }}">
                                             {{ 'IMDB Page'|trans }}&nbsp;<i class="bi bi-link-45deg"></i>
                                         </span>
-                                        </a>
-                                    </div>
-                                {% endif %}
-
-                                {% if dates is empty %}
-                                    <div class="date">
-                                        {{ 'Release Date'|trans }} : {{ movie.release_date|format_date('short') }}
-                                    </div>
-                                {% else %}
-                                    <div class="release-dates">
-                                        <h2>{{ 'Release Dates'|trans }}</h2>
-                                        {% for location in dates %}
-                                            <div class="country">
-                                                <div class="name">{{ location.iso_3166_1|country_name(locale) }}</div>
-                                                <div class="dates">
-                                                    {% for date in location.release_dates %}
-                                                        <div class="event">
-                                                            {{ date.type|trans }}{% if date.note is defined and date.note|length %}&nbsp;-&nbsp;{{ date.note }}{% endif %}&nbsp;:&nbsp;{{ date.release_date|format_date('short') }}
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-
-                                {% if movie.production_companies %}
-                                    <h2>{{ 'Production'|trans }}</h2>
-                                    <div class="productions">
-                                        {{ 'Production Companies'|trans }} :
-                                        <div>
-                                            {% for cie in movie.production_companies %}
-                                                <div class="production">
-                                                    <div>{{ cie.name }}</div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {% if movie.production_countries %}
-                                    <div class="productions">
-                                        {{ 'Production Countries'|trans }} :
-                                        <div>
-                                            {% for country in movie.production_countries %}
-                                                <div class="production">{{ country.iso_3166_1 |country_name(locale) }} {# ({{ country.name }}) #}</div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                {% endif %}
+                                </a>
                             </div>
-                            {% if movie.belongs_to_collection %}
-                                <div class="col-lg-6 col-12">
-                                    <h2>{{ 'Belongs to Collection'|trans }}</h2>
-                                    <div class="collection">
-                                        <div class="card text-center" style="width: 100%;">
-                                            {% if movie.belongs_to_collection.backdrop_path %}
-                                                <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" class="card-img-top" alt="movie.belongs_to_collection.name">
-                                            {% endif %}
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ movie.belongs_to_collection.name }}</h5>
-                                                <div><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
-                                                <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
-                                            </div>
+                        {% endif %}
+
+                        {% if dates is empty %}
+                            <div class="info">
+                                {{ 'Release Date'|trans }} : {{ movie.release_date|format_date('short') }}
+                            </div>
+                        {% else %}
+                            <div class="infos">
+                                <h2>{{ 'Release Dates'|trans }}</h2>
+                                {% for location in dates %}
+                                    <div class="country">
+                                        <div class="name">{{ location.iso_3166_1|country_name(locale) }}</div>
+                                        <div class="dates">
+                                            {% for date in location.release_dates %}
+                                                <div class="event">
+                                                    {{ date.type|trans }}{% if date.note is defined and date.note|length %}&nbsp;-&nbsp;{{ date.note }}{% endif %}&nbsp;:&nbsp;{{ date.release_date|format_date('short') }}
+                                                </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if movie.production_companies %}
+                            <h2>{{ 'Production'|trans }}</h2>
+                            <div class="productions">
+                                {{ 'Production Companies'|trans }} :
+                                <div>
+                                    {% for cie in movie.production_companies %}
+                                        <div class="production">
+                                            <div>{{ cie.name }}</div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5 col-12">
-                    <div class="movie-poster">
-                        {% if movie.poster_path %}
-                            <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
-                        {% else %}
-                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
+                            </div>
+                        {% endif %}
+                        {% if movie.production_countries %}
+                            <div class="productions">
+                                {{ 'Production Countries'|trans }} :
+                                <div>
+                                    {% for country in movie.production_countries %}
+                                        <div class="production">{{ country.iso_3166_1 |country_name(locale) }} {# ({{ country.name }}) #}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
+                    {% if movie.belongs_to_collection %}
+                        <div class="part-2R">
+                            <h2>{{ 'Belongs to Collection'|trans }}</h2>
+                            <div class="collection">
+                                <div class="card text-center" style="width: 100%;">
+                                    {% if movie.belongs_to_collection.backdrop_path %}
+                                        <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" class="card-img-top" alt="movie.belongs_to_collection.name">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ movie.belongs_to_collection.name }}</h5>
+                                        <div><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
+                                        <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
+            </div>
+            <div class="movie-poster">
+                {% if movie.poster_path %}
+                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% else %}
+                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
+                {% endif %}
             </div>
         </div>
 
