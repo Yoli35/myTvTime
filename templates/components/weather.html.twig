@@ -2,7 +2,7 @@
 {% set locale = this.getLocale %}
 {% if weather is not empty %}
     <div id="weather" class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
-{#        {{ dump(weather.forecast.forecastday.0) }}#}
+        {#        {{ dump(weather.forecast.forecastday.0) }} #}
         <div id="weather-content" class="content">
             <div class="content-row">
                 <div class="city">{{ weather.location.name }}</div>
@@ -57,10 +57,16 @@
                             <div class="south">S</div>
                             <div class="west">O</div>
                             <div class="arrow">
-                                <div class="head"><div><div></div></div></div>
+                                <div class="head">
+                                    <div>
+                                        <div></div>
+                                    </div>
+                                </div>
                                 <div class="stick"></div>
                                 <div class="center"></div>
-                                <div class="tail"></div>
+                                <div class="tail">
+                                    <div></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -180,7 +186,7 @@
             isBeforeSunrise = isSunriseHour,
             isBeforeSunset = isSunsetHour;
 
-        setTimeout( () => {
+        setTimeout(() => {
             now.focus();
             setInterval(updateNow, 5000)
         }, 500);
@@ -189,10 +195,12 @@
 
         toggle.addEventListener("click", weather_toggle);
 
-        weather_toggle();
-
         const arrow = document.querySelector(".arrow");
-        arrow.setAttribute("style", "transform: rotate({{ weather.current.wind_degree }}deg) scaleX(50%);");
+        // const angle = 240 +180;
+        const angle = {{ weather.current.wind_degree }} +180;
+        arrow.setAttribute("style", "transform: rotate(" + angle + "deg) scaleX(50%);");
+
+        weather_toggle();
 
         function weather_toggle() {
 
@@ -205,14 +213,15 @@
                     banner.setAttribute("style", "margin-bottom: 13em");
                     weather.setAttribute("style", "bottom: -13em");
                     avatar.setAttribute("style", "right: .5em");
-                }
-                else {
+                } else {
                     avatar.setAttribute("style", "right: 2em");
                 }
-                for (let i=0;i<row.length;i++) row.item(i).setAttribute("style", "flex-direction: row");
+                for (let i = 0; i < row.length; i++) row.item(i).setAttribute("style", "flex-direction: row");
                 content.setAttribute("style", "padding: 1em 1em 0 1em");
                 temperature.setAttribute("style", "font-size: 3em");
-                for (let i=0;i<vertical.length;i++) vertical.item(i).setAttribute("style", "display: none");
+                for (let i = 0; i < vertical.length; i++) vertical.item(i).setAttribute("style", "display: none");
+
+                arrow.setAttribute("style", "transform: rotate(0deg) scaleX(50%);");
             } else {
                 toggle.classList.add("open");
                 toggle.innerHTML = '<i class="bi bi-dash-circle">';
@@ -220,14 +229,15 @@
                     banner.setAttribute("style", "margin-bottom: 32em");
                     weather.setAttribute("style", "bottom: -32em");
                     avatar.setAttribute("style", "right: .5em");
-                }
-                else {
+                } else {
                     avatar.setAttribute("style", "right: 26em");
                 }
-                for (let i=0;i<row.length;i++) row.item(i).setAttribute("style", "flex-direction: column");
+                for (let i = 0; i < row.length; i++) row.item(i).setAttribute("style", "flex-direction: column");
                 content.setAttribute("style", "padding: 1em");
                 temperature.setAttribute("style", "font-size: 5em");
-                for (let i=0;i<vertical.length;i++) vertical.item(i).setAttribute("style", "display: block");
+                for (let i = 0; i < vertical.length; i++) vertical.item(i).setAttribute("style", "display: block");
+
+                arrow.setAttribute("style", "transform: rotate(" + (angle + 720) + "deg) scaleX(50%);");
             }
         }
 
@@ -273,12 +283,10 @@
                     next = h24.firstChild;
                     h24.insertBefore(now, next);
                 }
-                if (currentHour < 23)
-                {
+                if (currentHour < 23) {
                     next = next.nextElementSibling;
                     h24.insertBefore(now, next);
-                }
-                else {
+                } else {
                     h24.appendChild(now);
                 }
                 isSunriseHour = (hour === sunriseHour);
@@ -307,8 +315,7 @@
                         if (sunsetHour < 23) {
                             let next = sunset.nextElementSibling;
                             h24.insertBefore(now, next);
-                        }
-                        else {
+                        } else {
                             h24.appendChild(now);
                         }
                     }

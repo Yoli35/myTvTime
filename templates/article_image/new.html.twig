@@ -12,15 +12,17 @@
 
             <h1>{{ 'Create new ArticleImage'|trans }}</h1>
 
-            {{ include('article_image/_form.html.twig', {'button_label': 'Save'|trans, 'icon': 'fa-download'|raw}) }}
+            <div class="image-article">
+                {{ include('article_image/_form.html.twig', {'button_label': 'Save'|trans, 'icon': 'fa-download'|raw}) }}
 
-            <div class="back-delete">
-                <button class="btn btn-secondary">
-                    <a href="{{ path('app_article_image_index') }}">
-                        <i class="fa-solid fa-arrow-left"></i>
-                        {{ 'back to list'|trans }}
-                    </a>
-                </button>
+                <div class="back-delete">
+                    <button class="btn btn-secondary">
+                        <a href="{{ path('app_article_image_index') }}">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            {{ 'back to list'|trans }}
+                        </a>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -37,7 +39,7 @@
                 path.value = slugify(drop.files[0].name);
             })
         })
-        slugify = ( text ) => {
+        slugify = (text) => {
             return text
                 .toString()
                 .normalize('NFD')                   // split an accented letter in the base letter and the acent

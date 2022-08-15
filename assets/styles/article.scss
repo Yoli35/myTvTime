@@ -139,6 +139,127 @@
                 }
             }
         }
+
+        .comment-form {
+            background-color: #abcccc;
+            border-radius: 1em;
+            margin: 1em;
+            padding: 1em;
+            width: calc(100% - 2em);
+
+            .label {
+                Font-size: 1em;
+            }
+
+            .user {
+                @include flex-row(center, flex-start);
+                margin-bottom: .5em;
+
+                img {
+                    @include rounded-avatar(2em);
+                    border: 2px solid #abcccc;
+                }
+
+                .name {
+                    color: #123333;
+                    padding-left: .5em;
+                }
+            }
+        }
+
+        .comments {
+            width: calc(100% - 2em);
+
+            .label {
+                font-size: 1em;
+            }
+
+            .comment {
+                @include flex-col(flex-start, flex-start);
+                background-color: #abcccc;
+                border-radius: .5em;
+                margin-bottom: 1em;
+                padding: 1em;
+
+                .user {
+                    @include flex-row(center, flex-start);
+
+                    img {
+                        @include rounded-avatar(2em);
+                        border: 2px solid #abcccc;
+                    }
+
+                    .name {
+                        color: #123333;
+                        padding-left: .5em;
+                    }
+                }
+
+                .text {
+                    font-style: italic;
+                }
+
+                .dates {
+                    @include flex-100(center, flex-start);
+                    color: #123333;
+                    font-size: .75em;
+
+                    div {
+                        padding-right: 1em;
+                    }
+                }
+
+                .react {
+                    width: 100%;
+
+                    .answer {
+                        @include flex-100();
+
+                        .user {
+                            @include flex-row(center, flex-start);
+
+                            img {
+                                @include rounded-avatar(1.5em);
+                            }
+                            .name {
+                                font-size: .75em;
+                                padding-left: .5em;
+                            }
+                        }
+
+                        textarea {
+                            border-radius: .25em;
+                            height: 2em;
+                            margin: 0 1em;
+                            width: 100%;
+                        }
+
+                        .submit {
+                            background-color: #6c757d;
+                            border-color: #6c757d;
+                            border-radius: 0.2rem;
+                            color: #fff;
+                            cursor: pointer;
+                            display: inline-block;
+                            font-size: 0.75rem;
+                            font-weight: 400;
+                            line-height: 1.5;
+                            padding: 0.25rem 0.5rem;
+                            text-align: center;
+                            text-decoration: none;
+                            vertical-align: middle;
+                            user-select: none;
+
+                            &:hover {
+                                color: #fff;
+                                background-color: #5c636a;
+                                border-color: #565e64;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     .table {
@@ -158,39 +279,41 @@
         }
     }
 
-    .form {
-        margin: 2em 0;
-        width: 100%;
-
-        .dropzone-container {
-            background-color: #deffff1f;
-            border-radius: 1em;
-        }
-
-        .dropzone-preview-image {
-            border: 2px solid #bcdddd;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .save {
-            @include flex-100(center, flex-end);
-        }
-    }
-
-    .back-delete {
-        @include flex-100(center, flex-end)
-    }
-
-    .preview {
-        border-radius: 1em;
-        overflow: hidden;
-        width: 100%;
-
-        img {
-            display: block;
-            object-fit: cover;
+    .image-article {
+        .form {
+            margin: 2em 0;
             width: 100%;
+
+            .dropzone-container {
+                background-color: #deffff1f;
+                border-radius: 1em;
+            }
+
+            .dropzone-preview-image {
+                border: 2px solid #bcdddd;
+                border-radius: 50%;
+                overflow: hidden;
+            }
+
+            .save {
+                @include flex-100(center, flex-end);
+            }
+        }
+
+        .back-delete {
+            @include flex-100(center, flex-end)
+        }
+
+        .preview {
+            border-radius: 1em;
+            overflow: hidden;
+            width: 100%;
+
+            img {
+                display: block;
+                object-fit: cover;
+                width: 100%;
+            }
         }
     }
 
@@ -255,19 +378,21 @@
         margin: 0 calc(50% - 32em);
         max-width: 64em;
 
-        .form {
-            margin: 2em 16em;
-            max-width: 32em;
-        }
+        .image-article {
+            .form {
+                margin: 2em 16em;
+                max-width: 32em;
+            }
 
-        .preview {
-            margin: 2em 16em;
-            max-width: 32em;
-        }
+            .preview {
+                margin: 2em 16em;
+                max-width: 32em;
+            }
 
-        .back-delete {
-            margin: 2em 16em;
-            max-width: 32em;
+            .back-delete {
+                margin: 2em 16em;
+                max-width: 32em;
+            }
         }
     }
 }
@@ -306,6 +431,33 @@
                         .date {
                             color: #789999;
                         }
+                    }
+                }
+            }
+
+            .comment-form {
+                background-color: #123333;
+
+                .user {
+                    .name {
+                        color: #abcccc;
+                    }
+                }
+            }
+
+            .comments {
+
+                .comment {
+                    background-color: #123333;
+
+                    .user {
+                        .name {
+                            color: #abcccc;
+                        }
+                    }
+
+                    .dates {
+                        color: #abcccc;
                     }
                 }
             }

@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% set user = app.user %}
 {% block title %}myTvTime::{{ 'Blog'|trans }}{% endblock %}
 
 {% block body %}
@@ -22,11 +22,6 @@
                     <div class="banner full" style="background-image: url('/images/articles/banners/{{ article.banner }}')"></div>
                 {% endif %}
                 <div class="apercu">
-{#                    {% if article.thumbnail %}#}
-{#                        <div class="thumbnail">#}
-{#                            <img src="/images/articles/thumbnails/{{ article.thumbnail }}">#}
-{#                        </div>#}
-{#                    {% endif %}#}
                     <div class="presentation">
                         <div class="title-author">
                             <div class="title">{{ article.title }}</div>
@@ -40,6 +35,65 @@
                         <div class="abstract full">{{ content|raw|nl2br }}</div>
                     </div>
                 </div>
+                {% if is_granted("ROLE_USER") %}
+                    <div class="comment-form">
+                        {% if comments is empty %}
+                            <div class="label">{{ 'Be the first to react!'|trans }}</div>
+                        {% else %}
+                            <div class="label">{{ 'React!'|trans }} :</div>
+                        {% endif %}
+                        <div class="user">
+                            {% if user.avatar %}
+                                <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
+                            {% endif %}
+                            <div class="name">{{ user.username?:user.email }}</div>
+                        </div>
+                        <div class="form">
+                            {{ form_start(form) }}
+                            {{ form_errors(form) }}
+
+                            {{ form_row(form.text) }}
+
+                            {{ form_row(form.submit, { 'label': 'Add'|trans }) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if comments is not empty %}
+                    <div class="comments">
+                        <div class="label">{{ 'Comments'|trans }} :</div>
+                        {% for comment in comments %}
+                            <div class="comment">
+                                <div class="user">
+                                    {% if comment.user.avatar %}
+                                        <img src="/images/users/avatars/{{ comment.user.avatar }}" alt="{{ comment.user.username?:comment.user.email }}">
+                                    {% endif %}
+                                    <div class="name">{{ comment.user.username?:comment.user.email }}</div>
+                                </div>
+                                <div class="text">{{ comment.text }}</div>
+                                <div class="dates">
+                                    <div>{{ 'Created at'|trans }} : {{ comment.createdAt|format_datetime() }}</div>
+                                    <div>{{ 'Modified at'|trans }} : {{ comment.updatedAt|format_datetime() }}</div>
+                                </div>
+                                <div class="react">
+                                    <details>
+                                        <summary>{{ 'Answer'|trans }}</summary>
+                                        <div class="answer">
+                                            <div class="user">
+                                                {% if user.avatar %}
+                                                    <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
+                                                {% endif %}
+                                                <div class="name">{{ user.username?:user.email }}</div>
+                                            </div>
+                                            <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea>
+                                            <div class="submit" id="add-{{ comment.id }}" data-id="{{ comment.id }}">{{ 'Add'|trans }}</div>
+                                        </div>
+                                    </details>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         </div>
 

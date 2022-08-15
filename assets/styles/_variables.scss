@@ -114,3 +114,13 @@ $fa-font-path: "../webfonts";
     flex-direction: column;
     justify-content: $content;
 }
+
+@mixin rounded-avatar($size: size) {
+    background-image: url("../images/no_avatar.png");
+    background-position: center center;
+    background-size: cover;
+    border-radius: 50%;
+    height: $size;
+    object-fit: cover;
+    width: $size;
+}

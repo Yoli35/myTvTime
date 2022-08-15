@@ -16,10 +16,12 @@
                 <img src="/images/articles/images/{{ article_image.path }}" alt="{{ article_image.path }}">
             </div>
 
-            {{ include('article_image/_form.html.twig', {'button_label': 'Update'|trans, 'icon': 'fa-pen-to-square'|raw}) }}
+            <div class="image-article">
+                {{ include('article_image/_form.html.twig', {'button_label': 'Update'|trans, 'icon': 'fa-pen-to-square'|raw}) }}
 
-            <div class="back-delete">
-                {{ include('article_image/_delete_form.html.twig') }}
+                <div class="back-delete">
+                    {{ include('article_image/_delete_form.html.twig') }}
+                </div>
             </div>
 
         </div>
