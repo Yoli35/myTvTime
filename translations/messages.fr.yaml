@@ -265,6 +265,18 @@ Humidity: Humidité
 Pressure: Pression atmosphérique
 km/h: km/h
 Gust: Rafale
+N: N
+E: E
+S: S
+W: O
+NW: NO
+NE: NE
+SW: SO
+SE: SE
+WNW: ONO
+WSW: OSO
+ENE: ENE
+ESE: ESE
 Millibars: millibars
 Patchy rain possible: Pluie éparse possible
 Moderate rain: Pluie modérée

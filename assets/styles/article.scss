@@ -30,8 +30,10 @@
         }
     }
 
+    /*
     display: block;
     width: 100%;
+    */
 
     .article {
         @include flex-col();

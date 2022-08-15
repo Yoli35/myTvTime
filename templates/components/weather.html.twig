@@ -44,10 +44,25 @@
                     <div class="item">
                         <i class="bi bi-wind"></i>
                         <div>{{ 'Wind'|trans }} : {{ weather.current.wind_kph }}{{ 'km/h'|trans }}</div>
-                        <div>{{ 'Direction'|trans }} : {{ weather.current.wind_dir }} ({{ weather.current.wind_degree ~ '°' }})</div>
+                        <div>{{ 'Direction'|trans }} : {{ weather.current.wind_dir|trans }} ({{ weather.current.wind_degree ~ '°' }})</div>
                     </div>
                     <div class="item">
                         <div>{{ 'Gust'|trans }} : {{ weather.current.gust_kph }}{{ 'km/h'|trans }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="wind">
+                            <div class="circle1"></div>
+                            <div class="north">N</div>
+                            <div class="east">E</div>
+                            <div class="south">S</div>
+                            <div class="west">O</div>
+                            <div class="arrow">
+                                <div class="head"><div><div></div></div></div>
+                                <div class="stick"></div>
+                                <div class="center"></div>
+                                <div class="tail"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="item">
                         <i class="bi bi-sun"></i>
@@ -175,6 +190,9 @@
         toggle.addEventListener("click", weather_toggle);
 
         weather_toggle();
+
+        const arrow = document.querySelector(".arrow");
+        arrow.setAttribute("style", "transform: rotate({{ weather.current.wind_degree }}deg) scaleX(50%);");
 
         function weather_toggle() {
 

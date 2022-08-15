@@ -118,6 +118,7 @@
 
         .title {
             font-size: 2em;
+            //font-size: clamp(1rem, 3vw + 1rem, 3rem);
             font-weight: bold;
             margin-right: auto;
             padding: .5em;

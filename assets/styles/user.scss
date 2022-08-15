@@ -119,6 +119,98 @@
                     }
                 }
 
+                .wind {
+                    align-items: center;
+                    background-color: #3333333f;
+                    border-radius: .5em;
+                    display: flex;
+                    height: 5rem;
+                    justify-content: center;
+                    margin: .5em;
+                    position: relative;
+                    width: 5rem;
+
+                    .north {
+                        position: absolute;
+                        transform: translate(0, -1.9rem);
+                    }
+
+                    .east {
+                        position: absolute;
+                        transform: translate(1.9rem, 0);
+                    }
+
+                    .south {
+                        position: absolute;
+                        transform: translate(0, 1.9rem);
+                    }
+
+                    .west {
+                        position: absolute;
+                        transform: translate(-1.9rem, 0);
+                    }
+
+                    .circle1 {
+                        background-color: transparent;
+                        border: .5em solid #abcccc3f;
+                        border-radius: 50%;
+                        height: 4.25rem;
+                        position: absolute;
+                        width: 4.25rem;
+                    }
+
+                    .arrow {
+                        @include flex-col(center, flex-start);
+                        position: absolute;
+                        transform: scaleX(50%);
+                        height: 3rem;
+                        width: 1rem;
+
+                        .head {
+                            //transform: translateY(-.75rem);
+                            padding: 0;
+
+                            div {
+                                transform: rotate(-67deg);
+
+                                div {
+                                    border-bottom: 4px solid #abcccc;
+                                    border-right: 4px solid #abcccc;
+                                    height: 1rem;
+                                    width: 1rem;
+                                }
+                            }
+                        }
+
+                        .stick {
+                            background-color: #abcccc;
+                            height: 3rem;
+                            padding: 0;
+                            position: absolute;
+                            width: 4px;
+                        }
+
+                        .center {
+                            background-color: #abcccc;
+                            border-radius: 50%;
+                            height: .5rem;
+                            position: absolute;
+                            transform: translateY(1.5rem);
+                            width: 1rem;
+                        }
+
+                        .tail {
+                            background-color: #abcccc;
+                            border-radius: 50%;
+                            height: .5rem;
+                            position: absolute;
+                            transform: translateY(2.75rem);
+                            width: 1rem;
+                        }
+                    }
+
+                }
+
                 .hours {
                     @include flex-row(center, auto);
                     margin-bottom: 1em;
@@ -490,7 +582,7 @@
     .user-account {
 
         .banner {
-            height: 24em;
+            height: 32em;
         }
     }
 }
@@ -500,7 +592,7 @@
     .user-account {
 
         .banner {
-            height: 30em;
+            height: 40em;
         }
 
         .avatar {
@@ -517,7 +609,7 @@
     .user-account {
 
         .banner {
-            height: 36em;
+            height: 48em;
         }
 
     }
