@@ -223,10 +223,11 @@ function getProfile(e) {
             xhr2.open("GET", _imdb_infos + "?name=" + name + "&locale=" + locale);
             xhr2.send();
         }
+        const options = {year: 'numeric', month: 'long', day: 'numeric'};
         // if (birthday && birthday.length) $('.birthday span').html(dateFormat(birthday, locale)); else $('.birthday').css('display', 'none');
-        if (birthday && birthday.length) document.querySelector(".birthday span").innerHTML = birthday.toLocaleString(); else document.querySelector(".birthday").setAttribute("style", "display: none");
+        if (birthday && birthday.length) document.querySelector(".birthday span").innerHTML = new Date(birthday).toLocaleString(_loc, options); else document.querySelector(".birthday").setAttribute("style", "display: none");
         // if (death_day && death_day.length) $('.death-day span').html(dateFormat(death_day, locale)); else $('.death-day').css('display', 'none');
-        if (death_day && death_day.length) document.querySelector(".death-day span").innerHTML = death_day.toLocaleString(); else document.querySelector(".death-day").setAttribute("style", "display: none");
+        if (death_day && death_day.length) document.querySelector(".death-day span").innerHTML = new Date(death_day).toLocaleString(_loc, options); else document.querySelector(".death-day").setAttribute("style", "display: none");
         // if (homepage && homepage.length) $('.homepage span').html('<a href="' + homepage + '" target="_blank">' + homepage + '</a>'); else $('.homepage').css('display', 'none');
         if (homepage && homepage.length) document.querySelector(".homepage span").innerHTML = '<a href="' + homepage + '" target="_blank">' + homepage + '</a>'; else document.querySelector(".homepage").setAttribute("style", "display: none");
         // if (imdbpage && imdbpage.length) $('.imdb-page span').html('<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'); else $('.imdb-page').css('display', 'none');

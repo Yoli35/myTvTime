@@ -1,6 +1,11 @@
 $transition-delay: .5s;
 $fa-font-path: "../webfonts";
 
+:root {
+    --mtt-body-bg: #012222;
+    --mtt-body-color: #abcccc;
+}
+
 @mixin banner($image) {
     align-items: center;
     display: flex;

@@ -2,6 +2,8 @@
 @import "variables";
 
 body {
+    background-color: var(--mtt-body-bg);
+    color: var(--mtt-body-color);
     display: flex;
     flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -10,6 +12,49 @@ body {
 
 main {
     flex: 1;
+}
+
+
+.container,
+.container-fluid {
+    background-color: transparent;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
 }
 
 .nav-toggler {
@@ -78,7 +123,7 @@ main {
 
     > a {
         display: block;
-        font-size: 2em;
+        font-size: 1em;
         font-weight: 100;
         text-align: center;
         transition: all .5s;
@@ -252,9 +297,8 @@ h4 {
 .home-header {
     background-position: center bottom;
     background-size: cover;
-    border-radius: 1em;
-    height: 20em;
-    margin: 1em 0;
+    height: 15em;
+    margin: 0 0 1em 0;
     transition: background-position 1s;
     width: 100%;
 }
@@ -365,7 +409,7 @@ h4 {
     .content {
         @include flex-row(unset, space-evenly);
         flex-wrap: wrap;
-        margin: 2em;
+        margin: 1em 0;
 
         .see-more {
             @include flex-100;
@@ -373,12 +417,13 @@ h4 {
     }
 
     .footer-infos {
-        @include flex-100();
+        @include flex-col();
+        margin-top: 1em;
 
         div {
             color: #142b34;
             font-size: .8em;
-            padding: 8px;
+            padding: 0;
         }
     }
 }
@@ -390,7 +435,7 @@ h4 {
     margin: 0 10px 20px 10px;
     padding: 4px;
     position: relative;
-    width: 12em;
+    width: 100%;
 
     a {
         @include flex-col(center, unset);
@@ -428,9 +473,9 @@ h4 {
 
     .user {
         @include flex-row(center, center);
-        left: -1em;
         position: absolute;
-        top: 0;
+        right: 1em;
+        top: 1em;
 
         .has-been-seen {
             background-color: #333;
@@ -449,6 +494,64 @@ h4 {
         color: #11d08e;
     }
 }
+
+@media (min-width: 576px) { /* 540 */
+    .home-discover {
+        width: 18em;
+    }
+}
+
+@media (min-width: 768px) { /* 720 */
+
+    .nav-menu {
+        > a {
+            font-size: 2em;
+        }
+    }
+
+    .home-header {
+        border-radius: 1em;
+        height: 20em;
+        margin: 1em 0;
+    }
+
+    .home-discovers {
+        .content {
+            margin: 2em;
+        }
+
+        .footer-infos {
+            flex-direction: row;
+            margin-top: unset;
+
+            div {
+                padding: 8px;
+            }
+        }
+    }
+    //.home-discover {
+    //    width: 24em;
+    //}
+}
+
+@media (min-width: 992px) { /* 960 */
+    //.home-discover {
+    //    width: 15em;
+    //}
+}
+
+@media (min-width: 1200px) { /* 1140 */
+    //.home-discover {
+    //    width: 15em;
+    //}
+}
+
+@media (min-width: 1400px) { /* 1320 */
+    //.home-discover {
+    //    width: 15em;
+    //}
+}
+
 
 .cast, .crew {
     @include flex-row();
@@ -512,8 +615,8 @@ h4 {
 @media (prefers-color-scheme: dark) {
 
     :root {
-        --bs-body-bg: #1c1c1c;
-        --bs-body-color: #dbdbdb;
+        --bs-body-bg: #123333;
+        --bs-body-color: #abcccc;
     }
 
     a, .nav-link {
@@ -534,8 +637,7 @@ h4 {
 
     .container,
     .container-fluid {
-        background-color: #1c1c1c;
-        color: #bdbdbd;
+        background-color: transparent;
     }
 
     .dropdown-menu {

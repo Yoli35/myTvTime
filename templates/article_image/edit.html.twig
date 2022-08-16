@@ -33,11 +33,11 @@
 {% block morejs %}
     <script>
         window.addEventListener("DOMContentLoaded", () => {
-            const body = document.querySelector("body");
-            const container = document.querySelector(".container");
+            {#const body = document.querySelector("body");#}
+            {#const container = document.querySelector(".container");#}
 
-            body.setAttribute("style", "background-image: url(\"/images/articles/images/{{ article_image.path }}\"); background-position: center center; background-size: cover;");
-            container.setAttribute("style", "opacity: .97");
+            {#body.setAttribute("style", "background-image: url(\"/images/articles/images/{{ article_image.path }}\"); background-position: center center; background-size: cover;");#}
+            {#container.setAttribute("style", "opacity: .97");#}
         })
     </script>
 {% endblock %}

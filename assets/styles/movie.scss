@@ -105,6 +105,9 @@
             right: 1em;
         }
     }
+    .sub-part {
+        @include flex-100(flex-start, center);
+    }
 }
 
 .movie-info {
@@ -238,7 +241,7 @@
     }
 
     .movie-poster {
-        @include flex-row(flex-start, center);
+        @include flex-row(flex-start, flex-end);
         //margin-bottom: auto;
         //margin-left: auto;
         margin-top: 1em;
@@ -246,6 +249,15 @@
 
         img {
             border: 8px solid #f2f2f2;
+            width: 100%;
+        }
+
+        .replacement {
+            background: rgb(131,58,180);
+            background: linear-gradient(225deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+            border: 8px solid #f2f2f2;
+            height: 30vw;
+            width: 100%;
         }
     }
 }
@@ -256,7 +268,7 @@
         @include flex-100(unset, unset);
 
         .movie-detail {
-            width: 60%;
+            width: 70%;
 
             .part-1 {
                 width: 100%;
@@ -276,7 +288,8 @@
 
         .movie-poster {
             margin-top: 0;
-            width: 40%;
+            padding-left: 1em;
+            width: 30%;
         }
     }
 }

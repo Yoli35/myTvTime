@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserMovieRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,29 +17,33 @@ class UserMovie
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $title;
+    private ?string $title;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $originalTitle;
+    private ?string $originalTitle;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $posterPath;
+    private ?string $posterPath;
 
     #[ORM\Column(type: 'string', length: 10, nullable: true)]
-    private $releaseDate;
+    private ?string $releaseDate;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $movieDbId;
+    private ?int $movieDbId;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'movies')]
     private $users;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $runtime;
+    private ?int $runtime;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -141,6 +146,18 @@ class UserMovie
     public function setRuntime(?int $runtime): self
     {
         $this->runtime = $runtime;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

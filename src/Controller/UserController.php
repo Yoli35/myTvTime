@@ -114,7 +114,7 @@ class UserController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $movies = $userMovieRepository->findUserMovies($user->getId());
+        $movies = $userMovieRepository->findUserMoviesByAdd($user->getId());
         $imageConfig = $imageConfiguration->getConfig();
 
         $items = $userMovieRepository->getUserMoviesRuntime($user->getId());

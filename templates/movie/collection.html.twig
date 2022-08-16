@@ -26,96 +26,78 @@
         {% endif %}
 
         <div class="movie-info">
-            <div class="row">
-                <div class="col-8">
-                    <div class="movie-detail">
-                        <div class="row">
-                            <div class="col">
-                                <h1>{{ collection.name }}</h1>
-                                {% if collection.overview | length %}
-                                    <div class="overview">
-                                        {{ 'Overview'|trans }} :
-                                        {{ collection.overview }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
+            <div class="movie-detail">
+                <h1>{{ collection.name }}</h1>
+                {% if collection.overview | length %}
+                    <div class="overview">
+                        {{ 'Overview'|trans }} :
+                        {{ collection.overview }}
                     </div>
-                    {% if collection.parts is not empty %}
-                        <div class="row">
-                            <div class="col">
-                                <div class="collection-parts">
-                                    <h2>{{ 'Films'|trans }}</h2>
-                                    {% for part in collection.parts %}
-                                        <div class="part">
-                                            <div class="movie-header">
-                                                {% if part.backdrop_path %}
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ part.backdrop_path }}" class="d-block w-100" alt="{{ part.title }}">
-                                                {% else %}
-                                                    <img src="/images/default/no_banner_dark.png" class="d-block w-100" alt="{{ collection.name }}">
-                                                {% endif %}
-                                                <div class="user">
-                                                    <div class="rating" id="{{ part.id }}">
-                                                        <div class="star" data-rate="1"></div>
-                                                        <div class="star" data-rate="2"></div>
-                                                        <div class="star" data-rate="3"></div>
-                                                        <div class="star" data-rate="4"></div>
-                                                        <div class="star" data-rate="5"></div>
-                                                    </div>
-                                                    <div class="has-been-seen{% if part.id in userMovies %} yes{% endif %}" id="{{ part.id }}"><i class="bi bi-check-circle-fill"></i></div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-8">
-                                                    <div class="movie-detail">
-                                                        <h2>{{ part.title }}</h2>
-                                                        <div class="original_title">{{ 'Original Title'|trans }} : {{ part.original_title }}</div>
-                                                        <div class="genres">
-                                                            {% for genre in part.genres %}
-                                                                <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
-                                                            {% endfor %}
-                                                        </div>
-                                                        {% if part.overview | length %}
-                                                            <div class="overview">
-                                                                {{ 'Overview'|trans }} :
-                                                                {{ part.overview }}
-                                                            </div>
-                                                        {% endif %}
-                                                        {% if part.release_date|length %}
-                                                            <div class="date">
-                                                                {{ 'Release Date'|trans }} : {{ part.release_date|format_date('short') }}
-                                                            </div>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="movie-poster pt-5 pb-5">
-                                                        {% if part.poster_path %}
-                                                            <a href="{{ path('app_movie', {id: part.id}) }}" class="w-100">
-                                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ part.poster_path }}" alt="{{ part.title }}" class="w-100 h-auto">
-                                                            </a>
-                                                        {% else %}
-                                                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ part.title }}">
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            </div>
+                {% endif %}
+                {% if collection.parts is not empty %}
+                    <div class="collection-parts">
+                        <h2>{{ 'Films'|trans }}</h2>
+                        {% for part in collection.parts %}
+                            <div class="part">
+                                <div class="movie-header">
+                                    {% if part.backdrop_path %}
+                                        <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ part.backdrop_path }}" class="d-block w-100" alt="{{ part.title }}">
+                                    {% else %}
+                                        <img src="/images/default/no_banner_dark.png" class="d-block w-100" alt="{{ collection.name }}">
+                                    {% endif %}
+                                    <div class="user">
+                                        <div class="rating" id="{{ part.id }}">
+                                            <div class="star" data-rate="1"></div>
+                                            <div class="star" data-rate="2"></div>
+                                            <div class="star" data-rate="3"></div>
+                                            <div class="star" data-rate="4"></div>
+                                            <div class="star" data-rate="5"></div>
                                         </div>
-                                    {% endfor %}
+                                        <div class="has-been-seen{% if part.id in userMovies %} yes{% endif %}" id="{{ part.id }}"><i class="bi bi-check-circle-fill"></i></div>
+                                    </div>
+                                </div>
+                                <div class="sub-part">
+                                    <div class="movie-detail">
+                                        <h2>{{ part.title }}</h2>
+                                        <div class="original_title">{{ 'Original Title'|trans }} : {{ part.original_title }}</div>
+                                        <div class="genres">
+                                            {% for genre in part.genres %}
+                                                <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
+                                            {% endfor %}
+                                        </div>
+                                        {% if part.overview | length %}
+                                            <div class="overview">
+                                                {{ 'Overview'|trans }} :
+                                                {{ part.overview }}
+                                            </div>
+                                        {% endif %}
+                                        {% if part.release_date|length %}
+                                            <div class="date">
+                                                {{ 'Release Date'|trans }} : {{ part.release_date|format_date('short') }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="movie-poster pt-5 pb-5">
+                                        {% if part.poster_path %}
+                                            <a href="{{ path('app_movie', {id: part.id}) }}" class="w-100">
+                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ part.poster_path }}" alt="{{ part.title }}" class="w-100 h-auto">
+                                            </a>
+                                        {% else %}
+                                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ part.title }}">
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="col-4">
-                    <div class="movie-poster">
-                        {% if collection.poster_path %}
-                            <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ collection.poster_path }}" alt="{{ collection.name }}">
-                        {% else %}
-                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ collection.name }}">
-                        {% endif %}
+                        {% endfor %}
                     </div>
-                </div>
+                {% endif %}
+            </div>
+            <div class="movie-poster">
+                {% if collection.poster_path %}
+                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ collection.poster_path }}" alt="{{ collection.name }}">
+                {% else %}
+                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ collection.name }}">
+                {% endif %}
             </div>
         </div>
     </div>

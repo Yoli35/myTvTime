@@ -96,6 +96,22 @@ class UserMovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAll();
     }
 
+    public function findUserMoviesByAdd($userId, $offset = 0): array
+    {
+        $sql = 'SELECT * FROM `user_movie` t0 '
+            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            .'WHERE t1.`user_id` = '.$userId.' '
+            .'ORDER BY t0.`id` DESC '
+            .'LIMIT 20 '
+            .'OFFSET ' . $offset;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
     public function countUserMovies($userId): array
     {
         $sql = 'SELECT COUNT(*) AS `count` FROM `user_movie` t0 '
