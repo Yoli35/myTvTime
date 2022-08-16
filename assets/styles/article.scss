@@ -217,7 +217,13 @@
                     padding: .5em;
 
                     .reaction {
+                        border-radius: .5em;
+                        margin: .5em 0;
                         padding: .5em;
+                    }
+
+                    .odd {
+                        background-color: #cdeeee;
                     }
                 }
 
@@ -234,6 +240,7 @@
                             img {
                                 @include rounded-avatar(1.5em);
                             }
+
                             .name {
                                 font-size: .75em;
                                 padding-left: .5em;
@@ -303,6 +310,7 @@
             }
 
             .dropzone-preview-image {
+                background-size: cover;
                 border: 2px solid #bcdddd;
                 border-radius: 50%;
                 overflow: hidden;
@@ -417,7 +425,7 @@
 
     .blog {
         .article {
-            background-color: #012222;
+            background-color: #062020;
 
             .apercu {
 
@@ -475,6 +483,11 @@
 
                     .reactions {
                         background-color: #234444;
+
+                        .odd {
+                            background-color: #345555;
+                        }
+
                     }
                 }
             }

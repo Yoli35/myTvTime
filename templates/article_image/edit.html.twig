@@ -11,12 +11,12 @@
             <div class="header"></div>
 
             <h1>{{ 'Edit ArticleImage'|trans }}</h1>
-
-            <div class="preview">
-                <img src="/images/articles/images/{{ article_image.path }}" alt="{{ article_image.path }}">
-            </div>
-
             <div class="image-article">
+
+                <div class="preview">
+                    <img src="/images/articles/images/{{ article_image.path }}" alt="{{ article_image.path }}">
+                </div>
+
                 {{ include('article_image/_form.html.twig', {'button_label': 'Update'|trans, 'icon': 'fa-pen-to-square'|raw}) }}
 
                 <div class="back-delete">
@@ -29,4 +29,15 @@
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const body = document.querySelector("body");
+            const container = document.querySelector(".container");
+
+            body.setAttribute("style", "background-image: url(\"/images/articles/images/{{ article_image.path }}\"); background-position: center center; background-size: cover;");
+            container.setAttribute("style", "opacity: .97");
+        })
+    </script>
 {% endblock %}

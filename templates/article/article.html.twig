@@ -68,27 +68,29 @@
                                 {% if comment.answers is not empty %}
                                     <div class="reactions" id="reactions-{{ comment.id }}">
                                         {% for answer in comment.answers %}
-                                            <div class="reaction">
+                                            <div class="reaction{% if loop.index % 2 %} odd{% endif %}">
                                                 {{ include('blocks/article/reaction.html.twig', {reaction: answer}) }}
                                             </div>
                                         {% endfor %}
                                     </div>
                                 {% endif %}
-                                <div class="react">
-                                    <details>
-                                        <summary>{{ 'Answer'|trans }}</summary>
-                                        <div class="answer">
-                                            <div class="user">
-                                                {% if user.avatar %}
-                                                    <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
-                                                {% endif %}
-                                                <div class="name">{{ user.username?:user.email }}</div>
+                                {% if is_granted("ROLE_USER") %}
+                                    <div class="react">
+                                        <details>
+                                            <summary>{{ 'Answer'|trans }}</summary>
+                                            <div class="answer">
+                                                <div class="user">
+                                                    {% if user.avatar %}
+                                                        <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
+                                                    {% endif %}
+                                                    <div class="name">{{ user.username?:user.email }}</div>
+                                                </div>
+                                                <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea>
+                                                <div class="submit" id="add-{{ comment.id }}" data-id="{{ comment.id }}">{{ 'Add'|trans }}</div>
                                             </div>
-                                            <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea>
-                                            <div class="submit" id="add-{{ comment.id }}" data-id="{{ comment.id }}">{{ 'Add'|trans }}</div>
-                                        </div>
-                                    </details>
-                                </div>
+                                        </details>
+                                    </div>
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
@@ -117,11 +119,15 @@
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
                         const data = this.response;
-                        console.log({data});
 
                         const reactions = document.querySelector("#reactions-" + comment_id);
                         const reaction = document.createElement("div");
+                        const even = reactions.querySelectorAll(".reaction").length % 2;
+
                         reaction.classList.add("reaction");
+                        if (!even) {
+                            reaction.classList.add("odd");
+                        }
                         reaction.innerHTML = data;
                         reactions.appendChild(reaction);
                         textarea.value = "";
