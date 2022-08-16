@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Answer;
 use App\Entity\Comment;
 use App\Entity\User;
 use App\Form\CommentType;
+use App\Repository\AnswerRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
@@ -66,8 +69,7 @@ class ArticleController extends AbstractController
                 $comment->setText("");
                 $form = $this->createForm(CommentType::class, $comment);
             }
-        }
-        else {
+        } else {
             $form = null;
         }
 
@@ -76,8 +78,36 @@ class ArticleController extends AbstractController
         return $this->render('article/article.html.twig', [
             'article' => $article,
             'content' => $content,
-            'form' => $user?$form->createView():null,
+            'form' => $user ? $form->createView() : null,
             'comments' => $comments,
         ]);
+    }
+
+    #[Route('/{_locale}/blog/article/answer/{cid}', name: 'app_blog_article_add_answer', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function addAnswer(Request $request, $cid, CommentRepository $commentRepository, AnswerRepository $answerRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $comment = $commentRepository->find($cid);
+        $text = $request->query->get('text');
+
+        $answer = new Answer();
+        $answer->setUser($user);
+        $answer->setComment($comment);
+        $answer->setCreatedAt(new \DateTimeImmutable());
+        $answer->setUpdatedAt(new \DateTimeImmutable());
+        $answer->setText($text);
+        $answerRepository->add($answer, true);
+
+        return $this->render('blocks/article/reaction.html.twig', [
+            'reaction' => $answer,
+        ]);
+
+//        return $this->json([
+//            "comment_id" => $cid,
+//            "text" => $text,
+//            "created_at" => $answer->getCreatedAt(),
+//            "updated_at" => $answer->getUpdatedAt(),
+//        ]);
     }
 }

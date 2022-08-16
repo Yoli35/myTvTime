@@ -183,6 +183,7 @@
 
                 .user {
                     @include flex-row(center, flex-start);
+                    font-size: .875em;
 
                     img {
                         @include rounded-avatar(2em);
@@ -193,23 +194,35 @@
                         color: #123333;
                         padding-left: .5em;
                     }
+
+                    .dates {
+                        @include flex-100(center, flex-start);
+                        color: #123333;
+                        margin-left: 1em;
+
+                        div {
+                            padding-right: 1em;
+                        }
+                    }
                 }
 
                 .text {
                     font-style: italic;
                 }
 
-                .dates {
-                    @include flex-100(center, flex-start);
-                    color: #123333;
-                    font-size: .75em;
+                .reactions {
+                    background-color: #bcdddd;
+                    border-radius: .5em;
+                    margin: .25em 0 .25em 2em;
+                    padding: .5em;
 
-                    div {
-                        padding-right: 1em;
+                    .reaction {
+                        padding: .5em;
                     }
                 }
 
                 .react {
+                    padding-left: 2em;
                     width: 100%;
 
                     .answer {
@@ -454,10 +467,14 @@
                         .name {
                             color: #abcccc;
                         }
+
+                        .dates {
+                            color: #abcccc;
+                        }
                     }
 
-                    .dates {
-                        color: #abcccc;
+                    .reactions {
+                        background-color: #234444;
                     }
                 }
             }

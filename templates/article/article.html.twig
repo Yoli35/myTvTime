@@ -64,17 +64,16 @@
                         <div class="label">{{ 'Comments'|trans }} :</div>
                         {% for comment in comments %}
                             <div class="comment">
-                                <div class="user">
-                                    {% if comment.user.avatar %}
-                                        <img src="/images/users/avatars/{{ comment.user.avatar }}" alt="{{ comment.user.username?:comment.user.email }}">
-                                    {% endif %}
-                                    <div class="name">{{ comment.user.username?:comment.user.email }}</div>
-                                </div>
-                                <div class="text">{{ comment.text }}</div>
-                                <div class="dates">
-                                    <div>{{ 'Created at'|trans }} : {{ comment.createdAt|format_datetime() }}</div>
-                                    <div>{{ 'Modified at'|trans }} : {{ comment.updatedAt|format_datetime() }}</div>
-                                </div>
+                                {{ include('blocks/article/reaction.html.twig', {reaction: comment}) }}
+                                {% if comment.answers is not empty %}
+                                    <div class="reactions" id="reactions-{{ comment.id }}">
+                                        {% for answer in comment.answers %}
+                                            <div class="reaction">
+                                                {{ include('blocks/article/reaction.html.twig', {reaction: answer}) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                                 <div class="react">
                                     <details>
                                         <summary>{{ 'Answer'|trans }}</summary>
@@ -100,4 +99,38 @@
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        let path = "{{ path('app_blog_article_add_answer', {cid: 0}) }}";
+        const _app_blog_article_add_answer = path.substring(0, path.length - 1);
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            const submits = document.querySelectorAll(".submit");
+
+            submits.forEach(submit => {
+                submit.addEventListener("click", () => {
+                    const comment_id = submit.getAttribute("data-id");
+                    const textarea = document.querySelector("#answer-" + comment_id);
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.onload = function () {
+                        const data = this.response;
+                        console.log({data});
+
+                        const reactions = document.querySelector("#reactions-" + comment_id);
+                        const reaction = document.createElement("div");
+                        reaction.classList.add("reaction");
+                        reaction.innerHTML = data;
+                        reactions.appendChild(reaction);
+                        textarea.value = "";
+                        textarea.focus();
+                    }
+                    xhr.open("GET", _app_blog_article_add_answer + comment_id + '?text=' + textarea.value);
+                    xhr.send();
+                })
+            })
+        })
+    </script>
 {% endblock %}

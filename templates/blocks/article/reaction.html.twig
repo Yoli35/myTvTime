@@ -1,0 +1,11 @@
+<div class="user">
+    {% if reaction.user.avatar %}
+        <img src="/images/users/avatars/{{ reaction.user.avatar }}" alt="{{ reaction.user.username?:reaction.user.email }}">
+    {% endif %}
+    <div class="name">{{ reaction.user.username?:reaction.user.email }}</div>
+    <div class="dates">
+        <div>{{ 'Created at'|trans }} : {{ reaction.createdAt|format_datetime() }}</div>
+{#        <div>{{ 'Modified at'|trans }} : {{ reaction.updatedAt|format_datetime() }}</div>#}
+    </div>
+</div>
+<div class="text">{{ reaction.text }}</div>
