@@ -483,6 +483,10 @@ h4 {
             color: #dbdbdb;
             cursor: pointer;
             padding: 0 .2em;
+
+            &.yes {
+                color: #11d08e;
+            }
         }
 
         .rating {
@@ -490,8 +494,23 @@ h4 {
         }
     }
 
-    .has-been-seen.yes {
-        color: #11d08e;
+    .my-collections {
+        @include flex-col();
+        position: absolute;
+        right: -1.5em;
+        top: 4em;
+
+        .my-collection {
+            margin-top: -1em;
+
+            img {
+                border: 2px solid #11d08e;
+                border-radius: 50%;
+                height: 3em;
+                object-fit: cover;
+                width: 3em;
+            }
+        }
     }
 }
 

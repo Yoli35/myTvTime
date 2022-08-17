@@ -70,8 +70,8 @@ class UserMovieRepository extends ServiceEntityRepository
     public function findAllUserMovies($userId): array
     {
         $sql = 'SELECT * FROM `user_movie` t0 '
-            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
-            .'WHERE t1.`user_id` = '.$userId;
+            . 'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'WHERE t1.`user_id` = ' . $userId;
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
@@ -82,12 +82,49 @@ class UserMovieRepository extends ServiceEntityRepository
 
     public function findUserMovies($userId, $offset = 0): array
     {
-        $sql = 'SELECT * FROM `user_movie` t0 '
-            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
-            .'WHERE t1.`user_id` = '.$userId.' '
-            .'ORDER BY t0.`release_date` DESC '
-            .'LIMIT 20 '
-            .'OFFSET ' . $offset;
+        $sql = 'SELECT '
+            . '  id, title, original_title, poster_path, release_date, movie_db_id, runtime, created_at '
+            . 'FROM '
+            . '  `user_movie` t0 '
+            . 'INNER JOIN '
+            . '  `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'WHERE '
+            . '  t1.`user_id` = ' . $userId . ' '
+            . 'ORDER BY '
+            . '  t0.`release_date` DESC '
+            . 'LIMIT 20 '
+            . 'OFFSET ' . $offset;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
+    public function userMovieGetCollections($movie_id, $short = true): array
+    {
+        if ($short) {
+            $sql = 'SELECT '
+                . '  title,thumbnail '
+                . 'FROM '
+                . '  my_movie_collection t0 '
+                . 'INNER JOIN '
+                . '  my_movie_collection_user_movie '
+                . '  ON t0.id = my_movie_collection_user_movie.my_movie_collection_id '
+                . 'WHERE '
+                . '  my_movie_collection_user_movie.user_movie_id = ' . $movie_id;
+        } else {
+            $sql = 'SELECT '
+                . '  * '
+                . 'FROM '
+                . '  my_movie_collection t0 '
+                . 'INNER JOIN '
+                . '  my_movie_collection_user_movie '
+                . '  ON t0.id = my_movie_collection_user_movie.my_movie_collection_id '
+                . 'WHERE '
+                . '  my_movie_collection_user_movie.user_movie_id = ' . $movie_id;
+        }
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
@@ -99,11 +136,11 @@ class UserMovieRepository extends ServiceEntityRepository
     public function findUserMoviesByAdd($userId, $offset = 0): array
     {
         $sql = 'SELECT * FROM `user_movie` t0 '
-            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
-            .'WHERE t1.`user_id` = '.$userId.' '
-            .'ORDER BY t0.`id` DESC '
-            .'LIMIT 20 '
-            .'OFFSET ' . $offset;
+            . 'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'WHERE t1.`user_id` = ' . $userId . ' '
+            . 'ORDER BY t0.`id` DESC '
+            . 'LIMIT 20 '
+            . 'OFFSET ' . $offset;
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
@@ -115,8 +152,8 @@ class UserMovieRepository extends ServiceEntityRepository
     public function countUserMovies($userId): array
     {
         $sql = 'SELECT COUNT(*) AS `count` FROM `user_movie` t0 '
-            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
-            .'WHERE t1.`user_id` = '.$userId;
+            . 'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'WHERE t1.`user_id` = ' . $userId;
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
@@ -126,8 +163,8 @@ class UserMovieRepository extends ServiceEntityRepository
     public function getUserMoviesRuntime($userId): array
     {
         $sql = 'SELECT `runtime` FROM `user_movie` t0 '
-            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
-            .'WHERE t1.`user_id` = '.$userId;
+            . 'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'WHERE t1.`user_id` = ' . $userId;
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
@@ -137,8 +174,8 @@ class UserMovieRepository extends ServiceEntityRepository
     public function findUserMovieIds($userId): array
     {
         $sql = 'SELECT `movie_db_id` FROM `user_movie` t0 '
-            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
-            .'WHERE t1.`user_id` = '.$userId;
+            . 'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'WHERE t1.`user_id` = ' . $userId;
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
@@ -148,12 +185,12 @@ class UserMovieRepository extends ServiceEntityRepository
     public function getUserMovieFromIdList($userId, $list): array
     {
         $sql = 'SELECT * FROM `user_movie` t0 '
-            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
-            .'WHERE t1.`user_id` = '.$userId . ' AND t0.`movie_db_id` IN (';
+            . 'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'WHERE t1.`user_id` = ' . $userId . ' AND t0.`movie_db_id` IN (';
         foreach ($list as $id) {
             $sql .= $id . ', ';
         }
-        $sql = substr($sql, 0, strlen($sql)-2) . ')';
+        $sql = substr($sql, 0, strlen($sql) - 2) . ')';
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
@@ -163,10 +200,10 @@ class UserMovieRepository extends ServiceEntityRepository
     public function searchUserMovies($userId, $query): array
     {
         $sql = 'SELECT * FROM `user_movie` t0 '
-            .'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
-            .'WHERE t1.`user_id` = '.$userId.' '
-            .'AND (t0.title LIKE "%'.$query.'%" OR t0.original_title LIKE "%'.$query.'%")'
-            .'ORDER BY t0.`release_date` DESC';
+            . 'INNER JOIN `user_user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'WHERE t1.`user_id` = ' . $userId . ' '
+            . 'AND (t0.title LIKE "%' . $query . '%" OR t0.original_title LIKE "%' . $query . '%")'
+            . 'ORDER BY t0.`release_date` DESC';
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

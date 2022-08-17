@@ -108,6 +108,15 @@
 
                 .condition {
                     @include flex-row();
+                    width: 4em;
+
+                    &.open {
+                        width: 20em;
+
+                        img {
+                            width: 4em;
+                        }
+                    }
                 }
 
                 .item {
@@ -129,7 +138,7 @@
                     justify-content: center;
                     margin: .5em;
                     position: relative;
-                    transition: all 1s;
+                    transition: all .25s ease-out;
                     width: 5rem;
 
                     &:hover {

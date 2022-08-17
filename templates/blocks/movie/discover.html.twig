@@ -18,4 +18,15 @@
             <div class="has-been-seen{% if id in userMovies %} yes{% endif %}" id="{{ id }}"><i class="bi bi-check-circle-fill"></i></div>
         </div>
     {% endif %}
+    {% if discover.my_collections is defined %}
+        {% if discover.my_collections is not empty %}
+            <div class="my-collections">
+                {% for collection in discover.my_collections %}
+                    <div class="my-collection">
+                        <img src="/images/collections/thumbnails/{{ collection.thumbnail }}" alt="{{ collection.title }}">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
 </div>

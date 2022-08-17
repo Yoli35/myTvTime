@@ -114,7 +114,16 @@ class UserController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $movies = $userMovieRepository->findUserMoviesByAdd($user->getId());
+//        $userMovies = $userMovieRepository->findUserMovies($user->getId());
+//        $movies=[];
+//        foreach ($userMovies as $userMovie) {
+//            $movie = $userMovie;
+//            $collections = $userMovieRepository->userMovieGetCollections($userMovie['id']);
+//            $movie['my_collections'] = $collections;
+//            $movies[] = $movie;
+//        }
+        $movies = $this->getUserMovies($user->getId(), 0, $userMovieRepository);
+
         $imageConfig = $imageConfiguration->getConfig();
 
         $items = $userMovieRepository->getUserMoviesRuntime($user->getId());
@@ -144,8 +153,22 @@ class UserController extends AbstractController
     public function userMoviesMore(Request $request, UserMovieRepository $userMovieRepository): Response
     {
         return $this->json([
-            'results' => $userMovieRepository->findUserMovies($request->query->get('id'), $request->query->get('offset')),
+//            'results' => $userMovieRepository->findUserMovies($request->query->get('id'), $request->query->get('offset')),
+            'results' => $this->getUserMovies($request->query->get('id'), $request->query->get('offset'), $userMovieRepository),
         ]);
+    }
+
+    public function getUserMovies($userId, $offset, $userMovieRepository): array
+    {
+        $userMovies = $userMovieRepository->findUserMovies($userId, $offset);
+        $movies=[];
+        foreach ($userMovies as $userMovie) {
+            $movie = $userMovie;
+            $collections = $userMovieRepository->userMovieGetCollections($userMovie['id']);
+            $movie['my_collections'] = $collections;
+            $movies[] = $movie;
+        }
+        return $movies;
     }
 
     /**

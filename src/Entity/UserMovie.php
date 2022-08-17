@@ -40,10 +40,14 @@ class UserMovie
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToMany(targetEntity: MyMovieCollection::class, mappedBy: 'movies')]
+    private Collection $myMovieCollections;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
+        $this->myMovieCollections = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,5 +164,37 @@ class UserMovie
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, MyMovieCollection>
+     */
+    public function getMyMovieCollections(): Collection
+    {
+        return $this->myMovieCollections;
+    }
+
+    public function addMyMovieCollection(MyMovieCollection $myMovieCollection): self
+    {
+        if (!$this->myMovieCollections->contains($myMovieCollection)) {
+            $this->myMovieCollections->add($myMovieCollection);
+            $myMovieCollection->addMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMyMovieCollection(MyMovieCollection $myMovieCollection): self
+    {
+        if ($this->myMovieCollections->removeElement($myMovieCollection)) {
+            $myMovieCollection->removeMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
     }
 }

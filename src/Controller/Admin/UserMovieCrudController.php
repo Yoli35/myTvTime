@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\UserMovie;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -23,6 +24,7 @@ class UserMovieCrudController extends AbstractCrudController
             TextField::new('release_date'),
             NumberField::new('movie_db_id'),
             NumberField::new('runtime'),
+            AssociationField::new('myMovieCollections'),
         ];
     }
 }

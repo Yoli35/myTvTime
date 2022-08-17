@@ -472,6 +472,7 @@ function moreVideos() {
                     aVideo.appendChild(img);
                     aVideo.appendChild(title);
                     aVideo.appendChild(date);
+
                     let user = document.createElement("div");
                     user.classList.add("user");
                     user.setAttribute("style", "transform: scale(.5)");
@@ -496,6 +497,22 @@ function moreVideos() {
 
                     newVideo.appendChild(aVideo);
                     newVideo.appendChild(user);
+
+                    if (result['my_collections'].length) {
+                        let collections = document.createElement("div");
+                        collections.classList.add("my-collections");
+                        for (let i=0;i<result['my_collections'].length;i++) {
+                            let c = result['my_collections'][i];
+                            let collection = document.createElement("div");
+                            collection.classList.add("my-collection");
+                            let thumbnail = document.createElement("img");
+                            thumbnail.setAttribute("src", '/images/collections/thumbnails/' + c['thumbnail']);
+                            thumbnail.setAttribute("alt", c['title']);
+                            collection.appendChild(thumbnail);
+                            collections.appendChild(collection);
+                        }
+                        newVideo.appendChild(collections);
+                    }
 
                     userMovieList.appendChild(newVideo);
 

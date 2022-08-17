@@ -161,22 +161,23 @@
 <script>
     // https://api.weatherapi.com/v1/forecast.json?key=a790df8a650b4ec8ab145453222405&q=Nantes&days=3&lang=fr
     window.addEventListener("DOMContentLoaded", () => {
-        const banner = document.getElementById("user-banner");
-        const avatar = document.getElementById("user-avatar");
-        const toggle = document.getElementById("toggler");
-        const weather = document.getElementById("weather");
-        const content = document.getElementById("weather-content");
+        const banner = document.querySelector("#user-banner");
+        const avatar = document.querySelector("#user-avatar");
+        const toggle = document.querySelector("#toggler");
+        const weather = document.querySelector("#weather");
+        const content = document.querySelector("#weather-content");
         const row = document.getElementsByClassName("content-row");
         const vertical = document.getElementsByClassName("vertical");
-        const temperature = document.getElementById("weather-temp");
+        const temperature = document.querySelector("#weather-temp");
+        const condition = document.querySelector(".condition");
         let windowWidth = window.innerWidth;
         let startDate = new Date();
         let hour = startDate.getHours();
         let minutes = startDate.getMinutes();
-        const now = document.getElementById("now");
+        const now = document.querySelector("#now");
         const h24 = now.parentNode;
-        const sunrise = document.getElementById("sunrise");
-        const sunset = document.getElementById("sunset");
+        const sunrise = document.querySelector("#sunrise");
+        const sunset = document.querySelector("#sunset");
         const sunriseHour = parseInt(sunrise.getAttribute("data-sunrise"));
         const sunsetHour = parseInt(sunset.getAttribute("data-sunset"));
         const sunriseMinutes = parseInt(sunrise.getAttribute("data-sunrise-minutes"));
@@ -219,6 +220,7 @@
                 for (let i = 0; i < row.length; i++) row.item(i).setAttribute("style", "flex-direction: row");
                 content.setAttribute("style", "padding: 1em 1em 0 1em");
                 temperature.setAttribute("style", "font-size: 3em");
+                condition.classList.remove("open");
                 for (let i = 0; i < vertical.length; i++) vertical.item(i).setAttribute("style", "display: none");
 
                 arrow.setAttribute("style", "transform: rotate(0deg) scaleX(50%);");
@@ -235,6 +237,7 @@
                 for (let i = 0; i < row.length; i++) row.item(i).setAttribute("style", "flex-direction: column");
                 content.setAttribute("style", "padding: 1em");
                 temperature.setAttribute("style", "font-size: 5em");
+                condition.classList.add("open");
                 for (let i = 0; i < vertical.length; i++) vertical.item(i).setAttribute("style", "display: block");
 
                 arrow.setAttribute("style", "transform: rotate(" + (angle + 720) + "deg) scaleX(50%);");

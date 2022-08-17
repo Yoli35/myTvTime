@@ -281,6 +281,10 @@ WNW: ONO
 WSW: OSO
 ENE: ENE
 ESE: ESE
+SSE: SSE
+SSW: SSO
+NNE: NNE
+NNW: NNO
 Millibars: millibars
 Patchy rain possible: Pluie éparse possible
 Moderate rain: Pluie modérée
