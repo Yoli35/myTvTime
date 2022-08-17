@@ -497,7 +497,7 @@ h4 {
     .my-collections {
         @include flex-col();
         position: absolute;
-        right: -1.5em;
+        right: -1.25em;
         top: 4em;
 
         .my-collection {

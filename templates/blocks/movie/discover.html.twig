@@ -23,7 +23,11 @@
             <div class="my-collections">
                 {% for collection in discover.my_collections %}
                     <div class="my-collection">
-                        <img src="/images/collections/thumbnails/{{ collection.thumbnail }}" alt="{{ collection.title }}">
+                        <img
+                                src="/images/collections/thumbnails/{{ collection.thumbnail }}"
+                                alt="{{ collection.title }}"
+                                style="border: 2px solid {{ collection.color }}"
+                        >
                     </div>
                 {% endfor %}
             </div>

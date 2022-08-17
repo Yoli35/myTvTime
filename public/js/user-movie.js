@@ -508,6 +508,7 @@ function moreVideos() {
                             let thumbnail = document.createElement("img");
                             thumbnail.setAttribute("src", '/images/collections/thumbnails/' + c['thumbnail']);
                             thumbnail.setAttribute("alt", c['title']);
+                            thumbnail.setAttribute("style", "border: 2px solid " + c['color']);
                             collection.appendChild(thumbnail);
                             collections.appendChild(collection);
                         }

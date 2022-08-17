@@ -106,7 +106,7 @@ class UserMovieRepository extends ServiceEntityRepository
     {
         if ($short) {
             $sql = 'SELECT '
-                . '  title,thumbnail '
+                . '  title,thumbnail,color '
                 . 'FROM '
                 . '  my_movie_collection t0 '
                 . 'INNER JOIN '
