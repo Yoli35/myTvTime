@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CollectionController!{% endblock %}
+
+{% block body %}
+    <div class="my-collection-page">
+        <div class="container">
+
+            <header>
+
+                {{ include('blocks/pageHeader.html.twig') }}
+
+                <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                        {{ include('blocks/movie/bracket.html.twig') }}
+                        <li class="breadcrumb-item"><a href="{{ path('app_collection') }}">{{ 'My Collections'|trans }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="{{ collection.title }}">{{ collection.title }}</li>
+                    </ol>
+                </nav>
+
+                <div class="banner">
+                    {% if collection.banner %}
+                        <img src="/images/collections/banners/{{ collection.banner }}">
+                        <div class="thumbnail" style="background-color: {{ collection.color }}">
+                            {% if collection.thumbnail %}
+                                <img src="/images/collections/thumbnails/{{ collection.thumbnail }}">
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </header>
+
+            <main>
+                <h1>{{ collection.title }}</h1>
+                <aside>
+                    <details>
+                        <summary>{{ 'Description'|trans }}</summary>
+                        <div class="description">{{ collection.description|raw }}</div>
+                    </details>
+                </aside>
+                <section>
+                    <h2>{{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}</h2>
+                    <div class="movies">
+                        {% if collection.movies is empty %}
+                            Rien à afficher
+                        {% else %}
+                            {% for movie in collection.movies %}
+                                {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath %}
+                                {{ include('blocks/movie/discover.html.twig', { title: movie.title, poster: poster, id: movie.movieDbId, route: 'app_movie' }) }}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                {{ include('blocks/pageFooter.html.twig') }}
+            </footer>
+        </div>
+    </div>
+{% endblock %}
+{% block morejs %}
+    <script src="/js/movie.js"></script>
+    <script>
+        const paths = [
+            "{{ path('profile_infos') }}",
+            "{{ path('imdb_infos') }}",
+            "{{ path('app_movie_add') }}",
+            "{{ path('app_movie_remove') }}",
+            "{{ path('app_movie_get_rating') }}",
+            "{{ path('app_movie_set_rating') }}",
+        ];
+        window.addEventListener("DOMContentLoaded", () => {
+            initMovieStuff(paths, "", "{{ locale }}");
+        })
+    </script>
+{% endblock %}
+
+

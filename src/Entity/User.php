@@ -61,11 +61,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Article::class)]
     private Collection $articles;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: MyMovieCollection::class, orphanRemoval: true)]
+    private Collection $myMovieCollections;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
         $this->tiktoks = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->myMovieCollections = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -312,6 +316,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($article->getUser() === $this) {
                 $article->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MyMovieCollection>
+     */
+    public function getMyMovieCollections(): Collection
+    {
+        return $this->myMovieCollections;
+    }
+
+    public function addMyMovieCollection(MyMovieCollection $myMovieCollection): self
+    {
+        if (!$this->myMovieCollections->contains($myMovieCollection)) {
+            $this->myMovieCollections->add($myMovieCollection);
+            $myMovieCollection->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMyMovieCollection(MyMovieCollection $myMovieCollection): self
+    {
+        if ($this->myMovieCollections->removeElement($myMovieCollection)) {
+            // set the owning side to null (unless already changed)
+            if ($myMovieCollection->getUser() === $this) {
+                $myMovieCollection->setUser(null);
             }
         }
 

@@ -153,7 +153,7 @@
             </div>
             <div class="movie-poster">
                 {% if movie.poster_path %}
-                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
                 {% else %}
                     <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
                 {% endif %}
@@ -265,7 +265,7 @@
         ];
 
         window.addEventListener("DOMContentLoaded", () => {
-            initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}", "{{ locale }}");
+            initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.2 }}", "{{ locale }}");
 
             const poster = document.querySelector(".movie-poster");
             const image = poster.querySelector("img");

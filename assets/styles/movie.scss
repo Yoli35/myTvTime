@@ -105,6 +105,7 @@
             right: 1em;
         }
     }
+
     .sub-part {
         @include flex-100(flex-start, center);
     }
@@ -253,8 +254,8 @@
         }
 
         .replacement {
-            background: rgb(131,58,180);
-            background: linear-gradient(225deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+            background: rgb(131, 58, 180);
+            background: linear-gradient(225deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
             border: 8px solid #f2f2f2;
             height: 30vw;
             width: 100%;
@@ -339,7 +340,10 @@
 }
 
 .person-modal {
-    @include flex-row(unset, unset);
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
 
     .person-infos {
         @include flex-col(unset, space-evenly);
@@ -370,7 +374,27 @@
     }
 
     .person-profile {
-        margin-left: auto;
+        width: 100%;
+
+        img {
+            border-radius: .5em;
+            width: 100%;
+        }
+    }
+}
+
+@media (min-width: 992px) {
+
+    .person-modal {
+        @include flex-row(flex-start, flex-start);
+
+        .person-infos {
+            width: 70%;
+        }
+        .person-profile {
+            margin-left: auto;
+            width: 30%;
+        }
     }
 }
 

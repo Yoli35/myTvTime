@@ -2,7 +2,9 @@
 @import "variables";
 
 body {
-    background-color: var(--mtt-body-bg);
+    background: var(--mtt-body-bg);
+    background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--mtt-body-bg-gradiant) 100%);
+    background-attachment: fixed;
     color: var(--mtt-body-color);
     display: flex;
     flex-direction: column;
@@ -502,13 +504,20 @@ h4 {
 
         .my-collection {
             margin-top: -1em;
+            height: 3em;
+            transition: all .125s ease-out;
+            width: 3em;
 
             img {
                 border: 2px solid #11d08e;
                 border-radius: 50%;
-                height: 3em;
+                height: 100%;
                 object-fit: cover;
-                width: 3em;
+                width: 100%;
+            }
+
+            &:hover {
+                transform: scale(1.5);
             }
         }
     }

@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\MyMovieCollection;
+use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -31,6 +33,7 @@ class MyMovieCollectionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
+        yield AssociationField::new('user')->hideOnForm();
         yield TextField::new('title');
         if ($pageName == Crud::PAGE_EDIT || $pageName == Crud::PAGE_NEW) {
             yield TextEditorField::new('description');
@@ -49,6 +52,27 @@ class MyMovieCollectionCrudController extends AbstractCrudController
 //        if ($pageName == Crud::PAGE_EDIT || $pageName == Crud::PAGE_NEW) {
             yield AssociationField::new('movies');
 //        }
+    }
 
+    public function createEntity(string $entityFqcn): MyMovieCollection
+    {
+        $datetime = (new DateTimeImmutable());
+
+        $collection = new MyMovieCollection;
+
+        $collection->setUser($this->getUser());
+        $collection->setCreatedAt($datetime);
+        $collection->setUpdatedAt($datetime);
+
+        return $collection;
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        /** @var MyMovieCollection $entityInstance */
+        $entityInstance->setUpdatedAt(new DateTimeImmutable());
+
+        $entityManager->persist($entityInstance);
+        $entityManager->flush();
     }
 }
