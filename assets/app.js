@@ -15,6 +15,7 @@ import './styles/youtube.scss';
 import './styles/tiktok.scss';
 import './styles/article.scss';
 import './styles/collection.scss';
+import './styles/serie.scss';
 
 // import './js/movie';
 import './js/mydropzone_controller'

@@ -64,12 +64,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: MyMovieCollection::class, orphanRemoval: true)]
     private Collection $myMovieCollections;
 
+    #[ORM\ManyToMany(targetEntity: Serie::class, mappedBy: 'users')]
+    private Collection $series;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
         $this->tiktoks = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->myMovieCollections = new ArrayCollection();
+        $this->series = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,7 +197,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         if ($this->username) return $this->username;
-        return 'No Usermame ('.$this->email.')';
+        return 'No Username ('.$this->email.')';
     }
 
     public function getCity(): ?string
@@ -347,6 +351,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($myMovieCollection->getUser() === $this) {
                 $myMovieCollection->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Serie>
+     */
+    public function getSeries(): Collection
+    {
+        return $this->series;
+    }
+
+    public function addSeries(Serie $series): self
+    {
+        if (!$this->series->contains($series)) {
+            $this->series->add($series);
+            $series->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeries(Serie $series): self
+    {
+        if ($this->series->removeElement($series)) {
+            $series->removeUser($this);
         }
 
         return $this;

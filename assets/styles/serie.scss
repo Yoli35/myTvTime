@@ -1,0 +1,76 @@
+@import "variables";
+
+.my-series {
+    @include flex-col(flex-start, center);
+    padding-top: 1em;
+
+    .header {
+        background-image: url("../images/serie-header.jpg");
+        background-position: center center;
+        background-size: cover;
+        border-radius: 1em;
+        height: 20em;
+        width: 100%;
+    }
+
+    .series {
+        @include flex-col();
+
+        .wrapper {
+            @include flex-row(flex-start, flex-start);
+            flex-wrap: wrap;
+            font-size: .75em;
+            font-weight: 100;
+
+            .serie {
+                @include flex-col(center, flex-start);
+                position: relative;
+                margin: 1em;
+                width: 18em;
+
+                .poster {
+                    width: 100%;
+
+                    img {
+                        border-radius: .5em;
+                        width: 100%;
+                    }
+                }
+
+                .infos {
+                    @include flex-col();
+
+                    div:first-child {
+                        font-size: 1.5em;
+                        font-weight: 200;
+                    }
+                }
+
+                .network {
+                    @include flex-row();
+                    background-color: #edffff;
+                    border-radius: 50%;
+                    height: 3em;
+                    object-fit: cover;
+                    overflow: hidden;
+                    padding: .25em;
+                    position: absolute;
+                    right: -1.5em;
+                    top: 1em;
+                    width: 3em;
+
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .my-series {
+        color: #abcccc;
+    }
+}

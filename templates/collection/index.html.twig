@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CollectionController!{% endblock %}
+{% block title %}myTvTime::{{ 'My Collections'|trans }}{% endblock %}
 
 {% block body %}
+    {{ include('blocks/pageHeader.html.twig') }}
 
-    <div class="my-collections-page">
-        <div class="container">
+    <div class="container">
+        <div class="my-collections-page">
             <header>
-
-                {{ include('blocks/pageHeader.html.twig') }}
 
                 <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
                     <ol class="breadcrumb">

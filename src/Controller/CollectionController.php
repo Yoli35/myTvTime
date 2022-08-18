@@ -23,7 +23,7 @@ class CollectionController extends AbstractController
         $user = $this->getUser();
 
         $collections = $collectionRepository->findBy(['user' => $user]);
-        dump($collections);
+//        dump($collections);
 
         return $this->render('collection/index.html.twig', [
             'collections' => $collections,
@@ -35,10 +35,10 @@ class CollectionController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $movies = $movieCollection->getMovies();
-        foreach ($movies as $movie) {
-            dump($movie);
-        }
+//        $movies = $movieCollection->getMovies();
+//        foreach ($movies as $movie) {
+//            dump($movie);
+//        }
         $imageConfig = $imageConfiguration->getConfig();
 
         return $this->render('collection/display.html.twig', [

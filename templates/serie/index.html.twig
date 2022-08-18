@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Serie index{% endblock %}
+
+{% block body %}
+    {{ include('blocks/pageHeader.html.twig') }}
+    <div class="container">
+
+        <div class="my-series">
+            <div class="header"></div>
+
+            <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                    {{ include('blocks/movie/bracket.html.twig') }}
+                    <li class="breadcrumb-item active">{{ 'My Series'|trans }}</li>
+                </ol>
+            </nav>
+
+            <h1>Serie index</h1>
+            <main>
+                <div class="series">
+                    {% if series|length %}
+                        <div class="wrapper">
+                            {% for serie in series %}
+                                <a href="{{ path('app_serie_show', {'id': serie.id}) }}">
+                                    <div class="serie">
+                                        <div class="poster">
+                                            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ 'Poster' }}">
+                                        </div>
+                                        <div class="infos">
+                                            <div>{{ serie.name }}</div>
+                                            <div>{{ serie.firstDateAir ? serie.firstDateAir|format_datetime() : '' }}</div>
+                                            <div>{{ serie.addedAt ? serie.addedAt|format_datetime() : '' }}</div>
+                                        </div>
+                                        {% if serie.networkLogoPath %}
+                                            <div class="network">
+                                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ serie.networkLogoPath }}" alt="{{ 'Network' }}">
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        Rien à afficher
+                    {% endif %}
+                </div>
+            </main>
+
+            <a href="{{ path('app_serie_new') }}">Create new</a>
+        </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}

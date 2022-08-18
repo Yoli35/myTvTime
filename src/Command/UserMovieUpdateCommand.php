@@ -8,9 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -59,7 +57,7 @@ class UserMovieUpdateCommand extends Command
         foreach ($userMovies as $userMovie) {
             $output->write($userMovie->getTitle().' : ');
             $standing = $this->callTmdbService->getMovie($userMovie->getMovieDbId(), 'en');
-            $movie = json_decode($standing, true, 512, 0);
+            $movie = json_decode($standing, true);
             $runtime = $movie['runtime'];
             $output->writeln($runtime.' minutes.');
             $total_runtime += $runtime;
