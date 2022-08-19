@@ -46,10 +46,72 @@
                         </div>
                         <div class="pages-settings">
                             <div class="pages">
-                                <h2>{{ 'Pagination' }}</h2>
+                                <h2>{{ 'Pagination'|trans }}</h2>
+                                <div class="position">{{ 'Page'|trans }} {{ pages.page }} / {{ pages.paginator.total_pages }} - {{ pages.total_results }} {{ 'Series'|trans }}</div>
+                                <div class="page-group">
+                                    {% if pages.page > 1 %}
+                                        <div class="page"><a href="{{ path('app_serie_index') }}?p={{ pages.page-1 }}&pp={{ pages.per_page }}&ob={{ pages.order_by }}&o={{ pages.order }}"><i class="fa-solid fa-arrow-left"></i></a></div>
+                                    {% endif %}
+                                    {% for p in pages.paginator.first_link..pages.paginator.last_link %}
+                                        {% if p == pages.page %}
+                                            <div class="page current"><div>{{ p }}</div></div>
+                                        {% else %}
+                                            <div class="page"><a href="{{ path('app_serie_index') }}?p={{ p }}&pp={{ pages.per_page }}&ob={{ pages.order_by }}&o={{ pages.order }}">{{ p }}</a></div>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if pages.page < pages.paginator.total_pages %}
+                                        <div class="page"><a href="{{ path('app_serie_index') }}?p={{ pages.page+1 }}&pp={{ pages.per_page }}&ob={{ pages.order_by }}&o={{ pages.order }}"><i class="fa-solid fa-arrow-right"></i></a></div>
+                                    {% endif %}
+                                </div>
                             </div>
                             <div class="settings">
-                                <h2>{{ 'Settings' }}</h2>
+                                <h2>{{ 'Settings'|trans }}</h2>
+
+                                <div class="per-page">
+                                    <label class="label" for="per-page">{{ 'Results per page'|trans }}</label>
+                                    <div class="field">
+                                        {% set slider_value = 2 %}
+                                        {% for key, value in pages.per_page_values %}
+                                            {% if value == pages.per_page %}
+                                                {% set slider_value = key %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        <input id="per-page" type="range" value="{{ slider_value }}" list="per-page-list" min="1" max="{{ pages.per_page_values|length }}">
+                                        <datalist id="per-page-list">
+                                            {% for key, value in pages.per_page_values %}
+                                                <option value="{{ key }}" label="{{ value }}"></option>
+                                            {% endfor %}
+                                        </datalist>
+                                        <div class="value">{{ pages.per_page }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="group-settings">
+                                    <div class="order-by">
+                                        <label class="label" for="order-by">{{ 'Order by'|trans }}</label>
+                                        <div class="field">
+                                            <select id="order-by">
+                                                <option value="firstDateAir"{% if pages.order_by=='firstDateAir' %} selected{% endif %}>{{ 'First Air Date'|trans }}</option>
+                                                <option value="id"{% if pages.order_by=='id' %} selected{% endif %}>{{ 'Add order'|trans }}</option>
+                                                <option value="name"{% if pages.order_by=='name' %} selected{% endif %}>{{ 'Name'|trans }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="order">
+                                        <label class="label" for="order">{{ 'Order'|trans }}</label>
+                                        <div class="field">
+                                            <select id="order">
+                                                <option value="desc"{% if pages.order=='desc' %} selected{% endif %}>{{ 'Descending'|trans }}</option>
+                                                <option value="asc"{% if pages.order=='asc' %} selected{% endif %}>{{ 'Ascending'|trans }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="apply">
+                                    <button type="submit" class="btn btn-secondary">{{ 'Apply'|trans }}</button>
+                                </div>
                             </div>
                         </div>
                     {% else %}
@@ -64,4 +126,38 @@
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+
+            const apply = document.querySelector("button[type='submit']");
+            let per_page = {
+                'input': document.querySelector(".per-page").querySelector("input"),
+                'value': document.querySelector(".per-page").querySelector(".value"),
+                'data': [10, 20, 50, 100]
+            }
+            let order_by = {
+                'input': document.querySelector(".order-by").querySelector("select"),
+            }
+            let order = {
+                'input': document.querySelector(".order").querySelector("select"),
+            }
+            per_page.input.addEventListener("click", () => {
+                per_page.value.innerHTML = per_page.data[per_page.input.value - 1].toString();
+            })
+            per_page.input.addEventListener("mousemove", () => {
+                per_page.value.innerHTML = per_page.data[per_page.input.value - 1].toString();
+            })
+            order_by.input.addEventListener("change", () => {
+                console.log(order_by.input.value)
+            })
+            order.input.addEventListener("change", () => {
+                console.log(order.input.value)
+            })
+            apply.addEventListener("click", () => {
+                window.location.href = "{{ path('app_serie_index') }}?p=1&pp=" + per_page.data[per_page.input.value - 1].toString() + "&ob=" + order_by.input.value + "&o=" + order.input.value;
+            })
+        })
+    </script>
 {% endblock %}

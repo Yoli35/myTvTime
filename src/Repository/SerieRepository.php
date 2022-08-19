@@ -42,15 +42,15 @@ class SerieRepository extends ServiceEntityRepository
     /**
      * @return Serie[] Returns an array of Serie objects
      */
-    public function findAllByFirstAir($page = 1): array
+    public function findAllSeries($page = 1, $perPage = 20, $orderBy='firstAirDate', $order='desc'): array
     {
         if ($page < 1) {
             $page = 1;
         }
         return $this->createQueryBuilder('s')
-            ->orderBy('s.firstDateAir', 'DESC')
-            ->setMaxResults(20)
-            ->setFirstResult($page * 20)
+            ->orderBy('s.'.$orderBy, $order)
+            ->setMaxResults($perPage)
+            ->setFirstResult(($page-1) * $perPage)
             ->getQuery()
             ->getResult()
         ;

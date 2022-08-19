@@ -2,6 +2,7 @@
 
 .my-series {
     --serie-lg-height: 15em;
+    --serie-poster-height: 9.984375em;
 
     @include flex-col(flex-start, center);
     padding-top: 1em;
@@ -62,6 +63,8 @@
                         img {
                             border-radius: 0;
                             height: var(--serie-lg-height);
+                            object-fit: cover;
+                            width: var(--serie-poster-width)
                         }
                     }
 
@@ -111,14 +114,160 @@
                 min-height: unset;
                 margin-bottom: 1em;
                 padding: .5em;
+
+                .position {
+                    font-weight: 100;
+                    text-align: center;
+                    text-transform: uppercase;
+                    width: 100%;
+                }
+
+                .page-group {
+                    @include flex-row();
+                    border-radius: .25em;
+
+                    .page:nth-child(1n+0) {
+                        border-bottom: 1px solid #abcccc;
+                        border-left: 0;
+                        border-right: 1px solid #abcccc;
+                        border-top: 1px solid #abcccc;
+                        padding: .25em 0;
+                    }
+
+                    .page:first-child {
+                        border-left: 1px solid #abcccc;
+                        border-radius: .25em 0 0 .25em;
+                    }
+
+                    .page:last-child {
+                        border-radius: 0 .25em .25em 0;
+                    }
+
+                    .page {
+                        font-weight: 100;
+                        min-height: calc(2em + 2px);
+                        min-width: 2em;
+                        transition: all .3s;
+
+                        &.current {
+                            @include flex-row();
+                            background-color: #bcdddd;
+                            color: #234444;
+                        }
+
+                        &:hover {
+                            background-color: #abcccc;
+                            color: #123333;
+                        }
+
+                        a, div {
+                            @include flex-row();
+                            height: 100%;
+                            min-height: 2em;
+                            width: 100%;
+                        }
+                    }
+                }
+
             }
 
             .settings {
                 @include flex-col(flex-start, flex-start);
                 background-color: #edffff;
                 border-radius: 0;
-                min-height: unset;
                 padding: .5em;
+
+                .label {
+                    font-weight: 100;
+                    text-transform: uppercase;
+                }
+
+                .field {
+                    width: 100%;
+
+                    select {
+                        appearance: unset;
+                        background-color: #345555;
+                        border: 1px solid #abcccc;
+                        border-radius: .25em;
+                        color: #abcccc;
+                        font-weight: 100;
+                        padding: .25em;
+                        position: relative;
+                        width: 100%;
+
+                        &::after {
+                            border-bottom: 2px solid #abcccc;
+                            border-right: 2px solid #abcccc;
+                            content: 'x';
+                            position: absolute;
+                            right: 1em;
+                            top: 0;
+                            transform: rotate(45deg);
+                        }
+                    }
+
+                }
+
+                .group-settings {
+                    @include flex-100();
+                    margin-bottom: 2em;
+
+                    div:first-child {
+                        margin-right: .25em;
+                    }
+
+                    div:last-child {
+                        margin-left: .25em;
+                    }
+                }
+
+                .per-page {
+                    @include flex-col(flex-start, center);
+                    padding: 1em 0;
+                    width: 100%;
+
+                    .field {
+                        @include flex-100();
+
+                        input {
+                            width: 80%;
+                        }
+
+                        .value {
+                            @include flex-col();
+                            background-color: #345555;
+                            border-radius: .5em;
+                            font-weight: 100;
+                            margin: .5em;
+                            padding: .5em 1em;
+                            width: calc(20% - 2em);
+                        }
+                    }
+                }
+
+                .order-by {
+                    @include flex-col(flex-start, center);
+                    flex: 2;
+                    width: 100%;
+                }
+
+                .order {
+                    @include flex-col(flex-start, center);
+                    flex: 1;
+                    width: 100%;
+                }
+
+                .apply {
+                    @include flex-100();
+                    margin-top: auto;
+
+                    button {
+                        color: #abcccc;
+                        font-weight: 100;
+                        text-transform: uppercase;
+                    }
+                }
             }
         }
     }
@@ -128,6 +277,7 @@
 @media (min-width: 576px) { /* 540 */
     .my-series {
         --serie-lg-height: 20em;
+        --serie-poster-width: 13.3125em;
 
         .series {
             .wrapper {
@@ -196,7 +346,6 @@
                 .settings {
                     border: 1em;
                     border-radius: .5em;
-                    min-height: 40em;
                     padding: 1em;
                 }
             }

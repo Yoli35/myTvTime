@@ -23,12 +23,48 @@ class SerieController extends AbstractController
     #[Route('/', name: 'app_serie_index', requirements: ['page' => 1], methods: ['GET'])]
     public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
-        $page = $request->query->getInt('page', 1);
+        $page = $request->query->getInt('p', 1);
+        $perPage = $request->query->getInt('pp', 20);
+        $orderBy = $request->query->getAlpha('ob', 'firstDateAir');
+        $order = $request->query->getAlpha('o', 'desc');
+
+        $totalResults = $serieRepository->count([]);
+        $results = $serieRepository->findAllSeries($page, $perPage, $orderBy, $order);
 
         return $this->render('serie/index.html.twig', [
-            'series' => $serieRepository->findAllByFirstAir($page),
+            'series' => $results,
+            'pages' => [
+                'total_results' => $totalResults,
+                'page' => $page,
+                'per_page' => $perPage,
+                'paginator' => $this->paginator($totalResults, $page, $perPage, 7),
+                'per_page_values' => [1 => 10, 2 => 20, 3 => 50, 4 => 100],
+                'order_by' => $orderBy,
+                'order' => $order],
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
+    }
+
+    public function paginator($totalResults, $page = 1, $perPage = 20, $linkCount = 7): array
+    {
+        $first = 1;
+        $totalPages = ceil($totalResults / $perPage); // ceil(88 / 10) -> 9
+
+        if ($linkCount > $totalPages) {
+            $linkCount = $totalPages;
+        }
+
+        $center = ceil($linkCount / 2); // ceil(7 / 2) -> 4
+        $first = $page > $center ? $page - ($center - 1) : 1; // 1
+        $first = (($first + $linkCount) > $totalPages) ? $totalPages - $linkCount + 1 : $first;
+        $last = $first + $linkCount - 1;
+
+        return [
+            'total_pages' => $totalPages,
+            'link_count' => $linkCount,
+            'first_link' => $first,
+            'last_link' => $last,
+        ];
     }
 
     #[Route('/new', name: 'app_serie_new', methods: ['GET', 'POST'])]
@@ -86,7 +122,7 @@ class SerieController extends AbstractController
     #[Route('/{id}', name: 'app_serie_delete', methods: ['POST'])]
     public function delete(Request $request, Serie $serie, SerieRepository $serieRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$serie->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $serie->getId(), $request->request->get('_token'))) {
             $serieRepository->remove($serie, true);
         }
 

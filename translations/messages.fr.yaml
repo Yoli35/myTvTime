@@ -32,6 +32,15 @@ Description: Description
 My Movie Collections: Mes Collections de films
 My Series: Mes séries
 First Air at: Première diffusion
+Pagination: Pagination
+Results per page: Resultats par page
+Add order: Ordre d'ajout
+Order by: Tri
+Order: Sens
+Descending: Décroissant
+Ascending: Croissant
+Apply: Appliquer
+
 # Home Header
 Movies: Films
 Tv Shows: Émissions
