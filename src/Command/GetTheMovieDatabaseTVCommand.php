@@ -79,6 +79,7 @@ class GetTheMovieDatabaseTVCommand extends Command
 
         // Si elle existe déjà, mise à jour des données
         $serie->setName($tv['name']);
+        $serie->setOverview($tv['overview']);
         $serie->setPosterPath($tv['poster_path']);
         $serie->setSerieId($tv['id']);
         $serie->setFirstDateAir(new \DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));

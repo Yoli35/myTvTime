@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Serie index{% endblock %}
+{% block title %}{{ 'My Series'|trans }}{% endblock %}
 
 {% block body %}
     {{ include('blocks/pageHeader.html.twig') }}
     <div class="container">
 
         <div class="my-series">
-            <div class="header"></div>
+            <div class="header">
+                <h1>{{ 'My Series'|trans }}</h1>
+            </div>
 
             <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
                 <ol class="breadcrumb">
@@ -17,7 +19,6 @@
                 </ol>
             </nav>
 
-            <h1>Serie index</h1>
             <main>
                 <div class="series">
                     {% if series|length %}
@@ -30,8 +31,9 @@
                                         </div>
                                         <div class="infos">
                                             <div>{{ serie.name }}</div>
-                                            <div>{{ serie.firstDateAir ? serie.firstDateAir|format_datetime() : '' }}</div>
-                                            <div>{{ serie.addedAt ? serie.addedAt|format_datetime() : '' }}</div>
+                                            <div>{{ 'First Air at'|trans }} : {{ serie.firstDateAir ? serie.firstDateAir|format_date() : '' }}</div>
+                                            <div>{{ 'Added at'|trans }} : {{ serie.addedAt ? serie.addedAt|format_date() : '' }}</div>
+                                            <div>{{ serie.overview }}</div>
                                         </div>
                                         {% if serie.networkLogoPath %}
                                             <div class="network">
@@ -41,6 +43,14 @@
                                     </div>
                                 </a>
                             {% endfor %}
+                        </div>
+                        <div class="pages-settings">
+                            <div class="pages">
+                                <h2>{{ 'Pagination' }}</h2>
+                            </div>
+                            <div class="settings">
+                                <h2>{{ 'Settings' }}</h2>
+                            </div>
                         </div>
                     {% else %}
                         Rien à afficher

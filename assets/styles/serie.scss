@@ -1,67 +1,203 @@
 @import "variables";
 
 .my-series {
+    --serie-lg-height: 15em;
+
     @include flex-col(flex-start, center);
     padding-top: 1em;
 
     .header {
-        background-image: url("../images/serie-header.jpg");
-        background-position: center center;
-        background-size: cover;
+        @include flex-col();
         border-radius: 1em;
         height: 20em;
+        position: relative;
         width: 100%;
+
+        h1 {
+            color: #012222;
+            font-size: 6em;
+            font-weight: bold;
+            opacity: 1;
+        }
+
+        &:after {
+            background-image: url("../images/serie-header.jpg");
+            background-position: center center;
+            background-size: cover;
+            border-radius: 1em;
+            content: '';
+            inset: 0;
+            opacity: .5;
+            position: absolute;
+            z-index: -1;
+        }
     }
 
     .series {
         @include flex-col();
+        flex-direction: column-reverse;
 
         .wrapper {
-            @include flex-row(flex-start, flex-start);
-            flex-wrap: wrap;
-            font-size: .75em;
+            @include flex-col(flex-start, flex-start);
+            //font-size: .75em;
             font-weight: 100;
 
-            .serie {
-                @include flex-col(center, flex-start);
-                position: relative;
-                margin: 1em;
-                width: 18em;
+            a {
+                display: block;
+                height: 100%;
+                width: 100%;
 
-                .poster {
+                .serie {
+                    @include flex-row(flex-start, flex-start);
+                    background-color: #edffff;
+                    border-radius: 0;
+                    height: var(--serie-lg-height);
+                    margin-bottom: 1em;
+                    position: relative;
                     width: 100%;
 
-                    img {
+                    .poster {
+                        height: var(--serie-lg-height);
+
+                        img {
+                            border-radius: 0;
+                            height: var(--serie-lg-height);
+                        }
+                    }
+
+                    .infos {
+                        @include flex-col(flex-start, flex-start);
+                        height: var(--serie-lg-height);
+                        overflow: scroll;
+                        padding: .5em;
+
+                        div:first-child {
+                            font-size: 1.5em;
+                            font-weight: 200;
+                        }
+                    }
+
+                    .network {
+                        @include flex-row();
+                        background-color: #edffff;
+                        border: 2px solid #012222;
+                        border-radius: 50%;
+                        bottom: 1em;
+                        height: 4em;
+                        left: 1em;
+                        object-fit: cover;
+                        overflow: hidden;
+                        padding: .25em;
+                        position: absolute;
+                        width: 4em;
+
+                        img {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .pages-settings {
+            margin-bottom: 1em;
+            position: unset;
+            top: unset;
+            width: 100%;
+
+            .pages {
+                background-color: #edffff;
+                border-radius: 0;
+                min-height: unset;
+                margin-bottom: 1em;
+                padding: .5em;
+            }
+
+            .settings {
+                @include flex-col(flex-start, flex-start);
+                background-color: #edffff;
+                border-radius: 0;
+                min-height: unset;
+                padding: .5em;
+            }
+        }
+    }
+}
+
+
+@media (min-width: 576px) { /* 540 */
+    .my-series {
+        --serie-lg-height: 20em;
+
+        .series {
+            .wrapper {
+                a {
+                    .serie {
                         border-radius: .5em;
-                        width: 100%;
+
+                        .poster {
+                            img {
+                                border-radius: .5em 0 0 .5em;
+                            }
+                        }
+
+                        .infos {
+                            justify-content: center;
+                        }
+
+                        .network {
+                            bottom: unset;
+                            left: unset;
+                            right: -.5em;
+                            top: 1em;
+                        }
                     }
                 }
+            }
+        }
+    }
+}
 
-                .infos {
-                    @include flex-col();
 
-                    div:first-child {
-                        font-size: 1.5em;
-                        font-weight: 200;
+@media (min-width: 768px) { /* 720 */
+    .my-series {
+        //--serie-lg-height: 15em;
+        .series {
+            align-items: flex-start;
+            flex-direction: row;
+            justify-content: flex-start;
+
+            .wrapper {
+                width: calc(70% - 1em);
+
+                a {
+                    .serie {
+                        .infos {
+                            padding: 1em;
+                        }
                     }
                 }
+            }
 
-                .network {
-                    @include flex-row();
-                    background-color: #edffff;
-                    border-radius: 50%;
-                    height: 3em;
-                    object-fit: cover;
-                    overflow: hidden;
-                    padding: .25em;
-                    position: absolute;
-                    right: -1.5em;
-                    top: 1em;
-                    width: 3em;
+            .pages-settings {
+                margin-left: 1em;
+                position: sticky;
+                top: 0;
+                width: 30%;
 
-                    img {
-                        width: 100%;
-                    }
+                .pages {
+                    border: 1em;
+                    border-radius: .5em;
+                    min-height: 4em;
+                    margin-bottom: 1em;
+                    padding: 1em;
+                }
+
+                .settings {
+                    border: 1em;
+                    border-radius: .5em;
+                    min-height: 40em;
+                    padding: 1em;
                 }
             }
         }
@@ -72,5 +208,31 @@
 
     .my-series {
         color: #abcccc;
+
+        .header {
+            h1 {
+                color: #edffff;
+            }
+        }
+
+        .series {
+            .wrapper {
+                a {
+                    .serie {
+                        background-color: #234444;
+                    }
+                }
+            }
+
+            .pages-settings {
+                .pages {
+                    background-color: #234444;
+                }
+
+                .settings {
+                    background-color: #234444;
+                }
+            }
+        }
     }
 }

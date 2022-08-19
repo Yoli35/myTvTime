@@ -5,20 +5,28 @@ namespace App\Controller;
 use App\Entity\Serie;
 use App\Form\SerieType;
 use App\Repository\SerieRepository;
+use App\Service\CallImdbService;
+use App\Service\CallTmdbService;
 use App\Service\ImageConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-#[Route('/serie')]
+#[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieController extends AbstractController
 {
-    #[Route('/', name: 'app_serie_index', methods: ['GET'])]
-    public function index(SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    #[Route('/', name: 'app_serie_index', requirements: ['page' => 1], methods: ['GET'])]
+    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
+        $page = $request->query->getInt('page', 1);
+
         return $this->render('serie/index.html.twig', [
-            'series' => $serieRepository->findAll(),
+            'series' => $serieRepository->findAllByFirstAir($page),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
     }
@@ -42,11 +50,18 @@ class SerieController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     #[Route('/{id}', name: 'app_serie_show', methods: ['GET'])]
-    public function show(Serie $serie): Response
+    public function show(Request $request, Serie $serie, CallTmdbService $tmdbService): Response
     {
+        $tv = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
         return $this->render('serie/show.html.twig', [
-            'serie' => $serie,
+            'serie' => $tv,
         ]);
     }
 

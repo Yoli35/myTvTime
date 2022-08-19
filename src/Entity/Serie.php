@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SerieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SerieRepository::class)]
@@ -38,6 +39,9 @@ class Serie
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'series')]
     private Collection $users;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $overview = null;
 
     public function __construct()
     {
@@ -154,6 +158,18 @@ class Serie
     public function setNetworkLogoPath(?string $networkLogoPath): self
     {
         $this->networkLogoPath = $networkLogoPath;
+
+        return $this;
+    }
+
+    public function getOverview(): ?string
+    {
+        return $this->overview;
+    }
+
+    public function setOverview(?string $overview): self
+    {
+        $this->overview = $overview;
 
         return $this;
     }
