@@ -40,6 +40,12 @@ Order: Sens
 Descending: Décroissant
 Ascending: Croissant
 Apply: Appliquer
+New Serie Help: Trouvez votre série sur %link1% et copiez l'@ de la page de la série, comme " %link2% " ou l'ID de la série, ici " %id% ", dans la barre d'adresse et collez-le dans le champ juste au-dessus.
+New Serie Id: Adresse ou identifiant de la série
+Help: Aide
+Serie not found: Série introuvable
+New serie added: Nouvelle série ajoutée
+Serie updated: Série mise à jour
 
 # Home Header
 Movies: Films

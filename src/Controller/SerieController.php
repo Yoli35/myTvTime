@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Serie;
+use App\Entity\User;
 use App\Form\SerieType;
 use App\Repository\SerieRepository;
-use App\Service\CallImdbService;
 use App\Service\CallTmdbService;
 use App\Service\ImageConfiguration;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,7 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use DateTimeImmutable;
 
 #[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieController extends AbstractController
@@ -37,7 +39,7 @@ class SerieController extends AbstractController
                 'total_results' => $totalResults,
                 'page' => $page,
                 'per_page' => $perPage,
-                'paginator' => $this->paginator($totalResults, $page, $perPage, 7),
+                'paginator' => $this->paginator($totalResults, $page, $perPage),
                 'per_page_values' => [1 => 10, 2 => 20, 3 => 50, 4 => 100],
                 'order_by' => $orderBy,
                 'order' => $order],
@@ -47,7 +49,6 @@ class SerieController extends AbstractController
 
     public function paginator($totalResults, $page = 1, $perPage = 20, $linkCount = 7): array
     {
-        $first = 1;
         $totalPages = ceil($totalResults / $perPage); // ceil(88 / 10) -> 9
 
         if ($linkCount > $totalPages) {
@@ -67,22 +68,77 @@ class SerieController extends AbstractController
         ];
     }
 
-    #[Route('/new', name: 'app_serie_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SerieRepository $serieRepository): Response
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws Exception
+     */
+    #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
+    public function new(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
-        $serie = new Serie();
-        $form = $this->createForm(SerieType::class, $serie);
-        $form->handleRequest($request);
+        /** @var User $user */
+        $user = $this->getUser();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $serieRepository->add($serie, true);
+        $value = $request->query->get("value");
+        $tv = ['name'=> ''];
+        $serieId = "";
+        $status = "Ko";
+        $response = "Not found";
+        $card = "";
 
-            return $this->redirectToRoute('app_serie_index', [], Response::HTTP_SEE_OTHER);
+        if (is_numeric($value)) {
+            $serieId = $value;
+        } else {
+            if (preg_match("~(\d+)~", $value, $matches) == 1) {
+                $serieId = $matches[0];
+            }
+        }
+        if (strlen($serieId)) {
+            $standing = $tmdbService->getTv($serieId, 'fr');
+
+            if (strlen($standing)) {
+                $status = "Ok";
+                $tv = json_decode($standing, true);
+
+                if (is_array($tv['networks']) && count($tv['networks'])) {
+                    $network = $tv['networks'][0];
+                } else {
+                    $network = null;
+                }
+                $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
+
+                if ($serie == null) {
+                    $serie = new Serie();
+                    $response = "New";
+                }
+                else {
+                    $response = "Update";
+                }
+
+                $serie->setName($tv['name']);
+                $serie->setPosterPath($tv['poster_path']);
+                $serie->setOverview($tv['overview']);
+                $serie->setSerieId($tv['id']);
+                $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
+                if ($network) {
+                    $serie->setNetwork($network['name']);
+                    $serie->setNetworkLogoPath($network['logo_path']);
+                }
+                $serie->addUser($user);
+                $serieRepository->add($serie, true);
+
+                $card = $this->render('blocks/serie/card.html.twig', ['serie' => $serie, 'imageConfig' => $imageConfiguration->getConfig()]);
+            }
         }
 
-        return $this->renderForm('serie/new.html.twig', [
-            'serie' => $serie,
-            'form' => $form,
+        return $this->json([
+            'serie' => $tv['name'],
+            'status' => $status,
+            'response' => $response,
+            'id' => $serieId?:$value,
+            'card' => $card,
         ]);
     }
 

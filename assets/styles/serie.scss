@@ -102,7 +102,37 @@
             }
         }
 
-        .pages-settings {
+        .new-serie-preview {
+            @include flex-col();
+            background-color: #888888df;
+            inset: 0;
+            display: none;
+            position: absolute;
+
+            &.visible {
+                display: flex;
+            }
+
+            .message {
+                @include flex-row();
+                border-radius: .5em;
+                font-size: 2em;
+                font-weight: bold;
+                padding: 1em 2em;
+            }
+
+            .close {
+                border: 1px dashed #bcdddd;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 2em;
+                position: absolute;
+                top: 1em;
+                right: 1em;
+            }
+        }
+
+        .series-tools {
             margin-bottom: 1em;
             position: unset;
             top: unset;
@@ -165,6 +195,42 @@
                             height: 100%;
                             min-height: 2em;
                             width: 100%;
+                        }
+                    }
+                }
+
+            }
+
+            button {
+                color: #abcccc;
+                font-weight: 100;
+                text-transform: uppercase;
+            }
+
+            .add-serie {
+                background-color: #edffff;
+                border-radius: 0;
+                min-height: unset;
+                margin-bottom: 1em;
+                padding: .5em;
+
+                .label {
+                    font-weight: 100;
+                    text-transform: uppercase;
+                }
+
+                .group {
+                    @include flex-100(center, space-between);
+                }
+
+                .help {
+                    font-weight: 100;
+
+                    details {
+                        div {
+                            background-color: #bcdddd;
+                            border-radius: .5em;
+                            padding: .5em;
                         }
                     }
                 }
@@ -261,12 +327,6 @@
                 .apply {
                     @include flex-100();
                     margin-top: auto;
-
-                    button {
-                        color: #abcccc;
-                        font-weight: 100;
-                        text-transform: uppercase;
-                    }
                 }
             }
         }
@@ -329,13 +389,13 @@
                 }
             }
 
-            .pages-settings {
+            .series-tools {
                 margin-left: 1em;
                 position: sticky;
                 top: 0;
                 width: 30%;
 
-                .pages {
+                .pages, .add-serie {
                     border: 1em;
                     border-radius: .5em;
                     min-height: 4em;
@@ -373,13 +433,19 @@
                 }
             }
 
-            .pages-settings {
-                .pages {
+            .series-tools {
+                .pages, .add-serie, .settings {
                     background-color: #234444;
                 }
 
-                .settings {
-                    background-color: #234444;
+                .add-serie {
+                    .help {
+                        details {
+                            div {
+                                background-color: #345555;
+                            }
+                        }
+                    }
                 }
             }
         }

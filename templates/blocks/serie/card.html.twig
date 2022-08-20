@@ -1,0 +1,18 @@
+<a href="{{ path('app_serie_show', {'id': serie.id}) }}">
+    <div class="serie">
+        <div class="poster">
+            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ 'Poster' }}">
+        </div>
+        <div class="infos">
+            <div>{{ serie.name }}</div>
+            <div>{{ 'First Air at'|trans }} : {{ serie.firstDateAir ? serie.firstDateAir|format_date() : '' }}</div>
+            <div>{{ 'Added at'|trans }} : {{ serie.addedAt ? serie.addedAt|format_date() : '' }}</div>
+            <div>{{ serie.overview }}</div>
+        </div>
+        {% if serie.networkLogoPath %}
+            <div class="network">
+                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ serie.networkLogoPath }}" alt="{{ 'Network' }}">
+            </div>
+        {% endif %}
+    </div>
+</a>
