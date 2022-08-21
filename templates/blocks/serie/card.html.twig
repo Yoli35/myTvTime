@@ -1,5 +1,8 @@
 <a href="{{ path('app_serie_show', {'id': serie.id}) }}">
     <div class="serie">
+        {% if serie.backdropPath %}
+            <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
+        {% endif %}
         <div class="poster">
             <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ 'Poster' }}">
         </div>

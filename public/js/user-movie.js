@@ -378,9 +378,6 @@ function initButtons(id, locale, paths, url) {
     document.querySelector(".nav-to-top").addEventListener("click", function (e) {
         e.preventDefault();
         document.querySelector("html").scrollTop = 0;
-        // document.querySelector("html").animate( {
-        //     scrollTop: 0
-        // }, 800);
     })
 }
 

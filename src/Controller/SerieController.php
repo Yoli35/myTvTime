@@ -130,6 +130,7 @@ class SerieController extends AbstractController
 
                 $serie->setName($tv['name']);
                 $serie->setPosterPath($tv['poster_path']);
+                $serie->setBackdropPath($tv['backdrop_path']);
                 $serie->setOverview($tv['overview']);
                 $serie->setSerieId($tv['id']);
                 $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));

@@ -8,7 +8,7 @@
     padding-top: 1em;
 
     .header {
-        @include flex-col();
+        //@include flex-col();
         border-radius: 1em;
         height: 20em;
         position: relative;
@@ -19,14 +19,15 @@
             font-size: 4em;
             font-weight: bold;
             opacity: 1;
+            position: absolute;
+            //transition: all .3s;
         }
 
-        &:after {
+        .backdrop {
             background-image: url("../images/serie-header.jpg");
             background-position: center center;
             background-size: cover;
             border-radius: 1em;
-            content: '';
             inset: 0;
             opacity: .5;
             position: absolute;
@@ -50,12 +51,21 @@
 
                 .serie {
                     @include flex-row(flex-start, flex-start);
-                    background-color: #edffff;
                     border-radius: 0;
                     height: var(--serie-lg-height);
                     margin-bottom: 1em;
                     position: relative;
                     width: 100%;
+
+                    .backdrop {
+                        background-color: #edffff;
+                        background-position: center center;
+                        background-size: cover;
+                        inset: 0;
+                        left: 13em;
+                        opacity: .1;
+                        position: absolute;
+                    }
 
                     .poster {
                         height: var(--serie-lg-height);

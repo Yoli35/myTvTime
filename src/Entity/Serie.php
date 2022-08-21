@@ -22,6 +22,9 @@ class Serie
     #[ORM\Column(length: 255)]
     private ?string $posterPath = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $backdropPath = null;
+
     #[ORM\Column]
     private ?int $serieId = null;
 
@@ -170,6 +173,18 @@ class Serie
     public function setOverview(?string $overview): self
     {
         $this->overview = $overview;
+
+        return $this;
+    }
+
+    public function getBackdropPath(): ?string
+    {
+        return $this->backdropPath;
+    }
+
+    public function setBackdropPath(?string $backdropPath): self
+    {
+        $this->backdropPath = $backdropPath;
 
         return $this;
     }

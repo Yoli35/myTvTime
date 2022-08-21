@@ -9,6 +9,7 @@
         <div class="my-series">
             <div class="header">
                 <h1>{{ 'My Series'|trans }}</h1>
+                <div class="backdrop"></div>
             </div>
 
             <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
@@ -142,7 +143,37 @@
             initSettings();
             initPreview();
             newSerie();
+            initHeader();
         })
+
+        function initHeader() {
+            let ticking = false;
+            setH1();
+            window.addEventListener('resize', setH1);
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(function () {
+                        setH1();
+                        ticking = false;
+                    });
+                }
+                ticking = true;
+            });
+
+        }
+
+        function setH1() {
+            const header = document.querySelector(".header");
+            const h1 = document.querySelector("h1");
+            let left, ratio, top, size;
+            left = (header.clientWidth - h1.clientWidth) / 2;
+            top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
+            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
+            size = header.clientWidth > 720 ? 4 : 2;
+            if (ratio < 0) ratio = 0;
+            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; font-size: " + (size + 2 * ratio).toString() + "em");
+        }
 
         function initSettings() {
             //
@@ -182,18 +213,18 @@
             const preview = document.querySelector(".new-serie-preview");
             const close = preview.querySelector(".close");
 
-            preview.addEventListener("click", dismiss);
-            close.addEventListener("click", dismiss);
+            preview.addEventListener("click", dismissPreview);
+            close.addEventListener("click", dismissPreview);
         }
 
-        function dismiss() {
+        function dismissPreview() {
             const preview = document.querySelector(".new-serie-preview");
             const message = preview.querySelector(".message").querySelector(".content");
             const wrapper = preview.querySelector(".wrapper");
 
             setTimeout(() => {
                 preview.classList.remove("visible");
-            }, 10);
+            }, 0);
             wrapper.innerHTML = "";
             message.innerHTML = "";
             document.querySelector("#new_serie").focus();
@@ -243,6 +274,7 @@
                             const wrapper = preview.querySelector(".wrapper");
 
                             wrapper.innerHTML = data.card.content;
+
                             if (data.response === "New") {
                                 message.innerHTML = "{{ 'New serie added'|trans }}";
                             }
@@ -251,13 +283,13 @@
                             }
                             setTimeout(() => {
                                 preview.classList.add("visible");
-                            }, 10);
+                            }, 0);
 
                             /*
                              * Si on est sur la première page avec le tri par "ordre d'ajout décroissant",
                              * alors on insère la nouvelle série au début
                              */
-                            if (_current_page === 1 && _order_by === 'id' && _order === 'desc') {
+                            if (data.response === "New" && _current_page === 1 && _order_by === 'id' && _order === 'desc') {
                                 const wrapper = document.querySelector(".series").querySelector(".wrapper");
                                 const first = wrapper.firstElementChild;
                                 const last = wrapper.lastElementChild;
@@ -270,7 +302,7 @@
                              * Mise à jour du bloc Pagination
                              */
                             const tools = document.querySelectorAll(".series-tools");
-                            tools.forEach( tool => {
+                            tools.forEach(tool => {
                                 let pagination = tool.querySelector(".pages");
                                 pagination.innerHTML = data.pagination.content;
                             })
