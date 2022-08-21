@@ -29,25 +29,7 @@
                         </div>
                         <div class="series-tools">
                             <div class="pages">
-                                <h2>{{ 'Pagination'|trans }}</h2>
-                                <div class="position">{{ 'Page'|trans }} {{ pages.page }} / {{ pages.paginator.total_pages }} - {{ pages.total_results }} {{ 'Series'|trans }}</div>
-                                <div class="page-group">
-                                    {% if pages.page > 1 %}
-                                        <div class="page"><a href="{{ path('app_serie_index') }}?p={{ pages.page-1 }}&pp={{ pages.per_page }}&ob={{ pages.order_by }}&o={{ pages.order }}"><i class="fa-solid fa-arrow-left"></i></a></div>
-                                    {% endif %}
-                                    {% for p in pages.paginator.first_link..pages.paginator.last_link %}
-                                        {% if p == pages.page %}
-                                            <div class="page current">
-                                                <div>{{ p }}</div>
-                                            </div>
-                                        {% else %}
-                                            <div class="page"><a href="{{ path('app_serie_index') }}?p={{ p }}&pp={{ pages.per_page }}&ob={{ pages.order_by }}&o={{ pages.order }}">{{ p }}</a></div>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% if pages.page < pages.paginator.total_pages %}
-                                        <div class="page"><a href="{{ path('app_serie_index') }}?p={{ pages.page+1 }}&pp={{ pages.per_page }}&ob={{ pages.order_by }}&o={{ pages.order }}"><i class="fa-solid fa-arrow-right"></i></a></div>
-                                    {% endif %}
-                                </div>
+                                {{ include('blocks/serie/pagination.html.twig') }}
                             </div>
                             <div class="add-serie">
                                 <h2>{{ 'Add'|trans }}</h2>
@@ -62,7 +44,7 @@
                                     </div>
                                 </div>
                                 <div class="help">
-                                    <details open>
+                                    <details>
                                         <summary><span class="label">{{ 'Help'|trans }}</span></summary>
                                         <div>
                                             <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="The Movie Database (TMDB)" width="154" height="20"><br>
@@ -143,11 +125,21 @@
 {% block morejs %}
     <script>
         const _app_serie_new = "{{ path('app_serie_new') }}";
+        const _current_page = {{ pages.page }};
+        const _per_page = {{ pages.per_page }};
+        const _order_by = "{{ pages.order_by }}";
+        const _order = "{{ pages.order }}";
+
         window.addEventListener("DOMContentLoaded", () => {
 
             initSettings();
             initPreview();
             newSerie();
+
+            const header = document.querySelector(".my-series").querySelector(".header");
+            const top = Math.random() * 100;
+
+            header.setAttribute("style", "background-position: center " + top + "%");
         })
 
         function initSettings() {
@@ -186,24 +178,27 @@
         function initPreview() {
 
             const preview = document.querySelector(".new-serie-preview");
-            const message = preview.querySelector(".message");
-            const wrapper = preview.querySelector(".wrapper");
             const close = preview.querySelector(".close");
 
-            preview.addEventListener("click", () => {
-                preview.classList.remove("visible");
-                wrapper.innerHTML = "";
-                message.innerHTML = "";
-            })
+            preview.addEventListener("click", dismiss);
+            close.addEventListener("click", dismiss);
+        }
 
-            close.addEventListener("click", () => {
+        function dismiss() {
+            const preview = document.querySelector(".new-serie-preview");
+            const message = preview.querySelector(".message");
+            const wrapper = preview.querySelector(".wrapper");
+
+            setTimeout(() => {
                 preview.classList.remove("visible");
-                wrapper.innerHTML = "";
-                message.innerHTML = "";
-            })
+            }, 10);
+            wrapper.innerHTML = "";
+            message.innerHTML = "";
+            document.querySelector("#new_serie").focus();
         }
 
         function newSerie() {
+            document.querySelector("#new_serie").focus();
             document.querySelector("#new_serie").addEventListener("paste", addSerie);
             document.querySelector("#add_serie").addEventListener("click", addSerie);
 
@@ -228,11 +223,14 @@
             if (value.length) {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
-                    let data = {'serie': '',
+                    let data = {
+                        'serie': '',
                         'status': '',
                         'response': '',
                         'id': '',
-                        'card': {}};
+                        'card': {},
+                        'pagination': {}
+                    };
                     if (this.response.slice(0, 1) === '<') {
                         data = this.response;
                     }
@@ -250,7 +248,28 @@
                             if (data.response === "Update") {
                                 message.innerHTML = "{{ 'Serie updated'|trans }}";
                             }
+                            setTimeout(() => {
                             preview.classList.add("visible");
+                            }, 10);
+
+                            /*
+                             * Si on est sur la première page avec le tri par "ordre d'ajout décroissant",
+                             * alors on insère la nouvelle série au début
+                             */
+                            if (_current_page === 1 && _order_by === 'id' && _order === 'desc') {
+                                const wrapper = document.querySelector(".series").querySelector(".wrapper");
+                                const first = wrapper.firstElementChild;
+                                const last = wrapper.lastElementChild;
+                                const new_card = document.createRange().createContextualFragment(data.card.content);
+
+                                first.before(new_card);
+                                last.remove();
+                            }
+                            /*
+                             * Mise à jour du bloc Pagination
+                             */
+                            const pagination = document.querySelector(".series-tools").querySelector(".pages");
+                            pagination.innerHTML = data.pagination.content;
                         }
 
                         if (data.status === "Ko") {
@@ -260,7 +279,7 @@
                     console.log({data});
                     document.querySelector("#new_serie").value = "";
                 }
-                xhr.open("GET", _app_serie_new + '?value=' + value);
+                xhr.open("GET", _app_serie_new + '?value=' + value + "&p=" + _current_page + "&pp=" + _per_page + "&ob=" + _order_by + "&o=" + _order);
                 xhr.send();
             }
         }

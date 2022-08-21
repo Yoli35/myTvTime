@@ -22,6 +22,12 @@ use DateTimeImmutable;
 #[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieController extends AbstractController
 {
+    /*
+     * Pagination : nombre de liens de page
+     */
+    const LINK_COUNT = 7;
+    const PER_PAGE_ARRAY = [1 => 10, 2 => 20, 3 => 50, 4 => 100];
+
     #[Route('/', name: 'app_serie_index', requirements: ['page' => 1], methods: ['GET'])]
     public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
@@ -39,8 +45,9 @@ class SerieController extends AbstractController
                 'total_results' => $totalResults,
                 'page' => $page,
                 'per_page' => $perPage,
-                'paginator' => $this->paginator($totalResults, $page, $perPage),
-                'per_page_values' => [1 => 10, 2 => 20, 3 => 50, 4 => 100],
+                'link_count' => self::LINK_COUNT,
+                'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
+                'per_page_values' => self::PER_PAGE_ARRAY,
                 'order_by' => $orderBy,
                 'order' => $order],
             'imageConfig' => $imageConfiguration->getConfig(),
@@ -82,11 +89,16 @@ class SerieController extends AbstractController
         $user = $this->getUser();
 
         $value = $request->query->get("value");
-        $tv = ['name'=> ''];
+        $page = $request->query->get("p");
+        $perPage = $request->query->get("pp");
+        $orderBy = $request->query->get("ob");
+        $order = $request->query->get("o");
+        $tv = ['name' => ''];
         $serieId = "";
         $status = "Ko";
         $response = "Not found";
         $card = "";
+        $pagination = "";
 
         if (is_numeric($value)) {
             $serieId = $value;
@@ -112,8 +124,7 @@ class SerieController extends AbstractController
                 if ($serie == null) {
                     $serie = new Serie();
                     $response = "New";
-                }
-                else {
+                } else {
                     $response = "Update";
                 }
 
@@ -130,6 +141,19 @@ class SerieController extends AbstractController
                 $serieRepository->add($serie, true);
 
                 $card = $this->render('blocks/serie/card.html.twig', ['serie' => $serie, 'imageConfig' => $imageConfiguration->getConfig()]);
+
+                $totalResults = $serieRepository->count([]);
+                $pagination = $this->render('blocks/serie/pagination.html.twig', [
+                    'pages' => [
+                        'total_results' => $totalResults,
+                        'page' => $page,
+                        'per_page' => $perPage,
+                        'link_count' => self::LINK_COUNT,
+                        'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
+                        'per_page_values' => self::PER_PAGE_ARRAY,
+                        'order_by' => $orderBy,
+                        'order' => $order],
+                ]);
             }
         }
 
@@ -137,8 +161,9 @@ class SerieController extends AbstractController
             'serie' => $tv['name'],
             'status' => $status,
             'response' => $response,
-            'id' => $serieId?:$value,
+            'id' => $serieId ?: $value,
             'card' => $card,
+            'pagination' => $pagination,
         ]);
     }
 

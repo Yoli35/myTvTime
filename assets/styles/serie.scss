@@ -71,12 +71,16 @@
                     .infos {
                         @include flex-col(flex-start, flex-start);
                         height: var(--serie-lg-height);
-                        overflow: scroll;
+                        //overflow: scroll;
                         padding: .5em;
 
                         div:first-child {
                             font-size: 1.5em;
                             font-weight: 200;
+                        }
+                        div:last-child {
+                            max-height: calc(var(--serie-lg-height) - 8em);
+                            overflow: scroll;
                         }
                     }
 
@@ -104,13 +108,17 @@
 
         .new-serie-preview {
             @include flex-col();
-            background-color: #888888df;
+            background-color: #000;
             inset: 0;
             display: none;
+            opacity: 0;
             position: absolute;
+            transition: all .5s;
 
             &.visible {
+                background-color: #888888df;
                 display: flex;
+                opacity: 1;
             }
 
             .message {
