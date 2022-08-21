@@ -11,6 +11,7 @@
         //@include flex-col();
         border-radius: 1em;
         height: 20em;
+        overflow: hidden;
         position: relative;
         width: 100%;
 
@@ -417,6 +418,8 @@
     .my-series {
         //--serie-lg-height: 15em;
         .header {
+            height: 25em;
+
             h1 {
                 font-size: 6em;
             }
