@@ -16,7 +16,7 @@
 
         h1 {
             color: #012222;
-            font-size: 6em;
+            font-size: 4em;
             font-weight: bold;
             opacity: 1;
         }
@@ -78,6 +78,7 @@
                             font-size: 1.5em;
                             font-weight: 200;
                         }
+
                         div:last-child {
                             max-height: calc(var(--serie-lg-height) - 8em);
                             overflow: scroll;
@@ -122,21 +123,28 @@
             }
 
             .message {
-                @include flex-row();
-                border-radius: .5em;
-                font-size: 2em;
-                font-weight: bold;
-                padding: 1em 2em;
-            }
+                @include flex-row(center, flex-start);
+                margin-bottom: 2em;
+                position: relative;
 
-            .close {
-                border: 1px dashed #bcdddd;
-                border-radius: 50%;
-                cursor: pointer;
-                font-size: 2em;
-                position: absolute;
-                top: 1em;
-                right: 1em;
+                .content {
+                    background-color: #234444;
+                    border-radius: .5em;
+                    color: #edffff;
+                    font-size: 2em;
+                    font-weight: bold;
+                    padding: 1em 2em;
+                }
+
+                .close {
+                    border-radius: 50%;
+                    cursor: pointer;
+                    font-size: 1.5em;
+                    margin-left: auto;
+                    position: absolute;
+                    right: .25em;
+                    top: 0;
+                }
             }
         }
 
@@ -150,8 +158,11 @@
                 background-color: #edffff;
                 border-radius: 0;
                 min-height: unset;
-                margin-bottom: 1em;
                 padding: .5em;
+
+                &.mobile {
+                    display: block;
+                }
 
                 .position {
                     font-weight: 100;
@@ -215,23 +226,28 @@
                 text-transform: uppercase;
             }
 
+            .label {
+                font-weight: 100;
+                display: none;
+                text-transform: uppercase;
+            }
+
+            h2 {
+                display: none;
+            }
+
             .add-serie {
                 background-color: #edffff;
                 border-radius: 0;
                 min-height: unset;
-                margin-bottom: 1em;
                 padding: .5em;
-
-                .label {
-                    font-weight: 100;
-                    text-transform: uppercase;
-                }
 
                 .group {
                     @include flex-100(center, space-between);
                 }
 
                 .help {
+                    display: none;
                     font-weight: 100;
 
                     details {
@@ -251,54 +267,54 @@
                 border-radius: 0;
                 padding: .5em;
 
-                .label {
-                    font-weight: 100;
-                    text-transform: uppercase;
-                }
-
-                .field {
-                    width: 100%;
-
-                    select {
-                        appearance: unset;
-                        background-color: #345555;
-                        border: 1px solid #abcccc;
-                        border-radius: .25em;
-                        color: #abcccc;
-                        font-weight: 100;
-                        padding: .25em;
-                        position: relative;
-                        width: 100%;
-
-                        &::after {
-                            border-bottom: 2px solid #abcccc;
-                            border-right: 2px solid #abcccc;
-                            content: 'x';
-                            position: absolute;
-                            right: 1em;
-                            top: 0;
-                            transform: rotate(45deg);
-                        }
-                    }
-
-                }
-
-                .group-settings {
+                .sort {
                     @include flex-100();
-                    margin-bottom: 2em;
 
-                    div:first-child {
-                        margin-right: .25em;
-                    }
+                    .group-settings {
+                        @include flex-100();
 
-                    div:last-child {
-                        margin-left: .25em;
+                        .field {
+                            position: relative;
+                            width: 100%;
+
+                            &::after {
+                                border-bottom: 2px solid #abcccc;
+                                border-right: 2px solid #abcccc;
+                                content: '';
+                                height: .5em;
+                                position: absolute;
+                                right: .5em;
+                                top: .75em;
+                                transform: rotate(45deg);
+                                width: .5em;
+                                z-index: 2;
+                            }
+
+                            select {
+                                appearance: unset;
+                                background-color: #345555;
+                                border: 1px solid #abcccc;
+                                border-radius: 0;
+                                color: #abcccc;
+                                font-weight: 100;
+                                padding: .25em 1em .25em .25em;
+                                position: relative;
+                                width: 100%;
+                            }
+
+                        }
+
+                        div:first-child {
+                            border-right-width: 0;
+                        }
+
+                        div:last-child {
+                        }
                     }
                 }
 
                 .per-page {
                     @include flex-col(flex-start, center);
-                    padding: 1em 0;
                     width: 100%;
 
                     .field {
@@ -322,19 +338,29 @@
 
                 .order-by {
                     @include flex-col(flex-start, center);
-                    flex: 2;
                     width: 100%;
                 }
 
                 .order {
                     @include flex-col(flex-start, center);
-                    flex: 1;
                     width: 100%;
                 }
 
                 .apply {
                     @include flex-100();
+                    flex: 1;
                     margin-top: auto;
+
+                    button {
+                        appearance: unset;
+                        background-color: #123333;
+                        border: 1px solid #abcccc;
+                        border-radius: 0;
+                        color: #abcccc;
+                        font-weight: 100;
+                        padding: .25em;
+                        width: 100%;
+                    }
                 }
             }
         }
@@ -380,6 +406,12 @@
 @media (min-width: 768px) { /* 720 */
     .my-series {
         //--serie-lg-height: 15em;
+        .header {
+            h1 {
+                font-size: 6em;
+            }
+        }
+
         .series {
             align-items: flex-start;
             flex-direction: row;
@@ -403,11 +435,36 @@
                 top: 0;
                 width: 30%;
 
+                &.mobile {
+                    display: none;
+                }
+
+                .label {
+                    display: inline;
+                }
+
+                h2 {
+                    display: block;
+                }
+
+                .pages {
+
+                    &.mobile {
+                        display: none;
+                    }
+                }
+
+                .add-serie {
+                    .help {
+                        display: block;
+                    }
+                }
+
                 .pages, .add-serie {
                     border: 1em;
                     border-radius: .5em;
-                    min-height: 4em;
                     margin-bottom: 1em;
+                    min-height: 4em;
                     padding: 1em;
                 }
 
@@ -415,6 +472,32 @@
                     border: 1em;
                     border-radius: .5em;
                     padding: 1em;
+
+                    .field {
+                        select {
+                            border-radius: .25em;
+                        }
+                    }
+
+                    .per-page {
+                        padding: 1em 0;
+                    }
+
+                    .sort {
+                        flex-direction: column;
+
+                        .group-settings {
+                            margin-bottom: 1em;
+
+                            //div:first-child {
+                            //    margin-right: .25em;
+                            //}
+                            //
+                            //div:last-child {
+                            //    margin-left: .25em;
+                            //}
+                        }
+                    }
                 }
             }
         }

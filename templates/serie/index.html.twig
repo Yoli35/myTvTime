@@ -22,6 +22,11 @@
             <main>
                 <div class="series">
                     {% if series|length %}
+                        <div class="series-tools mobile">
+                            <div class="pages mobile">
+                                {{ include('blocks/serie/pagination.html.twig') }}
+                            </div>
+                        </div>
                         <div class="wrapper">
                             {% for serie in series %}
                                 {{ include('blocks/serie/card.html.twig') }}
@@ -78,31 +83,31 @@
                                     </div>
                                 </div>
 
-                                <div class="group-settings">
-                                    <div class="order-by">
-                                        <label class="label" for="order-by">{{ 'Order by'|trans }}</label>
-                                        <div class="field">
-                                            <select id="order-by">
-                                                <option value="firstDateAir"{% if pages.order_by=='firstDateAir' %} selected{% endif %}>{{ 'First Air Date'|trans }}</option>
-                                                <option value="id"{% if pages.order_by=='id' %} selected{% endif %}>{{ 'Add order'|trans }}</option>
-                                                <option value="name"{% if pages.order_by=='name' %} selected{% endif %}>{{ 'Name'|trans }}</option>
-                                            </select>
+                                <div class="sort">
+                                    <div class="group-settings">
+                                        <div class="order-by">
+                                            <label class="label" for="order-by">{{ 'Order by'|trans }}</label>
+                                            <div class="field">
+                                                <select id="order-by">
+                                                    <option value="firstDateAir"{% if pages.order_by=='firstDateAir' %} selected{% endif %}>{{ 'First Air Date'|trans }}</option>
+                                                    <option value="id"{% if pages.order_by=='id' %} selected{% endif %}>{{ 'Add order'|trans }}</option>
+                                                    <option value="name"{% if pages.order_by=='name' %} selected{% endif %}>{{ 'Name'|trans }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="order">
+                                            <label class="label" for="order">{{ 'Order'|trans }}</label>
+                                            <div class="field">
+                                                <select id="order">
+                                                    <option value="desc"{% if pages.order=='desc' %} selected{% endif %}>{{ 'Descending'|trans }}</option>
+                                                    <option value="asc"{% if pages.order=='asc' %} selected{% endif %}>{{ 'Ascending'|trans }}</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="order">
-                                        <label class="label" for="order">{{ 'Order'|trans }}</label>
-                                        <div class="field">
-                                            <select id="order">
-                                                <option value="desc"{% if pages.order=='desc' %} selected{% endif %}>{{ 'Descending'|trans }}</option>
-                                                <option value="asc"{% if pages.order=='asc' %} selected{% endif %}>{{ 'Ascending'|trans }}</option>
-                                            </select>
-                                        </div>
+                                    <div class="apply">
+                                        <button id="apply" type="submit" class="btn btn-secondary">{{ 'Apply'|trans }}</button>
                                     </div>
-                                </div>
-
-                                <div class="apply">
-                                    <button id="apply" type="submit" class="btn btn-secondary">{{ 'Apply'|trans }}</button>
                                 </div>
                             </div>
                         </div>
@@ -110,9 +115,11 @@
                         Rien à afficher
                     {% endif %}
                     <div class="new-serie-preview">
-                        <div class="message"></div>
+                        <div class="message">
+                            <div class="content"></div>
+                            <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
+                        </div>
                         <div class="wrapper"></div>
-                        <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
                     </div>
                 </div>
             </main>
@@ -135,11 +142,6 @@
             initSettings();
             initPreview();
             newSerie();
-
-            const header = document.querySelector(".my-series").querySelector(".header");
-            const top = Math.random() * 100;
-
-            header.setAttribute("style", "background-position: center " + top + "%");
         })
 
         function initSettings() {
@@ -186,7 +188,7 @@
 
         function dismiss() {
             const preview = document.querySelector(".new-serie-preview");
-            const message = preview.querySelector(".message");
+            const message = preview.querySelector(".message").querySelector(".content");
             const wrapper = preview.querySelector(".wrapper");
 
             setTimeout(() => {
@@ -233,12 +235,11 @@
                     };
                     if (this.response.slice(0, 1) === '<') {
                         data = this.response;
-                    }
-                    else {
+                    } else {
                         data = JSON.parse(this.response);
                         if (data.status === 'Ok') {
                             const preview = document.querySelector(".new-serie-preview");
-                            const message = preview.querySelector(".message");
+                            const message = preview.querySelector(".message").querySelector(".content");
                             const wrapper = preview.querySelector(".wrapper");
 
                             wrapper.innerHTML = data.card.content;
@@ -249,7 +250,7 @@
                                 message.innerHTML = "{{ 'Serie updated'|trans }}";
                             }
                             setTimeout(() => {
-                            preview.classList.add("visible");
+                                preview.classList.add("visible");
                             }, 10);
 
                             /*
@@ -268,8 +269,11 @@
                             /*
                              * Mise à jour du bloc Pagination
                              */
-                            const pagination = document.querySelector(".series-tools").querySelector(".pages");
-                            pagination.innerHTML = data.pagination.content;
+                            const tools = document.querySelectorAll(".series-tools");
+                            tools.forEach( tool => {
+                                let pagination = tool.querySelector(".pages");
+                                pagination.innerHTML = data.pagination.content;
+                            })
                         }
 
                         if (data.status === "Ko") {
