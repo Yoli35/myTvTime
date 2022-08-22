@@ -378,6 +378,91 @@
     }
 }
 
+.serie-page {
+    .header {
+        @include flex-row(flex-start, flex-start);
+        border-radius: 1em;
+        margin: 1em 0;
+        padding: 2em;
+        position: relative;
+        width: 100%;
+
+        .poster {
+            height: 30em;
+            width: auto;
+
+            img {
+                border-radius: .5em;
+                display: block;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .backdrop {
+            background-position: center center;
+            background-size: cover;
+            border-radius: 1em;
+            inset: 0;
+            opacity: .15;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .infos {
+            @include flex-col(flex-start, center);
+            height: 30em;
+            padding: 1em;
+            width: 100%;
+
+            h1 {
+                color: #edffff;
+                font-weight: 400;
+            }
+
+            .info {
+                font-weight: 100;
+                margin-top: 1em;
+            }
+
+            .creators {
+                @include flex-100(flex-end, space-around);
+                margin-top: 2em;
+                width: 100%;
+
+                .creator {
+                    @include flex-col();
+                    background-color: #3455557f;
+                    //border: 1px solid #bcdddd;
+                    border-radius: .5em;
+                    font-weight: 100;
+
+                    img {
+                        //border-bottom: 1px solid #bcdddd;
+                        border-radius: .5em .5em 0 0;
+                        height: 8em;
+                        object-fit: cover;
+                        width: 8em;
+                    }
+
+                    div {
+                        min-height: 1.5em;
+                        padding: .5em;
+                    }
+
+                    div:first-child {
+                        min-height: 0;
+                        padding: 0;
+                    }
+
+                    div:last-child {
+                        padding-top: 0;
+                    }
+                }
+            }
+        }
+    }
+}
 
 @media (min-width: 576px) { /* 540 */
     .my-series {

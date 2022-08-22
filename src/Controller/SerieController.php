@@ -175,11 +175,13 @@ class SerieController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{id}', name: 'app_serie_show', methods: ['GET'])]
-    public function show(Request $request, Serie $serie, CallTmdbService $tmdbService): Response
+    public function show(Request $request, Serie $serie, CallTmdbService $tmdbService, ImageConfiguration $imageConfiguration): Response
     {
-        $tv = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
+        $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
+        $tv = json_decode($standing, true);
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
+            'imageConfig' => $imageConfiguration->getConfig(),
         ]);
     }
 

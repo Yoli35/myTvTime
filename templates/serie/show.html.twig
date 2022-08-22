@@ -3,48 +3,58 @@
 {% block title %}Serie{% endblock %}
 
 {% block body %}
-    <h1>Serie</h1>
+    {{ include('blocks/pageHeader.html.twig') }}
+    <div class="container">
+        <div class="serie-page">
+            <div class="header">
+                <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
+                <div class="poster">
+                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ serie.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ serie.name }}</td>
-            </tr>
-            <tr>
-                <th>PosterPath</th>
-                <td>{{ serie.posterPath }}</td>
-            </tr>
-            <tr>
-                <th>SerieId</th>
-                <td>{{ serie.serieId }}</td>
-            </tr>
-            <tr>
-                <th>FirstDateAir</th>
-                <td>{{ serie.firstDateAir ? serie.firstDateAir|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Network</th>
-                <td>{{ serie.network }}</td>
-            </tr>
-            <tr>
-                <th>NetworkLogoPath</th>
-                <td>{{ serie.networkLogoPath }}</td>
-            </tr>
-            <tr>
-                <th>AddedAt</th>
-                <td>{{ serie.addedAt ? serie.addedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_serie_index') }}">back to list</a>
-
-    <a href="{{ path('app_serie_edit', {'id': serie.id}) }}">edit</a>
-
-    {{ include('serie/_delete_form.html.twig') }}
+                </div>
+                <div class="infos">
+                    <h1>{{ serie.name }} ({{ serie.first_air_date|date("Y") }})</h1>
+                    <div class="info">
+                        {% for genre in serie.genres %}
+                            {{ genre.name }}{% if loop.last == false %}, {% endif %}
+                        {% endfor %}
+                        {% if serie.episode_run_time|length %}
+                            <i class="fa-solid fa-period"></i>
+                            {{ serie.episode_run_time.0 }} {{ 'minutes'|trans }}
+                        {% endif %}
+                    </div>
+                    <div class="info">
+                        {% if serie.overview %}
+                            <h5>{{ 'Synopsis' }}</h5>
+                            <div>{{ serie.overview }}</div>
+                        {% endif %}
+                    </div>
+                    {% if serie.created_by|length %}
+                        <div class="creators">
+                            {% for c in serie.created_by %}
+                                <div class="creator">
+                                    <div class="profile">
+                                        {% if c.profile_path %}
+                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}">
+                                        {% endif %}
+                                    </div>
+                                    <div>{{ c.name }}</div>
+                                    <div>
+                                        {% if c.gender %}
+                                            {{ (c.gender==1?'creator.she':'creator.he')|trans }}
+{#                                            ({{ c.gender }})#}
+                                        {% else %}
+                                            {{ 'creation'|trans }}
+{#                                            ({{ c.gender }})#}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
 {% endblock %}

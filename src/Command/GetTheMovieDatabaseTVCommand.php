@@ -63,35 +63,53 @@ class GetTheMovieDatabaseTVCommand extends Command
 
         $user = $this->userRepository->find($userId);
 
-        $standing = $this->callTmdbService->getTv($tvId, 'fr');
-        $tv = json_decode($standing, true);
+        if ($tvId == 'all') {
+            $tvs = $this->serieRepository->findAll();
 
-        if (is_array($tv['networks']) && count($tv['networks'])) {
-            $network = $tv['networks'][0];
-        } else {
-            $network = null;
+            foreach ($tvs as $serie) {
+
+                if ($serie->getBackdropPath() == null) {
+
+                    $tmdbTv = json_decode($this->callTmdbService->getTv($serie->getSerieId(), 'fr'), true);
+
+                    $serie->setBackdropPath($tmdbTv['backdrop_path']);
+                    $this->serieRepository->add($serie, true);
+
+                    $io->success('Backdrop\'s "' . $serie->getName() . '" has been updated to the user ' . $user);
+                }
+            }
         }
-        $serie = $this->serieRepository->findOneBy(['serieId' => $tvId]);
+        else {
+            $standing = $this->callTmdbService->getTv($tvId, 'fr');
+            $tv = json_decode($standing, true);
 
-        if ($serie == null) {
-            $serie = new Serie();
+            if (is_array($tv['networks']) && count($tv['networks'])) {
+                $network = $tv['networks'][0];
+            } else {
+                $network = null;
+            }
+            $serie = $this->serieRepository->findOneBy(['serieId' => $tvId]);
+
+            if ($serie == null) {
+                $serie = new Serie();
+            }
+
+            // Si elle existe déjà, mise à jour des données
+            $serie->setName($tv['name']);
+            $serie->setOverview($tv['overview']);
+            $serie->setPosterPath($tv['poster_path']);
+            $serie->setSerieId($tv['id']);
+            $serie->setFirstDateAir(new \DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
+            if ($network) {
+                $serie->setNetwork($network['name']);
+                $serie->setNetworkLogoPath($network['logo_path']);
+            }
+            $serie->addUser($user);
+
+            $this->serieRepository->add($serie, true);
+
+            $io->success('"' . $serie->getName() . '" has been added to the user ' . $user);
         }
-
-        // Si elle existe déjà, mise à jour des données
-        $serie->setName($tv['name']);
-        $serie->setOverview($tv['overview']);
-        $serie->setPosterPath($tv['poster_path']);
-        $serie->setSerieId($tv['id']);
-        $serie->setFirstDateAir(new \DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
-        if ($network) {
-            $serie->setNetwork($network['name']);
-            $serie->setNetworkLogoPath($network['logo_path']);
-        }
-        $serie->addUser($user);
-
-        $this->serieRepository->add($serie, true);
-
-        $io->success('"' . $serie->getName() . '" has been added to the user ' . $user);
 
         return Command::SUCCESS;
     }
