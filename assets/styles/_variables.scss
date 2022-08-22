@@ -2,9 +2,50 @@ $transition-delay: .5s;
 $fa-font-path: "../webfonts";
 
 :root {
-    --mtt-body-bg: #012222;
-    --mtt-body-bg-gradiant: #123333;
-    --mtt-body-color: #abcccc;
+    //--mtt-body-bg: #012222;
+    //--mtt-body-bg-gradiant: #123333;
+    //--mtt-body-color: #abcccc;
+    --mtt-body-bg: var(--gradiant-ardoise-10);
+    --mtt-body-bg-gradiant: var(--gradiant-ardoise-40);
+    --mtt-body-color: var(--gradiant-ardoise-90);
+
+    --gradiant-ardoise-100: hsl(212, 43%, 100%);
+    --gradiant-ardoise-90: hsl(212, 43%, 90%);
+    --gradiant-ardoise-80: hsl(212, 43%, 80%);
+    --gradiant-ardoise-70: hsl(212, 43%, 70%);
+    --gradiant-ardoise-60: hsl(212, 43%, 60%);
+    --gradiant-ardoise-50: hsl(212, 43%, 50%);
+    --gradiant-ardoise-40: hsl(212, 43%, 40%);
+    --gradiant-ardoise-30: hsl(212, 43%, 30%);
+    --gradiant-ardoise-20: hsl(212, 43%, 20%);
+    --gradiant-ardoise-10: hsl(212, 43%, 10%);
+    --gradiant-ardoise-0: hsl(212, 43%, 0%);
+
+    --gradiant-purple-100: hsl(306, 50%, 100%);
+    --gradiant-purple-90: hsl(306,50%, 90%);
+    --gradiant-purple-80: hsl(306,50%, 80%);
+    --gradiant-purple-70: hsl(306,50%, 70%);
+    --gradiant-purple-60: hsl(306,50%, 60%);
+    --gradiant-purple-50: hsl(306,50%, 50%);
+    --gradiant-purple-40: hsl(306,50%, 40%);
+    --gradiant-purple-30: hsl(306,50%, 30%);
+    --gradiant-purple-20: hsl(306,50%, 20%);
+    --gradiant-purple-10: hsl(306,50%, 10%);
+    --gradiant-purple-0: hsl(306,50%, 0%);
+
+    --gradiant-mars-100: hsl(25, 76%, 100%);
+    --gradiant-mars-90: hsl(25,76%, 90%);
+    --gradiant-mars-80: hsl(25,76%, 80%);
+    --gradiant-mars-70: hsl(25,76%, 70%);
+    --gradiant-mars-60: hsl(25,76%, 60%);
+    --gradiant-mars-50: hsl(25,76%, 50%);
+    --gradiant-mars-40: hsl(25,76%, 40%);
+    --gradiant-mars-30: hsl(25,76%, 30%);
+    --gradiant-mars-20: hsl(25,76%, 20%);
+    --gradiant-mars-10: hsl(25,76%, 10%);
+    --gradiant-mars-0: hsl(25,76%, 0%);
+
+
 }
 
 @mixin banner($image) {
@@ -85,6 +126,7 @@ $fa-font-path: "../webfonts";
         }
     }
 }
+
 @mixin yt-header {
     @include flex-100();
     background-color: #085d55;
@@ -129,4 +171,39 @@ $fa-font-path: "../webfonts";
     height: $size;
     object-fit: cover;
     width: $size;
+}
+
+@mixin human-profile($color: var(--gradiant-ardoise-40)) {
+    @include flex-col(center, flex-start);
+    background-color: $color;
+    border-radius: .5rem;
+    margin: .25em;
+    overflow: hidden;
+    width: 8rem;
+
+    img {
+        //border-bottom: 1px solid #bcdddd;
+        border-radius: .5rem .5rem 0 0;
+        height: 8rem;
+        object-fit: cover;
+        width: 8rem;
+    }
+
+    div {
+        font-size: .75em;
+        font-weight: 100;
+        min-height: 1.5rem;
+        padding: .5rem;
+        text-align: center;
+    }
+
+    div:first-child {
+        min-height: 0;
+        padding: 0;
+    }
+
+    div:last-child {
+        margin-top: auto;
+        padding-top: 0;
+    }
 }

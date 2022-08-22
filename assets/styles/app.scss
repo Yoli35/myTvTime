@@ -16,6 +16,44 @@ main {
     flex: 1;
 }
 
+.d-none {
+    display: none;
+}
+
+.d-block {
+    display: block;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.cookie-overlay {
+    background-color: #012222;
+    border-radius: 1em;
+    bottom: 1em;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    padding: 2em;
+    position: fixed;
+    right: 1em;
+
+    .content {
+        @include flex-col(flex-start, flex-start);
+        max-width: 25em;
+        position: relative;
+
+        .close {
+            cursor: pointer;
+            position: absolute;
+            right: -1.5em;
+            top: -1.5em;
+        }
+    }
+
+    .footer {
+        @include flex-col(flex-end, flex-end);
+    }
+}
 
 .container,
 .container-fluid {
@@ -580,66 +618,6 @@ h4 {
     //}
 }
 
-
-.cast, .crew {
-    @include flex-row();
-    background-color: #eee;
-    border-radius: 1em;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    width: 100%;
-
-    .content {
-        @include flex-row(center, flex-start);
-        flex-wrap: wrap;
-        margin: 0 auto;
-        max-height: 20em;
-        min-height: 16em;
-        overflow-y: scroll;
-
-        .actor, .member {
-            @include flex-col(center, unset);
-            cursor: grab;
-            height: 14em;
-            margin: .5em .5em;
-            width: 7em;
-
-            .profile {
-                background-image: url("../images/profile.jpg");
-                background-position: center center;
-                background-repeat: no-repeat;
-                background-size: cover;
-                border-radius: .5em;
-                height: 10em;
-                overflow: hidden;
-                transition: border-radius .25s, height .25s;
-                width: 100%;
-
-                &:hover {
-                    border-radius: 50%;
-                    height: 15em;
-                }
-
-                img {
-                    height: auto;
-                    width: 100%;
-                }
-            }
-
-            .name {
-                font-size: .75em;
-                font-weight: bold;
-                text-align: center;
-            }
-
-            .character, .job {
-                font-size: .5em;
-                text-align: center;
-            }
-        }
-    }
-}
-
 @media (prefers-color-scheme: dark) {
 
     :root {
@@ -710,14 +688,6 @@ h4 {
             div {
                 color: #5dcbf6;
             }
-        }
-    }
-
-    .cast, .crew {
-        background-color: #383838;
-
-        .profile {
-            background-image: url("../images/profile_dark.jpg");
         }
     }
 

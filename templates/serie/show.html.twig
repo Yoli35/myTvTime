@@ -1,25 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Serie{% endblock %}
+{% block title %}MyTvTime::{{ 'My Series'|trans }}{% endblock %}
 
 {% block body %}
     {{ include('blocks/pageHeader.html.twig') }}
     <div class="container">
+        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                {{ include('blocks/movie/bracket.html.twig') }}
+                <li class="breadcrumb-item"><a href="{{ path('app_serie_index') }}">{{ 'My Series'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ serie.name }}</li>
+            </ol>
+        </nav>
         <div class="serie-page">
             <div class="header">
                 <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
                 <div class="poster">
-                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}">
+                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
 
                 </div>
                 <div class="infos">
-                    <h1>{{ serie.name }} ({{ serie.first_air_date|date("Y") }})</h1>
+                    <h1>{{ serie.name }} <span>({{ serie.first_air_date|date("Y") }})</span></h1>
                     <div class="info">
                         {% for genre in serie.genres %}
                             {{ genre.name }}{% if loop.last == false %}, {% endif %}
                         {% endfor %}
                         {% if serie.episode_run_time|length %}
-                            <i class="fa-solid fa-period"></i>
+                            •
                             {{ serie.episode_run_time.0 }} {{ 'minutes'|trans }}
                         {% endif %}
                     </div>
@@ -35,17 +43,19 @@
                                 <div class="creator">
                                     <div class="profile">
                                         {% if c.profile_path %}
-                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}">
+                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}" alt="{{ c.name }}">
+                                        {% else %}
+                                            <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
                                         {% endif %}
                                     </div>
                                     <div>{{ c.name }}</div>
                                     <div>
                                         {% if c.gender %}
                                             {{ (c.gender==1?'creator.she':'creator.he')|trans }}
-{#                                            ({{ c.gender }})#}
+                                            {#                                            ({{ c.gender }}) #}
                                         {% else %}
                                             {{ 'creation'|trans }}
-{#                                            ({{ c.gender }})#}
+                                            {#                                            ({{ c.gender }}) #}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -54,6 +64,79 @@
                     {% endif %}
                 </div>
             </div>
+
+            <main>
+                <article>
+                    <section>
+                        <div class="cast">
+                            <h4>{{ 'Cast'|trans }}</h4>
+                            <div class="list">
+                                {% for people in credits.cast %}
+                                    <div class="people">
+                                        <div class="profile">
+                                            {% if people.profile_path %}
+                                                <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
+                                            {% else %}
+                                                <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
+                                            {% endif %}
+                                        </div>
+                                        <div>{{ people.name }}</div>
+                                        <div>
+                                            {% if people.gender %}
+                                                {{ (people.known_for_department~(people.gender==1?'.she':'.he'))|trans }}
+                                            {% else %}
+                                                {{ people.known_for_department|trans }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </section>
+                </article>
+                <aside>
+                    <div class="key-facts">
+                        <h4>{{ 'Key facts'|trans }}</h4>
+                        <div class="fact">
+                            <div class="label">{{ 'Original name'|trans }}</div>
+                            <div class="content">{{ serie.original_name }}</div>
+                        </div>
+                        <div class="fact">
+                            <div class="label">{{ 'Original language'|trans }}</div>
+                            <div class="content">{{ serie.original_language|language_name(locale) }}</div>
+                        </div>
+                        <div class="fact">
+                            <div class="label">{{ 'Original Country'|trans }}</div>
+                            {% for country in serie.origin_country %}
+                                <div class="content">{{ country|country_name(locale) }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="fact">
+                            <div class="label">{{ 'Status'|trans }}</div>
+                            <div class="content">{{ serie.status|trans }}</div>
+                        </div>
+                        <div class="fact">
+                            <div class="label">{{ 'Networks'|trans }}</div>
+                            {% for network in serie.networks %}
+                                <div class="content">
+                                    <div class="frame">
+                                        <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="fact">
+                            <div class="label">{{ 'Keywords'|trans }}</div>
+                            <div class="keywords">
+                                {% for keyword in keywords.results %}
+                                    <div class="keyword">{{ keyword.name|trans }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </main>
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>

@@ -11,8 +11,8 @@
 <nav class="nav-menu">
     <a href="{{ path('app_blog') }}">{{ 'Blog'|trans }}</a>
     <a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a>
-    <a href="{{ path('app_home_series') }}">{{ 'Series'|trans }}</a>
-    <a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a>
+{#    <a href="{{ path('app_home_series') }}">{{ 'Series'|trans }}</a>#}
+{#    <a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a>#}
     <hr class="divider">
     {% if user is null %}
         <a href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>

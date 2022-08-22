@@ -31,11 +31,23 @@ class SerieController extends AbstractController
     #[Route('/', name: 'app_serie_index', requirements: ['page' => 1], methods: ['GET'])]
     public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
+        $settingsChanged = $request->query->getInt('s');
         $page = $request->query->getInt('p', 1);
         $perPage = $request->query->getInt('pp', 20);
         $orderBy = $request->query->getAlpha('ob', 'firstDateAir');
         $order = $request->query->getAlpha('o', 'desc');
 
+        if ($settingsChanged) {
+            setcookie("series", json_encode(['pp' => $perPage, 'ob' => $orderBy, 'o' => $order]), strtotime('+30 days'), '/');
+        }
+        if ($request->query->count() == 0) {
+            if (isset($_COOKIE['series'])) {
+                $cookie = json_decode($_COOKIE['series'], true);
+                $perPage = $cookie['pp'];
+                $orderBy = $cookie['ob'];
+                $order = $cookie['o'];
+            }
+        }
         $totalResults = $serieRepository->count([]);
         $results = $serieRepository->findAllSeries($page, $perPage, $orderBy, $order);
 
@@ -75,13 +87,6 @@ class SerieController extends AbstractController
         ];
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws Exception
-     */
     #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
     public function new(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
@@ -168,19 +173,25 @@ class SerieController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{id}', name: 'app_serie_show', methods: ['GET'])]
     public function show(Request $request, Serie $serie, CallTmdbService $tmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
         $tv = json_decode($standing, true);
+
+        $standing = $tmdbService->getTvCredits($serie->getSerieId(), $request->getLocale());
+        $credits = json_decode($standing, true);
+        dump($credits);
+
+        $standing = $tmdbService->getTvKeywords($serie->getSerieId(), $request->getLocale());
+        $keywords = json_decode($standing, true);
+        dump($keywords);
+
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
+            'credits' => $credits,
+            'keywords' => $keywords,
+            'locale' => $request->getLocale(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
     }

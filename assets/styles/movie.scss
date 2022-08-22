@@ -113,108 +113,133 @@
 
 .movie-info {
     @include flex-col(unset, unset);
-    margin-top: 2em;
 
-    .movie-detail {
+    .top {
         @include flex-col(unset, unset);
-        flex-wrap: wrap;
-        width: 100%;
+        margin-top: 2em;
 
-        .title {
-            font-size: 2em;
-            //font-size: clamp(1rem, 3vw + 1rem, 3rem);
-            font-weight: bold;
-            margin-right: auto;
-            padding: .5em;
-        }
+        .movie-detail {
+            @include flex-col(unset, unset);
+            flex-wrap: wrap;
+            width: 100%;
 
-        .genres {
-            margin-right: auto;
+            .title {
+                font-size: 2em;
+                //font-size: clamp(1rem, 3vw + 1rem, 3rem);
+                font-weight: bold;
+                margin-right: auto;
+                padding: .5em;
+            }
 
-            .genre {
-                border-color: #8a8a8a;
-                color: #8a8a8a;
+            .genres {
+                margin-right: auto;
 
-                a {
+                .genre {
+                    border-color: #8a8a8a;
                     color: #8a8a8a;
-                    height: 100%;
-                    padding: .25em 1em;
-                    text-decoration: none;
-                    width: 100%;
+
+                    a {
+                        color: #8a8a8a;
+                        height: 100%;
+                        padding: .25em 1em;
+                        text-decoration: none;
+                        width: 100%;
+                    }
                 }
             }
-        }
 
-        .part-1 {
-            @include flex-col(flex-start, flex-start);
-            width: 100%;
-        }
-
-        .part-2 {
-            @include flex-100(flex-start, flex-start);
-
-            .part-2L {
+            .part-1 {
                 @include flex-col(flex-start, flex-start);
                 width: 100%;
             }
 
-            .part-2R {
-                @include flex-col(center, flex-start);
-                width: 100%;
+            .part-2 {
+                @include flex-100(flex-start, flex-start);
+
+                .part-2L {
+                    @include flex-col(flex-start, flex-start);
+                    width: 100%;
+                }
+
+                .part-2R {
+                    @include flex-col(center, flex-start);
+                    width: 100%;
+                }
             }
-        }
 
-        .overview {
-            padding: 20px;
-        }
+            .overview {
+                padding: 20px;
+            }
 
-        .info {
-            padding-left: 1.25em;
-        }
+            .info {
+                padding-left: 1.25em;
+            }
 
-        .infos {
-            @include flex-col(flex-start, flex-start);
-            padding-left: 1.25em;
-        }
+            .infos {
+                @include flex-col(flex-start, flex-start);
+                padding-left: 1.25em;
+            }
 
-        .release-dates {
-            @include flex-col(unset, unset);
-            margin-bottom: 1em;
-            margin-top: 1em;
-
-            .country {
+            .release-dates {
                 @include flex-col(unset, unset);
-                padding-left: 1em;
+                margin-bottom: 1em;
+                margin-top: 1em;
 
-                .dates {
+                .country {
                     @include flex-col(unset, unset);
-                    padding-left: .5em;
+                    padding-left: 1em;
 
-                    .event {
-                        @include flex-row(flex-end, flex-start);
-                        padding: .25em;
+                    .dates {
+                        @include flex-col(unset, unset);
+                        padding-left: .5em;
+
+                        .event {
+                            @include flex-row(flex-end, flex-start);
+                            padding: .25em;
+                        }
+                    }
+                }
+            }
+
+            .productions {
+                padding: 20px 0 0 20px;
+
+                > div {
+                    @include flex-row(flex-start, unset);
+                    flex-wrap: wrap;
+                    list-style-type: none;
+
+                    .production {
+                        @include flex-row(unset, unset);
+                        background-color: rgba(128, 128, 128, 0.5);
+                        border-radius: .5em;
+                        font-size: .75em;
+                        font-weight: 100;
+                        margin: .5em .5em 0 0;
+                        padding: .25em .5em;
                     }
                 }
             }
         }
 
-        .productions {
-            padding: 20px 0 0 20px;
+        .movie-poster {
+            @include flex-row(flex-start, flex-end);
+            //margin-bottom: auto;
+            //margin-left: auto;
+            margin-top: 1em;
+            width: 100%;
 
-            > div {
-                @include flex-row(flex-start, unset);
-                flex-wrap: wrap;
-                list-style-type: none;
+            img {
+                border: 8px solid #f2f2f2;
+                width: 100%;
+            }
 
-                .production {
-                    @include flex-row(unset, unset);
-                    background-color: rgba(128, 128, 128, 0.5);
-                    border-radius: .5em;
-                    font-size: .75em;
-                    font-weight: 100;
-                    margin: .5em .5em 0 0;
-                    padding: .25em .5em;
-                }
+            .replacement {
+                background: rgb(131, 58, 180);
+                background: linear-gradient(225deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+                border: 8px solid #f2f2f2;
+                height: 30vw;
+                width: 100%;
             }
         }
     }
@@ -241,24 +266,62 @@
         }
     }
 
-    .movie-poster {
-        @include flex-row(flex-start, flex-end);
-        //margin-bottom: auto;
-        //margin-left: auto;
-        margin-top: 1em;
+    .cast, .crew {
+        @include flex-row();
+        background-color: #eee;
+        border-radius: 1em;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
         width: 100%;
 
-        img {
-            border: 8px solid #f2f2f2;
-            width: 100%;
-        }
+        .content {
+            @include flex-row(center, flex-start);
+            flex-wrap: wrap;
+            margin: 0 auto;
+            max-height: 20em;
+            min-height: 16em;
+            overflow-y: scroll;
 
-        .replacement {
-            background: rgb(131, 58, 180);
-            background: linear-gradient(225deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
-            border: 8px solid #f2f2f2;
-            height: 30vw;
-            width: 100%;
+            .actor, .member {
+                @include flex-col(center, unset);
+                cursor: grab;
+                height: 14em;
+                margin: .5em .5em;
+                width: 7em;
+
+                .profile {
+                    background-image: url("../images/profile.jpg");
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    border-radius: .5em;
+                    height: 10em;
+                    overflow: hidden;
+                    transition: border-radius .25s, height .25s;
+                    width: 100%;
+
+                    &:hover {
+                        border-radius: 50%;
+                        height: 15em;
+                    }
+
+                    img {
+                        height: auto;
+                        width: 100%;
+                    }
+                }
+
+                .name {
+                    font-size: .75em;
+                    font-weight: bold;
+                    text-align: center;
+                }
+
+                .character, .job {
+                    font-size: .5em;
+                    text-align: center;
+                }
+            }
         }
     }
 }
@@ -266,31 +329,34 @@
 @media (min-width: 991.98px) {
 
     .movie-info {
-        @include flex-100(unset, unset);
 
-        .movie-detail {
-            width: 70%;
+        .top {
+            @include flex-100(unset, unset);
 
-            .part-1 {
-                width: 100%;
-            }
+            .movie-detail {
+                width: 70%;
 
-            .part-2 {
-
-                .part-2L {
-                    width: 50%;
+                .part-1 {
+                    width: 100%;
                 }
 
-                .part-2R {
-                    width: 50%;
+                .part-2 {
+
+                    .part-2L {
+                        width: 50%;
+                    }
+
+                    .part-2R {
+                        width: 50%;
+                    }
                 }
             }
-        }
 
-        .movie-poster {
-            margin-top: 0;
-            padding-left: 1em;
-            width: 30%;
+            .movie-poster {
+                margin-top: 0;
+                padding-left: 1em;
+                width: 30%;
+            }
         }
     }
 }
@@ -391,6 +457,7 @@
         .person-infos {
             width: 70%;
         }
+
         .person-profile {
             margin-left: auto;
             width: 30%;
@@ -414,6 +481,22 @@
 
     .movie-detail .title {
         color: #f2f2f2;
+    }
+
+    .movie-info, .tv-info {
+        .cast, .crew {
+            background-color: #383838;
+
+            .content {
+
+                .actor, .member {
+
+                    .profile {
+                        background-image: url("../images/profile_dark.jpg");
+                    }
+                }
+            }
+        }
     }
 
     .collection .card {

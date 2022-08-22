@@ -29,8 +29,6 @@ My Collections: Mes collections
 Description: Description
 
 # User Series
-My Movie Collections: Mes Collections de films
-My Series: Mes séries
 First Air at: Première diffusion
 Pagination: Pagination
 Results per page: Resultats par page
@@ -65,6 +63,8 @@ Toolbar with button groups: Barre d'outil de la recherche de film
 First group: Groupe d'outil de recherche
 My Account: Mon compte
 My Movies: Mes films
+My Movie Collections: Mes Collections de films
+My Series: Mes séries
 Another action: Easy Admin
 Php Info: Php Info
 Logout: Déconnexion
@@ -198,6 +198,24 @@ Showrunner: Show Runner
 Status: Statut
 Continuing: En cours
 Ended: Terminé
+Cast: Distribution des rôles
+Acting.she: Actrice
+Acting.he: Acteur
+Acting: Actrice/Acteur
+Key facts: Faits principaux
+Original name: Nom original
+Original language: Langage d'origine
+Original Country: Pays d'origine
+Returning Series: Série renouvelée
+Networks: Diffuseur télé
+Keywords: Mots clés
+dream: rêve
+nightmare: cauchemar
+superhero: super héros
+based on comic: basé sur un comics
+raven: corbeau
+dark fantasy: fantaisie sombre
+multiverse:	multivers
 
 # Serie Genres
 Action: Action
@@ -384,4 +402,5 @@ Updated At: Modifié le
 
 # Others
 None: Aucun
-
+cookie consent: Ce site utilise des cookies pour améliorer le service rendu, notamment sur la page « Mes séries ». En cliquant sur le bouton « J'accepte » vous autorisez leur utilisation.
+Accept: J'accepte

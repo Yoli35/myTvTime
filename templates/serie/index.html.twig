@@ -163,13 +163,12 @@
         function setH1() {
             const header = document.querySelector(".header");
             const h1 = document.querySelector("h1");
-            let left, ratio, top, size;
+            let left, ratio, top;
+            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
             left = (header.clientWidth - h1.clientWidth) / 2;
             top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
-            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
-            size = header.clientWidth > 720 ? 4 : 2;
             if (ratio < 0) ratio = 0;
-            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; font-size: " + (size + 2 * ratio).toString() + "em");
+            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
         }
 
         function initSettings() {
@@ -201,7 +200,7 @@
                 console.log(order.input.value)
             })
             apply.addEventListener("click", () => {
-                window.location.href = "{{ path('app_serie_index') }}?p=1&pp=" + per_page.data[per_page.input.value - 1].toString() + "&ob=" + order_by.input.value + "&o=" + order.input.value;
+                window.location.href = "{{ path('app_serie_index') }}?p=1&pp=" + per_page.data[per_page.input.value - 1].toString() + "&ob=" + order_by.input.value + "&o=" + order.input.value + "&s=1";
             })
         }
 

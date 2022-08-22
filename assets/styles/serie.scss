@@ -16,7 +16,7 @@
         width: 100%;
 
         h1 {
-            color: #012222;
+            color: var(--gradiant-ardoise-90);
             font-size: 4em;
             font-weight: bold;
             opacity: 1;
@@ -52,6 +52,7 @@
 
                 .serie {
                     @include flex-row(flex-start, flex-start);
+                    background-color: var(--gradiant-ardoise-10);
                     border-radius: 0;
                     height: var(--serie-lg-height);
                     margin-bottom: 1em;
@@ -59,17 +60,18 @@
                     width: 100%;
 
                     .backdrop {
-                        background-color: #edffff;
+                        background-color: var(--gradiant-ardoise-90);
                         background-position: center center;
                         background-size: cover;
                         inset: 0;
-                        left: 13em;
-                        opacity: .1;
+                        left: var(--serie-poster-width);
+                        opacity: .25;
                         position: absolute;
                     }
 
                     .poster {
                         height: var(--serie-lg-height);
+                        z-index: 0;
 
                         img {
                             border-radius: 0;
@@ -84,6 +86,11 @@
                         height: var(--serie-lg-height);
                         //overflow: scroll;
                         padding: .5em;
+                        z-index: 0;
+
+                        div {
+                            color: var(--gradiant-ardoise-90);
+                        }
 
                         div:first-child {
                             font-size: 1.5em;
@@ -98,8 +105,8 @@
 
                     .network {
                         @include flex-row();
-                        background-color: #edffff;
-                        border: 2px solid #012222;
+                        background-color: var(--gradiant-ardoise-90);
+                        border: 2px solid var(--gradiant-ardoise-10);
                         border-radius: 50%;
                         bottom: 1em;
                         height: 4em;
@@ -120,7 +127,7 @@
 
         .new-serie-preview {
             @include flex-col();
-            background-color: #000;
+            background-color: var(--gradiant-ardoise-10);
             inset: 0;
             display: none;
             opacity: 0;
@@ -139,9 +146,9 @@
                 position: relative;
 
                 .content {
-                    background-color: #234444;
+                    background-color: var(--gradiant-ardoise-30);
                     border-radius: .5em;
-                    color: #edffff;
+                    color: var(--gradiant-ardoise-90);
                     font-size: 2em;
                     font-weight: bold;
                     padding: 1em 2em;
@@ -166,7 +173,7 @@
             width: 100%;
 
             .pages {
-                background-color: #edffff;
+                background-color: var(--gradiant-ardoise-90);
                 border-radius: 0;
                 min-height: unset;
                 padding: .5em;
@@ -176,6 +183,7 @@
                 }
 
                 .position {
+                    color: var(--gradiant-ardoise-30);
                     font-weight: 100;
                     text-align: center;
                     text-transform: uppercase;
@@ -187,15 +195,15 @@
                     border-radius: .25em;
 
                     .page:nth-child(1n+0) {
-                        border-bottom: 1px solid #abcccc;
+                        border-bottom: 1px solid var(--gradiant-ardoise-80);
                         border-left: 0;
-                        border-right: 1px solid #abcccc;
-                        border-top: 1px solid #abcccc;
+                        border-right: 1px solid var(--gradiant-ardoise-80);
+                        border-top: 1px solid var(--gradiant-ardoise-80);
                         padding: .25em 0;
                     }
 
                     .page:first-child {
-                        border-left: 1px solid #abcccc;
+                        border-left: 1px solid var(--gradiant-ardoise-80);
                         border-radius: .25em 0 0 .25em;
                     }
 
@@ -211,13 +219,13 @@
 
                         &.current {
                             @include flex-row();
-                            background-color: #bcdddd;
-                            color: #234444;
+                            background-color: var(--gradiant-ardoise-80);
+                            color: var(--gradiant-ardoise-30);
                         }
 
                         &:hover {
-                            background-color: #abcccc;
-                            color: #123333;
+                            background-color: var(--gradiant-ardoise-80);
+                            color: var(--gradiant-ardoise-20);
                         }
 
                         a, div {
@@ -232,12 +240,13 @@
             }
 
             button {
-                color: #abcccc;
+                color: var(--gradiant-ardoise-80);
                 font-weight: 100;
                 text-transform: uppercase;
             }
 
             .label {
+                color: var(--gradiant-ardoise-30);
                 font-weight: 100;
                 display: none;
                 text-transform: uppercase;
@@ -248,7 +257,7 @@
             }
 
             .add-serie {
-                background-color: #edffff;
+                background-color: var(--gradiant-ardoise-90);
                 border-radius: 0;
                 min-height: unset;
                 padding: .5em;
@@ -263,7 +272,7 @@
 
                     details {
                         div {
-                            background-color: #bcdddd;
+                            background-color: var(--gradiant-ardoise-80);
                             border-radius: .5em;
                             padding: .5em;
                         }
@@ -274,7 +283,7 @@
 
             .settings {
                 @include flex-col(flex-start, flex-start);
-                background-color: #edffff;
+                background-color: var(--gradiant-ardoise-90);
                 border-radius: 0;
                 padding: .5em;
 
@@ -289,8 +298,8 @@
                             width: 100%;
 
                             &::after {
-                                border-bottom: 2px solid #abcccc;
-                                border-right: 2px solid #abcccc;
+                                border-bottom: 2px solid var(--gradiant-ardoise-80);
+                                border-right: 2px solid var(--gradiant-ardoise-80);
                                 content: '';
                                 height: .5em;
                                 position: absolute;
@@ -303,10 +312,10 @@
 
                             select {
                                 appearance: unset;
-                                background-color: #345555;
-                                border: 1px solid #abcccc;
+                                background-color: var(--gradiant-ardoise-40);
+                                border: 1px solid var(--gradiant-ardoise-80);
                                 border-radius: 0;
-                                color: #abcccc;
+                                color: var(--gradiant-ardoise-80);
                                 font-weight: 100;
                                 padding: .25em 1em .25em .25em;
                                 position: relative;
@@ -337,7 +346,7 @@
 
                         .value {
                             @include flex-col();
-                            background-color: #345555;
+                            background-color: var(--gradiant-ardoise-40);
                             border-radius: .5em;
                             font-weight: 100;
                             margin: .5em;
@@ -364,10 +373,10 @@
 
                     button {
                         appearance: unset;
-                        background-color: #123333;
-                        border: 1px solid #abcccc;
+                        background-color: var(--gradiant-ardoise-20);
+                        border: 1px solid var(--gradiant-ardoise-80);
                         border-radius: 0;
-                        color: #abcccc;
+                        color: var(--gradiant-ardoise-80);
                         font-weight: 100;
                         padding: .25em;
                         width: 100%;
@@ -381,6 +390,7 @@
 .serie-page {
     .header {
         @include flex-row(flex-start, flex-start);
+        background-color: var(--gradiant-ardoise-10);
         border-radius: 1em;
         margin: 1em 0;
         padding: 2em;
@@ -390,6 +400,7 @@
         .poster {
             height: 30em;
             width: auto;
+            z-index: 0;
 
             img {
                 border-radius: .5em;
@@ -404,20 +415,26 @@
             background-size: cover;
             border-radius: 1em;
             inset: 0;
-            opacity: .15;
+            opacity: .25;
             position: absolute;
-            z-index: -1;
+            z-index: 0;
         }
 
         .infos {
             @include flex-col(flex-start, center);
-            height: 30em;
+            color: var(--gradiant-ardoise-90);
+            min-height: 30em;
             padding: 1em;
             width: 100%;
+            z-index: 0;
 
             h1 {
-                color: #edffff;
+                color: var(--gradiant-ardoise-90);
                 font-weight: 400;
+
+                span {
+                    font-weight: 100;
+                }
             }
 
             .info {
@@ -426,37 +443,101 @@
             }
 
             .creators {
-                @include flex-100(flex-end, space-around);
-                margin-top: 2em;
+                @include flex-100(unset, space-around);
+                flex-wrap: wrap;
+                margin-top: 1em;
                 width: 100%;
 
                 .creator {
-                    @include flex-col();
-                    background-color: #3455557f;
-                    //border: 1px solid #bcdddd;
+                    @include human-profile(var(--gradiant-ardoise-40));
+                }
+            }
+        }
+    }
+
+    main {
+        @include flex-100(flex-start, flex-start);
+
+        h4 {
+            margin-top: .5em;
+        }
+
+        article {
+            @include flex-col(flex-start, flex-start);
+            min-height: 50vh;
+            width: 75%;
+
+            section {
+                @include flex-col(flex-start, flex-start);
+                width: 100%;
+
+                .cast {
+                    @include flex-col(flex-start, flex-start);
+                    background-color: var(--gradiant-ardoise-30);
                     border-radius: .5em;
-                    font-weight: 100;
+                    padding: 0 1em;
+                    width: 100%;
 
-                    img {
-                        //border-bottom: 1px solid #bcdddd;
-                        border-radius: .5em .5em 0 0;
-                        height: 8em;
-                        object-fit: cover;
-                        width: 8em;
+                    .list {
+                        @include flex-row(unset, flex-start);
+                        margin: 1em;
+                        overflow-x: auto;
+                        width: 100%;
+
+                        .people {
+                            @include human-profile();
+                        }
+                    }
+                }
+            }
+        }
+
+        aside {
+            @include flex-col(flex-start, flex-start);
+            background-color: var(--gradiant-ardoise-30);
+            border-radius: .5em;
+            margin-left: 1em;
+            min-height: 50vh;
+            padding: 0 1em;
+            width: calc(25% - 1em);
+
+            .key-facts {
+                .fact {
+                    margin: .5em 0;
+
+                    .label {
+                        font-weight: 400;
                     }
 
-                    div {
-                        min-height: 1.5em;
-                        padding: .5em;
+                    .content {
+                        font-weight: 100;
+                        padding-left: .5em;
+
+                        .frame {
+                            background-color: var(--gradiant-ardoise-90);
+                            border-radius: .25em;
+                            display: inline-block;
+                            max-height: 4em;
+                            padding: .25em .5em;
+
+                            img {
+                                max-height: 3.5em;
+                            }
+                        }
                     }
 
-                    div:first-child {
-                        min-height: 0;
-                        padding: 0;
-                    }
+                    .keywords {
+                        @include flex-row(flex-start, flex-start);
+                        flex-wrap: wrap;
 
-                    div:last-child {
-                        padding-top: 0;
+                        .keyword {
+                            background-color: var(--gradiant-ardoise-40);
+                            border-radius: .25em;
+                            color: var(--gradiant-ardoise-80);
+                            font-weight: 100;
+                            padding: .25em .5em;
+                            margin: .125em;
+                        }
                     }
                 }
             }
@@ -605,11 +686,11 @@
 @media (prefers-color-scheme: dark) {
 
     .my-series {
-        color: #abcccc;
+        color: var(--gradiant-ardoise-80);
 
         .header {
             h1 {
-                color: #edffff;
+                color: var(--gradiant-ardoise-90);
             }
         }
 
@@ -617,21 +698,33 @@
             .wrapper {
                 a {
                     .serie {
-                        background-color: #234444;
+                        //background-color: var(--gradiant-ardoise-30);
                     }
                 }
             }
 
             .series-tools {
                 .pages, .add-serie, .settings {
-                    background-color: #234444;
+                    background-color: var(--gradiant-ardoise-30);
+                }
+
+                .pages {
+                    .position {
+                        color: var(--gradiant-ardoise-70);
+                    }
+                }
+
+                .add-serie, .settings {
+                    .label {
+                        color: var(--gradiant-ardoise-70);
+                    }
                 }
 
                 .add-serie {
                     .help {
                         details {
                             div {
-                                background-color: #345555;
+                                background-color: var(--gradiant-ardoise-40);
                             }
                         }
                     }

@@ -163,27 +163,6 @@ class CallTmdbService
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function getTv($showId, $locale): ?string
-    {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/tv/' . $showId . '?api_key='.$this->api_key.'&language=' . $locale,
-        );
-        try {
-            return $response->getContent();
-        } catch (Throwable $e) {
-
-            dump($e->getMessage(), $e->getCode());
-            return "";
-        }
-    }
-
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function getMovieCredits($movieId, $locale): ?string
     {
         $response = $this->client->request(
@@ -193,19 +172,61 @@ class CallTmdbService
         return $response->getContent();
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
+    public function getTv($showId, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $showId . '?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                dump($exception->getMessage(), $exception->getCode());
+                return "";
+            }
+        } catch (Throwable $exception) {
+            dump($exception->getMessage(), $exception->getCode());
+            return "";
+        }
+    }
+
     public function getTvCredits($tvId, $locale): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/tv/' . $tvId . '/credits?api_key='.$this->api_key.'&language=' . $locale,
-        );
-        return $response->getContent();
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $tvId . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                dump($exception->getMessage(), $exception->getCode());
+                return "";
+            }
+        } catch (Throwable $exception) {
+            dump($exception->getMessage(), $exception->getCode());
+            return "";
+        }
+    }
+
+    public function getTvKeywords($tvId, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $tvId . '/keywords?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                dump($exception->getMessage(), $exception->getCode());
+                return "";
+            }
+        } catch (Throwable $exception) {
+            dump($exception->getMessage(), $exception->getCode());
+            return "";
+        }
     }
 
     /**

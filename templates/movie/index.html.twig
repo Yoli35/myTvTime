@@ -28,196 +28,199 @@
                 {{ include('blocks/movie/rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
             </div>
         {% endif %}
+
         <div class="movie-info">
-            <div class="movie-detail">
-                <div class="part-1">
-                    <h1 class="title">{{ movie.title }}</h1>
-                    <div class="info">{{ 'Original Title'|trans }} : {{ movie.original_title }}</div>
-                    <div class="genres">
-                        {% for genre in movie.genres %}
-                            <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
-                        {% endfor %}
+            <div class="top">
+                <div class="movie-detail">
+                    <div class="part-1">
+                        <h1 class="title">{{ movie.title }}</h1>
+                        <div class="info">{{ 'Original Title'|trans }} : {{ movie.original_title }}</div>
+                        <div class="genres">
+                            {% for genre in movie.genres %}
+                                <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
+                            {% endfor %}
+                        </div>
+                        {% if movie.overview | length %}
+                            <div class="overview">
+                                {{ 'Overview'|trans }} :
+                                {{ movie.overview }}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if movie.overview | length %}
-                        <div class="overview">
-                            {{ 'Overview'|trans }} :
-                            {{ movie.overview }}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="part-2">
-                    <div class="part-2L">
-                        {% if movie.runtime %}
-                            <div class="info">
-                                {{ 'Runtime'|trans }} :
-                                {% if movie.runtime//60 > 0 %}
-                                    {{ movie.runtime//60 }}
-                                    {% if movie.runtime//60>1 %}{{ 'Hours'|trans }}{% else %}{{ 'Hour'|trans }}{% endif %}
-                                {% endif %}
-                                {{ movie.runtime%60 }} {{ 'Minute'|trans }}{% if movie.runtime%60>1 %}s{% endif %}
+                    <div class="part-2">
+                        <div class="part-2L">
+                            {% if movie.runtime %}
+                                <div class="info">
+                                    {{ 'Runtime'|trans }} :
+                                    {% if movie.runtime//60 > 0 %}
+                                        {{ movie.runtime//60 }}
+                                        {% if movie.runtime//60>1 %}{{ 'Hours'|trans }}{% else %}{{ 'Hour'|trans }}{% endif %}
+                                    {% endif %}
+                                    {{ movie.runtime%60 }} {{ 'Minute'|trans }}{% if movie.runtime%60>1 %}s{% endif %}
+                                </div>
+                            {% endif %}
+                            {% if movie.revenue > 0 %}
+                                <div class="info">
+                                    {{ 'Revenue'|trans }} : {{ movie.revenue }}$
+                                </div>
+                            {% endif %}
+                            <div class="infos">
+                                <div>{{ 'Average Vote'|trans }} : {{ movie.vote_average }}</div>
+                                <div>{{ 'Vote Count'|trans }} : {{ movie.vote_count }}</div>
                             </div>
-                        {% endif %}
-                        {% if movie.revenue > 0 %}
-                            <div class="info">
-                                {{ 'Revenue'|trans }} : {{ movie.revenue }}$
-                            </div>
-                        {% endif %}
-                        <div class="infos">
-                            <div>{{ 'Average Vote'|trans }} : {{ movie.vote_average }}</div>
-                            <div>{{ 'Vote Count'|trans }} : {{ movie.vote_count }}</div>
-                        </div>
-                        {% if movie.homepage | length %}
-                            <div class="info">
-                                {{ 'Home Page'|trans }} :
-                                <a href="{{ movie.homepage }}" target="_blank">
+                            {% if movie.homepage | length %}
+                                <div class="info">
+                                    {{ 'Home Page'|trans }} :
+                                    <a href="{{ movie.homepage }}" target="_blank">
                                         <span data-descr="{{ 'Visit the official Movie Website'|trans }}">
                                             {{ movie.homepage }}&nbsp;<i class="bi bi-link-45deg"></i>
                                          </span>
-                                </a>
-                            </div>
-                        {% endif %}
-                        {% if movie.imdb_id | length %}
-                            <div class="info">
-                                <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% if movie.imdb_id | length %}
+                                <div class="info">
+                                    <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">
                                         <span data-descr="{{ 'Visit the Movie Page on IMDB'|trans }}">
                                             {{ 'IMDB Page'|trans }}&nbsp;<i class="bi bi-link-45deg"></i>
                                         </span>
-                                </a>
-                            </div>
-                        {% endif %}
+                                    </a>
+                                </div>
+                            {% endif %}
 
-                        {% if dates is empty %}
-                            <div class="info">
-                                {{ 'Release Date'|trans }} : {{ movie.release_date|format_date('short') }}
-                            </div>
-                        {% else %}
-                            <div class="infos">
-                                <h2>{{ 'Release Dates'|trans }}</h2>
-                                {% for location in dates %}
-                                    <div class="country">
-                                        <div class="name">{{ location.iso_3166_1|country_name(locale) }}</div>
-                                        <div class="dates">
-                                            {% for date in location.release_dates %}
-                                                <div class="event">
-                                                    {{ date.type|trans }}{% if date.note is defined and date.note|length %}&nbsp;-&nbsp;{{ date.note }}{% endif %}&nbsp;:&nbsp;{{ date.release_date|format_date('short') }}
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-
-                        {% if movie.production_companies %}
-                            <h2>{{ 'Production'|trans }}</h2>
-                            <div class="productions">
-                                {{ 'Production Companies'|trans }} :
-                                <div>
-                                    {% for cie in movie.production_companies %}
-                                        <div class="production">
-                                            <div>{{ cie.name }}</div>
+                            {% if dates is empty %}
+                                <div class="info">
+                                    {{ 'Release Date'|trans }} : {{ movie.release_date|format_date('short') }}
+                                </div>
+                            {% else %}
+                                <div class="infos">
+                                    <h2>{{ 'Release Dates'|trans }}</h2>
+                                    {% for location in dates %}
+                                        <div class="country">
+                                            <div class="name">{{ location.iso_3166_1|country_name(locale) }}</div>
+                                            <div class="dates">
+                                                {% for date in location.release_dates %}
+                                                    <div class="event">
+                                                        {{ date.type|trans }}{% if date.note is defined and date.note|length %}&nbsp;-&nbsp;{{ date.note }}{% endif %}&nbsp;:&nbsp;{{ date.release_date|format_date('short') }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
                                         </div>
                                     {% endfor %}
                                 </div>
-                            </div>
-                        {% endif %}
-                        {% if movie.production_countries %}
-                            <div class="productions">
-                                {{ 'Production Countries'|trans }} :
-                                <div>
-                                    {% for country in movie.production_countries %}
-                                        <div class="production">{{ country.iso_3166_1 |country_name(locale) }} {# ({{ country.name }}) #}</div>
-                                    {% endfor %}
+                            {% endif %}
+
+                            {% if movie.production_companies %}
+                                <h2>{{ 'Production'|trans }}</h2>
+                                <div class="productions">
+                                    {{ 'Production Companies'|trans }} :
+                                    <div>
+                                        {% for cie in movie.production_companies %}
+                                            <div class="production">
+                                                <div>{{ cie.name }}</div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if movie.production_countries %}
+                                <div class="productions">
+                                    {{ 'Production Countries'|trans }} :
+                                    <div>
+                                        {% for country in movie.production_countries %}
+                                            <div class="production">{{ country.iso_3166_1 |country_name(locale) }} {# ({{ country.name }}) #}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% if movie.belongs_to_collection %}
+                            <div class="part-2R">
+                                <h2>{{ 'Belongs to Collection'|trans }}</h2>
+                                <div class="collection">
+                                    <div class="card text-center" style="width: 100%;">
+                                        {% if movie.belongs_to_collection.backdrop_path %}
+                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" class="card-img-top" alt="movie.belongs_to_collection.name">
+                                        {% endif %}
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ movie.belongs_to_collection.name }}</h5>
+                                            <div><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
+                                            <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
-                    {% if movie.belongs_to_collection %}
-                        <div class="part-2R">
-                            <h2>{{ 'Belongs to Collection'|trans }}</h2>
-                            <div class="collection">
-                                <div class="card text-center" style="width: 100%;">
-                                    {% if movie.belongs_to_collection.backdrop_path %}
-                                        <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" class="card-img-top" alt="movie.belongs_to_collection.name">
-                                    {% endif %}
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ movie.belongs_to_collection.name }}</h5>
-                                        <div><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
-                                        <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+                <div class="movie-poster">
+                    {% if movie.poster_path %}
+                        <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                    {% else %}
+                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
                     {% endif %}
                 </div>
             </div>
-            <div class="movie-poster">
-                {% if movie.poster_path %}
-                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
-                {% else %}
-                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
-                {% endif %}
-            </div>
-        </div>
 
-        {% if recommendations is not empty %}
-            <h2>{{ 'Recommendations'|trans }}</h2>
-            <div class="recommendations">
-                {% for recommendation in recommendations %}
-                    <div class="recommendation">
-                        <a href="{{ path('app_movie', {id: recommendation.id}) }}">
-                            {% if recommendation.poster_path %}
-                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
-                            {% else %}
-                                <div class="no-poster">
-                                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
-                                    <div class="title">{{ recommendation.title }}</div>
-                                    <div class="original-title">{{ recommendation.original_title }}</div>
-                                </div>
-                            {% endif %}
-                        </a>
+            {% if recommendations is not empty %}
+                <h2>{{ 'Recommendations'|trans }}</h2>
+                <div class="recommendations">
+                    {% for recommendation in recommendations %}
+                        <div class="recommendation">
+                            <a href="{{ path('app_movie', {id: recommendation.id}) }}">
+                                {% if recommendation.poster_path %}
+                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
+                                {% else %}
+                                    <div class="no-poster">
+                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
+                                        <div class="title">{{ recommendation.title }}</div>
+                                        <div class="original-title">{{ recommendation.original_title }}</div>
+                                    </div>
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if cast is not empty %}
+                <h2>{{ 'Casting'|trans }}</h2>
+                <div class="cast">
+                    <div class="content">
+                        {% for actor in cast %}
+                            <div class="actor" data-bs-toggle="modal" data-bs-target="#personModal">
+                                {% if actor.profile_path | length %}
+                                    <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
+                                {% else %}
+                                    <div class="profile" data-id="{{ actor.id }}"></div>
+                                {% endif %}
+                                <div class="name">{{ actor.name }}</div>
+                                <div class="character">{{ actor.character }}</div>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        {% if cast is not empty %}
-            <h2>{{ 'Casting'|trans }}</h2>
-            <div class="cast">
-                <div class="content">
-                    {% for actor in cast %}
-                        <div class="actor" data-bs-toggle="modal" data-bs-target="#personModal">
-                            {% if actor.profile_path | length %}
-                                <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
-                            {% else %}
-                                <div class="profile" data-id="{{ actor.id }}"></div>
-                            {% endif %}
-                            <div class="name">{{ actor.name }}</div>
-                            <div class="character">{{ actor.character }}</div>
-                        </div>
-                    {% endfor %}
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
 
-        {% if crew is not empty %}
-            <h2>{{ 'Crew'|trans }}</h2>
-            <div class="crew">
-                <div class="content">
-                    {% for member in crew %}
-                        <div class="member" data-bs-toggle="modal" data-bs-target="#personModal">
-                            {% if member.profile_path | length %}
-                                <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')" data-id="{{ member.id }}"></div>
-                            {% else %}
-                                <div class="profile" data-id="{{ member.id }}"></div>
-                            {% endif %}
-                            <div class="job">{{ member.job }}</div>
-                            <div class="name">{{ member.name }}</div>
-                        </div>
-                    {% endfor %}
+            {% if crew is not empty %}
+                <h2>{{ 'Crew'|trans }}</h2>
+                <div class="crew">
+                    <div class="content">
+                        {% for member in crew %}
+                            <div class="member" data-bs-toggle="modal" data-bs-target="#personModal">
+                                {% if member.profile_path | length %}
+                                    <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')" data-id="{{ member.id }}"></div>
+                                {% else %}
+                                    <div class="profile" data-id="{{ member.id }}"></div>
+                                {% endif %}
+                                <div class="job">{{ member.job }}</div>
+                                <div class="name">{{ member.name }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
 
         <div class="modal fade" id="personModal" tabindex="-1">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">

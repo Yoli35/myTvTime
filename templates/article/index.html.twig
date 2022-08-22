@@ -2,11 +2,6 @@
 
 {% block title %}myTvTime::{{ 'Blog'|trans }}{% endblock %}
 {% block morecss %}
-<style>
-    body, .container {
-        background-color: #011616;
-    }
-</style>
 {% endblock %}
 
 {% block body %}
@@ -26,17 +21,24 @@
                 </ol>
             </nav>
 
-            {% if articles|length %}
-                {% for article in articles %}
-                    {{ include('/blocks/article/apercu.html.twig') }}
-                {% endfor %}
-            {% else %}
-                <div class="nothing">
-                    <div class="to-show">
-                        {{ 'Nothing to show yet'|trans }}
-                    </div>
+            <div class="content">
+                <div class="articles">
+                    {% if articles|length %}
+                        {% for article in articles %}
+                            {{ include('/blocks/article/apercu.html.twig') }}
+                        {% endfor %}
+                    {% else %}
+                        <div class="nothing">
+                            <div class="to-show">
+                                {{ 'Nothing to show yet'|trans }}
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
+                <div class="tools">
+
+                </div>
+            </div>
         </div>
 
         {{ include('blocks/pageFooter.html.twig') }}

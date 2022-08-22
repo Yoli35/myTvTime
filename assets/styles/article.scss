@@ -35,252 +35,269 @@
     width: 100%;
     */
 
-    .article {
-        @include flex-col();
-        background-color: #bcdddd;
-        border-radius: 1em;
-        margin-top: 1em;
-        overflow: hidden;
+    .content {
+        @include flex-100(flex-start, flex-start);
 
-        .banner {
-            background-position: center center;
-            background-size: cover;
-            border-radius: 1em 1em 0 0;
-            height: 5em;
-            width: 100%;
+        .articles {
+            width: 75%;
 
-            &.full {
-                height: 15em;
-            }
-        }
-
-        .apercu {
-            @include flex-100(center, flex-start);
-            padding: 1em;
-
-            .thumbnail {
-                height: 3em;
-                width: 3em;
-
-                img {
-                    border: 4px solid #123333;
-                    border-radius: 50%;
-                    height: 3em;
-                    object-fit: cover;
-                    width: 3em;
-                }
-            }
-
-            .presentation {
-                @include flex-col(flex-start, center);
-                flex: 1;
-                margin-left: 1em;
-
-                .title-author {
-                    @include flex-100(baseline, flex-start);
-                }
-
-                .title {
-                    color: #123333;
-                    flex: 1;
-                    font-size: 1.5em;
-                    font-weight: bold;
-                }
-
-                .author {
-                    color: #456666;
-                    font-size: 1em;
-                    margin-left: auto;
-                }
-
-                .abstract {
-                    color: #012222;
-                    font-size: .75em;
-                    font-weight: 200;
-
-                    &.full {
-                        font-size: 1em;
-                        margin-top: 2em;
-
-                        .left {
-                            border-radius: .25em;
-                            display: inline-block;
-                            float: left;
-                            height: auto;
-                            margin: 0 1em 1em 0;
-                        }
-
-                        .right {
-                            border-radius: .25em;
-                            display: inline-block;
-                            float: right;
-                            height: auto;
-                            margin: 0 0 1em 1em;
-                        }
-
-                        .center {
-                            border-radius: .25em;
-                            height: auto;
-                            margin-inside: auto;
-                            width: 100%;
-                        }
-                    }
-                }
-
-                .dates {
-                    @include flex-100(center, flex-start);
-
-                    .date {
-                        color: #456666;
-                        font-size: .5em;
-                        font-weight: 200;
-                        margin-right: 1em;
-                    }
-                }
-            }
-        }
-
-        .comment-form {
-            background-color: #abcccc;
-            border-radius: 1em;
-            margin: 1em;
-            padding: 1em;
-            width: calc(100% - 2em);
-
-            .label {
-                Font-size: 1em;
-            }
-
-            .user {
-                @include flex-row(center, flex-start);
-                margin-bottom: .5em;
-
-                img {
-                    @include rounded-avatar(2em);
-                    border: 2px solid #abcccc;
-                }
-
-                .name {
-                    color: #123333;
-                    padding-left: .5em;
-                }
-            }
-        }
-
-        .comments {
-            width: calc(100% - 2em);
-
-            .label {
-                font-size: 1em;
-            }
-
-            .comment {
-                @include flex-col(flex-start, flex-start);
-                background-color: #abcccc;
-                border-radius: .5em;
+            .article {
+                @include flex-col();
+                background-color: #bcdddd;
+                border-radius: 1em;
                 margin-bottom: 1em;
-                padding: 1em;
+                overflow: hidden;
 
-                .user {
-                    @include flex-row(center, flex-start);
-                    font-size: .875em;
-
-                    img {
-                        @include rounded-avatar(2em);
-                        border: 2px solid #abcccc;
-                    }
-
-                    .name {
-                        color: #123333;
-                        padding-left: .5em;
-                    }
-
-                    .dates {
-                        @include flex-100(center, flex-start);
-                        color: #123333;
-                        margin-left: 1em;
-
-                        div {
-                            padding-right: 1em;
-                        }
-                    }
-                }
-
-                .text {
-                    font-style: italic;
-                }
-
-                .reactions {
-                    background-color: #bcdddd;
-                    border-radius: .5em;
-                    margin: .25em 0 .25em 2em;
-                    padding: .5em;
-
-                    .reaction {
-                        border-radius: .5em;
-                        margin: .5em 0;
-                        padding: .5em;
-                    }
-
-                    .odd {
-                        background-color: #cdeeee;
-                    }
-                }
-
-                .react {
-                    padding-left: 2em;
+                .banner {
+                    background-position: center center;
+                    background-size: cover;
+                    border-radius: 1em 1em 0 0;
+                    height: 15em;
                     width: 100%;
 
-                    .answer {
-                        @include flex-100();
+                    &.full {
+                        height: 15em;
+                    }
+                }
+
+                .apercu {
+                    @include flex-100(center, flex-start);
+                    padding: 1em;
+
+                    .thumbnail {
+                        height: 3em;
+                        width: 3em;
+
+                        img {
+                            border: 4px solid #123333;
+                            border-radius: 50%;
+                            height: 3em;
+                            object-fit: cover;
+                            width: 3em;
+                        }
+                    }
+
+                    .presentation {
+                        @include flex-col(flex-start, center);
+                        flex: 1;
+                        margin-left: 1em;
+
+                        .title-author {
+                            @include flex-100(baseline, flex-start);
+                        }
+
+                        .title {
+                            color: #123333;
+                            flex: 1;
+                            font-size: 1.5em;
+                            font-weight: bold;
+                        }
+
+                        .author {
+                            color: #456666;
+                            font-size: 1em;
+                            margin-left: auto;
+                        }
+
+                        .abstract {
+                            color: #012222;
+                            font-size: .75em;
+                            font-weight: 200;
+
+                            &.full {
+                                font-size: 1em;
+                                margin-top: 2em;
+
+                                .left {
+                                    border-radius: .25em;
+                                    display: inline-block;
+                                    float: left;
+                                    height: auto;
+                                    margin: 0 1em 1em 0;
+                                }
+
+                                .right {
+                                    border-radius: .25em;
+                                    display: inline-block;
+                                    float: right;
+                                    height: auto;
+                                    margin: 0 0 1em 1em;
+                                }
+
+                                .center {
+                                    border-radius: .25em;
+                                    height: auto;
+                                    margin-inside: auto;
+                                    width: 100%;
+                                }
+                            }
+                        }
+
+                        .dates {
+                            @include flex-100(center, flex-start);
+
+                            .date {
+                                color: #456666;
+                                font-size: .5em;
+                                font-weight: 200;
+                                margin-right: 1em;
+                            }
+                        }
+                    }
+                }
+
+                .comment-form {
+                    background-color: #abcccc;
+                    border-radius: 1em;
+                    margin: 1em;
+                    padding: 1em;
+                    width: calc(100% - 2em);
+
+                    .label {
+                        Font-size: 1em;
+                    }
+
+                    .user {
+                        @include flex-row(center, flex-start);
+                        margin-bottom: .5em;
+
+                        img {
+                            @include rounded-avatar(2em);
+                            border: 2px solid #abcccc;
+                        }
+
+                        .name {
+                            color: #123333;
+                            padding-left: .5em;
+                        }
+                    }
+                }
+
+                .comments {
+                    width: calc(100% - 2em);
+
+                    .label {
+                        font-size: 1em;
+                    }
+
+                    .comment {
+                        @include flex-col(flex-start, flex-start);
+                        background-color: #abcccc;
+                        border-radius: .5em;
+                        margin-bottom: 1em;
+                        padding: 1em;
 
                         .user {
                             @include flex-row(center, flex-start);
+                            font-size: .875em;
 
                             img {
-                                @include rounded-avatar(1.5em);
+                                @include rounded-avatar(2em);
+                                border: 2px solid #abcccc;
                             }
 
                             .name {
-                                font-size: .75em;
+                                color: #123333;
                                 padding-left: .5em;
+                            }
+
+                            .dates {
+                                @include flex-100(center, flex-start);
+                                color: #123333;
+                                margin-left: 1em;
+
+                                div {
+                                    padding-right: 1em;
+                                }
                             }
                         }
 
-                        textarea {
-                            border-radius: .25em;
-                            height: 2em;
-                            margin: 0 1em;
-                            width: 100%;
+                        .text {
+                            font-style: italic;
                         }
 
-                        .submit {
-                            background-color: #6c757d;
-                            border-color: #6c757d;
-                            border-radius: 0.2rem;
-                            color: #fff;
-                            cursor: pointer;
-                            display: inline-block;
-                            font-size: 0.75rem;
-                            font-weight: 400;
-                            line-height: 1.5;
-                            padding: 0.25rem 0.5rem;
-                            text-align: center;
-                            text-decoration: none;
-                            vertical-align: middle;
-                            user-select: none;
+                        .reactions {
+                            background-color: #bcdddd;
+                            border-radius: .5em;
+                            margin: .25em 0 .25em 2em;
+                            padding: .5em;
 
-                            &:hover {
-                                color: #fff;
-                                background-color: #5c636a;
-                                border-color: #565e64;
+                            .reaction {
+                                border-radius: .5em;
+                                margin: .5em 0;
+                                padding: .5em;
+                            }
+
+                            .odd {
+                                background-color: #cdeeee;
+                            }
+                        }
+
+                        .react {
+                            padding-left: 2em;
+                            width: 100%;
+
+                            .answer {
+                                @include flex-100();
+
+                                .user {
+                                    @include flex-row(center, flex-start);
+
+                                    img {
+                                        @include rounded-avatar(1.5em);
+                                    }
+
+                                    .name {
+                                        font-size: .75em;
+                                        padding-left: .5em;
+                                    }
+                                }
+
+                                textarea {
+                                    border-radius: .25em;
+                                    height: 2em;
+                                    margin: 0 1em;
+                                    width: 100%;
+                                }
+
+                                .submit {
+                                    background-color: #6c757d;
+                                    border-color: #6c757d;
+                                    border-radius: 0.2rem;
+                                    color: #fff;
+                                    cursor: pointer;
+                                    display: inline-block;
+                                    font-size: 0.75rem;
+                                    font-weight: 400;
+                                    line-height: 1.5;
+                                    padding: 0.25rem 0.5rem;
+                                    text-align: center;
+                                    text-decoration: none;
+                                    vertical-align: middle;
+                                    user-select: none;
+
+                                    &:hover {
+                                        color: #fff;
+                                        background-color: #5c636a;
+                                        border-color: #565e64;
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
+        .tools {
+            background-color: #abcccc;
+            border-radius: 1em;
+            margin-left: 1em;
+            min-height: 50vh;
+            width: calc(25% - 1em);
+        }
     }
+
 
     .table {
         border-bottom: unset;
@@ -424,72 +441,79 @@
 @media (prefers-color-scheme: dark) {
 
     .blog {
-        .article {
-            background-color: #062020;
+        .content {
+            .articles {
+                .article {
+                    background-color: #062020;
 
-            .apercu {
+                    .apercu {
 
-                .thumbnail {
-                    img {
-                        border: 2px solid #abcccc;
+                        .thumbnail {
+                            img {
+                                border: 2px solid #abcccc;
+                            }
+                        }
+
+                        .presentation {
+                            .title {
+                                color: #abcccc;
+                            }
+
+                            .author {
+                                color: #789999;
+                            }
+
+                            .abstract {
+                                color: #bcdddd;
+                            }
+
+                            .dates {
+                                .date {
+                                    color: #789999;
+                                }
+                            }
+                        }
                     }
-                }
 
-                .presentation {
-                    .title {
-                        color: #abcccc;
+                    .comment-form {
+                        background-color: #123333;
+
+                        .user {
+                            .name {
+                                color: #abcccc;
+                            }
+                        }
                     }
 
-                    .author {
-                        color: #789999;
-                    }
+                    .comments {
 
-                    .abstract {
-                        color: #bcdddd;
-                    }
+                        .comment {
+                            background-color: #123333;
 
-                    .dates {
-                        .date {
-                            color: #789999;
+                            .user {
+                                .name {
+                                    color: #abcccc;
+                                }
+
+                                .dates {
+                                    color: #abcccc;
+                                }
+                            }
+
+                            .reactions {
+                                background-color: #234444;
+
+                                .odd {
+                                    background-color: #345555;
+                                }
+
+                            }
                         }
                     }
                 }
             }
-
-            .comment-form {
+            .tools {
                 background-color: #123333;
-
-                .user {
-                    .name {
-                        color: #abcccc;
-                    }
-                }
-            }
-
-            .comments {
-
-                .comment {
-                    background-color: #123333;
-
-                    .user {
-                        .name {
-                            color: #abcccc;
-                        }
-
-                        .dates {
-                            color: #abcccc;
-                        }
-                    }
-
-                    .reactions {
-                        background-color: #234444;
-
-                        .odd {
-                            background-color: #345555;
-                        }
-
-                    }
-                }
             }
         }
 

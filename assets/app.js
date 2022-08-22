@@ -17,7 +17,7 @@ import './styles/article.scss';
 import './styles/collection.scss';
 import './styles/serie.scss';
 
-// import './js/movie';
+import './js/cookie-consent';
 import './js/mydropzone_controller'
 
 import 'bootstrap';
