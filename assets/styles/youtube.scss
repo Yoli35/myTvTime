@@ -27,7 +27,7 @@
 
     .parameters {
         @include flex-col();
-        background-color: #dbdbdb;
+        background-color: var(--gradiant-ardoise-80);
         border-radius: .5em;
         margin: 0 auto;
         overflow: hidden;
@@ -43,7 +43,7 @@
 
             .input {
                 @include flex-row();
-                background-color: #444;
+                background-color: var(--gradiant-ardoise-30);
                 border-radius: .5em;
                 padding: .5em;
 
@@ -69,10 +69,10 @@
                 }
 
                 span {
-                    color: #085d55;
+                    color: var(--gradiant-ardoise-50);
 
                     span {
-                        color: #12b7a9;
+                        color: var(--gradiant-ardoise-70);
                         font-weight: bold;
                     }
                 }
@@ -80,7 +80,7 @@
 
             .thumbnail {
                 @include flex-row();
-                background-color: #444;
+                background-color: var(--gradiant-ardoise-30);
                 border-radius: .5em;
                 padding: .5em;
 
@@ -95,7 +95,7 @@
 
     .search-tags {
         @include flex-col();
-        background-color: #dbdbdb;
+        background-color: var(--gradiant-ardoise-80);
         border-radius: .5em;
         margin: .25em auto;
         overflow: hidden;
@@ -125,7 +125,7 @@
 
         .yt-video {
             align-items: center;
-            background-color: #dbdbdb;
+            background-color: var(--gradiant-ardoise-80);
             border-radius: .5em;
             display: flex;
             flex-direction: column;
@@ -137,7 +137,7 @@
                 font-weight: 100;
 
                 .duration {
-                    background-color: #1c1c1c;
+                    background-color: var(--gradiant-ardoise-10);
                     border-radius: .125em;
                     bottom: .5em;
                     font-size: .75em;
@@ -155,10 +155,10 @@
                     top: .5em;
 
                     .tag {
-                        background-color: #085d55;
-                        border: 1px solid #abcccc;
+                        background-color: var(--gradiant-ardoise-40);
+                        border: 1px solid var(--gradiant-ardoise-80);
                         border-radius: .5em;
-                        color: #abcccc;
+                        color: var(--gradiant-ardoise-80);
                         font-size: .75em;
                         font-weight: 400;
                         padding: 0 .5em;
@@ -176,18 +176,18 @@
                 width: 20em;
 
                 .channel {
-                    @include author(#0d9488);
+                    @include author(var(--gradiant-ardoise-60));
 
                     span[data-descr] {
                         position: relative;
                     }
 
                     span[data-descr]:hover::after {
-                        background-color: #808080;
-                        border: 2px #bdbdbd solid;
+                        background-color: var(--gradiant-ardoise-50);
+                        border: 2px var(--gradiant-ardoise-70) solid;
                         border-radius: .5em;
                         bottom: 3.5em;
-                        color: #dbdbdb;
+                        color: var(--gradiant-ardoise-80);
                         content: attr(data-descr);
                         font-size: .5em;
                         font-weight: 400;
@@ -220,7 +220,7 @@
 }
 
 .yt-videos-none {
-    background-color: #808080;
+    background-color: var(--gradiant-ardoise-50);
     border-radius: .25em;
     font-size: 3em;
     font-weight: normal;
@@ -232,8 +232,8 @@
 /*
 @mixin thumbnail {
     align-items: center;
-    background-color: #0d9488;
-    border: 2px solid #bdbdbd;
+    background-color: var(--gradiant-ardoise-60);
+    border: 2px solid var(--gradiant-ardoise-70);
     border-radius: 50%;
     display: flex;
     height: 2em;
@@ -282,36 +282,36 @@
                     position: relative;
 
                     input {
-                        background-color: #085d55;
-                        border: 1px solid #abcccc;
+                        background-color: var(--gradiant-ardoise-50);
+                        border: 1px solid var(--gradiant-ardoise-70);
                         border-radius: .5em;
-                        caret-color: #abcccc;
-                        color: #abcccc;
+                        caret-color: var(--gradiant-ardoise-70);
+                        color: var(--gradiant-ardoise-70);
                         padding-left: .5em;
                     }
 
                     .results {
-                        background-color: #085d55;
-                        border: 1px solid #abcccc;
+                        background-color: var(--gradiant-ardoise-50);
+                        border: 1px solid var(--gradiant-ardoise-70);
                         border-radius: .25em;
                         left: 1em;
                         position: absolute;
                         top: 1.75em;
 
                         .item {
-                            color: #abcccc;
+                            color: var(--gradiant-ardoise-70);
                             padding: 0 1em;
 
                             &:hover {
-                                background-color: #abcccc;
-                                color: #085d55;
+                                background-color: var(--gradiant-ardoise-70);
+                                color: var(--gradiant-ardoise-50);
                                 cursor: pointer;
                             }
                         }
                     }
 
                     .add {
-                        color: #abcccc;
+                        color: var(--gradiant-ardoise-70);
                         cursor: pointer;
                         position: absolute;
                         right: .25em;
@@ -320,10 +320,10 @@
                 }
 
                 .tag {
-                    background-color: #085d55;
-                    border: 1px solid #abcccc;
+                    background-color: var(--gradiant-ardoise-50);
+                    border: 1px solid var(--gradiant-ardoise-70);
                     border-radius: .5em;
-                    color: #abcccc;
+                    color: var(--gradiant-ardoise-70);
                     font-size: 1em;
                     font-weight: 100;
                     padding: 1px 1.5em 1px .5em; /* -> same height as input */
@@ -331,7 +331,7 @@
                     position: relative;
 
                     &.new {
-                        background-color: #c36d00;
+                        background-color: var(--gradiant-mars-60);
                     }
 
                     .close {
@@ -349,7 +349,7 @@
 
         .description {
             a {
-                color: #0d5e42;
+                color: var(--gradiant-ardoise-40);
             }
         }
 
@@ -364,7 +364,7 @@
             }
 
             .thumbnail {
-                @include author(#0d9488);
+                @include author(var(--gradiant-ardoise-60));
             }
         }
     }
@@ -583,25 +583,25 @@
     .yt-videos {
 
         .parameters {
-            background-color: #2f2f2f;
+            background-color: var(--gradiant-ardoise-20);
 
             span {
-                color: #0d9488;
+                color: var(--gradiant-ardoise-60);
 
                 span {
-                    color: #16f6e2;
+                    color: var(--gradiant-ardoise-70);
                 }
             }
         }
 
         .search-tags {
-            background-color: #2f2f2f;
+            background-color: var(--gradiant-ardoise-20);
         }
 
         .result {
 
             .yt-video {
-                background-color: #2f2f2f;
+                background-color: var(--gradiant-ardoise-20);
             }
         }
     }
@@ -614,7 +614,7 @@
         .details {
             .description {
                 a {
-                    color: #16f6e2;
+                    color: var(--gradiant-ardoise-70);
                 }
             }
         }
