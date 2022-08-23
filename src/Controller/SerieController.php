@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Network;
 use App\Entity\Serie;
 use App\Entity\User;
 use App\Form\SerieType;
+use App\Repository\NetworkRepository;
 use App\Repository\SerieRepository;
 use App\Service\CallTmdbService;
 use App\Service\ImageConfiguration;
@@ -13,10 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use DateTimeImmutable;
 
 #[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -87,8 +85,11 @@ class SerieController extends AbstractController
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
-    public function new(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function new(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, NetworkRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -119,11 +120,6 @@ class SerieController extends AbstractController
                 $status = "Ok";
                 $tv = json_decode($standing, true);
 
-                if (is_array($tv['networks']) && count($tv['networks'])) {
-                    $network = $tv['networks'][0];
-                } else {
-                    $network = null;
-                }
                 $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
 
                 if ($serie == null) {
@@ -139,9 +135,18 @@ class SerieController extends AbstractController
                 $serie->setOverview($tv['overview']);
                 $serie->setSerieId($tv['id']);
                 $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
-                if ($network) {
-                    $serie->setNetwork($network['name']);
-                    $serie->setNetworkLogoPath($network['logo_path']);
+
+                foreach ($tv['networks'] as $network) {
+                    $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);
+
+                    if ($m2mNetwork == null) {
+                        $m2mNetwork = new Network();
+                        $m2mNetwork->setName($network['name']);
+                        $m2mNetwork->setLogoPath($network['logo_path']);
+                        $m2mNetwork->setOriginCountry($network['origin_country']);
+                        $networkRepository->add($m2mNetwork, true);
+                    }
+                    $serie->addNetwork($m2mNetwork);
                 }
                 $serie->addUser($user);
                 $serieRepository->add($serie, true);
@@ -181,16 +186,24 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getTvCredits($serie->getSerieId(), $request->getLocale());
         $credits = json_decode($standing, true);
-        dump($credits);
 
         $standing = $tmdbService->getTvKeywords($serie->getSerieId(), $request->getLocale());
         $keywords = json_decode($standing, true);
-        dump($keywords);
+
+        $standing = $tmdbService->getTvWatchProviders($serie->getSerieId());
+        $temp = json_decode($standing, true);
+        if (array_key_exists('FR', $temp['results'])) {
+            $watchProvider = json_decode($standing, true)['results']['FR'];
+        }
+        else {
+            $watchProvider = null;
+        }
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'credits' => $credits,
             'keywords' => $keywords,
+            'watchProvider' => $watchProvider,
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);

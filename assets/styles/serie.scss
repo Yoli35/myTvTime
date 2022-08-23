@@ -240,9 +240,15 @@
             }
 
             button {
+                appearance: unset;
+                background-color: var(--gradiant-ardoise-20);
+                border: 1px solid var(--gradiant-ardoise-80);
+                border-radius: var(--button-border-radius);
                 color: var(--gradiant-ardoise-80);
                 font-weight: 100;
+                padding: .25em 1em;
                 text-transform: uppercase;
+                width: 100%;
             }
 
             .label {
@@ -313,22 +319,23 @@
                             select {
                                 appearance: unset;
                                 background-color: var(--gradiant-ardoise-40);
-                                border: 1px solid var(--gradiant-ardoise-80);
-                                border-radius: 0;
+                                border: 0 solid var(--gradiant-ardoise-80);
                                 color: var(--gradiant-ardoise-80);
                                 font-weight: 100;
                                 padding: .25em 1em .25em .25em;
                                 position: relative;
                                 width: 100%;
+
+                                &.left {
+                                    border-width: 1px 0 1px 1px;
+                                    border-radius: var(--button-border-radius) 0 0 var(--button-border-radius);
+                                }
+
+                                &.right {
+                                    border-width: 1px 0 1px 1px;
+                                    border-radius: 0 0 0 0;
+                                }
                             }
-
-                        }
-
-                        div:first-child {
-                            border-right-width: 0;
-                        }
-
-                        div:last-child {
                         }
                     }
                 }
@@ -372,14 +379,7 @@
                     margin-top: auto;
 
                     button {
-                        appearance: unset;
-                        background-color: var(--gradiant-ardoise-20);
-                        border: 1px solid var(--gradiant-ardoise-80);
-                        border-radius: 0;
-                        color: var(--gradiant-ardoise-80);
-                        font-weight: 100;
-                        padding: .25em;
-                        width: 100%;
+                        border-radius: 0 var(--button-border-radius) var(--button-border-radius) 0;
                     }
                 }
             }
@@ -400,6 +400,7 @@
         .poster {
             height: 30em;
             width: auto;
+            position: relative;
             z-index: 0;
 
             img {
@@ -407,6 +408,40 @@
                 display: block;
                 height: 100%;
                 object-fit: cover;
+            }
+
+            .watch-provider {
+                @include flex-100();
+                background-color: var(--gradiant-ardoise-10);
+                border-radius: 0 0 .5em .5em;
+                bottom: 0;
+                color: var(--gradiant-ardoise-80);
+                height: 4em;
+                left: 0;
+                margin: 1px;
+                position: absolute;
+                width: calc(100% - 2px);
+
+                .logo {
+                    border-radius: .25em;
+                    height: 3em;
+                    width: 3em;
+
+                    img {
+                        background-size: cover;
+                    }
+                }
+
+                .watch {
+                    @include flex-col();
+                    font-weight: 100;
+                    height: 4em;
+                    margin-left: 1em;
+
+                    a {
+                        font-weight: bold;
+                    }
+                }
             }
         }
 
@@ -465,7 +500,7 @@
         article {
             @include flex-col(flex-start, flex-start);
             min-height: 50vh;
-            width: 75%;
+            width: 70%;
 
             section {
                 @include flex-col(flex-start, flex-start);
@@ -499,7 +534,7 @@
             margin-left: 1em;
             min-height: 50vh;
             padding: 0 1em;
-            width: calc(25% - 1em);
+            width: calc(30% - 1em);
 
             .key-facts {
                 .fact {
@@ -511,6 +546,7 @@
 
                     .content {
                         font-weight: 100;
+                        margin-bottom: .25em;
                         padding-left: .5em;
 
                         .frame {
@@ -578,7 +614,6 @@
         }
     }
 }
-
 
 @media (min-width: 768px) { /* 720 */
     .my-series {
@@ -666,15 +701,25 @@
                         flex-direction: column;
 
                         .group-settings {
-                            margin-bottom: 1em;
+                            .field {
+                                select {
+                                    &.left {
+                                        border-width: 1px 0 0 1px;
+                                        border-radius: var(--button-border-radius) 0 0 0;
+                                    }
 
-                            //div:first-child {
-                            //    margin-right: .25em;
-                            //}
-                            //
-                            //div:last-child {
-                            //    margin-left: .25em;
-                            //}
+                                    &.right {
+                                        border-width: 1px 1px 0 1px;
+                                        border-radius: 0 var(--button-border-radius) 0 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .apply {
+                        button {
+                            border-radius: 0 0 var(--button-border-radius) var(--button-border-radius);
                         }
                     }
                 }

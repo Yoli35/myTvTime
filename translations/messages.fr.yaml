@@ -193,50 +193,127 @@ Close: Fermer
 Creation: Année de création
 View on: Regarder sur
 Country: Pays
-Network: Network
-Showrunner: Show Runner
+Showrunner: Directeur de série
+# Status
 Status: Statut
+Canceled: Annulée
 Continuing: En cours
 Ended: Terminé
+# Watch
+Available in streaming: Disponible en streaming
+Available to rent or buy: Disponible à la location ou à l'achat
+Watch now: Regarder maintenant
+# cast / crew
 Cast: Distribution des rôles
 Acting.she: Actrice
 Acting.he: Acteur
 Acting: Actrice/Acteur
+Directing: Direction
+Production.he: Producteur
+Production.she: Productrice
+Writing.he: Auteur
+Writing.she: Autrice
+# key facts
 Key facts: Faits principaux
-Original name: Nom original
-Original language: Langage d'origine
+Network: Diffuseur télé
+Networks: Diffuseurs télé
 Original Country: Pays d'origine
+Original language: Langage d'origine
+Original name: Nom original
 Returning Series: Série renouvelée
-Networks: Diffuseur télé
+# keywords
+1960s: 1960s
+1980s: 1980s
 Keywords: Mots clés
-dream: rêve
-nightmare: cauchemar
-superhero: super héros
+aids: sida
+apocalypse: apocalypse
+artificial intelligence: intelligence artificielle
+australia: australie
 based on comic: basé sur un comics
-raven: corbeau
+based on novel or book : basé sur un roman ou un livre
+based on young adult novel : basé sur un roman pour jeunes adultes
+berlin, germany: berlin, allemagne
+best friend: meilleur ami
+cold war: guerre froide
+dark comedy: comédie noire
 dark fantasy: fantaisie sombre
+depression: dépression
+digital: digital
+dream: rêve
+espionage: espionnage
+fantasy world: monde fantastique
+female friendship: amitié féminine
+gang: gang
+gay interest: intérêt pour les gays
+gay: gay
+german democratic republic: république démocratique allemande
+germany: allemagne
+hiv/aids epidemic: épidémie de vih/sida
+hiv: hiv
+homophobia: homophobie
+housemates: co-locataires
+isle of wight: ile de wight
+lgbt: lgbt
+london, england: Londres, angleterre
+love: amour
+marvel cinematic universe (mcu): univers cinématique marvel (mcu)
+military: militaire
+mind reading: lire dans les pensées
+miniseries: mini séries
+misfit: asocial
+mother: mère
 multiverse:	multivers
+murder: meurtre
+mysterious: mystérieux
+mystery: mystère
+nightclub: discothèque
+nightmare: cauchemar
+nuclear catastrophe: catastrophe nucléaire
+organ theft: vol d'organes
+outbreak: épidémie
+partner: partenaire
+psychological thriller: thriller psychologique
+raven: corbeau
+roommate: co-locataire
+self-discovery : découverte de soi
+sitcom: sitcom
+small town: petite ville
+spin off: série dérivée
+stasi: stasi
+suburbia: banlieue
+super power: super pouvoir
+superhero team: équipe de super héros
+superhero: super héros
+supernatural power: puissance surnaturelle
+supernatural: supernaturel
+survival: survie
+suspense: suspense
+victorian england: angleterre victorienne
+volcanic eruption: éruption volcanique
+volcano: volcan
+west berlin: berlin ouest
+young adult: jeune adulte
 
 # Serie Genres
-Action: Action
-Adventure: Aventure
-Animation: Animation
-Anime: Anime
-Comedy: Comédie
-Crime: Crime
-Drama: Drame
-Family: Famille
-Fantasy: Fantastique
-History: Historique
-Horror: Horreur
-Mini-Series: Mini-séries
-Mystery: Mystère
-Romance: Romance
-Science Fiction: Science-Fiction
-Sport: Sport
-Suspense: Suspense
-Thriller: Thriller
-War: Guerre
+#Action: Action
+#Adventure: Aventure
+#Animation: Animation
+#Anime: Anime
+#Comedy: Comédie
+#Crime: Crime
+#Drama: Drame
+#Family: Famille
+#Fantasy: Fantastique
+#History: Historique
+#Horror: Horreur
+#Mini-Series: Mini-séries
+#Mystery: Mystère
+#Romance: Romance
+#Science Fiction: Science-Fiction
+#Sport: Sport
+#Suspense: Suspense
+#Thriller: Thriller
+#War: Guerre
 
 # YoutubeVideo
 My Youtube Videos: Mes vidéos Youtube

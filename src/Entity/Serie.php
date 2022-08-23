@@ -46,10 +46,14 @@ class Serie
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $overview = null;
 
+    #[ORM\ManyToMany(targetEntity: Network::class)]
+    private Collection $networks;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->addedAt = new \DateTimeImmutable();
+        $this->networks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -185,6 +189,30 @@ class Serie
     public function setBackdropPath(?string $backdropPath): self
     {
         $this->backdropPath = $backdropPath;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Network>
+     */
+    public function getNetworks(): Collection
+    {
+        return $this->networks;
+    }
+
+    public function addNetwork(Network $network): self
+    {
+        if (!$this->networks->contains($network)) {
+            $this->networks->add($network);
+        }
+
+        return $this;
+    }
+
+    public function removeNetwork(Network $network): self
+    {
+        $this->networks->removeElement($network);
 
         return $this;
     }

@@ -64,7 +64,6 @@ class YoutubeController extends AbstractController
 
             $videos[] = $video;
         }
-        dump($videos);
 
         return $this->json([
             'results' => $videos,
@@ -130,8 +129,6 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/remove/tag/{id}/{tag}', name: 'app_youtube_video_remove_tag', requirements: ['_locale' => 'fr|en|de|es'])]
     public function removeTag($id, $tag, YoutubeVideo $youtubeVideo, YoutubeVideoRepository $videoRepository, YoutubeVideoTagRepository $tagRepository): Response
     {
-        dump($youtubeVideo);
-
         $videoTag = $tagRepository->find($tag);
         $youtubeVideo->removeTag($videoTag);
         $videoRepository->add($youtubeVideo, true);

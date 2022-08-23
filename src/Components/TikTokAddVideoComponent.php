@@ -85,7 +85,6 @@ class TikTokAddVideoComponent
                 $standing = $this->tikTokService->getVideo($thisLink);
                 if ($standing['code'] == 200) {
                     // https://www.tiktok.com/@leoobbrown/video/7089218681154145542?is_from_webapp=1&sender_device=pc&web_id=7113996049588979205
-                    // dump($standing);
                     $tiktok = json_decode($standing['content'], true);
 
                     $video = new TikTokVideo();

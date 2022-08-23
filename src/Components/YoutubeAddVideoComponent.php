@@ -93,8 +93,6 @@ class YoutubeAddVideoComponent
         $this->firstView = $this->getFirstView();
         $this->time2Human = $this->getTime2human();
         list($this->preview_url, $this->preview_title) = $this->get_preview();
-//        dump($this->videos, $this->page, $this->user_id);
-
     }
 
     /**
@@ -192,7 +190,6 @@ class YoutubeAddVideoComponent
                 $this->videoRepository->add($newVideo, true);
 
                 $this->justAdded = $newVideo->getId();
-//                dump($this->page, $this->justAdded);
 
                 $this->videos = $this->getVideos();
                 $this->videoCount = $this->getVideosCount();
@@ -201,7 +198,6 @@ class YoutubeAddVideoComponent
             }
         }
         $firstVideo = $this->videos[0];
-//        dump($this->videos, $firstVideo, $this->page, $this->user_id);
         if (gettype($firstVideo)=='array') {
 
             $this->videos = $this->getVideos();

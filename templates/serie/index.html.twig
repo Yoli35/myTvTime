@@ -45,7 +45,7 @@
                                         <input id="new_serie" type="text" value="">
                                     </div>
                                     <div>
-                                        <button id="add_serie" type="submit" class="btn btn-secondary">{{ 'Add'|trans }}</button>
+                                        <button id="add_serie" type="submit">{{ 'Add'|trans }}</button>
                                     </div>
                                 </div>
                                 <div class="help">
@@ -88,7 +88,7 @@
                                         <div class="order-by">
                                             <label class="label" for="order-by">{{ 'Order by'|trans }}</label>
                                             <div class="field">
-                                                <select id="order-by">
+                                                <select id="order-by" class="left">
                                                     <option value="firstDateAir"{% if pages.order_by=='firstDateAir' %} selected{% endif %}>{{ 'First Air Date'|trans }}</option>
                                                     <option value="id"{% if pages.order_by=='id' %} selected{% endif %}>{{ 'Add order'|trans }}</option>
                                                     <option value="name"{% if pages.order_by=='name' %} selected{% endif %}>{{ 'Name'|trans }}</option>
@@ -98,7 +98,7 @@
                                         <div class="order">
                                             <label class="label" for="order">{{ 'Order'|trans }}</label>
                                             <div class="field">
-                                                <select id="order">
+                                                <select id="order" class="right">
                                                     <option value="desc"{% if pages.order=='desc' %} selected{% endif %}>{{ 'Descending'|trans }}</option>
                                                     <option value="asc"{% if pages.order=='asc' %} selected{% endif %}>{{ 'Ascending'|trans }}</option>
                                                 </select>
@@ -106,7 +106,7 @@
                                         </div>
                                     </div>
                                     <div class="apply">
-                                        <button id="apply" type="submit" class="btn btn-secondary">{{ 'Apply'|trans }}</button>
+                                        <button id="apply" type="submit">{{ 'Apply'|trans }}</button>
                                     </div>
                                 </div>
                             </div>

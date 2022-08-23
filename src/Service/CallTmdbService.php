@@ -229,6 +229,25 @@ class CallTmdbService
         }
     }
 
+    public function getTvWatchProviders($tvId): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $tvId . '/watch/providers?api_key=' . $this->api_key,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                dump($exception->getMessage(), $exception->getCode());
+                return "";
+            }
+        } catch (Throwable $exception) {
+            dump($exception->getMessage(), $exception->getCode());
+            return "";
+        }
+    }
+
     /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
@@ -312,7 +331,6 @@ class CallTmdbService
      */
     public function getPerson($id, $locale): ?string
     {
-        dump($id, $locale);
         if ($id && $locale) {
             $response = $this->client->request('GET', 'https://api.themoviedb.org/3/person/' . $id . '?api_key='.$this->api_key.'&language=' . $locale);
             return $response->getContent();

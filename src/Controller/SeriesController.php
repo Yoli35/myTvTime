@@ -43,7 +43,6 @@ class SeriesController extends AbstractController
     {
         $standing = $betaSeriesService->showsDisplay($id);
         $result = json_decode($standing, true, 512, 0);
-//        dump($result);
 
         return $this->render('series/index.html.twig', [
             'show' => $result['show'],

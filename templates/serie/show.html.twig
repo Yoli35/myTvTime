@@ -18,7 +18,28 @@
                 <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
                 <div class="poster">
                     <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
-
+                    {% if watchProvider %}
+                        <div class="watch-provider">
+                            {% if watchProvider.flatrate is defined %}
+                            <div class="logo">
+                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ watchProvider.flatrate.0.logo_path }}" alt="{{ watchProvider.flatrate.0.provider_name }}">
+                            </div>
+                            <div class="watch">
+                                <div>{{ 'Available in streaming'|trans }}</div>
+                                <div><a href="{{ watchProvider.link }}">{{ 'Watch now'|trans }}</a></div>
+                            </div>
+                            {% endif %}
+                            {% if watchProvider.buy is defined %}
+                            <div class="logo">
+                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ watchProvider.buy.0.logo_path }}" alt="{{ watchProvider.buy.0.provider_name }}">
+                            </div>
+                            <div class="watch">
+                                <div>{{ 'Available to rent or buy'|trans }}</div>
+                                <div><a href="{{ watchProvider.link }}">{{ 'Watch now'|trans }}</a></div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="infos">
                     <h1>{{ serie.name }} <span>({{ serie.first_air_date|date("Y") }})</span></h1>
@@ -50,12 +71,10 @@
                                     </div>
                                     <div>{{ c.name }}</div>
                                     <div>
-                                        {% if c.gender %}
+                                        {% if c.gender is defined %}
                                             {{ (c.gender==1?'creator.she':'creator.he')|trans }}
-                                            {#                                            ({{ c.gender }}) #}
                                         {% else %}
                                             {{ 'creation'|trans }}
-                                            {#                                            ({{ c.gender }}) #}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -81,8 +100,11 @@
                                             {% endif %}
                                         </div>
                                         <div>{{ people.name }}</div>
+                                        {% if people.character is defined %}
+                                            <div>{{ people.character }}</div>
+                                        {% endif %}
                                         <div>
-                                            {% if people.gender %}
+                                            {% if people.gender is defined %}
                                                 {{ (people.known_for_department~(people.gender==1?'.she':'.he'))|trans }}
                                             {% else %}
                                                 {{ people.known_for_department|trans }}
@@ -117,23 +139,31 @@
                             <div class="content">{{ serie.status|trans }}</div>
                         </div>
                         <div class="fact">
-                            <div class="label">{{ 'Networks'|trans }}</div>
-                            {% for network in serie.networks %}
-                                <div class="content">
-                                    <div class="frame">
-                                        <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
+                            {% if serie.networks|length %}
+                                <div class="label">{{ (serie.networks|length>1?'Networks':'Network')|trans }}</div>
+                                {% for network in serie.networks %}
+                                    <div class="content">
+                                        {% if network.logo_path %}
+                                            <div class="frame">
+                                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
+                                            </div>
+                                        {% else %}
+                                            {{ network.name }}
+                                        {% endif %}
                                     </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div class="fact">
-                            <div class="label">{{ 'Keywords'|trans }}</div>
-                            <div class="keywords">
-                                {% for keyword in keywords.results %}
-                                    <div class="keyword">{{ keyword.name|trans }}</div>
                                 {% endfor %}
-                            </div>
+                            {% endif %}
                         </div>
+                        {% if keywords.results|length %}
+                            <div class="fact">
+                                <div class="label">{{ 'Keywords'|trans }}</div>
+                                <div class="keywords">
+                                    {% for keyword in keywords.results %}
+                                        <div class="keyword">{{ keyword.name|trans }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </aside>
             </main>

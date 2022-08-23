@@ -29,6 +29,7 @@
         @include flex-col();
         background-color: var(--gradiant-ardoise-80);
         border-radius: .5em;
+        box-shadow: 0 0 1em rgba(0,0,0,.25);
         margin: 0 auto;
         overflow: hidden;
 
@@ -156,9 +157,9 @@
 
                     .tag {
                         background-color: var(--gradiant-ardoise-40);
-                        border: 1px solid var(--gradiant-ardoise-80);
+                        border: 1px solid var(--gradiant-ardoise-90);
                         border-radius: .5em;
-                        color: var(--gradiant-ardoise-80);
+                        color: var(--gradiant-ardoise-90);
                         font-size: .75em;
                         font-weight: 400;
                         padding: 0 .5em;
@@ -282,36 +283,36 @@
                     position: relative;
 
                     input {
-                        background-color: var(--gradiant-ardoise-50);
-                        border: 1px solid var(--gradiant-ardoise-70);
+                        background-color: var(--gradiant-ardoise-40);
+                        border: 1px solid var(--gradiant-ardoise-90);
                         border-radius: .5em;
-                        caret-color: var(--gradiant-ardoise-70);
-                        color: var(--gradiant-ardoise-70);
+                        caret-color: var(--gradiant-ardoise-90);
+                        color: var(--gradiant-ardoise-90);
                         padding-left: .5em;
                     }
 
                     .results {
-                        background-color: var(--gradiant-ardoise-50);
-                        border: 1px solid var(--gradiant-ardoise-70);
+                        background-color: var(--gradiant-ardoise-40);
+                        border: 1px solid var(--gradiant-ardoise-90);
                         border-radius: .25em;
                         left: 1em;
                         position: absolute;
                         top: 1.75em;
 
                         .item {
-                            color: var(--gradiant-ardoise-70);
+                            color: var(--gradiant-ardoise-90);
                             padding: 0 1em;
 
                             &:hover {
-                                background-color: var(--gradiant-ardoise-70);
-                                color: var(--gradiant-ardoise-50);
+                                background-color: var(--gradiant-ardoise-90);
+                                color: var(--gradiant-ardoise-40);
                                 cursor: pointer;
                             }
                         }
                     }
 
                     .add {
-                        color: var(--gradiant-ardoise-70);
+                        color: var(--gradiant-ardoise-90);
                         cursor: pointer;
                         position: absolute;
                         right: .25em;
@@ -320,10 +321,10 @@
                 }
 
                 .tag {
-                    background-color: var(--gradiant-ardoise-50);
-                    border: 1px solid var(--gradiant-ardoise-70);
+                    background-color: var(--gradiant-ardoise-40);
+                    border: 1px solid var(--gradiant-ardoise-90);
                     border-radius: .5em;
-                    color: var(--gradiant-ardoise-70);
+                    color: var(--gradiant-ardoise-90);
                     font-size: 1em;
                     font-weight: 100;
                     padding: 1px 1.5em 1px .5em; /* -> same height as input */
@@ -331,7 +332,7 @@
                     position: relative;
 
                     &.new {
-                        background-color: var(--gradiant-mars-60);
+                        background-color: var(--gradiant-mars-50);
                     }
 
                     .close {

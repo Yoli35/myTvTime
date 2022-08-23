@@ -2,7 +2,6 @@
 {% set locale = this.getLocale %}
 {% if weather is not empty %}
     <div id="weather" class="weather"{% if weather.current.is_day == 0 %} style="background-color: rgba(32, 32, 32, 0.75);"{% endif %}>
-        {#        {{ dump(weather.forecast.forecastday.0) }} #}
         <div id="weather-content" class="content">
             <div class="content-row">
                 <div class="city">{{ weather.location.name }}</div>

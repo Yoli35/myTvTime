@@ -99,7 +99,7 @@ main {
 
 .nav-toggler {
     align-items: center;
-    background: #0d9488e6; /* alpha 90% */
+    background: var(--gradiant-ardoise-30-alpha-90);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -148,7 +148,7 @@ main {
 
 .nav-menu {
     align-items: center;
-    background: #111111e6; /* alpha 90% */
+    background: var(--gradiant-ardoise-10-alpha-90);
     border-bottom: 2px solid #cfcfcf;
     display: flex;
     flex-direction: column;
@@ -186,7 +186,7 @@ main {
         }
 
         &:hover {
-            background-color: #abcccc3f;
+            background-color: var(--gradiant-ardoise-30-alpha-90);
             //color: #123333;
             font-weight: bold;
 
@@ -220,7 +220,7 @@ main {
 
     .welcome {
         align-items: center;
-        background: #0d94887f;
+        background: var(--gradiant-ardoise-30-alpha-90);
         border-radius: 1.5em;
         display: flex;
         padding: .25em .25em .25em .75em;

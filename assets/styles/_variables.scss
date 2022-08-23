@@ -9,6 +9,8 @@ $fa-font-path: "../webfonts";
     --mtt-body-bg-gradiant: var(--gradiant-ardoise-40);
     --mtt-body-color: var(--gradiant-ardoise-90);
 
+    --button-border-radius: .25em;
+
     --gradiant-ardoise-100: hsl(212, 43%, 100%);
     --gradiant-ardoise-90: hsl(212, 43%, 90%);
     --gradiant-ardoise-80: hsl(212, 43%, 80%);
@@ -17,8 +19,10 @@ $fa-font-path: "../webfonts";
     --gradiant-ardoise-50: hsl(212, 43%, 50%);
     --gradiant-ardoise-40: hsl(212, 43%, 40%);
     --gradiant-ardoise-30: hsl(212, 43%, 30%);
+    --gradiant-ardoise-30-alpha-90: hsla(212, 43%, 30%, .9);
     --gradiant-ardoise-20: hsl(212, 43%, 20%);
     --gradiant-ardoise-10: hsl(212, 43%, 10%);
+    --gradiant-ardoise-10-alpha-90: hsla(212, 43%, 10%, .9);
     --gradiant-ardoise-0: hsl(212, 43%, 0%);
 
     --gradiant-purple-100: hsl(306, 50%, 100%);
@@ -178,6 +182,7 @@ $fa-font-path: "../webfonts";
     background-color: $color;
     border-radius: .5rem;
     margin: .25em;
+    min-width: 8em;
     overflow: hidden;
     width: 8rem;
 
@@ -192,8 +197,7 @@ $fa-font-path: "../webfonts";
     div {
         font-size: .75em;
         font-weight: 100;
-        min-height: 1.5rem;
-        padding: .5rem;
+        padding: .125rem;
         text-align: center;
     }
 

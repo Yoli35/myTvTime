@@ -21,19 +21,14 @@
         margin: 4em 0;
 
         .to-show {
-            background-color: #0d9488;
+            background-color: var(--gradiant-ardoise-50);
             border-radius: 1em;
-            color: #abcccc;
+            color: var(--gradiant-ardoise-90);
             font-size: 1.5em;
             font-weight: bold;
             padding: 2em 4em;
         }
     }
-
-    /*
-    display: block;
-    width: 100%;
-    */
 
     .content {
         @include flex-100(flex-start, flex-start);
@@ -43,7 +38,7 @@
 
             .article {
                 @include flex-col();
-                background-color: #bcdddd;
+                background-color: var(--gradiant-ardoise-80);
                 border-radius: 1em;
                 margin-bottom: 1em;
                 overflow: hidden;
@@ -69,7 +64,7 @@
                         width: 3em;
 
                         img {
-                            border: 4px solid #123333;
+                            border: 4px solid var(--gradiant-ardoise-20);
                             border-radius: 50%;
                             height: 3em;
                             object-fit: cover;
@@ -87,20 +82,20 @@
                         }
 
                         .title {
-                            color: #123333;
+                            color: var(--gradiant-ardoise-20);
                             flex: 1;
                             font-size: 1.5em;
                             font-weight: bold;
                         }
 
                         .author {
-                            color: #456666;
+                            color: var(--gradiant-ardoise-40);
                             font-size: 1em;
                             margin-left: auto;
                         }
 
                         .abstract {
-                            color: #012222;
+                            color: var(--gradiant-ardoise-10);
                             font-size: .75em;
                             font-weight: 200;
 
@@ -137,7 +132,7 @@
                             @include flex-100(center, flex-start);
 
                             .date {
-                                color: #456666;
+                                color: var(--gradiant-ardoise-40);
                                 font-size: .5em;
                                 font-weight: 200;
                                 margin-right: 1em;
@@ -147,7 +142,7 @@
                 }
 
                 .comment-form {
-                    background-color: #abcccc;
+                    background-color: var(--gradiant-ardoise-90);
                     border-radius: 1em;
                     margin: 1em;
                     padding: 1em;
@@ -163,11 +158,11 @@
 
                         img {
                             @include rounded-avatar(2em);
-                            border: 2px solid #abcccc;
+                            border: 2px solid var(--gradiant-ardoise-90);
                         }
 
                         .name {
-                            color: #123333;
+                            color: var(--gradiant-ardoise-20);
                             padding-left: .5em;
                         }
                     }
@@ -182,7 +177,7 @@
 
                     .comment {
                         @include flex-col(flex-start, flex-start);
-                        background-color: #abcccc;
+                        background-color: var(--gradiant-ardoise-90);
                         border-radius: .5em;
                         margin-bottom: 1em;
                         padding: 1em;
@@ -193,17 +188,17 @@
 
                             img {
                                 @include rounded-avatar(2em);
-                                border: 2px solid #abcccc;
+                                border: 2px solid var(--gradiant-ardoise-90);
                             }
 
                             .name {
-                                color: #123333;
+                                color: var(--gradiant-ardoise-20);
                                 padding-left: .5em;
                             }
 
                             .dates {
                                 @include flex-100(center, flex-start);
-                                color: #123333;
+                                color: var(--gradiant-ardoise-20);
                                 margin-left: 1em;
 
                                 div {
@@ -217,7 +212,7 @@
                         }
 
                         .reactions {
-                            background-color: #bcdddd;
+                            background-color: var(--gradiant-ardoise-80);
                             border-radius: .5em;
                             margin: .25em 0 .25em 2em;
                             padding: .5em;
@@ -229,7 +224,7 @@
                             }
 
                             .odd {
-                                background-color: #cdeeee;
+                                background-color: var(--gradiant-ardoise-70);
                             }
                         }
 
@@ -261,10 +256,10 @@
                                 }
 
                                 .submit {
-                                    background-color: #6c757d;
-                                    border-color: #6c757d;
+                                    background-color: var(--gradiant-ardoise-40);
+                                    border-color: var(--gradiant-ardoise-40);
                                     border-radius: 0.2rem;
-                                    color: #fff;
+                                    color: var(--gradiant-ardoise-90);
                                     cursor: pointer;
                                     display: inline-block;
                                     font-size: 0.75rem;
@@ -277,9 +272,9 @@
                                     user-select: none;
 
                                     &:hover {
-                                        color: #fff;
-                                        background-color: #5c636a;
-                                        border-color: #565e64;
+                                        color: var(--gradiant-ardoise-90);
+                                        background-color: var(--gradiant-ardoise-30);
+                                        border-color: var(--gradiant-ardoise-40);
                                     }
                                 }
                             }
@@ -290,14 +285,13 @@
         }
 
         .tools {
-            background-color: #abcccc;
+            background-color: var(--gradiant-ardoise-90);
             border-radius: 1em;
             margin-left: 1em;
             min-height: 50vh;
             width: calc(25% - 1em);
         }
     }
-
 
     .table {
         border-bottom: unset;
@@ -308,7 +302,7 @@
         }
 
         img {
-            border: 2px solid #bcdddd;
+            border: 2px solid var(--gradiant-ardoise-80);
             border-radius: .25em;
             height: 3em;
             overflow: hidden;
@@ -322,13 +316,13 @@
             width: 100%;
 
             .dropzone-container {
-                background-color: #deffff1f;
+                background-color: var(--gradiant-ardoise-40);
                 border-radius: 1em;
             }
 
             .dropzone-preview-image {
                 background-size: cover;
-                border: 2px solid #bcdddd;
+                border: 2px solid var(--gradiant-ardoise-80);
                 border-radius: 50%;
                 overflow: hidden;
             }
@@ -369,16 +363,16 @@
         transition: background-color .5s, opacity .5s;
 
         &.visible {
-            background-color: #bcdddd7f;
+            background-color: var(--gradiant-ardoise-80)7f;
             display: flex;
             opacity: 1;
         }
 
         .close {
             align-items: center;
-            background-color: #bcdddd;
+            background-color: var(--gradiant-ardoise-80);
             border-radius: 50%;
-            color: #123333;
+            color: var(--gradiant-ardoise-20);
             cursor: pointer;
             display: flex;
             height: 1.5em;
@@ -390,7 +384,7 @@
         }
 
         img {
-            border: .5em solid #bcdddd;
+            border: .5em solid var(--gradiant-ardoise-80);
             border-radius: 1em;
             max-height: 80%;
             max-width: 80%;
@@ -444,43 +438,43 @@
         .content {
             .articles {
                 .article {
-                    background-color: #062020;
+                    background-color: var(--gradiant-ardoise-30);
 
                     .apercu {
 
                         .thumbnail {
                             img {
-                                border: 2px solid #abcccc;
+                                border: 2px solid var(--gradiant-ardoise-90);
                             }
                         }
 
                         .presentation {
                             .title {
-                                color: #abcccc;
+                                color: var(--gradiant-ardoise-90);
                             }
 
                             .author {
-                                color: #789999;
+                                color: var(--gradiant-ardoise-70);
                             }
 
                             .abstract {
-                                color: #bcdddd;
+                                color: var(--gradiant-ardoise-80);
                             }
 
                             .dates {
                                 .date {
-                                    color: #789999;
+                                    color: var(--gradiant-ardoise-70);
                                 }
                             }
                         }
                     }
 
                     .comment-form {
-                        background-color: #123333;
+                        background-color: var(--gradiant-ardoise-20);
 
                         .user {
                             .name {
-                                color: #abcccc;
+                                color: var(--gradiant-ardoise-90);
                             }
                         }
                     }
@@ -488,23 +482,23 @@
                     .comments {
 
                         .comment {
-                            background-color: #123333;
+                            background-color: var(--gradiant-ardoise-20);
 
                             .user {
                                 .name {
-                                    color: #abcccc;
+                                    color: var(--gradiant-ardoise-90);
                                 }
 
                                 .dates {
-                                    color: #abcccc;
+                                    color: var(--gradiant-ardoise-90);
                                 }
                             }
 
                             .reactions {
-                                background-color: #234444;
+                                background-color: var(--gradiant-ardoise-20);
 
                                 .odd {
-                                    background-color: #345555;
+                                    background-color: var(--gradiant-ardoise-30);
                                 }
 
                             }
@@ -513,17 +507,17 @@
                 }
             }
             .tools {
-                background-color: #123333;
+                background-color: var(--gradiant-ardoise-20);
             }
         }
 
         .table {
-            color: #bcdddd;
+            color: var(--gradiant-ardoise-80);
         }
 
         .show {
             &.visible {
-                background-color: #1233337f;
+                background-color: var(--gradiant-ardoise-20)7f;
             }
         }
     }

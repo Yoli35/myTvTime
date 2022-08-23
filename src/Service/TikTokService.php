@@ -37,14 +37,8 @@ class TikTokService
                 'GET',
                 'https://www.tiktok.com/oembed?url=' . $link,
             );
-        } catch (TransportException $transportException) {
-            dump($transportException->getMessage());
-        } catch (ServerException $serverException) {
-            dump($serverException->getMessage());
-        } catch (RedirectionException $redirectionException) {
-            dump($redirectionException->getMessage());
-        } catch (ClientException $clientException) {
-            dump($clientException->getMessage());
+        } catch (\Throwable $e) {
+            dump($e->getMessage());
         }
         $statusCode = $response->getStatusCode();
         dump($statusCode);
