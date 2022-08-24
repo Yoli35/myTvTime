@@ -18,28 +18,37 @@
                 <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
                 <div class="poster">
                     <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
-                    {% if watchProvider %}
-                        <div class="watch-provider">
-                            {% if watchProvider.flatrate is defined %}
-                            <div class="logo">
-                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ watchProvider.flatrate.0.logo_path }}" alt="{{ watchProvider.flatrate.0.provider_name }}">
-                            </div>
-                            <div class="watch">
-                                <div>{{ 'Available in streaming'|trans }}</div>
-                                <div><a href="{{ watchProvider.link }}">{{ 'Watch now'|trans }}</a></div>
-                            </div>
+                    {% if watchProviders %}
+                        <div class="watch-providers">
+                            {% if watchProviders.flatrate is defined %}
+                                {% for flatrate in watchProviders.flatrate %}
+                                    <div class="watch-provider">
+                                        <div class="logo">
+                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}" alt="{{ flatrate.provider_name }}">
+                                        </div>
+                                        <div class="watch">
+                                            <div>{{ 'Available in streaming'|trans }}</div>
+                                            <div><a href="{{ watchProviders.link }}">{{ 'Watch now'|trans }}</a></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             {% endif %}
-                            {% if watchProvider.buy is defined %}
-                            <div class="logo">
-                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ watchProvider.buy.0.logo_path }}" alt="{{ watchProvider.buy.0.provider_name }}">
-                            </div>
-                            <div class="watch">
-                                <div>{{ 'Available to rent or buy'|trans }}</div>
-                                <div><a href="{{ watchProvider.link }}">{{ 'Watch now'|trans }}</a></div>
-                            </div>
+                            {% if watchProviders.buy is defined %}
+                                {% for buy in watchProviders.buy %}
+                                    <div class="watch-provider">
+                                        <div class="logo">
+                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}" alt="{{ buy.provider_name }}">
+                                        </div>
+                                        <div class="watch">
+                                            <div>{{ 'Available to rent or buy'|trans }}</div>
+                                            <div><a href="{{ watchProviders.link }}">{{ 'Watch now'|trans }}</a></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             {% endif %}
                         </div>
                     {% endif %}
+                    <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 </div>
                 <div class="infos">
                     <h1>{{ serie.name }} <span>({{ serie.first_air_date|date("Y") }})</span></h1>
@@ -51,6 +60,9 @@
                             •
                             {{ serie.episode_run_time.0 }} {{ 'minutes'|trans }}
                         {% endif %}
+                    </div>
+                    <div class="info">
+                        <div class="tagline">{{ serie.tagline }}</div>
                     </div>
                     <div class="info">
                         {% if serie.overview %}
@@ -114,7 +126,27 @@
                                 {% endfor %}
                             </div>
                         </div>
-
+                    </section>
+                    <section>
+                        <div class="seasons">
+                            {% for season in serie.seasons %}
+                                <div class="season">
+                                    <div class="poster">
+                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
+                                    </div>
+                                    <div class="infos">
+                                        <h4>{{ season.name }}</h4>
+                                        <div>{{ season.air_date|slice(0,4) }} | {{ season.episode_count }} {{ 'episodes'|trans }}</div>
+                                        {% if season.overview|length %}
+                                            <div>{{ season.overview }}</div>
+                                        {% endif %}
+                                        <div>
+                                            {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('full'))}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </section>
                 </article>
                 <aside>
@@ -170,4 +202,16 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const providers = document.querySelectorAll(".watch-provider");
+
+            if (providers.length > 1) {
+                const arrow = document.querySelector(".arrow");
+                arrow.classList.add("d-flex");
+            }
+        })
+    </script>
 {% endblock %}

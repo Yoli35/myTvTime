@@ -10,7 +10,10 @@
         {{ include('blocks/pageHeader.html.twig') }}
 
         <div class="blog">
-            <div class="header"></div>
+            <div class="header">
+                <h1>{{ 'Blog'|trans }}</h1>
+                <div class="backdrop"></div>
+            </div>
 
             <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
                 <ol class="breadcrumb">
@@ -45,3 +48,42 @@
 
     </div>
 {% endblock %}
+{% block morejs %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+
+            initHeader();
+        })
+
+        function initHeader() {
+            let ticking = false;
+            setH1();
+            window.addEventListener('resize', setH1);
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(function () {
+                        setH1();
+                        ticking = false;
+                    });
+                }
+                ticking = true;
+            });
+
+        }
+
+        function setH1() {
+            const header = document.querySelector(".header");
+            const h1 = document.querySelector("h1");
+            let left, bottom, ratio;
+            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
+            if (ratio < 0) ratio = 0;
+            if (ratio > 1) ratio = 1;
+            ratio = ratio ** 3;
+            left = 32 + ((header.clientWidth - 64) * (1 - ratio));
+            bottom = 16 - ((h1.clientHeight / 2) * (1 - ratio));
+            h1.setAttribute("style", "left: " + left.toString() + "px; bottom: " + bottom + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
+        }
+    </script>
+{% endblock %}
+

@@ -193,17 +193,17 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTvWatchProviders($serie->getSerieId());
         $temp = json_decode($standing, true);
         if (array_key_exists('FR', $temp['results'])) {
-            $watchProvider = json_decode($standing, true)['results']['FR'];
+            $watchProviders = json_decode($standing, true)['results']['FR'];
         }
         else {
-            $watchProvider = null;
+            $watchProviders = null;
         }
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'credits' => $credits,
             'keywords' => $keywords,
-            'watchProvider' => $watchProvider,
+            'watchProviders' => $watchProviders,
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);

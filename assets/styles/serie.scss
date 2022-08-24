@@ -2,38 +2,13 @@
 
 .my-series {
     --serie-lg-height: 15em;
-    --serie-poster-height: 9.984375em;
+    --serie-poster-width: 9.984375em;
 
     @include flex-col(flex-start, center);
     padding-top: 1em;
 
     .header {
-        //@include flex-col();
-        border-radius: 1em;
-        height: 20em;
-        overflow: hidden;
-        position: relative;
-        width: 100%;
-
-        h1 {
-            color: var(--gradiant-ardoise-90);
-            font-size: 4em;
-            font-weight: bold;
-            opacity: 1;
-            position: absolute;
-            //transition: all .3s;
-        }
-
-        .backdrop {
-            background-image: url("../images/serie-header.jpg");
-            background-position: center center;
-            background-size: cover;
-            border-radius: 1em;
-            inset: 0;
-            opacity: .5;
-            position: absolute;
-            z-index: -1;
-        }
+        @include animated-header("../images/serie-header.jpg");
     }
 
     .series {
@@ -399,9 +374,9 @@
 
         .poster {
             height: 30em;
-            width: auto;
             position: relative;
             z-index: 0;
+            width: 20em;
 
             img {
                 border-radius: .5em;
@@ -410,37 +385,62 @@
                 object-fit: cover;
             }
 
-            .watch-provider {
-                @include flex-100();
-                background-color: var(--gradiant-ardoise-10);
-                border-radius: 0 0 .5em .5em;
+            .watch-providers {
+                @include flex-row(flex-start, flex-start);
                 bottom: 0;
-                color: var(--gradiant-ardoise-80);
-                height: 4em;
                 left: 0;
-                margin: 1px;
+                overflow-x: scroll;
                 position: absolute;
-                width: calc(100% - 2px);
+                width: 20em;
 
-                .logo {
-                    border-radius: .25em;
-                    height: 3em;
-                    width: 3em;
+                .watch-provider {
+                    @include flex-row();
+                    background-color: var(--gradiant-ardoise-10);
+                    border-radius: 0 0 .5em .5em;
+                    color: var(--gradiant-ardoise-80);
+                    height: 4em;
+                    //margin: 1px;
+                    width: 20em;
 
-                    img {
-                        background-size: cover;
+                    .logo {
+                        border-radius: .25em;
+                        height: 3em;
+                        margin: .5em;
+                        width: 3em;
+
+                        img {
+                            background-size: cover;
+                        }
+                    }
+
+                    .watch {
+                        @include flex-col();
+                        font-weight: 100;
+                        height: 4em;
+                        //margin-left: 1em;
+                        width: 16em;
+
+                        a {
+                            font-weight: bold;
+                        }
                     }
                 }
+            }
 
-                .watch {
-                    @include flex-col();
-                    font-weight: 100;
-                    height: 4em;
-                    margin-left: 1em;
+            .arrow {
+                @include flex-row();
+                background-color: var(--gradiant-ardoise-20);
+                border-radius: .25em;
+                bottom: 1em;
+                color: var(--gradiant-ardoise-80);
+                display: none;
+                height: 2em;
+                position: absolute;
+                right: .25em;
+                width: 2em;
 
-                    a {
-                        font-weight: bold;
-                    }
+                &.d-flex {
+                    display: flex;
                 }
             }
         }
@@ -474,17 +474,22 @@
 
             .info {
                 font-weight: 100;
-                margin-top: 1em;
+                margin-top: .5em;
+
+                .tagline {
+                    font-style: italic;
+                    font-weight: 100;
+                }
             }
 
             .creators {
-                @include flex-100(unset, space-around);
+                @include flex-100(unset, flex-start);
                 flex-wrap: wrap;
                 margin-top: 1em;
                 width: 100%;
 
                 .creator {
-                    @include human-profile(var(--gradiant-ardoise-40));
+                    @include human-profile(var(--gradiant-ardoise-20));
                 }
             }
         }
@@ -521,6 +526,49 @@
 
                         .people {
                             @include human-profile();
+                        }
+                    }
+                }
+
+                .seasons {
+                    @include flex-col();
+                    margin: 1em 0;
+                    width: 100%;
+
+                    .season {
+                        @include flex-row(center, flex-start);
+                        background-color: var(--gradiant-ardoise-90);
+                        border-radius: 0;
+                        height: 10em;
+                        margin: 1em 0;
+                        width: 100%;
+
+                        .poster {
+                            height: 10em;
+                            z-index: 0;
+
+                            img {
+                                border-radius: 0;
+                                height: 10em;
+                                object-fit: cover;
+                                width: auto;
+                            }
+                        }
+
+                        .infos {
+                            @include flex-col(flex-start, flex-start);
+                            padding: .5em;
+
+                            div {
+                                color: var(--gradiant-ardoise-20);
+                                font-weight: 100;
+                                margin: .25em 0;
+                            }
+
+                            div:first-child {
+                                font-size: 1.5em;
+                                font-weight: 200;
+                            }
                         }
                     }
                 }
@@ -726,6 +774,27 @@
             }
         }
     }
+
+    .serie-page {
+        main {
+            article {
+                section {
+                    .seasons {
+                        .season {
+                            background-color: var(--gradiant-ardoise-40);
+
+                            .infos {
+
+                                div {
+                                    color: var(--gradiant-ardoise-80);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -770,6 +839,35 @@
                         details {
                             div {
                                 background-color: var(--gradiant-ardoise-40);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    .serie-page {
+        main {
+            article {
+                section {
+                    .seasons {
+                        background-color: var(--gradiant-ardoise-30);
+                        border-radius: .5em;
+                        padding: 0 1em;
+
+                        .season {
+                            border-radius: .5em;
+                            height: 12em;
+
+                            .poster {
+                                height: 12em;
+
+                                img {
+                                    border-radius: .5em 0 0 .5em;
+                                    height: 12em;
+                                }
                             }
                         }
                     }

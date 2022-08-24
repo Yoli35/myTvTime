@@ -177,7 +177,7 @@ $fa-font-path: "../webfonts";
     width: $size;
 }
 
-@mixin human-profile($color: var(--gradiant-ardoise-40)) {
+@mixin human-profile($color: var(--gradiant-ardoise-20)) {
     @include flex-col(center, flex-start);
     background-color: $color;
     border-radius: .5rem;
@@ -209,5 +209,33 @@ $fa-font-path: "../webfonts";
     div:last-child {
         margin-top: auto;
         padding-top: 0;
+    }
+}
+
+@mixin animated-header($bg-image, $h1-color: var(--gradiant-ardoise-90))
+{
+    border-radius: 1em;
+    height: 20em;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    h1 {
+        color: $h1-color;
+        font-size: 4em;
+        font-weight: bold;
+        opacity: 1;
+        position: absolute;
+    }
+
+    .backdrop {
+        background-image: url($bg-image);
+        background-position: center center;
+        background-size: cover;
+        border-radius: 1em;
+        inset: 0;
+        opacity: .5;
+        position: absolute;
+        z-index: -1;
     }
 }

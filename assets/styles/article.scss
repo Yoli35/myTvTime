@@ -8,12 +8,7 @@
     padding-top: 1em;
 
     .header {
-        background-image: url("../images/blog-header.jpg");
-        background-position: center center;
-        background-size: cover;
-        border-radius: 1em;
-        height: 20em;
-        width: 100%;
+        @include animated-header("../images/blog-header.jpg");
     }
 
     .nothing {
