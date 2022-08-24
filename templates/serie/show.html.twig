@@ -48,7 +48,8 @@
                             {% endif %}
                         </div>
                     {% endif %}
-                    <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="arrow"></div>
+                    {#                    <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div> #}
                 </div>
                 <div class="infos">
                     <h1>{{ serie.name }} <span>({{ serie.first_air_date|date("Y") }})</span></h1>
@@ -132,7 +133,15 @@
                             {% for season in serie.seasons %}
                                 <div class="season">
                                     <div class="poster">
-                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
+                                        {% if season.poster_path|length %}
+                                            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
+                                        {% else %}
+                                            {% if serie.poster_path %}
+                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ season.name }}">
+                                            {% else %}
+                                                <img src="/images/default/no_poster.png" alt="{{ season.name }}">
+                                            {% endif %}
+                                        {% endif %}
                                     </div>
                                     <div class="infos">
                                         <h4>{{ season.name }}</h4>
@@ -211,6 +220,7 @@
             if (providers.length > 1) {
                 const arrow = document.querySelector(".arrow");
                 arrow.classList.add("d-flex");
+                arrow.innerHTML = "+" + (providers.length - 1);
             }
         })
     </script>

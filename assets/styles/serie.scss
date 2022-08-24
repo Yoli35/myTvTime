@@ -380,7 +380,6 @@
 
             img {
                 border-radius: .5em;
-                display: block;
                 height: 100%;
                 object-fit: cover;
             }
@@ -563,6 +562,8 @@
                                 color: var(--gradiant-ardoise-20);
                                 font-weight: 100;
                                 margin: .25em 0;
+                                max-height: 3em;
+                                overflow-y: scroll;
                             }
 
                             div:first-child {
