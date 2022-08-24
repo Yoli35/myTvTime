@@ -12,9 +12,9 @@
             <div>{{ 'Added at'|trans }} : {{ serie.addedAt ? serie.addedAt|format_date() : '' }}</div>
             <div>{{ serie.overview }}</div>
         </div>
-        {% if serie.networkLogoPath %}
+        {% if serie.networks|length %}
             <div class="network">
-                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ serie.networkLogoPath }}" alt="{{ 'Network' }}">
+                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ serie.networks.0.logoPath }}" alt="{{ 'Network' }}">
             </div>
         {% endif %}
     </div>

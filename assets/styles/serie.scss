@@ -31,6 +31,7 @@
                     border-radius: 0;
                     height: var(--serie-lg-height);
                     margin-bottom: 1em;
+                    //overflow: hidden;
                     position: relative;
                     width: 100%;
 
@@ -38,6 +39,7 @@
                         background-color: var(--gradiant-ardoise-90);
                         background-position: center center;
                         background-size: cover;
+                        border-radius: 0 .5em .5em 0;
                         inset: 0;
                         left: var(--serie-poster-width);
                         opacity: .25;
@@ -96,6 +98,14 @@
                             width: 100%;
                         }
                     }
+
+                    .add {
+                        @include seen(var(--serie-add), 1.5em);
+                    }
+
+                    .seen {
+                        @include seen(var(--serie-seen), 1.5em);
+                    }
                 }
             }
         }
@@ -106,7 +116,7 @@
             inset: 0;
             display: none;
             opacity: 0;
-            position: absolute;
+            position: fixed;
             transition: all .5s;
 
             &.visible {
@@ -492,6 +502,14 @@
                 }
             }
         }
+
+        .add {
+            @include seen(var(--serie-add), 2.5em);
+        }
+
+        .seen {
+            @include seen(var(--serie-seen), 2.5em);
+        }
     }
 
     main {
@@ -647,7 +665,12 @@
                             }
                         }
 
+                        .backdrop {
+                            border-radius: 0 .5em .5em 0;
+                        }
+
                         .infos {
+                            border-radius: 0 .5em .5em 0;
                             justify-content: center;
                         }
 

@@ -248,6 +248,25 @@ class CallTmdbService
         }
     }
 
+    public function getPopular($page, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/popular?api_key=' . $this->api_key.'&language='.$locale.'&page='.$page,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                dump($exception->getMessage(), $exception->getCode());
+                return "";
+            }
+        } catch (Throwable $exception) {
+            dump($exception->getMessage(), $exception->getCode());
+            return "";
+        }
+    }
+
     /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface

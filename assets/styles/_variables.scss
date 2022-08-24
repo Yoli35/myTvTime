@@ -11,6 +11,9 @@ $fa-font-path: "../webfonts";
 
     --button-border-radius: .25em;
 
+    --serie-add: hsl(212, 43%, 50%);
+    --serie-seen: hsl(105, 50%, 50%);
+
     --gradiant-ardoise-100: hsl(212, 43%, 100%);
     --gradiant-ardoise-90: hsl(212, 43%, 90%);
     --gradiant-ardoise-80: hsl(212, 43%, 80%);
@@ -165,6 +168,15 @@ $fa-font-path: "../webfonts";
     display: flex;
     flex-direction: column;
     justify-content: $content;
+}
+
+@mixin seen($color: var(--serie-add), $size: 1em) {
+    bottom: 1rem;
+    color: $color;
+    cursor: pointer;
+    font-size: $size;
+    position: absolute;
+    right: 1rem;
 }
 
 @mixin rounded-avatar($size: size) {

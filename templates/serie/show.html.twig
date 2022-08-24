@@ -9,7 +9,11 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
                 {{ include('blocks/movie/bracket.html.twig') }}
-                <li class="breadcrumb-item"><a href="{{ path('app_serie_index') }}">{{ 'My Series'|trans }}</a></li>
+                {% if index is defined %}
+                    <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}">{{ 'Popular Series'|trans }}</a></li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{{ path('app_serie_index') }}">{{ 'My Series'|trans }}</a></li>
+                {% endif %}
                 <li class="breadcrumb-item active">{{ serie.name }}</li>
             </ol>
         </nav>
@@ -95,6 +99,13 @@
                         </div>
                     {% endif %}
                 </div>
+                {% if index is defined %}
+                    {% if index %}
+                        <div class="seen"><i class="fa-solid fa-eye"></i></div>
+                    {% else %}
+                        <div class="add"><i class="fa-solid fa-circle-plus"></i></div>
+                    {% endif %}
+                {% endif %}
             </div>
 
             <main>

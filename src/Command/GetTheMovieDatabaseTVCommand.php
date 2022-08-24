@@ -85,7 +85,7 @@ class GetTheMovieDatabaseTVCommand extends Command
                     }
                     $this->serieRepository->add($serie, true);
 
-                    $io->success(++$n . 'Networks for "' . $serie->getName() . '" have been updated.');
+                    $io->success(++$n . ' - Networks for "' . $serie->getName() . '" have been updated.');
                 }
                 break;
 

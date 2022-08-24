@@ -25,8 +25,9 @@ class SerieController extends AbstractController
      */
     const LINK_COUNT = 7;
     const PER_PAGE_ARRAY = [1 => 10, 2 => 20, 3 => 50, 4 => 100];
+    const MY_SERIES = 'my series';
 
-    #[Route('/', name: 'app_serie_index', requirements: ['page' => 1], methods: ['GET'])]
+    #[Route('/', name: 'app_serie_index', methods: ['GET'])]
     public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $settingsChanged = $request->query->getInt('s');
@@ -64,6 +65,29 @@ class SerieController extends AbstractController
         ]);
     }
 
+    #[Route('/popular', name: 'app_serie_popular', methods: ['GET'])]
+    public function popular(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
+        $page = $request->query->getInt('p', 1);
+        $locale = $request->getLocale();
+        $standing = $tmdbService->getPopular($page, $locale);
+        $popular = json_decode($standing, true);
+
+        return $this->render('serie/popular.html.twig', [
+            'series' => $popular['results'],
+            'mySerieIds' => $this->mySerieIds($serieRepository),
+            'pages' => [
+                'total_results' => $popular['total_results'],
+                'page' => $page,
+                'per_page' => 20,
+                'link_count' => self::LINK_COUNT,
+                'paginator' => $this->paginator($popular['total_results'], $page, 20, self::LINK_COUNT),
+                'per_page_values' => self::PER_PAGE_ARRAY,
+            ],
+            'imageConfig' => $imageConfiguration->getConfig(),
+        ]);
+    }
+
     public function paginator($totalResults, $page = 1, $perPage = 20, $linkCount = 7): array
     {
         $totalPages = ceil($totalResults / $perPage); // ceil(88 / 10) -> 9
@@ -93,12 +117,13 @@ class SerieController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $from = $request->query->getAlpha('from', self::MY_SERIES);
 
         $value = $request->query->get("value");
-        $page = $request->query->get("p");
-        $perPage = $request->query->get("pp");
-        $orderBy = $request->query->get("ob");
-        $order = $request->query->get("o");
+        $page = $request->query->getInt('p', 1);
+        $perPage = $request->query->getInt('pp', 20);
+        $orderBy = $request->query->getAlpha('ob', 'firstDateAir');
+        $order = $request->query->getAlpha('o', 'desc');
         $tv = ['name' => ''];
         $serieId = "";
         $status = "Ko";
@@ -114,7 +139,7 @@ class SerieController extends AbstractController
             }
         }
         if (strlen($serieId)) {
-            $standing = $tmdbService->getTv($serieId, 'fr');
+            $standing = $tmdbService->getTv($serieId, $request->getLocale());
 
             if (strlen($standing)) {
                 $status = "Ok";
@@ -136,8 +161,11 @@ class SerieController extends AbstractController
                 $serie->setSerieId($tv['id']);
                 $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
 
+                dump($tv['networks']);
                 foreach ($tv['networks'] as $network) {
+                    dump($network['name']);
                     $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);
+                    dump($m2mNetwork);
 
                     if ($m2mNetwork == null) {
                         $m2mNetwork = new Network();
@@ -153,18 +181,20 @@ class SerieController extends AbstractController
 
                 $card = $this->render('blocks/serie/card.html.twig', ['serie' => $serie, 'imageConfig' => $imageConfiguration->getConfig()]);
 
-                $totalResults = $serieRepository->count([]);
-                $pagination = $this->render('blocks/serie/pagination.html.twig', [
-                    'pages' => [
-                        'total_results' => $totalResults,
-                        'page' => $page,
-                        'per_page' => $perPage,
-                        'link_count' => self::LINK_COUNT,
-                        'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
-                        'per_page_values' => self::PER_PAGE_ARRAY,
-                        'order_by' => $orderBy,
-                        'order' => $order],
-                ]);
+                if ($from == self::MY_SERIES) {
+                    $totalResults = $serieRepository->count([]);
+                    $pagination = $this->render('blocks/serie/pagination.html.twig', [
+                        'pages' => [
+                            'total_results' => $totalResults,
+                            'page' => $page,
+                            'per_page' => $perPage,
+                            'link_count' => self::LINK_COUNT,
+                            'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
+                            'per_page_values' => self::PER_PAGE_ARRAY,
+                            'order_by' => $orderBy,
+                            'order' => $order],
+                    ]);
+                }
             }
         }
 
@@ -194,8 +224,7 @@ class SerieController extends AbstractController
         $temp = json_decode($standing, true);
         if (array_key_exists('FR', $temp['results'])) {
             $watchProviders = json_decode($standing, true)['results']['FR'];
-        }
-        else {
+        } else {
             $watchProviders = null;
         }
 
@@ -207,6 +236,54 @@ class SerieController extends AbstractController
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
+    }
+
+    #[Route('/popular/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
+    public function tmdb(Request $request, $id, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
+        $standing = $tmdbService->getTv($id, $request->getLocale());
+        $tv = json_decode($standing, true);
+
+        $standing = $tmdbService->getTvCredits($id, $request->getLocale());
+        $credits = json_decode($standing, true);
+
+        $standing = $tmdbService->getTvKeywords($id, $request->getLocale());
+        $keywords = json_decode($standing, true);
+
+        $standing = $tmdbService->getTvWatchProviders($id);
+        $temp = json_decode($standing, true);
+        if (array_key_exists('FR', $temp['results'])) {
+            $watchProviders = json_decode($standing, true)['results']['FR'];
+        } else {
+            $watchProviders = null;
+        }
+
+        $mySerieIds = $this->mySerieIds($serieRepository);
+        $index = array_search($id, $mySerieIds['serieIds']);
+        $index = $index ? $mySerieIds[$index] : false;
+
+        return $this->render('serie/show.html.twig', [
+            'serie' => $tv,
+            'index' => $index,
+            'credits' => $credits,
+            'keywords' => $keywords,
+            'watchProviders' => $watchProviders,
+            'locale' => $request->getLocale(),
+            'imageConfig' => $imageConfiguration->getConfig(),
+        ]);
+    }
+
+    public function mySerieIds(SerieRepository $serieRepository): array
+    {
+        $mySerieIds = $serieRepository->findMySerieIds();
+        $mySerieIds['ids'] = [];
+        $mySerieIds['serieIds'] = [];
+        foreach ($mySerieIds as $mySerieId) {
+            if (array_key_exists('serieId', $mySerieId)) {
+                $mySerieIds['serieIds'][] = $mySerieId['serieId'];
+            }
+        }
+        return $mySerieIds;
     }
 
     #[Route('/{id}/edit', name: 'app_serie_edit', methods: ['GET', 'POST'])]

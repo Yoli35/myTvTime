@@ -31,12 +31,6 @@ class Serie
     #[ORM\Column]
     private ?\DateTimeImmutable $firstDateAir = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $network = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $networkLogoPath = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $addedAt = null;
 
@@ -121,18 +115,6 @@ class Serie
         return $this;
     }
 
-    public function getNetwork(): ?string
-    {
-        return $this->network;
-    }
-
-    public function setNetwork(?string $network): self
-    {
-        $this->network = $network;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, User>
      */
@@ -153,18 +135,6 @@ class Serie
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
-
-        return $this;
-    }
-
-    public function getNetworkLogoPath(): ?string
-    {
-        return $this->networkLogoPath;
-    }
-
-    public function setNetworkLogoPath(?string $networkLogoPath): self
-    {
-        $this->networkLogoPath = $networkLogoPath;
 
         return $this;
     }
