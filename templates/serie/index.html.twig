@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'My Series'|trans }}{% endblock %}
+{% block title %}MyTvTime::{{ 'My Series'|trans }}{% endblock %}
 
 {% block body %}
     {{ include('blocks/pageHeader.html.twig') }}
@@ -134,6 +134,7 @@
         const _per_page = {{ pages.per_page }};
         const _order_by = "{{ pages.order_by }}";
         const _order = "{{ pages.order }}";
+        const _from = "";
 
         window.addEventListener("DOMContentLoaded", () => {
 

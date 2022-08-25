@@ -7,46 +7,39 @@
 
     <div class="container">
         <div class="my-collections-page">
-            <header>
 
-                <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-                        {{ include('blocks/movie/bracket.html.twig') }}
-                        <li class="breadcrumb-item active" aria-current="{{ 'My Collections'|trans }}">{{ 'My Collections'|trans }}</a></li>
-                    </ol>
-                </nav>
+            <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+                    {{ include('blocks/movie/bracket.html.twig') }}
+                    <li class="breadcrumb-item active" aria-current="{{ 'My Collections'|trans }}">{{ 'My Collections'|trans }}</a></li>
+                </ol>
+            </nav>
 
-            </header>
+            <div class="wrapper">
+                {% if collections is empty %}
+                    Pas de collection pour le moment
+                {% else %}
+                    {% for collection in collections %}
+                        <div class="my-collection">
 
-            <main>
-                <section>
-                    {% if collections is empty %}
-                        Pas de collection pour le moment
-                    {% else %}
-                        {% for collection in collections %}
-                            <div class="my-collection">
-
-                                <div class="banner"{% if collection.banner %} style="background-image: url('/images/collections/banners/{{ collection.banner }}')"{% endif %}>
-                                    <div class="calc">
-                                        <div class="title">{{ collection.title }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="content">
-                                    <a href="{{ path('app_collection_display', {id: collection.id}) }}">Voir la collection</a>
-                                    {{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}
-                                    <div class="thumbnail" style="background-image: url('/images/collections/thumbnails/{{ collection.thumbnail }}')"></div>
+                            <div class="banner"{% if collection.banner %} style="background-image: url('/images/collections/banners/{{ collection.banner }}')"{% endif %}>
+                                <div class="calc">
+                                    <div class="title">{{ collection.title }}</div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                </section>
-            </main>
 
-            <footer>
-                {{ include('blocks/pageFooter.html.twig') }}
-            </footer>
+                            <div class="content">
+                                {{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}
+                                <a href="{{ path('app_collection_display', {id: collection.id}) }}"><i class="fa-solid fa-arrow-right-long"></i> Voir la collection</a>
+                                <div class="thumbnail" style="background-image: url('/images/collections/thumbnails/{{ collection.thumbnail }}')"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {{ include('blocks/pageFooter.html.twig') }}
         </div>
     </div>
 {% endblock %}

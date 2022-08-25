@@ -1,18 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}MyTvTime::{{ 'My Series'|trans }}{% endblock %}
+    {% block title %}
+        {% if index is defined %}
+            MyTvTime::{{ 'Popular Series'|trans }}::{{ serie.name }}
+        {% else %}
+            MyTvTime::{{ 'My Series'|trans }}::{{ serie.name }}
+        {% endif %}
+    {% endblock %}
 
 {% block body %}
+{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
     {{ include('blocks/pageHeader.html.twig') }}
     <div class="container">
         <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
                 {{ include('blocks/movie/bracket.html.twig') }}
-                {% if index is defined %}
-                    <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}">{{ 'Popular Series'|trans }}</a></li>
+                {% if from == 'popular' %}
+                    <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}?p={{ page }}#{{ serie.id }}">{{ 'Popular Series'|trans }} - {{ 'Page'|trans }} {{ page }}</a></li>
+                {% elseif from == 'top_rated' %}
+                    <li class="breadcrumb-item"><a href="{{ path('app_serie_top_rated') }}?p={{ page }}#{{ serie.id }}">{{ 'Top rated Series'|trans }} - {{ 'Page'|trans }} {{ page }}</a></li>
                 {% else %}
-                    <li class="breadcrumb-item"><a href="{{ path('app_serie_index') }}">{{ 'My Series'|trans }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_serie_index') }}?p={{ page }}&b=1#{{ serie.id }}">{{ 'My Series'|trans }} - {{ 'Page'|trans }} {{ page }}</a></li>
                 {% endif %}
                 <li class="breadcrumb-item active">{{ serie.name }}</li>
             </ol>
@@ -53,7 +62,6 @@
                         </div>
                     {% endif %}
                     <div class="arrow"></div>
-                    {#                    <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div> #}
                 </div>
                 <div class="infos">
                     <h1>{{ serie.name }} <span>({{ serie.first_air_date|date("Y") }})</span></h1>
@@ -211,7 +219,9 @@
                                 <div class="label">{{ 'Keywords'|trans }}</div>
                                 <div class="keywords">
                                     {% for keyword in keywords.results %}
-                                        <div class="keyword" data-original="{{ keyword.name }}">{{ keyword.name|trans({},'tags') }}</div>
+                                        <div class="keyword{% if keyword.name in missingTranslations %} new{% endif %}" data-original="{{ keyword.name }}">
+                                            {{ keyword.name|trans({},'tags') }}
+                                        </div>
                                     {% endfor %}
                                 </div>
                             </div>

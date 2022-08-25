@@ -640,6 +640,10 @@
                             font-weight: 100;
                             padding: .25em .5em;
                             margin: .125em;
+
+                            &.new {
+                                background-color: var(--gradiant-purple-40);
+                            }
                         }
                     }
                 }

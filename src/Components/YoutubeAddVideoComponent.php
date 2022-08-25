@@ -32,7 +32,7 @@ class YoutubeAddVideoComponent
     #[LiveProp(writable: true)]
     public string $link = '';
     #[LiveProp(writable: true)]
-    public bool $page = false;
+    public bool $page = true;
     #[LiveProp]
     public int $justAdded = 0;
     #[LiveProp]

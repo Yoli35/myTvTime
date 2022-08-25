@@ -1,13 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'Popular Series'|trans }}{% endblock %}
+{% block title %}
+    {% if from == 'popular' %}
+        MyTvTime::{{ 'Popular Series'|trans }}
+    {% endif %}
+    {% if from == 'top_rated' %}
+        MyTvTime::{{ 'Top rated Series'|trans }}
+    {% endif %}
+{% endblock %}
 
 {% block body %}
     {{ include('blocks/pageHeader.html.twig') }}
     <div class="container">
         <div class="my-series">
             <div class="header">
-                <h1>{{ 'Popular Series'|trans }}</h1>
+                {% if from == 'popular' %}
+                    <h1>{{ 'Popular Series'|trans }}</h1>
+                {% endif %}
+                {% if from == 'top_rated' %}
+                    <h1>{{ 'Top rated Series'|trans }}</h1>
+                {% endif %}
                 <div class="backdrop"></div>
             </div>
 
@@ -15,7 +27,12 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
                     {{ include('blocks/movie/bracket.html.twig') }}
-                    <li class="breadcrumb-item active">{{ 'Popular Series'|trans }}</li>
+                    {% if from == 'popular' %}
+                        <li class="breadcrumb-item active">{{ 'Popular Series'|trans }}</li>
+                    {% endif %}
+                    {% if from == 'top_rated' %}
+                        <li class="breadcrumb-item active">{{ 'Top rated Series'|trans }}</li>
+                    {% endif %}
                 </ol>
             </nav>
 
@@ -79,6 +96,7 @@
         const _app_serie_new = "{{ path('app_serie_new') }}";
         const _current_page = {{ pages.page }};
         const _per_page = {{ pages.per_page }};
+        const _from = "{{ from }}";
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -192,7 +210,7 @@
                 }
                 console.log({data});
             }
-            xhr.open("GET", _app_serie_new + '?value=' + value + "&p=" + _current_page + "&from=popular");
+            xhr.open("GET", _app_serie_new + '?value=' + value + "&p=" + _current_page + "&from=" + _from);
             xhr.send();
         }
     </script>

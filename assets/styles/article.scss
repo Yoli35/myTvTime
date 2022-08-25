@@ -196,7 +196,10 @@
                                 color: var(--gradiant-ardoise-20);
                                 margin-left: 1em;
 
-                                div {
+                                .date {
+                                    color: var(--gradiant-ardoise-40);
+                                    font-size: .75em;
+                                    font-weight: 200;
                                     padding-right: 1em;
                                 }
                             }
@@ -485,7 +488,9 @@
                                 }
 
                                 .dates {
-                                    color: var(--gradiant-ardoise-90);
+                                    .date {
+                                        color: var(--gradiant-ardoise-70);
+                                    }
                                 }
                             }
 

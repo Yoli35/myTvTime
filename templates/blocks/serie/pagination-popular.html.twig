@@ -2,7 +2,7 @@
 <div class="position">{{ 'Page'|trans }} {{ pages.page }} / {{ pages.paginator.total_pages }} - {{ pages.total_results }} {{ 'Series'|trans }}</div>
 <div class="page-group">
     {% if pages.page > 1 %}
-        <div class="page"><a href="{{ path('app_serie_popular') }}?p={{ pages.page-1 }}&pp={{ pages.per_page }}"><i class="fa-solid fa-arrow-left"></i></a></div>
+        <div class="page"><a href="{{ path('app_serie_' ~ from) }}?p={{ pages.page-1 }}&from={{ from }}"><i class="fa-solid fa-arrow-left"></i></a></div>
     {% endif %}
     {% for p in pages.paginator.first_link..pages.paginator.last_link %}
         {% if p == pages.page %}
@@ -10,10 +10,10 @@
                 <div>{{ p }}</div>
             </div>
         {% else %}
-            <div class="page"><a href="{{ path('app_serie_popular') }}?p={{ p }}&pp={{ pages.per_page }}">{{ p }}</a></div>
+            <div class="page"><a href="{{ path('app_serie_' ~ from) }}?p={{ p }}&from={{ from }}">{{ p }}</a></div>
         {% endif %}
     {% endfor %}
     {% if pages.page < pages.paginator.total_pages %}
-        <div class="page"><a href="{{ path('app_serie_popular') }}?p={{ pages.page+1 }}&pp={{ pages.per_page }}"><i class="fa-solid fa-arrow-right"></i></a></div>
+        <div class="page"><a href="{{ path('app_serie_' ~ from) }}?p={{ pages.page+1 }}&from={{ from }}"><i class="fa-solid fa-arrow-right"></i></a></div>
     {% endif %}
 </div>
