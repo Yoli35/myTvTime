@@ -161,7 +161,7 @@
                                             <div>{{ season.overview }}</div>
                                         {% endif %}
                                         <div>
-                                            {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('full'))}) }}
+                                            {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
                                         </div>
                                     </div>
                                 </div>
@@ -211,7 +211,7 @@
                                 <div class="label">{{ 'Keywords'|trans }}</div>
                                 <div class="keywords">
                                     {% for keyword in keywords.results %}
-                                        <div class="keyword">{{ keyword.name|trans }}</div>
+                                        <div class="keyword" data-original="{{ keyword.name }}">{{ keyword.name|trans({},'tags') }}</div>
                                     {% endfor %}
                                 </div>
                             </div>

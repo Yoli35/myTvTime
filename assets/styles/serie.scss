@@ -842,13 +842,32 @@
             }
 
             .series-tools {
-                .pages, .add-serie, .settings {
+                .add-serie, .settings {
                     background-color: var(--gradiant-ardoise-30);
                 }
 
                 .pages {
+                    background-color: var(--gradiant-ardoise-30);
+
                     .position {
                         color: var(--gradiant-ardoise-70);
+                    }
+
+                    .page-group {
+                        .page {
+                            border-color: var(--gradiant-ardoise-70);
+                            &.current {
+                                background-color: var(--gradiant-ardoise-40);
+                                color: var(--gradiant-ardoise-90);
+                            }
+
+                            &:hover {
+                                background-color: var(--gradiant-ardoise-60);
+                                a {
+                                    color: var(--gradiant-ardoise-20);
+                                }
+                            }
+                        }
                     }
                 }
 
