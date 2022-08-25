@@ -249,7 +249,7 @@ class SerieController extends AbstractController
         foreach ($keywords['results'] as $keyword) {
             $keywordsList[] = $keyword['name'];
             foreach ($translatedKeywords as $value) {
-                if ($keyword['name'] == $value[0]) {
+                if (!strcmp(trim($keyword['name']), trim($value[0]))) {
                     $keywordsOk[] = $keyword['name'];
                     break;
                 }

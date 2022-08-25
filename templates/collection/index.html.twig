@@ -21,20 +21,19 @@
                     Pas de collection pour le moment
                 {% else %}
                     {% for collection in collections %}
-                        <div class="my-collection">
-
-                            <div class="banner"{% if collection.banner %} style="background-image: url('/images/collections/banners/{{ collection.banner }}')"{% endif %}>
-                                <div class="calc">
-                                    <div class="title">{{ collection.title }}</div>
+                            <div class="collection">
+                                <a href="{{ path('app_collection_display', {id: collection.id}) }}">
+                                <div class="logo" style="background-image: url('/images/collections/thumbnails/{{ collection.thumbnail }}')"></div>
+                                <div class="infos">
+                                    <div class="name">{{ collection.title }}</div>
+                                    <div class="info">
+                                        {{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}
+                                        {#                                    <a href="{{ path('app_collection_display', {id: collection.id}) }}"><i class="fa-solid fa-arrow-right-long"></i> Voir la collection</a> #}
+                                    </div>
+                                    <div class="backdrop" style="background-image: url('/images/collections/banners/{{ collection.banner }}')"></div>
                                 </div>
+                                </a>
                             </div>
-
-                            <div class="content">
-                                {{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}
-                                <a href="{{ path('app_collection_display', {id: collection.id}) }}"><i class="fa-solid fa-arrow-right-long"></i> Voir la collection</a>
-                                <div class="thumbnail" style="background-image: url('/images/collections/thumbnails/{{ collection.thumbnail }}')"></div>
-                            </div>
-                        </div>
                     {% endfor %}
                 {% endif %}
             </div>
