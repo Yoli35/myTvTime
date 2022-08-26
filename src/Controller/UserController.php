@@ -42,6 +42,7 @@ class UserController extends AbstractController
     #[Route('/{_locale}/personal/profile', name: 'app_personal_profile', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, BetaSeriesService $betaSeriesService): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
 
@@ -87,7 +88,7 @@ class UserController extends AbstractController
         if ($user->getBanner() == null) {
             $banner = $this->setRandomBanner($betaSeriesService);
         }
-        return $this->render('user_account/index.html.twig', [
+        return $this->render('user/index.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
             'banner' => $banner,
@@ -115,7 +116,6 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         $movies = $this->getUserMovies($user->getId(), 0, $userMovieRepository);
-
         $imageConfig = $imageConfiguration->getConfig();
 
         $items = $userMovieRepository->getUserMoviesRuntime($user->getId());
@@ -130,13 +130,14 @@ class UserController extends AbstractController
         $runtime['months'] = floor($total/60/24/30.41666667) % 12;
         $runtime['years'] = floor($total/60/24/365);
 
-        return $this->render('user_account/user_movies.html.twig', [
+        return $this->render('user/movies.html.twig', [
             'discovers' => $movies,
             'userMovies' => $movieController->getUserMovieIds($userMovieRepository),
             'count' => count($items),
             'runtime' => $runtime,
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfig,
+            'user' => $user,
             'dRoute' => 'app_movie',
         ]);
     }

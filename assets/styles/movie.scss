@@ -7,30 +7,30 @@
     top: 1em;
 
     &.debug {
-        border: 2px dashed #dbdbdb;
+        border: 2px dashed var(--gradiant-ardoise-70);
         border-radius: .5em;
     }
 
     .notification {
         border-radius: .5em;
-        color: #dbdbdb;
+        color: var(--gradiant-ardoise-90);
         margin-bottom: 1em;
         opacity: 0;
         padding: 1em 2em;
 
         &.success {
-            background-color: #84a47edf;
-            border: 2px solid #84a47e;
+            background-color: hsla(111, 20%, 57%, 0.87);
+            border: 2px solid hsl(111, 40%, 57%);
         }
 
         &.error {
-            background-color: #a67a7adF;
-            border: 2px solid #a67a7a;
+            background-color: hsla(0, 20%, 56%, 0.87);
+            border: 2px solid hsl(0, 40%, 56%);
         }
 
         &.info {
-            background-color: #9a9a9adf;
-            border: 2px solid #9a9a9a;
+            background-color: hsla(0, 0%, 60%, 0.87);
+            border: 2px solid hsl(0, 0%, 80%);
         }
 
         &.init {
@@ -86,15 +86,15 @@
 }
 
 .has-been-seen {
-    background-color: #333;
+    background-color: var(--gradiant-ardoise-30);
     border-radius: 50%;
-    color: #dbdbdb;
+    color: var(--movie-add);
     cursor: pointer;
     font-size: 2em;
     padding: 0 .2em;
 
     &.yes {
-        color: #11d08e;
+        color: var(--movie-seen);
     }
 }
 
@@ -135,11 +135,11 @@
                 margin-right: auto;
 
                 .genre {
-                    border-color: #8a8a8a;
-                    color: #8a8a8a;
+                    border-color: var(--gradiant-ardoise-60);
+                    color: var(--gradiant-ardoise-60);
 
                     a {
-                        color: #8a8a8a;
+                        color: var(--gradiant-ardoise-60);
                         height: 100%;
                         padding: .25em 1em;
                         text-decoration: none;
@@ -211,7 +211,7 @@
 
                     .production {
                         @include flex-row(unset, unset);
-                        background-color: rgba(128, 128, 128, 0.5);
+                        background-color: var(--gradiant-ardoise-50);
                         border-radius: .5em;
                         font-size: .75em;
                         font-weight: 100;
@@ -223,23 +223,64 @@
         }
 
         .movie-poster {
-            @include flex-row(flex-start, flex-end);
+            @include flex-col(flex-start, flex-start);
             //margin-bottom: auto;
             //margin-left: auto;
             margin-top: 1em;
             width: 100%;
 
             img {
-                border: 8px solid #f2f2f2;
+                border: 8px solid var(--gradiant-ardoise-90);
                 width: 100%;
             }
 
             .replacement {
                 background: rgb(131, 58, 180);
                 background: linear-gradient(225deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
-                border: 8px solid #f2f2f2;
+                border: 8px solid var(--gradiant-ardoise-90);
                 height: 30vw;
                 width: 100%;
+            }
+
+            .movie-collection {
+                @include flex-col(flex-start, flex-start);
+                margin-top: 2em;
+                width: 100%;
+
+                .label {
+                    color: var(--gradiant-ardoise-70);
+                    font-weight: 100;
+                    text-transform: uppercase;
+                }
+
+                .field {
+                    margin-top: 1em;
+                    width: 100%;
+
+                    .list {
+                        @include flex-row(flex-start, center);
+                        flex-wrap: wrap;
+                        background-color: var(--gradiant-ardoise-30);
+                        color: var(--gradiant-ardoise-80);
+                        border: 0;
+                        border-radius: .5em;
+                        padding: .5em;
+                        width: 100%;
+
+                        .item {
+                            background-color: var(--gradiant-ardoise-50);
+                            border-radius: .25em;
+                            color: var(--gradiant-ardoise-80);
+                            cursor: pointer;
+                            padding: .25em .5em;
+                            margin: .25em;
+
+                            &.selected {
+                                background-color: var(--gradiant-mars-50);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -249,10 +290,10 @@
             position: relative;
 
             &:hover::after {
-                background-color: #1c1c1c;
-                border: 2px #bdbdbd solid;
+                background-color: var(--gradiant-ardoise-10);
+                border: 2px var(--gradiant-ardoise-60) solid;
                 border-radius: .5em;
-                color: #dbdbdb;
+                color: var(--gradiant-ardoise-60);
                 content: attr(data-descr);
                 font-size: .75em;
                 font-weight: 100;
@@ -268,7 +309,7 @@
 
     .cast, .crew {
         @include flex-row();
-        background-color: #eee;
+        background-color: var(--gradiant-ardoise-90);
         border-radius: 1em;
         font-family: 'Montserrat', sans-serif;
         font-weight: 400;
@@ -363,7 +404,7 @@
 
 .recommendations {
     @include flex-row(center, space-around);
-    background-color: #eee;
+    background-color: var(--gradiant-ardoise-90);
     border-radius: 1em;
     flex-wrap: wrap;
     max-height: 20em;
@@ -380,7 +421,7 @@
         width: 10em;
 
         .no-poster {
-            color: #dbdbdb;
+            color: var(--gradiant-ardoise-70);
             font-weight: 100;
             position: relative;
 
@@ -474,18 +515,18 @@
 }
 
 .collection .card {
-    background-color: #eee;
+    background-color: var(--gradiant-ardoise-90);
 }
 
 @media (prefers-color-scheme: dark) {
 
     .movie-detail .title {
-        color: #f2f2f2;
+        color: var(--gradiant-ardoise-90);
     }
 
     .movie-info, .tv-info {
         .cast, .crew {
-            background-color: #383838;
+            background-color: var(--gradiant-ardoise-30);
 
             .content {
 
@@ -500,10 +541,10 @@
     }
 
     .collection .card {
-        background-color: #383838;
+        background-color: var(--gradiant-ardoise-30);
     }
 
     .recommendations {
-        background-color: #383838;
+        background-color: var(--gradiant-ardoise-30);
     }
 }

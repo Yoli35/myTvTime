@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\UserMovie;
 use App\Form\MovieByNameType;
 use App\Repository\GenreRepository;
+use App\Repository\MovieCollectionRepository;
 use App\Repository\RatingRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\CallImdbService;
@@ -16,32 +17,29 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Google\ApiCore\ApiException;
 use Google\ApiCore\ValidationException;
-use Google\Cloud\Translate\V3\TranslationServiceClient;
+
+//use Google\Cloud\Translate\V3\TranslationServiceClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\Loader\ArrayLoader;
+use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MovieController extends AbstractController
 {
-    static array $r = ["adult" => false, "backdrop_path" => "/ol85vXUrOnXpfVU6ZVFBoqTNGGt.jpg", "belongs_to_collection" => ["id" => 374509, "name" => "Godzilla (Original) - Saga", "poster_path" => "/1wgaCmaVswtrX69Y61MGy2cfxnA.jpg", "backdrop_path" => "/dx9YSup5zEOjxYwG4UkYBVAZIXo.jpg"], "budget" => 0, "genres" => [["id" => 28, "name" => "Action"], ["id" => 12, "name" => "Aventure"], ["id" => 878, "name" => "Science-Fiction"]], "homepage" => "", "id" => 15766, "imdb_id" => "tt0058544", "original_language" => "ja", "original_title" => "三大怪獣　地球最大の決戦", "overview" => "Un étrange astéroïde s'écrase sur Terre et l'équipe du professeur Murai part enquêter sur place. Pendant ce temps, une femme étrange prétendant être une Martienne annonce que, si l'humanité ne se repent pas, elle sera détruite. La Martienne prophétise le retour de Godzilla et Rodan, ainsi que la venue d'un monstre de l'espace appelé King Ghidorah. Les prophéties se réalisent et Ghidrah sème la terreur. Seule solution : Godzilla, Rodan et Mothra doivent accepter de coopérer pour vaincre le monstre de l'espace.", "popularity" => 12.358, "poster_path" => "/7aakWz9ENpzFYxV631pPEZgMi2s.jpg", "production_companies" => [["id" => 882, "logo_path" => "/fRSWWjquvzcHjACbtF53utZFIll.png", "name" => "Toho", "origin_country" => "JP"]], "production_countries" => [["iso_3166_1" => "JP", "name" => "Japan"]], "release_date" => "1964-12-20", "revenue" => 3237880, "runtime" => 92, "spoken_languages" => [["english_name" => "Japanese", "iso_639_1" => "ja", "name" => "日本語"]], "status" => "Released", "tagline" => "", "title" => "Ghidrah, le monstre à trois têtes", "video" => false, "vote_average" => 7.2, "vote_count" => 164];
-
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{_locale}/movie/{id}', name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, $id, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
+    public function index(Request $request, $id, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         $locale = $request->getLocale();
         $standing = $callTmdbService->getMovie($id, $locale);
         $movieDetail = json_decode($standing, true);
@@ -51,21 +49,34 @@ class MovieController extends AbstractController
 
         $standing = $callTmdbService->getMovieCredits($id, $locale);
         $credits = json_decode($standing, true);
-
-        $standing = $callTmdbService->getMovieReleaseDates($id);
-        $releaseDates = json_decode($standing, true);
+        $cast = $credits['cast'];
+        $crew = $credits['crew'];
 
         $standing = $callTmdbService->getCountries();
         $countries = json_decode($standing, true);
+
+        $standing = $callTmdbService->getMovieReleaseDates($id);
+        $releaseDates = json_decode($standing, true);
+        $releaseDates = $this->getLocaleDates($releaseDates['results'], $countries, $locale);
+
         $imageConfig = $imageConfiguration->getConfig();
+
+        if ($user) {
+            $collections = $collectionRepository->findBy(['user' => $user]);
+            $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
+            $movieCollections = $userMovie->getMovieCollections();
+            $movieCollectionIds = [];
+            foreach ($movieCollections as $movieCollection) {
+                $movieCollectionIds[] = $movieCollection->getId();
+            }
+        } else {
+            $collections = [];
+            $movieCollectionIds = [];
+        }
 
         if (!array_key_exists('release_date', $movieDetail)) {
             $movieDetail['release_date'] = "";
         }
-        $cast = $credits['cast'];
-        $crew = $credits['crew'];
-//        $crew = usort($credits['crew'], 'memberCmp');
-        $releaseDates = $this->getLocaleDates($releaseDates['results'], $countries, $locale);
 
         return $this->render('movie/index.html.twig', [
             'movie' => $movieDetail,
@@ -74,15 +85,12 @@ class MovieController extends AbstractController
             'hasBeenSeen' => $this->hasBeenSeen($id, $userMovieRepository),
             'cast' => $cast,
             'crew' => $crew,
+            'collections' => $collections,
+            'movieCollection' => $movieCollectionIds,
+            'user' => $user,
             'imageConfig' => $imageConfig,
             'locale' => $locale,
         ]);
-    }
-
-    #[Assert\Callback]
-    public function memberCmp($a, $b): int
-    {
-        return strcmp($a['job'], $b['job']);
     }
 
     public function getLocaleDates($dates, $countries, $locale): array
@@ -139,7 +147,7 @@ class MovieController extends AbstractController
             $part['genres'] = [];
             $genre = [];
             foreach ($part['genre_ids'] as $genre_id) {
-                $genre = ['id'=> $genre_id, 'name' => $genres[$genre_id]];
+                $genre = ['id' => $genre_id, 'name' => $genres[$genre_id]];
                 $part['genres'][] = $genre;
             }
         }
@@ -225,12 +233,12 @@ class MovieController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/search/movie/{page}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesSearch(Request $request, $page,  UserMovieRepository $userMovieRepository, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function moviesSearch(Request $request, $page, UserMovieRepository $userMovieRepository, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
-        $query = $request->query->get('query')?:'';
-        $year = $request->query->get('year')?:'none';
+        $query = $request->query->get('query') ?: '';
+        $year = $request->query->get('year') ?: 'none';
         $imageConfig = $imageConfiguration->getConfig();
 
         $form = $this->createForm(MovieByNameType::class);
@@ -276,6 +284,25 @@ class MovieController extends AbstractController
     public function hasBeenSeen($id, $userMovieRepository): bool
     {
         return in_array($id, $this->getUserMovieIds($userMovieRepository));
+    }
+
+    #[Route('/movie/collection/toggle', name: 'app_movie_collection_toggle')]
+    public function toggleMovieToCollection(Request $request, MovieCollectionRepository $collectionRepository, UserMovieRepository $movieRepository, TranslatorInterface $translator): Response
+    {
+        $collectionId = $request->query->getInt("c");
+        $action = $request->query->get("a");
+        $movieId = $request->query->getInt("m");
+
+        $collection = $collectionRepository->find($collectionId);
+        $movie = $movieRepository->findOneBy(["movieDbId" => $movieId]);
+
+        if ($action == "a") $collection->addMovie($movie);
+        if ($action == "r") $collection->removeMovie($movie);
+        $collectionRepository->add($collection, true);
+
+        $message = "The movie « movie_name » has been " . ($action == "a" ? "added to" : "removed from") . " your collection « collection_name ».";
+        $message = $translator->trans($message, ["movie_name" => $movie->getTitle(), "collection_name" => $collection->getTitle()], "messages");
+        return $this->json(["message" => $message]);
     }
 
     /**
@@ -345,7 +372,7 @@ class MovieController extends AbstractController
 //                    $person['translated'] .= $translation->getTranslatedText();
 //                }
 //            } else {
-                $person['translated'] = '';
+            $person['translated'] = '';
 //            }
             $success = true;
         } else {
@@ -374,7 +401,7 @@ class MovieController extends AbstractController
         return $this->json(['title' => $userMovie->getTitle()]);
     }
 
-    public function addMovie($user, $movieId, $locale, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager):UserMovie
+    public function addMovie($user, $movieId, $locale, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): UserMovie
     {
         $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
 

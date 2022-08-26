@@ -24,7 +24,7 @@ class UserMovieCrudController extends AbstractCrudController
             TextField::new('release_date'),
             NumberField::new('movie_db_id'),
             NumberField::new('runtime'),
-            AssociationField::new('myMovieCollections'),
+            AssociationField::new('movieCollections'),
         ];
     }
 }

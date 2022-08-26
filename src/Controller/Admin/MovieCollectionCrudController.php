@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\MyMovieCollection;
+use App\Entity\MovieCollection;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -14,11 +14,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class MyMovieCollectionCrudController extends AbstractCrudController
+class MovieCollectionCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return MyMovieCollection::class;
+        return MovieCollection::class;
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -54,11 +54,11 @@ class MyMovieCollectionCrudController extends AbstractCrudController
 //        }
     }
 
-    public function createEntity(string $entityFqcn): MyMovieCollection
+    public function createEntity(string $entityFqcn): MovieCollection
     {
         $datetime = (new DateTimeImmutable());
 
-        $collection = new MyMovieCollection;
+        $collection = new MovieCollection;
 
         $collection->setUser($this->getUser());
         $collection->setCreatedAt($datetime);
@@ -69,7 +69,7 @@ class MyMovieCollectionCrudController extends AbstractCrudController
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        /** @var MyMovieCollection $entityInstance */
+        /** @var MovieCollection $entityInstance */
         $entityInstance->setUpdatedAt(new DateTimeImmutable());
 
         $entityManager->persist($entityInstance);

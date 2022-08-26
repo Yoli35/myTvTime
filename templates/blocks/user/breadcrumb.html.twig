@@ -1,0 +1,17 @@
+{% if is_granted('ROLE_USER') %}
+    <div class="menu">
+        {% if user.avatar %}
+            <img class="avatar" src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username }}">
+        {% else %}
+            <img class="avatar" src="/images/default/no_avatar.png" alt="{{ user.username }}">
+        {% endif %}
+        <div class="menu-items">
+            <div class="menu-item"><a href="{{ path('app_personal_profile') }}">{{ 'My Account'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_personal_movies') }}">{{ 'My Movies'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_collection') }}">{{ 'My Movie Collections'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_serie_index') }}">{{ 'My Series'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_youtube') }}">{{ 'My Youtube Videos'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_tik_tok') }}">{{ 'My TikTok Videos'|trans }}</a></div>
+        </div>
+    </div>
+{% endif %}

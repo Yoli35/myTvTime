@@ -10,13 +10,7 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-                {{ include('blocks/movie/bracket.html.twig') }}
-                <li class="breadcrumb-item active" aria-current="{{ movie.title }}">{{ movie.title }}</li>
-            </ol>
-        </nav>
+        {{ include('blocks/nav.html.twig', {thisPage: movie.title}) }}
 
         {% if movie.backdrop_path %}
             <div class="movie-header">
@@ -159,6 +153,19 @@
                     {% else %}
                         <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
                     {% endif %}
+
+                    {% if collections is not empty %}
+                        <div class="movie-collection">
+                            <div class="label">{{ 'My Collections'|trans }}</div>
+                            <div class="field">
+                                <div class="list" data-movie="{{ movie.id }}">
+                                    {% for collection in collections %}
+                                        <div class="item{% if collection.id in movieCollection %} selected{% endif %}" data-id="{{ collection.id }}">{{ collection.title }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -265,10 +272,13 @@
             "{{ path('app_movie_remove') }}",
             "{{ path('app_movie_get_rating') }}",
             "{{ path('app_movie_set_rating') }}",
+            "{{ path('app_movie_collection_toggle') }}",
         ];
 
         window.addEventListener("DOMContentLoaded", () => {
             initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.2 }}", "{{ locale }}");
+
+            initCollections();
 
             const poster = document.querySelector(".movie-poster");
             const image = poster.querySelector("img");

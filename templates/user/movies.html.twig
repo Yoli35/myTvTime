@@ -10,16 +10,11 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
-                <li class="breadcrumb-item active" aria-current="{{ 'My Movies'|trans }}">{{ 'My Movies'|trans }}</li>
-            </ol>
-        </nav>
+        {{ include('blocks/nav.html.twig', {thisPage: 'My Movies'}) }}
 
         <div class="user-account">
 
-            {{ include('blocks/user_account/banner.html.twig') }}
+            {{ include('blocks/user/banner.html.twig') }}
 
             <div class="user-movies">
                 <h1 style="font-weight: 100" id="h1" data-total-results="{{ count }}">

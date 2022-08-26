@@ -9,21 +9,14 @@
 
             <header>
 
-                <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-                        {{ include('blocks/movie/bracket.html.twig') }}
-                        <li class="breadcrumb-item"><a href="{{ path('app_collection') }}">{{ 'My Collections'|trans }}</a></li>
-                        <li class="breadcrumb-item active" aria-current="{{ collection.title }}">{{ collection.title }}</li>
-                    </ol>
-                </nav>
+                {{ include('blocks/nav.html.twig', {parent: {page: 'My Collections', url: path('app_collection')}, thisPage: collection.title}) }}
 
                 <div class="banner">
                     {% if collection.banner %}
-                        <img src="/images/collections/banners/{{ collection.banner }}">
+                        <img src="/images/collections/banners/{{ collection.banner }}" alt="{{ collection.title }}'s banner">
                         <div class="thumbnail" style="background-color: {{ collection.color }}">
                             {% if collection.thumbnail %}
-                                <img src="/images/collections/thumbnails/{{ collection.thumbnail }}">
+                                <img src="/images/collections/thumbnails/{{ collection.thumbnail }}" alt="{{ collection.title }}'s thumbnail">
                             {% endif %}
                         </div>
                     {% endif %}

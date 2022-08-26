@@ -1,6 +1,7 @@
 let _profile_infos, _imdb_infos,
     _add_movie, _remove_movie,
     _get_movie_rating, _set_movie_rating,
+    _app_movie_collection_toggle,
     _profile_url;
 let _loc;
 const txt = {
@@ -146,6 +147,7 @@ function initMovieStuff(paths, profileUrl, locale) {
     _remove_movie = paths[3];
     _get_movie_rating = paths[4];
     _set_movie_rating = paths[5];
+    _app_movie_collection_toggle = paths[6];
     _profile_url = profileUrl;
 
     initNotifications();
@@ -407,6 +409,32 @@ function leaveStars(e) {
     setStars(user);
 }
 
+function initCollections() {
+    const collections = document.querySelector(".movie-collection").querySelectorAll(".item");
+
+    collections.forEach( collection => {
+        collection.addEventListener("click", toggleCollection);
+    });
+}
+
+function toggleCollection(e) {
+    const collection = e.target;
+    const id = collection.getAttribute("data-id").toString();
+    const movie = collection.parentElement.getAttribute("data-movie");
+
+    collection.classList.toggle("selected");
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const data = JSON.parse(this.response);
+            let message = data['message'];
+
+            addNotification(message, "success");
+        }
+        xhr.open("GET", _app_movie_collection_toggle + "?c=" + id + "&m=" + movie + "&a=" + (collection.classList.contains("selected")?"a":"r"));
+        xhr.send();
+}
+
 function initNotifications() {
     const notifications = document.createElement("div");
     notifications.classList.add("notifications");
@@ -436,3 +464,4 @@ function addNotification(message, type) {
         }, 500);
     }, 5000);
 }
+

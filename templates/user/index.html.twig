@@ -7,16 +7,11 @@
     <div class="container">
         {{ include('blocks/pageHeader.html.twig') }}
 
-        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
-                <li class="breadcrumb-item active" aria-current="{{ 'My Account'|trans }}">{{ 'My Account'|trans }}</li>
-            </ol>
-        </nav>
+        {{ include('blocks/nav.html.twig', {thisPage: 'My Account'}) }}
 
         <div class="user-account">
 
-            {{ include('blocks/user_account/banner.html.twig') }}
+            {{ include('blocks/user/banner.html.twig') }}
 
             <div class="details">
                 {{ form_start(form) }}

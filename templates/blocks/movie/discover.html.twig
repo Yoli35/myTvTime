@@ -23,11 +23,13 @@
             <div class="my-collections">
                 {% for collection in discover.my_collections %}
                     <div class="my-collection">
-                        <img
-                                src="/images/collections/thumbnails/{{ collection.thumbnail }}"
-                                alt="{{ collection.title }}"
-                                style="border: 2px solid {{ collection.color }}"
-                        >
+                        <a href="{{ path("app_collection_display", {id: collection.id}) }}">
+                            <img
+                                    src="/images/collections/thumbnails/{{ collection.thumbnail }}"
+                                    alt="{{ collection.title }}"
+                                    style="border: 2px solid {{ collection.color }}"
+                            >
+                        </a>
                     </div>
                 {% endfor %}
             </div>

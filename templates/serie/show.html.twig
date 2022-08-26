@@ -9,23 +9,17 @@
     {% endblock %}
 
 {% block body %}
-{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     {{ include('blocks/pageHeader.html.twig') }}
     <div class="container">
-        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-                {{ include('blocks/movie/bracket.html.twig') }}
-                {% if from == 'popular' %}
-                    <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}?p={{ page }}#{{ serie.id }}">{{ 'Popular Series'|trans }} - {{ 'Page'|trans }} {{ page }}</a></li>
-                {% elseif from == 'top_rated' %}
-                    <li class="breadcrumb-item"><a href="{{ path('app_serie_top_rated') }}?p={{ page }}#{{ serie.id }}">{{ 'Top rated Series'|trans }} - {{ 'Page'|trans }} {{ page }}</a></li>
-                {% else %}
-                    <li class="breadcrumb-item"><a href="{{ path('app_serie_index') }}?p={{ page }}&b=1#{{ serie.id }}">{{ 'My Series'|trans }} - {{ 'Page'|trans }} {{ page }}</a></li>
-                {% endif %}
-                <li class="breadcrumb-item active">{{ serie.name }}</li>
-            </ol>
-        </nav>
+        {% if from == 'popular' %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'Popular Series', url: path('app_serie_popular')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}
+        {% elseif from == 'top_rated' %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}
+        {% else %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
+        {% endif %}
+
         <div class="serie-page">
             <div class="header">
                 <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>

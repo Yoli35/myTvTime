@@ -6,7 +6,7 @@ use App\Entity\Article;
 use App\Entity\ArticleImage;
 use App\Entity\Genre;
 use App\Entity\ImageConfig;
-use App\Entity\MyMovieCollection;
+use App\Entity\MovieCollection;
 use App\Entity\TikTokVideo;
 use App\Entity\User;
 use App\Entity\UserMovie;
@@ -61,7 +61,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Images', 'fa fa-image', ArticleImage::class);
         yield MenuItem::section('Movies');
         yield MenuItem::linkToCrud('Movies', 'fa-solid fa-film', UserMovie::class);
-        yield MenuItem::linkToCrud('Collections', 'fa-solid fa-film', MyMovieCollection::class);
+        yield MenuItem::linkToCrud('Collections', 'fa-solid fa-film', MovieCollection::class);
         yield MenuItem::section('Youtube Videos');
         yield MenuItem::linkToCrud('Youtube', 'fa-brands fa-youtube', YoutubeVideo::class);
         yield MenuItem::section('Tik Tok Videos');

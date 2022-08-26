@@ -32,6 +32,10 @@ class SerieController extends AbstractController
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
     public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /** @var User $user */
+        $user = $this->getUser();
+
         $settingsChanged = $request->query->getInt('s', 0);
         $backFromDetail = $request->query->getInt('b', 0);
         $page = $request->query->getInt('p', 1);
@@ -56,7 +60,7 @@ class SerieController extends AbstractController
             }
         }
         $totalResults = $serieRepository->count([]);
-        $results = $serieRepository->findAllSeries($page, $perPage, $orderBy, $order);
+        $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
 
         return $this->render('serie/index.html.twig', [
             'series' => $results,
@@ -69,6 +73,7 @@ class SerieController extends AbstractController
                 'per_page_values' => self::PER_PAGE_ARRAY,
                 'order_by' => $orderBy,
                 'order' => $order],
+            'user' => $user,
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
@@ -109,6 +114,7 @@ class SerieController extends AbstractController
                 'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
             ],
             'from' => $from,
+            'user' => $this->getUser(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ];
     }
@@ -305,6 +311,7 @@ class SerieController extends AbstractController
             'locale' => $request->getLocale(),
             'page' => $page,
             'from' => $from,
+            'user' => $this->getUser(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
     }
@@ -347,6 +354,7 @@ class SerieController extends AbstractController
             'locale' => $request->getLocale(),
             'page' => $page,
             'from' => $from,
+            'user' => $this->getUser(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
     }

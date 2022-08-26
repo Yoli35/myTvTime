@@ -38,13 +38,7 @@
 
         <div class="home-header bg{{ random(5) }}"></div>
 
-        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-                {{ include('blocks/movie/bracket.html.twig') }}
-                <li class="breadcrumb-item active" aria-current="{{ 'Search by Date'|trans }}">{{ 'Search by Date'|trans }}</li>
-            </ol>
-        </nav>
+        {{ include('blocks/nav.html.twig', {thisPage: 'Search by Date'}) }}
 
         <div class="search">
             <div class="date_select">

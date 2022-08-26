@@ -2,22 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\MyMovieCollectionRepository;
+use App\Repository\MovieCollectionRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MyMovieCollectionRepository::class)]
-class MyMovieCollection
+#[ORM\Entity(repositoryClass: MovieCollectionRepository::class)]
+class MovieCollection
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'myMovieCollections')]
+    #[ORM\ManyToOne(inversedBy: 'movieCollections')]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
@@ -36,7 +36,7 @@ class MyMovieCollection
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $banner = null;
 
-    #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'myMovieCollections')]
+    #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'movieCollections')]
     private Collection $movies;
 
     #[ORM\Column]
@@ -47,8 +47,8 @@ class MyMovieCollection
 
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTimeImmutable());
-        $this->setUpdatedAt(new \DateTimeImmutable());
+        $this->setCreatedAt(new DateTimeImmutable());
+        $this->setUpdatedAt(new DateTimeImmutable());
         $this->movies = new ArrayCollection();
     }
 
@@ -147,7 +147,7 @@ class MyMovieCollection
     {
         if (!$this->movies->contains($movie)) {
             $this->movies->add($movie);
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->setUpdatedAt(new DateTimeImmutable());
         }
 
         return $this;

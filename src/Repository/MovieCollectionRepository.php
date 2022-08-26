@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\MyMovieCollection;
+use App\Entity\MovieCollection;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<MyMovieCollection>
+ * @extends ServiceEntityRepository<MovieCollection>
  *
- * @method MyMovieCollection|null find($id, $lockMode = null, $lockVersion = null)
- * @method MyMovieCollection|null findOneBy(array $criteria, array $orderBy = null)
- * @method MyMovieCollection[]    findAll()
- * @method MyMovieCollection[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method MovieCollection|null find($id, $lockMode = null, $lockVersion = null)
+ * @method MovieCollection|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MovieCollection[]    findAll()
+ * @method MovieCollection[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MyMovieCollectionRepository extends ServiceEntityRepository
+class MovieCollectionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, MyMovieCollection::class);
+        parent::__construct($registry, MovieCollection::class);
     }
 
-    public function add(MyMovieCollection $entity, bool $flush = false): void
+    public function add(MovieCollection $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class MyMovieCollectionRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(MyMovieCollection $entity, bool $flush = false): void
+    public function remove(MovieCollection $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class MyMovieCollectionRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return MyMovieCollection[] Returns an array of MyMovieCollection objects
+//     * @return MovieCollection[] Returns an array of MovieCollection objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class MyMovieCollectionRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?MyMovieCollection
+//    public function findOneBySomeField($value): ?MovieCollection
 //    {
 //        return $this->createQueryBuilder('m')
 //            ->andWhere('m.exampleField = :val')

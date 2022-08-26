@@ -106,24 +106,24 @@ class UserMovieRepository extends ServiceEntityRepository
     {
         if ($short) {
             $sql = 'SELECT '
-                . '  title,thumbnail,color '
+                . '  id,title,thumbnail,color '
                 . 'FROM '
-                . '  my_movie_collection t0 '
+                . '  movie_collection t0 '
                 . 'INNER JOIN '
-                . '  my_movie_collection_user_movie '
-                . '  ON t0.id = my_movie_collection_user_movie.my_movie_collection_id '
+                . '  movie_collection_user_movie '
+                . '  ON t0.id = movie_collection_user_movie.movie_collection_id '
                 . 'WHERE '
-                . '  my_movie_collection_user_movie.user_movie_id = ' . $movie_id;
+                . '  movie_collection_user_movie.user_movie_id = ' . $movie_id;
         } else {
             $sql = 'SELECT '
                 . '  * '
                 . 'FROM '
-                . '  my_movie_collection t0 '
+                . '  movie_collection t0 '
                 . 'INNER JOIN '
-                . '  my_movie_collection_user_movie '
-                . '  ON t0.id = my_movie_collection_user_movie.my_movie_collection_id '
+                . '  movie_collection_user_movie '
+                . '  ON t0.id = movie_collection_user_movie.movie_collection_id '
                 . 'WHERE '
-                . '  my_movie_collection_user_movie.user_movie_id = ' . $movie_id;
+                . '  movie_collection_user_movie.user_movie_id = ' . $movie_id;
         }
 
         $em = $this->registry->getManager();

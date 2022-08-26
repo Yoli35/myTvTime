@@ -61,8 +61,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Article::class)]
     private Collection $articles;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: MyMovieCollection::class, orphanRemoval: true)]
-    private Collection $myMovieCollections;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: MovieCollection::class, orphanRemoval: true)]
+    private Collection $movieCollections;
 
     #[ORM\ManyToMany(targetEntity: Serie::class, mappedBy: 'users')]
     private Collection $series;
@@ -72,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->movies = new ArrayCollection();
         $this->tiktoks = new ArrayCollection();
         $this->articles = new ArrayCollection();
-        $this->myMovieCollections = new ArrayCollection();
+        $this->movieCollections = new ArrayCollection();
         $this->series = new ArrayCollection();
     }
 
@@ -327,29 +327,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, MyMovieCollection>
+     * @return Collection<int, MovieCollection>
      */
-    public function getMyMovieCollections(): Collection
+    public function getMovieCollections(): Collection
     {
-        return $this->myMovieCollections;
+        return $this->movieCollections;
     }
 
-    public function addMyMovieCollection(MyMovieCollection $myMovieCollection): self
+    public function addMovieCollection(MovieCollection $movieCollection): self
     {
-        if (!$this->myMovieCollections->contains($myMovieCollection)) {
-            $this->myMovieCollections->add($myMovieCollection);
-            $myMovieCollection->setUser($this);
+        if (!$this->movieCollections->contains($movieCollection)) {
+            $this->movieCollections->add($movieCollection);
+            $movieCollection->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeMyMovieCollection(MyMovieCollection $myMovieCollection): self
+    public function removeMovieCollection(MovieCollection $movieCollection): self
     {
-        if ($this->myMovieCollections->removeElement($myMovieCollection)) {
+        if ($this->movieCollections->removeElement($movieCollection)) {
             // set the owning side to null (unless already changed)
-            if ($myMovieCollection->getUser() === $this) {
-                $myMovieCollection->setUser(null);
+            if ($movieCollection->getUser() === $this) {
+                $movieCollection->setUser(null);
             }
         }
 

@@ -12,13 +12,7 @@
 
         <div class="home-header bg{{ random(5) }}"></div>
 
-        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-                {{ include('blocks/movie/bracket.html.twig') }}
-                <li class="breadcrumb-item active" aria-current="{{ 'Search by Name'|trans }}">{{ 'Search by Name'|trans }}</li>
-            </ol>
-        </nav>
+        {{ include('blocks/nav.html.twig', {thisPage: 'Search by Name'}) }}
 
         <div class="row">
             <div class="col-lg-3 col-md-1 col-sm"></div>

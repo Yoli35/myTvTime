@@ -40,14 +40,14 @@ class UserMovie
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToMany(targetEntity: MyMovieCollection::class, mappedBy: 'movies')]
-    private Collection $myMovieCollections;
+    #[ORM\ManyToMany(targetEntity: MovieCollection::class, mappedBy: 'movies')]
+    private Collection $movieCollections;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
-        $this->myMovieCollections = new ArrayCollection();
+        $this->movieCollections = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -167,27 +167,27 @@ class UserMovie
     }
 
     /**
-     * @return Collection<int, MyMovieCollection>
+     * @return Collection<int, MovieCollection>
      */
-    public function getMyMovieCollections(): Collection
+    public function getMovieCollections(): Collection
     {
-        return $this->myMovieCollections;
+        return $this->movieCollections;
     }
 
-    public function addMyMovieCollection(MyMovieCollection $myMovieCollection): self
+    public function addMovieCollection(MovieCollection $movieCollection): self
     {
-        if (!$this->myMovieCollections->contains($myMovieCollection)) {
-            $this->myMovieCollections->add($myMovieCollection);
-            $myMovieCollection->addMovie($this);
+        if (!$this->movieCollections->contains($movieCollection)) {
+            $this->movieCollections->add($movieCollection);
+            $movieCollection->addMovie($this);
         }
 
         return $this;
     }
 
-    public function removeMyMovieCollection(MyMovieCollection $myMovieCollection): self
+    public function removeMovieCollection(MovieCollection $movieCollection): self
     {
-        if ($this->myMovieCollections->removeElement($myMovieCollection)) {
-            $myMovieCollection->removeMovie($this);
+        if ($this->movieCollections->removeElement($movieCollection)) {
+            $movieCollection->removeMovie($this);
         }
 
         return $this;
