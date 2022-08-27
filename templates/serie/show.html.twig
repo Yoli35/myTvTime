@@ -223,20 +223,34 @@
                     </div>
                 </aside>
             </main>
+            <div class="translationModalBack">
+                <div class="translationModal">
+                    <div class="trans-header">
+                        <h4>{{ 'Translate new keywords'|trans }}</h4>
+                    </div>
+                    <div class="trans-content"></div>
+                    <div class="trans-footer">
+                        <button type="button" aria-label="{{ 'Cancel'|trans }}" aria-roledescription="{{ 'Cancel and close the dialog'|trans }}">{{ 'Cancel'|trans }}</button>
+                        <button type="submit" aria-label="{{ 'Translate'|trans }}" aria-roledescription="{{ 'Add translated keywords, close the dialog and reload the page'|trans }}">{{ 'Translate'|trans }}</button>
+                    </div>
+                </div>
+            </div>
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
 {% endblock %}
 {% block morejs %}
+    <script src="/js/serie.js"></script>
     <script>
-        window.addEventListener("DOMContentLoaded", () => {
-            const providers = document.querySelectorAll(".watch-provider");
+        const paths = [
+            "{{ path('app_serie_render_translation_field') }}",
+            "{{ path('app_serie_render_translation_select') }}",
+            "{{ path('app_serie_render_translation_save') }}",
+        ];
 
-            if (providers.length > 1) {
-                const arrow = document.querySelector(".arrow");
-                arrow.classList.add("d-flex");
-                arrow.innerHTML = "+" + (providers.length - 1);
-            }
+        window.addEventListener("DOMContentLoaded", () => {
+
+            initSerieStuff(paths);
         })
     </script>
 {% endblock %}

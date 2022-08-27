@@ -1,0 +1,6 @@
+<select>
+    <option value="fr"{% if locale == 'fr' %} selected{% endif %}>{{ 'French'|trans }}</option>
+    <option value="en"{% if locale == 'en' %} selected{% endif %}>{{ 'English'|trans }}</option>
+    <option value="de"{% if locale == 'de' %} selected{% endif %}>{{ 'German'|trans }}</option>
+    <option value="es"{% if locale == 'es' %} selected{% endif %}>{{ 'Spanish'|trans }}</option>
+</select>

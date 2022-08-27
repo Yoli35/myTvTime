@@ -52,8 +52,7 @@ class SerieController extends AbstractController
                 $perPage = $cookie['pp'];
                 $orderBy = $cookie['ob'];
                 $order = $cookie['o'];
-            }
-            else {
+            } else {
                 $perPage = 20;
                 $orderBy = 'firstDateAir';
                 $order = 'desc';
@@ -266,11 +265,11 @@ class SerieController extends AbstractController
 
     public function getTranslations($locale): array
     {
-        $filename = '../translations/tags.'.$locale.'.yaml';
+        $filename = '../translations/tags.' . $locale . '.yaml';
         $res = fopen($filename, 'a+');
         $ks = [];
 
-        while(!feof($res)) {
+        while (!feof($res)) {
             $line = fgets($res);
             $ks[] = explode(": ", $line);
         }
@@ -398,5 +397,45 @@ class SerieController extends AbstractController
         }
 
         return $this->redirectToRoute('app_serie_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/render/translation/field', name: 'app_serie_render_translation_field', methods: ['GET'])]
+    public function renderTranslationField(Request $request): Response
+    {
+        $index = $request->query->getInt('i');
+        $keyword = $request->query->get('k');
+        return $this->render('blocks/serie/translationField.html.twig', [
+            'index' => $index,
+            'keyword' => $keyword
+        ]);
+    }
+
+    #[Route('/render/translation/select', name: 'app_serie_render_translation_select', methods: ['GET'])]
+    public function renderTranslationSelect(Request $request): Response
+    {
+        return $this->render('blocks/serie/translationSelect.html.twig', [
+            'locale' => $request->getLocale(),
+        ]);
+    }
+
+    #[Route('/render/translation/save', name: 'app_serie_render_translation_save', methods: ['GET'])]
+    public function renderTranslationSave(Request $request): Response
+    {
+        $translations = json_decode($request->query->get('t'), true);
+        dump($translations);
+        $n = count($translations);
+
+        $filename = '../translations/tags.' . $translations[0][1] . '.yaml';
+        dump($filename);
+        $res = fopen($filename, 'a+');
+
+        for ($i=1; $i<$n;$i++) {
+            $line = $translations[$i][0] . ': ' . $translations[$i][1]. "\n";
+            dump($line);
+            fputs($res, $line);
+        }
+        fclose($res);
+
+        return $this->json(["result" => ($n-1) . " ligne".(($n-1)>1?"s":"")." ajoutée".(($n-1)>1?"s":"")." au fichier « tags." . $translations[0][1] . ".yaml »." ]);
     }
 }

@@ -1,26 +1,30 @@
 # Home Header
-Movies: Movies
-Tv Shows: Tv Shows
-Series: Series
-Search Movies by: Search Movies by
-Search by Name: Search by Name
-Search by Genre: Search by Genre
-Search by Date: Search by Date
-Genre: Genre
-Date: Date
-Welcome: Welcome
-Toolbar with button groups: Movie Search Toolbar
-First group: Search Tools Group
-My Account: My Account
-My Movies: My Movies
 Another action: Easy Admin
-Php Info: Php Info
-Logout: Logout
-Navigation: Navigation
-French: French
+Date: Date
 English: English
+First group: Search Tools Group
+French: French
+Genre: Genre
 German: German
+Logout: Logout
+Movies: Movies
+My Account: My Account
+My Movie Collections: My Movie Collections
+My Movies: My Movies
+My Series: My Series
+Navigation: Navigation
+Php Info: Php Info
+Popular Series: Popular Series
+Search Movies by: Search Movies by
+Search by Date: Search by Date
+Search by Genre: Search by Genre
+Search by Name: Search by Name
+Series: Series
 Spanish: Spanish
+Toolbar with button groups: Movie Search Toolbar
+Top rated Series: Top rated Series
+Tv Shows: Tv Shows
+Welcome: Welcome
 
 # Registration
 Register: Register
@@ -53,6 +57,64 @@ Page: Page
 Total Pages: Total Pages
 Total Results: Total Results
 
+# Blog
+Answer: Answer
+Are you sure you want to delete this item: Are you sure you want to delete this image
+Article: Article
+ArticleImage index: List of images displayed in articles
+Be the first to react!: Be the first to react!
+Blog: Blog
+By: By
+Comments: Comments
+Create new ArticleImage: Save a new image
+Create new: Add
+Created at: Created on
+Delete: Delete
+Drop: Drag and drop
+Edit ArticleImage: Modify
+Modified at: Modified on
+New ArticleImage: New image
+Nothing to show yet: Rien à afficher pour l'instant
+Path: Name
+React!: React!
+Save: Save
+Update: Update
+back to list: Back to list
+edit: Modify
+show: View
+
+# Collections
+Collections: Collections
+Description: Description
+My Collections: My collections
+The movie « movie_name » has been added to your collection « collection_name ».: The movie « movie_name » has been added to your collection « collection_name ».
+The movie « movie_name » has been removed from your collection « collection_name ».: The movie « movie_name » has been removed from your collection « collection_name ».
+
+# User Series
+First Air at: First Air at
+Pagination: Pagination
+Results per page: Results per page
+Add order: Add order
+Order by: Order by
+Order: Order
+Descending: Descending
+Ascending: Ascending
+Apply: Apply
+New Serie Help: Find your series on %link1% and copy the @ of the series page, such as "%link2%" or the series ID, in this case "%id%", from the address bar and paste it into the field just above.
+New Serie Id: Address or ID of the series
+Help: Help
+Serie not found: Series not found
+New serie added: New series added
+Serie updated: Series updated
+creator.she: Creator
+creator.he: Creator
+creation: Creation
+Cancel: Cancel
+Cancel and close the dialog: Cancel and close the dialog
+Translate: Translate
+Add translated keywords, close the dialog and reload the page: Add translated keywords, close the dialog and reload the page.
+Translate new keywords: Translate new keywords
+
 # Movies
 Sort: Sort
 Sort selection: Sort selection
@@ -81,7 +143,6 @@ Vote Count: Vote Count
 Home Page: Home Page
 IMDB Page: IMDB Page
 Personal IMDB Page: IMDB Page
-Production: Production
 Production Companies:  Production Companies
 Production Countries: Production Countries
 Crew: Crew
@@ -130,35 +191,71 @@ Place of Birth: Place of Birth
 Close: Close
 
 #Series
-Creation: Creation
-View on: View on
 Country: Country
-Network: Network
+Creation: Creation
 Showrunner: Showrunner
-Status: Status
+View on: View on
+# Status
+Canceled: Canceled
 Continuing: Continuing
 Ended: Ended
+In Production: In Production
+Status: Status
+# Watch
+Available in streaming: Available in streaming
+Available to rent or buy: Available to rent or buy
+Watch now: Watch now
+# cast / crew
+Cast: Cast
+Acting.he: Acting
+Acting.she: Acting
+Acting: Acting
+Art.he: Art
+Art.she: Art
+Art: Art
+Directing.she: Directing
+Directing.he: Directing
+Directing: Directing
+Production.he: Production
+Production.she: Production
+Production: Production
+Writing.he: Auteur
+Writing.she: Autrice
+Writing: Writing
+#key facts
+Key facts: Key facts
+Network: Network
+Networks: Networks
+Original Country: Original Country
+Original language: Original language
+Original name: Original name
+Returning Series: Returning Series
+Keywords: Keywords
+# seasons
+episodes: episodes
+The season season_number of serie_name aired from season_air_date.: The season season_number of serie_name aired from season_air_date.
+
 
 # Serie Genres
-Action: Action
-Adventure: Adventure
-Animation: Animation
-Anime: Anime
-Comedy: Comedy
-Crime: Crime
-Drama: Drama
-Family: Family
-Fantasy: Fantasy
-History: History
-Horror: Horror
-Mini-Series: Mini-Series
-Mystery: Mystery
-Romance: Romance
-Science Fiction: Science Fiction
-Sport: Sport
-Suspense: Suspense
-Thriller: Thriller
-War: War
+#Action: Action
+#Adventure: Adventure
+#Animation: Animation
+#Anime: Anime
+#Comedy: Comedy
+#Crime: Crime
+#Drama: Drama
+#Family: Family
+#Fantasy: Fantasy
+#History: History
+#Horror: Horror
+#Mini-Series: Mini-Series
+#Mystery: Mystery
+#Romance: Romance
+#Science Fiction: Science Fiction
+#Sport: Sport
+#Suspense: Suspense
+#Thriller: Thriller
+#War: War
 
 # Youtube
 My Youtube Videos: My Youtube Videos
@@ -261,4 +358,5 @@ Movie Db Id: Movie Db Id
 
 # Others
 None: None
-
+cookie consent: This site uses cookies to improve the service provided, particularly on the "My series" page. By clicking on the "I accept" button you authorize their use.
+Accept: Accept

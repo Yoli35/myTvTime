@@ -643,9 +643,99 @@
 
                             &.new {
                                 background-color: var(--gradiant-purple-40);
+                                cursor: pointer;
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    .translationModalBack {
+        background-color: var(--gradiant-ardoise-10-alpha-90);
+        display: none;
+        inset: 0;
+        opacity: 0;
+        position: fixed;
+        transition: opacity 500ms;
+
+        &.open {
+            @include flex-row();
+        }
+
+        &.visible {
+            opacity: 1;
+        }
+
+        .translationModal {
+            background-color: var(--gradiant-ardoise-30);
+            border-radius: 1em;
+            display: none;
+            color: var(--gradiant-ardoise-80);
+            opacity: 0;
+            transition: opacity 500ms;
+            width: 50em;
+
+            &.open {
+                @include flex-col(flex-start, flex-start);
+            }
+
+            &.visible {
+                opacity: 1;
+            }
+
+            .trans-header {
+                border-bottom: 1px solid var(--gradiant-ardoise-50);
+                padding: 1em;
+                width: 100%;
+            }
+
+            .trans-content {
+                @include flex-col(flex-start, flex-start);
+                border-bottom: 1px solid var(--gradiant-ardoise-50);
+                max-height: 38em;
+                margin: 1em 2em;
+                overflow: scroll;
+                width: calc(100% - 4em);
+
+                .language {
+                    @include flex-100();
+                    margin: 1em 0;
+                }
+
+                .field {
+                    width: 100%;
+                    .translation {
+                        @include flex-col(flex-start, flex-start);
+                        margin: .5em 1em;
+                        width: calc(100% - 4em);
+
+                        label {
+                            font-weight: 100;
+                        }
+
+                        input {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+
+            .trans-footer {
+                @include flex-100(center, flex-end);
+                padding: 1em;
+                width: 100%;
+
+                button {
+                    appearance: unset;
+                    background-color: var(--gradiant-ardoise-50);
+                    border: none;
+                    border-radius: var(--button-border-radius);
+                    color: var(--gradiant-ardoise-90);
+                    font-weight: 100;
+                    margin-left: 1em;
+                    padding: .25em 1em;
                 }
             }
         }
@@ -860,6 +950,7 @@
                     .page-group {
                         .page {
                             border-color: var(--gradiant-ardoise-70);
+
                             &.current {
                                 background-color: var(--gradiant-ardoise-40);
                                 color: var(--gradiant-ardoise-90);
@@ -867,6 +958,7 @@
 
                             &:hover {
                                 background-color: var(--gradiant-ardoise-60);
+
                                 a {
                                     color: var(--gradiant-ardoise-20);
                                 }

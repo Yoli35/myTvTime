@@ -145,7 +145,6 @@ class MovieController extends AbstractController
         }
         foreach ($collection['parts'] as &$part) {
             $part['genres'] = [];
-            $genre = [];
             foreach ($part['genre_ids'] as $genre_id) {
                 $genre = ['id' => $genre_id, 'name' => $genres[$genre_id]];
                 $part['genres'][] = $genre;
@@ -191,6 +190,7 @@ class MovieController extends AbstractController
             'current_genres' => $currentGenres,
             'imageConfig' => $imageConfig,
             'dRoute' => 'app_movie',
+            'user' => $this->getUser(),
             'locale' => $locale,
         ]);
     }
@@ -221,6 +221,7 @@ class MovieController extends AbstractController
             'date' => $date,
             'years' => $years,
             'imageConfig' => $imageConfig,
+            'user' => $this->getUser(),
             'dRoute' => 'app_movie',
             'locale' => $locale,
         ]);
@@ -262,6 +263,7 @@ class MovieController extends AbstractController
             'discovers' => $discovers,
             'userMovies' => $this->getUserMovieIds($userMovieRepository),
             'imageConfig' => $imageConfig,
+            'user' => $this->getUser(),
             'dRoute' => 'app_movie',
             'locale' => $locale,
         ]);
@@ -328,8 +330,6 @@ class MovieController extends AbstractController
      * @throws ServerExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
-     * @throws ApiException
-     * @throws ValidationException
      */
     #[Route('/{_locale}/imdb', name: 'imdb_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
     public function getPersonInfosOnIMDB(Request $request, CallImdbService $callImdbService, TranslatorInterface $translator): JsonResponse
@@ -344,7 +344,7 @@ class MovieController extends AbstractController
             $locale = $request->query->get('locale');
             $standing = $callImdbService->getPerson($result['id'], $locale);
             $person = json_decode($standing, true);
-            $summary = $translator->trans($person['summary']);
+//            $summary = $translator->trans($person['summary']);
 
 //            if ($locale !== 'en') {
 //                $config = [
@@ -383,25 +383,19 @@ class MovieController extends AbstractController
         return $this->json(['success' => $success, 'person' => $person,]);
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/movie/add', name: 'app_movie_add')]
-    public function addMovieToUser(Request $request, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
+    public function addMovieToUser(Request $request, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         $movieId = $request->query->get('movie_db_id');
         $locale = $request->getLocale();
 
-        $userMovie = $this->addMovie($user, $movieId, $locale, $callTmdbService, $userMovieRepository, $entityManager);
+        $userMovie = $this->addMovie($user, $movieId, $locale, $callTmdbService, $userMovieRepository);
         return $this->json(['title' => $userMovie->getTitle()]);
     }
 
-    public function addMovie($user, $movieId, $locale, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): UserMovie
+    public function addMovie($user, $movieId, $locale, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository): UserMovie
     {
         $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
 
@@ -418,32 +412,30 @@ class MovieController extends AbstractController
             $userMovie->setRuntime($movieDetail['runtime']);
         }
         $userMovie->addUser($user);
-        $entityManager->persist($userMovie);
-        $entityManager->flush();
+        $userMovieRepository->add($userMovie, true);
 
         return $userMovie;
     }
 
     #[Route('/movie/remove', name: 'app_movie_remove')]
-    public function removeMovieToUser(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $entityManager): JsonResponse
+    public function removeMovieToUser(Request $request, UserMovieRepository $userMovieRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         $movieId = $request->query->get('movie_db_id');
 
-        $userMovie = $doctrine->getRepository(UserMovie::class)->findOneBy(['movieDbId' => $movieId]);
+        $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
 
         if ($userMovie) {
             $userMovie->removeUser($user);
-            $entityManager->persist($userMovie);
-            $entityManager->flush();
+            $userMovieRepository->add($userMovie);
         }
 
         return $this->json(['/movie/remove' => 'success']);
     }
 
     #[Route('/movie/set/rating', name: 'app_movie_set_rating')]
-    public function setMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
+    public function setMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -461,14 +453,13 @@ class MovieController extends AbstractController
             $result = "create";
         }
         $rating->setValue($vote);
-        $entityManager->persist($rating);
-        $entityManager->flush();
+        $ratingRepository->add($rating, true);
 
         return $this->json(['result' => $result]);
     }
 
     #[Route('/movie/get/rating', name: 'app_movie_get_rating')]
-    public function getMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager): JsonResponse
+    public function getMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();

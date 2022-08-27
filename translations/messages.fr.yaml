@@ -1,83 +1,30 @@
-# Blog
-Blog: Blog
-Nothing to show yet: Rien à afficher pour l'instant
-Created at: Créé le
-Modified at: Modifié le
-By: Par
-ArticleImage index: Liste des images affichées dans les articles
-show: Voir
-edit: Modifier
-Create new: Ajouter
-New ArticleImage: Nouvelle image
-Create new ArticleImage: Enregistrer une nouvelle image
-Path: Nom
-Article: Article
-Drop: Glisser-déposer
-back to list: Retour à la liste
-Save: Enregistrer
-Edit ArticleImage: Modifier
-Update: Mettre à jour
-Are you sure you want to delete this item: "Êtes-vous sûr de vouloir supprimer cette image "
-Delete: Supprimer
-Be the first to react!: Soyez la première ou le premier à réagir !
-React!: Réagissez !
-Comments: Commentaires
-Answer: Répondre
-
-# Collections
-Collections: Collections
-My Collections: Mes collections
-Description: Description
-The movie « movie_name » has been added to your collection « collection_name ».: Le film « movie_name » a été ajouté à votre collection « collection_name ».
-The movie « movie_name » has been removed from your collection « collection_name ».: Le film « movie_name » a été retiré de votre collection « collection_name ».
-
-# User Series
-First Air at: Première diffusion
-Pagination: Pagination
-Results per page: Resultats par page
-Add order: Ordre d'ajout
-Order by: Tri
-Order: Sens
-Descending: Décroissant
-Ascending: Croissant
-Apply: Appliquer
-New Serie Help: Trouvez votre série sur %link1% et copiez l'@ de la page de la série, comme " %link2% " ou l'ID de la série, ici " %id% ", dans la barre d'adresse et collez-le dans le champ juste au-dessus.
-New Serie Id: Adresse ou identifiant de la série
-Help: Aide
-Serie not found: Série introuvable
-New serie added: Nouvelle série ajoutée
-Serie updated: Série mise à jour
-creator.she: Créatrice
-creator.he: Créateur
-creation: Création
-
 # Home Header
-Movies: Films
-Tv Shows: Émissions
-Series: Séries
-Popular Series: Séries populaires
-Top rated Series: Séries les mieux notées
-Search Movies by: Recherche de film par
-Search by Name: Recherche par nom
-Search by Genre: Recherche par genre
-Search by Date: Recherche par date
-Genre: Genre
-Date: Date
-Welcome: Bienvenue
-Toolbar with button groups: Barre d'outil de la recherche de film
-First group: Groupe d'outil de recherche
-My Account: Mon compte
-My Movies: Mes films
-My Movie Collections: Mes Collections de films
-My Series: Mes séries
 Another action: Easy Admin
-Php Info: Php Info
-Logout: Déconnexion
-Navigation: Navigation
-French: Français
+Date: Date
 English: Anglais
+First group: Groupe d'outil de recherche
+French: Français
+Genre: Genre
 German: Allemand
+Logout: Déconnexion
+Movies: Films
+My Account: Mon compte
+My Movie Collections: Mes Collections de films
+My Movies: Mes films
+My Series: Mes séries
+Navigation: Navigation
+Php Info: Php Info
+Popular Series: Séries populaires
+Search Movies by: Recherche de film par
+Search by Date: Recherche par date
+Search by Genre: Recherche par genre
+Search by Name: Recherche par nom
+Series: Séries
 Spanish: Espagnol
+Toolbar with button groups: Barre d'outil de la recherche de film
+Top rated Series: Séries les mieux notées
+Tv Shows: Émissions
+Welcome: Bienvenue
 
 # Registration
 Register: S'enregistrer
@@ -110,6 +57,64 @@ Page: Page
 Total Pages: Nombre de page
 Total Results: Nombre de résultat
 
+# Blog
+Answer: Répondre
+Are you sure you want to delete this item: "Êtes-vous sûr de vouloir supprimer cette image "
+Article: Article
+ArticleImage index: Liste des images affichées dans les articles
+Be the first to react!: Soyez la première ou le premier à réagir !
+Blog: Blog
+By: Par
+Comments: Commentaires
+Create new ArticleImage: Enregistrer une nouvelle image
+Create new: Ajouter
+Created at: Créé le
+Delete: Supprimer
+Drop: Glisser-déposer
+Edit ArticleImage: Modifier
+Modified at: Modifié le
+New ArticleImage: Nouvelle image
+Nothing to show yet: Rien à afficher pour l'instant
+Path: Nom
+React!: Réagissez !
+Save: Enregistrer
+Update: Mettre à jour
+back to list: Retour à la liste
+edit: Modifier
+show: Voir
+
+# Collections
+Collections: Collections
+Description: Description
+My Collections: Mes collections
+The movie « movie_name » has been added to your collection « collection_name ».: Le film « movie_name » a été ajouté à votre collection « collection_name ».
+The movie « movie_name » has been removed from your collection « collection_name ».: Le film « movie_name » a été retiré de votre collection « collection_name ».
+
+# User Series
+First Air at: Première diffusion
+Pagination: Pagination
+Results per page: Resultats par page
+Add order: Ordre d'ajout
+Order by: Tri
+Order: Sens
+Descending: Décroissant
+Ascending: Croissant
+Apply: Appliquer
+New Serie Help: Trouvez votre série sur %link1% et copiez l'@ de la page de la série, comme " %link2% " ou l'ID de la série, ici " %id% ", dans la barre d'adresse et collez-le dans le champ juste au-dessus.
+New Serie Id: Adresse ou identifiant de la série
+Help: Aide
+Serie not found: Série introuvable
+New serie added: Nouvelle série ajoutée
+Serie updated: Série mise à jour
+creator.she: Créatrice
+creator.he: Créateur
+creation: Création
+Cancel: Annuler
+Cancel and close the dialog: Annuler et fermer la boîte de dialogue
+Translate: Traduire
+Add translated keywords, close the dialog and reload the page: Ajouter les mots-clés traduits, fermer la boîte de dialogue et recharger la page.
+Translate new keywords: Traduire les nouveaux mots-clés
+
 # Movies
 Sort: Tri
 Sort selection: Sélection du tri
@@ -140,7 +145,6 @@ Visit the official Movie Website: Visiter le site officiel du film
 Visit the Movie Page on IMDB: Visiter la page du film sur IMDB
 IMDB Page: Le film sur Imdb
 Personal IMDB Page: Page IMDB
-Production: Production
 Production Companies: Compagnies de production
 Production Countries: Pays de production
 Crew: Équipe technique
@@ -195,24 +199,24 @@ Place of Birth: Lieu de naissance
 Close: Fermer
 
 #Series
-Creation: Année de création
-View on: Regarder sur
 Country: Pays
+Creation: Année de création
 Showrunner: Directeur de série
+View on: Regarder sur
 # Status
-Status: Statut
-In Production: En Production
 Canceled: Annulée
 Continuing: En cours
 Ended: Terminé
+In Production: En Production
+Status: Statut
 # Watch
 Available in streaming: Disponible en streaming
 Available to rent or buy: Location ou achat
 Watch now: Regarder maintenant
 # cast / crew
 Cast: Distribution des rôles
-Acting.she: Actrice
 Acting.he: Acteur
+Acting.she: Actrice
 Acting: Actrice/Acteur
 Art.he: Directeur artistique
 Art.she: Directrice artistique
@@ -222,8 +226,10 @@ Directing.he: Metteur en scène
 Directing: Mise en scène
 Production.he: Producteur
 Production.she: Productrice
+Production: Production
 Writing.he: Auteur
 Writing.she: Autrice
+Writing: Écriture
 # key facts
 Key facts: Faits principaux
 Network: Diffuseur télé
