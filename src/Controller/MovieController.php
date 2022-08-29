@@ -13,19 +13,13 @@ use App\Repository\UserMovieRepository;
 use App\Service\CallImdbService;
 use App\Service\CallTmdbService;
 use App\Service\ImageConfiguration;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Google\ApiCore\ApiException;
-use Google\ApiCore\ValidationException;
-
+//use Google\ApiCore\ValidationException;
 //use Google\Cloud\Translate\V3\TranslationServiceClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Translation\Loader\ArrayLoader;
-use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -123,12 +117,6 @@ class MovieController extends AbstractController
         return $localeDates;
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{_locale}/movie/collection/{mid}/{id}', 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
     public function movieCollection(Request $request, $mid, $id, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, GenreRepository $genreRepository, ImageConfiguration $imageConfiguration): Response
     {
@@ -164,12 +152,6 @@ class MovieController extends AbstractController
 
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{_locale}/movie/genre/{genres}/{page}', name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByGenres(Request $request, $page, $genres, UserMovieRepository $userMovieRepository, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
@@ -195,12 +177,6 @@ class MovieController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{_locale}/movie/date/{date}/{page}', name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByDate(Request $request, $page, $date, UserMovieRepository $userMovieRepository, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
@@ -227,19 +203,13 @@ class MovieController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{_locale}/search/movie/{page}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesSearch(Request $request, $page, UserMovieRepository $userMovieRepository, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         $query = $request->query->get('query') ?: '';
-        $year = $request->query->get('year') ?: 'none';
+        $year = $request->query->get('year') ?: '';
         $imageConfig = $imageConfiguration->getConfig();
 
         $form = $this->createForm(MovieByNameType::class);
@@ -307,12 +277,6 @@ class MovieController extends AbstractController
         return $this->json(["message" => $message]);
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{_locale}/profile', name: 'profile_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
     public function getPersonInfos(Request $request, CallTmdbService $callTmdbService): JsonResponse
     {
@@ -325,12 +289,6 @@ class MovieController extends AbstractController
         return $this->json(['success' => true, 'person' => $person, 'department' => $department, 'locale' => $locale,]);
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{_locale}/imdb', name: 'imdb_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
     public function getPersonInfosOnIMDB(Request $request, CallImdbService $callImdbService, TranslatorInterface $translator): JsonResponse
     {

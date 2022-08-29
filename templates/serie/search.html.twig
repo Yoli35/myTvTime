@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    MyTvTime::{{ 'Series search'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ include('blocks/pageHeader.html.twig') }}
+    <div class="container">
+        <div class="series-search">
+            <div class="header">
+                <h1>{{ 'Series search'|trans }}</h1>
+                <div class="backdrop"></div>
+            </div>
+            {{ include('blocks/nav.html.twig', {thisPage: 'Series search'}) }}
+            <div class="search">
+                {{ form_start(form) }}
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                    {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
+                    {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
+                    {{ form_widget(form.save, { 'attr': {'class': 'btn btn-secondary'} }) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block morejs %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+
+            initHeader();
+        })
+
+        function initHeader() {
+            let ticking = false;
+            setH1();
+            window.addEventListener('resize', setH1);
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(function () {
+                        setH1();
+                        ticking = false;
+                    });
+                }
+                ticking = true;
+            });
+
+        }
+
+        function setH1() {
+            const header = document.querySelector(".header");
+            const h1 = document.querySelector("h1");
+            let left, ratio, top;
+            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
+            left = (header.clientWidth - h1.clientWidth) / 2;
+            top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
+            if (ratio < 0) ratio = 0;
+            if (ratio > 1) ratio = 1;
+            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+        }
+    </script>
+{% endblock %}

@@ -1,10 +1,10 @@
-let _app_serie_render_translation_field;
+let _app_serie_render_translation_fields;
 let _app_serie_render_translation_select;
 let _app_serie_render_translation_save;
 
 function initSerieStuff(paths) {
 
-    _app_serie_render_translation_field = paths[0];
+    _app_serie_render_translation_fields = paths[0];
     _app_serie_render_translation_select = paths[1];
     _app_serie_render_translation_save = paths[2];
 
@@ -26,11 +26,14 @@ function markMultiWatchProviders() {
 function translateKeywords() {
 
     const keywords = document.querySelector(".keywords");
-    const newKeywords = keywords.querySelectorAll(".new");
 
-    newKeywords.forEach(newKeyword => {
-        newKeyword.addEventListener("click", openModal);
-    })
+    if (keywords) {
+        const newKeywords = keywords.querySelectorAll(".new");
+
+        newKeywords.forEach(newKeyword => {
+            newKeyword.addEventListener("click", openModal);
+        })
+    }
 }
 
 function openModal() {
@@ -107,25 +110,27 @@ function initFields() {
     const modal = document.querySelector(".translationModal");
     const content = modal.querySelector(".trans-content");
     let index = 0;
+    let values = [];
 
     renderTranslationSelect(content);
 
     newKeywords.forEach((keyword) => {
-        let txt = keyword.getAttribute("data-original");
-        renderTranslationField(content, index++, txt);
-    })
+        values[index++] = keyword.getAttribute("data-original");
+    });
+    console.log({values});
+    renderTranslationFields(content,values);
 }
 
-function renderTranslationField(content, index, keyword) {
+function renderTranslationFields(content, keywords) {
 
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         let div = document.createElement("div");
-        div.classList.add("field");
+        div.classList.add("fields");
         div.innerHTML = this.response;
         content.appendChild(div);
     }
-    xhr.open("GET", _app_serie_render_translation_field + '?i=' + index + '&k=' + keyword);
+    xhr.open("GET", _app_serie_render_translation_fields + '?k=' + JSON.stringify(keywords));
     xhr.send();
 }
 

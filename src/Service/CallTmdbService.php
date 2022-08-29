@@ -39,71 +39,87 @@ class CallTmdbService
         return $response->getContent();
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function moviesByGenres($page, $genres, $locale): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/discover/movie?api_key=' . $this->api_key . '&language=' . $locale . '&sort_by=popularity.desc&include_adult=false&include_video=false&page=' . $page . '&with_genres=' . $genres . '&with_watch_monetization_types=flatrate'
-        );
-        return $response->getContent();
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/discover/movie?api_key=' . $this->api_key . '&language=' . $locale . '&sort_by=popularity.desc&include_adult=false&include_video=false&page=' . $page . '&with_genres=' . $genres . '&with_watch_monetization_types=flatrate'
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function moviesByDate($page, $date, $locale): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/discover/movie?api_key=' . $this->api_key . '&language=' . $locale . '&sort_by=popularity.desc&include_adult=false&include_video=false&page=' . $page . '&primary_release_year=' . $date . '&with_watch_monetization_types=flatrate'
-        );
-        return $response->getContent();
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/discover/movie?api_key=' . $this->api_key . '&language=' . $locale . '&sort_by=popularity.desc&include_adult=false&include_video=false&page=' . $page . '&primary_release_year=' . $date . '&with_watch_monetization_types=flatrate'
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function moviesSearch($page, $query, $year, $locale): ?string
     {
-        if ($year != 'none') {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/search/movie?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . '&query=' . $query . '&year=' . $year . '&include_adult=false'
-            );
-        } else {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/search/movie?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . '&query=' . $query . '&include_adult=false'
-            );
+        try {
+            if (strlen($year)) {
+                $response = $this->client->request(
+                    'GET',
+                    'https://api.themoviedb.org/3/search/movie?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . '&query=' . $query . '&year=' . $year . '&include_adult=false'
+                );
+            } else {
+                $response = $this->client->request(
+                    'GET',
+                    'https://api.themoviedb.org/3/search/movie?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . '&query=' . $query . '&include_adult=false'
+                );
+            }
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
         }
-        return $response->getContent();
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function getGenres($locale): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/genre/movie/list?api_key=' . $this->api_key . '&language=' . $locale
-        );
-        return $response->getContent();
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/genre/movie/list?api_key=' . $this->api_key . '&language=' . $locale
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
     }
 
     public function getMovie($movieId, $locale): ?string
@@ -116,26 +132,32 @@ class CallTmdbService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
+                dump($e);
                 return "";
             }
         } catch (Throwable $e) {
+            dump($e);
             return "";
         }
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function getMovieCollection($collectionId, $locale): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/collection/' . $collectionId . '?api_key=' . $this->api_key . '&language=' . $locale,
-        );
-        return $response->getContent();
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/collection/' . $collectionId . '?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
     }
 
     public function getMovieCredits($movieId, $locale): ?string
@@ -149,9 +171,11 @@ class CallTmdbService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
+                dump($e);
                 return $noCredits;
             }
         } catch (Throwable $e) {
+            dump($e);
             return $noCredits;
         }
     }
@@ -232,12 +256,12 @@ class CallTmdbService
         }
     }
 
-    public function getPopular($page, $locale): ?string
+    public function search($page, $query, $year, $locale): ?string
     {
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/tv/popular?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page,
+                'https://api.themoviedb.org/3/search/tv?api_key=' . $this->api_key . '&page=' . $page . '&language=' . $locale . '&query=' . $query . '&include_adult=false' . ($year ? ('&first_air_date_year=' . $year):''),
             );
             try {
                 return $response->getContent();
@@ -251,12 +275,12 @@ class CallTmdbService
         }
     }
 
-    public function getTopRated($page, $locale): ?string
+    public function getLatest($locale): ?string
     {
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/tv/top_rated?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page,
+                'https://api.themoviedb.org/3/tv/latest?api_key=' . $this->api_key . '&language=' . $locale,
             );
             try {
                 return $response->getContent();
@@ -270,34 +294,61 @@ class CallTmdbService
         }
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
+    public function getSeries($kind, $page, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $kind . '?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                dump($exception->getMessage(), $exception->getCode());
+                return "";
+            }
+        } catch (Throwable $exception) {
+            dump($exception->getMessage(), $exception->getCode());
+            return "";
+        }
+    }
+
     public function getTvSeason($tvId, $seasonNumber, $locale): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '?api_key=' . $this->api_key . '&language=' . $locale,
-        );
-        return $response->getContent();
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function getTvEpisode($tvId, $seasonNumber, $episodeNumber, $locale): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '/episode/' . $episodeNumber . '?api_key=' . $this->api_key . '&language=' . $locale,
-        );
-        return $response->getContent();
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '/episode/' . $episodeNumber . '?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
     }
 
     public function getMovieRecommendations($movieId, $locale): ?string
@@ -311,16 +362,18 @@ class CallTmdbService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
+                dump($e);
                 return $zeroRecommandations;
             }
         } catch (Throwable $e) {
+            dump($e);
             return $zeroRecommandations;
         }
     }
 
     public function getMovieReleaseDates($movieId): ?string
     {
-        $noReleaseDates = json_encode([  "id" => $movieId,  "results" => []]);
+        $noReleaseDates = json_encode(["id" => $movieId, "results" => []]);
         try {
             $response = $this->client->request(
                 'GET',
@@ -329,9 +382,11 @@ class CallTmdbService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
+                dump($e);
                 return $noReleaseDates;
             }
         } catch (Throwable $e) {
+            dump($e);
             return $noReleaseDates;
         }
     }
@@ -347,9 +402,11 @@ class CallTmdbService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
+                dump($e);
                 return $noCountries;
             }
         } catch (Throwable $e) {
+            dump($e);
             return $noCountries;
         }
     }

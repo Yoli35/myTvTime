@@ -1,4 +1,8 @@
-<div class="translation">
-    <label for="translated-{{ index }}">{{ keyword }}</label>
-    <input id="translated-{{ index }}" type="text" data-original="{{ keyword }}" value="{{ keyword }}">
-</div>
+{% for keyword in keywords %}
+    <div class="field">
+        <div class="translation">
+            <label for="translated-{{ loop.index }}">{{ keyword }}</label>
+            <input id="translated-{{ loop.index }}" type="text" data-original="{{ keyword }}" value="{{ keyword }}">
+        </div>
+    </div>
+{% endfor %}

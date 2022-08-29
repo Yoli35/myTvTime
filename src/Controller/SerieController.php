@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Network;
 use App\Entity\Serie;
 use App\Entity\User;
+use App\Form\SerieSearchType;
 use App\Form\SerieType;
 use App\Repository\NetworkRepository;
 use App\Repository\SerieRepository;
@@ -27,7 +28,11 @@ class SerieController extends AbstractController
     const PER_PAGE_ARRAY = [1 => 10, 2 => 20, 3 => 50, 4 => 100];
     const MY_SERIES = 'my_series';
     const POPULAR = 'popular';
-    const TO_RATED = 'top_rated';
+    const TOP_RATED = 'top_rated';
+    const AIRING_TODAY = 'airing_today';
+    const ON_THE_AIR = 'on_the_air';
+    const LATEST = 'latest';
+    const SEARCH = 'search';
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
     public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
@@ -36,8 +41,8 @@ class SerieController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $settingsChanged = $request->query->getInt('s', 0);
-        $backFromDetail = $request->query->getInt('b', 0);
+        $settingsChanged = $request->query->getInt('s');
+        $backFromDetail = $request->query->getInt('b');
         $page = $request->query->getInt('p', 1);
         $perPage = $request->query->getInt('pp', 20);
         $orderBy = $request->query->getAlpha('ob', 'firstDateAir');
@@ -78,26 +83,78 @@ class SerieController extends AbstractController
         ]);
     }
 
+    #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['POST'])]
+    public function search(Request $request, int $page, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
+        $series = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
+        $query = $request->query->get('query', '');
+        $year = $request->query->get('year', '');
+
+        $form = $this->createForm(SerieSearchType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $form->getData();
+            $query = $result['query'];
+            $year = $result['year'];
+            $page = 1;
+        }
+        if ($query && strlen($query)) {
+            $standing = $tmdbService->search($page, $query, $year, $request->getLocale());
+            dump($page, $query, $year);
+            $series = json_decode($standing, true);
+            dump('results', $series);
+        }
+        return $this->render('serie/search.html.twig', [
+            'form' => $form->createView(),
+            'query' => $query,
+            'year' => $year,
+            'series' => $series['results'],
+            'mySerieIds' => $this->mySerieIds($serieRepository),
+            'user' => $this->getUser(),
+            'imageConfig' => $imageConfiguration->getConfig(),
+        ]);
+    }
+
     #[Route('/popular', name: 'app_serie_popular', methods: ['GET'])]
     public function popular(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
-        $page = $request->query->getInt('p', 1);
-        $locale = $request->getLocale();
-        $standing = $tmdbService->getPopular($page, $locale);
-        $popular = json_decode($standing, true);
-
-        return $this->render('serie/popular.html.twig', $this->renderParams(self::POPULAR, $page, $popular, $serieRepository, $imageConfiguration));
+        return $this->series(self::POPULAR, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
     #[Route('/top/rated', name: 'app_serie_top_rated', methods: ['GET'])]
     public function topRated(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
+        return $this->series(self::TOP_RATED, $request, $tmdbService, $serieRepository, $imageConfiguration);
+    }
+
+    #[Route('/airing/today', name: 'app_serie_airing_today', methods: ['GET'])]
+    public function topAiringToday(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
+        return $this->series(self::AIRING_TODAY, $request, $tmdbService, $serieRepository, $imageConfiguration);
+    }
+
+    #[Route('/on/the/air', name: 'app_serie_on_the_air', methods: ['GET'])]
+    public function topOnTheAir(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
+        return $this->series(self::ON_THE_AIR, $request, $tmdbService, $serieRepository, $imageConfiguration);
+    }
+
+    public function series($kind, Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
         $page = $request->query->getInt('p', 1);
         $locale = $request->getLocale();
-        $standing = $tmdbService->getTopRated($page, $locale);
-        $topRated = json_decode($standing, true);
+        $standing = "";
+//        switch ($kind) {
+//            case self::POPULAR:         $standing = $tmdbService->getPopular($page, $locale); break;
+//            case self::TOP_RATED:       $standing = $tmdbService->getTopRated($page, $locale); break;
+//            case self::ON_THE_AIR:      $standing = $tmdbService->getOnTheAir($page, $locale); break;
+//            case self::AIRING_TODAY:    $standing = $tmdbService->getAiringToday($page, $locale); break;
+//        }
+        $standing = $tmdbService->getSeries($kind, $page, $locale);
+        $series = json_decode($standing, true);
+        dump($series);
 
-        return $this->render('serie/popular.html.twig', $this->renderParams(self::TO_RATED, $page, $topRated, $serieRepository, $imageConfiguration));
+        return $this->render('serie/popular.html.twig', $this->renderParams($kind, $page, $series, $serieRepository, $imageConfiguration));
     }
 
     public function renderParams($from, $page, $series, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): array
@@ -277,7 +334,7 @@ class SerieController extends AbstractController
         return $ks;
     }
 
-    #[Route('/{id}', name: 'app_serie_show', methods: ['GET'])]
+    #[Route('/show/{id}', name: 'app_serie_show', methods: ['GET'])]
     public function show(Request $request, Serie $serie, CallTmdbService $tmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $page = $request->query->getInt('p', 1);
@@ -324,6 +381,21 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTv($id, $request->getLocale());
         $tv = json_decode($standing, true);
 
+        return $this->getSerie($tv, $page, $from, $request, $tmdbService, $serieRepository, $imageConfiguration);
+    }
+
+    #[Route('/latest/serie', name: 'app_serie_latest', methods: ['GET'])]
+    public function latest(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
+        $standing = $tmdbService->getLatest($request->getLocale());
+        $tv = json_decode($standing, true);
+        dump($tv);
+        return $this->getSerie($tv, 0, self::LATEST, $request, $tmdbService, $serieRepository, $imageConfiguration);
+    }
+
+    public function getSerie($tv, $page, $from, $request, $tmdbService, $serieRepository, $imageConfiguration): Response
+    {
+        $id = $tv['id'];
         $standing = $tmdbService->getTvCredits($id, $request->getLocale());
         $credits = json_decode($standing, true);
 
@@ -356,6 +428,7 @@ class SerieController extends AbstractController
             'user' => $this->getUser(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
+
     }
 
     public function mySerieIds(SerieRepository $serieRepository): array
@@ -389,7 +462,7 @@ class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_serie_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_serie_delete', methods: ['POST'])]
     public function delete(Request $request, Serie $serie, SerieRepository $serieRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $serie->getId(), $request->request->get('_token'))) {
@@ -399,14 +472,13 @@ class SerieController extends AbstractController
         return $this->redirectToRoute('app_serie_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/render/translation/field', name: 'app_serie_render_translation_field', methods: ['GET'])]
-    public function renderTranslationField(Request $request): Response
+    #[Route('/render/translation/fields', name: 'app_serie_render_translation_fields', methods: ['GET'])]
+    public function renderTranslationFields(Request $request): Response
     {
-        $index = $request->query->getInt('i');
-        $keyword = $request->query->get('k');
+        $keywords = json_decode($request->query->get('k'), true);
+
         return $this->render('blocks/serie/translationField.html.twig', [
-            'index' => $index,
-            'keyword' => $keyword
+            'keywords' => $keywords
         ]);
     }
 
@@ -419,23 +491,20 @@ class SerieController extends AbstractController
     }
 
     #[Route('/render/translation/save', name: 'app_serie_render_translation_save', methods: ['GET'])]
-    public function renderTranslationSave(Request $request): Response
+    public function translationSave(Request $request): Response
     {
         $translations = json_decode($request->query->get('t'), true);
-        dump($translations);
         $n = count($translations);
 
         $filename = '../translations/tags.' . $translations[0][1] . '.yaml';
-        dump($filename);
         $res = fopen($filename, 'a+');
 
-        for ($i=1; $i<$n;$i++) {
-            $line = $translations[$i][0] . ': ' . $translations[$i][1]. "\n";
-            dump($line);
+        for ($i = 1; $i < $n; $i++) {
+            $line = $translations[$i][0] . ': ' . $translations[$i][1] . "\n";
             fputs($res, $line);
         }
         fclose($res);
 
-        return $this->json(["result" => ($n-1) . " ligne".(($n-1)>1?"s":"")." ajoutée".(($n-1)>1?"s":"")." au fichier « tags." . $translations[0][1] . ".yaml »." ]);
+        return $this->json(["result" => ($n - 1) . " ligne" . (($n - 1) > 1 ? "s" : "") . " ajoutée" . (($n - 1) > 1 ? "s" : "") . " au fichier « tags." . $translations[0][1] . ".yaml »."]);
     }
 }

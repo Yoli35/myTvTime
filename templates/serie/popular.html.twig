@@ -3,9 +3,14 @@
 {% block title %}
     {% if from == 'popular' %}
         MyTvTime::{{ 'Popular Series'|trans }}
-    {% endif %}
-    {% if from == 'top_rated' %}
+    {% elseif from == 'top_rated' %}
         MyTvTime::{{ 'Top rated Series'|trans }}
+    {% elseif from == 'airing_today' %}
+        MyTvTime::{{ 'Series Airing Today'|trans }}
+    {% elseif from == 'on_the_air' %}
+        MyTvTime::{{ 'Series On The Air'|trans }}
+    {% elseif from == 'latest' %}
+        MyTvTime::{{ 'Latest Series'|trans }}
     {% endif %}
 {% endblock %}
 
@@ -16,18 +21,28 @@
             <div class="header">
                 {% if from == 'popular' %}
                     <h1>{{ 'Popular Series'|trans }}</h1>
-                {% endif %}
-                {% if from == 'top_rated' %}
+                {% elseif from == 'top_rated' %}
                     <h1>{{ 'Top rated Series'|trans }}</h1>
+                {% elseif from == 'airing_today' %}
+                    <h1>{{ 'Series Airing Today'|trans }}</h1>
+                {% elseif from == 'on_the_air' %}
+                    <h1>{{ 'Series On The Air'|trans }}</h1>
+                {% elseif from == 'latest' %}
+                    <h1>{{ 'Latest Series'|trans }}</h1>
                 {% endif %}
                 <div class="backdrop"></div>
             </div>
 
             {% if from == 'popular' %}
                 {{ include('blocks/nav.html.twig', {thisPage: 'Popular Series'}) }}
-            {% endif %}
-            {% if from == 'top_rated' %}
+            {% elseif from == 'top_rated' %}
                 {{ include('blocks/nav.html.twig', {thisPage: 'Top rated Series'}) }}
+            {% elseif from == 'airing_today' %}
+                {{ include('blocks/nav.html.twig', {thisPage: 'Series Airing Today'}) }}
+            {% elseif from == 'on_the_air' %}
+                {{ include('blocks/nav.html.twig', {thisPage: 'Series On The Air'}) }}
+            {% elseif from == 'latest' %}
+                {{ include('blocks/nav.html.twig', {thisPage: 'Latest Series'}) }}
             {% endif %}
 
             <main>

@@ -6,7 +6,9 @@ First group: Groupe d'outil de recherche
 French: Français
 Genre: Genre
 German: Allemand
+Latest Serie: Dernière série
 Logout: Déconnexion
+Movie: film
 Movies: Films
 My Account: Mon compte
 My Movie Collections: Mes Collections de films
@@ -20,6 +22,8 @@ Search by Date: Recherche par date
 Search by Genre: Recherche par genre
 Search by Name: Recherche par nom
 Series: Séries
+Series Airing Today: Séries diffusées aujourd'hui
+Series On The Air: Série en cours de diffusion
 Spanish: Espagnol
 Toolbar with button groups: Barre d'outil de la recherche de film
 Top rated Series: Séries les mieux notées
@@ -242,6 +246,10 @@ Keywords: Mots clé
 # seasons
 episodes: épisodes
 The season season_number of serie_name aired from season_air_date.: La saison season_number de serie_name a été diffusée à partir du season_air_date.
+# search
+Enter a Serie name: Enter le nom d'une série
+Enter a year: Préciser une année
+Series search: Rechercher une série
 
 # Serie Genres
 #Action: Action

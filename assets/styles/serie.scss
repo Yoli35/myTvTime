@@ -692,31 +692,40 @@
             }
 
             .trans-content {
-                @include flex-col(flex-start, flex-start);
-                border-bottom: 1px solid var(--gradiant-ardoise-50);
-                max-height: 38em;
-                margin: 1em 2em;
-                overflow: scroll;
-                width: calc(100% - 4em);
+                width: 100%;
 
                 .language {
                     @include flex-100();
-                    margin: 1em 0;
+                    margin-top: 1em;
                 }
 
-                .field {
-                    width: 100%;
-                    .translation {
-                        @include flex-col(flex-start, flex-start);
-                        margin: .5em 1em;
-                        width: calc(100% - 4em);
+                .fields {
+                    @include flex-col(flex-start, flex-start);
+                    max-height: 38em;
+                    margin: 1em 2em;
+                    overflow: scroll;
+                    width: calc(100% - 4em);
 
-                        label {
-                            font-weight: 100;
-                        }
+                    .language {
+                        @include flex-100();
+                        margin: 1em 0;
+                    }
 
-                        input {
-                            width: 100%;
+                    .field {
+                        width: 100%;
+
+                        .translation {
+                            @include flex-col(flex-start, flex-start);
+                            margin: .5em 1em;
+                            width: calc(100% - 4em);
+
+                            label {
+                                font-weight: 100;
+                            }
+
+                            input {
+                                width: 100%;
+                            }
                         }
                     }
                 }
@@ -724,6 +733,7 @@
 
             .trans-footer {
                 @include flex-100(center, flex-end);
+                border-top: 1px solid var(--gradiant-ardoise-50);
                 padding: 1em;
                 width: 100%;
 
@@ -739,6 +749,24 @@
                 }
             }
         }
+    }
+}
+
+.series-search {
+
+    @include flex-col(flex-start, center);
+    padding-top: 1em;
+
+    .header {
+        @include animated-header("../images/serie-header.jpg");
+    }
+
+    .search {
+        @include flex-100();
+        background-color: var(--gradiant-ardoise-20);
+        border-radius: .5em;
+        margin: 1em 0;
+        padding-top: 1em;
     }
 }
 

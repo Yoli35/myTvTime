@@ -7,6 +7,7 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 class CallImdbService
 {
@@ -17,34 +18,42 @@ class CallImdbService
         $this->client = $client;
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function searchName($name): ?string
     {
+        try {
         $response = $this->client->request(
             'GET',
             'https://imdb-api.com/en/API/SearchName/k_twx0t466/'.$name,
         );
-        return $response->getContent();
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function getPerson($name, $locale): ?string
     {
+        try {
         $response = $this->client->request(
             'GET',
             'https://imdb-api.com/'.$locale.'/API/Name/k_twx0t466/'.$name,
         );
-        return $response->getContent();
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
     }
 }
 
