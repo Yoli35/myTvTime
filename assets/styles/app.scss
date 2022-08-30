@@ -129,20 +129,20 @@ main {
     .l3 {
         transform: translateY(.5em);
     }
-}
 
-.nav-toggler.active {
+    &.active {
 
-    .l1 {
-        transform: translateY(0) rotate(135deg);
-    }
+        .l1 {
+            transform: translateY(0) rotate(135deg);
+        }
 
-    .l2 {
-        opacity: 0;
-    }
+        .l2 {
+            opacity: 0;
+        }
 
-    .l3 {
-        transform: translateY(0) rotate(-135deg);
+        .l3 {
+            transform: translateY(0) rotate(-135deg);
+        }
     }
 }
 
@@ -339,6 +339,7 @@ nav.active {
             .menu-items {
                 background-color: var(--gradiant-ardoise-30);
                 border-radius: .25em;
+                box-shadow: 0 0 1em var(--gradiant-ardoise-10-alpha-20);
                 display: none;
                 left: -6em;
                 overflow: hidden;
@@ -652,7 +653,7 @@ h4 {
 
     .nav-menu {
         > a {
-            font-size: 2em;
+            font-size: 1.5em;
         }
     }
 

@@ -1,0 +1,27 @@
+<a href="{{ path('app_serie_tmdb', {'id': serie.id}) }}?p={{ pages.page }}&from={{ from }}&query={{ query }}&year={{ year }}">
+    <div class="serie" id="{{ serie.id }}">
+        {#        {% if serie.backdrop_path %} #}
+        {#            <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div> #}
+        {#        {% endif %} #}
+        <div class="poster">
+            {% if serie.poster_path|length %}
+                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ 'Poster' }}">
+            {% else %}
+                <img src="/images/default/no_poster_dark.png" alt="No poster">
+            {% endif %}
+        </div>
+        <div class="infos">
+            <div>{{ serie.name }}</div>
+            {% if serie.first_air_date is defined %}
+                <div>{{ 'First Air at'|trans }} : {{ serie.first_air_date ? serie.first_air_date|format_date() : '' }}</div>
+            {% endif %}
+            <div>{{ serie.vote_average }} / 10 - {{ serie.vote_count }} {{ 'votes' }}</div>
+            <div>{{ serie.overview }}</div>
+        </div>
+        {% if serie.id in mySerieIds.serieIds %}
+            <div class="seen"><i class="fa-solid fa-eye"></i></div>
+        {% else %}
+            <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
+        {% endif %}
+    </div>
+</a>

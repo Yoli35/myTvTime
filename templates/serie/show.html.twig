@@ -9,6 +9,8 @@
             MyTvTime::{{ 'Series Airaing Today'|trans }}::{{ serie.name }}
         {% elseif from == 'on_the_air' %}
             MyTvTime::{{ 'Series On The Air'|trans }}::{{ serie.name }}
+        {% elseif from == 'search' %}
+            MyTvTime::{{ 'Series search'|trans }}::{{ serie.name }}
         {% elseif from == 'latest' %}
             MyTvTime::{{ 'Latest Serie'|trans }}::{{ serie.name }}
         {% else %}
@@ -28,6 +30,8 @@
             {{ include('blocks/nav.html.twig', {parent: {page: 'Series Airing Today', url: path('app_serie_airing_today')~'?p='~page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'on_the_air' %}
             {{ include('blocks/nav.html.twig', {parent: {page: 'Series On The Air', url: path('app_serie_on_the_air')~'?p='~page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
+        {% elseif from == 'search' %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: page})~'?query='~query~'&year='~year~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'latest' %}
             {{ include('blocks/nav.html.twig', {thisPage: serie.name}) }}
         {% else %}
@@ -239,6 +243,24 @@
                                     {% for keyword in keywords.results %}
                                         <div class="keyword{% if keyword.name in missingTranslations %} new{% endif %}" data-original="{{ keyword.name }}">
                                             {{ keyword.name|trans({},'tags') }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if similar.results|length %}
+                            <div class="fact">
+                                <div class="label">{{ 'Similar Series'|trans }}</div>
+                                <div class="similar">
+                                    {% for serie in similar.results %}
+                                        <div class="poster">
+                                            {% if serie.poster_path|length %}
+                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
+                                            {% else %}
+                                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
+                                                <div class="name">{{ serie.name }}</div>
+                                            {% endif %}
                                         </div>
                                     {% endfor %}
                                 </div>

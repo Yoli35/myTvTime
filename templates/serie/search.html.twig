@@ -23,6 +23,25 @@
                 </div>
                 {{ form_end(form) }}
             </div>
+            {% if series|length %}
+                <div class="series">
+                    <div class="series-tools mobile">
+                        <div class="pages mobile">
+                            {{ include('blocks/serie/pagination-search.html.twig') }}
+                        </div>
+                    </div>
+                    <div class="wrapper">
+                        {% for serie in series %}
+                            {{ include('blocks/serie/card-search.html.twig') }}
+                        {% endfor %}
+                    </div>
+                    <div class="series-tools">
+                        <div class="pages">
+                            {{ include('blocks/serie/pagination-search.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>

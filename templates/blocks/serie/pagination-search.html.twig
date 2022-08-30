@@ -1,0 +1,21 @@
+<h2>{{ 'Pagination'|trans }}</h2>
+<div class="position">{{ 'Page'|trans }} {{ pages.page }} / {{ pages.paginator.total_pages }} - {{ pages.total_results }} {{ 'Series'|trans }}</div>
+<div class="page-group">
+    {% if pages.page > 1 %}
+        <div class="page"><a href="{{ path('app_serie_' ~ from, {page: pages.page-1}) }}?&query={{ query }}&year={{ year }}"><i class="fa-solid fa-arrow-left"></i></a></div>
+    {% endif %}
+    {% if pages.paginator.total_pages > 1 %}
+        {% for p in pages.paginator.first_link..pages.paginator.last_link %}
+            {% if p == pages.page %}
+                <div class="page current">
+                    <div>{{ p }}</div>
+                </div>
+            {% else %}
+                <div class="page"><a href="{{ path('app_serie_' ~ from, {page: p}) }}?query={{ query }}&year={{ year }}">{{ p }}</a></div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if pages.page < pages.paginator.total_pages %}
+        <div class="page"><a href="{{ path('app_serie_' ~ from, {page: pages.page+1}) }}?query={{ query }}&year={{ year }}"><i class="fa-solid fa-arrow-right"></i></a></div>
+    {% endif %}
+</div>

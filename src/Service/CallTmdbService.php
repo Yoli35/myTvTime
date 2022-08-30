@@ -256,6 +256,25 @@ class CallTmdbService
         }
     }
 
+    public function getTvSimilar($tvId): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $tvId . '/similar?api_key=' . $this->api_key,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                dump($exception->getMessage(), $exception->getCode());
+                return "";
+            }
+        } catch (Throwable $exception) {
+            dump($exception->getMessage(), $exception->getCode());
+            return "";
+        }
+    }
+
     public function search($page, $query, $year, $locale): ?string
     {
         try {

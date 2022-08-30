@@ -83,12 +83,12 @@ class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['POST'])]
+    #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
     public function search(Request $request, int $page, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $series = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
-        $query = $request->query->get('query', '');
-        $year = $request->query->get('year', '');
+        $query = $request->query->get('query');
+        $year = $request->query->get('year');
 
         $form = $this->createForm(SerieSearchType::class);
         $form->handleRequest($request);
@@ -110,7 +110,14 @@ class SerieController extends AbstractController
             'year' => $year,
             'series' => $series['results'],
             'mySerieIds' => $this->mySerieIds($serieRepository),
+            'pages' => [
+                'page' => $page,
+                'total_pages' => $series['total_pages'],
+                'total_results' => $series['total_results'],
+                'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
+            ],
             'user' => $this->getUser(),
+            'from' => self::SEARCH,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
     }
@@ -377,11 +384,13 @@ class SerieController extends AbstractController
     {
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::POPULAR);
+        $query = $request->query->get('query', "");
+        $year = $request->query->get('year', "");
 
         $standing = $tmdbService->getTv($id, $request->getLocale());
         $tv = json_decode($standing, true);
 
-        return $this->getSerie($tv, $page, $from, $request, $tmdbService, $serieRepository, $imageConfiguration);
+        return $this->getSerie($tv, $page, $from, $request, $tmdbService, $serieRepository, $imageConfiguration, $query, $year);
     }
 
     #[Route('/latest/serie', name: 'app_serie_latest', methods: ['GET'])]
@@ -393,7 +402,7 @@ class SerieController extends AbstractController
         return $this->getSerie($tv, 0, self::LATEST, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
-    public function getSerie($tv, $page, $from, $request, $tmdbService, $serieRepository, $imageConfiguration): Response
+    public function getSerie($tv, $page, $from, $request, $tmdbService, $serieRepository, $imageConfiguration, $query="", $year=""): Response
     {
         $id = $tv['id'];
         $standing = $tmdbService->getTvCredits($id, $request->getLocale());
@@ -405,11 +414,15 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getTvWatchProviders($id);
         $temp = json_decode($standing, true);
+        dump($temp);
         if (array_key_exists('FR', $temp['results'])) {
             $watchProviders = json_decode($standing, true)['results']['FR'];
         } else {
             $watchProviders = null;
         }
+        $standing = $tmdbService->getTvSimilar($id);
+        $similar = json_decode($standing, true);
+        dump($similar);
 
         $mySerieIds = $this->mySerieIds($serieRepository);
         $index = array_search($id, $mySerieIds['serieIds']);
@@ -422,9 +435,12 @@ class SerieController extends AbstractController
             'keywords' => $keywords,
             'missingTranslations' => $missingTranslations,
             'watchProviders' => $watchProviders,
+            'similar' => $similar,
             'locale' => $request->getLocale(),
             'page' => $page,
             'from' => $from,
+            'query' => $query,
+            'year' => $year,
             'user' => $this->getUser(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
