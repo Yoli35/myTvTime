@@ -3,6 +3,7 @@ let _user_id;
 let _locale;
 let _personal_movies_export, _json_ids, _personal_movie_add, _json_cleanup, _json_sample, _movie_page, _movies_more;
 let _url;
+let _app_collection_display;
 
 // more videos variables
 let userMovieList, total_videos, displayed_videos, more_video_controller, loading_more_videos, nav_to_top, nav_to_top_visible;
@@ -18,6 +19,7 @@ function initButtons(id, locale, paths, url) {
     _json_sample = paths[4];
     _movie_page = paths[5].substring(0, paths[5].length - 1);
     _movies_more = paths[6];
+    _app_collection_display = paths[7].substring(0, paths[7].length - 1);
     _url = url;
 
     const userMovieLink = document.querySelector('#query');
@@ -500,13 +502,20 @@ function moreVideos() {
                         collections.classList.add("my-collections");
                         for (let i=0;i<result['my_collections'].length;i++) {
                             let c = result['my_collections'][i];
+
                             let collection = document.createElement("div");
                             collection.classList.add("my-collection");
+
+                            let aCollection = document.createElement("a");
+                            aCollection.setAttribute("href", _app_collection_display + c['id'].toString());
+
                             let thumbnail = document.createElement("img");
                             thumbnail.setAttribute("src", '/images/collections/thumbnails/' + c['thumbnail']);
                             thumbnail.setAttribute("alt", c['title']);
                             thumbnail.setAttribute("style", "border: 2px solid " + c['color']);
-                            collection.appendChild(thumbnail);
+
+                            aCollection.appendChild(thumbnail);
+                            collection.appendChild(aCollection);
                             collections.appendChild(collection);
                         }
                         newVideo.appendChild(collections);

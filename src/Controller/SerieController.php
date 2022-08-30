@@ -359,6 +359,9 @@ class SerieController extends AbstractController
         $keywords = json_decode($standing, true);
         $missingTranslations = $this->keywordsTranslation($keywords, $request->getLocale());
 
+        $standing = $tmdbService->getTvSimilar($serie->getSerieId());
+        $similar = json_decode($standing, true);
+
         $standing = $tmdbService->getTvWatchProviders($serie->getSerieId());
         $temp = json_decode($standing, true);
         if (array_key_exists('FR', $temp['results'])) {
@@ -373,6 +376,7 @@ class SerieController extends AbstractController
             'keywords' => $keywords,
             'missingTranslations' => $missingTranslations,
             'watchProviders' => $watchProviders,
+            'similar' => $similar,
             'locale' => $request->getLocale(),
             'page' => $page,
             'from' => $from,
