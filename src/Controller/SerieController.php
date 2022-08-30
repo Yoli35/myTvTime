@@ -270,27 +270,29 @@ class SerieController extends AbstractController
                 $serie->addUser($user);
                 $serieRepository->add($serie, true);
 
-                $card = $this->render('blocks/serie/card.html.twig', [
-                    'serie' => $serie,
-                    'pages' => [
-                        'page' => $page
-                    ],
-                    'from' => $from,
-                    'imageConfig' => $imageConfiguration->getConfig()]);
-
-                if ($from == self::MY_SERIES) {
-                    $totalResults = $serieRepository->count([]);
-                    $pagination = $this->render('blocks/serie/pagination.html.twig', [
+                if ($from != 'serie' && $from != 'search') {
+                    $card = $this->render('blocks/serie/card.html.twig', [
+                        'serie' => $serie,
                         'pages' => [
-                            'total_results' => $totalResults,
-                            'page' => $page,
-                            'per_page' => $perPage,
-                            'link_count' => self::LINK_COUNT,
-                            'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
-                            'per_page_values' => self::PER_PAGE_ARRAY,
-                            'order_by' => $orderBy,
-                            'order' => $order],
-                    ]);
+                            'page' => $page
+                        ],
+                        'from' => $from,
+                        'imageConfig' => $imageConfiguration->getConfig()]);
+
+                    if ($from == self::MY_SERIES) {
+                        $totalResults = $serieRepository->count([]);
+                        $pagination = $this->render('blocks/serie/pagination.html.twig', [
+                            'pages' => [
+                                'total_results' => $totalResults,
+                                'page' => $page,
+                                'per_page' => $perPage,
+                                'link_count' => self::LINK_COUNT,
+                                'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
+                                'per_page_values' => self::PER_PAGE_ARRAY,
+                                'order_by' => $orderBy,
+                                'order' => $order],
+                        ]);
+                    }
                 }
 
 //                $standing = $tmdbService->getTvKeywords($serieId, $request->getLocale());

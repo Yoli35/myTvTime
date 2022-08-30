@@ -129,9 +129,9 @@
                 </div>
                 {% if index is defined %}
                     {% if index %}
-                        <div class="seen"><i class="fa-solid fa-eye"></i></div>
+                        <div class="seen" data-id="{{ serie.id }}"><i class="fa-solid fa-eye"></i></div>
                     {% else %}
-                        <div class="add"><i class="fa-solid fa-circle-plus"></i></div>
+                        <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
                     {% endif %}
                 {% endif %}
             </div>
@@ -292,6 +292,7 @@
             "{{ path('app_serie_render_translation_fields') }}",
             "{{ path('app_serie_render_translation_select') }}",
             "{{ path('app_serie_render_translation_save') }}",
+            "{{ path('app_serie_new') }}"
         ];
 
         window.addEventListener("DOMContentLoaded", () => {

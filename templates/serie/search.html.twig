@@ -48,6 +48,7 @@
 {% endblock %}
 
 {% block morejs %}
+{#
     <script>
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -82,5 +83,20 @@
             if (ratio > 1) ratio = 1;
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
         }
+    </script>
+#}
+    <script src="/js/serie.js"></script>
+    <script>
+        const paths = [
+            "{{ path('app_serie_render_translation_fields') }}",
+            "{{ path('app_serie_render_translation_select') }}",
+            "{{ path('app_serie_render_translation_save') }}",
+            "{{ path('app_serie_new') }}"
+        ];
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            initSerieStuff(paths);
+        })
     </script>
 {% endblock %}

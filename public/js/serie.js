@@ -1,13 +1,16 @@
 let _app_serie_render_translation_fields;
 let _app_serie_render_translation_select;
 let _app_serie_render_translation_save;
+let _app_serie_new;
 
 function initSerieStuff(paths) {
 
     _app_serie_render_translation_fields = paths[0];
     _app_serie_render_translation_select = paths[1];
     _app_serie_render_translation_save = paths[2];
+    _app_serie_new = paths[3]
 
+    initAddSerie();
     markMultiWatchProviders();
     translateKeywords();
 }
@@ -21,6 +24,12 @@ function markMultiWatchProviders() {
         arrow.classList.add("d-flex");
         arrow.innerHTML = "+" + (providers.length - 1);
     }
+}
+
+function initAddSerie() {
+    document.querySelectorAll(".add").forEach(add => {
+        add.addEventListener("click", addSerie);
+    })
 }
 
 function translateKeywords() {
@@ -118,7 +127,7 @@ function initFields() {
         values[index++] = keyword.getAttribute("data-original");
     });
     console.log({values});
-    renderTranslationFields(content,values);
+    renderTranslationFields(content, values);
 }
 
 function renderTranslationFields(content, keywords) {
@@ -144,5 +153,35 @@ function renderTranslationSelect(content) {
         content.appendChild(div);
     }
     xhr.open("GET", _app_serie_render_translation_select);
+    xhr.send();
+}
+
+
+function addSerie(evt) {
+    const addButton = evt.currentTarget;
+    let value = addButton.getAttribute("data-id");
+
+    evt.preventDefault();
+
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        let data;
+        if (this.response.slice(0, 1) === '<') {
+            data = this.response;
+        } else {
+            data = JSON.parse(this.response);
+            if (data.status === 'Ok') {
+                addButton.classList.remove("add");
+                addButton.classList.add("seen");
+                addButton.innerHTML = "<i class=\"fa-solid fa-eye\"></i>"
+            }
+
+            if (data.status === "Ko") {
+                alert("{{ 'Serie not found'|trans }} (ID: " + data.id + ")");
+            }
+        }
+        console.log({data});
+    }
+    xhr.open("GET", _app_serie_new + '?value=' + value + "&from=serie");
     xhr.send();
 }
