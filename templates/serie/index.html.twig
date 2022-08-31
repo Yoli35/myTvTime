@@ -3,11 +3,15 @@
 {% block title %}MyTvTime::{{ 'My Series'|trans }}{% endblock %}
 
 {% block body %}
+    {{ dump(quote) }}
     {{ include('blocks/pageHeader.html.twig') }}
     <div class="container">
         <div class="my-series">
             <div class="header">
                 <h1>{{ 'My Series'|trans }}</h1>
+                {% if quote is defined %}
+                    <div class="quote"><div>{{ quote }}</div></div>
+                {% endif %}
                 <div class="backdrop"></div>
             </div>
 

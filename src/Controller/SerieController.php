@@ -11,6 +11,7 @@ use App\Repository\NetworkRepository;
 use App\Repository\SerieRepository;
 use App\Service\CallTmdbService;
 use App\Service\ImageConfiguration;
+use App\Service\QuoteService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +36,7 @@ class SerieController extends AbstractController
     const SEARCH = 'search';
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
-    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, QuoteService $quoteService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
@@ -79,6 +80,7 @@ class SerieController extends AbstractController
                 'order_by' => $orderBy,
                 'order' => $order],
             'user' => $user,
+            'quote' => (new \App\Service\QuoteService)->getARandomQuote(),
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
@@ -118,6 +120,7 @@ class SerieController extends AbstractController
                 'total_results' => $series['total_results'],
                 'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
             ],
+            'quote' => (new \App\Service\QuoteService)->getARandomQuote(),
             'user' => $this->getUser(),
             'from' => self::SEARCH,
             'imageConfig' => $imageConfiguration->getConfig(),
