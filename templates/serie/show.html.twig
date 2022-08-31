@@ -35,7 +35,7 @@
         {% elseif from == 'latest' %}
             {{ include('blocks/nav.html.twig', {thisPage: serie.name}) }}
         {% else %}
-            {{ include('blocks/nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~page~'&b=1#'~backId}, thisPage: serie.name}) }}
         {% endif %}
 
         <div class="serie-page">
@@ -186,13 +186,15 @@
                                     </div>
                                     <div class="infos">
                                         <h4>{{ season.name }}</h4>
-                                        <div>{{ season.air_date|slice(0,4) }} | {{ season.episode_count }} {{ 'episodes'|trans }}</div>
+                                        <div>{% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}{{ season.episode_count }} {{ 'episodes'|trans }}</div>
                                         {% if season.overview|length %}
                                             <div>{{ season.overview }}</div>
                                         {% endif %}
-                                        <div>
-                                            {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
-                                        </div>
+                                        {% if season.air_date %}
+                                            <div>
+                                                {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}
@@ -260,6 +262,11 @@
                                             {% else %}
                                                 <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
                                                 <div class="name">{{ serie.name }}</div>
+                                            {% endif %}
+                                            {% if serie.id in serieIds %}
+                                                <div class="seen"><i class="fa-solid fa-eye"></i></div>
+                                            {% else %}
+                                                <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
                                             {% endif %}
                                         </div>
                                     {% endfor %}

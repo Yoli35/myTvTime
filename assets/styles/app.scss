@@ -1,6 +1,11 @@
 @import '~bootstrap/scss/bootstrap';
 @import "variables";
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding: 10em;
+}
+
 body {
     background: var(--mtt-body-bg);
     background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--mtt-body-bg-gradiant) 100%);

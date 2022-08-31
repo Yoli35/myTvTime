@@ -7,6 +7,10 @@
           <mappings>
             <mapping local="$PROJECT_DIR$" web="public" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/vendor" />
+            <excludedPath local="true" path="$PROJECT_DIR$/tests" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>

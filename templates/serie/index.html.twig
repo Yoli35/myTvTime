@@ -30,6 +30,9 @@
                             <div class="pages">
                                 {{ include('blocks/serie/pagination.html.twig') }}
                             </div>
+                            <div class="numbers">
+                                {{ numbers.episodes }} {{ 'episodes'|trans }} / {{ numbers.seasons }} {{ 'seasons'|trans }}
+                            </div>
                             <div class="add-serie">
                                 <h2>{{ 'Add'|trans }}</h2>
 

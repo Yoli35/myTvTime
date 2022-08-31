@@ -665,6 +665,8 @@
                     .similar {
                         @include flex-100();
                         flex-wrap: wrap;
+                        max-height: 50em;
+                        overflow: scroll;
 
                         .poster {
                             position: relative;
@@ -683,6 +685,14 @@
                                 padding: .5em;
                                 text-align: center;
                                 width: 100%;
+                            }
+
+                            .add {
+                                @include seen(var(--serie-add), 1.5em);
+                            }
+
+                            .seen {
+                                @include seen(var(--serie-seen), 1.5em);
                             }
                         }
                     }
@@ -907,13 +917,21 @@
                     }
                 }
 
+
+                .numbers {
+                    font-weight: 100;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
+
                 .add-serie {
                     .help {
                         display: block;
                     }
                 }
 
-                .pages, .add-serie {
+                .pages, .numbers, .add-serie {
+                    background-color: var(--gradiant-ardoise-80);
                     border: 1em;
                     border-radius: .5em;
                     margin-bottom: 1em;
@@ -1009,7 +1027,7 @@
             }
 
             .series-tools {
-                .add-serie, .settings {
+                .add-serie, .numbers, .settings {
                     background-color: var(--gradiant-ardoise-30);
                 }
 

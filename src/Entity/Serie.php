@@ -43,6 +43,12 @@ class Serie
     #[ORM\ManyToMany(targetEntity: Network::class)]
     private Collection $networks;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $numberOfEpisodes = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $numberOfSeasons = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -183,6 +189,30 @@ class Serie
     public function removeNetwork(Network $network): self
     {
         $this->networks->removeElement($network);
+
+        return $this;
+    }
+
+    public function getNumberOfEpisodes(): ?int
+    {
+        return $this->numberOfEpisodes;
+    }
+
+    public function setNumberOfEpisodes(?int $numberOfEpisodes): self
+    {
+        $this->numberOfEpisodes = $numberOfEpisodes;
+
+        return $this;
+    }
+
+    public function getNumberOfSeasons(): ?int
+    {
+        return $this->numberOfSeasons;
+    }
+
+    public function setNumberOfSeasons(?int $numberOfSeasons): self
+    {
+        $this->numberOfSeasons = $numberOfSeasons;
 
         return $this;
     }

@@ -70,6 +70,14 @@ class SerieRepository extends ServiceEntityRepository
         ;
     }
 
+    public function numbers(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select("sum(s.numberOfEpisodes) episodes, sum(s.numberOfSeasons) seasons")
+            ->getQuery()
+            ->getResult();
+    }
+
 //    public function findOneBySomeField($value): ?Serie
 //    {
 //        return $this->createQueryBuilder('s')

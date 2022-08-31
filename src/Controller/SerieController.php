@@ -68,6 +68,7 @@ class SerieController extends AbstractController
 
         return $this->render('serie/index.html.twig', [
             'series' => $results,
+            'numbers' => $serieRepository->numbers()[0],
             'pages' => [
                 'total_results' => $totalResults,
                 'page' => $page,
@@ -253,6 +254,8 @@ class SerieController extends AbstractController
                 $serie->setBackdropPath($tv['backdrop_path']);
                 $serie->setOverview($tv['overview']);
                 $serie->setSerieId($tv['id']);
+                $serie->setNumberOfSeasons($tv['number_of_seasons']);
+                $serie->setNumberOfEpisodes($tv['number_of_episodes']);
                 $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
 
                 foreach ($tv['networks'] as $network) {
@@ -344,15 +347,19 @@ class SerieController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'app_serie_show', methods: ['GET'])]
-    public function show(Request $request, Serie $serie, CallTmdbService $tmdbService, ImageConfiguration $imageConfiguration): Response
+    public function show(Request $request, Serie $serie, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::MY_SERIES);
+        $query = $request->query->get('query', "");
+        $year = $request->query->get('year', "");
 
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
         $tv = json_decode($standing, true);
 
-        $standing = $tmdbService->getTvCredits($serie->getSerieId(), $request->getLocale());
+        return $this->getSerie($tv, $page, $from, $serie->getId(), $request, $tmdbService, $serieRepository, $imageConfiguration, $query, $year);
+
+/*        $standing = $tmdbService->getTvCredits($serie->getSerieId(), $request->getLocale());
         $credits = json_decode($standing, true);
 
         $standing = $tmdbService->getTvKeywords($serie->getSerieId(), $request->getLocale());
@@ -382,7 +389,7 @@ class SerieController extends AbstractController
             'from' => $from,
             'user' => $this->getUser(),
             'imageConfig' => $imageConfiguration->getConfig(),
-        ]);
+        ]);*/
     }
 
     #[Route('/tmdb/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
@@ -396,7 +403,7 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTv($id, $request->getLocale());
         $tv = json_decode($standing, true);
 
-        return $this->getSerie($tv, $page, $from, $request, $tmdbService, $serieRepository, $imageConfiguration, $query, $year);
+        return $this->getSerie($tv, $page, $from, $id, $request, $tmdbService, $serieRepository, $imageConfiguration, $query, $year);
     }
 
     #[Route('/latest/serie', name: 'app_serie_latest', methods: ['GET'])]
@@ -408,7 +415,7 @@ class SerieController extends AbstractController
         return $this->getSerie($tv, 0, self::LATEST, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
-    public function getSerie($tv, $page, $from, $request, $tmdbService, $serieRepository, $imageConfiguration, $query="", $year=""): Response
+    public function getSerie($tv, $page, $from, $backId, $request, $tmdbService, $serieRepository, $imageConfiguration, $query="", $year=""): Response
     {
         $id = $tv['id'];
         $standing = $tmdbService->getTvCredits($id, $request->getLocale());
@@ -420,7 +427,6 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getTvWatchProviders($id);
         $temp = json_decode($standing, true);
-        dump($temp);
         if (array_key_exists('FR', $temp['results'])) {
             $watchProviders = json_decode($standing, true)['results']['FR'];
         } else {
@@ -428,7 +434,6 @@ class SerieController extends AbstractController
         }
         $standing = $tmdbService->getTvSimilar($id);
         $similar = json_decode($standing, true);
-        dump($similar);
 
         $mySerieIds = $this->mySerieIds($serieRepository);
         $index = array_search($id, $mySerieIds['serieIds']);
@@ -437,6 +442,7 @@ class SerieController extends AbstractController
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'index' => $index,
+            'serieIds' => $mySerieIds['serieIds'],
             'credits' => $credits,
             'keywords' => $keywords,
             'missingTranslations' => $missingTranslations,
@@ -445,6 +451,7 @@ class SerieController extends AbstractController
             'locale' => $request->getLocale(),
             'page' => $page,
             'from' => $from,
+            'backId' => $backId,
             'query' => $query,
             'year' => $year,
             'user' => $this->getUser(),
