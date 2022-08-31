@@ -59,20 +59,23 @@ class SerieRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Serie[] Returns an array of Serie objects
+     * @param $userId
+     * @return array [] Returns an array of Serie partial objects (fields: id, serieId)
      */
-    public function findMySerieIds(): array
+    public function findMySerieIds($userId): array
     {
         return $this->createQueryBuilder('s')
+            ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
             ->select("s.id", "s.serieId")
             ->getQuery()
             ->getResult()
         ;
     }
 
-    public function numbers(): array
+    public function numbers($userId): array
     {
         return $this->createQueryBuilder('s')
+            ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
             ->select("sum(s.numberOfEpisodes) episodes, sum(s.numberOfSeasons) seasons")
             ->getQuery()
             ->getResult();

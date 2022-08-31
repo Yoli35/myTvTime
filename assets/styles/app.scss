@@ -276,11 +276,18 @@ nav.active {
 }
 
 .nav-breadcrumb {
-    margin: 1em auto 1em 1em;
     --bs-breadcrumb-divider: '◦';
+    background-color: var(--gradiant-ardoise-10);
+    border-radius: .5em;
+    margin: 1em;
+    padding: .5em 1.5em;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 
     .breadcrumb {
         align-items: center;
+        margin-bottom: 0;
 
         .breadcrumb-item {
             span {

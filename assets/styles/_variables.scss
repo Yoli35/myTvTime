@@ -244,6 +244,18 @@ $fa-font-path: "../webfonts";
         position: absolute;
     }
 
+    .animated-h1 {
+        @include flex-row();
+        color: $h1-color;
+        opacity: 1;
+        position: absolute;
+
+        .part {
+            font-size: 4em;
+            font-weight: bold;
+        }
+    }
+
     .backdrop {
         background-image: url($bg-image);
         background-position: center center;

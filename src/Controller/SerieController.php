@@ -68,7 +68,7 @@ class SerieController extends AbstractController
 
         return $this->render('serie/index.html.twig', [
             'series' => $results,
-            'numbers' => $serieRepository->numbers()[0],
+            'numbers' => $serieRepository->numbers($user->getId())[0],
             'pages' => [
                 'total_results' => $totalResults,
                 'page' => $page,
@@ -105,12 +105,13 @@ class SerieController extends AbstractController
             $series = json_decode($standing, true);
             dump('results', $series);
         }
+
         return $this->render('serie/search.html.twig', [
             'form' => $form->createView(),
             'query' => $query,
             'year' => $year,
             'series' => $series['results'],
-            'mySerieIds' => $this->mySerieIds($serieRepository),
+            'serieIds' => $this->mySerieIds($serieRepository, $this->getUser()),
             'pages' => [
                 'page' => $page,
                 'total_pages' => $series['total_pages'],
@@ -151,13 +152,7 @@ class SerieController extends AbstractController
     {
         $page = $request->query->getInt('p', 1);
         $locale = $request->getLocale();
-        $standing = "";
-//        switch ($kind) {
-//            case self::POPULAR:         $standing = $tmdbService->getPopular($page, $locale); break;
-//            case self::TOP_RATED:       $standing = $tmdbService->getTopRated($page, $locale); break;
-//            case self::ON_THE_AIR:      $standing = $tmdbService->getOnTheAir($page, $locale); break;
-//            case self::AIRING_TODAY:    $standing = $tmdbService->getAiringToday($page, $locale); break;
-//        }
+
         $standing = $tmdbService->getSeries($kind, $page, $locale);
         $series = json_decode($standing, true);
         dump($series);
@@ -169,7 +164,7 @@ class SerieController extends AbstractController
     {
         return [
             'series' => $series['results'],
-            'mySerieIds' => $this->mySerieIds($serieRepository),
+            'serieIds' => $this->mySerieIds($serieRepository, $this->getUser()),
             'pages' => [
                 'total_results' => $series['total_results'],
                 'page' => $page,
@@ -412,7 +407,7 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getLatest($request->getLocale());
         $tv = json_decode($standing, true);
         dump($tv);
-        return $this->getSerie($tv, 0, self::LATEST, $request, $tmdbService, $serieRepository, $imageConfiguration);
+        return $this->getSerie($tv, 0, self::LATEST, 0, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
     public function getSerie($tv, $page, $from, $backId, $request, $tmdbService, $serieRepository, $imageConfiguration, $query="", $year=""): Response
@@ -435,14 +430,14 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTvSimilar($id);
         $similar = json_decode($standing, true);
 
-        $mySerieIds = $this->mySerieIds($serieRepository);
-        $index = array_search($id, $mySerieIds['serieIds']);
-        $index = $index ? $mySerieIds[$index] : false;
+        $serieIds = $this->mySerieIds($serieRepository, $this->getUser());
+        $index = array_search($id, $serieIds);
+        $index = $index ? $serieIds[$index] : false;
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'index' => $index,
-            'serieIds' => $mySerieIds['serieIds'],
+            'serieIds' => $serieIds,
             'credits' => $credits,
             'keywords' => $keywords,
             'missingTranslations' => $missingTranslations,
@@ -460,17 +455,25 @@ class SerieController extends AbstractController
 
     }
 
-    public function mySerieIds(SerieRepository $serieRepository): array
+    /**
+     * @param SerieRepository $serieRepository
+     * @param User|null $user
+     * @return array [] Returns an array of ids of owned Series
+     */
+    public function mySerieIds(SerieRepository $serieRepository, User $user = null): array
     {
-        $mySerieIds = $serieRepository->findMySerieIds();
-        $mySerieIds['ids'] = [];
-        $mySerieIds['serieIds'] = [];
-        foreach ($mySerieIds as $mySerieId) {
-            if (array_key_exists('serieId', $mySerieId)) {
-                $mySerieIds['serieIds'][] = $mySerieId['serieId'];
+        if ($user) {
+            $mySerieIds = $serieRepository->findMySerieIds($user->getId());
+            $serieIds = [];
+            foreach ($mySerieIds as $mySerieId) {
+                    $serieIds[] = $mySerieId['serieId'];
             }
+            return $serieIds;
         }
-        return $mySerieIds;
+        if ($this->getUser()) {
+            dump('Check mySerieIds function parameters !!!');
+        }
+        return [];
     }
 
     #[Route('/{id}/edit', name: 'app_serie_edit', methods: ['GET', 'POST'])]

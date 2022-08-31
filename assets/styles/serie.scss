@@ -803,11 +803,12 @@
 
 .series-search {
 
-    @include flex-col(flex-start, center);
-    padding-top: 1em;
-
     .header {
-        @include animated-header("../images/serie-header.jpg");
+        .animated-h1 {
+            .part {
+                font-size: 6em;
+            }
+        }
     }
 
     .search {

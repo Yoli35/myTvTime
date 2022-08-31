@@ -7,10 +7,9 @@
     <div class="container">
         <div class="my-collection-page">
 
+            {{ include('blocks/nav.html.twig', {parent: {page: 'My Collections', url: path('app_collection')}, thisPage: collection.title}) }}
+
             <header>
-
-                {{ include('blocks/nav.html.twig', {parent: {page: 'My Collections', url: path('app_collection')}, thisPage: collection.title}) }}
-
                 <div class="banner">
                     {% if collection.banner %}
                         <img src="/images/collections/banners/{{ collection.banner }}" alt="{{ collection.title }}'s banner">
