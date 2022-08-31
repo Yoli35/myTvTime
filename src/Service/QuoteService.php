@@ -37,11 +37,61 @@ class QuoteService
         "Hon vände direkt, trodde jag var som andra",
         "¿Qué pasa?, ¿qué pasa?",
         "Kroppen hon har fick mig att sluta andas",
+        "Pride is for everyone",
+        "We’re here. We’re queer.",
+        "Born this way.",
+        "There’s no such thing as being extra in June",
+        "We’re coming out.",
+        "Yas.",
+        "Let’s have a kiki.",
+        "Out and proud.",
+        "Hi, Gay.",
+        "Slay.",
+        "Water off a duck’s back",
+        "I’d U-Haul with you.",
+        "We’re all born naked and the rest is drag.",
+        "Werk.",
+        "No shade.",
+        "Love is love.",
+        "I see your true colors shining through.",
+        "Got Pride?",
+        "Sounds gay, I’ll be there.",
+        "Nothing straight about me.",
+        "Let me be perfectly queer.",
+        "Be who you are.",
+        "Queer vibes only.",
+        "The future is trans.",
+        "Celebrate Trans Pride.",
+        "Don’t let your inner saboteur get in your way.",
+        "Don’t get bitter, just get better.",
+        "Walk into the room purse first.",
+        "Love yourself.",
+        "Trans rights are human rights",
+        "Let’s get loud, let’s get proud.",
+        "This is for the dancing queens.",
+        "Queer AF.",
+        "Love is not a crime.",
+        "Equality.",
+        "She/Her, He/Him, They/Them. Us.",
+        "They and them and everyone.",
+        "Everyone is welcome.",
+        "Is it gay in here or is it just me?",
+        "Gaymer.",
+        "Gay friendly.",
+        "Proud ally.",
+        "Purrride",
+        "I love my gay mom/kid/dad",
+        "Monday, but make it gay.",
+        "Move, I’m gay.",
+        "Love out loud",
+        "Be proud.",
+        "Not gonna hide my pride.",
+        "Come out, come out, wherever you are!",
     ];
 
     public function getAGayQuote(): string
     {
-        return $this->quotes[rand(0, count($this->quotes) - 1)];
+        return "🌈 ".$this->quotes[rand(0, count($this->quotes) - 1)]." 🌈";
     }
 
     public function getAStraightQuote(): ?string
@@ -52,6 +102,6 @@ class QuoteService
     public function getARandomQuote(): ?string
     {
         $r = rand(0, 999);
-        return ($r % 2 == 0) ? $this->getAGayQuote() : $this->getAStraightQuote();
+        return (floor($r * 4) % 2 == 0) ? $this->getAGayQuote() : $this->getAStraightQuote();
     }
 }
