@@ -11,7 +11,9 @@
             <div class="header">
                 <h1>{{ 'Series search'|trans }}</h1>
                 {% if quote is defined %}
-                    <div class="quote"><div>{{ quote }}</div></div>
+                    <div class="quote">
+                        <div>{{ quote }}</div>
+                    </div>
                 {% endif %}
                 <div class="backdrop"></div>
             </div>
@@ -51,7 +53,7 @@
 {% endblock %}
 
 {% block morejs %}
-{#
+    {#
     <script>
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -87,7 +89,7 @@
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
         }
     </script>
-#}
+    #}
     <script src="/js/serie.js"></script>
     <script>
         const paths = [
@@ -96,6 +98,7 @@
             "{{ path('app_serie_render_translation_save') }}",
             "{{ path('app_serie_new') }}"
         ];
+        let letterRatios = [];
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -105,7 +108,7 @@
 
         function initHeader() {
             let ticking = false;
-            let letters, animatedH1;
+            let letters, animatedH1, count, index = 0;
 
             animatedH1 = document.createElement("div");
             animatedH1.classList.add("animated-h1");
@@ -114,7 +117,8 @@
 
             document.querySelector("h1").innerText = "";
 
-            letters.forEach( letter => {
+            count = letters.length;
+            letters.forEach(letter => {
                 let part = document.createElement("div");
                 part.classList.add("part");
                 if (letter === " ") {
@@ -123,6 +127,8 @@
                     part.innerText = letter;
                 }
                 animatedH1.appendChild(part);
+                letterRatios[index] = index / (count - 1);
+                index++;
             })
             setH1();
             window.addEventListener('resize', setH1);
@@ -143,14 +149,14 @@
             const header = document.querySelector(".header");
             const h1 = document.querySelector(".animated-h1");
             const parts = h1.querySelectorAll(".part");
-            let left, ratio, top;
+            let left, ratio, top, index = 0;
             ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
             left = (header.clientWidth - h1.clientWidth) / 2;
             top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
             if (ratio < 0) ratio = 0;
             if (ratio > 1) ratio = 1;
             parts.forEach(part => {
-                part.setAttribute("style", "transform: rotate(" + (360 * ratio) + "deg);");
+                    part.setAttribute("style", "transform: rotate(" + (720 * ratio) + "deg);");
             })
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
         }

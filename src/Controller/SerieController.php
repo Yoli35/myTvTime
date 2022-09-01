@@ -80,7 +80,7 @@ class SerieController extends AbstractController
                 'order_by' => $orderBy,
                 'order' => $order],
             'user' => $user,
-            'quote' => (new \App\Service\QuoteService)->getARandomQuote(),
+            'quote' => (new QuoteService)->getARandomQuote(),
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
@@ -120,7 +120,7 @@ class SerieController extends AbstractController
                 'total_results' => $series['total_results'],
                 'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
             ],
-            'quote' => (new \App\Service\QuoteService)->getARandomQuote(),
+            'quote' => (new QuoteService)->getARandomQuote(),
             'user' => $this->getUser(),
             'from' => self::SEARCH,
             'imageConfig' => $imageConfiguration->getConfig(),
@@ -437,6 +437,9 @@ class SerieController extends AbstractController
         $index = array_search($id, $serieIds);
         $index = $index ? $serieIds[$index] : false;
 
+        $standing = $tmdbService->getTvImages($id, $request->getLocale());
+        $images = json_decode($standing, true);
+
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'index' => $index,
@@ -446,6 +449,7 @@ class SerieController extends AbstractController
             'missingTranslations' => $missingTranslations,
             'watchProviders' => $watchProviders,
             'similar' => $similar,
+            'images' => $images,
             'locale' => $request->getLocale(),
             'page' => $page,
             'from' => $from,

@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}MyTvTime::{{ 'My Series'|trans }}{% endblock %}
-
+{% block description %}{{ 'List of all the series I have watched in my life'|trans }}{% endblock %}
+{% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
     {{ include('blocks/pageHeader.html.twig') }}
     <div class="container">

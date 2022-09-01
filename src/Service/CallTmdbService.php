@@ -370,6 +370,25 @@ class CallTmdbService
         }
     }
 
+    public function getTvImages($tvId, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $tvId . '/images?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
+    }
+
     public function getMovieRecommendations($movieId, $locale): ?string
     {
         $zeroRecommandations = json_encode(["page" => 1, "results" => [], "total_pages" => 0, "total_results" => 40]);

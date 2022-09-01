@@ -88,7 +88,6 @@ Vote Count: Stimmen zählen
 Home Page: Startseite
 IMDB Page: IMDB-Seite
 Personal IMDB Page: IMDB-Seite
-Production: Produktion
 Production Companies:  Produktionsfirmen
 Production Countries: Produktionsländer
 Crew: Besatzung
@@ -137,36 +136,76 @@ Place of Birth: Geburtsort
 Close: Schließen
 
 #Series
-Creation: Année de création
-View: Auf
-on: nachschauen
 Country: Land
-Network: Netzwerk
-Showrunner: Showrunner
+Creation: Jahr der Erstellung
+Showrunner: Direktor der Serie
+View on: Ansehen auf
+# Status
+Canceled: Abgebrochen
+Continuing: In Bearbeitung
+Ended: Abgeschlossen
+In Production: In Produktion
 Status: Status
-Continuing: In Produktion
-Ended: Fertig
+# Watch
+Available in streaming: Verfügbar als Streaming
+Available to rent or buy: Mieten oder kaufen
+Watch now: Jetzt ansehen
+# cast / crew
+Cast: Besetzung der Rollen
+Acting.he: Schauspieler
+Acting.she: Schauspielerin
+Acting: Schauspielerin/Schauspieler
+Art.he: Künstlerische Leiterin
+Art.she: Künstlerische Leiterin
+Art: Künstlerische Leitung
+Directing.she: MRegisseurin
+Directing.he: Regisseur
+Directing: Regisseur/in
+Production.he: PProduzent
+Production.she: Produzentin
+Production: Produktion
+Writing.he: Autorin
+Writing.she: Autorin
+Writing: Schreiben
+# key facts
+Key facts: Wichtigste Fakten
+Network: Fernsehsender
+Networks: Fernsehsender
+Original Country: Land der Herkunft
+Original language: Ursprüngliche Sprache
+Original name: Ursprünglicher Name
+Returning Series: Erneuerte Serie
+Keywords: Schlüsselwörter
+Similar Series: Ähnliche Serien
+# seasons
+episodes: Episoden
+seasons: Staffeln
+The season season_number of serie_name aired from season_air_date.: Die Staffel season_number von serie_name wurde ab dem season_air_date ausgestrahlt.
+# search
+Enter a Serie name: Geben Sie den Namen einer Serie ein.
+Enter a year: Geben Sie ein Jahr an
+Series search: Nach einer Serie suchen
 
 # Serie's Genres
-Action: Action
-Adventure: Abenteuer
-Animation: Animation
-Anime: Anime
-Comedy: Komödie
-Crime: Verbrechen
-Drama: Drama
-Family: Familie
-Fantasy: Fantasie
-History: Historie
-Horror: Horror
-Mini-Series: Miniserie
-Mystery: Geheimnis
-Romance: Romanze
-Science Fiction: Science-Fiction
-Sport: Sport
-Suspense: Spannung
-Thriller: Thriller
-War: Krieg
+#Action: Action
+#Adventure: Abenteuer
+#Animation: Animation
+#Anime: Anime
+#Comedy: Komödie
+#Crime: Verbrechen
+#Drama: Drama
+#Family: Familie
+#Fantasy: Fantasie
+#History: Historie
+#Horror: Horror
+#Mini-Series: Miniserie
+#Mystery: Geheimnis
+#Romance: Romanze
+#Science Fiction: Science-Fiction
+#Sport: Sport
+#Suspense: Spannung
+#Thriller: Thriller
+#War: Krieg
 
 # Youtube
 My Youtube Videos: Meine Youtube Videos
