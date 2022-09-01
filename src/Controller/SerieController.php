@@ -80,7 +80,7 @@ class SerieController extends AbstractController
                 'order_by' => $orderBy,
                 'order' => $order],
             'user' => $user,
-            'quote' => (new QuoteService)->getARandomQuote(),
+            'quotes' => (new QuoteService)->getRandomQuotes(),
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
@@ -120,7 +120,7 @@ class SerieController extends AbstractController
                 'total_results' => $series['total_results'],
                 'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
             ],
-            'quote' => (new QuoteService)->getARandomQuote(),
+            'quotes' => (new QuoteService)->getRandomQuotes(),
             'user' => $this->getUser(),
             'from' => self::SEARCH,
             'imageConfig' => $imageConfiguration->getConfig(),

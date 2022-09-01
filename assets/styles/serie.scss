@@ -14,14 +14,54 @@
 
         .quote {
             @include flex-100(center, flex-end);
-            font-size: 2em;
+            font-size: 1.25em;
             font-weight: 100;
+            line-height: 1.25em;
             position: absolute;
-            right: 1em;
-            top: 1em;
+            text-align: right;
+
+            &.n1 {
+                right: 1em;
+                top: 1em;
+            }
+
+            &.n2 {
+                right: 1em;
+                bottom: 3em;
+            }
+
+            &.n3 {
+                bottom: 1em;
+                justify-content: flex-start;
+                left: 1em;
+                div {
+                    text-align: left;
+                }
+            }
+
+            &.n4 {
+                left: 1em;
+                justify-content: flex-start;
+                top: 3em;
+                div {
+                    text-align: left;
+                }
+            }
 
             div {
+                background-color: var(--gradiant-ardoise-40-alpha-50);
+                border-radius: .5em;
+                max-width: 48%;
+                padding: .5em 1em;
                 text-align: right;
+
+                b {
+                    color: var(--gradiant-purple-70);
+                }
+
+                em {
+                    color: var(--gradiant-mars-70);
+                }
             }
         }
     }

@@ -84,7 +84,11 @@
                     <div class="arrow"></div>
                 </div>
                 <div class="infos">
-                    <h1>{{ serie.name }} <span>({{ serie.first_air_date|date("Y") }})</span></h1>
+                    <h1>{{ serie.name }}
+                        {% if serie.first_air_date %}
+                            <span>({{ serie.first_air_date|date("Y") }})</span>
+                        {% endif %}
+                    </h1>
                     <div class="info">
                         {% for genre in serie.genres %}
                             {{ genre.name }}{% if loop.last == false %}, {% endif %}
@@ -192,7 +196,13 @@
                                         {% endif %}
                                         {% if season.air_date %}
                                             <div>
-                                                {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
+                                                {% if season.air_date < 'now'|date("Y-m-d") %}
+                                                    {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
+                                                {% elseif season.air_date > 'now'|date("Y-m-d") %}
+                                                    {{ 'The season season_number of serie_name will be aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
+                                                {% else %}
+                                                    {{ 'The season_number of serie_name is aired from today.'|trans({"season_number": season.season_number, "serie_name": serie.name}) }}
+                                                {% endif %}
                                             </div>
                                         {% endif %}
                                     </div>
@@ -325,19 +335,19 @@
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
 {% endblock %}
-{% block morejs %}
-    <script src="/js/serie.js"></script>
-    <script>
-        const paths = [
-            "{{ path('app_serie_render_translation_fields') }}",
-            "{{ path('app_serie_render_translation_select') }}",
-            "{{ path('app_serie_render_translation_save') }}",
-            "{{ path('app_serie_new') }}"
-        ];
+                                    {% block morejs %}
+                                        <script src="/js/serie.js"></script>
+                                        <script>
+                                            const paths = [
+                                                "{{ path('app_serie_render_translation_fields') }}",
+                                                "{{ path('app_serie_render_translation_select') }}",
+                                                "{{ path('app_serie_render_translation_save') }}",
+                                                "{{ path('app_serie_new') }}"
+                                            ];
 
-        window.addEventListener("DOMContentLoaded", () => {
+                                            window.addEventListener("DOMContentLoaded", () => {
 
-            initSerieStuff(paths);
-        })
-    </script>
-{% endblock %}
+                                                initSerieStuff(paths);
+                                            })
+                                        </script>
+                                    {% endblock %}

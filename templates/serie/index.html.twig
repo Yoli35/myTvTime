@@ -8,10 +8,8 @@
     <div class="container">
         <div class="my-series">
             <div class="header">
+                {{ include('blocks/serie/quotes.html.twig') }}
                 <h1>{{ 'My Series'|trans }}</h1>
-                {% if quote is defined %}
-                    <div class="quote"><div>{{ quote }}</div></div>
-                {% endif %}
                 <div class="backdrop"></div>
             </div>
 

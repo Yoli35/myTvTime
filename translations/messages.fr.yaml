@@ -251,6 +251,8 @@ Similar Series: Séries similaires
 episodes: épisodes
 seasons: saisons
 The season season_number of serie_name aired from season_air_date.: La saison season_number de serie_name a été diffusée à partir du season_air_date.
+The season_number of serie_name will be aired from the season_air_date.: La saison season_number de serie_name sera diffusée à partir du season_air_date.
+The season_number of serie_name is aired from today.: La saison season_number de serie_name est diffusée à partir d'aujourd'hui.
 # search
 Enter a Serie name: Enter le nom d'une série
 Enter a year: Préciser une année

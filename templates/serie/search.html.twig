@@ -9,6 +9,7 @@
     <div class="container">
         <div class="series-search">
             <div class="header">
+                {{ include('blocks/serie/quotes.html.twig') }}
                 <h1>{{ 'Series search'|trans }}</h1>
                 {% if quote is defined %}
                     <div class="quote">

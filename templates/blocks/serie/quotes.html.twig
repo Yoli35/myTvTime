@@ -1,0 +1,7 @@
+{% if quotes is defined %}
+    {% for quote in quotes %}
+        <div class="quote n{{ loop.index }}">
+            <div>{{ quote|raw|nl2br }}</div>
+        </div>
+    {% endfor %}
+{% endif %}
