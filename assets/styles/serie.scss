@@ -190,6 +190,7 @@
             opacity: 0;
             position: fixed;
             transition: all .5s;
+            z-index: 1000;
 
             &.visible {
                 background-color: #888888df;
@@ -594,7 +595,7 @@
         article {
             @include flex-col(flex-start, flex-start);
             min-height: 50vh;
-            width: 70%;
+            width: 100%;
 
             section {
                 @include flex-col(flex-start, flex-start);
@@ -619,46 +620,50 @@
                     }
                 }
 
-                .seasons {
+                .seasons, .episodes {
                     @include flex-col();
                     margin: 1em 0;
                     width: 100%;
 
-                    .season {
-                        @include flex-row(center, flex-start);
-                        background-color: var(--gradiant-ardoise-90);
-                        border-radius: 0;
-                        height: 10em;
-                        margin: 1em 0;
+                    a {
                         width: 100%;
 
-                        .poster {
+                        .season, .episode {
+                            @include flex-row(center, flex-start);
+                            background-color: var(--gradiant-ardoise-90);
+                            border-radius: 0;
                             height: 10em;
-                            z-index: 0;
+                            margin: 1em 0;
+                            width: 100%;
 
-                            img {
-                                border-radius: 0;
+                            .poster {
                                 height: 10em;
-                                object-fit: cover;
-                                width: auto;
-                            }
-                        }
+                                z-index: 0;
 
-                        .infos {
-                            @include flex-col(flex-start, flex-start);
-                            padding: .5em;
-
-                            div {
-                                color: var(--gradiant-ardoise-20);
-                                font-weight: 100;
-                                margin: .25em 0;
-                                max-height: 3em;
-                                overflow-y: scroll;
+                                img {
+                                    border-radius: 0;
+                                    height: 10em;
+                                    object-fit: cover;
+                                    width: auto;
+                                }
                             }
 
-                            div:first-child {
-                                font-size: 1.5em;
-                                font-weight: 200;
+                            .infos {
+                                @include flex-col(flex-start, flex-start);
+                                padding: .5em;
+
+                                div {
+                                    color: var(--gradiant-ardoise-20);
+                                    font-weight: 100;
+                                    margin: .25em 0;
+                                    max-height: 3em;
+                                    overflow-y: scroll;
+                                }
+
+                                div:first-child {
+                                    font-size: 1.5em;
+                                    font-weight: 200;
+                                }
                             }
                         }
                     }
@@ -712,7 +717,7 @@
             margin-left: 1em;
             min-height: 50vh;
             padding: 0 1em;
-            width: calc(30% - 1em);
+            width: 100%;
 
             .key-facts {
                 .fact {
@@ -1085,20 +1090,45 @@
     .serie-page {
         main {
             article {
+                width: 70%;
+
+                &.full {
+                    width: 100%;
+                }
+
                 section {
-                    .seasons {
-                        .season {
-                            background-color: var(--gradiant-ardoise-40);
+                    .seasons,.episodes {
+                        border-radius: .5em;
+                        padding: 0 1em;
 
-                            .infos {
+                        a {
+                            .season, .episode {
+                                border-radius: .5em;
+                                height: 12em;
 
-                                div {
-                                    color: var(--gradiant-ardoise-80);
+                                .poster {
+                                    height: 12em;
+
+                                    img {
+                                        border-radius: .5em 0 0 .5em;
+                                        height: 12em;
+                                    }
+                                }
+
+                                .infos {
+
+                                    div {
+                                        color: var(--gradiant-ardoise-80);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
+
+            aside {
+                width: calc(30% - 1em);
             }
         }
     }
@@ -1180,22 +1210,12 @@
         main {
             article {
                 section {
-                    .seasons {
+                    .seasons, .episodes {
                         background-color: var(--gradiant-ardoise-30);
-                        border-radius: .5em;
-                        padding: 0 1em;
 
-                        .season {
-                            border-radius: .5em;
-                            height: 12em;
-
-                            .poster {
-                                height: 12em;
-
-                                img {
-                                    border-radius: .5em 0 0 .5em;
-                                    height: 12em;
-                                }
+                        a {
+                            .season, .episode {
+                                background-color: var(--gradiant-ardoise-40);
                             }
                         }
                     }

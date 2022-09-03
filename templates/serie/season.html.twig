@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+{% set user = app.user %}
+{% block title %}
+    {% if parameters.from == 'popular' %}
+        MyTvTime::{{ 'Popular Series'|trans }}::{{ serie.name }}
+    {% elseif parameters.from == 'top_rated' %}
+        MyTvTime::{{ 'Top Rated Series'|trans }}::{{ serie.name }}
+    {% elseif parameters.from == 'airing_today' %}
+        MyTvTime::{{ 'Series Airaing Today'|trans }}::{{ serie.name }}
+    {% elseif parameters.from == 'on_the_air' %}
+        MyTvTime::{{ 'Series On The Air'|trans }}::{{ serie.name }}
+    {% elseif parameters.from == 'search' %}
+        MyTvTime::{{ 'Series search'|trans }}::{{ serie.name }}
+    {% elseif parameters.from == 'latest' %}
+        MyTvTime::{{ 'Latest Serie'|trans }}::{{ serie.name }}
+    {% else %}
+        MyTvTime::{{ 'My Series'|trans }}::{{ serie.name }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+    {{ include('blocks/pageHeader.html.twig') }}
+    <div class="container">
+        {% if parameters.from == 'popular' %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'Popular Series', url: path('app_serie_popular')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
+        {% elseif parameters.from == 'top_rated' %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
+        {% elseif parameters.from == 'airing_today' %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'Series Airing Today', url: path('app_serie_airing_today')~'?p='~parameters.page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
+        {% elseif parameters.from == 'on_the_air' %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'Series On The Air', url: path('app_serie_on_the_air')~'?p='~parameters.page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
+        {% elseif parameters.from == 'search' %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: parameters.page})~'?query='~parameters.query~'&year='~parameters.year~'#'~serie.id}, thisPage: serie.name}) }}
+        {% elseif parameters.from == 'latest' %}
+            {{ include('blocks/nav.html.twig', {thisPage: serie.name}) }}
+        {% else %}
+            {{ include('blocks/nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
+        {% endif %}
+
+        <div class="serie-page">
+            <div class="header">
+                {% if serie.backdropPath|length %}
+                    <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
+                {% else %}
+                    <div class="backdrop" style="background-image: url('/images/default/no_banner_dark.png')"></div>
+                {% endif %}
+                <div class="poster">
+                    {% if season.poster_path|length %}
+                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
+                    {% else %}
+                        <img src="/images/default/no_poster.png" alt="{{ season.name }}">
+                    {% endif %}
+                </div>
+                <div class="infos">
+                    <h1>{{ serie.name }}
+                        {% if serie.firstDateAir %}
+                            <span>({{ serie.firstDateAir|date("Y") }})</span>
+                        {% endif %}
+                    </h1>
+                    <h2>{{ season.name }}</h2>
+                    <div class="info">
+                        {% if season.overview|length %}
+                            <h5>{{ 'Synopsis'|trans }}</h5>
+                            <div>{{ serie.overview }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <main>
+                <article class="full">
+                    <section>
+                        <div class="episodes">
+                            {% for episode in season.episodes %}
+                                {% set url = path('app_serie_tmdb_episode', {id: serie.id, seasonNumber: episode.season_number, episodeNumber: episode.episode_number})~'?from='~parameters.from~'&p='~parameters.page %}
+                                {% if parameters.query is defined %} {% set url = url ~ '&qury=' ~ parameters.query %}{% endif %}
+                                {% if parameters.year is defined %} {% set url = url ~ '&year=' ~ parameters.year %}{% endif %}
+                                {% if parameters.backId is defined %} {% set url = url ~ '&back=' ~ parameters.backId %}{% endif %}
+                                <a href="{{ url }}">
+{#
+
+                                    "air_date" => "2022-08-21"
+                                    "episode_number" => 1
+                                    "id" => 1971015
+                                    "name" => "Les héritiers du dragon"
+                                    "overview" => "A Westeros, la chute de la maison Targaryen s'annonce. Une guerre civile arrive et va s'appeler la Danse des Dragons."
+                                    "production_code" => ""
+                                    "runtime" => 66
+                                    "season_number" => 1
+                                    "show_id" => 94997
+                                    "still_path" => "/3oumSnkavc4pcMFvPbgWDUTclNb.jpg"
+                                    "vote_average" => 7.9
+                                    "vote_count" => 38
+                                    "crew" => array:4 [▶]
+                                    "guest_stars" => array:28 [▼
+                                    0 => array:11 [▼
+                                        "character" => "Lord Corlys 'The Sea Snake' Velaryon"
+                                        "credit_id" => "60257dc1dd2589003ebdb5ba"
+                                        "order" => 5
+                                        "adult" => false
+                                        "gender" => 2
+                                        "id" => 55412
+                                        "known_for_department" => "Acting"
+                                        "name" => "Steve Toussaint"
+                                        "original_name" => "Steve Toussaint"
+                                        "popularity" => 13.914
+                                        "profile_path" => "/s4qDz1g0UzasoQlcUtgqkaAVbdC.jpg"
+
+#}
+                                    <div class="episode">
+                                        <div class="poster">
+                                            {% if episode.still_path|length %}
+                                                <img src="{{ imageConfig.url ~ imageConfig.still_sizes.3 ~ episode.still_path }}" alt="{{ episode.name }}">
+                                            {% else %}
+                                                {% if serie.posterPath %}
+                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ episode.name }}">
+                                                {% else %}
+                                                    <img src="/images/default/no_poster.png" alt="{{ episode.name }}">
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="infos">
+                                            <h4>{{ episode.name }}</h4>
+                                            {% if episode.overview|length %}
+                                                <div>{{ episode.overview }}</div>
+                                            {% endif %}
+                                            <div>{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ 'minutes' }}</div>
+                                            {% if episode.air_date %}
+                                                <div>
+                                                    {% if episode.air_date < 'now'|date("Y-m-d") %}
+                                                        {{ 'The episode episode_number, season season_number of serie_name aired from episode_air_date.'|trans({"episode_number": episode.episode_number, season_number: episode.season_number, "serie_name": serie.name, "episode_air_date": (episode.air_date|format_date('full'))}) }}
+                                                    {% elseif episode.air_date > 'now'|date("Y-m-d") %}
+                                                        {{ 'The episode episode_number, season season_number of serie_name will be aired from episode_air_date.'|trans({"episode_number": episode.episode_number, season_number: episode.season_number, "serie_name": serie.name, "episode_air_date": (episode.air_date|format_date('full'))}) }}
+                                                    {% else %}
+                                                        {{ 'The episode episode_number, season season_number of serie_name is aired from today.'|trans({"episode_number": episode.episode_number, season_number: episode.season_number, "serie_name": serie.name}) }}
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </section>
+                </article>
+            </main>
+        </div>
+    </div>
+{% endblock %}

@@ -34,6 +34,7 @@ class SerieController extends AbstractController
     const ON_THE_AIR = 'on_the_air';
     const LATEST = 'latest';
     const SEARCH = 'search';
+    const SERIE_PAGE = 'serie';
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
     public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, QuoteService $quoteService): Response
@@ -64,7 +65,7 @@ class SerieController extends AbstractController
                 $order = 'desc';
             }
         }
-        $totalResults = $serieRepository->count([]);
+        $totalResults = $serieRepository->countUserSeries($user->getId());
         $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
 
         return $this->render('serie/index.html.twig', [
@@ -237,6 +238,7 @@ class SerieController extends AbstractController
             if (strlen($standing)) {
                 $status = "Ok";
                 $tv = json_decode($standing, true);
+                dump($tv);
 
                 $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
 
@@ -270,8 +272,9 @@ class SerieController extends AbstractController
                 }
                 $serie->addUser($user);
                 $serieRepository->add($serie, true);
+                dump($serie);
 
-                if ($from != 'serie' && $from != 'search') {
+                if ($from != self::SERIE_PAGE && $from != self::SEARCH) {
                     $card = $this->render('blocks/serie/card.html.twig', [
                         'serie' => $serie,
                         'pages' => [
@@ -357,37 +360,37 @@ class SerieController extends AbstractController
 
         return $this->getSerie($tv, $page, $from, $serie->getId(), $request, $tmdbService, $serieRepository, $imageConfiguration, $query, $year);
 
-/*        $standing = $tmdbService->getTvCredits($serie->getSerieId(), $request->getLocale());
-        $credits = json_decode($standing, true);
+        /*        $standing = $tmdbService->getTvCredits($serie->getSerieId(), $request->getLocale());
+                $credits = json_decode($standing, true);
 
-        $standing = $tmdbService->getTvKeywords($serie->getSerieId(), $request->getLocale());
-        $keywords = json_decode($standing, true);
-        $missingTranslations = $this->keywordsTranslation($keywords, $request->getLocale());
+                $standing = $tmdbService->getTvKeywords($serie->getSerieId(), $request->getLocale());
+                $keywords = json_decode($standing, true);
+                $missingTranslations = $this->keywordsTranslation($keywords, $request->getLocale());
 
-        $standing = $tmdbService->getTvSimilar($serie->getSerieId());
-        $similar = json_decode($standing, true);
+                $standing = $tmdbService->getTvSimilar($serie->getSerieId());
+                $similar = json_decode($standing, true);
 
-        $standing = $tmdbService->getTvWatchProviders($serie->getSerieId());
-        $temp = json_decode($standing, true);
-        if (array_key_exists('FR', $temp['results'])) {
-            $watchProviders = json_decode($standing, true)['results']['FR'];
-        } else {
-            $watchProviders = null;
-        }
+                $standing = $tmdbService->getTvWatchProviders($serie->getSerieId());
+                $temp = json_decode($standing, true);
+                if (array_key_exists('FR', $temp['results'])) {
+                    $watchProviders = json_decode($standing, true)['results']['FR'];
+                } else {
+                    $watchProviders = null;
+                }
 
-        return $this->render('serie/show.html.twig', [
-            'serie' => $tv,
-            'credits' => $credits,
-            'keywords' => $keywords,
-            'missingTranslations' => $missingTranslations,
-            'watchProviders' => $watchProviders,
-            'similar' => $similar,
-            'locale' => $request->getLocale(),
-            'page' => $page,
-            'from' => $from,
-            'user' => $this->getUser(),
-            'imageConfig' => $imageConfiguration->getConfig(),
-        ]);*/
+                return $this->render('serie/show.html.twig', [
+                    'serie' => $tv,
+                    'credits' => $credits,
+                    'keywords' => $keywords,
+                    'missingTranslations' => $missingTranslations,
+                    'watchProviders' => $watchProviders,
+                    'similar' => $similar,
+                    'locale' => $request->getLocale(),
+                    'page' => $page,
+                    'from' => $from,
+                    'user' => $this->getUser(),
+                    'imageConfig' => $imageConfiguration->getConfig(),
+                ]);*/
     }
 
     #[Route('/tmdb/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
@@ -404,6 +407,62 @@ class SerieController extends AbstractController
         return $this->getSerie($tv, $page, $from, $id, $request, $tmdbService, $serieRepository, $imageConfiguration, $query, $year);
     }
 
+    #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
+    public function season(Request $request, $id, $seasonNumber, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
+        $from = $request->query->get('from');
+        $page = $request->query->get('p');
+        $query = $request->query->get('query');
+        $year = $request->query->get('year');
+        $backId = $request->query->get('back');
+
+        $serie = $serieRepository->findOneBy(['serieId' => $id]);
+        $standing = $tmdbService->getTvSeason($id, $seasonNumber, $request->getLocale());
+        $season = json_decode($standing, true);
+        dump($serie);
+        dump($season);
+        return $this->render('serie/season.html.twig', [
+            'serie' => $serie,
+            'season' => $season,
+            'parameters' => [
+                'from' => $from,
+                'page' => $page,
+                'query' => $query,
+                'year' => $year,
+                "backId" => $backId
+            ],
+            'imageConfig' => $imageConfiguration->getConfig(),
+        ]);
+    }
+
+    #[Route('/tmdb/{id}/season/{seasonNumber}/episode/{episodeNumber}', name: 'app_serie_tmdb_episode', methods: ['GET'])]
+    public function episode(Request $request, $id, $seasonNumber, $episodeNumber, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    {
+        $from = $request->query->get('from');
+        $year = $request->query->get('year');
+        $backId = $request->query->get('back');
+        $page = $request->query->get('p');
+        $query = $request->query->get('query');
+
+        $serie = $serieRepository->findOneBy(['serieId' => $id]);
+        $standing = $tmdbService->getTvEpisode($id, $seasonNumber, $episodeNumber, $request->getLocale());
+        $episode = json_decode($standing, true);
+        dump($serie);
+        dump($episode);
+        return $this->render('serie/episode.html.twig', [
+            'serie' => $serie,
+            'episode' => $episode,
+            'parameters' => [
+                'from' => $from,
+                'page' => $page,
+                'query' => $query,
+                'year' => $year,
+                "backId" => $backId
+            ],
+            'imageConfig' => $imageConfiguration->getConfig(),
+        ]);
+    }
+
     #[Route('/latest/serie', name: 'app_serie_latest', methods: ['GET'])]
     public function latest(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
@@ -413,7 +472,7 @@ class SerieController extends AbstractController
         return $this->getSerie($tv, 0, self::LATEST, 0, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
-    public function getSerie($tv, $page, $from, $backId, $request, $tmdbService, $serieRepository, $imageConfiguration, $query="", $year=""): Response
+    public function getSerie($tv, $page, $from, $backId, $request, $tmdbService, $serieRepository, $imageConfiguration, $query = "", $year = ""): Response
     {
         $id = $tv['id'];
         $standing = $tmdbService->getTvCredits($id, $request->getLocale());
@@ -473,7 +532,7 @@ class SerieController extends AbstractController
             $mySerieIds = $serieRepository->findMySerieIds($user->getId());
             $serieIds = [];
             foreach ($mySerieIds as $mySerieId) {
-                    $serieIds[] = $mySerieId['serieId'];
+                $serieIds[] = $mySerieId['serieId'];
             }
             return $serieIds;
         }

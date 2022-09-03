@@ -59,6 +59,20 @@ class SerieRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return int Returns number of serie owned by a user
+     */
+    public function countUserSeries($userId): int
+    {
+        $series = $this->createQueryBuilder('s')
+            ->select('s.name name')
+            ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
+            ->getQuery()
+            ->getResult()
+        ;
+        return count($series);
+    }
+
+    /**
      * @param $userId
      * @return array [] Returns an array of Serie partial objects (fields: id, serieId)
      */
