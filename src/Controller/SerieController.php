@@ -68,9 +68,12 @@ class SerieController extends AbstractController
         $totalResults = $serieRepository->countUserSeries($user->getId());
         $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
 
+        $list = $serieRepository->listUserSeries($user->getId());
+
         return $this->render('serie/index.html.twig', [
             'series' => $results,
             'numbers' => $serieRepository->numbers($user->getId())[0],
+            'list' => $list,
             'pages' => [
                 'total_results' => $totalResults,
                 'page' => $page,

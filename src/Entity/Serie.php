@@ -49,6 +49,9 @@ class Serie
     #[ORM\Column(nullable: true)]
     private ?int $numberOfSeasons = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $originalName = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -213,6 +216,18 @@ class Serie
     public function setNumberOfSeasons(?int $numberOfSeasons): self
     {
         $this->numberOfSeasons = $numberOfSeasons;
+
+        return $this;
+    }
+
+    public function getOriginalName(): ?string
+    {
+        return $this->originalName;
+    }
+
+    public function setOriginalName(?string $originalName): self
+    {
+        $this->originalName = $originalName;
 
         return $this;
     }

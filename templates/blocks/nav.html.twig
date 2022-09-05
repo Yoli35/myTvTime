@@ -6,6 +6,6 @@
         {% if parent is defined %}
             <li class="breadcrumb-item"><a href="{{ parent.url }}">{{ parent.page|trans }}</a></li>
         {% endif %}
-        <li class="breadcrumb-item active" aria-current="{{ thisPage|trans }}">{{ thisPage|trans }}</li>
+        <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
     </ol>
 </nav>

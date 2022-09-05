@@ -59,6 +59,7 @@ class SerieRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param $userId
      * @return int Returns number of serie owned by a user
      */
     public function countUserSeries($userId): int
@@ -70,6 +71,20 @@ class SerieRepository extends ServiceEntityRepository
             ->getResult()
         ;
         return count($series);
+    }
+
+    /**
+     * @param $userId
+     * @return array [id, name] Returns the list of serie owned by a user
+     */
+    public function listUserSeries($userId): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s.id id, s.name name, s.originalName original')
+            ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
+            ->orderBy('s.name')
+            ->getQuery()
+            ->getResult();
     }
 
     /**

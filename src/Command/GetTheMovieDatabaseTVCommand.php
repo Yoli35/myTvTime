@@ -94,16 +94,14 @@ class GetTheMovieDatabaseTVCommand extends Command
 
                 foreach ($tvs as $serie) {
 
-                    if ($serie->getNumberOfEpisodes() == null) {
+                    if ($serie->getOriginalName() == null) {
 
                         $tmdbTv = json_decode($this->callTmdbService->getTv($serie->getSerieId(), 'fr'), true);
 
-                   //     $serie->setBackdropPath($tmdbTv['backdrop_path']);
-                        $serie->setNumberOfEpisodes($tmdbTv['number_of_episodes']);
-                        $serie->setNumberOfSeasons($tmdbTv['number_of_seasons']);
+                        $serie->setOriginalName($tmdbTv['original_name']);
                         $this->serieRepository->add($serie, true);
 
-                        $io->success('Seasons & episodes numbers for "' . $serie->getName() . '" have been updated to the user ' . $user);
+                        $io->success('Original name for "' . $serie->getName() . '" have been updated to the user ' . $user);
                     }
                 }
                 break;

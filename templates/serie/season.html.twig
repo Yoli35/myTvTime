@@ -124,7 +124,9 @@
                                             {% if episode.overview|length %}
                                                 <div>{{ episode.overview }}</div>
                                             {% endif %}
+                                            {% if episode.runtime %}
                                             <div>{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ 'minutes' }}</div>
+                                            {% endif %}
                                             {% if episode.air_date %}
                                                 <div>
                                                     {% if episode.air_date < 'now'|date("Y-m-d") %}

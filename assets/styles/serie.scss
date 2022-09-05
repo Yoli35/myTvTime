@@ -34,6 +34,7 @@
                 bottom: 1em;
                 justify-content: flex-start;
                 left: 1em;
+
                 div {
                     text-align: left;
                 }
@@ -43,6 +44,7 @@
                 left: 1em;
                 justify-content: flex-start;
                 top: 3em;
+
                 div {
                     text-align: left;
                 }
@@ -307,6 +309,13 @@
                 padding: .25em 1em;
                 text-transform: uppercase;
                 width: 100%;
+
+                &.disabled {
+                    background-color: var(--gradiant-ardoise-50);
+                    border: 1px solid var(--gradiant-ardoise-60);
+                    color: var(--gradiant-ardoise-60);
+                    cursor: default;
+                }
             }
 
             .label {
@@ -317,10 +326,13 @@
             }
 
             h2 {
+                color: var(---gradiant-mars-70);
                 display: none;
+                font-size: 1.5em;
+                margin-top: 0;
             }
 
-            .add-serie {
+            .search-serie, .add-serie {
                 background-color: var(--gradiant-ardoise-90);
                 border-radius: 0;
                 min-height: unset;
@@ -343,6 +355,47 @@
                     }
                 }
 
+            }
+
+            .search-serie {
+                .group {
+                    .field {
+                        position: relative;
+                    }
+
+                    .autocomplete-items {
+                        border: 1px solid var(--gradiant-ardoise-80);
+                        border-bottom: none;
+                        border-top: none;
+                        left: 0;
+                        max-height: 32em;
+                        overflow: scroll;
+                        position: absolute;
+                        right: 0;
+                        top: 100%;
+                        width: 22em;
+                        z-index: 99;
+                    }
+
+                    .autocomplete-items div {
+                        padding: .25em .5em calc(.25em - 1px);
+                        cursor: pointer;
+                        background-color: var(--gradiant-ardoise-90);
+                        border-bottom: 1px solid var(--gradiant-ardoise-70);
+                        color: var(--gradiant-ardoise-30);
+                    }
+
+                    .autocomplete-items div:hover {
+                        /*when hovering an item:*/
+                        background-color: var(--gradiant-ardoise-80);
+                    }
+
+                    .autocomplete-active {
+                        /*when navigating through the items using the arrow keys:*/
+                        background-color: var(--gradiant-ardoise-40) !important;
+                        color: var(--gradiant-ardoise-90) !important;
+                    }
+                }
             }
 
             .settings {
@@ -1033,7 +1086,7 @@
                     }
                 }
 
-                .pages, .numbers, .add-serie {
+                .pages, .numbers, .search-serie, .add-serie {
                     background-color: var(--gradiant-ardoise-80);
                     border: 1em;
                     border-radius: .5em;
@@ -1097,7 +1150,7 @@
                 }
 
                 section {
-                    .seasons,.episodes {
+                    .seasons, .episodes {
                         border-radius: .5em;
                         padding: 0 1em;
 
@@ -1155,7 +1208,7 @@
             }
 
             .series-tools {
-                .add-serie, .numbers, .settings {
+                .search-serie, .add-serie, .numbers, .settings {
                     background-color: var(--gradiant-ardoise-30);
                 }
 
@@ -1186,10 +1239,32 @@
                     }
                 }
 
-                .add-serie, .settings {
+                .search-serie, .add-serie, .settings {
                     .label {
                         color: var(--gradiant-ardoise-70);
                     }
+                }
+
+                .search-serie {
+                    .autocomplete-items {
+                        border: 1px solid var(--gradiant-ardoise-40);
+                    }
+
+                    .autocomplete-items div {
+                        background-color: var(--gradiant-ardoise-30);
+                        border-bottom: 1px solid var(--gradiant-ardoise-40);
+                    }
+
+                    .autocomplete-items div:hover {
+                        /*when hovering an item:*/
+                        background-color: var(--gradiant-ardoise-60);
+                    }
+
+                    //.autocomplete-active {
+                    //    /*when navigating through the items using the arrow keys:*/
+                    //    background-color: var(--gradiant-ardoise-70) !important;
+                    //    color: var(--gradiant-ardoise-90);
+                    //}
                 }
 
                 .add-serie {
@@ -1230,4 +1305,5 @@
             }
         }
     }
+
 }

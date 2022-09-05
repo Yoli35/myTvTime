@@ -13,7 +13,7 @@
                 <div class="backdrop"></div>
             </div>
 
-            {{ include('blocks/nav.html.twig', {thisPage:'My Series'}) }}
+            {{ include('blocks/nav.html.twig', {thisPage:('My Series'|trans)}) }}
 
             <main>
                 <div class="series">
@@ -34,6 +34,19 @@
                             </div>
                             <div class="numbers">
                                 {{ numbers.episodes }} {{ 'episodes'|trans }} / {{ numbers.seasons }} {{ 'seasons'|trans }}
+                            </div>
+                            <div class="search-serie">
+                                <h2>{{ 'Search my series'|trans }}</h2>
+                                <label class="label" for="search-name">{{ 'Name of the serie'|trans }}</label>
+                                <div class="group">
+                                    <div class="field">
+                                        <input id="search-name" type="text" value="" placeholder="{{ 'Start taping the name'|trans }}">
+                                        <input id="search-id" type="hidden" value="-1">
+                                    </div>
+                                    <div>
+                                        <button id="search_serie" class="disabled" type="submit">{{ 'Show'|trans }}</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="add-serie">
                                 <h2>{{ 'Add'|trans }}</h2>
@@ -141,6 +154,8 @@
             initPreview();
             newSerie();
             initHeader();
+
+            autocomplete(document.querySelector("#search-name"), createList());
         })
 
         function initHeader() {
@@ -314,6 +329,142 @@
                 xhr.open("GET", _app_serie_new + '?value=' + value + "&p=" + _current_page + "&pp=" + _per_page + "&ob=" + _order_by + "&o=" + _order);
                 xhr.send();
             }
+        }
+
+        function autocomplete(input, list) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            let currentFocus;
+
+            setInterval(function () {
+                let id = parseInt(document.querySelector("#search-id").value);
+                if (id === -1) {
+                    document.querySelector("#search_serie").classList.add("disabled");
+                } else {
+                    document.querySelector("#search_serie").classList.remove("disabled");
+                }
+            }, 100);
+
+            document.querySelector("#search_serie").addEventListener("click", () => {
+                let id = parseInt(document.querySelector("#search-id").value);
+                if (id === -1) {
+                    return;
+                }
+                let url = "{{ path('app_serie_show', {id: 0}) }}";
+                url = url.substring(0, url.length - 1);
+                window.location = url + id + "?p={{ pages.page }}&from={{ from }}";
+            })
+
+            /*execute a function when someone writes in the text field:*/
+            input.addEventListener("input", function (e) {
+                let a, b, i, val;
+                val = e.target.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                document.querySelector("#search-id").value = -1;
+                if (!val) {
+                    return false;
+                }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("div");
+                a.setAttribute("id", e.target.id + "-autocomplete-list");
+                a.classList.add("autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < list.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    let ok_name = list[i].name.substring(0, val.length).toUpperCase() === val.toUpperCase();
+                    let ok_original = list[i].original.substring(0, val.length).toUpperCase() === val.toUpperCase();
+                    if (ok_name || ok_original) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("div");
+                        /*make the matching letters bold:*/
+                        if (ok_name) {
+                            b.innerHTML = "<strong>" + list[i].name.substr(0, val.length) + "</strong>";
+                            b.innerHTML += list[i].name.substring(val.length);
+                        } else {
+                            b.innerHTML = "<strong>" + list[i].original.substring(0, val.length) + "</strong>";
+                            b.innerHTML += list[i].original.substring(val.length);
+                        }
+                        /*insert an input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input id='item-" + i + "-id' type='hidden' value='" + list[i].id + "'>";
+                        b.innerHTML += "<input id='item-" + i + "-name' type='hidden' value='" + list[i].name + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function () {
+                            /*insert the value for the autocomplete text field:*/
+                            input.value = this.getElementsByTagName("input")[1].value;
+                            document.querySelector("#search-id").value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            input.addEventListener("keydown", function (e) {
+                let x = document.getElementById(this.id + "-autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode === 40) { /* arrow DOWN key */
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode === 38) { /* arrow UP key */
+                    currentFocus--;
+                    addActive(x);
+                } else if (e.keyCode === 13) { /* the ENTER key */
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+
+            function addActive(x) {
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (let i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+
+            function closeAllLists(element) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                let x = document.getElementsByClassName("autocomplete-items");
+                for (let i = 0; i < x.length; i++) {
+                    if (element !== x[i] && element !== input) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", (e) => {
+                closeAllLists(e.target);
+            });
+        }
+
+        function createList() {
+            let list = [{id: 0, name: '', original: ''}];
+
+            {% for serie in list %}
+            list[{{ loop.index0 }}] = {'id': {{ serie.id }}, 'name': "{{ serie.name }}", 'original': "{{ serie.original }}"};
+            {% endfor %}
+
+            console.log({list});
+            return list;
         }
     </script>
 {% endblock %}

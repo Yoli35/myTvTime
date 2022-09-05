@@ -84,7 +84,8 @@
                     <div class="arrow"></div>
                 </div>
                 <div class="infos">
-                    <h1>{{ serie.name }}
+                    <h1>
+                        {{ serie.name }}
                         {% if serie.first_air_date %}
                             <span>({{ serie.first_air_date|date("Y") }})</span>
                         {% endif %}
@@ -206,7 +207,7 @@
                                                     {% elseif season.air_date > 'now'|date("Y-m-d") %}
                                                         {{ 'The season season_number of serie_name will be aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
                                                     {% else %}
-                                                        {{ 'The season_number of serie_name is aired from today.'|trans({"season_number": season.season_number, "serie_name": serie.name}) }}
+                                                        {{ 'The season season_number of serie_name is aired from today.'|trans({"season_number": season.season_number, "serie_name": serie.name}) }}
                                                     {% endif %}
                                                 </div>
                                             {% endif %}

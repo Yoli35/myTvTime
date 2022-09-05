@@ -156,7 +156,6 @@ function renderTranslationSelect(content) {
     xhr.send();
 }
 
-
 function addSerie(evt) {
     const addButton = evt.currentTarget;
     let value = addButton.getAttribute("data-id");
