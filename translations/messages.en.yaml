@@ -239,8 +239,16 @@ Returning Series: Returning Series
 Keywords: Keywords
 # seasons
 episodes: episodes
+seasons: saisons
 The season season_number of serie_name aired from season_air_date.: The season season_number of serie_name aired from season_air_date.
-
+The season season_number of serie_name will be aired from the season_air_date.: The season season_number of serie_name will be aired from the season_air_date.
+The season season_number of serie_name is aired from today.: The season season_number of serie_name is aired from today.
+The episode episode_number, season season_number of serie_name aired from episode_air_date.: The episode episode_number, season season_number of serie_name aired from episode_air_date.
+The episode episode_number, season season_number of serie_name will be aired from episode_air_date.: The episode episode_number, season season_number of serie_name will be aired from episode_air_date.
+The episode episode_number, season season_number of serie_name is aired from today.: The episode episode_number, season season_number of serie_name is aired from today.
+This episode aired from episode_air_date.: This episode aired from episode_air_date.
+This episode will be aired from episode_air_date.: This episode will be aired from episode_air_date.
+This episode is aired from today.: This episode is aired from today.
 
 # Serie Genres
 #Action: Action

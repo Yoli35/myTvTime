@@ -104,7 +104,7 @@
                     </div>
                     <div class="info">
                         {% if serie.overview|length %}
-                            <h5>{{ 'Synopsis'|trans }}</h5>
+{#                            <h5>{{ 'Synopsis'|trans }}</h5>#}
                             <div>{{ serie.overview }}</div>
                         {% endif %}
                     </div>
@@ -342,19 +342,19 @@
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
 {% endblock %}
-                                    {% block morejs %}
-                                        <script src="/js/serie.js"></script>
-                                        <script>
-                                            const paths = [
-                                                "{{ path('app_serie_render_translation_fields') }}",
-                                                "{{ path('app_serie_render_translation_select') }}",
-                                                "{{ path('app_serie_render_translation_save') }}",
-                                                "{{ path('app_serie_new') }}"
-                                            ];
+{% block morejs %}
+    <script src="/js/serie.js"></script>
+    <script>
+        const paths = [
+            "{{ path('app_serie_render_translation_fields') }}",
+            "{{ path('app_serie_render_translation_select') }}",
+            "{{ path('app_serie_render_translation_save') }}",
+            "{{ path('app_serie_new') }}"
+        ];
 
-                                            window.addEventListener("DOMContentLoaded", () => {
+        window.addEventListener("DOMContentLoaded", () => {
 
-                                                initSerieStuff(paths);
-                                            })
-                                        </script>
-                                    {% endblock %}
+            initSerieStuff(paths);
+        })
+    </script>
+{% endblock %}

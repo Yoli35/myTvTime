@@ -154,6 +154,7 @@
             initPreview();
             newSerie();
             initHeader();
+            clearQuote();
 
             autocomplete(document.querySelector("#search-name"), createList());
         })
@@ -184,6 +185,19 @@
             top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
             if (ratio < 0) ratio = 0;
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
+        }
+
+        function clearQuote() {
+            const root = document.querySelector(":root");
+            let op = 1.0, intervalId;
+
+            intervalId = setInterval(()=> {
+                root.style.setProperty("--quote-opacity", op);
+                op -= 0.001;
+                if (op < 0.0) {
+                    clearInterval(intervalId);
+                }
+            }, 5);
         }
 
         function initSettings() {

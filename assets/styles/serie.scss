@@ -17,6 +17,7 @@
             font-size: 1.25em;
             font-weight: 100;
             line-height: 1.25em;
+            opacity: var(--quote-opacity);
             position: absolute;
             text-align: right;
 
@@ -681,7 +682,7 @@
                     a {
                         width: 100%;
 
-                        .season, .episode {
+                        .season {
                             @include flex-row(center, flex-start);
                             background-color: var(--gradiant-ardoise-90);
                             border-radius: 0;
@@ -716,6 +717,51 @@
                                 div:first-child {
                                     font-size: 1.5em;
                                     font-weight: 200;
+                                }
+                            }
+                        }
+                        .episode {
+                            @include flex-row(center, flex-start);
+                            background-color: var(--gradiant-ardoise-90);
+                            border-radius: 0;
+                            min-height: 10em;
+                            margin: 1em 0;
+                            width: 100%;
+
+                            .poster {
+                                height: 100%;
+                                z-index: 0;
+
+                                img {
+                                    border-radius: 0;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    width: 30em;
+                                }
+                            }
+
+                            .infos {
+                                @include flex-col(flex-start, flex-start);
+                                padding: .5em;
+                                width: calc(100% - 30em);
+
+                                .info {
+                                    color: var(--gradiant-ardoise-20);
+                                    font-weight: 100;
+                                    margin: .25em 0;
+                                    max-height: 3em;
+                                    overflow-y: scroll;
+                                }
+
+                                .guests {
+                                    @include flex-100(unset, flex-start);
+                                    margin-top: 1em;
+                                    overflow: scroll;
+                                    width: 100%;
+
+                                    .guest {
+                                        @include human-profile(var(--gradiant-ardoise-20));
+                                    }
                                 }
                             }
                         }
@@ -1165,6 +1211,8 @@
                                     img {
                                         border-radius: .5em 0 0 .5em;
                                         height: 12em;
+                                        max-width: 20em;
+                                        object-fit: cover;
                                     }
                                 }
 
@@ -1172,6 +1220,21 @@
 
                                     div {
                                         color: var(--gradiant-ardoise-80);
+                                    }
+                                }
+                            }
+
+                            .episode {
+                                height: 24em;
+
+                                .poster {
+                                    height: 24em;
+                                    width: 30em;
+
+                                    img {
+                                        height: 24em;
+                                        max-width: unset;
+                                        width: 30em;
                                     }
                                 }
                             }
