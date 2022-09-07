@@ -45,11 +45,49 @@
                     width: calc(50% - 10em);
                 }
                 .countdown {
-                    @include flex-col();
+                    @include flex-100();
                     font-size: 2em;
                     font-weight: 100;
                     height: var(--event-height);
+                    opacity: 1;
+                    transition: opacity 2s ease-in-out;
                     width: 50%;
+
+                    &.switch {
+                        opacity: 0;
+                    }
+
+                    &.past {
+                        opacity: .25;
+                    }
+
+                    .part {
+                        @include flex-col();
+
+                        .count {
+                            font-size: 2em;
+                            font-weight: bold;
+                        }
+
+                        .label {
+                            font-size: .5em;
+                            font-weight: 100;
+                            text-transform: uppercase;
+                        }
+                    }
+
+                    .separator {
+                        animation: blink 1s infinite ease-in-out;
+                        font-size: 2em;
+                        height: 100%;
+                        padding-top: .25em;
+                    }
+
+                    @keyframes blink {
+                        50% {
+                            opacity: 0;
+                        }
+                    }
                 }
             }
         }

@@ -25,7 +25,7 @@
                                 <h2>{{ event.name }}</h2>
                                 <div>{{ event.subheading }}</div>
                             </div>
-                            <div class="countdown">
+                            <div class="countdown" id="{{ event.id }}">
                                 {{ event.date|format_datetime('full', 'medium') }}
                             </div>
                         </div>
@@ -37,13 +37,40 @@
 {% endblock %}
 {% block morejs %}
     <script>
+        let letterRatios = [];
+        let countdownValues = [];
+        const start = Date.now();
+
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
+            initCountdowns();
         })
 
         function initHeader() {
             let ticking = false;
+            let letters, animatedH1, count, index = 0;
+
+            animatedH1 = document.createElement("div");
+            animatedH1.classList.add("animated-h1");
+            animatedH1 = document.querySelector(".header").insertBefore(animatedH1, document.querySelector(".backdrop"));
+            letters = document.querySelector("h1").innerText.split('');
+
+            document.querySelector("h1").innerText = "";
+
+            count = letters.length;
+            letters.forEach(letter => {
+                let part = document.createElement("div");
+                part.classList.add("part");
+                if (letter === " ") {
+                    part.innerHTML = "&nbsp;"
+                } else {
+                    part.innerText = letter;
+                }
+                animatedH1.appendChild(part);
+                letterRatios[index] = index / (count - 1);
+                index++;
+            })
             setH1();
             window.addEventListener('resize', setH1);
 
@@ -61,13 +88,153 @@
 
         function setH1() {
             const header = document.querySelector(".header");
-            const h1 = document.querySelector("h1");
+            const h1 = document.querySelector(".animated-h1");
+            const parts = h1.querySelectorAll(".part");
             let left, ratio, top;
             ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
             left = (header.clientWidth - h1.clientWidth) / 2;
             top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
             if (ratio < 0) ratio = 0;
-            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
+            if (ratio > 1) ratio = 1;
+            parts.forEach(part => {
+                part.setAttribute("style", "transform: rotate(" + (720 * ratio) + "deg);");
+            })
+            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+        }
+
+        function initCountdowns() {
+            const countdowns = document.querySelectorAll(".countdown");
+
+            setCountdownValues();
+
+            countdowns.forEach(countdown => {
+                countdown.classList.add("switch");
+                setTimeout(createCountdown, 2000, countdown);
+            });
+        }
+
+        function setCountdownValues() {
+{#            {% for c in countdowns %}#}
+{#            countdownValues[{{ loop.index0 }}] = {"id": {{ c.id }}, "futur": {{ c.futur }}, "y": {{ c.y }}, "M": {{ c.M }}, "d": {{ c.d }}, "h": {{ c.h }}, "m": {{ c.m }}, "s": {{ c.s }}};#}
+{#            {% endfor %}#}
+            countdownValues = [];
+            {% for e in events %}
+            countdownValues[{{ loop.index0 }}] = {"id": {{ e.id }}, "date": "{{ e.date|format_datetime('short','short', locale='en-US') }}"};
+            {% endfor %}
+        }
+
+        function getCountdownValue(id) {
+            let n = countdownValues.length;
+            for (let i = 0; i < n; i++) {
+                if (countdownValues[i].id === id) {
+                    return countdownValues[i];
+                }
+            }
+            return null;
+        }
+
+        function createCountdown(countdown) {
+            countdown.innerHTML = "";
+            const id = parseInt(countdown.id);
+            // const countdownValue = getCountdownValue(id);
+            let days, hours, minutes, secondes, separator1, separator2, separator3, count, label;
+            days = document.createElement("div");
+            hours = document.createElement("div");
+            minutes = document.createElement("div");
+            secondes = document.createElement("div");
+            separator1 = document.createElement("div");
+            separator2 = document.createElement("div");
+            separator3 = document.createElement("div");
+            days.setAttribute("id", "days-" + id);
+            hours.setAttribute("id", "hours-" + id);
+            minutes.setAttribute("id", "minutes-" + id);
+            secondes.setAttribute("id", "secondes-" + id);
+            days.classList.add("part");
+            hours.classList.add("part");
+            minutes.classList.add("part");
+            secondes.classList.add("part");
+            separator1.classList.add("separator");
+            separator2.classList.add("separator");
+            separator3.classList.add("separator");
+
+            count = document.createElement("div");
+            count.classList.add("count");
+            count.innerText = "00";
+            label = document.createElement("div");
+            label.classList.add("label");
+            label.innerText = "jours";
+            days.appendChild(count);
+            days.appendChild(label);
+
+            count = document.createElement("div");
+            count.classList.add("count");
+            count.innerText = "00";
+            label = document.createElement("div");
+            label.classList.add("label");
+            label.innerText = "heures";
+            hours.appendChild(count);
+            hours.appendChild(label);
+
+            count = document.createElement("div");
+            count.classList.add("count");
+            count.innerText = "00";
+            label = document.createElement("div");
+            label.classList.add("label");
+            label.innerText = "minutes";
+            minutes.appendChild(count);
+            minutes.appendChild(label);
+
+            count = document.createElement("div");
+            count.classList.add("count");
+            count.innerText = "00";
+            label = document.createElement("div");
+            label.classList.add("label");
+            label.innerText = "secondes";
+            secondes.appendChild(count);
+            secondes.appendChild(label);
+
+            separator1.innerText = ":";
+            separator2.innerText = ":";
+            separator3.innerText = ":";
+
+            countdown.appendChild(days);
+            countdown.appendChild(separator1);
+            countdown.appendChild(hours);
+            countdown.appendChild(separator2);
+            countdown.appendChild(minutes);
+            countdown.appendChild(separator3);
+            countdown.appendChild(secondes);
+
+            countdown.classList.remove("switch");
+
+            // if (!countdownValue.futur) {
+            //     countdown.classList.add("past");
+            // }
+
+            updateCountdown(countdown);
+            setInterval(updateCountdown, 1000, countdown);
+        }
+
+        function updateCountdown(countdown) {
+            const id = parseInt(countdown.id);
+            const countdownValue = getCountdownValue(id);
+            const date = new Date(countdownValue.date);
+            let d, h, m, s;
+            const now = Date.now();
+            const diff = Math.abs(now - date);
+
+            d = Math.floor(diff / 24 / 60 / 60 / 1000);
+            h = Math.floor(diff / 60 / 60 / 1000) % 24;
+            m = Math.floor(diff / 60 / 1000) % 60;
+            s = Math.floor(diff / 1000) % 60;
+            document.querySelector("#days-" + id).querySelector(".count").innerText = (d < 10 ? "0" : "") + d;
+            document.querySelector("#hours-" + id).querySelector(".count").innerText = (h < 10 ? "0" : "") + h;
+            document.querySelector("#minutes-" + id).querySelector(".count").innerText = (m < 10 ? "0" : "") + m;
+            document.querySelector("#secondes-" + id).querySelector(".count").innerText = (s < 10 ? "0" : "") + s;
+
+            if (now - date > 0) {
+                countdown.classList.add("past");
+            }
         }
     </script>
 {% endblock %}
