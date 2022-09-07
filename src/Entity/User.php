@@ -67,6 +67,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Serie::class, mappedBy: 'users')]
     private Collection $series;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class, orphanRemoval: true)]
+    private Collection $events;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -74,6 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->articles = new ArrayCollection();
         $this->movieCollections = new ArrayCollection();
         $this->series = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -378,6 +382,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->series->removeElement($series)) {
             $series->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+            $event->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getUser() === $this) {
+                $event->setUser(null);
+            }
         }
 
         return $this;

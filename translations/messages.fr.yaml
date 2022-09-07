@@ -11,6 +11,7 @@ Logout: Déconnexion
 Movie: film
 Movies: Films
 My Account: Mon compte
+My Events: Mes événements
 My Movie Collections: Mes Collections de films
 My Movies: Mes films
 My Series: Mes séries
@@ -269,6 +270,16 @@ Show: Montrer
 Enter a Serie name: Enter le nom d'une série
 Enter a year: Préciser une année
 Series search: Rechercher une série
+
+# Events
+event: événement
+events: événements
+Events: Événements
+Visible: Visible
+Subheading: Sous-titre
+EventImage: Image
+Caption: Légende
+Event: Événement
 
 # Serie Genres
 #Action: Action

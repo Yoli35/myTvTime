@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\ArticleImage;
+use App\Entity\Event;
+use App\Entity\EventImage;
 use App\Entity\Genre;
 use App\Entity\ImageConfig;
 use App\Entity\MovieCollection;
@@ -62,6 +64,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Movies');
         yield MenuItem::linkToCrud('Movies', 'fa-solid fa-film', UserMovie::class);
         yield MenuItem::linkToCrud('Collections', 'fa-solid fa-film', MovieCollection::class);
+        yield MenuItem::section('Events');
+        yield MenuItem::linkToCrud('Events', 'fa-solid fa-calendar', Event::class);
+        yield MenuItem::linkToCrud('Images', 'fa fa-image', EventImage::class);
         yield MenuItem::section('Youtube Videos');
         yield MenuItem::linkToCrud('Youtube', 'fa-brands fa-youtube', YoutubeVideo::class);
         yield MenuItem::section('Tik Tok Videos');

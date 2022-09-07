@@ -1,0 +1,70 @@
+@import "variables";
+
+.my-events {
+    --event-height: 10rem;
+
+    @include flex-col(flex-start, center);
+    padding-top: 1em;
+
+    .header {
+        @include animated-header("../images/event-header.jpg");
+    }
+
+    .nav-breadcrumb {
+        margin: 1em 0 1em auto;
+    }
+
+    main {
+        width: 100%;
+
+        .events {
+            @include flex-col();
+            width: 100%;
+
+            .event {
+                @include flex-row(flex-start, flex-start);
+                background-color: var(--gradiant-ardoise-90);
+                border-radius: .5em;
+                margin-bottom: 1em;
+                overflow: hidden;
+                width: 100%;
+
+                .poster {
+                    height: var(--event-height);
+                    width: 10em;
+
+                    img {
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+                .infos {
+                    @include flex-col(flex-start, center);
+                    height: var(--event-height);
+                    padding: 1em;
+                    width: calc(50% - 10em);
+                }
+                .countdown {
+                    @include flex-col();
+                    font-size: 2em;
+                    font-weight: 100;
+                    height: var(--event-height);
+                    width: 50%;
+                }
+            }
+        }
+    }
+
+}
+
+@media (prefers-color-scheme: dark) {
+    .my-events {
+        main {
+            .events {
+                .event {
+                    background-color: var(--gradiant-ardoise-30);
+                }
+            }
+        }
+    }
+}

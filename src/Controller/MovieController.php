@@ -55,17 +55,17 @@ class MovieController extends AbstractController
 
         $imageConfig = $imageConfiguration->getConfig();
 
+        $collections = [];
+        $movieCollectionIds = [];
         if ($user) {
             $collections = $collectionRepository->findBy(['user' => $user]);
             $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
-            $movieCollections = $userMovie->getMovieCollections();
-            $movieCollectionIds = [];
-            foreach ($movieCollections as $movieCollection) {
-                $movieCollectionIds[] = $movieCollection->getId();
+            if ($userMovie) {
+                $movieCollections = $userMovie->getMovieCollections();
+                foreach ($movieCollections as $movieCollection) {
+                    $movieCollectionIds[] = $movieCollection->getId();
+                }
             }
-        } else {
-            $collections = [];
-            $movieCollectionIds = [];
         }
 
         if (!array_key_exists('release_date', $movieDetail)) {
