@@ -139,6 +139,8 @@ class MovieController extends AbstractController
             }
         }
 
+        dump($collection);
+
         $imageConfig = $imageConfiguration->getConfig();
 
         return $this->render('movie/collection.html.twig', [
@@ -146,6 +148,7 @@ class MovieController extends AbstractController
             'collection' => $collection,
             'userMovies' => $this->getUserMovieIds($userMovieRepository),
             'genres' => $genres,
+            'user' => $this->getUser(),
             'imageConfig' => $imageConfig,
             'locale' => $request->getLocale(),
         ]);
@@ -264,9 +267,11 @@ class MovieController extends AbstractController
         $collectionId = $request->query->getInt("c");
         $action = $request->query->get("a");
         $movieId = $request->query->getInt("m");
+        dump($collectionId, $action, $movieId);
 
         $collection = $collectionRepository->find($collectionId);
         $movie = $movieRepository->findOneBy(["movieDbId" => $movieId]);
+        dump($collection, $movie);
 
         if ($action == "a") $collection->addMovie($movie);
         if ($action == "r") $collection->removeMovie($movie);

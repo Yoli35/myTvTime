@@ -8,7 +8,7 @@ html {
 
 body {
     background: var(--mtt-body-bg);
-    background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--mtt-body-bg-gradiant) 100%);
+    background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--gradiant-mars-30) 10%, var(--gradiant-purple-30) 90%, var(--mtt-body-bg-gradiant) 100%);
     background-attachment: fixed;
     color: var(--mtt-body-color);
     display: flex;
@@ -283,7 +283,7 @@ nav.active {
     padding: .5em 1.5em;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 50;
 
     .breadcrumb {
         align-items: center;
@@ -319,6 +319,7 @@ nav.active {
             margin: 0 2em 0 1em;
             position: relative;
             width: 2em;
+            z-index: 52;
 
             &:before {
                 content: '◦';
@@ -358,7 +359,7 @@ nav.active {
                 position: absolute;
                 top: 2em;
                 width: 14em;
-                z-index: 2;
+                z-index: 53;
 
                 .menu-item {
                     width: 100%;

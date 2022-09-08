@@ -20,8 +20,8 @@ class EventController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $events = $eventRepository->findBy(['user' => $user]);
-        dump($events);
+        $events = $eventRepository->findBy(['user' => $user], ['date' => 'DESC']);
+
         return $this->render('event/index.html.twig', [
             'events' => $events,
             'user' => $user,

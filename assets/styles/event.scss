@@ -63,10 +63,11 @@
 
                     .part {
                         @include flex-col();
+                        width: 2.5em;
 
                         .count {
                             font-size: 2em;
-                            font-weight: bold;
+                            font-weight: 100;
                         }
 
                         .label {
@@ -84,7 +85,13 @@
                     }
 
                     @keyframes blink {
+                        49% {
+                            opacity: 1;
+                        }
                         50% {
+                            opacity: 0;
+                        }
+                        100% {
                             opacity: 0;
                         }
                     }

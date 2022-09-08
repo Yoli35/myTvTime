@@ -33,6 +33,9 @@
                 </div>
             </main>
         </div>
+
+        {{ include('blocks/pageFooter.html.twig') }}
+
     </div>
 {% endblock %}
 {% block morejs %}
@@ -68,7 +71,7 @@
                     part.innerText = letter;
                 }
                 animatedH1.appendChild(part);
-                letterRatios[index] = index / (count - 1);
+                letterRatios[index] = 2 * (Math.random() - .5);
                 index++;
             })
             setH1();
@@ -90,14 +93,14 @@
             const header = document.querySelector(".header");
             const h1 = document.querySelector(".animated-h1");
             const parts = h1.querySelectorAll(".part");
-            let left, ratio, top;
+            let left, ratio, top, n = 0;
             ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
             left = (header.clientWidth - h1.clientWidth) / 2;
             top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
             if (ratio < 0) ratio = 0;
             if (ratio > 1) ratio = 1;
             parts.forEach(part => {
-                part.setAttribute("style", "transform: rotate(" + (720 * ratio) + "deg);");
+                part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * letterRatios[n++]) + "deg);");
             })
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
         }
@@ -114,9 +117,6 @@
         }
 
         function setCountdownValues() {
-{#            {% for c in countdowns %}#}
-{#            countdownValues[{{ loop.index0 }}] = {"id": {{ c.id }}, "futur": {{ c.futur }}, "y": {{ c.y }}, "M": {{ c.M }}, "d": {{ c.d }}, "h": {{ c.h }}, "m": {{ c.m }}, "s": {{ c.s }}};#}
-{#            {% endfor %}#}
             countdownValues = [];
             {% for e in events %}
             countdownValues[{{ loop.index0 }}] = {"id": {{ e.id }}, "date": "{{ e.date|format_datetime('short','short', locale='en-US') }}"};

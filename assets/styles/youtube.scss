@@ -29,9 +29,12 @@
         @include flex-col();
         background-color: var(--gradiant-ardoise-80);
         border-radius: .5em;
-        box-shadow: 0 0 1em rgba(0,0,0,.25);
+        box-shadow: 0 0 1em rgba(0,0,0,.5);
         margin: 0 auto;
         overflow: hidden;
+        position: sticky;
+        top: 3em;
+        z-index: 40;
 
         .header {
             @include yt-header;
