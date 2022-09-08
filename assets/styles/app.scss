@@ -380,6 +380,23 @@ nav.active {
                 }
             }
         }
+
+        .tag-button {
+            background-color: var(--gradiant-purple-10);
+            border: 1px solid var(--gradiant-purple-50);
+            border-radius: .5em;
+            cursor: pointer;
+            font-weight: 100;
+            margin-left: auto;
+            padding: .125em 1em;
+
+            a {
+                color: var(--gradiant-purple-80);
+                display: block;
+                height: 100%;
+                width: 100%;
+            }
+        }
     }
 }
 

@@ -29,7 +29,7 @@
         @include flex-col();
         background-color: var(--gradiant-ardoise-80);
         border-radius: .5em;
-        box-shadow: 0 0 1em rgba(0,0,0,.5);
+        box-shadow: 0 0 1em rgba(0, 0, 0, .5);
         margin: 0 auto;
         overflow: hidden;
         position: sticky;
@@ -64,7 +64,8 @@
                 .page {
                     @include flex-100(center, center);
                     height: 1.5em;
-                    padding-top: .5em;                }
+                    padding-top: .5em;
+                }
             }
 
             .example {
@@ -237,27 +238,6 @@
     text-align: center;
 }
 
-/*
-@mixin thumbnail {
-    align-items: center;
-    background-color: var(--gradiant-ardoise-60);
-    border: 2px solid var(--gradiant-ardoise-70);
-    border-radius: 50%;
-    display: flex;
-    height: 2em;
-    flex: none;
-    font-size: 2em;
-    font-weight: 400;
-    justify-content: center;
-    width: 2em;
-
-    img {
-        border-radius: 50%;
-    }
-}
-*/
-
-
 .yt-video-page {
     font-weight: 400;
 
@@ -378,6 +358,117 @@
     }
 }
 
+.youtube-search {
+    @include flex-col(flex-start, center);
+    padding-top: 1em;
+
+    .header {
+        @include animated-header("../images/yt-header2.png");
+    }
+
+    .search {
+        @include flex-100(start, start);
+        background-color: var(--gradiant-ardoise-20);
+        margin: 1em 0;
+        padding: 1em;
+
+        .group {
+            @include flex-100(center, start);
+
+            label {
+                font-weight: 100;
+                margin-right: 1em;
+            }
+
+            .field {
+                position: relative;
+
+                input {
+                    background-color: var(--gradiant-ardoise-30);
+                    color: var(--gradiant-ardoise-80);
+                    border: 0;
+                    border-radius: .25em;
+                    font-weight: 100;
+                    margin-right: .5em;
+                    outline: none;
+                    padding: .25em 1em;
+                }
+
+                .autocomplete-items {
+                    border: 1px solid var(--gradiant-ardoise-80);
+                    border-bottom: none;
+                    border-top: none;
+                    left: 0;
+                    max-height: 32em;
+                    overflow: scroll;
+                    position: absolute;
+                    right: 0;
+                    top: 100%;
+                    width: 22em;
+                    z-index: 99;
+
+                    div {
+                        padding: .25em .5em calc(.25em - 1px);
+                        cursor: pointer;
+                        background-color: var(--gradiant-ardoise-90);
+                        border-bottom: 1px solid var(--gradiant-ardoise-70);
+                        color: var(--gradiant-ardoise-30);
+
+                        &:hover {
+                            background-color: var(--gradiant-ardoise-80);
+                        }
+
+                        &.active {
+                            /*when navigating through the items using the arrow keys:*/
+                            background-color: var(--gradiant-ardoise-40) !important;
+                            color: var(--gradiant-ardoise-90) !important;
+                        }
+                    }
+                }
+            }
+
+            .tag {
+                @include flex-row();
+                background-color: var(--gradiant-ardoise-50);
+                border-radius: .25em;
+                font-weight: 100;
+                padding: .25em .5em;
+                margin-left: .5em;
+
+                .delete {
+                    @include flex-row();
+                    cursor: pointer;
+                    margin-left: .5em;
+                }
+            }
+
+            .apply {
+                appearance: unset;
+                background-color: var(--gradiant-ardoise-20);
+                border: 1px solid var(--gradiant-ardoise-80);
+                border-radius: var(--button-border-radius);
+                color: var(--gradiant-ardoise-80);
+                font-weight: 100;
+                margin-left: auto;
+                padding: .25em 1em;
+                text-transform: uppercase;
+
+                &:hover {
+                    background-color: var(--gradiant-ardoise-50);
+                    color: var(--gradiant-mars-80);
+                }
+
+                &.disabled {
+                    background-color: var(--gradiant-ardoise-50);
+                    border: 1px solid var(--gradiant-ardoise-60);
+                    color: var(--gradiant-ardoise-60);
+                    cursor: default;
+                }
+            }
+        }
+    }
+}
+
 @media (min-width: 575.98px) {
     .yt-video-page {
         .video {
@@ -447,6 +538,12 @@
                     padding: 0 1em;
                 }
             }
+        }
+    }
+
+    .youtube-search {
+        .search {
+            border-radius: .5em;
         }
     }
 

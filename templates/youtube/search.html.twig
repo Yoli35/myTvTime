@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    MyTvTime::{{ 'Youtube video search'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ include('blocks/pageHeader.html.twig') }}
+    <div class="container">
+        <div class="youtube-search">
+            <div class="header">
+                <h1>{{ 'Youtube video search'|trans }}</h1>
+                <div class="backdrop"></div>
+            </div>
+            {{ include('blocks/nav.html.twig', {thisPage: 'Youtube video search'}) }}
+            <div class="search">
+                <div class="group">
+                    <label class="label" for="search-tag">{{ 'Tags'|trans }}</label>
+                    <div class="field">
+                        <input id="search-tag" type="text" value="" placeholder="{{ 'Start taping…'|trans }}">
+                    </div>
+                    <button class="apply" type="submit">{{ 'Apply'|trans }}</button>
+                </div>
+            </div>
+        </div>
+        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        const paths = [
+            "{{ path('app_youtube_search') }}",
+        ];
+        let letterRatios = [];
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            initHeader();
+            autocomplete(document.querySelector("#search-tag"), createList());
+        })
+
+        function initHeader() {
+            let ticking = false;
+            let letters, animatedH1, index = 0;
+
+            animatedH1 = document.createElement("div");
+            animatedH1.classList.add("animated-h1");
+            animatedH1 = document.querySelector(".header").insertBefore(animatedH1, document.querySelector(".backdrop"));
+            letters = document.querySelector("h1").innerText.split('');
+
+            document.querySelector("h1").innerText = "";
+
+            letters.forEach(letter => {
+                let part = document.createElement("div");
+                part.classList.add("part");
+                if (letter === " ") {
+                    part.innerHTML = "&nbsp;"
+                } else {
+                    part.innerText = letter;
+                }
+                animatedH1.appendChild(part);
+                letterRatios[index] = 2 * (Math.random() - .5);
+                index++;
+            })
+            setH1();
+            window.addEventListener('resize', setH1);
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(function () {
+                        setH1();
+                        ticking = false;
+                    });
+                }
+                ticking = true;
+            });
+        }
+
+        function setH1() {
+            const header = document.querySelector(".header");
+            const h1 = document.querySelector(".animated-h1");
+            const parts = h1.querySelectorAll(".part");
+            let left, ratio, top, n = 0;
+            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
+            left = (header.clientWidth - h1.clientWidth) / 2;
+            top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
+            if (ratio < 0) ratio = 0;
+            if (ratio > 1) ratio = 1;
+            parts.forEach(part => {
+                part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * letterRatios[n++]) + "deg);");
+            })
+            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+        }
+
+        function autocomplete(input, list) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            let currentFocus;
+
+            /*execute a function when someone writes in the text field:*/
+            input.addEventListener("input", function (e) {
+                let a, b, i, val;
+                val = e.target.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) {
+                    return false;
+                }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("div");
+                a.setAttribute("id", e.target.id + "-autocomplete-list");
+                a.classList.add("autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < list.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    let ok_tag = list[i].label.substring(0, val.length).toUpperCase() === val.toUpperCase();
+                    if (ok_tag) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("div");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + list[i].label.substr(0, val.length) + "</strong>";
+                        b.innerHTML += list[i].label.substring(val.length);
+                        /*insert an input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input id='item-" + i + "-id' type='hidden' value='" + list[i].id + "'>";
+                        b.innerHTML += "<input id='item-" + i + "-label' type='hidden' value='" + list[i].label + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function () {
+                            /* add the tag to the list */
+                            let id = this.getElementsByTagName("input")[0].value;
+                            let label = this.getElementsByTagName("input")[1].value;
+
+                            let newTag = document.createElement("div");
+                            newTag.classList.add("tag");
+                            newTag.appendChild(document.createTextNode(label));
+                            newTag.setAttribute("data-id", id);
+                            let deleteButton = document.createElement("div");
+                            deleteButton.classList.add("delete");
+                            let xmark = document.createElement("i")
+                            xmark.classList.add("fa-solid", "fa-square-xmark");
+                            deleteButton.appendChild(xmark);
+                            deleteButton.addEventListener("click", removeTag);
+                            newTag.appendChild(deleteButton);
+                            document.querySelector(".group").insertBefore(newTag, document.querySelector(".apply"));
+
+                            input.value = "";
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            input.addEventListener("keydown", function (e) {
+                let x = document.getElementById(this.id + "-autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode === 40) { /* arrow DOWN key */
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode === 38) { /* arrow UP key */
+                    currentFocus--;
+                    addActive(x);
+                } else if (e.keyCode === 13) { /* the ENTER key */
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+
+            function removeTag() {
+                let tag = this.parentElement;
+                document.querySelector(".group").removeChild(tag);
+            }
+
+            function addActive(x) {
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("active");
+            }
+
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (let i = 0; i < x.length; i++) {
+                    x[i].classList.remove("active");
+                }
+            }
+
+            function closeAllLists(element) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                let x = document.getElementsByClassName("autocomplete-items");
+                for (let i = 0; i < x.length; i++) {
+                    if (element !== x[i] && element !== input) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", (e) => {
+                closeAllLists(e.target);
+            });
+        }
+
+        function createList() {
+            let list = [{id: 0, label: ''}];
+
+            {% for tag in tags %}
+            list[{{ loop.index0 }}] = {'id': {{ tag.id }}, 'label': "{{ tag.label }}"};
+            {% endfor %}
+
+            console.log({list});
+            return list;
+        }
+    </script>
+{% endblock %}

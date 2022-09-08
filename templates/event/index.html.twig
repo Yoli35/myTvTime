@@ -52,7 +52,7 @@
 
         function initHeader() {
             let ticking = false;
-            let letters, animatedH1, count, index = 0;
+            let letters, animatedH1, index = 0;
 
             animatedH1 = document.createElement("div");
             animatedH1.classList.add("animated-h1");
@@ -61,7 +61,6 @@
 
             document.querySelector("h1").innerText = "";
 
-            count = letters.length;
             letters.forEach(letter => {
                 let part = document.createElement("div");
                 part.classList.add("part");

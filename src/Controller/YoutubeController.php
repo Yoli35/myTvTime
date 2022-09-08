@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\YoutubeVideo;
 use App\Entity\YoutubeVideoTag;
 use App\Form\YoutubeVideoType;
@@ -29,6 +30,7 @@ class YoutubeController extends AbstractController
         return $this->render('youtube/index.html.twig', [
             'locale' => $request->getLocale(),
             'preview' => $previews[$preview_index],
+            'from' => 'youtube',
         ]);
     }
 
@@ -76,12 +78,27 @@ class YoutubeController extends AbstractController
         $tags = $repository->findAllByLabel();
         $description = nl2br($youtubeVideo->getDescription());
         $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i', '$1<a href="$2" target="_blank">$2</a>', $description);
-        $description = preg_replace('#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#','<a href="mailto:$1">$1</a>', $description);
+        $description = preg_replace('#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#', '<a href="mailto:$1">$1</a>', $description);
 
         return $this->render('youtube/video.html.twig', [
                 'video' => $youtubeVideo,
                 'description' => $description,
                 'other_tags' => array_diff($tags, $youtubeVideo->getTags()->toArray()),
+            ]
+        );
+    }
+
+    #[Route('/{_locale}/youtube/search', name: 'app_youtube_search', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function searchByTag(YoutubeVideoTagRepository $tagRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $tags = $tagRepository->findAllByLabel();
+
+        return $this->render('youtube/search.html.twig', [
+                'tags' => $tags,
+                'user' => $user,
             ]
         );
     }
@@ -103,8 +120,7 @@ class YoutubeController extends AbstractController
                 $newTag->setLabel($tag);
                 $tagRepository->add($newTag, true);
                 $newTag = $tagRepository->findOneBy(['label' => $tag]);
-            }
-            else {
+            } else {
                 $fromList = true;
             }
             $youtubeVideo->addTag($newTag);
@@ -149,11 +165,11 @@ class YoutubeController extends AbstractController
     {
         return preg_replace(
             array(
-            '/(?(?=<a[^>]*>.+<\/a>) (?:<a[^>]*>.+<\/a>) | ([^="\']?)((?:https?|ftp|bf2|):\/\/[^<> \n\r]+) )/ix',
-            '/<a([^>]*)target="?[^"\']+"?/i',
-            '/<a([^>]+)>/i',
-            '/(^|\s)(www.[^<> \n\r]+)/ix',
-            '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+) (\\.[A-Za-z0-9-]+)*)/ix'
+                '/(?(?=<a[^>]*>.+<\/a>) (?:<a[^>]*>.+<\/a>) | ([^="\']?)((?:https?|ftp|bf2|):\/\/[^<> \n\r]+) )/ix',
+                '/<a([^>]*)target="?[^"\']+"?/i',
+                '/<a([^>]+)>/i',
+                '/(^|\s)(www.[^<> \n\r]+)/ix',
+                '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+) (\\.[A-Za-z0-9-]+)*)/ix'
             ),
             array(
                 "stripslashes((strlen('\\2')>0?'\\1<a href=\"\\2\">\\2</a>\\3':'\\0'))",

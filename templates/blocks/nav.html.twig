@@ -7,5 +7,10 @@
             <li class="breadcrumb-item"><a href="{{ parent.url }}">{{ parent.page|trans }}</a></li>
         {% endif %}
         <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
+        {% if from is defined %}
+            {% if from == 'youtube' %}
+                <div class="tag-button"><a href="{{ path('app_youtube_search') }}" title="{{ 'Go to the search by tag page'|trans }}">{{ 'Search by tag'|trans }}</a></div>
+            {% endif %}
+        {% endif %}
     </ol>
 </nav>
