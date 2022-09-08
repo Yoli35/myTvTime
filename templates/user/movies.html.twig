@@ -10,11 +10,11 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        {{ include('blocks/nav.html.twig', {thisPage: 'My Movies'}) }}
-
         <div class="user-account">
 
             {{ include('blocks/user/banner.html.twig') }}
+
+            {{ include('blocks/nav.html.twig', {thisPage: 'My Movies'}) }}
 
             <div class="user-movies">
                 <h1 style="font-weight: 100" id="h1" data-total-results="{{ count }}">
