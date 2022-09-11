@@ -89,7 +89,7 @@
                         </div>
                         {% if tv.homepage | length %}
                             <div class="homepage">
-                                {{ 'Home Page'|trans }} : <a href="{{ tv.homepage }}" target="_blank"><span class="data">{{ tv.homepage }}</span></a>
+                                {{ 'Home Page'|trans }} : <a href="{{ tv.homepage }}" target="_blank" rel="noopener"><span class="data">{{ tv.homepage }}</span></a>
                             </div>
                         {% endif %}
                         {% if tv.production_companies %}

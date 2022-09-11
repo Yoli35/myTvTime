@@ -231,9 +231,9 @@ function getProfile(e) {
         // if (death_day && death_day.length) $('.death-day span').html(dateFormat(death_day, locale)); else $('.death-day').css('display', 'none');
         if (death_day && death_day.length) document.querySelector(".death-day span").innerHTML = new Date(death_day).toLocaleString(_loc, options); else document.querySelector(".death-day").setAttribute("style", "display: none");
         // if (homepage && homepage.length) $('.homepage span').html('<a href="' + homepage + '" target="_blank">' + homepage + '</a>'); else $('.homepage').css('display', 'none');
-        if (homepage && homepage.length) document.querySelector(".homepage span").innerHTML = '<a href="' + homepage + '" target="_blank">' + homepage + '</a>'; else document.querySelector(".homepage").setAttribute("style", "display: none");
+        if (homepage && homepage.length) document.querySelector(".homepage span").innerHTML = '<a href="' + homepage + '" target="_blank" rel="noopener">' + homepage + '</a>'; else document.querySelector(".homepage").setAttribute("style", "display: none");
         // if (imdbpage && imdbpage.length) $('.imdb-page span').html('<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'); else $('.imdb-page').css('display', 'none');
-        if (imdbpage && imdbpage.length) document.querySelector(".imdb-page span").innerHTML = '<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'; else document.querySelector(".imdb-page").setAttribute("style", "display: none");
+        if (imdbpage && imdbpage.length) document.querySelector(".imdb-page span").innerHTML = '<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank" rel="noopener"></a>'; else document.querySelector(".imdb-page").setAttribute("style", "display: none");
         // if (place_of_birth && place_of_birth.length) $('.place-of-birth span').html(place_of_birth); else $('.place-of-birth').css('display', 'none');
         if (place_of_birth && place_of_birth.length) document.querySelector(".place-of-birth span").innerHTML = place_of_birth; else document.querySelector(".place-of-birth").setAttribute("style", "display: none");
 

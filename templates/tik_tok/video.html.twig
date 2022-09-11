@@ -13,7 +13,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
                 <li class="breadcrumb-item"><a href="{{ path('app_tik_tok') }}">{{ 'My TikTok Videos'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ video.authorUrl }}" target="_blank">{{ video.authorName }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ video.authorUrl }}" target="_blank" rel="noopener">{{ video.authorName }}</a></li>
                 <li class="breadcrumb-item active" aria-current="{{ video.title }}">{{ video.title }}</li>
             </ol>
         </nav>

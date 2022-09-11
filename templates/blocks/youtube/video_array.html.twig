@@ -38,7 +38,7 @@
                 {% else %}
                     {% set url = item.channel.youtube_id %}
                 {% endif %}
-                <a href="https://www.youtube.com/c/{{ url }}" target="_blank">
+                <a href="https://www.youtube.com/c/{{ url }}" target="_blank" rel="noopener">
                     <span data-descr="{{ item.channel.title }}">
                         {% if item.channel.thumbnail_default_url %}
                             <img src="{{ item.channel.thumbnail_default_url }}" alt="{{ item.channel.title }}" class="w-100">

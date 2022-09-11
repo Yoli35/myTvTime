@@ -77,7 +77,7 @@ class YoutubeController extends AbstractController
     {
         $tags = $repository->findAllByLabel();
         $description = nl2br($youtubeVideo->getDescription());
-        $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i', '$1<a href="$2" target="_blank">$2</a>', $description);
+        $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i', '$1<a href="$2" target="_blank" rel="noopener">$2</a>', $description);
         $description = preg_replace('#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#', '<a href="mailto:$1">$1</a>', $description);
 
         return $this->render('youtube/video.html.twig', [
@@ -239,7 +239,7 @@ class YoutubeController extends AbstractController
             array(
                 "stripslashes((strlen('\\2')>0?'\\1<a href=\"\\2\">\\2</a>\\3':'\\0'))",
                 '<a\\1',
-                '<a\\1 target="_blank">',
+                '<a\\1 target="_blank" rel="noopener">',
                 "stripslashes((strlen('\\2')>0?'\\1<a href=\"http://\\2\">\\2</a>\\3':'\\0'))",
                 "stripslashes((strlen('\\2')>0?'<a href=\"mailto:\\0\">\\0</a>':'\\0'))"
             ),

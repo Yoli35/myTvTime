@@ -47,10 +47,10 @@
             <div class="example">
                 <b>{{ 'For example'|trans }} :</b>
                 <div class="text-center">{{ preview_title }}</div>
-                <a href="https://youtu.be/{{ preview }}" target="_blank"><span><span>{{ preview }}</span></span></a>
-                <a href="https://youtu.be/{{ preview }}" target="_blank"><span>https://youtu.be/<span>{{ preview }}</span></span></a>
-                <a href="https://youtu.be/{{ preview }}" target="_blank"><span>https://www.youtube.com/watch?v=<span>{{ preview }}</span></span></a>
-                <a href="https://youtu.be/7KFxzeyse2g" target="_blank"><span>https://www.youtube.com/shorts/<span>7KFxzeyse2g</span></span></a>
+                <a href="https://youtu.be/{{ preview }}" target="_blank" rel="noopener"><span><span>{{ preview }}</span></span></a>
+                <a href="https://youtu.be/{{ preview }}" target="_blank" rel="noopener"><span>https://youtu.be/<span>{{ preview }}</span></span></a>
+                <a href="https://youtu.be/{{ preview }}" target="_blank" rel="noopener"><span>https://www.youtube.com/watch?v=<span>{{ preview }}</span></span></a>
+                <a href="https://youtu.be/7KFxzeyse2g" target="_blank" rel="noopener"><span>https://www.youtube.com/shorts/<span>7KFxzeyse2g</span></span></a>
             </div>
             <div class="thumbnail">
                 <img src="{{ preview_url }}" alt="{{ preview_title }}">
@@ -62,55 +62,6 @@
         <div id="result" class="result">
             {% for video in videos %}
                 {{ include('blocks/youtube/video.html.twig', {item: video}) }}
-{#                <div class="yt-video">#}
-{#                    <a href="{{ path('app_youtube_video', {id: item.id}) }}">#}
-{#                        <div class="thumbnail">#}
-{#                            <img src="{{ item.thumbnailMediumPath }}" alt="{{ item.title }}">#}
-{#                            {% if item.contentDuration < 36000 %} #}{# < 10:00:00 => 0:00:00 #}
-{#                                {% if item.contentDuration < 3600 %} #}{# < 01:00:00 => 00:00 #}
-{#                                    {% if item.contentDuration < 600 %} #}{# < 00:10:00 => 0:00 #}
-{#                                        <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[4:] }}</div>#}
-{#                                    {% else %}#}
-{#                                        <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[3:] }}</div>#}
-{#                                    {% endif %}#}
-{#                                {% else %}#}
-{#                                    <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[1:] }}</div>#}
-{#                                {% endif %}#}
-{#                            {% else %}#}
-{#                                <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium') }}</div>#}
-{#                            {% endif %}#}
-{#                            <div class="tags">#}
-{#                                {% for tag in item.tags %}#}
-{#                                    <div class="tag">{{ tag }}</div>#}
-{#                                    #}{#                                    <div class="tag">{% for word in tag|split(' ') %} {{ word|capitalize }} {% endfor %}</div> #}
-{#                                {% endfor %}#}
-{#                            </div>#}
-
-{#                        </div>#}
-{#                        <div class="details">#}
-{#                            <div class="channel">#}
-{#                                {% if item.channel.customUrl %}#}
-{#                                    {% set url = item.channel.customUrl %}#}
-{#                                {% else %}#}
-{#                                    {% set url = item.channel.youtubeId %}#}
-{#                                {% endif %}#}
-{#                                <a href="https://www.youtube.com/c/{{ url }}" target="_blank">#}
-{#                                    <span data-descr="{{ item.channel.title }}">#}
-{#                                        {% if item.channel.thumbnailDefaultUrl %}#}
-{#                                            <img src="{{ item.channel.thumbnailDefaultUrl }}" alt="{{ item.channel.title }}" class="w-100">#}
-{#                                        {% else %}#}
-{#                                            {{ item.channel.title|first }}#}
-{#                                        {% endif %}#}
-{#                                    </span>#}
-{#                                </a>#}
-{#                            </div>#}
-{#                            <div class="infos">#}
-{#                                <div class="info">{{ item.title }}</div>#}
-{#                                <div class="info">{{ 'Published at'|trans }} : {{ item.publishedAt|format_date('short') }}</div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                </div>#}
             {% endfor %}
             {% if count > (videos|length) %}
                 <div id="see-more" class="see-more">

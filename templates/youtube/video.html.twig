@@ -18,7 +18,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
                 <li class="breadcrumb-item"><a href="{{ path('app_youtube') }}">{{ 'My Youtube Videos'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="https://www.youtube.com/{{ url }}" target="_blank">{{ video.channel.title }}</a></li>
+                <li class="breadcrumb-item"><a href="https://www.youtube.com/{{ url }}" target="_blank" rel="noopener">{{ video.channel.title }}</a></li>
                 <li class="breadcrumb-item active" aria-current="{{ video.title }}">{{ video.title }}</li>
             </ol>
         </nav>
@@ -55,7 +55,7 @@
                 <div class="description">{{ description|raw }}</div>
                 <div class="channel">
                     <div class="thumbnail">
-                        <a href="https://www.youtube.com/{{ url }}" target="_blank">
+                        <a href="https://www.youtube.com/{{ url }}" target="_blank" rel="noopener">
                             {% if video.channel.thumbnailDefaultUrl %}
                                 <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
                             {% else %}

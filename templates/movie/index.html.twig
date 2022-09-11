@@ -65,7 +65,7 @@
                             {% if movie.homepage | length %}
                                 <div class="info">
                                     {{ 'Home Page'|trans }} :
-                                    <a href="{{ movie.homepage }}" target="_blank">
+                                    <a href="{{ movie.homepage }}" target="_blank" rel="noopener">
                                         <span data-descr="{{ 'Visit the official Movie Website'|trans }}">
                                             {{ movie.homepage }}&nbsp;<i class="bi bi-link-45deg"></i>
                                          </span>
@@ -74,7 +74,7 @@
                             {% endif %}
                             {% if movie.imdb_id | length %}
                                 <div class="info">
-                                    <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">
+                                    <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank" rel="noopener">
                                         <span data-descr="{{ 'Visit the Movie Page on IMDB'|trans }}">
                                             {{ 'IMDB Page'|trans }}&nbsp;<i class="bi bi-link-45deg"></i>
                                         </span>
