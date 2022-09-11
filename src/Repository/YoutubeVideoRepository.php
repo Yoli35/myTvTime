@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\YoutubeVideo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -54,15 +55,14 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->setFirstResult($offset)
             ->setMaxResults(20)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     public function countUserYTVideos($userId): array
     {
         $sql = 'SELECT COUNT(*) AS `count` FROM `youtube_video` t0 '
 //            .'INNER JOIN `user_tik_tok_video` t1 ON t1.`tik_tok_video_id`=t0.`id` '
-            .'WHERE t0.`user_id` = '.$userId;
+            . 'WHERE t0.`user_id` = ' . $userId;
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
@@ -75,7 +75,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
     {
         $sql = 'SELECT `content_duration` FROM `youtube_video` t0 '
 //            .'INNER JOIN `user_tik_tok_video` t1 ON t1.`tik_tok_video_id`=t0.`id` '
-            .'WHERE t0.`user_id` = '.$userId;
+            . 'WHERE t0.`user_id` = ' . $userId;
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
@@ -84,7 +84,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         return $resultSet->fetchAll();
     }
 
-    public function firstAddedYTVideo($userId):YoutubeVideo
+    public function firstAddedYTVideo($userId): YoutubeVideo
     {
         $result = $this->createQueryBuilder('y')
             ->andWhere('y.userId = :val')
@@ -92,11 +92,43 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->orderBy('y.addedAt', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
         return $result[0];
     }
 
+    public function videosByTag($userId, $list, $count, $method): array
+    {
+        if ($method == 'or') {
+            $sql = "SELECT t0.id "
+                . "FROM `youtube_video` t0 "
+                . "INNER JOIN `youtube_video_tag_youtube_video` t2 "
+                . "ON t2.`youtube_video_tag_id` IN (" . $list . ") AND t0.`id`=t2.`youtube_video_id` "
+                . "WHERE t0.`user_id` = " . $userId . " ";
+        } else {
+            $sql = "SELECT t0.id "
+                . "FROM `youtube_video` t0 "
+                . "INNER JOIN `youtube_video_tag_youtube_video` t2 "
+                . "ON t2.`youtube_video_tag_id` IN (" . $list . ") AND t0.`id`=t2.`youtube_video_id` "
+                . "WHERE t0.`user_id` = " . $userId . " "
+                . "GROUP BY t0.id "
+                . "HAVING (COUNT(t0.id)=" . $count . ")";
+        }
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+
+//        $result = $this->createQueryBuilder('y')
+//            ->select('*')->distinct()
+//            ->where('y.userId = :val')
+//            ->setParameter('val', $userId)
+//            ->innerJoin('y.tags', 't', Expr\Join::WITH, 't.id in (' . $list . ') and y.id=t.ytVideos')
+//            ->orderBy('y.publishedAt', 'DESC')
+//            ->getQuery()
+//            ->getResult();
+    }
 //    /**
 //     * @return YoutubeVideo[] Returns an array of YoutubeVideo objects
 //     */

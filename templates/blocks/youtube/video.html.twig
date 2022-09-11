@@ -1,0 +1,57 @@
+<div class="yt-video">
+    <a href="{{ path('app_youtube_video', {id: item.id}) }}">
+        <div class="thumbnail">
+            <img src="{{ item.thumbnailMediumPath }}" alt="{{ item.title }}">
+            {% if item.contentDuration < 36000 %} {# < 10:00:00 => 0:00:00 #}
+                {% if item.contentDuration < 3600 %} {# < 01:00:00 => 00:00 #}
+                    {% if item.contentDuration < 600 %} {# < 00:10:00 => 0:00 #}
+                        <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[4:] }}</div>
+                    {% else %}
+                        <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[3:] }}</div>
+                    {% endif %}
+                {% else %}
+                    <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[1:] }}</div>
+                {% endif %}
+            {% else %}
+                <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium') }}</div>
+            {% endif %}
+            <div class="tags">
+                {% for tag in item.tags %}
+                    {% if list is defined %}
+                        {% if tag.id in list %}
+                            <div class="tag highlight">{{ tag }}</div>
+                        {% else %}
+                            <div class="tag">{{ tag }}</div>
+                        {% endif %}
+                    {% else %}
+                        <div class="tag">{{ tag }}</div>
+                    {% endif %}
+                    {#                                    <div class="tag">{% for word in tag|split(' ') %} {{ word|capitalize }} {% endfor %}</div> #}
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="details">
+            <div class="channel">
+                {% if item.channel.customUrl %}
+                    {% set url = item.channel.customUrl %}
+                {% else %}
+                    {% set url = item.channel.youtubeId %}
+                {% endif %}
+                <a href="https://www.youtube.com/c/{{ url }}" target="_blank">
+                                    <span data-descr="{{ item.channel.title }}">
+                                        {% if item.channel.thumbnailDefaultUrl %}
+                                            <img src="{{ item.channel.thumbnailDefaultUrl }}" alt="{{ item.channel.title }}" class="w-100">
+                                        {% else %}
+                                            {{ item.channel.title|first }}
+                                        {% endif %}
+                                    </span>
+                </a>
+            </div>
+            <div class="infos">
+                <div class="info">{{ item.title }}</div>
+                <div class="info">{{ 'Published at'|trans }} : {{ item.publishedAt|format_date('short') }}</div>
+            </div>
+        </div>
+    </a>
+</div>

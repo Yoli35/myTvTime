@@ -15,12 +15,22 @@
             {{ include('blocks/nav.html.twig', {thisPage: 'Youtube video search'}) }}
             <div class="search">
                 <div class="group">
-                    <label class="label" for="search-tag">{{ 'Tags'|trans }}</label>
+                    <label class="label" for="search-tag">{{ 'Tags'|trans }} :</label>
                     <div class="field">
                         <input id="search-tag" type="text" value="" placeholder="{{ 'Start taping…'|trans }}">
                     </div>
+                    <div class="method">
+                        <label for="method">{{ 'Selection'|trans }}</label>
+                        <select id="method">
+                            <option value="and">Tous le mots-clés</option>
+                            <option value="or" selected>Au moins un mot-clé</option>
+                        </select>
+                        <div class="arrow"><i class="fa-solid fa-caret-down"></i></div>
+                    </div>
                     <button class="apply" type="submit">{{ 'Apply'|trans }}</button>
                 </div>
+            </div>
+            <div class="results">
             </div>
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
@@ -29,14 +39,19 @@
 {% block morejs %}
     <script>
         const paths = [
-            "{{ path('app_youtube_search') }}",
+            "{{ path('app_youtube_video_by_tag') }}",
         ];
+
+        const _app_youtube_video_by_tag = paths[0];
         let letterRatios = [];
+        let tagList;
 
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
-            autocomplete(document.querySelector("#search-tag"), createList());
+            tagList = createList();
+            autocomplete(document.querySelector("#search-tag"), tagList);
+            document.querySelector(".apply").addEventListener("click", applyTags);
         })
 
         function initHeader() {
@@ -93,13 +108,11 @@
         }
 
         function autocomplete(input, list) {
-            /*the autocomplete function takes two arguments,
-            the text field element and an array of possible autocompleted values:*/
             let currentFocus;
 
             /*execute a function when someone writes in the text field:*/
             input.addEventListener("input", function (e) {
-                let a, b, i, val;
+                let a, b, c, i, val;
                 val = e.target.value;
                 /*close any already open lists of autocompleted values*/
                 closeAllLists();
@@ -107,48 +120,57 @@
                     return false;
                 }
                 currentFocus = -1;
-                /*create a DIV element that will contain the items (values):*/
                 a = document.createElement("div");
                 a.setAttribute("id", e.target.id + "-autocomplete-list");
                 a.classList.add("autocomplete-items");
-                /*append the DIV element as a child of the autocomplete container:*/
                 this.parentNode.appendChild(a);
-                /*for each item in the array...*/
+
                 for (i = 0; i < list.length; i++) {
-                    /*check if the item starts with the same letters as the text field value:*/
-                    let ok_tag = list[i].label.substring(0, val.length).toUpperCase() === val.toUpperCase();
-                    if (ok_tag) {
-                        /*create a DIV element for each matching element:*/
-                        b = document.createElement("div");
-                        /*make the matching letters bold:*/
-                        b.innerHTML = "<strong>" + list[i].label.substr(0, val.length) + "</strong>";
-                        b.innerHTML += list[i].label.substring(val.length);
-                        /*insert an input field that will hold the current array item's value:*/
-                        b.innerHTML += "<input id='item-" + i + "-id' type='hidden' value='" + list[i].id + "'>";
-                        b.innerHTML += "<input id='item-" + i + "-label' type='hidden' value='" + list[i].label + "'>";
-                        /*execute a function when someone clicks on the item value (DIV element):*/
-                        b.addEventListener("click", function () {
-                            /* add the tag to the list */
-                            let id = this.getElementsByTagName("input")[0].value;
-                            let label = this.getElementsByTagName("input")[1].value;
 
-                            let newTag = document.createElement("div");
-                            newTag.classList.add("tag");
-                            newTag.appendChild(document.createTextNode(label));
-                            newTag.setAttribute("data-id", id);
-                            let deleteButton = document.createElement("div");
-                            deleteButton.classList.add("delete");
-                            let xmark = document.createElement("i")
-                            xmark.classList.add("fa-solid", "fa-square-xmark");
-                            deleteButton.appendChild(xmark);
-                            deleteButton.addEventListener("click", removeTag);
-                            newTag.appendChild(deleteButton);
-                            document.querySelector(".group").insertBefore(newTag, document.querySelector(".apply"));
+                    if (list[i].selected === false) {
+                        let ok_tag = list[i].label.substring(0, val.length).toUpperCase() === val.toUpperCase();
+                        if (ok_tag) {
+                            /*create a DIV element for each matching element:*/
+                            b = document.createElement("div");
+                            /*make the matching letters bold:*/
+                            // b.innerHTML = "<strong>" + list[i].label.substr(0, val.length) + "</strong>";
+                            // b.innerHTML += list[i].label.substring(val.length);
+                            c = document.createElement("strong");
+                            c.appendChild(document.createTextNode(list[i].label.substr(0, val.length)));
+                            b.appendChild(c);
+                            b.appendChild(document.createTextNode(list[i].label.substr(val.length)));
+                            b.setAttribute("data-id", list[i].id);
+                            b.setAttribute("data-label", list[i].label);
+                            b.setAttribute("data-index", i);
 
-                            input.value = "";
-                            closeAllLists();
-                        });
-                        a.appendChild(b);
+                            /*execute a function when someone clicks on the item value (DIV element):*/
+                            b.addEventListener("click", function () {
+                                /* add the tag to the list */
+                                let id = this.getAttribute("data-id");
+                                let label = this.getAttribute("data-label");
+                                let index = this.getAttribute("data-index");
+
+                                tagList[index].selected = true;
+
+                                let newTag = document.createElement("div");
+                                newTag.classList.add("tag");
+                                newTag.appendChild(document.createTextNode(label));
+                                newTag.setAttribute("data-id", id);
+                                newTag.setAttribute("data-index", index);
+                                let deleteButton = document.createElement("div");
+                                deleteButton.classList.add("delete");
+                                let xmark = document.createElement("i")
+                                xmark.classList.add("fa-solid", "fa-square-xmark");
+                                deleteButton.appendChild(xmark);
+                                deleteButton.addEventListener("click", removeTag);
+                                newTag.appendChild(deleteButton);
+                                document.querySelector(".group").insertBefore(newTag, document.querySelector(".method"));
+
+                                input.value = "";
+                                closeAllLists();
+                            });
+                            a.appendChild(b);
+                        }
                     }
                 }
             });
@@ -172,6 +194,8 @@
 
             function removeTag() {
                 let tag = this.parentElement;
+                let index = tag.getAttribute("data-index");
+                tagList[index].selected = false;
                 document.querySelector(".group").removeChild(tag);
             }
 
@@ -209,14 +233,34 @@
             });
         }
 
+        function applyTags() {
+            const tags = document.querySelector(".group").querySelectorAll(".tag");
+            let method = document.querySelector("#method").value;
+            let list = "";
+            if (tags.length === 0) return;
+            tags.forEach(tag => {
+                if (list.length) list += ",";
+                list += tag.getAttribute("data-id");
+            });
+            console.log(list);
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let data = this.response;
+                console.log({data});
+                document.querySelector(".results").innerHTML = data;
+            }
+            xhr.open("GET", _app_youtube_video_by_tag + '?tags=' + list + '&m=' + method);
+            xhr.send();
+
+        }
+
         function createList() {
             let list = [{id: 0, label: ''}];
 
-            {% for tag in tags %}
-            list[{{ loop.index0 }}] = {'id': {{ tag.id }}, 'label': "{{ tag.label }}"};
+            {% for tag in allTags %}
+            list[{{ loop.index0 }}] = {'id': {{ tag.id }}, 'label': "{{ tag.label }}", 'selected': false};
             {% endfor %}
 
-            console.log({list});
             return list;
         }
     </script>

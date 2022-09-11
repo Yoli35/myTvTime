@@ -403,7 +403,7 @@
 }
 
 .recommendations {
-    @include flex-row(center, space-around);
+    @include flex-row(stretch, space-around);
     background-color: var(--gradiant-ardoise-90);
     border-radius: 1em;
     flex-wrap: wrap;
@@ -440,8 +440,16 @@
             }
         }
 
-        img {
-            border-radius: .5em;
+        a {
+            height: 100%;
+            width: 100%;
+
+            img {
+                border-radius: .5em;
+                height: 100%;
+                object-fit: cover;
+                width: 100%;
+            }
         }
     }
 }

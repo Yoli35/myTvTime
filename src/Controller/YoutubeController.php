@@ -89,18 +89,83 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/{_locale}/youtube/search', name: 'app_youtube_search', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function searchByTag(YoutubeVideoTagRepository $tagRepository): Response
+    public function search(Request $request, YoutubeVideoTagRepository $tagRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        $tags = $tagRepository->findAllByLabel();
+        $allTags = $tagRepository->findAllByLabel();
 
         return $this->render('youtube/search.html.twig', [
-                'tags' => $tags,
-                'user' => $user,
-            ]
-        );
+            'allTags' => $allTags,
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/{_locale}/youtube/search_by_tag', name: 'app_youtube_search_by_tag', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function searchByTag(Request $request, YoutubeVideoTagRepository $tagRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $list = $request->query->get("tags");
+        $method = $request->query->get("m");
+        $videos = [];
+        $addedVideosIndexes = [];
+
+        // Toutes les vidéos
+        if ($list) {
+            $items = explode(",", $list);
+            $tags = $tagRepository->findBy(['id' => $items]); // id in "33,50" par exemple
+
+            foreach ($tags as $tag) {
+                foreach ($tag->getYtVideos() as $ytVideo) {
+                    if ($ytVideo->getUserId() == $user->getId()) {
+                        // doublons
+                        if (!in_array($ytVideo->getId(), $addedVideosIndexes)) {
+                            $videos[] = $ytVideo;
+                            $addedVideosIndexes[] = $ytVideo->getId();
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this->render('blocks/youtube/videos.html.twig', [
+            'videos' => $videos,
+            'type' => '',
+        ]);
+    }
+
+    #[Route('/{_locale}/youtube/video_by_tag', name: 'app_youtube_video_by_tag', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function searchVideoByTag(Request $request, YoutubeVideoRepository $videoRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $list = $request->query->get("tags");
+        $method = $request->query->get("m");
+        $ids = [];
+        $videos = [];
+        $tagIds = explode(',', $list);
+        $count = count($tagIds);
+        dump($list, $tagIds, $count);
+
+        // Toutes les vidéos
+        if ($list) {
+            $videoIds = $videoRepository->videosByTag($user->getId(), $list, $count, $method);
+            dump($videoIds);
+            foreach ($videoIds as $videoId) {
+                $ids[] = $videoId['id'];
+            }
+            dump($ids);
+            $videos = $videoRepository->findBy(['id' => $ids], ['publishedAt' => 'DESC']);
+            dump($videos);
+        }
+
+        return $this->render('blocks/youtube/videos.html.twig', [
+            'videos' => $videos,
+            'list' => $tagIds,
+            'type' => '',
+        ]);
     }
 
     #[Route('/{_locale}/youtube/video/add/tag/{id}/{tag}', name: 'app_youtube_video_add_tag', requirements: ['_locale' => 'fr|en|de|es'])]
