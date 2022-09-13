@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\YoutubeChannelRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: YoutubeChannelRepository::class)]
@@ -13,40 +12,45 @@ class YoutubeChannel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $youtubeId;
+    private ?string $youtubeId;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private ?string $title;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $description;
+    private ?string $description;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $customUrl;
+    private ?string $customUrl;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $publishedAt;
+    private ?DateTimeImmutable $publishedAt;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $thumbnailDefaultUrl;
+    private ?string $thumbnailDefaultUrl;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $thumbnailMediumUrl;
+    private ?string $thumbnailMediumUrl;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $thumbnailHighUrl;
+    private ?string $thumbnailHighUrl;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $localizedTitle;
+    private ?string $localizedTitle;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $localizedDescription;
+    private ?string $localizedDescription;
 
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
-    private $country;
+    private ?string $country;
+
+    public function __toString(): string
+    {
+        return $this->title;
+    }
 
     public function getId(): ?int
     {
@@ -101,12 +105,12 @@ class YoutubeChannel
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTimeImmutable
+    public function getPublishedAt(): ?DateTimeImmutable
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(?\DateTimeImmutable $publishedAt): self
+    public function setPublishedAt(?DateTimeImmutable $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
 

@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\YoutubeVideo;
 use App\Entity\YoutubeVideoTag;
-use App\Form\YoutubeVideoType;
 use App\Repository\YoutubeVideoRepository;
 use App\Repository\YoutubeVideoTagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +24,7 @@ class YoutubeController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $previews = ['FhNiY_n0rmc', 'UoRyxgdFJ5Y', 'NCHMT-nQ-8c', 'tBTZ96Iit2g', 'T94JsAgK1X8', 'W9b8ifsDons', 'qOVT9rYda2o', 'qOVT9rYda2o', 'esNfg_XbXMY', 'lqttiQMLTbI', '9sLiQ7DKJ2g', 'q5D55G7Ejs8', 'R4bkKkooa-A', 'ieDIpgso4no', 'n0GSZtPEQs0', 'sbriUP3Pp5s', 'kDsC-fHC0vE', '2k-I_8lhS0w', 'iHTntTTa2io', 'uhMKEd18m_s', 'pVoRFDjq8-g', 'P5UZgiENdx0', 'at9h35V8rtQ', 'Mf1TwEySpno', '2kqvfoUUhA4', 'MUxcCgx4VlI', '6qiK5oQ_Vwk', '85gW-XY3fSE', '1Z5SRVURcIA', 'u044iM9xsWU', 'dWtG6DFFb1E', 'gmKINSHqryc', 'l8e8-8K1G0Y', 'xD_5BsMDBHY'];
-        $preview_index = array_rand($previews, 1);
+        $preview_index = array_rand($previews);
 
         return $this->render('youtube/index.html.twig', [
             'locale' => $request->getLocale(),
@@ -89,50 +88,15 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/{_locale}/youtube/search', name: 'app_youtube_search', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function search(Request $request, YoutubeVideoTagRepository $tagRepository): Response
+    public function search(YoutubeVideoTagRepository $tagRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
-
         $allTags = $tagRepository->findAllByLabel();
 
         return $this->render('youtube/search.html.twig', [
             'allTags' => $allTags,
             'user' => $user,
-        ]);
-    }
-
-    #[Route('/{_locale}/youtube/search_by_tag', name: 'app_youtube_search_by_tag', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function searchByTag(Request $request, YoutubeVideoTagRepository $tagRepository): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $list = $request->query->get("tags");
-        $method = $request->query->get("m");
-        $videos = [];
-        $addedVideosIndexes = [];
-
-        // Toutes les vidéos
-        if ($list) {
-            $items = explode(",", $list);
-            $tags = $tagRepository->findBy(['id' => $items]); // id in "33,50" par exemple
-
-            foreach ($tags as $tag) {
-                foreach ($tag->getYtVideos() as $ytVideo) {
-                    if ($ytVideo->getUserId() == $user->getId()) {
-                        // doublons
-                        if (!in_array($ytVideo->getId(), $addedVideosIndexes)) {
-                            $videos[] = $ytVideo;
-                            $addedVideosIndexes[] = $ytVideo->getId();
-                        }
-                    }
-                }
-            }
-        }
-
-        return $this->render('blocks/youtube/videos.html.twig', [
-            'videos' => $videos,
-            'type' => '',
         ]);
     }
 
@@ -147,18 +111,14 @@ class YoutubeController extends AbstractController
         $videos = [];
         $tagIds = explode(',', $list);
         $count = count($tagIds);
-        dump($list, $tagIds, $count);
 
         // Toutes les vidéos
         if ($list) {
             $videoIds = $videoRepository->videosByTag($user->getId(), $list, $count, $method);
-            dump($videoIds);
             foreach ($videoIds as $videoId) {
                 $ids[] = $videoId['id'];
             }
-            dump($ids);
             $videos = $videoRepository->findBy(['id' => $ids], ['publishedAt' => 'DESC']);
-            dump($videos);
         }
 
         return $this->render('blocks/youtube/videos.html.twig', [
@@ -208,7 +168,7 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/{_locale}/youtube/video/remove/tag/{id}/{tag}', name: 'app_youtube_video_remove_tag', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function removeTag($id, $tag, YoutubeVideo $youtubeVideo, YoutubeVideoRepository $videoRepository, YoutubeVideoTagRepository $tagRepository): Response
+    public function removeTag($tag, YoutubeVideo $youtubeVideo, YoutubeVideoRepository $videoRepository, YoutubeVideoTagRepository $tagRepository): Response
     {
         $videoTag = $tagRepository->find($tag);
         $youtubeVideo->removeTag($videoTag);
@@ -226,24 +186,23 @@ class YoutubeController extends AbstractController
         ]);
     }
 
-    private function urlsToLinks($text): array|string|null
-    {
-        return preg_replace(
-            array(
-                '/(?(?=<a[^>]*>.+<\/a>) (?:<a[^>]*>.+<\/a>) | ([^="\']?)((?:https?|ftp|bf2|):\/\/[^<> \n\r]+) )/ix',
-                '/<a([^>]*)target="?[^"\']+"?/i',
-                '/<a([^>]+)>/i',
-                '/(^|\s)(www.[^<> \n\r]+)/ix',
-                '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+) (\\.[A-Za-z0-9-]+)*)/ix'
-            ),
-            array(
-                "stripslashes((strlen('\\2')>0?'\\1<a href=\"\\2\">\\2</a>\\3':'\\0'))",
-                '<a\\1',
-                '<a\\1 target="_blank" rel="noopener">',
-                "stripslashes((strlen('\\2')>0?'\\1<a href=\"http://\\2\">\\2</a>\\3':'\\0'))",
-                "stripslashes((strlen('\\2')>0?'<a href=\"mailto:\\0\">\\0</a>':'\\0'))"
-            ),
-            $text);
-    }
-
+//    private function urlsToLinks($text): array|string|null
+//    {
+//        return preg_replace(
+//            array(
+//                '/(?(?=<a[^>]*>.+<\/a>) (?:<a[^>]*>.+<\/a>) | ([^="\']?)((?:https?|ftp|bf2|):\/\/[^<> \n\r]+) )/ix',
+//                '/<a([^>]*)target="?[^"\']+"?/i',
+//                '/<a([^>]+)>/i',
+//                '/(^|\s)(www.[^<> \n\r]+)/ix',
+//                '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+) (\\.[A-Za-z0-9-]+)*)/ix'
+//            ),
+//            array(
+//                "stripslashes((strlen('\\2')>0?'\\1<a href=\"\\2\">\\2</a>\\3':'\\0'))",
+//                '<a\\1',
+//                '<a\\1 target="_blank" rel="noopener">',
+//                "stripslashes((strlen('\\2')>0?'\\1<a href=\"http://\\2\">\\2</a>\\3':'\\0'))",
+//                "stripslashes((strlen('\\2')>0?'<a href=\"mailto:\\0\">\\0</a>':'\\0'))"
+//            ),
+//            $text);
+//    }
 }

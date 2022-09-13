@@ -141,6 +141,7 @@
       <path value="$PROJECT_DIR$/vendor/imagine/imagine" />
       <path value="$PROJECT_DIR$/vendor/google/longrunning" />
       <path value="$PROJECT_DIR$/vendor/symfony/ux-dropzone" />
+      <path value="$PROJECT_DIR$/vendor/deployer/deployer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">

@@ -14,6 +14,7 @@
   "build/images/header.004.png": "/build/images/header.004.389f7fe1.png",
   "build/images/header.002.png": "/build/images/header.002.5a5b254f.png",
   "build/images/yt-header1.png": "/build/images/yt-header1.59e36dde.png",
+  "build/images/yt-header2.png": "/build/images/yt-header2.02d544c1.png",
   "build/images/tiktok-header6.jpg": "/build/images/tiktok-header6.3dcdca83.jpg",
   "build/images/serie-header.jpg": "/build/images/serie-header.1c2fd2bf.jpg",
   "build/images/blog-header.jpg": "/build/images/blog-header.2116da3a.jpg",
@@ -24,6 +25,7 @@
   "build/images/tiktok-header3.jpg": "/build/images/tiktok-header3.31b2a098.jpg",
   "build/images/tiktok-header5.jpg": "/build/images/tiktok-header5.4662e987.jpg",
   "build/fonts/fa-brands-400.woff2": "/build/fonts/fa-brands-400.a914b121.woff2",
+  "build/images/event-header.jpg": "/build/images/event-header.2227954c.jpg",
   "build/images/tiktok-header4.jpg": "/build/images/tiktok-header4.8573f3f0.jpg",
   "build/images/tiktok-header1.jpg": "/build/images/tiktok-header1.087005de.jpg",
   "build/images/tiktok-header2.jpg": "/build/images/tiktok-header2.5d6c4fc1.jpg",
@@ -33,7 +35,5 @@
   "build/images/imdb.png": "/build/images/imdb.9a7477bf.png",
   "build/images/arrow-up-circle-outline.png": "/build/images/arrow-up-circle-outline.137a27d1.png",
   "build/images/star-outline.png": "/build/images/star-outline.3e7dbff2.png",
-  "build/images/star.png": "/build/images/star.16ef0d59.png",
-  "build/images/event-header.jpg": "/build/images/event-header.2227954c.jpg",
-  "build/images/yt-header2.png": "/build/images/yt-header2.02d544c1.png"
+  "build/images/star.png": "/build/images/star.16ef0d59.png"
 }
