@@ -101,10 +101,18 @@
                     </div>
                     <div class="info">
                         <div class="tagline">{{ serie.tagline }}</div>
+                        <div class="vote-count">{{ serie.vote_count }} votes</div>
+                        <div class="vote-average">
+                            <div class="circle">
+                                <div class="percentage">{{ (serie.vote_average * 10)|round }}%</div>
+                            </div>
+                            <div class="circle-start"></div>
+                            <div class="circle-end"></div>
+                        </div>
                     </div>
                     <div class="info">
                         {% if serie.overview|length %}
-{#                            <h5>{{ 'Synopsis'|trans }}</h5>#}
+                            {#                            <h5>{{ 'Synopsis'|trans }}</h5> #}
                             <div>{{ serie.overview }}</div>
                         {% endif %}
                     </div>
@@ -225,7 +233,7 @@
                                     <h5>{{ 'Backdrops'|trans }}</h5>
                                     <div>
                                         {% for backdrop in images.backdrops %}
-                                            <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.2 ~ backdrop.file_path }}">
+                                            <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.2 ~ backdrop.file_path }}" alt="Some backdrop">
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -233,7 +241,7 @@
                                     <h5>{{ 'Logos'|trans }}</h5>
                                     <div>
                                         {% for logo in images.logos %}
-                                            <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}">
+                                            <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -241,7 +249,7 @@
                                     <h5>{{ 'Posters'|trans }}</h5>
                                     <div>
                                         {% for poster in images.posters %}
-                                            <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.2 ~ poster.file_path }}">
+                                            <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.2 ~ poster.file_path }}" alt="Some poster">
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -355,6 +363,14 @@
         window.addEventListener("DOMContentLoaded", () => {
 
             initSerieStuff(paths);
+
+            const circle = document.querySelector(".circle");
+            const start = document.querySelector(".circle-start");
+            const end = document.querySelector(".circle-end");
+            const vote = parseFloat({{ serie.vote_average }}) * 10;
+            circle.setAttribute("style", "background: conic-gradient(var(--gradiant-ardoise-60) 0%, var(--gradiant-ardoise-60) " + vote + "%, var(--gradiant-ardoise-10) " + vote + "%);");
+            start.setAttribute("style", "translate: 0 -1.5em;");
+            end.setAttribute("style", "transform: rotate(" + (vote * 3.6) + "deg) translateY(-1.5em)");
         })
     </script>
 {% endblock %}

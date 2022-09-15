@@ -8,8 +8,6 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
 import './styles/movie.scss';
-// import './styles/series.scss';
-// import './styles/tv.scss';
 import './styles/user.scss';
 import './styles/youtube.scss';
 import './styles/tiktok.scss';
@@ -21,7 +19,7 @@ import './styles/event.scss';
 import './js/cookie-consent';
 import './js/mydropzone_controller'
 
-import 'bootstrap';
+// import 'bootstrap';
 
 // start the Stimulus application
 import './bootstrap';

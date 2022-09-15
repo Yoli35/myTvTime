@@ -1,37 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LoginController!{% endblock %}
+{% block title %}{{ 'Login' |trans }}{% endblock %}
 
 {% block body %}
-    <div class="container vh-100">
-        <div class="login">
-            <div class="card">
-                <form action="{{ path('app_login') }}" method="post">
-                    <div class="card-header"><h5>{{ 'Connexion'|trans }}</h5></div>
-                    <div class="card-body">
-                        {% if error %}
-                            <p class="card-text">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
-                        {% endif %}
-                        <div class="input-group mb-3">
-                            <label for="username"><span class="input-group-text" id="basic-addon1">{{ 'Email'|trans }}:</span> </label>
-                            <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" placeholder="{{ 'Email'|trans }}" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="password"><span class="input-group-text" id="basic-addon1">{{ 'Password'|trans }}:</span> </label>
-                            <input type="password" id="password" name="_password" value="{{ last_username }}" class="form-control" placeholder="{{ 'Password'|trans }}" aria-label="Password" aria-describedby="basic-addon1">
-                        </div>
-                        <label>
-                            <input type="checkbox" name="_remember_me" checked/>
-                            {{ 'Keep me logged in'|trans }}
-                        </label>
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    <div class="login">
+        <div class="login-dialog">
+            <form action="{{ path('app_login') }}" method="post">
+                <div class="header">{{ 'Connexion'|trans }}</div>
+                <div class="body">
+                    {% if error %}
+                        <p class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                    {% endif %}
+                    <div class="input">
+                        <label for="username">{{ 'Email'|trans }}</label>
+                        <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'Email'|trans }}" aria-label="Username" aria-describedby="Username field">
                     </div>
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-secondary">{{ 'Login'|trans }}</button>
+                    <div class="input">
+                        <label for="password">{{ 'Password'|trans }}</label>
+                        <input type="password" id="password" name="_password" value="" placeholder="{{ 'Password'|trans }}" aria-label="Password" aria-describedby="Password field">
                     </div>
-                </form>
-            </div>
+                    <label>
+                        <input type="checkbox" name="_remember_me" checked/>
+                        {{ 'Keep me logged in'|trans }}
+                    </label>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                </div>
+                <div class="footer">
+                    <button type="submit" class="btn">{{ 'Login'|trans }}</button>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}

@@ -360,6 +360,7 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
         $tv = json_decode($standing, true);
+        dump($tv);
 
         return $this->getSerie($tv, $page, $from, $serie->getId(), $request, $tmdbService, $serieRepository, $imageConfiguration, $query, $year);
 
