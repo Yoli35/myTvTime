@@ -3,7 +3,7 @@ let _app_serie_render_translation_select;
 let _app_serie_render_translation_save;
 let _app_serie_new;
 
-function initSerieStuff(paths) {
+function initSerieStuff(paths, vote) {
 
     _app_serie_render_translation_fields = paths[0];
     _app_serie_render_translation_select = paths[1];
@@ -11,6 +11,7 @@ function initSerieStuff(paths) {
     _app_serie_new = paths[3]
 
     initAddSerie();
+    setVote(vote);
     markMultiWatchProviders();
     translateKeywords();
 }
@@ -30,6 +31,16 @@ function initAddSerie() {
     document.querySelectorAll(".add").forEach(add => {
         add.addEventListener("click", addSerie);
     })
+}
+
+function setVote(vote) {
+    const circle = document.querySelector(".circle");
+    const start = document.querySelector(".circle-start");
+    const end = document.querySelector(".circle-end");
+    vote *= 10;
+    circle.setAttribute("style", "background: conic-gradient(var(--gradiant-ardoise-60) 0%, var(--gradiant-ardoise-60) " + vote + "%, var(--gradiant-ardoise-10) " + vote + "%);");
+    start.setAttribute("style", "translate: 0 -1.5em;");
+    end.setAttribute("style", "transform: rotate(" + (vote * 3.6) + "deg) translateY(-1.5em)");
 }
 
 function translateKeywords() {

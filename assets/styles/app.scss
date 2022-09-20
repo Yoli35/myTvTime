@@ -8,7 +8,7 @@ html {
 
 body {
     background: var(--mtt-body-bg);
-    background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--gradiant-mars-30) 10%, var(--gradiant-purple-30) 90%, var(--mtt-body-bg-gradiant) 100%);
+    background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--mtt-body-bg-gradiant) 100%);
     background-attachment: fixed;
     color: var(--mtt-body-color);
     display: flex;

@@ -124,6 +124,7 @@
                         @include flex-col(flex-start, flex-start);
                         height: var(--serie-lg-height);
                         padding: .5em;
+                        width: calc(100% - var(--serie-lg-poster-width));
                         z-index: 0;
 
                         div {
@@ -137,7 +138,9 @@
 
                         div:last-child {
                             max-height: calc(var(--serie-lg-height) - 8em);
-                            overflow: scroll;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            width: 100%;
                         }
                     }
 
@@ -760,9 +763,40 @@
                                     overflow-y: scroll;
                                 }
 
-                                div:first-child {
-                                    font-size: 1.5em;
-                                    font-weight: 200;
+                                .details {
+                                    @include flex-100(center, start);
+
+                                    div {
+                                        margin: 0;
+
+                                        .viewing {
+                                            @include flex-row(center, start);
+
+                                            .ep {
+                                                @include flex-row(center, center);
+                                                border: 2px solid var(--gradiant-ardoise-60);
+                                                border-radius: 50%;
+                                                height: 1em;
+                                                margin: 0 0 0 1em;
+                                                width: 1em;
+
+                                                &:hover {
+                                                    border: 2px solid var(--gradiant-ardoise-80);
+                                                }
+
+                                                .viewed {
+                                                    background-color: var(--gradiant-ardoise-60);
+                                                    border-radius: 50%;
+                                                    height: .5em;
+                                                    width: .5em;
+
+                                                    &:hover {
+                                                        background-color: var(--gradiant-ardoise-80);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

@@ -34,7 +34,7 @@
                     <div class="tags">
                         <div class="add-tag">
                             <label for="new-tag">{{ 'Tags' }}
-                                <input id="new-tag" type="search" name="tag_query" list="other-tags" autofocus>
+                                <input id="new-tag" type="search" name="tag_query" list="other-tags" autocomplete="off" autofocus>
                                 <datalist id="other-tags">
                                     {% for tag in other_tags %}
                                         <option value="{{ tag }}">

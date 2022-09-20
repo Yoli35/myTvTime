@@ -53,10 +53,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $preferredLanguage = null;
 
     #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'users')]
-    private $movies;
+    private Collection $movies;
 
     #[ORM\ManyToMany(targetEntity: TikTokVideo::class, inversedBy: 'users')]
-    private $tiktoks;
+    private Collection $tiktoks;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Article::class)]
     private Collection $articles;
@@ -70,6 +70,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class, orphanRemoval: true)]
     private Collection $events;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SerieViewing::class, cascade: ['persist', 'remove'])]
+    private Collection $serieViewings;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -78,6 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->movieCollections = new ArrayCollection();
         $this->series = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->serieViewings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -411,6 +415,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($event->getUser() === $this) {
                 $event->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSerieViewings(): Collection
+    {
+        return $this->serieViewings;
+    }
+
+    public function addSerieViewing(SerieViewing $serieViewing): self
+    {
+        if (!$this->serieViewings->contains($serieViewing)) {
+            $this->serieViewings->add($serieViewing);
+            $serieViewing->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSerieViewing(SerieViewing $serieViewing): self
+    {
+        if ($this->serieViewings->removeElement($serieViewing)) {
+            // set the owning side to null (unless already changed)
+            if ($serieViewing->getUser() === $this) {
+                $serieViewing->setUser(null);
             }
         }
 

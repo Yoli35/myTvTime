@@ -220,6 +220,7 @@ Canceled: Annulée
 Continuing: En cours
 Ended: Terminé
 In Production: En Production
+Planned: Planifié
 Status: Statut
 # Watch
 Available in streaming: Disponible en streaming
@@ -258,6 +259,7 @@ Logos: Logos
 Posters: Affiches
 # seasons
 episodes: épisodes
+episode: épisode
 seasons: saisons
 The season season_number of serie_name aired from season_air_date.: La saison season_number de serie_name a été diffusée à partir du season_air_date.
 The season season_number of serie_name will be aired from the season_air_date.: La saison season_number de serie_name sera diffusée à partir du season_air_date.

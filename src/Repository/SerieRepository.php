@@ -110,6 +110,11 @@ class SerieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+//    public function getViewing(): array
+//    {
+//
+//    }
+
 //    public function findOneBySomeField($value): ?Serie
 //    {
 //        return $this->createQueryBuilder('s')
