@@ -15,6 +15,7 @@ use App\Service\CallTmdbService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -367,6 +368,7 @@ class SerieController extends AbstractController
         return $this->getSerie($tv, $page, $from, $serie->getId(), $request, $tmdbService, $serieRepository, $serie, $viewingRepository, $imageConfiguration, $query, $year);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/tmdb/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
     public function tmdb(Request $request, $id, CallTmdbService $tmdbService, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration): Response
     {
@@ -445,6 +447,9 @@ class SerieController extends AbstractController
 
     public function getSerie($tv, $page, $from, $backId, $request, $tmdbService, $serieRepository, $serie, $viewingRepository, $imageConfiguration, $query = "", $year = ""): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         $id = $tv['id'];
         $standing = $tmdbService->getTvCredits($id, $request->getLocale());
         $credits = json_decode($standing, true);
@@ -463,17 +468,20 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTvSimilar($id);
         $similar = json_decode($standing, true);
 
-        // Est-ce une série ajoutée ? $index != null => Ok
-        $serieIds = $this->mySerieIds($serieRepository, $this->getUser());
-        $index = array_search($id, $serieIds);
-        $index = $index ? $serieIds[$index] : false;
-
+        if ($user) {
+            // Est-ce une série ajoutée ? $index != null => Ok
+            $serieIds = $this->mySerieIds($serieRepository, $user);
+            $index = array_search($id, $serieIds);
+            $index = $index ? $serieIds[$index] : false;
+        }
+        else {
+            $serieIds = [];
+            $index = false;
+        }
 
         $standing = $tmdbService->getTvImages($id, $request->getLocale());
         $images = json_decode($standing, true);
 
-        /** @var User $user */
-        $user = $this->getUser();
         $viewing = null;
 
         if ($index) {
@@ -522,14 +530,14 @@ class SerieController extends AbstractController
          * La saison 0 correspond aux épisodes spéciaux regroupés dans cette saison
          */
         if ($tv['seasons'][0]['season_number'] == 1) {
-            $tab[] = ['number' => 0, 'episodes' => []];
+            $tab[] = ['season_number' => 0, 'episode_count' => 0, 'episodes' => []];
         }
         foreach ($tv['seasons'] as $season) {
             $ep = [];
             for ($i = 1; $i <= $season['episode_count']; $i++) {
                 $ep[] = false;
             }
-            $tab[] = ['number' => $season['season_number'], 'episodes' => $ep];
+            $tab[] = ['season_number' => $season['season_number'], 'episode_count' => $season['episode_count'], 'episodes' => $ep];
         }
         return $tab;
     }
@@ -537,6 +545,8 @@ class SerieController extends AbstractController
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
     public function updateViewingTab(Request $request, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $serieId = $request->query->getInt('id');
         $season = $request->query->getInt('s');
         $episode = $request->query->getInt('e');
@@ -549,19 +559,38 @@ class SerieController extends AbstractController
         $viewing = $theViewing->getViewing();
 
         $newTab = [];
-        for ($s = 0; $s <= $season; $s++) {
+        /*
+         * Les saisons précédentes
+         */
+        for ($s = 0; $s < $season; $s++) {
             $newEpisodes = [];
-            for ($e = 0; $e < count($viewing[$s]['episodes']); $e++) {
-                $newEpisodes[] = $e + 1 <= $episode;
+            $episode_count = $viewing[$s]['episode_count'];
+            for ($e = 0; $e < $episode_count; $e++) {
+                $newEpisodes[] = true;
             }
-            $newTab[] = ['number' => $s, 'episodes' => $newEpisodes];
+            $newTab[] = ['season_number' => $s, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
         }
-        for ($s = $season; $s < $serie->getNumberOfSeasons(); $s++) {
+        /*
+         * La saison ciblée
+         */
+        $newEpisodes = [];
+        $episode_count = $viewing[$season]['episode_count'];
+        for ($e = 0; $e < $episode_count; $e++) {
+            $newEpisodes[] = $e + 1 <= $episode;
+        }
+        $newTab[] = ['season_number' => $s, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+        /*
+         * Les saisons suivantes
+         * S'il existe des épisodes spéciaux, il faut ajouter cette "saison 0" au nombre de saisons
+         */
+        $season_count = $serie->getNumberOfSeasons() + ($viewing[0]['episode_count'] > 0);
+        for ($s = $season + 1; $s < $season_count; $s++) {
             $newEpisodes = [];
-            for ($e = 0; $e < count($viewing[0]['episodes']); $e++) {
+            $episode_count = $viewing[$s]['episode_count'];
+            for ($e = 0; $e < $episode_count; $e++) {
                 $newEpisodes[] = false;
             }
-            $newTab[] = ['number' => $s, 'episodes' => $newEpisodes];
+            $newTab[] = ['season_number' => $s, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
         }
 
         $theViewing->setViewing($newTab);
@@ -569,13 +598,13 @@ class SerieController extends AbstractController
 
         $blocks = [];
         foreach ($newTab as $tab) {
-            if (count($tab['episodes'])) {
+            if ($tab['episode_count']) {
                 $blocks[] = [
-                    'season' => $tab['number'],
+                    'season' => $tab['season_number'],
                     'view' => $this->render('blocks/serie/viewing_season.html.twig', [
                         'viewing' => $newTab,
-                        'season_number' => $tab['number'],
-                        'episode_count' => count($tab['episodes']),
+                        'season_number' => $tab['season_number'],
+                        'episode_count' => $tab['episode_count'],
                     ])];
             }
         }

@@ -771,13 +771,14 @@
 
                                         .viewing {
                                             @include flex-row(center, start);
+                                            flex-wrap: wrap;
 
                                             .ep {
                                                 @include flex-row(center, center);
                                                 border: 2px solid var(--gradiant-ardoise-60);
                                                 border-radius: 50%;
                                                 height: 1em;
-                                                margin: 0 0 0 1em;
+                                                margin: .25em;
                                                 width: 1em;
 
                                                 &:hover {
@@ -785,13 +786,13 @@
                                                 }
 
                                                 .viewed {
-                                                    background-color: var(--gradiant-ardoise-60);
+                                                    background-color: var(--gradiant-ardoise-80);
                                                     border-radius: 50%;
                                                     height: .5em;
                                                     width: .5em;
 
                                                     &:hover {
-                                                        background-color: var(--gradiant-ardoise-80);
+                                                        background-color: var(--gradiant-mars-80);
                                                     }
                                                 }
                                             }

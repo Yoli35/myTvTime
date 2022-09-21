@@ -204,9 +204,9 @@
                                         </div>
                                         <div class="infos">
                                             <h4>{{ season.name }}</h4>
+                                            {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
+                                            {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
                                             <div class="details" data-season-number="{{ season.season_number }}">
-                                                {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
-                                                {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
                                                 <div>
                                                     {{ include('blocks/serie/viewing_season.html.twig', {season_number: season.season_number, episode_count: season.episode_count}) }}
                                                 </div>
