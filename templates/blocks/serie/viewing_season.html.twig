@@ -2,9 +2,9 @@
     {% if episode_count %}
         <div class="viewing" data-season-number="{{ season_number }}">
             {% for episode in 1..episode_count %}
-                <div class="ep" title="{{ 'Episode'|trans }} {{ episode }}" data-number="{{ loop.index }}" data-viewed="{{ viewing[season_number].episodes[loop.index0]=='true'?1:0 }}">
+                <div class="ep" data-number="{{ loop.index }}" data-viewed="{{ viewing[season_number].episodes[loop.index0]=='true'?1:0 }}">
                     {% if viewing[season_number].episodes[loop.index0]=='true' %}
-                        <div class="viewed"></div>
+                        <i class="fa-solid fa-circle-check"></i>
                     {% endif %}
                 </div>
             {% endfor %}

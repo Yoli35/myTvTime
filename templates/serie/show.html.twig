@@ -207,9 +207,14 @@
                                             {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
                                             {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
                                             <div class="details" data-season-number="{{ season.season_number }}">
+                                                <div class="bubble">
+                                                    <div class="body">{{ 'Episode'|trans }}&nbsp;<span></span></div>
+                                                    <div class="tail"></div>
+                                                </div>
                                                 <div>
                                                     {{ include('blocks/serie/viewing_season.html.twig', {season_number: season.season_number, episode_count: season.episode_count}) }}
                                                 </div>
+                                                <div class="mouse-detector"></div>
                                             </div>
                                             {% if season.overview|length %}
                                                 <div>{{ season.overview }}</div>
@@ -374,26 +379,52 @@
 
             initSerieStuff(paths, parseFloat({{ serie.vote_average }}));
 
+            const mouseDetectors = document.querySelectorAll(".mouse-detector");
+            mouseDetectors.forEach(mouseDetector => {
+                mouseDetector.addEventListener('mousemove', bubbleIt);
+                mouseDetector.addEventListener('mouseenter', bubbleItShow);
+                mouseDetector.addEventListener('mouseout', bubbleItShow);
+                mouseDetector.addEventListener('click', mouseToEpisode);
+            })
             const eps = document.querySelectorAll(".ep");
             eps.forEach(ep => {
                 ep.addEventListener("click", toggleView);
             });
 
-            function toggleView(evt) {
+            function bubbleItShow(evt) {
+                const details = evt.target.closest(".details");
+                const bubble = details.querySelector(".bubble");
+                bubble.classList.toggle("show");
+                if (!bubble.classList.contains("show")) {
+                    const span = bubble.querySelector("span");
+                    span.innerText = "";
+                }
+            }
+
+            function bubbleIt(evt) {
+                const bubble = document.querySelector(".bubble");
+                const number = (1 + Math.floor(evt.offsetX / 24));
+                const span = bubble.querySelector("span");
+                bubble.setAttribute("style", "translate: " + evt.offsetX + "px;");
+                span.innerText = number.toString();
+            }
+
+            function mouseToEpisode(evt) {
                 evt.preventDefault();
-                const ep = evt.target.classList.contains('viewed') ? evt.target.parentElement : evt.target;
+                const number = 1 + (Math.floor(evt.offsetX / 24));
+                const details = evt.target.closest(".details");
+                const ep = details.querySelector(".viewing :nth-child(" + number.toString() + ")")
+                toggleView(ep);
+            }
+
+            function toggleView(ep) {
                 const e_number = parseInt(ep.getAttribute("data-number"));
                 const e_viewed = parseInt(ep.getAttribute("data-viewed")) === 0 ? 1 : 0;
                 const s_number = parseInt(ep.parentElement.getAttribute("data-season-number"));
-                console.log({s_number})
-                console.log({e_number})
-                console.log({e_viewed})
-
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
                     let blocks = data['blocks'];
-                    console.log({data});
 
                     blocks.forEach(block => {
                         console.log({block});

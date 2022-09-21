@@ -764,7 +764,43 @@
                                 }
 
                                 .details {
-                                    @include flex-100(center, start);
+                                    @include flex-row(center, start);
+                                    overflow: initial;
+                                    position: relative;
+
+                                    .bubble {
+                                        @include flex-col(center, revert);
+                                        height: 2.5em;
+                                        left: -3em;
+                                        opacity: 0;
+                                        position: absolute;
+                                        top: -2em;
+                                        transition: opacity .25s;
+
+                                        &.show {
+                                            opacity: 1;
+                                        }
+
+                                        .body {
+                                            @include flex-row();
+                                            background-color: var(--gradiant-ardoise-20);
+                                            border-radius: .25em;
+                                            color: var(--gradiant-ardoise-80);
+                                            height: 2em;
+                                            width: 6em;
+                                            z-index: 2;
+                                        }
+
+                                        .tail {
+                                            background-color: var(--gradiant-ardoise-20);
+                                            border-radius: .125em;
+                                            min-height: 1em;
+                                            rotate: 45deg;
+                                            translate: 0 -.55em;
+                                            width: 1em;
+                                            z-index: 1;
+                                        }
+                                    }
 
                                     div {
                                         margin: 0;
@@ -772,6 +808,7 @@
                                         .viewing {
                                             @include flex-row(center, start);
                                             flex-wrap: wrap;
+                                            position: relative;
 
                                             .ep {
                                                 @include flex-row(center, center);
@@ -784,23 +821,19 @@
                                                 &:hover {
                                                     border: 2px solid var(--gradiant-ardoise-80);
                                                 }
-
-                                                .viewed {
-                                                    background-color: var(--gradiant-ardoise-80);
-                                                    border-radius: 50%;
-                                                    height: .5em;
-                                                    width: .5em;
-
-                                                    &:hover {
-                                                        background-color: var(--gradiant-mars-80);
-                                                    }
-                                                }
                                             }
                                         }
+                                    }
+
+                                    .mouse-detector {
+                                        background: transparent;
+                                        inset: 0;
+                                        position: absolute;
                                     }
                                 }
                             }
                         }
+
                         .episode {
                             @include flex-row(center, flex-start);
                             background-color: var(--gradiant-ardoise-90);
