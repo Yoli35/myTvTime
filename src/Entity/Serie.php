@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SerieRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -29,10 +30,19 @@ class Serie
     private ?int $serieId = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $firstDateAir = null;
+    private ?DateTimeImmutable $firstDateAir = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $addedAt = null;
+    private ?DateTimeImmutable $addedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $serieCompleted = null;
+
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $status = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'series')]
     private Collection $users;
@@ -55,7 +65,8 @@ class Serie
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->addedAt = new \DateTimeImmutable();
+        $this->addedAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
         $this->networks = new ArrayCollection();
     }
 
@@ -76,12 +87,12 @@ class Serie
         return $this;
     }
 
-    public function getFirstDateAir(): ?\DateTimeImmutable
+    public function getFirstDateAir(): ?DateTimeImmutable
     {
         return $this->firstDateAir;
     }
 
-    public function setFirstDateAir(\DateTimeImmutable $firstDateAir): self
+    public function setFirstDateAir(DateTimeImmutable $firstDateAir): self
     {
         $this->firstDateAir = $firstDateAir;
 
@@ -112,14 +123,26 @@ class Serie
         return $this;
     }
 
-    public function getAddedAt(): ?\DateTimeImmutable
+    public function getAddedAt(): ?DateTimeImmutable
     {
         return $this->addedAt;
     }
 
-    public function setAddedAt(\DateTimeImmutable $addedAt): self
+    public function setAddedAt(DateTimeImmutable $addedAt): self
     {
         $this->addedAt = $addedAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt?:$this->addedAt;
+    }
+
+    public function setUpdatedAt(?DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -228,6 +251,30 @@ class Serie
     public function setOriginalName(?string $originalName): self
     {
         $this->originalName = $originalName;
+
+        return $this;
+    }
+
+    public function isSerieCompleted(): ?bool
+    {
+        return $this->serieCompleted;
+    }
+
+    public function setSerieCompleted(?bool $serieCompleted): self
+    {
+        $this->serieCompleted = $serieCompleted;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

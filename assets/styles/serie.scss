@@ -102,8 +102,7 @@
                         background-position: center center;
                         background-size: cover;
                         border-radius: 0 .5em .5em 0;
-                        inset: 0;
-                        left: var(--serie-lg-poster-width);
+                        inset: 0 0 0 var(--serie-lg-poster-width);
                         opacity: .25;
                         position: absolute;
                     }
@@ -161,6 +160,18 @@
                         img {
                             width: 100%;
                         }
+                    }
+
+                    .status {
+                        @include flex-row();
+                        background-color: var(--gradiant-green-20);
+                        border-radius: .5em;
+                        color: var(--gradiant-green-90);
+                        height: 2em;
+                        padding: 0 1em;
+                        position: absolute;
+                        right: 4em;
+                        top: 2em;
                     }
 
                     .add {
@@ -770,11 +781,11 @@
 
                                     .bubble {
                                         @include flex-col(center, revert);
-                                        height: 2.5em;
-                                        left: -3em;
+                                        height: 3em;
+                                        left: -3.5em;
                                         opacity: 0;
                                         position: absolute;
-                                        top: -2em;
+                                        top: -3em;
                                         transition: opacity .25s;
 
                                         &.show {
@@ -786,8 +797,8 @@
                                             background-color: var(--gradiant-ardoise-20);
                                             border-radius: .25em;
                                             color: var(--gradiant-ardoise-80);
-                                            height: 2em;
-                                            width: 6em;
+                                            min-height: 2em;
+                                            width: 7em;
                                             z-index: 2;
                                         }
 
@@ -820,6 +831,10 @@
 
                                                 &:hover {
                                                     border: 2px solid var(--gradiant-ardoise-80);
+                                                }
+
+                                                &.full {
+                                                    color: var(--gradiant-green-50);
                                                 }
                                             }
                                         }
@@ -963,12 +978,22 @@
                         flex-wrap: wrap;
 
                         .keyword {
+                            @include flex-col();
                             background-color: var(--gradiant-ardoise-40);
                             border-radius: .25em;
                             color: var(--gradiant-ardoise-80);
-                            font-weight: 100;
                             padding: .25em .5em;
                             margin: .125em;
+
+                            .original {
+                                font-weight: 100;
+                            }
+
+                            .translated {
+                                font-size: .25em;
+                                font-weight: initial;
+                                line-height: .75em;
+                            }
 
                             &.new {
                                 background-color: var(--gradiant-purple-40);

@@ -218,10 +218,14 @@ View on: Regarder sur
 # Status
 Canceled: Annulée
 Continuing: En cours
-Ended: Terminé
+Ended: Terminée
 In Production: En Production
 Planned: Planifié
+Returning Series: Série renouvelée
 Status: Statut
+That's all: C'est tout !
+More episodes to come: Plus d'épisodes à venir !
+Watching in progress: Visionnage en cours
 # Watch
 Available in streaming: Disponible en streaming
 Available to rent or buy: Location ou achat
@@ -250,7 +254,6 @@ Networks: Diffuseurs télé
 Original Country: Pays d'origine
 Original language: Langage d'origine
 Original name: Nom original
-Returning Series: Série renouvelée
 Keywords: Mots clé
 Similar Series: Séries similaires
 # images

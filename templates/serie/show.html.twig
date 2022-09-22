@@ -312,7 +312,10 @@
                                 <div class="keywords">
                                     {% for keyword in keywords.results %}
                                         <div class="keyword{% if keyword.name in missingTranslations %} new{% endif %}" data-original="{{ keyword.name }}">
-                                            {{ keyword.name|trans({},'tags') }}
+                                            <div class="original">{{ keyword.name }}</div>
+                                            {% if keyword.name not in missingTranslations %}
+                                                <div class="translated">{{ keyword.name|trans({},'tags') }}</div>
+                                            {% endif %}
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -374,6 +377,11 @@
         ];
         const serie = {{ serie.id }};
         const _app_serie_viewing = paths[4];
+        const _locale = "{{ app.request.locale }}";
+        const txt = {
+            "vu": {"fr": "vu", "en": "seen"},
+            "pasVu": {"fr": "pas vu", "en": "not seen"}
+        }
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -386,10 +394,10 @@
                 mouseDetector.addEventListener('mouseout', bubbleItShow);
                 mouseDetector.addEventListener('click', mouseToEpisode);
             })
-            const eps = document.querySelectorAll(".ep");
-            eps.forEach(ep => {
-                ep.addEventListener("click", toggleView);
-            });
+            // const eps = document.querySelectorAll(".ep");
+            // eps.forEach(ep => {
+            //     ep.addEventListener("click", toggleView);
+            // });
 
             function bubbleItShow(evt) {
                 const details = evt.target.closest(".details");
@@ -402,16 +410,19 @@
             }
 
             function bubbleIt(evt) {
-                const bubble = document.querySelector(".bubble");
                 const number = (1 + Math.floor(evt.offsetX / 24));
+                const details = evt.target.closest(".details");
+                const ep = details.querySelector(".viewing :nth-child(" + number.toString() + ")");
+                const viewed = parseInt(ep ? ep.getAttribute("data-viewed") : 0);
+                const bubble = details.querySelector(".bubble");
                 const span = bubble.querySelector("span");
                 bubble.setAttribute("style", "translate: " + evt.offsetX + "px;");
-                span.innerText = number.toString();
+                span.innerText = number.toString() + (viewed ? (" 🤓") : (" 🥺"));
             }
 
             function mouseToEpisode(evt) {
                 evt.preventDefault();
-                const number = 1 + (Math.floor(evt.offsetX / 24));
+                const number = (1 + Math.floor(evt.offsetX / 24));
                 const details = evt.target.closest(".details");
                 const ep = details.querySelector(".viewing :nth-child(" + number.toString() + ")")
                 toggleView(ep);
@@ -431,15 +442,23 @@
                         const details = document.querySelector(".details[data-season-number=\"" + block.season + "\"]");
                         const oldViewingDiv = details.querySelector(".viewing").parentNode;
                         const newViewingDiv = document.createElement("div");
+                        const mouseDetector = details.querySelector(".mouse-detector");
                         newViewingDiv.innerHTML = block.view.content;
                         details.removeChild(oldViewingDiv);
-                        details.appendChild(newViewingDiv);
-
-                        const eps = document.querySelectorAll(".ep");
-                        eps.forEach(ep => {
-                            ep.addEventListener("click", toggleView);
-                        });
+                        details.insertBefore(newViewingDiv, mouseDetector);
                     })
+
+                    const mouseDetectors = document.querySelectorAll(".mouse-detector");
+                    mouseDetectors.forEach(mouseDetector => {
+                        mouseDetector.addEventListener('mousemove', bubbleIt);
+                        mouseDetector.addEventListener('mouseenter', bubbleItShow);
+                        mouseDetector.addEventListener('mouseout', bubbleItShow);
+                        mouseDetector.addEventListener('click', mouseToEpisode);
+                    })
+                    // const eps = document.querySelectorAll(".ep");
+                    // eps.forEach(ep => {
+                    //     ep.addEventListener("click", toggleView);
+                    // });
                 }
                 xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed);
                 xhr.send();

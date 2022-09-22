@@ -105,6 +105,24 @@ class GetTheMovieDatabaseTVCommand extends Command
                     }
                 }
                 break;
+
+            case 'status':
+                $tvs = $this->serieRepository->findAll();
+
+                foreach ($tvs as $serie) {
+
+                    $tmdbTv = json_decode($this->callTmdbService->getTv($serie->getSerieId(), 'fr'), true);
+                    if ($serie->getUpdatedAt() == null) {
+                        $serie->setUpdatedAt($serie->getAddedAt());
+                    }
+                    if ($serie->getStatus() == null) {
+                        $serie->setStatus($tmdbTv['status']);
+                    }
+                    $this->serieRepository->add($serie, true);
+                    $io->success('Status for "' . $serie->getName() . '" have been updated to the user ' . $user);
+                }
+                break;
+
             default:
                 $standing = $this->callTmdbService->getTv($tvId, 'fr');
                 $tv = json_decode($standing, true);

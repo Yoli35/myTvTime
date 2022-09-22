@@ -55,6 +55,18 @@ $fa-font-path: "../webfonts";
     --gradiant-mars-20: hsl(25,76%, 20%);
     --gradiant-mars-10: hsl(25,76%, 10%);
     --gradiant-mars-0: hsl(25,76%, 0%);
+
+    --gradiant-green-100: hsl(103, 86%, 100%);
+    --gradiant-green-90: hsl(103, 86%, 90%);
+    --gradiant-green-80: hsl(103, 86%, 80%);
+    --gradiant-green-70: hsl(103, 86%, 70%);
+    --gradiant-green-60: hsl(103, 86%, 60%);
+    --gradiant-green-50: hsl(103, 86%, 50%);
+    --gradiant-green-40: hsl(103, 86%, 40%);
+    --gradiant-green-30: hsl(103, 86%, 30%);
+    --gradiant-green-20: hsl(103, 86%, 20%);
+    --gradiant-green-10: hsl(103, 86%, 10%);
+    --gradiant-green-0: hsl(103, 86%, 0%);
 }
 
 @mixin banner($image) {

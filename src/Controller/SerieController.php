@@ -468,15 +468,17 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTvSimilar($id);
         $similar = json_decode($standing, true);
 
+        $index = false;
+        $serieIds = [];
         if ($user) {
             // Est-ce une série ajoutée ? $index != null => Ok
             $serieIds = $this->mySerieIds($serieRepository, $user);
-            $index = array_search($id, $serieIds);
-            $index = $index ? $serieIds[$index] : false;
-        }
-        else {
-            $serieIds = [];
-            $index = false;
+            foreach ($serieIds as $serieId) {
+                if ($serieId == $id) {
+                    $index = $id;
+                    break;
+                }
+            }
         }
 
         $standing = $tmdbService->getTvImages($id, $request->getLocale());
@@ -499,6 +501,7 @@ class SerieController extends AbstractController
                 }
             }
         }
+        dump($viewing);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -530,14 +533,14 @@ class SerieController extends AbstractController
          * La saison 0 correspond aux épisodes spéciaux regroupés dans cette saison
          */
         if ($tv['seasons'][0]['season_number'] == 1) {
-            $tab[] = ['season_number' => 0, 'episode_count' => 0, 'episodes' => []];
+            $tab[] = ['season_number' => 0, 'season_completed' => false, 'episode_count' => 0, 'episodes' => []];
         }
         foreach ($tv['seasons'] as $season) {
             $ep = [];
             for ($i = 1; $i <= $season['episode_count']; $i++) {
                 $ep[] = false;
             }
-            $tab[] = ['season_number' => $season['season_number'], 'episode_count' => $season['episode_count'], 'episodes' => $ep];
+            $tab[] = ['season_number' => $season['season_number'], 'season_completed' => false, 'episode_count' => $season['episode_count'], 'episodes' => $ep];
         }
         return $tab;
     }
@@ -560,41 +563,69 @@ class SerieController extends AbstractController
 
         $newTab = [];
         /*
-         * Les saisons précédentes
+         * Épisodes spéciaux
          */
-        for ($s = 0; $s < $season; $s++) {
+        if ($season == 0) {
             $newEpisodes = [];
-            $episode_count = $viewing[$s]['episode_count'];
+            $episode_count = $viewing[0]['episode_count'];
             for ($e = 0; $e < $episode_count; $e++) {
-                $newEpisodes[] = true;
+                $newEpisodes[] = $e + 1 <= $episode;
             }
-            $newTab[] = ['season_number' => $s, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
-        }
-        /*
-         * La saison ciblée
-         */
-        $newEpisodes = [];
-        $episode_count = $viewing[$season]['episode_count'];
-        for ($e = 0; $e < $episode_count; $e++) {
-            $newEpisodes[] = $e + 1 <= $episode;
-        }
-        $newTab[] = ['season_number' => $s, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
-        /*
-         * Les saisons suivantes
-         * S'il existe des épisodes spéciaux, il faut ajouter cette "saison 0" au nombre de saisons
-         */
-        $season_count = $serie->getNumberOfSeasons() + ($viewing[0]['episode_count'] > 0);
-        for ($s = $season + 1; $s < $season_count; $s++) {
+            $full = !in_array(false, $newEpisodes, true);
+            $newTab[] = ['season_number' => 0, 'season_completed' => $full, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+            for ($i = 1; $i <= $serie->getNumberOfSeasons(); $i++) {
+                $newTab[$i] = $viewing[$i];
+
+            }
+        } else {
+            $newTab[0] = $viewing[0];
+            /*
+             * Les saisons précédentes
+             */
+            for ($s = 1; $s < $season; $s++) {
+                $newEpisodes = [];
+                $episode_count = $viewing[$s]['episode_count'];
+                for ($e = 0; $e < $episode_count; $e++) {
+                    $newEpisodes[] = true;
+                }
+                $newTab[] = ['season_number' => $s, 'season_completed' => true, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+            }
+            /*
+             * La saison ciblée
+             */
             $newEpisodes = [];
-            $episode_count = $viewing[$s]['episode_count'];
+            $episode_count = $viewing[$season]['episode_count'];
             for ($e = 0; $e < $episode_count; $e++) {
-                $newEpisodes[] = false;
+                $newEpisodes[] = $e + 1 <= $episode;
             }
-            $newTab[] = ['season_number' => $s, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+            $full = !in_array(false, $newEpisodes, true);
+            $newTab[] = ['season_number' => $s, 'season_completed' => $full, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+            /*
+             * Les saisons suivantes
+             * S'il existe des épisodes spéciaux, il faut ajouter cette "saison 0" au nombre de saisons
+             */
+            $season_count = $serie->getNumberOfSeasons();
+            for ($s = $season + 1; $s <= $season_count; $s++) {
+                $newEpisodes = [];
+                $episode_count = $viewing[$s]['episode_count'];
+                for ($e = 0; $e < $episode_count; $e++) {
+                    $newEpisodes[] = false;
+                }
+                $newTab[] = ['season_number' => $s, 'season_completed' => false, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+            }
         }
+        $seasons_completed = [];
+        foreach ($newTab as $tab) {
+            $seasons_completed[] = !in_array(false, $tab['episodes'], true);
+        }
+        $serie_completed = !in_array(false, $seasons_completed, true);
 
         $theViewing->setViewing($newTab);
         $viewingRepository->add($theViewing, true);
+
+        $serie->setUpdatedAt(new DateTimeImmutable());
+        $serie->setSerieCompleted($serie_completed);
+        $serieRepository->add($serie, true);
 
         $blocks = [];
         foreach ($newTab as $tab) {
@@ -605,6 +636,7 @@ class SerieController extends AbstractController
                         'viewing' => $newTab,
                         'season_number' => $tab['season_number'],
                         'episode_count' => $tab['episode_count'],
+                        'season_completed' => $tab['season_completed'],
                     ])];
             }
         }

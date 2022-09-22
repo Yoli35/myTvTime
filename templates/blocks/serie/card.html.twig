@@ -9,7 +9,7 @@
         <div class="infos">
             <div>{{ serie.name }}</div>
             <div>{{ 'First Air at'|trans }} : {{ serie.firstDateAir ? serie.firstDateAir|format_date() : '' }}</div>
-            <div>{{ 'Added at'|trans }} : {{ serie.addedAt ? serie.addedAt|format_date() : '' }}</div>
+            <div>{{ 'Added at'|trans }} : {{ serie.addedAt ? serie.addedAt|format_date() : '' }} — {{ 'Updated at'|trans }} : {{ serie.updatedAt ? serie.updatedAt|format_datetime() : '' }}</div>
             <div>{{ serie.overview }}</div>
         </div>
         {% if serie.networks|length %}
@@ -17,5 +17,18 @@
                 <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ serie.networks.0.logoPath }}" alt="{{ 'Network' }}">
             </div>
         {% endif %}
+        <div class="status">
+            {{ serie.status|trans }} —
+            {% if serie.serieCompleted %}
+                {% if serie.status in ["Ended","Canceled"] %}
+                    {{ 'That\'s all'|trans }}
+                {% endif %}
+                {% if serie.status in ["Returning Series"] %}
+                    {{ 'More episodes to come'|trans }}
+                {% endif %}
+            {% else %}
+                {{ 'Watching in progress'|trans }}
+            {% endif %}
+        </div>
     </div>
 </a>
