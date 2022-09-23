@@ -488,7 +488,7 @@ function moreVideos() {
                     seen.classList.add("has-been-seen", "yes");
                     seen.setAttribute("id", result['movie_db_id']);
                     let check = document.createElement("i");
-                    check.classList.add("bi", "bi-check-circle-fill");
+                    check.classList.add("fa-solid", "fa-circle-check");
                     seen.appendChild(check);
 
                     user.appendChild(rating);

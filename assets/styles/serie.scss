@@ -10,7 +10,11 @@
     padding-top: 1em;
 
     .header {
+        --quote-opacity : 1;
+
         @include animated-header("../images/serie-header.jpg");
+        background-color: var(--gradiant-ardoise-10);
+        transition: background-color 3s ease-in-out;
 
         .quote {
             @include flex-100(center, flex-end);

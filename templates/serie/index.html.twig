@@ -149,6 +149,7 @@
         const _order_by = "{{ pages.order_by }}";
         const _order = "{{ pages.order }}";
         const _from = "";
+        const backdrop_filenames = ["serie-antiques.jpg", "serie-automne-2021.jpg", "serie-best-releasing-in-august-2022.webp", "serie-By-DC-Entertainment.jpg.webp", "serie-header.jpg", "serie-Hellbound.jpg", "serie-netflix.jpg", "serie-remote.jpg"];
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -156,12 +157,12 @@
             initPreview();
             newSerie();
             initHeader();
-            clearQuote();
 
             autocomplete(document.querySelector("#search-name"), createList());
         })
 
         function initHeader() {
+            const header = document.querySelector(".header");
             let ticking = false;
             setH1();
             window.addEventListener('resize', setH1);
@@ -176,6 +177,11 @@
                 ticking = true;
             });
 
+            setTimeout(() => {
+                header.setAttribute("style", "background-color: var(--gradiant-ardoise-10-alpha-20");
+            }, 3000);
+
+            setTimeout(clearQuote, 3000);
         }
 
         function setH1() {
@@ -190,16 +196,41 @@
         }
 
         function clearQuote() {
-            const root = document.querySelector(":root");
+            const header = document.querySelector(".header");
             let op = 1.0, intervalId;
 
-            intervalId = setInterval(()=> {
-                root.style.setProperty("--quote-opacity", op);
-                op -= 0.001;
+            intervalId = setInterval(() => {
+                header.style.setProperty("--quote-opacity", op);
+                op -= 0.005;
                 if (op < 0.0) {
                     clearInterval(intervalId);
+                    backdropSlide();
                 }
             }, 5);
+        }
+
+        function backdropSlide() {
+            const modulo = backdrop_filenames.length;
+            const header = document.querySelector(".header");
+            let slide = 0,filename,div, backdrop;
+
+            setInterval(() => {
+                slide++;
+                filename = backdrop_filenames[slide % modulo];
+                backdrop = header.querySelector(".backdrop");
+                div = document.createElement("div");
+                div.classList.add("backdrop", "right");
+                div.setAttribute("style", "background-image: url('/images/series/" + filename + "')");
+                header.appendChild(div);
+                setTimeout(()=>{
+                    backdrop.classList.add("left");
+                    div.classList.remove("right");
+                },0);
+                setTimeout(()=>{
+                    header.removeChild(backdrop);
+                },2500);
+            }, 5000);
+
         }
 
         function initSettings() {

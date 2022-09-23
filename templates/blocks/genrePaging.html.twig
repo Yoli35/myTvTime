@@ -4,10 +4,10 @@
 {% if max > 0 %}
     <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'Film Paginator' }}">
         {% if page > 6 %}
-            <a class="btn btn-secondary" href="{{ path(route, {page: '1', genres: genres}) }}"><i class="bi bi-chevron-bar-left"></i></a>
+            <a class="btn btn-secondary" href="{{ path(route, {page: '1', genres: genres}) }}"><i class="fa-solid fa-backward-step"></i></a>
         {% endif %}
         {% if page > 1 %}
-            <a class="btn btn-secondary" href="{{ path(route, {page: page-1, genres: genres}) }}"><i class="bi bi-chevron-left"></i></a>
+            <a class="btn btn-secondary" href="{{ path(route, {page: page-1, genres: genres}) }}"><i class="fa-solid fa-chevron-left"></i></a>
         {% endif %}
 
         {% if max >= 10 %}
@@ -49,10 +49,10 @@
         {% endif %}
 
         {% if page < max-1 %}
-            <a class="btn btn-secondary" href="{{ path(route, {page: page+1, genres: genres}) }}"><i class="bi bi-chevron-right"></i></a>
+            <a class="btn btn-secondary" href="{{ path(route, {page: page+1, genres: genres}) }}"><i class="fa-solid fa-chevron-right"></i></a>
         {% endif %}
         {% if page < max-5 %}
-            <a class="btn btn-secondary" href="{{ path(route, {page: max, genres: genres}) }}"><i class="bi bi-chevron-bar-right"></i></a>
+            <a class="btn btn-secondary" href="{{ path(route, {page: max, genres: genres}) }}"><i class="fa-solid fa-forward-step"></i></a>
         {% endif %}
     </div>
     <div class="footer-infos">
