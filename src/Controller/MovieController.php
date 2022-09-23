@@ -11,7 +11,7 @@ use App\Repository\MovieCollectionRepository;
 use App\Repository\RatingRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\CallImdbService;
-use App\Service\CallTmdbService;
+use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 //use Google\ApiCore\ValidationException;
 //use Google\Cloud\Translate\V3\TranslationServiceClient;
@@ -29,7 +29,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MovieController extends AbstractController
 {
     #[Route('/{_locale}/movie/{id}', name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, $id, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
+    public function index(Request $request, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -118,7 +118,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{_locale}/movie/collection/{mid}/{id}', 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function movieCollection(Request $request, $mid, $id, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, GenreRepository $genreRepository, ImageConfiguration $imageConfiguration): Response
+    public function movieCollection(Request $request, $mid, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, GenreRepository $genreRepository, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
         $standing = $callTmdbService->getMovieCollection($id, $locale);
@@ -156,7 +156,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{_locale}/movie/genre/{genres}/{page}', name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesByGenres(Request $request, $page, $genres, UserMovieRepository $userMovieRepository, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function moviesByGenres(Request $request, $page, $genres, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
         $standing = $callTmdbService->moviesByGenres($page, $genres, $locale);
@@ -181,7 +181,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{_locale}/movie/date/{date}/{page}', name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesByDate(Request $request, $page, $date, UserMovieRepository $userMovieRepository, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function moviesByDate(Request $request, $page, $date, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
         $standing = $callTmdbService->moviesByDate($page, $date, $locale);
@@ -207,7 +207,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{_locale}/search/movie/{page}', name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesSearch(Request $request, $page, UserMovieRepository $userMovieRepository, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function moviesSearch(Request $request, $page, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
@@ -283,7 +283,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{_locale}/profile', name: 'profile_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
-    public function getPersonInfos(Request $request, CallTmdbService $callTmdbService): JsonResponse
+    public function getPersonInfos(Request $request, TMDBService $callTmdbService): JsonResponse
     {
         $id = $request->query->get('id');
         $locale = $request->query->get('locale');
@@ -347,7 +347,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/movie/add', name: 'app_movie_add')]
-    public function addMovieToUser(Request $request, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository): JsonResponse
+    public function addMovieToUser(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -358,7 +358,7 @@ class MovieController extends AbstractController
         return $this->json(['title' => $userMovie->getTitle()]);
     }
 
-    public function addMovie($user, $movieId, $locale, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository): UserMovie
+    public function addMovie($user, $movieId, $locale, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository): UserMovie
     {
         $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
 

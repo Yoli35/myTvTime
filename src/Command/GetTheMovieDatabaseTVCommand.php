@@ -3,11 +3,10 @@
 namespace App\Command;
 
 use App\Entity\Network;
-use App\Entity\Serie;
 use App\Repository\NetworkRepository;
 use App\Repository\SerieRepository;
 use App\Repository\UserRepository;
-use App\Service\CallTmdbService;
+use App\Service\TMDBService;
 use DateTimeImmutable;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,18 +22,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class GetTheMovieDatabaseTVCommand extends Command
 {
-    private CallTmdbService $callTmdbService;
+    private TMDBService $tmdbService;
     private SerieRepository $serieRepository;
     private UserRepository $userRepository;
     private NetworkRepository $networkRepository;
 
-    public function __construct(CallTmdbService   $callTmdbService,
+    public function __construct(TMDBService       $tmdbService,
                                 SerieRepository   $serieRepository,
                                 UserRepository    $userRepository,
                                 NetworkRepository $networkRepository
     )
     {
-        $this->callTmdbService = $callTmdbService;
+        $this->tmdbService = $tmdbService;
         $this->serieRepository = $serieRepository;
         $this->userRepository = $userRepository;
         $this->networkRepository = $networkRepository;
@@ -68,7 +67,7 @@ class GetTheMovieDatabaseTVCommand extends Command
 
                 foreach ($tvs as $serie) {
 
-                    $tmdbTv = json_decode($this->callTmdbService->getTv($serie->getSerieId(), 'fr'), true);
+                    $tmdbTv = json_decode($this->tmdbService->getTv($serie->getSerieId(), 'fr'), true);
 
                     $networks = $tmdbTv['networks'];
                     foreach ($networks as $network) {
@@ -96,7 +95,7 @@ class GetTheMovieDatabaseTVCommand extends Command
 
                     if ($serie->getOriginalName() == null) {
 
-                        $tmdbTv = json_decode($this->callTmdbService->getTv($serie->getSerieId(), 'fr'), true);
+                        $tmdbTv = json_decode($this->tmdbService->getTv($serie->getSerieId(), 'fr'), true);
 
                         $serie->setOriginalName($tmdbTv['original_name']);
                         $this->serieRepository->add($serie, true);
@@ -111,48 +110,68 @@ class GetTheMovieDatabaseTVCommand extends Command
 
                 foreach ($tvs as $serie) {
 
-                    $tmdbTv = json_decode($this->callTmdbService->getTv($serie->getSerieId(), 'fr'), true);
-                    if ($serie->getUpdatedAt() == null) {
+                    $tmdbTv = json_decode($this->tmdbService->getTv($serie->getSerieId(), 'fr'), true);
+                    $modified = 0;
+                    $fields = '';
+                    /*
+                     * Les quatre champs suivants ont été ajoutés après la création de la table
+                     * ========================================================================
+                     * updated_at : modifiée par l'utilisateur, épisodes vus, par exemple
+                     * modified_at : modifiée par The Movie Database, nombre de saisons / épisodes
+                     * status : statut de la série (terminée, annulée, reconduite)
+                     * serie_completed : tous les épisodes de toutes les saisons ont été vus
+                     */
+                    if ($serie->getUpdatedAt() === null) {
                         $serie->setUpdatedAt($serie->getAddedAt());
+                        $fields = 'updated_at';
+                        $modified++;
                     }
-                    if ($serie->getStatus() == null) {
+                    if ($serie->getModifiedAt() === null) {
+                        $serie->setModifiedAt($serie->getAddedAt());
+                        $fields .= 'modified_at';
+                        $modified++;
+                    }
+                    if ($serie->getStatus() === null) {
                         $serie->setStatus($tmdbTv['status']);
+                        if (strlen($fields)) $fields .= ' / ';
+                        $fields .= 'status';
+                        $modified++;
                     }
-                    $this->serieRepository->add($serie, true);
-                    $io->success('Status for "' . $serie->getName() . '" have been updated to the user ' . $user);
+                    if ($serie->isSerieCompleted() === null) {
+                        $serie->setSerieCompleted(false);
+                        if (strlen($fields)) $fields .= ' / ';
+                        $fields .= 'serie_completed';
+                        $modified++;
+                    }
+                    /*
+                     * Les nombres de saison et d'épisode ont changé
+                     */
+                    if ($serie->getNumberOfSeasons() !== $tmdbTv['number_of_seasons']) {
+                        $serie->setNumberOfSeasons($tmdbTv['number_of_seasons']);
+                        $serie->setModifiedAt(new DateTimeImmutable());
+                        if (strlen($fields)) $fields .= ' / ';
+                        $fields .= 'number_of_seasons';
+                        $modified++;
+                    }
+                    if ($serie->getNumberOfEpisodes() !== $tmdbTv['number_of_episodes']) {
+                        $serie->setNumberOfEpisodes($tmdbTv['number_of_episodes']);
+                        $serie->setModifiedAt(new DateTimeImmutable());
+                        if (strlen($fields)) $fields .= ' / ';
+                        $fields .= 'number_of_episodes';
+                        $modified++;
+                    }
+                    /*
+                     * Si quelque chose a changé, l'enregistrement est mis à jour
+                     */
+                    if ($modified) {
+                        $this->serieRepository->add($serie, true);
+                        $io->success($fields . ' for "' . $serie->getName() . '" ' . ($modified > 1 ? 'have' : 'has') . ' been updated to the user ' . $user);
+                    }
                 }
                 break;
 
             default:
-                $standing = $this->callTmdbService->getTv($tvId, 'fr');
-                $tv = json_decode($standing, true);
 
-                if (is_array($tv['networks']) && count($tv['networks'])) {
-                    $network = $tv['networks'][0];
-                } else {
-                    $network = null;
-                }
-                $serie = $this->serieRepository->findOneBy(['serieId' => $tvId]);
-
-                if ($serie == null) {
-                    $serie = new Serie();
-                }
-
-                // Si elle existe déjà, mise à jour des données
-                $serie->setName($tv['name']);
-                $serie->setOverview($tv['overview']);
-                $serie->setPosterPath($tv['poster_path']);
-                $serie->setSerieId($tv['id']);
-                $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
-                if ($network) {
-                    $serie->setNetwork($network['name']);
-                    $serie->setNetworkLogoPath($network['logo_path']);
-                }
-                $serie->addUser($user);
-
-                $this->serieRepository->add($serie, true);
-
-                $io->success('"' . $serie->getName() . '" has been added to the user ' . $user);
                 break;
         }
 

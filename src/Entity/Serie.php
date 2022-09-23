@@ -33,10 +33,10 @@ class Serie
     private ?DateTimeImmutable $firstDateAir = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $addedAt = null;
+    private ?DateTimeImmutable $addedAt;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt;
 
     #[ORM\Column(nullable: true)]
     private ?bool $serieCompleted = null;
@@ -54,19 +54,23 @@ class Serie
     private Collection $networks;
 
     #[ORM\Column(nullable: true)]
-    private ?int $numberOfEpisodes = null;
+    private ?int $numberOfEpisodes = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?int $numberOfSeasons = null;
+    private ?int $numberOfSeasons = 0;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $originalName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTimeImmutable $modifiedAt;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->addedAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
+        $this->modifiedAt = new DateTimeImmutable();
         $this->networks = new ArrayCollection();
     }
 
@@ -137,7 +141,7 @@ class Serie
 
     public function getUpdatedAt(): ?DateTimeImmutable
     {
-        return $this->updatedAt?:$this->addedAt;
+        return $this->updatedAt;
     }
 
     public function setUpdatedAt(?DateTimeImmutable $updatedAt): self
@@ -275,6 +279,18 @@ class Serie
     public function setStatus(?string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getModifiedAt(): ?DateTimeImmutable
+    {
+        return $this->modifiedAt;
+    }
+
+    public function setModifiedAt(?DateTimeImmutable $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
 
         return $this;
     }

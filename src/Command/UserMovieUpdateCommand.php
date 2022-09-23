@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Entity\UserMovie;
-use App\Service\CallTmdbService;
+use App\Service\TMDBService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -19,11 +19,11 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 #[AsCommand(name: 'app:user-movie-update', description: 'This Command updates the "runtime" Field in "user_movie" Table',)]
 class UserMovieUpdateCommand extends Command
 {
-    private CallTmdbService $callTmdbService;
+    private TMDBService $callTmdbService;
     private ManagerRegistry $managerRegistry;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(CallTmdbService $callTmdbService, ManagerRegistry $managerRegistry, EntityManagerInterface $entityManager)
+    public function __construct(TMDBService $callTmdbService, ManagerRegistry $managerRegistry, EntityManagerInterface $entityManager)
     {
         $this->callTmdbService = $callTmdbService;
         $this->managerRegistry = $managerRegistry;

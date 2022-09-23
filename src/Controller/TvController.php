@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\CallTmdbService;
+use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class TvController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/tv', name: 'app_home_tv', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function indexTv(Request $request, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function indexTv(Request $request, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $page = $request->query->getInt('page', 1);
         $sort_by = $request->query->get('sort', 'popularity.desc');
@@ -61,7 +61,7 @@ class TvController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/tv/{id}', name: 'app_tv', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['id' => 15766])]
-    public function index(Request $request, $id, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function index(Request $request, $id, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
         $standing = $callTmdbService->getTv($id, $locale);
@@ -90,7 +90,7 @@ class TvController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/tv/season/{id}/{season_number}', name: 'app_season', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function season(Request $request, $id, $season_number, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration):Response
+    public function season(Request $request, $id, $season_number, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration):Response
     {
         $locale = $request->getLocale();
         $standing = $callTmdbService->getTvSeason($id, $season_number, $locale);
@@ -114,7 +114,7 @@ class TvController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/tv/episode/{id}/{season_number}/{episode_number}', name: 'app_episode', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function episode(Request $request, $id, $season_number, $episode_number, CallTmdbService $callTmdbService, ImageConfiguration $imageConfiguration):Response
+    public function episode(Request $request, $id, $season_number, $episode_number, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration):Response
     {
         $locale = $request->getLocale();
         $standing = $callTmdbService->getTvSeason($id, $season_number, $locale);

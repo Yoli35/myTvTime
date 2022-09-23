@@ -11,9 +11,10 @@ use App\Form\SerieType;
 use App\Repository\NetworkRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
-use App\Service\CallTmdbService;
+use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
+use DateTime;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -94,7 +95,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
-    public function search(Request $request, int $page, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function search(Request $request, int $page, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $series = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         $query = $request->query->get('query');
@@ -135,30 +136,30 @@ class SerieController extends AbstractController
     }
 
     #[Route('/popular', name: 'app_serie_popular', methods: ['GET'])]
-    public function popular(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function popular(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         return $this->series(self::POPULAR, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
     #[Route('/top/rated', name: 'app_serie_top_rated', methods: ['GET'])]
-    public function topRated(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function topRated(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         return $this->series(self::TOP_RATED, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
     #[Route('/airing/today', name: 'app_serie_airing_today', methods: ['GET'])]
-    public function topAiringToday(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function topAiringToday(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         return $this->series(self::AIRING_TODAY, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
     #[Route('/on/the/air', name: 'app_serie_on_the_air', methods: ['GET'])]
-    public function topOnTheAir(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function topOnTheAir(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         return $this->series(self::ON_THE_AIR, $request, $tmdbService, $serieRepository, $imageConfiguration);
     }
 
-    public function series($kind, Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function series($kind, Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $page = $request->query->getInt('p', 1);
         $locale = $request->getLocale();
@@ -213,7 +214,7 @@ class SerieController extends AbstractController
      * @throws Exception
      */
     #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
-    public function new(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, NetworkRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
+    public function new(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, NetworkRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -354,7 +355,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'app_serie_show', methods: ['GET'])]
-    public function show(Request $request, Serie $serie, CallTmdbService $tmdbService, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration): Response
+    public function show(Request $request, Serie $serie, TMDBService $tmdbService, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration): Response
     {
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::MY_SERIES);
@@ -370,7 +371,7 @@ class SerieController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/tmdb/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
-    public function tmdb(Request $request, $id, CallTmdbService $tmdbService, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration): Response
+    public function tmdb(Request $request, $id, TMDBService $tmdbService, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration): Response
     {
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::POPULAR);
@@ -384,7 +385,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
-    public function season(Request $request, $id, $seasonNumber, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function season(Request $request, $id, $seasonNumber, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $from = $request->query->get('from');
         $page = $request->query->get('p');
@@ -411,7 +412,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/tmdb/{id}/season/{seasonNumber}/episode/{episodeNumber}', name: 'app_serie_tmdb_episode', methods: ['GET'])]
-    public function episode(Request $request, $id, $seasonNumber, $episodeNumber, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function episode(Request $request, $id, $seasonNumber, $episodeNumber, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $from = $request->query->get('from');
         $year = $request->query->get('year');
@@ -438,7 +439,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/latest/serie', name: 'app_serie_latest', methods: ['GET'])]
-    public function latest(Request $request, CallTmdbService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function latest(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $standing = $tmdbService->getLatest($request->getLocale());
         $tv = json_decode($standing, true);
@@ -533,20 +534,32 @@ class SerieController extends AbstractController
          * La saison 0 correspond aux épisodes spéciaux regroupés dans cette saison
          */
         if ($tv['seasons'][0]['season_number'] == 1) {
-            $tab[] = ['season_number' => 0, 'season_completed' => false, 'episode_count' => 0, 'episodes' => []];
+            $tab[] = [
+                'season_number' => 0,
+                'season_completed' => false,
+                'air_date' => null,
+                'episode_count' => 0,
+                'episodes' => []
+            ];
         }
         foreach ($tv['seasons'] as $season) {
             $ep = [];
             for ($i = 1; $i <= $season['episode_count']; $i++) {
                 $ep[] = false;
             }
-            $tab[] = ['season_number' => $season['season_number'], 'season_completed' => false, 'episode_count' => $season['episode_count'], 'episodes' => $ep];
+            $tab[] = [
+                'season_number' => $season['season_number'],
+                'season_completed' => false,
+                'air_date' => $season['air_date'],
+                'episode_count' => $season['episode_count'],
+                'episodes' => $ep
+            ];
         }
         return $tab;
     }
 
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
-    public function updateViewingTab(Request $request, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository): Response
+    public function updateViewingTab(Request $request, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, TMDBService $tmdbService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -557,66 +570,104 @@ class SerieController extends AbstractController
 
         $episode = $newValue ? $episode : $episode - 1;
 
+        $tv = json_decode($tmdbService->getTv($serieId, $request->getLocale()), true);
+        $seasons = $tv['seasons'];
+        $noSpecialEpisodes = $seasons[0]['season_number'] == 1 ? 1 : 0;
+        dump($seasons, $noSpecialEpisodes);
         $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
         $theViewing = $viewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]);
         $viewing = $theViewing->getViewing();
 
         $newTab = [];
         /*
-         * Épisodes spéciaux
+         * Épisodes spéciaux : saison 0
          */
         if ($season == 0) {
             $newEpisodes = [];
             $episode_count = $viewing[0]['episode_count'];
+            $air_date = array_key_exists('air_date', $viewing[0]) ? $viewing[0]['air_date'] : $seasons[0]['air_date'];
             for ($e = 0; $e < $episode_count; $e++) {
                 $newEpisodes[] = $e + 1 <= $episode;
             }
             $full = !in_array(false, $newEpisodes, true);
-            $newTab[] = ['season_number' => 0, 'season_completed' => $full, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+            $newTab[] = [
+                'season_number' => 0,
+                'season_completed' => $full,
+                'air_date' => $air_date,
+                'episode_count' => $episode_count,
+                'episodes' => $newEpisodes
+            ];
             for ($i = 1; $i <= $serie->getNumberOfSeasons(); $i++) {
                 $newTab[$i] = $viewing[$i];
 
             }
         } else {
             $newTab[0] = $viewing[0];
+            if (!array_key_exists('air_date', $viewing[0])) $newTab[0]['air_date'] = $noSpecialEpisodes ? null : $seasons[0]['air_date'];
             /*
              * Les saisons précédentes
              */
             for ($s = 1; $s < $season; $s++) {
                 $newEpisodes = [];
                 $episode_count = $viewing[$s]['episode_count'];
+                $air_date = array_key_exists('air_date', $viewing[$s]) ? $viewing[$s]['air_date'] : $seasons[$s-$noSpecialEpisodes]['air_date'];
                 for ($e = 0; $e < $episode_count; $e++) {
                     $newEpisodes[] = true;
                 }
-                $newTab[] = ['season_number' => $s, 'season_completed' => true, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+                $newTab[] = [
+                    'season_number' => $s,
+                    'season_completed' => true,
+                    'air_date' => $air_date,
+                    'episode_count' => $episode_count,
+                    'episodes' => $newEpisodes
+                ];
             }
             /*
              * La saison ciblée
              */
             $newEpisodes = [];
             $episode_count = $viewing[$season]['episode_count'];
+            $air_date = array_key_exists('air_date', $viewing[$season]) ? $viewing[$season]['air_date'] : $seasons[$season-$noSpecialEpisodes]['air_date'];
+            dump($air_date);
             for ($e = 0; $e < $episode_count; $e++) {
                 $newEpisodes[] = $e + 1 <= $episode;
             }
             $full = !in_array(false, $newEpisodes, true);
-            $newTab[] = ['season_number' => $s, 'season_completed' => $full, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+            $newTab[] = [
+                'season_number' => $s,
+                'season_completed' => $full,
+                'air_date' => $air_date,
+                'episode_count' => $episode_count,
+                'episodes' => $newEpisodes
+            ];
+            dump($newTab);
             /*
              * Les saisons suivantes
-             * S'il existe des épisodes spéciaux, il faut ajouter cette "saison 0" au nombre de saisons
              */
             $season_count = $serie->getNumberOfSeasons();
             for ($s = $season + 1; $s <= $season_count; $s++) {
                 $newEpisodes = [];
                 $episode_count = $viewing[$s]['episode_count'];
+                $air_date = array_key_exists('air_date', $viewing[$s]) ? $viewing[$s]['air_date'] : $seasons[$s-$noSpecialEpisodes]['air_date'];
                 for ($e = 0; $e < $episode_count; $e++) {
                     $newEpisodes[] = false;
                 }
-                $newTab[] = ['season_number' => $s, 'season_completed' => false, 'episode_count' => $episode_count, 'episodes' => $newEpisodes];
+                $newTab[] = [
+                    'season_number' => $s,
+                    'season_completed' => false,
+                    'air_date' => $air_date,
+                    'episode_count' => $episode_count,
+                    'episodes' => $newEpisodes
+                ];
             }
         }
+        $today = (new DateTime)->format("Y-m-d");
+        dump($today);
         $seasons_completed = [];
         foreach ($newTab as $tab) {
-            $seasons_completed[] = !in_array(false, $tab['episodes'], true);
+            dump($tab);
+            if ($tab['air_date'] <= $today)
+                $seasons_completed[] = !in_array(false, $tab['episodes'], true);
         }
         $serie_completed = !in_array(false, $seasons_completed, true);
 

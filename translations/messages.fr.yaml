@@ -104,6 +104,8 @@ First Air at: Première diffusion
 Pagination: Pagination
 Results per page: Resultats par page
 Add order: Ordre d'ajout
+Last modified by user: Date de dernière modification (utilisateur)
+Last modified by TMDB: Date de dernière modification (the Movie Database)
 Order by: Tri
 Order: Sens
 Descending: Décroissant
@@ -209,12 +211,14 @@ Close: Fermer
 
 #Series
 # descriptions
-List of all the series I have watched in my life: Liste de toutes les séries que j’ai regardées au cours de ma vie
-Series, Tv Shows: Séries, séries télévisées
+Added at: Ajoutée le
 Country: Pays
 Creation: Année de création
+List of all the series I have watched in my life: Liste de toutes les séries que j’ai regardées au cours de ma vie
+Series, Tv Shows: Séries, séries télévisées
 Showrunner: Directeur de série
 View on: Regarder sur
+Updated at: Dernière mise à jour
 # Status
 Canceled: Annulée
 Continuing: En cours
@@ -342,7 +346,6 @@ Selection: Sélection
 #TikTok
 My TikTok Videos: Mes vidéos TikTok
 TikTok Link: Lien TikTok
-Added at: Ajoutée le
 See more results: Voir plus de résultats
 
 # User Account

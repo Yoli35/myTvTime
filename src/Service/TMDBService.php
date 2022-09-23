@@ -9,7 +9,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
-class CallTmdbService
+class TMDBService
 {
     // Clé d'API (v3 auth)
     //      f7e3c5fe794d565b471334c9c5ecaf96

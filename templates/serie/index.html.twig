@@ -103,6 +103,8 @@
                                                 <select id="order-by" class="left">
                                                     <option value="firstDateAir"{% if pages.order_by=='firstDateAir' %} selected{% endif %}>{{ 'First Air Date'|trans }}</option>
                                                     <option value="id"{% if pages.order_by=='id' %} selected{% endif %}>{{ 'Add order'|trans }}</option>
+                                                    <option value="updatedAt"{% if pages.order_by=='updatedAt' %} selected{% endif %}>{{ 'Last modified by user'|trans }}</option>
+                                                    <option value="modifiedAt"{% if pages.order_by=='modifiedAt' %} selected{% endif %}>{{ 'Last modified by TMDB'|trans }}</option>
                                                     <option value="name"{% if pages.order_by=='name' %} selected{% endif %}>{{ 'Name'|trans }}</option>
                                                 </select>
                                             </div>

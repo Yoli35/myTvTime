@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserMovieRepository;
-use App\Service\CallTmdbService;
+use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,7 +31,7 @@ class HomeController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es', 'page'=>1, 'sort_by'=>'popularity.desc'])]
-    public function index(Request $request, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
+    public function index(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
         $user = $this->getUser();

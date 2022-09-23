@@ -7,7 +7,7 @@ use App\Form\UserType;
 use App\Repository\UserMovieRepository;
 use App\Repository\UserRepository;
 use App\Service\BetaSeriesService;
-use App\Service\CallTmdbService;
+use App\Service\TMDBService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
 use Doctrine\ORM\EntityManagerInterface;
@@ -170,7 +170,7 @@ class UserController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/personal/movies/add', name: 'app_personnel_movie_add', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function add(Request $request, CallTmdbService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager, MovieController $movieController): JsonResponse
+    public function add(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager, MovieController $movieController): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
