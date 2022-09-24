@@ -249,8 +249,9 @@
     font-weight: 400;
 
     .video {
-        height: 324px;
-        width: 576px;
+        aspect-ratio: 16 / 9;
+        height: auto;
+        width: 100%;
 
         iframe {
             height: 100%;
@@ -516,10 +517,10 @@
 
 @media (min-width: 575.98px) {
     .yt-video-page {
-        .video {
-            height: 240px; /* 239,625 */
-            width: 426px;
-        }
+        //.video {
+        //    height: 240px; /* 239,625 */
+        //    width: 426px;
+        //}
     }
 
     .yt-header {
@@ -553,10 +554,10 @@
 
 @media (min-width: 767.98px) {
     .yt-video-page {
-        .video {
-            height: 324px;
-            width: 576px;
-        }
+        //.video {
+        //    height: 324px;
+        //    width: 576px;
+        //}
     }
 
     .yt-header {
@@ -600,10 +601,10 @@
 
 @media (min-width: 991.98px) {
     .yt-video-page {
-        .video {
-            height: 437px; /* 436,5 */
-            width: 776px;
-        }
+        //.video {
+        //    height: 437px; /* 436,5 */
+        //    width: 776px;
+        //}
     }
 
     .yt-header {
@@ -643,10 +644,10 @@
 
 @media (min-width: 1199.98px) {
     .yt-video-page {
-        .video {
-            height: 521px; /* 520,875 */
-            width: 926px;
-        }
+        //.video {
+        //    height: 521px; /* 520,875 */
+        //    width: 926px;
+        //}
     }
 
     .yt-header {
@@ -681,10 +682,10 @@
 
 @media (min-width: 1399.98px) {
     .yt-video-page {
-        .video {
-            height: 606px; /* 605,25 */
-            width: 1076px;
-        }
+        //.video {
+        //    height: 606px; /* 605,25 */
+        //    width: 1076px;
+        //}
     }
 
     .yt-header {

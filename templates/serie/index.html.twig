@@ -210,27 +210,63 @@
         }
 
         function backdropSlide() {
-            const modulo = backdrop_filenames.length;
+            // const modulo = backdrop_filenames.length;
             const header = document.querySelector(".header");
-            let slide = 0,filename,div, backdrop;
+            let slide = 0, filename, div, nameDiv, name, backdrop;
+            let images = getBackdrops();
+            let names = getNames();
+            let modulo = images.length;
 
             setInterval(() => {
-                slide++;
-                filename = backdrop_filenames[slide % modulo];
+                filename = images[slide % modulo];
+                name = names[slide++ % modulo];
+                // filename = backdrop_filenames[slide % modulo];
                 backdrop = header.querySelector(".backdrop");
                 div = document.createElement("div");
                 div.classList.add("backdrop", "right");
-                div.setAttribute("style", "background-image: url('/images/series/" + filename + "')");
+                div.setAttribute("style", "background-image: url('" + filename + "')");
+                nameDiv = document.createElement("div");
+                nameDiv.appendChild(document.createTextNode(name));
+                nameDiv.classList.add("name");
+                div.appendChild(nameDiv);
+                // div.setAttribute("style", "background-image: url('/images/series/" + filename + "')");
                 header.appendChild(div);
-                setTimeout(()=>{
+                setTimeout(() => {
                     backdrop.classList.add("left");
                     div.classList.remove("right");
-                },0);
-                setTimeout(()=>{
+                }, 0);
+                setTimeout(() => {
                     header.removeChild(backdrop);
-                },2500);
+                    setTimeout(() => {
+                        while (header.querySelectorAll(".backdrop").length > 1) {
+                            // header.removeChild(header.querySelector(".backdrop")); // Première div.backdrop
+                            header.removeChild(header.lastChild); // Dernière div.backdrop
+                        }
+                    }, 100);
+                }, 2500);
             }, 5000);
+        }
 
+        function getBackdrops() {
+            const wrapper = document.querySelector(".wrapper");
+            const backdrops = wrapper.querySelectorAll(".backdrop");
+            let tab = [], i = 0;
+            backdrops.forEach(backdrop => {
+                tab[i++] = backdrop.style.backgroundImage.match(/url\(["']?([^"']*)["']?\)/)[1];
+            });
+            console.log({tab});
+            return tab;
+        }
+
+        function getNames() {
+            const wrapper = document.querySelector(".wrapper");
+            const infos = wrapper.querySelectorAll(".infos");
+            let tab = [], i = 0;
+            infos.forEach(backdrop => {
+                tab[i++] = backdrop.firstElementChild.innerHTML;
+            });
+            console.log({tab});
+            return tab;
         }
 
         function initSettings() {

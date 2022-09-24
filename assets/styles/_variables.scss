@@ -265,15 +265,24 @@ $fa-font-path: "../webfonts";
     }
 
     .backdrop {
+        @include flex-row(end, start);
         background-image: url($bg-image);
-        background-position: center center;
+        background-position: center 25%;
         background-size: cover;
         border-radius: 1em;
         inset: 0;
-        opacity: .15;
+        opacity: .75;
+        padding: 2em;
         position: absolute;
         transition: translate 2s ease-in-out;
         z-index: -1;
+
+        .name {
+            color: var(--gradiant-ardoise-100);
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 0 0 8px var(--gradiant-ardoise-10);
+        }
 
         &.right {
             translate: 100% 0;

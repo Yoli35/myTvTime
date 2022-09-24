@@ -599,7 +599,7 @@ class SerieController extends AbstractController
             ];
             for ($i = 1; $i <= $serie->getNumberOfSeasons(); $i++) {
                 $newTab[$i] = $viewing[$i];
-
+                if (!array_key_exists('air_date', $viewing[$i])) $newTab[$i]['air_date'] = $seasons[$i]['air_date'];
             }
         } else {
             $newTab[0] = $viewing[0];

@@ -822,7 +822,8 @@
 
                                         .viewing {
                                             @include flex-row(center, start);
-                                            flex-wrap: wrap;
+                                            //flex-wrap: wrap;
+                                            overflow: scroll;
                                             position: relative;
 
                                             .ep {
