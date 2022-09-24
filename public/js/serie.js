@@ -11,7 +11,7 @@ function initSerieStuff(paths, vote) {
     _app_serie_new = paths[3]
 
     initAddSerie();
-    setVote(vote);
+    if (vote !== undefined) setVote(vote);
     markMultiWatchProviders();
     translateKeywords();
 }

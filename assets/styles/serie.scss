@@ -24,6 +24,11 @@
             opacity: var(--quote-opacity);
             position: absolute;
             text-align: right;
+            transition: opacity 500ms ease-in-out;
+
+            &.hidden {
+                opacity: 0;
+            }
 
             &.n1 {
                 right: 1em;

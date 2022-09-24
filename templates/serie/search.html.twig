@@ -11,11 +11,6 @@
             <div class="header">
                 {{ include('blocks/serie/quotes.html.twig') }}
                 <h1>{{ 'Series search'|trans }}</h1>
-                {% if quote is defined %}
-                    <div class="quote">
-                        <div>{{ quote }}</div>
-                    </div>
-                {% endif %}
                 <div class="backdrop"></div>
             </div>
             {{ include('blocks/nav.html.twig', {thisPage: 'Series search'}) }}
@@ -105,6 +100,7 @@
 
             initHeader();
             initSerieStuff(paths);
+            animateQuotes();
         })
 
         function initHeader() {
@@ -150,16 +146,56 @@
             const header = document.querySelector(".header");
             const h1 = document.querySelector(".animated-h1");
             const parts = h1.querySelectorAll(".part");
-            let left, ratio, top, index = 0;
+            let left, ratio, top;
             ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
             left = (header.clientWidth - h1.clientWidth) / 2;
             top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
             if (ratio < 0) ratio = 0;
             if (ratio > 1) ratio = 1;
             parts.forEach(part => {
-                    part.setAttribute("style", "transform: rotate(" + (720 * ratio) + "deg);");
+                part.setAttribute("style", "transform: rotate(" + (720 * ratio) + "deg);");
             })
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+        }
+
+        let quoteInterval = [2000, 3000, 4000, 5000];
+        let quoteIntervalId = [0, 0, 0, 0];
+        let quotes=["","","",""], quoteDivs;
+
+        function animateQuotes() {
+            quoteDivs = document.querySelectorAll(".quote");
+            let i = 0;
+
+            quoteDivs.forEach(() => {
+                quoteIntervalId[i] = setInterval(getQuote, quoteInterval[i], i);
+                i++;
+            });
+        }
+
+        function getQuote(idx) {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let data = JSON.parse(this.response), str;
+                const quoteDiv = quoteDivs[idx];
+                str = data['quote'];
+                console.log({str});
+                quotes[idx] = str.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                quoteInterval[idx] = Math.floor(2000 + (30 * 1000 * Math.random()));
+
+                quoteDiv.classList.add("hidden");
+                setTimeout(() => {
+                    quoteDiv.querySelector("div").innerHTML = quotes[idx];
+                    quoteDiv.classList.remove("hidden");
+                    clearInterval(quoteIntervalId[idx]);
+                    startInterval(idx, quoteInterval[idx]);
+                }, 500);
+            }
+            xhr.open("GET", '/fr/serie/quote');
+            xhr.send();
+        }
+
+        function startInterval(idx, duration) {
+            quoteIntervalId[idx] = setInterval(getQuote, duration, idx);
         }
     </script>
 {% endblock %}

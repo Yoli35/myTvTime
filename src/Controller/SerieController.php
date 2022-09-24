@@ -779,4 +779,12 @@ class SerieController extends AbstractController
 
         return $this->json(["result" => ($n - 1) . " ligne" . (($n - 1) > 1 ? "s" : "") . " ajoutée" . (($n - 1) > 1 ? "s" : "") . " au fichier « tags." . $translations[0][1] . ".yaml »."]);
     }
+
+    #[Route('/quote', name: 'app_serie_get_quote', methods: ['GET'])]
+    public function getQuote (): Response
+    {
+        return $this->json([
+            'quote' => (new QuoteService)->getRandomQuote(),
+        ]);
+    }
 }

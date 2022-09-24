@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Throws;
+
 class QuoteService
 {
     private array $quotes = [
@@ -87,5 +89,10 @@ class QuoteService
     public function getRandomQuotes(): ?array
     {
         return $this->getSerieQuotes();
+    }
+
+    public function getRandomQuote(): ?String
+    {
+        return $this->quotes[rand(0, count($this->quotes))];
     }
 }
