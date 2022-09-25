@@ -149,7 +149,7 @@
         const _order_by = "{{ pages.order_by }}";
         const _order = "{{ pages.order }}";
         const _from = "";
-        const backdrop_filenames = ["serie-antiques.jpg", "serie-automne-2021.jpg", "serie-best-releasing-in-august-2022.webp", "serie-By-DC-Entertainment.jpg.webp", "serie-header.jpg", "serie-Hellbound.jpg", "serie-netflix.jpg", "serie-remote.jpg"];
+        let slideInterval, slideImages, slideNames, slideIndex;
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -210,41 +210,158 @@
         }
 
         function backdropSlide() {
-            // const modulo = backdrop_filenames.length;
             const header = document.querySelector(".header");
-            let slide = 0, filename, div, nameDiv, name, backdrop;
-            let images = getBackdrops();
-            let names = getNames();
-            let modulo = images.length;
+            let indicatorDiv, indicatorsDiv, left, right, modulo;
 
-            setInterval(() => {
-                filename = images[slide % modulo];
-                name = names[slide++ % modulo];
-                // filename = backdrop_filenames[slide % modulo];
-                backdrop = header.querySelector(".backdrop");
-                div = document.createElement("div");
-                div.classList.add("backdrop", "right");
-                div.setAttribute("style", "background-image: url('" + filename + "')");
+            slideImages = getBackdrops();
+            slideNames = getNames();
+            slideIndex = 0;
+            modulo = slideImages.length;
+
+            left = document.createElement("div");
+            left.classList.add("left-arrow");
+            left.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            left.addEventListener("click", previousSlide);
+            header.appendChild(left);
+            right = document.createElement("div");
+            right.classList.add("right-arrow");
+            right.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            right.addEventListener("click", nextSlide);
+            header.appendChild(right);
+
+            indicatorsDiv = document.createElement("div");
+            indicatorsDiv.classList.add("indicators");
+            for (let i = 0; i < modulo; i++) {
+                indicatorDiv = document.createElement("div");
+                indicatorDiv.classList.add("indicator");
+                indicatorDiv.setAttribute("data-index", i.toString());
+                indicatorDiv.addEventListener("click", gotoSlide);
+                indicatorsDiv.appendChild(indicatorDiv);
+            }
+            indicatorsDiv.setAttribute("style", "left: " + ((header.clientWidth - (24 * modulo)) / 2) + "px");
+            header.appendChild(indicatorsDiv);
+
+            header.addEventListener("mouseenter", stopSlide);
+            header.addEventListener("mouseleave", startSlide);
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === 'visible') {
+                    startSlide();
+                } else {
+                    stopSlide();
+                }
+            });
+
+            slideInterval = setInterval(slideFunc, 5000);
+        }
+
+        function slideFunc() {
+            const header = document.querySelector(".header");
+            const modulo = slideImages.length;
+            let filename, div, nameDiv, name, backdrop;
+
+            filename = slideImages[slideIndex];
+            name = slideNames[slideIndex];
+            backdrop = header.querySelector(".backdrop");
+            div = document.createElement("div");
+            div.classList.add("backdrop", "right");
+            div.setAttribute("style", "background-image: url('" + filename + "')");
+            nameDiv = document.createElement("div");
+            nameDiv.appendChild(document.createTextNode(name));
+            nameDiv.classList.add("name");
+            div.appendChild(nameDiv);
+            header.appendChild(div);
+
+            setTimeout(() => {
+                backdrop.classList.add("left");
+                div.classList.remove("right");
+                indicators(header, slideIndex, modulo);
+            }, 0);
+            slideIndex = (slideIndex + 1) % modulo;
+            setTimeout(() => {
+                let leftBackdrop = header.querySelector(".backdrop.left");
+                header.removeChild(leftBackdrop);
+                setTimeout(() => {
+                    while (header.querySelectorAll(".backdrop").length > 1) {
+                        header.removeChild(header.lastChild); // Dernière div.backdrop
+                    }
+                }, 100);
+            }, 2500);
+        }
+
+        function gotoSlide(evt) {
+            const target = parseInt(evt.target.getAttribute("data-index"));
+            const modulo = slideImages.length;
+
+            if ((target + 1) % modulo === slideIndex) return;
+
+            slideIndex = target;
+            setSlide();
+            slideIndex = (slideIndex + 1) % modulo;
+        }
+
+        function nextSlide() {
+            const modulo = slideImages.length;
+
+            setSlide();
+            slideIndex = (slideIndex + 1) % modulo;
+        }
+
+        function previousSlide() {
+            const modulo = slideImages.length;
+
+            slideIndex -= 2;
+            if (slideIndex < 0) slideIndex = modulo + slideIndex;
+            setSlide();
+            slideIndex = (slideIndex + 1) % modulo;
+        }
+
+        function setSlide() {
+            const header = document.querySelector(".header");
+            const modulo = slideImages.length;
+            let filename, name, backdrop, nameDiv;
+
+            let leftBackdrop = document.querySelector(".backdrop.left");
+            if (leftBackdrop) {
+                header.removeChild(leftBackdrop);
+            }
+            filename = slideImages[slideIndex];
+            name = slideNames[slideIndex];
+            backdrop = header.querySelector(".backdrop");
+            backdrop.setAttribute("style", "background-image: url('" + filename + "')");
+            nameDiv = backdrop.querySelector(".name");
+            // avant le premier défilement, il n'y a pas de div.name
+            if (nameDiv) {
+                nameDiv.removeChild(nameDiv.firstChild);
+                nameDiv.appendChild(document.createTextNode(name));
+            } else {
                 nameDiv = document.createElement("div");
                 nameDiv.appendChild(document.createTextNode(name));
                 nameDiv.classList.add("name");
-                div.appendChild(nameDiv);
-                // div.setAttribute("style", "background-image: url('/images/series/" + filename + "')");
-                header.appendChild(div);
-                setTimeout(() => {
-                    backdrop.classList.add("left");
-                    div.classList.remove("right");
-                }, 0);
-                setTimeout(() => {
-                    header.removeChild(backdrop);
-                    setTimeout(() => {
-                        while (header.querySelectorAll(".backdrop").length > 1) {
-                            // header.removeChild(header.querySelector(".backdrop")); // Première div.backdrop
-                            header.removeChild(header.lastChild); // Dernière div.backdrop
-                        }
-                    }, 100);
-                }, 2500);
-            }, 5000);
+                backdrop.appendChild(nameDiv);
+            }
+            indicators(header, slideIndex + 1, modulo);
+        }
+
+        function stopSlide() {
+            clearInterval(slideInterval);
+        }
+
+        function startSlide() {
+            slideInterval = setInterval(slideFunc, 5000);
+        }
+
+        function indicators(header, idx, count) {
+            const indicators = header.querySelectorAll(".indicator");
+            idx--;
+            for (let i = 0; i < count; i++) {
+                indicators[i].classList.remove("active");
+            }
+            if (idx >= 0 && idx < count) {
+                indicators[idx].classList.add("active");
+            } else {
+                indicators[count - 1].classList.add("active");
+            }
         }
 
         function getBackdrops() {
@@ -254,7 +371,6 @@
             backdrops.forEach(backdrop => {
                 tab[i++] = backdrop.style.backgroundImage.match(/url\(["']?([^"']*)["']?\)/)[1];
             });
-            console.log({tab});
             return tab;
         }
 
@@ -265,7 +381,6 @@
             infos.forEach(backdrop => {
                 tab[i++] = backdrop.firstElementChild.innerHTML;
             });
-            console.log({tab});
             return tab;
         }
 
@@ -406,7 +521,6 @@
                             alert("{{ 'Serie not found'|trans }} (ID: " + data.id + ")");
                         }
                     }
-                    console.log({data});
                     document.querySelector("#new_serie").value = "";
                 }
                 xhr.open("GET", _app_serie_new + '?value=' + value + "&p=" + _current_page + "&pp=" + _per_page + "&ob=" + _order_by + "&o=" + _order);
@@ -546,7 +660,6 @@
             list[{{ loop.index0 }}] = {'id': {{ serie.id }}, 'name': "{{ serie.name }}", 'original': "{{ serie.original }}"};
             {% endfor %}
 
-            console.log({list});
             return list;
         }
     </script>

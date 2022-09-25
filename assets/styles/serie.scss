@@ -76,6 +76,52 @@
                 }
             }
         }
+
+        .indicators {
+            @include flex-row();
+            bottom: 1em;
+            height: 1em;
+            position: absolute;
+
+            .indicator {
+                background-color: var(--gradiant-ardoise-90);
+                border-radius: .125em;
+                cursor: pointer;
+                height: .25em;
+                margin: 0 .25em;
+                opacity: .75;
+                transition: height 100ms ease-in-out;
+                width: 1em;
+
+                &.active {
+                    height: .75em;
+                }
+            }
+        }
+
+        .left-arrow, .right-arrow {
+            @include flex-row();
+            background-color: transparent;
+            cursor: pointer;
+            height: 100%;
+            font-size: 2em;
+            position: absolute;
+            top: 0;
+            transition: background-color .5s ease-in-out;
+            width: 1.5em;
+
+            &:hover {
+                background-color: var(--gradiant-ardoise-90-alpha-10);
+            }
+        }
+
+        .left-arrow {
+            left: 0;
+        }
+
+        .right-arrow {
+            right: 0;
+        }
     }
 
     .nav-breadcrumb {
