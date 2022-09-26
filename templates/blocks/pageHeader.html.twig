@@ -67,10 +67,18 @@
     const navigation = document.querySelector('nav');
 
     hamburgerButton.addEventListener("click", toggleNav);
+    document.addEventListener("click", closeNav);
 
-    function toggleNav() {
+    function toggleNav(evt) {
+        evt.stopPropagation();
         hamburgerButton.classList.toggle("active");
         navigation.classList.toggle("active");
+    }
+
+    function closeNav(evt) {
+        console.log(evt.target.tagName());
+        hamburgerButton.classList.remove("active");
+        navigation.classList.remove("active");
     }
 </script>
 

@@ -17,18 +17,20 @@
             <main>
                 <div class="events">
                     {% for event in events %}
-                        <div class="event">
-                            <div class="poster">
-                                <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                        {% if event.visible %}
+                            <div class="event">
+                                <div class="poster">
+                                    <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                </div>
+                                <div class="infos">
+                                    <h2>{{ event.name }}</h2>
+                                    <div>{{ event.subheading }}</div>
+                                </div>
+                                <div class="countdown" id="{{ event.id }}">
+                                    {{ event.date|format_datetime('full', 'medium') }}
+                                </div>
                             </div>
-                            <div class="infos">
-                                <h2>{{ event.name }}</h2>
-                                <div>{{ event.subheading }}</div>
-                            </div>
-                            <div class="countdown" id="{{ event.id }}">
-                                {{ event.date|format_datetime('full', 'medium') }}
-                            </div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </main>
@@ -221,17 +223,18 @@
             let d, h, m, s;
             const now = Date.now();
             const diff = Math.abs(now - date);
+            const past = now > date;
 
             d = Math.floor(diff / 24 / 60 / 60 / 1000);
             h = Math.floor(diff / 60 / 60 / 1000) % 24;
             m = Math.floor(diff / 60 / 1000) % 60;
-            s = Math.floor(diff / 1000) % 60;
+            s = past ? Math.floor(diff / 1000) % 60 : Math.ceil(diff / 1000) % 60;
             document.querySelector("#days-" + id).querySelector(".count").innerText = (d < 10 ? "0" : "") + d;
             document.querySelector("#hours-" + id).querySelector(".count").innerText = (h < 10 ? "0" : "") + h;
             document.querySelector("#minutes-" + id).querySelector(".count").innerText = (m < 10 ? "0" : "") + m;
             document.querySelector("#secondes-" + id).querySelector(".count").innerText = (s < 10 ? "0" : "") + s;
 
-            if (now - date > 0) {
+            if (past) {
                 countdown.classList.add("past");
             }
         }
