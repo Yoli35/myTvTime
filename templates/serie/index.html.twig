@@ -149,7 +149,13 @@
         const _order_by = "{{ pages.order_by }}";
         const _order = "{{ pages.order }}";
         const _from = "";
+
+        const slideDuration = 6000;
+        const translateDuration = 3000;
+        const removeDelay = 100;
+        const actionDelay = 10;
         let slideInterval, slideImages, slideNames, slideIndex;
+
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -238,7 +244,7 @@
                 indicatorDiv.addEventListener("click", gotoSlide);
                 indicatorsDiv.appendChild(indicatorDiv);
             }
-            indicatorsDiv.setAttribute("style", "left: " + ((header.clientWidth - (24 * modulo)) / 2) + "px");
+            indicatorsDiv.setAttribute("style", "left: " + ((header.clientWidth - (20 * modulo)) / 2) + "px");
             header.appendChild(indicatorsDiv);
 
             header.addEventListener("mouseenter", stopSlide);
@@ -252,7 +258,7 @@
                 }
             });
 
-            slideInterval = setInterval(slideFunc, 5000);
+            slideInterval = setInterval(slideFunc, slideDuration);
         }
 
         function slideFunc() {
@@ -276,17 +282,19 @@
                 backdrop.classList.add("left");
                 div.classList.remove("right");
                 indicators(header, slideIndex, modulo);
-            }, 0);
+            }, actionDelay);
             slideIndex = (slideIndex + 1) % modulo;
             setTimeout(() => {
                 let leftBackdrop = header.querySelector(".backdrop.left");
-                header.removeChild(leftBackdrop);
+                if (leftBackdrop) {
+                    header.removeChild(leftBackdrop);
+                }
                 setTimeout(() => {
                     while (header.querySelectorAll(".backdrop").length > 1) {
                         header.removeChild(header.lastChild); // Dernière div.backdrop
                     }
-                }, 100);
-            }, 2500);
+                }, removeDelay);
+            }, translateDuration + removeDelay);
         }
 
         function gotoSlide(evt) {
@@ -348,7 +356,7 @@
         }
 
         function startSlide() {
-            slideInterval = setInterval(slideFunc, 5000);
+            slideInterval = setInterval(slideFunc, slideDuration);
         }
 
         function indicators(header, idx, count) {

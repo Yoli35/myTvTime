@@ -22,17 +22,17 @@ function initButtons(id, locale, paths, url) {
     _app_collection_display = paths[7].substring(0, paths[7].length - 1);
     _url = url;
 
-    const userMovieLink = document.querySelector('#query');
-    document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === 'visible') {
-            userMovieLink.focus();
-            userMovieLink.select();
-        }
-    });
-    setTimeout(() => {
-        userMovieLink.focus();
-        userMovieLink.select();
-    }, 1000);
+    // const userMovieLink = document.querySelector('#query');
+    // document.addEventListener("visibilitychange", () => {
+    //     if (document.visibilityState === 'visible') {
+    //         userMovieLink.focus();
+    //         userMovieLink.select();
+    //     }
+    // });
+    // setTimeout(() => {
+    //     userMovieLink.focus();
+    //     userMovieLink.select();
+    // }, 1000);
 
     const exportButton = document.querySelector('#export-button');
     const appendButton = document.querySelector("#append-button");

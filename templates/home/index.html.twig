@@ -36,6 +36,7 @@
                 {% if route == 'app_home_series' %}
                     <li class="breadcrumb-item active" aria-current="{{ 'Series'|trans }}">{{ 'Series'|trans }}</li>
                 {% endif %}
+                {{ include('blocks/user/breadcrumb.html.twig', {user: app.user}) }}
             </ol>
         </nav>
 

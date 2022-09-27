@@ -88,9 +88,9 @@
                 border-radius: .125em;
                 cursor: pointer;
                 height: .25em;
-                margin: 0 .25em;
+                margin: 0 .125em;
                 opacity: .75;
-                transition: height 100ms ease-in-out;
+                transition: height 500ms ease-in-out;
                 width: 1em;
 
                 &.active {
