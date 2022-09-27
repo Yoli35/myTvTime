@@ -29,6 +29,49 @@
                     <div class="part-1">
                         <h1 class="title">{{ movie.title }}</h1>
                         <div class="info">{{ 'Original Title'|trans }} : {{ movie.original_title }}</div>
+                        {% if watchProviders %}
+                            <div class="watch-providers">
+                                {% if watchProviders.flatrate is defined %}
+                                    <div class="streaming">{{ 'Available in streaming'|trans }}</div>
+                                    <div class="provider-list">
+                                        {% for provider in watchProviders.flatrate %}
+                                            <div class="provider">
+                                                <div class="name">{{ provider.provider_name }}</div>
+                                                <div class="logo">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% if watchProviders.buy is defined %}
+                                    <div class="buy">{{ 'Available to buy'|trans }}</div>
+                                    <div class="provider-list">
+                                        {% for provider in watchProviders.buy %}
+                                            <div class="provider">
+                                                <div class="name">{{ provider.provider_name }}</div>
+                                                <div class="logo">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% if watchProviders.rent is defined %}
+                                    <div class="buy">{{ 'Available to rent'|trans }}</div>
+                                    <div class="provider-list">
+                                        {% for provider in watchProviders.rent %}
+                                            <div class="provider">
+                                                <div class="name">{{ provider.provider_name }}</div>
+                                                <div class="logo">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                         <div class="genres">
                             {% for genre in movie.genres %}
                                 <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>

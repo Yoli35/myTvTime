@@ -449,6 +449,26 @@ class TMDBService
         }
     }
 
+    public function getWatchProviders($movieId): ?string
+    {
+        $noWatchProviders = json_encode([]);
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/movie/'.$movieId.'/watch/providers?api_key=' . $this->api_key,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return $noWatchProviders;
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return $noWatchProviders;
+        }
+    }
+
     /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface

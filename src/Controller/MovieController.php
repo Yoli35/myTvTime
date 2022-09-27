@@ -49,6 +49,18 @@ class MovieController extends AbstractController
         $standing = $callTmdbService->getCountries();
         $countries = json_decode($standing, true);
 
+        $standing = $callTmdbService->getWatchProviders($id);
+        $watchProviders = json_decode($standing, true);
+        if (key_exists('results', $watchProviders)) {
+            $watchProviders = $watchProviders['results'];
+            if (key_exists(strtoupper($locale), $watchProviders)) {
+                $watchProviders = $watchProviders[strtoupper($locale)];
+            }
+            else {
+                $watchProviders = null;
+            }
+        }
+
         $standing = $callTmdbService->getMovieReleaseDates($id);
         $releaseDates = json_decode($standing, true);
         $releaseDates = $this->getLocaleDates($releaseDates['results'], $countries, $locale);
@@ -76,6 +88,7 @@ class MovieController extends AbstractController
             'movie' => $movieDetail,
             'recommendations' => $recommendations['results'],
             'dates' => $releaseDates,
+            'watchProviders' => $watchProviders,
             'hasBeenSeen' => $this->hasBeenSeen($id, $userMovieRepository),
             'cast' => $cast,
             'crew' => $crew,

@@ -131,6 +131,47 @@
                 padding: .5em;
             }
 
+            .watch-providers {
+                padding: 1em;
+
+                .streaming, .buy {
+                    font-weight: 300;
+                }
+
+                .provider-list {
+                    @include flex-row(center, start);
+                    flex-wrap: wrap;
+
+                    .provider {
+                        background-color: var(--gradiant-ardoise-50);
+                        border-radius: .5em;
+                        @include flex-row(center, start);
+                        margin: .125em;
+                        padding: .25em .25em .25em .5em;
+
+                        .logo {
+                            border-radius: .25em;
+                            overflow: hidden;
+
+                            img {
+                                height: 2em;
+                                object-fit: cover;
+                                width: 2em;
+                            }
+                        }
+
+                        .name {
+                            font-weight: 100;
+                            margin-right: 1em;
+                        }
+                    }
+                }
+
+                .watch {
+
+                }
+            }
+
             .genres {
                 margin-right: auto;
 
@@ -168,7 +209,7 @@
             }
 
             .overview {
-                padding: 20px;
+                padding: 0 1.25em 1.25em;
             }
 
             .info {
