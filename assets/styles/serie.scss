@@ -10,7 +10,7 @@
     padding-top: 1em;
 
     .header {
-        --quote-opacity : 1;
+        --quote-opacity: 1;
 
         @include animated-header("../images/serie-header.jpg");
         background-color: var(--gradiant-ardoise-10);
@@ -150,6 +150,7 @@
                     margin-bottom: 1em;
                     //overflow: hidden;
                     position: relative;
+                    transition: scale 300ms ease-in-out;
                     width: 100%;
 
                     .backdrop {
@@ -211,6 +212,7 @@
                         padding: .25em;
                         position: absolute;
                         width: 4em;
+                        z-index: 1;
 
                         img {
                             width: 100%;
@@ -248,6 +250,48 @@
                         .poster {
                             height: var(--serie-md-height);
                             width: var(--serie-md-poster-width);
+                        }
+                    }
+
+                    .front {
+                        border: .25em solid transparent;
+                        border-radius: .5em;
+                        inset: 0;
+                        position: absolute;
+                        transition: border 100ms ease-in-out;
+
+                        &:hover {
+                            border: .25em solid var(--gradiant-ardoise-90);
+                            //outline-offset: -.25em;
+                        }
+                    }
+
+                    &:hover {
+                        animation: wobble 200ms;
+                        scale: 1.02;
+                    }
+
+                    @keyframes wobble {
+                        50% {
+                            rotate: -1deg;
+                        }
+                        75% {
+                            rotate: .5deg;
+                        }
+                        87.5% {
+                            rotate: -.25deg;
+                        }
+                        93.75% {
+                            rotate: .125deg;
+                        }
+                        96.875% {
+                            rotate: -.0625deg;
+                        }
+                        98.4375% {
+                            rotate: .03125deg;
+                        }
+                        99.21875% {
+                            rotate: -.015625deg;
                         }
                     }
                 }
