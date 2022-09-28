@@ -664,10 +664,11 @@
         }
 
         .infos {
-            @include flex-col(flex-start, center);
+            @include flex-col(start, center);
             color: var(--gradiant-ardoise-90);
             min-height: 30em;
             padding: 1em;
+            position: relative;
             width: 100%;
             z-index: 0;
 
@@ -741,6 +742,22 @@
 
                 .creator {
                     @include human-profile(var(--gradiant-ardoise-20));
+                }
+            }
+
+            .what-s-new {
+                @include flex-row(center, end);
+                position: absolute;
+                right: 1em;
+                top: 1em;
+
+                .new-episode, .new-season {
+                    background-color: var(--gradiant-mars-50);
+                    border-radius: .5em;
+                    color: var(--gradiant-mars-90);
+                    margin: 0 .5em;
+                    padding: .5em 1em;
+                    font-weight: 100;
                 }
             }
         }
