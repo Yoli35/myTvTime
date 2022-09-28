@@ -71,7 +71,6 @@ class SerieController extends AbstractController
         }
         $totalResults = $serieRepository->countUserSeries($user->getId());
         $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
-
         $list = $serieRepository->listUserSeries($user->getId());
 
         return $this->render('serie/index.html.twig', [
@@ -486,12 +485,16 @@ class SerieController extends AbstractController
         $images = json_decode($standing, true);
 
         $viewing = null;
+        $whatsNew = null;
 
         if ($index) {
             if ($serie == null) {
                 $serie = $serieRepository->findOneBy(['serieId' => $id]);
             }
             if ($serie) {
+                $whatsNew = $this->updateSeasonsAndEpisodes($tv, $serie, $serieRepository);
+
+                /** @var SerieViewing $viewing */
                 $viewing = $viewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
                 if ($viewing == null) {
                     $viewing = new SerieViewing();
@@ -499,10 +502,13 @@ class SerieController extends AbstractController
                     $viewing->setSerie($serie);
                     $viewing->setViewing($this->createViewingTab($tv));
                     $viewingRepository->add($viewing, true);
+                } else {
+                    $viewing->setViewing($this->updateViewing($tv, $viewing, $viewingRepository));
                 }
             }
         }
         dump($viewing);
+        dump($whatsNew);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -521,7 +527,8 @@ class SerieController extends AbstractController
             'query' => $query,
             'year' => $year,
             'user' => $user,
-            'viewing' => $viewing ? $viewing->getViewing() : null,
+            'viewing' => $viewing?->getViewing(),
+            'whatsNew' => $whatsNew,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
 
@@ -556,6 +563,145 @@ class SerieController extends AbstractController
             ];
         }
         return $tab;
+    }
+
+    public function updateSeasonsAndEpisodes($tv, $serie, $serieRepository): array|null
+    {
+        $whatsNew = ['episode' => 0, 'season' => 0];
+        $modified = false;
+        if ($serie->getNumberOfSeasons() !== $tv['number_of_seasons']) {
+            $whatsNew['season'] = $tv['number_of_seasons'] - $serie->getNumberOfSeasons();
+            $modified = true;
+
+            $serie->setNumberOfSeasons($tv['number_of_seasons']);
+            $serie->setModifiedAt(new DateTimeImmutable());
+        }
+        if ($serie->getNumberOfEpisodes() !== $tv['number_of_episodes']) {
+            $whatsNew['episode'] = $tv['number_of_episodes'] - $serie->getNumberOfSeasons();
+            $modified = true;
+
+            $serie->setNumberOfEpisodes($tv['number_of_episodes']);
+            $serie->setModifiedAt(new DateTimeImmutable());
+        }
+        /*
+         * Si quelque chose a changé, l'enregistrement est mis à jour
+         */
+        if ($modified) {
+            $serieRepository->add($serie, true);
+            return $whatsNew;
+        }
+
+        return null;
+    }
+
+    public function updateViewing($tv, SerieViewing $theViewing, SerieViewingRepository $viewingRepository): array
+    {
+        $viewing = $theViewing->getViewing();
+        $seasons = $tv['seasons'];
+        $modified = false;
+
+        dump($seasons);
+        dump($viewing);
+
+        /*
+         * Épisodes spéciaux : saison 0
+         *
+         * Si la saison comporte des épisodes spéciaux et que cette info est déjà dans la base (viewing)
+         * on met à jour viewing
+         */
+        $specialEpisodes = $seasons[0]['season_number'] == 0;
+        if ($specialEpisodes) {
+            $season = $seasons[0];
+
+            if ($viewing[0]['season_number'] == 0) {
+                /*
+                 * Le nombre d'épisodes spéciaux a augmenté ?
+                 */
+                if ($season['episode_count'] != $viewing[0]['episode_count']) {
+                    $viewing[0]['episode_count'] = $season['episode_count'];
+                    $viewing[0]['episodes'] = array_pad($viewing[0]['episodes'], $season['episode_count'], false);
+                    $viewing[0]['season_completed'] = false;
+                    $modified = true;
+                }
+                /*
+                 * L'info air_date est présente ?
+                 */
+                if (!array_key_exists('air_date', $viewing[0])) {
+                    $viewing[0]['air_date'] = $season['air_date'];
+                    $modified = true;
+                }
+            }
+        }
+
+        /*
+         * Si viewing ne comportait pas de saison 0
+         */
+        if ($viewing[0]['season_number'] != 0) {
+            $firstItem = [
+                'season_number' => 0,
+                'season_completed' => false,
+                'air_date' => null,
+                'episode_count' => 0,
+                'episodes' => []
+            ];
+            array_unshift($viewing, $firstItem);
+            $modified = true;
+        } else {
+            if (!array_key_exists('air_date', $viewing[0])) {
+                $viewing[0]['air_date'] = $specialEpisodes ? $seasons[0]['air_date'] : null;
+                $modified = true;
+            }
+        }
+
+        /*
+         * Les saisons suivantes. 'number_of_seasons' correspond au nombre de saisons, épisodes spéciaux exclus
+         */
+        $viewingCount = count($viewing);
+        /*
+         * Saison(s) supplémentaire(s)
+         */
+        if ($viewingCount < $tv['number_of_seasons'] + 1) {
+            // Dernière saison enregistrée
+            $lastViewingSeason = $viewingCount - 1;
+
+            for ($i = $lastViewingSeason + 1; $i <= $tv['number_of_seasons']; $i++) {
+                $season = $tv['seasons'][$i - 1];
+                $newItem = [
+                    'season_number' => $season['season_number'],
+                    'season_completed' => false,
+                    'air_date' => $season['air_date'],
+                    'episode_count' => $season['episode_count'],
+                    'episodes' => array_fill(0, $season['episode_count'], false)
+                ];
+                $viewing[] = $newItem;
+                $modified = true;
+            }
+        } else {
+            /*
+             * Nouveaux épisodes pour la dernière saison ?
+             */
+            $lastSeasonEpisodeCount = $tv['seasons'][$tv['number_of_seasons'] - 1]['episode_count'];
+            if ($viewing[$viewingCount - 1]['episode_count'] < $lastSeasonEpisodeCount) {
+                $viewing[$viewingCount - 1]['episode_count'] = $lastSeasonEpisodeCount;
+                $viewing[$viewingCount - 1]['episodes'] = array_pad($viewing[$viewingCount - 1]['episodes'], $lastSeasonEpisodeCount, false);
+                $modified = true;
+            }
+        }
+
+        $viewingCount = count($viewing);
+        for ($i = 1; $i < $viewingCount; $i++) {
+            if (!array_key_exists('air_date', $viewing[$i])) {
+                $viewing[$i]['air_date'] = $seasons[$i - $specialEpisodes ? 0 : 1]['air_date'];
+                $modified = true;
+            }
+        }
+
+        if ($modified) {
+            $theViewing->setViewing($viewing);
+            $viewingRepository->add($theViewing, true);
+        }
+
+        return $viewing;
     }
 
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
@@ -610,7 +756,7 @@ class SerieController extends AbstractController
             for ($s = 1; $s < $season; $s++) {
                 $newEpisodes = [];
                 $episode_count = $viewing[$s]['episode_count'];
-                $air_date = array_key_exists('air_date', $viewing[$s]) ? $viewing[$s]['air_date'] : $seasons[$s-$noSpecialEpisodes]['air_date'];
+                $air_date = array_key_exists('air_date', $viewing[$s]) ? $viewing[$s]['air_date'] : $seasons[$s - $noSpecialEpisodes]['air_date'];
                 for ($e = 0; $e < $episode_count; $e++) {
                     $newEpisodes[] = true;
                 }
@@ -627,7 +773,7 @@ class SerieController extends AbstractController
              */
             $newEpisodes = [];
             $episode_count = $viewing[$season]['episode_count'];
-            $air_date = array_key_exists('air_date', $viewing[$season]) ? $viewing[$season]['air_date'] : $seasons[$season-$noSpecialEpisodes]['air_date'];
+            $air_date = array_key_exists('air_date', $viewing[$season]) ? $viewing[$season]['air_date'] : $seasons[$season - $noSpecialEpisodes]['air_date'];
             dump($air_date);
             for ($e = 0; $e < $episode_count; $e++) {
                 $newEpisodes[] = $e + 1 <= $episode;
@@ -648,7 +794,7 @@ class SerieController extends AbstractController
             for ($s = $season + 1; $s <= $season_count; $s++) {
                 $newEpisodes = [];
                 $episode_count = $viewing[$s]['episode_count'];
-                $air_date = array_key_exists('air_date', $viewing[$s]) ? $viewing[$s]['air_date'] : $seasons[$s-$noSpecialEpisodes]['air_date'];
+                $air_date = array_key_exists('air_date', $viewing[$s]) ? $viewing[$s]['air_date'] : $seasons[$s - $noSpecialEpisodes]['air_date'];
                 for ($e = 0; $e < $episode_count; $e++) {
                     $newEpisodes[] = false;
                 }
@@ -781,7 +927,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/quote', name: 'app_serie_get_quote', methods: ['GET'])]
-    public function getQuote (): Response
+    public function getQuote(): Response
     {
         return $this->json([
             'quote' => (new QuoteService)->getRandomQuote(),
