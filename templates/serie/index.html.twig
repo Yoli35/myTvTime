@@ -456,14 +456,14 @@
 
         function initParticule(p) {
             p.frame = 0;
-            p.maxF = 120 + (Math.random() * 600);
+            p.maxF = 120 + (Math.random() * 240);
             p.x = Math.random() * (window.scrollX + window.innerWidth);
             p.y = -50 - Math.random() * (300);
             p.dx = Math.random() * 100;
             p.dy = Math.random() * 100;
             p.initialAngle = Math.random() * 360;
             p.turnPerSeconde = Math.random() * .25;
-            p.scale = .25 + (Math.random() * 1.75);
+            p.scale = .25 + (Math.random() * 1.25);
 
             // if (p.div.querySelector("div")) {
             //     p.div.removeChild(p.div.firstChild);
@@ -473,7 +473,7 @@
             // p.div.appendChild(child);
 
             p.div.classList.remove(p.bg);
-            p.bg = "b"+ (Math.ceil(15*Math.random())).toString();
+            p.bg = "b"+ (Math.ceil(19*Math.random())).toString();
             p.div.classList.add(p.bg);
         }
 
