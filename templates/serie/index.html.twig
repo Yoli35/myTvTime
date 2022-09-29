@@ -163,7 +163,9 @@
             initPreview();
             newSerie();
             initHeader();
-            particules();
+            if (Math.random() < .5) {
+                particules();
+            }
 
             autocomplete(document.querySelector("#search-name"), createList());
         })
@@ -401,7 +403,7 @@
             const height = Math.max(body.getBoundingClientRect().height, html.getBoundingClientRect().height);
 
             for (let i = 0; i < pCount; i++) {
-                let particule = {interval: 0, loop: 1, frame: 0, maxF:0, maxY: 0, div: undefined, bg: "b0", x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
+                let particule = {interval: 0, loop: 1, frame: 0, maxF: 0, maxY: 0, div: undefined, bg: "b0", x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
                 particule.div = document.createElement("div");
                 particule.div.classList.add("particule");
                 particule.div.classList.add("b0");
@@ -432,9 +434,8 @@
                 initParticule(p);
                 p.div.setAttribute("style", "translate: " + p.x + "px " + p.y + "px; rotate: calc(" + p.initialAngle + "deg + " + (p.frame * p.turnPerSeconde) + "turn); scale: " + p.scale);
                 p.interval = setInterval(animateParticule, 1000, p);
-                setTimeout(()=>p.div.classList.remove("reboot"), 50);
-            }
-            else {
+                setTimeout(() => p.div.classList.remove("reboot"), 50);
+            } else {
                 if (p.frame > p.maxF) {
                     clearInterval(p.interval);
                     p.div.classList.add("re-new");
@@ -473,7 +474,7 @@
             // p.div.appendChild(child);
 
             p.div.classList.remove(p.bg);
-            p.bg = "b"+ (Math.ceil(19*Math.random())).toString();
+            p.bg = "b" + (Math.ceil(19 * Math.random())).toString();
             p.div.classList.add(p.bg);
         }
 
