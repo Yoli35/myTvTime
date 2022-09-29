@@ -25,6 +25,7 @@
                 @include flex-row(flex-start, flex-start);
                 background-color: var(--gradiant-ardoise-90);
                 border-radius: .5em;
+                color: var(--gradiant-ardoise-30);
                 margin-bottom: 1em;
                 overflow: hidden;
                 width: 100%;
@@ -126,6 +127,7 @@
             .events {
                 .event {
                     background-color: var(--gradiant-ardoise-30);
+                    color: var(--gradiant-ardoise-90);
 
                     .countdown {
                         &.fade {
