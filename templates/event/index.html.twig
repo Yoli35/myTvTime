@@ -124,21 +124,16 @@
             {% endfor %}
         }
 
-        function getCountdownValue(id) {
-            let n = countdownValues.length;
-            for (let i = 0; i < n; i++) {
-                if (countdownValues[i].id === id) {
-                    return countdownValues[i];
-                }
-            }
-            return null;
-        }
-
         function createCountdown(countdown) {
-            countdown.innerHTML = "";
             const id = parseInt(countdown.id);
-            // const countdownValue = getCountdownValue(id);
             let days, hours, minutes, secondes, separator1, separator2, separator3, count, label;
+            const countdownDateDiv = document.createElement("div");
+
+            countdownDateDiv.classList.add("date");
+            countdownDateDiv.innerHTML = countdown.innerHTML;
+
+            countdown.innerHTML = "";
+
             days = document.createElement("div");
             hours = document.createElement("div");
             minutes = document.createElement("div");
@@ -206,19 +201,35 @@
             countdown.appendChild(separator3);
             countdown.appendChild(secondes);
 
-            countdown.classList.remove("switch");
+            countdown.appendChild(countdownDateDiv);
 
-            // if (!countdownValue.futur) {
-            //     countdown.classList.add("past");
-            // }
+            countdown.classList.remove("switch");
+            countdown.addEventListener('mouseenter', showCountDownDate);
+            countdown.addEventListener('mouseleave', hideCountDownDate);
 
             updateCountdown(countdown);
             setInterval(updateCountdown, 1000, countdown);
         }
 
+        function showCountDownDate(evt) {
+            const countdown = evt.target;
+            const div = countdown.querySelector(".date");
+
+            countdown.classList.add("fade");
+            div.classList.add("show");
+        }
+
+        function hideCountDownDate(evt) {
+            const countdown = evt.target;
+            const div = countdown.querySelector(".date");
+
+            countdown.classList.remove("fade");
+            div.classList.remove("show");
+        }
+
         function updateCountdown(countdown) {
             const id = parseInt(countdown.id);
-            const countdownValue = getCountdownValue(id);
+            const countdownValue = countdownValues.find(item => item.id === id);
             const date = new Date(countdownValue.date);
             let d, h, m, s;
             const now = Date.now();
