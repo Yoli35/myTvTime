@@ -167,6 +167,7 @@ main {
     z-index: 120;
 
     > a {
+        color: var(--gradiant-ardoise-30);
         display: block;
         font-size: 1em;
         font-weight: 100;
@@ -229,6 +230,7 @@ main {
         border-radius: 1.5em;
         display: flex;
         padding: .25em .25em .25em .75em;
+        transition: font-weight 500ms ease-in-out;
 
         .avatar {
             border: 2px solid #bdbdbd;
@@ -409,19 +411,19 @@ nav.active {
 }
 
 a, .nav-link {
-    color: #383838;
+    color: var(--gradiant-ardoise-80);
     text-decoration: none;
 
     &:hover {
-        color: #5b3b16;
+        color: var(--gradiant-mars-80);
     }
 
     &:visited {
-        color: #383838;
+        color: var(--gradiant-ardoise-80);
     }
 
     &:focus {
-        color: #5b3b16;
+        color: var(--gradiant-mars-80);
     }
 }
 
@@ -455,30 +457,30 @@ h4 {
     margin: 0 0 1em 0;
     transition: background-position 1s;
     width: 100%;
-}
 
-.bg0 {
-    background-image: url("../images/header.000.png");
-}
+    &.bg0 {
+        background-image: url("../images/header.000.png");
+    }
 
-.bg1 {
-    background-image: url("../images/header.001.png");
-}
+    &.bg1 {
+        background-image: url("../images/header.001.png");
+    }
 
-.bg2 {
-    background-image: url("../images/header.002.png");
-}
+    &.bg2 {
+        background-image: url("../images/header.002.png");
+    }
 
-.bg3 {
-    background-image: url("../images/header.003.png");
-}
+    &.bg3 {
+        background-image: url("../images/header.003.png");
+    }
 
-.bg4 {
-    background-image: url("../images/header.004.png");
-}
+    &.bg4 {
+        background-image: url("../images/header.004.png");
+    }
 
-.bg5 {
-    background-image: url("../images/header.005.png");
+    &.bg5 {
+        background-image: url("../images/header.005.png");
+    }
 }
 
 .home-footer {
@@ -737,6 +739,24 @@ h4 {
         --bs-body-color: #abcccc;
     }
 
+    .nav-menu {
+        > a {
+            color: var(--gradiant-ardoise-80);
+
+            &:hover {
+                color: #d08530;
+            }
+
+            &:visited {
+                color: #bdbdbd;
+            }
+
+            &:focus {
+                color: #d08530;
+            }
+        }
+    }
+
     a, .nav-link {
         color: #bdbdbd;
 
@@ -837,7 +857,7 @@ h4 {
         background-color: var(--gradiant-ardoise-40);
         border: 1px solid var(--gradiant-ardoise-60);
         border-radius: .5em;
-        box-shadow: 0 0 10px hsla(0,0,0,.25),0 0 40px hsla(0,0,0,.25),0 0 100px hsla(0,0,0,.25);
+        box-shadow: 0 0 10px hsla(0, 0, 0, .25), 0 0 40px hsla(0, 0, 0, .25), 0 0 100px hsla(0, 0, 0, .25);
         color: var(--gradiant-ardoise-80);
         font-weight: 100;
 

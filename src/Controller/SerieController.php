@@ -507,8 +507,7 @@ class SerieController extends AbstractController
                 }
             }
         }
-        dump($viewing);
-        dump($whatsNew);
+        $ygg = str_replace(' ', '+', $tv['name']);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -529,6 +528,7 @@ class SerieController extends AbstractController
             'user' => $user,
             'viewing' => $viewing?->getViewing(),
             'whatsNew' => $whatsNew,
+            'ygg' => $ygg,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
 

@@ -163,6 +163,7 @@
             initPreview();
             newSerie();
             initHeader();
+            particules();
 
             autocomplete(document.querySelector("#search-name"), createList());
         })
@@ -390,6 +391,85 @@
                 tab[i++] = backdrop.firstElementChild.innerHTML;
             });
             return tab;
+        }
+
+        function particules() {
+            const pCount = 20;
+            const particules = [];
+            const body = document.body;
+            const html = document.documentElement;
+            const height = Math.max(body.getBoundingClientRect().height, html.getBoundingClientRect().height);
+
+            for (let i = 0; i < pCount; i++) {
+                let particule = {interval: 0, loop: 1, frame: 0, maxF:0, maxY: 0, div: undefined, x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
+                particule.div = document.createElement("div");
+                particule.div.classList.add("particule");
+                initParticule(particule);
+                particule.maxY = height + 200;
+
+                particule.div.setAttribute("style", "translate: " + particule.x + "px " + particule.y + "px; rotate: " + particule.initialAngle + "deg; scale: " + particule.scale);
+
+                particule.interval = setInterval(animateParticule, 1000, particule);
+                particules[i] = particule;
+
+                document.querySelector("body").appendChild(particule.div);
+
+                console.log({height})
+            }
+        }
+
+        function animateParticule(p) {
+            p.frame++;
+            p.y += p.dy;
+
+            p.div.setAttribute("style", "translate: " + p.x + "px " + p.y + "px; rotate: calc(" + p.initialAngle + "deg + " + (p.frame * p.turnPerSeconde) + "turn); scale: " + p.scale);
+
+            if (p.y > p.maxY + 100) {
+                clearInterval(p.interval);
+                p.div.classList.add("reboot");
+                p.loop++;
+                initParticule(p);
+                p.div.setAttribute("style", "translate: " + p.x + "px " + p.y + "px; rotate: calc(" + p.initialAngle + "deg + " + (p.frame * p.turnPerSeconde) + "turn); scale: " + p.scale);
+                p.interval = setInterval(animateParticule, 1000, p);
+                setTimeout(()=>p.div.classList.remove("reboot"), 50);
+            }
+            else {
+                if (p.frame > p.maxF) {
+                    clearInterval(p.interval);
+                    p.div.classList.add("re-new");
+                    setTimeout(() => {
+                        p.div.classList.add("reboot");
+                        p.div.classList.toggle("new");
+                        p.loop = 1;
+                        initParticule(p);
+                        p.div.setAttribute("style", "translate: " + p.x + "px " + p.y + "px; rotate: calc(" + p.initialAngle + "deg + " + (p.frame * p.turnPerSeconde) + "turn); scale: " + p.scale);
+                        p.interval = setInterval(animateParticule, 1000, p);
+                        setTimeout(() => {
+                            p.div.classList.remove("reboot");
+                            p.div.classList.remove("re-new");
+                        }, 50);
+                    }, 800);
+                }
+            }
+        }
+
+        function initParticule(p) {
+            p.frame = 0;
+            p.maxF = 120 + (Math.random() * 600);
+            p.x = Math.random() * (window.scrollX + window.innerWidth);
+            p.y = -50 - Math.random() * (300);
+            p.dx = Math.random() * 100;
+            p.dy = Math.random() * 100;
+            p.initialAngle = Math.random() * 360;
+            p.turnPerSeconde = Math.random() * .25;
+            p.scale = .25 + (Math.random() * 1.75);
+
+            if (p.div.querySelector("div")) {
+                p.div.removeChild(p.div.firstChild);
+            }
+            let child = document.createElement("div");
+            child.appendChild(document.createTextNode(p.loop.toString()));
+            p.div.appendChild(child);
         }
 
         function initSettings() {

@@ -806,6 +806,15 @@
             }
         }
 
+        .ygg {
+            bottom: 1rem;
+            color: var(--gradiant-purple-50);
+            cursor: pointer;
+            font-size: 1.5em;
+            position: absolute;
+            right: 4rem;
+        }
+
         .add {
             @include seen(var(--serie-add), 2.5em);
         }
@@ -1273,6 +1282,32 @@
         background-color: var(--gradiant-ardoise-20);
         margin: 1em 0;
         padding-top: 1em;
+    }
+}
+
+.particule {
+    @include flex-100();
+    background-color: var(--gradiant-purple-90);
+    border: 2px solid var(--gradiant-purple-100);
+    border-radius: .5em;
+    color: var(--gradiant-purple-30);
+    height: 4em;
+    position: absolute;
+    transition: opacity 800ms ease-in-out, translate 1s linear, rotate 1s linear;
+    width: 4em;
+    z-index: 1000;
+
+    &.reboot {
+        transition: unset;
+    }
+
+    &.re-new {
+        opacity: 0;
+    }
+
+    &.new {
+        background-color: var(--gradiant-mars-80);
+        color: var(--gradiant-mars-30);
     }
 }
 

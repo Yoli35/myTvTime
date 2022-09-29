@@ -214,6 +214,7 @@
                     weather.setAttribute("style", "bottom: -13em");
                     avatar.setAttribute("style", "right: .5em");
                 } else {
+                    banner.setAttribute("style", "height: 30em");
                     avatar.setAttribute("style", "right: 2em");
                 }
                 for (let i = 0; i < row.length; i++) row.item(i).setAttribute("style", "flex-direction: row");
@@ -221,7 +222,6 @@
                 temperature.setAttribute("style", "font-size: 3em");
                 condition.classList.remove("open");
                 for (let i = 0; i < vertical.length; i++) vertical.item(i).setAttribute("style", "display: none");
-
                 arrow.setAttribute("style", "transform: rotate(0deg) scaleX(50%);");
             } else {
                 toggle.classList.add("open");
@@ -231,15 +231,17 @@
                     weather.setAttribute("style", "bottom: -32em");
                     avatar.setAttribute("style", "right: .5em");
                 } else {
+                    banner.removeAttribute("style");
                     avatar.setAttribute("style", "right: 26em");
                 }
-                for (let i = 0; i < row.length; i++) row.item(i).setAttribute("style", "flex-direction: column");
-                content.setAttribute("style", "padding: 1em");
-                temperature.setAttribute("style", "font-size: 5em");
-                condition.classList.add("open");
-                for (let i = 0; i < vertical.length; i++) vertical.item(i).setAttribute("style", "display: block");
-
-                arrow.setAttribute("style", "transform: rotate(" + (angle + 720) + "deg) scaleX(50%);");
+                setTimeout(() => {
+                    for (let i = 0; i < row.length; i++) row.item(i).setAttribute("style", "flex-direction: column");
+                    content.setAttribute("style", "padding: 1em");
+                    temperature.setAttribute("style", "font-size: 5em");
+                    condition.classList.add("open");
+                    for (let i = 0; i < vertical.length; i++) vertical.item(i).setAttribute("style", "display: block");
+                    arrow.setAttribute("style", "transform: rotate(" + (angle + 720) + "deg) scaleX(50%);");
+                }, 500)
             }
         }
 

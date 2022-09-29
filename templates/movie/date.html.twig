@@ -17,7 +17,7 @@
         ];
         window.addEventListener("DOMContentLoaded", () => {
             let year = document.querySelector('#year');
-            let initialValue = $(year).val(), newValue = 0,
+            let initialValue = year.value, newValue = 0,
                 url = '{{ path(route, {page: 1, date: date}) }}';
 
             year.addEventListener("change", function () {

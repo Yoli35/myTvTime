@@ -100,13 +100,8 @@ function initButtons(id, locale, paths, url) {
 
             exportFile = file;
 
-            // result_items = $('.result-item');
             result_items = exportModal.querySelectorAll(".result-item");
 
-            // $(result_items).click(function () {
-            //     $(this).toggleClass("active");
-            //     updateSample($(result_items));
-            // })
             result_items.forEach((item) => {
                 item.addEventListener("click", () => {
                     item.classList.toggle("active");
@@ -114,10 +109,6 @@ function initButtons(id, locale, paths, url) {
                 })
             })
 
-            // $('#export-select').click(function () {
-            //     $(result_items).addClass("active");
-            //     updateSample($(result_items));
-            // })
             exportModal.querySelector("#export-select").addEventListener("click", () => {
                 result_items.forEach((item) => {
                     item.classList.add("active");
@@ -125,10 +116,6 @@ function initButtons(id, locale, paths, url) {
                 updateSample(result_items);
             });
 
-            // $('#export-deselect').click(function () {
-            //     $(result_items).removeClass("active");
-            //     updateSample($(result_items));
-            // })
             exportModal.querySelector("#export-deselect").addEventListener("click", () => {
                 result_items.forEach((item) => {
                     item.classList.remove("active");
@@ -136,11 +123,6 @@ function initButtons(id, locale, paths, url) {
                 updateSample(result_items);
             });
 
-            // $('#export-filter').on('input', function () {
-            //     let needle = $(this).val();
-            //     filter(result_items, needle);
-            //     updateSample(result_items);
-            // })
             exportModal.querySelector("#export-filter").addEventListener("input", function () {
                 let needle = this.value;
                 filter(result_items, needle);
@@ -318,23 +300,6 @@ function initButtons(id, locale, paths, url) {
             let tmdb_id = movie.getAttribute("data-tmdb");
             let val = (100 * (i / n)).toFixed();
 
-            // $.ajax({
-            //     url: _personal_movie_add,
-            //     method: 'GET',
-            //     data: {movie_db_id: tmdb_id, progress_value: val},
-            //     success: function () {
-            //         pv++;
-            //         $(value).css('width', (100 * (pv / n)).toFixed() + '%');
-            //
-            //         if (pv === n) {
-            //             setTimeout(() => {
-            //                 // Ajout terminé.
-            //                 $(progress).css('display', 'none');
-            //                 window.location.reload();
-            //             }, 1000);
-            //         }
-            //     }
-            // })
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 pv++;

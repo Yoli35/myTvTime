@@ -141,12 +141,12 @@
                     {% endif %}
                     {% if whatsNew %}
                         <div class="what-s-new">
-                        {% if whatsNew.episode %}
-                            <div class="new-episode">{{ whatsNew.episode }} {{ ((whatsNew.episode > 1)?'new episodes':'new episode')|trans }}</div>
-                        {% endif %}
-                        {% if whatsNew.season %}
-                            <div class="new-season">{{ whatsNew.season }} {{ ((whatsNew.season > 1)?'new seasons':'new season')|trans }}</div>
-                        {% endif %}
+                            {% if whatsNew.episode %}
+                                <div class="new-episode">{{ whatsNew.episode }} {{ ((whatsNew.episode > 1)?'new episodes':'new episode')|trans }}</div>
+                            {% endif %}
+                            {% if whatsNew.season %}
+                                <div class="new-season">{{ whatsNew.season }} {{ ((whatsNew.season > 1)?'new seasons':'new season')|trans }}</div>
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>
@@ -157,6 +157,11 @@
                         <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
                     {% endif %}
                 {% endif %}
+                <div class="ygg">
+                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </a>
+                </div>
             </div>
 
             <main>
