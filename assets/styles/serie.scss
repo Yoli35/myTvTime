@@ -516,6 +516,7 @@
                 @include flex-col(flex-start, flex-start);
                 background-color: var(--gradiant-ardoise-90);
                 border-radius: 0;
+                margin-bottom: 1em;
                 padding: .5em;
 
                 .sort {
@@ -605,6 +606,63 @@
 
                     button {
                         border-radius: 0 var(--button-border-radius) var(--button-border-radius) 0;
+                    }
+                }
+
+                .animation {
+                    @include flex-col(start,start);
+                    width: 100%;
+
+                    .leaf {
+                        @include flex-col(start, start);
+                        width: 100%;
+
+                        .slider {
+                            @include flex-col(start, start);
+                            margin-bottom: 1em;
+                            width: 100%;
+
+                            .label {
+                                font-weight: 100;
+                                text-transform: uppercase;
+                            }
+
+                            .control {
+                                @include flex-100();
+
+                                input {
+                                    width: 100%;
+                                }
+
+                                .interval {
+                                    height: 1.5em;
+                                    position: relative;
+                                    width: 100%;
+
+                                    .bar {
+                                        background-color: var(--gradiant-ardoise-20);
+                                        border: 1px solid var(--gradiant-ardoise-60);
+                                        border-radius: 3px;
+                                        height: 6px;
+                                        left: 0;
+                                        position: absolute;
+                                        top: calc(.625em - 3px);
+                                        width: 100%;
+                                    }
+
+                                    .handle {
+                                        background-color: var(--gradiant-ardoise-20);
+                                        border: 1px solid var(--gradiant-ardoise-60);
+                                        border-radius: 50%;
+                                        height: 1.25em;
+                                        position: absolute;
+                                        top: .125em;
+                                        width: 1.25em;
+                                    }
+                                }
+
+                            }
+                        }
                     }
                 }
             }
@@ -1309,99 +1367,11 @@
         color: var(--gradiant-mars-30);
     }
 
-    &.b1 {
-        background: url("../images/leafs/leaf-1.png");
-        background-size: cover;
-    }
-
-    &.b2 {
-        background: url("../images/leafs/leaf-2.png");
-        background-size: cover;
-    }
-
-    &.b3 {
-        background: url("../images/leafs/leaf-3.png");
-        background-size: cover;
-    }
-
-    &.b4 {
-        background: url("../images/leafs/leaf-4.png");
-        background-size: cover;
-    }
-
-    &.b5 {
-        background: url("../images/leafs/leaf-5.png");
-        background-size: cover;
-    }
-
-    &.b6 {
-        background: url("../images/leafs/leaf-6.png");
-        background-size: cover;
-    }
-
-    &.b7 {
-        background: url("../images/leafs/leaf-7.png");
-        background-size: cover;
-    }
-
-    &.b8 {
-        background: url("../images/leafs/leaf-8.png");
-        background-size: cover;
-    }
-
-    &.b9 {
-        background: url("../images/leafs/leaf-9.png");
-        background-size: cover;
-    }
-
-    &.b10 {
-        background: url("../images/leafs/leaf-10.png");
-        background-size: cover;
-    }
-
-    &.b11 {
-        background: url("../images/leafs/leaf-11.png");
-        background-size: cover;
-    }
-
-    &.b12 {
-        background: url("../images/leafs/leaf-12.png");
-        background-size: cover;
-    }
-
-    &.b13 {
-        background: url("../images/leafs/leaf-13.png");
-        background-size: cover;
-    }
-
-    &.b14 {
-        background: url("../images/leafs/leaf-14.png");
-        background-size: cover;
-    }
-
-    &.b15 {
-        background: url("../images/leafs/leaf-15.png");
-        background-size: cover;
-    }
-
-    &.b16 {
-        background: url("../images/leafs/leaf-16.png");
-        background-size: cover;
-    }
-
-    &.b17 {
-        background: url("../images/leafs/leaf-17.png");
-        background-size: cover;
-    }
-
-    &.b18 {
-        background: url("../images/leafs/leaf-18.png");
-        background-size: cover;
-    }
-
-    &.b19 {
-        background: url("../images/leafs/leaf-19.png");
-        background-size: cover;
+    @for $i from 1 through 42 {
+        &.b#{$i} {
+            background: url("../images/leafs/leaf-#{$i}.png");
+            background-size: cover;
+        }
     }
 }
 

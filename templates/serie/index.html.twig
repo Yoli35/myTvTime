@@ -94,7 +94,6 @@
                                         <div class="value">{{ pages.per_page }}</div>
                                     </div>
                                 </div>
-
                                 <div class="sort">
                                     <div class="group-settings">
                                         <div class="order-by">
@@ -121,6 +120,42 @@
                                     </div>
                                     <div class="apply">
                                         <button id="apply" type="submit">{{ 'Apply'|trans }}</button>
+                                    </div>
+                                </div>
+{# let particule = {interval: 0, loop: 1, frame: 0,
+                        maxF: 0,
+                        maxY: 0, div: undefined, bg: "b0",
+                        x: 0, dx: 0, y: 0, dy: 0,
+                        initialAngle: 0, turnPerSeconde: 0,
+                        scale: 1
+                       };
+#}
+                            </div>
+                            <div class="settings">
+                                <div class="animation">
+                                    <h3>{{ 'Animation'|trans }}</h3>
+                                    <div class="leaf">
+                                        <h4>{{ 'Leaf' }}</h4>
+                                        <div class="slider" id="frequency">
+                                            <div class="label">{{ 'Frequency'|trans }}</div>
+                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="50"></div>
+                                        </div>
+                                        <div class="slider" id="life-length">
+                                            <div class="label">{{ 'Life\'s Length'|trans }}</div>
+                                            <div class="control" data-type="interval" data-min="0" data-max="300" data-min-value="2" data-max-value="60"></div>
+                                        </div>
+                                        <div class="slider" id="initial-angle">
+                                            <div class="label">{{ 'Initial angle'|trans }}</div>
+                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="50"></div>
+                                        </div>
+                                        <div class="slider" id="turn-per-minute">
+                                            <div class="label">{{ 'Turn per minute'|trans }}</div>
+                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="50"></div>
+                                        </div>
+                                        <div class="slider" id="scale">
+                                            <div class="label">{{ 'Scale'|trans }}</div>
+                                            <div class="control" data-type="interval" data-min=".25" data-max="5" data-min-value="0.25" data-max-value="2"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -163,9 +198,10 @@
             initPreview();
             newSerie();
             initHeader();
-            if (Math.random() < .5) {
-                particules();
-            }
+            initAnimation();
+            // if (Math.random() < .5) {
+            //     particules();
+            // }
 
             autocomplete(document.querySelector("#search-name"), createList());
         })
@@ -395,6 +431,53 @@
             return tab;
         }
 
+        function initAnimation() {
+            const animations = document.querySelectorAll(".animation");
+
+            if (!animations.length) return;
+
+            animations.forEach(animation => {
+               const sliders = animation.querySelectorAll(".slider");
+
+               sliders.forEach(slider => {
+                   const control = slider.querySelector(".control");
+                   switch (control.getAttribute("data-type")) {
+                       case 'range':
+                           const range = document.createElement("input");
+                           range.setAttribute("type", "range");
+                           range.setAttribute("min", control.getAttribute("data-min"));
+                           range.setAttribute("max", control.getAttribute("data-max"));
+                           range.setAttribute("value", control.getAttribute("data-value"));
+                           control.appendChild(range);
+                           break;
+                       case 'interval':
+                           let min, max, minV, maxV, offset;
+                           min = control.getAttribute("data-min");
+                           max = control.getAttribute("data-max");
+                           minV = control.getAttribute("data-min-value");
+                           maxV = control.getAttribute("data-max-value");
+                           const interval = document.createElement("div");
+                           interval.classList.add("interval");
+                           const bar = document.createElement("div");
+                           bar.classList.add("bar");
+                           const handleMin = document.createElement("div");
+                           handleMin.classList.add("handle");
+                           offset =100 * ((minV-min)/(max-min));
+                           handleMin.setAttribute("style", "translate: "+ offset.toString() + "% 0%");
+                           const handleMax = document.createElement("div");
+                           handleMax.classList.add("handle");
+                           offset =100 * ((maxV-min)/(max-min));
+                           handleMin.setAttribute("style", "translate: "+ offset.toString() + "% 0%");
+                           interval.appendChild(bar);
+                           interval.appendChild(handleMin);
+                           interval.appendChild(handleMax);
+                           control.appendChild(interval);
+                           break;
+                   }
+               })
+            });
+        }
+
         function particules() {
             const pCount = 10;
             const particules = [];
@@ -474,7 +557,7 @@
             // p.div.appendChild(child);
 
             p.div.classList.remove(p.bg);
-            p.bg = "b" + (Math.ceil(19 * Math.random())).toString();
+            p.bg = "b" + (Math.ceil(42 * Math.random())).toString();
             p.div.classList.add(p.bg);
         }
 
