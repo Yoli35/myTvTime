@@ -137,24 +137,24 @@
                                     <div class="leaf">
                                         <h4>{{ 'Leaf' }}</h4>
                                         <div class="slider" id="frequency">
-                                            <div class="label">{{ 'Frequency'|trans }}</div>
+                                            <div class="label">{{ 'Frequency'|trans }} (0-100)</div>
                                             <div class="control" data-type="range" data-min="0" data-max="100" data-value="10"></div>
                                         </div>
                                         <div class="slider" id="life-length">
-                                            <div class="label">{{ 'Life\'s Length'|trans }}</div>
+                                            <div class="label">{{ 'Life\'s Length'|trans }} (0-300sec)</div>
                                             <div class="control" data-type="interval" data-min="0" data-max="300" data-min-value="2" data-max-value="60"></div>
                                         </div>
                                         <div class="slider" id="initial-angle">
-                                            <div class="label">{{ 'Initial angle'|trans }}</div>
+                                            <div class="label">{{ 'Initial angle'|trans }} (0°-360°)</div>
                                             <div class="control" data-type="range" data-min="0" data-max="360" data-value="0"></div>
                                         </div>
                                         <div class="slider" id="turn-per-minute">
-                                            <div class="label">{{ 'Turn per minute'|trans }}</div>
+                                            <div class="label">{{ 'Turn per minute'|trans }} (0-100)</div>
                                             <div class="control" data-type="range" data-min="0" data-max="100" data-value="5"></div>
                                         </div>
                                         <div class="slider" id="scale">
-                                            <div class="label">{{ 'Scale'|trans }}</div>
-                                            <div class="control" data-type="interval" data-min=".25" data-max="5" data-min-value="0.25" data-max-value="2"></div>
+                                            <div class="label">{{ 'Scale'|trans }} (25%-500%)</div>
+                                            <div class="control" data-type="interval" data-min="25" data-max="500" data-min-value="25" data-max-value="200"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -446,49 +446,61 @@
                     let values, value;
                     switch (control.getAttribute("data-type")) {
                         case 'range':
-                            label.appendChild(newRangeValue(control.getAttribute("data-value"), control.getAttribute("data-min"), control.getAttribute("data-max")));
+                            label.appendChild(newRangeValue(control));
                             control.appendChild(newRange(control.getAttribute("data-value"), control.getAttribute("data-min"), control.getAttribute("data-max")));
                             break;
                         case 'interval':
-                            let min, max, minV, maxV, offset;
+                            let min, max, minV, maxV, offset1, offset2;
                             min = control.getAttribute("data-min");
                             max = control.getAttribute("data-max");
                             minV = control.getAttribute("data-min-value");
                             maxV = control.getAttribute("data-max-value");
+                            offset1 = width * ((minV - min) / (max - min));
+                            offset2 = width * ((maxV - min) / (max - min));
                             values = document.createElement("div");
                             values.classList.add("values");
                             value = document.createElement("input");
                             value.setAttribute("type", "number");
-                            value.classList.add("value");
+                            value.classList.add("value", "min");
                             value.value = minV;
                             value.setAttribute("min", min);
                             value.setAttribute("max", max);
-                            values.appendChild(document.createTextNode("Min:" + min));
                             values.appendChild(value);
                             value = document.createElement("input");
                             value.setAttribute("type", "number");
-                            value.classList.add("value");
+                            value.classList.add("value", "max");
                             value.value = maxV;
                             value.setAttribute("min", min);
                             value.setAttribute("max", max);
                             values.appendChild(value);
-                            values.appendChild(document.createTextNode("Max:" + max));
                             label.appendChild(values);
                             const interval = document.createElement("div");
                             interval.classList.add("interval");
                             const bar = document.createElement("div");
                             bar.classList.add("bar");
+                            const between = document.createElement("div");
+                            between.classList.add("between");
+                            between.setAttribute("style", "left: " + (offset1 + 8).toString() + "px; width: " + (offset2 - offset1).toString() + "px;");
                             const handleMin = document.createElement("div");
-                            handleMin.classList.add("handle");
-                            offset = width * ((minV - min) / (max - min));
-                            handleMin.setAttribute("style", "translate: " + offset.toString() + "px 0%");
+                            handleMin.classList.add("handle", "min");
+                            handleMin.setAttribute("style", "left: " + offset1.toString() + "px");
+                            handleMin.setAttribute("draggable", "true");
+                            handleMin.addEventListener("dragstart", updateIntervalValues);
+                            handleMin.ondragstart = () => {
+                                return false;
+                            }
                             const handleMax = document.createElement("div");
-                            handleMax.classList.add("handle");
-                            offset = width * ((maxV - min) / (max - min));
-                            handleMin.setAttribute("style", "translate: " + offset.toString() + "px 0%");
+                            handleMax.classList.add("handle", "max");
+                            handleMax.setAttribute("style", "left: " + offset2.toString() + "px");
+                            handleMax.setAttribute("draggable", "true");
+                            handleMax.addEventListener("dragstart", updateIntervalValues);
+                            handleMax.ondragstart = () => {
+                                return false;
+                            }
+                            bar.appendChild(between);
+                            bar.appendChild(handleMin);
+                            bar.appendChild(handleMax);
                             interval.appendChild(bar);
-                            interval.appendChild(handleMin);
-                            interval.appendChild(handleMax);
                             control.appendChild(interval);
                             break;
                     }
@@ -496,7 +508,10 @@
             });
         }
 
-        function newRangeValue(val, min, max) {
+        function newRangeValue(control) {
+            let val = control.getAttribute("data-value"),
+                min = control.getAttribute("data-min"),
+                max = control.getAttribute("data-max");
             let values = document.createElement("div");
             values.classList.add("values");
             let value = document.createElement("input");
@@ -505,9 +520,8 @@
             value.value = val;
             value.setAttribute("min", min);
             value.setAttribute("max", max);
-            values.appendChild(document.createTextNode("Min:" + min));
+            value.addEventListener("change", updateRange);
             values.appendChild(value);
-            values.appendChild(document.createTextNode("Max:" + max));
 
             return values;
         }
@@ -518,8 +532,94 @@
             range.setAttribute("min", min);
             range.setAttribute("max", max);
             range.setAttribute("value", val);
-
+            range.addEventListener("change", updateRangeValue)
             return range;
+        }
+
+        function updateRange(evt) {
+            console.log(evt.target);
+            evt.preventDefault();
+            const input = evt.target;
+            let value = input.value;
+            const min = input.getAttribute("min");
+            const max = input.getAttribute("max");
+            if (value < min) {
+                value = min;
+                input.value = min;
+            }
+            if (value > max) {
+                value = max;
+                input.value = max;
+            }
+            const slider = input.closest(".slider");
+            const range = slider.querySelector(".control").querySelector("input");
+            range.setAttribute("value", value);
+            return false;
+        }
+
+        function updateRangeValue(evt) {
+            console.log(evt.target);
+            evt.preventDefault();
+            const inputRange = evt.target;
+            let value = inputRange.value;
+            const slider = inputRange.closest(".slider");
+            const inputText = slider.querySelector(".label").querySelector("input");
+            inputText.value = value;
+        }
+
+        function updateIntervalValues(evt) {
+
+            evt.preventDefault();
+            const handle = evt.target;
+            const interval = handle.closest(".interval");
+            const control = handle.closest(".control");
+            const between = interval.querySelector(".between");
+            const handleMin = control.querySelector(".handle.min");
+            const handleMax = control.querySelector(".handle.max");
+            const min = control.getAttribute("data-min");
+            const max = control.getAttribute("data-max");
+            const width = interval.offsetWidth;
+            const shiftX = evt.clientX - handle.getBoundingClientRect().left;
+
+            handle.classList.add("drag");
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+
+            function onMouseMove(evt) {
+                let newLeft = evt.clientX - shiftX - interval.getBoundingClientRect().left;
+
+                if (newLeft < 0) {
+                    newLeft = 0;
+                }
+                let rightEdge = interval.offsetWidth - handle.offsetWidth;
+                if (newLeft > rightEdge) {
+                    newLeft = rightEdge;
+                }
+
+                handle.style.left = newLeft + 'px';
+
+                const newValue = parseInt(min) + Math.floor((max - min) * (newLeft / (width - 16)));
+
+                if (evt.target.classList.contains("min")) {
+                    control.setAttribute("data-min-value", newValue);
+                    const inputMinValue = control.closest(".slider").querySelector(".label").querySelector(".value.min");
+                    inputMinValue.value = newValue.toString();
+                    between.style.left = (newLeft + 8) + 'px';
+                    between.setAttribute("style", "left: " + Math.floor(parseInt(handleMin.style.left) + 8) + "px; width: " + Math.floor(parseInt(handleMax.style.left) - parseInt(handleMin.style.left)) + "px;");
+                }
+                if (evt.target.classList.contains("max")) {
+                    control.setAttribute("data-max-value", newValue);
+                    const inputMaxValue = control.closest(".slider").querySelector(".label").querySelector(".value.max");
+                    inputMaxValue.value = newValue.toString();
+                    between.setAttribute("style", "left: " + Math.floor(parseInt(handleMin.style.left) + 8) + "px; width: " + Math.floor(parseInt(handleMax.style.left) - parseInt(handleMin.style.left)) + "px;");
+                }
+            }
+
+            function onMouseUp() {
+                handle.classList.remove("drag");
+                document.removeEventListener('mouseup', onMouseUp);
+                document.removeEventListener('mousemove', onMouseMove);
+            }
         }
 
         function particules() {

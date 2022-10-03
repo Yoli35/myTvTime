@@ -623,23 +623,31 @@
                             width: 100%;
 
                             .label {
-                                @include flex-100(start, start);
+                                @include flex-100(start, center);
                                 font-weight: 100;
                                 text-transform: uppercase;
+                                margin-bottom: .5em;
 
                                 .values {
-                                    margin-bottom: .5em;
                                     margin-left: auto;
 
                                     .value {
-                                        background-color: var(--gradiant-ardoise-50);
                                         border: none;
                                         border-radius: .25em;
-                                        color: var(--gradiant-ardoise-80);
                                         font-weight: 100;
                                         margin: 0 .5em;
                                         max-width: 6em;
                                         padding: .125em .25em;
+
+                                        &.min {
+                                            background-color: var(--gradiant-mars-90);
+                                            color: var(--gradiant-mars-20);
+                                        }
+
+                                        &.max {
+                                            background-color: var(--gradiant-green-90);
+                                            color: var(--gradiant-green-20);
+                                        }
                                     }
                                 }
                             }
@@ -652,9 +660,10 @@
                                 }
 
                                 .interval {
-                                    height: 1.5em;
-                                    position: relative;
-                                    width: 100%;
+                                    @include flex-100();
+                                    height: 1em;
+                                    //position: relative;
+                                    //width: 100%;
 
                                     .bar {
                                         background: var(--gradiant-ardoise-20);
@@ -662,22 +671,49 @@
                                         border-radius: 2px;
                                         height: 5px;
                                         left: 0;
-                                        position: absolute;
+                                        position: relative;
+                                        //position: absolute;
                                         top: calc(.5em - 2px);
                                         width: 100%;
-                                    }
 
-                                    .handle {
-                                        background-color: var(--gradiant-ardoise-100);
-                                        //border: 1px solid var(--gradiant-ardoise-60);
-                                        border-radius: 50%;
-                                        height: 1em;
-                                        position: absolute;
-                                        top: 0;
-                                        width: 1em;
+                                        .between {
+                                            background-color: transparent;
+                                            border-bottom: 1px solid var(--gradiant-ardoise-80-alpha-50);
+                                            border-top: 1px solid var(--gradiant-ardoise-80-alpha-50);
+                                            height: 7px;
+                                            left: 0;
+                                            position: relative;
+                                            //position: absolute;
+                                            top: -1px;
+                                            width: 100%;
+                                        }
+
+                                        .handle {
+                                            background-color: var(--gradiant-ardoise-100);
+                                            border-radius: 50%;
+                                            cursor: pointer;
+                                            height: 1em;
+                                            left: 0;
+                                            position: relative;
+                                            //position: absolute;
+                                            width: 1em;
+
+                                            &.min {
+                                                background-color: var(--gradiant-mars-80);
+                                                top: -12px;
+                                            }
+
+                                            &.max {
+                                                background-color: var(--gradiant-green-80);
+                                                top: -28px;
+                                            }
+
+                                            &.drag {
+                                                cursor: grab;
+                                            }
+                                        }
                                     }
                                 }
-
                             }
                         }
                     }
