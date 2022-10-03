@@ -122,14 +122,14 @@
                                         <button id="apply" type="submit">{{ 'Apply'|trans }}</button>
                                     </div>
                                 </div>
-{# let particule = {interval: 0, loop: 1, frame: 0,
+                                {# let particule = {interval: 0, loop: 1, frame: 0,
                         maxF: 0,
                         maxY: 0, div: undefined, bg: "b0",
                         x: 0, dx: 0, y: 0, dy: 0,
                         initialAngle: 0, turnPerSeconde: 0,
                         scale: 1
                        };
-#}
+                                #}
                             </div>
                             <div class="settings">
                                 <div class="animation">
@@ -138,7 +138,7 @@
                                         <h4>{{ 'Leaf' }}</h4>
                                         <div class="slider" id="frequency">
                                             <div class="label">{{ 'Frequency'|trans }}</div>
-                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="50"></div>
+                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="10"></div>
                                         </div>
                                         <div class="slider" id="life-length">
                                             <div class="label">{{ 'Life\'s Length'|trans }}</div>
@@ -146,11 +146,11 @@
                                         </div>
                                         <div class="slider" id="initial-angle">
                                             <div class="label">{{ 'Initial angle'|trans }}</div>
-                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="50"></div>
+                                            <div class="control" data-type="range" data-min="0" data-max="360" data-value="0"></div>
                                         </div>
                                         <div class="slider" id="turn-per-minute">
                                             <div class="label">{{ 'Turn per minute'|trans }}</div>
-                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="50"></div>
+                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="5"></div>
                                         </div>
                                         <div class="slider" id="scale">
                                             <div class="label">{{ 'Scale'|trans }}</div>
@@ -437,45 +437,89 @@
             if (!animations.length) return;
 
             animations.forEach(animation => {
-               const sliders = animation.querySelectorAll(".slider");
+                const sliders = animation.querySelectorAll(".slider");
 
-               sliders.forEach(slider => {
-                   const control = slider.querySelector(".control");
-                   switch (control.getAttribute("data-type")) {
-                       case 'range':
-                           const range = document.createElement("input");
-                           range.setAttribute("type", "range");
-                           range.setAttribute("min", control.getAttribute("data-min"));
-                           range.setAttribute("max", control.getAttribute("data-max"));
-                           range.setAttribute("value", control.getAttribute("data-value"));
-                           control.appendChild(range);
-                           break;
-                       case 'interval':
-                           let min, max, minV, maxV, offset;
-                           min = control.getAttribute("data-min");
-                           max = control.getAttribute("data-max");
-                           minV = control.getAttribute("data-min-value");
-                           maxV = control.getAttribute("data-max-value");
-                           const interval = document.createElement("div");
-                           interval.classList.add("interval");
-                           const bar = document.createElement("div");
-                           bar.classList.add("bar");
-                           const handleMin = document.createElement("div");
-                           handleMin.classList.add("handle");
-                           offset =100 * ((minV-min)/(max-min));
-                           handleMin.setAttribute("style", "translate: "+ offset.toString() + "% 0%");
-                           const handleMax = document.createElement("div");
-                           handleMax.classList.add("handle");
-                           offset =100 * ((maxV-min)/(max-min));
-                           handleMin.setAttribute("style", "translate: "+ offset.toString() + "% 0%");
-                           interval.appendChild(bar);
-                           interval.appendChild(handleMin);
-                           interval.appendChild(handleMax);
-                           control.appendChild(interval);
-                           break;
-                   }
-               })
+                sliders.forEach(slider => {
+                    const label = slider.querySelector(".label");
+                    const control = slider.querySelector(".control");
+                    const width = control.offsetWidth;
+                    let values, value;
+                    switch (control.getAttribute("data-type")) {
+                        case 'range':
+                            label.appendChild(newRangeValue(control.getAttribute("data-value"), control.getAttribute("data-min"), control.getAttribute("data-max")));
+                            control.appendChild(newRange(control.getAttribute("data-value"), control.getAttribute("data-min"), control.getAttribute("data-max")));
+                            break;
+                        case 'interval':
+                            let min, max, minV, maxV, offset;
+                            min = control.getAttribute("data-min");
+                            max = control.getAttribute("data-max");
+                            minV = control.getAttribute("data-min-value");
+                            maxV = control.getAttribute("data-max-value");
+                            values = document.createElement("div");
+                            values.classList.add("values");
+                            value = document.createElement("input");
+                            value.setAttribute("type", "number");
+                            value.classList.add("value");
+                            value.value = minV;
+                            value.setAttribute("min", min);
+                            value.setAttribute("max", max);
+                            values.appendChild(document.createTextNode("Min:" + min));
+                            values.appendChild(value);
+                            value = document.createElement("input");
+                            value.setAttribute("type", "number");
+                            value.classList.add("value");
+                            value.value = maxV;
+                            value.setAttribute("min", min);
+                            value.setAttribute("max", max);
+                            values.appendChild(value);
+                            values.appendChild(document.createTextNode("Max:" + max));
+                            label.appendChild(values);
+                            const interval = document.createElement("div");
+                            interval.classList.add("interval");
+                            const bar = document.createElement("div");
+                            bar.classList.add("bar");
+                            const handleMin = document.createElement("div");
+                            handleMin.classList.add("handle");
+                            offset = width * ((minV - min) / (max - min));
+                            handleMin.setAttribute("style", "translate: " + offset.toString() + "px 0%");
+                            const handleMax = document.createElement("div");
+                            handleMax.classList.add("handle");
+                            offset = width * ((maxV - min) / (max - min));
+                            handleMin.setAttribute("style", "translate: " + offset.toString() + "px 0%");
+                            interval.appendChild(bar);
+                            interval.appendChild(handleMin);
+                            interval.appendChild(handleMax);
+                            control.appendChild(interval);
+                            break;
+                    }
+                })
             });
+        }
+
+        function newRangeValue(val, min, max) {
+            let values = document.createElement("div");
+            values.classList.add("values");
+            let value = document.createElement("input");
+            value.setAttribute("type", "number");
+            value.classList.add("value");
+            value.value = val;
+            value.setAttribute("min", min);
+            value.setAttribute("max", max);
+            values.appendChild(document.createTextNode("Min:" + min));
+            values.appendChild(value);
+            values.appendChild(document.createTextNode("Max:" + max));
+
+            return values;
+        }
+
+        function newRange(val, min, max) {
+            const range = document.createElement("input");
+            range.setAttribute("type", "range");
+            range.setAttribute("min", min);
+            range.setAttribute("max", max);
+            range.setAttribute("value", val);
+
+            return range;
         }
 
         function particules() {
