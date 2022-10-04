@@ -135,7 +135,13 @@
                                 <div class="animation">
                                     <h3>{{ 'Animation'|trans }}</h3>
                                     <div class="leaf">
-                                        <h4>{{ 'Leaf' }}</h4>
+                                        <h4>
+                                            {{ 'Leaf' }}
+                                            <label class="switch">
+                                                <input type="checkbox" />
+                                                <span></span>
+                                            </label>
+                                        </h4>
                                         <div class="slider" id="frequency">
                                             <div class="label">{{ 'Frequency'|trans }} (0-100)</div>
                                             <div class="control" data-type="range" data-min="0" data-max="100" data-value="10"></div>
@@ -155,6 +161,9 @@
                                         <div class="slider" id="scale">
                                             <div class="label">{{ 'Scale'|trans }} (25%-500%)</div>
                                             <div class="control" data-type="interval" data-min="25" data-max="500" data-min-value="25" data-max-value="200"></div>
+                                        </div>
+                                        <div class="save">
+                                            <button>{{ 'Apply'|trans }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -191,6 +200,8 @@
         const actionDelay = 10;
         let slideInterval, slideImages, slideNames, slideIndex;
 
+        const leaf_particules = [];
+
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -199,9 +210,6 @@
             newSerie();
             initHeader();
             initAnimation();
-            // if (Math.random() < .5) {
-            //     particules();
-            // }
 
             autocomplete(document.querySelector("#search-name"), createList());
         })
@@ -504,7 +512,10 @@
                             control.appendChild(interval);
                             break;
                     }
-                })
+                });
+
+                const switcher = animation.querySelector("h4").querySelector("input");
+                switcher.addEventListener("change", switchLeaves);
             });
         }
 
@@ -622,12 +633,22 @@
             }
         }
 
-        function particules() {
-            const pCount = 10;
-            const particules = [];
+        function switchLeaves(evt) {
+            const check = evt.target;
+            if (check.checked) {
+                startLeaves();
+            }
+            else {
+                stopLeaves();
+            }
+        }
+
+        function startLeaves() {
+            const pCount = 20;
             const body = document.body;
             const html = document.documentElement;
             const height = Math.max(body.getBoundingClientRect().height, html.getBoundingClientRect().height);
+            console.log({html})
 
             for (let i = 0; i < pCount; i++) {
                 let particule = {interval: 0, loop: 1, frame: 0, maxF: 0, maxY: 0, div: undefined, bg: "b0", x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
@@ -635,16 +656,27 @@
                 particule.div.classList.add("particule");
                 particule.div.classList.add("b0");
                 initParticule(particule);
-                particule.maxY = height + 200;
+                particule.maxY = html.scrollHeight + 200;
 
                 particule.div.setAttribute("style", "translate: " + particule.x + "px " + particule.y + "px; rotate: " + particule.initialAngle + "deg; scale: " + particule.scale);
 
                 particule.interval = setInterval(animateParticule, 1000, particule);
-                particules[i] = particule;
+                leaf_particules[i] = particule;
 
                 document.querySelector("body").appendChild(particule.div);
+            }
+        }
 
-                console.log({height})
+        function stopLeaves() {
+            console.log({leaf_particules});
+
+            for (let i=0;i<leaf_particules.length;i++) {
+                if (leaf_particules[i].interval > -1) {
+                    clearInterval(leaf_particules[i].interval);
+                    leaf_particules[i].interval = -1;
+                }
+                leaf_particules[i].div.remove();
+                leaf_particules[i] = {interval: 0, loop: 1, frame: 0, maxF: 0, maxY: 0, div: undefined, bg: "b0", x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
             }
         }
 
@@ -656,6 +688,7 @@
 
             if (p.y > p.maxY + 100) {
                 clearInterval(p.interval);
+                p.interval = -1
                 p.div.classList.add("reboot");
                 p.loop++;
                 initParticule(p);
@@ -665,6 +698,7 @@
             } else {
                 if (p.frame > p.maxF) {
                     clearInterval(p.interval);
+                    p.interval = -1;
                     p.div.classList.add("re-new");
                     setTimeout(() => {
                         p.div.classList.add("reboot");
@@ -692,13 +726,6 @@
             p.initialAngle = Math.random() * 360;
             p.turnPerSeconde = Math.random() * .25;
             p.scale = .25 + (Math.random() * 1.25);
-
-            // if (p.div.querySelector("div")) {
-            //     p.div.removeChild(p.div.firstChild);
-            // }
-            // let child = document.createElement("div");
-            // child.appendChild(document.createTextNode(p.loop.toString()));
-            // p.div.appendChild(child);
 
             p.div.classList.remove(p.bg);
             p.bg = "b" + (Math.ceil(42 * Math.random())).toString();
