@@ -138,32 +138,35 @@
                                         <h4>
                                             {{ 'Leaf' }}
                                             <label class="switch">
-                                                <input type="checkbox" />
+                                                <input type="checkbox"/>
                                                 <span></span>
                                             </label>
+                                            <div class="anim-settings-toggler"><i class="fa-solid fa-gear"></i></div>
                                         </h4>
-                                        <div class="slider" id="frequency">
-                                            <div class="label">{{ 'Frequency'|trans }} (0-100)</div>
-                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="10"></div>
-                                        </div>
-                                        <div class="slider" id="life-length">
-                                            <div class="label">{{ 'Life\'s Length'|trans }} (0-300sec)</div>
-                                            <div class="control" data-type="interval" data-min="0" data-max="300" data-min-value="2" data-max-value="60"></div>
-                                        </div>
-                                        <div class="slider" id="initial-angle">
-                                            <div class="label">{{ 'Initial angle'|trans }} (0°-360°)</div>
-                                            <div class="control" data-type="range" data-min="0" data-max="360" data-value="0"></div>
-                                        </div>
-                                        <div class="slider" id="turn-per-minute">
-                                            <div class="label">{{ 'Turn per minute'|trans }} (0-100)</div>
-                                            <div class="control" data-type="range" data-min="0" data-max="100" data-value="5"></div>
-                                        </div>
-                                        <div class="slider" id="scale">
-                                            <div class="label">{{ 'Scale'|trans }} (25%-500%)</div>
-                                            <div class="control" data-type="interval" data-min="25" data-max="500" data-min-value="25" data-max-value="200"></div>
-                                        </div>
-                                        <div class="save">
-                                            <button>{{ 'Apply'|trans }}</button>
+                                        <div class="anim-settings">
+                                            <div class="slider" id="frequency">
+                                                <div class="label">{{ 'Frequency'|trans }} (0-100)</div>
+                                                <div class="control" data-type="range" data-min="0" data-max="100" data-value="10"></div>
+                                            </div>
+                                            <div class="slider" id="life-length">
+                                                <div class="label">{{ 'Life\'s Length'|trans }} (0-300sec)</div>
+                                                <div class="control" data-type="interval" data-min="0" data-max="300" data-min-value="2" data-max-value="60"></div>
+                                            </div>
+                                            <div class="slider" id="initial-angle">
+                                                <div class="label">{{ 'Initial angle'|trans }} (0°-360°)</div>
+                                                <div class="control" data-type="range" data-min="0" data-max="360" data-value="0"></div>
+                                            </div>
+                                            <div class="slider" id="turn-per-minute">
+                                                <div class="label">{{ 'Turn per minute'|trans }} (0-100)</div>
+                                                <div class="control" data-type="range" data-min="0" data-max="100" data-value="5"></div>
+                                            </div>
+                                            <div class="slider" id="scale">
+                                                <div class="label">{{ 'Scale'|trans }} (25%-500%)</div>
+                                                <div class="control" data-type="interval" data-min="25" data-max="500" data-min-value="25" data-max-value="200"></div>
+                                            </div>
+                                            <div class="save">
+                                                <button>{{ 'Apply'|trans }}</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -516,6 +519,9 @@
 
                 const switcher = animation.querySelector("h4").querySelector("input");
                 switcher.addEventListener("change", switchLeaves);
+
+                const settingsToggler = animation.querySelector("h4").querySelector(".anim-settings-toggler");
+                settingsToggler.addEventListener("click", ()=> { animation.querySelector(".anim-settings").classList.toggle("hide")}, );
             });
         }
 
@@ -637,8 +643,7 @@
             const check = evt.target;
             if (check.checked) {
                 startLeaves();
-            }
-            else {
+            } else {
                 stopLeaves();
             }
         }
@@ -670,7 +675,7 @@
         function stopLeaves() {
             console.log({leaf_particules});
 
-            for (let i=0;i<leaf_particules.length;i++) {
+            for (let i = 0; i < leaf_particules.length; i++) {
                 if (leaf_particules[i].interval > -1) {
                     clearInterval(leaf_particules[i].interval);
                     leaf_particules[i].interval = -1;

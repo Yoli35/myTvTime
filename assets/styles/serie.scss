@@ -613,167 +613,192 @@
                     @include flex-col(start, start);
                     width: 100%;
 
-                    h4 {
-                        @include flex-100(start, start);
-
-                        .switch {
-                            border: 2px solid var(--gradiant-ardoise-80);
-                            border-radius: calc(.5em + 2px);
-                            cursor: pointer;
-                            display: inline-block;
-                            height: calc(1em + 4px);
-                            margin-left: auto;
-                            margin-right: .25em;
-                            overflow: hidden;
-                            position: relative;
-                            width: calc(2em + 4px);
-
-                            input {
-                                height: 0;
-                                position: absolute;
-                                top: -2em;
-                                width: 0;
-
-                                + span {
-                                    background: var(--gradiant-ardoise-80);
-                                    border-radius: .5em;
-                                    inset: 0;
-                                    position: absolute;
-
-                                    &:before {
-                                        background: white;
-                                        border-radius: 50%;
-                                        content: "";
-                                        display: inline-block;
-                                        height: 1em;
-                                        left: 0;
-                                        position: absolute;
-                                        top: 0;
-                                        transition: all .2s;
-                                        width: 1em;
-                                    }
-                                }
-
-                                &:checked + span {
-                                    background: var(--gradiant-green-30);
-                                }
-
-                                &:checked + span:before {
-                                    left: 1em;
-                                }
-                            }
-                        }
-                    }
-
                     .leaf {
                         @include flex-col(start, start);
                         width: 100%;
 
-                        .slider {
-                            @include flex-col(start, start);
-                            margin-bottom: 1em;
-                            width: 100%;
+                        h4 {
+                            @include flex-100(start, start);
 
-                            .label {
-                                @include flex-100(start, center);
-                                font-weight: 100;
-                                text-transform: uppercase;
-                                margin-bottom: .5em;
+                            .switch {
+                                border: 2px solid var(--gradiant-ardoise-80);
+                                border-radius: calc(.5em + 2px);
+                                cursor: pointer;
+                                display: inline-block;
+                                height: calc(1em + 4px);
+                                margin-left: auto;
+                                margin-right: .25em;
+                                overflow: hidden;
+                                position: relative;
+                                width: calc(2em + 4px);
 
-                                .values {
-                                    margin-left: auto;
+                                input {
+                                    height: 0;
+                                    position: absolute;
+                                    top: -2em;
+                                    width: 0;
 
-                                    .value {
-                                        border: none;
-                                        border-radius: .25em;
-                                        font-weight: 100;
-                                        margin: 0 .5em;
-                                        max-width: 6em;
-                                        padding: .125em .25em;
+                                    + span {
+                                        background: var(--gradiant-ardoise-80);
+                                        border-radius: .5em;
+                                        inset: 0;
+                                        position: absolute;
 
-                                        &.min {
-                                            background-color: var(--gradiant-mars-90);
-                                            color: var(--gradiant-mars-20);
+                                        &:before {
+                                            background: white;
+                                            border-radius: 50%;
+                                            content: "";
+                                            display: inline-block;
+                                            height: 1em;
+                                            left: 0;
+                                            position: absolute;
+                                            top: 0;
+                                            transition: all .2s ease-in-out;
+                                            width: 1em;
                                         }
+                                    }
 
-                                        &.max {
-                                            background-color: var(--gradiant-green-90);
-                                            color: var(--gradiant-green-20);
-                                        }
+                                    &:checked + span {
+                                        background: var(--gradiant-green-30);
+                                    }
+
+                                    &:checked + span:before {
+                                        left: 1em;
                                     }
                                 }
                             }
 
-                            .control {
-                                @include flex-100();
+                            .anim-settings-toggler {
+                                cursor: pointer;
+                                margin-left: .5em;
+                                transition: rotate .2s ease-in-out;
 
-                                input {
-                                    width: 100%;
-                                }
-
-                                .interval {
-                                    @include flex-100();
-                                    height: 1em;
-                                    //position: relative;
-                                    //width: 100%;
-
-                                    .bar {
-                                        background: var(--gradiant-ardoise-20);
-                                        background: linear-gradient(180deg, var(--gradiant-ardoise-10) 0%, var(--gradiant-ardoise-25) 100%);
-                                        border-radius: 2px;
-                                        height: 5px;
-                                        left: 0;
-                                        position: relative;
-                                        //position: absolute;
-                                        top: calc(.5em - 2px);
-                                        width: 100%;
-
-                                        .between {
-                                            background-color: transparent;
-                                            border-bottom: 1px solid var(--gradiant-ardoise-80-alpha-50);
-                                            border-top: 1px solid var(--gradiant-ardoise-80-alpha-50);
-                                            height: 7px;
-                                            left: 0;
-                                            position: relative;
-                                            //position: absolute;
-                                            top: -1px;
-                                            width: 100%;
-                                        }
-
-                                        .handle {
-                                            background-color: var(--gradiant-ardoise-100);
-                                            border-radius: 50%;
-                                            cursor: pointer;
-                                            height: 1em;
-                                            left: 0;
-                                            position: relative;
-                                            //position: absolute;
-                                            width: 1em;
-
-                                            &.min {
-                                                background-color: var(--gradiant-mars-80);
-                                                top: -12px;
-                                            }
-
-                                            &.max {
-                                                background-color: var(--gradiant-green-80);
-                                                top: -28px;
-                                            }
-
-                                            &.drag {
-                                                cursor: grab;
-                                            }
-                                        }
-                                    }
+                                &:hover {
+                                    rotate: 180deg;
                                 }
                             }
                         }
 
-                        .save {
-                            @include flex-100(end, end);
+                        .anim-settings {
+                            @include flex-col(start, start);
+                            overflow: hidden;
+                            transition: height .2s ease-in-out;
 
-                            button {
-                                width: unset;
+                            .slider {
+                                @include flex-col(start, start);
+                                margin-bottom: 1em;
+                                width: 100%;
+
+                                .label {
+                                    @include flex-100(start, center);
+                                    font-weight: 100;
+                                    text-transform: uppercase;
+                                    margin-bottom: .5em;
+
+                                    .values {
+                                        margin-left: auto;
+
+                                        .value {
+                                            border: none;
+                                            border-radius: .25em;
+                                            font-weight: 100;
+                                            margin: 0 .5em;
+                                            max-width: 6em;
+                                            padding: .125em .25em;
+
+                                            &.min {
+                                                background-color: var(--gradiant-mars-90);
+                                                color: var(--gradiant-mars-20);
+                                            }
+
+                                            &.max {
+                                                background-color: var(--gradiant-green-90);
+                                                color: var(--gradiant-green-20);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                .control {
+                                    @include flex-100();
+
+                                    input {
+                                        width: 100%;
+                                    }
+
+                                    .interval {
+                                        @include flex-100();
+                                        height: 1em;
+                                        //position: relative;
+                                        //width: 100%;
+
+                                        .bar {
+                                            background: var(--gradiant-ardoise-20);
+                                            background: linear-gradient(180deg, var(--gradiant-ardoise-10) 0%, var(--gradiant-ardoise-25) 100%);
+                                            border-radius: 2px;
+                                            height: 5px;
+                                            left: 0;
+                                            position: relative;
+                                            //position: absolute;
+                                            top: calc(.5em - 2px);
+                                            width: 100%;
+
+                                            .between {
+                                                background-color: transparent;
+                                                border-bottom: 1px solid var(--gradiant-ardoise-80-alpha-50);
+                                                border-top: 1px solid var(--gradiant-ardoise-80-alpha-50);
+                                                height: 7px;
+                                                left: 0;
+                                                position: relative;
+                                                //position: absolute;
+                                                top: -1px;
+                                                width: 100%;
+                                            }
+
+                                            .handle {
+                                                background-color: var(--gradiant-ardoise-100);
+                                                border-radius: 50%;
+                                                cursor: pointer;
+                                                height: 1em;
+                                                left: 0;
+                                                position: relative;
+                                                //position: absolute;
+                                                transition: scale .2s ease-in-out;
+                                                width: 1em;
+
+                                                &.min {
+                                                    background-color: var(--gradiant-mars-80);
+                                                    top: -12px;
+                                                }
+
+                                                &.max {
+                                                    background-color: var(--gradiant-green-80);
+                                                    top: -28px;
+                                                }
+
+                                                &.drag {
+                                                    cursor: grab;
+                                                }
+
+                                                &:hover {
+                                                    scale: 2;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            .save {
+                                @include flex-100(end, end);
+
+                                button {
+                                    width: unset;
+                                }
+                            }
+
+                            &.hide {
+                                height: 0;
                             }
                         }
                     }
