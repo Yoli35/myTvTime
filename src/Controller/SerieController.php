@@ -44,7 +44,7 @@ class SerieController extends AbstractController
     const SERIE_PAGE = 'serie';
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
-    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, QuoteService $quoteService): Response
+    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, SettingsRepository $settingsRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
@@ -91,6 +91,7 @@ class SerieController extends AbstractController
                 'order' => $order],
             'user' => $user,
             'quotes' => (new QuoteService)->getRandomQuotes(),
+            'leafSettings' => $settingsRepository->findOneBy(["user" => $user, "name" => "leaf"]),
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
@@ -944,8 +945,8 @@ class SerieController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $content = json_decode($request->query->get("data"), true);
-        dump($content);
-        $settings = $settingsRepository->findOneBy(["user" => $user]);
+
+        $settings = $settingsRepository->findOneBy(["user" => $user, "name" => $content["name"]]);
 
         if ($settings == null) {
             $settings = new Settings();

@@ -145,7 +145,7 @@
                                         </h4>
                                         <div class="anim-settings">
                                             <div class="slider" id="frequency">
-                                                <div class="label">{{ 'Nombre'|trans }} (0-100)</div>
+                                                <div class="label">{{ 'Number'|trans }} (0-100)</div>
                                                 <div class="control" data-name="number" data-type="range" data-min="0" data-max="100" data-value="10"></div>
                                             </div>
                                             <div class="slider" id="life-length">
@@ -205,8 +205,10 @@
         let slideInterval, slideImages, slideNames, slideIndex;
         let canNotify;
 
+        const leaf_settings = getLeafSettings();
         const leaf_particules = [];
 
+        console.log({leaf_settings});
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -460,7 +462,7 @@
                     switch (control.getAttribute("data-type")) {
                         case 'range':
                             label.appendChild(newRangeValue(control));
-                            control.appendChild(newRange(control.getAttribute("data-value"), control.getAttribute("data-min"), control.getAttribute("data-max")));
+                            control.appendChild(newRange(control));
                             break;
                         case 'interval':
                             let min, max, minV, maxV, offset1, offset2;
@@ -468,6 +470,15 @@
                             max = control.getAttribute("data-max");
                             minV = control.getAttribute("data-min-value");
                             maxV = control.getAttribute("data-max-value");
+
+                            let data = getIntervalValuesFromSettings(control.getAttribute("data-name"));
+                            if (data.length) {
+                                minV = data[0];
+                                maxV = data[1];
+                                control.setAttribute("data-min-value", minV);
+                                control.setAttribute("data-max-value", maxV);
+                            }
+
                             offset1 = width * ((minV - min) / (max - min));
                             offset2 = width * ((maxV - min) / (max - min));
                             values = document.createElement("div");
@@ -536,6 +547,13 @@
             let val = control.getAttribute("data-value"),
                 min = control.getAttribute("data-min"),
                 max = control.getAttribute("data-max");
+
+            let data = getRangeValueFromSettings(control.getAttribute("data-name"));
+            if (data) {
+                val = data;
+                control.setAttribute("data-value", val);
+            }
+
             let values = document.createElement("div");
             values.classList.add("values");
             let value = document.createElement("input");
@@ -550,14 +568,53 @@
             return values;
         }
 
-        function newRange(val, min, max) {
+        function newRange(control) {
+            let val = control.getAttribute("data-value"),
+                min = control.getAttribute("data-min"),
+                max = control.getAttribute("data-max");
             const range = document.createElement("input");
+
+            let data = getRangeValueFromSettings(control.getAttribute("data-name"));
+            if (data) {
+                val = data;
+                control.setAttribute("data-value", val);
+            }
+
             range.setAttribute("type", "range");
             range.setAttribute("min", min);
             range.setAttribute("max", max);
             range.setAttribute("value", val);
+            range.value = val;
             range.addEventListener("change", updateRangeValue)
             return range;
+        }
+
+        function getRangeValueFromSettings(name) {
+            if (leaf_settings.length === 0) return false;
+            let n = leaf_settings.length;
+            for (let i = 0; i < n; i++) {
+                let slider = leaf_settings[i];
+                if (slider.type === "range") {
+                    if (slider.name === name) {
+                        return slider.data;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function getIntervalValuesFromSettings(name) {
+            if (leaf_settings.length === 0) return [];
+            let n = leaf_settings.length;
+            for (let i = 0; i < n; i++) {
+                let slider = leaf_settings[i];
+                if (slider.type === "interval") {
+                    if (slider.name === name) {
+                        return slider.data;
+                    }
+                }
+            }
+            return [];
         }
 
         function updateRange(evt) {
@@ -576,7 +633,8 @@
             }
             const slider = input.closest(".slider");
             const range = slider.querySelector(".control").querySelector("input");
-            range.setAttribute("value", value);
+            range.value = value;
+            slider.querySelector(".control").setAttribute("data-value", value);
             return false;
         }
 
@@ -586,8 +644,8 @@
             const inputRange = evt.target;
             let value = inputRange.value;
             const slider = inputRange.closest(".slider");
-            const inputText = slider.querySelector(".label").querySelector("input");
-            inputText.value = value;
+            slider.querySelector(".label").querySelector("input").value = value;
+            slider.querySelector(".control").setAttribute("data-value", value);
         }
 
         function updateIntervalValues(evt) {
@@ -1048,6 +1106,27 @@
             {% endfor %}
 
             return list;
+        }
+
+        function getLeafSettings() {
+            let settings = [], settingR, settingI;
+            {% for slider in leafSettings.data %}
+            {% if slider.type == "range" %}
+            settingR = {data: 0, name: "", type: ""};
+            settingR.data = {{ slider.data }};
+            settingR.name = "{{ slider.name }}";
+            settingR.type = "{{ slider.type }}";
+            settings.push(settingR);
+            {% endif %}
+            {% if slider.type == "interval" %}
+            settingI = {data: [0, 0], name: "", type: ""};
+            settingI.data = [{{ slider.data.0 }},{{ slider.data.1 }}];
+            settingI.name = "{{ slider.name }}";
+            settingI.type = "{{ slider.type }}";
+            settings.push(settingI);
+            {% endif %}
+            {% endfor %}
+            return settings;
         }
 
         function notifyMe(message) {
