@@ -145,27 +145,27 @@
                                         </h4>
                                         <div class="anim-settings">
                                             <div class="slider" id="frequency">
-                                                <div class="label">{{ 'Frequency'|trans }} (0-100)</div>
-                                                <div class="control" data-type="range" data-min="0" data-max="100" data-value="10"></div>
+                                                <div class="label">{{ 'Nombre'|trans }} (0-100)</div>
+                                                <div class="control" data-name="number" data-type="range" data-min="0" data-max="100" data-value="10"></div>
                                             </div>
                                             <div class="slider" id="life-length">
                                                 <div class="label">{{ 'Life\'s Length'|trans }} (0-300sec)</div>
-                                                <div class="control" data-type="interval" data-min="0" data-max="300" data-min-value="2" data-max-value="60"></div>
+                                                <div class="control" data-name="life-length" data-type="interval" data-min="0" data-max="300" data-min-value="2" data-max-value="60"></div>
                                             </div>
                                             <div class="slider" id="initial-angle">
                                                 <div class="label">{{ 'Initial angle'|trans }} (0°-360°)</div>
-                                                <div class="control" data-type="range" data-min="0" data-max="360" data-value="0"></div>
+                                                <div class="control" data-name="initial-angle" data-type="range" data-min="0" data-max="360" data-value="0"></div>
                                             </div>
                                             <div class="slider" id="turn-per-minute">
                                                 <div class="label">{{ 'Turn per minute'|trans }} (0-100)</div>
-                                                <div class="control" data-type="range" data-min="0" data-max="100" data-value="5"></div>
+                                                <div class="control" data-name="turn-per-minute" data-type="range" data-min="0" data-max="100" data-value="5"></div>
                                             </div>
                                             <div class="slider" id="scale">
                                                 <div class="label">{{ 'Scale'|trans }} (25%-500%)</div>
-                                                <div class="control" data-type="interval" data-min="25" data-max="500" data-min-value="25" data-max-value="200"></div>
+                                                <div class="control" data-name="scale" data-type="interval" data-min="25" data-max="500" data-min-value="25" data-max-value="200"></div>
                                             </div>
                                             <div class="save">
-                                                <button>{{ 'Apply'|trans }}</button>
+                                                <button>{{ 'Save'|trans }}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -191,6 +191,7 @@
 {% block morejs %}
     <script>
         const _app_serie_new = "{{ path('app_serie_new') }}";
+        const _app_serie_set_settings = "{{ path('app_serie_set_settings') }}";
         const _current_page = {{ pages.page }};
         const _per_page = {{ pages.per_page }};
         const _order_by = "{{ pages.order_by }}";
@@ -202,6 +203,7 @@
         const removeDelay = 100;
         const actionDelay = 10;
         let slideInterval, slideImages, slideNames, slideIndex;
+        let canNotify;
 
         const leaf_particules = [];
 
@@ -521,7 +523,12 @@
                 switcher.addEventListener("change", switchLeaves);
 
                 const settingsToggler = animation.querySelector("h4").querySelector(".anim-settings-toggler");
-                settingsToggler.addEventListener("click", ()=> { animation.querySelector(".anim-settings").classList.toggle("hide")}, );
+                settingsToggler.addEventListener("click", () => {
+                    animation.querySelector(".anim-settings").classList.toggle("hide")
+                },);
+
+                const save = animation.querySelector(".save").querySelector("button");
+                save.addEventListener("click", saveLeaves);
             });
         }
 
@@ -554,7 +561,6 @@
         }
 
         function updateRange(evt) {
-            console.log(evt.target);
             evt.preventDefault();
             const input = evt.target;
             let value = input.value;
@@ -683,6 +689,34 @@
                 leaf_particules[i].div.remove();
                 leaf_particules[i] = {interval: 0, loop: 1, frame: 0, maxF: 0, maxY: 0, div: undefined, bg: "b0", x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
             }
+        }
+
+        function saveLeaves(evt) {
+            const save = evt.target;
+            const animation = save.closest(".animation");
+            const sliders = animation.querySelectorAll(".slider");
+            let data = [], settings = {name: "leaf", data: []};
+
+            sliders.forEach(slider => {
+                const control = slider.querySelector(".control");
+                let dataSlider = {name: control.getAttribute("data-name"), type: control.getAttribute("data-type")};
+                if (dataSlider.type === "range") {
+                    dataSlider.data = control.getAttribute("data-value");
+                }
+                if (dataSlider.type === "interval") {
+                    dataSlider.data = [control.getAttribute("data-min-value"), control.getAttribute("data-max-value")];
+                }
+                data.push(dataSlider);
+            });
+            settings.data = data;
+            console.log({settings});
+
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                notifyMe(JSON.parse(this.response));
+            }
+            xhr.open("GET", _app_serie_set_settings + "?data=" + JSON.stringify(settings));
+            xhr.send();
         }
 
         function animateParticule(p) {
@@ -1014,6 +1048,32 @@
             {% endfor %}
 
             return list;
+        }
+
+        function notifyMe(message) {
+            // Vérifions si le navigateur prend en charge les notifications
+            if (!('Notification' in window)) {
+                alert('Ce navigateur ne prend pas en charge la notification de bureau')
+            }
+
+            // Vérifions si les autorisations de notification ont déjà été accordées
+            else if (Notification.permission === 'granted') {
+                // Si tout va bien, créons une notification
+                const notification = new Notification(message)
+            }
+
+            // Sinon, nous devons demander la permission à l'utilisateur
+            else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then((permission) => {
+                    // Si l'utilisateur accepte, créons une notification
+                    if (permission === 'granted') {
+                        const notification = new Notification(message)
+                    }
+                })
+            }
+
+            // Enfin, si l'utilisateur a refusé les notifications, et que vous
+            // voulez être respectueux, il n'est plus nécessaire de les déranger.
         }
     </script>
 {% endblock %}

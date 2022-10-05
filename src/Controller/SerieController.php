@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\Network;
 use App\Entity\Serie;
 use App\Entity\SerieViewing;
+use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\SerieSearchType;
 use App\Form\SerieType;
 use App\Repository\NetworkRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
+use App\Repository\SettingsRepository;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
@@ -22,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use DateTimeImmutable;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieController extends AbstractController
@@ -932,5 +935,26 @@ class SerieController extends AbstractController
         return $this->json([
             'quote' => (new QuoteService)->getRandomQuote(),
         ]);
+    }
+
+    #[Route('/settings/save', name: 'app_serie_set_settings', methods: ['GET'])]
+    public function setSettings(Request $request, SettingsRepository $settingsRepository, TranslatorInterface $translator): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /** @var User $user */
+        $user = $this->getUser();
+        $content = json_decode($request->query->get("data"), true);
+        dump($content);
+        $settings = $settingsRepository->findOneBy(["user" => $user]);
+
+        if ($settings == null) {
+            $settings = new Settings();
+            $settings->setUser($user);
+            $settings->setName($content["name"]);
+        }
+        $settings->setData($content["data"]);
+        $settingsRepository->save($settings, true);
+
+        return $this->json($translator->trans("The settings have been saved"));
     }
 }
