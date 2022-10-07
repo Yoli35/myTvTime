@@ -510,21 +510,19 @@
             > div > div {
                 margin: .5em;
             }
+        }
 
-            .imdb-page {
-                align-items: center;
-                display: flex;
+        .imdb-page {
+            align-items: center;
+            display: flex;
 
-                span {
-                    a {
-                        background-image: url("../images/imdb.png");
-                        background-size: cover;
-                        display: block;
-                        height: 27px;
-                        margin-left: 2em;
-                        width: 64px;
-                    }
-                }
+            a {
+                background-image: url("../images/imdb.png");
+                background-size: cover;
+                display: block;
+                height: 27px;
+                margin-left: 2em;
+                width: 64px;
             }
         }
     }

@@ -133,6 +133,8 @@ const txt = {
         'space': ' ',
     },
 }
+const personalModal = document.querySelector("#personModal");
+const personalModalClose = personalModal.querySelectorAll("button");
 
 function initMovieStuff(paths, profileUrl, locale) {
     // querySelectorAll renvoie une nodeList, vide si aucune correspondance n'est trouvée
@@ -169,6 +171,19 @@ function initMovieStuff(paths, profileUrl, locale) {
     profiles.forEach(profile => {
         profile.addEventListener("click", getProfile);
     });
+
+    personalModal.addEventListener("click", closeProfile);
+    personalModalClose.forEach(button=> {
+        button.addEventListener("click", closeProfile);
+    });
+
+}
+
+function closeProfile() {
+    personalModal.classList.remove("show");
+    setTimeout(() => {
+        personalModal.classList.remove("d-block");
+    }, 200);
 }
 
 function getProfile(e) {
@@ -180,7 +195,6 @@ function getProfile(e) {
         let locale = data['locale'];
         let person = data['person'];
         let name = person['name'],
-            // also_known_as = person['also_known_as'],
             biography = person['biography'],
             birthday = person['birthday'],
             death_day = person['death-day'],
@@ -191,27 +205,22 @@ function getProfile(e) {
             profile_path = person['profile_path'],
             gender = person['gender'];
         let department = data['department'];
-        // console.log(department);
 
-        // $('.modal-title').html(name);
+        document.querySelector(".person-profile").innerHTML = "";
+        personalModal.classList.add("d-block");
+        personalModal.classList.add("show");
+
         document.querySelector(".modal-title").innerHTML = name;
-        // $('.also_known_as').html(also_known_as);
         if (biography && biography.length) {
-            // $('.biography div').html(biography);
             document.querySelector(".biography div").innerHTML = biography;
         } else {
-            // $('.biography div').html('<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>');
             document.querySelector(".biography div").innerHTML = '<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>';
 
             const xhr2 = new XMLHttpRequest();
             xhr2.onload = function (result) {
-                // console.log(JSON.parse(r.target.response));
                 const imdb = JSON.parse(result.target.response);
-                // console.log(imdb);
                 if (imdb['success']) {
                     let imdb_infos = imdb['person'];
-                    // console.log(imdb_infos);
-                    // $(".biography div").html(
                     document.querySelector(".biography div").innerHTML =
                         '<div>' +
                         imdb_infos['summary'] +
@@ -226,31 +235,21 @@ function getProfile(e) {
             xhr2.send();
         }
         const options = {year: 'numeric', month: 'long', day: 'numeric'};
-        // if (birthday && birthday.length) $('.birthday span').html(dateFormat(birthday, locale)); else $('.birthday').css('display', 'none');
         if (birthday && birthday.length) document.querySelector(".birthday span").innerHTML = new Date(birthday).toLocaleString(_loc, options); else document.querySelector(".birthday").setAttribute("style", "display: none");
-        // if (death_day && death_day.length) $('.death-day span').html(dateFormat(death_day, locale)); else $('.death-day').css('display', 'none');
         if (death_day && death_day.length) document.querySelector(".death-day span").innerHTML = new Date(death_day).toLocaleString(_loc, options); else document.querySelector(".death-day").setAttribute("style", "display: none");
-        // if (homepage && homepage.length) $('.homepage span').html('<a href="' + homepage + '" target="_blank">' + homepage + '</a>'); else $('.homepage').css('display', 'none');
         if (homepage && homepage.length) document.querySelector(".homepage span").innerHTML = '<a href="' + homepage + '" target="_blank" rel="noopener">' + homepage + '</a>'; else document.querySelector(".homepage").setAttribute("style", "display: none");
-        // if (imdbpage && imdbpage.length) $('.imdb-page span').html('<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank"></a>'); else $('.imdb-page').css('display', 'none');
         if (imdbpage && imdbpage.length) document.querySelector(".imdb-page span").innerHTML = '<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank" rel="noopener"></a>'; else document.querySelector(".imdb-page").setAttribute("style", "display: none");
-        // if (place_of_birth && place_of_birth.length) $('.place-of-birth span').html(place_of_birth); else $('.place-of-birth').css('display', 'none');
         if (place_of_birth && place_of_birth.length) document.querySelector(".place-of-birth span").innerHTML = place_of_birth; else document.querySelector(".place-of-birth").setAttribute("style", "display: none");
 
         if (known_for_department && known_for_department.length) {
             if (locale === 'en' || department[locale][known_for_department] === undefined) {
-                // $('.known-for-department span').html('<span style="color: ' + (locale === 'en' ? 'green' : 'red') + '">' + known_for_department + '</span>');
                 document.querySelector(".known-for-department span").innerHTML = '<span style="color: ' + (locale === 'en' ? 'green' : 'red') + '">' + known_for_department + '</span>';
             } else {
-                // $('.known-for-department span').html(department[locale][known_for_department][gender]);
                 document.querySelector(".known-for-department span").innerHTML = department[locale][known_for_department][gender];
             }
         } else {
-            // $('.known-for-department').css('display', 'none');
             document.querySelector(".known-for-department").setAttribute("style", "display: none");
         }
-
-        // $('.person-profile').html('<img src="{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}' + profile_path + '" alt="' + name + '">');
         document.querySelector(".person-profile").innerHTML = '<img src="' + _profile_url + profile_path + '" alt="' + name + '">';
     }
     xhr.open("GET", _profile_infos + "?id=" + id + "&locale=" + _loc);
