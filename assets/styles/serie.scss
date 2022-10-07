@@ -991,7 +991,7 @@
                 right: 1em;
                 top: 1em;
 
-                .new-episode, .new-season {
+                .new-status, .new-episode, .new-season {
                     background-color: var(--gradiant-mars-50);
                     border-radius: .5em;
                     color: var(--gradiant-mars-90);
@@ -1330,31 +1330,33 @@
                         max-height: 50em;
                         overflow: scroll;
 
-                        .poster {
-                            position: relative;
+                        a {
+                            .poster {
+                                position: relative;
 
-                            img {
-                                border-radius: .5em;
-                                height: 12em;
-                                margin: 1em;
-                                object-fit: cover;
-                                width: 8em;
-                            }
+                                img {
+                                    border-radius: .5em;
+                                    height: 12em;
+                                    margin: 1em;
+                                    object-fit: cover;
+                                    width: 8em;
+                                }
 
-                            .name {
-                                bottom: 1em;
-                                font-size: .5em;
-                                padding: .5em;
-                                text-align: center;
-                                width: 100%;
-                            }
+                                .name {
+                                    bottom: 1em;
+                                    font-size: .5em;
+                                    padding: .5em;
+                                    text-align: center;
+                                    width: 100%;
+                                }
 
-                            .add {
-                                @include seen(var(--serie-add), 1.5em);
-                            }
+                                .add {
+                                    @include seen(var(--serie-add), 1.5em);
+                                }
 
-                            .seen {
-                                @include seen(var(--serie-seen), 1.5em);
+                                .seen {
+                                    @include seen(var(--serie-seen), 1.5em);
+                                }
                             }
                         }
                     }
@@ -1574,6 +1576,7 @@
             align-items: flex-start;
             flex-direction: row;
             justify-content: flex-start;
+            position: relative;
 
             .wrapper {
                 width: calc(70% - 1em);
@@ -1611,7 +1614,6 @@
                         display: none;
                     }
                 }
-
 
                 .numbers {
                     font-weight: 100;
@@ -1674,6 +1676,12 @@
                             border-radius: 0 0 var(--button-border-radius) var(--button-border-radius);
                         }
                     }
+                }
+
+                &.bottom {
+                    bottom: 0;
+                    position: absolute;
+                    right: 0;
                 }
             }
         }

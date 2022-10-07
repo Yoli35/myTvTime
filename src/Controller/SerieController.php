@@ -76,6 +76,8 @@ class SerieController extends AbstractController
         $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
         $list = $serieRepository->listUserSeries($user->getId());
 
+        dump($results);
+
         return $this->render('serie/index.html.twig', [
             'series' => $results,
             'numbers' => $serieRepository->numbers($user->getId())[0],
@@ -267,6 +269,9 @@ class SerieController extends AbstractController
                 $serie->setNumberOfSeasons($tv['number_of_seasons']);
                 $serie->setNumberOfEpisodes($tv['number_of_episodes']);
                 $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
+
+                $serie->setOriginalName($tv['original_name']);
+                $serie->setStatus($tv['status']);
 
                 foreach ($tv['networks'] as $network) {
                     $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);
@@ -513,6 +518,8 @@ class SerieController extends AbstractController
         }
         $ygg = str_replace(' ', '+', $tv['name']);
 
+        dump($serie);
+
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'index' => $index,
@@ -571,7 +578,7 @@ class SerieController extends AbstractController
 
     public function updateSeasonsAndEpisodes($tv, $serie, $serieRepository): array|null
     {
-        $whatsNew = ['episode' => 0, 'season' => 0];
+        $whatsNew = ['episode' => 0, 'season' => 0, 'status' => "", 'original_name' => ""];
         $modified = false;
         if ($serie->getNumberOfSeasons() !== $tv['number_of_seasons']) {
             $whatsNew['season'] = $tv['number_of_seasons'] - $serie->getNumberOfSeasons();
@@ -586,6 +593,19 @@ class SerieController extends AbstractController
 
             $serie->setNumberOfEpisodes($tv['number_of_episodes']);
             $serie->setModifiedAt(new DateTimeImmutable());
+        }
+        if ($serie->getStatus() !== $tv['status']) {
+            $whatsNew['status'] = $tv['status'];
+            $modified = true;
+
+            $serie->setStatus($tv['status']);
+            $serie->setModifiedAt(new DateTimeImmutable());
+        }
+        if ($serie->getOriginalName() !== $tv['original_name']) {
+            $whatsNew['original_name'] = $tv['original_name'];
+            $modified = true;
+
+            $serie->setOriginalName($tv['original_name']);
         }
         /*
          * Si quelque chose a changé, l'enregistrement est mis à jour

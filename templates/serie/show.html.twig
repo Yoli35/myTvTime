@@ -141,6 +141,12 @@
                     {% endif %}
                     {% if whatsNew %}
                         <div class="what-s-new">
+                            {% if whatsNew.original_name|length %}
+                                <div class="new-status">{{ whatsNew.original_name }}</div>
+                            {% endif %}
+                            {% if whatsNew.status|length %}
+                                <div class="new-status">{{ whatsNew.status|trans }}</div>
+                            {% endif %}
                             {% if whatsNew.episode %}
                                 <div class="new-episode">{{ whatsNew.episode }} {{ ((whatsNew.episode > 1)?'new episodes':'new episode')|trans }}</div>
                             {% endif %}
@@ -342,21 +348,23 @@
                                 <div class="label">{{ 'Similar Series'|trans }}</div>
                                 <div class="similar">
                                     {% for serie in similar.results %}
-                                        <div class="poster">
-                                            {% if serie.poster_path|length %}
-                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
-                                            {% else %}
-                                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
-                                                <div class="name">{{ serie.name }}</div>
-                                            {% endif %}
-                                            {% if serieIds|length %}
-                                                {% if serie.id in serieIds %}
-                                                    <div class="seen"><i class="fa-solid fa-eye"></i></div>
+                                        <a href="{{ path('app_serie_tmdb', {'id': serie.id}) }}?p={{ page }}&from={{ from }}" title="{{ serie.name }}">
+                                            <div class="poster">
+                                                {% if serie.poster_path|length %}
+                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
                                                 {% else %}
-                                                    <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
+                                                    <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
+                                                    <div class="name">{{ serie.name }}</div>
                                                 {% endif %}
-                                            {% endif %}
-                                        </div>
+                                                {% if serieIds|length %}
+                                                    {% if serie.id in serieIds %}
+                                                        <div class="seen"><i class="fa-solid fa-eye"></i></div>
+                                                    {% else %}
+                                                        <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </a>
                                     {% endfor %}
                                 </div>
                             </div>

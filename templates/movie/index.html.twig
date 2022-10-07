@@ -10,8 +10,6 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        {{ include('blocks/nav.html.twig', {thisPage: movie.title}) }}
-
         {% if movie.backdrop_path %}
             <div class="movie-header">
                 <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" class="d-block w-100" alt="{{ movie.title }}">
@@ -22,6 +20,8 @@
                 {{ include('blocks/movie/rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
             </div>
         {% endif %}
+
+        {{ include('blocks/nav.html.twig', {thisPage: movie.title}) }}
 
         <div class="movie-info">
             <div class="top">

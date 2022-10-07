@@ -8,7 +8,20 @@ html {
 
 body {
     background: var(--mtt-body-bg);
-    background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--mtt-body-bg-gradiant) 100%);
+    //background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--mtt-body-bg-gradiant) 100%);
+    background-image: linear-gradient(
+                    45deg,
+                    hsl(240deg, 100%, 20%) 0%,
+                    hsl(289deg, 100%, 21%) 4%,
+                    hsl(315deg, 100%, 27%) 14%,
+                    hsl(329deg, 100%, 36%) 27%,
+                    hsl(337deg, 100%, 43%) 43%,
+                    hsl(357deg, 91%, 59%) 59%,
+                    hsl(17deg, 100%, 59%) 74%,
+                    hsl(34deg, 100%, 53%) 87%,
+                    hsl(45deg, 100%, 50%) 96%,
+                    hsl(55deg, 100%, 50%) 100%
+    );
     background-attachment: fixed;
     color: var(--mtt-body-color);
     display: flex;
