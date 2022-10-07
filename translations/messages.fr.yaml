@@ -205,8 +205,13 @@ Also known as: Aussi connu•e comme
 Biography: Biographie
 Birthday: Date de naissance
 Death-day: Date du décès
-Known for Department: Métier
+Known for Department: Célèbre pour
 Place of Birth: Lieu de naissance
+Personal Informations: Informations personnelles
+Known appearances: Apparitions connues
+Gender: Genre
+Female: Femme
+Male: Homme
 Close: Fermer
 
 #Series
@@ -244,7 +249,7 @@ Watch now: Regarder maintenant
 Cast: Distribution des rôles
 Acting.he: Acteur
 Acting.she: Actrice
-Acting: Actrice/Acteur
+Acting: Interprétation
 Art.he: Directeur artistique
 Art.she: Directrice artistique
 Art: Direction artistique

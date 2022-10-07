@@ -280,7 +280,7 @@ class TMDBService
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/search/tv?api_key=' . $this->api_key . '&page=' . $page . '&language=' . $locale . '&query=' . $query . '&include_adult=false' . ($year ? ('&first_air_date_year=' . $year):''),
+                'https://api.themoviedb.org/3/search/tv?api_key=' . $this->api_key . '&page=' . $page . '&language=' . $locale . '&query=' . $query . '&include_adult=false' . ($year ? ('&first_air_date_year=' . $year) : ''),
             );
             try {
                 return $response->getContent();
@@ -455,7 +455,7 @@ class TMDBService
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/movie/'.$movieId.'/watch/providers?api_key=' . $this->api_key,
+                'https://api.themoviedb.org/3/movie/' . $movieId . '/watch/providers?api_key=' . $this->api_key,
             );
             try {
                 return $response->getContent();
@@ -469,18 +469,51 @@ class TMDBService
         }
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
-    public function getPerson($id, $locale): ?string
+    public function getPerson($id, $locale, $images = false): ?string
     {
-        if ($id && $locale) {
-            $response = $this->client->request('GET', 'https://api.themoviedb.org/3/person/' . $id . '?api_key=' . $this->api_key . '&language=' . $locale);
-            return $response->getContent();
+        $noOne = json_encode([]);
+        try {
+            if ($images) {
+                $response = $this->client->request(
+                    'GET',
+                    'https://api.themoviedb.org/3/person/' . $id . '?api_key=' . $this->api_key . '&language=' . $locale . '&append_to_response=images'
+                );
+            }
+            else {
+                $response = $this->client->request(
+                    'GET',
+                    'https://api.themoviedb.org/3/person/' . $id . '?api_key=' . $this->api_key . '&language=' . $locale
+                );
+            }
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return $noOne;
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return $noOne;
         }
-        return null;
+    }
+
+    public function getPersonCredits($id, $locale): ?string
+    {
+        $noCredits = json_encode([]);
+        try {
+                $response = $this->client->request(
+                    'GET',
+                    'https://api.themoviedb.org/3/person/' . $id . '/combined_credits?api_key=' . $this->api_key . '&language=' . $locale
+                );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return $noCredits;
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return $noCredits;
+        }
     }
 }

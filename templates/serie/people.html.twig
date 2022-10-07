@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {{ include('blocks/pageHeader.html.twig') }}
+    <div class="container">
+        <header>{{ include('blocks/nav.html.twig', {thisPage:('My Series'|trans)}) }}</header>
+        <main>
+            <div class="person">
+                <div class="left-column">
+                    <div class="profile">
+                        <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
+                    </div>
+                    <div class="infos">
+                        <h4>{{ 'Personal Informations'|trans }}</h4>
+                        <div class="info">
+                            <div>{{ 'Known for Department'|trans }}</div>
+                            <div>{{ people.known_for_department|trans }}</div>
+                        </div>
+                        <div class="info">
+                            <div>{{ 'Known appearances'|trans }}</div>
+                            <div>{{ credits.cast|length + credits.crew|length }}</div>
+                        </div>
+                        <div class="info">
+                            <div>{{ 'Gender'|trans }}</div>
+                            <div>{{ (people.gender == 1 ? 'Female' : (people.gender == 2 ? 'Male':'Other'))|trans }}</div>
+                        </div>
+                        <div class="info">
+                            <div>{{ 'Birthday'|trans }}</div>
+                            <div>{{ people.birthday|format_date('medium') }}</div>
+                        </div>
+                        {% if people.deathday %}
+                            <div class="info">
+                                <div>{{ 'Deathday'|trans }}</div>
+                                <div>{{ people.deathday|format_date('medium') }}</div>
+                            </div>
+                        {% endif %}
+                        <div class="info">
+                            <div>{{ 'Place of Birth'|trans }}</div>
+                            <div>{{ people.place_of_birth }}</div>
+                        </div>
+                        {% if people.homepage %}
+                            <div class="info">
+                                <div>{{ 'Homepage'|trans }}</div>
+                                <div>{{ people.homepage }}</div>
+                            </div>
+                        {% endif %}
+                        {% if people.also_known_as|length %}
+                            <div class="info">
+                                <div>{{ 'Also known as'|trans }}</div>
+                                {% for name in people.also_known_as %}
+                                    <div>{{ name }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if people.images|length %}
+                        {% if people.images.profiles|length %}
+                            <div class="images">
+                                {% for image in people.images.profiles %}
+                                    <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ image.file_path }}" alt="{{ people.name }}">
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+{#
+                    "biography" => ""
+                    "imdb_id" => "nm4055138"
+#}
+                </div>
+                <div class="right-column">
+                    <div class="content">
+                        <h1>{{ people.name }}</h1>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>{{ include('blocks/pageFooter.html.twig') }}</footer>
+    </div>
+{% endblock %}
+{% block morejs %}
+{% endblock %}

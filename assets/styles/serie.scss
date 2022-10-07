@@ -1044,13 +1044,17 @@
                     width: 100%;
 
                     .list {
-                        @include flex-row(unset, flex-start);
+                        @include flex-row(stretch, flex-start);
                         margin: 1em;
                         overflow-x: auto;
                         width: 100%;
 
-                        .people {
-                            @include human-profile();
+                        a {
+                            @include flex-row(stretch);
+
+                            .people {
+                                @include human-profile();
+                            }
                         }
                     }
                 }
@@ -1461,6 +1465,77 @@
                     padding: .25em 1em;
                 }
             }
+        }
+    }
+}
+
+.person {
+    @include flex-100(stretch, start);
+    min-height: 50vh;
+
+    .left-column {
+        @include flex-col(start, start);
+        background-color: var(--gradiant-ardoise-30);
+        border-radius: 1em;
+        min-height: 80vh;
+        width: 18em;
+
+        .profile {
+            border-radius: 1em 1em 0 0;
+
+            img {
+                border-radius: 1em 1em 0 0;
+                height: auto;
+                object-fit: cover;
+                width: 100%;
+            }
+
+            div {
+                @include flex-col();
+            }
+        }
+
+        .infos {
+            @include flex-col(start, start);
+            padding: 1em;
+
+            .info {
+                margin-bottom: .5em;
+
+                div {
+                    font-weight: 100;
+                    padding-left: 1em;
+                }
+
+                div:first-child {
+                    font-weight: 300;
+                    padding-left: 0;
+                }
+            }
+        }
+
+        .images {
+            padding: 1em;
+
+            img {
+                border-radius: .5em;
+                height: auto;
+                margin-bottom: 1em;
+                width: 100%;
+            }
+        }
+    }
+
+    .right-column {
+        @include flex-row(stretch, start);
+        padding-left: 1em;
+        width: calc(100% - 18em);
+
+        .content {
+            background-color: var(--gradiant-ardoise-30);
+            border-radius: 1em;
+            padding: 1em;
+            width: 100%;
         }
     }
 }

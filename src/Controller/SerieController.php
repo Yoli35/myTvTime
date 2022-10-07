@@ -914,6 +914,24 @@ class SerieController extends AbstractController
         return $this->redirectToRoute('app_serie_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/people/{id}', name: 'app_serie_people', methods: ['GET'])]
+    public function people(Request $request, $id, TMDBService $TMDBService, ImageConfiguration $imageConfiguration): Response
+    {
+        $standing = $TMDBService->getPerson($id, $request->getLocale(), true);
+        $people = json_decode($standing, true);
+        dump($people);
+        $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);
+        $credits = json_decode($standing, true);
+        dump($credits);
+
+        return $this->render('serie/people.html.twig', [
+            'people' => $people,
+            'credits' => $credits,
+            'user' => $this->getUser(),
+            'imageConfig' => $imageConfiguration->getConfig(),
+        ]);
+    }
+
     #[Route('/render/translation/fields', name: 'app_serie_render_translation_fields', methods: ['GET'])]
     public function renderTranslationFields(Request $request): Response
     {
