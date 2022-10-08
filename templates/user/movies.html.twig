@@ -5,7 +5,7 @@
 {% block morecss %}
 {% endblock %}
 {% block body %}
-{#    {% if app.debug=='dev' %}{{ dump() }}{% endif %}#}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
@@ -48,6 +48,8 @@
                     </div>
 
                 </div>
+
+                <div class="pinned-collection hide"><div class="wrapper"></div></div>
 
                 <div class="home-discovers">
                     <div id="content" class="content">
@@ -127,7 +129,7 @@
         ];
         window.addEventListener("DOMContentLoaded", () => {
             initButtons(
-                {{ user.id }},
+                    {{ user.id }},
                 "{{ locale }}",
                 [
                     "{{ path('app_personal_movies_export') }}",
@@ -141,6 +143,55 @@
                 ],
                 "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}",
             );
+            let _app_personal_movie_collection = "{{ path('app_personal_movie_collection', {id: 1}) }}";
+            let url = "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}";
+            document.querySelector('.choose-collection').querySelector('select').addEventListener("change", getCollection);
+            document.querySelector('.choose-collection').querySelector('input').addEventListener("change", showHideCollection);
+
+            function getCollection(evt) {
+                const collectionId = evt.target.value;
+                console.log({collectionId});
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    const wrapper = document.querySelector(".pinned-collection").querySelector(".wrapper");
+                    wrapper.innerHTML = "";
+                    let data = JSON.parse(this.response);
+                    console.log({data});
+                    data.forEach(item => {
+                        let movie = document.createElement("div");
+                        movie.classList.add("movie");
+                        let img = document.createElement("img");
+                        img.setAttribute("src", url + item.poster_path);
+                        img.setAttribute("alt", item.title);
+                        let title = document.createElement("div");
+                        title.classList.add("title");
+                        title.appendChild(document.createTextNode(item.title));
+                        movie.appendChild(img);
+                        movie.appendChild(title);
+                        wrapper.appendChild(movie);
+                    });
+                }
+                xhr.open("GET", _app_personal_movie_collection.substring(0, _app_personal_movie_collection.length - 1) + collectionId);
+                xhr.send();
+            }
+
+            function showHideCollection() {
+                const pinned = document.querySelector(".pinned-collection");
+
+                if (pinned.classList.contains("show")) {
+                    pinned.classList.remove("show");
+                    setTimeout(() => {
+                        pinned.classList.add("hide");
+                    }, 300);
+                } else {
+                    pinned.classList.remove("hide");
+                    setTimeout(() => {
+                        pinned.classList.add("show");
+                    }, 0);
+                }
+            }
+
             initMovieStuff(paths, "", "{{ locale }}");
         })
     </script>

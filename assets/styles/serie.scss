@@ -621,51 +621,7 @@
                             @include flex-100(start, start);
 
                             .switch {
-                                border: 2px solid var(--gradiant-ardoise-80);
-                                border-radius: calc(.5em + 2px);
-                                cursor: pointer;
-                                display: inline-block;
-                                height: calc(1em + 4px);
-                                margin-left: auto;
-                                margin-right: .25em;
-                                overflow: hidden;
-                                position: relative;
-                                width: calc(2em + 4px);
-
-                                input {
-                                    height: 0;
-                                    position: absolute;
-                                    top: -2em;
-                                    width: 0;
-
-                                    + span {
-                                        background: var(--gradiant-ardoise-80);
-                                        border-radius: .5em;
-                                        inset: 0;
-                                        position: absolute;
-
-                                        &:before {
-                                            background: white;
-                                            border-radius: 50%;
-                                            content: "";
-                                            display: inline-block;
-                                            height: 1em;
-                                            left: 0;
-                                            position: absolute;
-                                            top: 0;
-                                            transition: all .2s ease-in-out;
-                                            width: 1em;
-                                        }
-                                    }
-
-                                    &:checked + span {
-                                        background: var(--gradiant-green-30);
-                                    }
-
-                                    &:checked + span:before {
-                                        left: 1em;
-                                    }
-                                }
+                                @include switcher(var(--gradiant-green-30), var(--gradiant-ardoise-80))
                             }
 
                             .anim-settings-toggler {
@@ -1499,6 +1455,10 @@
             @include flex-col(start, start);
             padding: 1em;
 
+            h4 {
+                color: hsl(0, 100%, 50%);
+
+            }
             .info {
                 margin-bottom: .5em;
 
@@ -1536,6 +1496,15 @@
             border-radius: 1em;
             padding: 1em;
             width: 100%;
+
+            h1 {
+                color: var(--gradiant-ardoise-80);
+                font-weight: 300;
+            }
+
+            .bio {
+                font-weight: 100;
+            }
         }
     }
 }

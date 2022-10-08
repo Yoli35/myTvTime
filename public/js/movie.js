@@ -134,7 +134,10 @@ const txt = {
     },
 }
 const personalModal = document.querySelector("#personModal");
-const personalModalClose = personalModal.querySelectorAll("button");
+let personalModalClose;
+if (personalModal) {
+    personalModalClose = personalModal.querySelectorAll("button");
+}
 
 function initMovieStuff(paths, profileUrl, locale) {
     // querySelectorAll renvoie une nodeList, vide si aucune correspondance n'est trouvée
@@ -172,11 +175,12 @@ function initMovieStuff(paths, profileUrl, locale) {
         profile.addEventListener("click", getProfile);
     });
 
-    personalModal.addEventListener("click", closeProfile);
-    personalModalClose.forEach(button=> {
-        button.addEventListener("click", closeProfile);
-    });
-
+    if (personalModal) {
+        personalModal.addEventListener("click", closeProfile);
+        personalModalClose.forEach(button => {
+            button.addEventListener("click", closeProfile);
+        });
+    }
 }
 
 function closeProfile() {

@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\MovieCollection;
 use App\Entity\User;
+use App\Entity\UserMovie;
 use App\Form\UserType;
+use App\Repository\MovieCollectionRepository;
 use App\Repository\UserMovieRepository;
 use App\Repository\UserRepository;
 use App\Service\BetaSeriesService;
@@ -30,7 +33,9 @@ class UserController extends AbstractController
 
     public function __construct(
         private readonly LocaleSwitcher $localeSwitcher,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws TransportExceptionInterface
@@ -78,7 +83,7 @@ class UserController extends AbstractController
             $userPreferredLanguage = $user->getPreferredLanguage();
 //
 //            if ($currentLocale != $userPreferredLanguage) {
-                $this->localeSwitcher->setLocale($userPreferredLanguage);
+            $this->localeSwitcher->setLocale($userPreferredLanguage);
 //            }
 
             return $this->redirectToRoute('app_personal_profile');
@@ -108,7 +113,7 @@ class UserController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/personal/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function userMovies(Request $request, UserMovieRepository $userMovieRepository, MovieController $movieController, ImageConfiguration $imageConfiguration): Response
+    public function userMovies(Request $request, UserMovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -125,10 +130,10 @@ class UserController extends AbstractController
         }
         $runtime['total'] = $total;
         $runtime['minutes'] = $total % 60;
-        $runtime['hours'] = floor($total/60) % 24;
-        $runtime['days'] = floor($total/60/24) % 30.41666667;
-        $runtime['months'] = floor($total/60/24/30.41666667) % 12;
-        $runtime['years'] = floor($total/60/24/365);
+        $runtime['hours'] = floor($total / 60) % 24;
+        $runtime['days'] = floor($total / 60 / 24) % 30.41666667;
+        $runtime['months'] = floor($total / 60 / 24 / 30.41666667) % 12;
+        $runtime['years'] = floor($total / 60 / 24 / 365);
 
         return $this->render('user/movies.html.twig', [
             'discovers' => $movies,
@@ -139,6 +144,8 @@ class UserController extends AbstractController
             'imageConfig' => $imageConfig,
             'user' => $user,
             'dRoute' => 'app_movie',
+            'from' => 'user movies',
+            'collections' => $collectionRepository->findBy(['user' => $user]),
         ]);
     }
 
@@ -154,7 +161,7 @@ class UserController extends AbstractController
     public function getUserMovies($userId, $offset, $userMovieRepository): array
     {
         $userMovies = $userMovieRepository->findUserMovies($userId, $offset);
-        $movies=[];
+        $movies = [];
         foreach ($userMovies as $userMovie) {
             $movie = $userMovie;
             $collections = $userMovieRepository->userMovieGetCollections($userMovie['id']);
@@ -162,6 +169,33 @@ class UserController extends AbstractController
             $movies[] = $movie;
         }
         return $movies;
+    }
+
+    #[Route('/{_locale}/personal/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function getCollection($id, MovieCollectionRepository $collectionRepository): Response
+    {
+        $collection = $collectionRepository->find($id);
+        dump($collection);
+        $movies = $this->moviesToArray($collection->getMovies());
+        dump($movies);
+        return $this->json($movies);
+    }
+
+    private function moviesToArray($movies): array
+    {
+        $tab = [];
+        /** @var UserMovie $movie */
+        foreach ($movies as $movie) {
+            $item['id'] = $movie->getId();
+            $item['title'] = $movie->getTitle();
+            $item['original_title'] = $movie->getOriginalTitle();
+            $item['poster_path'] = $movie->getPosterPath();
+            $item['movie_db_id'] = $movie->getMovieDbId();
+            $item['release_date'] = $movie->getReleaseDate();
+            $item['runtime'] = $movie->getRuntime();
+            array_unshift($tab, $item);
+        }
+        return $tab;
     }
 
     /**
@@ -191,10 +225,10 @@ class UserController extends AbstractController
         $id = $request->query->get('id');
         $movies = $this->movie2export($userMovieRepository->findAllUserMovies($id));
         $count = count($movies);
-        $json = $this->formatJson('{'.$this->json_header.'"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
+        $json = $this->formatJson('{' . $this->json_header . '"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
 
         $filename = $this->saveFile($json, $user);
-    //    $url = $this->generateUrl('app_json');
+        //    $url = $this->generateUrl('app_json');
         $sample = $this->sample($request, $userMovieRepository, $id, null);
 
         return $this->json([
@@ -207,11 +241,11 @@ class UserController extends AbstractController
         ]);
     }
 
-    function movie2export($movies):array
+    function movie2export($movies): array
     {
         $exports = [];
         $count = count($movies);
-        for ($i=0;$i<$count;$i++) {
+        for ($i = 0; $i < $count; $i++) {
 
             $movie = $movies[$i];
             $export['id'] = $movie['id'];
@@ -227,11 +261,11 @@ class UserController extends AbstractController
         return $exports;
     }
 
-/*    #[Route('/movielist/', name: 'app_json')]
-    public function jsonUrl()
-    {
+    /*    #[Route('/movielist/', name: 'app_json')]
+        public function jsonUrl()
+        {
 
-    }*/
+        }*/
 
     #[Route('/{_locale}/movielist/updateSample', name: 'app_json_sample', requirements: ['_locale' => 'fr|en|de|es'])]
     public function updateSample(Request $request, UserMovieRepository $userMovieRepository, UserRepository $userRepository): JsonResponse
@@ -246,7 +280,7 @@ class UserController extends AbstractController
         $movies = $this->movie2export($this->userMoviesFromList($userId, $userMovieRepository, $ids));
         $count = count($movies);
         $jsonMovies = json_encode($movies);
-        $json = '{'.$this->json_header.'"total_results":' . $count . ',"results":' . $jsonMovies . '}';
+        $json = '{' . $this->json_header . '"total_results":' . $count . ',"results":' . $jsonMovies . '}';
         $json = $this->formatJson($json);
         $this->saveFile($json, $userRepository->find($userId), $filename);
 
@@ -299,30 +333,30 @@ class UserController extends AbstractController
         return $filename;
     }
 
-    private function sample(Request $request, UserMovieRepository $userMovieRepository, int $user_id, mixed $ids):string
+    private function sample(Request $request, UserMovieRepository $userMovieRepository, int $user_id, mixed $ids): string
     {
         $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
 
         $movies = $this->movie2export($this->userMoviesFromList($user_id, $userMovieRepository, $ids));
         $count = count($movies);
 
-        $sample = $this->formatJson('{'.$this->json_header.'"total_results":'.$count.',"results":', 0, $tab, '<br>');
+        $sample = $this->formatJson('{' . $this->json_header . '"total_results":' . $count . ',"results":', 0, $tab, '<br>');
         if ($count == 1) {
-            $sample .= ' [<br>'.$tab.$tab;
+            $sample .= ' [<br>' . $tab . $tab;
             $sample .= $this->formatJson(json_encode($movies[0]), 2, $tab, '<br>');
-            $sample .= '<br>'.$tab.']';
+            $sample .= '<br>' . $tab . ']';
         }
         if ($count == 2) {
             $sample .= ' ' . $this->formatJson(json_encode($movies), 1, $tab, '<br>');
         }
         if ($count > 2) {
-            $sample .= ' [<br>'.$tab.$tab;
+            $sample .= ' [<br>' . $tab . $tab;
             $sample .= $this->formatJson(json_encode($movies[0]), 2, $tab, '<br>');
 
-            $sample .= $this->andOther($request->getLocale(), $count, $tab).$tab.$tab;
+            $sample .= $this->andOther($request->getLocale(), $count, $tab) . $tab . $tab;
 
             $sample .= $this->formatJson(json_encode($movies[$count - 1]), 2, $tab, '<br>');
-            $sample .= '<br>'.$tab.']';
+            $sample .= '<br>' . $tab . ']';
         }
         $sample .= '<br>}';
 
@@ -334,7 +368,7 @@ class UserController extends AbstractController
 
     private function userMoviesFromList(int $userId, UserMovieRepository $userMovieRepository, mixed $list): array
     {
-        if ($list==null) {
+        if ($list == null) {
             $list = [];
             $userMovies = $userMovieRepository->findUserMovieIds($userId);
             foreach ($userMovies as $userMovie) {
@@ -344,7 +378,7 @@ class UserController extends AbstractController
         return $userMovieRepository->getUserMovieFromIdList($userId, $list);
     }
 
-    private function andOther($locale, $count, $tab):string
+    private function andOther($locale, $count, $tab): string
     {
         return match ($locale) {
             'fr' => ',<br>' . $tab . $tab . '<i>[...] /* et ' . ($count - 2) . ' autre' . ($count > 3 ? 's' : '') . ' */</i><br>',
@@ -439,7 +473,7 @@ class UserController extends AbstractController
         $standing = $betaSeriesService->showsList(rand(1, 10));
         $discovers = json_decode($standing, true);
         $discover = $discovers['shows'][rand(0, 19)];
-        $banner['image'] = $discover['images']['show'] ? : $discover['images']['banner'];
+        $banner['image'] = $discover['images']['show'] ?: $discover['images']['banner'];
         $banner['title'] = $discover['title'];
         return $banner;
     }

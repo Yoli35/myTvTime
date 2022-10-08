@@ -11,6 +11,23 @@
             {% if from == 'youtube' %}
                 <div class="tag-button"><a href="{{ path('app_youtube_search') }}" title="{{ 'Go to the search by tag page'|trans }}">{{ 'Search by tag'|trans }}</a></div>
             {% endif %}
+            {% if from == 'user movies' %}
+                {% if collections|length %}
+                    <div class="choose-collection">
+                        <label>{{ 'Pin a collection'|trans }}
+                            <select>
+                                {% for c in collections %}
+                                    <option value="{{ c.id }}">{{ c.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                        <label class="switch">
+                            <input type="checkbox"/>
+                            <span></span>
+                        </label>
+                    </div>
+                {% endif %}
+            {% endif %}
         {% endif %}
     </ol>
 </nav>

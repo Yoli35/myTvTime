@@ -8,6 +8,32 @@ $fa-font-path: "../webfonts";
 
     --button-border-radius: .25em;
 
+    --gradiant-light:  linear-gradient(
+                    45deg,
+                    hsl(240deg, 100%, 20%) 0%,
+                    hsl(289deg, 100%, 21%) 4%,
+                    hsl(315deg, 100%, 27%) 14%,
+                    hsl(329deg, 100%, 36%) 27%,
+                    hsl(337deg, 100%, 43%) 43%,
+                    hsl(357deg, 91%, 59%) 59%,
+                    hsl(17deg, 100%, 59%) 74%,
+                    hsl(34deg, 100%, 53%) 87%,
+                    hsl(45deg, 100%, 50%) 96%,
+                    hsl(55deg, 100%, 50%) 100%);
+
+    --gradiant-dark:  linear-gradient(
+                    45deg,
+                    hsl(240deg, 100%, 10%) 0%,
+                    hsl(284deg, 100%, 10%) 11%,
+                    hsl(315deg, 100%, 10%) 22%,
+                    hsl(332deg, 100%, 10%) 33%,
+                    hsl(343deg, 100%, 10%) 44%,
+                    hsl(357deg, 83%, 10%) 56%,
+                    hsl(20deg, 100%, 10%) 67%,
+                    hsl(31deg, 100%, 10%) 78%,
+                    hsl(44deg, 100%, 10%) 89%,
+                    hsl(60deg, 100%, 10%) 100%);
+
     --serie-add: hsl(212, 43%, 70%);
     --serie-seen: hsl(105, 50%, 50%);
     --movie-add: hsl(212, 43%, 70%);
@@ -30,6 +56,7 @@ $fa-font-path: "../webfonts";
     --gradiant-ardoise-20: hsl(212, 43%, 20%);
     --gradiant-ardoise-10: hsl(212, 43%, 10%);
     --gradiant-ardoise-10-alpha-90: hsla(212, 43%, 10%, .9);
+    --gradiant-ardoise-10-alpha-50: hsla(212, 43%, 10%, .5);
     --gradiant-ardoise-10-alpha-20: hsla(212, 43%, 10%, .2);
     --gradiant-ardoise-0: hsl(212, 43%, 0%);
 
@@ -295,4 +322,53 @@ $fa-font-path: "../webfonts";
             translate: -100% 0;
         }
     }
+}
+
+@mixin switcher($checked, $unchecked) {
+    border: 2px solid var(--gradiant-ardoise-80);
+    border-radius: calc(.5em + 2px);
+    cursor: pointer;
+    display: inline-block;
+    height: calc(1em + 4px);
+    margin-left: auto;
+    margin-right: .25em;
+    overflow: hidden;
+    position: relative;
+    width: calc(2em + 4px);
+
+    input {
+        height: 0;
+        position: absolute;
+        top: -2em;
+        width: 0;
+
+        + span {
+            background: $unchecked;
+            border-radius: .5em;
+            inset: 0;
+            position: absolute;
+
+            &:before {
+                background: white;
+                border-radius: 50%;
+                content: "";
+                display: inline-block;
+                height: 1em;
+                left: 0;
+                position: absolute;
+                top: 0;
+                transition: all .2s ease-in-out;
+                width: 1em;
+            }
+        }
+
+        &:checked + span {
+            background: $checked;
+        }
+
+        &:checked + span:before {
+            left: 1em;
+        }
+    }
+
 }

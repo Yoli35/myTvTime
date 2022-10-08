@@ -23,20 +23,24 @@
                             <div>{{ 'Gender'|trans }}</div>
                             <div>{{ (people.gender == 1 ? 'Female' : (people.gender == 2 ? 'Male':'Other'))|trans }}</div>
                         </div>
-                        <div class="info">
-                            <div>{{ 'Birthday'|trans }}</div>
-                            <div>{{ people.birthday|format_date('medium') }}</div>
-                        </div>
+                        {% if people.birthday %}
+                            <div class="info">
+                                <div>{{ 'Birthday'|trans }}</div>
+                                <div>{{ people.birthday|format_date('medium') }}</div>
+                            </div>
+                        {% endif %}
                         {% if people.deathday %}
                             <div class="info">
                                 <div>{{ 'Deathday'|trans }}</div>
                                 <div>{{ people.deathday|format_date('medium') }}</div>
                             </div>
                         {% endif %}
-                        <div class="info">
-                            <div>{{ 'Place of Birth'|trans }}</div>
-                            <div>{{ people.place_of_birth }}</div>
-                        </div>
+                        {% if people.place_of_birth %}
+                            <div class="info">
+                                <div>{{ 'Place of Birth'|trans }}</div>
+                                <div>{{ people.place_of_birth }}</div>
+                            </div>
+                        {% endif %}
                         {% if people.homepage %}
                             <div class="info">
                                 <div>{{ 'Homepage'|trans }}</div>
@@ -61,14 +65,19 @@
                             </div>
                         {% endif %}
                     {% endif %}
-{#
+                    {#
                     "biography" => ""
                     "imdb_id" => "nm4055138"
-#}
+                    #}
                 </div>
                 <div class="right-column">
                     <div class="content">
                         <h1>{{ people.name }}</h1>
+                        {% if people.biography|length %}
+                            <div class="bio">
+                               {{ people.biography|nl2br }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
