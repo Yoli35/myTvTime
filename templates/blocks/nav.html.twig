@@ -16,8 +16,9 @@
                     <div class="choose-collection">
                         <label>{{ 'Pin a collection'|trans }}
                             <select>
+                                <option value="0">{{ 'Select a collection'|trans }}</option>
                                 {% for c in collections %}
-                                    <option value="{{ c.id }}">{{ c.title }}</option>
+                                    <option value="{{ c.id }}">{{ c.title }} ({{ c.movies|length }})</option>
                                 {% endfor %}
                             </select>
                         </label>

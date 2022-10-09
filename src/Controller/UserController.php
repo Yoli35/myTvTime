@@ -175,9 +175,7 @@ class UserController extends AbstractController
     public function getCollection($id, MovieCollectionRepository $collectionRepository): Response
     {
         $collection = $collectionRepository->find($id);
-        dump($collection);
         $movies = $this->moviesToArray($collection->getMovies());
-        dump($movies);
         return $this->json($movies);
     }
 
