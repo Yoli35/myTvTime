@@ -764,6 +764,15 @@
     }
 }
 
+.ygg {
+    bottom: 1rem;
+    color: var(--gradiant-purple-50);
+    cursor: pointer;
+    font-size: 1.5em;
+    position: absolute;
+    right: 4rem;
+}
+
 .serie-page {
     .header {
         @include flex-row(flex-start, flex-start);
@@ -956,15 +965,6 @@
                     font-weight: 100;
                 }
             }
-        }
-
-        .ygg {
-            bottom: 1rem;
-            color: var(--gradiant-purple-50);
-            cursor: pointer;
-            font-size: 1.5em;
-            position: absolute;
-            right: 4rem;
         }
 
         .add {

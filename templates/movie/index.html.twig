@@ -14,6 +14,11 @@
             <div class="movie-header">
                 <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" class="d-block w-100" alt="{{ movie.title }}">
                 {{ include('blocks/movie/rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
+                <div class="ygg">
+                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </a>
+                </div>
             </div>
         {% else %}
             <div class="movie-header no-header">

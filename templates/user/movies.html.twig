@@ -146,39 +146,87 @@
                 "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}",
             );
             let _app_personal_movie_collection = "{{ path('app_personal_movie_collection', {id: 1}) }}";
+            let _app_movie = "{{ path('app_movie', {id:0}) }}";
             let url = "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}";
             document.querySelector('.choose-collection').querySelector('select').addEventListener("change", getCollection);
             document.querySelector('.choose-collection').querySelector('input').addEventListener("change", showHideCollection);
 
             function getCollection(evt) {
                 const collectionId = evt.target.value;
+                const pinned = document.querySelector(".pinned-collection");
 
                 if (collectionId > 0) {
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
+                        const body = document.querySelector("body");
                         const wrapper = document.querySelector(".pinned-collection").querySelector(".wrapper");
                         wrapper.innerHTML = "";
                         let data = JSON.parse(this.response);
                         console.log({data});
-                        data.forEach(item => {
+                        data.forEach((item = {id: 0, title: "", original_title: "", poster_path: "", movie_db_id: 0, release_date: "", runtime: 0}) => {
+                            let a = document.createElement("a");
+                            a.setAttribute("href", _app_movie.substring(0, _app_movie.length - 1) + item.movie_db_id);
                             let movie = document.createElement("div");
                             movie.classList.add("movie");
+                            movie.setAttribute("data-id", item.id.toString());
                             let img = document.createElement("img");
                             img.setAttribute("src", url + item.poster_path);
                             img.setAttribute("alt", item.title);
                             let title = document.createElement("div");
                             title.classList.add("title");
                             title.appendChild(document.createTextNode(item.title));
+
                             movie.appendChild(img);
                             movie.appendChild(title);
-                            wrapper.appendChild(movie);
+                            movie.addEventListener("mouseenter", showAbout);
+                            movie.addEventListener("mouseleave", hideAbout);
+                            a.appendChild(movie);
+                            wrapper.appendChild(a);
+
+                            img = document.createElement("img");
+                            img.setAttribute("src", url + item.poster_path);
+                            img.setAttribute("alt", item.title);
+
+                            let about = document.createElement("div");
+                            about.classList.add("about-pinned-movie", "hide");
+                            about.setAttribute("data-id", item.id.toString());
+                            about.appendChild(img);
+                            let infos = document.createElement("div");
+                            infos.classList.add("infos");
+                            title = document.createElement("h4");
+                            title.appendChild(document.createTextNode(item.title));
+                            infos.appendChild(title);
+                            let info= document.createElement("div");
+                            let dateT = item.release_date + 'T00:00:00';
+                            let released = new Date(dateT);
+                            const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
+                            info.appendChild(document.createTextNode(txt.movie.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
+                            infos.appendChild(info);
+                            info= document.createElement("div");
+                            info.appendChild(document.createTextNode(txt.movie.original_title[_locale] + ' : ' + item.original_title));
+                            infos.appendChild(info);
+                            info= document.createElement("div");
+                            info.appendChild(document.createTextNode(txt.movie.runtime[_locale] + ' : ' + item.runtime + ' ' + txt.movie.minutes[_locale]));
+                            infos.appendChild(info);
+                            about.appendChild(infos);
+
+                            body.appendChild(about);
                         });
+
+                        if (pinned.classList.contains("hide")) {
+                            pinned.classList.remove("hide");
+                            setTimeout(() => {
+                                pinned.classList.remove("mini");
+                            }, 0);
+                            setTimeout(() => {
+                                pinned.classList.add("show");
+                            }, 0);
+                            document.querySelector('.choose-collection').querySelector('input').checked = true;
+                        }
                     }
                     xhr.open("GET", _app_personal_movie_collection.substring(0, _app_personal_movie_collection.length - 1) + collectionId);
                     xhr.send();
                 } else {
-                    const pinned = document.querySelector(".pinned-collection");
-
                     if (pinned.classList.contains("show")) {
                         pinned.classList.remove("show");
                         setTimeout(() => {
@@ -190,6 +238,45 @@
                     }
                     document.querySelector('.choose-collection').querySelector('input').checked = false;
                 }
+            }
+
+            function showAbout(evt) {
+                const body = document.querySelector("body");
+                const width = body.clientWidth;
+                const middleX = width / 2;
+                const movie = evt.target;
+                const id = movie.getAttribute("data-id");
+                const selector = '.about-pinned-movie[data-id="' + id + '"]';
+                const about = document.querySelector(selector);
+                let style, x, y = evt.pageY + 20;
+
+                if (evt.pageX < middleX) {
+                    x = evt.pageX - 288;
+                    x = x < 16 ? 16 : x;
+                    style = "left: " + x + "px;"
+                }
+                else {
+                    x = width - (evt.pageX + 288);
+                    x = x < 16 ? 16 : x;
+                    style = "left: unset; right: " + x + "px;"
+                }
+
+                about.setAttribute("style", style + " top: " + y + "px;");
+                about.classList.remove("hide");
+                about.classList.add("show");
+            }
+
+            function hideAbout(evt) {
+                const movie = evt.target;
+                const id = movie.getAttribute("data-id");
+                const selector = '.about-pinned-movie[data-id="' + id + '"]';
+                const about = document.querySelector(selector);
+
+                about.classList.remove("show");
+                setTimeout(()=> {
+                    about.classList.add("hide");
+                    about.removeAttribute("style");
+                }, 300);
             }
 
             function showHideCollection() {

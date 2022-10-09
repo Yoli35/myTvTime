@@ -32,6 +32,24 @@ const txt = {
             'de': 'Erscheinungsdatum',
             'es': 'Fecha de lanzamiento'
         },
+        'original_title': {
+            'fr': 'Titre original ',
+            'en': 'Original title',
+            'de': 'Originaltitel',
+            'es': 'Título original'
+        },
+        'runtime': {
+            'fr': 'Durée ',
+            'en': 'Runtime',
+            'de': 'Dauer',
+            'es': 'Duración'
+        },
+        'minutes': {
+            'fr': 'minutes ',
+            'en': 'minutes',
+            'de': 'Minuten',
+            'es': 'minutos'
+        },
         'add': {
             'fr': 'Ce film a été ajouté à votre liste de films vus avec succès !',
             'en': 'This movie has been added to your list of movies successfully viewed!',

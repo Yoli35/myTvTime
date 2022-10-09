@@ -80,6 +80,10 @@ class MovieController extends AbstractController
             $movieDetail['release_date'] = "";
         }
 
+        $ygg = str_replace(' ', '+', $movieDetail['title']);
+        $ygg = str_replace('\'', '+', $ygg);
+
+
         return $this->render('movie/index.html.twig', [
             'movie' => $movieDetail,
             'recommendations' => $recommendations['results'],
@@ -91,6 +95,7 @@ class MovieController extends AbstractController
             'collections' => $collections,
             'movieCollection' => $movieCollectionIds,
             'user' => $user,
+            'ygg' => $ygg,
             'imageConfig' => $imageConfig,
             'locale' => $locale,
         ]);
