@@ -207,7 +207,7 @@
         const translateDuration = 3000;
         const removeDelay = 100;
         const actionDelay = 10;
-        let slideInterval, slideImages, slideNames, slideIndex;
+        let slideInterval, slideImages, slideNames, slideLinks, slideIndex;
         let canNotify;
 
         const leaf_settings = getLeafSettings();
@@ -268,6 +268,10 @@
                 header.style.setProperty("--quote-opacity", op);
                 op -= 0.005;
                 if (op < 0.0) {
+                    header.removeChild(header.querySelector(".quote.n1"));
+                    header.removeChild(header.querySelector(".quote.n2"));
+                    header.removeChild(header.querySelector(".quote.n3"));
+                    header.removeChild(header.querySelector(".quote.n4"));
                     clearInterval(intervalId);
                     backdropSlide();
                 }
@@ -280,6 +284,7 @@
 
             slideImages = getBackdrops();
             slideNames = getNames();
+            slideLinks = getLinks();
             slideIndex = 0;
             modulo = slideImages.length;
 
@@ -323,10 +328,11 @@
         function slideFunc() {
             const header = document.querySelector(".header");
             const modulo = slideImages.length;
-            let filename, div, nameDiv, name, backdrop;
+            let filename, div, nameDiv, name, backdrop, link, href;
 
             filename = slideImages[slideIndex];
             name = slideNames[slideIndex];
+            href = slideLinks[slideIndex];
             backdrop = header.querySelector(".backdrop");
             div = document.createElement("div");
             div.classList.add("backdrop", "right");
@@ -335,6 +341,11 @@
             nameDiv.appendChild(document.createTextNode(name));
             nameDiv.classList.add("name");
             div.appendChild(nameDiv);
+            link = document.createElement("a");
+            link.classList.add("link");
+            link.setAttribute("href", href);
+            link.appendChild(document.createTextNode("Voir la fiche"));
+            div.appendChild(link);
             header.appendChild(div);
 
             setTimeout(() => {
@@ -386,7 +397,7 @@
         function setSlide() {
             const header = document.querySelector(".header");
             const modulo = slideImages.length;
-            let filename, name, backdrop, nameDiv;
+            let filename, name, backdrop, nameDiv, link, href;
 
             let leftBackdrop = document.querySelector(".backdrop.left");
             if (leftBackdrop) {
@@ -394,18 +405,25 @@
             }
             filename = slideImages[slideIndex];
             name = slideNames[slideIndex];
+            href = slideLinks[slideIndex];
             backdrop = header.querySelector(".backdrop");
             backdrop.setAttribute("style", "background-image: url('" + filename + "')");
             nameDiv = backdrop.querySelector(".name");
-            // avant le premier défilement, il n'y a pas de div.name
+            link = backdrop.querySelector("a");
+            // avant le premier défilement, il n'y a pas de div.name ni de lien
             if (nameDiv) {
                 nameDiv.removeChild(nameDiv.firstChild);
                 nameDiv.appendChild(document.createTextNode(name));
+                link.setAttribute("href", href);
             } else {
                 nameDiv = document.createElement("div");
                 nameDiv.appendChild(document.createTextNode(name));
                 nameDiv.classList.add("name");
                 backdrop.appendChild(nameDiv);
+                link = document.createElement("a");
+                link.classList.add("link");
+                link.setAttribute("href", href);
+                backdrop.appendChild(link);
             }
             indicators(header, slideIndex + 1, modulo);
         }
@@ -447,6 +465,16 @@
             let tab = [], i = 0;
             infos.forEach(backdrop => {
                 tab[i++] = backdrop.firstElementChild.innerHTML;
+            });
+            return tab;
+        }
+
+        function getLinks() {
+            const wrapper = document.querySelector(".wrapper");
+            const links = wrapper.querySelectorAll("a");
+            let tab = [], i = 0;
+            links.forEach(link => {
+                tab[i++] = link.getAttribute("href");
             });
             return tab;
         }

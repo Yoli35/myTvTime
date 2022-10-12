@@ -106,7 +106,7 @@ main {
 
 .nav-toggler {
     align-items: center;
-    background: var(--gradiant-ardoise-10-alpha-50);
+    background: var(--gradiant-grey-10-alpha-50);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -155,8 +155,8 @@ main {
 
 .nav-menu {
     align-items: center;
-    background: var(--gradiant-ardoise-10-alpha-90);
-    border-bottom: 2px solid var(--gradiant-ardoise-20);
+    background: var(--gradiant-grey-10-alpha-90);
+    border-bottom: 2px solid var(--gradiant-grey-20);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -169,7 +169,7 @@ main {
     z-index: 120;
 
     > a {
-        color: var(--gradiant-ardoise-30);
+        color: var(--gradiant-grey-30);
         display: block;
         font-size: 1em;
         font-weight: 100;
@@ -194,7 +194,7 @@ main {
         }
 
         &:hover {
-            background-color: var(--gradiant-ardoise-30-alpha-90);
+            background-color: var(--gradiant-grey-30-alpha-90);
             //color: #123333;
             font-weight: bold;
 
@@ -228,7 +228,7 @@ main {
 
     .welcome {
         align-items: center;
-        background: var(--gradiant-ardoise-30-alpha-90);
+        background: var(--gradiant-grey-30-alpha-90);
         border-radius: 1.5em;
         display: flex;
         padding: .25em .25em .25em .75em;
@@ -281,7 +281,7 @@ nav.active {
 
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '◦';
-    background-color: var(--gradiant-ardoise-10);
+    background-color: var(--gradiant-grey-10);
     border-radius: .5em;
     margin: 1em;
     padding: .5em 1.5em;
@@ -295,29 +295,29 @@ nav.active {
 
         .breadcrumb-item {
             span {
-                color: var(--gradiant-ardoise-60);
+                color: var(--gradiant-grey-60);
                 font-size: .75em;
                 font-variant: small-caps;
                 font-weight: 100;
             }
 
             &.active {
-                color: var(--gradiant-ardoise-60);
+                color: var(--gradiant-grey-60);
             }
 
             &:before {
-                color: var(--gradiant-ardoise-60);
+                color: var(--gradiant-grey-60);
             }
 
         }
 
         .bracket {
-            color: var(--gradiant-ardoise-30);
+            color: var(--gradiant-grey-30);
             padding: 0 .5em;
         }
 
         .menu {
-            color: var(--gradiant-ardoise-60);
+            color: var(--gradiant-grey-60);
             cursor: pointer;
             height: 2em;
             margin: 0 2em 0 1em;
@@ -347,7 +347,7 @@ nav.active {
             }
 
             img {
-                border: 2px solid var(--gradiant-ardoise-80);
+                border: 2px solid var(--gradiant-grey-80);
                 border-radius: .5em;
                 height: 2em;
                 object-fit: cover;
@@ -355,9 +355,9 @@ nav.active {
             }
 
             .menu-items {
-                background-color: var(--gradiant-ardoise-30);
+                background-color: var(--gradiant-grey-30);
                 border-radius: .25em;
-                box-shadow: 0 0 1em var(--gradiant-ardoise-10-alpha-20);
+                box-shadow: 0 0 1em var(--gradiant-grey-10-alpha-20);
                 display: none;
                 left: -6em;
                 overflow: hidden;
@@ -370,15 +370,15 @@ nav.active {
                     width: 100%;
 
                     a {
-                        color: var(--gradiant-ardoise-80);
+                        color: var(--gradiant-grey-80);
                         display: block;
                         font-weight: 100;
                         padding: 0 1em;
                         width: 100%;
 
                         &:hover {
-                            background-color: var(--gradiant-ardoise-80);
-                            color: var(--gradiant-ardoise-30);
+                            background-color: var(--gradiant-grey-80);
+                            color: var(--gradiant-grey-30);
                         }
                     }
                 }
@@ -415,8 +415,8 @@ nav.active {
                 position: relative;
 
                 &::after {
-                    border-bottom: 2px solid var(--gradiant-ardoise-80);
-                    border-right: 2px solid var(--gradiant-ardoise-80);
+                    border-bottom: 2px solid var(--gradiant-grey-80);
+                    border-right: 2px solid var(--gradiant-grey-80);
                     content: '';
                     height: .5em;
                     position: absolute;
@@ -429,8 +429,8 @@ nav.active {
 
                 select {
                     appearance: unset;
-                    background: var(--gradiant-ardoise-30);
-                    color: var(--gradiant-ardoise-80);
+                    background: var(--gradiant-grey-30);
+                    color: var(--gradiant-grey-80);
                     font-weight: 100;
                     margin: 0 1em;
                     padding: .125em 2em .125em .25em;
@@ -438,7 +438,7 @@ nav.active {
             }
 
             .switch {
-                @include switcher(var(--gradiant-green-30), var(--gradiant-ardoise-80))
+                @include switcher(var(--gradiant-green-30), var(--gradiant-grey-80))
             }
         }
     }
@@ -449,7 +449,7 @@ nav.active {
 }
 
 a, .nav-link {
-    color: var(--gradiant-ardoise-80);
+    color: var(--gradiant-grey-80);
     text-decoration: none;
 
     &:hover {
@@ -457,7 +457,7 @@ a, .nav-link {
     }
 
     &:visited {
-        color: var(--gradiant-ardoise-80);
+        color: var(--gradiant-grey-80);
     }
 
     &:focus {
@@ -590,7 +590,7 @@ h4 {
 }
 
 .pinned-collection {
-    background-color: var(--gradiant-ardoise-30-50);
+    background-color: var(--gradiant-grey-30-50);
     border-radius: 1em;
     height: 15em;
     opacity: 0;
@@ -618,9 +618,9 @@ h4 {
         a {
             .movie {
                 @include flex-col(center, start);
-                background-color: var(--gradiant-ardoise-40);
+                background-color: var(--gradiant-grey-40);
                 border-radius: .5em;
-                color: var(--gradiant-ardoise-80);
+                color: var(--gradiant-grey-80);
                 height: 14em;
                 isolation: isolate;
                 width: 8em;
@@ -649,9 +649,9 @@ h4 {
 
 .about-pinned-movie {
     @include flex-row(start, start);
-    background-color: var(--gradiant-ardoise-10);
+    background-color: var(--gradiant-grey-10);
     border-radius: 1em;
-    color: var(--gradiant-ardoise-80);
+    color: var(--gradiant-grey-80);
     font-weight: 100;
     height: 24em;
     left: 0;
@@ -689,7 +689,7 @@ h4 {
         }
 
         .shade {
-            background: linear-gradient(rgba(0, 0, 0, 0), var(--gradiant-ardoise-10) 75%);
+            background: linear-gradient(rgba(0, 0, 0, 0), var(--gradiant-grey-10) 75%);
             bottom: 0.5em;
             height: 3em;
             left: 16em;
@@ -902,7 +902,7 @@ h4 {
 
     .nav-menu {
         > a {
-            color: var(--gradiant-ardoise-80);
+            color: var(--gradiant-grey-80);
 
             &:hover {
                 color: #d08530;
@@ -1015,20 +1015,20 @@ h4 {
     width: 100%;
 
     .login-dialog {
-        background-color: var(--gradiant-ardoise-40);
-        border: 1px solid var(--gradiant-ardoise-60);
+        background-color: var(--gradiant-grey-40);
+        border: 1px solid var(--gradiant-grey-60);
         border-radius: .5em;
         box-shadow: 0 0 10px hsla(0, 0, 0, .25), 0 0 40px hsla(0, 0, 0, .25), 0 0 100px hsla(0, 0, 0, .25);
-        color: var(--gradiant-ardoise-80);
+        color: var(--gradiant-grey-80);
         font-weight: 100;
 
         .header {
-            border-bottom: 1px solid var(--gradiant-ardoise-60);
+            border-bottom: 1px solid var(--gradiant-grey-60);
             padding: 1em;
         }
 
         .body {
-            border-bottom: 1px solid var(--gradiant-ardoise-60);
+            border-bottom: 1px solid var(--gradiant-grey-60);
             padding: 1em;
 
             .error {
@@ -1037,15 +1037,15 @@ h4 {
 
             .input {
                 @include flex-100(start, start);
-                border: 1px solid var(--gradiant-ardoise-60);
+                border: 1px solid var(--gradiant-grey-60);
                 border-radius: .25em;
                 margin-bottom: .5em;
                 overflow: hidden;
 
                 label {
-                    background-color: var(--gradiant-ardoise-30);
-                    border-right: 1px solid var(--gradiant-ardoise-60);
-                    color: var(--gradiant-ardoise-80);
+                    background-color: var(--gradiant-grey-30);
+                    border-right: 1px solid var(--gradiant-grey-60);
+                    color: var(--gradiant-grey-80);
                     padding: .5em 1em;
                     width: 50%;
                 }
@@ -1061,9 +1061,9 @@ h4 {
             padding: .5em 1em;
 
             .btn {
-                background-color: var(--gradiant-ardoise-30);
-                border: 1px solid var(--gradiant-ardoise-60);
-                color: var(--gradiant-ardoise-80);
+                background-color: var(--gradiant-grey-30);
+                border: 1px solid var(--gradiant-grey-60);
+                color: var(--gradiant-grey-80);
                 font-weight: 100;
             }
         }

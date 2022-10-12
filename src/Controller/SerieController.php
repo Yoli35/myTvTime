@@ -919,10 +919,79 @@ class SerieController extends AbstractController
     {
         $standing = $TMDBService->getPerson($id, $request->getLocale(), true);
         $people = json_decode($standing, true);
-        dump($people);
         $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);
         $credits = json_decode($standing, true);
-        dump($credits);
+
+        $date = new DateTime($people['birthday']);
+        $now = $people['deathday'] ? new DateTime($people['deathday']) : new DateTime();
+        $interval = $now->diff($date);
+        $age = $interval->y;
+        $people['age'] = $age;
+
+        $knownFor = [];
+        $castNoDates = [];
+        $castDates = [];
+        $noDate = 0;
+        foreach ($credits['cast'] as $cast) {
+            $role['id'] = $cast['id'];
+            $role['character'] = key_exists('character', $cast) ? $cast['character'] : null;
+            $role['media_type'] = key_exists('media_type', $cast) ? $cast['media_type'] : null;
+            $role['original_title'] = key_exists('original_title', $cast) ? $cast['original_title'] : (key_exists('original_name', $cast) ? $cast['original_name'] : null);
+            $role['poster_path'] = key_exists('poster_path', $cast) ? $cast['poster_path'] : null;
+            $role['release_date'] = key_exists('release_date', $cast) ? $cast['release_date'] : (key_exists('first_air_date', $cast) ? $cast['first_air_date'] : null);
+            $role['title'] = key_exists('title', $cast) ? $cast['title'] : (key_exists('name', $cast) ? $cast['name'] : null);
+
+            if ($role['release_date']) {
+                $castDates[$role['release_date']] = $role;
+            } else {
+                $castNoDates[$noDate++] = $role;
+            }
+        }
+        ksort($castDates);
+        $castDates = array_reverse($castDates);
+        $credits['cast'] = array_merge($castNoDates, $castDates);
+        $knownFor = $this->getKnownFor($castDates);
+
+        $crewDates = [];
+        $noDate = 0;
+        foreach ($credits['crew'] as $crew) {
+            $role['id'] = $crew['id'];
+            $role['department'] = key_exists('department', $crew) ? $crew['department'] : null;
+            $role['job'] = key_exists('job', $crew) ? $crew['job'] : null;
+            $role['media_type'] = key_exists('media_type', $crew) ? $crew['media_type'] : null;
+            $role['release_date'] = key_exists('release_date', $crew) ? $crew['release_date'] : (key_exists('first_air_date', $crew) ? $crew['first_air_date'] : null);
+            $role['poster_path'] = key_exists('poster_path', $crew) ? $crew['poster_path'] : null;
+            $role['title'] = key_exists('title', $crew) ? $crew['title'] : (key_exists('name', $crew) ? $crew['name'] : null);
+            $role['original_title'] = key_exists('original_title', $crew) ? $crew['original_title'] : null;
+
+            if ($role['release_date']) {
+                $crewDates[$role['department']][$role['release_date']] = $role;
+            } else {
+                $crewDates[$role['department']][$noDate++] = $role;
+            }
+        }
+        $sortedCrew = [];
+        foreach ($crewDates as $department => $crewDate) {
+            $noDates = [];
+            $dates= [];
+            foreach ($crewDate as $date) {
+                if (!$date['release_date']) {
+                    $noDates[] = $date;
+                    unset($date);
+                }
+                else {
+                    $dates[$date['release_date']] = $date;
+                }
+            }
+            ksort($dates);
+            $dates = array_reverse($dates);
+            $sortedCrew[$department] = array_merge($noDates, $dates);
+            $knownFor = array_merge($knownFor, $this->getKnownFor($dates));
+        }
+        $credits['crew'] = $sortedCrew;
+        ksort($knownFor);
+        $knownFor = array_reverse($knownFor);
+        $credits['known_for'] = $knownFor;
 
         return $this->render('serie/people.html.twig', [
             'people' => $people,
@@ -932,6 +1001,23 @@ class SerieController extends AbstractController
         ]);
     }
 
+    private function getKnownFor($dates): array
+    {
+        $knownFor = [];
+
+        foreach ($dates as $date) {
+            $item = [];
+            if ($date['title'] && $date['poster_path']) {
+                $item['id'] = $date['id'];
+                $item['media_type'] = $date['media_type'];
+                $item['title'] = $date['title'];
+                $item['poster_path'] = $date['poster_path'];
+                $knownFor[$date['release_date']] = $item;
+            }
+        }
+
+        return $knownFor;
+    }
     #[Route('/render/translation/fields', name: 'app_serie_render_translation_fields', methods: ['GET'])]
     public function renderTranslationFields(Request $request): Response
     {

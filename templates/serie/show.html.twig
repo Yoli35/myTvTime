@@ -119,23 +119,25 @@
                     {% if serie.created_by|length %}
                         <div class="creators">
                             {% for c in serie.created_by %}
-                                <div class="creator">
-                                    <div class="profile">
-                                        {% if c.profile_path %}
-                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}" alt="{{ c.name }}">
-                                        {% else %}
-                                            <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
-                                        {% endif %}
+                                <a href="{{ path('app_serie_people', {id: c.id}) }}">
+                                    <div class="creator">
+                                        <div class="profile">
+                                            {% if c.profile_path %}
+                                                <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}" alt="{{ c.name }}">
+                                            {% else %}
+                                                <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
+                                            {% endif %}
+                                        </div>
+                                        <div>{{ c.name }}</div>
+                                        <div>
+                                            {% if c.gender is defined %}
+                                                {{ (c.gender==1?'creator.she':'creator.he')|trans }}
+                                            {% else %}
+                                                {{ 'creation'|trans }}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                    <div>{{ c.name }}</div>
-                                    <div>
-                                        {% if c.gender is defined %}
-                                            {{ (c.gender==1?'creator.she':'creator.he')|trans }}
-                                        {% else %}
-                                            {{ 'creation'|trans }}
-                                        {% endif %}
-                                    </div>
-                                </div>
+                                </a>
                             {% endfor %}
                         </div>
                     {% endif %}

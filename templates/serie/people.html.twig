@@ -26,7 +26,7 @@
                         {% if people.birthday %}
                             <div class="info">
                                 <div>{{ 'Birthday'|trans }}</div>
-                                <div>{{ people.birthday|format_date('medium') }}</div>
+                                <div>{{ people.birthday|format_date('medium') }} ({{ people.age }} {{ 'old'|trans }})</div>
                             </div>
                         {% endif %}
                         {% if people.deathday %}
@@ -75,7 +75,68 @@
                         <h1>{{ people.name }}</h1>
                         {% if people.biography|length %}
                             <div class="bio">
-                               {{ people.biography|nl2br }}
+                                {{ people.biography|nl2br }}
+                            </div>
+                        {% endif %}
+                        {% if credits.known_for|length %}
+                            <h2>{{ 'Known for'|trans }}</h2>
+                            <div class="known-for">
+                                <div class="wrapper">
+                                    {% for media in credits.known_for %}
+                                        {% if media.media_type == "movie" %}
+                                            {% set url = path('app_movie', {id: media.id}) %}
+                                        {% endif %}
+                                        {% if media.media_type == "tv" %}
+                                            {% set url = path('app_serie_tmdb', {id: media.id}) %}
+                                        {% endif %}
+                                        {% if url is defined %}
+                                            <a href="{{ url }}">
+                                        {% endif %}
+                                        <div class="media">
+                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ media.poster_path }}" alt="{{ media.title }}">
+                                            <div class="title">{{ media.title }}</div>
+                                        </div>
+                                        {% if url is defined %}
+                                            </a>
+                                        {% endif %}
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if credits.cast|length %}
+                            <h2>{{ 'Acting'|trans }}</h2>
+                            <div class="acting">
+                                {% for date, prod in credits.cast %}
+                                    <div class="date">
+                                        <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                        <div class="info" data-id="{{ prod.id }}"><i class="fa-solid fa-circle-info"></i></div>
+                                        {% if prod.media_type == "movie" %}
+                                            {% set url = path('app_movie', {id: prod.id}) %}
+                                        {% endif %}
+                                        {% if prod.media_type == "tv" %}
+                                            {% set url = path('app_serie_tmdb', {id: prod.id}) %}
+                                        {% endif %}
+                                        {% if url is defined %}
+                                        <a href="{{ url }}">
+                                            {% endif %}
+                                        <div class="title">
+                                            {{ prod.title }}
+                                            {% if prod.media_type == 'movie' %}
+                                                <i class="fa-solid fa-film" title="{{ "Movie"|trans }}"></i>
+                                            {% endif %}
+                                            {% if prod.media_type == 'tv' %}
+                                                <i class="fa-solid fa-tv" title="{{ 'Serie'|trans }}"></i>
+                                            {% endif %}
+                                        </div>
+                                            {% if url is defined %}
+                                        </a>
+                                        {% endif %}
+                                        {% if prod.character|length %}
+                                            <div class="character">{{ 'as'|trans }} {{ prod.character }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
                             </div>
                         {% endif %}
                     </div>

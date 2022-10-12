@@ -8,7 +8,7 @@ $fa-font-path: "../webfonts";
 
     --button-border-radius: .25em;
 
-    --gradiant-light:  linear-gradient(
+    --gradiant-light: linear-gradient(
                     45deg,
                     hsl(240deg, 100%, 20%) 0%,
                     hsl(289deg, 100%, 21%) 4%,
@@ -21,7 +21,7 @@ $fa-font-path: "../webfonts";
                     hsl(45deg, 100%, 50%) 96%,
                     hsl(55deg, 100%, 50%) 100%);
 
-    --gradiant-dark:  linear-gradient(
+    --gradiant-dark: linear-gradient(
                     45deg,
                     hsl(240deg, 100%, 10%) 0%,
                     hsl(284deg, 100%, 10%) 11%,
@@ -60,29 +60,51 @@ $fa-font-path: "../webfonts";
     --gradiant-ardoise-10-alpha-20: hsla(212, 43%, 10%, .2);
     --gradiant-ardoise-0: hsl(212, 43%, 0%);
 
+    --gradiant-grey-100: hsl(0, 0%, 100%);
+    --gradiant-grey-90: hsl(0, 0%, 90%);
+    --gradiant-grey-90-alpha-10: hsla(0, 0%, 90%, .1);
+    --gradiant-grey-80: hsl(0, 0%, 80%);
+    --gradiant-grey-80-alpha-50: hsla(0, 0%, 80%, .5);
+    --gradiant-grey-70: hsl(0, 0%, 70%);
+    --gradiant-grey-60: hsl(0, 0%, 60%);
+    --gradiant-grey-50: hsl(0, 0%, 50%);
+    --gradiant-grey-40: hsl(0, 0%, 40%);
+    --gradiant-grey-40-alpha-50: hsla(0, 0%, 40%, .5);
+    --gradiant-grey-30: hsl(0, 0%, 30%);
+    --gradiant-grey-30-alpha-50: hsla(0, 0%, 30%, .5);
+    --gradiant-grey-30-alpha-90: hsla(0, 0%, 30%, .9);
+    --gradiant-grey-25: hsl(0, 0%, 25%);
+    --gradiant-grey-20: hsl(0, 0%, 20%);
+    --gradiant-grey-20-alpha-50: hsla(0, 0%, 20%, .5);
+    --gradiant-grey-10: hsl(0, 0%, 10%);
+    --gradiant-grey-10-alpha-90: hsla(0, 0%, 10%, .9);
+    --gradiant-grey-10-alpha-50: hsla(0, 0%, 10%, .5);
+    --gradiant-grey-10-alpha-20: hsla(0, 0%, 10%, .2);
+    --gradiant-grey-0: hsl(0, 0%, 0%);
+
     --gradiant-purple-100: hsl(306, 50%, 100%);
-    --gradiant-purple-90: hsl(306,50%, 90%);
-    --gradiant-purple-80: hsl(306,50%, 80%);
-    --gradiant-purple-70: hsl(306,50%, 70%);
-    --gradiant-purple-60: hsl(306,50%, 60%);
-    --gradiant-purple-50: hsl(306,50%, 50%);
-    --gradiant-purple-40: hsl(306,50%, 40%);
-    --gradiant-purple-30: hsl(306,50%, 30%);
-    --gradiant-purple-20: hsl(306,50%, 20%);
-    --gradiant-purple-10: hsl(306,50%, 10%);
-    --gradiant-purple-0: hsl(306,50%, 0%);
+    --gradiant-purple-90: hsl(306, 50%, 90%);
+    --gradiant-purple-80: hsl(306, 50%, 80%);
+    --gradiant-purple-70: hsl(306, 50%, 70%);
+    --gradiant-purple-60: hsl(306, 50%, 60%);
+    --gradiant-purple-50: hsl(306, 50%, 50%);
+    --gradiant-purple-40: hsl(306, 50%, 40%);
+    --gradiant-purple-30: hsl(306, 50%, 30%);
+    --gradiant-purple-20: hsl(306, 50%, 20%);
+    --gradiant-purple-10: hsl(306, 50%, 10%);
+    --gradiant-purple-0: hsl(306, 50%, 0%);
 
     --gradiant-mars-100: hsl(25, 76%, 100%);
-    --gradiant-mars-90: hsl(25,76%, 90%);
-    --gradiant-mars-80: hsl(25,76%, 80%);
-    --gradiant-mars-70: hsl(25,76%, 70%);
-    --gradiant-mars-60: hsl(25,76%, 60%);
-    --gradiant-mars-50: hsl(25,76%, 50%);
-    --gradiant-mars-40: hsl(25,76%, 40%);
-    --gradiant-mars-30: hsl(25,76%, 30%);
-    --gradiant-mars-20: hsl(25,76%, 20%);
-    --gradiant-mars-10: hsl(25,76%, 10%);
-    --gradiant-mars-0: hsl(25,76%, 0%);
+    --gradiant-mars-90: hsl(25, 76%, 90%);
+    --gradiant-mars-80: hsl(25, 76%, 80%);
+    --gradiant-mars-70: hsl(25, 76%, 70%);
+    --gradiant-mars-60: hsl(25, 76%, 60%);
+    --gradiant-mars-50: hsl(25, 76%, 50%);
+    --gradiant-mars-40: hsl(25, 76%, 40%);
+    --gradiant-mars-30: hsl(25, 76%, 30%);
+    --gradiant-mars-20: hsl(25, 76%, 20%);
+    --gradiant-mars-10: hsl(25, 76%, 10%);
+    --gradiant-mars-0: hsl(25, 76%, 0%);
 
     --gradiant-green-100: hsl(160, 90%, 100%);
     --gradiant-green-90: hsl(160, 90%, 90%);
@@ -231,7 +253,7 @@ $fa-font-path: "../webfonts";
     width: $size;
 }
 
-@mixin human-profile($color: var(--gradiant-ardoise-20)) {
+@mixin human-profile($color: var(--gradiant-grey-20-alpha-50)) {
     @include flex-col(center, flex-start);
     background-color: $color;
     border-radius: .5rem;
@@ -266,8 +288,7 @@ $fa-font-path: "../webfonts";
     }
 }
 
-@mixin animated-header($bg-image, $h1-color: var(--gradiant-ardoise-90))
-{
+@mixin animated-header($bg-image, $h1-color: var(--gradiant-ardoise-90)) {
     border-radius: 1em;
     height: 20em;
     overflow: hidden;
@@ -301,6 +322,7 @@ $fa-font-path: "../webfonts";
         background-size: cover;
         border-radius: 1em;
         inset: 0;
+        isolation: isolate;
         opacity: .75;
         padding: 2em;
         position: absolute;
@@ -312,6 +334,7 @@ $fa-font-path: "../webfonts";
             font-size: 3em;
             font-weight: bold;
             text-shadow: 0 0 8px var(--gradiant-ardoise-10);
+            z-index: 1;
         }
 
         &.right {
@@ -320,6 +343,19 @@ $fa-font-path: "../webfonts";
 
         &.left {
             translate: -100% 0;
+        }
+
+        .link {
+            @include flex-row();
+            background: var(--gradiant-ardoise-40);
+            border-radius: .5em;
+            bottom: 1em;
+            color: var(--gradiant-ardoise-80);
+            height: 2em;
+            padding: .5em 1em;
+            position: absolute;
+            right: 4em;
+            z-index: 1;
         }
     }
 }
