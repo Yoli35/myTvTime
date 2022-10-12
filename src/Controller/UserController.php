@@ -172,18 +172,47 @@ class UserController extends AbstractController
     }
 
     #[Route('/{_locale}/personal/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function getCollection($id, MovieCollectionRepository $collectionRepository): Response
+    public function getCollection(Request $request, $id, MovieCollectionRepository $collectionRepository, TMDBService $TMDBService, UserMovieRepository $movieRepository): Response
     {
         $collection = $collectionRepository->find($id);
-        $movies = $this->moviesToArray($collection->getMovies());
+        $movies = $this->moviesToArray($request, $collection->getMovies(), $TMDBService, $movieRepository);
         return $this->json($movies);
     }
 
-    private function moviesToArray($movies): array
+    private function moviesToArray($request, $movies, $TMDBService, $movieRepository): array
     {
         $tab = [];
+        $locale = $request->getLocale();
         /** @var UserMovie $movie */
         foreach ($movies as $movie) {
+            $overview = null;
+            switch ($locale) {
+                case 'fr':
+                    $overview = $movie->getOverviewFr();
+                    break;
+                case 'en':
+                    $overview = $movie->getOverviewEn();
+                    break;
+                case 'de':
+                    $overview = $movie->getOverviewDe();
+                    break;
+                case 'es':
+                    $overview = $movie->getOverviewEs();
+                    break;
+            }
+            if ($overview==null) {
+                $standing = $TMDBService->getMovie($movie->getMovieDbId(), $locale);
+                $movieDetail = json_decode($standing, true);
+                $overview = $movieDetail['overview'];
+
+                switch ($locale) {
+                    case 'fr': $movie->setOverviewFr($overview); break;
+                    case 'en': $movie->setOverviewEn($overview); break;
+                    case 'de': $movie->setOverviewDe($overview); break;
+                    case 'es': $movie->setOverviewEs($overview); break;
+                }
+                $movieRepository->add($movie, true);
+            }
             $item['id'] = $movie->getId();
             $item['title'] = $movie->getTitle();
             $item['original_title'] = $movie->getOriginalTitle();
@@ -191,6 +220,7 @@ class UserController extends AbstractController
             $item['movie_db_id'] = $movie->getMovieDbId();
             $item['release_date'] = $movie->getReleaseDate();
             $item['runtime'] = $movie->getRuntime();
+            $item['description'] = $overview;
             array_unshift($tab, $item);
         }
         return $tab;

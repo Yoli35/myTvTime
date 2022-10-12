@@ -6,6 +6,7 @@ use App\Repository\UserMovieRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserMovieRepository::class)]
@@ -42,6 +43,18 @@ class UserMovie
 
     #[ORM\ManyToMany(targetEntity: MovieCollection::class, mappedBy: 'movies')]
     private Collection $movieCollections;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $overview_fr = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $overview_en = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $overview_de = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $overview_es = null;
 
     public function __construct()
     {
@@ -196,5 +209,53 @@ class UserMovie
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    public function getOverviewFr(): ?string
+    {
+        return $this->overview_fr;
+    }
+
+    public function setOverviewFr(?string $overview_fr): self
+    {
+        $this->overview_fr = $overview_fr;
+
+        return $this;
+    }
+
+    public function getOverviewEn(): ?string
+    {
+        return $this->overview_en;
+    }
+
+    public function setOverviewEn(?string $overview_en): self
+    {
+        $this->overview_en = $overview_en;
+
+        return $this;
+    }
+
+    public function getOverviewDe(): ?string
+    {
+        return $this->overview_de;
+    }
+
+    public function setOverviewDe(?string $overview_de): self
+    {
+        $this->overview_de = $overview_de;
+
+        return $this;
+    }
+
+    public function getOverviewEs(): ?string
+    {
+        return $this->overview_es;
+    }
+
+    public function setOverviewEs(?string $overview_es): self
+    {
+        $this->overview_es = $overview_es;
+
+        return $this;
     }
 }

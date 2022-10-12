@@ -163,7 +163,7 @@
                         wrapper.innerHTML = "";
                         let data = JSON.parse(this.response);
                         console.log({data});
-                        data.forEach((item = {id: 0, title: "", original_title: "", poster_path: "", movie_db_id: 0, release_date: "", runtime: 0}) => {
+                        data.forEach((item = {id: 0, title: "", original_title: "", poster_path: "", movie_db_id: 0, release_date: "", runtime: 0, description: ""}) => {
                             let a = document.createElement("a");
                             a.setAttribute("href", _app_movie.substring(0, _app_movie.length - 1) + item.movie_db_id);
                             let movie = document.createElement("div");
@@ -178,6 +178,8 @@
 
                             movie.appendChild(img);
                             movie.appendChild(title);
+                            // movie.addEventListener("mouseover", showAbout);
+                            // movie.addEventListener("mouseout", hideAbout);
                             movie.addEventListener("mouseenter", showAbout);
                             movie.addEventListener("mouseleave", hideAbout);
                             a.appendChild(movie);
@@ -190,25 +192,33 @@
                             let about = document.createElement("div");
                             about.classList.add("about-pinned-movie", "hide");
                             about.setAttribute("data-id", item.id.toString());
-                            about.appendChild(img);
+                            let content = document.createElement("div");
+                            content.classList.add("content");
+                            content.appendChild(img);
                             let infos = document.createElement("div");
                             infos.classList.add("infos");
                             title = document.createElement("h4");
                             title.appendChild(document.createTextNode(item.title));
                             infos.appendChild(title);
-                            let info= document.createElement("div");
+                            let info = document.createElement("div");
                             let dateT = item.release_date + 'T00:00:00';
                             let released = new Date(dateT);
                             const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
                             info.appendChild(document.createTextNode(txt.movie.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
                             infos.appendChild(info);
-                            info= document.createElement("div");
+                            info = document.createElement("div");
                             info.appendChild(document.createTextNode(txt.movie.original_title[_locale] + ' : ' + item.original_title));
                             infos.appendChild(info);
-                            info= document.createElement("div");
+                            info = document.createElement("div");
                             info.appendChild(document.createTextNode(txt.movie.runtime[_locale] + ' : ' + item.runtime + ' ' + txt.movie.minutes[_locale]));
+                            info = document.createElement("div");
+                            info.appendChild(document.createTextNode(item.description));
                             infos.appendChild(info);
-                            about.appendChild(infos);
+                            content.appendChild(infos);
+                            let shade = document.createElement("div");
+                            shade.classList.add("shade");
+                            content.appendChild(shade);
+                            about.appendChild(content);
 
                             body.appendChild(about);
                         });
@@ -245,6 +255,15 @@
                 const width = body.clientWidth;
                 const middleX = width / 2;
                 const movie = evt.target;
+                // let movie;
+                //
+                // if (evt.target.classList.contains("movie"))
+                //     movie = evt.target;
+                // else
+                //     movie = evt.target.closest(".movie");
+                //
+                // evt.preventDefault();
+
                 const id = movie.getAttribute("data-id");
                 const selector = '.about-pinned-movie[data-id="' + id + '"]';
                 const about = document.querySelector(selector);
@@ -254,8 +273,7 @@
                     x = evt.pageX - 288;
                     x = x < 16 ? 16 : x;
                     style = "left: " + x + "px;"
-                }
-                else {
+                } else {
                     x = width - (evt.pageX + 288);
                     x = x < 16 ? 16 : x;
                     style = "left: unset; right: " + x + "px;"
@@ -268,12 +286,21 @@
 
             function hideAbout(evt) {
                 const movie = evt.target;
+                // let movie;
+                //
+                // if (evt.target.classList.contains("movie"))
+                //     movie = evt.target;
+                // else
+                //     movie = evt.target.closest(".movie");
+                //
+                // evt.preventDefault();
+
                 const id = movie.getAttribute("data-id");
                 const selector = '.about-pinned-movie[data-id="' + id + '"]';
                 const about = document.querySelector(selector);
 
                 about.classList.remove("show");
-                setTimeout(()=> {
+                setTimeout(() => {
                     about.classList.add("hide");
                     about.removeAttribute("style");
                 }, 300);

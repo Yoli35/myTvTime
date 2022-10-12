@@ -37,7 +37,37 @@ function initButtons(id, locale, paths, url) {
     const exportButton = document.querySelector('#export-button');
     const appendButton = document.querySelector("#append-button");
     const exportModal = document.querySelector('#exportModal');
+    const exportModalClose = exportModal.querySelectorAll("button");
     const appendModal = document.querySelector("#appendModal");
+    const appendModalClose = appendModal.querySelectorAll("button");
+
+    exportModalClose.forEach(button => {
+        button.addEventListener("click", closeExport);
+    });
+
+    appendModalClose.forEach(button => {
+        button.addEventListener("click", closeAppend);
+    });
+
+    function closeExport() {
+        exportModal.classList.remove("show");
+        setTimeout(() => {
+            exportModal.classList.remove("d-block");
+        }, 200);
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+        }
+        xhr.open("GET", _json_cleanup + '?filename=' + exportFile);
+        xhr.send();
+    }
+
+    function closeAppend() {
+        appendModal.classList.remove("show");
+        setTimeout(() => {
+            appendModal.classList.remove("d-block");
+        }, 200);
+    }
 
     exportButton.addEventListener("click", () => {
 
@@ -54,17 +84,13 @@ function initButtons(id, locale, paths, url) {
             file = data['file'];
             sample = data['sample'];
 
-            // $('#json-link').attr({'href': url + file, 'download': file});
             exportModal.querySelector("#json-link").setAttribute("href", url + file);
             exportModal.querySelector("#json-link").setAttribute("download", file);
 
-            // $(result).empty();
             while (result.lastChild) {
                 result.removeChild(result.lastChild);
             }
-            // $(result).append('<div class="sample">' + sample + '</div>');
             result.innerHTML += '<div class="sample">' + sample + '</div>';
-            // $(result).append(
             result.innerHTML +=
                 '<div class="selection">' +
                 '   <div class="input-group w-75">' +
@@ -74,12 +100,8 @@ function initButtons(id, locale, paths, url) {
                 '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.ui.aria_deselect_all[_locale] + '">' + txt.ui.deselect_all[_locale] + '</button>' +
                 '   </div>' +
                 '</div>';
-            // );
 
             for (let i = 0; i < count; i++) {
-                // $(result).append(
-                //     '<div class="result-item" data-movie-id="' + movies[i]['movie_db_id'] + '" data-title="' + movies[i]['title'] + '" data-original="' + movies[i]['original_title'] + '">' + movies[i]['title'] + '</div>';
-                // )
                 // 100 x faster than innerHtml = "<div class...>"
                 let div = document.createElement("div");
                 div.setAttribute("class", "result-item");
@@ -90,13 +112,9 @@ function initButtons(id, locale, paths, url) {
                 result.appendChild(div);
             }
 
-            // console.log(Modal);
-            // new Modal('#exportModal').show();
-            // $(exportModal).css('background-color', 'rgba(189,115,189,0.25)');
-            // exportModal.setAttribute("style", "background-color: rgba(189,11,189,0.25)");
             exportModal.setAttribute("style", "background-color: rgba(189, 141, 189, 0.25)");
-            // $(exportModal).css('display', 'block');
-            // $(exportModal).css('opacity', '1');
+            exportModal.classList.add("d-block");
+            setTimeout(()=> {exportModal.classList.add("show");}, 0);
 
             exportFile = file;
 
@@ -182,6 +200,8 @@ function initButtons(id, locale, paths, url) {
         // $(appendModal).css('background-color', 'rgba(189,115,189,0.25)');
         appendModal.setAttribute("style", "transition: background-color .45s");
         appendModal.setAttribute("style", "background-color: rgba(189, 141, 189, 0.25)");
+        appendModal.classList.add("d-block");
+        setTimeout(()=> {appendModal.classList.add("show");}, 0);
     });
 
     // $('input[name="json"]').change(function () {
