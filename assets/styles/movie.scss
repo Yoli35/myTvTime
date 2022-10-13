@@ -7,13 +7,13 @@
     top: 1em;
 
     &.debug {
-        border: 2px dashed var(--gradiant-ardoise-70);
+        border: 2px dashed var(--gradiant-grey-70);
         border-radius: .5em;
     }
 
     .notification {
         border-radius: .5em;
-        color: var(--gradiant-ardoise-90);
+        color: var(--gradiant-grey-90);
         margin-bottom: 1em;
         opacity: 0;
         padding: 1em 2em;
@@ -86,7 +86,7 @@
 }
 
 .has-been-seen {
-    background-color: var(--gradiant-ardoise-30);
+    background-color: var(--gradiant-grey-30);
     border-radius: 50%;
     color: var(--movie-add);
     cursor: pointer;
@@ -143,7 +143,7 @@
                     flex-wrap: wrap;
 
                     .provider {
-                        background-color: var(--gradiant-ardoise-50);
+                        background-color: var(--gradiant-grey-50);
                         border-radius: .5em;
                         @include flex-row(center, start);
                         margin: .125em;
@@ -176,11 +176,11 @@
                 margin-right: auto;
 
                 .genre {
-                    border-color: var(--gradiant-ardoise-60);
-                    color: var(--gradiant-ardoise-60);
+                    border-color: var(--gradiant-grey-60);
+                    color: var(--gradiant-grey-60);
 
                     a {
-                        color: var(--gradiant-ardoise-60);
+                        color: var(--gradiant-grey-60);
                         height: 100%;
                         padding: .25em 1em;
                         text-decoration: none;
@@ -252,7 +252,7 @@
 
                     .production {
                         @include flex-row(unset, unset);
-                        background-color: var(--gradiant-ardoise-50);
+                        background-color: var(--gradiant-grey-30);
                         border-radius: .5em;
                         font-size: .75em;
                         font-weight: 100;
@@ -271,14 +271,14 @@
             width: 100%;
 
             img {
-                border: 8px solid var(--gradiant-ardoise-90);
+                border: 8px solid var(--gradiant-grey-90);
                 width: 100%;
             }
 
             .replacement {
                 background: rgb(131, 58, 180);
                 background: linear-gradient(225deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
-                border: 8px solid var(--gradiant-ardoise-90);
+                border: 8px solid var(--gradiant-grey-90);
                 height: 30vw;
                 width: 100%;
             }
@@ -289,7 +289,7 @@
                 width: 100%;
 
                 .label {
-                    color: var(--gradiant-ardoise-70);
+                    color: var(--gradiant-grey-70);
                     font-weight: 100;
                     text-transform: uppercase;
                 }
@@ -301,17 +301,17 @@
                     .list {
                         @include flex-row(flex-start, center);
                         flex-wrap: wrap;
-                        background-color: var(--gradiant-ardoise-30);
-                        color: var(--gradiant-ardoise-80);
+                        background-color: var(--gradiant-grey-10-alpha-50);
+                        color: var(--gradiant-grey-80);
                         border: 0;
                         border-radius: .5em;
                         padding: .5em;
                         width: 100%;
 
                         .item {
-                            background-color: var(--gradiant-ardoise-50);
+                            background-color: var(--gradiant-grey-30);
                             border-radius: .25em;
-                            color: var(--gradiant-ardoise-80);
+                            color: var(--gradiant-grey-80);
                             cursor: pointer;
                             padding: .25em .5em;
                             margin: .25em;
@@ -331,10 +331,10 @@
             position: relative;
 
             &:hover::after {
-                background-color: var(--gradiant-ardoise-10);
-                border: 2px var(--gradiant-ardoise-60) solid;
+                background-color: var(--gradiant-grey-10);
+                border: 2px var(--gradiant-grey-60) solid;
                 border-radius: .5em;
-                color: var(--gradiant-ardoise-60);
+                color: var(--gradiant-grey-60);
                 content: attr(data-descr);
                 font-size: .75em;
                 font-weight: 100;
@@ -350,7 +350,7 @@
 
     .cast, .crew {
         @include flex-row();
-        background-color: var(--gradiant-ardoise-90);
+        background-color: var(--gradiant-grey-90);
         border-radius: 1em;
         font-family: 'Montserrat', sans-serif;
         font-weight: 400;
@@ -445,7 +445,7 @@
 
 .recommendations {
     @include flex-row(stretch, space-around);
-    background-color: var(--gradiant-ardoise-90);
+    background-color: var(--gradiant-grey-90);
     border-radius: 1em;
     flex-wrap: wrap;
     max-height: 20em;
@@ -462,7 +462,7 @@
         width: 10em;
 
         .no-poster {
-            color: var(--gradiant-ardoise-70);
+            color: var(--gradiant-grey-70);
             font-weight: 100;
             position: relative;
 
@@ -562,18 +562,18 @@
 }
 
 .collection .card {
-    background-color: var(--gradiant-ardoise-90);
+    background-color: var(--gradiant-grey-90);
 }
 
 @media (prefers-color-scheme: dark) {
 
     .movie-detail .title {
-        color: var(--gradiant-ardoise-90);
+        color: var(--gradiant-grey-90);
     }
 
     .movie-info, .tv-info {
         .cast, .crew {
-            background-color: var(--gradiant-ardoise-30);
+            background-color: var(--gradiant-grey-10-alpha-50);
 
             .content {
 
@@ -588,10 +588,10 @@
     }
 
     .collection .card {
-        background-color: var(--gradiant-ardoise-30);
+        background-color: var(--gradiant-grey-30);
     }
 
     .recommendations {
-        background-color: var(--gradiant-ardoise-30);
+        background-color: var(--gradiant-grey-10-alpha-50);
     }
 }

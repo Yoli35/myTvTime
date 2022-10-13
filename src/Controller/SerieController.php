@@ -992,6 +992,7 @@ class SerieController extends AbstractController
         ksort($knownFor);
         $knownFor = array_reverse($knownFor);
         $credits['known_for'] = $knownFor;
+        dump($credits);
 
         return $this->render('serie/people.html.twig', [
             'people' => $people,

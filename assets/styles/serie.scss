@@ -1547,7 +1547,7 @@
             }
 
             .credits {
-                .acting {
+                .acting, .sub-credits {
                     @include flex-col(start, start);
                     background-color: var(--gradiant-grey-20-alpha-50);
                     border-radius: 1em;
@@ -1577,7 +1577,7 @@
                             font-weight: 300;
                         }
 
-                        .character {
+                        .character, .job {
                             font-weight: 100;
                             padding-left: .5em;
                         }

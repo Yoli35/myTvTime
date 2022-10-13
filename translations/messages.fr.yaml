@@ -255,6 +255,7 @@ Acting: Interprétation
 Art.he: Directeur artistique
 Art.she: Directrice artistique
 Art: Direction artistique
+Creator: Création
 Directing.she: Metteuse en scène
 Directing.he: Metteur en scène
 Directing: Mise en scène
@@ -310,10 +311,34 @@ Series search: Rechercher une série
 # People
 Known for: Célèbre pour
 as: incarnant
+as.job: comme
 Serie: Série
 old: ans
 tv: série télévisée
 movie: film
+job.Creator.he: créateur
+job.Creator.she: créatrice
+job.Producer.he: producteur
+job.Producer.she: productrice
+job.Writer.he: auteur
+job.Writer.she: auteure
+job.Director.he: réalisateur
+job.Director.she: réalisatrice
+job.Executive Producer.he: producteur exécutif
+job.Executive Producer.she: productrice exécutive
+job.Development Producer.he: producteur de développement
+job.Development Producer.she: productrice de développement
+job.Characters.he: créateur (personnages)
+job.Story.he: auteur (histoire)
+job.Production Design.he: Conception (production)
+Sound: son
+job.Sound Mixer.he: mixeur son
+job.Production Sound Mixer.he: Mixeur son (production)
+job.Production Executive.he: production executive
+job.Screenplay.he: scénariste
+Self: soi-même
+Himself: lui-même
+Herself: elle-même
 
 # Events
 event: événement

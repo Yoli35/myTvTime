@@ -33,14 +33,13 @@
                 <section>
                     <h2>{{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}</h2>
                     <div class="movies">
-                        {% if collection.movies is empty %}
-                            Rien à afficher
+                        {% for i in (collection.movies|length)-1..0 %}
+                            {% set movie = collection.movies[i] %}
+                            {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath %}
+                            {{ include('blocks/movie/discover.html.twig', { title: movie.title, poster: poster, id: movie.movieDbId, route: 'app_movie' }) }}
                         {% else %}
-                            {% for movie in collection.movies %}
-                                {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath %}
-                                {{ include('blocks/movie/discover.html.twig', { title: movie.title, poster: poster, id: movie.movieDbId, route: 'app_movie' }) }}
-                            {% endfor %}
-                        {% endif %}
+                            {{ 'Nothing to show'|trans }}
+                        {% endfor %}
                     </div>
                 </section>
             </main>

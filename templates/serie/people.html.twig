@@ -6,9 +6,11 @@
         <main>
             <div class="person">
                 <div class="left-column">
-                    <div class="profile">
-                        <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
-                    </div>
+                    {% if people.profile_path|length %}
+                        <div class="profile">
+                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
+                        </div>
+                    {% endif %}
                     <div class="infos">
                         <h4>{{ 'Personal Informations'|trans }}</h4>
                         <div class="info">
@@ -134,11 +136,67 @@
                                             </a>
                                             {% endif %}
                                             {% if prod.character|length %}
-                                                <div class="character">{{ 'as'|trans }} {{ prod.character }}</div>
+                                                {% if prod.character is defined %}
+                                                    {% if prod.character|length %}
+                                                        {% if prod.character == 'Himself' or prod.character == 'Herself' or prod.character == 'Self' %}
+                                                            {% set character = prod.character|trans %}
+                                                        {% else %}
+                                                            {% set character = prod.character %}
+                                                        {% endif %}
+                                                        <div class="character">{{ 'as'|trans }} {{ character }},</div>
+                                                    {% endif %}
+                                                {% endif %}
                                             {% endif %}
                                         </div>
                                     {% endfor %}
                                 </div>
+                            {% endif %}
+                            {% if credits.crew|length %}
+                                {% for department, prod in credits.crew %}
+                                    <h2>{{ department|trans }}</h2>
+                                    <div class="sub-credits">
+                                        {% for date, sub_prod in prod %}
+                                            <div class="date">
+                                                <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                                <div class="info" data-id="{{ sub_prod.id }}" data-title="{{ sub_prod.title }}" data-type="{{ sub_prod.media_type }}" data-poster="{{ sub_prod.poster_path }}"><i class="fa-solid fa-circle-info"></i></div>
+                                                {% if sub_prod.media_type == "movie" %}
+                                                    {% set url = path('app_movie', {id: sub_prod.id}) %}
+                                                {% endif %}
+                                                {% if sub_prod.media_type == "tv" %}
+                                                    {% set url = path('app_serie_tmdb', {id: sub_prod.id}) %}
+                                                {% endif %}
+                                                {% if url is defined %}
+                                                <a href="{{ url }}">
+                                                    {% endif %}
+                                                    <div class="title">
+                                                        {{ sub_prod.title }}
+                                                        {% if sub_prod.media_type == 'movie' %}
+                                                            <i class="fa-solid fa-film" title="{{ "Movie"|trans }}"></i>
+                                                        {% endif %}
+                                                        {% if sub_prod.media_type == 'tv' %}
+                                                            <i class="fa-solid fa-tv" title="{{ 'Serie'|trans }}"></i>
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if url is defined %}
+                                                </a>
+                                                {% endif %}
+                                                {#                                                {% if sub_prod.character is defined %} #}
+                                                {#                                                    {% if sub_prod.character|length %} #}
+                                                {#                                                        {% if sub_prod.character == 'Himself' or sub_prod.character == 'Herself' %} #}
+                                                {#                                                            {% set character = sub_prod.character|trans %} #}
+                                                {#                                                        {% else %} #}
+                                                {#                                                            {% set character = sub_prod.character %} #}
+                                                {#                                                        {% endif %} #}
+                                                {#                                                        <div class="job">{{ 'as'|trans }} {{ character }},</div> #}
+                                                {#                                                    {% endif %} #}
+                                                {#                                                {% endif %} #}
+                                                {% if sub_prod.job|length %}
+                                                    <div class="job">{{ 'as.job'|trans }} {{ ('job.' ~ sub_prod.job ~ (people.gender == 1 ? '.she':'.he'))|trans }}</div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
                             {% endif %}
                         </div>
                     </div>
@@ -190,9 +248,9 @@
             const close = popInfos.querySelector(".close");
             const x = evt.clientX, y = evt.clientY + evt.view.scrollY - 16;
 
-            close.addEventListener("click", ()=> {
+            close.addEventListener("click", () => {
                 popInfos.classList.remove("fade");
-                setTimeout(()=>{
+                setTimeout(() => {
                     popInfos.classList.remove("show");
                     popInfos.querySelector(".poster").innerHTML = "";
                     popInfos.querySelector(".title").innerHTML = "";
@@ -208,7 +266,7 @@
             popInfos.querySelector(".spinner").setAttribute("style", "display: block;");
             popInfos.setAttribute("style", "left: calc(" + x + "px - 16em); top: calc(" + y + "px - 10.85em);");
             popInfos.classList.add("show");
-            setTimeout(()=> {
+            setTimeout(() => {
                 popInfos.classList.add("fade");
             }, 0);
 
@@ -222,7 +280,7 @@
                 popInfos.querySelector(".overview").appendChild(document.createTextNode(result.overview));
                 popInfos.querySelector(".spinner").setAttribute("style", "display: none;");
             }
-            xhr.open("GET", _app_serie_get_overview.substring(0, _app_serie_get_overview.length-1) + id + "?type=" + type);
+            xhr.open("GET", _app_serie_get_overview.substring(0, _app_serie_get_overview.length - 1) + id + "?type=" + type);
             xhr.send();
 
         }

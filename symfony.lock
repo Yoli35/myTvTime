@@ -96,10 +96,10 @@
         "version": "1.1.2"
     },
     "easycorp/easyadmin-bundle": {
-        "version": "4.0",
+        "version": "4.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
+            "branch": "main",
             "version": "3.0",
             "ref": "b131e6cbfe1b898a508987851963fff485986285"
         }
@@ -469,9 +469,6 @@
     "symfony/polyfill-php81": {
         "version": "v1.24.0"
     },
-    "symfony/polyfill-uuid": {
-        "version": "v1.24.0"
-    },
     "symfony/process": {
         "version": "v6.0.3"
     },
@@ -564,9 +561,6 @@
             "config/packages/twig.yaml",
             "templates/base.html.twig"
         ]
-    },
-    "symfony/uid": {
-        "version": "v6.0.3"
     },
     "symfony/ux-dropzone": {
         "version": "v2.3.0"
