@@ -243,10 +243,11 @@
             });
 
             setTimeout(() => {
-                header.setAttribute("style", "background-color: var(--gradiant-ardoise-10-alpha-20");
+                header.classList.add("fade-bg");
             }, 3000);
 
             setTimeout(clearQuote, 3000);
+            setTimeout(backdropSlide, 4000);
         }
 
         function setH1() {
@@ -262,25 +263,25 @@
 
         function clearQuote() {
             const header = document.querySelector(".header");
+            const quotes = header.querySelectorAll(".quote");
             let op = 1.0, intervalId;
 
-            intervalId = setInterval(() => {
-                header.style.setProperty("--quote-opacity", op);
-                op -= 0.005;
-                if (op < 0.0) {
-                    header.removeChild(header.querySelector(".quote.n1"));
-                    header.removeChild(header.querySelector(".quote.n2"));
-                    header.removeChild(header.querySelector(".quote.n3"));
-                    header.removeChild(header.querySelector(".quote.n4"));
-                    clearInterval(intervalId);
-                    backdropSlide();
-                }
-            }, 5);
+            quotes.forEach((quote) => {
+                setTimeout(() => {
+                    quote.classList.add("hidden");
+                }, 0);
+            });
+
+            setTimeout(() => {
+                quotes.forEach(quote => {
+                    header.removeChild(quote);
+                })
+            }, 500);
         }
 
         function backdropSlide() {
             const header = document.querySelector(".header");
-            let indicatorDiv, indicatorsDiv, left, right, modulo;
+            let indicatorDiv, indicatorsDiv, left, right, modulo, link;
 
             slideImages = getBackdrops();
             slideNames = getNames();
@@ -311,6 +312,10 @@
             indicatorsDiv.setAttribute("style", "left: " + ((header.clientWidth - (20 * modulo)) / 2) + "px");
             header.appendChild(indicatorsDiv);
 
+            link = document.createElement("a");
+            link.classList.add("link");
+            header.insertBefore(link, header.querySelector(".left-arrow"));
+
             header.addEventListener("mouseenter", stopSlide);
             header.addEventListener("mouseleave", startSlide);
 
@@ -328,36 +333,43 @@
         function slideFunc() {
             const header = document.querySelector(".header");
             const modulo = slideImages.length;
-            let filename, div, nameDiv, name, backdrop, link, href;
+            let filename, nameDiv, name, backdrop, newBackdrop, link, newLink, href;
 
             filename = slideImages[slideIndex];
             name = slideNames[slideIndex];
             href = slideLinks[slideIndex];
             backdrop = header.querySelector(".backdrop");
-            div = document.createElement("div");
-            div.classList.add("backdrop", "right");
-            div.setAttribute("style", "background-image: url('" + filename + "')");
+            newBackdrop = document.createElement("div");
+            newBackdrop.classList.add("backdrop", "right");
+            newBackdrop.setAttribute("style", "background-image: url('" + filename + "')");
             nameDiv = document.createElement("div");
             nameDiv.appendChild(document.createTextNode(name));
             nameDiv.classList.add("name");
-            div.appendChild(nameDiv);
-            link = document.createElement("a");
-            link.classList.add("link");
-            link.setAttribute("href", href);
-            link.appendChild(document.createTextNode("Voir la fiche"));
-            div.appendChild(link);
-            header.appendChild(div);
+            newBackdrop.appendChild(nameDiv);
+            header.appendChild(newBackdrop);
+
+            link = header.querySelector(".link");
+            newLink = document.createElement("a");
+            newLink.classList.add("link", "right");
+            newLink.setAttribute("href", href);
+            header.insertBefore(newLink, header.querySelector(".left-arrow"));
 
             setTimeout(() => {
                 backdrop.classList.add("left");
-                div.classList.remove("right");
+                newBackdrop.classList.remove("right");
+                link.classList.add("left");
+                newLink.classList.remove("right");
                 indicators(header, slideIndex, modulo);
             }, actionDelay);
             slideIndex = (slideIndex + 1) % modulo;
             setTimeout(() => {
                 let leftBackdrop = header.querySelector(".backdrop.left");
+                let leftLink = header.querySelector(".link.left");
                 if (leftBackdrop) {
                     header.removeChild(leftBackdrop);
+                }
+                if (leftLink) {
+                    header.removeChild(leftLink);
                 }
                 setTimeout(() => {
                     while (header.querySelectorAll(".backdrop").length > 1) {
@@ -409,7 +421,7 @@
             backdrop = header.querySelector(".backdrop");
             backdrop.setAttribute("style", "background-image: url('" + filename + "')");
             nameDiv = backdrop.querySelector(".name");
-            link = backdrop.querySelector("a");
+            link = header.querySelector(".link");
             // avant le premier défilement, il n'y a pas de div.name ni de lien
             if (nameDiv) {
                 nameDiv.removeChild(nameDiv.firstChild);
@@ -423,7 +435,7 @@
                 link = document.createElement("a");
                 link.classList.add("link");
                 link.setAttribute("href", href);
-                backdrop.appendChild(link);
+                header.insertBefore(link, header.querySelector(".left-arrow"));
             }
             indicators(header, slideIndex + 1, modulo);
         }
@@ -747,9 +759,9 @@
 
         function startLeaves() {
             const pCount = 20;
-            const body = document.body;
+            // const body = document.body;
             const html = document.documentElement;
-            const height = Math.max(body.getBoundingClientRect().height, html.getBoundingClientRect().height);
+            // const height = Math.max(body.getBoundingClientRect().height, html.getBoundingClientRect().height);
             console.log({html})
 
             for (let i = 0; i < pCount; i++) {

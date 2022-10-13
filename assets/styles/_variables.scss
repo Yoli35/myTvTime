@@ -2,9 +2,9 @@ $transition-delay: .5s;
 $fa-font-path: "../webfonts";
 
 :root {
-    --mtt-body-bg: var(--gradiant-ardoise-10);
-    --mtt-body-bg-gradiant: var(--gradiant-ardoise-40);
-    --mtt-body-color: var(--gradiant-ardoise-90);
+    --mtt-body-bg: var(--gradiant-grey-10);
+    --mtt-body-bg-gradiant: var(--gradiant-grey-40);
+    --mtt-body-color: var(--gradiant-grey-90);
 
     --button-border-radius: .25em;
 
@@ -200,9 +200,9 @@ $fa-font-path: "../webfonts";
 
 @mixin yt-header {
     @include flex-100();
-    background-color: var(--gradiant-ardoise-30);
-    border-bottom: 1px solid var(--gradiant-ardoise-80);
-    color: var(--gradiant-ardoise-80);
+    background-color: var(--gradiant-grey-30);
+    border-bottom: 1px solid var(--gradiant-grey-80);
+    color: var(--gradiant-grey-80);
     font-size: 1em;
     font-weight: 100;
     padding: .25em .5em;
@@ -288,12 +288,18 @@ $fa-font-path: "../webfonts";
     }
 }
 
-@mixin animated-header($bg-image, $h1-color: var(--gradiant-ardoise-90)) {
+@mixin animated-header($bg-image, $h1-color: var(--gradiant-grey-90)) {
+    background-color: hsla(0, 100%, 10%, 1);
     border-radius: 1em;
     height: 20em;
     overflow: hidden;
     position: relative;
+    transition: background-color 1s ease-in-out;
     width: 100%;
+
+    &.fade-bg {
+        background-color: var(--gradiant-ardoise-10-alpha-20);
+    }
 
     h1 {
         color: $h1-color;
@@ -322,7 +328,6 @@ $fa-font-path: "../webfonts";
         background-size: cover;
         border-radius: 1em;
         inset: 0;
-        isolation: isolate;
         opacity: .75;
         padding: 2em;
         position: absolute;
@@ -330,10 +335,10 @@ $fa-font-path: "../webfonts";
         z-index: -1;
 
         .name {
-            color: var(--gradiant-ardoise-100);
+            color: var(--gradiant-grey-100);
             font-size: 3em;
             font-weight: bold;
-            text-shadow: 0 0 8px var(--gradiant-ardoise-10);
+            text-shadow: 0 0 8px var(--gradiant-grey-10);
             z-index: 1;
         }
 
@@ -344,24 +349,26 @@ $fa-font-path: "../webfonts";
         &.left {
             translate: -100% 0;
         }
+    }
 
-        .link {
-            @include flex-row();
-            background: var(--gradiant-ardoise-40);
-            border-radius: .5em;
-            bottom: 1em;
-            color: var(--gradiant-ardoise-80);
-            height: 2em;
-            padding: .5em 1em;
-            position: absolute;
-            right: 4em;
-            z-index: 1;
+    .link {
+        display: block;
+        inset: 0;
+        position: absolute;
+        transition: translate 3s ease-in-out;
+
+        &.right {
+            translate: 100% 0;
+        }
+
+        &.left {
+            translate: -100% 0;
         }
     }
 }
 
 @mixin switcher($checked, $unchecked) {
-    border: 2px solid var(--gradiant-ardoise-80);
+    border: 2px solid var(--gradiant-grey-80);
     border-radius: calc(.5em + 2px);
     cursor: pointer;
     display: inline-block;
