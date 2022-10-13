@@ -311,31 +311,41 @@ Series search: Rechercher une série
 # People
 Known for: Célèbre pour
 as: incarnant
-as.job: comme
+as.job: " — "
 Serie: Série
 old: ans
 tv: série télévisée
 movie: film
-job.Creator.he: créateur
-job.Creator.she: créatrice
-job.Producer.he: producteur
-job.Producer.she: productrice
-job.Writer.he: auteur
-job.Writer.she: auteure
-job.Director.he: réalisateur
-job.Director.she: réalisatrice
-job.Executive Producer.he: producteur exécutif
-job.Executive Producer.she: productrice exécutive
-job.Development Producer.he: producteur de développement
-job.Development Producer.she: productrice de développement
-job.Characters.he: créateur (personnages)
-job.Story.he: auteur (histoire)
+Editing: Editing
+Sound: Son
+job.Creator.he: Créateur
+job.Creator.she: Créatrice
+job.Producer.he: Producteur
+job.Producer.she: Productrice
+job.Writer.he: Auteur
+job.Writer.she: Auteure
+job.Director.he: Réalisateur
+job.Director.she: Réalisatrice
+job.Executive Producer.he: Producteur exécutif
+job.Executive Producer.she: Productrice exécutive
+job.Co-Executive Producer.he: Producteur co-exécutif
+job.Development Producer.he: Producteur de développement
+job.Development Producer.she: Productrice de développement
+job.Characters.he: Créateur (personnages)
+job.Story.he: Auteur (histoire)
 job.Production Design.he: Conception (production)
-Sound: son
-job.Sound Mixer.he: mixeur son
+job.Sound Mixer.he: Mixeur son
 job.Production Sound Mixer.he: Mixeur son (production)
-job.Production Executive.he: production executive
-job.Screenplay.he: scénariste
+job.Production Executive.he: Production executive
+job.Associate Producer.he: Producteur associé
+job.Thanks.he: Remerciements
+job.Screenplay.he: Scénariste
+job.Book.he: Livre
+job.Novel.he: Nouvelle
+job.Teleplay.he: Télétexte
+job.Cinematography.he: Cinématographie
+job.Editor.he: Rédacteur en chef
+job.Author.he: Auteur
 Self: soi-même
 Himself: lui-même
 Herself: elle-même

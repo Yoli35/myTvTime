@@ -7,8 +7,6 @@ html {
 }
 
 body {
-    --gradiant-bg: var(--gradiant-dark);
-
     background: var(--mtt-body-bg);
     background-image: var(--gradiant-bg);
     background-attachment: fixed;

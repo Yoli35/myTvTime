@@ -242,10 +242,7 @@
                 ticking = true;
             });
 
-            setTimeout(() => {
-                header.classList.add("fade-bg");
-            }, 3000);
-
+            setTimeout(() => header.classList.add("fade-bg"), 3000);
             setTimeout(clearQuote, 3000);
             setTimeout(backdropSlide, 4000);
         }
@@ -264,19 +261,9 @@
         function clearQuote() {
             const header = document.querySelector(".header");
             const quotes = header.querySelectorAll(".quote");
-            let op = 1.0, intervalId;
 
-            quotes.forEach((quote) => {
-                setTimeout(() => {
-                    quote.classList.add("hidden");
-                }, 0);
-            });
-
-            setTimeout(() => {
-                quotes.forEach(quote => {
-                    header.removeChild(quote);
-                })
-            }, 500);
+            quotes.forEach(quote => setTimeout(() => quote.classList.add("hidden"), 0));
+            setTimeout(() => quotes.forEach(quote => header.removeChild(quote)), 500);
         }
 
         function backdropSlide() {
@@ -319,13 +306,7 @@
             header.addEventListener("mouseenter", stopSlide);
             header.addEventListener("mouseleave", startSlide);
 
-            document.addEventListener("visibilitychange", () => {
-                if (document.visibilityState === 'visible') {
-                    startSlide();
-                } else {
-                    stopSlide();
-                }
-            });
+            document.addEventListener("visibilitychange", () => (document.visibilityState === 'visible') ? startSlide() : stopSlide());
 
             slideInterval = setInterval(slideFunc, slideDuration);
         }
@@ -465,9 +446,7 @@
             const wrapper = document.querySelector(".wrapper");
             const backdrops = wrapper.querySelectorAll(".backdrop");
             let tab = [], i = 0;
-            backdrops.forEach(backdrop => {
-                tab[i++] = backdrop.style.backgroundImage.match(/url\(["']?([^"']*)["']?\)/)[1];
-            });
+            backdrops.forEach(backdrop => tab[i++] = backdrop.style.backgroundImage.match(/url\(["']?([^"']*)["']?\)/)[1]);
             return tab;
         }
 
@@ -475,9 +454,7 @@
             const wrapper = document.querySelector(".wrapper");
             const infos = wrapper.querySelectorAll(".infos");
             let tab = [], i = 0;
-            infos.forEach(backdrop => {
-                tab[i++] = backdrop.firstElementChild.innerHTML;
-            });
+            infos.forEach(backdrop => tab[i++] = backdrop.firstElementChild.innerHTML);
             return tab;
         }
 
@@ -485,9 +462,7 @@
             const wrapper = document.querySelector(".wrapper");
             const links = wrapper.querySelectorAll("a");
             let tab = [], i = 0;
-            links.forEach(link => {
-                tab[i++] = link.getAttribute("href");
-            });
+            links.forEach(link => tab[i++] = link.getAttribute("href"));
             return tab;
         }
 

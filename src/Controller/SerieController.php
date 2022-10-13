@@ -928,6 +928,7 @@ class SerieController extends AbstractController
         $age = $interval->y;
         $people['age'] = $age;
 
+        $count = count($credits['cast']) + count($credits['crew']);
         $knownFor = [];
         $castNoDates = [];
         $castDates = [];
@@ -973,13 +974,12 @@ class SerieController extends AbstractController
         $sortedCrew = [];
         foreach ($crewDates as $department => $crewDate) {
             $noDates = [];
-            $dates= [];
+            $dates = [];
             foreach ($crewDate as $date) {
                 if (!$date['release_date']) {
                     $noDates[] = $date;
                     unset($date);
-                }
-                else {
+                } else {
                     $dates[$date['release_date']] = $date;
                 }
             }
@@ -997,6 +997,7 @@ class SerieController extends AbstractController
         return $this->render('serie/people.html.twig', [
             'people' => $people,
             'credits' => $credits,
+            'count' => $count,
             'user' => $this->getUser(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
@@ -1036,10 +1037,11 @@ class SerieController extends AbstractController
             $content = json_decode($standing, true);
         }
         return $this->json([
-            'overview' => $content? $content['overview']:"",
+            'overview' => $content ? $content['overview'] : "",
             'media_type' => $translator->trans($type),
         ]);
     }
+
     #[Route('/render/translation/fields', name: 'app_serie_render_translation_fields', methods: ['GET'])]
     public function renderTranslationFields(Request $request): Response
     {

@@ -27,7 +27,7 @@
 
     .parameters {
         @include flex-col();
-        background-color: var(--gradiant-ardoise-80);
+        background-color: var(--gradiant-grey-80);
         border-radius: .5em;
         box-shadow: 0 0 1em rgba(0, 0, 0, .5);
         margin: 0 auto;
@@ -51,7 +51,7 @@
 
             .input {
                 @include flex-row();
-                background-color: var(--gradiant-ardoise-30);
+                background-color: var(--gradiant-grey-30);
                 border-radius: .5em;
                 padding: .5em;
 
@@ -78,10 +78,10 @@
                 }
 
                 span {
-                    color: var(--gradiant-ardoise-50);
+                    color: var(--gradiant-grey-50);
 
                     span {
-                        color: var(--gradiant-ardoise-70);
+                        color: var(--gradiant-grey-70);
                         font-weight: bold;
                     }
                 }
@@ -89,7 +89,7 @@
 
             .thumbnail {
                 @include flex-row();
-                background-color: var(--gradiant-ardoise-30);
+                background-color: var(--gradiant-grey-30);
                 border-radius: .5em;
                 padding: .5em;
 
@@ -104,7 +104,7 @@
 
     .search-tags {
         @include flex-col();
-        background-color: var(--gradiant-ardoise-80);
+        background-color: var(--gradiant-grey-80);
         border-radius: .5em;
         margin: .25em auto;
         overflow: hidden;
@@ -140,7 +140,7 @@
 
 .yt-video {
     align-items: center;
-    background-color: var(--gradiant-ardoise-80);
+    background-color: var(--gradiant-grey-80);
     border-radius: .5em;
     box-shadow: 0 0 1em rgba(0, 0, 0, .25);
     display: flex;
@@ -153,7 +153,7 @@
         font-weight: 100;
 
         .duration {
-            background-color: var(--gradiant-ardoise-10);
+            background-color: var(--gradiant-grey-10);
             border-radius: .125em;
             bottom: .5em;
             font-size: .75em;
@@ -171,10 +171,10 @@
             top: .5em;
 
             .tag {
-                background-color: var(--gradiant-ardoise-40);
-                border: 1px solid var(--gradiant-ardoise-90);
+                background-color: var(--gradiant-grey-40);
+                border: 1px solid var(--gradiant-grey-90);
                 border-radius: .5em;
-                color: var(--gradiant-ardoise-90);
+                color: var(--gradiant-grey-90);
                 font-size: .75em;
                 font-weight: 400;
                 padding: 0 .5em;
@@ -198,18 +198,18 @@
         width: 20em;
 
         .channel {
-            @include author(var(--gradiant-ardoise-60));
+            @include author(var(--gradiant-grey-60));
 
             span[data-descr] {
                 position: relative;
             }
 
             span[data-descr]:hover::after {
-                background-color: var(--gradiant-ardoise-50);
-                border: 2px var(--gradiant-ardoise-70) solid;
+                background-color: var(--gradiant-grey-50);
+                border: 2px var(--gradiant-grey-70) solid;
                 border-radius: .5em;
                 bottom: 3.5em;
-                color: var(--gradiant-ardoise-80);
+                color: var(--gradiant-grey-80);
                 content: attr(data-descr);
                 font-size: .5em;
                 font-weight: 400;
@@ -236,7 +236,7 @@
 }
 
 .yt-videos-none {
-    background-color: var(--gradiant-ardoise-50);
+    background-color: var(--gradiant-grey-50);
     border-radius: .25em;
     font-size: 3em;
     font-weight: normal;
@@ -278,36 +278,36 @@
                     position: relative;
 
                     input {
-                        background-color: var(--gradiant-ardoise-40);
-                        border: 1px solid var(--gradiant-ardoise-90);
+                        background-color: var(--gradiant-grey-40);
+                        border: 1px solid var(--gradiant-grey-90);
                         border-radius: .5em;
-                        caret-color: var(--gradiant-ardoise-90);
-                        color: var(--gradiant-ardoise-90);
+                        caret-color: var(--gradiant-grey-90);
+                        color: var(--gradiant-grey-90);
                         padding-left: .5em;
                     }
 
                     .results {
-                        background-color: var(--gradiant-ardoise-40);
-                        border: 1px solid var(--gradiant-ardoise-90);
+                        background-color: var(--gradiant-grey-40);
+                        border: 1px solid var(--gradiant-grey-90);
                         border-radius: .25em;
                         left: 1em;
                         position: absolute;
                         top: 1.75em;
 
                         .item {
-                            color: var(--gradiant-ardoise-90);
+                            color: var(--gradiant-grey-90);
                             padding: 0 1em;
 
                             &:hover {
-                                background-color: var(--gradiant-ardoise-90);
-                                color: var(--gradiant-ardoise-40);
+                                background-color: var(--gradiant-grey-90);
+                                color: var(--gradiant-grey-40);
                                 cursor: pointer;
                             }
                         }
                     }
 
                     .add {
-                        color: var(--gradiant-ardoise-90);
+                        color: var(--gradiant-grey-90);
                         cursor: pointer;
                         position: absolute;
                         right: .25em;
@@ -316,10 +316,10 @@
                 }
 
                 .tag {
-                    background-color: var(--gradiant-ardoise-40);
-                    border: 1px solid var(--gradiant-ardoise-90);
+                    background-color: var(--gradiant-grey-40);
+                    border: 1px solid var(--gradiant-grey-90);
                     border-radius: .5em;
-                    color: var(--gradiant-ardoise-90);
+                    color: var(--gradiant-grey-90);
                     font-size: 1em;
                     font-weight: 100;
                     padding: 1px 1.5em 1px .5em; /* -> same height as input */
@@ -345,7 +345,7 @@
 
         .description {
             a {
-                color: var(--gradiant-ardoise-40);
+                color: var(--gradiant-grey-40);
             }
         }
 
@@ -360,7 +360,7 @@
             }
 
             .thumbnail {
-                @include author(var(--gradiant-ardoise-60));
+                @include author(var(--gradiant-grey-60));
             }
         }
     }
@@ -376,7 +376,7 @@
 
     .search {
         @include flex-100(start, start);
-        background-color: var(--gradiant-ardoise-20);
+        background-color: var(--gradiant-grey-20);
         margin: 1em 0;
         padding: 1em;
 
@@ -392,8 +392,8 @@
                 position: relative;
 
                 input {
-                    background-color: var(--gradiant-ardoise-30);
-                    color: var(--gradiant-ardoise-70);
+                    background-color: var(--gradiant-grey-30);
+                    color: var(--gradiant-grey-70);
                     border: 0;
                     border-radius: .25em;
                     font-weight: 100;
@@ -403,7 +403,7 @@
                 }
 
                 .autocomplete-items {
-                    border: 1px solid var(--gradiant-ardoise-80);
+                    border: 1px solid var(--gradiant-grey-80);
                     border-bottom: none;
                     border-top: none;
                     left: 0;
@@ -418,17 +418,17 @@
                     div {
                         padding: .25em .5em calc(.25em - 1px);
                         cursor: pointer;
-                        background-color: var(--gradiant-ardoise-90);
-                        border-bottom: 1px solid var(--gradiant-ardoise-70);
-                        color: var(--gradiant-ardoise-30);
+                        background-color: var(--gradiant-grey-90);
+                        border-bottom: 1px solid var(--gradiant-grey-70);
+                        color: var(--gradiant-grey-30);
 
                         &:hover {
-                            background-color: var(--gradiant-ardoise-80);
+                            background-color: var(--gradiant-grey-80);
                         }
 
                         &.active {
-                            background-color: var(--gradiant-ardoise-40) !important;
-                            color: var(--gradiant-ardoise-90) !important;
+                            background-color: var(--gradiant-grey-40) !important;
+                            color: var(--gradiant-grey-90) !important;
                         }
                     }
                 }
@@ -450,7 +450,7 @@
             }
 
             .method {
-                color: var(--gradiant-ardoise-70);
+                color: var(--gradiant-grey-70);
                 margin-left: auto;
                 position: relative;
 
@@ -460,10 +460,10 @@
 
                 select {
                     appearance: none;
-                    background-color: var(--gradiant-ardoise-30);
+                    background-color: var(--gradiant-grey-30);
                     border: none;
                     border-radius: .25em;
-                    color: var(--gradiant-ardoise-70);
+                    color: var(--gradiant-grey-70);
                     font-weight: 100;
                     padding: .25em 2em .25em 1em;
                 }
@@ -480,24 +480,24 @@
 
             .apply {
                 appearance: unset;
-                background-color: var(--gradiant-ardoise-20);
-                border: 1px solid var(--gradiant-ardoise-80);
+                background-color: var(--gradiant-grey-20);
+                border: 1px solid var(--gradiant-grey-80);
                 border-radius: var(--button-border-radius);
-                color: var(--gradiant-ardoise-80);
+                color: var(--gradiant-grey-80);
                 font-weight: 100;
                 margin-left: 1em;
                 padding: .25em 1em;
                 text-transform: uppercase;
 
                 &:hover {
-                    background-color: var(--gradiant-ardoise-50);
+                    background-color: var(--gradiant-grey-50);
                     color: var(--gradiant-mars-80);
                 }
 
                 &.disabled {
-                    background-color: var(--gradiant-ardoise-50);
-                    border: 1px solid var(--gradiant-ardoise-60);
-                    color: var(--gradiant-ardoise-60);
+                    background-color: var(--gradiant-grey-50);
+                    border: 1px solid var(--gradiant-grey-60);
+                    color: var(--gradiant-grey-60);
                     cursor: default;
                 }
             }
@@ -734,19 +734,19 @@
     .yt-videos {
 
         .parameters {
-            background-color: var(--gradiant-ardoise-20);
+            background-color: var(--gradiant-grey-20);
 
             span {
-                color: var(--gradiant-ardoise-60);
+                color: var(--gradiant-grey-60);
 
                 span {
-                    color: var(--gradiant-ardoise-70);
+                    color: var(--gradiant-grey-70);
                 }
             }
         }
 
         .search-tags {
-            background-color: var(--gradiant-ardoise-20);
+            background-color: var(--gradiant-grey-20);
         }
 
         .result {
@@ -754,7 +754,7 @@
     }
 
     .yt-video {
-        background-color: var(--gradiant-ardoise-20);
+        background-color: var(--gradiant-grey-20);
     }
 
     .yt-video-page {
@@ -765,7 +765,7 @@
         .details {
             .description {
                 a {
-                    color: var(--gradiant-ardoise-70);
+                    color: var(--gradiant-grey-70);
                 }
             }
         }
