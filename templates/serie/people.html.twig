@@ -104,42 +104,64 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% if credits.cast|length %}
-                            <h2>{{ 'Acting'|trans }}</h2>
-                            <div class="acting">
-                                {% for date, prod in credits.cast %}
-                                    <div class="date">
-                                        <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
-                                        <div class="info" data-id="{{ prod.id }}"><i class="fa-solid fa-circle-info"></i></div>
-                                        {% if prod.media_type == "movie" %}
-                                            {% set url = path('app_movie', {id: prod.id}) %}
-                                        {% endif %}
-                                        {% if prod.media_type == "tv" %}
-                                            {% set url = path('app_serie_tmdb', {id: prod.id}) %}
-                                        {% endif %}
-                                        {% if url is defined %}
-                                        <a href="{{ url }}">
+                        <div class="credits">
+                            {% if credits.cast|length %}
+                                <h2>{{ 'Acting'|trans }}</h2>
+                                <div class="acting">
+                                    {% for date, prod in credits.cast %}
+                                        <div class="date">
+                                            <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                            <div class="info" data-id="{{ prod.id }}" data-title="{{ prod.title }}" data-type="{{ prod.media_type }}" data-poster="{{ prod.poster_path }}"><i class="fa-solid fa-circle-info"></i></div>
+                                            {% if prod.media_type == "movie" %}
+                                                {% set url = path('app_movie', {id: prod.id}) %}
                                             {% endif %}
-                                        <div class="title">
-                                            {{ prod.title }}
-                                            {% if prod.media_type == 'movie' %}
-                                                <i class="fa-solid fa-film" title="{{ "Movie"|trans }}"></i>
+                                            {% if prod.media_type == "tv" %}
+                                                {% set url = path('app_serie_tmdb', {id: prod.id}) %}
                                             {% endif %}
-                                            {% if prod.media_type == 'tv' %}
-                                                <i class="fa-solid fa-tv" title="{{ 'Serie'|trans }}"></i>
+                                            {% if url is defined %}
+                                            <a href="{{ url }}">
+                                                {% endif %}
+                                                <div class="title">
+                                                    {{ prod.title }}
+                                                    {% if prod.media_type == 'movie' %}
+                                                        <i class="fa-solid fa-film" title="{{ "Movie"|trans }}"></i>
+                                                    {% endif %}
+                                                    {% if prod.media_type == 'tv' %}
+                                                        <i class="fa-solid fa-tv" title="{{ 'Serie'|trans }}"></i>
+                                                    {% endif %}
+                                                </div>
+                                                {% if url is defined %}
+                                            </a>
+                                            {% endif %}
+                                            {% if prod.character|length %}
+                                                <div class="character">{{ 'as'|trans }} {{ prod.character }}</div>
                                             {% endif %}
                                         </div>
-                                            {% if url is defined %}
-                                        </a>
-                                        {% endif %}
-                                        {% if prod.character|length %}
-                                            <div class="character">{{ 'as'|trans }} {{ prod.character }}</div>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
+                </div>
+                <div class="pop-infos">
+                    <div class="content">
+                        <div class="poster"></div>
+                        <div class="body">
+                            <div class="title"></div>
+                            <div class="overview"></div>
+                            <div class="spinner">
+                                <div class="circle1">
+                                    <div class="circle2">
+                                        <div class="circle3">
+                                            <div class="circle4"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="close"><i class="fa-solid fa-xmark"></i></div>
+                        </div>
+                    </div>
+                    <div class="tail"></div>
                 </div>
             </div>
         </main>
@@ -147,4 +169,62 @@
     </div>
 {% endblock %}
 {% block morejs %}
+    <script>
+        const _app_serie_get_overview = "{{ path('app_serie_get_overview', {id: 0}) }}";
+        const imgUrl = "{{ imageConfig.url ~ imageConfig.profile_sizes.2 }}";
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const infos = document.querySelector(".credits").querySelectorAll(".info");
+            infos.forEach(info => {
+                info.querySelector("i").addEventListener("click", showInfos);
+            });
+        });
+
+        function showInfos(evt) {
+            const id = evt.target.closest(".info").getAttribute("data-id");
+            const type = evt.target.closest(".info").getAttribute("data-type");
+            const title = evt.target.closest(".info").getAttribute("data-title");
+            const poster = evt.target.closest(".info").getAttribute("data-poster");
+
+            const popInfos = document.querySelector(".pop-infos");
+            const close = popInfos.querySelector(".close");
+            const x = evt.clientX, y = evt.clientY + evt.view.scrollY - 16;
+
+            close.addEventListener("click", ()=> {
+                popInfos.classList.remove("fade");
+                setTimeout(()=>{
+                    popInfos.classList.remove("show");
+                    popInfos.querySelector(".poster").innerHTML = "";
+                    popInfos.querySelector(".title").innerHTML = "";
+                    popInfos.querySelector(".overview").innerHTML = "";
+                }, 300);
+            });
+
+            let img = document.createElement("img");
+            img.setAttribute("src", imgUrl + poster);
+            popInfos.querySelector(".poster").innerHTML = "";
+            popInfos.querySelector(".poster").appendChild(img);
+            popInfos.querySelector(".title").appendChild(document.createTextNode(title));
+            popInfos.querySelector(".spinner").setAttribute("style", "display: block;");
+            popInfos.setAttribute("style", "left: calc(" + x + "px - 16em); top: calc(" + y + "px - 10.85em);");
+            popInfos.classList.add("show");
+            setTimeout(()=> {
+                popInfos.classList.add("fade");
+            }, 0);
+
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let result = {'overview': "", "media_type": ""};
+                result = JSON.parse(this.response);
+                popInfos.querySelector(".title").innerHTML = "";
+                popInfos.querySelector(".overview").innerHTML = "";
+                popInfos.querySelector(".title").appendChild(document.createTextNode(title + " (" + result.media_type + ")"));
+                popInfos.querySelector(".overview").appendChild(document.createTextNode(result.overview));
+                popInfos.querySelector(".spinner").setAttribute("style", "display: none;");
+            }
+            xhr.open("GET", _app_serie_get_overview.substring(0, _app_serie_get_overview.length-1) + id + "?type=" + type);
+            xhr.send();
+
+        }
+    </script>
 {% endblock %}

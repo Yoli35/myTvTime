@@ -1018,6 +1018,27 @@ class SerieController extends AbstractController
 
         return $knownFor;
     }
+
+    #[Route('/overview/{id}', name: 'app_serie_get_overview', methods: 'GET')]
+    public function getOverview(Request $request, $id, TMDBService $service, TranslatorInterface $translator): Response
+    {
+        $type = $request->query->get("type");
+        $content = null;
+
+        $standing = match ($type) {
+            "tv" => $service->getTv($id, $request->getLocale()),
+            "movie" => $service->getMovie($id, $request->getLocale()),
+            default => null,
+        };
+
+        if ($standing) {
+            $content = json_decode($standing, true);
+        }
+        return $this->json([
+            'overview' => $content? $content['overview']:"",
+            'media_type' => $translator->trans($type),
+        ]);
+    }
     #[Route('/render/translation/fields', name: 'app_serie_render_translation_fields', methods: ['GET'])]
     public function renderTranslationFields(Request $request): Response
     {
