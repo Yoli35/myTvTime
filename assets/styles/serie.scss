@@ -1184,42 +1184,7 @@
                 }
 
                 .images {
-                    @include flex-col(flex-start, flex-start);
-                    margin: 1em 0;
-                    width: 100%;
-
-                    > div {
-                        @include flex-row(center, flex-start);
-                        flex-wrap: wrap;
-                        background-color: var(--gradiant-grey-90);
-                        border-radius: 0;
-                        min-height: 10em;
-                        margin: 0 0 1em 0;
-                        width: 100%;
-
-                        img {
-                            display: block;
-                            margin: 1em;
-                        }
-
-                        .backdrop {
-                            border-radius: .5em;
-                            max-width: calc(100% - 2em);
-                        }
-
-                        .logo {
-
-                        }
-
-                        .poster {
-                            border-radius: .5em;
-                        }
-                    }
-
-                    h4, h5 {
-                        font-weight: 100;
-                        text-transform: uppercase;
-                    }
+                    @include images-tmdb;
                 }
             }
         }

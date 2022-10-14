@@ -38,7 +38,7 @@ function setVote(vote) {
     const start = document.querySelector(".circle-start");
     const end = document.querySelector(".circle-end");
     vote *= 10;
-    circle.setAttribute("style", "background: conic-gradient(var(--gradiant-ardoise-60) 0%, var(--gradiant-ardoise-60) " + vote + "%, var(--gradiant-ardoise-10) " + vote + "%);");
+    circle.setAttribute("style", "background: conic-gradient(var(--gradiant-grey-60) 0%, var(--gradiant-grey-60) " + vote + "%, var(--gradiant-grey-10) " + vote + "%);");
     start.setAttribute("style", "translate: 0 -1.5em;");
     end.setAttribute("style", "transform: rotate(" + (vote * 3.6) + "deg) translateY(-1.5em)");
 }

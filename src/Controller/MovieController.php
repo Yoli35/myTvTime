@@ -80,6 +80,10 @@ class MovieController extends AbstractController
             $movieDetail['release_date'] = "";
         }
 
+        $standing = $callTmdbService->getMovieImages($id, $locale);
+        $images = json_decode($standing, true);
+        dump($images);
+
         $ygg = str_replace(' ', '+', $movieDetail['title']);
         $ygg = str_replace('\'', '+', $ygg);
 
@@ -119,6 +123,7 @@ class MovieController extends AbstractController
             'crew' => $crew,
             'collections' => $collections,
             'movieCollection' => $movieCollectionIds,
+            'images' => $images,
             'user' => $user,
             'ygg' => $ygg,
             'imageConfig' => $imageConfig,

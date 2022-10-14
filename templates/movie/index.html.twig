@@ -279,6 +279,37 @@
                     </div>
                 </div>
             {% endif %}
+            {% if images.backdrops|length or images.logos|length or images.posters|length %}
+                <section>
+                    <div class="images">
+                        <h4>{{ 'Images'|trans }}</h4>
+                        {% if images.backdrops|length %}
+                            <h5>{{ 'Backdrops'|trans }}</h5>
+                            <div>
+                                {% for backdrop in images.backdrops %}
+                                    <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.2 ~ backdrop.file_path }}" alt="Some backdrop">
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if images.logos|length %}
+                            <h5>{{ 'Logos'|trans }}</h5>
+                            <div>
+                                {% for logo in images.logos %}
+                                    <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if images.posters|length %}
+                            <h5>{{ 'Posters'|trans }}</h5>
+                            <div>
+                                {% for poster in images.posters %}
+                                    <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.2 ~ poster.file_path }}" alt="Some poster">
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </section>
+            {% endif %}
         </div>
 
         <div class="modal fade" id="personModal" tabindex="-1">

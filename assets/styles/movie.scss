@@ -144,7 +144,7 @@
                     flex-wrap: wrap;
 
                     .provider {
-                        background-color: var(--gradiant-grey-50);
+                        background-color: var(--gradiant-grey-10);
                         border-radius: .5em;
                         @include flex-row(center, start);
                         margin: .125em;
@@ -407,6 +407,10 @@
             }
         }
     }
+
+    .images {
+        @include images-tmdb;
+    }
 }
 
 @media (min-width: 991.98px) {
@@ -584,6 +588,13 @@
                         background-image: url("../images/profile_dark.jpg");
                     }
                 }
+            }
+        }
+
+        .images {
+            > div {
+                background-color: var(--gradiant-grey-20-alpha-50);
+                border-radius: .5em;
             }
         }
     }

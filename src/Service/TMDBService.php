@@ -370,6 +370,25 @@ class TMDBService
         }
     }
 
+    public function getMovieImages($id, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/movie/' . $id . '/images?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
+    }
+
     public function getTvImages($tvId, $locale): ?string
     {
         try {
