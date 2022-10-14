@@ -85,7 +85,7 @@
                         {% if movie.overview | length %}
                             <div class="overview">
                                 {{ 'Overview'|trans }} :
-                                {{ movie.overview }}
+                                {{ movie.overview|raw }}
                             </div>
                         {% endif %}
                     </div>
@@ -243,15 +243,17 @@
                 <div class="cast">
                     <div class="content">
                         {% for actor in cast %}
-                            <div class="actor" data-bs-toggle="modal" data-bs-target="#personModal">
-                                {% if actor.profile_path | length %}
-                                    <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
-                                {% else %}
-                                    <div class="profile" data-id="{{ actor.id }}"></div>
-                                {% endif %}
-                                <div class="name">{{ actor.name }}</div>
-                                <div class="character">{{ actor.character }}</div>
-                            </div>
+                            <a href="{{ path('app_serie_people', {id: actor.id}) }}">
+                                <div class="actor" data-bs-toggle="modal" data-bs-target="#personModal">
+                                    {% if actor.profile_path | length %}
+                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
+                                    {% else %}
+                                        <div class="profile" data-id="{{ actor.id }}"></div>
+                                    {% endif %}
+                                    <div class="name">{{ actor.name }}</div>
+                                    <div class="character">{{ actor.character }}</div>
+                                </div>
+                            </a>
                         {% endfor %}
                     </div>
                 </div>
@@ -262,15 +264,17 @@
                 <div class="crew">
                     <div class="content">
                         {% for member in crew %}
-                            <div class="member" data-bs-toggle="modal" data-bs-target="#personModal">
-                                {% if member.profile_path | length %}
-                                    <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')" data-id="{{ member.id }}"></div>
-                                {% else %}
-                                    <div class="profile" data-id="{{ member.id }}"></div>
-                                {% endif %}
-                                <div class="job">{{ member.job }}</div>
-                                <div class="name">{{ member.name }}</div>
-                            </div>
+                            <a href="{{ path('app_serie_people', {id: member.id}) }}">
+                                <div class="member" data-bs-toggle="modal" data-bs-target="#personModal">
+                                    {% if member.profile_path | length %}
+                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')" data-id="{{ member.id }}"></div>
+                                    {% else %}
+                                        <div class="profile" data-id="{{ member.id }}"></div>
+                                    {% endif %}
+                                    <div class="job">{{ member.job }}</div>
+                                    <div class="name">{{ member.name }}</div>
+                                </div>
+                            </a>
                         {% endfor %}
                     </div>
                 </div>

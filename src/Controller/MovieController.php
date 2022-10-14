@@ -13,6 +13,7 @@ use App\Repository\UserMovieRepository;
 use App\Service\CallImdbService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
+
 //use Google\ApiCore\ValidationException;
 //use Google\Cloud\Translate\V3\TranslationServiceClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,8 +52,7 @@ class MovieController extends AbstractController
             $watchProviders = $watchProviders['results'];
             if (key_exists(strtoupper($locale), $watchProviders)) {
                 $watchProviders = $watchProviders[strtoupper($locale)];
-            }
-            else {
+            } else {
                 $watchProviders = null;
             }
         }
@@ -83,9 +83,34 @@ class MovieController extends AbstractController
         $ygg = str_replace(' ', '+', $movieDetail['title']);
         $ygg = str_replace('\'', '+', $ygg);
 
+        if (!$movieDetail['overview'] || !strlen($movieDetail['overview'])) {
+            $movie = $userMovieRepository->findOneBy(['movieDbId' => $id]);
+            switch ($locale) {
+                case 'fr':
+                    if ($movie && $movie->getOverviewFr()) {
+                        $movieDetail['overview'] = $movie->getOverviewFr();
+                    }
+                    break;
+                case 'en':
+                    if ($movie && $movie->getOverviewEn()) {
+                        $movieDetail['overview'] = $movie->getOverviewEn();
+                    }
+                    break;
+                case 'es':
+                    if ($movie && $movie->getOverviewEs()) {
+                        $movieDetail['overview'] = $movie->getOverviewEs();
+                    }
+                    break;
+                case 'de':
+                    if ($movie && $movie->getOverviewDe()) {
+                        $movieDetail['overview'] = $movie->getOverviewDe();
+                    }
+                    break;
+            }
+        }
+        dump($movieDetail);
 
-        return $this->render('movie/index.html.twig', [
-            'movie' => $movieDetail,
+        return $this->render('movie/index.html.twig', ['movie' => $movieDetail,
             'recommendations' => $recommendations['results'],
             'dates' => $releaseDates,
             'watchProviders' => $watchProviders,
@@ -97,11 +122,11 @@ class MovieController extends AbstractController
             'user' => $user,
             'ygg' => $ygg,
             'imageConfig' => $imageConfig,
-            'locale' => $locale,
-        ]);
+            'locale' => $locale,]);
     }
 
-    public function getLocaleDates($dates, $countries, $locale): array
+    public
+    function getLocaleDates($dates, $countries, $locale): array
     {
         $locales = [
             'fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
@@ -131,7 +156,8 @@ class MovieController extends AbstractController
         return $localeDates;
     }
 
-    #[Route('/{_locale}/movie/collection/{mid}/{id}', 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[
+        Route('/{_locale}/movie/collection/{mid}/{id}', 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
     public function movieCollection(Request $request, $mid, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, GenreRepository $genreRepository, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();

@@ -159,7 +159,7 @@ if (personalModal) {
 
 function initMovieStuff(paths, profileUrl, locale) {
     // querySelectorAll renvoie une nodeList, vide si aucune correspondance n'est trouvée
-    const profiles = document.querySelectorAll(".profile");
+    // const profiles = document.querySelectorAll(".profile");
     const has_been_seen = document.querySelectorAll(".has-been-seen");
     const movie_headers = document.querySelectorAll(".movie-header");
 
@@ -189,6 +189,7 @@ function initMovieStuff(paths, profileUrl, locale) {
         }
     })
 
+/*
     profiles.forEach(profile => {
         profile.addEventListener("click", getProfile);
     });
@@ -199,8 +200,10 @@ function initMovieStuff(paths, profileUrl, locale) {
             button.addEventListener("click", closeProfile);
         });
     }
+*/
 }
 
+/*
 function closeProfile() {
     personalModal.classList.remove("show");
     setTimeout(() => {
@@ -277,6 +280,7 @@ function getProfile(e) {
     xhr.open("GET", _profile_infos + "?id=" + id + "&locale=" + _loc);
     xhr.send();
 }
+*/
 
 function toggleSeenStatus(e) {
 

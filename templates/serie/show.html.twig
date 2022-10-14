@@ -19,6 +19,10 @@
     {% endblock %}
 
 {% block body %}
+    <div class="bubble">
+        <div class="body">{{ 'Episode'|trans }}&nbsp;<span></span></div>
+        <div class="tail"></div>
+    </div>
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     {{ include('blocks/pageHeader.html.twig') }}
     <div class="container">
@@ -232,14 +236,10 @@
                                             {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
                                             {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
                                             <div class="details" data-season-number="{{ season.season_number }}">
-                                                <div class="bubble">
-                                                    <div class="body">{{ 'Episode'|trans }}&nbsp;<span></span></div>
-                                                    <div class="tail"></div>
-                                                </div>
                                                 <div>
                                                     {{ include('blocks/serie/viewing_season.html.twig', {season_number: season.season_number, episode_count: season.episode_count}) }}
                                                 </div>
-                                                <div class="mouse-detector"></div>
+                                                {#                                                <div class="mouse-detector"></div> #}
                                             </div>
                                             {% if season.overview|length %}
                                                 <div>{{ season.overview }}</div>
@@ -414,48 +414,44 @@
 
             initSerieStuff(paths, parseFloat({{ serie.vote_average }}));
 
-            const mouseDetectors = document.querySelectorAll(".mouse-detector");
-            mouseDetectors.forEach(mouseDetector => {
-                mouseDetector.addEventListener('mousemove', bubbleIt);
-                mouseDetector.addEventListener('mouseenter', bubbleItShow);
-                mouseDetector.addEventListener('mouseout', bubbleItShow);
-                mouseDetector.addEventListener('click', mouseToEpisode);
-            })
-            // const eps = document.querySelectorAll(".ep");
-            // eps.forEach(ep => {
-            //     ep.addEventListener("click", toggleView);
-            // });
+            episodeAddEvent();
+
+            function episodeAddEvent() {
+                const episodes = document.querySelectorAll(".ep");
+                episodes.forEach(episode => {
+                    episode.addEventListener('mousemove', bubbleIt);
+                    episode.addEventListener('mouseenter', bubbleItShow);
+                    episode.addEventListener('mouseleave', bubbleItHide);
+                    episode.addEventListener('click', toggleView);
+                })
+            }
 
             function bubbleItShow(evt) {
-                const details = evt.target.closest(".details");
-                const bubble = details.querySelector(".bubble");
-                bubble.classList.toggle("show");
-                if (!bubble.classList.contains("show")) {
-                    const span = bubble.querySelector("span");
-                    span.innerText = "";
-                }
+                const bubble = document.querySelector(".bubble");
+                const viewed = parseInt(this.getAttribute("data-viewed"));
+                const episode = this.getAttribute("data-number");
+                bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
+                bubble.querySelector("span").innerText = episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
+                bubble.classList.add("show");
+            }
+
+            function bubbleItHide(evt) {
+                const bubble = document.querySelector(".bubble");
+                bubble.classList.remove("show");
+                bubble.querySelector("span").innerText = "";
             }
 
             function bubbleIt(evt) {
-                const number = (1 + Math.floor(evt.offsetX / 24));
-                const details = evt.target.closest(".details");
-                const ep = details.querySelector(".viewing :nth-child(" + number.toString() + ")");
-                const viewed = parseInt(ep ? ep.getAttribute("data-viewed") : 0);
-                const bubble = details.querySelector(".bubble");
-                const span = bubble.querySelector("span");
-                bubble.setAttribute("style", "translate: " + evt.offsetX + "px;");
-                span.innerText = number.toString() + (viewed ? (" 🤓") : (" 🥺"));
+                const bubble = document.querySelector(".bubble");
+                // const viewed = parseInt(this.getAttribute("data-viewed"));
+                // const episode = this.getAttribute("data-number");
+                bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
+                // bubble.querySelector("span").innerText = episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
             }
 
-            function mouseToEpisode(evt) {
+            function toggleView(evt) {
+                const ep = this;
                 evt.preventDefault();
-                const number = (1 + Math.floor(evt.offsetX / 24));
-                const details = evt.target.closest(".details");
-                const ep = details.querySelector(".viewing :nth-child(" + number.toString() + ")")
-                toggleView(ep);
-            }
-
-            function toggleView(ep) {
                 const e_number = parseInt(ep.getAttribute("data-number"));
                 const e_viewed = parseInt(ep.getAttribute("data-viewed")) === 0 ? 1 : 0;
                 const s_number = parseInt(ep.parentElement.getAttribute("data-season-number"));
@@ -475,17 +471,7 @@
                         details.insertBefore(newViewingDiv, mouseDetector);
                     })
 
-                    const mouseDetectors = document.querySelectorAll(".mouse-detector");
-                    mouseDetectors.forEach(mouseDetector => {
-                        mouseDetector.addEventListener('mousemove', bubbleIt);
-                        mouseDetector.addEventListener('mouseenter', bubbleItShow);
-                        mouseDetector.addEventListener('mouseout', bubbleItShow);
-                        mouseDetector.addEventListener('click', mouseToEpisode);
-                    })
-                    // const eps = document.querySelectorAll(".ep");
-                    // eps.forEach(ep => {
-                    //     ep.addEventListener("click", toggleView);
-                    // });
+                    episodeAddEvent();
                 }
                 xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed);
                 xhr.send();
