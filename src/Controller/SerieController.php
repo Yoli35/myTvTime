@@ -921,6 +921,7 @@ class SerieController extends AbstractController
         $people = json_decode($standing, true);
         $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);
         $credits = json_decode($standing, true);
+        dump($credits);
 
         $date = new DateTime($people['birthday']);
         $now = $people['deathday'] ? new DateTime($people['deathday']) : new DateTime();

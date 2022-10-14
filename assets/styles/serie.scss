@@ -618,16 +618,20 @@
                         width: 100%;
 
                         h4 {
-                            @include flex-100(start, start);
+                            @include flex-100(center, start);
 
                             .switch {
                                 @include switcher(var(--gradiant-green-30), var(--gradiant-grey-80))
                             }
 
                             .anim-settings-toggler {
+                                background-image: url("../images/settings.png");
+                                background-size: cover;
                                 cursor: pointer;
+                                height: 1.5em;
                                 margin-left: .5em;
                                 transition: rotate .2s ease-in-out;
+                                width: 1.5em;
 
                                 &:hover {
                                     rotate: 180deg;
@@ -1550,6 +1554,11 @@
                             font-weight: 100;
                             padding-left: .5em;
                         }
+                    }
+
+                    .separation {
+                        border-bottom: 1px solid var(--gradiant-grey-40-alpha-50);
+                        width: 100%;
                     }
                 }
             }

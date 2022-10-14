@@ -50,6 +50,7 @@
                 </div>
 
                 <div class="pinned-collection hide mini">
+                    <h4></h4>
                     <div class="wrapper"></div>
                 </div>
 
@@ -163,7 +164,8 @@
                         wrapper.innerHTML = "";
                         let data = JSON.parse(this.response);
                         console.log({data});
-                        data.forEach((item = {id: 0, title: "", original_title: "", poster_path: "", movie_db_id: 0, release_date: "", runtime: 0, description: ""}) => {
+                        pinned.querySelector("h4").innerHTML = data.title;
+                        data.movies.forEach((item = {id: 0, title: "", original_title: "", poster_path: "", movie_db_id: 0, release_date: "", runtime: 0, description: ""}) => {
                             let a = document.createElement("a");
                             a.setAttribute("href", _app_movie.substring(0, _app_movie.length - 1) + item.movie_db_id);
                             let movie = document.createElement("div");

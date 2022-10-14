@@ -174,9 +174,10 @@ class UserController extends AbstractController
     #[Route('/{_locale}/personal/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
     public function getCollection(Request $request, $id, MovieCollectionRepository $collectionRepository, TMDBService $TMDBService, UserMovieRepository $movieRepository): Response
     {
+        /** @var MovieCollection $collection */
         $collection = $collectionRepository->find($id);
         $movies = $this->moviesToArray($request, $collection->getMovies(), $TMDBService, $movieRepository);
-        return $this->json($movies);
+        return $this->json(['title' => $collection->getTitle(), 'movies' => $movies]);
     }
 
     private function moviesToArray($request, $movies, $TMDBService, $movieRepository): array

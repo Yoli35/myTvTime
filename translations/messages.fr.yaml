@@ -316,8 +316,10 @@ Serie: Série
 old: ans
 tv: série télévisée
 movie: film
+Camera: Caméra
 Editing: Editing
 Sound: Son
+Lighting: Lumière
 job.Creator.he: Créateur
 job.Creator.she: Créatrice
 job.Producer.he: Producteur
@@ -346,6 +348,21 @@ job.Teleplay.he: Télétexte
 job.Cinematography.he: Cinématographie
 job.Editor.he: Rédacteur en chef
 job.Author.he: Auteur
+job.Production Assistant.he: Assistant de production
+job.Creative Producer.he: Producteur créatif
+job.Comic Book.he: Bande dessinée
+job.Director of Photography.he: Directeur de la photographie
+job.Assistant Director.he: Assistant réalisateur
+job.Lighting Technician.he: Technicien d'éclairage
+job.Original Story.he: Histoire originale
+job.Screenstory.he: Scénario
+job.Adaptation.he: Adaptation
+job.Music.he: Musique
+job.Original Music Composer.he: Compositeur de musique originale
+job.Conductor.he: Chef d'orchestre
+job.Music Supervisor.he: Superviseur musical
+job.Dialogue.he: Dialogue
+job.Co-Writer.he: Co-auteur
 Self: soi-même
 Himself: lui-même
 Herself: elle-même

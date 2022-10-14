@@ -110,9 +110,23 @@
                             {% if credits.cast|length %}
                                 <h2>{{ 'Acting'|trans }}</h2>
                                 <div class="acting">
+                                    {% set lastDate = "" %}
                                     {% for date, prod in credits.cast %}
+                                        {% if loop.index0 %}
+                                            {% if date|length == 10 and date|slice(0,4) != lastDate %}
+                                                <div class="separation"></div>
+                                            {% endif %}
+                                        {% endif %}
                                         <div class="date">
-                                            <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                            {% if loop.index0 %}
+                                                {% if date|length == 10 and date|slice(0,4) != lastDate %}
+                                                    <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                                {% else %}
+                                                    <div class="year"></div>
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                            {% endif %}
                                             <div class="info" data-id="{{ prod.id }}" data-title="{{ prod.title }}" data-type="{{ prod.media_type }}" data-poster="{{ prod.poster_path }}"><i class="fa-solid fa-circle-info"></i></div>
                                             {% if prod.media_type == "movie" %}
                                                 {% set url = path('app_movie', {id: prod.id}) %}
@@ -148,6 +162,7 @@
                                                 {% endif %}
                                             {% endif %}
                                         </div>
+                                        {% set lastDate = date|slice(0,4) %}
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -156,8 +171,21 @@
                                     <h2>{{ department|trans }}</h2>
                                     <div class="sub-credits">
                                         {% for date, sub_prod in prod %}
+                                            {% if loop.index0 %}
+                                                {% if date|length == 10 and date|slice(0,4) != lastDate %}
+                                                    <div class="separation"></div>
+                                                {% endif %}
+                                            {% endif %}
                                             <div class="date">
-                                                <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                                {% if loop.index0 %}
+                                                    {% if date|length == 10 and date|slice(0,4) != lastDate %}
+                                                        <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                                    {% else %}
+                                                        <div class="year"></div>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <div class="year">{{ date|length == 10 ? (date|slice(0,4)) : "—" }}</div>
+                                                {% endif %}
                                                 <div class="info" data-id="{{ sub_prod.id }}" data-title="{{ sub_prod.title }}" data-type="{{ sub_prod.media_type }}" data-poster="{{ sub_prod.poster_path }}"><i class="fa-solid fa-circle-info"></i></div>
                                                 {% if sub_prod.media_type == "movie" %}
                                                     {% set url = path('app_movie', {id: sub_prod.id}) %}
@@ -194,6 +222,7 @@
                                                     <div class="job">{{ 'as.job'|trans }} {{ ('job.' ~ sub_prod.job ~ (people.gender == 1 ? '.she':'.he'))|trans }}</div>
                                                 {% endif %}
                                             </div>
+                                            {% set lastDate = date|slice(0,4) %}
                                         {% endfor %}
                                     </div>
                                 {% endfor %}
@@ -276,6 +305,7 @@
             xhr.open("GET", _app_serie_get_overview.substring(0, _app_serie_get_overview.length - 1) + id + "?type=" + type);
             xhr.send();
         }
+
         function hideInfos() {
             const popInfos = document.querySelector(".pop-infos");
             if (popInfos.classList.contains("fade")) {

@@ -161,8 +161,7 @@ class MovieController extends AbstractController
         return $localeDates;
     }
 
-    #[
-        Route('/{_locale}/movie/collection/{mid}/{id}', 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/movie/collection/{mid}/{id}', 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
     public function movieCollection(Request $request, $mid, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, GenreRepository $genreRepository, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
