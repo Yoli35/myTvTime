@@ -1139,49 +1139,49 @@
                                 }
                             }
                         }
+                    }
 
-                        .episode {
-                            @include flex-row(center, flex-start);
-                            background-color: var(--gradiant-grey-90);
-                            border-radius: 0;
-                            min-height: 10em;
-                            margin: 1em 0;
-                            width: 100%;
+                    .episode {
+                        @include flex-row(center, flex-start);
+                        background-color: var(--gradiant-grey-90);
+                        border-radius: 0;
+                        color: var(--gradiant-grey-20);
+                        height: 14em;
+                        margin: 1em 0;
+                        width: 100%;
 
-                            .poster {
+                        .still {
+                            height: 100%;
+                            z-index: 0;
+
+                            img {
+                                border-radius: 0;
                                 height: 100%;
-                                z-index: 0;
+                                object-fit: cover;
+                                width: 15em;
+                            }
+                        }
 
-                                img {
-                                    border-radius: 0;
-                                    height: 100%;
-                                    object-fit: cover;
-                                    width: 30em;
-                                }
+                        .infos {
+                            @include flex-col(flex-start, flex-start);
+                            padding: .5em;
+                            width: calc(100% - 30em);
+
+                            .info {
+                                font-weight: 100;
+                                margin: .25em 0;
+                                max-height: 3em;
+                                overflow-y: scroll;
                             }
 
-                            .infos {
-                                @include flex-col(flex-start, flex-start);
-                                padding: .5em;
-                                width: calc(100% - 30em);
+                            .guests {
+                                @include flex-100(unset, flex-start);
+                                margin-top: 1em;
+                                overflow: scroll;
+                                width: 100%;
 
-                                .info {
-                                    color: var(--gradiant-grey-20);
-                                    font-weight: 100;
-                                    margin: .25em 0;
-                                    max-height: 3em;
-                                    overflow-y: scroll;
-                                }
-
-                                .guests {
-                                    @include flex-100(unset, flex-start);
-                                    margin-top: 1em;
-                                    overflow: scroll;
-                                    width: 100%;
-
-                                    .guest {
-                                        @include human-profile(var(--gradiant-grey-20));
-                                    }
+                                .guest {
+                                    @include human-profile(var(--gradiant-grey-20));
                                 }
                             }
                         }
@@ -2130,19 +2130,16 @@
                                     }
                                 }
                             }
+                        }
 
-                            .episode {
-                                height: 24em;
+                        .episode {
+                            border-radius: 1em;
 
-                                .poster {
-                                    height: 24em;
-                                    width: 30em;
+                            .still {
 
-                                    img {
-                                        height: 24em;
-                                        max-width: unset;
-                                        width: 30em;
-                                    }
+                                img {
+                                    border-bottom-left-radius: 1em;
+                                    border-top-left-radius: 1em;
                                 }
                             }
                         }
@@ -2255,12 +2252,18 @@
             article {
                 section {
                     .seasons, .episodes {
+                        color: var(--gradiant-grey-90);
                         background-color: var(--gradiant-grey-20-alpha-50);
 
                         a {
-                            .season, .episode {
+                            .season {
+                                color: var(--gradiant-grey-90);
                                 background-color: var(--gradiant-grey-30-alpha-50);
                             }
+                        }
+                        .episode {
+                            color: var(--gradiant-grey-90);
+                            background-color: var(--gradiant-grey-30-alpha-50);
                         }
                     }
 

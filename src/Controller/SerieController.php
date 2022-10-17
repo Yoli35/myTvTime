@@ -401,10 +401,10 @@ class SerieController extends AbstractController
         $year = $request->query->get('year');
         $backId = $request->query->get('back');
 
-        $serie = $serieRepository->findOneBy(['serieId' => $id]);
+        $serie = $this->serie($id, $tmdbService, $request->getLocale(), $serieRepository);
         $standing = $tmdbService->getTvSeason($id, $seasonNumber, $request->getLocale());
         $season = json_decode($standing, true);
-
+        dump($season);
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
@@ -418,7 +418,7 @@ class SerieController extends AbstractController
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
     }
-
+/*
     #[Route('/tmdb/{id}/season/{seasonNumber}/episode/{episodeNumber}', name: 'app_serie_tmdb_episode', methods: ['GET'])]
     public function episode(Request $request, $id, $seasonNumber, $episodeNumber, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
@@ -428,10 +428,10 @@ class SerieController extends AbstractController
         $page = $request->query->get('p');
         $query = $request->query->get('query');
 
-        $serie = $serieRepository->findOneBy(['serieId' => $id]);
+        $serie = $this->serie($id, $tmdbService, $request->getLocale(), $serieRepository);
         $standing = $tmdbService->getTvEpisode($id, $seasonNumber, $episodeNumber, $request->getLocale());
         $episode = json_decode($standing, true);
-
+        dump($episode);
         return $this->render('serie/episode.html.twig', [
             'serie' => $serie,
             'episode' => $episode,
@@ -444,6 +444,32 @@ class SerieController extends AbstractController
             ],
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
+    }
+*/
+    public function serie($id, $tmdbService, $locale, $serieRepository): array
+    {
+        $serie = [];
+        /** @var Serie $userSerie */
+        $userSerie = $serieRepository->findOneBy(['serieId' => $id]);
+        if ($userSerie == null) {
+            $standing = $tmdbService->getTv($id, $locale);
+            $tmdbSerie = json_decode($standing, true);
+            dump($tmdbSerie);
+            $serie['id'] = $tmdbSerie['id'];
+            $serie['name'] = $tmdbSerie['name'];
+            $serie['backdropPath'] = $tmdbSerie['backdrop_path'];
+            $serie['firstDateAir'] = $tmdbSerie['last_air_date'];
+            $serie['posterPath'] = $tmdbSerie['poster_path'];
+        }
+        else {
+            $serie['id'] = $userSerie->getSerieId();
+            $serie['name'] = $userSerie->getName();
+            $serie['backdropPath'] = $userSerie->getBackdropPath();
+            $serie['firstDateAir'] = $userSerie->getFirstDateAir();
+            $serie['posterPath'] = $userSerie->getPosterPath();
+        }
+
+        return $serie;
     }
 
     #[Route('/latest/serie', name: 'app_serie_latest', methods: ['GET'])]
@@ -505,6 +531,7 @@ class SerieController extends AbstractController
 
                 /** @var SerieViewing $viewing */
                 $viewing = $viewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
+                dump($viewing);
                 if ($viewing == null) {
                     $viewing = new SerieViewing();
                     $viewing->setUser($user);
