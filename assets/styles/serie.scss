@@ -159,7 +159,7 @@
                         background-size: cover;
                         border-radius: 0 .5em .5em 0;
                         inset: 0 0 0 var(--serie-lg-poster-width);
-                        opacity: .25;
+                        opacity: .1;
                         position: absolute;
                     }
 
@@ -641,8 +641,9 @@
 
                         .anim-settings {
                             @include flex-col(start, start);
+                            height: 25em;
                             overflow: hidden;
-                            transition: height .2s ease-in-out;
+                            transition: height 500ms ease-in-out;
 
                             .slider {
                                 @include flex-col(start, start);

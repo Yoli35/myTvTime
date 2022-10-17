@@ -243,36 +243,45 @@
                 <div class="cast">
                     <div class="content">
                         {% for actor in cast %}
-                            <a href="{{ path('app_serie_people', {id: actor.id}) }}">
-                                <div class="actor" data-bs-toggle="modal" data-bs-target="#personModal">
-                                    {% if actor.profile_path | length %}
+                            {% if actor.profile_path|length %}
+                                <a href="{{ path('app_serie_people', {id: actor.id}) }}">
+                                    <div class="actor" data-bs-toggle="modal" data-bs-target="#personModal">
                                         <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
-                                    {% else %}
+                                        <div class="name">{{ actor.name }}</div>
+                                        <div class="character">{{ actor.character }}</div>
+                                    </div>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        {% for actor in cast %}
+                            {% if actor.profile_path|length == 0 %}
+                                <a href="{{ path('app_serie_people', {id: actor.id}) }}">
+                                    <div class="actor" data-bs-toggle="modal" data-bs-target="#personModal">
                                         <div class="profile" data-id="{{ actor.id }}"></div>
-                                    {% endif %}
-                                    <div class="name">{{ actor.name }}</div>
-                                    <div class="character">{{ actor.character }}</div>
-                                </div>
-                            </a>
+                                        <div class="name">{{ actor.name }}</div>
+                                        <div class="character">{{ actor.character }}</div>
+                                    </div>
+                                </a>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
             {% endif %}
 
-            {% if crew is not empty %}
+            {% if sortedCrew is not empty %}
                 <h2>{{ 'Crew'|trans }}</h2>
                 <div class="crew">
                     <div class="content">
-                        {% for member in crew %}
-                            <a href="{{ path('app_serie_people', {id: member.id}) }}">
-                                <div class="member" data-bs-toggle="modal" data-bs-target="#personModal">
-                                    {% if member.profile_path | length %}
-                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ member.profile_path }}')" data-id="{{ member.id }}"></div>
+                        {% for name, data in sortedCrew %}
+                            <a href="{{ path('app_serie_people', {id: data.id}) }}">
+                                <div class="member">
+                                    {% if data.profile_path | length %}
+                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ data.profile_path }}')" data-id="{{ data.id }}"></div>
                                     {% else %}
-                                        <div class="profile" data-id="{{ member.id }}"></div>
+                                        <div class="profile" data-id="{{ data.id }}"></div>
                                     {% endif %}
-                                    <div class="job">{{ member.job }}</div>
-                                    <div class="name">{{ member.name }}</div>
+                                    <div class="name">{{ name }}</div>
+                                    <div class="job">{{ data.job }}</div>
                                 </div>
                             </a>
                         {% endfor %}

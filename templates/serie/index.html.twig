@@ -1141,7 +1141,7 @@
             {% endif %}
             {% if slider.type == "interval" %}
             settingI = {data: [0, 0], name: "", type: ""};
-            settingI.data = [{{ slider.data.0 }},{{ slider.data.1 }}];
+            settingI.data = [{{ slider.data.0 }}, {{ slider.data.1 }}];
             settingI.name = "{{ slider.name }}";
             settingI.type = "{{ slider.type }}";
             settings.push(settingI);
@@ -1160,6 +1160,7 @@
             else if (Notification.permission === 'granted') {
                 // Si tout va bien, créons une notification
                 const notification = new Notification(message)
+                console.log({notification});
             }
 
             // Sinon, nous devons demander la permission à l'utilisateur
@@ -1168,6 +1169,7 @@
                     // Si l'utilisateur accepte, créons une notification
                     if (permission === 'granted') {
                         const notification = new Notification(message)
+                        console.log({notification});
                     }
                 })
             }

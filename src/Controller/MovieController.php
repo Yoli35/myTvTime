@@ -41,7 +41,7 @@ class MovieController extends AbstractController
         $standing = $callTmdbService->getMovieCredits($id, $locale);
         $credits = json_decode($standing, true);
         $cast = $credits['cast'];
-        $crew = $credits['crew'];
+        $sortedCrew = $this->sortCrew($credits['crew']);
 
         $standing = $callTmdbService->getCountries();
         $countries = json_decode($standing, true);
@@ -120,7 +120,7 @@ class MovieController extends AbstractController
             'watchProviders' => $watchProviders,
             'hasBeenSeen' => $this->hasBeenSeen($id, $userMovieRepository),
             'cast' => $cast,
-            'crew' => $crew,
+            'sortedCrew' => $sortedCrew,
             'collections' => $collections,
             'movieCollection' => $movieCollectionIds,
             'images' => $images,
@@ -159,6 +159,45 @@ class MovieController extends AbstractController
         }
 
         return $localeDates;
+    }
+
+    function sortCrew($crew): array
+    {
+        $sortedCrewWithProfile = [];
+        $sortedCrewWithoutProfile = [];
+
+        foreach ($crew as $people) {
+            if ($people['profile_path']) {
+                if ($this->peopleInSortedCrew($people, $sortedCrewWithProfile)) {
+                    $sortedCrewWithProfile[$people['name']]['job'] .= ', ' . $people['job'];
+                } else {
+                    $sortedCrewWithProfile[$people['name']]['id'] = $people['id'];
+                    $sortedCrewWithProfile[$people['name']]['profile_path'] = $people['profile_path'];
+                    $sortedCrewWithProfile[$people['name']]['job'] = $people['job'];
+                }
+            }
+            else {
+                if ($this->peopleInSortedCrew($people, $sortedCrewWithoutProfile)) {
+                    $sortedCrewWithoutProfile[$people['name']]['job'] .= ', ' . $people['job'];
+                } else {
+                    $sortedCrewWithoutProfile[$people['name']]['id'] = $people['id'];
+                    $sortedCrewWithoutProfile[$people['name']]['profile_path'] = $people['profile_path'];
+                    $sortedCrewWithoutProfile[$people['name']]['job'] = $people['job'];
+                }
+            }
+        }
+
+        return array_merge($sortedCrewWithProfile, $sortedCrewWithoutProfile);
+    }
+
+    function peopleInSortedCrew($p, $s): bool
+    {
+        foreach ($s as $key => $value) {
+            if ($key == $p['name']) {
+                return true;
+            }
+        }
+        return false;
     }
 
     #[Route('/{_locale}/movie/collection/{mid}/{id}', 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
