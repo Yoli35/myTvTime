@@ -23,9 +23,9 @@
 
             .event {
                 @include flex-row(flex-start, flex-start);
-                background-color: var(--gradiant-ardoise-90);
+                background-color: var(--gradiant-grey-90);
                 border-radius: .5em;
-                color: var(--gradiant-ardoise-30);
+                color: var(--gradiant-grey-30);
                 margin-bottom: 1em;
                 overflow: hidden;
                 width: 100%;
@@ -39,12 +39,14 @@
                         object-fit: cover;
                     }
                 }
+
                 .infos {
                     @include flex-col(flex-start, center);
                     height: var(--event-height);
                     padding: 1em;
                     width: calc(50% - 10em);
                 }
+
                 .countdown {
                     @include flex-100();
                     font-size: 2em;
@@ -60,7 +62,7 @@
                     }
 
                     &.fade {
-                        color: var(--gradiant-ardoise-90);
+                        color: var(--gradiant-grey-90);
                     }
 
                     &.past {
@@ -92,7 +94,7 @@
 
                     .date {
                         @include flex-100();
-                        color: var(--gradiant-ardoise-20);
+                        color: var(--gradiant-grey-20);
                         inset: 0;
                         opacity: 0;
                         position: absolute;
@@ -122,19 +124,36 @@
 }
 
 @media (prefers-color-scheme: dark) {
+
     .my-events {
+
+        .header {
+            background-color: var(--gradiant-grey-20);
+            border-radius: 1em;
+            color: var(--gradiant-grey-70);
+
+            h1 {
+                color: var(--gradiant-grey-70);
+            }
+
+            .animated-h1 {
+                color: var(--gradiant-grey-70);
+            }
+        }
+
         main {
             .events {
                 .event {
-                    background-color: var(--gradiant-ardoise-30);
-                    color: var(--gradiant-ardoise-90);
+                    background-color: var(--gradiant-grey-30);
+                    color: var(--gradiant-grey-90);
 
                     .countdown {
                         &.fade {
-                            color: var(--gradiant-ardoise-30);
+                            color: var(--gradiant-grey-30);
                         }
+
                         .date {
-                            color: var(--gradiant-ardoise-90);
+                            color: var(--gradiant-grey-90);
                         }
                     }
                 }

@@ -301,8 +301,9 @@ $fa-font-path: "../webfonts";
 }
 
 @mixin animated-header($bg-image, $h1-color: var(--gradiant-grey-90)) {
-    background-color: hsla(0, 100%, 10%, 1);
+    background-color: var(--gradiant-grey-80);
     border-radius: 1em;
+    color: var(--gradiant-grey-30);
     height: 20em;
     overflow: hidden;
     position: relative;

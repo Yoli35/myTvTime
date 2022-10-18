@@ -16,9 +16,9 @@
         margin: 4em 0;
 
         .to-show {
-            background-color: var(--gradiant-ardoise-50);
+            background-color: var(--gradiant-grey-50);
             border-radius: 1em;
-            color: var(--gradiant-ardoise-90);
+            color: var(--gradiant-grey-90);
             font-size: 1.5em;
             font-weight: bold;
             padding: 2em 4em;
@@ -33,7 +33,7 @@
 
             .article {
                 @include flex-col();
-                background-color: var(--gradiant-ardoise-80);
+                background-color: var(--gradiant-grey-80);
                 border-radius: 1em;
                 margin-bottom: 1em;
                 overflow: hidden;
@@ -59,7 +59,7 @@
                         width: 3em;
 
                         img {
-                            border: 4px solid var(--gradiant-ardoise-20);
+                            border: 4px solid var(--gradiant-grey-20);
                             border-radius: 50%;
                             height: 3em;
                             object-fit: cover;
@@ -77,20 +77,20 @@
                         }
 
                         .title {
-                            color: var(--gradiant-ardoise-20);
+                            color: var(--gradiant-grey-20);
                             flex: 1;
                             font-size: 1.5em;
                             font-weight: bold;
                         }
 
                         .author {
-                            color: var(--gradiant-ardoise-40);
+                            color: var(--gradiant-grey-40);
                             font-size: 1em;
                             margin-left: auto;
                         }
 
                         .abstract {
-                            color: var(--gradiant-ardoise-10);
+                            color: var(--gradiant-grey-10);
                             font-size: .75em;
                             font-weight: 200;
 
@@ -127,7 +127,7 @@
                             @include flex-100(center, flex-start);
 
                             .date {
-                                color: var(--gradiant-ardoise-40);
+                                color: var(--gradiant-grey-40);
                                 font-size: .5em;
                                 font-weight: 200;
                                 margin-right: 1em;
@@ -137,7 +137,7 @@
                 }
 
                 .comment-form {
-                    background-color: var(--gradiant-ardoise-90);
+                    background-color: var(--gradiant-grey-90);
                     border-radius: 1em;
                     margin: 1em;
                     padding: 1em;
@@ -153,11 +153,11 @@
 
                         img {
                             @include rounded-avatar(2em);
-                            border: 2px solid var(--gradiant-ardoise-90);
+                            border: 2px solid var(--gradiant-grey-90);
                         }
 
                         .name {
-                            color: var(--gradiant-ardoise-20);
+                            color: var(--gradiant-grey-20);
                             padding-left: .5em;
                         }
                     }
@@ -172,7 +172,7 @@
 
                     .comment {
                         @include flex-col(flex-start, flex-start);
-                        background-color: var(--gradiant-ardoise-90);
+                        background-color: var(--gradiant-grey-90);
                         border-radius: .5em;
                         margin-bottom: 1em;
                         padding: 1em;
@@ -183,21 +183,21 @@
 
                             img {
                                 @include rounded-avatar(2em);
-                                border: 2px solid var(--gradiant-ardoise-90);
+                                border: 2px solid var(--gradiant-grey-90);
                             }
 
                             .name {
-                                color: var(--gradiant-ardoise-20);
+                                color: var(--gradiant-grey-20);
                                 padding-left: .5em;
                             }
 
                             .dates {
                                 @include flex-100(center, flex-start);
-                                color: var(--gradiant-ardoise-20);
+                                color: var(--gradiant-grey-20);
                                 margin-left: 1em;
 
                                 .date {
-                                    color: var(--gradiant-ardoise-40);
+                                    color: var(--gradiant-grey-40);
                                     font-size: .75em;
                                     font-weight: 200;
                                     padding-right: 1em;
@@ -210,7 +210,7 @@
                         }
 
                         .reactions {
-                            background-color: var(--gradiant-ardoise-80);
+                            background-color: var(--gradiant-grey-80);
                             border-radius: .5em;
                             margin: .25em 0 .25em 2em;
                             padding: .5em;
@@ -222,7 +222,7 @@
                             }
 
                             .odd {
-                                background-color: var(--gradiant-ardoise-70);
+                                background-color: var(--gradiant-grey-70);
                             }
                         }
 
@@ -254,10 +254,10 @@
                                 }
 
                                 .submit {
-                                    background-color: var(--gradiant-ardoise-40);
-                                    border-color: var(--gradiant-ardoise-40);
+                                    background-color: var(--gradiant-grey-40);
+                                    border-color: var(--gradiant-grey-40);
                                     border-radius: 0.2rem;
-                                    color: var(--gradiant-ardoise-90);
+                                    color: var(--gradiant-grey-90);
                                     cursor: pointer;
                                     display: inline-block;
                                     font-size: 0.75rem;
@@ -270,9 +270,9 @@
                                     user-select: none;
 
                                     &:hover {
-                                        color: var(--gradiant-ardoise-90);
-                                        background-color: var(--gradiant-ardoise-30);
-                                        border-color: var(--gradiant-ardoise-40);
+                                        color: var(--gradiant-grey-90);
+                                        background-color: var(--gradiant-grey-30);
+                                        border-color: var(--gradiant-grey-40);
                                     }
                                 }
                             }
@@ -283,7 +283,7 @@
         }
 
         .tools {
-            background-color: var(--gradiant-ardoise-90);
+            background-color: var(--gradiant-grey-90);
             border-radius: 1em;
             margin-left: 1em;
             min-height: 50vh;
@@ -300,7 +300,7 @@
         }
 
         img {
-            border: 2px solid var(--gradiant-ardoise-80);
+            border: 2px solid var(--gradiant-grey-80);
             border-radius: .25em;
             height: 3em;
             overflow: hidden;
@@ -314,13 +314,13 @@
             width: 100%;
 
             .dropzone-container {
-                background-color: var(--gradiant-ardoise-40);
+                background-color: var(--gradiant-grey-40);
                 border-radius: 1em;
             }
 
             .dropzone-preview-image {
                 background-size: cover;
-                border: 2px solid var(--gradiant-ardoise-80);
+                border: 2px solid var(--gradiant-grey-80);
                 border-radius: 50%;
                 overflow: hidden;
             }
@@ -361,16 +361,16 @@
         transition: background-color .5s, opacity .5s;
 
         &.visible {
-            background-color: var(--gradiant-ardoise-80)7f;
+            background-color: var(--gradiant-grey-80)7f;
             display: flex;
             opacity: 1;
         }
 
         .close {
             align-items: center;
-            background-color: var(--gradiant-ardoise-80);
+            background-color: var(--gradiant-grey-80);
             border-radius: 50%;
-            color: var(--gradiant-ardoise-20);
+            color: var(--gradiant-grey-20);
             cursor: pointer;
             display: flex;
             height: 1.5em;
@@ -382,7 +382,7 @@
         }
 
         img {
-            border: .5em solid var(--gradiant-ardoise-80);
+            border: .5em solid var(--gradiant-grey-80);
             border-radius: 1em;
             max-height: 80%;
             max-width: 80%;
@@ -436,43 +436,43 @@
         .content {
             .articles {
                 .article {
-                    background-color: var(--gradiant-ardoise-30);
+                    background-color: var(--gradiant-grey-30);
 
                     .apercu {
 
                         .thumbnail {
                             img {
-                                border: 2px solid var(--gradiant-ardoise-90);
+                                border: 2px solid var(--gradiant-grey-90);
                             }
                         }
 
                         .presentation {
                             .title {
-                                color: var(--gradiant-ardoise-90);
+                                color: var(--gradiant-grey-90);
                             }
 
                             .author {
-                                color: var(--gradiant-ardoise-70);
+                                color: var(--gradiant-grey-70);
                             }
 
                             .abstract {
-                                color: var(--gradiant-ardoise-80);
+                                color: var(--gradiant-grey-80);
                             }
 
                             .dates {
                                 .date {
-                                    color: var(--gradiant-ardoise-70);
+                                    color: var(--gradiant-grey-70);
                                 }
                             }
                         }
                     }
 
                     .comment-form {
-                        background-color: var(--gradiant-ardoise-20);
+                        background-color: var(--gradiant-grey-20);
 
                         .user {
                             .name {
-                                color: var(--gradiant-ardoise-90);
+                                color: var(--gradiant-grey-90);
                             }
                         }
                     }
@@ -480,25 +480,25 @@
                     .comments {
 
                         .comment {
-                            background-color: var(--gradiant-ardoise-20);
+                            background-color: var(--gradiant-grey-20);
 
                             .user {
                                 .name {
-                                    color: var(--gradiant-ardoise-90);
+                                    color: var(--gradiant-grey-90);
                                 }
 
                                 .dates {
                                     .date {
-                                        color: var(--gradiant-ardoise-70);
+                                        color: var(--gradiant-grey-70);
                                     }
                                 }
                             }
 
                             .reactions {
-                                background-color: var(--gradiant-ardoise-20);
+                                background-color: var(--gradiant-grey-20);
 
                                 .odd {
-                                    background-color: var(--gradiant-ardoise-30);
+                                    background-color: var(--gradiant-grey-30);
                                 }
 
                             }
@@ -507,17 +507,17 @@
                 }
             }
             .tools {
-                background-color: var(--gradiant-ardoise-20);
+                background-color: var(--gradiant-grey-20);
             }
         }
 
         .table {
-            color: var(--gradiant-ardoise-80);
+            color: var(--gradiant-grey-80);
         }
 
         .show {
             &.visible {
-                background-color: var(--gradiant-ardoise-20)7f;
+                background-color: var(--gradiant-grey-20)7f;
             }
         }
     }
