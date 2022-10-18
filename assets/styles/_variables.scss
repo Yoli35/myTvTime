@@ -2,24 +2,24 @@ $transition-delay: .5s;
 $fa-font-path: "../webfonts";
 
 :root {
-    --mtt-body-bg: var(--gradiant-grey-10);
+    --mtt-body-bg: var(--gradiant-grey-100);
     --mtt-body-bg-gradiant: var(--gradiant-grey-40);
-    --mtt-body-color: var(--gradiant-grey-90);
+    --mtt-body-color: var(--gradiant-grey-10);
 
     --button-border-radius: .25em;
 
     --gradiant-light: linear-gradient(
                     45deg,
-                    hsl(240deg, 40%, 80%) 0%,
-                    hsl(289deg, 40%, 80%) 4%,
-                    hsl(315deg, 40%, 80%) 14%,
-                    hsl(329deg, 40%, 80%) 27%,
-                    hsl(337deg, 40%, 80%) 43%,
-                    hsl(357deg, 40%, 80%) 59%,
-                    hsl(17deg, 40%, 80%) 74%,
-                    hsl(34deg, 40%, 80%) 87%,
-                    hsl(45deg, 40%, 80%) 96%,
-                    hsl(55deg, 40%, 80%) 100%);
+                    hsl(240deg, 30%, 90%) 0%,
+                    hsl(289deg, 30%, 90%) 4%,
+                    hsl(315deg, 30%, 90%) 14%,
+                    hsl(329deg, 30%, 90%) 27%,
+                    hsl(337deg, 30%, 90%) 43%,
+                    hsl(357deg, 30%, 90%) 59%,
+                    hsl(17deg, 30%, 90%) 74%,
+                    hsl(34deg, 30%, 90%) 87%,
+                    hsl(45deg, 30%, 90%) 96%,
+                    hsl(55deg, 30%, 90%) 100%);
 
     --gradiant-dark: linear-gradient(
                     45deg,
@@ -34,7 +34,7 @@ $fa-font-path: "../webfonts";
                     hsl(44deg, 100%, 10%) 89%,
                     hsl(60deg, 100%, 10%) 100%);
 
-    --gradiant-bg: var(--gradiant-light);
+    //--gradiant-bg: var(--gradiant-light);
 
     --serie-add: hsl(212, 43%, 70%);
     --serie-seen: hsl(105, 50%, 50%);
@@ -65,6 +65,7 @@ $fa-font-path: "../webfonts";
     --gradiant-grey-100: hsl(0, 0%, 100%);
     --gradiant-grey-90: hsl(0, 0%, 90%);
     --gradiant-grey-90-alpha-10: hsla(0, 0%, 90%, .1);
+    --gradiant-grey-90-alpha-90: hsla(0, 0%, 90%, .95);
     --gradiant-grey-80: hsl(0, 0%, 80%);
     --gradiant-grey-80-alpha-50: hsla(0, 0%, 80%, .5);
     --gradiant-grey-70: hsl(0, 0%, 70%);
@@ -123,7 +124,10 @@ $fa-font-path: "../webfonts";
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --gradiant-bg: var(--gradiant-dark);
+        //--gradiant-bg: var(--gradiant-dark);
+        --mtt-body-bg: var(--gradiant-grey-10);
+        --mtt-body-bg-gradiant: var(--gradiant-grey-40);
+        --mtt-body-color: var(--gradiant-grey-90);
     }
 }
 

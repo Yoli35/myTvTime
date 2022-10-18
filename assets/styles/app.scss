@@ -8,7 +8,7 @@ html {
 
 body {
     background: var(--mtt-body-bg);
-    background-image: var(--gradiant-bg);
+    //background-image: var(--gradiant-bg);
     background-attachment: fixed;
     color: var(--mtt-body-color);
     display: flex;
@@ -153,8 +153,8 @@ main {
 
 .nav-menu {
     align-items: center;
-    background: var(--gradiant-grey-10-alpha-90);
-    border-bottom: 2px solid var(--gradiant-grey-20);
+    background: var(--gradiant-grey-90-alpha-90);
+    border-bottom: 2px solid var(--gradiant-grey-80);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -193,7 +193,7 @@ main {
 
         &:hover {
             background-color: var(--gradiant-grey-30-alpha-90);
-            //color: #123333;
+            color: var(--gradiant-grey-90);
             font-weight: bold;
 
             &::before {
@@ -442,29 +442,110 @@ nav.active {
     }
 }
 
+@media (prefers-color-scheme: light) {
+    .nav-breadcrumb {
+        background-color: var(--gradiant-grey-90);
+
+        .breadcrumb {
+
+            .breadcrumb-item {
+                span {
+                    color: var(--gradiant-grey-30);
+                }
+
+                &.active {
+                    color: var(--gradiant-grey-30);
+                }
+
+                &:before {
+                    color: var(--gradiant-grey-30);
+                }
+
+            }
+
+            .bracket {
+                color: var(--gradiant-grey-70);
+            }
+
+            .menu {
+                color: var(--gradiant-grey-30);
+
+                img {
+                    border: 2px solid var(--gradiant-grey-20);
+                }
+
+                .menu-items {
+                    background-color: var(--gradiant-grey-90);
+
+                    .menu-item {
+
+                        a {
+                            color: var(--gradiant-grey-20);
+
+                            &:hover {
+                                background-color: var(--gradiant-grey-20);
+                                color: var(--gradiant-grey-70);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .tag-button {
+                background-color: var(--gradiant-purple-90);
+                border: 1px solid var(--gradiant-purple-50);
+
+                a {
+                    color: var(--gradiant-purple-20);
+                }
+
+                &:hover {
+                    background-color: var(--gradiant-purple-60);
+                }
+            }
+
+            .choose-collection {
+
+                label:has(select) {
+
+                    &::after {
+                        border-bottom: 2px solid var(--gradiant-grey-80);
+                        border-right: 2px solid var(--gradiant-grey-80);
+                    }
+
+                    select {
+                        background: var(--gradiant-grey-30);
+                        color: var(--gradiant-grey-80);
+                    }
+                }
+            }
+        }
+    }
+}
+
 .navbar-brand, .nav-link {
     transition: all .15s;
 }
 
 a, .nav-link {
-    color: var(--gradiant-grey-80);
+    color: var(--gradiant-grey-20);
     text-decoration: none;
 
     &:hover {
-        color: var(--gradiant-mars-80);
+        color: var(--gradiant-mars-20);
     }
 
     &:visited {
-        color: var(--gradiant-grey-80);
+        color: var(--gradiant-grey-20);
     }
 
     &:focus {
-        color: var(--gradiant-mars-80);
+        color: var(--gradiant-mars-20);
     }
 }
 
 h1, h1 a, h2, h2 a {
-    color: #30393d;
+    color: var(--gradiant-grey-20);
     font-weight: 100;
 }
 
@@ -474,16 +555,6 @@ h2 {
 
 h4 {
     font-weight: 100;
-}
-
-.logo {
-    color: #f2f2f2;
-
-    span {
-        color: #cbaa4f;
-        font-size: 1em;
-        font-weight: bold;
-    }
 }
 
 .home-header {
@@ -521,8 +592,9 @@ h4 {
 
 .home-footer {
     @include flex-col();
-    background-color: #ca8a04; /* Symfony footer */
+    background-color: var(--gradiant-grey-30-alpha-50);
     border-radius: 1em;
+    color: var(--gradiant-grey-80);
     margin: 1em 0;
     padding: 1em;
     width: 100%;
@@ -540,7 +612,7 @@ h4 {
 }
 
 .user-menu-img {
-    border: 2px solid #bdbdbd;
+    border: 2px solid var(--gradiant-grey-70);
     border-radius: 50%;
     cursor: pointer;
     height: 32px;
@@ -938,38 +1010,34 @@ h4 {
     }
 
     .dropdown-menu {
-        color: #bdbdbd;
-        background-color: #3b3b3b;
+        color: var(--gradiant-grey-80);
+        background-color: var(--gradiant-grey-30);
     }
 
     .dropdown-item-text {
-        color: #bdbdbd;
+        color: var(--gradiant-grey-80);
     }
 
     h1, h2, {
-        color: #7c97a1;
+        color: var(--gradiant-grey-80);
 
         a {
-            color: #7c97a1;
+            color: var(--gradiant-grey-80);
         }
     }
 
     .nav-breadcrumb {
         .breadcrumb {
             .bracket {
-                color: #dbdbdb;
+                color: var(--gradiant-grey-80);
             }
         }
     }
 
     .home-discover {
         a {
-            .title {
-                color: #5ec6f1;
-            }
-
-            .date {
-                color: #5cc6ef;
+            .title, .date {
+                color: var(--gradiant-grey-80);
             }
         }
     }
@@ -977,7 +1045,7 @@ h4 {
     .home-discovers {
         .footer-infos {
             div {
-                color: #5dcbf6;
+                color: var(--gradiant-grey-80);
             }
         }
     }
@@ -995,11 +1063,11 @@ h4 {
     }
 
     .modal-content {
-        background-color: #2c2c2c;
+        background-color: var(--gradiant-grey-20);
     }
 
     .modal-header {
-        border-bottom: 1px solid #67696b;
+        border-bottom: 1px solid var(--gradiant-grey-30);
     }
 }
 
