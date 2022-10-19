@@ -59,6 +59,11 @@
     position: relative;
     transform: translate(0, -100%);
 
+    img {
+        object-fit: cover;
+        width: 100%;
+    }
+
     &.no-header {
         height: 5em;
         width: 100%;
