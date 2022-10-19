@@ -1077,60 +1077,161 @@ h4 {
     background: linear-gradient(225deg, var(--mtt-body-bg) 0%, var(--mtt-body-bg-gradiant) 100%);
     background-attachment: fixed;
     color: var(--mtt-body-color);
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
 
     .login-dialog {
-        background-color: var(--gradiant-grey-40);
+        background-color: var(--gradiant-grey-100);
         border: 1px solid var(--gradiant-grey-60);
-        border-radius: .5em;
-        box-shadow: 0 0 10px hsla(0, 0, 0, .25), 0 0 40px hsla(0, 0, 0, .25), 0 0 100px hsla(0, 0, 0, .25);
-        color: var(--gradiant-grey-80);
-        font-weight: 100;
+        border-radius: calc(0.5rem - 1px);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.25), 0 0 40px rgba(0, 0, 0, 0.25), 0 0 100px rgba(0, 0, 0, 0.25);
+        color: var(--gradiant-grey-20);
+        font-weight: 200;
 
         .header {
+            background-color: var(--gradiant-grey-90);
             border-bottom: 1px solid var(--gradiant-grey-60);
-            padding: 1em;
+            border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+            padding: .5em 1em;
+            margin-bottom: 0;
         }
 
         .body {
             border-bottom: 1px solid var(--gradiant-grey-60);
             padding: 1em;
 
-            .error {
-                color: red;
+            .control {
+                > div {
+                    @include flex-col(start, start);
+                    margin-bottom: 1em;
+                    width: 20em;
+
+                    .error {
+                        color: darkred;
+                    }
+
+                    label {
+                        font-weight: 200;
+                        margin-bottom: .25em;
+                    }
+
+                    input {
+                        appearance: unset;
+                        border: none;
+                        border-bottom: 1px solid var(--gradiant-grey-70);
+                        font-weight: 200;
+                        outline-offset: 1px;
+                        width: 100%;
+                    }
+                }
+            }
+
+            .checkbox {
+                > div {
+                    @include flex-100(center, start);
+                    flex-direction: row-reverse;
+
+                    label {
+                        padding-left: .5em;
+                    }
+                }
             }
 
             .input {
-                @include flex-100(start, start);
-                border: 1px solid var(--gradiant-grey-60);
-                border-radius: .25em;
+                @include flex-col(start, start);
                 margin-bottom: .5em;
-                overflow: hidden;
+                width: 20em;
 
                 label {
-                    background-color: var(--gradiant-grey-30);
-                    border-right: 1px solid var(--gradiant-grey-60);
-                    color: var(--gradiant-grey-80);
-                    padding: .5em 1em;
-                    width: 50%;
+                    color: var(--gradiant-grey-40);
+                    margin-bottom: .25em;
+                    width: 100%;
                 }
 
                 input {
-                    height: 2.5em;
+                    appearance: unset;
+                    border: none;
+                    border-bottom: 1px solid var(--gradiant-grey-70);
+                    font-weight: 200;
+                    outline-offset: 1px;
+                    width: 100%;
                 }
             }
         }
 
         .footer {
             @include flex-100(end, end);
+            background-color: var(--gradiant-grey-90);
+            border-radius: 0 0 calc(0.5rem - 1px) calc(0.5rem - 1px);
             padding: .5em 1em;
 
             .btn {
-                background-color: var(--gradiant-grey-30);
-                border: 1px solid var(--gradiant-grey-60);
-                color: var(--gradiant-grey-80);
-                font-weight: 100;
+                background-color: var(--gradiant-grey-80);
+                border: 1px solid var(--gradiant-grey-40);
+                color: var(--gradiant-grey-0);
+            }
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .login {
+        .login-dialog {
+            background-color: var(--gradiant-grey-30);
+            border-color: var(--gradiant-grey-0);
+            color: var(--gradiant-grey-90);
+
+            .header {
+                background-color: var(--gradiant-grey-20);
+                border-bottom-color: var(--gradiant-grey-40);
+            }
+
+            .body {
+                border-bottom-color: var(--gradiant-grey-40);
+
+                .control {
+                    > div {
+                        label {
+                            color: var(--gradiant-grey-80);
+                        }
+
+                        input {
+                            background-color: var(--gradiant-grey-30);
+                            border-color: var(--gradiant-grey-60);
+                            color: var(--gradiant-grey-90);
+                        }
+                    }
+                }
+
+                .checkbox {
+                    > div {
+                        label {
+                            color: var(--gradiant-grey-80);
+                        }
+                    }
+                }
+
+                .input {
+                    label {
+                        color: var(--gradiant-grey-80);
+                    }
+
+                    input {
+                        background-color: var(--gradiant-grey-30);
+                        border-color: var(--gradiant-grey-60);
+                        color: var(--gradiant-grey-90);
+                    }
+                }
+            }
+
+            .footer {
+                background-color: var(--gradiant-grey-20);
+
+                .btn {
+                    background-color: var(--gradiant-grey-40);
+                    border: 1px solid var(--gradiant-grey-50);
+                    color: var(--gradiant-grey-90);
+                }
             }
         }
     }
