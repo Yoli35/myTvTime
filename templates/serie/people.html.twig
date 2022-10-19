@@ -150,15 +150,8 @@
                                             </a>
                                             {% endif %}
                                             {% if prod.character|length %}
-                                                {% if prod.character is defined %}
-                                                    {% if prod.character|length %}
-                                                        {% if prod.character == 'Himself' or prod.character == 'Herself' or prod.character == 'Self' %}
-                                                            {% set character = prod.character|trans %}
-                                                        {% else %}
-                                                            {% set character = prod.character %}
-                                                        {% endif %}
-                                                        <div class="character">{{ 'as'|trans }} {{ character }},</div>
-                                                    {% endif %}
+                                                {% if prod.character %}
+                                                    <div class="character"> — {{ prod.character }}</div>
                                                 {% endif %}
                                             {% endif %}
                                         </div>

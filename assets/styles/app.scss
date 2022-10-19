@@ -1,6 +1,10 @@
 //@import '~bootstrap/scss/bootstrap';
 @import "variables";
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 html {
     scroll-behavior: smooth;
     scroll-padding: 10em;
@@ -101,6 +105,18 @@ main {
 @media (min-width: 1400px) {
     .container {
         max-width: 1320px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1520px;
+    }
+}
+
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1860px;
     }
 }
 
@@ -282,7 +298,7 @@ nav.active {
 
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '◦';
-    background-color: var(--gradiant-grey-10);
+    background-color: var(--gradiant-grey-20);
     border-radius: .5em;
     margin: 1em;
     padding: .5em 1.5em;
@@ -296,6 +312,7 @@ nav.active {
         flex-wrap: wrap;
         list-style: none;
         margin-bottom: 0;
+        margin-top: 0;
         padding: 0 0;
 
         .breadcrumb-item {

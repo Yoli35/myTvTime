@@ -5,7 +5,7 @@
 
 {% block body %}
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
-    <div class="container-fluid">
+    <div class="container">
 
         {{ include('blocks/pageHeader.html.twig') }}
 
@@ -13,9 +13,8 @@
             <div class="banner"></div>
         </div>
 
-        {{ include('blocks/nav.html.twig', {thisPage: 'My Youtube Videos'}) }}
-
         <div class="yt-videos">
+            {{ include('blocks/nav.html.twig', {thisPage: 'My Youtube Videos'}) }}
             {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'locale': locale}) }}
         </div>
 

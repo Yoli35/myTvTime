@@ -325,49 +325,56 @@ Camera: Caméra
 Editing: Editing
 Sound: Son
 Lighting: Lumière
+Visual Effects: Effets visuels
+job.Adaptation.he: Adaptation
+job.Animation.she: Animatrice
+job.Assistant Director.he: Assistant réalisateur
+job.Associate Producer.he: Producteur associé
+job.Associate Producer.she: Productrice associée
+job.Author.he: Auteur
+job.Book.he: Livre
+job.Characters.he: Créateur (personnages)
+job.Cinematography.he: Cinématographie
+job.Co-Executive Producer.he: Producteur co-exécutif
+job.Co-Producer.he: Co-producteur
+job.Co-Producer.she: Co-productrice
+job.Co-Writer.he: Co-auteur
+job.Comic Book.he: Bande dessinée
+job.Conductor.he: Chef d'orchestre
+job.Creative Producer.he: Producteur créatif
 job.Creator.he: Créateur
 job.Creator.she: Créatrice
-job.Producer.he: Producteur
-job.Producer.she: Productrice
-job.Writer.he: Auteur
-job.Writer.she: Auteure
-job.Director.he: Réalisateur
-job.Director.she: Réalisatrice
-job.Executive Producer.he: Producteur exécutif
-job.Executive Producer.she: Productrice exécutive
-job.Co-Executive Producer.he: Producteur co-exécutif
 job.Development Producer.he: Producteur de développement
 job.Development Producer.she: Productrice de développement
-job.Characters.he: Créateur (personnages)
-job.Story.he: Auteur (histoire)
-job.Production Design.he: Conception (production)
-job.Sound Mixer.he: Mixeur son
-job.Production Sound Mixer.he: Mixeur son (production)
-job.Production Executive.he: Production executive
-job.Associate Producer.he: Producteur associé
-job.Thanks.he: Remerciements
-job.Screenplay.he: Scénariste
-job.Book.he: Livre
-job.Novel.he: Nouvelle
-job.Teleplay.he: Télétexte
-job.Cinematography.he: Cinématographie
-job.Editor.he: Rédacteur en chef
-job.Author.he: Auteur
-job.Production Assistant.he: Assistant de production
-job.Creative Producer.he: Producteur créatif
-job.Comic Book.he: Bande dessinée
-job.Director of Photography.he: Directeur de la photographie
-job.Assistant Director.he: Assistant réalisateur
-job.Lighting Technician.he: Technicien d'éclairage
-job.Original Story.he: Histoire originale
-job.Screenstory.he: Scénario
-job.Adaptation.he: Adaptation
-job.Music.he: Musique
-job.Original Music Composer.he: Compositeur de musique originale
-job.Conductor.he: Chef d'orchestre
-job.Music Supervisor.he: Superviseur musical
 job.Dialogue.he: Dialogue
-job.Co-Writer.he: Co-auteur
+job.Director of Photography.he: Directeur de la photographie
+job.Director.he: Réalisateur
+job.Director.she: Réalisatrice
+job.Editor.he: Rédacteur en chef
+job.Executive Producer.he: Producteur exécutif
+job.Executive Producer.she: Productrice exécutive
+job.Lighting Technician.he: Technicien d'éclairage
+job.Music Director.he: Directeur musical
+job.Music Supervisor.he: Superviseur musical
+job.Music.he: Musique
+job.Novel.he: Nouvelle
+job.Original Music Composer.he: Compositeur de musique originale
+job.Original Story.he: Histoire originale
+job.Producer.he: Producteur
+job.Producer.she: Productrice
+job.Production Assistant.he: Assistant de production
+job.Production Design.he: Conception (production)
+job.Production Executive.he: Production executive
+job.Production Sound Mixer.he: Mixeur son (production)
+job.Screenplay.he: Scénariste
+job.Screenstory.he: Scénario
+job.Sound Mixer.he: Mixeur son
+job.Story.he: Auteur (histoire)
+job.Teleplay.he: Télétexte
+job.Thanks.he: Remerciements
+job.Thanks.she: Remerciements
+job.Writer.he: Auteur
+job.Writer.she: Auteure
 Self: soi-même
 Himself: lui-même
 Herself: elle-même

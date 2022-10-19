@@ -167,15 +167,19 @@ $fa-font-path: "../webfonts";
     border: 2px solid #bdbdbd;
     border-radius: 50%;
     display: flex;
-    height: 2em;
+    height: 4em;
     flex: none;
-    font-size: 2em;
-    font-weight: 400;
     justify-content: center;
-    width: 2em;
+    width: 4em;
 
     img {
         border-radius: 50%;
+        height: 100%;
+        width: 100%;
+    }
+    .initial {
+        font-size: 2em;
+        font-weight: 400;
     }
 }
 

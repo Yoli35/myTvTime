@@ -19,9 +19,20 @@
             text-align: center;
         }
 
-        h5 {
+        h2 {
             font-weight: 100;
             text-align: center;
+        }
+
+        .result {
+            @include flex-100(stretch, center);
+            flex-wrap: wrap;
+            gap: 1em;
+            margin-top: 2em;
+
+            a {
+                display: block;
+            }
         }
     }
 
@@ -139,18 +150,26 @@
 }
 
 .yt-video {
-    align-items: center;
+    @include flex-col(start, start);
     background-color: var(--gradiant-grey-80);
     border-radius: .5em;
     box-shadow: 0 0 1em rgba(0, 0, 0, .25);
-    display: flex;
-    flex-direction: column;
-    margin: 1em;
-    overflow: hidden;
+    line-height: 1em;
+    width: 20em;
 
-    .thumbnail {
-        position: relative;
+    .yt-thumbnail {
         font-weight: 100;
+        height: 12em;
+        position: relative;
+        width: 100%;
+
+        img {
+            border-top-left-radius: .5em;
+            border-top-right-radius: .5em;
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+        }
 
         .duration {
             background-color: var(--gradiant-grey-10);
@@ -164,11 +183,12 @@
         }
 
         .tags {
-            @include flex-100(center, flex-start);
+            @include flex-row(center, flex-start);
             flex-wrap: wrap;
             left: .5em;
             position: absolute;
             top: .5em;
+            width: calc(100% - 1em);
 
             .tag {
                 background-color: var(--gradiant-grey-40);
@@ -190,36 +210,11 @@
     }
 
     .details {
-        align-items: flex-start;
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
+        @include flex-100(center, start);
         padding: .5em;
-        width: 20em;
 
         .channel {
             @include author(var(--gradiant-grey-60));
-
-            span[data-descr] {
-                position: relative;
-            }
-
-            span[data-descr]:hover::after {
-                background-color: var(--gradiant-grey-50);
-                border: 2px var(--gradiant-grey-70) solid;
-                border-radius: .5em;
-                bottom: 3.5em;
-                color: var(--gradiant-grey-80);
-                content: attr(data-descr);
-                font-size: .5em;
-                font-weight: 400;
-                left: 0;
-                min-width: 10em;
-                padding: .25em;
-                position: absolute;
-                text-align: center;
-                z-index: 1;
-            }
         }
 
         .infos {
