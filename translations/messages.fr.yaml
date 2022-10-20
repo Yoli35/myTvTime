@@ -353,6 +353,8 @@ job.Director.she: Réalisatrice
 job.Editor.he: Rédacteur en chef
 job.Executive Producer.he: Producteur exécutif
 job.Executive Producer.she: Productrice exécutive
+job.Executive Co-Producer.he: Producteur co-exécutif
+job.Executive Co-Producer.she: Producteur co-exécutive
 job.Lighting Technician.he: Technicien d'éclairage
 job.Music Director.he: Directeur musical
 job.Music Supervisor.he: Superviseur musical
@@ -368,6 +370,8 @@ job.Production Executive.he: Production executive
 job.Production Sound Mixer.he: Mixeur son (production)
 job.Screenplay.he: Scénariste
 job.Screenstory.he: Scénario
+job.Songs.he: Paroles
+job.Songs.she: Paroles
 job.Sound Mixer.he: Mixeur son
 job.Story.he: Auteur (histoire)
 job.Teleplay.he: Télétexte

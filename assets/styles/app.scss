@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+input, textarea, select, button {
+    font-size: 1em;
+    margin: 0;
+}
+
 html {
     scroll-behavior: smooth;
     scroll-padding: 10em;

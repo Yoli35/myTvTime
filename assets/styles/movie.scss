@@ -367,13 +367,15 @@
             flex-wrap: wrap;
             margin: 0 auto;
             max-height: 20em;
-            min-height: 16em;
+            min-height: 14em;
             overflow-y: scroll;
 
             .actor, .member {
                 @include flex-col(center, unset);
+                background-color: var(--gradiant-grey-80);
+                border-radius: .5em;
                 cursor: grab;
-                height: 14em;
+                height: 12.5em;
                 margin: .5em .5em;
                 width: 7em;
 
@@ -382,7 +384,7 @@
                     background-position: center center;
                     background-repeat: no-repeat;
                     background-size: cover;
-                    border-radius: .5em;
+                    border-radius: .5em .5em 0 0;
                     height: 10em;
                     overflow: hidden;
                     transition: border-radius .25s, height .25s;
@@ -399,15 +401,21 @@
                     }
                 }
 
-                .name {
-                    font-size: .75em;
-                    font-weight: bold;
-                    text-align: center;
-                }
+                div:not(.profile) {
+                    @include flex-col();
+                    height: 2.5em;
+                    line-height: 1em;
 
-                .character, .job {
-                    font-size: .5em;
-                    text-align: center;
+                    .name {
+                        font-size: .75em;
+                        font-weight: bold;
+                        text-align: center;
+                    }
+
+                    .character, .job {
+                        font-size: .5em;
+                        text-align: center;
+                    }
                 }
             }
         }
@@ -583,11 +591,12 @@
 
     .movie-info, .tv-info {
         .cast, .crew {
-            background-color: var(--gradiant-grey-10-alpha-50);
+            background-color: var(--gradiant-grey-30-alpha-50);
 
             .content {
 
                 .actor, .member {
+                    background-color: var(--gradiant-grey-30);
 
                     .profile {
                         background-image: url("../images/profile_dark.jpg");

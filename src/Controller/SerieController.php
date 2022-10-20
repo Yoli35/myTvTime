@@ -956,176 +956,16 @@ class SerieController extends AbstractController
         $age = $interval->y;
         $people['age'] = $age;
 
-        $roles['en'] = [
-            '/Self - Host(.*)(0)/',
-            '/Self - Host(.*)(1)/',
-            '/Self - Host(.*)(2)/',
-            '/Self - (.*)(0)/',
-            '/Self - (.*)(1)/',
-            '/Self - (.*)(2)/',
-            '/\(archive footage\)([0|1|2])/',
-            '/\(uncredited\)([0|2])/',
-            '/\(uncredited\)(1)/',
-            '/(.*)Narrator \(voice\)(.*)([0|2])/',
-            '/(.*)Narrator \(voice\)(.*)(1)/',
-            '/\(voice\)([0|1|2])/',
-            '/\(singing voice\)([0|1|2])/',
-            '/Bartender([0|2])/',
-            '/Bartender(1)/',
-            '/CIA Agent([0|1|2])/',
-            '/Guy at Beach with Drink([0|1|2])/',
-            '/Beaver Girl([0|1|2])/',
-            '/Courtesy of the Gentleman at the Bar([0|1|2])/',
-            '/Girl in Wheelchair \/ China Girl([0|1|2])/',
-            '/Musical Guest([0|2])/',
-            '/Musical Guest(1)/',
-            '/Party Guest([0|2])/',
-            '/Party Guest(1)/',
-            '/Wedding Guest([0|2])/',
-            '/Wedding Guest(1)/',
-            '/Guest([0|2])/',
-            '/Guest(1)/',
-            '/Host([0|2])/',
-            '/Host(1)/',
-            '/Narrator([0|2])/',
-            '/Narrator(1)/',
-            '/Partygoer([0|2])/',
-            '/Partygoer(1)/',
-            '/Passenger([0|2])/',
-            '/Passenger(1)/',
-            '/Performer([0|1|2])/',
-            '/Portrait Subject & Interviewee([0|1|2])/',
-            '/President of Georgia([0|1|2])/',
-            '/Preppie Kid at Fight([0|1|2])/',
-            '/Self(0)/', '/Self(1)/', '/Self(2)/', '/Himself([0|1|2])/', '/Herself([0|1|2])/', '/Themselves([0|1|2])/',
-            '/Singer([0|1|2])/',
-            '/Singer(1)/',
-            '/Thumbs Up Giver([0|2])/',
-            '/Thumbs Up Giver(1)/',
-            '/Waiter([0|1|2])/',
-            '/Woman at Party([0|1|2])/',
-            '/Young Man in Coffee Shop([0|1|2])/',
-            '/Academy Awards Presenter([0|2])/',
-            '/Academy Awards Presenter(1)/',
-            '/Various([0|1|2])/',
-            '/Various/',
-
-            '/(.*)\'s Voice Over([0|1|2])/',
-            '/(.*) Weatherman([0|1|2])/',
-            '/(.*)the Studio Chairman([0|2])/',
-            '/(.*)the Studio Chairman(1)/',
-            '/(.*)British High Commissioner([0|2])/',
-            '/(.*)British High Commissioner(1)/',
-            '/CIA Director (.*)([0|2])/',
-            '/CIA Director (.*)(1)/',
-            '/U.S. President (.*)([0|2])/',
-            '/U.S. President (.*)(1)/',
-            '/President (.*)([0|2])/',
-            '/President (.*)(1)/',
-            '/Professor (.*)([0|2])/',
-            '/Professor (.*)(1)/',
-            '/Sergeant (.*)([0|1|2])/',
-            '/Officer (.*)([0|1|2])/',
-            '/Judge (.*)([0|1|2])/',
-            '/Young Agent (.*)([0|1|2])/',
-            '/Young (.*)([0|1|2])/',
-            '/Countess (.*)([0|1|2])/',
-            '/Queen (.*)([0|1|2])/',
-            '/Detective (.*)([0|1|2])/',
-            '/(.+)([0|1|2])/',
-//            '/ in /',
-//            '/ from /',
-        ];
-        $roles['fr'] = [
-            'Soi-même - Hôte${1}0',
-            'Elle-même - Hôtesse${1}1',
-            'Lui-même - Hôte${1}2',
-            'Soi-même - ${1}0',
-            'Elle-même - ${1}1',
-            'Lui-même - ${1}2',
-            '(images d\'archives)',
-            '(non crédité)',
-            '(non créditée)',
-            '${1}Narrateur${2}',
-            '${1}Narratrice${2}',
-            '(voix)',
-            '(chant)',
-            'Barman',
-            'Barmaid',
-            'Agent de la CIA',
-            'Un gars à la plage avec une boisson',
-            'Fille de castor',
-            'Avec l\'aimable autorisation du gentleman au bar',
-            'Fille en fauteuil roulant / Fille de Chine',
-            'Invité musical',
-            'Invitée musicale',
-            'Invité de la fête',
-            'Invitée de la fête',
-            'Invité de mariage',
-            'Invitée de mariage',
-            'Invité',
-            'Invitée',
-            'Hôte',
-            'Hôtesse',
-            'Narrateur',
-            'Narratrice',
-            'Fêtard',
-            'Fêtarde',
-            'Passager',
-            'Passagère',
-            'Interprète',
-            'Portrait du sujet et de l\'interviewé',
-            'Président de la Géorgie',
-            'Gamin BCBG à la bagarre',
-            'Soi-même', 'Elle-même', 'Lui-même', 'Lui-même', 'Elle-même', 'Eux-mêmes',
-            'Chanteur',
-            'Chanteuse',
-            'Le donneur d\'ordre',
-            'Le donneuse d\'ordre',
-            'Serveur',
-            'Femme à une fête',
-            'Jeune homme dans un café',
-            'Présentateur des Oscars',
-            'Présentatrice des Oscars',
-            'Autres personnages',
-            'Autres personnages',
-
-            'Voix off de ${1}',
-            'Monsieur Météo de « ${1} »',
-            '${1}, le président du studio',
-            '${1}, la présidente du studio',
-            '${1}, Haut commissaire britannique',
-            '${1}, Haute commissaire britannique',
-            'Le directeur de la CIA ${1}',
-            'La directrice de la CIA ${1}',
-            'Le président des États-uns ${1}',
-            'La présidente des États-uns ${1}',
-            'Le président ${1}',
-            'La présidente ${1}',
-            'Le professeur ${1}',
-            'La professeure ${1}',
-            'Sergent ${1}',
-            'Officier ${1}',
-            'Juge ${1}',
-            'Jeune agent ${1}',
-            'Jeune ${1}',
-            'La Comtesse ${1}',
-            'La Reine ${1}',
-            'Détective ${1}',
-            '${1}',
-//            ' dans ',
-//            ' de ',
-        ];
-
-
         $count = count($credits['cast']) + count($credits['crew']);
         $knownFor = [];
         $castNoDates = [];
         $castDates = [];
         $noDate = 0;
+        $roles = $this->makeRoles();
+
         foreach ($credits['cast'] as $cast) {
             $role['id'] = $cast['id'];
-            $role['character'] = key_exists('character', $cast) ? ($cast['character'] ? preg_replace($roles['en'], $roles['fr'], $cast['character'].$people['gender']) : null) : null;;
+            $role['character'] = key_exists('character', $cast) ? ($cast['character'] ? preg_replace($roles['en'], $roles['fr'], $cast['character'] . $people['gender']) : null) : null;;
             $role['media_type'] = key_exists('media_type', $cast) ? $cast['media_type'] : null;
             $role['original_title'] = key_exists('original_title', $cast) ? $cast['original_title'] : (key_exists('original_name', $cast) ? $cast['original_name'] : null);
             $role['poster_path'] = key_exists('poster_path', $cast) ? $cast['poster_path'] : null;
@@ -1191,6 +1031,136 @@ class SerieController extends AbstractController
             'user' => $this->getUser(),
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
+    }
+
+    private function makeRoles(): array
+    {
+        $roles = ['fr'=> [], 'en'=> []];
+
+        $genderedTerms = [
+            'Self', 'Host', 'Narrator', 'Bartender', 'Guest', 'Musical Guest', 'Wedding Guest', 'Party Guest',
+            'uncredited', 'Partygoer', 'Passenger', 'Singer', 'Thumbs Up Giver', 'Academy Awards Presenter',
+            'British High Commissioner', 'CIA Director', 'U.S. President', 'President', 'Professor',
+            'Sergeant', 'Commander',
+        ];
+        $unisexTerms = [
+            'archive footage', 'voice', 'singing voice', 'CIA Agent', 'Performer',
+            'Portrait Subject & Interviewee', 'President of Georgia', 'Preppie Kid at Fight',
+            'Themselves', 'Various', '\'s Voice Over', 'Officer', 'Judge', 'Young Agent', 'Agent',
+            'Detective', 'Audience', 'Filmmaker',
+        ];
+        $maleTerms = [
+            'Guy at Beach with Drink', 'Courtesy of the Gentleman at the Bar', 'Himself',
+            'Waiter', 'Young Man in Coffee Shop', 'Weatherman', 'the Studio Chairman', 'The Man',
+            'Santa Claus', 'Hero Boy', 'Father', 'Conductor',
+        ];
+        $femaleTerms = [
+            'Beaver Girl', 'Girl in Wheelchair \/ China Girl', 'Herself', 'Woman at Party',
+            'Countess', 'Queen',
+        ];
+
+        foreach ($genderedTerms as $term) {
+            $roles['en'][] = '/(.*)'.$term.'(.*)(1)/';      // féminin
+            $roles['en'][] = '/(.*)'.$term.'(.*)([0|2])/';  // non genré ou masculin
+        }
+        foreach ($unisexTerms as $term) {
+            $roles['en'][] = '/(.*)'.$term.'(.*)([0|1|2])/';
+        }
+        foreach ($maleTerms as $term) {
+            $roles['en'][] = '/(.*)'.$term.'(.*)([0|1|2])/';
+        }
+        foreach ($femaleTerms as $term) {
+            $roles['en'][] = '/(.*)'.$term.'(.*)([0|1|2])/';
+        }
+        $roles['en'][] = '/(.+)([0|1|2])/';
+
+        $roles['fr'] = [
+            /* Gendered Terms */
+            '${1}Elle-même${2}${3}', /* Ligne 1 */
+            '${1}Lui-même${2}${3}',
+            '${1}Hôtesse${2}${3}',
+            '${1}Hôte${2}${3}',
+            '${1}Narratrice${2}${3}',
+            '${1}Narrateur${2}${3}',
+            '${1}Barmaid${2}${3}',
+            '${1}Barman${2}${3}',
+            '${1}Invitée${2}${3}',
+            '${1}Invité${2}${3}',
+            '${1}Invitée musicale${2}${3}',
+            '${1}Invité musical${2}${3}',
+            '${1}Invitée du mariage${2}${3}',
+            '${1}Invité du mariage${2}${3}',
+            '${1}Invitée de la fête{2}${3}',
+            '${1}Invité de la fête{2}${3}',
+            '${1}non créditée${2}${3}', /* ligne 2 */
+            '${1}non crédité${2}${3}',
+            '${1}Fêtarde${2}${3}',
+            '${1}Fêtard${2}${3}',
+            '${1}Passagère${2}${3}',
+            '${1}Passager${2}${3}',
+            '${1}Chanteuse${2}${3}',
+            '${1}Chanteur${2}${3}',
+            '${1}Donneuse d\'ordre${2}${3}',
+            '${1}Donneur d\'ordre${2}${3}',
+            '${1}Présentatrice des Oscars${2}${3}',
+            '${1}Présentateur des Oscars${2}${3}',
+            '${1}Haute commissaire britannique${2}${3}', /* Ligne 3 */
+            '${1}Haut commissaire britannique${2}${3}',
+            '${1}Directrice de la CIA${2}${3}',
+            '${1}Directeur de la CIA${2}${3}',
+            '${1}Présidente des États-unis${2}${3}',
+            '${1}Président des États-unis${2}${3}',
+            '${1}Présidente${2}${3}',
+            '${1}Président${2}${3}',
+            '${1}Professeure${2}${3}',
+            '${1}Professeur${2}${3}',
+            '${1}Sergente${2}${3}', /* Ligne 4 */
+            '${1}Sergent${2}${3}',
+            '${1}Commandante${2}${3}',
+            '${1}Commandant${2}${3}',
+            /* Unisex Terms */
+            '${1}images d\'archives${2}${3}', /* Ligne 1 */
+            '${1}voix${2}${3}',
+            '${1}chant${2}${3}',
+            '${1}Agent de la CIA${2}${3}',
+            '${1}Interprète${2}${3}',
+            '${1}Portrait du sujet et de la personne${2}${3}', /* Ligne 2 */
+            '${1}Président de la Géorgie${2}${3}',
+            '${1}Gamin BCBG à la bagarre${2}${3}',
+            '${1}Eux-mêmes${2}${3}', /* Ligne 3 */
+            '${1}Multiples personnages${2}${3}',
+            'Voix off de ${1}${2}${3}',
+            '${1}Officer${2}${3}',
+            '${1}Juge${2}${3}',
+            '${1}Jeune agent${2}${3}',
+            '${1}Agent${2}${3}',
+            '${1}Détective${2}${3}', /* Ligne 4 */
+            '${1}Dans le public${2}${3}',
+            '${1}Cinéaste${2}${3}',
+            /* Male Terms */
+            '${1}Gars à la plage avec un verre${2}${3}', /* Ligne 1 */
+            '${1}Avec l\'aimable autorisation du gentleman au bar${2}${3}',
+            '${1}Lui-même${2}${3}',
+            '${1}Serveur${2}${3}', /* Ligne 2 */
+            '${1}Jeune homme dans la café${2}${3}',
+            '${1}Monsieur Météo${2}${3}',
+            '${1}le président du studio${2}${3}',
+            '${1}L\'homme${2}${3}',
+            '${1}Le Père Noël${2}${3}', /* Ligne 3 */
+            '${1}Le garçon héroïque${2}${3}',
+            '${1}Le père${2}${3}',
+            '${1}Le conducteur${2}${3}',
+            /* Female Terms */
+            '${1}La fille castor${2}${3}', /* Ligne 1 */
+            '${1}Fille en fauteuil roulant${2}${3}',
+            '${1}Elle-même${2}${3}',
+            '${1}Femme à la fête${2}${3}',
+            '${1}Comtesse${2}${3}', /* Ligne 2 */
+            '${1}Queen${2}${3}',
+        ];
+        $roles['fr'][] = '${1}';
+
+        return $roles;
     }
 
     private function getKnownFor($dates): array
