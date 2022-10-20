@@ -1,25 +1,42 @@
 window.addEventListener("DOMContentLoaded", () => {
 
-    const dialog = document.querySelector(".cookie-overlay");
+    const dialog = document.querySelector("#cookies");
+    const actAsADialog = typeof dialog.showModal === 'function';
+
+    if (!actAsADialog) {
+        dialog.classList.add("d-none", "classic");
+    }
 
     if (document.cookie.indexOf("accepted_cookies=") < 0) {
 
-        dialog.classList.remove("d-none");
-        dialog.classList.add("d-block");
+        openDialog();
 
-        document.querySelector(".accept-cookies").addEventListener("click", function () {
+        document.querySelector(".accept-cookies").addEventListener("click", () => {
             document.cookie = "accepted_cookies=yes;path=/;max-age=172800;SameSite=Lax"
-            dialog.classList.add("d-none");
-            dialog.classList.remove("d-block");
+            closeDialog();
         })
-
-        // expand depending on your needs
         document.querySelector(".close").addEventListener('click', function () {
+            closeDialog();
+        });
+    } else {
+        dialog.parentNode.removeChild(dialog);
+    }
+
+    function openDialog() {
+        if (actAsADialog) {
+            dialog.showModal();
+        } else {
+            dialog.classList.remove("d-none");
+            dialog.classList.add("d-block");
+        }
+    }
+
+    function closeDialog() {
+        if (actAsADialog) {
+            dialog.close();
+        } else {
             dialog.classList.add("d-none");
             dialog.classList.remove("d-block");
-        })
-    }
-    else {
-        dialog.parentNode.removeChild(dialog);
+        }
     }
 })

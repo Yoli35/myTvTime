@@ -39,30 +39,53 @@ main {
     display: flex;
 }
 
-.cookie-overlay {
-    background-color: #012222;
-    border-radius: 1em;
-    bottom: 1em;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-    padding: 2em;
-    position: fixed;
-    right: 1em;
+#cookies {
+    background-color: var(--gradiant-grey-10-alpha-90);
+    height: 100vh;
+    max-height: 100vh;
+    max-width: 100vw;
+    width: 100vw;
 
-    .content {
-        @include flex-col(flex-start, flex-start);
-        max-width: 25em;
-        position: relative;
+    .cookie-overlay {
+        background-color: var(--gradiant-grey-30);
+        border: 1px solid var(--gradiant-grey-50);
+        border-radius: .5em;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        color: var(--gradiant-grey-80);
+        margin: calc(50vh - 8em) auto;
+        padding: 2em;
+        width: 30em;
 
-        .close {
-            cursor: pointer;
-            position: absolute;
-            right: -1.5em;
-            top: -1.5em;
+        .content {
+            @include flex-col(flex-start, flex-start);
+            max-width: 26em;
+            position: relative;
+
+            .close {
+                appearance: none;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                font-size: 1em;
+                position: absolute;
+                right: -1.5em;
+                top: -1.5em;
+            }
+        }
+
+        &.classic {
+            bottom: 1em;
+            position: fixed;
+            right: 1em;
+        }
+
+        .footer {
+            @include flex-col(flex-end, flex-end);
         }
     }
 
-    .footer {
-        @include flex-col(flex-end, flex-end);
+    &::backdrop {
+        background: var(--gradiant-grey-30-alpha-50);
     }
 }
 

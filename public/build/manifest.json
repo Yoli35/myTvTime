@@ -78,5 +78,7 @@
   "build/images/arrow-up-circle-outline.png": "/build/images/arrow-up-circle-outline.137a27d1.png",
   "build/images/star-outline.png": "/build/images/star-outline.3e7dbff2.png",
   "build/images/star.png": "/build/images/star.16ef0d59.png",
-  "build/images/settings.png": "/build/images/settings.04f49a7c.png"
+  "build/images/settings.png": "/build/images/settings.04f49a7c.png",
+  "build/vendors-node_modules_core-js_internals_array-iteration_js-node_modules_core-js_internals_dom--711a0d.js": "/build/vendors-node_modules_core-js_internals_array-iteration_js-node_modules_core-js_internals_dom--711a0d.js",
+  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-c7b1a0.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-c7b1a0.js"
 }
