@@ -233,6 +233,8 @@ View on: Regarder sur
 Updated at: Dernière mise à jour
 new episode: nouvel épisode
 new episodes: nouveaux épisodes
+viewed episode: épisode vu
+viewed episodes: épisodes vus
 new season: nouvelle saison
 new seasons: nouvelles saisons
 # Status
@@ -309,7 +311,7 @@ Turn per minute: Tour par minute
 Scale: Échelle
 The settings have been saved: Les réglages ont bien été sauvés
 # search
-Enter a Serie name: Enter le nom d'une série
+Enter a Serie name: Entrer le nom d'une série
 Enter a year: Préciser une année
 Series search: Rechercher une série
 
@@ -370,6 +372,7 @@ job.Production Executive.he: Production executive
 job.Production Sound Mixer.he: Mixeur son (production)
 job.Screenplay.he: Scénariste
 job.Screenstory.he: Scénario
+job.Script.he: Écriture
 job.Songs.he: Paroles
 job.Songs.she: Paroles
 job.Sound Mixer.he: Mixeur son

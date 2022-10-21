@@ -373,6 +373,11 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
         $tv = json_decode($standing, true);
         dump($tv);
+        if ($tv == null) {
+            return $this->render('serie/error.html.twig', [
+                'serie' => $serie,
+            ]);
+        }
 
         return $this->getSerie($tv, $page, $from, $serie->getId(), $request, $tmdbService, $serieRepository, $serie, $viewingRepository, $imageConfiguration, $query, $year);
     }
@@ -419,34 +424,6 @@ class SerieController extends AbstractController
         ]);
     }
 
-    /*
-        #[Route('/tmdb/{id}/season/{seasonNumber}/episode/{episodeNumber}', name: 'app_serie_tmdb_episode', methods: ['GET'])]
-        public function episode(Request $request, $id, $seasonNumber, $episodeNumber, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
-        {
-            $from = $request->query->get('from');
-            $year = $request->query->get('year');
-            $backId = $request->query->get('back');
-            $page = $request->query->get('p');
-            $query = $request->query->get('query');
-
-            $serie = $this->serie($id, $tmdbService, $request->getLocale(), $serieRepository);
-            $standing = $tmdbService->getTvEpisode($id, $seasonNumber, $episodeNumber, $request->getLocale());
-            $episode = json_decode($standing, true);
-            dump($episode);
-            return $this->render('serie/episode.html.twig', [
-                'serie' => $serie,
-                'episode' => $episode,
-                'parameters' => [
-                    'from' => $from,
-                    'page' => $page,
-                    'query' => $query,
-                    'year' => $year,
-                    "backId" => $backId
-                ],
-                'imageConfig' => $imageConfiguration->getConfig(),
-            ]);
-        }
-    */
     public function serie($id, $tmdbService, $locale, $serieRepository): array
     {
         $serie = [];
@@ -537,6 +514,7 @@ class SerieController extends AbstractController
                     $viewing->setUser($user);
                     $viewing->setSerie($serie);
                     $viewing->setViewing($this->createViewingTab($tv));
+                    $viewing->setViewedEpisodes(0);
                     $viewingRepository->add($viewing, true);
                 } else {
                     $viewing->setViewing($this->updateViewing($tv, $viewing, $viewingRepository));
@@ -565,6 +543,7 @@ class SerieController extends AbstractController
             'year' => $year,
             'user' => $user,
             'viewing' => $viewing?->getViewing(),
+            'viewedEpisodes' => $viewing->getViewedEpisodes(),
             'whatsNew' => $whatsNew,
             'ygg' => $ygg,
             'imageConfig' => $imageConfiguration->getConfig(),
@@ -650,10 +629,6 @@ class SerieController extends AbstractController
         $viewing = $theViewing->getViewing();
         $seasons = $tv['seasons'];
         $modified = false;
-
-        dump($seasons);
-        dump($viewing);
-
         /*
          * Épisodes spéciaux : saison 0
          *
@@ -746,6 +721,11 @@ class SerieController extends AbstractController
                 $modified = true;
             }
         }
+        $viewed = $this->getViewedEpisodes($theViewing);
+        if ($viewed !== $theViewing->getViewedEpisodes()) {
+            $theViewing->setViewedEpisodes($viewed);
+            $modified = true;
+        }
 
         if ($modified) {
             $theViewing->setViewing($viewing);
@@ -753,6 +733,31 @@ class SerieController extends AbstractController
         }
 
         return $viewing;
+    }
+
+    public function getViewedEpisodes($viewing): int
+    {
+        $viewed = 0;
+        $seasons = $viewing->getViewing();
+        $count = count($seasons);
+        dump($seasons, $count);
+        for ($i = 1; $i < $count; $i++) {
+            dump($i);
+            if (key_exists($i, $seasons)) {
+                $season = $seasons[$i];
+                if ($season['episode_count']) {
+                    if ($season['season_completed']) {
+                        $viewed += $season['episode_count'];
+                    } else {
+                        $count = 0;
+                        foreach ($season['episodes'] as $view) if ($view) $count++;
+                        $viewed += $count;
+                    }
+                }
+            }
+        }
+//        dump($viewed);
+        return $viewed;
     }
 
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
@@ -868,6 +873,8 @@ class SerieController extends AbstractController
         }
         $serie_completed = !in_array(false, $seasons_completed, true);
 
+        $viewed = $this->getViewedEpisodes($theViewing);
+        $theViewing->setViewedEpisodes($viewed);
         $theViewing->setViewing($newTab);
         $viewingRepository->add($theViewing, true);
 
@@ -1035,7 +1042,7 @@ class SerieController extends AbstractController
 
     private function makeRoles(): array
     {
-        $roles = ['fr'=> [], 'en'=> []];
+//        $roles = ['fr'=> [], 'en'=> []];
 
         $genderedTerms = [
             'Self', 'Host', 'Narrator', 'Bartender', 'Guest', 'Musical Guest', 'Wedding Guest', 'Party Guest',
@@ -1050,7 +1057,7 @@ class SerieController extends AbstractController
             'Detective', 'Audience', 'Filmmaker',
         ];
         $maleTerms = [
-            'Guy at Beach with Drink', 'Courtesy of the Gentleman at the Bar', 'Himself',
+            'Guy at Beach with Drink', 'Courtesy of the Gentleman at the Bar', 'Himself', 'himself',
             'Waiter', 'Young Man in Coffee Shop', 'Weatherman', 'the Studio Chairman', 'The Man',
             'Santa Claus', 'Hero Boy', 'Father', 'Conductor',
         ];
@@ -1060,17 +1067,17 @@ class SerieController extends AbstractController
         ];
 
         foreach ($genderedTerms as $term) {
-            $roles['en'][] = '/(.*)'.$term.'(.*)(1)/';      // féminin
-            $roles['en'][] = '/(.*)'.$term.'(.*)([0|2])/';  // non genré ou masculin
+            $roles['en'][] = '/(.*)' . $term . '(.*)(1)/';      // féminin
+            $roles['en'][] = '/(.*)' . $term . '(.*)([0|2])/';  // non genré ou masculin
         }
         foreach ($unisexTerms as $term) {
-            $roles['en'][] = '/(.*)'.$term.'(.*)([0|1|2])/';
+            $roles['en'][] = '/(.*)' . $term . '(.*)([0|1|2])/';
         }
         foreach ($maleTerms as $term) {
-            $roles['en'][] = '/(.*)'.$term.'(.*)([0|1|2])/';
+            $roles['en'][] = '/(.*)' . $term . '(.*)([0|1|2])/';
         }
         foreach ($femaleTerms as $term) {
-            $roles['en'][] = '/(.*)'.$term.'(.*)([0|1|2])/';
+            $roles['en'][] = '/(.*)' . $term . '(.*)([0|1|2])/';
         }
         $roles['en'][] = '/(.+)([0|1|2])/';
 
@@ -1141,6 +1148,7 @@ class SerieController extends AbstractController
             '${1}Gars à la plage avec un verre${2}${3}', /* Ligne 1 */
             '${1}Avec l\'aimable autorisation du gentleman au bar${2}${3}',
             '${1}Lui-même${2}${3}',
+            '${1}lui-même${2}${3}',
             '${1}Serveur${2}${3}', /* Ligne 2 */
             '${1}Jeune homme dans la café${2}${3}',
             '${1}Monsieur Météo${2}${3}',

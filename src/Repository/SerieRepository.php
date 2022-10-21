@@ -43,7 +43,7 @@ class SerieRepository extends ServiceEntityRepository
     /**
      * @return Serie[] Returns an array of Serie objects
      */
-    public function findAllSeries($userId, $page = 1, $perPage = 20, $orderBy='firstAirDate', $order='desc'): array
+    public function findAllSeries($userId, $page = 1, $perPage = 20, $orderBy='firstDateAir', $order='desc'): array
     {
         if ($page < 1) {
             $page = 1;
@@ -53,6 +53,19 @@ class SerieRepository extends ServiceEntityRepository
             ->orderBy('s.'.$orderBy, $order)
             ->setMaxResults($perPage)
             ->setFirstResult(($page-1) * $perPage)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Serie[] Returns an array of Serie objects
+     */
+    public function findAllUserSeries($userId): array
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
+            ->orderBy('s.id', 'ASC')
             ->getQuery()
             ->getResult()
         ;
@@ -80,7 +93,7 @@ class SerieRepository extends ServiceEntityRepository
     public function listUserSeries($userId): array
     {
         return $this->createQueryBuilder('s')
-            ->select('s.id id, s.name name, s.originalName original')
+            ->select('s.id id, s.name name, s.originalName original, s.firstDateAir firstDateAir')
             ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
             ->orderBy('s.name')
             ->getQuery()

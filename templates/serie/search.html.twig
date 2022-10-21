@@ -16,12 +16,9 @@
             {{ include('blocks/nav.html.twig', {thisPage: 'Series search'}) }}
             <div class="search">
                 {{ form_start(form) }}
-                <div class="input-group input-group-sm mb-3">
-                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
                     {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
                     {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
                     {{ form_widget(form.save, { 'attr': {'class': 'btn btn-secondary'} }) }}
-                </div>
                 {{ form_end(form) }}
             </div>
             {% if series|length %}

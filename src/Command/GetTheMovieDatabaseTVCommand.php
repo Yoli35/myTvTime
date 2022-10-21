@@ -2,9 +2,12 @@
 
 namespace App\Command;
 
+use App\Controller\SerieController;
 use App\Entity\Network;
+use App\Entity\SerieViewing;
 use App\Repository\NetworkRepository;
 use App\Repository\SerieRepository;
+use App\Repository\SerieViewingRepository;
 use App\Repository\UserRepository;
 use App\Service\TMDBService;
 use DateTimeImmutable;
@@ -23,19 +26,25 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class GetTheMovieDatabaseTVCommand extends Command
 {
     private TMDBService $tmdbService;
+    private SerieController $serieController;
     private SerieRepository $serieRepository;
     private UserRepository $userRepository;
+    private SerieViewingRepository $viewingRepository;
     private NetworkRepository $networkRepository;
 
-    public function __construct(TMDBService       $tmdbService,
-                                SerieRepository   $serieRepository,
-                                UserRepository    $userRepository,
-                                NetworkRepository $networkRepository
+    public function __construct(TMDBService            $tmdbService,
+                                SerieController        $serieController,
+                                SerieRepository        $serieRepository,
+                                UserRepository         $userRepository,
+                                SerieViewingRepository $viewingRepository,
+                                NetworkRepository      $networkRepository
     )
     {
         $this->tmdbService = $tmdbService;
+        $this->serieController = $serieController;
         $this->serieRepository = $serieRepository;
         $this->userRepository = $userRepository;
+        $this->viewingRepository = $viewingRepository;
         $this->networkRepository = $networkRepository;
 
         parent::__construct();
@@ -170,6 +179,37 @@ class GetTheMovieDatabaseTVCommand extends Command
                 }
                 break;
 
+            case 'episode':
+                if ($user) {
+
+                    $io->success('Utilisateur: ' . $user->getUsername());
+                    $series = $this->serieRepository->findAllUserSeries($user->getId());
+
+                    foreach ($series as $serie) {
+                        $tv = json_decode($this->tmdbService->getTv($serie->getSerieId(), 'fr'), true);
+
+                        if ($tv == null) {
+                            $io->error('Les données de la série « ' . $serie->getName() . ' » (' . $serie->getSerieId() . ') n\'ont pu être récupérées.');
+                        } else {
+                            /** @var SerieViewing $viewing */
+                            $viewing = $this->viewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
+
+                            if ($viewing == null) {
+                                $viewing = new SerieViewing();
+                                $viewing->setUser($user);
+                                $viewing->setSerie($serie);
+                                $viewing->setViewing($this->serieController->createViewingTab($tv));
+                                $viewing->setViewedEpisodes(0);
+                            } else {
+                                $viewing->setViewing($this->serieController->updateViewing($tv, $viewing, $this->viewingRepository));
+                            }
+                            $this->viewingRepository->add($viewing, true);
+                            $n = $viewing->getViewedEpisodes();
+                            $io->success($serie->getName() . ' : ' . $n . ' / ' . $serie->getNumberOfEpisodes() . ' épisode' . ($n > 1 ? 's' : ''));
+                        }
+                    }
+                }
+                break;
             default:
 
                 break;

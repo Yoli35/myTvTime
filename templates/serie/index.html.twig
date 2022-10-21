@@ -127,14 +127,6 @@
                                         <button id="apply" type="submit">{{ 'Apply'|trans }}</button>
                                     </div>
                                 </div>
-                                {# let particule = {interval: 0, loop: 1, frame: 0,
-                        maxF: 0,
-                        maxY: 0, div: undefined, bg: "b0",
-                        x: 0, dx: 0, y: 0, dy: 0,
-                        initialAngle: 0, turnPerSeconde: 0,
-                        scale: 1
-                       };
-                                #}
                             </div>
                             <div class="settings">
                                 <div class="animation">
@@ -147,7 +139,7 @@
                                                 <span></span>
                                             </label>
                                             <div class="anim-settings-toggler"></div>
-{#                                            <div class="anim-settings-toggler"><i class="fa-solid fa-gear"></i></div>#}
+                                            {#                                            <div class="anim-settings-toggler"><i class="fa-solid fa-gear"></i></div> #}
                                         </h4>
                                         <div class="anim-settings">
                                             <div class="slider" id="frequency">
@@ -733,24 +725,37 @@
             }
         }
 
+        function getLeafValues() {
+            const leaf = document.querySelector(".leaf");
+            const life = leaf.querySelector(".control[data-name='life-length']");
+            const lifeLengthMin = parseInt(life.getAttribute("data-min-value"));
+            const lifeLengthMax = parseInt(life.getAttribute("data-max-value"));
+            const initialAngle = parseInt(leaf.querySelector(".control[data-name='initial-angle']").getAttribute("data-value"));
+            const turnPerMinute = parseInt(leaf.querySelector(".control[data-name='turn-per-minute']").getAttribute("data-value"));
+            const scaleMin = parseInt(leaf.querySelector(".control[data-name='scale']").getAttribute("data-min-value"));
+            const scaleMax = parseInt(leaf.querySelector(".control[data-name='scale']").getAttribute("data-max-value"));
+            const pCount = parseInt(leaf.querySelector(".control[data-name='number']").getAttribute("data-value"));
+
+            return {count: pCount, lifeMin: lifeLengthMin, lifeMax: lifeLengthMax, initialAngle: initialAngle, turnPerMinute: turnPerMinute, scaleMin: scaleMin, scaleMax: scaleMax }
+        }
         function startLeaves() {
-            const pCount = 20;
+            const leafValues = getLeafValues();
             // const body = document.body;
             const html = document.documentElement;
             // const height = Math.max(body.getBoundingClientRect().height, html.getBoundingClientRect().height);
             console.log({html})
 
-            for (let i = 0; i < pCount; i++) {
+            for (let i = 0; i < leafValues.count; i++) {
                 let particule = {interval: 0, loop: 1, frame: 0, maxF: 0, maxY: 0, div: undefined, bg: "b0", x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
                 particule.div = document.createElement("div");
                 particule.div.classList.add("particule");
                 particule.div.classList.add("b0");
-                initParticule(particule);
+                initParticule(particule, leafValues);
                 particule.maxY = html.scrollHeight + 200;
 
                 particule.div.setAttribute("style", "translate: " + particule.x + "px " + particule.y + "px; rotate: " + particule.initialAngle + "deg; scale: " + particule.scale);
 
-                particule.interval = setInterval(animateParticule, 1000, particule);
+                particule.interval = setInterval(animateParticule, 1000, particule, leafValues);
                 leaf_particules[i] = particule;
 
                 document.querySelector("body").appendChild(particule.div);
@@ -798,7 +803,7 @@
             xhr.send();
         }
 
-        function animateParticule(p) {
+        function animateParticule(p, values) {
             p.frame++;
             p.y += p.dy;
 
@@ -809,9 +814,9 @@
                 p.interval = -1
                 p.div.classList.add("reboot");
                 p.loop++;
-                initParticule(p);
+                initParticule(p, values);
                 p.div.setAttribute("style", "translate: " + p.x + "px " + p.y + "px; rotate: calc(" + p.initialAngle + "deg + " + (p.frame * p.turnPerSeconde) + "turn); scale: " + p.scale);
-                p.interval = setInterval(animateParticule, 1000, p);
+                p.interval = setInterval(animateParticule, 1000, p, values);
                 setTimeout(() => p.div.classList.remove("reboot"), 50);
             } else {
                 if (p.frame > p.maxF) {
@@ -822,9 +827,9 @@
                         p.div.classList.add("reboot");
                         p.div.classList.toggle("new");
                         p.loop = 1;
-                        initParticule(p);
+                        initParticule(p, values);
                         p.div.setAttribute("style", "translate: " + p.x + "px " + p.y + "px; rotate: calc(" + p.initialAngle + "deg + " + (p.frame * p.turnPerSeconde) + "turn); scale: " + p.scale);
-                        p.interval = setInterval(animateParticule, 1000, p);
+                        p.interval = setInterval(animateParticule, 1000, p, values);
                         setTimeout(() => {
                             p.div.classList.remove("reboot");
                             p.div.classList.remove("re-new");
@@ -834,16 +839,17 @@
             }
         }
 
-        function initParticule(p) {
+        function initParticule(p, values) {
+
             p.frame = 0;
-            p.maxF = 120 + (Math.random() * 240);
+            p.maxF = values.lifeMin + (Math.random() * (values.lifeMax - values.lifeMin));
             p.x = Math.random() * (window.scrollX + window.innerWidth);
             p.y = -50 - Math.random() * (300);
             p.dx = Math.random() * 100;
             p.dy = Math.random() * 100;
-            p.initialAngle = Math.random() * 360;
-            p.turnPerSeconde = Math.random() * .25;
-            p.scale = .25 + (Math.random() * 1.25);
+            p.initialAngle = values.initialAngle + Math.random() * 360;
+            p.turnPerSeconde = Math.random() * (values.turnPerMinute / 60);
+            p.scale = (values.scaleMin / 100) + (Math.random() * ((values.scaleMax - values.scaleMin) / 100));
 
             p.div.classList.remove(p.bg);
             p.bg = "b" + (Math.ceil(42 * Math.random())).toString();
@@ -1046,10 +1052,10 @@
                         /*make the matching letters bold:*/
                         if (ok_name) {
                             b.innerHTML = "<strong>" + list[i].name.substr(0, val.length) + "</strong>";
-                            b.innerHTML += list[i].name.substring(val.length);
+                            b.innerHTML += list[i].name.substring(val.length) + ' (' + list[i].firstDateAir + ')';
                         } else {
                             b.innerHTML = "<strong>" + list[i].original.substring(0, val.length) + "</strong>";
-                            b.innerHTML += list[i].original.substring(val.length);
+                            b.innerHTML += list[i].original.substring(val.length) + ' (' + list[i].firstDateAir + ')';
                         }
                         /*insert an input field that will hold the current array item's value:*/
                         b.innerHTML += "<input id='item-" + i + "-id' type='hidden' value='" + list[i].id + "'>";
@@ -1120,10 +1126,10 @@
         }
 
         function createList() {
-            let list = [{id: 0, name: '', original: ''}];
+            let list = [{id: 0, name: '', original: '', firstDateAir: 0}];
 
             {% for serie in list %}
-            list[{{ loop.index0 }}] = {'id': {{ serie.id }}, 'name': "{{ serie.name }}", 'original': "{{ serie.original }}"};
+            list[{{ loop.index0 }}] = { id: {{ serie.id }}, name: "{{ serie.name }}", original: "{{ serie.original }}", firstDateAir: {{ serie.firstDateAir|date("Y") }} };
             {% endfor %}
 
             return list;

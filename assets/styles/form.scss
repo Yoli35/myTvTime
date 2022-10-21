@@ -20,6 +20,12 @@
     }
 }
 
+.form-control {
+    appearance: unset;
+    border: 1px solid var(--gradiant-grey-40);
+    padding: .125em .5em;
+}
+
 .btn {
     appearance: none;
     background-color: var(--gradiant-grey-90);

@@ -53,12 +53,14 @@ function initYoutube(id, locale, paths) {
 
                 for (let i = 0; i < count; i++) {
                     let result = results[i];
-                    let newVideo = document.createElement("div");
-                    newVideo.setAttribute("class", "yt-video");
+                    let newResult = document.createElement("div");
+                    newResult.setAttribute("class", "yt-result");
                     let aVideo = document.createElement("a");
                     aVideo.setAttribute("href", _yt_video_page + result['id'].toString());
+                    let newVideo = document.createElement("div");
+                    newVideo.setAttribute("class", "yt-video");
                     let thumbnail = document.createElement("div");
-                    thumbnail.setAttribute("class", "thumbnail");
+                    thumbnail.setAttribute("class", "yt-thumbnail");
                     let img = document.createElement("img");
                     img.setAttribute("src", result['thumbnailMediumPath']);
                     img.setAttribute("alt", result['title']);
@@ -90,7 +92,6 @@ function initYoutube(id, locale, paths) {
                         let imgChannel = document.createElement("img");
                         imgChannel.setAttribute("src", result['channel']['thumbnailDefaultUrl']);
                         imgChannel.setAttribute("alt", result['channel']['title']);
-                        imgChannel.setAttribute("class", "w-100")
                         span.appendChild(imgChannel);
                     } else {
                         let fChannel = document.createTextNode(result['channel']['title'].charAt(0));
@@ -113,11 +114,12 @@ function initYoutube(id, locale, paths) {
                     details.appendChild(channel);
                     details.appendChild(infos);
 
-                    aVideo.appendChild(thumbnail);
-                    newVideo.appendChild(aVideo);
+                    newVideo.appendChild(thumbnail);
                     newVideo.appendChild(details);
+                    aVideo.appendChild(newVideo);
+                    newResult.appendChild(aVideo);
 
-                    videoList.insertBefore(newVideo, seeMore);
+                    videoList.insertBefore(newResult, seeMore);
                 }
                 //
                 // If everything is displayed, we make the 'See more results' button disappear

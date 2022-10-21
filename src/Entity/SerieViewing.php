@@ -24,6 +24,9 @@ class SerieViewing
     #[ORM\Column]
     private array $viewing = [];
 
+    #[ORM\Column(nullable: true)]
+    private ?int $viewedEpisodes = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +64,18 @@ class SerieViewing
     public function setViewing(array $viewing): self
     {
         $this->viewing = $viewing;
+
+        return $this;
+    }
+
+    public function getViewedEpisodes(): ?int
+    {
+        return $this->viewedEpisodes;
+    }
+
+    public function setViewedEpisodes(?int $viewedEpisodes): self
+    {
+        $this->viewedEpisodes = $viewedEpisodes;
 
         return $this;
     }

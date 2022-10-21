@@ -941,17 +941,22 @@
                     margin-right: 2em;
                 }
 
-                .vote-count {
+                .vote-count  {
+                    color: var(--gradiant-grey-80);
+                    margin-left: 2em;
+                }
+
+                .view-count  {
                     color: var(--gradiant-grey-80);
                     margin-left: auto;
                 }
 
-                .vote-average {
+                .vote-average, .view-average {
                     @include flex-row(center, center);
                     background-color: var(--gradiant-grey-20);
                     border-radius: 50%;
                     height: 3.5em;
-                    margin-left: 2em;
+                    margin-left: 1em;
                     position: relative;
                     width: 3.5em;
 
@@ -1513,6 +1518,7 @@
                                 @include flex-100();
                                 font-size: .75em;
                                 font-weight: 100;
+                                line-height: 1em;
                                 height: 3em;
                                 text-align: center;
                             }
@@ -1886,7 +1892,13 @@
         @include flex-100();
         background-color: var(--gradiant-grey-20);
         margin: 1em 0;
-        padding-top: 1em;
+        padding: .5em;
+        //
+        //input {
+        //    appearance: unset;
+        //    border: 1px solid var(--gradiant-grey-40);
+        //    padding: .5em;
+        //}
     }
 }
 

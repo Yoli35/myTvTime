@@ -105,6 +105,18 @@
                     </div>
                     <div class="info">
                         <div class="tagline">{{ serie.tagline }}</div>
+                        <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
+                        <div class="view-average">
+                            <div class="circle">
+                                {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+                                {% if percent > 100 %}
+                                    {% set percent = 100 %}
+                                {% endif %}
+                                <div class="percentage">{{ percent }}%</div>
+                            </div>
+                            <div class="circle-start"></div>
+                            <div class="circle-end"></div>
+                        </div>
                         <div class="vote-count">{{ serie.vote_count }} votes</div>
                         <div class="vote-average">
                             <div class="circle">
@@ -411,8 +423,16 @@
         }
 
         window.addEventListener("DOMContentLoaded", () => {
-
-            initSerieStuff(paths, parseFloat({{ serie.vote_average }}));
+            {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+            {% if percent > 100 %}
+            {% set percent = 100 %}
+            {% endif %}
+            initSerieStuff(paths, [
+                [".vote-average", 10 * parseFloat({{ serie.vote_average }})
+                ],
+                [".view-average", parseFloat({{ percent }})
+                ]
+            ]);
 
             episodeAddEvent();
 
