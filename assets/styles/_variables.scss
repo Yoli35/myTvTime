@@ -250,13 +250,18 @@ $fa-font-path: "../webfonts";
     justify-content: $content;
 }
 
-@mixin seen($color: var(--serie-add), $size: 1em) {
+@mixin seen($color: var(--serie-add), $size: 1em, $right: 1em) {
+    @include flex-row();
+    border: 1px dashed #abcccc;
+    border-radius: 50%;
     bottom: 1rem;
     color: $color;
     cursor: pointer;
     font-size: $size;
+    height: 1.25em;
     position: absolute;
-    right: 1rem;
+    right: $right;
+    width: 1.25em;
 }
 
 @mixin rounded-avatar($size: size) {
@@ -439,7 +444,7 @@ $fa-font-path: "../webfonts";
     width: 100%;
 
     > div {
-        @include flex-row(center, flex-start);
+        @include flex-row(center, center);
         flex-wrap: wrap;
         background-color: var(--gradiant-grey-90);
         border-radius: 0;

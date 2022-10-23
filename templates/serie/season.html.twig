@@ -113,7 +113,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="infos">
-                                        <h4>{{ episode.name }}</h4>
+                                        <h4>{{ 'Episode'|trans }} {{ episode.episode_number }} : {{ episode.name }}</h4>
                                         {% if episode.overview|length %}
                                             <div class="info">{{ episode.overview }}</div>
                                         {% endif %}

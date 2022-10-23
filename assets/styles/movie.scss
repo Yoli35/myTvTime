@@ -88,6 +88,14 @@
             @include rating();
         }
     }
+
+    .ygg {
+        @include seen(var(--gradiant-mars-50), 2.5em, 2.5em);
+
+        a {
+            color: var(--gradiant-mars-50);
+        }
+    }
 }
 
 .has-been-seen {

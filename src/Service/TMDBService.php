@@ -351,6 +351,25 @@ class TMDBService
         }
     }
 
+    public function getTvSeasonCredits($tvId, $seasonNumber, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            dump($e);
+            return "";
+        }
+    }
+
     public function getTvEpisode($tvId, $seasonNumber, $episodeNumber, $locale): ?string
     {
         try {

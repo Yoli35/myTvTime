@@ -770,18 +770,6 @@
     }
 }
 
-.ygg {
-    bottom: 1rem;
-    cursor: pointer;
-    font-size: 1.5em;
-    position: absolute;
-    right: 4rem;
-
-    a {
-        color: var(--gradiant-mars-50);
-    }
-}
-
 .bubble {
     @include flex-col(center, revert);
     height: 3em;
@@ -941,12 +929,12 @@
                     margin-right: 2em;
                 }
 
-                .vote-count  {
+                .vote-count {
                     color: var(--gradiant-grey-80);
                     margin-left: 2em;
                 }
 
-                .view-count  {
+                .view-count {
                     color: var(--gradiant-grey-80);
                     margin-left: auto;
                 }
@@ -1022,6 +1010,27 @@
 
         .seen {
             @include seen(var(--serie-seen), 2.5em);
+        }
+
+        .ygg {
+            @include seen(var(--gradiant-mars-50), 2.5em, 2.5em);
+
+            a {
+                color: var(--gradiant-mars-50);
+            }
+        }
+
+        .tmdb {
+            @include seen(var(--gradiant-ardoise-60), 2.5, 3.5);
+            background-image: url("../images/the-movie-database.png");
+            background-size: cover;
+
+            a {
+                div {
+                    height: 2.5em;
+                    width: 3.4575em;
+                }
+            }
         }
     }
 

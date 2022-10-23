@@ -93,7 +93,6 @@ class YoutubeController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $allTags = $tagRepository->findAllByLabel();
-
         return $this->render('youtube/search.html.twig', [
             'allTags' => $allTags,
             'user' => $user,

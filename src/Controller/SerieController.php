@@ -410,6 +410,9 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTvSeason($id, $seasonNumber, $request->getLocale());
         $season = json_decode($standing, true);
         dump($season);
+        $standing = $tmdbService->getTvSeasonCredits($id, $seasonNumber, $request->getLocale());
+        $credits = json_decode($standing, true);
+        dump($credits);
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
@@ -472,7 +475,7 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getTvWatchProviders($id);
         $temp = json_decode($standing, true);
-        if (array_key_exists('FR', $temp['results'])) {
+        if ($temp && array_key_exists('FR', $temp['results'])) {
             $watchProviders = json_decode($standing, true)['results']['FR'];
         } else {
             $watchProviders = null;
@@ -485,12 +488,15 @@ class SerieController extends AbstractController
         if ($user) {
             // Est-ce une série ajoutée ? $index != null => Ok
             $serieIds = $this->mySerieIds($serieRepository, $user);
-            foreach ($serieIds as $serieId) {
-                if ($serieId == $id) {
-                    $index = $id;
-                    break;
-                }
+            if (in_array($id, $serieIds)) {
+                $index = $id;
             }
+//            foreach ($serieIds as $serieId) {
+//                if ($serieId == $id) {
+//                    $index = $id;
+//                    break;
+//                }
+//            }
         }
 
         $standing = $tmdbService->getTvImages($id, $request->getLocale());
@@ -740,9 +746,7 @@ class SerieController extends AbstractController
         $viewed = 0;
         $seasons = $viewing->getViewing();
         $count = count($seasons);
-        dump($seasons, $count);
         for ($i = 1; $i < $count; $i++) {
-            dump($i);
             if (key_exists($i, $seasons)) {
                 $season = $seasons[$i];
                 if ($season['episode_count']) {

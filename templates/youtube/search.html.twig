@@ -52,15 +52,17 @@
             tagList = createList();
             autocomplete(document.querySelector("#search-tag"), tagList);
             document.querySelector(".apply").addEventListener("click", applyTags);
+            document.querySelector("#search-tag").focus();
         })
 
         function initHeader() {
+            const header = document.querySelector(".header");
             let ticking = false;
             let letters, animatedH1, index = 0;
 
             animatedH1 = document.createElement("div");
             animatedH1.classList.add("animated-h1");
-            animatedH1 = document.querySelector(".header").insertBefore(animatedH1, document.querySelector(".backdrop"));
+            animatedH1 = header.insertBefore(animatedH1, document.querySelector(".backdrop"));
             letters = document.querySelector("h1").innerText.split('');
 
             document.querySelector("h1").innerText = "";
@@ -89,6 +91,7 @@
                 }
                 ticking = true;
             });
+            header.setAttribute("style", "background-color: transparent;");
         }
 
         function setH1() {
@@ -108,13 +111,11 @@
         }
 
         function autocomplete(input, list) {
-            let currentFocus;
+            let currentFocus = -1;
 
-            /*execute a function when someone writes in the text field:*/
             input.addEventListener("input", function (e) {
                 let a, b, c, i, val;
                 val = e.target.value;
-                /*close any already open lists of autocompleted values*/
                 closeAllLists();
                 if (!val) {
                     return false;
@@ -126,24 +127,14 @@
                 this.parentNode.appendChild(a);
 
                 for (i = 0; i < list.length; i++) {
-
                     if (list[i].selected === false) {
-                        let ok_tag = list[i].label.substring(0, val.length).toUpperCase() === val.toUpperCase();
-                        if (ok_tag) {
-                            /*create a DIV element for each matching element:*/
-                            b = document.createElement("div");
-                            /*make the matching letters bold:*/
-                            // b.innerHTML = "<strong>" + list[i].label.substr(0, val.length) + "</strong>";
-                            // b.innerHTML += list[i].label.substring(val.length);
-                            c = document.createElement("strong");
-                            c.appendChild(document.createTextNode(list[i].label.substr(0, val.length)));
-                            b.appendChild(c);
-                            b.appendChild(document.createTextNode(list[i].label.substr(val.length)));
+                        let parts = findOccurences(list[i], val);
+                        if (parts.length > 2) {
+                            b = createItemDiv(list[i], val, parts);
                             b.setAttribute("data-id", list[i].id);
                             b.setAttribute("data-label", list[i].label);
                             b.setAttribute("data-index", i);
 
-                            /*execute a function when someone clicks on the item value (DIV element):*/
                             b.addEventListener("click", function () {
                                 /* add the tag to the list */
                                 let id = this.getAttribute("data-id");
@@ -167,14 +158,16 @@
                                 document.querySelector(".group").insertBefore(newTag, document.querySelector(".method"));
 
                                 input.value = "";
+                                input.focus();
                                 closeAllLists();
+                                currentFocus = -1;
                             });
                             a.appendChild(b);
                         }
                     }
                 }
             });
-            /*execute a function presses a key on the keyboard:*/
+
             input.addEventListener("keydown", function (e) {
                 let x = document.getElementById(this.id + "-autocomplete-list");
                 if (x) x = x.getElementsByTagName("div");
@@ -188,6 +181,10 @@
                     e.preventDefault();
                     if (currentFocus > -1) {
                         if (x) x[currentFocus].click();
+                    }
+                    else {
+                        let tags = document.querySelector(".group").querySelectorAll(".tag");
+                        if (tags.length) applyTags();
                     }
                 }
             });
@@ -227,7 +224,6 @@
                 }
             }
 
-            /*execute a function when someone clicks in the document:*/
             document.addEventListener("click", (e) => {
                 closeAllLists(e.target);
             });
@@ -258,10 +254,59 @@
             let list = [{id: 0, label: ''}];
 
             {% for tag in allTags %}
-            list[{{ loop.index0 }}] = {'id': {{ tag.id }}, 'label': "{{ tag.label }}", 'selected': false};
+            list[{{ loop.index0 }}] = {'id': {{ tag.id }}, 'label': "{{ tag.label|raw }}", 'selected': false};
             {% endfor %}
 
             return list;
+        }
+
+        function findOccurences(item, val) {
+            val = removeAccent(val);
+            let label = removeAccent(item.label), parts = [item.label + ' / ' + label, val],
+                index = 0, nextIndex = 0;
+            do {
+                index = label.indexOf(val, nextIndex);
+                if (index !== -1) {
+                    parts.push(index);
+                }
+                nextIndex = index + val.length;
+            } while (index !== -1);
+
+            return parts;
+        }
+
+        function createItemDiv(item, val, parts) {
+            let div, strong, j, k = 0, str, index, lastIndex=0;
+            div = document.createElement("div");
+            for (j = 2; j < parts.length; j++) {
+                index = parts[j];
+
+                for (k = lastIndex, str = ""; k < index; k++) {
+                    str += item.label[k];
+                }
+                if (str.length) {
+                    div.appendChild(document.createTextNode(str));
+                }
+                strong = document.createElement("strong");
+                strong.appendChild(document.createTextNode(item.label.substr(index, val.length)));
+                div.appendChild(strong);
+                lastIndex = index + val.length;
+            }
+            div.appendChild(document.createTextNode(item.label.substr(lastIndex)));
+
+            return div;
+        }
+
+        function removeAccent(str) {
+            str = str.toLowerCase();
+
+            let from = "àáäâèéëêìíïîòóöôùúüûñç";
+            let to = "aaaaeeeeiiiioooouuuunc";
+            for (let i = 0, l = from.length; i < l; i++) {
+                str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+            }
+
+            return str;
         }
     </script>
 {% endblock %}
