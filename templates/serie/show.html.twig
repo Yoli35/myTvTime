@@ -183,7 +183,7 @@
                 {% endif %}
                 <div class="ygg">
                     <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <div></div>
                     </a>
                 </div>
                 <div class="tmdb">
@@ -426,6 +426,7 @@
             "vu": {"fr": "vu", "en": "seen"},
             "pasVu": {"fr": "pas vu", "en": "not seen"}
         }
+        let number_of_episodes = {{ serie.number_of_episodes }};
 
         window.addEventListener("DOMContentLoaded", () => {
             {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
@@ -460,7 +461,7 @@
                 bubble.classList.add("show");
             }
 
-            function bubbleItHide(evt) {
+            function bubbleItHide() {
                 const bubble = document.querySelector(".bubble");
                 bubble.classList.remove("show");
                 bubble.querySelector("span").innerText = "";
@@ -484,6 +485,7 @@
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
                     let blocks = data['blocks'];
+                    let viewedEpisodes = data['viewedEpisodes'];
 
                     blocks.forEach(block => {
                         console.log({block});
@@ -495,6 +497,10 @@
                         details.removeChild(oldViewingDiv);
                         details.insertBefore(newViewingDiv, mouseDetector);
                     })
+                    let percent = Math.round(viewedEpisodes / number_of_episodes * 100);
+                    if (percent > 100) percent = 100;
+                    setVote([[".view-average", percent]]);
+                    document.querySelector(".view-average").querySelector(".percentage").innerHTML = percent + "%";
 
                     episodeAddEvent();
                 }

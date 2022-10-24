@@ -549,7 +549,7 @@ class SerieController extends AbstractController
             'year' => $year,
             'user' => $user,
             'viewing' => $viewing?->getViewing(),
-            'viewedEpisodes' => $viewing->getViewedEpisodes(),
+            'viewedEpisodes' => $viewing?->getViewedEpisodes(),
             'whatsNew' => $whatsNew,
             'ygg' => $ygg,
             'imageConfig' => $imageConfiguration->getConfig(),
@@ -727,7 +727,7 @@ class SerieController extends AbstractController
                 $modified = true;
             }
         }
-        $viewed = $this->getViewedEpisodes($theViewing);
+        $viewed = $this->getViewedEpisodes($theViewing->getViewing());
         if ($viewed !== $theViewing->getViewedEpisodes()) {
             $theViewing->setViewedEpisodes($viewed);
             $modified = true;
@@ -744,7 +744,7 @@ class SerieController extends AbstractController
     public function getViewedEpisodes($viewing): int
     {
         $viewed = 0;
-        $seasons = $viewing->getViewing();
+        $seasons = $viewing;
         $count = count($seasons);
         for ($i = 1; $i < $count; $i++) {
             if (key_exists($i, $seasons)) {
@@ -877,7 +877,7 @@ class SerieController extends AbstractController
         }
         $serie_completed = !in_array(false, $seasons_completed, true);
 
-        $viewed = $this->getViewedEpisodes($theViewing);
+        $viewed = $this->getViewedEpisodes($newTab);
         $theViewing->setViewedEpisodes($viewed);
         $theViewing->setViewing($newTab);
         $viewingRepository->add($theViewing, true);
@@ -896,11 +896,15 @@ class SerieController extends AbstractController
                         'season_number' => $tab['season_number'],
                         'episode_count' => $tab['episode_count'],
                         'season_completed' => $tab['season_completed'],
-                    ])];
+                    ]),
+                ];
             }
         }
 
-        return $this->json(['blocks' => $blocks]);
+        return $this->json([
+            'blocks' => $blocks,
+            'viewedEpisodes' => $viewed,
+        ]);
     }
 
     /**

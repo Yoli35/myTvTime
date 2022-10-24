@@ -1013,22 +1013,29 @@
         }
 
         .ygg {
-            @include seen(var(--gradiant-mars-50), 2.5em, 2.5em);
-
-            a {
-                color: var(--gradiant-mars-50);
-            }
-        }
-
-        .tmdb {
-            @include seen(var(--gradiant-ardoise-60), 2.5, 3.5);
-            background-image: url("../images/the-movie-database.png");
+            @include seen(hsl(0, 0%, 0%), 2.5em, 2.5em);
+            background-image: url("../images/yggland.png");
+            background-position: center;
             background-size: cover;
 
             a {
                 div {
-                    height: 2.5em;
-                    width: 3.4575em;
+                    height: 1em;
+                    width: 1em;
+                }
+            }
+        }
+
+        .tmdb {
+            @include seen(hsl(0, 0%, 0%), 2.5em, 4em);
+            background-image: url("../images/the-movie-database.png");
+            background-position: center;
+            background-size: cover;
+
+            a {
+                div {
+                    height: 1em;
+                    width: 1em;
                 }
             }
         }

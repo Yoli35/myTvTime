@@ -90,7 +90,7 @@
     }
 }
 
-input {
+input[type="text"],input[type="search"] {
     appearance: unset;
     border: none;
 }
