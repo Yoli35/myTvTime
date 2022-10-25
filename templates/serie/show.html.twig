@@ -489,7 +489,7 @@
 
                     blocks.forEach(block => {
                         console.log({block});
-                        const details = document.querySelector(".details[data-season-number=\"" + block.season + "\"]");
+                        const details = document.querySelector(".details[data-season-number=\"" + block['season'] + "\"]");
                         const oldViewingDiv = details.querySelector(".viewing").parentNode;
                         const newViewingDiv = document.createElement("div");
                         const mouseDetector = details.querySelector(".mouse-detector");
@@ -497,15 +497,18 @@
                         details.removeChild(oldViewingDiv);
                         details.insertBefore(newViewingDiv, mouseDetector);
                     })
-                    let percent = Math.round(viewedEpisodes / number_of_episodes * 100);
-                    if (percent > 100) percent = 100;
-                    setVote([[".view-average", percent]]);
-                    document.querySelector(".view-average").querySelector(".percentage").innerHTML = percent + "%";
-
+                    updateViewCount(".view-average", viewedEpisodes);
                     episodeAddEvent();
                 }
                 xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed);
                 xhr.send();
+            }
+
+            function updateViewCount(selector, viewedEpisodes) {
+                let percent = Math.round(viewedEpisodes / number_of_episodes * 100);
+                if (percent > 100) percent = 100;
+                setVote([[selector, percent]]);
+                document.querySelector(selector).querySelector(".percentage").innerHTML = percent + "%";
             }
         });
     </script>

@@ -12,46 +12,37 @@
 
         <div class="home-header bg{{ random(5) }}"></div>
 
-        {{ include('blocks/nav.html.twig', {thisPage: 'Search by Name'}) }}
+        {{ include('blocks/nav.html.twig', {thisPage: 'Search by Name'|trans}) }}
 
-        <div class="row">
-            <div class="col-lg-3 col-md-1 col-sm"></div>
-            <div class="col-lg-6 col-md-10 col-sm-12">
-                {{ form_start(form) }}
-                <div class="input-group input-group-sm mb-3">
-                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                    {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
-                    {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
-                    {{ form_widget(form.save, { 'label': 'Search', 'attr': {'class': 'btn btn-secondary'} }) }}
-                </div>
-                {{ form_end(form) }}
-            </div>
-            <div class="col-lg-3 col-md-1 col-sm"></div>
+        <div class="search">
+            {{ form_start(form) }}
+            {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
+            {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
+            {{ form_widget(form.save, { 'label': 'Search', 'attr': {'class': 'btn btn-secondary'} }) }}
+            {{ form_end(form) }}
         </div>
-
-        {% if discovers.total_results > 0 %}
-            <div class="row">
-                <div class="home-discovers-footer-infos fs-4">
-                    <div>{{ 'Movie Search Result'|trans }} : {{ discovers.total_results }} {{ ((discovers.total_results > 1) ? 'Movies'|trans : 'Movie'|trans) }}</div>
-                </div>
-            </div>
-        {% endif %}
-
-        <div class="home-discovers">
-            {{ include('blocks/searchPaging.html.twig') }}
-            <div class="content">
-                {% for discover in discovers.results %}
-                    {% if discover.poster_path is defined and discover.poster_path|length %}
-                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
-                    {% else %}
-                        {% set poster = "/images/default/no_poster_dark.png" %}
-                    {% endif %}
-                    {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.id, route: 'app_movie' }) }}
-                {% endfor %}
-            </div>
-            {{ include('blocks/searchPaging.html.twig') }}
+        <div class="search">
+            {% if discovers.total_results > 0 %}
+                <div>{{ 'Movie Search Result'|trans }} : {{ discovers.total_results }} {{ ((discovers.total_results > 1) ? 'Movies'|trans : 'Movie'|trans) }}</div>
+            {% endif %}
         </div>
-        {{ include('blocks/pageFooter.html.twig') }}
+    </div>
+
+    <div class="home-discovers">
+        {{ include('blocks/searchPaging.html.twig') }}
+        <div class="content">
+            {% for discover in discovers.results %}
+                {% if discover.poster_path is defined and discover.poster_path|length %}
+                    {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
+                {% else %}
+                    {% set poster = "/images/default/no_poster_dark.png" %}
+                {% endif %}
+                {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.id, route: 'app_movie' }) }}
+            {% endfor %}
+        </div>
+        {{ include('blocks/searchPaging.html.twig') }}
+    </div>
+    {{ include('blocks/pageFooter.html.twig') }}
     </div>
 {% endblock %}
 {% block morejs %}
@@ -68,6 +59,8 @@
         window.addEventListener("DOMContentLoaded", () => {
             document.querySelector(".home-header").setAttribute("style", "background-position-y: center");
             initMovieStuff(paths, "", "{{ locale }}");
+            document.querySelector("#movie_by_name_query").focus();
+            document.querySelector("#movie_by_name_query").select();
         })
     </script>
 {% endblock %}
