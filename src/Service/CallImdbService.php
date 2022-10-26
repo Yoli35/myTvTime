@@ -28,11 +28,11 @@ class CallImdbService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -47,11 +47,11 @@ class CallImdbService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }

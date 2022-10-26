@@ -453,8 +453,13 @@ User Account: Compte utilisateur
 City: Ville
 Zip code: Code postal
 Preferred language: Langage préféré
-Profile Image (JPG, PNG file): Image de profil (au format jpg ou png)
-Banner Image (JPG, PNG file): Image de bannière (au format jpg ou png)
+Profile Image (JPG, PNG file): Image de profil (fichier JPG ou PNG)
+Banner Image (JPG, PNG file): Image de bannière (fichier JPG ou PNG)
+Drop a profile file: Déposer le fichier de votre image de profil ici
+Drop a banner file: Déposer le fichier de votre bannière ici
+Profile Image: sélectionner une image de profil
+Banner Image: sélectionner une image de bannière
+Drop file here: Déposer le fichier ici
 Search: Rechercher
 Watched Films: Films vus
 "Time spent watching TV:":	"Temps passé à regarder : "
@@ -587,3 +592,4 @@ Updated At: Modifié le
 None: Aucun
 cookie consent: Ce site utilise des cookies pour améliorer le service rendu, notamment sur la page « Mes séries ». En cliquant sur le bouton « J'accepte » vous autorisez leur utilisation.
 Accept: J'accepte
+Confidentiality policy: Politique de confidentialité

@@ -82,7 +82,7 @@ class MovieController extends AbstractController
 
         $standing = $callTmdbService->getMovieImages($id, $locale);
         $images = json_decode($standing, true);
-        dump($images);
+        // dump($images);
 
         $ygg = str_replace(' ', '+', $movieDetail['title']);
         $ygg = str_replace('\'', '+', $ygg);
@@ -112,7 +112,7 @@ class MovieController extends AbstractController
                     break;
             }
         }
-        dump($movieDetail);
+        // dump($movieDetail);
 
         return $this->render('movie/index.html.twig', ['movie' => $movieDetail,
             'recommendations' => $recommendations['results'],
@@ -130,8 +130,7 @@ class MovieController extends AbstractController
             'locale' => $locale,]);
     }
 
-    public
-    function getLocaleDates($dates, $countries, $locale): array
+    public function getLocaleDates($dates, $countries, $locale): array
     {
         $locales = [
             'fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
@@ -222,7 +221,7 @@ class MovieController extends AbstractController
             }
         }
 
-        dump($collection);
+        // dump($collection);
 
         $imageConfig = $imageConfiguration->getConfig();
 
@@ -350,11 +349,11 @@ class MovieController extends AbstractController
         $collectionId = $request->query->getInt("c");
         $action = $request->query->get("a");
         $movieId = $request->query->getInt("m");
-        dump($collectionId, $action, $movieId);
+        // dump($collectionId, $action, $movieId);
 
         $collection = $collectionRepository->find($collectionId);
         $movie = $movieRepository->findOneBy(["movieDbId" => $movieId]);
-        dump($collection, $movie);
+        // dump($collection, $movie);
 
         if ($action == "a") $collection->addMovie($movie);
         if ($action == "r") $collection->removeMovie($movie);

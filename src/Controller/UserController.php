@@ -56,7 +56,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $avatarFile */
-            $avatarFile = $form->get('avatar')->getData();
+            $avatarFile = $form->get('dropThumbnail')->getData();
             if ($avatarFile) {
                 $avatarFileName = $fileUploader->upload($avatarFile, 'avatar');
                 $fileToBeRemoved = $user->getAvatar();
@@ -66,7 +66,7 @@ class UserController extends AbstractController
                 $user->setAvatar($avatarFileName);
             }
             /** @var UploadedFile $bannerFile */
-            $bannerFile = $form->get('banner')->getData();
+            $bannerFile = $form->get('dropBanner')->getData();
             if ($bannerFile) {
                 $bannerFileName = $fileUploader->upload($bannerFile, 'banner');
                 $fileToBeRemoved = $user->getBanner();
@@ -176,54 +176,46 @@ class UserController extends AbstractController
     {
         /** @var MovieCollection $collection */
         $collection = $collectionRepository->find($id);
-        $movies = $this->moviesToArray($request, $collection->getMovies(), $TMDBService, $movieRepository);
-        return $this->json(['title' => $collection->getTitle(), 'movies' => $movies]);
+        $movies = $this->moviesToArray($request, $collectionRepository->getMoviesByReleaseDate($id, 'DESC'), $TMDBService, $movieRepository);
+
+        return $this->json([
+            'title' => $collection->getTitle(),
+            'movies' => $movies
+        ]);
     }
 
     private function moviesToArray($request, $movies, $TMDBService, $movieRepository): array
     {
         $tab = [];
         $locale = $request->getLocale();
-        /** @var UserMovie $movie */
         foreach ($movies as $movie) {
-            $overview = null;
-            switch ($locale) {
-                case 'fr':
-                    $overview = $movie->getOverviewFr();
-                    break;
-                case 'en':
-                    $overview = $movie->getOverviewEn();
-                    break;
-                case 'de':
-                    $overview = $movie->getOverviewDe();
-                    break;
-                case 'es':
-                    $overview = $movie->getOverviewEs();
-                    break;
-            }
-            if ($overview==null) {
+            $overview = $movie['overview_' . $locale];
+            if ($overview === null) {
                 $standing = $TMDBService->getMovie($movie->getMovieDbId(), $locale);
                 $movieDetail = json_decode($standing, true);
                 $overview = $movieDetail['overview'];
 
+                $m = $movieRepository->findOneBy(['id' => $movie['id']]);
                 switch ($locale) {
-                    case 'fr': $movie->setOverviewFr($overview); break;
-                    case 'en': $movie->setOverviewEn($overview); break;
-                    case 'de': $movie->setOverviewDe($overview); break;
-                    case 'es': $movie->setOverviewEs($overview); break;
+                    case 'fr':
+                        $m->setOverviewFr($overview);
+                        break;
+                    case 'en':
+                        $m->setOverviewEn($overview);
+                        break;
+                    case 'de':
+                        $m->setOverviewDe($overview);
+                        break;
+                    case 'es':
+                        $m->setOverviewEs($overview);
+                        break;
                 }
-                $movieRepository->add($movie, true);
+                $movieRepository->add($m, true);
             }
-            $item['id'] = $movie->getId();
-            $item['title'] = $movie->getTitle();
-            $item['original_title'] = $movie->getOriginalTitle();
-            $item['poster_path'] = $movie->getPosterPath();
-            $item['movie_db_id'] = $movie->getMovieDbId();
-            $item['release_date'] = $movie->getReleaseDate();
-            $item['runtime'] = $movie->getRuntime();
-            $item['description'] = $overview;
-            array_unshift($tab, $item);
+            $movie['description'] = $overview;
+            $tab[] = $movie;
         }
+
         return $tab;
     }
 

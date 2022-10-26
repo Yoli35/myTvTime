@@ -14,8 +14,12 @@
         {{ include('blocks/nav.html.twig', {thisPage: 'Collection'}) }}
 
         {% if collection.backdrop_path %}
-            <div class="movie-header">
-                <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ collection.backdrop_path }}" class="d-block w-100" alt="{{ collection.name }}">
+            <div class="collection-header" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ collection.backdrop_path }}')">
+                {% if collection.poster_path %}
+                    <div class="collection-poster">
+                        <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ collection.poster_path }}" alt="{{ collection.name }}">
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
 
@@ -71,7 +75,7 @@
                                             </div>
                                         {% endif %}
                                     </div>
-                                    <div class="movie-poster pt-5 pb-5">
+                                    <div class="movie-poster">
                                         {% if part.poster_path %}
                                             <a href="{{ path('app_movie', {id: part.id}) }}" class="w-100">
                                                 <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ part.poster_path }}" alt="{{ part.title }}" class="w-100 h-auto">
@@ -84,13 +88,6 @@
                             </div>
                         {% endfor %}
                     </div>
-                {% endif %}
-            </div>
-            <div class="movie-poster">
-                {% if collection.poster_path %}
-                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ collection.poster_path }}" alt="{{ collection.name }}">
-                {% else %}
-                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ collection.name }}">
                 {% endif %}
             </div>
         </div>

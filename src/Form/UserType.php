@@ -14,36 +14,48 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class UserType extends AbstractType
 {
+    private TranslatorInterface $translator;
+
+    public function __construct(TranslatorInterface $translator) {
+        $this->translator = $translator;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class, [
-                'attr' => ['class' => 'col-6'],
+                'label' => 'Email',
+                'attr' => ['class' => 'w100'],
                 'required' => true,
             ])
-//            ->add('roles')
-//            ->add('password')
             ->add('username', TextType::class, [
-                'attr' => ['class' => 'col-6'],
+                'label' => 'Username',
+                'attr' => ['class' => 'w100'],
                 'required' => true,
             ])
-//            ->add('isVerified')
             ->add('city', TextType::class, [
-                'attr' => ['class' => 'col-6'],
+                'label' => 'City',
+                'attr' => ['class' => 'w100'],
                 'required' => false,
             ])
             ->add('zipCode', TextType::class, [
-                'attr' => ['class' => 'col-3'],
+                'label' => 'Zip code',
+                'attr' => ['class' => 'w100'],
                 'required' => false,
             ])
             ->add('country', TextType::class, [
-                'attr' => ['class' => 'col-3'],
+                'label' => 'Country',
+                'attr' => ['class' => 'w100'],
                 'required' => false,
             ])
             ->add('preferredLanguage', ChoiceType::class, [
+                'label' => 'Preferred language',
+                'attr' => ['class' => 'form-select w100'],
                 'choices' => [
                     'French' => 'fr',
                     'English' => 'en',
@@ -52,46 +64,31 @@ class UserType extends AbstractType
                 ],
                 'expanded' => false,
             ])
-            ->add('avatar', FileType::class, [
+            ->add('dropThumbnail', DropzoneType::class, [
                 'label' => 'Profile Image (JPG, PNG file)',
-                // unmapped means that this field is not associated to any entity property
                 'mapped' => false,
-                // make it optional so you don't have to re-upload the PDF file
-                // every time you edit the Product details
                 'required' => false,
-                // unmapped fields can't define their validation using annotations
-                // in the associated entity, so you can use the PHP constraint classes
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2048k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/webp',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid JPEG or PNG image',
-                    ])
+                'attr' => [
+                    'data-controller' => 'mydropzone',
+                    'class' => 'w100',
+                    'placeholder' => $this->translator->trans('Drop a profile file'),
+                    'accept' => 'image/*'
                 ],
             ])
-            ->add('banner', FileType::class, [
+            ->add('dropBanner', DropzoneType::class, [
                 'label' => 'Banner Image (JPG, PNG file)',
                 'mapped' => false,
                 'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2048k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/webp',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid JPEG or PNG image',
-                    ])
-                ],
+                'attr' => [
+                    'data-controller' => 'mydropzone',
+                    'class' => 'w100',
+                     'placeholder' => $this->translator->trans('Drop a banner file'),
+                    'accept' => 'image/*'
+               ],
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Update Profile',
-                'attr' => ['class' => 'btn-success float-end'],
+                'attr' => ['class' => 'btn btn-secondary'],
             ]);
     }
 

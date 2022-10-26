@@ -49,11 +49,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -68,11 +68,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -94,11 +94,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -113,11 +113,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -132,11 +132,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -151,11 +151,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -171,11 +171,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return $noCredits;
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return $noCredits;
         }
     }
@@ -190,11 +190,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $exception) {
-                dump($exception->getMessage(), $exception->getCode());
+                // dump($exception->getMessage(), $exception->getCode());
                 return "";
             }
         } catch (Throwable $exception) {
-            dump($exception->getMessage(), $exception->getCode());
+            // dump($exception->getMessage(), $exception->getCode());
             return "";
         }
     }
@@ -209,11 +209,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $exception) {
-                dump($exception->getMessage(), $exception->getCode());
+                // dump($exception->getMessage(), $exception->getCode());
                 return "";
             }
         } catch (Throwable $exception) {
-            dump($exception->getMessage(), $exception->getCode());
+            // dump($exception->getMessage(), $exception->getCode());
             return "";
         }
     }
@@ -228,11 +228,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $exception) {
-                dump($exception->getMessage(), $exception->getCode());
+                // dump($exception->getMessage(), $exception->getCode());
                 return "";
             }
         } catch (Throwable $exception) {
-            dump($exception->getMessage(), $exception->getCode());
+            // dump($exception->getMessage(), $exception->getCode());
             return "";
         }
     }
@@ -247,11 +247,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $exception) {
-                dump($exception->getMessage(), $exception->getCode());
+                // dump($exception->getMessage(), $exception->getCode());
                 return "";
             }
         } catch (Throwable $exception) {
-            dump($exception->getMessage(), $exception->getCode());
+            // dump($exception->getMessage(), $exception->getCode());
             return "";
         }
     }
@@ -266,11 +266,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $exception) {
-                dump($exception->getMessage(), $exception->getCode());
+                // dump($exception->getMessage(), $exception->getCode());
                 return "";
             }
         } catch (Throwable $exception) {
-            dump($exception->getMessage(), $exception->getCode());
+            // dump($exception->getMessage(), $exception->getCode());
             return "";
         }
     }
@@ -285,11 +285,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $exception) {
-                dump($exception->getMessage(), $exception->getCode());
+                // dump($exception->getMessage(), $exception->getCode());
                 return "";
             }
         } catch (Throwable $exception) {
-            dump($exception->getMessage(), $exception->getCode());
+            // dump($exception->getMessage(), $exception->getCode());
             return "";
         }
     }
@@ -304,11 +304,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $exception) {
-                dump($exception->getMessage(), $exception->getCode());
+                // dump($exception->getMessage(), $exception->getCode());
                 return "";
             }
         } catch (Throwable $exception) {
-            dump($exception->getMessage(), $exception->getCode());
+            // dump($exception->getMessage(), $exception->getCode());
             return "";
         }
     }
@@ -323,11 +323,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $exception) {
-                dump($exception->getMessage(), $exception->getCode());
+                // dump($exception->getMessage(), $exception->getCode());
                 return "";
             }
         } catch (Throwable $exception) {
-            dump($exception->getMessage(), $exception->getCode());
+            // dump($exception->getMessage(), $exception->getCode());
             return "";
         }
     }
@@ -342,11 +342,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -361,11 +361,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -380,11 +380,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -399,11 +399,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -418,11 +418,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return "";
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return "";
         }
     }
@@ -438,11 +438,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return $zeroRecommandations;
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return $zeroRecommandations;
         }
     }
@@ -458,11 +458,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return $noReleaseDates;
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return $noReleaseDates;
         }
     }
@@ -478,11 +478,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return $noCountries;
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return $noCountries;
         }
     }
@@ -498,11 +498,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return $noWatchProviders;
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return $noWatchProviders;
         }
     }
@@ -526,11 +526,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return $noOne;
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return $noOne;
         }
     }
@@ -546,11 +546,11 @@ class TMDBService
             try {
                 return $response->getContent();
             } catch (Throwable $e) {
-                dump($e);
+                // dump($e);
                 return $noCredits;
             }
         } catch (Throwable $e) {
-            dump($e);
+            // dump($e);
             return $noCredits;
         }
     }

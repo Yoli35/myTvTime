@@ -58,6 +58,10 @@ main {
     display: flex;
 }
 
+.w100 {
+    width: 100%;
+}
+
 #cookies {
     background-color: var(--gradiant-grey-10-alpha-90);
     height: 100vh;
@@ -66,11 +70,13 @@ main {
     width: 100vw;
 
     .cookie-overlay {
-        background-color: var(--gradiant-grey-30);
-        border: 1px solid var(--gradiant-grey-50);
+        background-color: hsl(346.84, 77.17%, 49.8%);
+        //background-color: var(--gradiant-grey-30);
+        border: 1px solid hsl(214.29, 31.82%, 91.37%);
+        //border: 1px solid var(--gradiant-grey-50);
         border-radius: .5em;
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-        color: var(--gradiant-grey-80);
+        color: #fff;
         margin: calc(50vh - 8em) auto;
         padding: 2em;
         width: 30em;
@@ -86,6 +92,7 @@ main {
                 border: none;
                 cursor: pointer;
                 font-size: 1em;
+                outline: none;
                 position: absolute;
                 right: -1.5em;
                 top: -1.5em;
@@ -100,6 +107,17 @@ main {
 
         .footer {
             @include flex-col(flex-end, flex-end);
+            margin-top: 1em;
+
+            .btn-secondary {
+                background-color: hsl(343, 80%, 35%);
+                border-color: hsl(343, 80%, 70%);
+                color: #fff;
+
+                &:hover {
+                    background-color: hsl(341.54, 75.48%, 30.39%);
+                }
+            }
         }
     }
 
@@ -107,6 +125,21 @@ main {
         background: var(--gradiant-grey-30-alpha-50);
     }
 }
+
+.rgpd {
+    max-width: 1200px;
+}
+
+.rgpd-header {
+    background-image: url("../images/rgpd.jpg");
+    background-size: cover;
+    border-radius: 1em;
+    height: 20em;
+    margin-bottom: 2em;
+    margin-top: 1em;
+    width: 100%;
+}
+
 
 .container,
 .container-fluid {
@@ -372,7 +405,8 @@ nav.active {
                     float: left;
                     padding-right: 0.5rem;
                     color: #6c757d;
-                    content: var(--bs-breadcrumb-divider, "/") /* rtl: var(--bs-breadcrumb-divider, "/") */;
+                    content: var(--bs-breadcrumb-divider, "/") /* rtl: var(--bs-breadcrumb-divider, "/") */
+                ;
                 }
             }
 
@@ -438,7 +472,7 @@ nav.active {
                 overflow: hidden;
                 position: absolute;
                 top: 2em;
-                width: 14em;
+                width: 15em;
                 z-index: 53;
 
                 .menu-item {
@@ -507,6 +541,7 @@ nav.active {
                     background: var(--gradiant-grey-30);
                     color: var(--gradiant-grey-80);
                     font-weight: 100;
+                    height: 2em;
                     margin: 0 1em;
                     padding: .125em 2em .125em .25em;
                 }
@@ -952,7 +987,7 @@ h4 {
         }
 
         .logo {
-            border: 4px solid #bdbdbd;
+            border: 4px solid var(--gradiant-grey-70);
             border-radius: 50%;
             height: auto;
             position: absolute;
@@ -969,14 +1004,17 @@ h4 {
         top: 1em;
 
         .has-been-seen {
-            background-color: #333;
+            @include flex-row();
+            background-color: var(--gradiant-grey-20);
             border-radius: 50%;
-            color: #dbdbdb;
+            color: var(--gradiant-grey-80);
             cursor: pointer;
+            height: 1.35em;
             padding: 0 .2em;
+            width: 1.35em;
 
             &.yes {
-                color: #11d08e;
+                color: var(--gradiant-green-60);
             }
         }
 

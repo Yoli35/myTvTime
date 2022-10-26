@@ -9,6 +9,7 @@
     color: var(--gradiant-grey-10);
     font-size: 1em;
     font-weight: 200;
+    height: 2em;
     padding: .25em 1.5em .25em .5em;
     position: relative;
 
@@ -90,7 +91,14 @@
     }
 }
 
-input[type="text"],input[type="search"] {
+input[type="text"],
+input[type="search"],
+input[type="email"] {
     appearance: unset;
     border: none;
+    border-radius: .25em;
+    font-size: 1em;
+    font-weight: 200;
+    height: 2em;
+    padding: .5em 1em;
 }

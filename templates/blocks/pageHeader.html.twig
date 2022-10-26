@@ -35,6 +35,7 @@
         <a href="{{ path('app_collection') }}">{{ 'My Movie Collections'|trans }}</a>
         <a href="{{ path('app_serie_index') }}">{{ 'My Series'|trans }}</a>
         <a href="{{ path('app_youtube') }}">{{ 'My Youtube Videos'|trans }}</a>
+        <a href="{{ path('app_youtube_search') }}">{{ 'Youtube video search'|trans }}</a>
         <a href="{{ path('app_tik_tok') }}">{{ 'My TikTok Videos'|trans }}</a>
         <hr class="divider">
         <div class="locale">
@@ -45,6 +46,8 @@
             <a href="/de{{ path[3:]~params }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}"></a>
             <a href="/es{{ path[3:]~params }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}"></a>
         </div>
+        <hr class="divider">
+        <a href="{{ path('app_rgpd') }}">{{ 'Confidentiality policy'|trans }}</a>
 
         {% if is_granted('ROLE_ADMIN') %}
             <hr class="divider">

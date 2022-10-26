@@ -180,16 +180,16 @@
                             <div class="part-2R">
                                 <h2>{{ 'Belongs to Collection'|trans }}</h2>
                                 <div class="collection">
-                                    <div class="card text-center" style="width: 100%;">
-                                        {% if movie.belongs_to_collection.backdrop_path %}
+                                    {% if movie.belongs_to_collection.backdrop_path %}
+                                        <div class="banner">
                                             <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" class="card-img-top" alt="movie.belongs_to_collection.name">
-                                        {% endif %}
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ movie.belongs_to_collection.name }}</h5>
-                                            <div><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
-                                            <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
                                         </div>
-                                    </div>
+                                    {% endif %}
+                                    <div class="content">
+                                    <h2>{{ movie.belongs_to_collection.name }}</h2>
+                                    <div class="poster"><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
+                                    <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
+                                </div>
                                 </div>
                             </div>
                         {% endif %}

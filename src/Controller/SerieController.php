@@ -76,7 +76,7 @@ class SerieController extends AbstractController
         $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
         $list = $serieRepository->listUserSeries($user->getId());
 
-        dump($results);
+        // dump($results);
 
         return $this->render('serie/index.html.twig', [
             'series' => $results,
@@ -116,9 +116,9 @@ class SerieController extends AbstractController
         }
         if ($query && strlen($query)) {
             $standing = $tmdbService->search($page, $query, $year, $request->getLocale());
-            dump($page, $query, $year);
+            // dump($page, $query, $year);
             $series = json_decode($standing, true);
-            dump('results', $series);
+            // dump('results', $series);
         }
 
         return $this->render('serie/search.html.twig', [
@@ -171,7 +171,7 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getSeries($kind, $page, $locale);
         $series = json_decode($standing, true);
-        dump($series);
+        // dump($series);
 
         return $this->render('serie/popular.html.twig', $this->renderParams($kind, $page, $series, $serieRepository, $imageConfiguration));
     }
@@ -250,7 +250,7 @@ class SerieController extends AbstractController
             if (strlen($standing)) {
                 $status = "Ok";
                 $tv = json_decode($standing, true);
-                dump($tv);
+                // dump($tv);
 
                 $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
 
@@ -287,7 +287,7 @@ class SerieController extends AbstractController
                 }
                 $serie->addUser($user);
                 $serieRepository->add($serie, true);
-                dump($serie);
+                // dump($serie);
 
                 if ($from != self::SERIE_PAGE && $from != self::SEARCH) {
                     $card = $this->render('blocks/serie/card.html.twig', [
@@ -372,7 +372,7 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
         $tv = json_decode($standing, true);
-        dump($tv);
+        // dump($tv);
         if ($tv == null) {
             return $this->render('serie/error.html.twig', [
                 'serie' => $serie,
@@ -409,10 +409,10 @@ class SerieController extends AbstractController
         $serie = $this->serie($id, $tmdbService, $request->getLocale(), $serieRepository);
         $standing = $tmdbService->getTvSeason($id, $seasonNumber, $request->getLocale());
         $season = json_decode($standing, true);
-        dump($season);
+        // dump($season);
         $standing = $tmdbService->getTvSeasonCredits($id, $seasonNumber, $request->getLocale());
         $credits = json_decode($standing, true);
-        dump($credits);
+        // dump($credits);
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
@@ -435,7 +435,7 @@ class SerieController extends AbstractController
         if ($userSerie == null) {
             $standing = $tmdbService->getTv($id, $locale);
             $tmdbSerie = json_decode($standing, true);
-            dump($tmdbSerie);
+            // dump($tmdbSerie);
             $serie['id'] = $tmdbSerie['id'];
             $serie['name'] = $tmdbSerie['name'];
             $serie['backdropPath'] = $tmdbSerie['backdrop_path'];
@@ -514,7 +514,7 @@ class SerieController extends AbstractController
 
                 /** @var SerieViewing $viewing */
                 $viewing = $viewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
-                dump($viewing);
+                // dump($viewing);
                 if ($viewing == null) {
                     $viewing = new SerieViewing();
                     $viewing->setUser($user);
@@ -529,7 +529,7 @@ class SerieController extends AbstractController
         }
         $ygg = str_replace(' ', '+', $tv['name']);
 
-        dump($serie);
+        // dump($serie);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -779,7 +779,7 @@ class SerieController extends AbstractController
         $tv = json_decode($tmdbService->getTv($serieId, $request->getLocale()), true);
         $seasons = $tv['seasons'];
         $noSpecialEpisodes = $seasons[0]['season_number'] == 1 ? 1 : 0;
-        dump($seasons, $noSpecialEpisodes);
+        // dump($seasons, $noSpecialEpisodes);
         $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
         $theViewing = $viewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]);
         $viewing = $theViewing->getViewing();
@@ -834,7 +834,7 @@ class SerieController extends AbstractController
             $newEpisodes = [];
             $episode_count = $viewing[$season]['episode_count'];
             $air_date = array_key_exists('air_date', $viewing[$season]) ? $viewing[$season]['air_date'] : $seasons[$season - $noSpecialEpisodes]['air_date'];
-            dump($air_date);
+            // dump($air_date);
             for ($e = 0; $e < $episode_count; $e++) {
                 $newEpisodes[] = $e + 1 <= $episode;
             }
@@ -846,7 +846,7 @@ class SerieController extends AbstractController
                 'episode_count' => $episode_count,
                 'episodes' => $newEpisodes
             ];
-            dump($newTab);
+            // dump($newTab);
             /*
              * Les saisons suivantes
              */
@@ -868,10 +868,10 @@ class SerieController extends AbstractController
             }
         }
         $today = (new DateTime)->format("Y-m-d");
-        dump($today);
+        // dump($today);
         $seasons_completed = [];
         foreach ($newTab as $tab) {
-            dump($tab);
+            // dump($tab);
             if ($tab['air_date'] <= $today)
                 $seasons_completed[] = !in_array(false, $tab['episodes'], true);
         }
@@ -923,7 +923,7 @@ class SerieController extends AbstractController
             return $serieIds;
         }
         if ($this->getUser()) {
-            dump('Check mySerieIds function parameters !!!');
+            // dump('Check mySerieIds function parameters !!!');
         }
         return [];
     }
@@ -963,7 +963,7 @@ class SerieController extends AbstractController
         $people = json_decode($standing, true);
         $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);
         $credits = json_decode($standing, true);
-        dump($credits);
+        // dump($credits);
 
         $date = new DateTime($people['birthday']);
         $now = $people['deathday'] ? new DateTime($people['deathday']) : new DateTime();
@@ -1037,7 +1037,7 @@ class SerieController extends AbstractController
         ksort($knownFor);
         $knownFor = array_reverse($knownFor);
         $credits['known_for'] = $knownFor;
-        dump($credits);
+        // dump($credits);
 
         return $this->render('serie/people.html.twig', [
             'people' => $people,
