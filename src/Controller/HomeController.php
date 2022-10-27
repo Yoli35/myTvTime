@@ -141,7 +141,7 @@ class HomeController extends AbstractController
             'pages' => $pages,
             'sorts' => $sorts,
             'dRoute' => 'app_movie',
-            'locale' => $request->getLocale()
+            'locale' => $locale,
         ]);
     }
 }
