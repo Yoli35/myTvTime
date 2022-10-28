@@ -25,7 +25,9 @@
                         </div>
                         <div class="wrapper">
                             {% for serie in series %}
-                                {{ include('blocks/serie/card.html.twig') }}
+                                <div data-id="{{ serie.id }}">
+                                    {{ include('blocks/serie/card.html.twig') }}
+                                </div>
                             {% endfor %}
                         </div>
                         <div class="series-tools bottom">
@@ -736,7 +738,7 @@
             const scaleMax = parseInt(leaf.querySelector(".control[data-name='scale']").getAttribute("data-max-value"));
             const pCount = parseInt(leaf.querySelector(".control[data-name='number']").getAttribute("data-value"));
 
-            return {count: pCount, lifeMin: lifeLengthMin, lifeMax: lifeLengthMax, initialAngle: initialAngle, turnPerMinute: turnPerMinute, scaleMin: scaleMin, scaleMax: scaleMax }
+            return {count: pCount, lifeMin: lifeLengthMin, lifeMax: lifeLengthMax, initialAngle: initialAngle, turnPerMinute: turnPerMinute, scaleMin: scaleMin, scaleMax: scaleMax}
         }
 
         function startLeaves() {
@@ -1084,8 +1086,7 @@
                     e.preventDefault();
                     if (currentFocus > -1) {
                         if (x) x[currentFocus].click();
-                    }
-                    else {
+                    } else {
                         show.click();
                     }
                 }
@@ -1129,7 +1130,7 @@
             let list = [{id: 0, name: '', original: '', firstDateAir: 0}];
 
             {% for serie in list %}
-            list[{{ loop.index0 }}] = { id: {{ serie.id }}, name: "{{ serie.name }}", original: "{{ serie.original }}", firstDateAir: {{ serie.firstDateAir|date("Y") }} };
+            list[{{ loop.index0 }}] = {id: {{ serie.id }}, name: "{{ serie.name }}", original: "{{ serie.original }}", firstDateAir: {{ serie.firstDateAir|date("Y") }} };
             {% endfor %}
 
             return list;

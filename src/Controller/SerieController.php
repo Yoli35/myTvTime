@@ -226,6 +226,8 @@ class SerieController extends AbstractController
         $from = $request->query->get('from', self::MY_SERIES);
 
         $value = $request->query->get("value");
+        $query = $request->query->get("query");
+        $year = $request->query->get("year");
         $page = $request->query->getInt('p', 1);
         $perPage = $request->query->getInt('pp', 20);
         $orderBy = $request->query->getAlpha('ob', 'firstDateAir');
@@ -234,8 +236,9 @@ class SerieController extends AbstractController
         $serieId = "";
         $status = "Ko";
         $response = "Not found";
-        $card = "";
-        $pagination = "";
+        $serie = null;
+        $card = null;
+        $pagination = null;
 
         if (is_numeric($value)) {
             $serieId = $value;
@@ -288,30 +291,62 @@ class SerieController extends AbstractController
                 $serie->addUser($user);
                 $serieRepository->add($serie, true);
                 // dump($serie);
-
-                if ($from != self::SERIE_PAGE && $from != self::SEARCH) {
-                    $card = $this->render('blocks/serie/card.html.twig', [
-                        'serie' => $serie,
+                /*
+                    const POPULAR = 'popular';
+                    const TOP_RATED = 'top_rated';
+                    const AIRING_TODAY = 'airing_today';
+                    const ON_THE_AIR = 'on_the_air';
+                    const LATEST = 'latest';
+                    const SEARCH = 'search';
+                 */
+                if ($from === self::POPULAR || $from === self::TOP_RATED || $from ===self::AIRING_TODAY || $from ===self::ON_THE_AIR || $from === self::LATEST) {
+                    dump("Not my series");
+                    $card = $this->render('blocks/serie/card-popular.html.twig', [
+                        'serie' => $tv,
                         'pages' => [
                             'page' => $page
                         ],
                         'from' => $from,
+                        'serieIds' => $this->mySerieIds($serieRepository, $this->getUser()),
                         'imageConfig' => $imageConfiguration->getConfig()]);
+                }
 
-                    if ($from == self::MY_SERIES) {
-                        $totalResults = $serieRepository->count([]);
-                        $pagination = $this->render('blocks/serie/pagination.html.twig', [
-                            'pages' => [
-                                'total_results' => $totalResults,
-                                'page' => $page,
-                                'per_page' => $perPage,
-                                'link_count' => self::LINK_COUNT,
-                                'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
-                                'per_page_values' => self::PER_PAGE_ARRAY,
-                                'order_by' => $orderBy,
-                                'order' => $order],
-                        ]);
-                    }
+                if ($from === self::SEARCH) {
+                    dump("Not my series");
+                    $card = $this->render('blocks/serie/card-search.html.twig', [
+                        'serie' => $tv,
+                        'query' => $query?:"",
+                        'year' => $year?:"",
+                        'pages' => [
+                            'page' => $page
+                        ],
+                        'from' => $from,
+                        'serieIds' => $this->mySerieIds($serieRepository, $this->getUser()),
+                        'imageConfig' => $imageConfiguration->getConfig()]);
+                }
+
+                if ($from === self::MY_SERIES) {
+                    dump("My series");
+//                    $card = $this->render('blocks/serie/card.html.twig', [
+//                        'serie' => $serie,
+//                        'pages' => [
+//                            'page' => $page
+//                        ],
+//                        'from' => $from,
+//                        'imageConfig' => $imageConfiguration->getConfig()]);
+
+                    $totalResults = $serieRepository->count([]);
+                    $pagination = $this->render('blocks/serie/pagination.html.twig', [
+                        'pages' => [
+                            'total_results' => $totalResults,
+                            'page' => $page,
+                            'per_page' => $perPage,
+                            'link_count' => self::LINK_COUNT,
+                            'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
+                            'per_page_values' => self::PER_PAGE_ARRAY,
+                            'order_by' => $orderBy,
+                            'order' => $order],
+                    ]);
                 }
 
 //                $standing = $tmdbService->getTvKeywords($serieId, $request->getLocale());
@@ -326,6 +361,7 @@ class SerieController extends AbstractController
             'response' => $response,
             'id' => $serieId ?: $value,
             'card' => $card,
+            'userSerieId' => $serie?->getId(),
             'pagination' => $pagination,
         ]);
     }
@@ -765,7 +801,7 @@ class SerieController extends AbstractController
     }
 
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
-    public function updateViewingTab(Request $request, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, TMDBService $tmdbService): Response
+    public function updateViewingTab(Request $request, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, TMDBService $tmdbService, TranslatorInterface $translator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -904,6 +940,7 @@ class SerieController extends AbstractController
         return $this->json([
             'blocks' => $blocks,
             'viewedEpisodes' => $viewed,
+            'episodeText' => $translator->trans($viewed > 1 ? "viewed episodes" : "viewed episode"),
         ]);
     }
 

@@ -17,7 +17,7 @@
     <a href="{{ path('app_serie_on_the_air') }}">{{ 'Series On The Air'|trans }}</a>
     <a href="{{ path('app_serie_latest') }}">{{ 'Latest Serie'|trans }}</a>
     <a href="{{ path('app_serie_search') }}">{{ 'Series search'|trans }}</a>
-{#    <a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a>#}
+    {#    <a href="{{ path('app_home_tv') }}">{{ 'Tv Shows'|trans }}</a> #}
     <hr class="divider">
     {% if user is null %}
         <a href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>
@@ -79,8 +79,13 @@
     }
 
     function closeNav(evt) {
-        hamburgerButton.classList.remove("active");
-        navigation.classList.remove("active");
+        if (hamburgerButton.classList.contains("active")) {
+            if (!navigation.contains(evt.target)) {
+                evt.preventDefault();
+            }
+            hamburgerButton.classList.remove("active");
+            navigation.classList.remove("active");
+        }
     }
 </script>
 

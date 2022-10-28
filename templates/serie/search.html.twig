@@ -16,9 +16,9 @@
             {{ include('blocks/nav.html.twig', {thisPage: 'Series search'}) }}
             <div class="search">
                 {{ form_start(form) }}
-                    {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
-                    {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
-                    {{ form_widget(form.save, { 'attr': {'class': 'btn btn-secondary'} }) }}
+                {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
+                {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
+                {{ form_widget(form.save, { 'attr': {'class': 'btn btn-secondary'} }) }}
                 {{ form_end(form) }}
             </div>
             {% if series|length %}
@@ -30,7 +30,9 @@
                     </div>
                     <div class="wrapper">
                         {% for serie in series %}
-                            {{ include('blocks/serie/card-search.html.twig') }}
+                            <div data-type="card">
+                                {{ include('blocks/serie/card-search.html.twig') }}
+                            </div>
                         {% endfor %}
                     </div>
                     <div class="series-tools">
@@ -52,7 +54,8 @@
             "{{ path('app_serie_render_translation_fields') }}",
             "{{ path('app_serie_render_translation_select') }}",
             "{{ path('app_serie_render_translation_save') }}",
-            "{{ path('app_serie_new') }}"
+            "{{ path('app_serie_new') }}",
+            "{{ path('app_serie_show', {id:0}) }}",
         ];
         let letterRatios = [];
 
@@ -104,7 +107,7 @@
 
         let quoteInterval = [2000, 3000, 4000, 5000];
         let quoteIntervalId = [0, 0, 0, 0];
-        let quotes=["","","",""], quoteDivs;
+        let quotes = ["", "", "", ""], quoteDivs;
 
         function animateQuotes() {
             quoteDivs = document.querySelectorAll(".quote");

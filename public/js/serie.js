@@ -2,13 +2,15 @@ let _app_serie_render_translation_fields;
 let _app_serie_render_translation_select;
 let _app_serie_render_translation_save;
 let _app_serie_new;
+let _app_serie_show;
 
-function initSerieStuff(paths, circles) {
+function initSerieStuff(paths, circles = undefined) {
 
     _app_serie_render_translation_fields = paths[0];
     _app_serie_render_translation_select = paths[1];
     _app_serie_render_translation_save = paths[2];
-    _app_serie_new = paths[3]
+    _app_serie_new = paths[3];
+    _app_serie_show = paths[4].substring(0, paths[4].length - 1);
 
     initAddSerie();
     if (circles !== undefined) setVote(circles);
@@ -173,13 +175,14 @@ function renderTranslationSelect(content) {
 
 function addSerie(evt) {
     const addButton = evt.currentTarget;
+    const from = addButton.getAttribute("data-from");
     let value = addButton.getAttribute("data-id");
 
     evt.preventDefault();
 
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
-        let data;
+        let data = {'serie': "", status: "", response: "", id: 0, card: null, userSerieId: 0, pagination: null};
         if (this.response.slice(0, 1) === '<') {
             data = this.response;
         } else {
@@ -193,9 +196,37 @@ function addSerie(evt) {
             if (data.status === "Ko") {
                 alert("{{ 'Serie not found'|trans }} (ID: " + data.id + ")");
             }
+
+            const pathname = evt.view.location.pathname;
+
+            if (pathname.includes("tmdb")) {
+                window.location.href = _app_serie_show + data.userSerieId + evt.view.location.search;
+            }
+
+            if (data.pagination) {
+                document.querySelectorAll(".pages").forEach(page => {
+                    page.innerHTML = data.pagination.content;
+                })
+            }
+
+            // if (from === "my_series") {
+            //     if (data.card) {
+            //         evt.currentTarget.closest("div[data-id=" + data.userSerieId + "]").innerHTML = data.card;
+            //     }
+            // }
+
+            if (from === "popular" || from === "top_rated" ||
+                from === "airing_today" || from === "on_the_air" ||
+                from === "latest" || from === "search") {
+                if (data.card) {
+                    let card = addButton.closest("div[data-type=\"card\"]");
+                    card.innerHTML = data.card.content;
+                }
+            }
+
         }
         console.log({data});
     }
-    xhr.open("GET", _app_serie_new + '?value=' + value + "&from=serie");
+    xhr.open("GET", _app_serie_new + '?value=' + value + "&from=serie" + "&from=" + from);
     xhr.send();
 }

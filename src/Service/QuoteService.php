@@ -117,7 +117,7 @@ class QuoteService
             $this->quotes[$indexes[1]],
             $this->quotes[$indexes[2]],
             $this->quotes[$indexes[3]],
-            ];
+        ];
     }
 
     public function getRandomQuotes(): ?array
@@ -125,8 +125,8 @@ class QuoteService
         return $this->getSerieQuotes();
     }
 
-    public function getRandomQuote(): ?String
+    public function getRandomQuote(): ?string
     {
-        return $this->quotes[rand(0, count($this->quotes))];
+        return $this->quotes[rand(0, count($this->quotes) - 1)];
     }
 }

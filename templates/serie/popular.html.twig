@@ -54,7 +54,9 @@
                     </div>
                     <div class="wrapper">
                         {% for serie in series %}
-                            {{ include('blocks/serie/card-popular.html.twig') }}
+                            <div data-type="card">
+                                {{ include('blocks/serie/card-popular.html.twig') }}
+                            </div>
                         {% endfor %}
                     </div>
                     <div class="series-tools">
@@ -154,14 +156,7 @@
 
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
-                let data = {
-                    'serie': '',
-                    'status': '',
-                    'response': '',
-                    'id': '',
-                    'card': {},
-                    'pagination': {}
-                };
+                let data = {'serie': '', 'status': '', 'response': '', 'id': '', 'card': {}, 'pagination': {}};
                 if (this.response.slice(0, 1) === '<') {
                     data = this.response;
                 } else {

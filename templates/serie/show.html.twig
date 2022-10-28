@@ -105,18 +105,22 @@
                     </div>
                     <div class="info">
                         <div class="tagline">{{ serie.tagline }}</div>
-                        <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
-                        <div class="view-average">
-                            <div class="circle">
-                                {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
-                                {% if percent > 100 %}
-                                    {% set percent = 100 %}
-                                {% endif %}
-                                <div class="percentage">{{ percent }}%</div>
-                            </div>
-                            <div class="circle-start"></div>
-                            <div class="circle-end"></div>
-                        </div>
+                        {% if index is defined %}
+                            {% if index %}
+                                <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
+                                <div class="view-average">
+                                    <div class="circle">
+                                        {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+                                        {% if percent > 100 %}
+                                            {% set percent = 100 %}
+                                        {% endif %}
+                                        <div class="percentage">{{ percent }}%</div>
+                                    </div>
+                                    <div class="circle-start"></div>
+                                    <div class="circle-end"></div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
                         <div class="vote-count">{{ serie.vote_count }} votes</div>
                         <div class="vote-average">
                             <div class="circle">
@@ -417,16 +421,17 @@
             "{{ path('app_serie_render_translation_select') }}",
             "{{ path('app_serie_render_translation_save') }}",
             "{{ path('app_serie_new') }}",
+            "{{ path('app_serie_show', {id:0}) }}",
             "{{ path('app_serie_viewing') }}"
         ];
         const serie = {{ serie.id }};
-        const _app_serie_viewing = paths[4];
+        const _app_serie_viewing = paths[5];
         const _locale = "{{ app.request.locale }}";
         const txt = {
             "vu": {"fr": "vu", "en": "seen"},
             "pasVu": {"fr": "pas vu", "en": "not seen"}
         }
-        let number_of_episodes = {{ serie.number_of_episodes }};
+        const number_of_episodes = {{ serie.number_of_episodes }};
 
         window.addEventListener("DOMContentLoaded", () => {
             {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
@@ -436,8 +441,12 @@
             initSerieStuff(paths, [
                 [".vote-average", 10 * parseFloat({{ serie.vote_average }})
                 ],
-                [".view-average", parseFloat({{ percent }})
-                ]
+                {% if index is defined %}
+                    {% if index %}
+                        [".view-average", parseFloat({{ percent }})
+                        ]
+                    {% endif %}
+                {% endif %}
             ]);
 
             episodeAddEvent();
@@ -486,6 +495,7 @@
                     let data = JSON.parse(this.response);
                     let blocks = data['blocks'];
                     let viewedEpisodes = data['viewedEpisodes'];
+                    let episodeText = data['episodeText'];
 
                     blocks.forEach(block => {
                         console.log({block});
@@ -497,18 +507,19 @@
                         details.removeChild(oldViewingDiv);
                         details.insertBefore(newViewingDiv, mouseDetector);
                     })
-                    updateViewCount(".view-average", viewedEpisodes);
+                    updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
                     episodeAddEvent();
                 }
                 xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed);
                 xhr.send();
             }
 
-            function updateViewCount(selector, viewedEpisodes) {
+            function updateViewCount(textSelector, graphSelector, viewedEpisodes, episodeText) {
                 let percent = Math.round(viewedEpisodes / number_of_episodes * 100);
                 if (percent > 100) percent = 100;
-                setVote([[selector, percent]]);
-                document.querySelector(selector).querySelector(".percentage").innerHTML = percent + "%";
+                setVote([[graphSelector, percent]]);
+                document.querySelector(graphSelector).querySelector(".percentage").innerHTML = percent + "%";
+                document.querySelector(textSelector).innerHTML = viewedEpisodes + " " + episodeText;
             }
         });
     </script>
