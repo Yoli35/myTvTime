@@ -2,18 +2,15 @@
 
 namespace App\Form;
 
-use App\Config\PreferredLanguage;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\Dropzone\Form\DropzoneType;
 
@@ -48,7 +45,7 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'w100'],
                 'required' => false,
             ])
-            ->add('country', TextType::class, [
+            ->add('country', CountryType::class, [ //] TextType::class, [
                 'label' => 'Country',
                 'attr' => ['class' => 'w100'],
                 'required' => false,
