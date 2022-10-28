@@ -90,6 +90,10 @@
             initPreview();
             newPopularSerie();
             initHeader();
+
+            setTimeout(()=> {
+                document.querySelector(".header").setAttribute("style", "background-color: hsla(0 0% 0% / .25);");
+            }, 0);
         })
 
         function initHeader() {
