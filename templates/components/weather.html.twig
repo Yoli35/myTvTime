@@ -210,11 +210,15 @@
                 toggle.classList.remove("open");
                 toggle.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
                 if (windowWidth < 767.98) {
-                    banner.setAttribute("style", "margin-bottom: 13em");
+                    banner.classList.add("mb13");
+                    banner.classList.remove("mb32");
+                    banner.classList.remove("h30");
                     weather.setAttribute("style", "bottom: -13em");
                     avatar.setAttribute("style", "right: .5em");
                 } else {
-                    banner.setAttribute("style", "height: 30em");
+                    banner.classList.add("h30");
+                    banner.classList.remove("h40");
+                    banner.classList.remove("mb13");
                     avatar.setAttribute("style", "right: 2em");
                 }
                 for (let i = 0; i < row.length; i++) row.item(i).setAttribute("style", "flex-direction: row");
@@ -227,11 +231,12 @@
                 toggle.classList.add("open");
                 toggle.innerHTML = '<i class="fa-solid fa-circle-minus"></i>';
                 if (windowWidth < 767.98) {
-                    banner.setAttribute("style", "margin-bottom: 32em");
+                    banner.classList.add("mb32");//setAttribute("style", "margin-bottom: 32em");
                     weather.setAttribute("style", "bottom: -32em");
                     avatar.setAttribute("style", "right: .5em");
                 } else {
-                    banner.removeAttribute("style");
+                    banner.classList.add("h40");
+                    banner.classList.remove("h30"); //removeAttribute("style");
                     avatar.setAttribute("style", "right: 26em");
                 }
                 setTimeout(() => {

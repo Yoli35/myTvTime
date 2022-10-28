@@ -1,19 +1,19 @@
 <div id="user-banner" class="banner">
     {% if user.banner %}
-        <img src="/images/users/banners/{{ user.banner }}" alt="">
+        <img src="/images/users/banners/{{ user.banner }}" alt="User banner">
     {% else %}
         {% if banner is not empty %}
-            <img src="{{ banner.image }}" class="" alt="">
+            <img src="{{ banner.image }}" class="" alt="No banner">
         {% else %}
-            <img src="/images/default/no_banner_dark.png">
+            <img src="/images/default/no_banner_dark.png" alt="No banner">
         {% endif %}
     {% endif %}
     <div class="title">{{ user }}</div>
     <div id="user-avatar" class="avatar">
         {% if user.avatar %}
-            <img src="/images/users/avatars/{{ user.avatar }}">
+            <img src="/images/users/avatars/{{ user.avatar }}" alt="User avatar">
         {% else %}
-            <img src="/images/default/no_avatar.png">
+            <img src="/images/default/no_avatar.png" alt="No avatar">
         {% endif %}
     </div>
     {{ component('weather', {'locale': locale}) }}

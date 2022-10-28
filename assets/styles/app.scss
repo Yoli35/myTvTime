@@ -588,27 +588,27 @@ nav.active {
         }
     }
     .nav-breadcrumb {
-        background-color: var(--gradiant-grey-90);
+        background-color: var(--gradiant-grey-70);
 
         .breadcrumb {
 
             .breadcrumb-item {
                 span {
-                    color: var(--gradiant-grey-30);
+                    color: var(--gradiant-grey-20);
                 }
 
                 &.active {
-                    color: var(--gradiant-grey-30);
+                    color: var(--gradiant-grey-20);
                 }
 
                 &:before {
-                    color: var(--gradiant-grey-30);
+                    color: var(--gradiant-grey-20);
                 }
 
             }
 
             .bracket {
-                color: var(--gradiant-grey-70);
+                color: var(--gradiant-grey-20);
             }
 
             .menu {
@@ -1113,8 +1113,8 @@ h4 {
 @media (prefers-color-scheme: dark) {
 
     :root {
-        --bs-body-bg: #123333;
-        --bs-body-color: #abcccc;
+        --bs-body-bg: var(--gradiant-grey-20);
+        --bs-body-color: var(--gradiant-grey-90);
     }
 
     a, .nav-link {

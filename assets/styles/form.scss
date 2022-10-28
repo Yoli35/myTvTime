@@ -1,6 +1,5 @@
 @import "variables";
 
-//select::part()
 .form-select {
     appearance: none;
     background-color: var(--gradiant-grey-90);
@@ -101,4 +100,54 @@ input[type="email"] {
     font-weight: 200;
     height: 2em;
     padding: .5em 1em;
+}
+
+@media (prefers-color-scheme: light) {
+
+    .form-select {
+        background-color: var(--gradiant-grey-10);
+        border: 1px solid var(--gradiant-grey-50);
+        color: var(--gradiant-grey-90);
+    }
+
+    .form-control {
+        border: 1px solid var(--gradiant-grey-60);
+    }
+
+    .btn {
+        background-color: var(--gradiant-grey-10);
+        border: 1px solid var(--gradiant-grey-50);
+        color: var(--gradiant-grey-90);
+
+        &:hover {
+            background-color: var(--gradiant-grey-20);
+        }
+    }
+
+    .btn-group {
+        .btn:first-child {
+            border-left: 1px solid var(--gradiant-grey-50);
+        }
+    }
+
+    .btn-secondary {
+        background-color: var(--gradiant-grey-60);
+        border-color: var(--gradiant-grey-50);
+        color: var(--gradiant-grey-10);
+
+        &:hover {
+            background-color: var(--gradiant-grey-50);
+            border-color: var(--gradiant-grey-40);
+        }
+    }
+
+    .btn-outline-secondary {
+        border-color: var(--gradiant-grey-50);
+        color: var(--gradiant-grey-10);
+
+        &:hover {
+            background-color: var(--gradiant-grey-30-alpha-50);
+            border-color: var(--gradiant-grey-40);
+        }
+    }
 }

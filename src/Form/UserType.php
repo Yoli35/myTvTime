@@ -49,6 +49,7 @@ class UserType extends AbstractType
                 'label' => 'Country',
                 'attr' => ['class' => 'w100'],
                 'required' => false,
+                'preferred_choices' => ['FR', 'DE', 'GB', 'ES', 'US'],
             ])
             ->add('preferredLanguage', ChoiceType::class, [
                 'label' => 'Preferred language',

@@ -324,6 +324,13 @@ Copy: Copy
 Add: Add
 Progress: Progress
 Download: Download
+Drop a profile file: Drop a profile file
+Drop a banner file: Drop a banner file
+My account: My account
+Series search: Series search
+My Events: My Events
+Youtube video search: Youtube video search
+Confidentiality policy: Confidentiality policy
 
 #weather
 Now: Now
@@ -343,6 +350,22 @@ Sunrise: Sunrise
 Sunset: Sunset
 City: City
 Zip code: Zip code
+N: N
+E: E
+S: S
+W: W
+NW: NW
+NE: NE
+SW: SW
+SE: SE
+WNW: WNW
+WSW: WSW
+ENE: ENE
+ESE: ESE
+SSE: SSE
+SSW: SSW
+NNE: NNE
+NNW: NNW
 
 # Admin
 Dashboard: Dashboard

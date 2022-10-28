@@ -88,10 +88,11 @@
 
             setTimeout(() => {
                 document.querySelector('#user_email').focus();
+                document.querySelector('#user_email').select();
             }, 1000);
 
-            const inputAvatar = document.querySelector('#user_avatar');
-            const inputBanner = document.querySelector('#user_banner');
+            const inputAvatar = document.querySelector('#user_dropThumbnail');
+            const inputBanner = document.querySelector('#user_dropBanner');
             const banner = document.querySelector('#user-banner');
             const avatar = document.querySelector('#user-avatar');
 
@@ -107,12 +108,12 @@
 
             inputBanner.addEventListener("mouseout", () => {
                 banner.firstElementChild.removeAttribute("style");
-                banner.removeAttribute("style");
+                banner.querySelector("img").classList.remove("sepia");
             });
 
             inputBanner.addEventListener("mouseenter", () => {
                 banner.firstElementChild.setAttribute("style", "border-color: #D81F26");
-                banner.setAttribute("style", "filter: sepia(0.8)");
+                banner.querySelector("img").classList.add("sepia");
             });
         })
     </script>

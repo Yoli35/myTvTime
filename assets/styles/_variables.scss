@@ -2,9 +2,9 @@ $transition-delay: .5s;
 $fa-font-path: "../webfonts";
 
 :root {
-    --mtt-body-bg: var(--gradiant-grey-100);
+    --mtt-body-bg: var(--gradiant-grey-90);
     --mtt-body-bg-gradiant: var(--gradiant-grey-40);
-    --mtt-body-color: var(--gradiant-grey-10);
+    --mtt-body-color: var(--gradiant-grey-20);
 
     --button-border-radius: .25em;
 
@@ -120,6 +120,10 @@ $fa-font-path: "../webfonts";
     --gradiant-green-20: hsl(160, 90%, 20%);
     --gradiant-green-10: hsl(160, 90%, 10%);
     --gradiant-green-0: hsl(160, 90%, 0%);
+
+    --form-bg: hsl(0, 0%, 95%);
+    --form-border: hsl(0, 0%, 15%);
+    --form-text: hsl(0, 0%, 15%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -128,6 +132,11 @@ $fa-font-path: "../webfonts";
         --mtt-body-bg: var(--gradiant-grey-10);
         --mtt-body-bg-gradiant: var(--gradiant-grey-40);
         --mtt-body-color: var(--gradiant-grey-90);
+
+        --form-bg: hsl(0, 0%, 15%);
+        --form-border: hsl(0, 0%, 90%);
+        --form-text: hsl(0, 0%, 90%);
+
     }
 }
 
