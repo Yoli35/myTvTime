@@ -31,9 +31,7 @@ class UserController extends AbstractController
 {
     private string $json_header = '"json_format":"myTvTime","json_version":"1.0",';
 
-    public function __construct(
-        private readonly LocaleSwitcher $localeSwitcher,
-    )
+    public function __construct(private readonly LocaleSwitcher $localeSwitcher)
     {
     }
 
@@ -498,4 +496,15 @@ class UserController extends AbstractController
         $banner['title'] = $discover['title'];
         return $banner;
     }
+
+    #[Route('/still-connected/', name: 'app_user_connected')]
+    public function stillConnected(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        dump($user);
+
+        return $this->json(['connected' => ($user !== null)]);
+    }
+
 }
