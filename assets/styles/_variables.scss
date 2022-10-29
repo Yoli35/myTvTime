@@ -454,15 +454,16 @@ $fa-font-path: "../webfonts";
     > div {
         @include flex-row(center, center);
         flex-wrap: wrap;
-        background-color: var(--gradiant-grey-90);
-        border-radius: 0;
+        gap: 1em;
+        background-color: var(--gradiant-grey-80);
+        border-radius: .5em;
         min-height: 10em;
         margin: 0 0 1em 0;
+        padding: 1em;
         width: 100%;
 
         img {
             display: block;
-            margin: 1em;
         }
 
         .backdrop {
@@ -470,13 +471,31 @@ $fa-font-path: "../webfonts";
             max-width: calc(100% - 2em);
         }
 
-        .logo {
-
-        }
-
         .poster {
             border-radius: .5em;
         }
+    }
+
+    .logo-bg-dark {
+        @include flex-row(center, center);
+        flex-wrap: wrap;
+        gap: 1em;
+        background-color: var(--gradiant-grey-30);
+        border-radius: .5em;
+        height: 100%;
+        padding: 1em;
+        width: calc(50% - 2em);
+    }
+
+    .logo-bg-light {
+        @include flex-row(center, center);
+        flex-wrap: wrap;
+        gap: 1em;
+        background-color: var(--gradiant-grey-70);
+        border-radius: .5em;
+        height: 100%;
+        padding: 1em;
+        width: calc(50% - 2em);
     }
 
     h4, h5 {

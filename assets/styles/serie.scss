@@ -144,7 +144,7 @@
 
                 .serie {
                     @include flex-row(flex-start, flex-start);
-                    background-color: var(--gradiant-grey-10);
+                    background-color: var(--gradiant-grey-90);
                     border-radius: 0;
                     height: var(--serie-lg-height);
                     margin-bottom: 1em;
@@ -183,7 +183,7 @@
                         z-index: 0;
 
                         div {
-                            color: var(--gradiant-grey-90);
+                            color: var(--mtt-body-color);
                         }
 
                         div:first-child {
@@ -516,7 +516,7 @@
 
             .settings {
                 @include flex-col(flex-start, flex-start);
-                background-color: var(--gradiant-grey-90);
+                background-color: var(--gradiant-grey-80);
                 border-radius: 0;
                 margin-bottom: 1em;
                 padding: .5em;
@@ -810,7 +810,7 @@
 .serie-page {
     .header {
         @include flex-row(flex-start, flex-start);
-        background-color: var(--gradiant-grey-10);
+        background-color: var(--mmt-body-bg);
         border-radius: 1em;
         margin: 1em 0;
         padding: 2em;
@@ -904,7 +904,7 @@
 
         .infos {
             @include flex-col(start, center);
-            color: var(--gradiant-grey-90);
+            color: var(--mmt-body-color);
             min-height: 30em;
             padding: 1em;
             position: relative;
@@ -912,7 +912,6 @@
             z-index: 0;
 
             h1 {
-                color: var(--gradiant-grey-90);
                 font-weight: 400;
 
                 span {
@@ -1061,7 +1060,7 @@
 
                 .cast {
                     @include flex-col(flex-start, flex-start);
-                    background-color: var(--gradiant-grey-30-alpha-50);
+                    background-color: var(--gradiant-grey-80);
                     border-radius: .5em;
                     padding: 0 1em;
                     width: 100%;
@@ -1084,6 +1083,7 @@
 
                 .seasons, .episodes {
                     @include flex-col();
+                    background-color: var(--gradiant-grey-80);
                     margin: 1em 0;
                     width: 100%;
 
@@ -1092,7 +1092,7 @@
 
                         .season {
                             @include flex-row(center, flex-start);
-                            background-color: var(--gradiant-grey-90);
+                            background-color: var(--gradiant-grey-80);
                             border-radius: 0;
                             height: 10em;
                             margin: 1em 0;
@@ -1115,7 +1115,7 @@
                                 padding: .5em;
 
                                 div {
-                                    color: var(--gradiant-grey-20);
+                                    color: var(--mmt-body-color);
                                     font-weight: 100;
                                     margin: .25em 0;
                                     max-height: 3em;
@@ -1138,15 +1138,16 @@
 
                                             .ep {
                                                 @include flex-row(center, center);
-                                                border: 2px solid var(--gradiant-grey-60);
+                                                border: 2px solid var(--gradiant-grey-20);
                                                 border-radius: 50%;
+                                                color: var(--gradiant-grey-20);
                                                 height: 1em;
                                                 margin: .25em;
                                                 overflow: hidden;
                                                 width: 1em;
 
                                                 &:hover {
-                                                    border: 2px solid var(--gradiant-grey-80);
+                                                    border: 2px solid var(--gradiant-mars-50);
                                                 }
 
                                                 &.full {
@@ -1168,9 +1169,9 @@
 
                     .episode {
                         @include flex-row(center, flex-start);
-                        background-color: var(--gradiant-grey-90);
+                        background-color: var(--gradiant-grey-80);
                         border-radius: 0;
-                        color: var(--gradiant-grey-20);
+                        color: var(--mmt-body-color);
                         height: 14em;
                         margin: 1em 0;
                         width: 100%;
@@ -1206,7 +1207,7 @@
                                 width: 100%;
 
                                 .guest {
-                                    @include human-profile(var(--gradiant-grey-20));
+                                    @include human-profile(var(--gradiant-grey-40));
                                 }
                             }
                         }
@@ -1221,7 +1222,7 @@
 
         aside {
             @include flex-col(flex-start, flex-start);
-            background-color: var(--gradiant-grey-30-alpha-50);
+            background-color: var(--gradiant-grey-80);
             border-radius: .5em;
             margin-left: 1em;
             min-height: 50vh;
@@ -2283,7 +2284,7 @@
         main {
             article {
                 section {
-                    .seasons, .episodes {
+                    .seasons, .episodes, .cast {
                         color: var(--gradiant-grey-90);
                         background-color: var(--gradiant-grey-20-alpha-50);
 
@@ -2291,6 +2292,19 @@
                             .season {
                                 color: var(--gradiant-grey-90);
                                 background-color: var(--gradiant-grey-30-alpha-50);
+
+                                .infos {
+                                    .details {
+                                        div {
+                                            .viewing {
+                                                .ep {
+                                                    border: 2px solid var(--gradiant-grey-80);
+                                                    color: var(--gradiant-grey-60);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
 
@@ -2307,6 +2321,10 @@
                         }
                     }
                 }
+            }
+
+            aside {
+                background-color: var(--gradiant-grey-20-alpha-50);
             }
         }
     }

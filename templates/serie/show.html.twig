@@ -236,7 +236,7 @@
                         <div class="seasons">
                             {% for season in serie.seasons %}
                                 {% set url = path('app_serie_tmdb_season', {id: serie.id, seasonNumber: season.season_number})~'?from='~from~'&p='~page %}
-                                {% if query is defined %} {% set url = url ~ '&qury=' ~ query %}{% endif %}
+                                {% if query is defined %} {% set url = url ~ '&query=' ~ query %}{% endif %}
                                 {% if year is defined %} {% set url = url ~ '&year=' ~ year %}{% endif %}
                                 {% if backId is defined %} {% set url = url ~ '&back=' ~ backId %}{% endif %}
                                 <a href="{{ url }}">
@@ -297,9 +297,16 @@
                                 {% if images.logos|length %}
                                     <h5>{{ 'Logos'|trans }}</h5>
                                     <div>
-                                        {% for logo in images.logos %}
-                                            <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
-                                        {% endfor %}
+                                        <div class="logo-bg-dark">
+                                            {% for logo in images.logos %}
+                                                <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
+                                            {% endfor %}
+                                        </div>
+                                        <div class="logo-bg-light">
+                                            {% for logo in images.logos %}
+                                                <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 {% endif %}
                                 {% if images.posters|length %}
