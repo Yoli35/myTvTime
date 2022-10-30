@@ -44,7 +44,7 @@ class SerieController extends AbstractController
     const SERIE_PAGE = 'serie';
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
-    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, SettingsRepository $settingsRepository): Response
+    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, SettingsRepository $settingsRepository, SerieViewingRepository $viewingRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
@@ -76,10 +76,11 @@ class SerieController extends AbstractController
         $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
         $list = $serieRepository->listUserSeries($user->getId());
 
-        // dump($results);
+        $series = $this->getSeriesViews($user, $results, $viewingRepository);
+        dump($series);
 
         return $this->render('serie/index.html.twig', [
-            'series' => $results,
+            'series' => $series,
             'numbers' => $serieRepository->numbers($user->getId())[0],
             'list' => $list,
             'pages' => [
@@ -97,6 +98,59 @@ class SerieController extends AbstractController
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
+    }
+
+    public function getSeriesViews($user, $results, $viewingRepository): array
+    {
+        $ids = '(';
+        /** @var Serie $result */
+        foreach ($results as $result) {
+            $ids .= $result->getId() . ', ';
+        }
+        $ids = substr($ids, 0, strlen($ids) - 2) . ')';
+        $viewings = $viewingRepository->getSeriesViewings($user, $ids);
+
+        $series = [];
+        /** @var Serie $result */
+        foreach ($results as $result) {
+            $serie = $this->serie2array($result);
+            $serie['viewing'] = $this->getSerieViews($result, $viewings);
+
+            $series[] = $serie;
+        }
+        return $series;
+    }
+
+    public function getSerieViews(Serie $result, $viewings): ?array
+    {
+        foreach ($viewings as $viewing) {
+            if ($viewing['serie_id'] == $result->getId()) {
+                return $viewing;
+            }
+        }
+        return null;
+    }
+
+    public function serie2array(Serie $result): array
+    {
+        $serie['id'] = $result->getId();
+        $serie['name'] = $result->getName();
+        $serie['posterPath'] = $result->getPosterPath();
+        $serie['backdropPath'] = $result->getBackdropPath();
+        $serie['serieId'] = $result->getSerieId();
+        $serie['firstDateAir'] = $result->getFirstDateAir();
+        $serie['addedAt'] = $result->getAddedAt();
+        $serie['updatedAt'] = $result->getUpdatedAt();
+        $serie['serieCompleted'] = $result->isSerieCompleted();
+        $serie['status'] = $result->getStatus();
+        $serie['overview'] = $result->getOverview();
+        $serie['networks'] = $result->getNetworks();
+        $serie['numberOfEpisodes'] = $result->getNumberOfEpisodes();
+        $serie['numberOfSeasons'] = $result->getNumberOfSeasons();
+        $serie['originalName'] = $result->getOriginalName();
+        $serie['modifiedAt'] = $result->getModifiedAt();
+
+        return $serie;
     }
 
     #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
@@ -299,7 +353,7 @@ class SerieController extends AbstractController
                     const LATEST = 'latest';
                     const SEARCH = 'search';
                  */
-                if ($from === self::POPULAR || $from === self::TOP_RATED || $from ===self::AIRING_TODAY || $from ===self::ON_THE_AIR || $from === self::LATEST) {
+                if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
                     dump("Not my series");
                     $card = $this->render('blocks/serie/card-popular.html.twig', [
                         'serie' => $tv,
@@ -315,8 +369,8 @@ class SerieController extends AbstractController
                     dump("Not my series");
                     $card = $this->render('blocks/serie/card-search.html.twig', [
                         'serie' => $tv,
-                        'query' => $query?:"",
-                        'year' => $year?:"",
+                        'query' => $query ?: "",
+                        'year' => $year ?: "",
                         'pages' => [
                             'page' => $page
                         ],
@@ -407,6 +461,7 @@ class SerieController extends AbstractController
         $year = $request->query->get('year', "");
 
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
+//        dump($standing);
         $tv = json_decode($standing, true);
         // dump($tv);
         if ($tv == null) {

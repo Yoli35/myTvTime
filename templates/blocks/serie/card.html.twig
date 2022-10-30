@@ -17,7 +17,7 @@
                 <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ serie.networks.0.logoPath }}" alt="{{ 'Network' }}">
             </div>
         {% endif %}
-        <div class="status">
+        <div class="status{% if serie.viewing.viewed_episodes == 0 %} start-watching {% endif %}">
             {{ serie.status|trans }} —
             {% if serie.serieCompleted %}
                 {% if serie.status in ["Ended","Canceled"] %}
@@ -27,7 +27,12 @@
                     {{ 'More episodes to come'|trans }}
                 {% endif %}
             {% else %}
-                {{ 'Watching in progress'|trans }}
+                {% if serie.viewing.viewed_episodes > 0 %}
+                    {% set more = serie.numberOfEpisodes - serie.viewing.viewed_episodes %}
+                    {{ 'Watching in progress'|trans }}, {{ more }} {{ (more > 1 ? 'episodes more':'episode more')|trans }}
+                {% else %}
+                    {{ 'Start watching the show'| trans }}, {{ serie.numberOfEpisodes }} {{ (serie.numberOfEpisodes>1?'episodes':'episode')|trans }}
+                {% endif %}
             {% endif %}
         </div>
         <div class="front"></div>

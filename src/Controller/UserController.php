@@ -189,7 +189,7 @@ class UserController extends AbstractController
         foreach ($movies as $movie) {
             $overview = $movie['overview_' . $locale];
             if ($overview === null) {
-                $standing = $TMDBService->getMovie($movie->getMovieDbId(), $locale);
+                $standing = $TMDBService->getMovie($movie['movie_db_id'], $locale);
                 $movieDetail = json_decode($standing, true);
                 $overview = $movieDetail['overview'];
 

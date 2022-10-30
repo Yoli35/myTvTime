@@ -231,6 +231,11 @@
                         right: 4em;
                         top: -.75em;
                         z-index: 10;
+
+                        &.start-watching {
+                            background-color: var(--gradiant-mars-30);
+                            color: var(--gradiant-mars-90);
+                        }
                     }
 
                     .add {
@@ -269,7 +274,7 @@
                     }
 
                     &:hover {
-                        animation: wobble 200ms;
+                        //animation: wobble 200ms;
                         scale: 1.02;
                     }
 
@@ -2202,7 +2207,7 @@
             .wrapper {
                 a {
                     .serie {
-                        //background-color: var(--gradiant-grey-30);
+                        background-color: var(--gradiant-grey-10);
                     }
                 }
             }

@@ -235,12 +235,14 @@ new episode: nouvel épisode
 new episodes: nouveaux épisodes
 viewed episode: épisode vu
 viewed episodes: épisodes vus
+episode more: épisode restant
+episodes more: épisodes restants
 new season: nouvelle saison
 new seasons: nouvelles saisons
 # Status
-Canceled: Annulée
-Continuing: En cours
-Ended: Terminée
+Canceled: Série annulée
+Continuing: Série en cours
+Ended: Série terminée
 In Production: En Production
 Planned: Planifié
 Returning Series: Série renouvelée
@@ -248,6 +250,7 @@ Status: Statut
 That's all: C'est tout !
 More episodes to come: Plus d'épisodes à venir !
 Watching in progress: Visionnage en cours
+Start watching the show: Commencer à regarder
 # Watch
 Available in streaming: Disponible en streaming
 Available to rent or buy: Location ou achat

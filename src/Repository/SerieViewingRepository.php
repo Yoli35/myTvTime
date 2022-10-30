@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\SerieViewing;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,9 +17,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SerieViewingRepository extends ServiceEntityRepository
 {
+    private ManagerRegistry $registry;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, SerieViewing::class);
+        $this->registry = $registry;
     }
 
     public function add(SerieViewing $entity, bool $flush = false): void
@@ -39,6 +43,16 @@ class SerieViewingRepository extends ServiceEntityRepository
         }
     }
 
+    public function getSeriesViewings(User $user, string $ids)
+    {
+        $sql = "SELECT * FROM `serie_viewing` s WHERE s.`user_id`=" . $user->getId() . " AND s.`serie_id` in " . $ids;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
 //    /**
 //     * @return SerieViewing[] Returns an array of SerieViewing objects
 //     */

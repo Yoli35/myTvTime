@@ -439,22 +439,31 @@
                 }
             }
 
-            .tag {
+            .tags {
                 @include flex-row();
-                background-color: var(--gradiant-purple-30);
-                border-radius: .25em;
-                font-weight: 100;
-                padding: .25em .5em;
+                flex-shrink: 10000;
+                flex-wrap: wrap;
+                gap: .25em;
                 margin-left: .5em;
+                margin-right: .5em;
 
-                .delete {
+                .tag {
                     @include flex-row();
-                    cursor: pointer;
-                    margin-left: .5em;
+                    background-color: var(--gradiant-purple-30);
+                    border-radius: .25em;
+                    font-weight: 100;
+                    padding: .25em .5em;
+
+                    .delete {
+                        @include flex-row();
+                        cursor: pointer;
+                        margin-left: .5em;
+                    }
                 }
             }
 
             .method {
+
                 color: var(--gradiant-grey-70);
                 margin-left: auto;
                 position: relative;
@@ -477,7 +486,7 @@
                     @include flex-row();
                     height: 100%;
                     position: absolute;
-                    right: 0;
+                    right: .75em;
                     top: 0;
                     width: 1.5em;
                 }

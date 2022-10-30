@@ -15,16 +15,17 @@
             {{ include('blocks/nav.html.twig', {thisPage: 'Youtube video search'}) }}
             <div class="search">
                 <div class="group">
-                    <label class="label" for="search-tag">{{ 'Tags'|trans }} :</label>
                     <div class="field">
+                        <label class="label" for="search-tag">{{ 'Tags'|trans }}&nbsp;:</label>
                         <input id="search-tag" type="text" value="" placeholder="{{ 'Start taping…'|trans }}">
                     </div>
+                    <div class="tags"></div>
                     <div class="method">
-                        <label for="method">{{ 'Selection'|trans }}</label>
-                        <select id="method">
-                            <option value="and">Tous le mots-clés</option>
-                            <option value="or" selected>Au moins un mot-clé</option>
-                        </select>
+                        <label for="method">{{ 'Selection'|trans }}&nbsp;<select id="method">
+                                <option value="and">Tous le mots-clés</option>
+                                <option value="or" selected>Au moins un mot-clé</option>
+                            </select>
+                        </label>
                         <div class="arrow"><i class="fa-solid fa-caret-down"></i></div>
                     </div>
                     <button class="apply" type="submit">{{ 'Apply'|trans }}</button>
@@ -114,7 +115,7 @@
             let currentFocus = -1;
 
             input.addEventListener("input", function (e) {
-                let a, b, c, i, val;
+                let a, b, i, val;
                 val = e.target.value;
                 closeAllLists();
                 if (!val) {
@@ -155,7 +156,7 @@
                                 deleteButton.appendChild(xmark);
                                 deleteButton.addEventListener("click", removeTag);
                                 newTag.appendChild(deleteButton);
-                                document.querySelector(".group").insertBefore(newTag, document.querySelector(".method"));
+                                document.querySelector(".tags").appendChild(newTag);
 
                                 input.value = "";
                                 input.focus();
@@ -181,9 +182,8 @@
                     e.preventDefault();
                     if (currentFocus > -1) {
                         if (x) x[currentFocus].click();
-                    }
-                    else {
-                        let tags = document.querySelector(".group").querySelectorAll(".tag");
+                    } else {
+                        let tags = document.querySelector(".tags").querySelectorAll(".tag");
                         if (tags.length) applyTags();
                     }
                 }
@@ -193,7 +193,7 @@
                 let tag = this.parentElement;
                 let index = tag.getAttribute("data-index");
                 tagList[index].selected = false;
-                document.querySelector(".group").removeChild(tag);
+                document.querySelector(".tags").removeChild(tag);
             }
 
             function addActive(x) {
@@ -230,7 +230,7 @@
         }
 
         function applyTags() {
-            const tags = document.querySelector(".group").querySelectorAll(".tag");
+            const tags = document.querySelector(".tags").querySelectorAll(".tag");
             let method = document.querySelector("#method").value;
             let list = "";
             if (tags.length === 0) return;
@@ -276,7 +276,7 @@
         }
 
         function createItemDiv(item, val, parts) {
-            let div, strong, j, k = 0, str, index, lastIndex=0;
+            let div, strong, j, k = 0, str, index, lastIndex = 0;
             div = document.createElement("div");
             for (j = 2; j < parts.length; j++) {
                 index = parts[j];
