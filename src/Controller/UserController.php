@@ -91,6 +91,10 @@ class UserController extends AbstractController
         if ($user->getBanner() == null) {
             $banner = $this->setRandomBanner($betaSeriesService);
         }
+
+        $friends = $user->getFriends();
+        dump($friends);
+
         return $this->render('user/index.html.twig', [
             'form' => $form->createView(),
             'user' => $user,

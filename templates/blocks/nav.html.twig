@@ -4,7 +4,7 @@
         {{ include('blocks/movie/bracket.html.twig') }}
         {{ include('blocks/user/breadcrumb.html.twig') }}
         {% if parent is defined %}
-            <li class="breadcrumb-item"><a href="{{ parent.url }}">{{ parent.page|trans }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ parent.url }}" accesskey="<">{{ parent.page|trans }}</a></li>
         {% endif %}
         <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
         {% if from is defined %}

@@ -20,9 +20,6 @@ class YoutubeVideo
     private ?string $link;
 
     #[ORM\Column(type: 'integer')]
-    private ?int $userId;
-
-    #[ORM\Column(type: 'integer')]
     private ?int $categoryId;
 
     #[ORM\Column(type: 'string', length: 8, nullable: true)]
@@ -79,9 +76,13 @@ class YoutubeVideo
     #[ORM\ManyToMany(targetEntity: YoutubeVideoTag::class, mappedBy: 'ytVideos')]
     private Collection $tags;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'youtubeVideos')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,18 +98,6 @@ class YoutubeVideo
     public function setLink(string $link): self
     {
         $this->link = $link;
-
-        return $this;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(int $userId): self
-    {
-        $this->userId = $userId;
 
         return $this;
     }
@@ -351,6 +340,33 @@ class YoutubeVideo
     {
         if ($this->tags->removeElement($tag)) {
             $tag->removeYtVideo($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addYoutubeVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeYoutubeVideo($this);
         }
 
         return $this;

@@ -4,6 +4,7 @@ namespace App\Components;
 
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
+use App\Repository\UserRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
 use DateInterval;
@@ -57,6 +58,7 @@ class YoutubeAddVideoComponent
     private int $totalRuntime = 0;
 //    private TranslationServiceClient $translationClient;
 //    private TranslatorInterface $translator;
+    private UserRepository $userRepository;
     private EntityManagerInterface $entityManager;
     private YoutubeVideoRepository $videoRepository;
     private YoutubeChannelRepository $channelRepository;
@@ -66,11 +68,12 @@ class YoutubeAddVideoComponent
     /**
      * @throws Exception
      */
-    public function __construct(YoutubeVideoRepository $videoRepository, YoutubeChannelRepository $channelRepository, EntityManagerInterface $entityManager)
+    public function __construct(YoutubeVideoRepository $videoRepository, YoutubeChannelRepository $channelRepository, EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
         $this->videoRepository = $videoRepository;
         $this->channelRepository = $channelRepository;
         $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
 
         $client = new Google_Client();
         $client->setApplicationName('mytvtime');
@@ -166,7 +169,6 @@ class YoutubeAddVideoComponent
 
                 $newVideo = new YoutubeVideo();
                 $newVideo->setLink($item->id);
-                $newVideo->setUserId($this->user_id);
                 $newVideo->setCategoryId($snippet['categoryId']);
                 $newVideo->setChannel($channel);
                 $newVideo->setDefaultAudioLanguage($snippet['defaultAudioLanguage'] ?: "");
@@ -210,8 +212,7 @@ class YoutubeAddVideoComponent
 
     public function getVideosCount(): int
     {
-        $count = $this->videoRepository->countUserYTVideos($this->user_id);
-        return $count[0]['count'];
+        return count($this->userRepository->find($this->user_id)->getYoutubeVideos());
     }
 
     public function getVideos(): array
@@ -221,14 +222,7 @@ class YoutubeAddVideoComponent
 
     public function getTotalRuntime(): int
     {
-        /** @var YoutubeVideo[] $items */
-        $items = $this->videoRepository->getUserYTVideosRuntime($this->user_id);
-        $total = 0;
-        foreach ($items as $item) {
-            $total += $item['content_duration'];
-        }
-
-        return $total;
+        return $this->videoRepository->getUserYTVideosRuntime($this->user_id);
     }
 
     public function getFirstView(): ?DateTimeImmutable

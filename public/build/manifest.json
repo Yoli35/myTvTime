@@ -24,6 +24,7 @@
   "build/fonts/fa-solid-900.woff2": "/build/fonts/fa-solid-900.64d495f5.woff2",
   "build/images/tiktok-header3.jpg": "/build/images/tiktok-header3.31b2a098.jpg",
   "build/images/tiktok-header5.jpg": "/build/images/tiktok-header5.4662e987.jpg",
+  "build/images/rgpd.jpg": "/build/images/rgpd.59d8af3e.jpg",
   "build/fonts/fa-brands-400.woff2": "/build/fonts/fa-brands-400.a914b121.woff2",
   "build/images/event-header.jpg": "/build/images/event-header.2227954c.jpg",
   "build/images/tiktok-header4.jpg": "/build/images/tiktok-header4.8573f3f0.jpg",
@@ -33,6 +34,7 @@
   "build/images/leaf-12.png": "/build/images/leaf-12.19bce3ee.png",
   "build/images/tiktok-header1.jpg": "/build/images/tiktok-header1.087005de.jpg",
   "build/images/leaf-1.png": "/build/images/leaf-1.11f265f4.png",
+  "build/images/the-movie-database.png": "/build/images/the-movie-database.ada98c58.png",
   "build/images/leaf-14.png": "/build/images/leaf-14.e497fb53.png",
   "build/images/leaf-9.png": "/build/images/leaf-9.ddd772ee.png",
   "build/images/leaf-10.png": "/build/images/leaf-10.dcda9e8f.png",
@@ -50,6 +52,7 @@
   "build/images/leaf-17.png": "/build/images/leaf-17.ec9ac617.png",
   "build/images/leaf-30.png": "/build/images/leaf-30.5574cf83.png",
   "build/images/leaf-42.png": "/build/images/leaf-42.88cfbb57.png",
+  "build/images/yggland.png": "/build/images/yggland.8b10b240.png",
   "build/images/settings.png": "/build/images/settings.04f49a7c.png",
   "build/images/leaf-27.png": "/build/images/leaf-27.0eba9852.png",
   "build/images/leaf-24.png": "/build/images/leaf-24.ef156587.png",
@@ -78,9 +81,5 @@
   "build/images/imdb.png": "/build/images/imdb.9a7477bf.png",
   "build/images/arrow-up-circle-outline.png": "/build/images/arrow-up-circle-outline.137a27d1.png",
   "build/images/star-outline.png": "/build/images/star-outline.3e7dbff2.png",
-  "build/images/star.png": "/build/images/star.16ef0d59.png",
-  "build/images/the-movie-database.png": "/build/images/the-movie-database.ada98c58.png",
-  "build/images/yggland-30.png": "/build/images/yggland-30.8b10b240.png",
-  "build/images/yggland.png": "/build/images/yggland.8b10b240.png",
-  "build/images/rgpd.jpg": "/build/images/rgpd.59d8af3e.jpg"
+  "build/images/star.png": "/build/images/star.16ef0d59.png"
 }

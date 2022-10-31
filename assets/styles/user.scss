@@ -506,6 +506,36 @@
         }
     }
 
+    .collections {
+        @include flex-100(stretch);
+        background-color: var(--gradiant-grey-80);
+        border-radius: 1em;
+        color: var(--gradiant-grey-20);
+        font-weight: 100;
+        gap: 1em;
+        padding: 1em;
+
+        .collection {
+            @include flex-col(center, start);
+            gap: .5em;
+            width: 9em;
+
+            .count {
+                @include flex-row();
+                border: 4px solid var(--gradiant-grey-40);
+                border-radius: 50%;
+                font-size: 2em;
+                height: 3em;
+                width: 3em;
+            }
+
+            .label {
+                font-weight: 300;
+                text-align: center;
+            }
+        }
+    }
+
     @media (min-width: 768px) {
         .details {
             .field {
@@ -868,6 +898,20 @@
         .details {
             form {
                 box-shadow: 0 0 1em hsla(0, 0, 100%, .2), 0 0 3em hsla(0, 0, 100%, .15), 0 0 10em hsla(0, 0, 100%, .1);
+            }
+        }
+        .collections {
+            background-color: var(--gradiant-grey-30);
+            color: var(--gradiant-grey-90);
+
+            .collection {
+
+                .count {
+                    border: 2px solid var(--gradiant-grey-90);
+                }
+
+                .label {
+                }
             }
         }
     }

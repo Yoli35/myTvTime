@@ -14,14 +14,7 @@
 
         {{ include('blocks/pageHeader.html.twig') }}
 
-        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('app_youtube') }}">{{ 'My Youtube Videos'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="https://www.youtube.com/{{ url }}" target="_blank" rel="noopener">{{ video.channel.title }}</a></li>
-                <li class="breadcrumb-item active" aria-current="{{ video.title }}">{{ video.title }}</li>
-            </ol>
-        </nav>
+        {{ include('blocks/nav.html.twig', {parent: {url: path('app_youtube'), page: 'My Youtube Videos'|trans}, thisPage: video.title}) }}
 
         <div class="yt-video-page">
             <div class="video">

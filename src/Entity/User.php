@@ -73,6 +73,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: SerieViewing::class, cascade: ['persist', 'remove'])]
     private Collection $serieViewings;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Friend::class)]
+    private Collection $friends;
+
+    #[ORM\ManyToMany(targetEntity: YoutubeVideo::class, inversedBy: 'users')]
+    private Collection $youtubeVideos;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -82,6 +88,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->series = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->serieViewings = new ArrayCollection();
+        $this->friends = new ArrayCollection();
+        $this->youtubeVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -444,6 +452,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $serieViewing->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Friend>
+     */
+    public function getFriends(): Collection
+    {
+        return $this->friends;
+    }
+
+    public function addFriend(Friend $friend): self
+    {
+        if (!$this->friends->contains($friend)) {
+            $this->friends->add($friend);
+            $friend->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFriend(Friend $friend): self
+    {
+        if ($this->friends->removeElement($friend)) {
+            // set the owning side to null (unless already changed)
+            if ($friend->getOwner() === $this) {
+                $friend->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, YoutubeVideo>
+     */
+    public function getYoutubeVideos(): Collection
+    {
+        return $this->youtubeVideos;
+    }
+
+    public function addYoutubeVideo(YoutubeVideo $youtubeVideo): self
+    {
+        if (!$this->youtubeVideos->contains($youtubeVideo)) {
+            $this->youtubeVideos->add($youtubeVideo);
+        }
+
+        return $this;
+    }
+
+    public function removeYoutubeVideo(YoutubeVideo $youtubeVideo): self
+    {
+        $this->youtubeVideos->removeElement($youtubeVideo);
 
         return $this;
     }

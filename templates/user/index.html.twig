@@ -76,6 +76,45 @@
                 </div>
                 {{ form_end(form) }}
             </div>
+
+            <div class="collections">
+                <div class="collection">
+                    <div class="count">{{ user.friends|length }}</div>
+                    <div class="label">{{ 'Friends'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.movies|length }}</div>
+                    <div class="label">{{ 'Movies'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.movieCollections|length }}</div>
+                    <div class="label">{{ 'Movie collections'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.Series|length }}</div>
+                    <div class="label">{{ 'Series'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.serieViewings|length }}</div>
+                    <div class="label">{{ 'Serie viewings'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.youtubeVideos|length }}</div>
+                    <div class="label">{{ 'Youtube videos'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.tiktoks|length }}</div>
+                    <div class="label">{{ 'Tiktok videos'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.articles|length }}</div>
+                    <div class="label">{{ 'Articles'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.events|length }}</div>
+                    <div class="label">{{ 'Events'|trans }}</div>
+                </div>
+            </div>
         </div>
 
         {{ include('blocks/pageFooter.html.twig') }}
