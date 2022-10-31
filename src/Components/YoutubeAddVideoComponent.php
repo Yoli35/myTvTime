@@ -118,7 +118,7 @@ class YoutubeAddVideoComponent
 
         if (strlen($thisLink) == 11) {
 
-            $link = $this->videoRepository->findBy(['link' => $thisLink, 'userId' => $this->user_id]);
+            $link = $this->videoRepository->findOneBy(['link' => $thisLink]);
 
             // Si le lien n'a pas déjà été ajouté
             if ($link == null) {
@@ -136,11 +136,9 @@ class YoutubeAddVideoComponent
                 $snippet = $item['snippet'];
                 $thumbnails = (array)$snippet['thumbnails'];
                 $localised = $snippet['localized'];
-                $already_exist = true;
 
                 if ($channel == null) {
                     $channel = new YoutubeChannel();
-                    $already_exist = false;
                 }
                 //
                 // if channel already stored in db, it might have change everything
@@ -188,6 +186,7 @@ class YoutubeAddVideoComponent
                 $newVideo->setContentProjection($contentDetails['projection']);
                 $addedAt = new DateTimeImmutable();
                 $newVideo->setAddedAt($addedAt->setTimezone((new DateTime())->getTimezone()));
+                $newVideo->addUser($this->userRepository->find($this->user_id));
 
                 $this->videoRepository->add($newVideo, true);
 
@@ -197,6 +196,10 @@ class YoutubeAddVideoComponent
                 $this->videoCount = $this->getVideosCount();
                 $this->totalRuntime = $this->getTotalRuntime();
                 $this->time2Human = $this->getTime2human();
+            }
+            else {
+                $link->addUser($this->userRepository->find($this->user_id));
+                $this->videoRepository->add($link, true);
             }
         }
         $firstVideo = $this->videos[0];
