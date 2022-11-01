@@ -77,7 +77,7 @@ class SerieController extends AbstractController
         $list = $serieRepository->listUserSeries($user->getId());
 
         $series = $this->getSeriesViews($user, $results, $viewingRepository);
-        dump($series);
+        // dump($series);
 
         return $this->render('serie/index.html.twig', [
             'series' => $series,
@@ -170,9 +170,9 @@ class SerieController extends AbstractController
         }
         if ($query && strlen($query)) {
             $standing = $tmdbService->search($page, $query, $year, $request->getLocale());
-            // dump($page, $query, $year);
+            // // dump($page, $query, $year);
             $series = json_decode($standing, true);
-            // dump('results', $series);
+            // // dump('results', $series);
         }
 
         return $this->render('serie/search.html.twig', [
@@ -225,7 +225,7 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getSeries($kind, $page, $locale);
         $series = json_decode($standing, true);
-        // dump($series);
+        // // dump($series);
 
         return $this->render('serie/popular.html.twig', $this->renderParams($kind, $page, $series, $serieRepository, $imageConfiguration));
     }
@@ -307,7 +307,7 @@ class SerieController extends AbstractController
             if (strlen($standing)) {
                 $status = "Ok";
                 $tv = json_decode($standing, true);
-                // dump($tv);
+                // // dump($tv);
 
                 $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
 
@@ -338,13 +338,13 @@ class SerieController extends AbstractController
                         $m2mNetwork->setName($network['name']);
                         $m2mNetwork->setLogoPath($network['logo_path']);
                         $m2mNetwork->setOriginCountry($network['origin_country']);
-                        $networkRepository->add($m2mNetwork, true);
+                        $networkRepository->save($m2mNetwork, true);
                     }
                     $serie->addNetwork($m2mNetwork);
                 }
                 $serie->addUser($user);
-                $serieRepository->add($serie, true);
-                // dump($serie);
+                $serieRepository->save($serie, true);
+                // // dump($serie);
                 /*
                     const POPULAR = 'popular';
                     const TOP_RATED = 'top_rated';
@@ -354,7 +354,7 @@ class SerieController extends AbstractController
                     const SEARCH = 'search';
                  */
                 if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
-                    dump("Not my series");
+                    // dump("Not my series");
                     $card = $this->render('blocks/serie/card-popular.html.twig', [
                         'serie' => $tv,
                         'pages' => [
@@ -366,7 +366,7 @@ class SerieController extends AbstractController
                 }
 
                 if ($from === self::SEARCH) {
-                    dump("Not my series");
+                    // dump("Not my series");
                     $card = $this->render('blocks/serie/card-search.html.twig', [
                         'serie' => $tv,
                         'query' => $query ?: "",
@@ -380,7 +380,7 @@ class SerieController extends AbstractController
                 }
 
                 if ($from === self::MY_SERIES) {
-                    dump("My series");
+                    // dump("My series");
 //                    $card = $this->render('blocks/serie/card.html.twig', [
 //                        'serie' => $serie,
 //                        'pages' => [
@@ -461,9 +461,9 @@ class SerieController extends AbstractController
         $year = $request->query->get('year', "");
 
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
-//        dump($standing);
+//        // dump($standing);
         $tv = json_decode($standing, true);
-        // dump($tv);
+        // // dump($tv);
         if ($tv == null) {
             return $this->render('serie/error.html.twig', [
                 'serie' => $serie,
@@ -500,10 +500,10 @@ class SerieController extends AbstractController
         $serie = $this->serie($id, $tmdbService, $request->getLocale(), $serieRepository);
         $standing = $tmdbService->getTvSeason($id, $seasonNumber, $request->getLocale());
         $season = json_decode($standing, true);
-        // dump($season);
+        // // dump($season);
         $standing = $tmdbService->getTvSeasonCredits($id, $seasonNumber, $request->getLocale());
         $credits = json_decode($standing, true);
-        // dump($credits);
+        // // dump($credits);
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
@@ -526,7 +526,7 @@ class SerieController extends AbstractController
         if ($userSerie == null) {
             $standing = $tmdbService->getTv($id, $locale);
             $tmdbSerie = json_decode($standing, true);
-            // dump($tmdbSerie);
+            // // dump($tmdbSerie);
             $serie['id'] = $tmdbSerie['id'];
             $serie['name'] = $tmdbSerie['name'];
             $serie['backdropPath'] = $tmdbSerie['backdrop_path'];
@@ -551,7 +551,7 @@ class SerieController extends AbstractController
         return $this->getSerie($tv, 0, self::LATEST, 0, $request, $tmdbService, $serieRepository, null, null, $imageConfiguration);
     }
 
-    public function getSerie($tv, $page, $from, $backId, $request, $tmdbService, $serieRepository, $serie, $viewingRepository, $imageConfiguration, $query = "", $year = ""): Response
+    public function getSerie(array $tv, int $page, string $from, $backId, Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, Serie|null $serie, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration, $query = "", $year = ""): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -597,7 +597,7 @@ class SerieController extends AbstractController
         $whatsNew = null;
 
         if ($index) {
-            if ($serie == null) {
+            if ($serie === null) {
                 $serie = $serieRepository->findOneBy(['serieId' => $id]);
             }
             if ($serie) {
@@ -605,22 +605,22 @@ class SerieController extends AbstractController
 
                 /** @var SerieViewing $viewing */
                 $viewing = $viewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
-                // dump($viewing);
+                // // dump($viewing);
                 if ($viewing == null) {
                     $viewing = new SerieViewing();
                     $viewing->setUser($user);
                     $viewing->setSerie($serie);
                     $viewing->setViewing($this->createViewingTab($tv));
                     $viewing->setViewedEpisodes(0);
-                    $viewingRepository->add($viewing, true);
                 } else {
                     $viewing->setViewing($this->updateViewing($tv, $viewing, $viewingRepository));
                 }
+                $viewingRepository->save($viewing, true);
             }
         }
         $ygg = str_replace(' ', '+', $tv['name']);
 
-        // dump($serie);
+        // // dump($serie);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -714,18 +714,50 @@ class SerieController extends AbstractController
          * Si quelque chose a changé, l'enregistrement est mis à jour
          */
         if ($modified) {
-            $serieRepository->add($serie, true);
+            $serieRepository->save($serie, true);
             return $whatsNew;
         }
 
         return null;
     }
 
+    public function getSeasonViews($viewings): array
+    {
+        $seasonViews = [];
+        foreach ($viewings as $viewing) {
+            $object = new SeasonView();
+            foreach ($viewing as $key => $value) {
+                switch ($key) {
+                    case "air_date":
+                        $object->setAirDate(new DateTimeImmutable($value));
+                        break;
+                    case "episodes":
+                        $object->setEpisodes($value);
+                        break;
+                    case "episode_count":
+                        $object->setEpisodeCount($value);
+                        break;
+                    case "season_completed":
+                        $object->setSeasonCompleted($value);
+                        break;
+                    case "season_number":
+                        $object->setSeasonNumber($value);
+                        break;
+                }
+            }
+            $seasonViews[] = $object;
+        }
+        return $seasonViews;
+    }
     public function updateViewing($tv, SerieViewing $theViewing, SerieViewingRepository $viewingRepository): array
     {
-        $viewing = $theViewing->getViewing();
+        $viewings = $theViewing->getViewing();
         $seasons = $tv['seasons'];
         $modified = false;
+
+        $seasonViews = $this->getSeasonViews($viewings);
+        dump($seasonViews);
+
         /*
          * Épisodes spéciaux : saison 0
          *
@@ -736,30 +768,30 @@ class SerieController extends AbstractController
         if ($specialEpisodes) {
             $season = $seasons[0];
 
-            if ($viewing[0]['season_number'] == 0) {
+            if ($viewings[0]['season_number'] == 0) {
                 /*
                  * Le nombre d'épisodes spéciaux a augmenté ?
                  */
-                if ($season['episode_count'] != $viewing[0]['episode_count']) {
-                    $viewing[0]['episode_count'] = $season['episode_count'];
-                    $viewing[0]['episodes'] = array_pad($viewing[0]['episodes'], $season['episode_count'], false);
-                    $viewing[0]['season_completed'] = false;
+                if ($season['episode_count'] != $viewings[0]['episode_count']) {
+                    $viewings[0]['episode_count'] = $season['episode_count'];
+                    $viewings[0]['episodes'] = array_pad($viewings[0]['episodes'], $season['episode_count'], false);
+                    $viewings[0]['season_completed'] = false;
                     $modified = true;
                 }
                 /*
                  * L'info air_date est présente ?
                  */
-                if (!array_key_exists('air_date', $viewing[0])) {
-                    $viewing[0]['air_date'] = $season['air_date'];
+                if (!array_key_exists('air_date', $viewings[0])) {
+                    $viewings[0]['air_date'] = $season['air_date'];
                     $modified = true;
                 }
             }
         }
 
         /*
-         * Si viewing ne comportait pas de saison 0
+         * Si viewings ne comportait pas de saison 0
          */
-        if ($viewing[0]['season_number'] != 0) {
+        if ($viewings[0]['season_number'] != 0) {
             $firstItem = [
                 'season_number' => 0,
                 'season_completed' => false,
@@ -767,11 +799,11 @@ class SerieController extends AbstractController
                 'episode_count' => 0,
                 'episodes' => []
             ];
-            array_unshift($viewing, $firstItem);
+            array_unshift($viewings, $firstItem);
             $modified = true;
         } else {
-            if (!array_key_exists('air_date', $viewing[0])) {
-                $viewing[0]['air_date'] = $specialEpisodes ? $seasons[0]['air_date'] : null;
+            if (!array_key_exists('air_date', $viewings[0])) {
+                $viewings[0]['air_date'] = $specialEpisodes ? $seasons[0]['air_date'] : null;
                 $modified = true;
             }
         }
@@ -779,7 +811,7 @@ class SerieController extends AbstractController
         /*
          * Les saisons suivantes. 'number_of_seasons' correspond au nombre de saisons, épisodes spéciaux exclus
          */
-        $viewingCount = count($viewing);
+        $viewingCount = count($viewings);
         /*
          * Saison(s) supplémentaire(s)
          */
@@ -796,7 +828,7 @@ class SerieController extends AbstractController
                     'episode_count' => $season['episode_count'],
                     'episodes' => array_fill(0, $season['episode_count'], false)
                 ];
-                $viewing[] = $newItem;
+                $viewings[] = $newItem;
                 $modified = true;
             }
         } else {
@@ -804,17 +836,17 @@ class SerieController extends AbstractController
              * Nouveaux épisodes pour la dernière saison ?
              */
             $lastSeasonEpisodeCount = $tv['seasons'][$tv['number_of_seasons'] - 1]['episode_count'];
-            if ($viewing[$viewingCount - 1]['episode_count'] < $lastSeasonEpisodeCount) {
-                $viewing[$viewingCount - 1]['episode_count'] = $lastSeasonEpisodeCount;
-                $viewing[$viewingCount - 1]['episodes'] = array_pad($viewing[$viewingCount - 1]['episodes'], $lastSeasonEpisodeCount, false);
+            if ($viewings[$viewingCount - 1]['episode_count'] < $lastSeasonEpisodeCount) {
+                $viewings[$viewingCount - 1]['episode_count'] = $lastSeasonEpisodeCount;
+                $viewings[$viewingCount - 1]['episodes'] = array_pad($viewings[$viewingCount - 1]['episodes'], $lastSeasonEpisodeCount, false);
                 $modified = true;
             }
         }
 
-        $viewingCount = count($viewing);
+        $viewingCount = count($viewings);
         for ($i = 1; $i < $viewingCount; $i++) {
-            if (!array_key_exists('air_date', $viewing[$i])) {
-                $viewing[$i]['air_date'] = $seasons[$i - $specialEpisodes ? 0 : 1]['air_date'];
+            if (!array_key_exists('air_date', $viewings[$i])) {
+                $viewings[$i]['air_date'] = $seasons[$i - $specialEpisodes ? 0 : 1]['air_date'];
                 $modified = true;
             }
         }
@@ -825,11 +857,11 @@ class SerieController extends AbstractController
         }
 
         if ($modified) {
-            $theViewing->setViewing($viewing);
-            $viewingRepository->add($theViewing, true);
+            $theViewing->setViewing($viewings);
+            $viewingRepository->save($theViewing, true);
         }
 
-        return $viewing;
+        return $viewings;
     }
 
     public function getViewedEpisodes($viewing): int
@@ -851,12 +883,12 @@ class SerieController extends AbstractController
                 }
             }
         }
-//        dump($viewed);
+//        // dump($viewed);
         return $viewed;
     }
 
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
-    public function updateViewingTab(Request $request, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, TMDBService $tmdbService, TranslatorInterface $translator): Response
+    public function updateViewingArray(Request $request, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, TMDBService $tmdbService, TranslatorInterface $translator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -870,10 +902,13 @@ class SerieController extends AbstractController
         $tv = json_decode($tmdbService->getTv($serieId, $request->getLocale()), true);
         $seasons = $tv['seasons'];
         $noSpecialEpisodes = $seasons[0]['season_number'] == 1 ? 1 : 0;
-        // dump($seasons, $noSpecialEpisodes);
+        // // dump($seasons, $noSpecialEpisodes);
         $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
         $theViewing = $viewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]);
-        $viewing = $theViewing->getViewing();
+        $viewings = $theViewing->getViewing();
+
+        $seasonViews = $this->getSeasonViews($viewings);
+        dump($seasonViews);
 
         $newTab = [];
         /*
@@ -881,8 +916,8 @@ class SerieController extends AbstractController
          */
         if ($season == 0) {
             $newEpisodes = [];
-            $episode_count = $viewing[0]['episode_count'];
-            $air_date = array_key_exists('air_date', $viewing[0]) ? $viewing[0]['air_date'] : $seasons[0]['air_date'];
+            $episode_count = $viewings[0]['episode_count'];
+            $air_date = array_key_exists('air_date', $viewings[0]) ? $viewings[0]['air_date'] : $seasons[0]['air_date'];
             for ($e = 0; $e < $episode_count; $e++) {
                 $newEpisodes[] = $e + 1 <= $episode;
             }
@@ -895,19 +930,19 @@ class SerieController extends AbstractController
                 'episodes' => $newEpisodes
             ];
             for ($i = 1; $i <= $serie->getNumberOfSeasons(); $i++) {
-                $newTab[$i] = $viewing[$i];
-                if (!array_key_exists('air_date', $viewing[$i])) $newTab[$i]['air_date'] = $seasons[$i]['air_date'];
+                $newTab[$i] = $viewings[$i];
+                if (!array_key_exists('air_date', $viewings[$i])) $newTab[$i]['air_date'] = $seasons[$i]['air_date'];
             }
         } else {
-            $newTab[0] = $viewing[0];
-            if (!array_key_exists('air_date', $viewing[0])) $newTab[0]['air_date'] = $noSpecialEpisodes ? null : $seasons[0]['air_date'];
+            $newTab[0] = $viewings[0];
+            if (!array_key_exists('air_date', $viewings[0])) $newTab[0]['air_date'] = $noSpecialEpisodes ? null : $seasons[0]['air_date'];
             /*
              * Les saisons précédentes
              */
             for ($s = 1; $s < $season; $s++) {
                 $newEpisodes = [];
-                $episode_count = $viewing[$s]['episode_count'];
-                $air_date = array_key_exists('air_date', $viewing[$s]) ? $viewing[$s]['air_date'] : $seasons[$s - $noSpecialEpisodes]['air_date'];
+                $episode_count = $viewings[$s]['episode_count'];
+                $air_date = array_key_exists('air_date', $viewings[$s]) ? $viewings[$s]['air_date'] : $seasons[$s - $noSpecialEpisodes]['air_date'];
                 for ($e = 0; $e < $episode_count; $e++) {
                     $newEpisodes[] = true;
                 }
@@ -923,9 +958,9 @@ class SerieController extends AbstractController
              * La saison ciblée
              */
             $newEpisodes = [];
-            $episode_count = $viewing[$season]['episode_count'];
-            $air_date = array_key_exists('air_date', $viewing[$season]) ? $viewing[$season]['air_date'] : $seasons[$season - $noSpecialEpisodes]['air_date'];
-            // dump($air_date);
+            $episode_count = $viewings[$season]['episode_count'];
+            $air_date = array_key_exists('air_date', $viewings[$season]) ? $viewings[$season]['air_date'] : $seasons[$season - $noSpecialEpisodes]['air_date'];
+            // // dump($air_date);
             for ($e = 0; $e < $episode_count; $e++) {
                 $newEpisodes[] = $e + 1 <= $episode;
             }
@@ -937,15 +972,15 @@ class SerieController extends AbstractController
                 'episode_count' => $episode_count,
                 'episodes' => $newEpisodes
             ];
-            // dump($newTab);
+            // // dump($newTab);
             /*
              * Les saisons suivantes
              */
             $season_count = $serie->getNumberOfSeasons();
             for ($s = $season + 1; $s <= $season_count; $s++) {
                 $newEpisodes = [];
-                $episode_count = $viewing[$s]['episode_count'];
-                $air_date = array_key_exists('air_date', $viewing[$s]) ? $viewing[$s]['air_date'] : $seasons[$s - $noSpecialEpisodes]['air_date'];
+                $episode_count = $viewings[$s]['episode_count'];
+                $air_date = array_key_exists('air_date', $viewings[$s]) ? $viewings[$s]['air_date'] : $seasons[$s - $noSpecialEpisodes]['air_date'];
                 for ($e = 0; $e < $episode_count; $e++) {
                     $newEpisodes[] = false;
                 }
@@ -959,10 +994,10 @@ class SerieController extends AbstractController
             }
         }
         $today = (new DateTime)->format("Y-m-d");
-        // dump($today);
+        // // dump($today);
         $seasons_completed = [];
         foreach ($newTab as $tab) {
-            // dump($tab);
+            // // dump($tab);
             if ($tab['air_date'] <= $today)
                 $seasons_completed[] = !in_array(false, $tab['episodes'], true);
         }
@@ -971,11 +1006,11 @@ class SerieController extends AbstractController
         $viewed = $this->getViewedEpisodes($newTab);
         $theViewing->setViewedEpisodes($viewed);
         $theViewing->setViewing($newTab);
-        $viewingRepository->add($theViewing, true);
+        $viewingRepository->save($theViewing, true);
 
         $serie->setUpdatedAt(new DateTimeImmutable());
         $serie->setSerieCompleted($serie_completed);
-        $serieRepository->add($serie, true);
+        $serieRepository->save($serie, true);
 
         $blocks = [];
         foreach ($newTab as $tab) {
@@ -1015,7 +1050,7 @@ class SerieController extends AbstractController
             return $serieIds;
         }
         if ($this->getUser()) {
-            // dump('Check mySerieIds function parameters !!!');
+            // // dump('Check mySerieIds function parameters !!!');
         }
         return [];
     }
@@ -1027,7 +1062,7 @@ class SerieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $serieRepository->add($serie, true);
+            $serieRepository->save($serie, true);
 
             return $this->redirectToRoute('app_serie_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -1055,7 +1090,7 @@ class SerieController extends AbstractController
         $people = json_decode($standing, true);
         $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);
         $credits = json_decode($standing, true);
-        // dump($credits);
+        // // dump($credits);
 
         $date = new DateTime($people['birthday']);
         $now = $people['deathday'] ? new DateTime($people['deathday']) : new DateTime();
@@ -1129,7 +1164,7 @@ class SerieController extends AbstractController
         ksort($knownFor);
         $knownFor = array_reverse($knownFor);
         $credits['known_for'] = $knownFor;
-        // dump($credits);
+        // // dump($credits);
 
         return $this->render('serie/people.html.twig', [
             'people' => $people,

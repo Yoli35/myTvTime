@@ -49,7 +49,6 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         if ($offset < 0) {
             $offset = 0;
         }
-        dump($offset);
         return $this->createQueryBuilder('y')
             ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
             ->orderBy('y.publishedAt', 'DESC')

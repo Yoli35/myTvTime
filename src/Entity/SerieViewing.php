@@ -27,6 +27,9 @@ class SerieViewing
     #[ORM\Column(nullable: true)]
     private ?int $viewedEpisodes = null;
 
+    #[ORM\Column]
+    private ?bool $specialEpisodes = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,18 @@ class SerieViewing
     public function setViewedEpisodes(?int $viewedEpisodes): self
     {
         $this->viewedEpisodes = $viewedEpisodes;
+
+        return $this;
+    }
+
+    public function isSpecialEpisodes(): ?bool
+    {
+        return $this->specialEpisodes;
+    }
+
+    public function setSpecialEpisodes(bool $specialEpisodes): self
+    {
+        $this->specialEpisodes = $specialEpisodes;
 
         return $this;
     }

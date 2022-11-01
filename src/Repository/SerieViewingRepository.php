@@ -25,7 +25,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         $this->registry = $registry;
     }
 
-    public function add(SerieViewing $entity, bool $flush = false): void
+    public function save(SerieViewing $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 

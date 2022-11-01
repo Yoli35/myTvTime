@@ -22,7 +22,7 @@ class SerieRepository extends ServiceEntityRepository
         parent::__construct($registry, Serie::class);
     }
 
-    public function add(Serie $entity, bool $flush = false): void
+    public function save(Serie $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 

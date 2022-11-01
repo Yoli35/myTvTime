@@ -21,7 +21,7 @@ class NetworkRepository extends ServiceEntityRepository
         parent::__construct($registry, Network::class);
     }
 
-    public function add(Network $entity, bool $flush = false): void
+    public function save(Network $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
