@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SerieViewingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SerieViewingRepository::class)]
@@ -29,6 +31,17 @@ class SerieViewing
 
     #[ORM\Column]
     private ?bool $specialEpisodes = false;
+
+    #[ORM\Column]
+    private ?int $seasonCount = null;
+
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: SeasonViewing::class)]
+    private Collection $seasons; /* will replace viewing */
+
+    public function __construct()
+    {
+        $this->seasons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,6 +104,48 @@ class SerieViewing
     public function setSpecialEpisodes(bool $specialEpisodes): self
     {
         $this->specialEpisodes = $specialEpisodes;
+
+        return $this;
+    }
+
+    public function getSeasonCount(): ?int
+    {
+        return $this->seasonCount;
+    }
+
+    public function setSeasonCount(int $seasonCount): self
+    {
+        $this->seasonCount = $seasonCount;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SeasonViewing>
+     */
+    public function getSeasons(): Collection
+    {
+        return $this->seasons;
+    }
+
+    public function addSeason(SeasonViewing $season): self
+    {
+        if (!$this->seasons->contains($season)) {
+            $this->seasons->add($season);
+            $season->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeason(SeasonViewing $season): self
+    {
+        if ($this->seasons->removeElement($season)) {
+            // set the owning side to null (unless already changed)
+            if ($season->getSerie() === $this) {
+                $season->setSerie(null);
+            }
+        }
 
         return $this;
     }

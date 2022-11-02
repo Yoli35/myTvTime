@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Friend;
 use App\Entity\MovieCollection;
 use App\Entity\User;
 use App\Entity\UserMovie;
 use App\Form\UserType;
+use App\Repository\FriendRepository;
 use App\Repository\MovieCollectionRepository;
 use App\Repository\UserMovieRepository;
 use App\Repository\UserRepository;
@@ -43,7 +45,7 @@ class UserController extends AbstractController
      */
     #[IsGranted('ROLE_USER')]
     #[Route('/{_locale}/personal/profile', name: 'app_personal_profile', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, BetaSeriesService $betaSeriesService): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, FriendRepository $friendRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
@@ -77,30 +79,45 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-//            $currentLocale = $this->localeSwitcher->getLocale();
             $userPreferredLanguage = $user->getPreferredLanguage();
-//
-//            if ($currentLocale != $userPreferredLanguage) {
             $this->localeSwitcher->setLocale($userPreferredLanguage);
-//            }
 
             return $this->redirectToRoute('app_personal_profile');
         }
 
-        $banner = [];
-        if ($user->getBanner() == null) {
-            $banner = $this->setRandomBanner($betaSeriesService);
-        }
-
-        $friends = $user->getFriends();
-        dump($friends);
+        $friends = $friendRepository->findBy(['approved' => true]);
+        $friendRequests = $friendRepository->findBy(['approved' => false]);
 
         return $this->render('user/index.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
-            'banner' => $banner,
+            'friends' => $friends,
+            'friendRequests' => $friendRequests,
             'locale' => $request->getLocale(),
         ]);
+    }
+
+    #[Route('/{_locale}/personal/friends/', name: 'app_personal_friends', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function getFriendsAndRequests(FriendRepository $friendRepository): JsonResponse
+    {
+        $friends = $friendRepository->findBy(['approved' => true]);
+        $friendRequests = $friendRepository->findBy(['approved' => false]);
+
+        return $this->json(['friends' => $this->getFriendsData($friends), 'friendRequests' => $this->getFriendsData($friendRequests)]);
+    }
+
+    public function getFriendsData($friends): array
+    {
+        $friendsData = [];
+        /** @var Friend $friend */
+        foreach ($friends as $friend) {
+            $friendData['id'] = $friend->getRecipient()->getId();
+            $friendData['username'] = $friend->getRecipient()->getUsername();
+            $friendData['avatar'] = $friend->getRecipient()->getAvatar();
+            $friendsData[] = $friendData;
+        }
+
+        return $friendsData;
     }
 
     #[Route('/{_locale}/phpinfo', name: 'app_php_info', requirements: ['_locale' => 'fr|en|de|es'])]

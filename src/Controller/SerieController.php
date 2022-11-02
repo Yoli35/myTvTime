@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\EpisodeViewing;
 use App\Entity\Network;
+use App\Entity\SeasonViewing;
 use App\Entity\Serie;
 use App\Entity\SerieViewing;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\SerieSearchType;
 use App\Form\SerieType;
+use App\Repository\EpisodeViewingRepository;
 use App\Repository\NetworkRepository;
+use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
@@ -17,6 +21,8 @@ use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,6 +48,17 @@ class SerieController extends AbstractController
     const LATEST = 'latest';
     const SEARCH = 'search';
     const SERIE_PAGE = 'serie';
+
+    private SerieViewingRepository $serieViewingRepository;
+    private SeasonViewingRepository $seasonViewingRepository;
+    private EpisodeViewingRepository $episodeViewingRepository;
+
+    public function __construct(SerieViewingRepository $serieViewingRepository, SeasonViewingRepository $seasonViewingRepository, EpisodeViewingRepository $episodeViewingRepository)
+    {
+        $this->serieViewingRepository = $serieViewingRepository;
+        $this->seasonViewingRepository = $seasonViewingRepository;
+        $this->episodeViewingRepository = $episodeViewingRepository;
+    }
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
     public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, SettingsRepository $settingsRepository, SerieViewingRepository $viewingRepository): Response
@@ -453,7 +470,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'app_serie_show', methods: ['GET'])]
-    public function show(Request $request, Serie $serie, TMDBService $tmdbService, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration): Response
+    public function show(Request $request, Serie $serie, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::MY_SERIES);
@@ -470,12 +487,12 @@ class SerieController extends AbstractController
             ]);
         }
 
-        return $this->getSerie($tv, $page, $from, $serie->getId(), $request, $tmdbService, $serieRepository, $serie, $viewingRepository, $imageConfiguration, $query, $year);
+        return $this->getSerie($tv, $page, $from, $serie->getId(), $request, $tmdbService, $serieRepository, $serie, $imageConfiguration, $query, $year);
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route('/tmdb/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
-    public function tmdb(Request $request, $id, TMDBService $tmdbService, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration): Response
+    public function tmdb(Request $request, $id, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::POPULAR);
@@ -485,7 +502,7 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTv($id, $request->getLocale());
         $tv = json_decode($standing, true);
 
-        return $this->getSerie($tv, $page, $from, $id, $request, $tmdbService, $serieRepository, null, $viewingRepository, $imageConfiguration, $query, $year);
+        return $this->getSerie($tv, $page, $from, $id, $request, $tmdbService, $serieRepository, null, $imageConfiguration, $query, $year);
     }
 
     #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
@@ -548,10 +565,10 @@ class SerieController extends AbstractController
     {
         $standing = $tmdbService->getLatest($request->getLocale());
         $tv = json_decode($standing, true);
-        return $this->getSerie($tv, 0, self::LATEST, 0, $request, $tmdbService, $serieRepository, null, null, $imageConfiguration);
+        return $this->getSerie($tv, 0, self::LATEST, 0, $request, $tmdbService, $serieRepository, null, $imageConfiguration);
     }
 
-    public function getSerie(array $tv, int $page, string $from, $backId, Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, Serie|null $serie, SerieViewingRepository $viewingRepository, ImageConfiguration $imageConfiguration, $query = "", $year = ""): Response
+    public function getSerie(array $tv, int $page, string $from, $backId, Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, Serie|null $serie, ImageConfiguration $imageConfiguration, $query = "", $year = ""): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -582,12 +599,6 @@ class SerieController extends AbstractController
             if (in_array($id, $serieIds)) {
                 $index = $id;
             }
-//            foreach ($serieIds as $serieId) {
-//                if ($serieId == $id) {
-//                    $index = $id;
-//                    break;
-//                }
-//            }
         }
 
         $standing = $tmdbService->getTvImages($id, $request->getLocale());
@@ -604,23 +615,55 @@ class SerieController extends AbstractController
                 $whatsNew = $this->updateSeasonsAndEpisodes($tv, $serie, $serieRepository);
 
                 /** @var SerieViewing $viewing */
-                $viewing = $viewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
+                $viewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
                 // // dump($viewing);
                 if ($viewing == null) {
                     $viewing = new SerieViewing();
                     $viewing->setUser($user);
                     $viewing->setSerie($serie);
                     $viewing->setViewing($this->createViewingTab($tv));
+                    $viewing->setSeasonCount($tv['number_of_seasons']);
                     $viewing->setViewedEpisodes(0);
+                    foreach ($tv['seasons'] as $s) {
+                        $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
+                        $this->seasonViewingRepository->save($season, true);
+                        $viewing->addSeason($season);
+                    }
+                    $seasons = $viewing->getSeasons();
+                    foreach ($seasons as $season) {
+                        for ($i = 0; $i < $season->getEpisodeCount(); $i++) {
+                            $episode = new EpisodeViewing($i);
+                            $this->episodeViewingRepository->save($episode);
+                            $season->addEpisode($episode);
+                        }
+                    }
                 } else {
-                    $viewing->setViewing($this->updateViewing($tv, $viewing, $viewingRepository));
+                    $viewing->setViewing($this->updateViewing($tv, $viewing, $this->serieViewingRepository));
+                    dump($viewing->getSeasons()->isEmpty());
+                    if ($viewing->getSeasons()->isEmpty()) {
+                        foreach ($tv['seasons'] as $s) {
+                            $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
+                            $this->seasonViewingRepository->save($season, true);
+                            $viewing->addSeason($season);
+                        }
+                        $seasons = $viewing->getSeasons();
+                        dump($seasons);
+                        foreach ($seasons as $season) {
+                            for ($i = 0; $i < $season->getEpisodeCount(); $i++) {
+                                $episode = new EpisodeViewing($i);
+                                $this->episodeViewingRepository->save($episode);
+                                $season->addEpisode($episode);
+                            }
+                        }
+                    }
                 }
-                $viewingRepository->save($viewing, true);
+                $this->serieViewingRepository->save($viewing, true);
             }
         }
         $ygg = str_replace(' ', '+', $tv['name']);
 
-        // // dump($serie);
+        dump($tv);
+        dump($viewing);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -749,6 +792,7 @@ class SerieController extends AbstractController
         }
         return $seasonViews;
     }
+
     public function updateViewing($tv, SerieViewing $theViewing, SerieViewingRepository $viewingRepository): array
     {
         $viewings = $theViewing->getViewing();

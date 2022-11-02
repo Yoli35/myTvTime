@@ -2,11 +2,7 @@
     {% if user.banner %}
         <img src="/images/users/banners/{{ user.banner }}" alt="User banner">
     {% else %}
-        {% if banner is not empty %}
-            <img src="{{ banner.image }}" class="" alt="No banner">
-        {% else %}
-            <img src="/images/default/no_banner_dark.png" alt="No banner">
-        {% endif %}
+        <img src="/images/default/no_banner_dark.png" alt="No banner">
     {% endif %}
     <div class="title">{{ user }}</div>
     <div id="user-avatar" class="avatar">

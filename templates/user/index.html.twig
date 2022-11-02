@@ -79,8 +79,12 @@
 
             <div class="collections">
                 <div class="collection">
-                    <div class="count">{{ user.friends|length }}</div>
+                    <div class="count">{{ friends|length }}</div>
                     <div class="label">{{ 'Friends'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ friendRequests|length }}</div>
+                    <div class="label">{{ 'Friend requests'|trans }}</div>
                 </div>
                 <div class="collection">
                     <div class="count">{{ user.movies|length }}</div>
@@ -123,8 +127,11 @@
 {% endblock %}
 {% block morejs %}
     <script>
+        let friends, friendRequests;
+
         window.addEventListener("DOMContentLoaded", () => {
 
+            getFriendsAndRequests();
             setTimeout(() => {
                 document.querySelector('#user_email').focus();
                 document.querySelector('#user_email').select();
@@ -154,6 +161,21 @@
                 banner.firstElementChild.setAttribute("style", "border-color: #D81F26");
                 banner.querySelector("img").classList.add("sepia");
             });
-        })
+        });
+
+        function getFriendsAndRequests() {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let data = {friends: null, friendRequests: null};
+                 data = JSON.parse(this.response);
+                friends = data.friends;
+                friendRequests = data.friendRequests;
+                console.log({friends});
+                console.log({friendRequests});
+            }
+            xhr.open("GET", '/fr/personal/friends');
+            xhr.send();
+
+        }
     </script>
 {% endblock %}
