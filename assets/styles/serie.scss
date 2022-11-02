@@ -136,6 +136,11 @@
             @include flex-col(flex-start, flex-start);
             //font-size: .75em;
             font-weight: 100;
+            gap: 1em;
+
+            > div {
+                width: 100%;
+            }
 
             a {
                 display: block;
