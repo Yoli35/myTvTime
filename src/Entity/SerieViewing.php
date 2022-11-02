@@ -128,6 +128,17 @@ class SerieViewing
         return $this->seasons;
     }
 
+    public function getSeasonByNumber(int $number): ?SeasonViewing
+    {
+        /** @var SeasonViewing $season */
+        foreach ($this->seasons as $season) {
+            if ($season->getSeasonNumber()==$number) {
+                return $season;
+            }
+        }
+        return null;
+    }
+
     public function addSeason(SeasonViewing $season): self
     {
         if (!$this->seasons->contains($season)) {

@@ -638,24 +638,8 @@ class SerieController extends AbstractController
                         }
                     }
                 } else {
-                    $viewing->setViewing($this->updateViewing($tv, $viewing, $this->serieViewingRepository));
-                    dump($viewing->getSeasons()->isEmpty());
-                    if ($viewing->getSeasons()->isEmpty()) {
-                        foreach ($tv['seasons'] as $s) {
-                            $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
-                            $this->seasonViewingRepository->save($season, true);
-                            $viewing->addSeason($season);
-                        }
-                        $seasons = $viewing->getSeasons();
-                        dump($seasons);
-                        foreach ($seasons as $season) {
-                            for ($i = 0; $i < $season->getEpisodeCount(); $i++) {
-                                $episode = new EpisodeViewing($i);
-                                $this->episodeViewingRepository->save($episode);
-                                $season->addEpisode($episode);
-                            }
-                        }
-                    }
+                    $viewing->setViewing($this->updateViewing($tv, $viewing));
+                    $this->updateSerieViewing($tv, $viewing);
                 }
                 $this->serieViewingRepository->save($viewing, true);
             }
@@ -793,7 +777,7 @@ class SerieController extends AbstractController
         return $seasonViews;
     }
 
-    public function updateViewing($tv, SerieViewing $theViewing, SerieViewingRepository $viewingRepository): array
+    public function updateViewing($tv, SerieViewing $theViewing): array
     {
         $viewings = $theViewing->getViewing();
         $seasons = $tv['seasons'];
@@ -902,10 +886,37 @@ class SerieController extends AbstractController
 
         if ($modified) {
             $theViewing->setViewing($viewings);
-            $viewingRepository->save($theViewing, true);
+            $this->serieViewingRepository->save($theViewing, true);
         }
 
         return $viewings;
+    }
+
+    public function updateSerieViewing($tv, SerieViewing $theViewing)
+    {
+        foreach ($tv['seasons'] as $s) {
+            if ($theViewing->getSeasonByNumber($s['season_number']) === null) {
+                $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
+                $this->seasonViewingRepository->save($season, true);
+                $theViewing->addSeason($season);
+                for ($i = 0; $i < $s['episode_count']; $i++) {
+                    $episode = new EpisodeViewing($i);
+                    $this->episodeViewingRepository->save($episode);
+                    $season->addEpisode($episode);
+                }
+            } else {
+                $season = $theViewing->getSeasonByNumber($s['season_number']);
+                if ($season->getEpisodeCount() < $s['episode_count']) {
+                    for ($i = $season->getEpisodeCount(); $i < $s['episode_count']; $i++) {
+                        $episode = new EpisodeViewing($i);
+                        $this->episodeViewingRepository->save($episode);
+                        $season->addEpisode($episode);
+                    }
+                }
+            }
+        }
+        $seasons = $theViewing->getSeasons();
+        dump($seasons);
     }
 
     public function getViewedEpisodes($viewing): int

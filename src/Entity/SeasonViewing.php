@@ -33,7 +33,7 @@ class SeasonViewing
     #[ORM\ManyToOne(inversedBy: 'seasons')]
     private ?SerieViewing $serie = null;
 
-    #[ORM\OneToMany(mappedBy: 'seasonViewing', targetEntity: EpisodeViewing::class)]
+    #[ORM\OneToMany(mappedBy: 'season', targetEntity: EpisodeViewing::class)]
     private Collection $episodes;
 
     public function __construct($airAt, $seasonNumber, $episodeCount, $seasonCompleted)
@@ -55,7 +55,7 @@ class SeasonViewing
         return $this->airAt;
     }
 
-    public function setAirAt(DateTimeInterface $airAt): self
+    public function setAirAt(DateTimeImmutable $airAt): self
     {
         $this->airAt = $airAt;
 
