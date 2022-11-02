@@ -361,7 +361,8 @@ class SerieController extends AbstractController
                 }
                 $serie->addUser($user);
                 $serieRepository->save($serie, true);
-                // // dump($serie);
+                dump($serie);
+                $this->createViewing($user, $tv, $serie);
                 /*
                     const POPULAR = 'popular';
                     const TOP_RATED = 'top_rated';
@@ -435,6 +436,30 @@ class SerieController extends AbstractController
             'userSerieId' => $serie?->getId(),
             'pagination' => $pagination,
         ]);
+    }
+
+    public function createViewing($user, $tv, $serie)
+    {
+        $viewing = new SerieViewing();
+        $viewing->setUser($user);
+        $viewing->setSerie($serie);
+        $viewing->setViewing($this->createViewingTab($tv));
+        $viewing->setSeasonCount($tv['number_of_seasons']);
+        $viewing->setViewedEpisodes(0);
+        foreach ($tv['seasons'] as $s) {
+            $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
+            $this->seasonViewingRepository->save($season, true);
+            $viewing->addSeason($season);
+        }
+        $seasons = $viewing->getSeasons();
+        foreach ($seasons as $season) {
+            for ($i = 0; $i < $season->getEpisodeCount(); $i++) {
+                $episode = new EpisodeViewing($i);
+                $this->episodeViewingRepository->save($episode);
+                $season->addEpisode($episode);
+            }
+        }
+        $this->serieViewingRepository->save($viewing, true);
     }
 
     public function keywordsTranslation($keywords, $locale): array
@@ -616,32 +641,14 @@ class SerieController extends AbstractController
 
                 /** @var SerieViewing $viewing */
                 $viewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
-                // // dump($viewing);
+                dump($viewing, $serie);
                 if ($viewing == null) {
-                    $viewing = new SerieViewing();
-                    $viewing->setUser($user);
-                    $viewing->setSerie($serie);
-                    $viewing->setViewing($this->createViewingTab($tv));
-                    $viewing->setSeasonCount($tv['number_of_seasons']);
-                    $viewing->setViewedEpisodes(0);
-                    foreach ($tv['seasons'] as $s) {
-                        $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
-                        $this->seasonViewingRepository->save($season, true);
-                        $viewing->addSeason($season);
-                    }
-                    $seasons = $viewing->getSeasons();
-                    foreach ($seasons as $season) {
-                        for ($i = 0; $i < $season->getEpisodeCount(); $i++) {
-                            $episode = new EpisodeViewing($i);
-                            $this->episodeViewingRepository->save($episode);
-                            $season->addEpisode($episode);
-                        }
-                    }
+                    $this->createViewing($user, $tv, $serie);
                 } else {
                     $viewing->setViewing($this->updateViewing($tv, $viewing));
                     $this->updateSerieViewing($tv, $viewing);
+                    $this->serieViewingRepository->save($viewing, true);
                 }
-                $this->serieViewingRepository->save($viewing, true);
             }
         }
         $ygg = str_replace(' ', '+', $tv['name']);
@@ -899,7 +906,7 @@ class SerieController extends AbstractController
                 $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
                 $this->seasonViewingRepository->save($season, true);
                 $theViewing->addSeason($season);
-                for ($i = 0; $i < $s['episode_count']; $i++) {
+                for ($i = 1; $i <= $s['episode_count']; $i++) {
                     $episode = new EpisodeViewing($i);
                     $this->episodeViewingRepository->save($episode);
                     $season->addEpisode($episode);
@@ -907,7 +914,7 @@ class SerieController extends AbstractController
             } else {
                 $season = $theViewing->getSeasonByNumber($s['season_number']);
                 if ($season->getEpisodeCount() < $s['episode_count']) {
-                    for ($i = $season->getEpisodeCount(); $i < $s['episode_count']; $i++) {
+                    for ($i = $season->getEpisodeCount(); $i <= $s['episode_count']; $i++) {
                         $episode = new EpisodeViewing($i);
                         $this->episodeViewingRepository->save($episode);
                         $season->addEpisode($episode);

@@ -23,7 +23,7 @@ class EpisodeViewing
     #[ORM\Column(nullable: true)]
     private ?int $duration = null;
 
-    #[ORM\ManyToOne(inversedBy: 'episodes')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'episodes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?SeasonViewing $season = null;
 

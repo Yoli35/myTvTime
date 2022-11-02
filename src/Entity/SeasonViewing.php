@@ -30,7 +30,7 @@ class SeasonViewing
     #[ORM\Column]
     private ?bool $seasonCompleted = null;
 
-    #[ORM\ManyToOne(inversedBy: 'seasons')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'seasons')]
     private ?SerieViewing $serie = null;
 
     #[ORM\OneToMany(mappedBy: 'season', targetEntity: EpisodeViewing::class)]
