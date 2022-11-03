@@ -27,7 +27,8 @@
                                     <div>{{ event.subheading }}</div>
                                 </div>
                                 <div class="countdown" id="{{ event.id }}">
-                                    {{ event.date|format_datetime('full', 'medium') }}
+                                    {{ event.date|format_date('full') }}<br/>
+                                    {{ event.date|format_time('medium') }}
                                 </div>
                             </div>
                         {% endif %}

@@ -602,11 +602,6 @@
 
     .home-discover {
         @include flex-col();
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin: 0 .125em .25em .125em;
         padding: 0;
         position: relative;
         transition: opacity .5s ease-out, transform .5s ease-out;
@@ -847,7 +842,6 @@
         }
 
         .home-discover {
-            margin: 0 .5em 1em .5em;
             padding: .25em;
             width: 18em;
         }
