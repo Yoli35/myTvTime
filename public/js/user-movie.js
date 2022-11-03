@@ -459,10 +459,14 @@ function moreVideos() {
 
                     let user = document.createElement("div");
                     user.classList.add("user");
-                    user.setAttribute("style", "transform: scale(.5)");
+                    user.setAttribute("style", "transform: scale(.75)");
                     let rating = document.createElement("div");
-                    rating.classList.add("rating");
+                    rating.classList.add("rating", "visible");
                     rating.setAttribute("id", result['movie_db_id']);
+                    let trash = document.createElement("div");
+                    trash.classList.add("trash");
+                    trash.setAttribute("data-rate", "0");
+                    rating.appendChild(trash);
                     for (let j=1;j<=5;j++) {
                         let star = document.createElement("div");
                         star.classList.add("star");

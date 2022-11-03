@@ -373,11 +373,13 @@ function initRating(badge) {
     const user = badge.parentElement;
     const rating = user.querySelector(".rating");
     const stars = rating.querySelectorAll(".star");
+    const trash = rating.querySelector(".trash");
     stars.forEach(star => {
         star.addEventListener("mouseover", hoverStars);
         star.addEventListener("mouseleave", leaveStars);
         star.addEventListener("click", setMovieRating);
     })
+    trash.addEventListener("click", setMovieRating);
     setStars(user);
     rating.classList.add("visible");
 }
@@ -387,11 +389,13 @@ function terminateRating(badge) {
     const rating = user.querySelector(".rating");
     if (rating) {
         const stars = rating.querySelectorAll(".star");
+        const trash = rating.querySelector(".trash");
         stars.forEach(star => {
             star.removeEventListener("mouseover", hoverStars);
             star.removeEventListener("mouseleave", leaveStars);
             star.removeEventListener("click", setMovieRating);
         })
+        trash.removeEventListener("click", setMovieRating);
         rating.classList.remove("visible");
     }
 }

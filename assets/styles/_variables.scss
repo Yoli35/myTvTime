@@ -201,7 +201,7 @@ $fa-font-path: "../webfonts";
     margin-right: 1em;
     opacity: 0;
     transition: opacity .5s;
-    width: 12em;
+    width: 14em;
 
     &.visible {
         opacity: 1;
@@ -216,6 +216,17 @@ $fa-font-path: "../webfonts";
         &.ok {
             background-image: url("../images/star.png");
         }
+
+        &:hover {
+            transform: scale(1.25);
+        }
+    }
+
+    .trash {
+        background-image: url("../images/trash-outline.png");
+        background-size: cover;
+        height: 2em;
+        width: 2em;
 
         &:hover {
             transform: scale(1.25);
