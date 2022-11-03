@@ -102,5 +102,7 @@
   "build/images/device-tablet-light.png": "/build/images/device-tablet-light.345a882d.png",
   "build/images/device-tablet-dark.png": "/build/images/device-tablet-dark.fecf6988.png",
   "build/images/device-tablet-dark-active.png": "/build/images/device-tablet-dark-active.eae94cf8.png",
-  "build/images/device-tablet-light-active.png": "/build/images/device-tablet-light-active.99f4572c.png"
+  "build/images/device-tablet-light-active.png": "/build/images/device-tablet-light-active.99f4572c.png",
+  "build/images/network-other-light.png": "/build/images/network-other-light.82d80b8d.png",
+  "build/images/network-other-dark.png": "/build/images/network-other-dark.99a84cb4.png"
 }

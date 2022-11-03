@@ -2,7 +2,7 @@
 
 .devices {
     .choice {
-        @include flex-col();
+        @include flex-col(center, stretch);
 
         .device {
             background-position: center;
@@ -56,6 +56,8 @@
 
         .label {
             font-weight: 100;
+            text-align: center;
+            width: 6em;
         }
     }
 }

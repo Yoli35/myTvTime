@@ -422,7 +422,7 @@
     <dialog class="viewed-episode">
         <div class="overlay">
             <div class="header">
-                {{ 'Where did you watched it ?'|trans }}
+                {{ 'Where did you watched it?'|trans }}
                 <button value="nope" class="close"><i class="fa-solid fa-circle-xmark"></i></button>
             </div>
             <div class="content">
@@ -449,7 +449,7 @@
                             </div>
                         {% endfor %}
                     {% endif %}
-                    <div class="network"><div class="logo"></div><div class="label">{{ 'Other'|trans }}</div></div>
+                    <div class="network active"><div class="logo other"></div><div class="label">{{ 'Other'|trans }}</div></div>
                 </div>
                 <div class="devices">
                     <div class="choice"><div class="device desktop"></div><div class="label">{{ 'Desktop'|trans }}</div></div>
@@ -486,6 +486,7 @@
             "pasVu": {"fr": "pas vu", "en": "not seen"}
         }
         const number_of_episodes = {{ serie.number_of_episodes }};
+        let viewedEpisodesDialog, episodeClicked = {viewed:0, episodeNumber:0, seasonNumber:0};
 
         window.addEventListener("DOMContentLoaded", () => {
             {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
@@ -503,6 +504,8 @@
                 {% endif %}
             ]);
 
+            viewedEpisodesDialog = document.querySelector(".viewed-episode");
+            initViewedEpisodes(viewedEpisodesDialog);
             episodeAddEvent();
 
             function episodeAddEvent() {
@@ -538,35 +541,66 @@
                 // bubble.querySelector("span").innerText = episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
             }
 
-            function toggleView(evt) {
-
-                stillConnected();
-
-                const dialog = document.querySelector(".viewed-episode");
+            function initViewedEpisodes(dialog)
+            {
                 const devices = dialog.querySelectorAll(".device");
-                dialog.classList.remove("d-none");
-                dialog.classList.add("d-block");
+                const networks = dialog.querySelectorAll(".network");
 
                 dialog.querySelector(".viewed-episode-done").addEventListener("click", () => {
-                    dialog.classList.add("d-none");
-                    dialog.classList.remove("d-block");
+                    closeDialog(viewedEpisodesDialog);
                 })
                 dialog.querySelector(".close").addEventListener('click', function () {
-                    dialog.classList.add("d-none");
-                    dialog.classList.remove("d-block");
+                    closeDialog(viewedEpisodesDialog);
                 });
                 devices.forEach(device => {
                     device.addEventListener("click", (evt) => {
                         devices.forEach(d => d.classList.remove("active"));
-                        evt.target.classList.add("active");
+                        evt.currentTarget.classList.add("active");
                     })
                 })
+                networks.forEach(network => {
+                    network.addEventListener("click", (evt) => {
+                        networks.forEach(n => n.classList.remove("active"));
+                        evt.currentTarget.classList.add("active");
+                    })
+                })
+            }
 
+            function openDialog(dialog) {
+                dialog.classList.remove("d-none");
+                dialog.classList.add("d-block");
+            }
+
+            function closeDialog(dialog) {
+                dialog.classList.add("d-none");
+                dialog.classList.remove("d-block");
+                if (episodeClicked.viewed) {
+                    openDialog(viewedEpisodesDialog);
+                }
+            }
+
+            function toggleView(evt) {
                 const ep = this;
+                episodeClicked.viewed = parseInt(ep.getAttribute("data-viewed")) === 0 ? 1 : 0;
+                episodeClicked.episodeNumber = parseInt(ep.getAttribute("data-number"));
+                episodeClicked.seasonNumber = parseInt(ep.parentElement.getAttribute("data-season-number"));
                 evt.preventDefault();
-                const e_number = parseInt(ep.getAttribute("data-number"));
-                const e_viewed = parseInt(ep.getAttribute("data-viewed")) === 0 ? 1 : 0;
-                const s_number = parseInt(ep.parentElement.getAttribute("data-season-number"));
+
+                if (episodeClicked.viewed) {
+                    openDialog(viewedEpisodesDialog);
+                }
+                else {
+                    toggleEpisodeView();
+                }
+           }
+
+            function toggleEpisodeView() {
+
+                stillConnected();
+
+                const e_viewed = episodeClicked.viewed;
+                const e_number = episodeClicked.episodeNumber;
+                const s_number = episodeClicked.seasonNumber;
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);

@@ -1484,16 +1484,23 @@
                 padding: 1em 0;
 
                 .network {
-                    @include flex-col();
+                    @include flex-col(center, stretch);
                     border-radius: .5em;
-                    padding: .125em;
+                    padding: .25em;
 
                     .logo {
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-size: contain;
                         border: 2px solid var(--gradiant-grey-20);
                         border-radius: .5em;
                         cursor: pointer;
                         height: 4em;
                         width: 4em;
+
+                        &.other {
+                            background-image: url("../images/devices/network-other-light.png");
+                        }
                     }
 
                     .label {
@@ -1505,11 +1512,15 @@
                     &:hover {
                         background-color: var(--gradiant-grey-80);
                     }
+
+                    &.active {
+                        background-color: var(--gradiant-grey-50);
+                    }
                 }
             }
 
             .devices {
-                @include flex-100(center, space-evenly);
+                @include flex-100(stretch, space-evenly);
                 padding: 1em 0;
             }
 
@@ -1523,6 +1534,7 @@
 
         .footer {
             @include flex-col(flex-end, flex-end);
+            border-top: 1px solid var(--gradiant-grey-50);
             padding: 1em;
         }
     }
@@ -2440,7 +2452,7 @@
     .viewed-episode {
         .overlay {
             background-color: var(--gradiant-grey-20);
-            border: 1px solid var(--gradiant-grey-50);
+            border-color: var(--gradiant-grey-50);
             color: var(--gradiant-grey-80);
 
             .header {
@@ -2453,9 +2465,11 @@
                 .networks {
                     .network {
                         .logo {
-                            background-position: center;
-                            background-size: cover;
-                            border: 2px solid var(--gradiant-grey-80);
+                            border-color: var(--gradiant-grey-80);
+
+                            &.other {
+                                background-image: url("../images/devices/network-other-dark.png");
+                            }
                         }
 
                         &:hover {
