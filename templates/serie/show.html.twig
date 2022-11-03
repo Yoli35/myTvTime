@@ -419,6 +419,51 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
+    <dialog class="viewed-episode">
+        <div class="overlay">
+            <div class="header">
+                {{ 'Where did you watched it ?'|trans }}
+                <button value="nope" class="close"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+            <div class="content">
+                <div class="networks">
+                    {% for network in serie.networks %}
+                        <div class="network">
+                            <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}')"></div>
+                            <div class="label">{{ network.name }}</div>
+                        </div>
+                    {% endfor %}
+                    {% if watchProviders.flatrate is defined %}
+                        {% for flatrate in watchProviders.flatrate %}
+                            <div class="network">
+                                <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}')"></div>
+                                <div class="label">{{ flatrate.provider_name }}</div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if watchProviders.buy is defined %}
+                        {% for buy in watchProviders.buy %}
+                            <div class="network">
+                                <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}')"></div>
+                                <div class="label">{{ buy.provider_name }}</div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="network"><div class="logo"></div><div class="label">{{ 'Other'|trans }}</div></div>
+                </div>
+                <div class="devices">
+                    <div class="choice"><div class="device desktop"></div><div class="label">{{ 'Desktop'|trans }}</div></div>
+                    <div class="choice"><div class="device laptop"></div><div class="label">{{ 'Laptop'|trans }}</div></div>
+                    <div class="choice"><div class="device phone"></div><div class="label">{{ 'Phone'|trans }}</div></div>
+                    <div class="choice"><div class="device tablet"></div><div class="label">{{ 'Tablet'|trans }}</div></div>
+                    <div class="choice"><div class="device tv"></div><div class="label">{{ 'Tv'|trans }}</div></div>
+                </div>
+            </div>
+            <div class="footer">
+                <button value="yass" class="btn btn-secondary viewed-episode-done">{{ 'Done'|trans }}</button>
+            </div>
+        </div>
+    </dialog>
 {% endblock %}
 {% block morejs %}
     <script src="/js/serie.js"></script>
@@ -496,6 +541,26 @@
             function toggleView(evt) {
 
                 stillConnected();
+
+                const dialog = document.querySelector(".viewed-episode");
+                const devices = dialog.querySelectorAll(".device");
+                dialog.classList.remove("d-none");
+                dialog.classList.add("d-block");
+
+                dialog.querySelector(".viewed-episode-done").addEventListener("click", () => {
+                    dialog.classList.add("d-none");
+                    dialog.classList.remove("d-block");
+                })
+                dialog.querySelector(".close").addEventListener('click', function () {
+                    dialog.classList.add("d-none");
+                    dialog.classList.remove("d-block");
+                });
+                devices.forEach(device => {
+                    device.addEventListener("click", (evt) => {
+                        devices.forEach(d => d.classList.remove("active"));
+                        evt.target.classList.add("active");
+                    })
+                })
 
                 const ep = this;
                 evt.preventDefault();

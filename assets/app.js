@@ -16,6 +16,7 @@ import './styles/article.scss';
 import './styles/collection.scss';
 import './styles/serie.scss';
 import './styles/event.scss';
+import './styles/devices.scss';
 
 import './js/cookie-consent';
 import './js/mydropzone_controller'

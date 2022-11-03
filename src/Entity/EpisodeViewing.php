@@ -27,6 +27,9 @@ class EpisodeViewing
     #[ORM\JoinColumn(nullable: false)]
     private ?SeasonViewing $season = null;
 
+    #[ORM\ManyToOne]
+    private ?Network $network = null;
+
     public function __construct($episodeNumber)
     {
         $this->episodeNumber = $episodeNumber;
@@ -80,6 +83,18 @@ class EpisodeViewing
     public function setSeason(?SeasonViewing $season): self
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    public function getNetwork(): ?Network
+    {
+        return $this->network;
+    }
+
+    public function setNetwork(?Network $network): self
+    {
+        $this->network = $network;
 
         return $this;
     }
