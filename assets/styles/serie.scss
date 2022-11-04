@@ -1574,13 +1574,38 @@
     @include dialog;
 
     .loading {
-        @include flex-100();
+        @include flex-row();
         background-color: var(--gradiant-grey-100);
-        border: 1px solid var(--gradiant-grey-50);
-        border-radius: 1em;
-        height: 10em;
+        border: 4px solid var(--gradiant-grey-50);
+        border-radius: 50%;
+        gap: 1em;
+        height: 12em;
         margin: calc(50vh - 5em) auto;
-        width: 10em;
+        width: 12em;
+
+        .dot {
+            background-color: var(--gradiant-grey-60);
+            border: 1px solid var(--gradiant-grey-30);
+            border-radius: 50%;
+            height: 1.5em;
+            translate: 0 -.75em;
+            width: 1.5em;
+            animation: bounce 300ms infinite ease-in-out alternate;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 100ms;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 200ms;
+        }
+
+        @keyframes bounce {
+            to {
+                translate: 0 1.5em;
+            }
+        }
     }
 }
 
@@ -2528,6 +2553,11 @@
             background-color: var(--gradiant-grey-20);
             border-color: var(--gradiant-grey-50);
             color: var(--gradiant-grey-80);
+
+            .dot {
+                background-color: var(--gradiant-grey-30);
+                border: 1px solid var(--gradiant-grey-60);
+            }
         }
     }
 

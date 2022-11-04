@@ -420,8 +420,12 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
-    <dialog class="viewed-update">
-        <div class="loading">{{ 'update'|trans }}</div>
+    <dialog class="viewed-update" open>
+        <div class="loading">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
     </dialog>
     <dialog class="viewed-episode">
         <div class="overlay">
