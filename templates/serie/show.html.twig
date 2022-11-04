@@ -234,6 +234,7 @@
                     {% endif %}
                     <section>
                         <div class="seasons">
+                            {% set globalIndex = 1 %}
                             {% for season in serie.seasons %}
                                 {% set url = path('app_serie_tmdb_season', {id: serie.id, seasonNumber: season.season_number})~'?from='~from~'&p='~page %}
                                 {% if query is defined %} {% set url = url ~ '&query=' ~ query %}{% endif %}
@@ -260,7 +261,6 @@
                                                 <div>
                                                     {{ include('blocks/serie/viewing_season.html.twig', {season_number: season.season_number, episode_count: season.episode_count}) }}
                                                 </div>
-                                                {#                                                <div class="mouse-detector"></div> #}
                                             </div>
                                             {% if season.overview|length %}
                                                 <div>{{ season.overview }}</div>
@@ -279,6 +279,7 @@
                                         </div>
                                     </div>
                                 </a>
+                                {% set globalIndex = globalIndex + season.episode_count %}
                             {% endfor %}
                         </div>
                     </section>
@@ -419,6 +420,9 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
+    <dialog class="viewed-update">
+        <div class="loading">{{ 'update'|trans }}</div>
+    </dialog>
     <dialog class="viewed-episode">
         <div class="overlay">
             <div class="header">
@@ -478,9 +482,14 @@
                         <div class="label">{{ 'Tv'|trans }}</div>
                     </div>
                 </div>
+                <div class="check-them-all">
+                    <label for="checkThemAll">
+                        <input type="checkbox" id="checkThemAll" checked>{{ 'Marquer les épisodes précédents comme vus'|trans }}
+                    </label>
+                </div>
                 <div class="remember-choice">
                     <label for="rememberChoice">
-                        <input type="checkbox" id="rememberChoice" checked title="{{ 'Se souvenirs de my choix tant que je reste sur cette page' }}">{{ 'Remember my choices'|trans }}
+                        <input type="checkbox" id="rememberChoice" checked title="{{ 'Remember my choice as long as I stay on this page'|trans }}">{{ 'Remember my choices'|trans }}
                     </label>
                 </div>
             </div>
@@ -512,7 +521,7 @@
             "pasVu": {"fr": "pas vu", "en": "not seen"}
         }
         const number_of_episodes = {{ serie.number_of_episodes }};
-        let viewedEpisodesDialog, episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0};
+        let viewedEpisodesDialog, currentDialog, episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0};
 
         window.addEventListener("DOMContentLoaded", () => {
             {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
@@ -570,6 +579,8 @@
                 console.log(dialog.querySelector(".networks").clientWidth);
                 console.log(dialog.querySelector(".wrapper").clientWidth);
 
+                currentDialog = dialog;
+
                 dialog.querySelector(".viewed-episode-done").addEventListener("click", () => {
                     closeDialog(dialog, true);
                 })
@@ -596,17 +607,17 @@
             function openDialog(dialog) {
                 const devices = dialog.querySelectorAll(".device");
                 const networks = dialog.querySelectorAll(".network");
+                const checkThemAllDiv = dialog.querySelector(".check-them-all");
 
                 if (!dialog.querySelector("#rememberChoice").checked) {
                     devices.forEach(d => d.classList.remove("active"));
                     networks.forEach(n => n.classList.remove("active"));
+                    checkThemAllDiv.classList.remove("show");
                 }
 
                 if (typeof dialog.showModal === "function") {
                     dialog.showModal();
-                    setTimeout(() => {
-                        dialog.classList.add("show")
-                    }, 0);
+                    setTimeout(() => {dialog.classList.add("show")}, 0);
                 } else {
                     console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
                     /*dialog.setAttribute("open");
@@ -622,13 +633,12 @@
                 dialog.classList.remove("d-block");
                 dialog.removeAttribute("style");*/
                 dialog.classList.remove("show");
-                setTimeout(() => {
-                    dialog.close()
-                }, 300);
+                setTimeout(() => {dialog.close()}, 300);
                 if (toggle) {
                     let network = dialog.querySelector(".network.active");
                     let device = dialog.querySelector(".device.active");
-                    toggleEpisodeView(network, device);
+                    let all = dialog.querySelector("#checkThemAll").checked;
+                    toggleEpisodeView(network, device, all);
                 }
             }
 
@@ -639,14 +649,32 @@
                 episodeClicked.seasonNumber = parseInt(ep.parentElement.getAttribute("data-season-number"));
                 evt.preventDefault();
 
+
                 if (episodeClicked.viewed) {
+                    const checkThemAllDiv = currentDialog.querySelector(".check-them-all");
+                    if (areUnseenEpisodesBefore(parseInt(ep.getAttribute("data-global-index")))) {
+                        checkThemAllDiv.classList.add("show");
+                    } else {
+                        checkThemAllDiv.classList.remove("show");
+                        checkThemAllDiv.querySelector("#checkThemAll").checked = false;
+                    }
                     openDialog(viewedEpisodesDialog);
                 } else {
                     toggleEpisodeView();
                 }
             }
 
-            function toggleEpisodeView(network = null, device = null) {
+            function areUnseenEpisodesBefore(index) {
+                if (index === 1) return false;
+                const eps = document.querySelector("main").querySelector(".seasons").querySelectorAll(".ep");
+
+                for (let i=0;i<index-1;i++) {
+                    if (parseInt(eps[i].getAttribute("data-viewed")) === 0) return true;
+                }
+                return false;
+            }
+
+            function toggleEpisodeView(network = null, device = null, all = false) {
 
                 stillConnected();
 
@@ -663,6 +691,7 @@
                 const e_viewed = episodeClicked.viewed;
                 const e_number = episodeClicked.episodeNumber;
                 const s_number = episodeClicked.seasonNumber;
+                const update = document.querySelector(".viewed-update");
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
@@ -682,9 +711,15 @@
                     })
                     updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
                     episodeAddEvent();
+                    update.classList.remove("show");
+                    setTimeout(() => {update.close()}, 300);
+
                 }
-                xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : ""));
+                xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : ""));
                 xhr.send();
+                update.showModal();
+                setTimeout(() => {update.classList.add("show")}, 0);
+
             }
 
             function updateViewCount(textSelector, graphSelector, viewedEpisodes, episodeText) {

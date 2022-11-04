@@ -1436,13 +1436,7 @@
 }
 
 .viewed-episode {
-    background-color: var(--gradiant-grey-10-alpha-90);
-    height: 100vh;
-    max-height: 100vh;
-    max-width: 100vw;
-    opacity: 0;
-    transition: opacity 300ms ease-in-out;
-    width: 100vw;
+    @include dialog;
 
     .overlay {
         background-color: var(--gradiant-grey-100);
@@ -1536,12 +1530,22 @@
                 padding: 1em 0;
             }
 
+            .check-them-all {
+                @include flex-100(end, end);
+                display: none;
+                transition: height 300s ease-in-out;
+
+                &.show {
+                    display: flex;
+                }
+            }
+
             .remember-choice {
                 @include flex-100(end, end);
+            }
 
-                input {
-                    margin-right: 1em;
-                }
+            input[type=checkbox] {
+                margin-right: 1em;
             }
         }
 
@@ -1564,13 +1568,19 @@
             }
         }
     }
+}
 
-    &.show {
-        opacity: 1;
-    }
+.viewed-update {
+    @include dialog;
 
-    &::backdrop {
-        background: var(--gradiant-grey-30-alpha-50);
+    .loading {
+        @include flex-100();
+        background-color: var(--gradiant-grey-100);
+        border: 1px solid var(--gradiant-grey-50);
+        border-radius: 1em;
+        height: 10em;
+        margin: calc(50vh - 5em) auto;
+        width: 10em;
     }
 }
 
@@ -2510,6 +2520,14 @@
                     }
                 }
             }
+        }
+    }
+
+    .viewed-update {
+        .loading {
+            background-color: var(--gradiant-grey-20);
+            border-color: var(--gradiant-grey-50);
+            color: var(--gradiant-grey-80);
         }
     }
 

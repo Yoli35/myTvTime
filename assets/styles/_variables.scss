@@ -514,3 +514,21 @@ $fa-font-path: "../webfonts";
         text-transform: uppercase;
     }
 }
+
+@mixin dialog {
+    background-color: var(--gradiant-grey-10-alpha-90);
+    height: 100vh;
+    max-height: 100vh;
+    max-width: 100vw;
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+    width: 100vw;
+
+    &.show {
+        opacity: 1;
+    }
+
+    &::backdrop {
+        background: var(--gradiant-grey-30-alpha-50);
+    }
+}
