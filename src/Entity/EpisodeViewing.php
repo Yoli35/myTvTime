@@ -14,21 +14,27 @@ class EpisodeViewing
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $firstAirAt = null;
-
     #[ORM\Column]
     private ?int $episodeNumber = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $duration = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'episodes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?SeasonViewing $season = null;
 
-    #[ORM\ManyToOne]
-    private ?Network $network = null;
+    #[ORM\Column(length: 15, nullable: true)]
+    private ?string $networkType = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $networkId = null;
+
+    #[ORM\Column(length: 15, nullable: true)]
+    private ?string $deviceType = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $viewedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $airDate = null;
 
     public function __construct($episodeNumber)
     {
@@ -39,18 +45,6 @@ class EpisodeViewing
         return $this->id;
     }
 
-    public function getFirstAirAt(): ?DateTimeImmutable
-    {
-        return $this->firstAirAt;
-    }
-
-    public function setFirstAirAt(?DateTimeImmutable $firstAirAt): self
-    {
-        $this->firstAirAt = $firstAirAt;
-
-        return $this;
-    }
-
     public function getEpisodeNumber(): ?int
     {
         return $this->episodeNumber;
@@ -59,18 +53,6 @@ class EpisodeViewing
     public function setEpisodeNumber(int $episodeNumber): self
     {
         $this->episodeNumber = $episodeNumber;
-
-        return $this;
-    }
-
-    public function getDuration(): ?int
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(?int $duration): self
-    {
-        $this->duration = $duration;
 
         return $this;
     }
@@ -87,14 +69,62 @@ class EpisodeViewing
         return $this;
     }
 
-    public function getNetwork(): ?Network
+    public function getNetworkType(): ?string
     {
-        return $this->network;
+        return $this->networkType;
     }
 
-    public function setNetwork(?Network $network): self
+    public function setNetworkType(?string $networkType): self
     {
-        $this->network = $network;
+        $this->networkType = $networkType;
+
+        return $this;
+    }
+
+    public function getNetworkId(): ?int
+    {
+        return $this->networkId;
+    }
+
+    public function setNetworkId(?int $networkId): self
+    {
+        $this->networkId = $networkId;
+
+        return $this;
+    }
+
+    public function getDeviceType(): ?string
+    {
+        return $this->deviceType;
+    }
+
+    public function setDeviceType(?string $deviceType): self
+    {
+        $this->deviceType = $deviceType;
+
+        return $this;
+    }
+
+    public function getViewedAt(): ?\DateTimeImmutable
+    {
+        return $this->viewedAt;
+    }
+
+    public function setViewedAt(?\DateTimeImmutable $viewedAt): self
+    {
+        $this->viewedAt = $viewedAt;
+
+        return $this;
+    }
+
+    public function getAirDate(): ?\DateTimeImmutable
+    {
+        return $this->airDate;
+    }
+
+    public function setAirDate(?\DateTimeImmutable $airDate): self
+    {
+        $this->airDate = $airDate;
 
         return $this;
     }

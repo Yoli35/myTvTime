@@ -1440,6 +1440,8 @@
     height: 100vh;
     max-height: 100vh;
     max-width: 100vw;
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
     width: 100vw;
 
     .overlay {
@@ -1448,7 +1450,7 @@
         border-radius: 1em;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 0, 0, 0.25);
         color: var(--gradiant-grey-20);
-        margin: calc(50vh - 8em) auto;
+        margin: calc(50vh - 15em) auto;
         width: 50em;
 
         .header {
@@ -1457,6 +1459,7 @@
             padding: 1em;
             position: relative;
             text-align: center;
+            width: 50em;
 
             .close {
                 appearance: none;
@@ -1475,46 +1478,55 @@
         .content {
             @include flex-col(flex-start, flex-start);
             padding: 2em;
+            width: 50em;
 
             .networks {
-                @include flex-100(stretch, start);
+                @include flex-row(stretch, start);
                 border-bottom: 1px solid var(--gradiant-grey-50);
-                gap: 1em;
                 overflow-x: scroll;
                 padding: 1em 0;
+                width: 46em;
 
-                .network {
-                    @include flex-col(center, stretch);
-                    border-radius: .5em;
-                    padding: .25em;
+                .wrapper {
+                    @include flex-row(stretch, start);
+                    gap: 1em;
+                    min-width: 46em;
 
-                    .logo {
-                        background-position: center;
-                        background-repeat: no-repeat;
-                        background-size: contain;
-                        border: 2px solid var(--gradiant-grey-20);
+                    .network {
+                        @include flex-col(center, stretch);
                         border-radius: .5em;
-                        cursor: pointer;
-                        height: 4em;
-                        width: 4em;
-
-                        &.other {
-                            background-image: url("../images/devices/network-other-light.png");
-                        }
-                    }
-
-                    .label {
-                        font-weight: 100;
-                        text-align: center;
+                        padding: .25em;
                         width: 6em;
-                    }
 
-                    &:hover {
-                        background-color: var(--gradiant-grey-80);
-                    }
+                        .logo {
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            border: 2px solid var(--gradiant-grey-20);
+                            border-radius: .5em;
+                            cursor: pointer;
+                            height: 4em;
+                            width: 4em;
 
-                    &.active {
-                        background-color: var(--gradiant-grey-50);
+                            &.other {
+                                background-image: url("../images/devices/network-other-light.png");
+                            }
+                        }
+
+                        .label {
+                            font-weight: 100;
+                            text-align: center;
+                            width: 6em;
+                        }
+
+                        &:hover {
+                            background-color: var(--gradiant-grey-80);
+                            color: var(--gradiant-grey-20);
+                        }
+
+                        &.active {
+                            background-color: var(--gradiant-grey-50);
+                        }
                     }
                 }
             }
@@ -1524,6 +1536,13 @@
                 padding: 1em 0;
             }
 
+            .remember-choice {
+                @include flex-100(end, end);
+
+                input {
+                    margin-right: 1em;
+                }
+            }
         }
 
         &.classic {
@@ -1533,10 +1552,21 @@
         }
 
         .footer {
-            @include flex-col(flex-end, flex-end);
+            @include flex-100(flex-end, flex-end);
+            gap: 1em;
             border-top: 1px solid var(--gradiant-grey-50);
             padding: 1em;
+            width: 50em;
+
+            button:hover {
+                background-color: var(--gradiant-grey-60);
+                border-color: var(--gradiant-grey-50);
+            }
         }
+    }
+
+    &.show {
+        opacity: 1;
     }
 
     &::backdrop {
@@ -2463,19 +2493,20 @@
 
             .content {
                 .networks {
-                    .network {
-                        .logo {
-                            border-color: var(--gradiant-grey-80);
+                    .wrapper {
+                        .network {
+                            .logo {
+                                border-color: var(--gradiant-grey-80);
 
-                            &.other {
-                                background-image: url("../images/devices/network-other-dark.png");
+                                &.other {
+                                    background-image: url("../images/devices/network-other-dark.png");
+                                }
+                            }
+
+                            &:hover {
+                                background-color: var(--gradiant-grey-40);
                             }
                         }
-
-                        &:hover {
-                            background-color: var(--gradiant-grey-40);
-                        }
-
                     }
                 }
             }

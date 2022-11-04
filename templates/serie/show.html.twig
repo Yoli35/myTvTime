@@ -427,39 +427,65 @@
             </div>
             <div class="content">
                 <div class="networks">
-                    {% for network in serie.networks %}
-                        <div class="network">
-                            <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}')"></div>
-                            <div class="label">{{ network.name }}</div>
+                    <div class="wrapper">
+                        {% for network in serie.networks %}
+                            <div class="network" data-type="network" data-id="{{ network.id }}">
+                                <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}')"></div>
+                                <div class="label">{{ network.name }}</div>
+                            </div>
+                        {% endfor %}
+                        {% if watchProviders.flatrate is defined %}
+                            {% for flatrate in watchProviders.flatrate %}
+                                <div class="network" data-type="flatrate" data-id="{{ flatrate.provider_id }}">
+                                    <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}')"></div>
+                                    <div class="label">{{ flatrate.provider_name }}</div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if watchProviders.buy is defined %}
+                            {% for buy in watchProviders.buy %}
+                                <div class="network" data-type="buy" data-id="{{ buy.provider_id }}">
+                                    <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}')"></div>
+                                    <div class="label">{{ buy.provider_name }}</div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="network" data-type="other">
+                            <div class="logo other"></div>
+                            <div class="label">{{ 'Other'|trans }}</div>
                         </div>
-                    {% endfor %}
-                    {% if watchProviders.flatrate is defined %}
-                        {% for flatrate in watchProviders.flatrate %}
-                            <div class="network">
-                                <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}')"></div>
-                                <div class="label">{{ flatrate.provider_name }}</div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    {% if watchProviders.buy is defined %}
-                        {% for buy in watchProviders.buy %}
-                            <div class="network">
-                                <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}')"></div>
-                                <div class="label">{{ buy.provider_name }}</div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    <div class="network active"><div class="logo other"></div><div class="label">{{ 'Other'|trans }}</div></div>
+                    </div>
                 </div>
                 <div class="devices">
-                    <div class="choice"><div class="device desktop"></div><div class="label">{{ 'Desktop'|trans }}</div></div>
-                    <div class="choice"><div class="device laptop"></div><div class="label">{{ 'Laptop'|trans }}</div></div>
-                    <div class="choice"><div class="device phone"></div><div class="label">{{ 'Phone'|trans }}</div></div>
-                    <div class="choice"><div class="device tablet"></div><div class="label">{{ 'Tablet'|trans }}</div></div>
-                    <div class="choice"><div class="device tv"></div><div class="label">{{ 'Tv'|trans }}</div></div>
+                    <div class="choice">
+                        <div class="device desktop" data-type="desktop"></div>
+                        <div class="label">{{ 'Desktop'|trans }}</div>
+                    </div>
+                    <div class="choice">
+                        <div class="device laptop" data-type="laptop"></div>
+                        <div class="label">{{ 'Laptop'|trans }}</div>
+                    </div>
+                    <div class="choice">
+                        <div class="device phone" data-type="phone"></div>
+                        <div class="label">{{ 'Phone'|trans }}</div>
+                    </div>
+                    <div class="choice">
+                        <div class="device tablet" data-type="tablet"></div>
+                        <div class="label">{{ 'Tablet'|trans }}</div>
+                    </div>
+                    <div class="choice">
+                        <div class="device tv" data-type="tv"></div>
+                        <div class="label">{{ 'Tv'|trans }}</div>
+                    </div>
+                </div>
+                <div class="remember-choice">
+                    <label for="rememberChoice">
+                        <input type="checkbox" id="rememberChoice" checked title="{{ 'Se souvenirs de my choix tant que je reste sur cette page' }}">{{ 'Remember my choices'|trans }}
+                    </label>
                 </div>
             </div>
             <div class="footer">
+                <button value="nope" class="btn btn-secondary viewed-episode-cancel">{{ 'Cancel'|trans }}</button>
                 <button value="yass" class="btn btn-secondary viewed-episode-done">{{ 'Done'|trans }}</button>
             </div>
         </div>
@@ -486,7 +512,7 @@
             "pasVu": {"fr": "pas vu", "en": "not seen"}
         }
         const number_of_episodes = {{ serie.number_of_episodes }};
-        let viewedEpisodesDialog, episodeClicked = {viewed:0, episodeNumber:0, seasonNumber:0};
+        let viewedEpisodesDialog, episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0};
 
         window.addEventListener("DOMContentLoaded", () => {
             {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
@@ -535,22 +561,23 @@
 
             function bubbleIt(evt) {
                 const bubble = document.querySelector(".bubble");
-                // const viewed = parseInt(this.getAttribute("data-viewed"));
-                // const episode = this.getAttribute("data-number");
                 bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
-                // bubble.querySelector("span").innerText = episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
             }
 
-            function initViewedEpisodes(dialog)
-            {
+            function initViewedEpisodes(dialog) {
                 const devices = dialog.querySelectorAll(".device");
                 const networks = dialog.querySelectorAll(".network");
+                console.log(dialog.querySelector(".networks").clientWidth);
+                console.log(dialog.querySelector(".wrapper").clientWidth);
 
                 dialog.querySelector(".viewed-episode-done").addEventListener("click", () => {
-                    closeDialog(viewedEpisodesDialog);
+                    closeDialog(dialog, true);
+                })
+                dialog.querySelector(".viewed-episode-cancel").addEventListener("click", () => {
+                    closeDialog(dialog, false);
                 })
                 dialog.querySelector(".close").addEventListener('click', function () {
-                    closeDialog(viewedEpisodesDialog);
+                    closeDialog(dialog, false);
                 });
                 devices.forEach(device => {
                     device.addEventListener("click", (evt) => {
@@ -567,15 +594,41 @@
             }
 
             function openDialog(dialog) {
-                dialog.classList.remove("d-none");
-                dialog.classList.add("d-block");
+                const devices = dialog.querySelectorAll(".device");
+                const networks = dialog.querySelectorAll(".network");
+
+                if (!dialog.querySelector("#rememberChoice").checked) {
+                    devices.forEach(d => d.classList.remove("active"));
+                    networks.forEach(n => n.classList.remove("active"));
+                }
+
+                if (typeof dialog.showModal === "function") {
+                    dialog.showModal();
+                    setTimeout(() => {
+                        dialog.classList.add("show")
+                    }, 0);
+                } else {
+                    console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
+                    /*dialog.setAttribute("open");
+                    let offset = document.querySelector("html").scrollTop;
+                    dialog.setAttribute("style", "translate: 0 " + offset + "px;");
+                    dialog.classList.remove("d-none");
+                    dialog.classList.add("d-block");*/
+                }
             }
 
-            function closeDialog(dialog) {
-                dialog.classList.add("d-none");
+            function closeDialog(dialog, toggle) {
+                /*dialog.classList.add("d-none");
                 dialog.classList.remove("d-block");
-                if (episodeClicked.viewed) {
-                    openDialog(viewedEpisodesDialog);
+                dialog.removeAttribute("style");*/
+                dialog.classList.remove("show");
+                setTimeout(() => {
+                    dialog.close()
+                }, 300);
+                if (toggle) {
+                    let network = dialog.querySelector(".network.active");
+                    let device = dialog.querySelector(".device.active");
+                    toggleEpisodeView(network, device);
                 }
             }
 
@@ -588,15 +641,24 @@
 
                 if (episodeClicked.viewed) {
                     openDialog(viewedEpisodesDialog);
-                }
-                else {
+                } else {
                     toggleEpisodeView();
                 }
-           }
+            }
 
-            function toggleEpisodeView() {
+            function toggleEpisodeView(network = null, device = null) {
 
                 stillConnected();
+
+                let networkId = null, networkType = null, deviceType = null;
+
+                if (network) {
+                    networkType = network.getAttribute("data-type");
+                    networkId = network.getAttribute("data-id");
+                }
+                if (device) {
+                    deviceType = device.getAttribute("data-type");
+                }
 
                 const e_viewed = episodeClicked.viewed;
                 const e_number = episodeClicked.episodeNumber;
@@ -621,7 +683,7 @@
                     updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
                     episodeAddEvent();
                 }
-                xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed);
+                xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : ""));
                 xhr.send();
             }
 

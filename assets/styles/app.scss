@@ -735,13 +735,25 @@ h4 {
 }
 
 .home-footer {
-    @include flex-col();
+    @include flex-100(center, space-evenly);
     background-color: var(--gradiant-grey-30-alpha-50);
     border-radius: 1em;
     color: var(--gradiant-grey-80);
     margin: 1em 0;
     padding: 1em;
-    width: 100%;
+
+    .powered {
+        background-image: url("../images/the-movie-db.svg");
+        background-size: cover;
+        height: 1em;
+        width: 12em;
+
+        a {
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+    }
 }
 
 .user-menu {

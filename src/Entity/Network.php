@@ -22,6 +22,9 @@ class Network
     #[ORM\Column(length: 8, nullable: true)]
     private ?string $originCountry = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $networkId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Network
     public function setOriginCountry(string $originCountry): self
     {
         $this->originCountry = $originCountry;
+
+        return $this;
+    }
+
+    public function getNetworkId(): ?int
+    {
+        return $this->networkId;
+    }
+
+    public function setNetworkId(?int $networkId): self
+    {
+        $this->networkId = $networkId;
 
         return $this;
     }

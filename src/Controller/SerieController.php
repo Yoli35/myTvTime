@@ -453,7 +453,7 @@ class SerieController extends AbstractController
         }
         $seasons = $viewing->getSeasons();
         foreach ($seasons as $season) {
-            for ($i = 0; $i < $season->getEpisodeCount(); $i++) {
+            for ($i = 1; $i <= $season->getEpisodeCount(); $i++) {
                 $episode = new EpisodeViewing($i);
                 $this->episodeViewingRepository->save($episode);
                 $season->addEpisode($episode);
@@ -619,7 +619,7 @@ class SerieController extends AbstractController
         $index = false;
         $serieIds = [];
         if ($user) {
-            // Est-ce une série ajoutée ? $index != null => Ok
+            // Est-ce une série ajoutée ? $index != false => Ok
             $serieIds = $this->mySerieIds($serieRepository, $user);
             if (in_array($id, $serieIds)) {
                 $index = $id;
@@ -949,6 +949,9 @@ class SerieController extends AbstractController
         return $viewed;
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
     public function updateViewingArray(Request $request, SerieRepository $serieRepository, SerieViewingRepository $viewingRepository, TMDBService $tmdbService, TranslatorInterface $translator): Response
     {
@@ -959,13 +962,48 @@ class SerieController extends AbstractController
         $episode = $request->query->getInt('e');
         $newValue = $request->query->getInt('v');
 
+        $user = $this->getUser();
+        $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
+
+        /* ----------- entity based viewing ----------- */
+        $episodeViewing = $this->getEpisodeViewing($user, $serie, $season, $episode);
+
+        if ($newValue) {
+            $deviceType = $request->query->getAlpha('device-type');
+            $networkType = $request->query->getAlpha('network-type');
+            $networkId = $request->query->getInt('network-id');
+
+
+            if ($networkId) {
+                $episodeViewing->setNetworkId($networkId);
+            }
+            if (strlen($networkType)) {
+                $episodeViewing->setNetworkType($networkType);
+            }
+            if (strlen($deviceType)) {
+                $episodeViewing->setDeviceType($deviceType);
+            }
+            $episodeViewing->setViewedAt(new DateTimeImmutable());
+        }
+        else {
+            $episodeViewing->setViewedAt(null);
+            $episodeViewing->setDeviceType(null);
+            $episodeViewing->setNetworkType(null);
+            $episodeViewing->setNetworkId(null);
+        }
+        if (!$episodeViewing->getAirDate()) {
+            $episodeTmdb = json_decode($tmdbService->getTvEpisode($serieId, $season, $episode, $request->getLocale()), true);
+            $episodeViewing->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
+        }
+        $this->episodeViewingRepository->save($episodeViewing, true);
+        /* ----fin---- entity based viewing ----fin---- */
+
         $episode = $newValue ? $episode : $episode - 1;
 
         $tv = json_decode($tmdbService->getTv($serieId, $request->getLocale()), true);
         $seasons = $tv['seasons'];
         $noSpecialEpisodes = $seasons[0]['season_number'] == 1 ? 1 : 0;
         // // dump($seasons, $noSpecialEpisodes);
-        $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
         $theViewing = $viewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]);
         $viewings = $theViewing->getViewing();
 
@@ -1094,6 +1132,18 @@ class SerieController extends AbstractController
             'viewedEpisodes' => $viewed,
             'episodeText' => $translator->trans($viewed > 1 ? "viewed episodes" : "viewed episode"),
         ]);
+    }
+
+    public function getEpisodeViewing($user, $serie, $season, $episode): EpisodeViewing
+    {
+        /** @var SerieViewing $serieViewing */
+        $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
+        /** @var SeasonViewing $seasonViewing */
+        $seasonViewing = $this->seasonViewingRepository->findOneBy(['serie' => $serieViewing, 'seasonNumber' => $season]);
+        /** @var EpisodeViewing $episodeViewing */
+        $episodeViewing = $this->episodeViewingRepository->findOneBy(['season' => $seasonViewing, 'episodeNumber' => $episode]);
+
+        return $episodeViewing;
     }
 
     /**
