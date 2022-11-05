@@ -278,6 +278,7 @@
             .tags {
                 @include flex-row(center, flex-end);
                 flex-wrap: wrap;
+                margin: 1em 0;
 
                 .add-tag {
                     position: relative;
@@ -355,9 +356,8 @@
         }
 
         .channel {
-            align-items: baseline;
-            display: flex;
-            flex-direction: row;
+            @include flex-row(center, start);
+            margin-top: 1em;
 
             .title {
                 font-weight: 400;
