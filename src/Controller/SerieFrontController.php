@@ -136,7 +136,7 @@ class SerieFrontController extends AbstractController
                             'page' => $page
                         ],
                         'from' => $from,
-                        'serieIds' => $this->serieController->mySerieIds($serieRepository, $this->getUser()),
+                        'serieIds' => $this->serieController->mySerieIds($serieRepository, $user),
                         'imageConfig' => $imageConfiguration->getConfig()]);
                 }
 
@@ -150,7 +150,7 @@ class SerieFrontController extends AbstractController
                             'page' => $page
                         ],
                         'from' => $from,
-                        'serieIds' => $this->serieController->mySerieIds($serieRepository, $this->getUser()),
+                        'serieIds' => $this->serieController->mySerieIds($serieRepository, $user),
                         'imageConfig' => $imageConfiguration->getConfig()]);
                 }
 

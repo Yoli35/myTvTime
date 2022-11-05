@@ -420,11 +420,18 @@
         </div>
         {{ include('blocks/pageFooter.html.twig') }}
     </div>
-    <dialog class="viewed-update" open>
+    <dialog class="viewed-update">
         <div class="loading">
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
+        </div>
+    </dialog>
+    <dialog class="viewed-update-db-world">
+        <div class="loading">
+            <div class="world"><i class="fa-solid fa-globe"></i></div>
+            <div class="arrows"><i class="fa-solid fa-arrow-up"></i></div>
+            <div class="db"><i class="fa-solid fa-database"></i></div>
         </div>
     </dialog>
     <dialog class="viewed-episode">
@@ -695,7 +702,7 @@
                 const e_viewed = episodeClicked.viewed;
                 const e_number = episodeClicked.episodeNumber;
                 const s_number = episodeClicked.seasonNumber;
-                const update = document.querySelector(".viewed-update");
+                const update = document.querySelector(".viewed-update-db-world");
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
@@ -706,12 +713,13 @@
                     blocks.forEach(block => {
                         console.log({block});
                         const details = document.querySelector(".details[data-season-number=\"" + block['season'] + "\"]");
-                        const oldViewingDiv = details.querySelector(".viewing").parentNode;
-                        const newViewingDiv = document.createElement("div");
-                        const mouseDetector = details.querySelector(".mouse-detector");
-                        newViewingDiv.innerHTML = block.view.content;
-                        details.removeChild(oldViewingDiv);
-                        details.insertBefore(newViewingDiv, mouseDetector);
+                        if (details) {
+                            const oldViewingDiv = details.querySelector(".viewing").parentNode;
+                            const newViewingDiv = document.createElement("div");
+                            newViewingDiv.innerHTML = block.view.content;
+                            details.insertBefore(newViewingDiv, oldViewingDiv);
+                            details.removeChild(oldViewingDiv);
+                        }
                     })
                     updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
                     episodeAddEvent();

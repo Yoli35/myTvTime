@@ -739,8 +739,18 @@ h4 {
     background-color: var(--gradiant-grey-30-alpha-50);
     border-radius: 1em;
     color: var(--gradiant-grey-80);
+    height: 3em;
     margin: 1em 0;
-    padding: 1em;
+
+    .logo {
+        @include flex-row(center, end);
+        background-image: url("../../public/apple-touch-icon.png");
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: 2em 2em;
+        height: 2em;
+        padding-left: 3em;
+    }
 
     .powered {
         background-image: url("../images/the-movie-db.svg");

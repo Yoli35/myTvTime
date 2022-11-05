@@ -2,7 +2,7 @@ $transition-delay: .5s;
 $fa-font-path: "../webfonts";
 
 :root {
-    --mtt-body-bg: var(--gradiant-grey-90);
+    --mtt-body-bg: var(--gradiant-grey-95);
     --mtt-body-bg-gradiant: var(--gradiant-grey-40);
     --mtt-body-color: var(--gradiant-grey-20);
 
@@ -63,6 +63,7 @@ $fa-font-path: "../webfonts";
     --gradiant-ardoise-0: hsl(212, 43%, 0%);
 
     --gradiant-grey-100: hsl(0, 0%, 100%);
+    --gradiant-grey-95: hsl(0, 0%, 95%);
     --gradiant-grey-90: hsl(0, 0%, 90%);
     --gradiant-grey-90-alpha-10: hsla(0, 0%, 90%, .1);
     --gradiant-grey-90-alpha-90: hsla(0, 0%, 90%, .95);
@@ -93,6 +94,7 @@ $fa-font-path: "../webfonts";
     --gradiant-purple-50: hsl(306, 50%, 50%);
     --gradiant-purple-40: hsl(306, 50%, 40%);
     --gradiant-purple-30: hsl(306, 50%, 30%);
+    --gradiant-purple-30-alpha-50: hsl(306, 50%, 30%, .5);
     --gradiant-purple-20: hsl(306, 50%, 20%);
     --gradiant-purple-10: hsl(306, 50%, 10%);
     --gradiant-purple-0: hsl(306, 50%, 0%);
@@ -293,10 +295,11 @@ $fa-font-path: "../webfonts";
     width: $size;
 }
 
-@mixin human-profile($color: var(--gradiant-grey-20-alpha-50)) {
+@mixin human-profile($bg-color: var(--gradiant-grey-20-alpha-50), $color: var(--gradiant-grey-80)) {
     @include flex-col(center, flex-start);
-    background-color: $color;
+    background-color: $bg-color;
     border-radius: .5rem;
+    color: $color;
     margin: .25em;
     min-width: 8em;
     overflow: hidden;
@@ -515,7 +518,7 @@ $fa-font-path: "../webfonts";
     }
 }
 
-@mixin dialog {
+@mixin dialog($backdropColor: var(--gradiant-grey-30-alpha-50)) {
     background-color: var(--gradiant-grey-10-alpha-90);
     height: 100vh;
     max-height: 100vh;
@@ -529,6 +532,6 @@ $fa-font-path: "../webfonts";
     }
 
     &::backdrop {
-        background: var(--gradiant-grey-30-alpha-50);
+        background: $backdropColor;
     }
 }

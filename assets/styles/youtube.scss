@@ -102,7 +102,7 @@
 
 .yt-videos {
     font-weight: 400;
-    margin: 1em;
+    margin: 1em 0;
 
     .getter {
         @include flex-col();
@@ -114,6 +114,7 @@
 
         h2 {
             font-weight: 100;
+            margin: 0 0 1em 0;
             text-align: center;
         }
 
@@ -127,7 +128,7 @@
 
     .parameters {
         @include flex-col();
-        background-color: var(--gradiant-grey-80);
+        background-color: var(--gradiant-grey-90);
         border-radius: .5em;
         box-shadow: 0 0 1em rgba(0, 0, 0, .5);
         margin: 0 auto;
@@ -151,13 +152,17 @@
 
             .input {
                 @include flex-row();
-                background-color: var(--gradiant-grey-30);
+                background-color: var(--gradiant-grey-80);
                 border-radius: .5em;
                 padding: .5em;
 
                 .link {
                     label {
                         margin-left: 0;
+
+                        input {
+                            margin-left: .5em;
+                        }
                     }
                 }
 
@@ -451,6 +456,7 @@
                     @include flex-row();
                     background-color: var(--gradiant-purple-30);
                     border-radius: .25em;
+                    color: var(--gradiant-grey-90);
                     font-weight: 100;
                     padding: .25em .5em;
 
@@ -637,7 +643,7 @@
 
     .yt-videos {
         .parameters {
-            width: 90%;
+            //width: 90%;
 
             .content {
                 flex-direction: row;
@@ -680,7 +686,7 @@
 
     .yt-videos {
         .parameters {
-            width: 80%;
+            //width: 80%;
 
             .content {
                 flex-direction: row;
@@ -707,7 +713,7 @@
 
         .banner {
             height: 320px;
-            width: 80%;
+            //width: 80%;
 
             .nav-breadcrumb {
                 bottom: 0;
@@ -718,7 +724,7 @@
 
     .yt-videos {
         .parameters {
-            width: 80%;
+            //width: 80%;
 
             .content {
                 flex-direction: row;
@@ -756,6 +762,12 @@
 
         .parameters {
             background-color: var(--gradiant-grey-20);
+
+            .content {
+                .input {
+                    background-color: var(--gradiant-grey-30);
+                }
+            }
 
             span {
                 color: var(--gradiant-grey-60);
