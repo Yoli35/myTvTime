@@ -22,7 +22,10 @@
             </div>
             <div class="details">
                 <div class="title-tags">
-                    <div class="title">{{ video.title }}</div>
+                    <div class="title-trash">
+                        <div class="title">{{ video.title }}</div>
+                        <div class="trash" data-dialog="delete-video"><i class="fa-solid fa-trash"></i></div>
+                    </div>
                     {#                  {{ component('youtube_video_tags', {class: 'tags', 'id': user.id, 'video': video.id}) }} #}
                     <div class="tags">
                         <div class="add-tag">
@@ -30,8 +33,8 @@
                                 <input id="new-tag" type="search" name="tag_query" list="other-tags" autocomplete="off" autofocus>
                                 <datalist id="other-tags">
                                     {% for tag in other_tags %}
-                                        <option value="{{ tag }}">
-                                    {% endfor %}
+                                    <option value="{{ tag }}">
+                                        {% endfor %}
                                 </datalist>
                             </label>
                             <div class="add"><i class="fa-solid fa-circle-plus"></i></div>
@@ -64,14 +67,32 @@
         {{ include('blocks/pageFooter.html.twig') }}
 
     </div>
+    <dialog class="delete-video">
+        <div class="overlay">
+            <div class="header">
+                {{ 'Delete this video'|trans }}
+                <button value="nope" class="close"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+            <div class="content">
+                {{ 'Do you really want to delete this video?'|trans }}
+            </div>
+            <div class="footer">
+                <button value="nope" class="btn btn-secondary delete-video-cancel">{{ 'Cancel'|trans }}</button>
+                <button value="yass" class="btn btn-secondary delete-video-done">{{ 'Delete'|trans }}</button>
+            </div>
+        </div>
+    </dialog>
 {% endblock %}
 {% block morejs %}
     <script>
+        const _app_youtube = "{{ path('app_youtube') }}";
+        const _yt_video_delete = "{{ path('app_youtube_video_delete', {id: video.id}) }}";
         const _yt_video_add_tag = "{{ path('app_youtube_video_add_tag', {id: video.id, tag: 'tag'}) }}";
         const _yt_video_remove_tag = "{{ path('app_youtube_video_remove_tag', {id: video.id, tag: 1}) }}";
 
         window.addEventListener("DOMContentLoaded", () => {
 
+            const trash = document.querySelector(".trash");
             const tags = document.querySelector(".tags");
             const input = document.querySelector("#new-tag");
             const tagList = document.querySelector("#other-tags");
@@ -79,10 +100,11 @@
             const videoTags = document.querySelectorAll(".tag");
             const delTags = document.querySelectorAll(".close");
 
+            initDeleteDialog(document.querySelector(".delete-video"))
+            trash.addEventListener("click", openDialog);
+
             addTag.addEventListener("click", addNewTag);
             input.addEventListener("keyup", ({key}) => {
-                // console.log(key);
-                // console.log({key});
                 if (key === "Enter") {
                     addNewTag();
                 }
@@ -94,6 +116,55 @@
                 });
             });
 
+            function initDeleteDialog(dialog) {
+
+                currentDialog = dialog;
+
+                dialog.querySelector(".delete-video-done").addEventListener("click", () => {
+                    closeDialog(dialog, true);
+                })
+                dialog.querySelector(".delete-video-cancel").addEventListener("click", () => {
+                    closeDialog(dialog, false);
+                })
+                dialog.querySelector(".close").addEventListener('click', function () {
+                    closeDialog(dialog, false);
+                });
+            }
+
+            function openDialog(evt) {
+                const dialog = document.querySelector("."+evt.currentTarget.getAttribute("data-dialog"));
+                if (typeof dialog.showModal === "function") {
+                    dialog.showModal();
+                    setTimeout(() => {dialog.classList.add("show")}, 0);
+                } else {
+                    console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
+                    /*dialog.setAttribute("open");
+                    let offset = document.querySelector("html").scrollTop;
+                    dialog.setAttribute("style", "translate: 0 " + offset + "px;");
+                    dialog.classList.remove("d-none");
+                    dialog.classList.add("d-block");*/
+                }
+            }
+
+            function closeDialog(dialog, lets_delete) {
+                dialog.classList.remove("show");
+                setTimeout(() => {dialog.close()}, 300);
+                if (lets_delete) {
+                    deleteVideo();
+                }
+            }
+
+            function deleteVideo() {
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    const response = JSON.parse(this.response);
+                    console.log({response});
+                    // window.location.href = _app_youtube;
+                    history.back();
+                }
+                xhr.open("GET", _yt_video_delete);
+                xhr.send();
+            }
             function addNewTag() {
                 const newTag = input.value;
 
@@ -117,8 +188,7 @@
                         newTagButton.appendChild(closeButton);
                         if (videoTags.length) {
                             tags.insertBefore(newTagButton, videoTags[0]);
-                        }
-                        else {
+                        } else {
                             tags.appendChild(newTagButton);
                         }
                         closeButton.addEventListener("click", () => {
@@ -129,7 +199,7 @@
                                 tagList.removeChild(tagList.lastElementChild);
                             }
                             let newTagListItems = response['other_tags'];
-                            for (let i= 0; i< newTagListItems.length; i++) {
+                            for (let i = 0; i < newTagListItems.length; i++) {
                                 let option = document.createElement("option");
                                 option.setAttribute("value", newTagListItems[i]);
                                 tagList.appendChild(option);
@@ -158,7 +228,7 @@
         });
 
         Object.defineProperty(String.prototype, 'capitalize', {
-            value: function() {
+            value: function () {
                 return this.charAt(0).toUpperCase() + this.slice(1);
             },
             enumerable: false

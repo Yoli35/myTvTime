@@ -6,13 +6,50 @@
 
 {% block body %}
     {{ include('blocks/pageHeader.html.twig') }}
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                max-width: 720px;
+            }
+        }
+
+        @media (min-width: 1016px) {
+            .container {
+                max-width: 1016px;
+            }
+        }
+
+        @media (min-width: 1352px) {
+            .container {
+                max-width: 1352px;
+            }
+        }
+
+        @media (min-width: 1688px) {
+            .container {
+                max-width: 1688px;
+            }
+        }
+
+        @media (min-width: 2024px) {
+            .container {
+                max-width: 2024px;
+            }
+        }
+
+        @media (min-width: 2360px) {
+            .container {
+                max-width: 2360px;
+            }
+        }
+    </style>
     <div class="container">
         <div class="youtube-search">
             <div class="header">
                 <h1>{{ 'Youtube video search'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
-            {{ include('blocks/nav.html.twig', {thisPage: 'Youtube video search'}) }}
+            {{ include('blocks/nav.html.twig', {thisPage: 'Youtube video search'|trans}) }}
             <div class="search">
                 <div class="group">
                     <div class="field">

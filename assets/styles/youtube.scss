@@ -274,10 +274,20 @@
         .title-tags {
             @include flex-col(flex-start, flex-start);
 
-            .title {
-                font-size: 1.5em;
-                font-weight: 400;
-                padding-top: 1em;
+            .title-trash {
+                @include flex-100();
+
+                .title {
+                    font-size: 1.5em;
+                    font-weight: 400;
+                    padding-top: 1em;
+                }
+
+                .trash {
+                    cursor: pointer;
+                    font-size: 1.5em;
+                    margin-left: auto;
+                }
             }
 
             .tags {
@@ -374,6 +384,10 @@
             }
         }
     }
+}
+
+.delete-video {
+    @include dialog2(30em);
 }
 
 .youtube-search {

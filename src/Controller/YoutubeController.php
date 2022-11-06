@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\YoutubeVideo;
 use App\Entity\YoutubeVideoTag;
+use App\Repository\UserRepository;
 use App\Repository\YoutubeVideoRepository;
 use App\Repository\YoutubeVideoTagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,6 +38,8 @@ class YoutubeController extends AbstractController
     #[Route('/youtube/more', name: 'app_youtube_more')]
     public function moreVideos(Request $request, YoutubeVideoRepository $youtubeVideoRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /** @var YoutubeVideo [] $vids */
         $vids = $youtubeVideoRepository->findAllByDate($request->query->get('id'), $request->query->get('offset'));
         $videos = [];
@@ -74,10 +78,16 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
     public function video(YoutubeVideoTagRepository $repository, YoutubeVideo $youtubeVideo): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $tags = $repository->findAllByLabel();
         $description = nl2br($youtubeVideo->getDescription());
-        $description = preg_replace('@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i', '$1<a href="$2" target="_blank" rel="noopener">$2</a>', $description);
-        $description = preg_replace('#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#', '<a href="mailto:$1">$1</a>', $description);
+        $description = preg_replace(
+            ['@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i',
+                '#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#'],
+            ['$1<a href="$2" target="_blank" rel="noopener">$2</a>',
+                '<a href="mailto:$1">$1</a>'],
+            $description);
 
         return $this->render('youtube/video.html.twig', [
                 'video' => $youtubeVideo,
@@ -90,6 +100,8 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/search', name: 'app_youtube_search', requirements: ['_locale' => 'fr|en|de|es'])]
     public function search(YoutubeVideoTagRepository $tagRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /** @var User $user */
         $user = $this->getUser();
         $allTags = $tagRepository->findAllByLabel();
@@ -102,6 +114,8 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video_by_tag', name: 'app_youtube_video_by_tag', requirements: ['_locale' => 'fr|en|de|es'])]
     public function searchVideoByTag(Request $request, YoutubeVideoRepository $videoRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /** @var User $user */
         $user = $this->getUser();
         $list = $request->query->get("tags");
@@ -130,6 +144,8 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/add/tag/{id}/{tag}', name: 'app_youtube_video_add_tag', requirements: ['_locale' => 'fr|en|de|es'])]
     public function addTag($tag, YoutubeVideo $youtubeVideo, YoutubeVideoTagRepository $tagRepository, YoutubeVideoRepository $videoRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $existingTags = $tagRepository->findAll();
         $newTagId = -1;
         $fromList = false; // Was the tag in the list <datalist>
@@ -169,6 +185,8 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/remove/tag/{id}/{tag}', name: 'app_youtube_video_remove_tag', requirements: ['_locale' => 'fr|en|de|es'])]
     public function removeTag($tag, YoutubeVideo $youtubeVideo, YoutubeVideoRepository $videoRepository, YoutubeVideoTagRepository $tagRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $videoTag = $tagRepository->find($tag);
         $youtubeVideo->removeTag($videoTag);
         $videoRepository->add($youtubeVideo, true);
@@ -185,6 +203,19 @@ class YoutubeController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/youtube/video/delete/{id}', name: 'app_youtube_video_delete', requirements: ['_locale'=> 'fr|en|de|es'])]
+    public function removeVideo($id, UserRepository $userRepository, YoutubeVideoRepository $youtubeVideoRepository): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $video = $youtubeVideoRepository->find($id);
+        $user->removeYoutubeVideo($video);
+        $userRepository->save($user, true);
+
+        return $this->json([$video->getTitle()]);
+    }
 //    private function urlsToLinks($text): array|string|null
 //    {
 //        return preg_replace(

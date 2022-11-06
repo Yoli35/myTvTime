@@ -110,10 +110,14 @@ class YoutubeAddVideoComponent
         $thisLink = $this->link;
         $this->justAdded = 0;
 
-        if (str_contains($thisLink, 'https://www.youtube.com/watch?v=') ||
-            str_contains($thisLink, 'https://www.youtube.com/shorts/') ||
-            str_contains($thisLink, 'https://youtu.be/')) {
-            $thisLink = substr($thisLink, -11);
+        if (str_contains($thisLink, "shorts")) {
+            $thisLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $thisLink);
+        }
+        elseif (str_contains($thisLink, "youtu.be")) {
+            $thisLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $thisLink);
+        }
+        elseif (str_contains($thisLink, 'watch')) {
+            $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=(.+)/", "$1", $thisLink);
         }
 
         if (strlen($thisLink) == 11) {
