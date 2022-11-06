@@ -169,6 +169,20 @@ $fa-font-path: "../webfonts";
                 padding: 0 .5em;
             }
         }
+
+        .debug {
+            @include flex-row();
+            background-color: #0000007f;
+            border: 2px dashed;
+            border-radius: 1.5em;
+            color: #fff;
+            font-weight: 600;
+            height: 3em;
+            position: absolute;
+            right: 1em;
+            top: 1em;
+            width: 20em;
+        }
     }
 }
 
