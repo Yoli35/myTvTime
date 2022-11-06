@@ -212,6 +212,7 @@
 
         window.addEventListener("DOMContentLoaded", () => {
 
+            checkHeight();
             initSettings();
             initPreview();
             newSerie();
@@ -220,6 +221,36 @@
 
             autocomplete(document.querySelector("#search-name"), createList());
         })
+
+        function checkHeight() {
+            const container = document.querySelector(".container");
+            if (container.clientHeight === 496) {
+                container.classList.add("d-none");
+                const body = document.querySelector("body");
+                body.classList.add("p-relative");
+                const reload = document.createElement("div");
+                reload.classList.add("reload");
+                const circle = document.createElement("div");
+                circle.classList.add("circle");
+                reload.appendChild(circle);
+                body.appendChild(reload);
+                setTimeout(() => {
+                    circle.classList.add("full")
+                }, 0);
+                setTimeout(() => {
+                    const inside = document.createElement("div");
+                    inside.classList.add("inside");
+                    circle.appendChild(inside);
+                    setTimeout(() => {
+                        inside.classList.add("full")
+                    }, 200);
+                })
+                setTimeout(() => {
+                    body.removeChild(reload)
+                }, 1200);
+                window.location.reload();
+            }
+        }
 
         function initHeader() {
             const header = document.querySelector(".header");

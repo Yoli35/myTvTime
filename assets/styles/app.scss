@@ -42,6 +42,40 @@ body {
     margin: 0;
 }
 
+.reload {
+    @include flex-100();
+    inset: 0;
+    position: absolute;
+
+    .circle {
+        @include flex-row();
+        flex: 1;
+        background-color: var(--mtt-body-color);
+        border-radius: 50%;
+        height: 1em;
+        transition: height 1s ease-out, width 1s ease-out;
+        width: 1em;
+
+        &.full {
+            height: calc(100vmax * 1.5);
+            width: calc(100vmax * 1.5);
+        }
+
+        .inside {
+            background-color: var(--mtt-body-bg);
+            border-radius: 50%;
+            height: 1em;
+            transition: height 1s ease-out, width 1s ease-out;
+            width: 1em;
+
+            &.full {
+                height: calc(100vmax * 1.5);
+                width: calc(100vmax * 1.5);
+            }
+        }
+    }
+}
+
 main {
     flex: 1;
 }
@@ -56,6 +90,10 @@ main {
 
 .d-flex {
     display: flex;
+}
+
+.p-relative {
+    position: relative;
 }
 
 .w100 {
