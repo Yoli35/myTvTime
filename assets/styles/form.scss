@@ -105,9 +105,9 @@ input[type="email"] {
 @media (prefers-color-scheme: light) {
 
     .form-select {
-        background-color: var(--gradiant-grey-10);
-        border: 1px solid var(--gradiant-grey-50);
-        color: var(--gradiant-grey-90);
+        background-color: var(--gradiant-grey-80);
+        border: 1px solid var(--gradiant-grey-10);
+        color: var(--gradiant-grey-10);
     }
 
     .form-control {
@@ -131,7 +131,7 @@ input[type="email"] {
     }
 
     .btn-secondary {
-        background-color: var(--gradiant-grey-60);
+        background-color: var(--gradiant-grey-80);
         border-color: var(--gradiant-grey-50);
         color: var(--gradiant-grey-10);
 
@@ -142,7 +142,7 @@ input[type="email"] {
     }
 
     .btn-outline-secondary {
-        border-color: var(--gradiant-grey-50);
+        background-color: transparent;
         color: var(--gradiant-grey-10);
 
         &:hover {

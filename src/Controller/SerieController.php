@@ -491,7 +491,7 @@ class SerieController extends AbstractController
                 if ($viewing == null) {
                     $this->createViewing($user, $tv, $serie);
                 } else {
-                    $viewing->setViewing($this->updateViewing($tv, $viewing));
+//                    $viewing->setViewing($this->updateViewing($tv, $viewing));
                     $this->updateSerieViewing($tv, $viewing);
                     $this->serieViewingRepository->save($viewing, true);
                 }
@@ -528,36 +528,36 @@ class SerieController extends AbstractController
 
     }
 
-    public function createViewingTab($tv): array
-    {
-        $tab = [];
-        /*
-         * La saison 0 correspond aux épisodes spéciaux regroupés dans cette saison
-         */
-        if ($tv['seasons'][0]['season_number'] == 1) {
-            $tab[] = [
-                'season_number' => 0,
-                'season_completed' => false,
-                'air_date' => null,
-                'episode_count' => 0,
-                'episodes' => []
-            ];
-        }
-        foreach ($tv['seasons'] as $season) {
-            $ep = [];
-            for ($i = 1; $i <= $season['episode_count']; $i++) {
-                $ep[] = false;
-            }
-            $tab[] = [
-                'season_number' => $season['season_number'],
-                'season_completed' => false,
-                'air_date' => $season['air_date'],
-                'episode_count' => $season['episode_count'],
-                'episodes' => $ep
-            ];
-        }
-        return $tab;
-    }
+//    public function createViewingTab($tv): array
+//    {
+//        $tab = [];
+//        /*
+//         * La saison 0 correspond aux épisodes spéciaux regroupés dans cette saison
+//         */
+//        if ($tv['seasons'][0]['season_number'] == 1) {
+//            $tab[] = [
+//                'season_number' => 0,
+//                'season_completed' => false,
+//                'air_date' => null,
+//                'episode_count' => 0,
+//                'episodes' => []
+//            ];
+//        }
+//        foreach ($tv['seasons'] as $season) {
+//            $ep = [];
+//            for ($i = 1; $i <= $season['episode_count']; $i++) {
+//                $ep[] = false;
+//            }
+//            $tab[] = [
+//                'season_number' => $season['season_number'],
+//                'season_completed' => false,
+//                'air_date' => $season['air_date'],
+//                'episode_count' => $season['episode_count'],
+//                'episodes' => $ep
+//            ];
+//        }
+//        return $tab;
+//    }
 
     public function updateSeasonsAndEpisodes($tv, $serie, $serieRepository): array|null
     {
@@ -630,120 +630,120 @@ class SerieController extends AbstractController
         return $seasonViews;
     }
 
-    public function updateViewing($tv, SerieViewing $theViewing): array
-    {
-        $viewings = $theViewing->getViewing();
-        $seasons = $tv['seasons'];
-        $modified = false;
-
-        $seasonViews = $this->getSeasonViews($viewings);
-        dump($seasonViews);
-
-        /*
-         * Épisodes spéciaux : saison 0
-         *
-         * Si la saison comporte des épisodes spéciaux et que cette info est déjà dans la base (viewing)
-         * on met à jour viewing
-         */
-        $specialEpisodes = $seasons[0]['season_number'] == 0;
-        if ($specialEpisodes) {
-            $season = $seasons[0];
-
-            if ($viewings[0]['season_number'] == 0) {
-                /*
-                 * Le nombre d'épisodes spéciaux a augmenté ?
-                 */
-                if ($season['episode_count'] != $viewings[0]['episode_count']) {
-                    $viewings[0]['episode_count'] = $season['episode_count'];
-                    $viewings[0]['episodes'] = array_pad($viewings[0]['episodes'], $season['episode_count'], false);
-                    $viewings[0]['season_completed'] = false;
-                    $modified = true;
-                }
-                /*
-                 * L'info air_date est présente ?
-                 */
-                if (!array_key_exists('air_date', $viewings[0])) {
-                    $viewings[0]['air_date'] = $season['air_date'];
-                    $modified = true;
-                }
-            }
-        }
-
-        /*
-         * Si viewings ne comportait pas de saison 0
-         */
-        if ($viewings[0]['season_number'] != 0) {
-            $firstItem = [
-                'season_number' => 0,
-                'season_completed' => false,
-                'air_date' => null,
-                'episode_count' => 0,
-                'episodes' => []
-            ];
-            array_unshift($viewings, $firstItem);
-            $modified = true;
-        } else {
-            if (!array_key_exists('air_date', $viewings[0])) {
-                $viewings[0]['air_date'] = $specialEpisodes ? $seasons[0]['air_date'] : null;
-                $modified = true;
-            }
-        }
-
-        /*
-         * Les saisons suivantes. 'number_of_seasons' correspond au nombre de saisons, épisodes spéciaux exclus
-         */
-        $viewingCount = count($viewings);
-        /*
-         * Saison(s) supplémentaire(s)
-         */
-        if ($viewingCount < $tv['number_of_seasons'] + 1) {
-            // Dernière saison enregistrée
-            $lastViewingSeason = $viewingCount - 1;
-
-            for ($i = $lastViewingSeason + 1; $i <= $tv['number_of_seasons']; $i++) {
-                $season = $tv['seasons'][$i - 1];
-                $newItem = [
-                    'season_number' => $season['season_number'],
-                    'season_completed' => false,
-                    'air_date' => $season['air_date'],
-                    'episode_count' => $season['episode_count'],
-                    'episodes' => array_fill(0, $season['episode_count'], false)
-                ];
-                $viewings[] = $newItem;
-                $modified = true;
-            }
-        } else {
-            /*
-             * Nouveaux épisodes pour la dernière saison ?
-             */
-            $lastSeasonEpisodeCount = $tv['seasons'][$tv['number_of_seasons'] - 1]['episode_count'];
-            if ($viewings[$viewingCount - 1]['episode_count'] < $lastSeasonEpisodeCount) {
-                $viewings[$viewingCount - 1]['episode_count'] = $lastSeasonEpisodeCount;
-                $viewings[$viewingCount - 1]['episodes'] = array_pad($viewings[$viewingCount - 1]['episodes'], $lastSeasonEpisodeCount, false);
-                $modified = true;
-            }
-        }
-
-        $viewingCount = count($viewings);
-        for ($i = 1; $i < $viewingCount; $i++) {
-            if (!array_key_exists('air_date', $viewings[$i])) {
-                $viewings[$i]['air_date'] = $seasons[$i - $specialEpisodes ? 0 : 1]['air_date'];
-                $modified = true;
-            }
-        }
-        $viewed = $this->getViewedEpisodes($theViewing->getViewing());
-        if ($viewed !== $theViewing->getViewedEpisodes()) {
-            $theViewing->setViewedEpisodes($viewed);
-            $modified = true;
-        }
-
-        if ($modified) {
-            $theViewing->setViewing($viewings);
-            $this->serieViewingRepository->save($theViewing, true);
-        }
-
-        return $viewings;
-    }
+//    public function updateViewing($tv, SerieViewing $theViewing): array
+//    {
+//        $viewings = $theViewing->getViewing();
+//        $seasons = $tv['seasons'];
+//        $modified = false;
+//
+//        $seasonViews = $this->getSeasonViews($viewings);
+//        dump($seasonViews);
+//
+//        /*
+//         * Épisodes spéciaux : saison 0
+//         *
+//         * Si la saison comporte des épisodes spéciaux et que cette info est déjà dans la base (viewing)
+//         * on met à jour viewing
+//         */
+//        $specialEpisodes = $seasons[0]['season_number'] == 0;
+//        if ($specialEpisodes) {
+//            $season = $seasons[0];
+//
+//            if ($viewings[0]['season_number'] == 0) {
+//                /*
+//                 * Le nombre d'épisodes spéciaux a augmenté ?
+//                 */
+//                if ($season['episode_count'] != $viewings[0]['episode_count']) {
+//                    $viewings[0]['episode_count'] = $season['episode_count'];
+//                    $viewings[0]['episodes'] = array_pad($viewings[0]['episodes'], $season['episode_count'], false);
+//                    $viewings[0]['season_completed'] = false;
+//                    $modified = true;
+//                }
+//                /*
+//                 * L'info air_date est présente ?
+//                 */
+//                if (!array_key_exists('air_date', $viewings[0])) {
+//                    $viewings[0]['air_date'] = $season['air_date'];
+//                    $modified = true;
+//                }
+//            }
+//        }
+//
+//        /*
+//         * Si viewings ne comportait pas de saison 0
+//         */
+//        if ($viewings[0]['season_number'] != 0) {
+//            $firstItem = [
+//                'season_number' => 0,
+//                'season_completed' => false,
+//                'air_date' => null,
+//                'episode_count' => 0,
+//                'episodes' => []
+//            ];
+//            array_unshift($viewings, $firstItem);
+//            $modified = true;
+//        } else {
+//            if (!array_key_exists('air_date', $viewings[0])) {
+//                $viewings[0]['air_date'] = $specialEpisodes ? $seasons[0]['air_date'] : null;
+//                $modified = true;
+//            }
+//        }
+//
+//        /*
+//         * Les saisons suivantes. 'number_of_seasons' correspond au nombre de saisons, épisodes spéciaux exclus
+//         */
+//        $viewingCount = count($viewings);
+//        /*
+//         * Saison(s) supplémentaire(s)
+//         */
+//        if ($viewingCount < $tv['number_of_seasons'] + 1) {
+//            // Dernière saison enregistrée
+//            $lastViewingSeason = $viewingCount - 1;
+//
+//            for ($i = $lastViewingSeason + 1; $i <= $tv['number_of_seasons']; $i++) {
+//                $season = $tv['seasons'][$i - 1];
+//                $newItem = [
+//                    'season_number' => $season['season_number'],
+//                    'season_completed' => false,
+//                    'air_date' => $season['air_date'],
+//                    'episode_count' => $season['episode_count'],
+//                    'episodes' => array_fill(0, $season['episode_count'], false)
+//                ];
+//                $viewings[] = $newItem;
+//                $modified = true;
+//            }
+//        } else {
+//            /*
+//             * Nouveaux épisodes pour la dernière saison ?
+//             */
+//            $lastSeasonEpisodeCount = $tv['seasons'][$tv['number_of_seasons'] - 1]['episode_count'];
+//            if ($viewings[$viewingCount - 1]['episode_count'] < $lastSeasonEpisodeCount) {
+//                $viewings[$viewingCount - 1]['episode_count'] = $lastSeasonEpisodeCount;
+//                $viewings[$viewingCount - 1]['episodes'] = array_pad($viewings[$viewingCount - 1]['episodes'], $lastSeasonEpisodeCount, false);
+//                $modified = true;
+//            }
+//        }
+//
+//        $viewingCount = count($viewings);
+//        for ($i = 1; $i < $viewingCount; $i++) {
+//            if (!array_key_exists('air_date', $viewings[$i])) {
+//                $viewings[$i]['air_date'] = $seasons[$i - $specialEpisodes ? 0 : 1]['air_date'];
+//                $modified = true;
+//            }
+//        }
+//        $viewed = $this->getViewedEpisodes($theViewing->getViewing());
+//        if ($viewed !== $theViewing->getViewedEpisodes()) {
+//            $theViewing->setViewedEpisodes($viewed);
+//            $modified = true;
+//        }
+//
+//        if ($modified) {
+//            $theViewing->setViewing($viewings);
+//            $this->serieViewingRepository->save($theViewing, true);
+//        }
+//
+//        return $viewings;
+//    }
 
     public function updateSerieViewing($tv, SerieViewing $theViewing)
     {

@@ -89,34 +89,32 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="appendModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content position-relative">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ 'Append'|trans }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <label for="json" class="form-label">{{ 'Select a Movie List File (.json)'|trans }}</label>
-                    <input type="file" id="json" name="json" accept="application/json" class="form-control form-control-sm">
-                    <div class="append-infos"></div>
-                    <div class="append-result"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
-                    <button id="append-add" type="button" class="btn btn-primary" disabled>{{ 'Add'|trans }} <i class="bi bi-download"></i></button>
-                </div>
-                <div class="append-progress">
-                    <div class="progress">
-                        <div class="label">{{ 'Progress'|trans }} :</div>
-                        <div class="bar">
-                            <div class="value"></div>
-                        </div>
+    <dialog class="append-modal fade" id="appendModal" tabindex="-1">
+        <div class="movies-dialog">
+            <div class="header">
+                {{ 'Append'|trans }}
+                <button value="nope" class="close"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+            <div class="content">
+                <label for="json" class="form-label">{{ 'Select a Movie List File (.json)'|trans }}</label>
+                <input type="file" id="json" name="json" accept="application/json" class="form-control form-control-sm">
+                <div class="append-infos"></div>
+                <div class="append-result"></div>
+            </div>
+            <div class="footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
+                <button id="append-add" type="button" class="btn btn-primary" disabled>{{ 'Add'|trans }} <i class="bi bi-download"></i></button>
+            </div>
+            <div class="append-progress">
+                <div class="progress">
+                    <div class="label">{{ 'Progress'|trans }} :</div>
+                    <div class="bar">
+                        <div class="value"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </dialog>
 {% endblock %}
 {% block morejs %}
     <script src="/js/movie.js"></script>

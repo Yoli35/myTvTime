@@ -3,18 +3,11 @@
     {% if route == 'app_home' %}
         myTvTime::{{ 'Movies'|trans }}::{{ 'Page'|trans }} {{ pages.page }}
     {% endif %}
-{#    {% if route == 'app_home_tv' %}#}
-{#        myTvTime::{{ 'Tv Shows'|trans }}::{{ 'Page'|trans }} {{ pages.page }}#}
-{#    {% endif %}#}
-{#    {% if route == 'app_home_series' %}#}
-{#        myTvTime::{{ 'Series'|trans }}::{{ 'Page'|trans }} {{ page }}#}
-{#    {% endif %}#}
 {% endblock %}
 
 {% block body %}
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
 
-{#    {% set discovers = route == 'app_home_series' ? discovers.shows:discovers.results %}#}
     {% set discovers = discovers.results %}
 
     <div class="container">
@@ -24,22 +17,6 @@
         {% if route == 'app_home' %}
             <div class="home-header bg{{ random(5) }}"></div>
         {% endif %}
-{#        <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">#}
-{#            <ol class="breadcrumb">#}
-{#                {% if route == 'app_home' %}#}
-{#                    <li class="breadcrumb-item active" aria-current="{{ 'Homepage'|trans }}">{{ 'Homepage'|trans }}</li>#}
-{#                {% else %}#}
-{#                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Homepage'|trans }}</a></li>#}
-{#                {% endif %}#}
-{#                {% if route == 'app_home_tv' %}#}
-{#                    <li class="breadcrumb-item active" aria-current="{{ 'Tv Shows'|trans }}">{{ 'Tv Shows'|trans }}</li>#}
-{#                {% endif %}#}
-{#                {% if route == 'app_home_series' %}#}
-{#                    <li class="breadcrumb-item active" aria-current="{{ 'Series'|trans }}">{{ 'Series'|trans }}</li>#}
-{#                {% endif %}#}
-{#                {{ include('blocks/user/breadcrumb.html.twig', {user: app.user}) }}#}
-{#            </ol>#}
-{#        </nav>#}
         {{ include('blocks/nav.html.twig', {thisPage: 'Home Page', user: app.user}) }}
 
         {% if route == 'app_home' %}

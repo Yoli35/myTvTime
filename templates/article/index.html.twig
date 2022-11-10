@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% set user = app.user %}
 {% block title %}myTvTime::{{ 'Blog'|trans }}{% endblock %}
 {% block morecss %}
 {% endblock %}
@@ -19,6 +19,9 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
                     {{ include('blocks/movie/bracket.html.twig') }}
+                    {% if user %}
+                        {{ include('blocks/user/breadcrumb.html.twig') }}
+                    {% endif %}
                     <li class="breadcrumb-item active">{{ 'Blog'|trans }}</li>
                     <li class="breadcrumb-item"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></li>
                 </ol>
@@ -53,6 +56,10 @@
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
+            setTimeout(() => {
+                document.querySelector(".header").setAttribute("style", "background-color: transparent");
+            }, 0);
+
         })
 
         function initHeader() {

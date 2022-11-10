@@ -1816,6 +1816,7 @@
 
                     .date {
                         @include flex-100(center, start);
+                        flex-wrap: wrap;
                         background-blend-mode: color;
 
                         .year {

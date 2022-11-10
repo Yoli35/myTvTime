@@ -63,15 +63,18 @@ class MovieController extends AbstractController
 
         $imageConfig = $imageConfiguration->getConfig();
 
+        $hasBeenSeen = $this->hasBeenSeen($id, $userMovieRepository);
         $collections = [];
         $movieCollectionIds = [];
-        if ($user) {
-            $collections = $collectionRepository->findBy(['user' => $user]);
-            $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
-            if ($userMovie) {
-                $movieCollections = $userMovie->getMovieCollections();
-                foreach ($movieCollections as $movieCollection) {
-                    $movieCollectionIds[] = $movieCollection->getId();
+        if ($hasBeenSeen) {
+            if ($user) {
+                $collections = $collectionRepository->findBy(['user' => $user]);
+                $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
+                if ($userMovie) {
+                    $movieCollections = $userMovie->getMovieCollections();
+                    foreach ($movieCollections as $movieCollection) {
+                        $movieCollectionIds[] = $movieCollection->getId();
+                    }
                 }
             }
         }
@@ -114,11 +117,12 @@ class MovieController extends AbstractController
         }
         // dump($movieDetail);
 
-        return $this->render('movie/index.html.twig', ['movie' => $movieDetail,
+        return $this->render('movie/index.html.twig', [
+            'movie' => $movieDetail,
             'recommendations' => $recommendations['results'],
             'dates' => $releaseDates,
             'watchProviders' => $watchProviders,
-            'hasBeenSeen' => $this->hasBeenSeen($id, $userMovieRepository),
+            'hasBeenSeen' => $hasBeenSeen,
             'cast' => $cast,
             'sortedCrew' => $sortedCrew,
             'collections' => $collections,

@@ -5,6 +5,7 @@
     position: fixed;
     right: 8em;
     top: 1em;
+    z-index: 1000;
 
     &.debug {
         border: 2px dashed var(--gradiant-grey-70);
@@ -318,7 +319,7 @@
 
                     .production {
                         @include flex-row(unset, unset);
-                        background-color: var(--gradiant-grey-30);
+                        background-color: var(--gradiant-grey-80);
                         border-radius: .5em;
                         font-size: .75em;
                         font-weight: 100;
