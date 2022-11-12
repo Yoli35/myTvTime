@@ -1144,7 +1144,7 @@
                                         .viewing {
                                             @include flex-row(center, start);
                                             flex-wrap: wrap;
-                                            overflow: scroll;
+                                            overflow: hidden;
                                             position: relative;
 
                                             .ep {

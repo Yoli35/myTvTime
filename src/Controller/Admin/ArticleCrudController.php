@@ -56,8 +56,8 @@ class ArticleCrudController extends AbstractCrudController
                 ->setUploadDir('public/images/articles/banners')
                 ->setUploadedFileNamePattern('[uuid].[extension]')
                 ->setColumns(6);
-            yield AssociationField::new('articleImages');
         }
+        yield AssociationField::new('articleImages');
     }
 
     public function createEntity(string $entityFqcn): Article

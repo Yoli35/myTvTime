@@ -191,7 +191,7 @@ main {
 
 @media (min-width: 576px) {
     .container {
-        max-width: 540px;
+        //max-width: 540px;
         padding-left: 0.75rem;
         padding-right: 0.75rem;
     }
@@ -199,13 +199,15 @@ main {
 
 @media (min-width: 768px) {
     .container {
-        max-width: 720px;
+        //max-width: unset;
     }
 }
 
 @media (min-width: 1024px) {
     .container {
         max-width: 1024px;
+        padding-left: unset;
+        padding-right: unset;
     }
 }
 
@@ -1019,7 +1021,6 @@ h4 {
     @include flex-col();
     font-size: .75em;
     font-weight: 100;
-    padding: 4px;
     position: relative;
     width: 100%;
 
@@ -1154,6 +1155,9 @@ h4 {
 }
 
 @media (min-width: 992px) { /* 960 */
+    .content {
+        justify-content: space-between;
+    }
     //.home-discover {
     //    width: 15em;
     //}
