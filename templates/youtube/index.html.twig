@@ -44,18 +44,18 @@
     </style>
     <div class="container">
 
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
         <div class="yt-header">
             <div class="banner"></div>
         </div>
 
         <div class="yt-videos">
-            {{ include('blocks/nav.html.twig', {thisPage: 'My Youtube Videos'}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage: 'My Youtube Videos'|trans}) }}
             {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'locale': locale}) }}
         </div>
 
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
 {% endblock %}

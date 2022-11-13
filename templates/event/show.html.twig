@@ -3,48 +3,87 @@
 {% block title %}Event{% endblock %}
 
 {% block body %}
-    <h1>Event</h1>
+    {{ include('blocks/_pageHeader.html.twig') }}
+    <div class="container">
+        <div class="my-event">
+            <div class="header">
+                <h1>{{ 'My Events'|trans }}</h1>
+                <div class="backdrop"></div>
+            </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ event.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ event.name }}</td>
-            </tr>
-            <tr>
-                <th>Subheading</th>
-                <td>{{ event.subheading }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ event.description }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ event.date ? event.date|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ event.createdAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ event.updatedAt ? event.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Visible</th>
-                <td>{{ event.visible ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
+            {{ include('blocks/_nav.html.twig', {thisPage: event.name, user: app.user, parent: {url: path('app_event'), page: 'My Events'}}) }}
 
-    <a href="{{ path('app_event_index') }}">back to list</a>
+            {# EventController.php  line 34 #}
+            {# App\Entity\Event #}{# 1011 ▼ #}
+            {#  -id: 1 #}
+            {#  -name: "Ligne B" #}
+            {#  -subheading: "Ouverture de la ligne B du métro à Rennes" #}
+            {#  -description: "<div>C’est (bientôt) parti ! <br>Le 20 septembre à 5h10, votre nouveau métro ouvre ses portillons. <strong>15 nouvelles stations, 4 parcs relais, et tout une mé ▶" #}
+            {#  -date: DateTimeImmutable @1663643400 #}{# 1006 ▶} #}
+            {#  -createdAt: DateTimeImmutable @1662535902 #}{# 1001 ▶} #}
+            {#  -updatedAt: DateTimeImmutable @1662631508 #}{# 1004 ▶} #}
+            {#  -visible: true #}
+            {#  -user: Proxies\__CG__\App\Entity\User #}{# 1075 ▶} #}
+            {#  -thumbnail: "86eda539-27ec-4016-b227-c2650475333f.png" #}
+            {#  -banner: "529818d3-d331-42df-acd0-7b5e533eebcb.jpg" #}
+            {#  -images: Doctrine\ORM\PersistentCollection #}{# 1063 ▶} #}
+            {# } #}
+            {# EventController.php  line 36 #}
+            {# App\Entity\EventImage #}{# 1104 ▼ #}
+            {#  -id: 1 #}
+            {#  -path: "lignes-de-metro-rennais.jpg" #}
+            {#  -caption: "Plan de métro - Rennes" #}
+            {#  -event: App\Entity\Event #}{# 1011 ▶} #}
+            {# }            #}
 
-    <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+            <div class="sub-header">
+                <div class="thumbnail">
+                    <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                </div>
+                <div class="banner">
+                    <img src="/images/events/banners/{{ event.banner }}" alt="{{ event.name }}">
+                </div>
+            </div>
+            <h2>{{ event.name }}</h2>
+            <h3>{{ event.subheading }}</h3>
 
-    {{ include('event/_delete_form.html.twig') }}
+            <div class="dates">
+                <div class="date">{{ 'Created At'|trans }} : {{ event.createdAt|format_datetime() }}</div>
+                <div class="date">{{ 'Updated At'|trans }} : {{ event.updatedAt|format_datetime() }}</div>
+            </div>
+
+            <div class="countdown" id="{{ event.id }}">
+                {{ event.date|format_date('full') }}<br/>
+                {{ event.date|format_time('medium') }}
+            </div>
+
+            <div class="description">{{ event.description|raw }}</div>
+
+            {% for image in event.images %}
+                <div class="image">
+                    <figure>
+                        <img src="/images/events/images/{{ image.path }}" alt="{{ image.caption }}">
+                        <figcaption>{{ image.caption }}</figcaption>
+                    </figure>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block morejs %}
+    <script src="/js/event.js"></script>
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+
+            initHeader();
+            initCountdowns(setCountdownValues());
+            document.querySelector(".header").setAttribute("style", "background: transparent;");
+        })
+
+        function setCountdownValues() {
+            countdownValues = [];
+            countdownValues[0] = {"id": {{ event.id }}, "date": "{{ event.date|format_datetime('short','short', locale='en-US') }}"};
+            return countdownValues;
+        }
+    </script>
 {% endblock %}

@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container">
         {#        {{ dump() }} #}
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
         <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
             <ol class="breadcrumb">
@@ -119,7 +119,7 @@
             </div>
         </div>
 
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
 {% endblock %}

@@ -8,13 +8,13 @@
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
         <div class="user-account">
 
-            {{ include('blocks/user/banner.html.twig') }}
+            {{ include('blocks/user/_banner.html.twig') }}
 
-            {{ include('blocks/nav.html.twig', {thisPage: 'My Movies'}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage: 'My Movies'}) }}
 
             <div class="user-movies">
                 <h1 style="font-weight: 100" id="h1" data-total-results="{{ count }}">
@@ -58,14 +58,14 @@
                     <div id="content" class="content">
                         {% for discover in discovers %}
                             {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
-                            {{ include('blocks/movie/discover.html.twig', { title: discover.title, poster: poster, id: discover.movie_db_id, route: 'app_movie' }) }}
+                            {{ include('blocks/movie/_discover.html.twig', { title: discover.title, poster: poster, id: discover.movie_db_id, route: 'app_movie' }) }}
                         {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
 
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
 

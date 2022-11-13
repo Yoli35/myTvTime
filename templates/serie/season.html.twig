@@ -20,22 +20,22 @@
 
 {% block body %}
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
-    {{ include('blocks/pageHeader.html.twig') }}
+    {{ include('blocks/_pageHeader.html.twig') }}
     <div class="container">
         {% if parameters.from == 'popular' %}
-            {{ include('blocks/nav.html.twig', {parent: {page: 'Popular Series', url: path('app_serie_popular')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'Popular Series', url: path('app_serie_popular')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'top_rated' %}
-            {{ include('blocks/nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'airing_today' %}
-            {{ include('blocks/nav.html.twig', {parent: {page: 'Series Airing Today', url: path('app_serie_airing_today')~'?p='~parameters.page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series Airing Today', url: path('app_serie_airing_today')~'?p='~parameters.page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'on_the_air' %}
-            {{ include('blocks/nav.html.twig', {parent: {page: 'Series On The Air', url: path('app_serie_on_the_air')~'?p='~parameters.page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series On The Air', url: path('app_serie_on_the_air')~'?p='~parameters.page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'search' %}
-            {{ include('blocks/nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: parameters.page})~'?query='~parameters.query~'&year='~parameters.year~'#'~serie.id}, thisPage: serie.name}) }}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: parameters.page})~'?query='~parameters.query~'&year='~parameters.year~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'latest' %}
-            {{ include('blocks/nav.html.twig', {thisPage: serie.name}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage: serie.name}) }}
         {% else %}
-            {{ include('blocks/nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
         {% endif %}
 
         <div class="serie-page">
@@ -157,7 +157,7 @@
             </main>
         </div>
 
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
 {% endblock %}

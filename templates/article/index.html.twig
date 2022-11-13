@@ -7,7 +7,7 @@
 {% block body %}
     <div class="container">
 
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
         <div class="blog">
             <div class="header">
@@ -15,23 +15,13 @@
                 <div class="backdrop"></div>
             </div>
 
-            <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-                    {{ include('blocks/movie/bracket.html.twig') }}
-                    {% if user %}
-                        {{ include('blocks/user/breadcrumb.html.twig') }}
-                    {% endif %}
-                    <li class="breadcrumb-item active">{{ 'Blog'|trans }}</li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></li>
-                </ol>
-            </nav>
+            {{ include('blocks/_nav.html.twig', {thisPage: 'Home Page', user: app.user, from: 'blog', style: 'width: 100%'}) }}
 
             <div class="content">
                 <div class="articles">
                     {% if articles|length %}
                         {% for article in articles %}
-                            {{ include('/blocks/article/apercu.html.twig') }}
+                            {{ include('/blocks/article/_apercu.html.twig') }}
                         {% endfor %}
                     {% else %}
                         <div class="nothing">
@@ -47,7 +37,7 @@
             </div>
         </div>
 
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
 {% endblock %}

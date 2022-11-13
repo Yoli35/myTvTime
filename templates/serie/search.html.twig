@@ -5,15 +5,15 @@
 {% endblock %}
 
 {% block body %}
-    {{ include('blocks/pageHeader.html.twig') }}
+    {{ include('blocks/_pageHeader.html.twig') }}
     <div class="container">
         <div class="series-search">
             <div class="header">
-                {{ include('blocks/serie/quotes.html.twig') }}
+                {{ include('blocks/serie/_quotes.html.twig') }}
                 <h1>{{ 'Series search'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
-            {{ include('blocks/nav.html.twig', {thisPage: 'Series search'}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage: 'Series search'}) }}
             <div class="search">
                 {{ form_start(form) }}
                 {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
@@ -25,25 +25,25 @@
                 <div class="series">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
-                            {{ include('blocks/serie/pagination-search.html.twig') }}
+                            {{ include('blocks/serie/_pagination-search.html.twig') }}
                         </div>
                     </div>
                     <div class="wrapper">
                         {% for serie in series %}
                             <div data-type="card">
-                                {{ include('blocks/serie/card-search.html.twig') }}
+                                {{ include('blocks/serie/_card-search.html.twig') }}
                             </div>
                         {% endfor %}
                     </div>
                     <div class="series-tools">
                         <div class="pages">
-                            {{ include('blocks/serie/pagination-search.html.twig') }}
+                            {{ include('blocks/serie/_pagination-search.html.twig') }}
                         </div>
                     </div>
                 </div>
             {% endif %}
         </div>
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
 

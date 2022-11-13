@@ -4,40 +4,40 @@
 {% block description %}{{ 'List of all the series I have watched in my life'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
-    {{ include('blocks/pageHeader.html.twig') }}
+    {{ include('blocks/_pageHeader.html.twig') }}
     <div class="container">
         <div class="my-series">
             <div class="header">
-                {{ include('blocks/serie/quotes.html.twig') }}
+                {{ include('blocks/serie/_quotes.html.twig') }}
                 <h1>{{ 'My Series'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
 
-            {{ include('blocks/nav.html.twig', {thisPage:('My Series'|trans)}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage:('My Series'|trans)}) }}
 
             <main>
                 <div class="series">
                     {% if series|length %}
                         <div class="series-tools mobile">
                             <div class="pages mobile">
-                                {{ include('blocks/serie/pagination.html.twig') }}
+                                {{ include('blocks/serie/_pagination.html.twig') }}
                             </div>
                         </div>
                         <div class="wrapper">
                             {% for serie in series %}
                                 <div data-id="{{ serie.id }}">
-                                    {{ include('blocks/serie/card.html.twig') }}
+                                    {{ include('blocks/serie/_card.html.twig') }}
                                 </div>
                             {% endfor %}
                         </div>
                         <div class="series-tools bottom">
                             <div class="pages">
-                                {{ include('blocks/serie/pagination.html.twig') }}
+                                {{ include('blocks/serie/_pagination.html.twig') }}
                             </div>
                         </div>
                         <div class="series-tools">
                             <div class="pages">
-                                {{ include('blocks/serie/pagination.html.twig') }}
+                                {{ include('blocks/serie/_pagination.html.twig') }}
                             </div>
                             <div class="numbers">
                                 {{ numbers.episodes }} {{ 'episodes'|trans }} / {{ numbers.seasons }} {{ 'seasons'|trans }}
@@ -185,7 +185,7 @@
                 </div>
             </main>
         </div>
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
 {% block morejs %}

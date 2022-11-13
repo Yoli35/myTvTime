@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    {{ include('blocks/pageHeader.html.twig') }}
+    {{ include('blocks/_pageHeader.html.twig') }}
     <div class="container">
-        <header>{{ include('blocks/nav.html.twig', {thisPage:('My Series'|trans)}) }}</header>
+        <header>{{ include('blocks/_nav.html.twig', {thisPage:('My Series'|trans)}) }}</header>
         <main>
             <div class="person">
                 <div class="left-column">
@@ -246,7 +246,7 @@
                 </div>
             </div>
         </main>
-        <footer>{{ include('blocks/pageFooter.html.twig') }}</footer>
+        <footer>{{ include('blocks/_pageFooter.html.twig') }}</footer>
     </div>
 {% endblock %}
 {% block morejs %}

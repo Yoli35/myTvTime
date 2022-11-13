@@ -12,12 +12,12 @@
 
     <div class="container">
 
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
         {% if route == 'app_home' %}
             <div class="home-header bg{{ random(5) }}"></div>
         {% endif %}
-        {{ include('blocks/nav.html.twig', {thisPage: 'Home Page', user: app.user}) }}
+        {{ include('blocks/_nav.html.twig', {thisPage: 'Home Page', user: app.user}) }}
 
         {% if route == 'app_home' %}
             <div class="search">
@@ -43,7 +43,7 @@
         {% endif %}
 
         <div class="home-discovers">
-            {{ include('blocks/discoverPaging.html.twig') }}
+            {{ include('blocks/_discoverPaging.html.twig') }}
             <div class="content">
                 {% for discover in discovers %}
                     {% set dTitle = route in ['app_home', 'app_home_series', 'app_admin_dashboard_index'] ? discover.title: discover.name %}
@@ -55,13 +55,13 @@
                     {% else %}
                         {% set poster = "/images/default/no_poster_dark.png" %}
                     {% endif %}
-                    {{ include('blocks/movie/discover.html.twig', { title: dTitle, poster: poster, id: discover.id, route: dRoute }) }}
+                    {{ include('blocks/movie/_discover.html.twig', { title: dTitle, poster: poster, id: discover.id, route: dRoute }) }}
                 {% endfor %}
             </div>
-            {{ include('blocks/discoverPaging.html.twig') }}
+            {{ include('blocks/_discoverPaging.html.twig') }}
         </div>
 
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
 {% endblock %}

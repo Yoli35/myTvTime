@@ -1,13 +1,16 @@
-<nav class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';" aria-label="{{ 'Navigation'|trans }}">
+<nav class="nav-breadcrumb" {% if style is defined %}style="{{ style }}" {% endif %}aria-label="{{ 'Navigation'|trans }}">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
-        {{ include('blocks/movie/bracket.html.twig') }}
-        {{ include('blocks/user/breadcrumb.html.twig') }}
+        {{ include('blocks/movie/_bracket.html.twig') }}
+        {{ include('blocks/user/_breadcrumb.html.twig') }}
         {% if parent is defined %}
             <li class="breadcrumb-item"><a href="{{ parent.url }}" accesskey="<">{{ parent.page|trans }}</a></li>
         {% endif %}
         <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
         {% if from is defined %}
+            {% if from == 'blog' %}
+                <div class="btn btn-secondary ml"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></div>
+            {% endif %}
             {% if from == 'youtube' %}
                 <div class="tag-button"><a href="{{ path('app_youtube_search') }}" title="{{ 'Go to the search by tag page'|trans }}">{{ 'Search by tag'|trans }}</a></div>
             {% endif %}

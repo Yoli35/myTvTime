@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block body %}
-    {{ include('blocks/pageHeader.html.twig') }}
+    {{ include('blocks/_pageHeader.html.twig') }}
     <div class="container">
         <div class="my-series">
             <div class="header">
@@ -34,34 +34,34 @@
             </div>
 
             {% if from == 'popular' %}
-                {{ include('blocks/nav.html.twig', {thisPage: 'Popular Series'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Popular Series'}) }}
             {% elseif from == 'top_rated' %}
-                {{ include('blocks/nav.html.twig', {thisPage: 'Top rated Series'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Top rated Series'}) }}
             {% elseif from == 'airing_today' %}
-                {{ include('blocks/nav.html.twig', {thisPage: 'Series Airing Today'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Series Airing Today'}) }}
             {% elseif from == 'on_the_air' %}
-                {{ include('blocks/nav.html.twig', {thisPage: 'Series On The Air'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Series On The Air'}) }}
             {% elseif from == 'latest' %}
-                {{ include('blocks/nav.html.twig', {thisPage: 'Latest Series'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Latest Series'}) }}
             {% endif %}
 
             <main>
                 <div class="series">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
-                            {{ include('blocks/serie/pagination-popular.html.twig') }}
+                            {{ include('blocks/serie/_pagination-popular.html.twig') }}
                         </div>
                     </div>
                     <div class="wrapper">
                         {% for serie in series %}
                             <div data-type="card">
-                                {{ include('blocks/serie/card-popular.html.twig') }}
+                                {{ include('blocks/serie/_card-popular.html.twig') }}
                             </div>
                         {% endfor %}
                     </div>
                     <div class="series-tools">
                         <div class="pages">
-                            {{ include('blocks/serie/pagination-popular.html.twig') }}
+                            {{ include('blocks/serie/_pagination-popular.html.twig') }}
                         </div>
                     </div>
                     <div class="new-serie-preview">
@@ -74,7 +74,7 @@
                 </div>
             </main>
         </div>
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
 {% block morejs %}

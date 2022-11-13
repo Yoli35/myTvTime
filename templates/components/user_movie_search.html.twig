@@ -9,7 +9,7 @@
         <div class="result">
             {% for item in this.movie_results %}
                 {%  set poster = this.poster_url ~ item.poster_path %}
-                {{ include('blocks/movie/discover.html.twig', { title: item.title, poster: poster, id: item.movie_db_id, route: 'app_movie' }) }}
+                {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.movie_db_id, route: 'app_movie' }) }}
             {% endfor %}
         </div>
     {% endif %}

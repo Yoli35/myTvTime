@@ -3,12 +3,12 @@
 {% block title %}myTvTime::{{ 'My Collections'|trans }}{% endblock %}
 
 {% block body %}
-    {{ include('blocks/pageHeader.html.twig') }}
+    {{ include('blocks/_pageHeader.html.twig') }}
 
     <div class="container">
         <div class="my-collections-page">
 
-            {{ include('blocks/nav.html.twig', {thisPage: 'My Collections'}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage: 'My Collections'}) }}
 
             <div class="wrapper">
                 {% if collections is empty %}
@@ -32,7 +32,7 @@
                 {% endif %}
             </div>
 
-            {{ include('blocks/pageFooter.html.twig') }}
+            {{ include('blocks/_pageFooter.html.twig') }}
         </div>
     </div>
 {% endblock %}

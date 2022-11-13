@@ -130,7 +130,7 @@ class SerieFrontController extends AbstractController
                  */
                 if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
                     // dump("Not my series");
-                    $card = $this->render('blocks/serie/card-popular.html.twig', [
+                    $card = $this->render('blocks/serie/_card-popular.html.twig', [
                         'serie' => $tv,
                         'pages' => [
                             'page' => $page
@@ -142,7 +142,7 @@ class SerieFrontController extends AbstractController
 
                 if ($from === self::SEARCH) {
                     // dump("Not my series");
-                    $card = $this->render('blocks/serie/card-search.html.twig', [
+                    $card = $this->render('blocks/serie/_card-search.html.twig', [
                         'serie' => $tv,
                         'query' => $query ?: "",
                         'year' => $year ?: "",
@@ -156,7 +156,7 @@ class SerieFrontController extends AbstractController
 
                 if ($from === self::MY_SERIES) {
                     // dump("My series");
-//                    $card = $this->render('blocks/serie/card.html.twig', [
+//                    $card = $this->render('blocks/serie/_card.html.twig', [
 //                        'serie' => $serie,
 //                        'pages' => [
 //                            'page' => $page
@@ -165,7 +165,7 @@ class SerieFrontController extends AbstractController
 //                        'imageConfig' => $imageConfiguration->getConfig()]);
 
                     $totalResults = $serieRepository->count([]);
-                    $pagination = $this->render('blocks/serie/pagination.html.twig', [
+                    $pagination = $this->render('blocks/serie/_pagination.html.twig', [
                         'pages' => [
                             'total_results' => $totalResults,
                             'page' => $page,
@@ -221,7 +221,7 @@ class SerieFrontController extends AbstractController
     {
         $keywords = json_decode($request->query->get('k'), true);
 
-        return $this->render('blocks/serie/translationField.html.twig', [
+        return $this->render('blocks/serie/_translationField.html.twig', [
             'keywords' => $keywords
         ]);
     }
@@ -229,7 +229,7 @@ class SerieFrontController extends AbstractController
     #[Route('/render/translation/select', name: 'app_serie_render_translation_select', methods: ['GET'])]
     public function renderTranslationSelect(Request $request): Response
     {
-        return $this->render('blocks/serie/translationSelect.html.twig', [
+        return $this->render('blocks/serie/_translationSelect.html.twig', [
             'locale' => $request->getLocale(),
         ]);
     }

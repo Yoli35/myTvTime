@@ -8,7 +8,7 @@
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
         <nav aria-label="{{ 'Navigation'|trans }}" class="nav-breadcrumb" style="--bs-breadcrumb-divider: '◦';">
             <ol class="breadcrumb">
@@ -208,6 +208,6 @@
                 {% endfor %}
             </div>
         {% endif %}
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}

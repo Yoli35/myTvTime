@@ -9,9 +9,9 @@
 
     <div class="container">
 
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
-        {{ include('blocks/nav.html.twig', {thisPage: 'Collection'}) }}
+        {{ include('blocks/_nav.html.twig', {thisPage: 'Collection'}) }}
 
         {% if collection.backdrop_path %}
             <div class="collection-header" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ collection.backdrop_path }}')">

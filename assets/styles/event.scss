@@ -1,6 +1,6 @@
 @import "variables";
 
-.my-events {
+.my-events, .my-event {
     --event-height: 10rem;
 
     @include flex-col(flex-start, center);
@@ -14,6 +14,90 @@
         margin: 1em 0 1em auto;
     }
 
+    .countdown {
+        @include flex-100();
+        font-size: 2em;
+        font-weight: 100;
+        height: var(--event-height);
+        line-height: 1.1em;
+        opacity: 1;
+        position: relative;
+        transition: opacity 2s ease-in-out, color 300ms ease-in-out;
+        text-align: center;
+        width: 50%;
+
+        &.switch {
+            opacity: 0;
+        }
+
+        &.fade {
+            color: var(--gradiant-grey-90);
+        }
+
+        &.past {
+            opacity: .25;
+        }
+
+        .part {
+            @include flex-col(center, space-evenly);
+            height: 6rem;
+            width: 2.5em;
+
+            .count {
+                display: block;
+                font-size: 4rem;
+                font-weight: 100;
+                height: 2rem;
+            }
+
+            .label {
+                display: block;
+                font-size: 1rem;
+                font-weight: 100;
+                height: 1rem;
+                text-transform: uppercase;
+            }
+        }
+
+        .separator {
+            animation: blink 1s infinite ease-in-out;
+            font-size: 2em;
+            height: 4.5rem;
+            //padding-top: .25em;
+        }
+
+        .date {
+            @include flex-100();
+            color: var(--gradiant-grey-20);
+            inset: 0;
+            line-height: 1.1em;
+            opacity: 0;
+            position: absolute;
+            transition: opacity 300ms ease-in-out;
+            text-align: center;
+
+            &.show {
+                opacity: 1;
+            }
+        }
+
+        @keyframes blink {
+            49% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    }
+}
+
+.my-events {
+    --event-height: 10rem;
+
     main {
         width: 100%;
 
@@ -21,109 +105,33 @@
             @include flex-col();
             width: 100%;
 
-            .event {
-                @include flex-row(flex-start, flex-start);
-                background-color: var(--gradiant-grey-90);
-                border-radius: .5em;
-                color: var(--gradiant-grey-30);
-                margin-bottom: 1em;
-                overflow: hidden;
+            a {
                 width: 100%;
 
-                .poster {
-                    height: var(--event-height);
-                    width: 10em;
+                .event {
+                    @include flex-row(flex-start, flex-start);
+                    background-color: var(--gradiant-grey-90);
+                    border-radius: .5em;
+                    color: var(--gradiant-grey-30);
+                    margin-bottom: 1em;
+                    overflow: hidden;
+                    width: 100%;
 
-                    img {
-                        height: 100%;
-                        object-fit: cover;
-                    }
-                }
+                    .poster {
+                        height: var(--event-height);
+                        width: 10em;
 
-                .infos {
-                    @include flex-col(flex-start, center);
-                    height: var(--event-height);
-                    padding: 1em;
-                    width: calc(50% - 10em);
-                }
-
-                .countdown {
-                    @include flex-100();
-                    font-size: 2em;
-                    font-weight: 100;
-                    height: var(--event-height);
-                    line-height: 1.1em;
-                    opacity: 1;
-                    position: relative;
-                    transition: opacity 2s ease-in-out, color 300ms ease-in-out;
-                    text-align: center;
-                    width: 50%;
-
-                    &.switch {
-                        opacity: 0;
-                    }
-
-                    &.fade {
-                        color: var(--gradiant-grey-90);
-                    }
-
-                    &.past {
-                        opacity: .25;
-                    }
-
-                    .part {
-                        @include flex-col(center, space-evenly);
-                        height: 6rem;
-                        width: 2.5em;
-
-                        .count {
-                            display: block;
-                            font-size: 4rem;
-                            font-weight: 100;
-                            height: 2rem;
-                        }
-
-                        .label {
-                            display: block;
-                            font-size: 1rem;
-                            font-weight: 100;
-                            height: 1rem;
-                            text-transform: uppercase;
+                        img {
+                            height: 100%;
+                            object-fit: cover;
                         }
                     }
 
-                    .separator {
-                        animation: blink 1s infinite ease-in-out;
-                        font-size: 2em;
-                        height: 4.5rem;
-                        //padding-top: .25em;
-                    }
-
-                    .date {
-                        @include flex-100();
-                        color: var(--gradiant-grey-20);
-                        inset: 0;
-                        line-height: 1.1em;
-                        opacity: 0;
-                        position: absolute;
-                        transition: opacity 300ms ease-in-out;
-                        text-align: center;
-
-                        &.show {
-                            opacity: 1;
-                        }
-                    }
-
-                    @keyframes blink {
-                        49% {
-                            opacity: 1;
-                        }
-                        50% {
-                            opacity: 0;
-                        }
-                        100% {
-                            opacity: 0;
-                        }
+                    .infos {
+                        @include flex-col(flex-start, center);
+                        height: var(--event-height);
+                        padding: 1em;
+                        width: calc(50% - 10em);
                     }
                 }
             }
@@ -132,9 +140,77 @@
 
 }
 
+.my-event {
+    .sub-header {
+        @include flex-100();
+
+        .thumbnail, .banner {
+            img {
+                height: 100%;
+                object-fit: cover;
+                width: 100%;
+            }
+        }
+
+        .thumbnail {
+            border: 4px solid var(--gradiant-grey-90);
+            border-radius: 50%;
+            height: 8em;
+            width: 8em;
+
+            img {
+                border-radius: 50%;
+            }
+        }
+
+        .banner {
+            border-radius: 1em;
+            height: 30em;
+            margin-left: auto;
+            width: calc(100% - 9em);
+
+            img {
+                border-radius: 1em;
+            }
+        }
+    }
+
+    h3 {
+        font-weight: 100;
+    }
+
+    .dates {
+        @include flex-row(start, start);
+        font-size: .75em;
+
+        .date {
+            margin-right: 1em;
+        }
+    }
+
+    .description {
+        margin-top: 1em;
+    }
+
+    .image {
+        @include flex-100();
+        margin-bottom: 2em;
+
+        figure {
+            max-width: 100%;
+
+            img {
+                border-radius: 1em;
+                margin-inline: auto;
+                max-width: 100%;
+            }
+        }
+    }
+}
+
 @media (prefers-color-scheme: dark) {
 
-    .my-events {
+    .my-events, .my-event {
 
         .header {
             background-color: var(--gradiant-grey-20);
@@ -150,23 +226,41 @@
             }
         }
 
+        .countdown {
+            &.fade {
+                color: transparent;
+                //color: var(--gradiant-grey-30);
+            }
+
+            .date {
+                color: var(--gradiant-grey-90);
+            }
+        }
+    }
+
+    .my-events {
+
         main {
             .events {
-                .event {
-                    background-color: var(--gradiant-grey-30);
-                    color: var(--gradiant-grey-90);
-
-                    .countdown {
-                        &.fade {
-                            color: var(--gradiant-grey-30);
-                        }
-
-                        .date {
-                            color: var(--gradiant-grey-90);
-                        }
+                a {
+                    .event {
+                        background-color: var(--gradiant-grey-30);
+                        color: var(--gradiant-grey-90);
                     }
                 }
             }
         }
     }
+
+    //.my-event {
+    //    .countdown {
+    //        &.fade {
+    //            color: var(--gradiant-grey-30);
+    //        }
+    //
+    //        .date {
+    //            color: var(--gradiant-grey-90);
+    //        }
+    //    }
+    //}
 }

@@ -353,7 +353,7 @@ class SerieController extends AbstractController
         $tv = json_decode($standing, true);
         // // dump($tv);
         if ($tv == null) {
-            return $this->render('serie/error.html.twig', [
+            return $this->render('serie/_error.html.twig', [
                 'serie' => $serie,
             ]);
         }
@@ -990,7 +990,7 @@ class SerieController extends AbstractController
             if ($tab['episode_count']) {
                 $blocks[] = [
                     'season' => $tab['season_number'],
-                    'view' => $this->render('blocks/serie/viewing_season.html.twig', [
+                    'view' => $this->render('blocks/serie/_viewing_season.html.twig', [
                         'viewing' => $newTab,
                         'season_number' => $tab['season_number'],
                         'episode_count' => $tab['episode_count'],

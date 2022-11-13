@@ -12,9 +12,9 @@
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
-        {{ include('blocks/nav.html.twig', {parent: {url: path('app_youtube'), page: 'My Youtube Videos'|trans}, thisPage: video.title}) }}
+        {{ include('blocks/_nav.html.twig', {parent: {url: path('app_youtube'), page: 'My Youtube Videos'|trans}, thisPage: video.title}) }}
 
         <div class="yt-video-page">
             <div class="video">
@@ -69,7 +69,7 @@
             </div>
         </div>
 
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
     <dialog class="delete-video">

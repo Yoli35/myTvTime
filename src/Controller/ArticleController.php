@@ -99,7 +99,7 @@ class ArticleController extends AbstractController
         $answer->setText($text);
         $answerRepository->add($answer, true);
 
-        return $this->render('blocks/article/reaction.html.twig', [
+        return $this->render('blocks/article/_reaction.html.twig', [
             'reaction' => $answer,
         ]);
 

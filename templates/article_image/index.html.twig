@@ -5,12 +5,12 @@
 {% block body %}
     <div class="container">
 
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
         <div class="blog">
             <div class="header"></div>
 
-            {{ include('blocks/nav.html.twig', {thisPage: 'Images'|trans, user: app.user}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage: 'Images'|trans, user: app.user, parent: {url: path('app_blog'), page: 'Blog'|trans}}) }}
 
             <h1>{{ 'ArticleImage index'|trans }}</h1>
 
@@ -49,7 +49,7 @@
                 <a href="{{ path('app_article_image_new') }}">{{ 'Create new'|trans }}</a>
             </div>
 
-            {{ include('blocks/pageFooter.html.twig') }}
+            {{ include('blocks/_pageFooter.html.twig') }}
 
             <div class="show">
                 <div class="close"><i class="fa-solid fa-xmark"></i></div>

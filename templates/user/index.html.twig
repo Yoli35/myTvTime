@@ -5,13 +5,13 @@
 {% block body %}
     {#    {{ dump() }} #}
     <div class="container">
-        {{ include('blocks/pageHeader.html.twig') }}
+        {{ include('blocks/_pageHeader.html.twig') }}
 
-        {{ include('blocks/nav.html.twig', {thisPage: 'My account'|trans}) }}
+        {{ include('blocks/_nav.html.twig', {thisPage: 'My account'|trans}) }}
 
         <div class="user-account">
 
-            {{ include('blocks/user/banner.html.twig') }}
+            {{ include('blocks/user/_banner.html.twig') }}
 
             <div class="details">
                 {{ form_start(form) }}
@@ -121,7 +121,7 @@
             </div>
         </div>
 
-        {{ include('blocks/pageFooter.html.twig') }}
+        {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
 {% endblock %}
