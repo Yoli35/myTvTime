@@ -447,6 +447,7 @@ class SerieController extends AbstractController
         $id = $tv['id'];
         $standing = $tmdbService->getTvCredits($id, $request->getLocale());
         $credits = json_decode($standing, true);
+//        dump($standing, $credits);
 
         $standing = $tmdbService->getTvKeywords($id, $request->getLocale());
         $keywords = json_decode($standing, true);
@@ -487,7 +488,7 @@ class SerieController extends AbstractController
 
                 /** @var SerieViewing $viewing */
                 $viewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
-                dump($viewing, $serie);
+//                dump($viewing, $serie);
                 if ($viewing == null) {
                     $this->createViewing($user, $tv, $serie);
                 } else {
@@ -498,9 +499,10 @@ class SerieController extends AbstractController
             }
         }
         $ygg = str_replace(' ', '+', $tv['name']);
+        $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
-        dump($tv);
-        dump($viewing);
+//        dump($tv);
+//        dump($viewing);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -523,6 +525,7 @@ class SerieController extends AbstractController
             'viewedEpisodes' => $viewing?->getViewedEpisodes(),
             'whatsNew' => $whatsNew,
             'ygg' => $ygg,
+            'yggOriginal' => $yggOriginal,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
 

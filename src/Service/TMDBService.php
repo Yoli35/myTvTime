@@ -210,11 +210,11 @@ class TMDBService
                 return $response->getContent();
             } catch (Throwable $exception) {
                 // dump($exception->getMessage(), $exception->getCode());
-                return "";
+                return 'Response : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
             }
         } catch (Throwable $exception) {
             // dump($exception->getMessage(), $exception->getCode());
-            return "";
+            return 'Request : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
         }
     }
 
@@ -516,8 +516,7 @@ class TMDBService
                     'GET',
                     'https://api.themoviedb.org/3/person/' . $id . '?api_key=' . $this->api_key . '&language=' . $locale . '&append_to_response=images'
                 );
-            }
-            else {
+            } else {
                 $response = $this->client->request(
                     'GET',
                     'https://api.themoviedb.org/3/person/' . $id . '?api_key=' . $this->api_key . '&language=' . $locale
@@ -539,10 +538,10 @@ class TMDBService
     {
         $noCredits = json_encode([]);
         try {
-                $response = $this->client->request(
-                    'GET',
-                    'https://api.themoviedb.org/3/person/' . $id . '/combined_credits?api_key=' . $this->api_key . '&language=' . $locale
-                );
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/person/' . $id . '/combined_credits?api_key=' . $this->api_key . '&language=' . $locale
+            );
             try {
                 return $response->getContent();
             } catch (Throwable $e) {

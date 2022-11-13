@@ -104,30 +104,32 @@
                         {% endif %}
                     </div>
                     <div class="info">
-                        <div class="tagline">{{ serie.tagline }}</div>
-                        {% if index is defined %}
-                            {% if index %}
-                                <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
-                                <div class="view-average">
-                                    <div class="circle">
-                                        {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
-                                        {% if percent > 100 %}
-                                            {% set percent = 100 %}
-                                        {% endif %}
-                                        <div class="percentage">{{ percent }}%</div>
+                        <div class="view-vote">
+                            <div class="tagline">{{ serie.tagline }}</div>
+                            {% if index is defined %}
+                                {% if index %}
+                                    <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
+                                    <div class="view-average">
+                                        <div class="circle">
+                                            {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+                                            {% if percent > 100 %}
+                                                {% set percent = 100 %}
+                                            {% endif %}
+                                            <div class="percentage">{{ percent }}%</div>
+                                        </div>
+                                        <div class="circle-start"></div>
+                                        <div class="circle-end"></div>
                                     </div>
-                                    <div class="circle-start"></div>
-                                    <div class="circle-end"></div>
-                                </div>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                        <div class="vote-count">{{ serie.vote_count }} votes</div>
-                        <div class="vote-average">
-                            <div class="circle">
-                                <div class="percentage">{{ (serie.vote_average * 10)|round }}%</div>
+                            <div class="vote-count">{{ serie.vote_count }} votes</div>
+                            <div class="vote-average">
+                                <div class="circle">
+                                    <div class="percentage">{{ (serie.vote_average * 10)|round }}%</div>
+                                </div>
+                                <div class="circle-start"></div>
+                                <div class="circle-end"></div>
                             </div>
-                            <div class="circle-start"></div>
-                            <div class="circle-end"></div>
                         </div>
                     </div>
                     <div class="info">
@@ -190,6 +192,11 @@
                         <div></div>
                     </a>
                 </div>
+                <div class="ygg-original">
+                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ yggOriginal }}&do=search&order=desc&sort=publish_date" target="_blank">
+                        <div></div>
+                    </a>
+                </div>
                 <div class="tmdb">
                     <a href="https://www.themoviedb.org/tv/{{ serie.id }}" target="_blank" rel="noopener">
                         <div></div>
@@ -199,38 +206,42 @@
 
             <main>
                 <article>
-                    {% if credits.cast|length %}
-                        <section>
-                            <div class="cast">
-                                <h4>{{ 'Cast'|trans }}</h4>
-                                <div class="list">
-                                    {% for people in credits.cast %}
-                                        <a href="{{ path('app_serie_people', {id: people.id}) }}">
-                                            <div class="people">
-                                                <div class="profile">
-                                                    {% if people.profile_path %}
-                                                        <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
-                                                    {% else %}
-                                                        <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
-                                                    {% endif %}
-                                                </div>
-                                                <div>{{ people.name }}</div>
-                                                {% if people.character is defined %}
-                                                    <div>{{ people.character }}</div>
-                                                {% endif %}
-                                                <div>
-                                                    {% if people.gender is defined %}
-                                                        {{ (people.known_for_department~(people.gender==1?'.she':'.he'))|trans }}
-                                                    {% else %}
-                                                        {{ people.known_for_department|trans }}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </a>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </section>
+                    {% if credits %}
+                        {% if credits.cast %}
+                            {% if credits.cast|length %}
+                                <section>
+                                    <div class="cast">
+                                        <h4>{{ 'Cast'|trans }}</h4>
+                                        <div class="list">
+                                            {% for people in credits.cast %}
+                                                <a href="{{ path('app_serie_people', {id: people.id}) }}">
+                                                    <div class="people">
+                                                        <div class="profile">
+                                                            {% if people.profile_path %}
+                                                                <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
+                                                            {% else %}
+                                                                <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div>{{ people.name }}</div>
+                                                        {% if people.character is defined %}
+                                                            <div>{{ people.character }}</div>
+                                                        {% endif %}
+                                                        <div>
+                                                            {% if people.gender is defined %}
+                                                                {{ (people.known_for_department~(people.gender==1?'.she':'.he'))|trans }}
+                                                            {% else %}
+                                                                {{ people.known_for_department|trans }}
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </section>
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
                     <section>
                         <div class="seasons">
@@ -628,7 +639,9 @@
 
                 if (typeof dialog.showModal === "function") {
                     dialog.showModal();
-                    setTimeout(() => {dialog.classList.add("show")}, 0);
+                    setTimeout(() => {
+                        dialog.classList.add("show")
+                    }, 0);
                 } else {
                     console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
                     /*dialog.setAttribute("open");
@@ -644,7 +657,9 @@
                 dialog.classList.remove("d-block");
                 dialog.removeAttribute("style");*/
                 dialog.classList.remove("show");
-                setTimeout(() => {dialog.close()}, 300);
+                setTimeout(() => {
+                    dialog.close()
+                }, 300);
                 if (toggle) {
                     let network = dialog.querySelector(".network.active");
                     let device = dialog.querySelector(".device.active");
@@ -659,7 +674,6 @@
                 episodeClicked.episodeNumber = parseInt(ep.getAttribute("data-number"));
                 episodeClicked.seasonNumber = parseInt(ep.parentElement.getAttribute("data-season-number"));
                 evt.preventDefault();
-
 
                 if (episodeClicked.viewed) {
                     const checkThemAllDiv = currentDialog.querySelector(".check-them-all");
@@ -679,7 +693,7 @@
                 if (index === 1) return false;
                 const eps = document.querySelector("main").querySelector(".seasons").querySelectorAll(".ep");
 
-                for (let i=0;i<index-1;i++) {
+                for (let i = 0; i < index - 1; i++) {
                     if (parseInt(eps[i].getAttribute("data-viewed")) === 0) return true;
                 }
                 return false;
@@ -724,13 +738,17 @@
                     updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
                     episodeAddEvent();
                     update.classList.remove("show");
-                    setTimeout(() => {update.close()}, 300);
+                    setTimeout(() => {
+                        update.close()
+                    }, 300);
 
                 }
                 xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : ""));
                 xhr.send();
                 update.showModal();
-                setTimeout(() => {update.classList.add("show")}, 0);
+                setTimeout(() => {
+                    update.classList.add("show")
+                }, 0);
 
             }
 

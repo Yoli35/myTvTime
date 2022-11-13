@@ -40,36 +40,19 @@ function initButtons(id, locale, paths, url) {
     const exportModalClose = exportModal.querySelectorAll("button");
     const appendModal = document.querySelector("#appendModal");
     const appendModalClose = appendModal.querySelectorAll("button");
+    let currentDialog = null;
 
     exportModalClose.forEach(button => {
-        button.addEventListener("click", closeExport);
+        button.addEventListener("click", closeDialog);
     });
 
     appendModalClose.forEach(button => {
-        button.addEventListener("click", closeAppend);
+        button.addEventListener("click", closeDialog);
     });
 
-    function closeExport() {
-        exportModal.classList.remove("show");
-        setTimeout(() => {
-            exportModal.classList.remove("d-block");
-        }, 200);
-
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-        }
-        xhr.open("GET", _json_cleanup + '?filename=' + exportFile);
-        xhr.send();
-    }
-
-    function closeAppend() {
-        appendModal.classList.remove("show");
-        setTimeout(() => {
-            appendModal.classList.remove("d-block");
-        }, 200);
-    }
-
     exportButton.addEventListener("click", () => {
+
+        currentDialog = exportModal;
 
         let result = exportModal.querySelector('.export-result');
         let count, movies, url, file, sample, result_items;
@@ -112,9 +95,7 @@ function initButtons(id, locale, paths, url) {
                 result.appendChild(div);
             }
 
-            exportModal.setAttribute("style", "background-color: rgba(189, 141, 189, 0.25)");
-            exportModal.classList.add("d-block");
-            setTimeout(()=> {exportModal.classList.add("show");}, 0);
+            openDialog();
 
             exportFile = file;
 
@@ -165,6 +146,9 @@ function initButtons(id, locale, paths, url) {
 
     // $('#append-button').click(function () {
     appendButton.addEventListener("click", function () {
+
+        currentDialog = appendModal;
+
         //     preview = $('.append-result');
         //     infos = $('.append-infos');
         preview = appendModal.querySelector(".append-result");
@@ -201,7 +185,9 @@ function initButtons(id, locale, paths, url) {
         appendModal.setAttribute("style", "transition: background-color .45s");
         appendModal.setAttribute("style", "background-color: rgba(189, 141, 189, 0.25)");
         appendModal.classList.add("d-block");
-        setTimeout(()=> {appendModal.classList.add("show");}, 0);
+        setTimeout(() => {
+            appendModal.classList.add("show");
+        }, 0);
     });
 
     // $('input[name="json"]').change(function () {
@@ -338,13 +324,47 @@ function initButtons(id, locale, paths, url) {
         }
     });
 
-    exportModal.addEventListener('hidden.bs.modal', () => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
+    function openDialog() {
+        let dialog = currentDialog;
+
+        if (typeof dialog.showModal === "function") {
+            dialog.showModal();
+            setTimeout(() => {
+                dialog.classList.add("show")
+            }, 0);
+        } else {
+            console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
+            /*dialog.setAttribute("open");
+            let offset = document.querySelector("html").scrollTop;
+            dialog.setAttribute("style", "translate: 0 " + offset + "px;");
+            dialog.classList.remove("d-none");
+            dialog.classList.add("d-block");*/
         }
-        xhr.open("GET", _json_cleanup + '?filename=' + exportFile);
-        xhr.send();
-    });
+    }
+
+    function dismissDialog (dialog) {
+        dialog.classList.remove("show");
+        setTimeout(() => {
+            dialog.close()
+        }, 300);
+    }
+    function closeDialog() {
+
+        let dialog = currentDialog;
+
+        if (currentDialog === exportModal) {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = () => dismissDialog(dialog);
+            xhr.onerror = () => dismissDialog(dialog);
+
+            xhr.open("GET", _json_cleanup + '?filename=' + exportFile);
+            xhr.send();
+        }
+        else {
+            dismissDialog(dialog);
+        }
+        currentDialog = null;
+    }
 
     // more videos event listener
     userMovieList = document.querySelector("#content");
@@ -467,7 +487,7 @@ function moreVideos() {
                     trash.classList.add("trash");
                     trash.setAttribute("data-rate", "0");
                     rating.appendChild(trash);
-                    for (let j=1;j<=5;j++) {
+                    for (let j = 1; j <= 5; j++) {
                         let star = document.createElement("div");
                         star.classList.add("star");
                         star.setAttribute("data-rate", j.toString());
@@ -489,7 +509,7 @@ function moreVideos() {
                     if (result['my_collections'].length) {
                         let collections = document.createElement("div");
                         collections.classList.add("my-collections");
-                        for (let i=0;i<result['my_collections'].length;i++) {
+                        for (let i = 0; i < result['my_collections'].length; i++) {
                             let c = result['my_collections'][i];
 
                             let collection = document.createElement("div");

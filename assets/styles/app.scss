@@ -1115,6 +1115,141 @@ h4 {
     }
 }
 
+.export-movies, .append-movies {
+    @include dialog();
+
+    .overlay {
+        background-color: var(--gradiant-grey-100);
+        border: 1px solid var(--gradiant-grey-50);
+        border-radius: 1em;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 0, 0, 0.25);
+        color: var(--gradiant-grey-20);
+        margin-inline: auto;
+        width: 50em;
+
+        .header {
+            @include flex-100();
+            border-bottom: 1px solid var(--gradiant-grey-50);
+            padding: 1em;
+            position: relative;
+            text-align: center;
+            width: 50em;
+
+            .close {
+                appearance: none;
+                background-color: transparent;
+                border: none;
+                color: var(--gradiant-grey-20);
+                cursor: pointer;
+                font-size: 1em;
+                outline: none;
+                position: absolute;
+                right: .5em;
+                top: .5em;
+            }
+        }
+
+        .content {
+            @include flex-col(flex-start, flex-start);
+            padding: 2em;
+            width: 50em;
+
+            .networks {
+                @include flex-row(stretch, start);
+                border-bottom: 1px solid var(--gradiant-grey-50);
+                overflow-x: scroll;
+                padding: 1em 0;
+                width: 46em;
+
+                .wrapper {
+                    @include flex-row(stretch, start);
+                    gap: 1em;
+                    min-width: 46em;
+
+                    .network {
+                        @include flex-col(center, stretch);
+                        border-radius: .5em;
+                        padding: .25em;
+                        width: 6em;
+
+                        .logo {
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            border: 2px solid var(--gradiant-grey-20);
+                            border-radius: .5em;
+                            cursor: pointer;
+                            height: 4em;
+                            width: 4em;
+
+                            &.other {
+                                background-image: url("../images/devices/network-other-light.png");
+                            }
+                        }
+
+                        .label {
+                            font-weight: 100;
+                            text-align: center;
+                            width: 6em;
+                        }
+
+                        &:hover {
+                            background-color: var(--gradiant-grey-80);
+                            color: var(--gradiant-grey-20);
+                        }
+
+                        &.active {
+                            background-color: var(--gradiant-grey-50);
+                        }
+                    }
+                }
+            }
+
+            .devices {
+                @include flex-100(stretch, space-evenly);
+                padding: 1em 0;
+            }
+
+            .check-them-all {
+                @include flex-100(end, end);
+                display: none;
+                transition: height 300s ease-in-out;
+
+                &.show {
+                    display: flex;
+                }
+            }
+
+            .remember-choice {
+                @include flex-100(end, end);
+            }
+
+            input[type=checkbox] {
+                margin-right: 1em;
+            }
+        }
+
+        &.classic {
+            bottom: 1em;
+            position: fixed;
+            right: 1em;
+        }
+
+        .footer {
+            @include flex-100(flex-end, flex-end);
+            gap: 1em;
+            border-top: 1px solid var(--gradiant-grey-50);
+            padding: 1em;
+            width: 50em;
+
+            button:hover {
+                background-color: var(--gradiant-grey-60);
+                border-color: var(--gradiant-grey-50);
+            }
+        }
+    }
+}
+
 @media (min-width: 576px) { /* 540 */
     .home-discover {
         width: 18em;
@@ -1274,6 +1409,40 @@ h4 {
 
     .modal-header {
         border-bottom: 1px solid var(--gradiant-grey-30);
+    }
+
+    .export-movies, .append-movies {
+        .overlay {
+            background-color: var(--gradiant-grey-20);
+            border-color: var(--gradiant-grey-50);
+            color: var(--gradiant-grey-80);
+
+            .header {
+                .close {
+                    color: var(--gradiant-grey-80);
+                }
+            }
+
+            .content {
+                .networks {
+                    .wrapper {
+                        .network {
+                            .logo {
+                                border-color: var(--gradiant-grey-80);
+
+                                &.other {
+                                    background-image: url("../images/devices/network-other-dark.png");
+                                }
+                            }
+
+                            &:hover {
+                                background-color: var(--gradiant-grey-40);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
