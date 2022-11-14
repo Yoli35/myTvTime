@@ -531,36 +531,36 @@ class SerieController extends AbstractController
 
     }
 
-//    public function createViewingTab($tv): array
-//    {
-//        $tab = [];
-//        /*
-//         * La saison 0 correspond aux épisodes spéciaux regroupés dans cette saison
-//         */
-//        if ($tv['seasons'][0]['season_number'] == 1) {
-//            $tab[] = [
-//                'season_number' => 0,
-//                'season_completed' => false,
-//                'air_date' => null,
-//                'episode_count' => 0,
-//                'episodes' => []
-//            ];
-//        }
-//        foreach ($tv['seasons'] as $season) {
-//            $ep = [];
-//            for ($i = 1; $i <= $season['episode_count']; $i++) {
-//                $ep[] = false;
-//            }
-//            $tab[] = [
-//                'season_number' => $season['season_number'],
-//                'season_completed' => false,
-//                'air_date' => $season['air_date'],
-//                'episode_count' => $season['episode_count'],
-//                'episodes' => $ep
-//            ];
-//        }
-//        return $tab;
-//    }
+    public function createViewingTab($tv): array
+    {
+        $tab = [];
+        /*
+         * La saison 0 correspond aux épisodes spéciaux regroupés dans cette saison
+         */
+        if ($tv['seasons'][0]['season_number'] == 1) {
+            $tab[] = [
+                'season_number' => 0,
+                'season_completed' => false,
+                'air_date' => null,
+                'episode_count' => 0,
+                'episodes' => []
+            ];
+        }
+        foreach ($tv['seasons'] as $season) {
+            $ep = [];
+            for ($i = 1; $i <= $season['episode_count']; $i++) {
+                $ep[] = false;
+            }
+            $tab[] = [
+                'season_number' => $season['season_number'],
+                'season_completed' => false,
+                'air_date' => $season['air_date'],
+                'episode_count' => $season['episode_count'],
+                'episodes' => $ep
+            ];
+        }
+        return $tab;
+    }
 
     public function updateSeasonsAndEpisodes($tv, $serie, $serieRepository): array|null
     {

@@ -281,7 +281,7 @@
                                                     {% if season.air_date < 'now'|date("Y-m-d") %}
                                                         {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
                                                     {% elseif season.air_date > 'now'|date("Y-m-d") %}
-                                                        {{ 'The season season_number of serie_name will be aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
+                                                        {{ 'The season season_number of serie_name will be aired from the season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
                                                     {% else %}
                                                         {{ 'The season season_number of serie_name is aired from today.'|trans({"season_number": season.season_number, "serie_name": serie.name}) }}
                                                     {% endif %}
