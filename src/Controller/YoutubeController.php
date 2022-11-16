@@ -83,9 +83,9 @@ class YoutubeController extends AbstractController
         $tags = $repository->findAllByLabel();
         $description = nl2br($youtubeVideo->getDescription());
         $description = preg_replace(
-            ['@([^>"])(https?://[a-z0-9\./+,%\@\?=#_-]+)@i',
-                '#([A-Za-z_-][A-Za-z0-9\._-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#'],
-            ['$1<a href="$2" target="_blank" rel="noopener">$2</a>',
+            ['/(https:\/\/.+)/',
+                '#([A-Za-z_-][A-Za-z0-9_-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#'],
+            ['<a href="$1" target="_blank" rel="noopener">$1</a>',
                 '<a href="mailto:$1">$1</a>'],
             $description);
 
