@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/{_locale}/serie/internal', requirements: ['_locale' => 'fr|en|de|es'])]
+#[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieFrontController extends AbstractController
 {
     const LINK_COUNT = 7;

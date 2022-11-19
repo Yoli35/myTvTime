@@ -1,7 +1,14 @@
 <nav class="nav-breadcrumb" {% if style is defined %}style="{{ style }}" {% endif %}aria-label="{{ 'Navigation'|trans }}">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Movies'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Home'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('app_movie_list') }}">{{ 'Movies'|trans }}</a></li>
         {{ include('blocks/movie/_bracket.html.twig') }}
+        {% if from is defined %}
+            {% if from == 'home' %}
+                <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}">{{ 'Series'|trans }}</a></li>
+                {{ include('blocks/serie/_bracket.html.twig') }}
+            {% endif %}
+        {% endif %}
         {{ include('blocks/user/_breadcrumb.html.twig') }}
         {% if parent is defined %}
             <li class="breadcrumb-item"><a href="{{ parent.url }}" accesskey="<">{{ parent.page|trans }}</a></li>

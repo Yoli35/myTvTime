@@ -24,19 +24,23 @@ class TMDBService
         $this->client = $client;
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     public function discoverMovies($page, $sort, $locale): ?string
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.themoviedb.org/3/discover/movie?api_key=' . $this->api_key . '&language=' . $locale . '&sort_by=' . $sort . '&include_adult=false&include_video=false&page=' . $page . '&with_watch_monetization_types=flatrate',
-        );
-        return $response->getContent();
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/discover/movie?api_key=' . $this->api_key . '&language=' . $locale . '&sort_by=' . $sort . '&include_adult=false&include_video=false&page=' . $page . '&with_watch_monetization_types=flatrate',
+            );
+            try {
+            return $response->getContent();
+            } catch (Throwable $e) {
+                // dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            // dump($e);
+            return "";
+        }
     }
 
     public function moviesByGenres($page, $genres, $locale): ?string

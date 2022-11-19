@@ -34,15 +34,15 @@
             </div>
 
             {% if from == 'popular' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Popular Series'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Popular Series'|trans}) }}
             {% elseif from == 'top_rated' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Top rated Series'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Top rated Series'|trans}) }}
             {% elseif from == 'airing_today' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Series Airing Today'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Series Airing Today'|trans}) }}
             {% elseif from == 'on_the_air' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Series On The Air'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Series On The Air'|trans}) }}
             {% elseif from == 'latest' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Latest Series'}) }}
+                {{ include('blocks/_nav.html.twig', {thisPage: 'Latest Series'|trans}) }}
             {% endif %}
 
             <main>

@@ -1,366 +1,68 @@
 {% extends 'base.html.twig' %}
-{% block morecss %}
-    {#    <link href="{{ asset("movie.css") }}" rel="stylesheet"> #}
+{% block title %}
+    {% if route == 'app_movie_list' %}
+        myTvTime::{{ 'Movies'|trans }}::{{ 'Page'|trans }} {{ pages.page }}
+    {% endif %}
 {% endblock %}
 
-{% block title %}myTvTime::{{ movie.title }}{% endblock %}
 {% block body %}
-    {#        {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
+
+    {% set discovers = discovers.results %}
+
     <div class="container">
 
         {{ include('blocks/_pageHeader.html.twig') }}
 
-        {% if movie.backdrop_path %}
-            <div class="movie-header">
-                <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" alt="{{ movie.title }}">
-                {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
-                <div class="ygg">
-                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </a>
+        {% if route == 'app_movie_list' %}
+            <div class="home-header bg{{ random(5) }}"></div>
+        {% endif %}
+        {{ include('blocks/_nav.html.twig', {thisPage: 'Movies', user: app.user}) }}
+
+        {% if route == 'app_home' %}
+            <div class="search">
+                <div class="search-label">{{ 'Search Movies by'|trans }}</div>
+                <div class="btn-toolbar" role="toolbar" aria-label="{{ 'Toolbar with button groups'|trans }}">
+                    <div class="btn-group btn-group-sm me-2" role="group" aria-label="{{ 'First group'|trans }}">
+                        <a href="{{ path('app_movies_search', {query: ''}) }}" class="btn btn-outline-secondary">{{ 'Name'|trans }}</a>
+                        <a href="{{ path('app_movies_by_genre', {genres: '1'}) }}" class="btn btn-outline-secondary">{{ 'Genre'|trans }}</a>
+                        <a href="{{ path('app_movies_by_date', {date: '2022'}) }}" class="btn btn-outline-secondary">{{ 'Date'|trans }}</a>
+                    </div>
                 </div>
-            </div>
-        {% else %}
-            <div class="movie-header no-header">
-                {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
+                <form>
+                    <div class="sort_select">
+                        <div class="label">{{ 'Sort'|trans }}</div>
+                        <select id="sort" class="form-select form-select-sm" aria-label="{{ 'Sort selection'|trans }}">
+                            {% for key, sort in sorts.options %}
+                                <option value="{{ sort }}"{% if sort == sorts.sort_by %} selected{% endif %}>{{ key|raw }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
             </div>
         {% endif %}
 
-        {{ include('blocks/_nav.html.twig', {thisPage: movie.title}) }}
-
-        <div class="movie-info">
-            <div class="top">
-                <div class="movie-detail">
-                    <div class="part-1">
-                        <h1 class="title">{{ movie.title }}</h1>
-                        <div class="info">{{ 'Original Title'|trans }} : {{ movie.original_title }}</div>
-                        {% if watchProviders %}
-                            <div class="watch-providers">
-                                {% if watchProviders.flatrate is defined %}
-                                    <div class="streaming">{{ 'Available in streaming'|trans }}</div>
-                                    <div class="provider-list">
-                                        {% for provider in watchProviders.flatrate %}
-                                            <div class="provider">
-                                                <div class="name">{{ provider.provider_name }}</div>
-                                                <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                                {% if watchProviders.buy is defined %}
-                                    <div class="buy">{{ 'Available to buy'|trans }}</div>
-                                    <div class="provider-list">
-                                        {% for provider in watchProviders.buy %}
-                                            <div class="provider">
-                                                <div class="name">{{ provider.provider_name }}</div>
-                                                <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                                {% if watchProviders.rent is defined %}
-                                    <div class="buy">{{ 'Available to rent'|trans }}</div>
-                                    <div class="provider-list">
-                                        {% for provider in watchProviders.rent %}
-                                            <div class="provider">
-                                                <div class="name">{{ provider.provider_name }}</div>
-                                                <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                        <div class="genres">
-                            {% for genre in movie.genres %}
-                                <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
-                            {% endfor %}
-                        </div>
-                        {% if movie.overview | length %}
-                            <div class="overview">
-                                {{ 'Overview'|trans }} :
-                                {{ movie.overview|raw }}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="part-2">
-                        <div class="part-2L">
-                            {% if movie.runtime %}
-                                <div class="info">
-                                    {{ 'Runtime'|trans }} :
-                                    {% if movie.runtime//60 > 0 %}
-                                        {{ movie.runtime//60 }}
-                                        {% if movie.runtime//60>1 %}{{ 'Hours'|trans }}{% else %}{{ 'Hour'|trans }}{% endif %}
-                                    {% endif %}
-                                    {{ movie.runtime%60 }} {{ 'Minute'|trans }}{% if movie.runtime%60>1 %}s{% endif %}
-                                </div>
-                            {% endif %}
-                            {% if movie.revenue > 0 %}
-                                <div class="info">
-                                    {{ 'Revenue'|trans }} : {{ movie.revenue }}$
-                                </div>
-                            {% endif %}
-                            <div class="infos">
-                                <div>{{ 'Average Vote'|trans }} : {{ movie.vote_average }}</div>
-                                <div>{{ 'Vote Count'|trans }} : {{ movie.vote_count }}</div>
-                            </div>
-                            {% if movie.homepage | length %}
-                                <div class="info">
-                                    {{ 'Home Page'|trans }} :
-                                    <a href="{{ movie.homepage }}" target="_blank" rel="noopener">
-                                        <span data-descr="{{ 'Visit the official Movie Website'|trans }}">
-                                            {{ movie.homepage }}&nbsp;<i class="bi bi-link-45deg"></i>
-                                         </span>
-                                    </a>
-                                </div>
-                            {% endif %}
-                            {% if movie.imdb_id | length %}
-                                <div class="info">
-                                    <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank" rel="noopener">
-                                        <span data-descr="{{ 'Visit the Movie Page on IMDB'|trans }}">
-                                            {{ 'IMDB Page'|trans }}&nbsp;<i class="bi bi-link-45deg"></i>
-                                        </span>
-                                    </a>
-                                </div>
-                            {% endif %}
-
-                            {% if dates is empty %}
-                                <div class="info">
-                                    {{ 'Release Date'|trans }} : {{ movie.release_date|format_date('short') }}
-                                </div>
-                            {% else %}
-                                <div class="infos">
-                                    <h2>{{ 'Release Dates'|trans }}</h2>
-                                    {% for location in dates %}
-                                        <div class="country">
-                                            <div class="name">{{ location.iso_3166_1|country_name(locale) }}</div>
-                                            <div class="dates">
-                                                {% for date in location.release_dates %}
-                                                    <div class="event">
-                                                        {{ date.type|trans }}{% if date.note is defined and date.note|length %}&nbsp;-&nbsp;{{ date.note }}{% endif %}&nbsp;:&nbsp;{{ date.release_date|format_date('short') }}
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-
-                            {% if movie.production_companies %}
-                                <h2>{{ 'Production'|trans }}</h2>
-                                <div class="productions">
-                                    {{ 'Production Companies'|trans }} :
-                                    <div>
-                                        {% for cie in movie.production_companies %}
-                                            <div class="production">
-                                                <div>{{ cie.name }}</div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                            {% if movie.production_countries %}
-                                <div class="productions">
-                                    {{ 'Production Countries'|trans }} :
-                                    <div>
-                                        {% for country in movie.production_countries %}
-                                            <div class="production">{{ country.iso_3166_1 |country_name(locale) }} {# ({{ country.name }}) #}</div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                        {% if movie.belongs_to_collection %}
-                            <div class="part-2R">
-                                <h2>{{ 'Belongs to Collection'|trans }}</h2>
-                                <div class="collection">
-                                    {% if movie.belongs_to_collection.backdrop_path %}
-                                        <div class="banner">
-                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" class="card-img-top" alt="movie.belongs_to_collection.name">
-                                        </div>
-                                    {% endif %}
-                                    <div class="content">
-                                    <h2>{{ movie.belongs_to_collection.name }}</h2>
-                                    <div class="poster"><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
-                                    <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
-                                </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="movie-poster">
-                    {% if movie.poster_path %}
-                        <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+        <div class="home-discovers">
+            {{ include('blocks/_discoverPaging.html.twig') }}
+            <div class="content">
+                {% for discover in discovers %}
+                    {% set dTitle = route in ['app_movie_list', 'app_home_series', 'app_admin_dashboard_index'] ? discover.title: discover.name %}
+                    {% set dDate = route == 'app_home' ? discover.release_date : route == 'app_home_tv' ? discover.first_air_date: '' %}
+                    {% if discover.poster_path is defined and discover.poster_path|length %}
+                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
+                    {% elseif discover.images is defined and discover.images.poster|length %}
+                        {% set poster = discover.images.poster %}
                     {% else %}
-                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
+                        {% set poster = "/images/default/no_poster_dark.png" %}
                     {% endif %}
-
-                    {% if collections is not empty %}
-                        <div class="movie-collection">
-                            <div class="label">{{ 'My Collections'|trans }}</div>
-                            <div class="field">
-                                <div class="list" data-movie="{{ movie.id }}">
-                                    {% for collection in collections %}
-                                        <div class="item{% if collection.id in movieCollection %} selected{% endif %}" data-id="{{ collection.id }}">{{ collection.title }}</div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
+                    {{ include('blocks/movie/_discover.html.twig', { title: dTitle, poster: poster, id: discover.id, route: dRoute }) }}
+                {% endfor %}
             </div>
-
-            {% if recommendations is not empty %}
-                <h2>{{ 'Recommendations'|trans }}</h2>
-                <div class="recommendations">
-                    {% for recommendation in recommendations %}
-                        <div class="recommendation">
-                            <a href="{{ path('app_movie', {id: recommendation.id}) }}">
-                                {% if recommendation.poster_path %}
-                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
-                                {% else %}
-                                    <div class="no-poster">
-                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
-                                        <div class="title">{{ recommendation.title }}</div>
-                                        <div class="original-title">{{ recommendation.original_title }}</div>
-                                    </div>
-                                {% endif %}
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            {% if cast is not empty %}
-                <h2>{{ 'Casting'|trans }}</h2>
-                <div class="cast">
-                    <div class="content">
-                        {% for actor in cast %}
-                            {% if actor.profile_path|length %}
-                                <a href="{{ path('app_serie_people', {id: actor.id}) }}">
-                                    <div class="actor">
-                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
-                                        <div>
-                                            <div class="name">{{ actor.name }}</div>
-                                            <div class="character">{{ actor.character }}</div>
-                                        </div>
-                                    </div>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                        {% for actor in cast %}
-                            {% if actor.profile_path|length == 0 %}
-                                <a href="{{ path('app_serie_people', {id: actor.id}) }}">
-                                    <div class="actor">
-                                        <div class="profile" data-id="{{ actor.id }}"></div>
-                                        <div>
-                                            <div class="name">{{ actor.name }}</div>
-                                            <div class="character">{{ actor.character }}</div>
-                                        </div>
-                                    </div>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-
-            {% if sortedCrew is not empty %}
-                <h2>{{ 'Crew'|trans }}</h2>
-                <div class="crew">
-                    <div class="content">
-                        {% for name, data in sortedCrew %}
-                            <a href="{{ path('app_serie_people', {id: data.id}) }}">
-                                <div class="member">
-                                    {% if data.profile_path | length %}
-                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ data.profile_path }}')" data-id="{{ data.id }}"></div>
-                                    {% else %}
-                                        <div class="profile" data-id="{{ data.id }}"></div>
-                                    {% endif %}
-                                    <div>
-                                        <div class="name">{{ name }}</div>
-                                        <div class="job">{{ data.job }}</div>
-                                    </div>
-                                </div>
-                            </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-            {% if images.backdrops|length or images.logos|length or images.posters|length %}
-                <section>
-                    <div class="images">
-                        <h4>{{ 'Images'|trans }}</h4>
-                        {% if images.backdrops|length %}
-                            <h5>{{ 'Backdrops'|trans }}</h5>
-                            <div>
-                                {% for backdrop in images.backdrops %}
-                                    <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.2 ~ backdrop.file_path }}" alt="Some backdrop">
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        {% if images.logos|length %}
-                            <h5>{{ 'Logos'|trans }}</h5>
-                            <div>
-                                {% for logo in images.logos %}
-                                    <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        {% if images.posters|length %}
-                            <h5>{{ 'Posters'|trans }}</h5>
-                            <div>
-                                {% for poster in images.posters %}
-                                    <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.2 ~ poster.file_path }}" alt="Some poster">
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                </section>
-            {% endif %}
+            {{ include('blocks/_discoverPaging.html.twig') }}
         </div>
 
-        {#
-        <div class="modal fade" id="personModal" tabindex="-1">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Name</h5>
-        #}
-        {#                        <div>{{ 'Also known as'|trans }}</div> : <div class="also_known_as"></div> #}{#
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-        <div class="person-modal">
-            <div class="person-infos">
-                <div class="biography">{{ 'Biography'|trans }} :
-                    <div></div>
-                </div>
-                <div class="birthday">{{ 'Birthday'|trans }} : <span></span></div>
-                <div class="death-day">{{ 'Death-day'|trans }} : <span></span></div>
-                <div class="homepage">{{ 'Home Page'|trans }} : <span></span></div>
-                <div class="imdb-page">{{ 'Personal IMDB Page'|trans }} : <span></span></div>
-                <div class="known-for-department">{{ 'Known for Department'|trans }} : <span></span></div>
-                <div class="place-of-birth">{{ 'Place of Birth'|trans }} : <span></span></div>
-            </div>
-            <div class="person-profile"></div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
-    </div>
-</div>
-</div>
-</div>
-        #}
         {{ include('blocks/_pageFooter.html.twig') }}
+
     </div>
 {% endblock %}
 {% block morejs %}
@@ -373,25 +75,18 @@
             "{{ path('app_movie_remove') }}",
             "{{ path('app_movie_get_rating') }}",
             "{{ path('app_movie_set_rating') }}",
-            "{{ path('app_movie_collection_toggle') }}",
         ];
 
         window.addEventListener("DOMContentLoaded", () => {
-            initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.2 }}", "{{ locale }}");
-
-            initCollections();
-
-            const poster = document.querySelector(".movie-poster");
-            const image = poster.querySelector("img");
-
-            image.addEventListener("onerror", (evt) => {
-                console.log({evt});
-                image.remove();
-                const div = document.createElement("div");
-                div.classList.add("replacement");
-                poster.appendChild(div);
-                alert("Alerte Poster !!!");
-            })
+            setTimeout(() => {
+                document.querySelector(".home-header").setAttribute("style", "background-position-y: top");
+            }, 10);
+            const select = document.querySelector("#sort");
+            select.addEventListener("change", function () {
+                let value = select.options[select.selectedIndex].value;
+                window.location.href = '{{ path(route) }}?sort=' + value + '&page=1';
+            });
+            initMovieStuff(paths, "", "{{ locale }}");
         })
     </script>
 {% endblock %}
