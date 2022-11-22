@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\NetworkRepository;
+use App\Repository\NetworksRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: NetworkRepository::class)]
-class Network
+#[ORM\Entity(repositoryClass: NetworksRepository::class)]
+class Networks
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

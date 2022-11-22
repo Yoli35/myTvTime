@@ -3,9 +3,9 @@
 namespace App\Command;
 
 use App\Controller\SerieController;
-use App\Entity\Network;
+use App\Entity\Networks;
 use App\Entity\SerieViewing;
-use App\Repository\NetworkRepository;
+use App\Repository\NetworksRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\UserRepository;
@@ -30,14 +30,14 @@ class GetTheMovieDatabaseTVCommand extends Command
     private SerieRepository $serieRepository;
     private UserRepository $userRepository;
     private SerieViewingRepository $viewingRepository;
-    private NetworkRepository $networkRepository;
+    private NetworksRepository $networkRepository;
 
     public function __construct(TMDBService            $tmdbService,
                                 SerieController        $serieController,
                                 SerieRepository        $serieRepository,
                                 UserRepository         $userRepository,
                                 SerieViewingRepository $viewingRepository,
-                                NetworkRepository      $networkRepository
+                                NetworksRepository $networkRepository
     )
     {
         $this->tmdbService = $tmdbService;
@@ -83,7 +83,7 @@ class GetTheMovieDatabaseTVCommand extends Command
                         $m2mNetwork = $this->networkRepository->findOneBy(['name' => $network['name']]);
 
                         if ($m2mNetwork == null) {
-                            $m2mNetwork = new Network();
+                            $m2mNetwork = new Networks();
                             $m2mNetwork->setName($network['name']);
                             $m2mNetwork->setLogoPath($network['logo_path']);
                             $m2mNetwork->setOriginCountry($network['origin_country']);

@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Network;
+use App\Entity\Networks;
 use App\Entity\Serie;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Repository\EpisodeViewingRepository;
-use App\Repository\NetworkRepository;
+use App\Repository\NetworksRepository;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
@@ -53,7 +53,7 @@ class SerieFrontController extends AbstractController
      * @throws Exception
      */
     #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
-    public function new(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, NetworkRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
+    public function new(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, NetworksRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -114,7 +114,7 @@ class SerieFrontController extends AbstractController
                     $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);
 
                     if ($m2mNetwork == null) {
-                        $m2mNetwork = new Network();
+                        $m2mNetwork = new Networks();
                         $m2mNetwork->setName($network['name']);
                         $m2mNetwork->setLogoPath($network['logo_path']);
                         $m2mNetwork->setOriginCountry($network['origin_country']);

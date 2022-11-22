@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Network;
+use App\Entity\Networks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Network>
+ * @extends ServiceEntityRepository<Networks>
  *
- * @method Network|null find($id, $lockMode = null, $lockVersion = null)
- * @method Network|null findOneBy(array $criteria, array $orderBy = null)
- * @method Network[]    findAll()
- * @method Network[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Networks|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Networks|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Networks[]    findAll()
+ * @method Networks[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NetworkRepository extends ServiceEntityRepository
+class NetworksRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Network::class);
+        parent::__construct($registry, Networks::class);
     }
 
-    public function save(Network $entity, bool $flush = false): void
+    public function save(Networks $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class NetworkRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Network $entity, bool $flush = false): void
+    public function remove(Networks $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

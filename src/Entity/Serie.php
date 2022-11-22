@@ -50,7 +50,7 @@ class Serie
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $overview = null;
 
-    #[ORM\ManyToMany(targetEntity: Network::class)]
+    #[ORM\ManyToMany(targetEntity: Networks::class)]
     private Collection $networks;
 
     #[ORM\Column(nullable: true)]
@@ -200,14 +200,14 @@ class Serie
     }
 
     /**
-     * @return Collection<int, Network>
+     * @return Collection<int, Networks>
      */
     public function getNetworks(): Collection
     {
         return $this->networks;
     }
 
-    public function addNetwork(Network $network): self
+    public function addNetwork(Networks $network): self
     {
         if (!$this->networks->contains($network)) {
             $this->networks->add($network);
@@ -216,7 +216,7 @@ class Serie
         return $this;
     }
 
-    public function removeNetwork(Network $network): self
+    public function removeNetwork(Networks $network): self
     {
         $this->networks->removeElement($network);
 
