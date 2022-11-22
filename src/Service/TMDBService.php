@@ -24,6 +24,25 @@ class TMDBService
         $this->client = $client;
     }
 
+    public function trending($mediaType, $timeWindow, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/trending/' . $mediaType . '/' . $timeWindow . '?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                // dump($e);
+                return "";
+            }
+        } catch (Throwable $e) {
+            // dump($e);
+            return "";
+        }
+    }
+
     public function discoverMovies($page, $sort, $locale): ?string
     {
         try {
@@ -32,7 +51,7 @@ class TMDBService
                 'https://api.themoviedb.org/3/discover/movie?api_key=' . $this->api_key . '&language=' . $locale . '&sort_by=' . $sort . '&include_adult=false&include_video=false&page=' . $page . '&with_watch_monetization_types=flatrate',
             );
             try {
-            return $response->getContent();
+                return $response->getContent();
             } catch (Throwable $e) {
                 // dump($e);
                 return "";
@@ -508,6 +527,26 @@ class TMDBService
         } catch (Throwable $e) {
             // dump($e);
             return $noWatchProviders;
+        }
+    }
+
+    public function getPopularPeople($locale): ?string
+    {
+        $noPopularPeople = json_encode([]);
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/person/popular?api_key=' . $this->api_key . '&language=' . $locale,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                // dump($e);
+                return $noPopularPeople;
+            }
+        } catch (Throwable $e) {
+            // dump($e);
+            return $noPopularPeople;
         }
     }
 

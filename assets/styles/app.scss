@@ -806,6 +806,19 @@ h4 {
     }
 }
 
+.home-list {
+    @include flex-100(start,start);
+    overflow-x: scroll;
+
+    .wrapper {
+        @include flex-row(start,start);
+        gap: 1em;
+
+        .serie {
+
+        }
+    }
+}
 .user-menu {
     margin-left: auto;
 }

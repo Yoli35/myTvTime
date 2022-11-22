@@ -55,7 +55,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
-    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, SettingsRepository $settingsRepository, SerieViewingRepository $viewingRepository): Response
+    public function index(Request $request, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration, SettingsRepository $settingsRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
@@ -85,10 +85,11 @@ class SerieController extends AbstractController
         }
         $totalResults = $serieRepository->countUserSeries($user->getId());
         $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
+        // Liste des séries ajoutées par l'utilisateur pour le menu de recherche
         $list = $serieRepository->listUserSeries($user->getId());
 
-        $series = $this->getSeriesViews($user, $results, $viewingRepository);
-        // dump($series);
+        $series = $this->getSeriesViews($user, $results);
+        dump($series);
 
         return $this->render('serie/index.html.twig', [
             'series' => $series,
@@ -111,7 +112,7 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function getSeriesViews($user, $results, $viewingRepository): array
+    public function getSeriesViews($user, $results): array
     {
         $ids = '(';
         /** @var Serie $result */
@@ -119,7 +120,7 @@ class SerieController extends AbstractController
             $ids .= $result->getId() . ', ';
         }
         $ids = substr($ids, 0, strlen($ids) - 2) . ')';
-        $viewings = $viewingRepository->getSeriesViewings($user, $ids);
+        $viewings = $this->serieViewingRepository->getSeriesViewings($user, $ids);
 
         $series = [];
         /** @var Serie $result */
@@ -431,13 +432,13 @@ class SerieController extends AbstractController
         return $serie;
     }
 
-    #[Route('/latest/serie', name: 'app_serie_latest', methods: ['GET'])]
-    public function latest(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
-    {
-        $standing = $tmdbService->getLatest($request->getLocale());
-        $tv = json_decode($standing, true);
-        return $this->getSerie($tv, 0, self::LATEST, 0, $request, $tmdbService, $serieRepository, null, $imageConfiguration);
-    }
+//    #[Route('/latest/serie', name: 'app_serie_latest', methods: ['GET'])]
+//    public function latest(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+//    {
+//        $standing = $tmdbService->getLatest($request->getLocale());
+//        $tv = json_decode($standing, true);
+//        return $this->getSerie($tv, 0, self::LATEST, 0, $request, $tmdbService, $serieRepository, null, $imageConfiguration);
+//    }
 
     public function getSerie(array $tv, int $page, string $from, $backId, Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, Serie|null $serie, ImageConfiguration $imageConfiguration, $query = "", $year = ""): Response
     {
@@ -763,7 +764,7 @@ class SerieController extends AbstractController
                 }
             } else {
                 if ($season->getEpisodeCount() < $s['episode_count']) {
-                    for ($i = $season->getEpisodeCount(); $i <= $s['episode_count']; $i++) {
+                    for ($i = $season->getEpisodeCount()+1; $i <= $s['episode_count']; $i++) {
                         $episode = new EpisodeViewing($i);
                         $this->episodeViewingRepository->save($episode);
                         $season->addEpisode($episode);
@@ -771,8 +772,8 @@ class SerieController extends AbstractController
                 }
             }
         }
-        $seasons = $theViewing->getSeasons();
-        dump($seasons);
+//        $seasons = $theViewing->getSeasons();
+//        dump($seasons);
     }
 
     public function getViewedEpisodes($viewing): int
@@ -935,7 +936,7 @@ class SerieController extends AbstractController
             $newEpisodes = [];
             $episode_count = $viewings[$season]['episode_count'];
             $air_date = array_key_exists('air_date', $viewings[$season]) ? $viewings[$season]['air_date'] : $seasons[$season - $noSpecialEpisodes]['air_date'];
-            // // dump($air_date);
+            // dump($air_date);
             for ($e = 0; $e < $episode_count; $e++) {
                 $newEpisodes[] = $e + 1 <= $episode;
             }
@@ -969,7 +970,7 @@ class SerieController extends AbstractController
             }
         }
         $today = (new DateTime)->format("Y-m-d");
-// // dump($today);
+        // dump($today);
         $seasons_completed = [];
         foreach ($newTab as $tab) {
             // // dump($tab);

@@ -124,7 +124,7 @@ class SerieFrontController extends AbstractController
                 }
                 $serie->addUser($user);
                 $serieRepository->save($serie, true);
-                dump($serie);
+                //dump($serie);
                 $this->serieController->createViewing($user, $tv, $serie);
                 /*
                  */

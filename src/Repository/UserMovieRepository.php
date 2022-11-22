@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\UserMovie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -40,6 +41,20 @@ class UserMovieRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return UserMovie[] Returns an array of UserMovie objects
+     */
+    public function lastAddedMovies($userId, $count = 10): array
+    {
+        return $this->createQueryBuilder('um')
+            ->innerJoin('um.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
+            ->orderBy('um.createdAt', 'DESC')
+            ->setMaxResults($count)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**

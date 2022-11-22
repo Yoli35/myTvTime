@@ -1,0 +1,8 @@
+<div class="home-discover" id="{{ serie.id }}">
+    <a href="{{ path('app_serie_'~type, {'id': serie.id}) }}?from={{ from }}" title="{{ serie.name }}">
+        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster_path }}" alt="{{ 'Poster' }}">
+        <div class="title">
+            <div>{{ serie.name }}</div>
+        </div>
+    </a>
+</div>

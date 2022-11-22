@@ -7,11 +7,11 @@
     <div class="container">
         {{ include('blocks/_pageHeader.html.twig') }}
 
-        {{ include('blocks/_nav.html.twig', {thisPage: 'My account'|trans}) }}
-
         <div class="user-account">
 
             {{ include('blocks/user/_banner.html.twig') }}
+
+            {{ include('blocks/_nav.html.twig', {thisPage: 'My account'|trans}) }}
 
             <div class="details">
                 {{ form_start(form) }}
