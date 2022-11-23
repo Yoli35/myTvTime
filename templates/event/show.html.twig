@@ -13,29 +13,6 @@
 
             {{ include('blocks/_nav.html.twig', {thisPage: event.name, user: app.user, parent: {url: path('app_event'), page: 'My Events'}}) }}
 
-            {# EventController.php  line 34 #}
-            {# App\Entity\Event #}{# 1011 ▼ #}
-            {#  -id: 1 #}
-            {#  -name: "Ligne B" #}
-            {#  -subheading: "Ouverture de la ligne B du métro à Rennes" #}
-            {#  -description: "<div>C’est (bientôt) parti ! <br>Le 20 septembre à 5h10, votre nouveau métro ouvre ses portillons. <strong>15 nouvelles stations, 4 parcs relais, et tout une mé ▶" #}
-            {#  -date: DateTimeImmutable @1663643400 #}{# 1006 ▶} #}
-            {#  -createdAt: DateTimeImmutable @1662535902 #}{# 1001 ▶} #}
-            {#  -updatedAt: DateTimeImmutable @1662631508 #}{# 1004 ▶} #}
-            {#  -visible: true #}
-            {#  -user: Proxies\__CG__\App\Entity\User #}{# 1075 ▶} #}
-            {#  -thumbnail: "86eda539-27ec-4016-b227-c2650475333f.png" #}
-            {#  -banner: "529818d3-d331-42df-acd0-7b5e533eebcb.jpg" #}
-            {#  -images: Doctrine\ORM\PersistentCollection #}{# 1063 ▶} #}
-            {# } #}
-            {# EventController.php  line 36 #}
-            {# App\Entity\EventImage #}{# 1104 ▼ #}
-            {#  -id: 1 #}
-            {#  -path: "lignes-de-metro-rennais.jpg" #}
-            {#  -caption: "Plan de métro - Rennes" #}
-            {#  -event: App\Entity\Event #}{# 1011 ▶} #}
-            {# }            #}
-
             <div class="sub-header">
                 <div class="thumbnail">
                     <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">

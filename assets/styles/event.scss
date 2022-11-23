@@ -99,10 +99,11 @@
     --event-height: 10rem;
 
     main {
-        width: 100%;
+        @include flex-100();
 
         .events {
             @include flex-col();
+            gap: 1em;
             width: 100%;
 
             a {
@@ -113,7 +114,6 @@
                     background-color: var(--gradiant-grey-90);
                     border-radius: .5em;
                     color: var(--gradiant-grey-30);
-                    margin-bottom: 1em;
                     overflow: hidden;
                     width: 100%;
 
@@ -134,6 +134,45 @@
                         width: calc(50% - 10em);
                     }
                 }
+            }
+
+            .no-event, .add-event {
+                background-color: var(--gradiant-grey-50);
+                border-radius: 1em;
+                color: var(--gradiant-grey-10);
+                font-weight: 600;
+                padding: 1em 2em;
+            }
+
+            .no-event {
+                background-color: var(--gradiant-grey-50);
+            }
+
+            .add-event {
+                align-items: center;
+                background-color: var(--gradiant-green-50);
+                box-shadow: 0 0 0 var(--gradiant-green-20);
+                cursor: pointer;
+                display: flex;
+                transition: translate 100ms ease-out;
+
+                i {
+                    font-size: 2em;
+                    margin-right: .5em;
+                }
+
+                &:hover {
+                    box-shadow: 0 4px 0 var(--gradiant-green-20);
+                    translate: 0 -4px;
+                }
+            }
+        }
+
+        .form {
+            @include flex-100();
+
+            form {
+                @include mtt-form();
             }
         }
     }

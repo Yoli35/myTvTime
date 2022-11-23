@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,20 +28,20 @@ class Event
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $date = null;
+    private ?DateTime $date;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $updatedAt = null;
+    private ?DateTime $updatedAt;
 
     #[ORM\Column]
-    private ?bool $visible = null;
+    private ?bool $visible;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $user;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $thumbnail = null;
@@ -51,13 +52,14 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventImage::class)]
     private Collection $images;
 
-    public function __construct()
+    public function __construct($user = null)
     {
-        $this->date = new DateTimeImmutable();
+        $this->date = new DateTime();
         $this->createdAt = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTime();
         $this->visible = false;
         $this->images = new ArrayCollection();
+        $this->user = $user;
     }
 
     public function __toString()
@@ -94,12 +96,12 @@ class Event
         return $this;
     }
 
-    public function getDate(): ?DateTimeImmutable
+    public function getDate(): ?DateTime
     {
         return $this->date;
     }
 
-    public function setDate(DateTimeImmutable $date): self
+    public function setDate(DateTime $date): self
     {
         $this->date = $date;
 
@@ -118,12 +120,12 @@ class Event
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeImmutable
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

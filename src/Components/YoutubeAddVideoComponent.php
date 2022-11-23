@@ -25,9 +25,13 @@ use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsLiveComponent('youtube_add_video')]
+#[AsLiveComponent('youtube_add_video', csrf: false)]
 class YoutubeAddVideoComponent
 {
+    //https://www.youtube.com/watch?v=f6XXCR5agqg
+    //https://youtu.be/dw3uAa-u0KY
+    //https://youtube.com/shorts/gepwtKiSPIg?feature=share
+    //
     use DefaultActionTrait;
 
     #[LiveProp(writable: true)]
@@ -54,7 +58,7 @@ class YoutubeAddVideoComponent
     public DateTimeImmutable $firstView;
     #[LiveProp]
     public string $time2Human = "";
-
+    #[LiveProp]
     private int $totalRuntime = 0;
 //    private TranslationServiceClient $translationClient;
 //    private TranslatorInterface $translator;
@@ -70,6 +74,7 @@ class YoutubeAddVideoComponent
      */
     public function __construct(YoutubeVideoRepository $videoRepository, YoutubeChannelRepository $channelRepository, EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
+        dump('construct start');
         $this->videoRepository = $videoRepository;
         $this->channelRepository = $channelRepository;
         $this->entityManager = $entityManager;
@@ -82,10 +87,12 @@ class YoutubeAddVideoComponent
         $client->setAccessType('offline');
 
         $this->service_YouTube = new Google_Service_YouTube($client);
+        dump('construct end');
     }
 
     public function mount($id, $preview, $locale): void
     {
+        dump('mount start');
         $this->user_id = $id;
         $this->locale = $locale;
         $this->preview = $preview;
@@ -96,6 +103,7 @@ class YoutubeAddVideoComponent
         $this->firstView = $this->getFirstView();
         $this->time2Human = $this->getTime2human();
         list($this->preview_url, $this->preview_title) = $this->get_preview();
+        dump('mount end');
     }
 
     /**
@@ -104,6 +112,7 @@ class YoutubeAddVideoComponent
      */
     public function newVideo(): array
     {
+        dump('newVideo');
         // https://www.youtube.com/watch?v=at9h35V8rtQ
         // https://www.youtube.com/shorts/7KFxzeyse2g
         // https://youtu.be/at9h35V8rtQ

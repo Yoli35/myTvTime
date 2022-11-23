@@ -16,25 +16,30 @@
 
             <main>
                 <div class="events">
-                    {% for event in events %}
-                        {% if event.visible %}
-                            <a href="{{ path('app_event_show', {id: event.id}) }}">
-                                <div class="event">
-                                    <div class="poster">
-                                        <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                    <div class="add-event"><i class="fa-solid fa-circle-plus"></i> {{ 'Add event'|trans }}</div>
+                    {% if events|length %}
+                        {% for event in events %}
+                            {% if event.visible %}
+                                <a href="{{ path('app_event_show', {id: event.id}) }}">
+                                    <div class="event">
+                                        <div class="poster">
+                                            <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                        </div>
+                                        <div class="infos">
+                                            <h2>{{ event.name }}</h2>
+                                            <div>{{ event.subheading }}</div>
+                                        </div>
+                                        <div class="countdown" id="{{ event.id }}">
+                                            {{ event.date|format_date('full') }}<br/>
+                                            {{ event.date|format_time('medium') }}
+                                        </div>
                                     </div>
-                                    <div class="infos">
-                                        <h2>{{ event.name }}</h2>
-                                        <div>{{ event.subheading }}</div>
-                                    </div>
-                                    <div class="countdown" id="{{ event.id }}">
-                                        {{ event.date|format_date('full') }}<br/>
-                                        {{ event.date|format_time('medium') }}
-                                    </div>
-                                </div>
-                            </a>
-                        {% endif %}
-                    {% endfor %}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-event">{{ 'No event'|trans }}</div>
+                    {% endif %}
                 </div>
             </main>
         </div>
@@ -51,6 +56,7 @@
             initHeader();
             initCountdowns(setCountdownValues());
             document.querySelector(".header").setAttribute("style", "background: transparent;");
+            document.querySelector(".add-event").addEventListener("click", addNewEvent);
         })
 
         function setCountdownValues() {
@@ -59,6 +65,10 @@
             countdownValues[{{ loop.index0 }}] = {"id": {{ e.id }}, "date": "{{ e.date|format_datetime('short','short', locale='en-US') }}"};
             {% endfor %}
             return countdownValues;
+        }
+
+        function addNewEvent() {
+            window.location.href = "{{ path('app_event_new') }}";
         }
     </script>
 {% endblock %}

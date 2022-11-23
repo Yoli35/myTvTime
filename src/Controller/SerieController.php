@@ -6,6 +6,7 @@ use App\Entity\EpisodeViewing;
 use App\Entity\SeasonViewing;
 use App\Entity\Serie;
 use App\Entity\SerieViewing;
+use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\SerieSearchType;
 use App\Repository\EpisodeViewingRepository;
@@ -88,9 +89,24 @@ class SerieController extends AbstractController
         // Liste des séries ajoutées par l'utilisateur pour le menu de recherche
         $list = $serieRepository->listUserSeries($user->getId());
 
-        $series = $this->getSeriesViews($user, $results);
-        dump($series);
+        $series = $totalResults ? $this->getSeriesViews($user, $results) : null;
+//        dump($series);
 
+        $leafSettings = $settingsRepository->findOneBy(["user" => $user, "name" => "leaf"]);
+        if ($leafSettings == null) {
+            $leafSettings = new Settings();
+            $leafSettings->setUser($user);
+            $leafSettings->setName("leaf");
+            $leafSettings->setData([
+                ["data" => "30", "name" => "number", "type" => "range"],
+                ["data" => ["30", "80"], "name" => "life-length", "type" => "interval"],
+                ["data" => "180", "name" => "initial-angle", "type" => "range"],
+                ["data" => "16", "name" => "turn-per-minute", "type" => "range"],
+                ["data" => ["25", "200"], "name" => "scale", "type" => "interval"]
+            ]);
+            $settingsRepository->save($leafSettings, true);
+            dump($leafSettings);
+        }
         return $this->render('serie/index.html.twig', [
             'series' => $series,
             'numbers' => $serieRepository->numbers($user->getId())[0],
@@ -106,7 +122,7 @@ class SerieController extends AbstractController
                 'order' => $order],
             'user' => $user,
             'quotes' => (new QuoteService)->getRandomQuotes(),
-            'leafSettings' => $settingsRepository->findOneBy(["user" => $user, "name" => "leaf"]),
+            'leafSettings' => $leafSettings,
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
@@ -503,7 +519,7 @@ class SerieController extends AbstractController
         $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
 //        dump($tv);
-//        dump($viewing);
+        dump($viewing);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -764,7 +780,7 @@ class SerieController extends AbstractController
                 }
             } else {
                 if ($season->getEpisodeCount() < $s['episode_count']) {
-                    for ($i = $season->getEpisodeCount()+1; $i <= $s['episode_count']; $i++) {
+                    for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
                         $episode = new EpisodeViewing($i);
                         $this->episodeViewingRepository->save($episode);
                         $season->addEpisode($episode);
@@ -823,7 +839,7 @@ class SerieController extends AbstractController
             $allBefore = $request->query->getInt('all');
 
             $episodeViewings = $this->getEpisodeViewings($user, $serie, $season, $episode, $allBefore);
-            dump($episodeViewings, $allBefore);
+//            dump($episodeViewings, $allBefore);
 
             /** @var EpisodeViewing $episodeViewing */
             foreach ($episodeViewings as $episodeViewing) {
@@ -884,7 +900,7 @@ class SerieController extends AbstractController
         $viewings = $theViewing->getViewing();
 
         $seasonViews = $this->getSeasonViews($viewings);
-        dump($seasonViews);
+//        dump($seasonViews);
 
         $newTab = [];
         /*

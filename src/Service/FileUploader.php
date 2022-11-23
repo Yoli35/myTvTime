@@ -44,6 +44,8 @@ class FileUploader
             'avatar' => $this->targetDirectory[0],
             'banner' => $this->targetDirectory[1],
             'article_images' => $this->targetDirectory[2],
+            'event_thumbnail' => $this->targetDirectory[3],
+            'event_banner' => $this->targetDirectory[4],
             default => '',
         };
     }

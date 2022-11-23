@@ -12,5 +12,7 @@
             <img src="/images/default/no_avatar.png" alt="No avatar">
         {% endif %}
     </div>
-    {{ component('weather', {'locale': locale}) }}
+{#    {% if user.city or user.zipCode %}#}
+{#        {{ component('weather', {'locale': locale}) }}#}
+{#    {% endif %}#}
 </div>
