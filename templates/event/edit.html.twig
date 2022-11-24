@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}MyTvTime::{{ 'New event'|trans }}{% endblock %}
+{% block title %}MyTvTime::{{ 'Edit event'|trans }}{% endblock %}
 {% block description %}{{ 'List of all my events'|trans }}{% endblock %}
 {% block keywords %}{{ 'event'|trans }}{% endblock %}
 
@@ -9,7 +9,7 @@
     <div class="container">
         <div class="my-events">
             <div class="header">
-                <h1>{{ 'New event'|trans }}</h1>
+                <h1>{{ 'Edit event'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
 
@@ -29,6 +29,7 @@
         window.addEventListener("DOMContentLoaded", () => {
             initHeader();
             document.querySelector(".header").setAttribute("style", "background: transparent;");
+            document.querySelector("#event_save").innerHTML = "{{ "Update the event"|trans }}";
         })
     </script>
 {% endblock %}

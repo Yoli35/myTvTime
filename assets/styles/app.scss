@@ -92,6 +92,11 @@ main {
     display: flex;
 }
 
+.d-flex-1 {
+    display: flex;
+    gap: 1em;
+}
+
 .p-relative {
     position: relative;
 }

@@ -417,14 +417,21 @@ Herself: elle-même
 # Events
 event: événement
 events: événements
+My events: Mes événements
 Events: Événements
+List of all my events: Liste de mes événements
 Visible: Visible
+Edit: Éditer
+Hide: Masquer
 Subheading: Sous-titre
 EventImage: Image
 Caption: Légende
 Event: Événement
 No event: Pas d'événement
 Add event: Ajouter un événement
+New event: Nouvel événement
+Edit event: Éditer l'événement
+Update the event: Mettre à jour l'événement
 Click here or drop a thumbnail file: Cliquez ici ou déposez une vignette
 Click here or drop a banner file: Cliquez ici ou déposez un fichier de bannière
 

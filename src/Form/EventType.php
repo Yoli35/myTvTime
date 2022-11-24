@@ -29,12 +29,12 @@ class EventType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
-                'attr' => ['class'=> "w100"],
+                'attr' => ['class'=> "w100", 'rows' => 8],
                 'required' => false
             ])
             ->add('date', DateTimeType::class, [
                 'label' => 'Date',
-                'attr' => ['class'=> "w100"],
+                'attr' => ['class'=> "w100 d-flex-1"],
                 'required' => true
             ])
             ->add('dropThumbnail', DropzoneType::class, [
@@ -60,7 +60,7 @@ class EventType extends AbstractType
                 ],
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Update Profile',
+                'label' => 'Add event',
                 'attr' => ['class' => 'btn btn-secondary'],
             ]);
         ;

@@ -124,6 +124,7 @@
                         img {
                             height: 100%;
                             object-fit: cover;
+                            width: 100%;
                         }
                     }
 
@@ -131,15 +132,33 @@
                         @include flex-col(flex-start, center);
                         height: var(--event-height);
                         padding: 1em;
+                        position: relative;
                         width: calc(50% - 10em);
+
+                        .tools {
+                            @include flex-row();
+                            background-color: var(--gradiant-grey-50);
+                            border-radius: .5em;
+                            gap: 1em;
+                            height: 2em;
+                            opacity: 0;
+                            position: absolute;
+                            right: 1em;
+                            top: 4em;
+                            transition: opacity 300ms ease-in-out;
+                            width: 6em;
+
+                            &.show {
+                                opacity: 1;
+                            }
+                        }
                     }
                 }
             }
 
             .no-event, .add-event {
-                background-color: var(--gradiant-grey-50);
                 border-radius: 1em;
-                color: var(--gradiant-grey-10);
+                color: var(--gradiant-green-70);
                 font-weight: 600;
                 padding: 1em 2em;
             }
@@ -150,10 +169,11 @@
 
             .add-event {
                 align-items: center;
-                background-color: var(--gradiant-green-50);
-                box-shadow: 0 0 0 var(--gradiant-green-20);
+                background-color: var(--gradiant-grey-50);
+                box-shadow: 0 0 0 var(--gradiant-grey-20);
                 cursor: pointer;
                 display: flex;
+                margin-left: auto;
                 transition: translate 100ms ease-out;
 
                 i {
@@ -162,8 +182,13 @@
                 }
 
                 &:hover {
-                    box-shadow: 0 4px 0 var(--gradiant-green-20);
+                    box-shadow: 0 4px 0 var(--gradiant-grey-20);
                     translate: 0 -4px;
+                }
+
+                &.click {
+                    box-shadow: 0 0 0 var(--gradiant-grey-20);
+                    translate: 0 0;
                 }
             }
         }
@@ -177,6 +202,18 @@
         }
     }
 
+}
+
+@media (prefers-color-scheme: dark) {
+    .my-events {
+        main {
+            .form {
+                form {
+                    box-shadow: 0 0 1em hsla(0, 0, 100%, .2), 0 0 3em hsla(0, 0, 100%, .15), 0 0 10em hsla(0, 0, 100%, .1);
+                }
+            }
+        }
+    }
 }
 
 .my-event {

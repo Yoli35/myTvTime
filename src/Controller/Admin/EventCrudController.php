@@ -67,7 +67,7 @@ class EventCrudController extends AbstractCrudController
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         /** @var Event $entityInstance */
-        $entityInstance->setUpdatedAt(new \DateTimeImmutable());
+        $entityInstance->setUpdatedAt(new \DateTime());
 
         $entityManager->persist($entityInstance);
         $entityManager->flush();

@@ -47,7 +47,7 @@ class UserType extends AbstractType
             ])
             ->add('country', CountryType::class, [ //] TextType::class, [
                 'label' => 'Country',
-                'attr' => ['class' => 'w100'],
+                'attr' => ['class' => 'form-select w100'],
                 'required' => false,
                 'preferred_choices' => ['FR', 'DE', 'GB', 'ES', 'US'],
             ])

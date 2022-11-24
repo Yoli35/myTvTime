@@ -10,6 +10,7 @@ use App\Service\FileUploader;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +33,7 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_event_new', methods: ['GET','POST'])]
+    #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EventRepository $eventRepository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -42,39 +43,64 @@ class EventController extends AbstractController
         $event = new Event($user);
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $event->setVisible(true);
-
-            /** @var UploadedFile $thumbnailFile */
-            $thumbnailFile = $form->get('dropThumbnail')->getData();
-            if ($thumbnailFile) {
-                $thumbnailFileName = $fileUploader->upload($thumbnailFile, 'event_thumbnail');
-                $fileToBeRemoved = $event->getThumbnail();
-                if ($fileToBeRemoved) {
-                    $fileUploader->removeFile($fileToBeRemoved, 'event_thumbnail');
-                }
-                $event->setThumbnail($thumbnailFileName);
-            }
-            /** @var UploadedFile $bannerFile */
-            $bannerFile = $form->get('dropBanner')->getData();
-            if ($bannerFile) {
-                $bannerFileName = $fileUploader->upload($bannerFile, 'event_banner');
-                $fileToBeRemoved = $event->getBanner();
-                if ($fileToBeRemoved) {
-                    $fileUploader->removeFile($fileToBeRemoved, 'event_banner');
-                }
-                $event->setBanner($bannerFileName);
-            }
-
-            $eventRepository->add($event, true);
-
-            return $this->redirectToRoute('app_event');
+            $this->handleForm($form, $event, $fileUploader, $eventRepository);
         }
+
         return $this->render('event/new.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
         ]);
+    }
+
+    #[Route('/edit/{id}', name: 'app_event_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Event $event, EventRepository $eventRepository, FileUploader $fileUploader): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->handleForm($form, $event, $fileUploader, $eventRepository);
+        }
+
+        return $this->render('event/edit.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
+    }
+
+    function handleForm($form, Event $event, FileUploader $fileUploader, EventRepository $eventRepository): RedirectResponse
+    {
+        $event->setVisible(true);
+        $event->setUpdatedAt(new \DateTime());
+
+        /** @var UploadedFile $thumbnailFile */
+        $thumbnailFile = $form->get('dropThumbnail')->getData();
+        if ($thumbnailFile) {
+            $thumbnailFileName = $fileUploader->upload($thumbnailFile, 'event_thumbnail');
+            $fileToBeRemoved = $event->getThumbnail();
+            if ($fileToBeRemoved) {
+                $fileUploader->removeFile($fileToBeRemoved, 'event_thumbnail');
+            }
+            $event->setThumbnail($thumbnailFileName);
+        }
+        /** @var UploadedFile $bannerFile */
+        $bannerFile = $form->get('dropBanner')->getData();
+        if ($bannerFile) {
+            $bannerFileName = $fileUploader->upload($bannerFile, 'event_banner');
+            $fileToBeRemoved = $event->getBanner();
+            if ($fileToBeRemoved) {
+                $fileUploader->removeFile($fileToBeRemoved, 'event_banner');
+            }
+            $event->setBanner($bannerFileName);
+        }
+
+        $eventRepository->add($event, true);
+
+        return $this->redirectToRoute('app_event');
     }
 
     #[Route('/{id}', name: 'app_event_show', methods: ['GET'])]

@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}MyTvTime::{{ 'My Series'|trans }}{% endblock %}
-{% block description %}{{ 'List of all the series I have watched in my life'|trans }}{% endblock %}
-{% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
+{% block title %}MyTvTime::{{ 'My events'|trans }}{% endblock %}
+{% block description %}{{ 'List of all my events'|trans }}{% endblock %}
+{% block keywords %}{{ 'event'|trans }}{% endblock %}
 {% block body %}
     {{ include('blocks/_pageHeader.html.twig') }}
     <div class="container">
@@ -12,7 +12,7 @@
                 <div class="backdrop"></div>
             </div>
 
-            {{ include('blocks/_nav.html.twig', {thisPage:('My Events'|trans)}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage:('My events'|trans)}) }}
 
             <main>
                 <div class="events">
@@ -28,6 +28,11 @@
                                         <div class="infos">
                                             <h2>{{ event.name }}</h2>
                                             <div>{{ event.subheading }}</div>
+                                            <div id="{{ event.id }}" class="tools">
+                                                <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
+                                                <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i>
+                                                <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
+                                            </div>
                                         </div>
                                         <div class="countdown" id="{{ event.id }}">
                                             {{ event.date|format_date('full') }}<br/>
@@ -51,12 +56,16 @@
 {% block morejs %}
     <script src="/js/event.js"></script>
     <script>
+        const locale = "{{ app.request.locale }}"
+
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
             initCountdowns(setCountdownValues());
+            initTools();
             document.querySelector(".header").setAttribute("style", "background: transparent;");
             document.querySelector(".add-event").addEventListener("click", addNewEvent);
+
         })
 
         function setCountdownValues() {
@@ -67,8 +76,56 @@
             return countdownValues;
         }
 
-        function addNewEvent() {
-            window.location.href = "{{ path('app_event_new') }}";
+        function initTools() {
+            const tools = document.querySelectorAll(".tools");
+            const events = document.querySelectorAll(".event");
+
+            tools.forEach(tool => {
+                tool.querySelector(".fa-pen-to-square").addEventListener("click", editEvent);
+                tool.querySelector(".fa-eye-slash").addEventListener("click", hideEvent);
+                tool.querySelector(".fa-trash-can").addEventListener("click", deleteEvent);
+            });
+
+            events.forEach(event => {
+                event.addEventListener("mouseenter", showTools);
+                event.addEventListener("mouseleave", hideTools);
+            })
+        }
+
+        function showTools(evt) {
+            const tools = evt.currentTarget.querySelector(".tools");
+            tools.classList.add("show");
+        }
+
+        function hideTools(evt) {
+            const tools = evt.currentTarget.querySelector(".tools");
+            tools.classList.remove("show");
+        }
+
+        function addNewEvent(evt) {
+            evt.currentTarget.classList.add("click");
+            setTimeout(() => {
+                window.location.href = "{{ path('app_event_new') }}";
+            }, 100);
+        }
+
+        function editEvent(evt) {
+            const id = evt.currentTarget.parentElement.getAttribute("id");
+            console.log('edit', {id});
+            evt.preventDefault();
+            window.location.href = "/" + locale + "/event/edit/" + id;
+        }
+
+        function hideEvent(evt) {
+            const id = evt.currentTarget.parentElement.getAttribute("id");
+            console.log('hide', {id});
+            evt.preventDefault();
+        }
+
+        function deleteEvent(evt) {
+            const id = evt.currentTarget.parentElement.getAttribute("id");
+            console.log('delete', {id});
+            evt.preventDefault();
         }
     </script>
 {% endblock %}

@@ -651,9 +651,10 @@ $fa-font-path: "../webfonts";
 
     label {
         @include flex-col(start, start);
+        width: 100%;
     }
 
-    label:has(select) {
+    label:has(select):has(.form-select) {
         font-weight: 100;
         position: relative;
 
@@ -669,17 +670,17 @@ $fa-font-path: "../webfonts";
             width: .5em;
             z-index: 2;
         }
+    }
 
-        select {
-            appearance: unset;
-            background-color: var(--form-bg);
-            border-color: var(--form-border);
-            color: var(--form-text);
-            font-weight: 100;
-            height: 2em;
-            margin: 0;
-            padding: .125em 2em .125em .25em;
-        }
+    select {
+        appearance: unset;
+        background-color: var(--form-bg);
+        border-color: var(--form-border);
+        color: var(--form-text);
+        font-weight: 100;
+        height: 2em;
+        margin: 0;
+        padding: .125em 2em .125em .25em;
     }
 
     .field {
@@ -687,7 +688,7 @@ $fa-font-path: "../webfonts";
         width: calc(50% - .5em);
     }
 
-    input[type=email], input[type=text] {
+    input[type=email], input[type=text], textarea {
         background-color: var(--form-bg);
         border: 1px solid var(--form-border);
         color: var(--form-text);
