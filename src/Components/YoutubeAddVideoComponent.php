@@ -28,10 +28,6 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 #[AsLiveComponent('youtube_add_video', csrf: false)]
 class YoutubeAddVideoComponent
 {
-    //https://www.youtube.com/watch?v=f6XXCR5agqg
-    //https://youtu.be/dw3uAa-u0KY
-    //https://youtube.com/shorts/gepwtKiSPIg?feature=share
-    //
     use DefaultActionTrait;
 
     #[LiveProp(writable: true)]
@@ -41,27 +37,26 @@ class YoutubeAddVideoComponent
     #[LiveProp]
     public int $justAdded = 0;
     #[LiveProp]
+    public int $user_id = 0;
+    #[LiveProp]
+    public int $videoCount = 0;
+    #[LiveProp]
+    public int $totalRuntime = 0;
+    #[LiveProp]
     public string $locale = '';
     #[LiveProp]
     public string $preview = '';
     #[LiveProp]
-    public int $user_id = 0;
-    #[LiveProp]
     public string $preview_url = "";
     #[LiveProp]
     public string $preview_title = "";
-    #[LiveProp]
-    public int $videoCount = 0;
     #[LiveProp]
     public array $videos = [];
     #[LiveProp]
     public DateTimeImmutable $firstView;
     #[LiveProp]
     public string $time2Human = "";
-    #[LiveProp]
-    private int $totalRuntime = 0;
-//    private TranslationServiceClient $translationClient;
-//    private TranslatorInterface $translator;
+
     private UserRepository $userRepository;
     private EntityManagerInterface $entityManager;
     private YoutubeVideoRepository $videoRepository;
@@ -74,7 +69,6 @@ class YoutubeAddVideoComponent
      */
     public function __construct(YoutubeVideoRepository $videoRepository, YoutubeChannelRepository $channelRepository, EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
-        dump('construct start');
         $this->videoRepository = $videoRepository;
         $this->channelRepository = $channelRepository;
         $this->entityManager = $entityManager;
@@ -87,12 +81,10 @@ class YoutubeAddVideoComponent
         $client->setAccessType('offline');
 
         $this->service_YouTube = new Google_Service_YouTube($client);
-        dump('construct end');
     }
 
     public function mount($id, $preview, $locale): void
     {
-        dump('mount start');
         $this->user_id = $id;
         $this->locale = $locale;
         $this->preview = $preview;
@@ -103,7 +95,6 @@ class YoutubeAddVideoComponent
         $this->firstView = $this->getFirstView();
         $this->time2Human = $this->getTime2human();
         list($this->preview_url, $this->preview_title) = $this->get_preview();
-        dump('mount end');
     }
 
     /**
@@ -112,20 +103,23 @@ class YoutubeAddVideoComponent
      */
     public function newVideo(): array
     {
-        dump('newVideo');
-        // https://www.youtube.com/watch?v=at9h35V8rtQ
-        // https://www.youtube.com/shorts/7KFxzeyse2g
-        // https://youtu.be/at9h35V8rtQ
+
         $thisLink = $this->link;
         $this->justAdded = 0;
 
         if (str_contains($thisLink, "shorts")) {
-            $thisLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $thisLink);
-        }
-        elseif (str_contains($thisLink, "youtu.be")) {
+            if (str_contains($thisLink, "www")) {
+                // https://www.youtube.com/shorts/7KFxzeyse2g
+                $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/shorts\/(.+)/", "$1", $thisLink);
+            } else {
+                // https://youtube.com/shorts/XxpFBkm5XqI?feature=share
+                $thisLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $thisLink);
+            }
+        } elseif (str_contains($thisLink, "youtu.be")) {
+            // https://youtu.be/at9h35V8rtQ
             $thisLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $thisLink);
-        }
-        elseif (str_contains($thisLink, 'watch')) {
+        } elseif (str_contains($thisLink, 'watch')) {
+            // https://www.youtube.com/watch?v=at9h35V8rtQ
             $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=(.+)/", "$1", $thisLink);
         }
 
@@ -209,14 +203,14 @@ class YoutubeAddVideoComponent
                 $this->videoCount = $this->getVideosCount();
                 $this->totalRuntime = $this->getTotalRuntime();
                 $this->time2Human = $this->getTime2human();
-            }
-            else {
+            } else {
                 $link->addUser($this->userRepository->find($this->user_id));
                 $this->videoRepository->add($link, true);
             }
         }
+
         $firstVideo = $this->videos[0];
-        if (gettype($firstVideo)=='array') {
+        if (gettype($firstVideo) == 'array') {
 
             $this->videos = $this->getVideos();
             $this->videoCount = $this->getVideosCount();
@@ -336,25 +330,4 @@ class YoutubeAddVideoComponent
         }
         return "";
     }
-//
-//    /**
-//     * @throws ValidationException
-//     * @throws ApiException
-//     */
-//    private function translate($phrase): string
-//    {
-//        $toBeTranslate = $this->translator->trans($phrase);
-//        $translated = '';
-//
-//        if ($this->locale !== 'en') {
-//
-//            $content = [$toBeTranslate];
-//            $targetLanguage = $this->locale;
-//            $response = $this->translationClient->translateText($content, $targetLanguage, TranslationServiceClient::locationName('mytvtime-349019', 'global'));
-//            foreach ($response->getTranslations() as $key => $translation) {
-//                $translated .= $translation->getTranslatedText();
-//            }
-//        }
-//        return strlen($translated) ? $translated : $phrase;
-//    }
 }

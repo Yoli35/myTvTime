@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "072dd3d9af52c23377fb24d7ae1d0379",
+    "content-hash": "8a9daef5616a05f2ea9b6ff0fc136c53",
     "packages": [
         {
             "name": "brick/math",
@@ -1182,16 +1182,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.13.3",
+            "version": "2.13.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "e750360bd52b080c4cbaaee1b48b80f7dc873b36"
+                "reference": "a5a6cc6630ce497290396d5f206887227820a634"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/e750360bd52b080c4cbaaee1b48b80f7dc873b36",
-                "reference": "e750360bd52b080c4cbaaee1b48b80f7dc873b36",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/a5a6cc6630ce497290396d5f206887227820a634",
+                "reference": "a5a6cc6630ce497290396d5f206887227820a634",
                 "shasum": ""
             },
             "require": {
@@ -1220,13 +1220,13 @@
                 "doctrine/annotations": "^1.13",
                 "doctrine/coding-standard": "^9.0.2 || ^10.0",
                 "phpbench/phpbench": "^0.16.10 || ^1.0",
-                "phpstan/phpstan": "~1.4.10 || 1.8.5",
+                "phpstan/phpstan": "~1.4.10 || 1.9.2",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
                 "psr/log": "^1 || ^2 || ^3",
                 "squizlabs/php_codesniffer": "3.7.1",
                 "symfony/cache": "^4.4 || ^5.4 || ^6.0",
                 "symfony/yaml": "^3.4 || ^4.0 || ^5.0 || ^6.0",
-                "vimeo/psalm": "4.27.0"
+                "vimeo/psalm": "4.30.0"
             },
             "suggest": {
                 "ext-dom": "Provides support for XSD validation for XML mapping files",
@@ -1276,9 +1276,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.13.3"
+                "source": "https://github.com/doctrine/orm/tree/2.13.4"
             },
-            "time": "2022-10-07T06:37:17+00:00"
+            "time": "2022-11-20T18:53:31+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -9112,23 +9112,23 @@
         },
         {
             "name": "symfony/ux-live-component",
-            "version": "v2.5.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-live-component.git",
-                "reference": "a74516608719af6cbec8782bdea488101791b2fc"
+                "reference": "17a2586f0fe86c4efbcabd39b3a90bcd453a39b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/a74516608719af6cbec8782bdea488101791b2fc",
-                "reference": "a74516608719af6cbec8782bdea488101791b2fc",
+                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/17a2586f0fe86c4efbcabd39b3a90bcd453a39b2",
+                "reference": "17a2586f0fe86c4efbcabd39b3a90bcd453a39b2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0",
                 "symfony/property-access": "^5.4|^6.0",
                 "symfony/serializer": "^5.4|^6.0",
-                "symfony/ux-twig-component": "^2.5"
+                "symfony/ux-twig-component": "^2.1"
             },
             "conflict": {
                 "symfony/config": "<5.4.0"
@@ -9144,7 +9144,7 @@
                 "symfony/security-csrf": "^5.4|^6.0",
                 "symfony/twig-bundle": "^5.4|^6.0",
                 "symfony/validator": "^5.4|^6.0",
-                "zenstruck/browser": "^1.2.0",
+                "zenstruck/browser": "^0.9.1",
                 "zenstruck/foundry": "^1.10"
             },
             "type": "symfony-bundle",
@@ -9177,7 +9177,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-live-component/tree/v2.5.0"
+                "source": "https://github.com/symfony/ux-live-component/tree/v2.4.0"
             },
             "funding": [
                 {
@@ -9193,20 +9193,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-06T19:53:00+00:00"
+            "time": "2022-08-15T07:48:28+00:00"
         },
         {
             "name": "symfony/ux-twig-component",
-            "version": "v2.5.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-twig-component.git",
-                "reference": "a669df9c8f4f154d36957b2f2c3c8b53d7a0e225"
+                "reference": "877a1b479b6083472bbec6a9e7267f2cac11b5dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/a669df9c8f4f154d36957b2f2c3c8b53d7a0e225",
-                "reference": "a669df9c8f4f154d36957b2f2c3c8b53d7a0e225",
+                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/877a1b479b6083472bbec6a9e7267f2cac11b5dd",
+                "reference": "877a1b479b6083472bbec6a9e7267f2cac11b5dd",
                 "shasum": ""
             },
             "require": {
@@ -9254,7 +9254,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-twig-component/tree/v2.5.0"
+                "source": "https://github.com/symfony/ux-twig-component/tree/v2.4.0"
             },
             "funding": [
                 {
@@ -9270,7 +9270,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-07T13:45:36+00:00"
+            "time": "2022-06-17T07:08:52+00:00"
         },
         {
             "name": "symfony/validator",
