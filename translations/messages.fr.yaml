@@ -432,6 +432,9 @@ Add event: Ajouter un événement
 New event: Nouvel événement
 Edit event: Éditer l'événement
 Update the event: Mettre à jour l'événement
+Delete this event?: Supprimer cet événement ?
+Do you really want to delete this event?: Souhaitez-vous réellement supprimer cet événement ?
+This operation is final and cannot be cancelled.: Cette opération est définitive et ne peut être annulée.
 Click here or drop a thumbnail file: Cliquez ici ou déposez une vignette
 Click here or drop a banner file: Cliquez ici ou déposez un fichier de bannière
 

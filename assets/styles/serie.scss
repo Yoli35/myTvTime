@@ -1455,43 +1455,12 @@
 }
 
 .viewed-episode {
-    @include dialog();
+    @include dialog2(50em);
 
     .overlay {
-        background-color: var(--gradiant-grey-100);
-        border: 1px solid var(--gradiant-grey-50);
-        border-radius: 1em;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 0, 0, 0.25);
-        color: var(--gradiant-grey-20);
         margin: calc(50vh - 15em) auto;
-        width: 50em;
-
-        .header {
-            @include flex-100();
-            border-bottom: 1px solid var(--gradiant-grey-50);
-            padding: 1em;
-            position: relative;
-            text-align: center;
-            width: 50em;
-
-            .close {
-                appearance: none;
-                background-color: transparent;
-                border: none;
-                color: var(--gradiant-grey-20);
-                cursor: pointer;
-                font-size: 1em;
-                outline: none;
-                position: absolute;
-                right: .5em;
-                top: .5em;
-            }
-        }
 
         .content {
-            @include flex-col(flex-start, flex-start);
-            padding: 2em;
-            width: 50em;
 
             .networks {
                 @include flex-row(stretch, start);
@@ -1572,19 +1541,6 @@
             bottom: 1em;
             position: fixed;
             right: 1em;
-        }
-
-        .footer {
-            @include flex-100(flex-end, flex-end);
-            gap: 1em;
-            border-top: 1px solid var(--gradiant-grey-50);
-            padding: 1em;
-            width: 50em;
-
-            button:hover {
-                background-color: var(--gradiant-grey-60);
-                border-color: var(--gradiant-grey-50);
-            }
         }
     }
 }

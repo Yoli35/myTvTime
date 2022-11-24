@@ -21,10 +21,10 @@ class FileUploader
 
     public function upload(UploadedFile $file, $type): string
     {
-        if ($type=='avatar' ||$type=='banner') {
+        if ($type == 'avatar' || $type == 'banner' ||
+            $type == 'event_thumbnail' || $type == 'event_banner') {
             $fileName = Uuid::uuid4()->toString() . '.' . $file->guessExtension();
-        }
-        else {
+        } else {
             $originalFilename = strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
             $fileName = $this->slugger->slug($originalFilename) . '.' . $file->guessExtension();
         }

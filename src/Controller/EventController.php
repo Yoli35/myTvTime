@@ -10,6 +10,7 @@ use App\Service\FileUploader;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +46,7 @@ class EventController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->handleForm($form, $event, $fileUploader, $eventRepository);
+            return $this->redirectToRoute('app_event');
         }
 
         return $this->render('event/new.html.twig', [
@@ -64,6 +66,7 @@ class EventController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->handleForm($form, $event, $fileUploader, $eventRepository);
+            return $this->redirectToRoute('app_event');
         }
 
         return $this->render('event/edit.html.twig', [
@@ -72,7 +75,7 @@ class EventController extends AbstractController
         ]);
     }
 
-    function handleForm($form, Event $event, FileUploader $fileUploader, EventRepository $eventRepository): RedirectResponse
+    function handleForm($form, Event $event, FileUploader $fileUploader, EventRepository $eventRepository): void
     {
         $event->setVisible(true);
         $event->setUpdatedAt(new \DateTime());
@@ -99,8 +102,21 @@ class EventController extends AbstractController
         }
 
         $eventRepository->add($event, true);
+    }
 
-        return $this->redirectToRoute('app_event');
+    #[Route('/delete/{id}', name: 'app_event_delete', methods: ['GET'])]
+    public function delete(Event $event, EventRepository $eventRepository, FileUploader $fileUploader): JsonResponse
+    {
+        if ($event->getThumbnail()) {
+            $fileUploader->removeFile($event->getThumbnail(), 'event_thumbnail');
+        }
+        if ($event->getBanner()) {
+            $fileUploader->removeFile($event->getBanner(), 'event_banner');
+        }
+        // TODO : Supprimer les images associées
+        $eventRepository->remove($event, true);
+
+        return $this->json(['status' => 200]);
     }
 
     #[Route('/{id}', name: 'app_event_show', methods: ['GET'])]

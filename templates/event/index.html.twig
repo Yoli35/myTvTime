@@ -21,7 +21,7 @@
                         {% for event in events %}
                             {% if event.visible %}
                                 <a href="{{ path('app_event_show', {id: event.id}) }}">
-                                    <div class="event">
+                                    <div class="event" data-id="{{ event.id }}">
                                         <div class="poster">
                                             <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
                                         </div>
@@ -52,21 +52,40 @@
         {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
+    <dialog class="confirm-deletion">
+        <div class="overlay">
+            <div class="header">
+                {{ 'Delete this event?'|trans }}
+                <div class="close"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="content">
+                {{ 'Do you really want to delete this event?'|trans }}
+                <span></span>
+                {{ 'This operation is final and cannot be cancelled.'|trans }}
+            </div>
+            <div class="footer">
+                <button value="nope" class="btn btn-secondary delete-cancel">{{ 'Cancel'|trans }}</button>
+                <button value="yass" class="btn btn-secondary delete-done">{{ 'Delete'|trans }}</button>
+            </div>
+        </div>
+    </dialog>
 {% endblock %}
 {% block morejs %}
     <script src="/js/event.js"></script>
     <script>
-        const locale = "{{ app.request.locale }}"
+        const locale = "{{ app.request.locale }}";
+        let confirmDialog;
 
         window.addEventListener("DOMContentLoaded", () => {
 
-            initHeader();
-            initCountdowns(setCountdownValues());
-            initTools();
             document.querySelector(".header").setAttribute("style", "background: transparent;");
             document.querySelector(".add-event").addEventListener("click", addNewEvent);
+            confirmDialog = document.querySelector(".confirm-deletion");
 
-        })
+            initHeader();
+            initCountdowns(setCountdownValues());
+            initTools(confirmDialog);
+        });
 
         function setCountdownValues() {
             countdownValues = [];
@@ -76,7 +95,7 @@
             return countdownValues;
         }
 
-        function initTools() {
+        function initTools(dialog) {
             const tools = document.querySelectorAll(".tools");
             const events = document.querySelectorAll(".event");
 
@@ -89,7 +108,60 @@
             events.forEach(event => {
                 event.addEventListener("mouseenter", showTools);
                 event.addEventListener("mouseleave", hideTools);
+            });
+
+
+            dialog.querySelector(".delete-done").addEventListener("click", () => {
+                closeDialog(dialog, true);
             })
+            dialog.querySelector(".delete-cancel").addEventListener("click", () => {
+                closeDialog(dialog, false);
+            })
+            dialog.querySelector(".close").addEventListener('click', function () {
+                closeDialog(dialog, false);
+            });
+        }
+
+        function openDialog(dialog, id, elem) {
+            const infos = elem.closest(".infos");
+            dialog.querySelector("span").innerHTML = infos.querySelector("h2").innerHTML;
+            dialog.setAttribute("data-id", id);
+
+            if (typeof dialog.showModal === "function") {
+                dialog.showModal();
+                setTimeout(() => {
+                    dialog.classList.add("show")
+                }, 0);
+            } else {
+                console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
+            }
+        }
+
+        function closeDialog(dialog, deleteEvent) {
+            let id = dialog.getAttribute("data-id");
+            dialog.removeAttribute("data-id");
+            dialog.classList.remove("show");
+            setTimeout(() => {
+                dialog.close()
+            }, 300);
+            if (deleteEvent) {
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    const selector = ".event[data-id=\"" + id + "\"]";
+                    const event = document.querySelector(selector);
+                    const a = event.closest("a");
+                    setTimeout(() => {
+                        a.classList.add("deleted");
+                    }, 0);
+                    setTimeout(() => {
+                        const events = a.closest(".events");
+                        events.removeChild(a);
+                    }, 300);
+                }
+                xhr.open("GET", "/" + locale + "/event/delete/" + id);
+                xhr.send();
+            }
         }
 
         function showTools(evt) {
@@ -126,6 +198,7 @@
             const id = evt.currentTarget.parentElement.getAttribute("id");
             console.log('delete', {id});
             evt.preventDefault();
+            openDialog(confirmDialog, id, evt.currentTarget);
         }
     </script>
 {% endblock %}

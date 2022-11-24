@@ -107,7 +107,12 @@
             width: 100%;
 
             a {
+                transition: scale 300ms ease-in-out;
                 width: 100%;
+
+                &.deleted {
+                    scale: 0;
+                }
 
                 .event {
                     @include flex-row(flex-start, flex-start);
@@ -201,7 +206,16 @@
             }
         }
     }
+}
 
+.confirm-deletion {
+    @include dialog2(32em);
+
+    .content {
+        span {
+            font-weight: bold;
+        }
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -210,6 +224,20 @@
             .form {
                 form {
                     box-shadow: 0 0 1em hsla(0, 0, 100%, .2), 0 0 3em hsla(0, 0, 100%, .15), 0 0 10em hsla(0, 0, 100%, .1);
+                }
+            }
+        }
+    }
+
+    .confirm-deletion {
+        .overlay {
+            background-color: var(--gradiant-grey-20);
+            border-color: var(--gradiant-grey-50);
+            color: var(--gradiant-grey-80);
+
+            .header {
+                .close {
+                    color: var(--gradiant-grey-80);
                 }
             }
         }
