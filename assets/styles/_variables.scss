@@ -346,7 +346,7 @@ $fa-font-path: "../webfonts";
     }
 }
 
-@mixin animated-header($bg-image, $h1-color: var(--gradiant-grey-90)) {
+@mixin animated-header($bg-image, $h1-color: var(--gradiant-grey-50)) {
     background-color: var(--gradiant-grey-80);
     border-radius: 1em;
     color: var(--gradiant-grey-30);
@@ -383,7 +383,7 @@ $fa-font-path: "../webfonts";
     .backdrop {
         @include flex-row(end, start);
         background-image: url($bg-image);
-        background-position: center 25%;
+        background-position: center;
         background-size: cover;
         border-radius: 1em;
         inset: 0;

@@ -90,7 +90,7 @@
         function setCountdownValues() {
             countdownValues = [];
             {% for e in events %}
-            countdownValues[{{ loop.index0 }}] = {"id": {{ e.id }}, "date": "{{ e.date|format_datetime('short','short', locale='en-US') }}"};
+            countdownValues[{{ loop.index0 }}] = {"id": {{ e.id }}, "interval": -1, "date": "{{ e.date|format_datetime('short','short', locale='en-US') }}"};
             {% endfor %}
             return countdownValues;
         }
@@ -156,6 +156,8 @@
                     }, 0);
                     setTimeout(() => {
                         const events = a.closest(".events");
+                        const countdownValue = countdownValues.find(item => item.id === id);
+                        clearInterval(countdownValue.interval);
                         events.removeChild(a);
                     }, 300);
                 }

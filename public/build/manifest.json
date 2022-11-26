@@ -106,5 +106,7 @@
   "build/images/network-other-light.png": "/build/images/network-other-light.82d80b8d.png",
   "build/images/network-other-dark.png": "/build/images/network-other-dark.99a84cb4.png",
   "build/images/the-movie-db.svg": "/build/images/the-movie-db.da3f379f.svg",
-  "build/images/apple-touch-icon.png": "/build/images/apple-touch-icon.abbb8735.png"
+  "build/images/apple-touch-icon.png": "/build/images/apple-touch-icon.abbb8735.png",
+  "build/images/youtube-light.png": "/build/images/youtube-light.933acd12.png",
+  "build/images/youtube-dark.png": "/build/images/youtube-dark.add64810.png"
 }

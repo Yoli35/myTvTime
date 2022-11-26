@@ -4,7 +4,7 @@
 @import "../fontawesome/scss/brands.scss";
 
 .yt-header {
-    @include banner("../images/yt-header1.png");
+    @include banner("../images/youtube-light.png");
 }
 
 .yt-result {
@@ -439,7 +439,7 @@
     padding-top: 1em;
 
     .header {
-        @include animated-header("../images/yt-header2.png");
+        @include animated-header("../images/youtube-light.png");
     }
 
     .search {
@@ -798,6 +798,20 @@
 }
 
 @media (prefers-color-scheme: dark) {
+
+    .yt-header {
+        .banner {
+            background-image: url("../images/youtube-dark.png");
+        }
+    }
+
+    .youtube-search {
+        .header {
+            .backdrop {
+                background-image: url("../images/youtube-dark.png");
+            }
+        }
+    }
 
     .yt-header {
         .banner {

@@ -152,8 +152,9 @@ function createCountdown(countdown) {
     countdown.addEventListener('mouseenter', showCountDownDate);
     countdown.addEventListener('mouseleave', hideCountDownDate);
 
+    const countdownValue = countdownValues.find(item => item.id === id);
     updateCountdown(countdown);
-    setInterval(updateCountdown, 1000, countdown);
+    countdownValue.interval = setInterval(updateCountdown, 1000, countdown);
 }
 
 function showCountDownDate(evt) {
