@@ -138,17 +138,17 @@
         }
 
         function closeDialog(dialog, deleteEvent) {
-            let id = dialog.getAttribute("data-id");
+            let deletedId = parseInt(dialog.getAttribute("data-id"));
+            let countdownValue = countdownValues.find(({id}) => id === deletedId);
             dialog.removeAttribute("data-id");
             dialog.classList.remove("show");
             setTimeout(() => {
                 dialog.close()
             }, 300);
             if (deleteEvent) {
-
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
-                    const selector = ".event[data-id=\"" + id + "\"]";
+                    const selector = ".event[data-id=\"" + deletedId + "\"]";
                     const event = document.querySelector(selector);
                     const a = event.closest("a");
                     setTimeout(() => {
@@ -156,12 +156,12 @@
                     }, 0);
                     setTimeout(() => {
                         const events = a.closest(".events");
-                        const countdownValue = countdownValues.find(item => item.id === id);
                         clearInterval(countdownValue.interval);
+                        countdownValue.interval = -1;
                         events.removeChild(a);
                     }, 300);
                 }
-                xhr.open("GET", "/" + locale + "/event/delete/" + id);
+                xhr.open("GET", "/" + locale + "/event/delete/" + deletedId);
                 xhr.send();
             }
         }
