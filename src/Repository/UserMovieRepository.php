@@ -117,29 +117,23 @@ class UserMovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAll();
     }
 
-    public function userMovieGetCollections($movie_id, $short = true): array
+    public function userMovieGetCollections($movie_id, $user_id, $short = true): array
     {
         if ($short) {
             $sql = 'SELECT '
-                . '  id,title,thumbnail,color '
-                . 'FROM '
-                . '  movie_collection t0 '
-                . 'INNER JOIN '
-                . '  movie_collection_user_movie '
-                . '  ON t0.id = movie_collection_user_movie.movie_collection_id '
-                . 'WHERE '
-                . '  movie_collection_user_movie.user_movie_id = ' . $movie_id;
+                . '  id,title,thumbnail,color ';
         } else {
             $sql = 'SELECT '
-                . '  * '
-                . 'FROM '
-                . '  movie_collection t0 '
-                . 'INNER JOIN '
-                . '  movie_collection_user_movie '
-                . '  ON t0.id = movie_collection_user_movie.movie_collection_id '
-                . 'WHERE '
-                . '  movie_collection_user_movie.user_movie_id = ' . $movie_id;
+                . '  * ';
         }
+        $sql .= 'FROM '
+            . '  movie_collection t0 '
+            . 'INNER JOIN '
+            . '  movie_collection_user_movie '
+            . '  ON t0.id = movie_collection_user_movie.movie_collection_id '
+            . 'WHERE '
+            . '  movie_collection_user_movie.user_movie_id = ' . $movie_id
+            . ' AND t0.`user_id` = ' . $user_id;
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

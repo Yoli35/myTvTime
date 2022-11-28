@@ -471,236 +471,218 @@
     }
 }
 
-.export-result {
-    @include flex-row();
-    flex-wrap: wrap;
-    max-height: 49rem;
-    overflow-y: scroll;
+.export-movies, .append-movies {
+    @include dialog2(50em);
 
-    .sample {
-        //background-color: #f0f0f0;
-        background: #f6e2f6;
-        background: linear-gradient(225deg, #f6e2f6 0%, #f0f0f0 100%);
-        border-radius: .5em;
-        color: #545454;
-        font-family: 'Courier Prime', monospace;
-        font-size: 1em;
-        margin: 0 0 1em 0;
-        max-width: 800px;
-        overflow-x: scroll;
-        padding: 1em;
-        width: 100%;
-
-        span.key {
-            color: #a600a6;
-        }
-
-        span.value-alpha {
-            color: #007800;
-        }
-
-        span.value-digit {
-            color: #0000db;
-        }
-
-        .i {
-            color: #e99e00;
-        }
-    }
-
-    .selection {
-        @include flex-row();
-        margin-bottom: 1em;
-        width: 100%;
-    }
-
-    .result-item {
-        background-color: #0d5e42;
-        border-radius: .25em;
-        color: #0dcaf0;
-        cursor: pointer;
-        margin: .125em;
-        padding: 0 .25em;
-
-        &:hover {
-            background-color: #ffe4ab;
-            color: #073f53;
-        }
-    }
-
-    .result-item.active {
-        background-color: #3487bb;
-        color: #c8f1ff;
+    .overlay {
+        margin-top: calc(50vh - 30em);
     }
 }
 
-.append-modal {
-    @include dialog();
-    background-color: var(--gradiant-grey-100);
-    border: 1px solid var(--gradiant-grey-50);
-    border-radius: 1em;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 0, 0, 0.25);
-    color: var(--gradiant-grey-20);
-    margin: calc(50vh - 15em) auto;
-    width: 50em;
+.export-movies {
+    .content {
 
-    .movies-dialog {
-        position: relative;
-
-        .header {
-            @include flex-100();
-            border-bottom: 1px solid var(--gradiant-grey-50);
+        .sample {
+            //background-color: #f0f0f0;
+            background: #f6e2f6;
+            background: linear-gradient(225deg, #f6e2f6 0%, #f0f0f0 100%);
+            border-radius: .5em;
+            color: #545454;
+            font-family: 'Courier Prime', monospace;
+            font-size: 1em;
+            margin: 0 0 1em 0;
+            max-width: 800px;
+            overflow-x: scroll;
             padding: 1em;
-            position: relative;
-            text-align: center;
-            width: 50em;
+            width: 100%;
 
-            .close {
-                appearance: none;
-                background-color: transparent;
-                border: none;
-                color: var(--gradiant-grey-20);
+            span.key {
+                color: #a600a6;
+            }
+
+            span.value-alpha {
+                color: #007800;
+            }
+
+            span.value-digit {
+                color: #0000db;
+            }
+
+            .i {
+                color: #e99e00;
+            }
+        }
+
+        .selection {
+            @include flex-row();
+            margin-bottom: 1em;
+            width: 100%;
+        }
+
+        .export-result {
+            @include flex-row();
+            flex-wrap: wrap;
+            max-height: 10rem;
+            overflow-y: scroll;
+
+            .result-item {
+                background-color: #0d5e42;
+                border-radius: .25em;
+                color: #0dcaf0;
                 cursor: pointer;
-                font-size: 1em;
-                outline: none;
-                position: absolute;
-                right: .5em;
-                top: .5em;
+                margin: .125em;
+                padding: 0 .25em;
+
+                &:hover {
+                    background-color: #ffe4ab;
+                    color: #073f53;
+                }
+
+                &.active {
+                    background-color: #3487bb;
+                    color: #c8f1ff;
+                }
+            }
+        }
+    }
+}
+
+.append-movies {
+    .content {
+
+        label {
+            margin-bottom: 1em;
+
+            input {
+                margin-left: 1em;
+
+                &::file-selector-button {
+                    appearance: none;
+                    background-color: var(--gradiant-grey-50);
+                    border: 1px solid var(--gradiant-grey-60);
+                    border-radius: .5em;
+                    color: var(--gradiant-grey-80);
+                    font-weight: 100;
+                }
             }
         }
 
-        .content {
+        .append-infos {
+            background-color: #666;
+            border-radius: .5em;
+            color: #dbdbdb;
+            display: flex;
+            flex-direction: column;
+            margin: .5em 0;
+            padding: .5em;
+            width: 100%;
 
-            .append-infos {
-                background-color: #666;
-                border-radius: .5em;
-                color: #dbdbdb;
-                display: flex;
-                flex-direction: column;
-                margin: .5em 0;
+            .info {
+                font-size: .75em;
                 padding: .5em;
-                width: 100%;
-
-                .info {
-                    font-size: .75em;
-                    padding: .5em;
-                }
-
-                .select {
-                    margin-left: auto;
-                    padding: .5em;
-                }
-
-                .none {
-                    background-color: #0d9488;
-                    border-radius: .5em;
-                    font-size: 1.5em;
-                    margin: 1em auto;
-                    padding: 1em;
-                }
             }
 
-            .append-result {
-                @include flex-row(stretch, center);
-                color: #dbdbdb;
-                flex-wrap: wrap;
-                max-height: 49rem;
-                overflow-y: scroll;
-
-                .result-item {
-                    background-color: #666;
-                    border-radius: .5em;
-                    display: flex;
-                    flex-direction: column;
-                    margin: .5em;
-                    overflow: hidden;
-                    position: relative;
-                    width: 10em;
-
-                    .name {
-                        @include flex-row();
-                        font-size: .75em;
-                        height: 100%;
-                        padding: .25em;
-                        text-align: center;
-                        width: 100%;
-                    }
-
-                    img {
-                        display: block;
-                        height: 15em;
-                        object-fit: cover;
-                        width: auto;
-                    }
-
-                    .check-add {
-                        background-color: transparent;
-                        border: 4px solid #dbdbdb;
-                        border-radius: 50%;
-                        cursor: pointer;
-                        height: 1.5em;
-                        position: absolute;
-                        right: 1em;
-                        top: 1em;
-                        width: 1.5em;
-                    }
-
-                    .check-add.active {
-                        background-color: #0d6efd;
-                    }
-                }
+            .select {
+                margin-left: auto;
+                padding: .5em;
             }
-        }
 
-        .footer {
-            @include flex-100(flex-end, flex-end);
-            gap: 1em;
-            border-top: 1px solid var(--gradiant-grey-50);
-            padding: 1em;
-            width: 50em;
-
-            button:hover {
-                background-color: var(--gradiant-grey-60);
-                border-color: var(--gradiant-grey-50);
-            }
-        }
-
-        .append-progress {
-            background-color: rgba(13, 148, 136, 0.2);
-            align-items: center;
-            display: none;
-            inset: 0;
-            justify-content: center;
-            position: absolute;
-
-            .progress {
-                @include flex-row(center, space-evenly);
+            .none {
                 background-color: #0d9488;
                 border-radius: .5em;
-                color: #dbdbdb;
-                height: 4em;
+                font-size: 1.5em;
+                margin: 1em auto;
                 padding: 1em;
+            }
+        }
 
-                .label {
-                    font-size: 1em;
-                    margin-right: .5em;
+        .append-result {
+            @include flex-row(stretch, center);
+            color: #dbdbdb;
+            flex-wrap: wrap;
+            max-height: 49rem;
+            overflow-y: scroll;
+
+            .result-item {
+                background-color: #666;
+                border-radius: .5em;
+                display: flex;
+                flex-direction: column;
+                margin: .5em;
+                overflow: hidden;
+                position: relative;
+                width: 10em;
+
+                .name {
+                    @include flex-row();
+                    font-size: .75em;
+                    height: 100%;
+                    padding: .25em;
+                    text-align: center;
+                    width: 100%;
                 }
 
-                .bar {
-                    background-color: #0c4a6e;
-                    border: 2px solid #dbdbdb;
-                    border-radius: .5em;
-                    height: 1em;
-                    overflow: hidden;
-                    width: 30em;
+                img {
+                    display: block;
+                    height: 15em;
+                    object-fit: cover;
+                    width: auto;
+                }
 
-                    .value {
-                        background-color: #5eead4;
-                        height: 100%;
-                        overflow: hidden;
-                        transition: width .2s linear;
-                        width: 50%;
-                    }
+                .check-add {
+                    background-color: transparent;
+                    border: 4px solid #dbdbdb;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    height: 1.5em;
+                    position: absolute;
+                    right: 1em;
+                    top: 1em;
+                    width: 1.5em;
+                }
+
+                .check-add.active {
+                    background-color: #0d6efd;
+                }
+            }
+        }
+    }
+
+    .append-progress {
+        background-color: rgba(13, 148, 136, 0.2);
+        align-items: center;
+        display: none;
+        inset: 0;
+        justify-content: center;
+        position: absolute;
+
+        .progress {
+            @include flex-row(center, space-evenly);
+            background-color: #0d9488;
+            border-radius: .5em;
+            color: #dbdbdb;
+            height: 4em;
+            padding: 1em;
+
+            .label {
+                font-size: 1em;
+                margin-right: .5em;
+            }
+
+            .bar {
+                background-color: #0c4a6e;
+                border: 2px solid #dbdbdb;
+                border-radius: .5em;
+                height: 1em;
+                overflow: hidden;
+                width: 30em;
+
+                .value {
+                    background-color: #5eead4;
+                    height: 100%;
+                    overflow: hidden;
+                    transition: width .2s linear;
+                    width: 50%;
                 }
             }
         }
@@ -809,6 +791,7 @@
                 box-shadow: 0 0 1em hsla(0, 0, 100%, .2), 0 0 3em hsla(0, 0, 100%, .15), 0 0 10em hsla(0, 0, 100%, .1);
             }
         }
+
         .collections {
             background-color: var(--gradiant-grey-30);
             color: var(--gradiant-grey-90);
@@ -836,29 +819,43 @@
         }
     }
 
-    .export-result {
+    .export-movies, .append-movies {
+        .overlay {
+            background-color: var(--gradiant-grey-20);
+            border-color: var(--gradiant-grey-50);
+            color: var(--gradiant-grey-80);
 
-        .sample {
-            //background-color: #444;
-            background: rgb(68, 68, 68);
-            background: linear-gradient(225deg, rgba(83, 66, 83, 1) 0%, rgba(68, 68, 68, 1) 100%);
-            color: #5eead4;
-
-            span.key {
-                color: #f493f4;
+            .header {
+                .close {
+                    color: var(--gradiant-grey-80);
+                }
             }
 
-            span.value-alpha {
-                color: #5bbf5b;
-            }
+            .content {
 
-            span.value-digit {
-                color: #55b1fc;
-            }
+                .sample {
+                    background: rgb(68, 68, 68);
+                    background: linear-gradient(225deg, rgba(83, 66, 83, 1) 0%, rgba(68, 68, 68, 1) 100%);
+                    color: #5eead4;
 
-            i {
-                color: #ffe4ab;
+                    span.key {
+                        color: #f493f4;
+                    }
+
+                    span.value-alpha {
+                        color: #5bbf5b;
+                    }
+
+                    span.value-digit {
+                        color: #55b1fc;
+                    }
+
+                    i {
+                        color: #ffe4ab;
+                    }
+                }
             }
         }
     }
+
 }

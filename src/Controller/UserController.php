@@ -38,7 +38,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
@@ -183,7 +182,7 @@ class UserController extends AbstractController
         $movies = [];
         foreach ($userMovies as $userMovie) {
             $movie = $userMovie;
-            $collections = $userMovieRepository->userMovieGetCollections($userMovie['id']);
+            $collections = $userMovieRepository->userMovieGetCollections($userMovie['id'], $userId);
             $movie['my_collections'] = $collections;
             $movies[] = $movie;
         }

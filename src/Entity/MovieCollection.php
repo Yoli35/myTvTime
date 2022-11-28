@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MovieCollectionRepository;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -43,12 +44,13 @@ class MovieCollection
     private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $updatedAt = null;
+    private ?DateTime $updatedAt = null;
 
-    public function __construct()
+    public function __construct($user)
     {
+        $this->user = $user;
         $this->setCreatedAt(new DateTimeImmutable());
-        $this->setUpdatedAt(new DateTimeImmutable());
+        $this->setUpdatedAt(new DateTime());
         $this->movies = new ArrayCollection();
     }
 
@@ -147,7 +149,7 @@ class MovieCollection
     {
         if (!$this->movies->contains($movie)) {
             $this->movies->add($movie);
-            $this->setUpdatedAt(new DateTimeImmutable());
+            $this->setUpdatedAt(new DateTime());
         }
 
         return $this;
@@ -172,12 +174,12 @@ class MovieCollection
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeImmutable
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

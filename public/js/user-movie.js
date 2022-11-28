@@ -70,19 +70,11 @@ function initButtons(id, locale, paths, url) {
             exportModal.querySelector("#json-link").setAttribute("href", url + file);
             exportModal.querySelector("#json-link").setAttribute("download", file);
 
+            exportModal.querySelector(".sample").innerHTML = sample;
+
             while (result.lastChild) {
                 result.removeChild(result.lastChild);
             }
-            result.innerHTML += '<div class="sample">' + sample + '</div>';
-            result.innerHTML +=
-                '<div class="selection">' +
-                '   <div class="input-group w-75">' +
-                '       <span class="input-group-text">' + txt.ui.filter[_locale] + '</span>' +
-                '       <input type="search" id="export-filter" class="form-control" placeholder="' + txt.ui.movie_name[_locale] + '" aria-label="' + txt.ui.filter[_locale] + '" style="width: 15em">' +
-                '       <button type="button" id="export-select" class="btn btn-secondary" aria-label="' + txt.ui.aria_select_all[_locale] + '">' + txt.ui.select_all[_locale] + '</button>' +
-                '       <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="' + txt.ui.aria_deselect_all[_locale] + '">' + txt.ui.deselect_all[_locale] + '</button>' +
-                '   </div>' +
-                '</div>';
 
             for (let i = 0; i < count; i++) {
                 // 100 x faster than innerHtml = "<div class...>"
@@ -149,28 +141,16 @@ function initButtons(id, locale, paths, url) {
 
         currentDialog = appendModal;
 
-        //     preview = $('.append-result');
-        //     infos = $('.append-infos');
         preview = appendModal.querySelector(".append-result");
         infos = appendModal.querySelector(".append-infos");
-        // $(preview).empty();
         while (preview.lastChild) {
             preview.removeChild(preview.lastChild);
         }
-        // $(infos).empty();
         while (infos.lastChild) {
             infos.removeChild(infos.lastChild);
         }
-        // $(infos).css('padding', '0');
         infos.setAttribute("style", "padding: 0");
 
-        // $.ajax({
-        //     url: _json_ids,
-        //     method: 'GET',
-        //     success: function (data) {
-        //         ids = data['movie_ids'];
-        //     }
-        // })
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
             const data = JSON.parse(this.response);
@@ -179,15 +159,7 @@ function initButtons(id, locale, paths, url) {
         xhr.open("GET", _json_ids);
         xhr.send();
 
-        // let appendModal = $('#appendModal');
-        // $(appendModal).css('transition', 'background-color .45s');
-        // $(appendModal).css('background-color', 'rgba(189,115,189,0.25)');
-        appendModal.setAttribute("style", "transition: background-color .45s");
-        appendModal.setAttribute("style", "background-color: rgba(189, 141, 189, 0.25)");
-        appendModal.classList.add("d-block");
-        setTimeout(() => {
-            appendModal.classList.add("show");
-        }, 0);
+        openDialog();
     });
 
     // $('input[name="json"]').change(function () {

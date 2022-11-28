@@ -73,18 +73,26 @@
 
     <dialog class="export-movies" id="exportModal" tabindex="-1">
         <div class="overlay">
-                <div class="header">
-                    <h5 class="modal-title">{{ 'Export'|trans }}</h5>
-                    <button value="nope" class="close"><i class="fa-solid fa-circle-xmark"></i></button>
+            <div class="header">
+                <h5 class="modal-title">{{ 'Export'|trans }}</h5>
+                <button value="nope" class="close"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+            <div class="content">
+                <div class="sample"></div>
+                <div class="selection">
+                    <div class="input-group w-75">
+                        <span class="input-group-text">{{ 'Filter by name'|trans }}</span>
+                        <input type="search" id="export-filter" class="form-control" placeholder="{{ 'Movie title'|trans }}" aria-label="{{ 'Filter by name'|trans }}" style="width: 15em">
+                        <button type="button" id="export-select" class="btn btn-secondary" aria-label="{{ 'Select all'|trans }}">{{ 'Select all'|trans }}</button>
+                        <button type="button" id="export-deselect" class="btn btn-secondary" aria-label="{{ 'Deselect all'|trans }}">{{ 'Deselect all'|trans }}</button>
+                    </div>
                 </div>
-                <div class="content">
-                    <div class="export-result"></div>
-                </div>
-                <div class="footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
-                    <button id="export-file" type="button" class="btn btn-secondary"><a href="#" download="" id="json-link">{{ 'Download'|trans }} <i class="bi bi-file-arrow-down"></i></a></button>
-                    <button id="export-copy" type="button" class="btn btn-secondary">{{ 'Copy'|trans }} <i class="bi bi-clipboard2-plus"></i></button>
-                </div>
+                <div class="export-result"></div>
+            </div>
+            <div class="footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
+                <button id="export-file" type="button" class="btn btn-secondary"><a href="#" download="" id="json-link">{{ 'Download'|trans }} <i class="fa-solid fa-download"></i></a></button>
+                <button id="export-copy" type="button" class="btn btn-secondary">{{ 'Copy'|trans }} <i class="bi bi-clipboard2-plus"></i></button>
             </div>
         </div>
     </dialog>
@@ -95,14 +103,15 @@
                 <button value="nope" class="close"><i class="fa-solid fa-circle-xmark"></i></button>
             </div>
             <div class="content">
-                <label for="json" class="form-label">{{ 'Select a Movie List File (.json)'|trans }}</label>
-                <input type="file" id="json" name="json" accept="application/json" class="form-control form-control-sm">
+                <label for="json" class="form-label">{{ 'Select a Movie List File (.json)'|trans }}
+                    <input type="file" id="json" name="json" accept="application/json">
+                </label>
                 <div class="append-infos"></div>
                 <div class="append-result"></div>
             </div>
             <div class="footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
-                <button id="append-add" type="button" class="btn btn-secondary" disabled>{{ 'Add'|trans }} <i class="bi bi-download"></i></button>
+                <button id="append-add" type="button" class="btn btn-secondary" disabled>{{ 'Add'|trans }}</button>
             </div>
             <div class="append-progress">
                 <div class="progress">

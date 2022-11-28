@@ -6,6 +6,7 @@
     .wrapper {
         @include flex-row();
         flex-wrap: wrap;
+        width: 100%;
 
         .collection {
             background-color: var(--gradiant-grey-90);
@@ -57,6 +58,52 @@
                     }
                 }
             }
+        }
+    }
+
+    .no-collection, .add-collection {
+        border-radius: 1em;
+        color: var(--gradiant-green-70);
+        font-weight: 600;
+        margin-bottom: 2em;
+        padding: 1em 2em;
+    }
+
+    .no-collection {
+        background-color: var(--gradiant-grey-50);
+    }
+
+    .add-collection {
+        align-items: center;
+        background-color: var(--gradiant-grey-50);
+        box-shadow: 0 0 0 var(--gradiant-grey-20);
+        cursor: pointer;
+        display: flex;
+        margin-left: auto;
+        transition: translate 100ms ease-out;
+
+        i {
+            font-size: 2em;
+            margin-right: .5em;
+        }
+
+        &:hover {
+            box-shadow: 0 4px 0 var(--gradiant-grey-20);
+            translate: 0 -4px;
+        }
+
+        &.click {
+            box-shadow: 0 0 0 var(--gradiant-grey-20);
+            translate: 0 0;
+        }
+    }
+
+    .form {
+        @include flex-row();
+        width: 60em;
+
+        form {
+            @include mtt-form();
         }
     }
 

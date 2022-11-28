@@ -10,24 +10,27 @@
 
             {{ include('blocks/_nav.html.twig', {thisPage: 'My Collections'}) }}
 
+            <div class="add-collection"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>
             <div class="wrapper">
                 {% if collections is empty %}
-                    Pas de collection pour le moment
+                    <div class="no-collection">
+                        Pas de collection pour le moment
+                    </div>
                 {% else %}
                     {% for collection in collections %}
-                            <div class="collection">
-                                <a href="{{ path('app_collection_display', {id: collection.id}) }}">
+                        <div class="collection">
+                            <a href="{{ path('app_collection_display', {id: collection.id}) }}">
                                 <div class="logo" style="background-image: url('/images/collections/thumbnails/{{ collection.thumbnail }}')"></div>
                                 <div class="infos">
                                     <div class="name">{{ collection.title }}</div>
                                     <div class="info">
-                                        {{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}
+                                        {{ collection.movies|length ?: 'None'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}
                                         {#                                    <a href="{{ path('app_collection_display', {id: collection.id}) }}"><i class="fa-solid fa-arrow-right-long"></i> Voir la collection</a> #}
                                     </div>
                                     <div class="backdrop" style="background-image: url('/images/collections/banners/{{ collection.banner }}')"></div>
                                 </div>
-                                </a>
-                            </div>
+                            </a>
+                        </div>
                     {% endfor %}
                 {% endif %}
             </div>
@@ -36,3 +39,21 @@
         </div>
     </div>
 {% endblock %}
+{% block javascripts %}
+    <script>
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            document.querySelector(".add-collection").addEventListener("click", addNewCollection);
+        });
+
+        function addNewCollection(evt) {
+            evt.currentTarget.classList.add("click");
+            setTimeout(() => {
+                window.location.href = "{{ path('app_collection_new') }}";
+            }, 100);
+        }
+
+    </script>
+{% endblock %}
+

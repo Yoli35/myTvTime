@@ -2,65 +2,62 @@
 
 namespace App\Form;
 
-use App\Entity\Event;
+use App\Entity\MovieCollection;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\Dropzone\Form\DropzoneType;
 
-class EventType extends AbstractType
+class MovieCollectionType extends AbstractType
 {
+    public function __construct(private readonly TranslatorInterface $translator) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, [
-                'label' => 'Name',
-                'attr' => ['class'=> "w100"],
-                'required' => true
-            ])
-            ->add('subheading', TextType::class, [
-                'label' => 'Subheading',
-                'attr' => ['class'=> "w100"],
-                'required' => false
+            ->add('title', TextType::class, [
+                'label' => $this->translator->trans('Title'),
+                'attr' => ['class', "w100"],
+                'required' => true,
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'Description',
-                'attr' => ['class'=> "w100", 'rows' => 8],
-                'required' => false
+                'label' => $this->translator->trans('Description'),
+                'attr' => ['class' => 'w100', 'rows' => 5],
+                'required' => false,
             ])
-            ->add('date', DateTimeType::class, [
-                'label' => 'Date',
-                'attr' => ['class'=> "w100 d-flex-1"],
-                'required' => true
+            ->add('color', ColorType::class, [
+                'label' => $this->translator->trans('Color'),
             ])
             ->add('dropThumbnail', DropzoneType::class, [
-                'label' => 'Profile Image (JPG, PNG file)',
+                'label' => $this->translator->trans('Thumbnail Image (JPG, PNG file)'),
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
                     'data-controller' => 'mydropzone',
                     'class' => 'w100',
-                    'placeholder' => 'Click here or drop a thumbnail file',
+                    'placeholder' => 'Click here or drop a thumbnail image file',
                     'accept' => 'image/*'
                 ],
             ])
             ->add('dropBanner', DropzoneType::class, [
-                'label' => 'Banner Image (JPG, PNG file)',
+                'label' => $this->translator->trans('Banner Image (JPG, PNG file)'),
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
                     'data-controller' => 'mydropzone',
                     'class' => 'w100',
-                    'placeholder' => 'Click here or drop a banner file',
+                    'placeholder' => 'Click here or drop a banner image file',
                     'accept' => 'image/*'
                 ],
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Add event',
+                'label' => 'Add collection',
                 'attr' => ['class' => 'btn btn-secondary'],
             ])
         ;
@@ -69,7 +66,7 @@ class EventType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Event::class,
+            'data_class' => MovieCollection::class,
         ]);
     }
 }
