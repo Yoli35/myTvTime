@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime::{{ 'Edit collection'|trans }}::{{ title }}{% endblock %}
+
+{% block body %}
+    {{ include('blocks/_pageHeader.html.twig') }}
+    <div class="container">
+        <div class="my-collections-page">
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_collection')}, thisPage: 'Edit collection'|trans}) }}
+
+            <h1>{{ 'Edit collection'|trans }}</h1>
+
+            <main>
+                {{ include('blocks/collection/_form.html.twig') }}
+            </main>
+
+        </div>
+        <footer>
+            {{ include('blocks/_pageFooter.html.twig') }}
+        </footer>
+    </div>
+{% endblock %}
+{% block morejs %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            document.querySelector("#movie_collection_save").innerHTML = "{{ "Update the collection"|trans }}";
+        })
+    </script>
+{% endblock %}

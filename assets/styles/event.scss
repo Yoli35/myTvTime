@@ -141,21 +141,7 @@
                         width: calc(50% - 10em);
 
                         .tools {
-                            @include flex-row();
-                            background-color: var(--gradiant-grey-50);
-                            border-radius: .5em;
-                            gap: 1em;
-                            height: 2em;
-                            opacity: 0;
-                            position: absolute;
-                            right: 1em;
-                            top: 4em;
-                            transition: opacity 300ms ease-in-out;
-                            width: 6em;
-
-                            &.show {
-                                opacity: 1;
-                            }
+                            @include crud-tools();
                         }
                     }
                 }

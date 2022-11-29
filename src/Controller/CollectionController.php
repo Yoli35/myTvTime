@@ -11,17 +11,18 @@ use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/{_locale}/collection', requirements: ['_locale' => 'fr|en|de|es'])]
 class CollectionController extends AbstractController
 {
-    #[Route('/{_locale}/collections', name: 'app_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/', name: 'app_collection')]
     public function index(MovieCollectionRepository $collectionRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /** @var User $user */
         $user = $this->getUser();
 
@@ -33,8 +34,8 @@ class CollectionController extends AbstractController
         ]);
     }
 
-    #[Route('/{_locale}/collections/{id}', name: 'app_collection_display', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function display(Request $request, MovieCollection $movieCollection, MovieController $movieController, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
+    #[Route('/show/{id}', name: 'app_collection_show', methods: ['GET'])]
+    public function show(Request $request, MovieCollection $movieCollection, MovieController $movieController, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
@@ -51,7 +52,7 @@ class CollectionController extends AbstractController
         ]);
     }
 
-    #[Route('/{_locale}/collection/new', name: 'app_collection_new', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/new', name: 'app_collection_new',methods: ['GET', 'POST'])]
     public function new(Request $request, MovieCollectionRepository $repository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -70,6 +71,27 @@ class CollectionController extends AbstractController
         return $this->render('collection/new.html.twig', [
             'form' => $form->createView(),
             'collection' => $collection,
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/edit/{id}', name: 'app_collection_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, MovieCollection $collection, MovieCollectionRepository $repository, FileUploader $fileUploader): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(MovieCollectionType::class, $collection);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->handleForm($form, $collection, $fileUploader, $repository);
+            return $this->redirectToRoute('app_collection');
+        }
+
+        return $this->render('collection/edit.html.twig', [
+            'form' => $form->createView(),
+            'title' => $collection->getTitle(),
             'user' => $user,
         ]);
     }
@@ -97,5 +119,19 @@ class CollectionController extends AbstractController
             $collection->setBanner($bannerFileName);
         }
         $repository->add($collection, true);
+    }
+
+    #[Route('/delete/{id}', name: 'app_collection_delete', methods: ['GET'])]
+    public function delete(MovieCollection $collection, MovieCollectionRepository $repository, FileUploader $fileUploader): JsonResponse
+    {
+        if ($collection->getThumbnail()) {
+            $fileUploader->removeFile($collection->getThumbnail(), 'collection_thumbnail');
+        }
+        if ($collection->getBanner()) {
+            $fileUploader->removeFile($collection->getBanner(), 'collection_banner');
+        }
+        $repository->remove($collection, true);
+
+        return $this->json(['status' => 200]);
     }
 }

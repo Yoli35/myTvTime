@@ -532,6 +532,24 @@ $fa-font-path: "../webfonts";
     }
 }
 
+@mixin crud-tools {
+    @include flex-row();
+    background-color: var(--gradiant-grey-50);
+    border-radius: .5em;
+    gap: 1em;
+    height: 2em;
+    opacity: 0;
+    position: absolute;
+    right: 1em;
+    top: 4em;
+    transition: opacity 300ms ease-in-out;
+    width: 6em;
+
+    &.show {
+        opacity: 1;
+    }
+}
+
 @mixin dialog($backdropColor: var(--gradiant-grey-30-alpha-50)) {
     background-color: $backdropColor;
     height: 100vh;

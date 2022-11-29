@@ -3,9 +3,7 @@
 namespace App\Service;
 
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Mime\Exception\InvalidArgumentException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class FileUploader
@@ -21,14 +19,19 @@ class FileUploader
 
     public function upload(UploadedFile $file, $type): string
     {
+        $dir = $this->getTargetDirectory($type);
+
         if ($type == 'avatar' || $type == 'banner' ||
             $type == 'event_thumbnail' || $type == 'event_banner') {
             $fileName = Uuid::uuid4()->toString() . '.' . $file->guessExtension();
         } else {
             $originalFilename = strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
             $fileName = $this->slugger->slug($originalFilename) . '.' . $file->guessExtension();
+            while (file_exists($dir.'/'.$fileName)) {
+                $fileName = $this->slugger->slug($originalFilename) . '-' .Uuid::uuid1()->toString() . '.' . $file->guessExtension();
+            }
         }
-        $file->move($this->getTargetDirectory($type), $fileName);
+        $file->move($dir, $fileName);
 
         return $fileName;
     }

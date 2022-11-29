@@ -37,7 +37,7 @@ class MovieCollection
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $banner = null;
 
-    #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'movieCollections')]
+    #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'movieCollections', cascade: ['remove'])]
     private Collection $movies;
 
     #[ORM\Column]

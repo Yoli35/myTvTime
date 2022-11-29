@@ -112,9 +112,11 @@ Description: Description
 My Collections: Mes collections
 The movie « movie_name » has been added to your collection « collection_name ».: Le film « movie_name » a été ajouté à votre collection « collection_name ».
 The movie « movie_name » has been removed from your collection « collection_name ».: Le film « movie_name » a été retiré de votre collection « collection_name ».
+# new/edit collection
 Add collection: Ajouter une collection
 New collection: Nouvelle collection
-# new collection
+Edit collection: Modifier la collection
+Update the collection: Mettre à jour la collection
 Color: Couleur
 Thumbnail Image (JPG, PNG file): Vignette (format JPG, PNG)
 Click here or drop a thumbnail image file: Cliquez ici ou déposez une image de la miniature
