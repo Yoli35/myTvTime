@@ -25,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MovieController extends AbstractController
 {
-    #[Route(['fr'=>'/{_locale}/films/', 'en'=>'/{_locale}/movies/','de'=>'/{_locale}/filme/', 'es'=>'/{_locale}/peliculas/'], name: 'app_movie_list', requirements: ['_locale' => 'fr|en|de|es', 'page'=>1, 'sort_by'=>'popularity.desc'])]
+    #[Route(['fr' => '/{_locale}/films/', 'en' => '/{_locale}/movies/', 'de' => '/{_locale}/filme/', 'es' => '/{_locale}/peliculas/'], name: 'app_movie_list', requirements: ['_locale' => 'fr|en|de|es', 'page' => 1, 'sort_by' => 'popularity.desc'])]
     public function index(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
@@ -140,7 +140,7 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route(['fr'=>'/{_locale}/film/{id}', 'en'=>'/{_locale}/movie/{id}','de'=>'/{_locale}/filme/{id}', 'es'=>'/{_locale}/pelicula/{id}'], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route(['fr' => '/{_locale}/film/{id}', 'en' => '/{_locale}/movie/{id}', 'de' => '/{_locale}/filme/{id}', 'es' => '/{_locale}/pelicula/{id}'], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
     public function show(Request $request, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
@@ -293,8 +293,7 @@ class MovieController extends AbstractController
                     $sortedCrewWithProfile[$people['name']]['profile_path'] = $people['profile_path'];
                     $sortedCrewWithProfile[$people['name']]['job'] = $people['job'];
                 }
-            }
-            else {
+            } else {
                 if ($this->peopleInSortedCrew($people, $sortedCrewWithoutProfile)) {
                     $sortedCrewWithoutProfile[$people['name']]['job'] .= ', ' . $people['job'];
                 } else {
@@ -318,7 +317,7 @@ class MovieController extends AbstractController
         return false;
     }
 
-    #[Route(['fr'=>'/{_locale}/film/collection/{mid}/{id}','en'=>'/{_locale}/movie/collection/{mid}/{id}','de'=>'/{_locale}/filme/sammlung/{mid}/{id}','es'=>'/{_locale}/pelicula/coleccion/{mid}/{id}'], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route(['fr' => '/{_locale}/film/collection/{mid}/{id}', 'en' => '/{_locale}/movie/collection/{mid}/{id}', 'de' => '/{_locale}/filme/sammlung/{mid}/{id}', 'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
     public function movieCollection(Request $request, $mid, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, GenreRepository $genreRepository, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
@@ -356,7 +355,7 @@ class MovieController extends AbstractController
 
     }
 
-    #[Route(['fr'=>'/{_locale}/film/recherche/par/genre/{genres}/{page}','en'=>'/{_locale}/movie/by/genre/{genres}/{page}','de'=>'/{_locale}/film/nach/genre/{genres}/{page}','es'=>'/{_locale}/pelicula/por/genero/{genres}/{page}'], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    #[Route(['fr' => '/{_locale}/films/recherche/par/genre/{genres}/{page}', 'en' => '/{_locale}/movies/by/genre/{genres}/{page}', 'de' => '/{_locale}/filmen/nach/genre/{genres}/{page}', 'es' => '/{_locale}/peliculas/por/genero/{genres}/{page}'], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByGenres(Request $request, $page, $genres, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
@@ -381,7 +380,7 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route(['fr'=>'/{_locale}/film/recherche/par/date/{date}/{page}','en'=>'/{_locale}/movie/by/date/{date}/{page}','de'=>'/{_locale}/film/nach/datum/{date}/{page}','es'=>'/{_locale}/pelicula/por/fecha/{date}/{page}'], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    #[Route(['fr' => '/{_locale}/films/recherche/par/date/{date}/{page}', 'en' => '/{_locale}/movies/by/date/{date}/{page}', 'de' => '/{_locale}/filmen/nach/datum/{date}/{page}', 'es' => '/{_locale}/peliculas/por/fecha/{date}/{page}'], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByDate(Request $request, $page, $date, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
@@ -407,16 +406,16 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route(['fr'=>'/{_locale}/film/recherche/par/nom/{page}','en'=>'/{_locale}/movie/search/{page}','de'=>'/{_locale}/film/suche/{page}','es'=>'/{_locale}/pelicula/buscar/{page}'], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    #[Route(['fr' => '/{_locale}/films/recherche/par/nom/{page}', 'en' => '/{_locale}/movies/search/{page}', 'de' => '/{_locale}/filmen/suche/{page}', 'es' => '/{_locale}/peliculas/buscar/{page}'], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesSearch(Request $request, $page, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
-        $query = $request->query->get('query') ?: '';
-        $year = $request->query->get('year') ?: '';
+        $query = $request->query->get('query');
+        $year = $request->query->get('year');
         $imageConfig = $imageConfiguration->getConfig();
 
-        $form = $this->createForm(MovieByNameType::class);
+        $form = $this->createForm(MovieByNameType::class, ['query' => $query, 'year' => $year]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $form->getData();
@@ -430,10 +429,15 @@ class MovieController extends AbstractController
             $discovers = json_decode($standing, true);
         }
 
+        $action = $this->generateUrl('app_movies_search', ['query' => $query, 'year' => $year]);
+        dump($query, $year, $action);
+
         return $this->render('movie/search.html.twig', [
             'form' => $form->createView(),
+            'action' => $action,
             'query' => $query,
             'year' => $year,
+            'page' => $page,
             'discovers' => $discovers,
             'userMovies' => $this->getUserMovieIds($userMovieRepository),
             'imageConfig' => $imageConfig,

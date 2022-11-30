@@ -5,9 +5,10 @@
 {% set user_route = ['app_personal_account', 'app_personal_movies'] %}
 {% set user = app.user %}
 {% set path = app.request.pathInfo %}
-
+{% set route = app.request.attributes.get('_route') %}
+{% set parameters = app.request.query %}
+{% set route_params = app.request.attributes.get('_route_params') %}
 {# {{ dump() }} #}
-
 <nav class="nav-menu">
     <a href="{{ path('app_home') }}">{{ 'Home'|trans }}</a>
     <a href="{{ path('app_blog') }}">{{ 'Blog'|trans }}</a>
@@ -38,16 +39,28 @@
         <a href="{{ path('app_tik_tok') }}">{{ 'My TikTok Videos'|trans }}</a>
         <hr class="divider">
         <div class="locale">
-            {% set params = '' %}
-            {% if route in ['app_movies_search'] %} {% set params = '?query='~query~'&year='~year %} {% endif %}
-{#            <a href="/fr{{ path[3:]~params }}"><img src="/images/interface/fr.png" alt="{{ 'French'|trans }}"></a>#}
-{#            <a href="/en{{ path[3:]~params }}"><img src="/images/interface/en.png" alt="{{ 'English'|trans }}"></a>#}
-{#            <a href="/de{{ path[3:]~params }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}"></a>#}
-{#            <a href="/es{{ path[3:]~params }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}"></a>#}
-            <a href="{{ path('app_home', {'_locale': 'fr'}) }}"><img src="/images/interface/fr.png" alt="{{ 'French'|trans }}"></a>
-            <a href="{{ path('app_home', {'_locale': 'en'}) }}"><img src="/images/interface/en.png" alt="{{ 'English'|trans }}"></a>
-            <a href="{{ path('app_home', {'_locale': 'de'}) }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}"></a>
-            <a href="{{ path('app_home', {'_locale': 'es'}) }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}"></a>
+            {% set p = '' %}
+            {% if parameters|length %}
+                {% for key, value in parameters %}
+                    {% set p = p ~ (loop.index0 ? '&':'?') ~ key ~ '=' ~ value %}
+                {% endfor %}
+            {% endif %}
+            {% set rp_fr = route_params %}
+            {% set rp_fr = rp_fr|merge({'_locale': 'fr'}) %}
+            {% set rp_en = route_params %}
+            {% set rp_en = rp_en|merge({'_locale': 'en'}) %}
+            {% set rp_de = route_params %}
+            {% set rp_de = rp_de|merge({'_locale': 'de'}) %}
+            {% set rp_es = route_params %}
+            {% set rp_es = rp_es|merge({'_locale': 'es'}) %}
+            <a href="{{ path(route, rp_fr) ~ p }}"><img src="/images/interface/fr.png" alt="{{ 'French'|trans }}"></a>
+            <a href="{{ path(route, rp_en) ~ p }}"><img src="/images/interface/en.png" alt="{{ 'English'|trans }}"></a>
+            <a href="{{ path(route, rp_de) ~ p }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}"></a>
+            <a href="{{ path(route, rp_es) ~ p }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}"></a>
+{#            <a href="{{ path('app_home', {'_locale': 'fr'}) }}"><img src="/images/interface/fr.png" alt="{{ 'French'|trans }}"></a>#}
+{#            <a href="{{ path('app_home', {'_locale': 'en'}) }}"><img src="/images/interface/en.png" alt="{{ 'English'|trans }}"></a>#}
+{#            <a href="{{ path('app_home', {'_locale': 'de'}) }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}"></a>#}
+{#            <a href="{{ path('app_home', {'_locale': 'es'}) }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}"></a>#}
         </div>
         <hr class="divider">
         <a href="{{ path('app_rgpd') }}">{{ 'Confidentiality policy'|trans }}</a>
