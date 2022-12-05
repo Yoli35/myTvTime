@@ -81,13 +81,13 @@ class YoutubeController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $tags = $repository->findAllByLabel();
-        $description = nl2br($youtubeVideo->getDescription());
         $description = preg_replace(
             ['/(https:\/\/.+)/',
                 '#([A-Za-z_-][A-Za-z0-9_-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#'],
             ['<a href="$1" target="_blank" rel="noopener">$1</a>',
                 '<a href="mailto:$1">$1</a>'],
-            $description);
+            $youtubeVideo->getDescription());
+        $description = nl2br($description);
 
         return $this->render('youtube/video.html.twig', [
                 'video' => $youtubeVideo,

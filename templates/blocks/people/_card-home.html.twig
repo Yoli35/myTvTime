@@ -1,0 +1,35 @@
+<div class="home-discover" id="{{ people.id }}">
+    <div class="profile">
+        <a href="{{ path('app_serie_people', {'id': people.id}) }}?from={{ from }}" title="{{ people.name }}">
+            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.3 ~ people.profile_path }}" alt="{{ people.name ~ '\'s profile' }}">
+        </a>
+        <div class="known-for">
+            {% for medium in people.known_for %}
+                {% set url = medium.media_type == 'tv' ? path('app_serie_tmdb', {id: medium.id}) : path('app_movie', {id: medium.id}) %}
+                <a href="{{ url ~ '?from=home' }}">
+                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ medium.poster_path }}" alt="">
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="title">
+        <div>{{ people.name }}</div>
+    </div>
+</div>
+{#
+0 => array:13 [▼
+         "backdrop_path" => "/t73x5Pb81mIGZR417aeGwbkR520.jpg"
+         "first_air_date" => "2020-12-06"
+         "genre_ids" => array:1 [▶]
+         "id" => 86430
+         "media_type" => "tv"
+         "name" => "Your Honor"
+         "origin_country" => array:1 [▶]
+         "original_language" => "en"
+         "original_name" => "Your Honor"
+         "overview" => "À l'apogée d'une carrière florissante, un juge voit sa vie basculer le jour où son fils adolescent est reconnu coupable d'un délit de fuite. Un accident dont la ▶"
+         "poster_path" => "/5NDs12paqvz4Jug3f13fC9XmSVN.jpg"
+         "vote_average" => 8.2
+         "vote_count" => 1223
+       ]
+#}

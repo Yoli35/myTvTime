@@ -823,8 +823,36 @@ h4 {
         @include flex-row(start,start);
         gap: 1em;
 
-        .serie {
+        .home-discover {
+            .profile {
+                position: relative;
 
+                .known-for {
+                    @include flex-100(center, space-around);
+                    bottom: 0;
+                    height: 9em;
+                    left: 0;
+                    overflow-x: hidden;
+                    position: absolute;
+
+                    a {
+                        justify-content: center;
+
+                        img {
+                            border: 2px solid var(--gradiant-grey-90);
+                            border-radius: .25em;
+                            height: 8em;
+                            object-fit: cover;
+                            transition: scale 150ms ease-in-out;
+                            width: 5em;
+
+                            &:hover {
+                                scale: 1.1;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

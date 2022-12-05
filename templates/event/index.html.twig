@@ -30,7 +30,7 @@
                                             <div>{{ event.subheading }}</div>
                                             <div id="{{ event.id }}" class="tools">
                                                 <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
-                                                <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i>
+{#                                                <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i>#}
                                                 <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
                                             </div>
                                         </div>
@@ -101,7 +101,7 @@
 
             tools.forEach(tool => {
                 tool.querySelector(".fa-pen-to-square").addEventListener("click", editEvent);
-                tool.querySelector(".fa-eye-slash").addEventListener("click", hideEvent);
+                // tool.querySelector(".fa-eye-slash").addEventListener("click", hideEvent);
                 tool.querySelector(".fa-trash-can").addEventListener("click", deleteEvent);
             });
 
@@ -190,11 +190,11 @@
             window.location.href = "/" + locale + "/event/edit/" + id;
         }
 
-        function hideEvent(evt) {
-            const id = evt.currentTarget.parentElement.getAttribute("id");
-            console.log('hide', {id});
-            evt.preventDefault();
-        }
+        // function hideEvent(evt) {
+        //     const id = evt.currentTarget.parentElement.getAttribute("id");
+        //     console.log('hide', {id});
+        //     evt.preventDefault();
+        // }
 
         function deleteEvent(evt) {
             const id = evt.currentTarget.parentElement.getAttribute("id");

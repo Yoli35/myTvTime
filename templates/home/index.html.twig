@@ -34,6 +34,19 @@
             </div>
         {% endif %}
 
+        {% if popularPeople %}
+            <h2>{{ 'popular people'|trans }}</h2>
+            <div class="home-list">
+                <div class="wrapper">
+                    {% for people in popularPeople.results %}
+                        {% if people.profile_path %}
+                            {{ include('blocks/people/_card-home.html.twig') }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
         {% if popularMovies %}
             <h2>{{ 'popular movies'|trans }}</h2>
             <div class="home-list">

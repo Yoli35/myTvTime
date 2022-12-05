@@ -534,7 +534,7 @@ $fa-font-path: "../webfonts";
 
 @mixin crud-tools {
     @include flex-row();
-    background-color: var(--gradiant-grey-50);
+    background-color: var(--gradiant-grey-30-alpha-50);
     border-radius: .5em;
     gap: 1em;
     height: 2em;
@@ -544,6 +544,7 @@ $fa-font-path: "../webfonts";
     top: 4em;
     transition: opacity 300ms ease-in-out;
     width: 6em;
+    z-index: 10;
 
     &.show {
         opacity: 1;

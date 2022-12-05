@@ -209,7 +209,7 @@ class YoutubeAddVideoComponent
             }
         }
 
-        $firstVideo = $this->videos[0];
+        $firstVideo = count($this->videos) ? $this->videos[0] : [];
         if (gettype($firstVideo) == 'array') {
 
             $this->videos = $this->getVideos();
@@ -232,7 +232,7 @@ class YoutubeAddVideoComponent
 
     public function getTotalRuntime(): int
     {
-        return $this->videoRepository->getUserYTVideosRuntime($this->user_id);
+        return $this->videoRepository->getUserYTVideosRuntime($this->user_id)?:0;
     }
 
     public function getFirstView(): ?DateTimeImmutable

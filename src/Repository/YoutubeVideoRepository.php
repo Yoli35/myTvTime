@@ -58,7 +58,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getUserYTVideosRuntime($userId): int
+    public function getUserYTVideosRuntime($userId): int|null
     {
         $duration = -1;
         try {

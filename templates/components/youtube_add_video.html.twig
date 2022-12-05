@@ -72,5 +72,14 @@
         </div>
     {% else %}
         <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
+        <script>
+            window.addEventListener("DOMContentLoaded", () => {
+                const videoCount = {{ count }};
+                if (!videoCount) {
+                    document.querySelector(".tag-button").style.display = "none";
+                    document.querySelector(".menu-item.youtube-video-search").style.display = "none";
+                }
+            });
+        </script>
     {% endif %}
 </div>

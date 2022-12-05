@@ -19,7 +19,7 @@ window.addEventListener("DOMContentLoaded", () => {
             closeDialog();
         });
     } else {
-        dialog.parentNode.removeChild(dialog);
+        dialog.parentElement.removeChild(dialog);
     }
 
     function openDialog() {

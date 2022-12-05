@@ -29,7 +29,7 @@
                                     <div class="backdrop" style="background-image: url('/images/collections/banners/{{ collection.banner }}')"></div>
                                     <div id="{{ collection.id }}" class="tools">
                                         <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
-                                        <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i>
+{#                                        <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i>#}
                                         <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
                                     </div>
                                 </div>
@@ -61,7 +61,7 @@
         </div>
     </dialog>
 {% endblock %}
-{% block javascripts %}
+{% block morejs %}
     <script>
         const locale = "{{ app.request.locale }}";
         let confirmDialog;
@@ -80,7 +80,7 @@
 
             tools.forEach(tool => {
                 tool.querySelector(".fa-pen-to-square").addEventListener("click", editCollection);
-                tool.querySelector(".fa-eye-slash").addEventListener("click", hideCollection);
+                // tool.querySelector(".fa-eye-slash").addEventListener("click", hideCollection);
                 tool.querySelector(".fa-trash-can").addEventListener("click", deleteCollection);
             });
 
@@ -165,11 +165,11 @@
             window.location.href = "/" + locale + "/collection/edit/" + id;
         }
 
-        function hideCollection(evt) {
-            const id = evt.currentTarget.parentElement.getAttribute("id");
-            console.log('hide', {id});
-            evt.preventDefault();
-        }
+        // function hideCollection(evt) {
+        //     const id = evt.currentTarget.parentElement.getAttribute("id");
+        //     console.log('hide', {id});
+        //     evt.preventDefault();
+        // }
 
         function deleteCollection(evt) {
             const id = evt.currentTarget.parentElement.getAttribute("id");
