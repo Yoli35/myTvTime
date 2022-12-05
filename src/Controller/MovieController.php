@@ -430,7 +430,7 @@ class MovieController extends AbstractController
         }
 
         $action = $this->generateUrl('app_movies_search', ['query' => $query, 'year' => $year]);
-        dump($query, $year, $action);
+//        dump($query, $year, $action);
 
         return $this->render('movie/search.html.twig', [
             'form' => $form->createView(),
