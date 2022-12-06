@@ -21,6 +21,9 @@ import './styles/devices.scss';
 import './js/cookie-consent';
 import './js/mydropzone_controller'
 
+// loads the code syntax highlighting library
+import './js/highlight.js';
+
 // import 'bootstrap';
 
 // start the Stimulus application

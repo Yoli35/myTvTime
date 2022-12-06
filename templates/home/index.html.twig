@@ -2,7 +2,7 @@
 {% block title %}myTvTime{% endblock %}
 
 {% block body %}
-    <div class="container" style="min-height: 100vh">
+    <div class="container">
 
         {{ include('blocks/_pageHeader.html.twig') }}
 
@@ -10,6 +10,7 @@
             <div class="home-header bg{{ random(5) }}"></div>
         {% endif %}
         {{ include('blocks/_nav.html.twig', {thisPage: 'Home Page', user: app.user}) }}
+        {{ include('blocks/source/button.html.twig') }}
 
         {% if lastAddedMovies %}
             <h2>{{ 'last added movies'|trans }}</h2>
@@ -90,8 +91,10 @@
         {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
+
+    {{ show_source_code(_self) }}
+
 {% endblock %}
 {% block morejs %}
-    <script>
-    </script>
+    <script src="/js/source.js"></script>
 {% endblock %}

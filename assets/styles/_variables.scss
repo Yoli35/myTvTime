@@ -644,6 +644,65 @@ $fa-font-path: "../webfonts";
     }
 }
 
+@mixin dialog3($width: 50%, $backdropColor: var(--gradiant-grey-30-alpha-50)) {
+    background-color: $backdropColor;
+    height: 100vh;
+    max-height: 100vh;
+    max-width: 100vw;
+    opacity: 0;
+    padding: 0;
+    transition: opacity 300ms ease-in-out;
+    width: 100vw;
+    z-index: 9999;
+
+    &.show {
+        opacity: 1;
+    }
+
+    &::backdrop {
+        background: $backdropColor;
+    }
+
+    .overlay {
+        background-color: var(--gradiant-grey-100);
+        border: 1px solid var(--gradiant-grey-50);
+        border-radius: 1em;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 0, 0, 0.25);
+        color: var(--gradiant-grey-20);
+        margin: 5vh auto;
+        max-height: 90vh;
+        overflow: scroll;
+        width: $width;
+
+        .header {
+            @include flex-100();
+            border-bottom: 1px solid var(--gradiant-grey-50);
+            padding: 1em;
+            position: relative;
+            text-align: center;
+
+            .close {
+                appearance: none;
+                background-color: transparent;
+                border: none;
+                color: var(--gradiant-grey-20);
+                cursor: pointer;
+                font-size: 1em;
+                outline: none;
+                position: absolute;
+                right: .5em;
+                top: .5em;
+            }
+        }
+
+        .content {
+            @include flex-col(flex-start, flex-start);
+            padding: 2em;
+            width: 100%;
+        }
+    }
+}
+
 @mixin mtt-form($angle: 0deg) {
     @include flex-col();
     background-color: var(--form-bg);

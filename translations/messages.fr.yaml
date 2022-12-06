@@ -46,6 +46,14 @@ popular movies: Films populaires
 popular series: Séries populaires
 popular people: Personnes populaires
 
+# Show code
+action.show_code: Voir le code
+action.close: Fermer
+title.source_code: Code source
+title.controller_code: Code source du controller
+title.twig_template_code: Code source du template
+not_available: Non disponible
+
 # Registration
 Register: S'enregistrer
 Registration: Enregistrement

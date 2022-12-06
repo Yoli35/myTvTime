@@ -9,7 +9,9 @@
                 {{ include('blocks/serie/_bracket.html.twig') }}
             {% endif %}
         {% endif %}
-        {{ include('blocks/user/_breadcrumb.html.twig') }}
+        <li>
+            {{ include('blocks/user/_breadcrumb.html.twig') }}
+        </li>
         {% if parent is defined %}
             <li class="breadcrumb-item"><a href="{{ parent.url }}" accesskey="<">{{ parent.page|trans }}</a></li>
         {% endif %}

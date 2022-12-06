@@ -9,6 +9,7 @@
         <div class="my-collections-page">
 
             {{ include('blocks/_nav.html.twig', {thisPage: 'My Collections'}) }}
+            {{ include('blocks/source/button.html.twig') }}
 
             <div class="add-collection"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>
             <div class="wrapper">
@@ -60,8 +61,11 @@
             </div>
         </div>
     </dialog>
+
+    {{ show_source_code(_self) }}
 {% endblock %}
 {% block morejs %}
+    <script src="/js/source.js"></script>
     <script>
         const locale = "{{ app.request.locale }}";
         let confirmDialog;
