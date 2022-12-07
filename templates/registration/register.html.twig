@@ -9,9 +9,9 @@
             <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
         {% endfor %}
         <div class="login-dialog">
+            {{ form_start(registrationForm) }}
             <div class="header"><h5>{{ 'Registration'|trans }}</h5></div>
             <div class="body">
-                {{ form_start(registrationForm) }}
                 <div class="control">
                     {{ form_row(registrationForm.email) }}
                 </div>
@@ -30,8 +30,8 @@
 
             <div class="footer">
                 <button type="submit" class="btn btn-secondary float-end">{{ 'Register'|trans }}</button>
-                {{ form_end(registrationForm) }}
             </div>
+            {{ form_end(registrationForm) }}
         </div>
     </div>
 {% endblock %}

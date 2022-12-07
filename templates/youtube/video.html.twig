@@ -25,6 +25,7 @@
                     <div class="title-tags">
                         <div class="title-trash">
                             <div class="title">{{ video.title }}</div>
+                            <div class="youtube"><a href="https://youtu.be/{{ video.link }}" target="_blank"><i class="fa-brands fa-youtube"></i></a></div>
                             <div class="trash" data-dialog="delete-video"><i class="fa-solid fa-trash"></i></div>
                         </div>
                         {#                  {{ component('youtube_video_tags', {class: 'tags', 'id': user.id, 'video': video.id}) }} #}

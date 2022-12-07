@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Friend;
 use App\Entity\MovieCollection;
 use App\Entity\User;
-use App\Entity\UserMovie;
+use App\Form\Type\ChangePasswordType;
 use App\Form\UserType;
 use App\Repository\FriendRepository;
 use App\Repository\MovieCollectionRepository;
@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\LocaleSwitcher;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -92,6 +93,7 @@ class UserController extends AbstractController
             'user' => $user,
             'friends' => $friends,
             'friendRequests' => $friendRequests,
+            'from' => 'profile',
             'locale' => $request->getLocale(),
         ]);
     }
@@ -525,6 +527,27 @@ class UserController extends AbstractController
         //dump($user);
 
         return $this->json(['connected' => ($user !== null)]);
+    }
+
+    #[Route('/change-password', name: 'app_user_change_password', methods: ['GET', 'POST'])]
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(ChangePasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($passwordHasher->hashPassword($user, $form->get('newPassword')->getData()));
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_logout');
+        }
+
+        return $this->render('user/change_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
 }

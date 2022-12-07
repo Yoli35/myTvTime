@@ -41,6 +41,9 @@
                     </div>
                 {% endif %}
             {% endif %}
+            {% if from == 'profile' %}
+                <div class="btn btn-secondary ml"><a href="{{ path('app_user_change_password') }}">{{ 'Change password'|trans }}</a></div>
+            {% endif %}
         {% endif %}
     </ol>
 </nav>

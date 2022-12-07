@@ -105,7 +105,7 @@ class SerieController extends AbstractController
                 ["data" => ["25", "200"], "name" => "scale", "type" => "interval"]
             ]);
             $settingsRepository->save($leafSettings, true);
-            dump($leafSettings);
+//            dump($leafSettings);
         }
         return $this->render('serie/index.html.twig', [
             'series' => $series,
@@ -519,7 +519,7 @@ class SerieController extends AbstractController
         $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
 //        dump($tv);
-        dump($viewing);
+//        dump($viewing);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
