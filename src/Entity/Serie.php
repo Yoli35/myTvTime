@@ -64,14 +64,14 @@ class Serie
     private ?string $originalName = null;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $modifiedAt;
+    private ?DateTime $modifiedAt;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->addedAt = new DateTimeImmutable();
         $this->updatedAt = new DateTime();
-        $this->modifiedAt = new DateTimeImmutable();
+        $this->modifiedAt = new DateTime();
         $this->networks = new ArrayCollection();
     }
 
@@ -284,12 +284,12 @@ class Serie
         return $this;
     }
 
-    public function getModifiedAt(): ?DateTimeImmutable
+    public function getModifiedAt(): ?DateTime
     {
         return $this->modifiedAt;
     }
 
-    public function setModifiedAt(?DateTimeImmutable $modifiedAt): self
+    public function setModifiedAt(?DateTime $modifiedAt): self
     {
         $this->modifiedAt = $modifiedAt;
 
