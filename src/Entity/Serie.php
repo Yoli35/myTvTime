@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SerieRepository;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -36,7 +37,7 @@ class Serie
     private ?DateTimeImmutable $addedAt;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $updatedAt;
+    private ?DateTime $updatedAt;
 
     #[ORM\Column(nullable: true)]
     private ?bool $serieCompleted = null;
@@ -69,7 +70,7 @@ class Serie
     {
         $this->users = new ArrayCollection();
         $this->addedAt = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTime();
         $this->modifiedAt = new DateTimeImmutable();
         $this->networks = new ArrayCollection();
     }
@@ -139,12 +140,12 @@ class Serie
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeImmutable
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(?DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

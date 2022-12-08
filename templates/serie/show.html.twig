@@ -141,7 +141,7 @@
                     {% if serie.created_by|length %}
                         <div class="creators">
                             {% for c in serie.created_by %}
-                                <a href="{{ path('app_serie_people', {id: c.id}) }}">
+                                <a href="{{ path('app_people', {id: c.id}) }}">
                                     <div class="creator">
                                         <div class="profile">
                                             {% if c.profile_path %}
@@ -214,7 +214,7 @@
                                         <h4>{{ 'Cast'|trans }}</h4>
                                         <div class="list">
                                             {% for people in credits.cast %}
-                                                <a href="{{ path('app_serie_people', {id: people.id}) }}">
+                                                <a href="{{ path('app_people', {id: people.id}) }}">
                                                     <div class="people">
                                                         <div class="profile">
                                                             {% if people.profile_path %}

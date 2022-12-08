@@ -244,7 +244,7 @@
                     <div class="content">
                         {% for actor in cast %}
                             {% if actor.profile_path|length %}
-                                <a href="{{ path('app_serie_people', {id: actor.id}) }}">
+                                <a href="{{ path('app_people', {id: actor.id}) }}">
                                     <div class="actor">
                                         <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
                                         <div>
@@ -257,7 +257,7 @@
                         {% endfor %}
                         {% for actor in cast %}
                             {% if actor.profile_path|length == 0 %}
-                                <a href="{{ path('app_serie_people', {id: actor.id}) }}">
+                                <a href="{{ path('app_people', {id: actor.id}) }}">
                                     <div class="actor">
                                         <div class="profile" data-id="{{ actor.id }}"></div>
                                         <div>
@@ -277,7 +277,7 @@
                 <div class="crew">
                     <div class="content">
                         {% for name, data in sortedCrew %}
-                            <a href="{{ path('app_serie_people', {id: data.id}) }}">
+                            <a href="{{ path('app_people', {id: data.id}) }}">
                                 <div class="member">
                                     {% if data.profile_path | length %}
                                         <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ data.profile_path }}')" data-id="{{ data.id }}"></div>

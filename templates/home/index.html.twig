@@ -10,7 +10,7 @@
             <div class="home-header bg{{ random(5) }}"></div>
         {% endif %}
         {{ include('blocks/_nav.html.twig', {thisPage: 'Home Page', user: app.user}) }}
-        {{ include('blocks/source/button.html.twig') }}
+        {{ include('blocks/source/_button.html.twig') }}
 
         {% if lastAddedMovies %}
             <h2>{{ 'last added movies'|trans }}</h2>

@@ -1,6 +1,6 @@
 <div class="home-discover" data-id="{{ people.id }}">
     <div class="profile">
-        <a href="{{ path('app_serie_people', {'id': people.id}) }}?from={{ from }}" title="{{ people.name }}">
+        <a href="{{ path('app_people', {'id': people.id}) }}?from={{ from }}" title="{{ people.name }}">
             <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.3 ~ people.profile_path }}" alt="{{ people.name ~ '\'s profile' }}">
         </a>
         <div class="known-for">

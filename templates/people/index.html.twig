@@ -3,6 +3,7 @@
     {{ include('blocks/_pageHeader.html.twig') }}
     <div class="container">
         <header>{{ include('blocks/_nav.html.twig', {thisPage:('My Series'|trans)}) }}</header>
+        {{ include('blocks/source/_button.html.twig') }}
         <main>
             <div class="person">
                 <div class="left-column">
@@ -67,10 +68,6 @@
                             </div>
                         {% endif %}
                     {% endif %}
-                    {#
-                    "biography" => ""
-                    "imdb_id" => "nm4055138"
-                    #}
                 </div>
                 <div class="right-column">
                     <div class="content">
@@ -248,8 +245,11 @@
         </main>
         <footer>{{ include('blocks/_pageFooter.html.twig') }}</footer>
     </div>
+
+    {{ show_source_code(_self) }}
 {% endblock %}
 {% block morejs %}
+    <script src="/js/source.js"></script>
     <script>
         const _app_serie_get_overview = "{{ path('app_serie_get_overview', {id: 0}) }}";
         const imgUrl = "{{ imageConfig.url ~ imageConfig.profile_sizes.2 }}";

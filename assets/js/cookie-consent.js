@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", () => {
         openDialog();
 
         document.querySelector(".accept-cookies").addEventListener("click", () => {
-            document.cookie = "accepted_cookies=yes;path=/;max-age=172800;SameSite=Lax"
+            document.cookie = "accepted_cookies=yes;path=/;max-age=604800;SameSite=Lax"
             closeDialog();
         })
         document.querySelector(".close").addEventListener('click', function () {
