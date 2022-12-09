@@ -35,6 +35,9 @@
                 {% endif %}
             {% endif %}
         </div>
+        {% if is_favorite(user.id, serie.id, 'serie') %}
+            <div class="favorite">{{ 'Favorite'|trans }}</div>
+        {% endif %}
         <div class="front"></div>
     </div>
 </a>

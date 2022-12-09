@@ -161,6 +161,7 @@ Cancel and close the dialog: Annuler et fermer la boîte de dialogue
 Translate: Traduire
 Add translated keywords, close the dialog and reload the page: Ajouter les mots-clés traduits, fermer la boîte de dialogue et recharger la page.
 Translate new keywords: Traduire les nouveaux mots-clés
+Favorite serie: Série favorite
 
 # Movies
 Sort: Tri
@@ -309,6 +310,10 @@ Writing.he: Auteur
 Writing.she: Autrice
 Writing: Écriture
 # key facts
+Favorite: Série favorite
+Add to favorites: Ajouter aux favoris
+Successfully added to favorites: Ajouté aux favoris avec succès
+Successfully removed to favorites: Retiré des favoris avec succès
 Key facts: Faits principaux
 Network: Diffuseur télé
 Networks: Diffuseurs télé

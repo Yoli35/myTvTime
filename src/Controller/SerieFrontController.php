@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Favorite;
 use App\Entity\Networks;
 use App\Entity\Serie;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Repository\EpisodeViewingRepository;
+use App\Repository\FavoriteRepository;
 use App\Repository\NetworksRepository;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieRepository;
@@ -36,17 +38,14 @@ class SerieFrontController extends AbstractController
     const LATEST = 'latest';
     const SEARCH = 'search';
 
-    private SerieViewingRepository $serieViewingRepository;
-    private SeasonViewingRepository $seasonViewingRepository;
-    private EpisodeViewingRepository $episodeViewingRepository;
-    private SerieController $serieController;
-
-    public function __construct(SerieController $serieController, SerieViewingRepository $serieViewingRepository, SeasonViewingRepository $seasonViewingRepository, EpisodeViewingRepository $episodeViewingRepository)
+    public function __construct(private SerieController $serieController,
+//                                private SerieViewingRepository $serieViewingRepository,
+//                                private SeasonViewingRepository $seasonViewingRepository,
+//                                private EpisodeViewingRepository $episodeViewingRepository,
+                                private FavoriteRepository $favoriteRepository,
+//                                private SerieRepository $serieRepository,
+                                private TranslatorInterface $translator)
     {
-        $this->serieController = $serieController;
-        $this->serieViewingRepository = $serieViewingRepository;
-        $this->seasonViewingRepository = $seasonViewingRepository;
-        $this->episodeViewingRepository = $episodeViewingRepository;
     }
 
     /**
@@ -193,6 +192,25 @@ class SerieFrontController extends AbstractController
             'userSerieId' => $serie?->getId(),
             'pagination' => $pagination,
         ]);
+    }
+
+    #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_serie_toggle_favorite', methods: 'GET')]
+    public function toggleFavorite(bool $fav, int $userId, int $mediaId): Response
+    {
+        if ($fav) {
+            $favorite = new Favorite($userId, $mediaId, 'serie');
+            $this->favoriteRepository->save($favorite, true);
+            $message = $this->translator->trans("Successfully added to favorites");
+            $class = 'added';
+        } else {
+            $favorite = $this->favoriteRepository->findOneBy(['userId' => $userId, 'mediaId' => $mediaId, 'type' => 'serie']);
+            $this->favoriteRepository->remove($favorite, true);
+            $message = $this->translator->trans("Successfully removed from favorites");
+            $class = 'removed';
+        }
+
+//        $serie = $this->serieRepository->findOneBy(['']);
+        return $this->json(['message' => $message, 'class' => $class]);
     }
 
     #[Route('/overview/{id}', name: 'app_serie_get_overview', methods: 'GET')]

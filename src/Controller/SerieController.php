@@ -494,6 +494,7 @@ class SerieController extends AbstractController
         $standing = $tmdbService->getTvImages($id, $request->getLocale());
         $images = json_decode($standing, true);
 
+        $serieId = null;
         $viewing = null;
         $whatsNew = null;
 
@@ -502,7 +503,8 @@ class SerieController extends AbstractController
                 $serie = $serieRepository->findOneBy(['serieId' => $id]);
             }
             if ($serie) {
-                $whatsNew = $this->updateSeasonsAndEpisodes($tv, $serie, $serieRepository);
+                $serieId = $serie->getId();
+                $whatsNew = $this->whatsNew($tv, $serie, $serieRepository);
 
                 /** @var SerieViewing $viewing */
                 $viewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
@@ -524,6 +526,7 @@ class SerieController extends AbstractController
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
+            'serieId' => $serieId,
             'index' => $index,
             'serieIds' => $serieIds,
             'credits' => $credits,
@@ -570,13 +573,13 @@ class SerieController extends AbstractController
                 'season_completed' => false,
                 'air_date' => $season['air_date'],
                 'episode_count' => $season['episode_count'],
-                'episodes' => array_fill(1, $season['episode_count'], false)
+                'episodes' => array_fill(0, $season['episode_count'], false)
             ];
         }
         return $tab;
     }
 
-    public function updateSeasonsAndEpisodes($tv, $serie, $serieRepository): array|null
+    public function whatsNew($tv, $serie, $serieRepository): array|null
     {
         $whatsNew = ['episode' => 0, 'season' => 0, 'status' => "", 'original_name' => ""];
         $modified = false;
@@ -930,7 +933,7 @@ class SerieController extends AbstractController
              */
             for ($s = 1; $s < $season; $s++) {
                 $episode_count = $viewings[$s]['episode_count'];
-                $newEpisodes = array_fill(1, $episode_count, true);
+                $newEpisodes = array_fill(0, $episode_count, true);
                 $air_date = array_key_exists('air_date', $viewings[$s]) ? $viewings[$s]['air_date'] : $seasons[$s - $noSpecialEpisodes]['air_date'];
                 $newTab[] = [
                     'season_number' => $s,
@@ -965,7 +968,7 @@ class SerieController extends AbstractController
             $season_count = $serie->getNumberOfSeasons();
             for ($s = $season + 1; $s <= $season_count; $s++) {
                 $episode_count = $viewings[$s]['episode_count'];
-                $newEpisodes = array_fill(1, $episode_count, false);
+                $newEpisodes = array_fill(0, $episode_count, false);
                 $air_date = array_key_exists('air_date', $viewings[$s]) ? $viewings[$s]['air_date'] : $seasons[$s - $noSpecialEpisodes]['air_date'];
                 $newTab[] = [
                     'season_number' => $s,

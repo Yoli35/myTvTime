@@ -143,9 +143,6 @@
             }
 
             a {
-                display: block;
-                height: 100%;
-                width: 100%;
 
                 .serie {
                     @include flex-row(flex-start, flex-start);
@@ -241,6 +238,20 @@
                             background-color: var(--gradiant-mars-30);
                             color: var(--gradiant-mars-90);
                         }
+                    }
+
+                    .favorite {
+                        @include flex-row();
+                        background-color: var(--gradiant-green-30);
+                        border-radius: .5em;
+                        color: var(--gradiant-grey-100);
+                        font-weight: 300;
+                        height: 2em;
+                        position: absolute;
+                        right: 4em;
+                        text-align: center;
+                        top: 2em;
+                        width: 8em;
                     }
 
                     .add {
@@ -431,6 +442,7 @@
                 border: 1px solid var(--gradiant-grey-80);
                 border-radius: var(--button-border-radius);
                 color: var(--gradiant-grey-80);
+                cursor: pointer;
                 font-weight: 100;
                 padding: .25em 1em;
                 text-transform: uppercase;
@@ -1258,6 +1270,36 @@
             min-height: 50vh;
             padding: 0 1em;
             width: 100%;
+
+            .favorite {
+                @include flex-col();
+                padding: 1em .5em;
+                width: 100%;
+
+                .control {
+                    @include flex-100();
+                    .switch {
+                        @include switcher(var(--gradiant-green-30), var(--gradiant-grey-80))
+                    }
+                }
+
+                .message {
+                    @include flex-100();
+                    border-radius: .5em;
+                    color: var(--gradiant-grey-100);
+                    font-weight: 300;
+                    margin-top: 1em;
+                    padding: .5em;
+
+                    &.added {
+                        background-color: var(--gradiant-green-30);
+                    }
+
+                    &.removed {
+                        background-color: var(--gradiant-mars-30);
+                    }
+                }
+            }
 
             .key-facts {
                 .fact {

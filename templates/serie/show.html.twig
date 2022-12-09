@@ -334,6 +334,18 @@
                     {% endif %}
                 </article>
                 <aside>
+                    {% if user and serieId %}
+                        <div class="favorite" data-user="{{ user.id }}" data-media="{{ serieId }}">
+                            <div class="control">
+                                {{ 'Add to favorites'|trans }}
+                                <label class="switch">
+                                    <input type="checkbox" {% if is_favorite(user.id, serieId, 'serie') %} checked{% endif %}/>
+                                    <span></span>
+                                </label>
+                            </div>
+                            <span class="message"></span>
+                        </div>
+                    {% endif %}
                     <div class="key-facts">
                         <h4>{{ 'Key facts'|trans }}</h4>
                         <div class="fact">
@@ -522,7 +534,8 @@
         </div>
     </dialog>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/serie.js"></script>
     <script>
         const paths = [
@@ -532,11 +545,13 @@
             "{{ path('app_serie_new') }}",
             "{{ path('app_serie_show', {id:0}) }}",
             "{{ path('app_serie_viewing') }}",
-            "{{ path('app_user_connected') }}"
+            "{{ path('app_user_connected') }}",
+            "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}"
         ];
         const serie = {{ serie.id }};
         const _app_serie_viewing = paths[5];
         const _app_user_connected = paths[6];
+        let _app_serie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
         const _locale = "{{ app.request.locale }}";
         const txt = {
             "vu": {"fr": "vu", "en": "seen"},
@@ -561,9 +576,33 @@
                 {% endif %}
             ]);
 
+            document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
+
             viewedEpisodesDialog = document.querySelector(".viewed-episode");
             initViewedEpisodes(viewedEpisodesDialog);
             episodeAddEvent();
+
+            function toggleFavorite(evt) {
+                const fav = evt.target.checked ? 1 : 0;
+                const userId = "{{ user.id }}";
+                const mediaId = "{{ serieId }}";
+
+                // console.log({fav});
+                let url = _app_serie_toggle_favorite + '/' + userId + '/' + mediaId + '/' + fav;
+                // console.log({url});
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    let data = JSON.parse(this.response);
+                    let message = evt.target.closest(".favorite").querySelector(".message");
+                    // console.log({data});
+                    message.innerHTML = data.message;
+                    message.classList.remove("added", "removed");
+                    message.classList.add(data.class);
+                }
+                xhr.open("GET", url);
+                xhr.send();
+            }
 
             function episodeAddEvent() {
                 const episodes = document.querySelectorAll(".ep");
@@ -598,8 +637,6 @@
             function initViewedEpisodes(dialog) {
                 const devices = dialog.querySelectorAll(".device");
                 const networks = dialog.querySelectorAll(".network");
-                console.log(dialog.querySelector(".networks").clientWidth);
-                console.log(dialog.querySelector(".wrapper").clientWidth);
 
                 currentDialog = dialog;
 
