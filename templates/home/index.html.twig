@@ -7,7 +7,7 @@
         {{ include('blocks/_pageHeader.html.twig') }}
 
         {% if route == 'app_home' %}
-            <div class="home-header bg{{ random(5) }}"></div>
+            <div class="home-header"></div>
         {% endif %}
         {{ include('blocks/_nav.html.twig', {thisPage: 'Home Page', user: app.user}) }}
         {{ include('blocks/source/_button.html.twig') }}

@@ -105,6 +105,7 @@ main {
 .w100 {
     width: 100%;
 }
+
 .ml-auto {
     margin-left: auto;
 }
@@ -757,36 +758,13 @@ h4 {
 }
 
 .home-header {
-    background-position: center bottom;
+    background-image: url("../images/mytvtime-light.png");
+    background-position: center center;
     background-size: cover;
-    height: 15em;
+    height: 20vw;
     margin: 0 0 1em 0;
     transition: background-position 1s;
     width: 100%;
-
-    &.bg0 {
-        background-image: url("../images/header.000.png");
-    }
-
-    &.bg1 {
-        background-image: url("../images/header.001.png");
-    }
-
-    &.bg2 {
-        background-image: url("../images/header.002.png");
-    }
-
-    &.bg3 {
-        background-image: url("../images/header.003.png");
-    }
-
-    &.bg4 {
-        background-image: url("../images/header.004.png");
-    }
-
-    &.bg5 {
-        background-image: url("../images/header.005.png");
-    }
 }
 
 .home-footer {
@@ -1185,7 +1163,6 @@ h4 {
 }
 
 @media (min-width: 768px) { /* 720 */
-
     .nav-menu {
         > a {
             font-size: 1.5em;
@@ -1194,7 +1171,6 @@ h4 {
 
     .home-header {
         border-radius: 1em;
-        height: 20em;
         margin: 1em 0;
     }
 
@@ -1212,31 +1188,14 @@ h4 {
             }
         }
     }
-    //.home-discover {
-    //    width: 24em;
-    //}
 }
 
 @media (min-width: 992px) { /* 960 */
     .content {
         justify-content: space-between;
     }
-    //.home-discover {
-    //    width: 15em;
-    //}
 }
 
-@media (min-width: 1200px) { /* 1140 */
-    //.home-discover {
-    //    width: 15em;
-    //}
-}
-
-@media (min-width: 1400px) { /* 1320 */
-    //.home-discover {
-    //    width: 15em;
-    //}
-}
 
 @media (prefers-color-scheme: dark) {
 
@@ -1289,6 +1248,10 @@ h4 {
                 color: var(--gradiant-grey-80);
             }
         }
+    }
+
+    .home-header {
+        background-image: url("../images/mytvtime-dark.png");
     }
 
     .genres {
