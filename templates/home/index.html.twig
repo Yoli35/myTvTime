@@ -24,11 +24,34 @@
             </div>
         {% endif %}
 
+        {% if favoriteMovies %}
+            <h2>{{ 'favorite movies'|trans }}</h2>
+            <div class="home-list">
+                <div class="wrapper">
+                    {% for movie in favoriteMovies %}
+                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath %}
+                        {{ include('blocks/movie/_discover.html.twig', { title: movie.title, poster: poster, id: movie.movieDbId, route: 'app_movie' }) }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
         {% if lastUpdatedSeries %}
             <h2>{{ 'last updated series'|trans }}</h2>
             <div class="home-list">
                 <div class="wrapper">
                     {% for serie in lastUpdatedSeries %}
+                        {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: serie, poster_path: serie.posterPath}) }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if favoriteSeries %}
+            <h2>{{ 'favorite series'|trans }}</h2>
+            <div class="home-list">
+                <div class="wrapper">
+                    {% for serie in favoriteSeries %}
                         {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: serie, poster_path: serie.posterPath}) }}
                     {% endfor %}
                 </div>

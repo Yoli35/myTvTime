@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Favorite;
 use App\Entity\Rating;
 use App\Entity\User;
 use App\Entity\UserMovie;
 use App\Form\MovieByNameType;
+use App\Repository\FavoriteRepository;
 use App\Repository\GenreRepository;
 use App\Repository\MovieCollectionRepository;
 use App\Repository\RatingRepository;
@@ -25,6 +27,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MovieController extends AbstractController
 {
+    public function __construct(private FavoriteRepository $favoriteRepository,
+                                private TranslatorInterface $translator)
+    {
+    }
+
     #[Route(['fr' => '/{_locale}/films/', 'en' => '/{_locale}/movies/', 'de' => '/{_locale}/filme/', 'es' => '/{_locale}/peliculas/'], name: 'app_movie_list', requirements: ['_locale' => 'fr|en|de|es', 'page' => 1, 'sort_by' => 'popularity.desc'])]
     public function index(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
@@ -181,11 +188,13 @@ class MovieController extends AbstractController
         $hasBeenSeen = $this->hasBeenSeen($id, $userMovieRepository);
         $collections = [];
         $movieCollectionIds = [];
+        $userMovieId = 0;
         if ($hasBeenSeen) {
             if ($user) {
                 $collections = $collectionRepository->findBy(['user' => $user]);
                 $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
                 if ($userMovie) {
+                    $userMovieId = $userMovie->getId();
                     $movieCollections = $userMovie->getMovieCollections();
                     foreach ($movieCollections as $movieCollection) {
                         $movieCollectionIds[] = $movieCollection->getId();
@@ -240,6 +249,7 @@ class MovieController extends AbstractController
             'hasBeenSeen' => $hasBeenSeen,
             'cast' => $cast,
             'sortedCrew' => $sortedCrew,
+            'userMovieId' => $userMovieId,
             'collections' => $collections,
             'movieCollection' => $movieCollectionIds,
             'images' => $images,
@@ -315,6 +325,25 @@ class MovieController extends AbstractController
             }
         }
         return false;
+    }
+
+    #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_movie_toggle_favorite', methods: 'GET')]
+    public function toggleFavorite(bool $fav, int $userId, int $mediaId): Response
+    {
+        if ($fav) {
+            $favorite = new Favorite($userId, $mediaId, 'movie');
+            $this->favoriteRepository->save($favorite, true);
+            $message = $this->translator->trans("Successfully added to favorites");
+            $class = 'added';
+        } else {
+            $favorite = $this->favoriteRepository->findOneBy(['userId' => $userId, 'mediaId' => $mediaId, 'type' => 'movie']);
+            $this->favoriteRepository->remove($favorite, true);
+            $message = $this->translator->trans("Successfully removed from favorites");
+            $class = 'removed';
+        }
+
+//        $serie = $this->serieRepository->findOneBy(['']);
+        return $this->json(['message' => $message, 'class' => $class]);
     }
 
     #[Route(['fr' => '/{_locale}/film/collection/{mid}/{id}', 'en' => '/{_locale}/movie/collection/{mid}/{id}', 'de' => '/{_locale}/filme/sammlung/{mid}/{id}', 'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -514,6 +543,9 @@ class MovieController extends AbstractController
             $person = json_decode($standing, true);
 //            $summary = $translator->trans($person['summary']);
 
+            /*
+             * composer require "google/cloud-translate"
+             */
 //            if ($locale !== 'en') {
 //                $config = [
 //                    'credentials' => [

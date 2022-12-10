@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\FavoriteRepository;
 use App\Repository\SerieRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\TMDBService;
@@ -23,17 +24,27 @@ class HomeController extends AbstractController
     }
 
     #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, TMDBService $tmdbService, UserMovieRepository $userMovieRepository, SerieRepository $serieRepository, ImageConfiguration $imageConfiguration): Response
+    public function index(Request $request, TMDBService $tmdbService, UserMovieRepository $userMovieRepository, SerieRepository $serieRepository, FavoriteRepository $favoriteRepository, ImageConfiguration $imageConfiguration): Response
     {
         /** @var User $user */
         $user = $this->getUser();
         $locale = $request->getLocale();
-        $lastAddedMovies = null;
-        $lastUpdatedSeries = null;
 
         if ($user) {
             $lastAddedMovies = $userMovieRepository->lastAddedMovies($user->getId(), 20);
             $lastUpdatedSeries = $serieRepository->lastUpdatedSeries($user->getId(), 20);
+
+            $favorites = $favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'serie']);
+            $favoriteSerieIds = array_map(function ($favorite) {
+                return $favorite->getMediaId();
+            }, $favorites);
+            $favoriteSeries = $serieRepository->findBy(['id' => $favoriteSerieIds], ['modifiedAt' => 'DESC']);
+
+            $favorites = $favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'movie']);
+            $favoriteMovieIds = array_map(function ($favorite) {
+                return $favorite->getMediaId();
+            }, $favorites);
+            $favoriteMovies = $userMovieRepository->findBy(['id' => $favoriteMovieIds], ['createdAt' => 'DESC']);
         }
         $standing = $tmdbService->discoverMovies(1, 'popularity.desc', $locale);
         $popularMovies = json_decode($standing, true);
@@ -47,8 +58,10 @@ class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'from' => 'home',
-            'lastAddedMovies' => $lastAddedMovies,
-            'lastUpdatedSeries' => $lastUpdatedSeries,
+            'lastAddedMovies' => $user ? $lastAddedMovies : null,
+            'lastUpdatedSeries' => $user ? $lastUpdatedSeries : null,
+            'favoriteMovies' => $user ? $favoriteMovies : null,
+            'favoriteSeries' => $user ? $favoriteSeries : null,
             'popularMovies' => $popularMovies,
             'popularSeries' => $popularSeries,
             'popularPeople' => $popularPeople,

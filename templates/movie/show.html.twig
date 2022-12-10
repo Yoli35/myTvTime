@@ -202,6 +202,19 @@
                         <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
                     {% endif %}
 
+                    {% if userMovieId > 0 %}
+                        <div class="favorite" data-user="{{ user.id }}" data-media="{{ userMovieId }}">
+                            <div class="control">
+                                {{ 'Add to favorites'|trans|upper }}
+                                <label class="switch">
+                                    <input type="checkbox" {% if is_favorite(user.id, userMovieId, 'movie') %} checked{% endif %}/>
+                                    <span></span>
+                                </label>
+                            </div>
+                            <span class="message"></span>
+                        </div>
+                    {% endif %}
+
                     {% if collections is not empty %}
                         <div class="movie-collection">
                             <div class="label">{{ 'My Collections'|trans }}</div>
@@ -326,40 +339,6 @@
                 </section>
             {% endif %}
         </div>
-
-        {#
-        <div class="modal fade" id="personModal" tabindex="-1">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Name</h5>
-        #}
-        {#                        <div>{{ 'Also known as'|trans }}</div> : <div class="also_known_as"></div> #}{#
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-        <div class="person-modal">
-            <div class="person-infos">
-                <div class="biography">{{ 'Biography'|trans }} :
-                    <div></div>
-                </div>
-                <div class="birthday">{{ 'Birthday'|trans }} : <span></span></div>
-                <div class="death-day">{{ 'Death-day'|trans }} : <span></span></div>
-                <div class="homepage">{{ 'Home Page'|trans }} : <span></span></div>
-                <div class="imdb-page">{{ 'Personal IMDB Page'|trans }} : <span></span></div>
-                <div class="known-for-department">{{ 'Known for Department'|trans }} : <span></span></div>
-                <div class="place-of-birth">{{ 'Place of Birth'|trans }} : <span></span></div>
-            </div>
-            <div class="person-profile"></div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Close'|trans }}</button>
-    </div>
-</div>
-</div>
-</div>
-        #}
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
@@ -374,7 +353,9 @@
             "{{ path('app_movie_get_rating') }}",
             "{{ path('app_movie_set_rating') }}",
             "{{ path('app_movie_collection_toggle') }}",
+            "{{ path('app_movie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}"
         ];
+        const _app_movie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
 
         window.addEventListener("DOMContentLoaded", () => {
             initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.2 }}", "{{ locale }}");
@@ -392,6 +373,30 @@
                 poster.appendChild(div);
                 alert("Alerte Poster !!!");
             })
+
+            document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
+
+            function toggleFavorite(evt) {
+                const fav = evt.target.checked ? 1 : 0;
+                const userId = "{{ user.id }}";
+                const mediaId = "{{ userMovieId }}";
+
+                // console.log({fav});
+                let url = _app_movie_toggle_favorite + '/' + userId + '/' + mediaId + '/' + fav;
+                // console.log({url});
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    let data = JSON.parse(this.response);
+                    let message = evt.target.closest(".favorite").querySelector(".message");
+                    // console.log({data});
+                    message.innerHTML = data.message;
+                    message.classList.remove("added", "removed");
+                    message.classList.add(data.class);
+                }
+                xhr.open("GET", url);
+                xhr.send();
+            }
         })
     </script>
 {% endblock %}

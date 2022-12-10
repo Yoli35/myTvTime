@@ -351,6 +351,36 @@
                 width: 100%;
             }
 
+            .favorite {
+                @include flex-col();
+                padding: 1em .5em;
+                width: 100%;
+
+                .control {
+                    @include flex-100();
+                    .switch {
+                        @include switcher(var(--gradiant-green-30), var(--gradiant-grey-80))
+                    }
+                }
+
+                .message {
+                    @include flex-100();
+                    border-radius: .5em;
+                    color: var(--gradiant-grey-100);
+                    font-weight: 300;
+                    margin-top: 1em;
+                    padding: .5em;
+
+                    &.added {
+                        background-color: var(--gradiant-green-30);
+                    }
+
+                    &.removed {
+                        background-color: var(--gradiant-mars-30);
+                    }
+                }
+            }
+
             .movie-collection {
                 @include flex-col(flex-start, flex-start);
                 margin-top: 2em;

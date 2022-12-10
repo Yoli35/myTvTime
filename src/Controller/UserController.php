@@ -16,7 +16,6 @@ use App\Service\TMDBService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,7 +42,6 @@ class UserController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[IsGranted('ROLE_USER')]
     #[Route('/{_locale}/personal/profile', name: 'app_personal_profile', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, FriendRepository $friendRepository): Response
     {
