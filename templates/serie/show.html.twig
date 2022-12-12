@@ -134,7 +134,6 @@
                     </div>
                     <div class="info">
                         {% if serie.overview|length %}
-                            {#                            <h5>{{ 'Synopsis'|trans }}</h5> #}
                             <div>{{ serie.overview }}</div>
                         {% endif %}
                     </div>
@@ -180,11 +179,13 @@
                         </div>
                     {% endif %}
                 </div>
-                {% if index is defined %}
-                    {% if index %}
-                        <div class="seen" data-id="{{ serie.id }}"><i class="fa-solid fa-eye"></i></div>
-                    {% else %}
-                        <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
+                {% if user %}
+                    {% if index is defined %}
+                        {% if index %}
+                            <div class="seen" data-id="{{ serie.id }}"><i class="fa-solid fa-eye"></i></div>
+                        {% else %}
+                            <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
                 <div class="ygg">
@@ -576,11 +577,12 @@
                 {% endif %}
             ]);
 
-            document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
-
             viewedEpisodesDialog = document.querySelector(".viewed-episode");
             initViewedEpisodes(viewedEpisodesDialog);
             episodeAddEvent();
+
+            {% if user and serieId %}
+            document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
 
             function toggleFavorite(evt) {
                 const fav = evt.target.checked ? 1 : 0;
@@ -603,6 +605,7 @@
                 xhr.open("GET", url);
                 xhr.send();
             }
+            {% endif %}
 
             function episodeAddEvent() {
                 const episodes = document.querySelectorAll(".ep");

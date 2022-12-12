@@ -39,9 +39,6 @@ class Serie
     #[ORM\Column(nullable: true)]
     private ?DateTime $updatedAt;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $serieCompleted = null;
-
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $status = null;
 
@@ -63,15 +60,11 @@ class Serie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $originalName = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?DateTime $modifiedAt;
-
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->addedAt = new DateTimeImmutable();
         $this->updatedAt = new DateTime();
-        $this->modifiedAt = new DateTime();
         $this->networks = new ArrayCollection();
     }
 
@@ -260,18 +253,6 @@ class Serie
         return $this;
     }
 
-    public function isSerieCompleted(): ?bool
-    {
-        return $this->serieCompleted;
-    }
-
-    public function setSerieCompleted(?bool $serieCompleted): self
-    {
-        $this->serieCompleted = $serieCompleted;
-
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -280,18 +261,6 @@ class Serie
     public function setStatus(?string $status): self
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getModifiedAt(): ?DateTime
-    {
-        return $this->modifiedAt;
-    }
-
-    public function setModifiedAt(?DateTime $modifiedAt): self
-    {
-        $this->modifiedAt = $modifiedAt;
 
         return $this;
     }

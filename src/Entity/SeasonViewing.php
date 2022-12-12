@@ -31,7 +31,7 @@ class SeasonViewing
     private ?bool $seasonCompleted = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'seasons')]
-    private ?SerieViewing $serie = null;
+    private ?SerieViewing $serieViewing = null;
 
     #[ORM\OneToMany(mappedBy: 'season', targetEntity: EpisodeViewing::class)]
     private Collection $episodes;
@@ -98,14 +98,14 @@ class SeasonViewing
         return $this;
     }
 
-    public function getSerie(): ?SerieViewing
+    public function getSerieViewing(): ?SerieViewing
     {
-        return $this->serie;
+        return $this->serieViewing;
     }
 
-    public function setSerie(?SerieViewing $serie): self
+    public function setSerie(?SerieViewing $serieViewing): self
     {
-        $this->serie = $serie;
+        $this->serieViewing = $serieViewing;
 
         return $this;
     }

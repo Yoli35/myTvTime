@@ -38,13 +38,13 @@ class SerieFrontController extends AbstractController
     const LATEST = 'latest';
     const SEARCH = 'search';
 
-    public function __construct(private SerieController $serieController,
+    public function __construct(private readonly SerieController $serieController,
 //                                private SerieViewingRepository $serieViewingRepository,
 //                                private SeasonViewingRepository $seasonViewingRepository,
 //                                private EpisodeViewingRepository $episodeViewingRepository,
-                                private FavoriteRepository $favoriteRepository,
+                                private readonly FavoriteRepository $favoriteRepository,
 //                                private SerieRepository $serieRepository,
-                                private TranslatorInterface $translator)
+                                private readonly TranslatorInterface $translator)
     {
     }
 
@@ -124,7 +124,7 @@ class SerieFrontController extends AbstractController
                 $serie->addUser($user);
                 $serieRepository->save($serie, true);
                 //dump($serie);
-                $this->serieController->createViewing($user, $tv, $serie);
+                $this->serieController->createSerieViewing($user, $tv, $serie);
                 /*
                  */
                 if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {

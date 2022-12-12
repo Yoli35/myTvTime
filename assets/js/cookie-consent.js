@@ -11,13 +11,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
         openDialog();
 
-        document.querySelector(".accept-cookies").addEventListener("click", () => {
+        document.querySelector(".accept-cookies").addEventListener("click", function () {
             document.cookie = "accepted_cookies=yes;path=/;max-age=604800;SameSite=Lax"
             closeDialog();
         })
         document.querySelector(".close").addEventListener('click', function () {
             closeDialog();
         });
+
+        dialog.addEventListener("keyup", function(evt) {
+            if (evt.keyCode === 13 || evt.key === 13 || evt.code === 'Enter' || evt.code === 'NumpadEnter') {
+                document.querySelector(".accept-cookies").click();
+            }
+            if (evt.keyCode === 27 || evt.key === 27 || evt.code === 'Escape') {
+                document.querySelector(".close").click();
+            }
+        })
     } else {
         dialog.parentElement.removeChild(dialog);
     }

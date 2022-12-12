@@ -135,21 +135,10 @@ class GetTheMovieDatabaseTVCommand extends Command
                         $fields = 'updated_at';
                         $modified++;
                     }
-                    if ($serie->getModifiedAt() === null) {
-                        $serie->setModifiedAt($serie->getAddedAt());
-                        $fields .= 'modified_at';
-                        $modified++;
-                    }
                     if ($serie->getStatus() === null) {
                         $serie->setStatus($tmdbTv['status']);
                         if (strlen($fields)) $fields .= ' / ';
                         $fields .= 'status';
-                        $modified++;
-                    }
-                    if ($serie->isSerieCompleted() === null) {
-                        $serie->setSerieCompleted(false);
-                        if (strlen($fields)) $fields .= ' / ';
-                        $fields .= 'serie_completed';
                         $modified++;
                     }
                     /*
@@ -157,14 +146,14 @@ class GetTheMovieDatabaseTVCommand extends Command
                      */
                     if ($serie->getNumberOfSeasons() !== $tmdbTv['number_of_seasons']) {
                         $serie->setNumberOfSeasons($tmdbTv['number_of_seasons']);
-                        $serie->setModifiedAt(new DateTimeImmutable());
+                        $serie->setUpdatedAt(new DateTimeImmutable());
                         if (strlen($fields)) $fields .= ' / ';
                         $fields .= 'number_of_seasons';
                         $modified++;
                     }
                     if ($serie->getNumberOfEpisodes() !== $tmdbTv['number_of_episodes']) {
                         $serie->setNumberOfEpisodes($tmdbTv['number_of_episodes']);
-                        $serie->setModifiedAt(new DateTimeImmutable());
+                        $serie->setUpdatedAt(new DateTimeImmutable());
                         if (strlen($fields)) $fields .= ' / ';
                         $fields .= 'number_of_episodes';
                         $modified++;

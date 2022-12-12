@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SerieViewingRepository;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,11 +37,22 @@ class SerieViewing
     #[ORM\Column]
     private ?int $seasonCount = null;
 
-    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: SeasonViewing::class)]
+    #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class)]
     private Collection $seasons; /* will replace viewing */
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTime $modifiedAt;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $serieCompleted = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
+        $this->createdAt = new DateTimeImmutable();
+        $this->modifiedAt = new DateTime();
         $this->seasons = new ArrayCollection();
     }
 
@@ -157,6 +170,42 @@ class SerieViewing
                 $season->setSerie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isSerieCompleted(): ?bool
+    {
+        return $this->serieCompleted;
+    }
+
+    public function setSerieCompleted(?bool $serieCompleted): self
+    {
+        $this->serieCompleted = $serieCompleted;
+
+        return $this;
+    }
+
+    public function getModifiedAt(): ?DateTime
+    {
+        return $this->modifiedAt;
+    }
+
+    public function setModifiedAt(?DateTime $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
