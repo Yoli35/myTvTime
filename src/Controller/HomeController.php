@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\FavoriteRepository;
 use App\Repository\SerieRepository;
+use App\Repository\SerieViewingRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
@@ -34,11 +35,11 @@ class HomeController extends AbstractController
             $lastAddedMovies = $userMovieRepository->lastAddedMovies($user->getId(), 20);
             $lastUpdatedSeries = $serieRepository->lastUpdatedSeries($user->getId(), 20);
 
-            $favorites = $favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'serie']);
+            $favorites = $favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'serie'], ['createdAt' => 'DESC']);
             $favoriteSerieIds = array_map(function ($favorite) {
                 return $favorite->getMediaId();
             }, $favorites);
-            $favoriteSeries = $serieRepository->findBy(['id' => $favoriteSerieIds], ['modifiedAt' => 'DESC']);
+            $favoriteSeries = $serieRepository->findBy(['id' => $favoriteSerieIds]/*, ['updatedAt' => 'DESC']*/);
 
             $favorites = $favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'movie']);
             $favoriteMovieIds = array_map(function ($favorite) {

@@ -86,6 +86,16 @@ class SeasonViewing
         return $this;
     }
 
+    public function getViewedEpisodeCount(): int
+    {
+        $count = 0;
+        /** @var EpisodeViewing $episode */
+        foreach ($this->episodes as $episode) {
+            if ($episode->getViewedAt()) $count++;
+        }
+        return $count;
+    }
+
     public function isSeasonCompleted(): ?bool
     {
         return $this->seasonCompleted;
@@ -103,7 +113,7 @@ class SeasonViewing
         return $this->serieViewing;
     }
 
-    public function setSerie(?SerieViewing $serieViewing): self
+    public function setSerieViewing(?SerieViewing $serieViewing): self
     {
         $this->serieViewing = $serieViewing;
 
@@ -116,6 +126,17 @@ class SeasonViewing
     public function getEpisodes(): Collection
     {
         return $this->episodes;
+    }
+
+    public function getEpisodeByNumber(int $number): ?EpisodeViewing
+    {
+        /** @var EpisodeViewing $episode */
+        foreach ($this->episodes as $episode) {
+            if ($episode->getEpisodeNumber() == $number) {
+                return $episode;
+            }
+        }
+        return null;
     }
 
     public function addEpisode(EpisodeViewing $episode): self

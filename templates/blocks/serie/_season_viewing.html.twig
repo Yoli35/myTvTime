@@ -1,0 +1,19 @@
+{% if season %}
+    {% if season.episodeCount > 0 %}
+        <div class="viewing" data-season-number="{{ season.seasonNumber }}">
+            {% for episode in season.episodes %}
+                <div class="ep{% if season.seasonCompleted %} full{% endif %}"
+                     data-number="{{ episode.episodeNumber }}"
+                     data-viewed="{{ episode.viewedAt?1:0 }}"
+                     data-global-index="{{ globalIndex }}">
+                    {% if episode.viewedAt %}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {% endif %}
+                    {% set globalIndex = globalIndex + 1 %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
+
+

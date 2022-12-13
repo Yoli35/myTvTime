@@ -25,9 +25,6 @@ class SerieViewing
     #[ORM\JoinColumn(nullable: false)]
     private ?Serie $serie = null;
 
-    #[ORM\Column]
-    private array $viewing = [];
-
     #[ORM\Column(nullable: true)]
     private ?int $viewedEpisodes = null;
 
@@ -38,7 +35,7 @@ class SerieViewing
     private ?int $seasonCount = null;
 
     #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class)]
-    private Collection $seasons; /* will replace viewing */
+    private Collection $seasons;
 
     #[ORM\Column(nullable: true)]
     private ?DateTime $modifiedAt;
@@ -47,7 +44,7 @@ class SerieViewing
     private ?bool $serieCompleted = null;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     public function __construct()
     {
@@ -81,18 +78,6 @@ class SerieViewing
     public function setSerie(Serie $serie): self
     {
         $this->serie = $serie;
-
-        return $this;
-    }
-
-    public function getViewing(): array
-    {
-        return $this->viewing;
-    }
-
-    public function setViewing(array $viewing): self
-    {
-        $this->viewing = $viewing;
 
         return $this;
     }
@@ -156,7 +141,7 @@ class SerieViewing
     {
         if (!$this->seasons->contains($season)) {
             $this->seasons->add($season);
-            $season->setSerie($this);
+            $season->setSerieViewing($this);
         }
 
         return $this;
@@ -166,8 +151,8 @@ class SerieViewing
     {
         if ($this->seasons->removeElement($season)) {
             // set the owning side to null (unless already changed)
-            if ($season->getSerie() === $this) {
-                $season->setSerie(null);
+            if ($season->getSerieViewing() === $this) {
+                $season->setSerieViewing(null);
             }
         }
 

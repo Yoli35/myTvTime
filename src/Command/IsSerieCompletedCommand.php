@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Controller\SerieController;
-use App\Entity\SeasonViewing;
 use App\Repository\SerieViewingRepository;
 use App\Service\TMDBService;
 use DateTime;
@@ -20,8 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class IsSerieCompletedCommand extends Command
 {
-    public function __construct(private readonly SerieViewingRepository $repository,
-        /* private readonly SeasonViewingRepository $seasonViewingRepository,*/
+    public function __construct(private readonly SerieViewingRepository $serieViewingRepository,
                                 private readonly TMDBService            $TMDBService,
                                 private readonly SerieController        $serieController)
     {
@@ -36,12 +34,11 @@ class IsSerieCompletedCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $serieViewingRepository = $this->repository;
-        $serieViewings = $this->repository->findAll();
+        $serieViewings = $this->serieViewingRepository->findAll();
         $count = 0;
 
         foreach ($serieViewings as $serieViewing) {
-            if ($serieViewing->getId() > 118) {
+            if ($serieViewing->getId() >= 518) {
                 $user = $serieViewing->getUser();
                 $serie = $serieViewing->getSerie();
                 $seasons = $serieViewing->getSeasons();
@@ -76,12 +73,12 @@ class IsSerieCompletedCommand extends Command
                     $io->comment('    => Serie completed: ' . ($serieCompleted ? 'Yes' : 'No'));
                     if ($serieViewing->isSerieCompleted() != $serieCompleted) {
                         $serieViewing->setSerieCompleted($serieCompleted);
-                        $serieViewingRepository->save($serieViewing, true);
+                        $this->serieViewingRepository->save($serieViewing, true);
                         $io->success('    => Serie updated');
                     }
                 } else {
                     $serieViewing = $this->serieController->createSerieViewingContent($serieViewing, $tmdbSerie);
-                    $serieViewingRepository->save($serieViewing, true);
+                    $this->serieViewingRepository->save($serieViewing, true);
                 }
                 $count++;
             }

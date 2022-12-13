@@ -7,12 +7,9 @@ use App\Entity\Networks;
 use App\Entity\Serie;
 use App\Entity\Settings;
 use App\Entity\User;
-use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
 use App\Repository\NetworksRepository;
-use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieRepository;
-use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
@@ -28,8 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieFrontController extends AbstractController
 {
-    const LINK_COUNT = 7;
-    const PER_PAGE_ARRAY = [1 => 10, 2 => 20, 3 => 50, 4 => 100];
     const MY_SERIES = 'my_series';
     const POPULAR = 'popular';
     const TOP_RATED = 'top_rated';
@@ -39,11 +34,7 @@ class SerieFrontController extends AbstractController
     const SEARCH = 'search';
 
     public function __construct(private readonly SerieController $serieController,
-//                                private SerieViewingRepository $serieViewingRepository,
-//                                private SeasonViewingRepository $seasonViewingRepository,
-//                                private EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FavoriteRepository $favoriteRepository,
-//                                private SerieRepository $serieRepository,
                                 private readonly TranslatorInterface $translator)
     {
     }
@@ -62,9 +53,6 @@ class SerieFrontController extends AbstractController
         $query = $request->query->get("query");
         $year = $request->query->get("year");
         $page = $request->query->getInt('p', 1);
-        $perPage = $request->query->getInt('pp', 20);
-        $orderBy = $request->query->getAlpha('ob', 'firstDateAir');
-        $order = $request->query->getAlpha('o', 'desc');
         $tv = ['name' => ''];
         $serieId = "";
         $status = "Ko";
@@ -135,7 +123,7 @@ class SerieFrontController extends AbstractController
                             'page' => $page
                         ],
                         'from' => $from,
-                        'serieIds' => $this->serieController->mySerieIds($serieRepository, $user),
+                        'serieIds' => $this->serieController->mySerieIds($user),
                         'imageConfig' => $imageConfiguration->getConfig()]);
                 }
 
@@ -149,37 +137,9 @@ class SerieFrontController extends AbstractController
                             'page' => $page
                         ],
                         'from' => $from,
-                        'serieIds' => $this->serieController->mySerieIds($serieRepository, $user),
+                        'serieIds' => $this->serieController->mySerieIds($user),
                         'imageConfig' => $imageConfiguration->getConfig()]);
                 }
-
-                if ($from === self::MY_SERIES) {
-                    // dump("My series");
-//                    $card = $this->render('blocks/serie/_card.html.twig', [
-//                        'serie' => $serie,
-//                        'pages' => [
-//                            'page' => $page
-//                        ],
-//                        'from' => $from,
-//                        'imageConfig' => $imageConfiguration->getConfig()]);
-
-                    $totalResults = $serieRepository->count([]);
-                    $pagination = $this->render('blocks/serie/_pagination.html.twig', [
-                        'pages' => [
-                            'total_results' => $totalResults,
-                            'page' => $page,
-                            'per_page' => $perPage,
-                            'link_count' => self::LINK_COUNT,
-                            'paginator' => $this->serieController->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
-                            'per_page_values' => self::PER_PAGE_ARRAY,
-                            'order_by' => $orderBy,
-                            'order' => $order],
-                    ]);
-                }
-
-//                $standing = $tmdbService->getTvKeywords($serieId, $request->getLocale());
-//                $keywords = json_decode($standing, true);
-//                $missingTranslation = $this->keywordsTranslation($keywords, $request->getLocale());
             }
         }
 
