@@ -118,6 +118,7 @@
     {{ show_source_code(_self) }}
 
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/source.js"></script>
 {% endblock %}

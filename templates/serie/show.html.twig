@@ -269,11 +269,13 @@
                                             <h4>{{ season.name }}</h4>
                                             {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
                                             {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
-                                            <div class="details" data-season-number="{{ season.season_number }}">
-                                                <div>
-                                                    {{ include('blocks/serie/_season_viewing.html.twig', {season: season.seasonViewing}) }}
+                                            {% if season.seasonViewing is defined %}
+                                                <div class="details" data-season-number="{{ season.season_number }}">
+                                                    <div>
+                                                        {{ include('blocks/serie/_season_viewing.html.twig', {season: season.seasonViewing}) }}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            {% endif %}
                                             {% if season.overview|length %}
                                                 <div>{{ season.overview }}</div>
                                             {% endif %}
@@ -549,7 +551,7 @@
             "{{ path('app_user_connected') }}",
             "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}"
         ];
-        const serie = {{ serie.id }};
+        const serie = {{ serieId }};
         const _app_serie_viewing = paths[5];
         const _app_user_connected = paths[6];
         let _app_serie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);

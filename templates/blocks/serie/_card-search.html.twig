@@ -17,7 +17,9 @@
             {% if serie.first_air_date is defined %}
                 <div>{{ 'First Air at'|trans }} : {{ serie.first_air_date ? serie.first_air_date|format_date() : '' }}</div>
             {% endif %}
-            <div>{{ serie.vote_average }} / 10 - {{ serie.vote_count }} {{ 'votes' }}</div>
+            {% if serie.vote_count %}
+                <div>{{ serie.vote_average }} / 10 - {{ serie.vote_count }} {{ 'vote' }}{% if serie.vote_count>1 %}s{% endif %}</div>
+            {% endif %}
             <div>{{ serie.overview }}</div>
         </div>
         {% if serieIds|length %}

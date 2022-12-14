@@ -669,14 +669,14 @@ $fa-font-path: "../webfonts";
         border-radius: 1em;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 0, 0, 0.25);
         color: var(--gradiant-grey-20);
+        height: 90vh;
         margin: 5vh auto;
-        max-height: 90vh;
-        overflow: scroll;
         width: $width;
 
         .header {
             @include flex-100();
             border-bottom: 1px solid var(--gradiant-grey-50);
+            height: 3.5em;
             padding: 1em;
             position: relative;
             text-align: center;
@@ -697,8 +697,27 @@ $fa-font-path: "../webfonts";
 
         .content {
             @include flex-col(flex-start, flex-start);
-            padding: 2em;
-            width: 100%;
+            height: calc(90vh - 7.5em);
+            overflow: scroll;
+            margin: 2em;
+            width: calc(100% - 4em);
+
+            h3 {
+                margin: 1em 0;
+
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+
+            pre {
+                width: 100%;
+
+                code {
+                    border-radius: .5em;
+                    width: 100%;
+                }
+            }
         }
     }
 }

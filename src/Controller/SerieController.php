@@ -80,14 +80,25 @@ class SerieController extends AbstractController
                 $order = 'desc';
             }
         }
-        $totalResults = $serieRepository->countUserSeries($user->getId());
-        $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
+        if ($orderBy == 'modifiedAt') {
+            $lastModifiedSerieViewings = $this->serieViewingRepository->findBy(['user' => $user], ['modifiedAt' => $order], $perPage, $perPage * ($page - 1));
+            $results = array_map(function ($serieViewing) {
+                return $serieViewing->getSerie();
+            }, $lastModifiedSerieViewings);
+            $resultIds = array_map(function ($result) {
+                return $result->getId();
+            }, $results);
+            dump($resultIds);
+        } else {
+            $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
+        }
 
         // Liste des séries ajoutées par l'utilisateur pour le menu de recherche
         $list = $serieRepository->listUserSeries($user->getId());
+//        $totalResults = $serieRepository->countUserSeries($user->getId());
+        $totalResults = count($list);
 
         $series = $totalResults ? $this->getSeriesViews($user, $results) : null;
-//        dump($series);
 
         $leafSettings = $settingsRepository->findOneBy(["user" => $user, "name" => "leaf"]);
         if ($leafSettings == null) {
@@ -102,7 +113,6 @@ class SerieController extends AbstractController
                 ["data" => ["25", "200"], "name" => "scale", "type" => "interval"]
             ]);
             $settingsRepository->save($leafSettings, true);
-//            dump($leafSettings);
         }
         return $this->render('serie/index.html.twig', [
             'series' => $series,
@@ -127,7 +137,9 @@ class SerieController extends AbstractController
 
     public function getSeriesViews($user, $results): array
     {
-        $ids = array_map(function($result) { return $result->getId();}, $results);
+        $ids = array_map(function ($result) {
+            return $result->getId();
+        }, $results);
         $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'serie' => $ids]);
 
         $series = [];
@@ -342,6 +354,7 @@ class SerieController extends AbstractController
                     $modified = true;
                 }
                 if ($modified) {
+                    $serie->setUpdatedAt(new DateTime());
                     $this->serieRepository->save($serie, true);
                 }
             }
@@ -373,6 +386,7 @@ class SerieController extends AbstractController
                 }
             }
         }
+        $this->setViewedEpisodeCount($serieViewing);
         return $serieViewing;
     }
 
@@ -511,8 +525,6 @@ class SerieController extends AbstractController
         $serieRepository = $this->serieRepository;
         $imageConfiguration = $this->imageConfiguration;
 
-        dump($tv);
-
         $id = $tv['id'];
         $standing = $tmdbService->getTvCredits($id, $request->getLocale());
         $credits = json_decode($standing, true);
@@ -554,13 +566,13 @@ class SerieController extends AbstractController
                 $serie = $serieRepository->findOneBy(['serieId' => $id]);
             }
             if ($serie) {
-                dump($serie);
+//                dump($serie);
                 $serieId = $serie->getId();
                 $whatsNew = $this->whatsNew($tv, $serie, $serieRepository);
 
                 /** @var SerieViewing $serieViewing */
                 $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
-                dump($serieViewing);
+//                dump($serieViewing);
                 if ($serieViewing == null) {
                     $serieViewing = $this->createSerieViewing($user, $tv, $serie);
                 } else {
@@ -580,6 +592,7 @@ class SerieController extends AbstractController
 
 //        dump($tv);
 //        dump($viewing);
+        dump($serieId);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -681,7 +694,7 @@ class SerieController extends AbstractController
      * @throws Exception
      */
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
-    public function updateViewingArray(Request $request, TranslatorInterface $translator): Response
+    public function setSerieViewing(Request $request, TranslatorInterface $translator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -692,7 +705,7 @@ class SerieController extends AbstractController
         $allBefore = $request->query->getInt('all');
 
         $user = $this->getUser();
-        $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
+        $serie = $this->serieRepository->find($serieId);
         $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
         $episodeViewings = $this->getEpisodeViewings($serieViewing, $season, $episode, $allBefore);
 
@@ -723,7 +736,7 @@ class SerieController extends AbstractController
             foreach ($serieViewing->getSeasons() as $season) {
                 $completed = $season->getViewedEpisodeCount() == $season->getEpisodeCount();
                 if ($completed) {
-                    $season->setSeasonCompleted($completed);
+                    $season->setSeasonCompleted(true);
                     $this->seasonViewingRepository->save($season, true);
                 }
             }
@@ -746,6 +759,9 @@ class SerieController extends AbstractController
                 $this->seasonViewingRepository->save($episode->getSeason(), true);
             }
         }
+        $serieViewing->setModifiedAt(new DateTime());
+        $this->serieViewingRepository->save($serieViewing);
+        $this->setViewedEpisodeCount($serieViewing);
         /* ----end---- entity based viewing ----end---- */
 
         $blocks = [];
@@ -769,6 +785,18 @@ class SerieController extends AbstractController
             'episodeText' => $translator->trans($viewed > 1 ? "viewed episodes" : "viewed episode"),
         ]);
     }
+
+    public function setViewedEpisodeCount($serieViewing): void
+    {
+        $viewedEpisodeCount = 0;
+        foreach ($serieViewing->getSeasons() as $season) {
+            $viewedEpisodeCount += $season->getViewedEpisodeCount();
+        }
+        $serieViewing->setViewedEpisodes($viewedEpisodeCount);
+        $this->serieViewingRepository->save($serieViewing, true);
+    }
+
+//    public function setSeason
 
     public function getEpisodeViewings(SerieViewing $serieViewing, int $seasonNumber, int $episodeNumber, bool $allBefore = false): array
     {

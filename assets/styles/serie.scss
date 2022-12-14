@@ -674,6 +674,7 @@
                             height: 25em;
                             overflow: hidden;
                             transition: height 500ms ease-in-out;
+                            width: 100%;
 
                             .slider {
                                 @include flex-col(start, start);
@@ -846,7 +847,7 @@
 
         .poster {
             height: 30em;
-            min-width: 20em;
+            //min-width: 20em;
             position: relative;
             z-index: 0;
 

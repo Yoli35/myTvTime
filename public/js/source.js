@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const codeDialog = document.querySelector(".show-code");
 
-    document.querySelector(".source-code").addEventListener("click", openDialog);
+    document.querySelector("#source-code").addEventListener("click", openDialog);
 
     codeDialog.querySelector(".close").addEventListener('click', function () {
         closeDialog(codeDialog);
