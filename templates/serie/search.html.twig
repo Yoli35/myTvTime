@@ -47,7 +47,8 @@
     </div>
 {% endblock %}
 
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/serie.js"></script>
     <script>
         const paths = [
@@ -62,6 +63,7 @@
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
+            initPages();
             initSerieStuff(paths);
             animateQuotes();
             document.querySelector("#serie_search_query").focus();
@@ -108,6 +110,15 @@
         let quoteInterval = [2000, 3000, 4000, 5000];
         let quoteIntervalId = [0, 0, 0, 0];
         let quotes = ["", "", "", ""], quoteDivs;
+
+        function initPages() {
+            const viewportWidth = document.body.clientWidth;
+            if (viewportWidth > 768) {
+                const seriesDiv = document.querySelector(".series");
+                const seriesToolsDiv = seriesDiv.querySelector(".series-tools:not(.mobile)");
+                seriesToolsDiv.classList.add("sticky");
+            }
+        }
 
         function animateQuotes() {
             quoteDivs = document.querySelectorAll(".quote");

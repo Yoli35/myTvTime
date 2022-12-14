@@ -27,8 +27,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MovieController extends AbstractController
 {
-    public function __construct(private FavoriteRepository $favoriteRepository,
-                                private TranslatorInterface $translator)
+    public function __construct(private readonly FavoriteRepository  $favoriteRepository,
+                                private readonly TranslatorInterface $translator)
     {
     }
 

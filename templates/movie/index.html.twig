@@ -14,12 +14,11 @@
 
         {{ include('blocks/_pageHeader.html.twig') }}
 
-        {% if route == 'app_movie_list' %}
-            <div class="home-header bg{{ random(5) }}"></div>
-        {% endif %}
+        <div class="home-header bg{{ random(5) }}"></div>
+
         {{ include('blocks/_nav.html.twig', {thisPage: 'Movies', user: app.user}) }}
 
-        {% if route == 'app_home' %}
+        {% if route == 'app_movie_list' %}
             <div class="search">
                 <div class="search-label">{{ 'Search Movies by'|trans }}</div>
                 <div class="btn-toolbar" role="toolbar" aria-label="{{ 'Toolbar with button groups'|trans }}">

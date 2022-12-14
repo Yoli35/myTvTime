@@ -77,7 +77,8 @@
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         const _app_serie_new = "{{ path('app_serie_new') }}";
         const _current_page = {{ pages.page }};
@@ -90,10 +91,13 @@
             initPreview();
             newPopularSerie();
             initHeader();
+            initPages();
 
             setTimeout(()=> {
                 document.querySelector(".header").setAttribute("style", "background-color: hsla(0 0% 0% / .25);");
             }, 0);
+
+
         })
 
         function initHeader() {
@@ -123,6 +127,15 @@
             if (ratio < 0) ratio = 0;
             if (ratio > 1) ratio = 1;
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+        }
+
+        function initPages() {
+            const viewportWidth = document.body.clientWidth;
+            if (viewportWidth > 768) {
+                const seriesDiv = document.querySelector(".series");
+                const seriesToolsDiv = seriesDiv.querySelector(".series-tools:not(.mobile)");
+                seriesToolsDiv.classList.add("sticky");
+            }
         }
 
         function initPreview() {
