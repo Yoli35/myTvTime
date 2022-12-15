@@ -3,7 +3,7 @@
 {% block title %}myTvTime::{{ 'Edit collection'|trans }}::{{ title }}{% endblock %}
 
 {% block body %}
-    {{ include('blocks/_pageHeader.html.twig') }}
+    {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
         <div class="my-collections-page">
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_collection')}, thisPage: 'Edit collection'|trans}) }}

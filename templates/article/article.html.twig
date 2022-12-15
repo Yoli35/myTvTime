@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container">
 
-        {{ include('blocks/_pageHeader.html.twig') }}
+        {{ include('blocks/_mainMenu.html.twig') }}
 
         {{ include('blocks/_nav.html.twig', {thisPage: article.title, parent: {url: path('app_blog'), page: 'Blog'|trans}}) }}
 

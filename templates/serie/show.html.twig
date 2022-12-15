@@ -24,7 +24,7 @@
         <div class="tail"></div>
     </div>
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
-    {{ include('blocks/_pageHeader.html.twig') }}
+    {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
         {% if from == 'popular' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Popular Series', url: path('app_serie_popular')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}

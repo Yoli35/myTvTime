@@ -26,6 +26,7 @@
         "symfony/form": "6.2.*",
         "symfony/framework-bundle": "6.2.*",
         "symfony/google-mailer": "6.2.*",
+        "symfony/html-sanitizer": "6.2.*",
         "symfony/http-client": "6.2.*",
         "symfony/intl": "6.2.*",
         "symfony/mailer": "6.2.*",
@@ -108,7 +109,6 @@
         }
     },
     "require-dev": {
-        "deployer/deployer": "^7.0",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "icanhazstring/composer-unused": "^0.8.4",
         "symfony/debug-bundle": "6.2.*",

@@ -12,7 +12,7 @@
     {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
     <div class="container">
 
-        {{ include('blocks/_pageHeader.html.twig') }}
+        {{ include('blocks/_mainMenu.html.twig') }}
 
         {{ include('blocks/_nav.html.twig', {parent: {url: path('app_youtube'), page: 'My Youtube Videos'|trans}, thisPage: video.title}) }}
 

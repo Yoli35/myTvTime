@@ -138,7 +138,6 @@
       <path value="$PROJECT_DIR$/vendor/google/apiclient" />
       <path value="$PROJECT_DIR$/vendor/google/apiclient-services" />
       <path value="$PROJECT_DIR$/vendor/symfony/ux-dropzone" />
-      <path value="$PROJECT_DIR$/vendor/deployer/deployer" />
       <path value="$PROJECT_DIR$/vendor/symfony/apache-pack" />
       <path value="$PROJECT_DIR$/vendor/icanhazstring/composer-unused" />
       <path value="$PROJECT_DIR$/vendor/webmozart/glob" />
@@ -147,6 +146,10 @@
       <path value="$PROJECT_DIR$/vendor/composer-unused/contracts" />
       <path value="$PROJECT_DIR$/vendor/imagine/imagine" />
       <path value="$PROJECT_DIR$/vendor/liip/imagine-bundle" />
+      <path value="$PROJECT_DIR$/vendor/league/uri-interfaces" />
+      <path value="$PROJECT_DIR$/vendor/league/uri" />
+      <path value="$PROJECT_DIR$/vendor/masterminds/html5" />
+      <path value="$PROJECT_DIR$/vendor/symfony/html-sanitizer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">

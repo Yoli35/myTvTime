@@ -85,10 +85,6 @@ class SerieController extends AbstractController
             $results = array_map(function ($serieViewing) {
                 return $serieViewing->getSerie();
             }, $lastModifiedSerieViewings);
-            $resultIds = array_map(function ($result) {
-                return $result->getId();
-            }, $results);
-            dump($resultIds);
         } else {
             $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
         }

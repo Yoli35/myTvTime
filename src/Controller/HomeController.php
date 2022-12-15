@@ -17,6 +17,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    public function __construct(private readonly TMDBService            $TMDBService,
+                                private readonly UserMovieRepository    $userMovieRepository,
+                                private readonly SerieRepository        $serieRepository,
+                                private readonly SerieViewingRepository $serieViewingRepository,
+                                private readonly FavoriteRepository     $favoriteRepository,
+                                private readonly ImageConfiguration     $imageConfiguration
+    )
+    {
+    }
+
     #[Route('/', name: 'homeWoLocale')]
     public function home(Request $request): RedirectResponse
     {
@@ -25,48 +35,59 @@ class HomeController extends AbstractController
     }
 
     #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, TMDBService $tmdbService, UserMovieRepository $userMovieRepository, SerieRepository $serieRepository, FavoriteRepository $favoriteRepository, ImageConfiguration $imageConfiguration): Response
+    public function index(Request $request): Response
     {
         /** @var User $user */
         $user = $this->getUser();
         $locale = $request->getLocale();
 
         if ($user) {
-            $lastAddedMovies = $userMovieRepository->lastAddedMovies($user->getId(), 20);
-            $lastUpdatedSeries = $serieRepository->lastUpdatedSeries($user->getId(), 20);
+            $lastAddedMovies = $this->userMovieRepository->lastAddedMovies($user->getId(), 20);
+            $lastAddedSeries = $this->serieRepository->lastAddedSeries($user->getId(), 20);
+            $lastUpdatedSeries = $this->serieRepository->lastUpdatedSeries($user->getId(), 20);
 
-            $favorites = $favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'serie'], ['createdAt' => 'DESC']);
+            $favorites = $this->favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'serie'], ['createdAt' => 'DESC']);
             $favoriteSerieIds = array_map(function ($favorite) {
                 return $favorite->getMediaId();
             }, $favorites);
-            $favoriteSeries = $serieRepository->findBy(['id' => $favoriteSerieIds]/*, ['updatedAt' => 'DESC']*/);
+            $favoriteSeries = $this->serieRepository->findBy(['id' => $favoriteSerieIds]/*, ['updatedAt' => 'DESC']*/);
 
-            $favorites = $favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'movie']);
+            $lastModifiedSerieViewings = $this->serieViewingRepository->findBy(['user' => $user], ['modifiedAt' => 'DESC'], 20, 0);
+            $lastModifiedSeries = array_map(function ($serieViewing) {
+                return $serieViewing->getSerie();
+            }, $lastModifiedSerieViewings);
+
+            $favorites = $this->favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'movie']);
             $favoriteMovieIds = array_map(function ($favorite) {
                 return $favorite->getMediaId();
             }, $favorites);
-            $favoriteMovies = $userMovieRepository->findBy(['id' => $favoriteMovieIds], ['createdAt' => 'DESC']);
+            $favoriteMovies = $this->userMovieRepository->findBy(['id' => $favoriteMovieIds], ['createdAt' => 'DESC']);
         }
-        $standing = $tmdbService->discoverMovies(1, 'popularity.desc', $locale);
+        $standing = $this->TMDBService->discoverMovies(1, 'popularity.desc', $locale);
         $popularMovies = json_decode($standing, true);
-        $standing = $tmdbService->getSeries('popular', 1, $locale);
+        $standing = $this->TMDBService->getSeries('popular', 1, $locale);
         $popularSeries = json_decode($standing, true);
-        $standing = $tmdbService->getPopularPeople($locale);
+        $standing = $this->TMDBService->getPopularPeople($locale);
         $popularPeople = json_decode($standing, true);
-        $standing = $tmdbService->trending('all', 'day', $locale);
-        $trending = json_decode($standing, true);
-        $imageConfig = $imageConfiguration->getConfig();
+        $standing = $this->TMDBService->trending('all', 'day', $locale);
+        $trendingOfTheDay = json_decode($standing, true);
+        $standing = $this->TMDBService->trending('all', 'week', $locale);
+        $trendingOfTheWeek = json_decode($standing, true);
+        $imageConfig = $this->imageConfiguration->getConfig();
 
         return $this->render('home/index.html.twig', [
             'from' => 'home',
             'lastAddedMovies' => $user ? $lastAddedMovies : null,
+            'lastAddedSeries' => $user ? $lastAddedSeries : null,
             'lastUpdatedSeries' => $user ? $lastUpdatedSeries : null,
+            'lastModifiedSeries' => $user ? $lastModifiedSeries : null,
             'favoriteMovies' => $user ? $favoriteMovies : null,
             'favoriteSeries' => $user ? $favoriteSeries : null,
             'popularMovies' => $popularMovies,
             'popularSeries' => $popularSeries,
             'popularPeople' => $popularPeople,
-            'trending' => $trending,
+            'trendingOfTheDay' => $trendingOfTheDay,
+            'trendingOfTheWeek' => $trendingOfTheWeek,
             'imageConfig' => $imageConfig,
         ]);
     }

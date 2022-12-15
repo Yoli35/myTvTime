@@ -86,6 +86,20 @@ class SerieRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Serie[] Returns an array of Serie objects
+     */
+    public function lastAddedSeries($userId, $count = 10): array
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
+            ->orderBy('s.id', 'DESC')
+            ->setMaxResults($count)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * @param $userId
      * @return int Returns number of serie owned by a user
      */
