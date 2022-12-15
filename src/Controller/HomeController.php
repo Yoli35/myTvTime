@@ -76,18 +76,64 @@ class HomeController extends AbstractController
         $imageConfig = $this->imageConfiguration->getConfig();
 
         return $this->render('home/index.html.twig', [
+            'lists' => [
+                [
+                    'name' => 'last added movies',
+                    'data' => $user ? $lastAddedMovies : null,
+                    'type' => 'movie',
+                ],
+                [
+                    'name' => 'favorite movies',
+                    'data' => $user ? $favoriteMovies : null,
+                    'type' => 'movie',
+                ],
+                [
+                    'name' => 'last added series',
+                    'data' => $user ? $lastAddedSeries : null,
+                    'type' => 'serie',
+                ],
+                [
+                    'name' => 'last modified series',
+                    'data' => $user ? $lastModifiedSeries : null,
+                    'type' => 'serie',
+                ],
+                [
+                    'name' => 'last updated series',
+                    'data' => $user ? $lastUpdatedSeries : null,
+                    'type' => 'serie',
+                ],
+                [
+                    'name' => 'favorite series',
+                    'data' => $user ? $favoriteSeries : null,
+                    'type' => 'serie',
+                ],
+                [
+                    'name' => 'popular people',
+                    'data' => $popularPeople['results'],
+                    'type' => 'people',
+                ],
+                [
+                    'name' => 'popular movies',
+                    'data' => $popularMovies['results'],
+                    'type' => 'tmdb movie',
+                ],
+                [
+                    'name' => 'popular series',
+                    'data' => $popularSeries['results'],
+                    'type' => 'tmdb serie',
+                ],
+                [
+                    'name' => 'trending today',
+                    'data' => $trendingOfTheDay['results'],
+                    'type' => 'tmdb mixte',
+                ],
+                [
+                    'name' => 'trending of the week',
+                    'data' => $trendingOfTheWeek['results'],
+                    'type' => 'tmdb mixte',
+                ],
+            ],
             'from' => 'home',
-            'lastAddedMovies' => $user ? $lastAddedMovies : null,
-            'lastAddedSeries' => $user ? $lastAddedSeries : null,
-            'lastUpdatedSeries' => $user ? $lastUpdatedSeries : null,
-            'lastModifiedSeries' => $user ? $lastModifiedSeries : null,
-            'favoriteMovies' => $user ? $favoriteMovies : null,
-            'favoriteSeries' => $user ? $favoriteSeries : null,
-            'popularMovies' => $popularMovies,
-            'popularSeries' => $popularSeries,
-            'popularPeople' => $popularPeople,
-            'trendingOfTheDay' => $trendingOfTheDay,
-            'trendingOfTheWeek' => $trendingOfTheWeek,
             'imageConfig' => $imageConfig,
         ]);
     }

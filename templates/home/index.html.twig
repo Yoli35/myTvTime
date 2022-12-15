@@ -11,143 +11,45 @@
         {{ include('blocks/_nav.html.twig', {thisPage: 'Home Page', user: app.user}) }}
         {{ include('blocks/source/_button.html.twig') }}
 
-        {% if lastAddedMovies %}
-            <h2>{{ 'last added movies'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for movie in lastAddedMovies %}
-                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath %}
-                        {{ include('blocks/movie/_discover.html.twig', { title: movie.title, poster: poster, id: movie.movieDbId, route: 'app_movie' }) }}
-                    {% endfor %}
+        {% for list in lists %}
+            {% if list.data %}
+                <h2>{{ list.name|trans }}</h2>
+                <div class="home-list">
+                    <div class="wrapper">
+                        {% for item in list.data %}
+                            {% if list.type=='movie' %}
+                                {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.posterPath %}
+                                {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.movieDbId, route: 'app_movie' }) }}
+                            {% endif %}
+                            {% if list.type=='serie' %}
+                                {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: item, poster_path: item.posterPath}) }}
+                            {% endif %}
+                            {% if list.type=='people' %}
+                                {% if item.profile_path %}
+                                    {{ include('blocks/people/_card-home.html.twig', {people: item}) }}
+                                {% endif %}
+                            {% endif %}
+                            {% if list.type=='tmdb movie' %}
+                                {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path %}
+                                {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.id, route: 'app_movie' }) }}
+                            {% endif %}
+                            {% if list.type=='tmdb serie' %}
+                                {{ include('blocks/serie/_card-home.html.twig', {type: 'tmdb', serie: item, poster_path: item.poster_path}) }}
+                            {% endif %}
+                            {% if list.type=='tmdb mixte' %}
+                                {% if item.media_type == 'movie' %}
+                                    {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path %}
+                                    {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.id, route: 'app_movie' }) }}
+                                {% endif %}
+                                {% if item.media_type == 'tv' %}
+                                    {{ include('blocks/serie/_card-home.html.twig', {type: 'tmdb', serie: item, poster_path: item.poster_path}) }}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-        {% endif %}
-
-        {% if favoriteMovies %}
-            <h2>{{ 'favorite movies'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for movie in favoriteMovies %}
-                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath %}
-                        {{ include('blocks/movie/_discover.html.twig', { title: movie.title, poster: poster, id: movie.movieDbId, route: 'app_movie' }) }}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if lastAddedSeries %}
-            <h2>{{ 'last added series'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for serie in lastAddedSeries %}
-                        {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: serie, poster_path: serie.posterPath}) }}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if lastModifiedSeries %}
-            <h2>{{ 'last modified series'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for serie in lastModifiedSeries %}
-                        {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: serie, poster_path: serie.posterPath}) }}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if lastUpdatedSeries %}
-            <h2>{{ 'last updated series'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for serie in lastUpdatedSeries %}
-                        {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: serie, poster_path: serie.posterPath}) }}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if favoriteSeries %}
-            <h2>{{ 'favorite series'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for serie in favoriteSeries %}
-                        {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: serie, poster_path: serie.posterPath}) }}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if popularPeople %}
-            <h2>{{ 'popular people'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for people in popularPeople.results %}
-                        {% if people.profile_path %}
-                            {{ include('blocks/people/_card-home.html.twig') }}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if popularMovies %}
-            <h2>{{ 'popular movies'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for movie in popularMovies.results %}
-                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.poster_path %}
-                        {{ include('blocks/movie/_discover.html.twig', { title: movie.title, poster: poster, id: movie.id, route: 'app_movie' }) }}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if popularSeries %}
-            <h2>{{ 'popular series'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for serie in popularSeries.results %}
-                        {{ include('blocks/serie/_card-home.html.twig', {type: 'tmdb', serie: serie, poster_path: serie.poster_path}) }}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if trendingOfTheDay %}
-            <h2>{{ 'trending today'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for media in trendingOfTheDay.results %}
-                        {% if media.media_type == 'movie' %}
-                            {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ media.poster_path %}
-                            {{ include('blocks/movie/_discover.html.twig', { title: media.title, poster: poster, id: media.id, route: 'app_movie' }) }}
-                        {% endif %}
-                        {% if media.media_type == 'tv' %}
-                            {{ include('blocks/serie/_card-home.html.twig', {type: 'tmdb', serie: media, poster_path: media.poster_path}) }}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-
-        {% if trendingOfTheWeek %}
-            <h2>{{ 'trending of the week'|trans }}</h2>
-            <div class="home-list">
-                <div class="wrapper">
-                    {% for media in trendingOfTheWeek.results %}
-                        {% if media.media_type == 'movie' %}
-                            {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ media.poster_path %}
-                            {{ include('blocks/movie/_discover.html.twig', { title: media.title, poster: poster, id: media.id, route: 'app_movie' }) }}
-                        {% endif %}
-                        {% if media.media_type == 'tv' %}
-                            {{ include('blocks/serie/_card-home.html.twig', {type: 'tmdb', serie: media, poster_path: media.poster_path}) }}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
+            {% endif %}
+        {% endfor %}
 
         {{ include('blocks/_pageFooter.html.twig') }}
 
