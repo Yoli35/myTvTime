@@ -25,9 +25,9 @@ class LogService
         $browser = $agent->browser();
         $platform = $agent->platform();
         $languages = $agent->languages();
-        $deviceName = $agent->isMobile() ? $agent->device():null;
+        $deviceName = $agent->isMobile() ? $agent->device() : null;
 
-        $log = new VisitorLog($user?->getUsername(), $url, $ip, $browser, $platform, $languages, $deviceName);
+        $log = new VisitorLog($user ? $user->getUsername() : ($agent->isBot() ? $agent->robot() : 'Anonymous'), $url, $ip, $browser, $platform, $languages, $deviceName);
         $this->repository->save($log, true);
     }
 }
