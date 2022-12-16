@@ -294,10 +294,19 @@
                         margin-left: auto;
                     }
 
-                    .trash {
+                    .copy, .trash {
                         cursor: pointer;
                         font-size: 1.5em;
                         margin-left: 1em;
+                    }
+
+                    .copy {
+                        transition: color 250ms ease-in-out, rotate 500ms ease-in-out;
+
+                        &.copied {
+                            color: red;
+                            rotate: 1turn;
+                        }
                     }
                 }
 

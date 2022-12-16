@@ -14,7 +14,7 @@
 
         {{ include('blocks/_mainMenu.html.twig') }}
 
-        {{ include('blocks/_nav.html.twig', {parent: {url: path('app_youtube'), page: 'My Youtube Videos'|trans}, thisPage: video.title}) }}
+        {{ include('blocks/_nav.html.twig', {parent: {url: path('app_youtube'), page: 'My Youtube Videos'}, thisPage: video.title}) }}
 
         <div class="yt-video-page">
             <div class="video">
@@ -25,8 +25,9 @@
                     <div class="title-tags">
                         <div class="title-trash">
                             <div class="title">{{ video.title }}</div>
-                            <div class="youtube"><a href="https://youtu.be/{{ video.link }}" target="_blank"><i class="fa-brands fa-youtube"></i></a></div>
-                            <div class="trash" data-dialog="delete-video"><i class="fa-solid fa-trash"></i></div>
+                            <div class="youtube" title="{{ 'See this video on Youtube'|trans }}"><a href="https://youtu.be/{{ video.link }}" target="_blank"><i class="fa-brands fa-youtube"></i></a></div>
+                            <div class="copy" data-url="https://youtu.be/{{ video.link }}" title="{{ 'Copy the link'|trans }}"><i class="fa-solid fa-copy"></i></div>
+                            <div class="trash" data-dialog="delete-video" title="{{ 'Delete the video'|trans }}"><i class="fa-solid fa-trash"></i></div>
                         </div>
                         {#                  {{ component('youtube_video_tags', {class: 'tags', 'id': user.id, 'video': video.id}) }} #}
                         <div class="tags">
@@ -89,7 +90,8 @@
         </div>
     </dialog>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         const _app_youtube = "{{ path('app_youtube') }}";
         const _yt_video_delete = "{{ path('app_youtube_video_delete', {id: video.id}) }}";
@@ -99,6 +101,7 @@
         window.addEventListener("DOMContentLoaded", () => {
 
             const trash = document.querySelector(".trash");
+            const copy = document.querySelector(".copy");
             const tags = document.querySelector(".tags");
             const input = document.querySelector("#new-tag");
             const tagList = document.querySelector("#other-tags");
@@ -121,6 +124,12 @@
                     removeTag(delTag);
                 });
             });
+
+            copy.addEventListener("click", () => {
+                navigator.clipboard.writeText("https://youtu.be/{{ video.link }}");
+                copy.classList.add("copied");
+                setTimeout(()=> {copy.classList.remove("copied")}, 600);
+            })
 
             function initDeleteDialog(dialog) {
 
