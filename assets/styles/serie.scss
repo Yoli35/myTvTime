@@ -855,7 +855,7 @@
                 border-radius: .5em;
                 height: 30em;
                 object-fit: cover;
-                width: 20em;
+                min-width: 20em;
             }
 
             .watch-providers {

@@ -34,7 +34,7 @@ class SerieViewing
     #[ORM\Column]
     private ?int $seasonCount = null;
 
-    #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class)]
+    #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class, cascade: ['persist'])]
     private Collection $seasons;
 
     #[ORM\Column(nullable: true)]

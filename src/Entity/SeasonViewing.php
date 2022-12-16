@@ -33,7 +33,7 @@ class SeasonViewing
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'seasons')]
     private ?SerieViewing $serieViewing = null;
 
-    #[ORM\OneToMany(mappedBy: 'season', targetEntity: EpisodeViewing::class)]
+    #[ORM\OneToMany(mappedBy: 'season', targetEntity: EpisodeViewing::class, cascade: ['persist'])]
     private Collection $episodes;
 
     public function __construct($airAt, $seasonNumber, $episodeCount, $seasonCompleted)
