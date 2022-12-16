@@ -14,6 +14,7 @@ use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
+use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
@@ -46,7 +47,8 @@ class SerieController extends AbstractController
                                 private readonly ImageConfiguration       $imageConfiguration,
                                 private readonly SerieViewingRepository   $serieViewingRepository,
                                 private readonly SeasonViewingRepository  $seasonViewingRepository,
-                                private readonly EpisodeViewingRepository $episodeViewingRepository)
+                                private readonly EpisodeViewingRepository $episodeViewingRepository,
+                                private readonly LogService               $logService)
     {
     }
 
@@ -54,6 +56,8 @@ class SerieController extends AbstractController
     public function index(Request $request, SettingsRepository $settingsRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
+
         /** @var User $user */
         $user = $this->getUser();
         $serieRepository = $this->serieRepository;
@@ -183,6 +187,7 @@ class SerieController extends AbstractController
     #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
     public function search(Request $request, int $page): Response
     {
+        $this->logService->log($request, $this->getUser());
         $tmdbService = $this->TMDBService;
         $series = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         $query = $request->query->get('query');
@@ -227,24 +232,28 @@ class SerieController extends AbstractController
     #[Route('/popular', name: 'app_serie_popular', methods: ['GET'])]
     public function popular(Request $request): Response
     {
+        $this->logService->log($request, $this->getUser());
         return $this->series($request, self::POPULAR);
     }
 
     #[Route('/top/rated', name: 'app_serie_top_rated', methods: ['GET'])]
     public function topRated(Request $request): Response
     {
+        $this->logService->log($request, $this->getUser());
         return $this->series($request, self::TOP_RATED);
     }
 
     #[Route('/airing/today', name: 'app_serie_airing_today', methods: ['GET'])]
     public function topAiringToday(Request $request): Response
     {
+        $this->logService->log($request, $this->getUser());
         return $this->series($request, self::AIRING_TODAY);
     }
 
     #[Route('/on/the/air', name: 'app_serie_on_the_air', methods: ['GET'])]
     public function topOnTheAir(Request $request): Response
     {
+        $this->logService->log($request, $this->getUser());
         return $this->series($request, self::ON_THE_AIR);
     }
 
@@ -423,6 +432,7 @@ class SerieController extends AbstractController
     public function show(Request $request, Serie $serie): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
 
         $tmdbService = $this->TMDBService;
 
@@ -447,6 +457,7 @@ class SerieController extends AbstractController
     #[Route('/tmdb/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
     public function tmdb(Request $request, $id): Response
     {
+        $this->logService->log($request, $this->getUser());
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::POPULAR);
         $query = $request->query->get('query', "");
@@ -461,6 +472,7 @@ class SerieController extends AbstractController
     #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
     public function season(Request $request, $id, $seasonNumber): Response
     {
+        $this->logService->log($request, $this->getUser());
         $from = $request->query->get('from');
         $page = $request->query->get('p');
         $query = $request->query->get('query');
@@ -589,7 +601,7 @@ class SerieController extends AbstractController
 
 //        dump($tv);
 //        dump($viewing);
-        dump($serieId);
+//        dump($serieId);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -657,7 +669,7 @@ class SerieController extends AbstractController
             $serie->setUpdatedAt(new DateTime());
         }
         if ($serie->getNumberOfEpisodes() !== $tv['number_of_episodes']) {
-            $whatsNew['episode'] = $tv['number_of_episodes'] - $serie->getNumberOfSeasons();
+            $whatsNew['episode'] = $tv['number_of_episodes'] - $serie->getNumberOfEpisodes();
             $modified = true;
 
             $serie->setNumberOfEpisodes($tv['number_of_episodes']);

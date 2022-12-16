@@ -7,6 +7,7 @@ use App\Repository\FavoriteRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\UserMovieRepository;
+use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,8 @@ class HomeController extends AbstractController
                                 private readonly SerieRepository        $serieRepository,
                                 private readonly SerieViewingRepository $serieViewingRepository,
                                 private readonly FavoriteRepository     $favoriteRepository,
-                                private readonly ImageConfiguration     $imageConfiguration
+                                private readonly ImageConfiguration     $imageConfiguration,
+                                private readonly LogService             $logService
     )
     {
     }
@@ -37,6 +39,7 @@ class HomeController extends AbstractController
     #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request): Response
     {
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
         $locale = $request->getLocale();

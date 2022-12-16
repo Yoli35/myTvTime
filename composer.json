@@ -13,6 +13,7 @@
         "doctrine/orm": "2.*",
         "easycorp/easyadmin-bundle": "^4.4",
         "google/apiclient": "^2.0",
+        "jenssegers/agent": "^2.6",
         "liip/imagine-bundle": "^2.8",
         "phpdocumentor/reflection-docblock": "^5.3",
         "ramsey/uuid": "4.*",
