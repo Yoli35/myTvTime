@@ -38,10 +38,8 @@ class TikTokService
                 'https://www.tiktok.com/oembed?url=' . $link,
             );
         } catch (\Throwable $e) {
-            // dump($e->getMessage());
         }
         $statusCode = $response->getStatusCode();
-        // dump($statusCode);
         return [
             'code' => $statusCode,
             'content' => $statusCode == 200 ? $response->getContent() : null

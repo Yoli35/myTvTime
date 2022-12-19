@@ -506,7 +506,6 @@ class UserController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        //dump($user);
 
         return $this->json(['connected' => ($user !== null)]);
     }

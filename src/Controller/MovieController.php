@@ -138,7 +138,6 @@ class MovieController extends AbstractController
                 $discover['release_date'] = "";
             }
         }
-        dump($discovers);
 
         return $this->render('movie/index.html.twig', [
             'discovers' => $discovers['results'],
@@ -213,7 +212,6 @@ class MovieController extends AbstractController
 
         $standing = $callTmdbService->getMovieImages($id, $locale);
         $images = json_decode($standing, true);
-        // dump($images);
 
         $ygg = str_replace(' ', '+', $movieDetail['title']);
         $ygg = str_replace('\'', '+', $ygg);
@@ -243,7 +241,6 @@ class MovieController extends AbstractController
                     break;
             }
         }
-        // dump($movieDetail);
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
@@ -372,8 +369,6 @@ class MovieController extends AbstractController
             }
         }
 
-        // dump($collection);
-
         $imageConfig = $imageConfiguration->getConfig();
 
         return $this->render('movie/collection.html.twig', [
@@ -466,7 +461,6 @@ class MovieController extends AbstractController
         }
 
         $action = $this->generateUrl('app_movies_search', ['query' => $query, 'year' => $year]);
-//        dump($query, $year, $action);
 
         return $this->render('movie/search.html.twig', [
             'form' => $form->createView(),
@@ -508,11 +502,9 @@ class MovieController extends AbstractController
         $collectionId = $request->query->getInt("c");
         $action = $request->query->get("a");
         $movieId = $request->query->getInt("m");
-        // dump($collectionId, $action, $movieId);
 
         $collection = $collectionRepository->find($collectionId);
         $movie = $movieRepository->findOneBy(["movieDbId" => $movieId]);
-        // dump($collection, $movie);
 
         if ($action == "a") $collection->addMovie($movie);
         if ($action == "r") $collection->removeMovie($movie);

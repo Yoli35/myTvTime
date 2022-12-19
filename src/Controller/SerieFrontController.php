@@ -74,7 +74,6 @@ class SerieFrontController extends AbstractController
             if (strlen($standing)) {
                 $status = "Ok";
                 $tv = json_decode($standing, true);
-                // // dump($tv);
 
                 $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
 
@@ -111,12 +110,10 @@ class SerieFrontController extends AbstractController
                 }
                 $serie->addUser($user);
                 $serieRepository->save($serie, true);
-                //dump($serie);
                 $this->serieController->createSerieViewing($user, $tv, $serie);
                 /*
                  */
                 if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
-                    // dump("Not my series");
                     $card = $this->render('blocks/serie/_card-popular.html.twig', [
                         'serie' => $tv,
                         'pages' => [
@@ -128,7 +125,6 @@ class SerieFrontController extends AbstractController
                 }
 
                 if ($from === self::SEARCH) {
-                    // dump("Not my series");
                     $card = $this->render('blocks/serie/_card-search.html.twig', [
                         'serie' => $tv,
                         'query' => $query ?: "",

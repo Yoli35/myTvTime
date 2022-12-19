@@ -203,9 +203,7 @@ class SerieController extends AbstractController
         }
         if ($query && strlen($query)) {
             $standing = $tmdbService->search($page, $query, $year, $request->getLocale());
-            // // dump($page, $query, $year);
             $series = json_decode($standing, true);
-            // // dump('results', $series);
         }
 
         /** @var User $user */
@@ -442,14 +440,12 @@ class SerieController extends AbstractController
         $year = $request->query->get('year', "");
 
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
-//        // dump($standing);
         if ($standing == "") {
             return $this->render('serie/_error.html.twig', [
                 'serie' => $serie,
             ]);
         }
         $tv = json_decode($standing, true);
-        // // dump($tv);
 
         return $this->getSerie($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
     }
@@ -482,10 +478,8 @@ class SerieController extends AbstractController
         $serie = $this->serie($id, $request->getLocale());
         $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale());
         $season = json_decode($standing, true);
-        // // dump($season);
         $standing = $this->TMDBService->getTvSeasonCredits($id, $seasonNumber, $request->getLocale());
         $credits = json_decode($standing, true);
-        // // dump($credits);
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
@@ -509,7 +503,6 @@ class SerieController extends AbstractController
         if ($userSerie == null) {
             $standing = $this->TMDBService->getTv($id, $locale);
             $tmdbSerie = json_decode($standing, true);
-            // // dump($tmdbSerie);
             $serie['id'] = $tmdbSerie['id'];
             $serie['name'] = $tmdbSerie['name'];
             $serie['backdropPath'] = $tmdbSerie['backdrop_path'];
@@ -575,13 +568,11 @@ class SerieController extends AbstractController
                 $serie = $serieRepository->findOneBy(['serieId' => $id]);
             }
             if ($serie) {
-//                dump($serie);
                 $serieId = $serie->getId();
                 $whatsNew = $this->whatsNew($tv, $serie, $serieRepository);
 
                 /** @var SerieViewing $serieViewing */
                 $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
-//                dump($serieViewing);
                 if ($serieViewing == null) {
                     $serieViewing = $this->createSerieViewing($user, $tv, $serie);
                 } else {
@@ -598,10 +589,6 @@ class SerieController extends AbstractController
         }
         $ygg = str_replace(' ', '+', $tv['name']);
         $yggOriginal = str_replace(' ', '+', $tv['original_name']);
-
-//        dump($tv);
-//        dump($viewing);
-//        dump($serieId);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,

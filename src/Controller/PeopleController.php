@@ -25,7 +25,6 @@ class PeopleController extends AbstractController
         $people = json_decode($standing, true);
         $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);
         $credits = json_decode($standing, true);
-        // // dump($credits);
 
         $date = new DateTime($people['birthday']);
         $now = $people['deathday'] ? new DateTime($people['deathday']) : new DateTime();
@@ -98,7 +97,6 @@ class PeopleController extends AbstractController
         ksort($knownFor);
         $knownFor = array_reverse($knownFor);
         $credits['known_for'] = $knownFor;
-        // // dump($credits);
 
         return $this->render('people/index.html.twig', [
             'people' => $people,

@@ -68,7 +68,6 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
         } catch(Throwable $e) {
-        //    dump($e);
         }
         return $duration;
     }
