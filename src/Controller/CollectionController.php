@@ -9,6 +9,7 @@ use App\Repository\MovieCollectionRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
+use App\Service\LogService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,10 +20,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/{_locale}/collection', requirements: ['_locale' => 'fr|en|de|es'])]
 class CollectionController extends AbstractController
 {
+    public function __construct(private readonly LogService $logService)
+    {
+    }
+
     #[Route('/', name: 'app_collection')]
-    public function index(MovieCollectionRepository $collectionRepository): Response
+    public function index(Request $request, MovieCollectionRepository $collectionRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -38,6 +44,7 @@ class CollectionController extends AbstractController
     public function show(Request $request, MovieCollection $movieCollection, MovieController $movieController, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -56,6 +63,7 @@ class CollectionController extends AbstractController
     public function new(Request $request, MovieCollectionRepository $repository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -79,6 +87,7 @@ class CollectionController extends AbstractController
     public function edit(Request $request, MovieCollection $collection, MovieCollectionRepository $repository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 

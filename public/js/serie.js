@@ -225,7 +225,7 @@ function addSerie(evt) {
             }
 
         }
-        console.log({data});
+        // console.log({data});
     }
     xhr.open("GET", _app_serie_new + '?value=' + value + "&from=serie" + "&from=" + from);
     xhr.send();

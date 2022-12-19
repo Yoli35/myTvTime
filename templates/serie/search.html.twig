@@ -136,7 +136,7 @@
                 let data = JSON.parse(this.response), str;
                 const quoteDiv = quoteDivs[idx];
                 str = data['quote'];
-                console.log({str});
+                // console.log({str});
                 quotes[idx] = str.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 quoteInterval[idx] = Math.floor(2000 + (30 * 1000 * Math.random()));
 

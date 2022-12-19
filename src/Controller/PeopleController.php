@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\ImageConfiguration;
+use App\Service\LogService;
 use App\Service\TMDBService;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,9 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PeopleController extends AbstractController
 {
+    public function __construct(private readonly LogService $logService)
+    {
+    }
+
     #[Route('/people/{id}', name: 'app_people', methods: ['GET'])]
     public function people(Request $request, $id, TMDBService $TMDBService, ImageConfiguration $imageConfiguration): Response
     {
+        $this->logService->log($request, $this->getUser());
         $standing = $TMDBService->getPerson($id, $request->getLocale(), true);
         $people = json_decode($standing, true);
         $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);

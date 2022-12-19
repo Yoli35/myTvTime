@@ -1,15 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-    {% if route == 'app_movie_list' %}
         myTvTime::{{ 'Movies'|trans }}::{{ 'Page'|trans }} {{ pages.page }}
-    {% endif %}
 {% endblock %}
 
 {% block body %}
-    {#    {% if app.debug=='dev' %}{{ dump() }}{% endif %} #}
-
-    {% set discovers = discovers.results %}
-
     <div class="container">
 
         {{ include('blocks/_mainMenu.html.twig') }}
@@ -18,7 +12,6 @@
 
         {{ include('blocks/_nav.html.twig', {thisPage: 'Movies', user: app.user}) }}
 
-        {% if route == 'app_movie_list' %}
             <div class="search">
                 <div class="search-label">{{ 'Search Movies by'|trans }}</div>
                 <div class="btn-toolbar" role="toolbar" aria-label="{{ 'Toolbar with button groups'|trans }}">
@@ -39,14 +32,11 @@
                     </div>
                 </form>
             </div>
-        {% endif %}
 
         <div class="home-discovers">
-            {{ include('blocks/_discoverPaging.html.twig') }}
+            {{ include('blocks/movie/_discoverPaging.html.twig') }}
             <div class="content">
                 {% for discover in discovers %}
-                    {% set dTitle = route in ['app_movie_list', 'app_home_series', 'app_admin_dashboard_index'] ? discover.title: discover.name %}
-                    {% set dDate = route == 'app_home' ? discover.release_date : route == 'app_home_tv' ? discover.first_air_date: '' %}
                     {% if discover.poster_path is defined and discover.poster_path|length %}
                         {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path %}
                     {% elseif discover.images is defined and discover.images.poster|length %}
@@ -54,10 +44,10 @@
                     {% else %}
                         {% set poster = "/images/default/no_poster_dark.png" %}
                     {% endif %}
-                    {{ include('blocks/movie/_discover.html.twig', { title: dTitle, poster: poster, id: discover.id, route: dRoute }) }}
+                    {{ include('blocks/movie/_discover.html.twig', { title: discover.title, poster: poster, id: discover.id }) }}
                 {% endfor %}
             </div>
-            {{ include('blocks/_discoverPaging.html.twig') }}
+            {{ include('blocks/movie/_discoverPaging.html.twig') }}
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}

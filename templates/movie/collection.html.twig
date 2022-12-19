@@ -43,16 +43,7 @@
                                     {% else %}
                                         <img src="/images/default/no_banner_dark.png" class="d-block w-100" alt="{{ collection.name }}">
                                     {% endif %}
-                                    <div class="user">
-                                        <div class="rating" id="{{ part.id }}">
-                                            <div class="star" data-rate="1"></div>
-                                            <div class="star" data-rate="2"></div>
-                                            <div class="star" data-rate="3"></div>
-                                            <div class="star" data-rate="4"></div>
-                                            <div class="star" data-rate="5"></div>
-                                        </div>
-                                        <div class="has-been-seen{% if part.id in userMovies %} yes{% endif %}" id="{{ part.id }}"><i class="fa-solid fa-circle-check"></i></div>
-                                    </div>
+                                    {{ include('blocks/movie/_rating.html.twig', {id: part.id, seen: part.id in userMovies}) }}
                                 </div>
                                 <div class="sub-part">
                                     <div class="movie-detail">

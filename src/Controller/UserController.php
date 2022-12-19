@@ -12,6 +12,7 @@ use App\Repository\MovieCollectionRepository;
 use App\Repository\UserMovieRepository;
 use App\Repository\UserRepository;
 use App\Service\BetaSeriesService;
+use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
@@ -33,7 +34,8 @@ class UserController extends AbstractController
 {
     private string $json_header = '"json_format":"myTvTime","json_version":"1.0",';
 
-    public function __construct(private readonly LocaleSwitcher $localeSwitcher)
+    public function __construct(private readonly LocaleSwitcher $localeSwitcher,
+                                private readonly LogService     $logService)
     {
     }
 
@@ -46,6 +48,7 @@ class UserController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, FriendRepository $friendRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -134,6 +137,7 @@ class UserController extends AbstractController
     public function userMovies(Request $request, UserMovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
 
         /** @var User $user */
         $user = $this->getUser();
@@ -261,14 +265,13 @@ class UserController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $id = $request->query->get('id');
+        $id = $user->getId();
         $movies = $this->movie2export($userMovieRepository->findAllUserMovies($id));
         $count = count($movies);
         $json = $this->formatJson('{' . $this->json_header . '"total_results":' . $count . ',"results":' . json_encode($movies) . '}');
 
         $filename = $this->saveFile($json, $user);
-        //    $url = $this->generateUrl('app_json');
-        $sample = $this->sample($request, $userMovieRepository, $id, null);
+        $sample = $this->sample($movies, $request->getLocale());
 
         return $this->json([
             'count' => $count,
@@ -300,12 +303,6 @@ class UserController extends AbstractController
         return $exports;
     }
 
-    /*    #[Route('/movielist/', name: 'app_json')]
-        public function jsonUrl()
-        {
-
-        }*/
-
     #[Route('/{_locale}/movielist/updateSample', name: 'app_json_sample', requirements: ['_locale' => 'fr|en|de|es'])]
     public function updateSample(Request $request, UserMovieRepository $userMovieRepository, UserRepository $userRepository): JsonResponse
     {
@@ -314,9 +311,9 @@ class UserController extends AbstractController
         $ids = json_decode($ids, true);
         $filename = $request->get('filename');
 
-        $sample = $this->sample($request, $userMovieRepository, $userId, $ids);
+        $movies = $this->movie2export($userMovieRepository->getUserMovieFromIdList($userId, $ids));
+        $sample = $this->sample($movies, $request->getLocale());
 
-        $movies = $this->movie2export($this->userMoviesFromList($userId, $userMovieRepository, $ids));
         $count = count($movies);
         $jsonMovies = json_encode($movies);
         $json = '{' . $this->json_header . '"total_results":' . $count . ',"results":' . $jsonMovies . '}';
@@ -372,11 +369,10 @@ class UserController extends AbstractController
         return $filename;
     }
 
-    private function sample(Request $request, UserMovieRepository $userMovieRepository, int $user_id, mixed $ids): string
+    private function sample($movies, $locale): string
     {
         $tab = '&nbsp;&nbsp;&nbsp;&nbsp;';
 
-        $movies = $this->movie2export($this->userMoviesFromList($user_id, $userMovieRepository, $ids));
         $count = count($movies);
 
         $sample = $this->formatJson('{' . $this->json_header . '"total_results":' . $count . ',"results":', 0, $tab, '<br>');
@@ -392,7 +388,7 @@ class UserController extends AbstractController
             $sample .= ' [<br>' . $tab . $tab;
             $sample .= $this->formatJson(json_encode($movies[0]), 2, $tab, '<br>');
 
-            $sample .= $this->andOther($request->getLocale(), $count, $tab) . $tab . $tab;
+            $sample .= $this->andOther($locale, $count, $tab) . $tab . $tab;
 
             $sample .= $this->formatJson(json_encode($movies[$count - 1]), 2, $tab, '<br>');
             $sample .= '<br>' . $tab . ']';
@@ -403,18 +399,6 @@ class UserController extends AbstractController
             ['#.("\w*"):\s("[a-zA-Z0-9\s\\\/\'.,:-]*"),#', '#.("\w*"):\s(\d*)#'],
             ['<span class="key">$1</span>: <span class="value-alpha">$2</span>,', '<span class="key">$1</span>: <span class="value-digit">$2</span>'],
             $sample);
-    }
-
-    private function userMoviesFromList(int $userId, UserMovieRepository $userMovieRepository, mixed $list): array
-    {
-        if ($list == null) {
-            $list = [];
-            $userMovies = $userMovieRepository->findUserMovieIds($userId);
-            foreach ($userMovies as $userMovie) {
-                $list[] = $userMovie['movie_db_id'];
-            }
-        }
-        return $userMovieRepository->getUserMovieFromIdList($userId, $list);
     }
 
     private function andOther($locale, $count, $tab): string

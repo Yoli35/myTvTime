@@ -36,7 +36,7 @@
                         {% for i in (collection.movies|length)-1..0 %}
                             {% set movie = collection.movies[i] %}
                             {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath %}
-                            {{ include('blocks/movie/_discover.html.twig', { title: movie.title, poster: poster, id: movie.movieDbId, route: 'app_movie' }) }}
+                            {{ include('blocks/movie/_discover.html.twig', { title: movie.title, poster: poster, id: movie.movieDbId }) }}
                         {% else %}
                             {{ 'Nothing to show'|trans }}
                         {% endfor %}

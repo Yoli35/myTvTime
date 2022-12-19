@@ -20,7 +20,7 @@
             {% endfor %}
         </div>
         <div class="home-discovers">
-            {{ include('blocks/_genrePaging.html.twig') }}
+            {{ include('blocks/movie/_genrePaging.html.twig') }}
             <div class="content">
                 {% for discover in discovers.results %}
                     {% if discover.poster_path is defined and discover.poster_path|length %}
@@ -28,10 +28,10 @@
                     {% else %}
                         {% set poster = "/images/default/no_poster_dark.png" %}
                     {% endif %}
-                    {{ include('blocks/movie/_discover.html.twig', { title: discover.title, poster: poster, id: discover.id, route: 'app_movie' }) }}
+                    {{ include('blocks/movie/_discover.html.twig', { title: discover.title, poster: poster, id: discover.id }) }}
                 {% endfor %}
             </div>
-            {{ include('blocks/_genrePaging.html.twig') }}
+            {{ include('blocks/movie/_genrePaging.html.twig') }}
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>

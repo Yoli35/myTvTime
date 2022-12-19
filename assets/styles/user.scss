@@ -476,7 +476,7 @@
     @include dialog2(50em);
 
     .overlay {
-        margin-top: calc(50vh - 30em);
+        margin-top: calc(50vh - 38em);
     }
 }
 
@@ -559,11 +559,17 @@
 
                 &::file-selector-button {
                     appearance: none;
-                    background-color: var(--gradiant-grey-50);
+                    background-color: var(--gradiant-grey-40);
                     border: 1px solid var(--gradiant-grey-60);
                     border-radius: .5em;
                     color: var(--gradiant-grey-80);
                     font-weight: 100;
+                    padding: .25em .5em;
+
+                    &:hover {
+                        background-color: var(--gradiant-grey-50);
+                        color: var(--gradiant-grey-90);
+                    }
                 }
             }
         }

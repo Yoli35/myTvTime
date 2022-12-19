@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use App\Service\FileUploader;
+use App\Service\LogService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -19,10 +20,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/{_locale}/event', requirements: ['_locale' => 'fr|en|de|es'])]
 class EventController extends AbstractController
 {
+    public function __construct(private readonly LogService $logService)
+    {
+    }
+
     #[Route('/', name: 'app_event', methods: ['GET'])]
-    public function index(EventRepository $eventRepository): Response
+    public function index(Request $request, EventRepository $eventRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -38,6 +44,7 @@ class EventController extends AbstractController
     public function new(Request $request, EventRepository $eventRepository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -59,6 +66,7 @@ class EventController extends AbstractController
     public function edit(Request $request, Event $event, EventRepository $eventRepository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 

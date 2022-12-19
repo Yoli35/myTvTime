@@ -2,16 +2,23 @@
 
 namespace App\Controller;
 
+use App\Service\LogService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    #[Route('/{_locale}/login', name: 'app_login', requirements: ['locale' => 'fr|en|de|es'])]
-    public function index(AuthenticationUtils $authenticationUtils): Response
+    public function __construct(private readonly LogService $logService)
     {
+    }
+
+    #[Route('/{_locale}/login', name: 'app_login', requirements: ['locale' => 'fr|en|de|es'])]
+    public function index(Request $request, AuthenticationUtils $authenticationUtils): Response
+    {
+        $this->logService->log($request, $this->getUser());
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 

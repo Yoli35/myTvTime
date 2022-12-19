@@ -50,8 +50,13 @@ function initButtons(id, locale, paths, url) {
         button.addEventListener("click", closeDialog);
     });
 
-    exportButton.addEventListener("click", () => {
+    exportButton.addEventListener("click", openExportDialog);
+    exportModal.querySelector("#export-copy").addEventListener("click", exportListToClipboard);
+    appendButton.addEventListener("click", openAppendDialog);
+    appendModal.querySelector("input[name='json']").addEventListener("change", appendShowJsonContent);
+    appendModal.querySelector("#append-add").addEventListener("click", appendAddJsonContent);
 
+    function openExportDialog() {
         currentDialog = exportModal;
 
         let result = exportModal.querySelector('.export-result');
@@ -120,12 +125,11 @@ function initButtons(id, locale, paths, url) {
                 updateSample(result_items);
             });
         }
-        xhr.open("GET", _personal_movies_export + '?id=' + _user_id);
+        xhr.open("GET", _personal_movies_export);
         xhr.send();
-    });
+    }
 
-    // $('#export-copy').click(function () {
-    exportModal.querySelector("#export-copy").addEventListener("click", function () {
+    function exportListToClipboard() {
         let string = JSON.stringify(json, null, '\t');
         navigator.clipboard.writeText(json).then(function () {
             /* presse-papiers modifié avec succès */
@@ -134,10 +138,9 @@ function initButtons(id, locale, paths, url) {
             /* échec de l’écriture dans le presse-papiers */
             alert('Rejected!')
         }).catch(err => alert(err));
-    });
+    }
 
-    // $('#append-button').click(function () {
-    appendButton.addEventListener("click", function () {
+    function openAppendDialog() {
 
         currentDialog = appendModal;
 
@@ -160,10 +163,9 @@ function initButtons(id, locale, paths, url) {
         xhr.send();
 
         openDialog();
-    });
+    }
 
-    // $('input[name="json"]').change(function () {
-    appendModal.querySelector("input[name='json']").addEventListener("change", function () {
+    function appendShowJsonContent() {
         // let add = $('#append-add');
         const add = appendModal.querySelector("#append-add");
 
@@ -175,11 +177,9 @@ function initButtons(id, locale, paths, url) {
         }
         fr.onloadend = function () {
             content = JSON.parse(json);
-            // $(preview).empty();
             while (preview.lastChild) {
                 preview.removeChild(preview.lastChild);
             }
-            // $(infos).empty();
             while (infos.lastChild) {
                 infos.removeChild(infos.lastChild);
             }
@@ -191,22 +191,17 @@ function initButtons(id, locale, paths, url) {
                 for (let i = 0; i < content['total_results']; i++) {
                     let item = content['results'][i];
                     if (!ids.includes(item['movie_db_id'])) {
-                        // $(preview).append('<div class="result-item"><img src="' + _url + item['poster_path'] + '" alt="' + item['title'] + '"><div class="name">' + item['title'] + '</div><div class="check-add" data-id="' + item['id'] + '" data-tmdb="' + item['movie_db_id'] + '"></div></div>');
                         preview.innerHTML += '<div class="result-item"><img src="' + _url + item['poster_path'] + '" alt="' + item['title'] + '"><div class="name">' + item['title'] + '</div><div class="check-add" data-id="' + item['id'] + '" data-tmdb="' + item['movie_db_id'] + '"></div></div>';
                         count++;
                     }
                 }
-                // $(infos).css('padding', '.5em');
                 preview.setAttribute("style", "padding: .5em");
                 let delta = content['total_results'] - count;
-                // $(infos).append('<div class="info">' + txt.count[_locale] + txt.space + content['total_results'] + txt.space + txt.movies[_locale] + '.</div>');
                 infos.innerHTML += '<div class="info">' + txt.ui.count[_locale] + txt.ui.space + content['total_results'] + txt.ui.space + txt.ui.movies[_locale] + '.</div>';
                 if (delta) {
-                    // $(infos).append('<div class="info">' + delta + txt.space + txt[(delta > 1) ? 'movies' : 'movie'][_locale] + txt.space + (delta > 1 ? txt.presents[_locale] : txt.present[_locale]) + '</div>');
                     infos.innerHTML += '<div class="info">' + delta + txt.ui.space + txt.ui[(delta > 1) ? 'movies' : 'movie'][_locale] + txt.ui.space + (delta > 1 ? txt.ui.presents[_locale] : txt.ui.present[_locale]) + '</div>';
                 }
                 if (count) {
-                    // $(infos).append(
                     infos.innerHTML +=
                         '<div class="select">' +
                         '   <div class="btn-group btn-group-sm" role="group" aria-label="' + txt.ui.aria_select_group[_locale] + '">' +
@@ -214,62 +209,40 @@ function initButtons(id, locale, paths, url) {
                         '       <button name="unselect-all" type="button" class="btn btn-secondary">' + txt.ui.deselect_all[_locale] + '</button>' +
                         '   </div>' +
                         '</div>';
-                    // );
-
-                    // $('.check-add').click(function () {
-                    //     $(this).toggleClass('active');
-                    // });
                     const checkAdds = appendModal.querySelectorAll(".check-add");
                     checkAdds.forEach((item) => {
                         item.addEventListener("click", () => {
                             item.classList.toggle("active");
                         });
                     });
-
-                    // $('button[name="select-all"]').click(function () {
-                    //     $('.check-add').addClass('active');
-                    // });
                     appendModal.querySelector('button[name="select-all"]').addEventListener("click", () => {
                         checkAdds.forEach((item) => {
                             item.classList.add("active");
                         });
                     });
-
-                    // $('button[name="unselect-all"]').click(function () {
-                    //     $('.check-add').removeClass('active');
-                    // });
                     appendModal.querySelector('button[name="unselect-all"]').addEventListener("click", () => {
                         checkAdds.forEach((item) => {
                             item.classList.remove("active");
                         });
                     });
 
-                    // $(add).removeAttr('disabled');
                     add.removeAttribute("disabled");
                 } else {
-                    // $(infos).append(
                     infos.innerHTML +=
                         '<div class="none">' + txt.ui.none[_locale] + '</div>';
-                    // );
                 }
             }
         }
         fr.readAsText(this.files[0]);
-    });
+    }
 
-    // $('#append-add').click(function () {
-    appendModal.querySelector("#append-add").addEventListener("click", () => {
-        // let selected = $('.check-add.active');
+    function appendAddJsonContent() {
         const selected = appendModal.querySelectorAll('.check-add.active');
-        // let progress = $('.append-progress');
         const progress = appendModal.querySelector('.append-progress');
-        // let value = $('.value');
         const value = progress.querySelector('.value');
         let i, n = selected.length, pv = 0;
 
-        // $(progress).css('display', 'flex');
         progress.setAttribute("style", "display: flex");
-        // $(value).css('width', '0%');
         value.setAttribute("style", "width: 0%");
 
         for (i = 0; i < n; i++) {
@@ -294,7 +267,7 @@ function initButtons(id, locale, paths, url) {
             xhr.open("GET", _personal_movie_add + '?movie_db_id=' + tmdb_id + '&progress_value=' + val);
             xhr.send();
         }
-    });
+    }
 
     function openDialog() {
         let dialog = currentDialog;
@@ -314,25 +287,32 @@ function initButtons(id, locale, paths, url) {
         }
     }
 
-    function dismissDialog (dialog) {
+    function dismissDialog(dialog) {
         dialog.classList.remove("show");
         setTimeout(() => {
             dialog.close()
         }, 300);
     }
-    function closeDialog() {
+
+    function closeDialog(evt) {
 
         let dialog = currentDialog;
 
         if (currentDialog === exportModal) {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = () => dismissDialog(dialog);
-            xhr.onerror = () => dismissDialog(dialog);
+            const button = evt.currentTarget;
+            let delay = 0;
+            if (button.getAttribute("id") === 'export-file') {
+                delay = 1000;
+            }
+            setTimeout(() => {
+                const xhr = new XMLHttpRequest();
+                xhr.onload = () => dismissDialog(dialog);
+                xhr.onerror = () => dismissDialog(dialog);
 
-            xhr.open("GET", _json_cleanup + '?filename=' + exportFile);
-            xhr.send();
-        }
-        else {
+                xhr.open("GET", _json_cleanup + '?filename=' + exportFile);
+                xhr.send();
+            }, delay);
+        } else {
             dismissDialog(dialog);
         }
         currentDialog = null;
@@ -402,9 +382,11 @@ function updateSample(items) {
 
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
-        const data = JSON.parse(this.response);
-        document.querySelector('.sample').innerHTML = data['sample'];
-        json = data['json'];
+        if (this.response.charAt(0) !== '<') {
+            const data = JSON.parse(this.response);
+            document.querySelector('.sample').innerHTML = data['sample'];
+            json = data['json'];
+        }
     }
     xhr.open("GET", _json_sample + "?user_id=" + _user_id + "&ids=" + JSON.stringify(ids) + "&filename=" + exportFile);
     xhr.send();

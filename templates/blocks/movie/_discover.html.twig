@@ -1,5 +1,5 @@
 <div data-id="{{ id }}" class="home-discover">
-    <a href="{{ path(route, {id: id}) }}">
+    <a href="{{ path('app_movie', {id: id}) }}">
         <img src="{{ poster }}" alt="{{ title }}">
         <div class="title">{{ title }}</div>
         {% if discover.release_date is defined and discover.release_date|length %}
@@ -7,17 +7,7 @@
         {% endif %}
     </a>
     {% if app.user is not null and userMovies is defined %}
-        <div class="user" style="transform: scale(.75)">
-            <div class="rating" id="{{ id }}">
-                <div class="trash" data-rate="0"></div>
-                <div class="star" data-rate="1"></div>
-                <div class="star" data-rate="2"></div>
-                <div class="star" data-rate="3"></div>
-                <div class="star" data-rate="4"></div>
-                <div class="star" data-rate="5"></div>
-            </div>
-            <div class="has-been-seen{% if id in userMovies %} yes{% endif %}" id="{{ id }}"><i class="fa-solid fa-circle-check"></i></div>
-        </div>
+        {{ include('blocks/movie/_rating.html.twig', {scale: 0.75, seen: id in userMovies}) }}
     {% endif %}
     {% if discover.my_collections is defined %}
         {% if discover.my_collections is not empty %}

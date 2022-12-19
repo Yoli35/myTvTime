@@ -13,6 +13,7 @@ use App\Repository\MovieCollectionRepository;
 use App\Repository\RatingRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\CallImdbService;
+use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 
@@ -28,13 +29,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MovieController extends AbstractController
 {
     public function __construct(private readonly FavoriteRepository  $favoriteRepository,
-                                private readonly TranslatorInterface $translator)
+                                private readonly TranslatorInterface $translator,
+                                private readonly LogService          $logService)
     {
     }
 
     #[Route(['fr' => '/{_locale}/films/', 'en' => '/{_locale}/movies/', 'de' => '/{_locale}/filme/', 'es' => '/{_locale}/peliculas/'], name: 'app_movie_list', requirements: ['_locale' => 'fr|en|de|es', 'page' => 1, 'sort_by' => 'popularity.desc'])]
     public function index(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
         $userMovieIds = [];
@@ -135,14 +138,14 @@ class MovieController extends AbstractController
                 $discover['release_date'] = "";
             }
         }
+        dump($discovers);
 
         return $this->render('movie/index.html.twig', [
-            'discovers' => $discovers,
+            'discovers' => $discovers['results'],
             'userMovies' => $userMovieIds,
             'imageConfig' => $imageConfig,
             'pages' => $pages,
             'sorts' => $sorts,
-            'dRoute' => 'app_movie',
             'locale' => $locale,
         ]);
     }
@@ -150,6 +153,7 @@ class MovieController extends AbstractController
     #[Route(['fr' => '/{_locale}/film/{id}', 'en' => '/{_locale}/movie/{id}', 'de' => '/{_locale}/filme/{id}', 'es' => '/{_locale}/pelicula/{id}'], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
     public function show(Request $request, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
     {
+        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -387,6 +391,7 @@ class MovieController extends AbstractController
     #[Route(['fr' => '/{_locale}/films/recherche/par/genre/{genres}/{page}', 'en' => '/{_locale}/movies/by/genre/{genres}/{page}', 'de' => '/{_locale}/filmen/nach/genre/{genres}/{page}', 'es' => '/{_locale}/peliculas/por/genero/{genres}/{page}'], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByGenres(Request $request, $page, $genres, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
+        $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
         $standing = $callTmdbService->moviesByGenres($page, $genres, $locale);
         $discovers = json_decode($standing, true);
@@ -412,6 +417,7 @@ class MovieController extends AbstractController
     #[Route(['fr' => '/{_locale}/films/recherche/par/date/{date}/{page}', 'en' => '/{_locale}/movies/by/date/{date}/{page}', 'de' => '/{_locale}/filmen/nach/datum/{date}/{page}', 'es' => '/{_locale}/peliculas/por/fecha/{date}/{page}'], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByDate(Request $request, $page, $date, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
+        $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
         $standing = $callTmdbService->moviesByDate($page, $date, $locale);
         $discovers = json_decode($standing, true);
@@ -438,6 +444,7 @@ class MovieController extends AbstractController
     #[Route(['fr' => '/{_locale}/films/recherche/par/nom/{page}', 'en' => '/{_locale}/movies/search/{page}', 'de' => '/{_locale}/filmen/suche/{page}', 'es' => '/{_locale}/peliculas/buscar/{page}'], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesSearch(Request $request, $page, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
     {
+        $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         $query = $request->query->get('query');
@@ -618,7 +625,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/movie/remove', name: 'app_movie_remove')]
-    public function removeMovieToUser(Request $request, UserMovieRepository $userMovieRepository): JsonResponse
+    public function removeMovieFromUser(Request $request, UserMovieRepository $userMovieRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();

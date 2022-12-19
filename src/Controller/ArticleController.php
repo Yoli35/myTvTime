@@ -9,19 +9,22 @@ use App\Form\CommentType;
 use App\Repository\AnswerRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\LogService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    #[Route('/{_locale}/blog', name: 'app_blog', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(ArticleRepository $articleRepository): Response
+    public function __construct(private readonly LogService $logService)
     {
+    }
+
+    #[Route('/{_locale}/blog', name: 'app_blog', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function index(Request $request, ArticleRepository $articleRepository): Response
+    {
+        $this->logService->log($request, $this->getUser());
         $articles = $articleRepository->findByPublishedAtDesc();
 
         return $this->render('article/index.html.twig', [
@@ -32,6 +35,7 @@ class ArticleController extends AbstractController
     #[Route('/{_locale}/blog/article/{id}', name: 'app_blog_article', requirements: ['_locale' => 'fr|en|de|es'])]
     public function article(Request $request, $id, ArticleRepository $articleRepository, CommentRepository $commentRepository): Response
     {
+        $this->logService->log($request, $this->getUser());
         $article = $articleRepository->find($id);
 
         $content = preg_replace(

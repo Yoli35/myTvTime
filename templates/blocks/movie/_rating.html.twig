@@ -1,4 +1,4 @@
-<div class="user">
+<div class="user"{% if scale is defined %} style="transform: scale({{ scale }})"{% endif %}>
     <div class="rating" id="{{ id }}">
         <div class="trash" data-rate="0"></div>
         <div class="star" data-rate="1"></div>
