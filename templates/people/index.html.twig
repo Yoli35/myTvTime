@@ -199,16 +199,6 @@
                                                     {% if url is defined %}
                                                 </a>
                                                 {% endif %}
-                                                {#                                                {% if sub_prod.character is defined %} #}
-                                                {#                                                    {% if sub_prod.character|length %} #}
-                                                {#                                                        {% if sub_prod.character == 'Himself' or sub_prod.character == 'Herself' %} #}
-                                                {#                                                            {% set character = sub_prod.character|trans %} #}
-                                                {#                                                        {% else %} #}
-                                                {#                                                            {% set character = sub_prod.character %} #}
-                                                {#                                                        {% endif %} #}
-                                                {#                                                        <div class="job">{{ 'as'|trans }} {{ character }},</div> #}
-                                                {#                                                    {% endif %} #}
-                                                {#                                                {% endif %} #}
                                                 {% if sub_prod.job|length %}
                                                     <div class="job">{{ 'as.job'|trans }} {{ ('job.' ~ sub_prod.job ~ (people.gender == 1 ? '.she':'.he'))|trans }}</div>
                                                 {% endif %}
@@ -259,57 +249,75 @@
             infos.forEach(info => {
                 info.querySelector("i").addEventListener("click", showInfos);
             });
+            document.addEventListener("click", hideInfos);
+            initInfos();
         });
-        document.addEventListener("click", hideInfos);
 
-        function showInfos(evt) {
-            const id = evt.target.closest(".info").getAttribute("data-id");
-            const type = evt.target.closest(".info").getAttribute("data-type");
-            const title = evt.target.closest(".info").getAttribute("data-title");
-            const poster = evt.target.closest(".info").getAttribute("data-poster");
-
+        function initInfos() {
             const popInfos = document.querySelector(".pop-infos");
             const close = popInfos.querySelector(".close");
-            const x = evt.clientX, y = evt.clientY + evt.view.scrollY - 16;
 
             close.addEventListener("click", hideInfos);
-
-            let img = document.createElement("img");
-            img.setAttribute("src", imgUrl + poster);
-            popInfos.querySelector(".poster").innerHTML = "";
-            popInfos.querySelector(".poster").appendChild(img);
-            popInfos.querySelector(".title").appendChild(document.createTextNode(title));
-            popInfos.querySelector(".spinner").setAttribute("style", "display: block;");
-            popInfos.setAttribute("style", "left: calc(" + x + "px - 16em); top: calc(" + y + "px - 10.85em);");
-            popInfos.classList.add("show");
-            setTimeout(() => {
-                popInfos.classList.add("fade");
-            }, 0);
-
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                let result = {'overview': "", "media_type": ""};
-                result = JSON.parse(this.response);
-                popInfos.querySelector(".title").innerHTML = "";
-                popInfos.querySelector(".overview").innerHTML = "";
-                popInfos.querySelector(".title").appendChild(document.createTextNode(title + " (" + result.media_type + ")"));
-                popInfos.querySelector(".overview").appendChild(document.createTextNode(result.overview));
-                popInfos.querySelector(".spinner").setAttribute("style", "display: none;");
-            }
-            xhr.open("GET", _app_serie_get_overview.substring(0, _app_serie_get_overview.length - 1) + id + "?type=" + type);
-            xhr.send();
         }
 
-        function hideInfos() {
+        function showInfos(evt) {
+            const popInfos = document.querySelector(".pop-infos");
+            let wasOpen = false;
+            if (popInfos.classList.contains("show")) {
+                hideInfos(evt);
+                wasOpen = true;
+            }
+
+            setTimeout(() => {
+                const id = evt.target.closest(".info").getAttribute("data-id");
+                const type = evt.target.closest(".info").getAttribute("data-type");
+                const title = evt.target.closest(".info").getAttribute("data-title");
+                const poster = evt.target.closest(".info").getAttribute("data-poster");
+
+                const x = evt.clientX, y = evt.clientY + evt.view.scrollY - 16;
+
+                let img = document.createElement("img");
+                if (poster.length) {
+                    img.setAttribute("src", imgUrl + poster);
+                } else {
+                    img.setAttribute("src", '/images/default/no_poster_dark.png');
+                }
+                popInfos.querySelector(".poster").innerHTML = "";
+                popInfos.querySelector(".poster").appendChild(img);
+                popInfos.querySelector(".title").appendChild(document.createTextNode(title));
+                popInfos.querySelector(".spinner").setAttribute("style", "display: block;");
+                popInfos.setAttribute("style", "left: calc(" + x + "px - 16em); top: calc(" + y + "px - 10.85em);");
+                popInfos.classList.add("show");
+                setTimeout(() => {
+                    popInfos.classList.add("fade");
+                }, 0);
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    let result = {'overview': "", "media_type": ""};
+                    result = JSON.parse(this.response);
+                    popInfos.querySelector(".title").innerHTML = "";
+                    popInfos.querySelector(".overview").innerHTML = "";
+                    popInfos.querySelector(".title").appendChild(document.createTextNode(title + " (" + result.media_type + ")"));
+                    popInfos.querySelector(".overview").appendChild(document.createTextNode(result.overview));
+                    popInfos.querySelector(".spinner").setAttribute("style", "display: none;");
+                }
+                xhr.open("GET", _app_serie_get_overview.substring(0, _app_serie_get_overview.length - 1) + id + "?type=" + type);
+                xhr.send();
+            }, wasOpen ? 200 : 0);
+        }
+
+        function hideInfos(evt) {
             const popInfos = document.querySelector(".pop-infos");
             if (popInfos.classList.contains("fade")) {
+                evt.preventDefault();
                 popInfos.classList.remove("fade");
                 setTimeout(() => {
                     popInfos.classList.remove("show");
                     popInfos.querySelector(".poster").innerHTML = "";
                     popInfos.querySelector(".title").innerHTML = "";
                     popInfos.querySelector(".overview").innerHTML = "";
-                }, 300);
+                }, 150);
             }
         }
     </script>

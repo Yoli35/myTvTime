@@ -92,6 +92,8 @@
                 .info {
                     font-size: .75em;
                     font-weight: 400;
+                    max-height: 4em;
+                    overflow: hidden;
                 }
             }
         }
@@ -127,24 +129,29 @@
     }
 
     .parameters {
-        @include flex-col();
+        @include flex-100(center, space-between);
         background-color: var(--gradiant-grey-90);
         border-radius: .5em;
         box-shadow: 0 0 1em rgba(0, 0, 0, .5);
+        gap: 1em;
         margin: 0 auto;
+        padding: 0 1em;
         overflow: hidden;
         position: sticky;
         top: 3em;
         z-index: 40;
 
-        .header {
-            @include yt-header;
+        .title, .icon {
+            flex-shrink: 0;
+        }
+
+        .icon {
+            cursor: pointer;
         }
 
         .content {
             @include flex-col(center, space-around);
             padding: 1em;
-            width: 100%;
 
             label {
                 font-weight: 100;
@@ -202,6 +209,33 @@
                     border-radius: .25em;
                     height: 5.625em;
                     width: 10em;
+                }
+            }
+
+            &.minimise {
+                padding: 0;
+
+                .input {
+                    padding-left: 1em;
+                    padding-right: 1em;
+
+                    form {
+                        @include flex-row();
+                        gap: 1em;
+
+                        label {
+                            @include flex-row();
+                            gap: 1em;
+
+                            > div {
+                                flex-shrink: 0;
+                            }
+                        }
+                    }
+                }
+
+                .example, .thumbnail {
+                    display: none;
                 }
             }
         }
@@ -852,6 +886,12 @@
             .content {
                 .input {
                     background-color: var(--gradiant-grey-30);
+                }
+                &.minimise {
+                    .input {
+                        background-color: transparent;
+                        padding: .25em 0;
+                    }
                 }
             }
 

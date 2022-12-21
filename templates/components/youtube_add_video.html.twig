@@ -7,12 +7,12 @@
 {% set preview_url = this.preview_url %}
 {% set preview_title = this.preview_title %}
 
-{#{{ 0|format_datetime('none', 'medium') }}#}
-{#{{ 600|format_datetime('none', 'medium') }}#}
-{#{{ 3599|format_datetime('none', 'medium') }}#}
-{#{{ 3600|format_datetime('none', 'medium') }}#}
-{#{{ 3601|format_datetime('none', 'medium') }}#}
-{#{{ 4189|format_datetime('none', 'medium') }}#}
+{# {{ 0|format_datetime('none', 'medium') }} #}
+{# {{ 600|format_datetime('none', 'medium') }} #}
+{# {{ 3599|format_datetime('none', 'medium') }} #}
+{# {{ 3600|format_datetime('none', 'medium') }} #}
+{# {{ 3601|format_datetime('none', 'medium') }} #}
+{# {{ 4189|format_datetime('none', 'medium') }} #}
 <div {{ attributes }}>
     {% if page and this.justAdded %}
         <div class="redirect" data-id="{{ this.justAdded }}"></div>
@@ -22,19 +22,13 @@
     </h1>
     <h2>{{ time_2_human }}</h2>
     <div class="parameters">
-        <div class="header">
-            {{ 'Add a Youtube video'|trans }}
-            <div>
-                <i class="fa-brands fa-youtube"></i>
-                <i class="fa-solid fa-circle-plus"></i>
-            </div>
-        </div>
-        <div class="content">
+        <div class="title">{{ 'Add a Youtube video'|trans }}</div>
+        <div class="content minimise">
             <div class="input">
                 <form data-model="*">
                     <div class="link">
-                        <label for="link">{{ 'Link'|trans }} :
-{#                            <input id="link" type="search" name="link" value="{{ link }}" autofocus>#}
+                        <label for="link">
+                            <div>{{ 'Link'|trans }} :</div>
                             <input id="link" type="search" name="link" autofocus>
                         </label>
                     </div>
@@ -56,6 +50,26 @@
                 <img src="{{ preview_url }}" alt="{{ preview_title }}">
             </div>
         </div>
+        <div class="icon">
+            <i class="fa-brands fa-youtube"></i>
+            <i class="fa-solid fa-circle-plus"></i>
+        </div>
+        <script>
+            window.addEventListener("DOMContentLoaded", () => {
+                const icon = document.querySelector(".icon");
+                icon.addEventListener("click", () => {
+                    const content = document.querySelector(".content");
+                    content.classList.toggle("minimise");
+                    if (content.classList.contains("minimise")) {
+                        icon.lastElementChild.classList.remove("fa-circle-minus");
+                        icon.lastElementChild.classList.add("fa-circle-plus");
+                    } else {
+                        icon.lastElementChild.classList.remove("fa-circle-plus");
+                        icon.lastElementChild.classList.add("fa-circle-minus");
+                    }
+                });
+            });
+        </script>
     </div>
 
     {% if videos|length %}
@@ -78,6 +92,9 @@
                     document.querySelector(".tag-button").style.display = "none";
                     document.querySelector(".menu-item.youtube-video-search").style.display = "none";
                 }
+                document.querySelector(".icon").addEventListener("click", () => {
+                    document.querySelector(".content").classList.toggle("minimise");
+                });
             });
         </script>
     {% endif %}

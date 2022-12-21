@@ -601,13 +601,16 @@ nav.active {
                     float: left;
                     padding-right: 0.5rem;
                     color: #6c757d;
-                    content: var(--bs-breadcrumb-divider, "/") /* rtl: var(--bs-breadcrumb-divider, "/") */
-                ;
+                    content: var(--bs-breadcrumb-divider, "/");
                 }
             }
 
             &.active {
                 color: var(--gradiant-grey-60);
+                max-width: 50%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             &:before {
