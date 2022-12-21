@@ -254,6 +254,20 @@
                         width: 8em;
                     }
 
+                    .today {
+                        @include flex-row();
+                        background-color: var(--gradiant-mars-50);
+                        border-radius: .5em;
+                        color: var(--gradiant-grey-100);
+                        font-weight: 300;
+                        height: 2em;
+                        padding: 0 .5em;
+                        position: absolute;
+                        right: 14em;
+                        text-align: center;
+                        top: 2em;
+                    }
+
                     .add {
                         @include seen(var(--serie-add), 1.5em);
                     }

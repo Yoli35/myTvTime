@@ -95,7 +95,6 @@ class SerieController extends AbstractController
 
         // Liste des séries ajoutées par l'utilisateur pour le menu de recherche
         $list = $serieRepository->listUserSeries($user->getId());
-//        $totalResults = $serieRepository->countUserSeries($user->getId());
         $totalResults = count($list);
 
         $series = $totalResults ? $this->getSeriesViews($user, $results) : null;
@@ -114,6 +113,32 @@ class SerieController extends AbstractController
             ]);
             $settingsRepository->save($leafSettings, true);
         }
+
+        $now = new DateTime();
+
+        foreach ($series as &$serie) {
+            $serie['today'] = false;
+            $viewing = $serie['viewing'];
+            /** @var SerieViewing $viewing */
+            if (!$viewing->isSerieCompleted()) {
+                foreach ($viewing->getSeasons() as $season) {
+//                    dump($serie['name'] . ": season " . $season->getSeasonNumber() . ' -> ' . $season->getAirAt()->format("d/m/Y"));
+                    $diff = date_diff($now, $season->getAirAt());
+                    if (!$season->isSeasonCompleted() && $diff->invert) {
+                        foreach ($season->getEpisodes() as $episode) {
+                            if ($episode->getAirDate()) {
+                                $diff = date_diff($now, $episode->getAirDate());
+                                if ($diff->y == 0 && $diff->m == 0 && $diff->d == 0) {
+                                    $serie['today'] = true;
+//                                    dump($serie['name']);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return $this->render('serie/index.html.twig', [
             'series' => $series,
             'numbers' => $serieRepository->numbers($user->getId())[0],
@@ -324,16 +349,18 @@ class SerieController extends AbstractController
     public function createSerieViewingContent(SerieViewing $viewing, array $tv): SerieViewing
     {
         foreach ($tv['seasons'] as $s) {
-            $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
-            $viewing->addSeason($season);
-            $this->seasonViewingRepository->save($season, true);
+            if ($s['season_number']) { // 21/12/2022 : plus d'épisodes spéciaux
+                $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
+                $viewing->addSeason($season);
+                $this->seasonViewingRepository->save($season, true);
 
-            for ($i = 1; $i <= $season->getEpisodeCount(); $i++) {
-                $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr');
-                $tmdbEpisode = json_decode($standing, true);
-                $episode = new EpisodeViewing($i, $tmdbEpisode ? $tmdbEpisode['air_date'] : null);
-                $season->addEpisode($episode);
-                $this->episodeViewingRepository->save($episode, true);
+                for ($i = 1; $i <= $season->getEpisodeCount(); $i++) {
+                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr');
+                    $tmdbEpisode = json_decode($standing, true);
+                    $episode = new EpisodeViewing($i, $tmdbEpisode ? $tmdbEpisode['air_date'] : null);
+                    $season->addEpisode($episode);
+                    $this->episodeViewingRepository->save($episode, true);
+                }
             }
         }
         return $viewing;
@@ -363,35 +390,41 @@ class SerieController extends AbstractController
             }
         }
         foreach ($tv['seasons'] as $s) {
-            $season = $serieViewing->getSeasonByNumber($s['season_number']);
-            if ($season === null) {
-                $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
-                $serieViewing->addSeason($season);
-                for ($i = 1; $i <= $s['episode_count']; $i++) {
-                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr');
-                    $tmdbEpisode = json_decode($standing, true);
-                    $episode = new EpisodeViewing($i, $tmdbEpisode['air_date']);
-                    $episode->setSeason($season);
-                    $this->episodeViewingRepository->save($episode, true);
-                    $season->addEpisode($episode);
-                }
-                $this->seasonViewingRepository->save($season, true);
-            } else {
-                if ($season->getEpisodeCount() < $s['episode_count']) {
-                    for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
-                        $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr');
-                        $tmdbEpisode = json_decode($standing, true);
-                        $episode = new EpisodeViewing($i, $tmdbEpisode['air_date']);
-                        $this->episodeViewingRepository->save($episode, true);
-                        $season->addEpisode($episode);
+            if ($s['season_number']) { // 21/12/2022 : plus d'épisodes spéciaux
+                $season = $serieViewing->getSeasonByNumber($s['season_number']);
+                if ($season === null) {
+                    $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
+                    $serieViewing->addSeason($season);
+                    for ($i = 1; $i <= $s['episode_count']; $i++) {
+                        $this->addNewEpisode($tv, $season, $i);
                     }
-                    $season->setEpisodeCount($s['episode_count']);
                     $this->seasonViewingRepository->save($season, true);
+                } else {
+                    if ($season->getEpisodeCount() < $s['episode_count']) {
+                        for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
+                            $this->addNewEpisode($tv, $season, $i);
+                        }
+                        $season->setEpisodeCount($s['episode_count']);
+                        $this->seasonViewingRepository->save($season, true);
+                    }
                 }
             }
         }
         $this->setViewedEpisodeCount($serieViewing);
+        // Ajuste les champs seasonCount, seasonCompleted, serieCompleted
+        $this->viewingCompleted($serieViewing);
+
         return $serieViewing;
+    }
+
+    public function addNewEpisode(array $tv, SeasonViewing $season, int $episodeNumber)
+    {
+        $standing = $this->TMDBService->getTvEpisode($tv['id'], $season->getSeasonNumber(), $episodeNumber, 'fr');
+        $tmdbEpisode = json_decode($standing, true);
+        $episode = new EpisodeViewing($episodeNumber, $tmdbEpisode['air_date']);
+        $episode->setSeason($season);
+        $this->episodeViewingRepository->save($episode, true);
+        $season->addEpisode($episode);
     }
 
     public function keywordsTranslation($keywords, $locale): array
@@ -617,33 +650,6 @@ class SerieController extends AbstractController
 
     }
 
-    public function createViewingTab($tv): array
-    {
-        $tab = [];
-        /*
-         * La saison 0 correspond aux épisodes spéciaux regroupés dans cette saison
-         */
-        if ($tv['seasons'][0]['season_number'] == 1) {
-            $tab[] = [
-                'season_number' => 0,
-                'season_completed' => false,
-                'air_date' => null,
-                'episode_count' => 0,
-                'episodes' => []
-            ];
-        }
-        foreach ($tv['seasons'] as $season) {
-            $tab[] = [
-                'season_number' => $season['season_number'],
-                'season_completed' => false,
-                'air_date' => $season['air_date'],
-                'episode_count' => $season['episode_count'],
-                'episodes' => array_fill(0, $season['episode_count'], false)
-            ];
-        }
-        return $tab;
-    }
-
     public function whatsNew($tv, $serie, $serieRepository): array|null
     {
         $whatsNew = ['episode' => 0, 'season' => 0, 'status' => "", 'original_name' => ""];
@@ -728,14 +734,8 @@ class SerieController extends AbstractController
                     $this->episodeViewingRepository->save($episode, true);
                 }
             }
-            /* ---start--- Season completed ? ---start--- */
-            foreach ($serieViewing->getSeasons() as $season) {
-                $completed = $season->getViewedEpisodeCount() == $season->getEpisodeCount();
-                if ($completed) {
-                    $season->setSeasonCompleted(true);
-                    $this->seasonViewingRepository->save($season, true);
-                }
-            }
+            /* ---start--- Serie / Season completed ? ---start--- */
+            $this->viewingCompleted($serieViewing);
             /* ----end---- Season completed ? ----end---- */
         } else {
             /** @var EpisodeViewing $episode */
@@ -764,15 +764,17 @@ class SerieController extends AbstractController
         $globalIndex = 1;
         $viewed = 0;
         foreach ($serieViewing->getSeasons() as $season) {
-            $blocks[] = [
-                'season' => $season->getSeasonNumber(),
-                'view' => $this->render('blocks/serie/_season_viewing.html.twig', [
-                    'season' => $season,
-                    'globalIndex' => $globalIndex,
-                ])
-            ];
-            $viewed += $season->getViewedEpisodeCount();
-            $globalIndex += $season->getEpisodeCount();
+            if ($season->getSeasonNumber()) { // 21/12/2022 : plus d'épisodes spéciaux
+                $blocks[] = [
+                    'season' => $season->getSeasonNumber(),
+                    'view' => $this->render('blocks/serie/_season_viewing.html.twig', [
+                        'season' => $season,
+                        'globalIndex' => $globalIndex,
+                    ])
+                ];
+                $viewed += $season->getViewedEpisodeCount();
+                $globalIndex += $season->getEpisodeCount();
+            }
         }
 
         return $this->json([
@@ -782,11 +784,33 @@ class SerieController extends AbstractController
         ]);
     }
 
+    public function viewingCompleted(SerieViewing $serieViewing)
+    {
+        $seasonsCompleted = 0;
+        foreach ($serieViewing->getSeasons() as $season) {
+            $completed = $season->getViewedEpisodeCount() == $season->getEpisodeCount();
+            if ($completed && !$season->isSeasonCompleted()) {
+                $season->setSeasonCompleted(true);
+                $this->seasonViewingRepository->save($season, true);
+            }
+            if ($completed) $seasonsCompleted++;
+        }
+        if ($serieViewing->getSeasonCount() == 0) {
+            $serieViewing->setSeasonCount(count($serieViewing->getSeasons()));
+            $this->serieViewingRepository->save($serieViewing, true);
+        }
+        if ($serieViewing->getSeasonCount() == $seasonsCompleted) {
+            $serieViewing->setSerieCompleted(true);
+            $this->serieViewingRepository->save($serieViewing, true);
+        }
+    }
     public function setViewedEpisodeCount($serieViewing): void
     {
         $viewedEpisodeCount = 0;
         foreach ($serieViewing->getSeasons() as $season) {
-            $viewedEpisodeCount += $season->getViewedEpisodeCount();
+            if ($season->getSeasonNumber()) { // 21/12/2022 : plus d'épisodes spéciaux
+                $viewedEpisodeCount += $season->getViewedEpisodeCount();
+            }
         }
         $serieViewing->setViewedEpisodes($viewedEpisodeCount);
         $this->serieViewingRepository->save($serieViewing, true);
@@ -809,12 +833,6 @@ class SerieController extends AbstractController
                                 $array[] = $episode;
                             }
                         }
-                    }
-                }
-            } else { /* Season 0 / Special episodes */
-                foreach ($serieViewing->getSeasonByNumber(0)?->getEpisodes() as $episode) {
-                    if ($episode->getEpisodeNumber() <= $episodeNumber) {
-                        $array[] = $episode;
                     }
                 }
             }

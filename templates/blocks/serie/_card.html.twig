@@ -38,6 +38,9 @@
         {% if is_favorite(user.id, serie.id, 'serie') %}
             <div class="favorite">{{ 'Favorite'|trans }}</div>
         {% endif %}
+        {% if serie.today %}
+            <div class="today">{{ 'New episode'|trans }}</div>
+        {% endif %}
         <div class="front"></div>
     </div>
 </a>

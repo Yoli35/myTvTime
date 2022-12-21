@@ -304,12 +304,12 @@ class TMDBService
         }
     }
 
-    public function getSeries($kind, $page, $locale): ?string
+    public function getSeries($kind, $page, $locale, $timezone = null): ?string
     {
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/tv/' . $kind . '?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page,
+                'https://api.themoviedb.org/3/tv/' . $kind . '?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . ($timezone?'&timezone='.$timezone:''),
             );
             try {
                 return $response->getContent();

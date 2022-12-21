@@ -187,12 +187,9 @@ class GetTheMovieDatabaseTVCommand extends Command
                                 $viewing = new SerieViewing();
                                 $viewing->setUser($user);
                                 $viewing->setSerie($serie);
-                                $viewing->setViewing($this->serieController->createViewingTab($tv));
                                 $viewing->setViewedEpisodes(0);
-                            } else {
-                                $viewing->setViewing($this->serieController->updateViewing($tv, $viewing, $this->viewingRepository));
                             }
-                            $this->viewingRepository->add($viewing, true);
+                            $this->viewingRepository->save($viewing, true);
                             $n = $viewing->getViewedEpisodes();
                             $io->success($serie->getName() . ' : ' . $n . ' / ' . $serie->getNumberOfEpisodes() . ' épisode' . ($n > 1 ? 's' : ''));
                         }

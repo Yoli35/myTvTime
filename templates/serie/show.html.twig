@@ -11,8 +11,6 @@
             MyTvTime::{{ 'Series On The Air'|trans }}::{{ serie.name }}
         {% elseif from == 'search' %}
             MyTvTime::{{ 'Series search'|trans }}::{{ serie.name }}
-        {% elseif from == 'latest' %}
-            MyTvTime::{{ 'Latest Serie'|trans }}::{{ serie.name }}
         {% else %}
             MyTvTime::{{ 'My Series'|trans }}::{{ serie.name }}
         {% endif %}
@@ -35,8 +33,6 @@
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series On The Air', url: path('app_serie_on_the_air')~'?p='~page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'search' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: page})~'?query='~query~'&year='~year~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif from == 'latest' %}
-            {{ include('blocks/_nav.html.twig', {thisPage: serie.name}) }}
         {% else %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~page~'&b=1#'~backId}, thisPage: serie.name}) }}
         {% endif %}
@@ -247,52 +243,54 @@
                         <div class="seasons">
                             {% set globalIndex = 1 %}
                             {% for season in serie.seasons %}
-                                {% set url = path('app_serie_tmdb_season', {id: serie.id, seasonNumber: season.season_number})~'?from='~from~'&p='~page %}
-                                {% if query is defined %} {% set url = url ~ '&query=' ~ query %}{% endif %}
-                                {% if year is defined %} {% set url = url ~ '&year=' ~ year %}{% endif %}
-                                {% if backId is defined %} {% set url = url ~ '&back=' ~ backId %}{% endif %}
-                                <a href="{{ url }}">
-                                    <div class="season">
-                                        <div class="poster">
-                                            {% if season.poster_path|length %}
-                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
-                                            {% else %}
-                                                {% if serie.poster_path %}
-                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ season.name }}">
+                                {% if season.season_number %}
+                                    {% set url = path('app_serie_tmdb_season', {id: serie.id, seasonNumber: season.season_number})~'?from='~from~'&p='~page %}
+                                    {% if query is defined %} {% set url = url ~ '&query=' ~ query %}{% endif %}
+                                    {% if year is defined %} {% set url = url ~ '&year=' ~ year %}{% endif %}
+                                    {% if backId is defined %} {% set url = url ~ '&back=' ~ backId %}{% endif %}
+                                    <a href="{{ url }}">
+                                        <div class="season">
+                                            <div class="poster">
+                                                {% if season.poster_path|length %}
+                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
                                                 {% else %}
-                                                    <img src="/images/default/no_poster.png" alt="{{ season.name }}">
-                                                {% endif %}
-                                            {% endif %}
-                                        </div>
-                                        <div class="infos">
-                                            <h4>{{ season.name }}</h4>
-                                            {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
-                                            {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
-                                            {% if season.seasonViewing is defined %}
-                                                <div class="details" data-season-number="{{ season.season_number }}">
-                                                    <div>
-                                                        {{ include('blocks/serie/_season_viewing.html.twig', {season: season.seasonViewing}) }}
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                            {% if season.overview|length %}
-                                                <div>{{ season.overview }}</div>
-                                            {% endif %}
-                                            {% if season.air_date %}
-                                                <div>
-                                                    {% if season.air_date < 'now'|date("Y-m-d") %}
-                                                        {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
-                                                    {% elseif season.air_date > 'now'|date("Y-m-d") %}
-                                                        {{ 'The season season_number of serie_name will be aired from the season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
+                                                    {% if serie.poster_path %}
+                                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ season.name }}">
                                                     {% else %}
-                                                        {{ 'The season season_number of serie_name is aired from today.'|trans({"season_number": season.season_number, "serie_name": serie.name}) }}
+                                                        <img src="/images/default/no_poster.png" alt="{{ season.name }}">
                                                     {% endif %}
-                                                </div>
-                                            {% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="infos">
+                                                <h4>{{ season.name }}</h4>
+                                                {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
+                                                {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
+                                                {% if season.seasonViewing is defined %}
+                                                    <div class="details" data-season-number="{{ season.season_number }}">
+                                                        <div>
+                                                            {{ include('blocks/serie/_season_viewing.html.twig', {season: season.seasonViewing}) }}
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if season.overview|length %}
+                                                    <div>{{ season.overview }}</div>
+                                                {% endif %}
+                                                {% if season.air_date %}
+                                                    <div>
+                                                        {% if season.air_date < 'now'|date("Y-m-d") %}
+                                                            {{ 'The season season_number of serie_name aired from season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
+                                                        {% elseif season.air_date > 'now'|date("Y-m-d") %}
+                                                            {{ 'The season season_number of serie_name will be aired from the season_air_date.'|trans({"season_number": season.season_number, "serie_name": serie.name, "season_air_date": (season.air_date|format_date('medium'))}) }}
+                                                        {% else %}
+                                                            {{ 'The season season_number of serie_name is aired from today.'|trans({"season_number": season.season_number, "serie_name": serie.name}) }}
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
-                                {% set globalIndex = globalIndex + season.episode_count %}
+                                    </a>
+                                    {% set globalIndex = globalIndex + season.episode_count %}
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </section>
