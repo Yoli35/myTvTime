@@ -68,6 +68,7 @@
                     <img src="https://api.qrcode-monkey.com/qr/custom?data=https://www.youtube.com/watch?v={{ video.link }}">
                 </div>
             </div>
+            <div class="copied-text">{{ 'Copied!'|trans }}</div>
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}
@@ -124,10 +125,25 @@
                 });
             });
 
-            copy.addEventListener("click", () => {
+            copy.addEventListener("click", (evt) => {
+                const mouseX = evt.pageX, mouseY = evt.pageY;
+                const copied = document.querySelector(".copied-text");
                 navigator.clipboard.writeText("https://youtu.be/{{ video.link }}");
                 copy.classList.add("copied");
-                setTimeout(()=> {copy.classList.remove("copied")}, 600);
+                setTimeout(() => {
+                    copy.classList.remove("copied")
+                }, 500);
+                copied.style.top = (mouseY - (copied.clientHeight / 2)) + "px";
+                copied.style.left = (mouseX - (copied.clientWidth / 2)) + "px";
+                setTimeout(() => {
+                    copied.classList.add("visible", "move-up");
+                }, 0);
+                setTimeout(() => {
+                    copied.classList.remove("visible");
+                }, 400);
+                setTimeout(() => {
+                    copied.classList.remove("move-up");
+                }, 1000);
             })
 
             function initDeleteDialog(dialog) {

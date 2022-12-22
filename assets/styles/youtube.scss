@@ -307,6 +307,7 @@
     .the-video {
         @include flex-100(start, start);
         gap: 1em;
+        position: relative;
 
         .details {
             width: 80%;
@@ -316,6 +317,7 @@
 
                 .title-trash {
                     @include flex-100();
+                    gap: 1em;
 
                     .title {
                         font-size: 1.5em;
@@ -331,14 +333,12 @@
                     .copy, .trash {
                         cursor: pointer;
                         font-size: 1.5em;
-                        margin-left: 1em;
                     }
 
                     .copy {
-                        transition: color 250ms ease-in-out, rotate 500ms ease-in-out;
+                        transition: rotate 500ms ease-in-out;
 
                         &.copied {
-                            color: red;
                             rotate: 1turn;
                         }
                     }
@@ -448,6 +448,39 @@
                 width: 100%;
             }
         }
+    }
+
+    .copied-text {
+        background-color: var(--gradiant-green-30);
+        border-radius: .25em;
+        color: var(-gradiant-grey-100);
+        font-weight: bold;
+        opacity: 0;
+        padding: .25em .5em;
+        position: absolute;
+        transform: scale(.25);
+        transition: transform 600ms ease-out;
+
+        &.visible {
+            animation: appearance 3s ease-out;
+        }
+
+        &.move-up {
+            transform: scale(2) translateY(-80px);
+        }
+
+        @keyframes appearance {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
     }
 }
 
