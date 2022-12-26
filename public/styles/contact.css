@@ -1,0 +1,13 @@
+.container {
+    background-color: hsl(0, 0%, 10%);
+    color: hsl(0, 0%, 90%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    padding: 2em;
+}
+
+code {
+    background-color: hsl(0, 0%, 20%);
+    border-radius: .5em;
+    color: hsl(204, 72%, 74%);
+    padding: 1em;
+}

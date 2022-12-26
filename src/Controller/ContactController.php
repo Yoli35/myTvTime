@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\ContactType;
+use App\Service\FileUploader;
 use App\Service\LogService;
 use App\Service\MailerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,7 @@ class ContactController extends AbstractController
 
     public function __construct(private readonly LogService          $logService,
                                 private readonly MailerService       $mailerService,
+                                private readonly FileUploader        $fileUploader,
                                 private readonly TranslatorInterface $translator)
     {
     }
@@ -36,9 +38,15 @@ class ContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $contactFormData = $form->getData();
-            $subject = $this->translator->trans('Contact request from') . ' ' . $contactFormData['email'];
-            $content = $contactFormData['username'] . ' ' . $this->translator->trans('sent you the following message') . ': ' . $contactFormData['message'];
-            $this->mailerService->sendEmail(subject: $subject, content: $content);
+            $image = $contactFormData['image'];
+            $imagePath = '';
+            $imageFilename = '';
+            if ($image) {
+                $imageFilename = $this->fileUploader->upload($image, 'contact');
+                $imagePath = $this->fileUploader->getTargetDirectory('contact') . '/' . $imageFilename;
+            }
+            $subject = $this->translator->trans('Contact request from') . ' ' . $contactFormData['username'];
+            $this->mailerService->sendEmail(subject: $subject, contact: $contactFormData, imagePath: $imagePath, image: $imageFilename);
             $this->addFlash('success', $this->translator->trans('Your message has been successfully send.'));
             $this->addFlash('warning', $this->translator->trans('It may take a few days to receive a response.'));
 

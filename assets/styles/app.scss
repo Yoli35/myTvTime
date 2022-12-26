@@ -62,6 +62,7 @@ body {
     z-index: 119;
 
     .flash-message {
+        border: 1px solid;
         border-radius: .5em;
         height: 3.5em;
         margin: 1em 16em;
@@ -72,16 +73,19 @@ body {
 
         &.success {
             background-color: var(--gradiant-green-40);
+            border-color: var(--gradiant-green-90);
             color: var(--gradiant-green-90);
         }
 
         &.warning {
             background-color: var(--gradiant-mars-40);
+            border-color: var(--gradiant-mars-90);
             color: var(--gradiant-mars-90);
         }
 
         &.danger {
             background-color: var(--gradiant-red-40);
+            border-color: var(--gradiant-red-90);
             color: var(--gradiant-red-90);
         }
 

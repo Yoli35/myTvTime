@@ -54,6 +54,7 @@ class FileUploader
             'event_banner' => $this->targetDirectory[4],
             'collection_thumbnail' => $this->targetDirectory[6],
             'collection_banner' => $this->targetDirectory[7],
+            'contact' => $this->targetDirectory[8],
             default => '',
         };
     }

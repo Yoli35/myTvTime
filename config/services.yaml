@@ -16,6 +16,7 @@ parameters:
     event_s_thumbnail_directory: '%kernel.project_dir%/public/images/events/thumbnails'
     event_s_banner_directory: '%kernel.project_dir%/public/images/events/banners'
     event_s_images_directory: '%kernel.project_dir%/public/images/events/images'
+    contact_images_directory: '%kernel.project_dir%/public/images/contact'
 
 services:
     # default configuration for services in *this* file
@@ -40,5 +41,6 @@ services:
             $targetDirectory: [
                 '%avatars_directory%', '%banners_directory%', '%article_images_directory%',
                 '%event_s_thumbnail_directory%', '%event_s_banner_directory%', '%event_s_images_directory%',
-                '%collection_s_thumbnail_directory%', '%collection_s_banner_directory%'
+                '%collection_s_thumbnail_directory%', '%collection_s_banner_directory%',
+                '%contact_images_directory%'
             ]
