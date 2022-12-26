@@ -8,7 +8,7 @@
     <div class="container">
         <div class="my-collections-page">
 
-            {{ include('blocks/_nav.html.twig', {thisPage: 'My Collections'}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage: 'My Collections'|trans}) }}
             {{ include('blocks/source/_button.html.twig') }}
 
             <div class="add-collection"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>

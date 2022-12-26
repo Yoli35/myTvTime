@@ -129,29 +129,31 @@
     }
 
     .parameters {
-        @include flex-100(center, space-between);
+        @include flex-100(start, space-between);
         background-color: var(--gradiant-grey-90);
         border-radius: .5em;
         box-shadow: 0 0 1em rgba(0, 0, 0, .5);
         gap: 1em;
         margin: 0 auto;
-        padding: 0 1em;
+        padding: .5em 1em;
         overflow: hidden;
         position: sticky;
         top: 3em;
         z-index: 40;
 
-        .title, .icon {
+        .title {
             flex-shrink: 0;
+            margin-top: .5em;
         }
 
         .icon {
+            flex-shrink: 0;
             cursor: pointer;
         }
 
         .content {
             @include flex-col(center, space-around);
-            padding: 1em;
+            padding: .5em;
 
             label {
                 font-weight: 100;

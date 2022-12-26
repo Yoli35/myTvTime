@@ -54,6 +54,53 @@ body {
     margin: 0;
 }
 
+.flash-messages {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 119;
+
+    .flash-message {
+        border-radius: .5em;
+        height: 3.5em;
+        margin: 1em 16em;
+        opacity: 1;
+        padding: 1em;
+        position: relative;
+        transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, padding 500ms ease-in-out;
+
+        &.success {
+            background-color: var(--gradiant-green-40);
+            color: var(--gradiant-green-90);
+        }
+
+        &.warning {
+            background-color: var(--gradiant-mars-40);
+            color: var(--gradiant-mars-90);
+        }
+
+        &.danger {
+            background-color: var(--gradiant-red-40);
+            color: var(--gradiant-red-90);
+        }
+
+        .close {
+            cursor: pointer;
+            position: absolute;
+            right: .5em;
+            top: .5em;
+        }
+
+        &.hide {
+            height: 0;
+            opacity: 0;
+            margin: 0 1em;
+            padding: 0 1em;
+        }
+    }
+}
+
 .reload {
     @include flex-100();
     inset: 0;
@@ -343,7 +390,7 @@ main {
     left: 0;
     padding: 1em;
     position: fixed;
-    transform: translateY(-100%);
+    transform: translateY(calc(-100% - 72px));
     transition: transform .3s cubic-bezier(.73, .11, .67, .84);
     width: 100vw;
     z-index: 120;
@@ -452,6 +499,7 @@ nav.active {
         .connexion {
             > a {
                 background-color: var(--gradiant-grey-100);
+
                 &:hover {
                     background-color: var(--gradiant-grey-40);
                     color: var(--gradiant-grey-90);

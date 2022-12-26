@@ -90,6 +90,17 @@ Current password: Mot de passe actuel
 New password: Nouveau mot de passe
 Confirm new password: Confirmer le mot de passe
 
+# Contact
+Subject: Sujet
+Message: Message
+Image (JPG, PNG file): Image (JPG, PNG file)
+Send: Envoyer
+Contact: Contact
+Drop a image file: Cliquer ou déposer un image
+Contact request from: Demande de contact sur votre site de
+sent you the following message : vous a envoyé le message suivant
+Your message has been successfully send.: Votre message a été envoyé avec succès.
+It may take a few days to receive a response.: Il est possible que vous constatiez un délai de quelques jours avant d\'obtenir une réponse.
 # Home Paginator
 First Page: Première page
 Last Page: Dernière page
@@ -140,6 +151,9 @@ Color: Couleur
 Thumbnail Image (JPG, PNG file): Vignette (format JPG, PNG)
 Click here or drop a thumbnail image file: Cliquez ici ou déposez une image de la miniature
 Click here or drop a banner image file: Cliquez ici ou déposez une image de la bannière
+# delete collection
+Delete this collection?: Supprimer cette collection?
+Do you really want to delete this collection?: Voulez-vous vraiment supprimer cette collection?
 
 # User Series
 First Air at: Première diffusion

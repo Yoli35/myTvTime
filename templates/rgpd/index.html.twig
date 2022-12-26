@@ -8,6 +8,8 @@
         {{ include('blocks/_mainMenu.html.twig') }}
         <div class="rgpd-header"></div>
 
+        {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('Confidentiality policy'|trans)}) }}
+
         <h1>Politique de confidentialité</h1>
         <div><strong>Définitions :<br></strong><br></div>
         <ul>

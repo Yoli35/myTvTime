@@ -696,6 +696,46 @@
     }
 }
 
+.contact {
+
+    .details {
+        @include flex-100();
+
+        form {
+            @include mtt-form(0deg);
+
+            .form-row {
+                &.center {
+                    justify-content: center;
+                }
+            }
+
+            .field {
+                input {
+                    width: 100%;
+                }
+                textarea {
+                    padding: .25em 1em;
+                    width: 100%;
+                }
+
+                &:has(textarea) {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 768px) {
+        .details {
+            .field {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+        }
+    }
+}
+
 @media (min-width: 575.98px) {
 
     .user-account {

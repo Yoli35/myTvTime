@@ -134,22 +134,20 @@
             "{{ path('app_movie_get_rating') }}",
             "{{ path('app_movie_set_rating') }}",
         ];
+        const paths2 = [
+            "{{ path('app_personal_movies_export') }}",
+            "{{ path('app_json_ids') }}",
+            "{{ path('app_personnel_movie_add') }}",
+            "{{ path('app_json_cleanup') }}",
+            "{{ path('app_json_sample') }}",
+            "{{ path('app_movie', {id: 0}) }}",
+            "{{ path('app_personal_movies_more') }}",
+            "{{ path('app_collection_show', {id: 0}) }}"
+        ];
         window.addEventListener("DOMContentLoaded", () => {
-            initButtons(
-                    {{ user.id }},
-                "{{ locale }}",
-                [
-                    "{{ path('app_personal_movies_export') }}",
-                    "{{ path('app_json_ids') }}",
-                    "{{ path('app_personnel_movie_add') }}",
-                    "{{ path('app_json_cleanup') }}",
-                    "{{ path('app_json_sample') }}",
-                    "{{ path('app_movie', {id: 0}) }}",
-                    "{{ path('app_personal_movies_more') }}",
-                    "{{ path('app_collection_show', {id: 0}) }}"
-                ],
-                "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}",
-            );
+            initButtons({{ user.id }}, "{{ locale }}", paths2, "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}");
+            initMovieStuff(paths, "", "{{ locale }}");
+
             let _app_personal_movie_collection = "{{ path('app_personal_movie_collection', {id: 1}) }}";
             let _app_movie = "{{ path('app_movie', {id:0}) }}";
             let url = "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}";
@@ -333,8 +331,6 @@
                     }, 0);
                 }
             }
-
-            initMovieStuff(paths, "", "{{ locale }}");
         })
     </script>
 {% endblock %}

@@ -26,6 +26,16 @@
 </head>
 <body>
 {# {% include '_notyf.html.twig' %} #}
+<div class="flash-messages">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-message {{ label }}">
+                {{ message }}
+                <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
 {% block body %}{% endblock %}
 {% block morejs %}{% endblock %}
 {% include "_cookie-consent.html.twig" %}

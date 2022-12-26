@@ -124,7 +124,8 @@
 
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         let friends, friendRequests;
 

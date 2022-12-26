@@ -8,7 +8,7 @@
 
         <div class="home-header"></div>
 
-        {{ include('blocks/_nav.html.twig', {thisPage: 'Home Page', user: app.user}) }}
+        {{ include('blocks/_nav.html.twig', {thisPage: 'Home'|trans, user: app.user}) }}
         {{ include('blocks/source/_button.html.twig') }}
 
         {% for list in lists %}
@@ -56,7 +56,6 @@
     </div>
 
     {{ show_source_code(_self) }}
-
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

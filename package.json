@@ -1,18 +1,19 @@
 {
     "devDependencies": {
-        "@hotwired/stimulus": "^3.0.0",
-        "@popperjs/core": "^2.11.5",
+        "@babel/code-frame": "^7.18.6",
+        "@hotwired/stimulus": "^3.2.1",
+        "@popperjs/core": "^2.11.6",
         "@symfony/stimulus-bridge": "^3.0.0",
         "@symfony/ux-dropzone": "file:vendor/symfony/ux-dropzone/assets",
         "@symfony/ux-live-component": "file:vendor/symfony/ux-live-component/assets",
-        "@symfony/webpack-encore": "^1.7.0",
-        "bootstrap": "^5.1.3",
+        "@symfony/webpack-encore": "^4.2.0",
+        "bootstrap": "^5.2.3",
         "bs-custom-file-input": "^1.3.4",
-        "core-js": "^3.0.0",
-        "node-sass": "^7.0.1",
-        "regenerator-runtime": "^0.13.2",
-        "sass-loader": "^13.0.2",
-        "webpack-notifier": "^1.6.0"
+        "core-js": "^3.26.1",
+        "node-sass": "^8.0.0",
+        "regenerator-runtime": "^0.13.11",
+        "sass-loader": "^13.2.0",
+        "webpack-notifier": "^1.15.0"
     },
     "license": "UNLICENSED",
     "private": true,
@@ -23,8 +24,12 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@babel/core": "^7.20.7",
+        "@babel/preset-env": "^7.16.0",
         "bs-modal": "^1.0.5",
         "highlight.js": "^11.7.0",
-        "notyf": "^3.10.0"
+        "notyf": "^3.10.0",
+        "webpack": "^5.72",
+        "webpack-cli": "^5.0.1"
     }
 }

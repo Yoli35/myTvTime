@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime::{{ 'Contact'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {{ include('blocks/_mainMenu.html.twig') }}
+
+        <div class="contact">
+
+            {{ include('blocks/_nav.html.twig', {thisPage: 'Contact'|trans}) }}
+
+            <div class="details">
+                {{ form_start(form) }}
+                <div class="form-row">
+                    <div class="field">
+                        <label for="{{ form.username.vars.id }}" class="{{ form.username.vars.required ? 'required' }}">
+                            <div>{{ form.username.vars.label|trans }}</div>
+                            {{ form_widget(form.username) }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label for="{{ form.email.vars.id }}" class="{{ form.email.vars.required ? 'required' }}">
+                            <div>{{ form.email.vars.label|trans }}</div>
+                            {{ form_widget(form.email) }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="field">
+                        <label for="{{ form.subject.vars.id }}" class="{{ form.subject.vars.required ? 'required' }}">
+                            <div>{{ form.subject.vars.label|trans }}</div>
+                            {{ form_widget(form.subject) }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="field">
+                        <label for="{{ form.message.vars.id }}" class="{{ form.message.vars.required ? 'required' }}">
+                            <div>{{ form.message.vars.label|trans }}</div>
+                            {{ form_widget(form.message) }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row center">
+                    <div class="field">
+                        <label for="{{ form.image.vars.id }}" class="{{ form.image.vars.required ? 'required' }}">
+                            <div>{{ form.image.vars.label|trans }}</div>
+                            {{ form_widget(form.image) }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row right">
+                    {{ form_widget(form.save, {'label': 'Send'}) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+        {{ include('blocks/_pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}
