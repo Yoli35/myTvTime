@@ -461,10 +461,10 @@
         padding: .25em .5em;
         position: absolute;
         transform: scale(.25);
-        transition: transform 600ms ease-out;
+        transition: transform 1000ms ease-out;
 
         &.visible {
-            animation: appearance 3s ease-out;
+            animation: appearance 1500ms ease-out;
         }
 
         &.move-up {
@@ -472,10 +472,7 @@
         }
 
         @keyframes appearance {
-            0% {
-                opacity: 1;
-            }
-            50% {
+            20% {
                 opacity: 1;
             }
             100% {

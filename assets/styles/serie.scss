@@ -235,8 +235,18 @@
                         z-index: 10;
 
                         &.start-watching {
-                            background-color: var(--gradiant-mars-30);
+                            background-color: var(--gradiant-mars-50);
                             color: var(--gradiant-mars-90);
+                        }
+
+                        &.more-to-come {
+                            background-color: var(--gradiant-ardoise-50);
+                            color: var(--gradiant-ardoise-90);
+                        }
+
+                        &.that-s-all {
+                            background-color: var(--gradiant-grey-50);
+                            color: var(--gradiant-grey-90);
                         }
                     }
 

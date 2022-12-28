@@ -17,7 +17,11 @@
                 <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ serie.networks.0.logoPath }}" alt="{{ 'Network' }}">
             </div>
         {% endif %}
-        <div class="status{% if serie.viewing.viewedEpisodes == 0 %} start-watching {% endif %}">
+        <div class="status
+            {% if serie.viewing.viewedEpisodes == 0 %} start-watching {% endif %}
+            {% if serie.viewing.serieCompleted and  serie.status in ["Returning Series"] %} more-to-come {% endif %}
+            {% if serie.viewing.serieCompleted and  serie.status in ["Ended","Canceled"] %} that-s-all {% endif %}
+            ">
             {{ serie.status|trans }} —
             {% if serie.viewing.serieCompleted %}
                 {% if serie.status in ["Ended","Canceled"] %}

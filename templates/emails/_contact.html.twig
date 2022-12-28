@@ -3,7 +3,7 @@
         <h1>{{ 'New contact message from'|trans }} {{ contact.username }}</h1>
         <p>{{ 'Email address of the user'|trans }} : {{ contact.email }}</p>
         <p>{{ 'Content of the message'|trans }} :</p>
-        <p><code>{{ contact.message|nl2br }}</code></p>
+        <div class="message">{{ contact.message|nl2br }}</div>
         {% if image|length %}
             <div><img src="{{ email.image('@images/'~image) }}" alt="{{ 'Image attachment'|trans }}"></div>
         {% endif %}

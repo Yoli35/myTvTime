@@ -97,10 +97,6 @@ class YoutubeAddVideoComponent
         list($this->preview_url, $this->preview_title) = $this->get_preview();
     }
 
-    /**
-     * @throws Exception
-     * @throws \Exception
-     */
     public function newVideo(): array
     {
 
@@ -120,17 +116,19 @@ class YoutubeAddVideoComponent
             $thisLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $thisLink);
         } elseif (str_contains($thisLink, 'watch')) {
             // https://www.youtube.com/watch?v=at9h35V8rtQ
-            $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=(.+)/", "$1", $thisLink);
+            // https://www.youtube.com/watch?v=IzHJ7Jnj2LU&pp=wgIGCgQQAhgB
+            $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?>&[a-z_-]+=.+)*/", "$1", $thisLink);
         }
 
         if (strlen($thisLink) == 11) {
 
             $link = $this->videoRepository->findOneBy(['link' => $thisLink]);
 
-            // Si le lien n'a pas déjà été ajouté
+            // Si le lien n'a pas déjà été ajouté 12345678912
             if ($link == null) {
 
                 $videoListResponse = $this->getVideoSnippet($thisLink);
+                dump($videoListResponse);
                 $items = $videoListResponse->getItems();
                 $item = $items[0];
                 $snippet = $item['snippet'];
@@ -288,7 +286,6 @@ class YoutubeAddVideoComponent
     private function getTime2human(): string
     {
         $ss = $this->totalRuntime;
-
         if ($ss) {
             $l = $this->locale;
             $words = ["timeSpent1" => ["en" => "Time spent watching Youtube", "fr" => "Temps passé devant youtube", "es" => "Tiempo dedicado a ver Youtube", "de" => "Zeit, die Sie mit Youtube verbracht haben"], "timeSpent2" => ["en" => "secondes i.e.", "fr" => "secondes c.à.d.", "es" => "segundos, es decir,", "de" => "Sekunden d.h."], "month" => ["en" => "month", "fr" => "mois", "es" => "mes", "de" => "Monat"], "months" => ["en" => "months", "fr" => "mois", "es" => "meses", "de" => "Monate"], "day" => ["en" => "day", "fr" => "jour", "es" => "día", "de" => "Tag"], "days" => ["en" => "days", "fr" => "jours", "es" => "días", "de" => "Tage"], "hour" => ["en" => "hour", "fr" => "heure", "es" => "hora", "de" => "Stunde"], "hours" => ["en" => "hours", "fr" => "heures", "es" => "horas", "de" => "Stunden"], "minute" => ["en" => "minute", "fr" => "minute", "es" => "minuto", "de" => "Minute"], "minutes" => ["en" => "minutes", "fr" => "minutes", "es" => "minutos", "de" => "Minuten"], "seconde" => ["en" => "seconde", "fr" => "seconde", "es" => "segundo", "de" => "Sekunde"], "secondes" => ["en" => "secondes", "fr" => "secondes", "es" => "segundos", "de" => "Sekunden"], "and" => ["en" => "and", "fr" => "et", "es" => "y", "de" => "und"],];

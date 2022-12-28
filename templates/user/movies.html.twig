@@ -256,9 +256,12 @@
 
             function showAbout(evt) {
                 const body = document.querySelector("body");
+                let { pageX: x, pageY: y } = evt;
                 const width = body.clientWidth;
                 const middleX = width / 2;
                 const movie = evt.target;
+                console.log({x});
+                console.log({y});
                 // let movie;
                 //
                 // if (evt.target.classList.contains("movie"))
@@ -271,8 +274,9 @@
                 const id = movie.getAttribute("data-id");
                 const selector = '.about-pinned-movie[data-id="' + id + '"]';
                 const about = document.querySelector(selector);
-                let style, x, y = evt.pageY + 20;
+                let style/*, x, y = evt.pageY + 20*/;
 
+                y += 20;
                 if (evt.pageX < middleX) {
                     x = evt.pageX - 288;
                     x = x < 16 ? 16 : x;

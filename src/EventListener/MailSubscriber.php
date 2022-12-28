@@ -29,12 +29,13 @@ class MailSubscriber implements EventSubscriberInterface
     public function onSentMessage(SentMessageEvent $event): void
     {
         $message = $event->getMessage();
-        dump($message->getOriginalMessage());
-        dump($message->getDebug());
+        dump($message);
+//        dump($message->getOriginalMessage());
+//        dump($message->getDebug());
     }
 
     public function onFailedMessage(FailedMessageEvent $event): void
     {
-        dump($event->getError());
+//        dump($event->getError());
     }
 }
