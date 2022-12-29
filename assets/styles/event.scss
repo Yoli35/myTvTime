@@ -190,6 +190,12 @@
             form {
                 @include mtt-form();
             }
+
+            .switch {
+                @include switcher-with-label(11em, var(--gradiant-green-30), var(--gradiant-grey-60));
+                margin-left: unset;
+            }
+
         }
     }
 }

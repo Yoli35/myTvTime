@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -34,7 +35,7 @@ class Article
     private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $updatedAt = null;
+    private ?DateTime $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $publishedAt = null;
@@ -49,17 +50,19 @@ class Article
     private ?string $thumbnail = null;
 
     #[ORM\Column]
-    private ?bool $isPublished = null;
+    private ?bool $isPublished;
 
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    public function __construct()
+    public function __construct($user)
     {
-        $this->setCreatedAt(new \DateTimeImmutable());
-        $this->setUpdatedAt(new \DateTimeImmutable());
+        $this->setUser($user);
+        $this->setCreatedAt(new DateTimeImmutable());
+        $this->setUpdatedAt(new DateTime());
         $this->articleImages = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->isPublished = false;
     }
 
     public function getId(): ?int
@@ -127,12 +130,12 @@ class Article
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeImmutable
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

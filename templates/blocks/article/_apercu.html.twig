@@ -1,4 +1,4 @@
-<div class="article">
+<div class="article" data-id="{{ article.id }}">
     {% if article.banner %}
         <div class="banner" style="background-image: url('/images/articles/banners/{{ article.banner }}')"></div>
     {% endif %}
@@ -19,6 +19,13 @@
                 <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div>
                 <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div>
             </div>
+            {% if article.id in userArticleIds %}
+                <div id="{{ article.id }}" class="tools">
+                    <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
+                    <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
+

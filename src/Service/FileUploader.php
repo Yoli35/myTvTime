@@ -22,7 +22,8 @@ class FileUploader
         $dir = $this->getTargetDirectory($type);
 
         if ($type == 'avatar' || $type == 'banner' ||
-            $type == 'event_thumbnail' || $type == 'event_banner') {
+            $type == 'event_thumbnail' || $type == 'event_banner' ||
+            $type == 'article_thumbnail' || $type == 'article_banner') {
             $fileName = Uuid::uuid4()->toString() . '.' . $file->guessExtension();
         } else {
             $originalFilename = strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
@@ -55,6 +56,8 @@ class FileUploader
             'collection_thumbnail' => $this->targetDirectory[6],
             'collection_banner' => $this->targetDirectory[7],
             'contact' => $this->targetDirectory[8],
+            'article_thumbnail' => $this->targetDirectory[9],
+            'article_banner' => $this->targetDirectory[10],
             default => '',
         };
     }

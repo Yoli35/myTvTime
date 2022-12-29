@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MyTvTime::{{ 'Edit Article'|trans }}{% endblock %}
+{% block description %}{{ 'List of all my articles'|trans }}{% endblock %}
+{% block keywords %}{{ 'article'|trans }}{% endblock %}
+
+{% block body %}
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container">
+        <div class="my-events">
+            <div class="header">
+                <h1>{{ 'Edit article'|trans }}</h1>
+                <div class="backdrop"></div>
+            </div>
+
+            {{ include('blocks/_nav.html.twig', {thisPage:('Edit article'|trans), parent: {url: path('app_blog'), page: 'Blog'|trans}}) }}
+
+            <main>
+                {{ include('blocks/article/_form.html.twig') }}
+            </main>
+
+        </div>
+        {{ include('blocks/_pagefooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block morejs %}
+    <script src="/js/article.js"></script>
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            initHeader();
+            document.querySelector(".header").setAttribute("style", "background: transparent;");
+            document.querySelector("#article_save").innerHTML = "{{ "Update the article"|trans }}";
+        })
+    </script>
+{% endblock %}

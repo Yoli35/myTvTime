@@ -9,7 +9,7 @@ parameters:
 
     avatars_directory: '%kernel.project_dir%/public/images/users/avatars'
     banners_directory: '%kernel.project_dir%/public/images/users/banners'
-    article_images_directory: '%kernel.project_dir%/public/images/articles/images'
+    article_s_images_directory: '%kernel.project_dir%/public/images/articles/images'
     movie_list_directory: '%kernel.project_dir%/public/movielist'
     collection_s_thumbnail_directory: '%kernel.project_dir%/public/images/collections/thumbnails'
     collection_s_banner_directory: '%kernel.project_dir%/public/images/collections/banners'
@@ -17,6 +17,8 @@ parameters:
     event_s_banner_directory: '%kernel.project_dir%/public/images/events/banners'
     event_s_images_directory: '%kernel.project_dir%/public/images/events/images'
     contact_images_directory: '%kernel.project_dir%/public/images/contact'
+    article_s_thumbnail_directory: '%kernel.project_dir%/public/images/articles/thumbnails'
+    article_s_banner_directory: '%kernel.project_dir%/public/images/articles/banners'
 
 services:
     # default configuration for services in *this* file
@@ -39,8 +41,9 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: [
-                '%avatars_directory%', '%banners_directory%', '%article_images_directory%',
+                '%avatars_directory%', '%banners_directory%', '%article_s_images_directory%',
                 '%event_s_thumbnail_directory%', '%event_s_banner_directory%', '%event_s_images_directory%',
                 '%collection_s_thumbnail_directory%', '%collection_s_banner_directory%',
-                '%contact_images_directory%'
+                '%contact_images_directory%',
+                '%article_s_thumbnail_directory%', '%article_s_banner_directory%'
             ]

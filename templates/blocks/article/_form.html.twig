@@ -1,0 +1,46 @@
+<div class="form">
+    {{ form_start(form) }}
+    <div class="form-row">
+        <label for="{{ form.title.vars.id }}" class="{{ form.title.vars.required ? 'required' }}">
+            <div>{{ form.title.vars.label|trans }}</div>
+            {{ form_widget(form.title) }}
+        </label>
+    </div>
+    <div class="form-row">
+        <label for="{{ form.isPublished.vars.id }}" class="{{ form.isPublished.vars.required ? 'required' }} switch">
+            <div>{{ form.isPublished.vars.label|trans }}</div>
+            {{ form_widget(form.isPublished) }}
+            <span></span>
+        </label>
+    </div>
+    <div class="form-row">
+        <label for="{{ form.abstract.vars.id }}" class="{{ form.abstract.vars.required ? 'required' }}">
+            <div>{{ form.abstract.vars.label|trans }}</div>
+            {{ form_widget(form.abstract) }}
+        </label>
+    </div>
+    <div class="form-row">
+        <label for="{{ form.content.vars.id }}" class="{{ form.content.vars.required ? 'required' }}">
+            <div>{{ form.content.vars.label|trans }}</div>
+            {{ form_widget(form.content) }}
+        </label>
+    </div>
+    <div class="form-row">
+        <div class="field">
+            <label for="{{ form.dropThumbnail.vars.id }}" class="{{ form.dropThumbnail.vars.required ? 'required' }}">
+                <div>{{ form.dropThumbnail.vars.label|trans }}</div>
+                {{ form_widget(form.dropThumbnail) }}
+            </label>
+        </div>
+        <div class="field">
+            <label for="{{ form.dropBanner.vars.id }}" class="{{ form.dropBanner.vars.required ? 'required' }}">
+                <div>{{ form.dropBanner.vars.label|trans }}</div>
+                {{ form_widget(form.dropBanner) }}
+            </label>
+        </div>
+    </div>
+    <div class="form-row right">
+        {{ form_widget(form.save) }}
+    </div>
+    {{ form_end(form) }}
+</div>

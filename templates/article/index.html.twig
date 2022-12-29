@@ -19,20 +19,25 @@
 
             <div class="content">
                 <div class="articles">
-                    {% if articles|length %}
-                        {% for article in articles %}
-                            {{ include('/blocks/article/_apercu.html.twig') }}
-                        {% endfor %}
+                    {% for article in articles %}
+                        {{ include('/blocks/article/_apercu.html.twig') }}
                     {% else %}
                         <div class="nothing">
                             <div class="to-show">
                                 {{ 'Nothing to show yet'|trans }}
                             </div>
                         </div>
-                    {% endif %}
+                    {% endfor %}
                 </div>
-                <div class="tools">
-
+                <div class="articles-tools">
+                    <div class="add-article"><i class="fa-solid fa-circle-plus"></i> {{ 'Add article'|trans }}</div>
+                    <div class="list">
+                        <ul>
+                            {% for article in articles %}
+                                <li><a href="{{ path('app_blog_article', {id: article.id}) }}">{{ article.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,15 +45,38 @@
         {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
+    <dialog class="confirm-deletion">
+        <div class="overlay">
+            <div class="header">
+                {{ 'Delete this article?'|trans }}
+                <div class="close"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="content">
+                {{ 'Do you really want to delete this article?'|trans }}
+                <span></span>
+                {{ 'This operation is final and cannot be cancelled.'|trans }}
+            </div>
+            <div class="footer">
+                <button value="nope" class="btn btn-secondary delete-cancel">{{ 'Cancel'|trans }}</button>
+                <button value="yass" class="btn btn-secondary delete-done">{{ 'Delete'|trans }}</button>
+            </div>
+        </div>
+    </dialog>
 {% endblock %}
 {% block morejs %}
     <script>
+        const locale = "{{ app.request.locale }}";
+        let confirmDialog;
+
         window.addEventListener("DOMContentLoaded", () => {
 
+            confirmDialog = document.querySelector(".confirm-deletion");
             initHeader();
+            initTools(confirmDialog);
             setTimeout(() => {
                 document.querySelector(".header").setAttribute("style", "background-color: transparent");
             }, 0);
+            document.querySelector(".add-article").addEventListener("click", addNewArticle);
 
         })
 
@@ -80,6 +108,103 @@
             left = 32 + ((header.clientWidth - 64) * (1 - ratio));
             bottom = 16 - ((h1.clientHeight / 2) * (1 - ratio));
             h1.setAttribute("style", "left: " + left.toString() + "px; bottom: " + bottom + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
+        }
+
+        function initTools(dialog) {
+            const tools = document.querySelector(".articles").querySelectorAll(".tools");
+            const articles = document.querySelectorAll(".article");
+
+            tools.forEach(tool => {
+                tool.querySelector(".fa-pen-to-square").addEventListener("click", editArticle);
+                tool.querySelector(".fa-trash-can").addEventListener("click", deleteArticle);
+            });
+
+            articles.forEach(article => {
+                article.addEventListener("mouseenter", showTools);
+                article.addEventListener("mouseleave", hideTools);
+            });
+
+
+            dialog.querySelector(".delete-done").addEventListener("click", () => {
+                closeDialog(dialog, true);
+            })
+            dialog.querySelector(".delete-cancel").addEventListener("click", () => {
+                closeDialog(dialog, false);
+            })
+            dialog.querySelector(".close").addEventListener('click', function () {
+                closeDialog(dialog, false);
+            });
+        }
+
+        function openDialog(dialog, id, elem) {
+            const presentation = elem.closest(".presentation");
+            dialog.querySelector("span").innerHTML = presentation.querySelector(".title").innerHTML;
+            dialog.setAttribute("data-id", id);
+
+            if (typeof dialog.showModal === "function") {
+                dialog.showModal();
+                setTimeout(() => {
+                    dialog.classList.add("show")
+                }, 0);
+            } else {
+                console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
+            }
+        }
+
+        function closeDialog(dialog, deleteArticle) {
+            let deletedId = parseInt(dialog.getAttribute("data-id"));
+            dialog.removeAttribute("data-id");
+            dialog.classList.remove("show");
+            setTimeout(() => {
+                dialog.close()
+            }, 300);
+            if (deleteArticle) {
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    const selector = ".article[data-id=\"" + deletedId + "\"]";
+                    const article = document.querySelector(selector);
+                    setTimeout(() => {
+                        article.classList.add("deleted");
+                    }, 0);
+                    setTimeout(() => {
+                        const articles = article.closest(".articles");
+                        articles.removeChild(article);
+                    }, 300);
+                }
+                xhr.open("GET", "/" + locale + "/blog/delete/" + deletedId);
+                xhr.send();
+            }
+        }
+
+        function showTools(evt) {
+            const tools = evt.currentTarget.querySelector(".tools");
+            tools.classList.add("visible");
+        }
+
+        function hideTools(evt) {
+            const tools = evt.currentTarget.querySelector(".tools");
+            tools.classList.remove("visible");
+        }
+
+        function addNewArticle(evt) {
+            evt.currentTarget.classList.add("click");
+            setTimeout(() => {
+                window.location.href = "{{ path('app_blog_new') }}";
+            }, 100);
+        }
+
+        function editArticle(evt) {
+            const id = evt.currentTarget.parentElement.getAttribute("id");
+            console.log('edit', {id});
+            evt.preventDefault();
+            window.location.href = "/" + locale + "/blog/edit/" + id;
+        }
+
+        function deleteArticle(evt) {
+            const id = evt.currentTarget.closest(".article").getAttribute("data-id");
+            console.log('delete', {id});
+            evt.preventDefault();
+            openDialog(confirmDialog, id, evt.currentTarget);
         }
     </script>
 {% endblock %}

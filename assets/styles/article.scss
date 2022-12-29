@@ -27,6 +27,7 @@
 
     .content {
         @include flex-100(flex-start, flex-start);
+        gap: 1em;
 
         .articles {
             width: 75%;
@@ -37,6 +38,11 @@
                 border-radius: 1em;
                 margin-bottom: 1em;
                 overflow: hidden;
+                transition: scale 300ms ease-in-out;
+
+                &.deleted {
+                    scale: 0;
+                }
 
                 .banner {
                     background-position: center center;
@@ -71,6 +77,7 @@
                         @include flex-col(flex-start, center);
                         flex: 1;
                         margin-left: 1em;
+                        position: relative;
 
                         .title-author {
                             @include flex-100(baseline, flex-start);
@@ -132,6 +139,10 @@
                                 font-weight: 200;
                                 margin-right: 1em;
                             }
+                        }
+
+                        .tools {
+                            @include crud-tools(1em, 2em);
                         }
                     }
                 }
@@ -286,12 +297,46 @@
             }
         }
 
-        .tools {
-            background-color: var(--gradiant-grey-90);
-            border-radius: 1em;
-            margin-left: 1em;
-            min-height: 50vh;
+        .articles-tools, .article-tools {
+            min-height: 25vh;
             width: calc(25% - 1em);
+
+            .add-article, .edit-article, .delete-article {
+                @include flex-row();
+                align-items: center;
+                background-color: var(--gradiant-grey-50);
+                border-radius: 999em;
+                box-shadow: 0 0 0 var(--gradiant-grey-20);
+                color: var(--gradiant-green-70);
+                cursor: pointer;
+                display: flex;
+                font-weight: 600;
+                height: 4em;
+                transition: translate 100ms ease-out;
+
+                i {
+                    font-size: 2em;
+                    margin-right: .5em;
+                }
+
+                &:hover {
+                    box-shadow: 0 4px 0 var(--gradiant-grey-20);
+                    translate: 0 -4px;
+                }
+
+                &.click {
+                    box-shadow: 0 0 0 var(--gradiant-grey-20);
+                    translate: 0 0;
+                }
+            }
+
+            .edit-article, .delete-article {
+                margin-bottom: 1em;
+            }
+
+            .list {
+                margin: 1em 2em;
+            }
         }
     }
 
@@ -365,7 +410,7 @@
         transition: background-color .5s, opacity .5s;
 
         &.visible {
-            background-color: var(--gradiant-grey-80)7f;
+            background-color: var(--gradiant-grey-80) 7 f;
             display: flex;
             opacity: 1;
         }
@@ -510,9 +555,6 @@
                     }
                 }
             }
-            .tools {
-                background-color: var(--gradiant-grey-20);
-            }
         }
 
         .table {
@@ -521,7 +563,7 @@
 
         .show {
             &.visible {
-                background-color: var(--gradiant-grey-20)7f;
+                background-color: var(--gradiant-grey-20) 7 f;
             }
         }
     }
