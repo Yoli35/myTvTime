@@ -728,8 +728,10 @@ class SerieController extends AbstractController
                     $episode->setViewedAt(new DateTimeImmutable());
 
                     if (!$episode->getAirDate()) {
-                        $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serieId, $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber(), $request->getLocale()), true);
-                        $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
+                        $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber(), $request->getLocale()), true);
+                        if ($episodeTmdb) {
+                            $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
+                        }
                     }
                     $this->episodeViewingRepository->save($episode, true);
                 }
@@ -746,8 +748,10 @@ class SerieController extends AbstractController
             $episode->setNetworkType(null);
             $episode->setNetworkId(null);
             if (!$episode->getAirDate()) {
-                $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serieId, $season, $episode, $request->getLocale()), true);
-                $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
+                $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $season, $episode, $request->getLocale()), true);
+                if ($episodeTmdb) {
+                    $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
+                }
             }
             $this->episodeViewingRepository->save($episode, true);
             if ($episode->getSeason()->isSeasonCompleted()) {
@@ -804,6 +808,7 @@ class SerieController extends AbstractController
             $this->serieViewingRepository->save($serieViewing, true);
         }
     }
+
     public function setViewedEpisodeCount($serieViewing): void
     {
         $viewedEpisodeCount = 0;

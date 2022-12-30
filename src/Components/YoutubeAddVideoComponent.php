@@ -128,7 +128,7 @@ class YoutubeAddVideoComponent
             if ($link == null) {
 
                 $videoListResponse = $this->getVideoSnippet($thisLink);
-                dump($videoListResponse);
+//                dump($videoListResponse);
                 $items = $videoListResponse->getItems();
                 $item = $items[0];
                 $snippet = $item['snippet'];

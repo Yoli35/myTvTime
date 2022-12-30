@@ -20,7 +20,11 @@
                             <div class="presentation">
                                 <div class="title-author">
                                     <div class="title">{{ article.title }}</div>
-                                    <div class="author">{{ 'By'|trans }} {{ article.user.username?:article.user.email }}</div>
+                                    {% if article.user.id == user.id %}
+                                        <div class="author">{{ 'By myself'|trans }}</div>
+                                    {% else %}
+                                        <div class="author">{{ 'By'|trans }} {{ article.user.username?:article.user.email }}</div>
+                                    {% endif %}
                                 </div>
                                 <div class="dates">
                                     <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div>
@@ -104,6 +108,7 @@
         {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
+
     <dialog class="confirm-deletion">
         <div class="overlay">
             <div class="header">

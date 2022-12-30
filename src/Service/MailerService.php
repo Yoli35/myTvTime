@@ -28,7 +28,7 @@ class MailerService
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
-            dump($e);
+//            dump($e);
         }
     }
 }
