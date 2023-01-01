@@ -296,10 +296,19 @@ function toggleSeenStatus(e) {
 function addMovie(badge) {
 
     const id = badge.getAttribute("id");
+    const collections = document.querySelector(".movie-collection");
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
 
         badge.classList.add("yes");
+        if (collections) {
+            setTimeout(()=> {
+                collections.classList.remove("hide");
+            }, 0);
+            setTimeout(()=> {
+                collections.classList.remove("d-none");
+            }, 300);
+        }
         let r = getMovieRating(badge);
         addNotification(txt.movie.add[_loc], "success");
         if (r) addNotification(txt.movie.rating[_loc], "info");
@@ -309,12 +318,20 @@ function addMovie(badge) {
 }
 
 function removeMovie(badge) {
-
     const id = badge.getAttribute("id");
+    const collections = document.querySelector(".movie-collection");
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
 
         badge.classList.remove("yes");
+        if (collections) {
+            setTimeout(()=> {
+                collections.classList.add("hide");
+            }, 0);
+            setTimeout(()=> {
+                collections.classList.add("d-none");
+            }, 300);
+        }
         terminateRating(badge);
         addNotification(txt.movie.remove[_loc], "info");
     }

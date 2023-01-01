@@ -95,6 +95,17 @@ class UserMovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAll();
     }
 
+    public function isInUserMovies($userId, $movieId): array
+    {
+        $sql = 'SELECT * FROM `user_user_movie` t1 WHERE t1.`user_movie_id`=' . $movieId . ' AND t1.`user_id`=' . $userId;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
     public function findUserMovies($userId, $offset = 0): array
     {
         $sql = 'SELECT '

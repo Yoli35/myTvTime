@@ -384,7 +384,16 @@
             .movie-collection {
                 @include flex-col(flex-start, flex-start);
                 margin-top: 2em;
+                transition: opacity 300ms ease-in-out;
                 width: 100%;
+
+                &.hide {
+                    opacity: 0;
+                }
+
+                &.d-none {
+                    display: none;
+                }
 
                 .label {
                     color: var(--gradiant-grey-70);

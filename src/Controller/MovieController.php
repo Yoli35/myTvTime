@@ -188,23 +188,25 @@ class MovieController extends AbstractController
 
         $imageConfig = $imageConfiguration->getConfig();
 
-        $hasBeenSeen = $this->hasBeenSeen($id, $userMovieRepository);
+        $hasBeenSeen = false;//$this->hasBeenSeen($id, $userMovieRepository);
         $collections = [];
         $movieCollectionIds = [];
         $userMovieId = 0;
-        if ($hasBeenSeen) {
-            if ($user) {
-                $collections = $collectionRepository->findBy(['user' => $user]);
-                $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
-                if ($userMovie) {
-                    $userMovieId = $userMovie->getId();
-                    $movieCollections = $userMovie->getMovieCollections();
-                    foreach ($movieCollections as $movieCollection) {
-                        $movieCollectionIds[] = $movieCollection->getId();
-                    }
+
+        if ($user) {
+            $collections = $collectionRepository->findBy(['user' => $user]);
+            $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
+            if ($userMovie) {
+                $hasBeenSeen = count($userMovieRepository->isInUserMovies($user->getId(), $userMovie->getId()));
+
+                $userMovieId = $userMovie->getId();
+                $movieCollections = $userMovie->getMovieCollections();
+                foreach ($movieCollections as $movieCollection) {
+                    $movieCollectionIds[] = $movieCollection->getId();
                 }
             }
         }
+
 
         if (!array_key_exists('release_date', $movieDetail)) {
             $movieDetail['release_date'] = "";
@@ -491,11 +493,6 @@ class MovieController extends AbstractController
         return $userMovieIds;
     }
 
-    public function hasBeenSeen($id, $userMovieRepository): bool
-    {
-        return in_array($id, $this->getUserMovieIds($userMovieRepository));
-    }
-
     #[Route('/movie/collection/toggle', name: 'app_movie_collection_toggle')]
     public function toggleMovieToCollection(Request $request, MovieCollectionRepository $collectionRepository, UserMovieRepository $movieRepository, TranslatorInterface $translator): Response
     {
@@ -627,7 +624,7 @@ class MovieController extends AbstractController
 
         if ($userMovie) {
             $userMovie->removeUser($user);
-            $userMovieRepository->add($userMovie);
+            $userMovieRepository->add($userMovie, true);
         }
 
         return $this->json(['/movie/remove' => 'success']);

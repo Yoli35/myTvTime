@@ -563,6 +563,7 @@ class SerieController extends AbstractController
         $id = $tv['id'];
         $standing = $tmdbService->getTvCredits($id, $request->getLocale());
         $credits = json_decode($standing, true);
+//        dump($credits);
 
         $standing = $tmdbService->getTvKeywords($id, $request->getLocale());
         $keywords = json_decode($standing, true);
