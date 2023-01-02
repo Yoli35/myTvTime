@@ -113,7 +113,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $pendingRequests = $this->friendRepository->findBy(['owner' => $user, 'acceptedAt' => null]);
-        dump($pendingRequests);
+
         foreach ($pendingRequests as $request) {
             dump($request->getCreatedAt());
             $openLetter = ['a', 'e', 'é', 'h', 'i', 'o', 'u'];
