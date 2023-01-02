@@ -63,6 +63,8 @@ body {
 
     .flash-message {
         align-items: center;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border: 1px solid;
         border-radius: .5em;
         display: flex;
@@ -75,25 +77,25 @@ body {
         transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, padding 500ms ease-in-out;
 
         &.success {
-            background-color: var(--gradiant-green-40);
+            background-color: var(--gradiant-green-40-alpha-50);
             border-color: var(--gradiant-green-90);
             color: var(--gradiant-green-90);
         }
 
         &.friendship {
-            background-color: var(--gradiant-purple-40);
-            border-color: var(--gradiant-purple-90);
-            color: var(--gradiant-purple-90);
+            background-color: var(--gradiant-ardoise-40-alpha-50);
+            border-color: var(--gradiant-ardoise-90);
+            color: var(--gradiant-ardoise-90);
 
             button {
-                background-color: var(--gradiant-purple-50);
-                border-color: var(--gradiant-purple-90);
-                color: var(--gradiant-purple-90);
+                background-color: var(--gradiant-ardoise-50);
+                border-color: var(--gradiant-ardoise-90);
+                color: var(--gradiant-ardoise-90);
             }
         }
 
         &.warning {
-            background-color: var(--gradiant-mars-40);
+            background-color: var(--gradiant-mars-40-alpha-50);
             border-color: var(--gradiant-mars-90);
             color: var(--gradiant-mars-90);
         }

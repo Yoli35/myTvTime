@@ -116,9 +116,13 @@ class UserController extends AbstractController
         dump($pendingRequests);
         foreach ($pendingRequests as $request) {
             dump($request->getCreatedAt());
+            $openLetter = ['a', 'e', 'é', 'h', 'i', 'o', 'u'];
+            $name = $request->getRecipient()->getUsername() ?: $request->getRecipient()->getEmail();
+            $firstLetter = strtolower($name)[0];
 
-            $this->addFlash('friendship', "Vous avez une demande d'amitié en attente de la part de "
-                . ($request->getRecipient()->getUsername() ?: $request->getRecipient()->getEmail())
+            $this->addFlash('friendship', "Vous avez une demande d'amitié en attente de la part "
+                . (in_array($firstLetter, $openLetter) ? "d'":"de ")
+                . $name
                 . ", " . $this->dateTimeFormatter->formatDiff($request->getCreatedAt()) . "."
                 . "<button class='btn flash-accept' data-id='" . $request->getId() . "'>".$this->translator->trans("Accept")."</button>"
                 . "<button class='btn flash-reject' data-id='" . $request->getId() . "'>".$this->translator->trans("Reject")."</button>");
