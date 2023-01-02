@@ -140,6 +140,9 @@
     "guzzlehttp/psr7": {
         "version": "2.2.1"
     },
+    "knplabs/knp-time-bundle": {
+        "version": "v1.20.0"
+    },
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
@@ -440,9 +443,6 @@
         "version": "v1.24.0"
     },
     "symfony/polyfill-mbstring": {
-        "version": "v1.24.0"
-    },
-    "symfony/polyfill-php81": {
         "version": "v1.24.0"
     },
     "symfony/process": {

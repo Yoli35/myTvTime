@@ -18,7 +18,10 @@ use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Bundle\TimeBundle\DateTimeFormatter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,13 +34,17 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserController extends AbstractController
 {
     private string $json_header = '"json_format":"myTvTime","json_version":"1.0",';
 
-    public function __construct(private readonly LocaleSwitcher $localeSwitcher,
-                                private readonly LogService     $logService)
+    public function __construct(private readonly LocaleSwitcher      $localeSwitcher,
+                                private readonly LogService          $logService,
+                                private readonly FriendRepository    $friendRepository,
+                                private readonly DateTimeFormatter   $dateTimeFormatter,
+                                private readonly TranslatorInterface $translator)
     {
     }
 
@@ -46,7 +53,8 @@ class UserController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[Route('/{_locale}/personal/profile', name: 'app_personal_profile', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[
+        Route('/{_locale}/personal/profile', name: 'app_personal_profile', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, FriendRepository $friendRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -99,6 +107,44 @@ class UserController extends AbstractController
             'from' => 'profile',
             'locale' => $request->getLocale(),
         ]);
+    }
+
+    public function checkPendingFriendRequest()
+    {
+        $user = $this->getUser();
+        $pendingRequests = $this->friendRepository->findBy(['owner' => $user, 'acceptedAt' => null]);
+        dump($pendingRequests);
+        foreach ($pendingRequests as $request) {
+            dump($request->getCreatedAt());
+
+            $this->addFlash('friendship', "Vous avez une demande d'amitié en attente de la part de "
+                . ($request->getRecipient()->getUsername() ?: $request->getRecipient()->getEmail())
+                . ", " . $this->dateTimeFormatter->formatDiff($request->getCreatedAt()) . "."
+                . "<button class='btn flash-accept' data-id='" . $request->getId() . "'>".$this->translator->trans("Accept")."</button>"
+                . "<button class='btn flash-reject' data-id='" . $request->getId() . "'>".$this->translator->trans("Reject")."</button>");
+        }
+    }
+
+    #[Route('/personal/friendship/accept/{id}', name: 'app_personal_friendship_accept', methods: ['GET'])]
+    public function acceptPendingFriendRequest($id): JsonResponse
+    {
+        $request = $this->friendRepository->find($id);
+        $request->setAcceptedAt(new DateTimeImmutable());
+        $request->setApproved(true);
+        $this->friendRepository->save($request, true);
+
+        return $this->json([]);
+    }
+
+    #[Route('/personal/friendship/reject/{id}', name: 'app_personal_friendship_reject', methods: ['GET'])]
+    public function rejectPendingFriendRequest($id): JsonResponse
+    {
+        $request = $this->friendRepository->find($id);
+        $request->setAcceptedAt(new DateTimeImmutable());
+        $request->setApproved(false);
+        $this->friendRepository->save($request, true);
+
+        return $this->json([]);
     }
 
     #[Route('/{_locale}/personal/friends/', name: 'app_personal_friends', requirements: ['_locale' => 'fr|en|de|es'])]

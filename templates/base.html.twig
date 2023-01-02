@@ -30,7 +30,7 @@
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="flash-message {{ label }}">
-                {{ message }}
+                {{ message|raw }}
                 <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
             </div>
         {% endfor %}

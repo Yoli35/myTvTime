@@ -37,13 +37,6 @@ class ArticleController extends AbstractController
         $this->logService->log($request, $this->getUser());
         $articles = $articleRepository->findByPublishedAtDesc();
 
-        if ($user) {
-            $userArticles = $articleRepository->findBy(['user' => $user]);
-            $userArticleIds = array_map(function ($article) {
-                return $article->getId();
-            }, $userArticles);
-        }
-
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
             'userArticleIds' => $this->getUserArticleIds($user, $articleRepository),
@@ -53,9 +46,6 @@ class ArticleController extends AbstractController
     #[Route('/{_locale}/blog/article/{id}', name: 'app_blog_article', requirements: ['_locale' => 'fr|en|de|es'])]
     public function article(Request $request, $id, ArticleRepository $articleRepository, CommentRepository $commentRepository): Response
     {
-        /** @var User $user */
-        $user = $this->getUser();
-
         $this->logService->log($request, $this->getUser());
         $article = $articleRepository->find($id);
 

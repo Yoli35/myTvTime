@@ -15,9 +15,12 @@
             </div>
             <div class="abstract">{{ article.abstract }}</div>
             <div class="dates">
-                <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div>
-                <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div>
-                <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div>
+                <div class="date" title="{{ article.createdAt|format_datetime() }}">{{ 'Created'|trans }} : {{ article.createdAt|ago }}</div>
+                <div class="date" title="{{ article.updatedAt|format_datetime() }}">{{ 'Updated'|trans }} : {{ article.updatedAt|ago }}</div>
+                <div class="date" title="{{ article.publishedAt|format_datetime() }}">{{ 'Published'|trans }} : {{ article.publishedAt|ago }}</div>
+{#                <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div>#}
+{#                <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div>#}
+{#                <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div>#}
             </div>
             {% if article.id in userArticleIds %}
                 <div id="{{ article.id }}" class="tools">

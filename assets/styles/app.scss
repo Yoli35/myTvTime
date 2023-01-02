@@ -62,9 +62,12 @@ body {
     z-index: 119;
 
     .flash-message {
+        align-items: center;
         border: 1px solid;
         border-radius: .5em;
-        height: 3.5em;
+        display: flex;
+        gap: 1em;
+        //height: 3.5em;
         margin: 1em 16em;
         opacity: 1;
         padding: 1em;
@@ -75,6 +78,18 @@ body {
             background-color: var(--gradiant-green-40);
             border-color: var(--gradiant-green-90);
             color: var(--gradiant-green-90);
+        }
+
+        &.friendship {
+            background-color: var(--gradiant-purple-40);
+            border-color: var(--gradiant-purple-90);
+            color: var(--gradiant-purple-90);
+
+            button {
+                background-color: var(--gradiant-purple-50);
+                border-color: var(--gradiant-purple-90);
+                color: var(--gradiant-purple-90);
+            }
         }
 
         &.warning {
@@ -89,11 +104,15 @@ body {
             color: var(--gradiant-red-90);
         }
 
+        button:first-child {
+            margin-left: auto;
+        }
+
         .close {
             cursor: pointer;
             position: absolute;
             right: .5em;
-            top: .5em;
+            top: .25em;
         }
 
         &.hide {
