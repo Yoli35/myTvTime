@@ -106,9 +106,11 @@ class YoutubeAddVideoComponent
         if (str_contains($thisLink, "shorts")) {
             if (str_contains($thisLink, "www")) {
                 // https://www.youtube.com/shorts/7KFxzeyse2g
+                // https://www.youtube.com/shorts/32UE5jtEZmQ Fail!
                 $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/shorts\/(.+)/", "$1", $thisLink);
             } else {
                 // https://youtube.com/shorts/XxpFBkm5XqI?feature=share
+                // https://youtube.com/shorts/32UE5jtEZmQ?feature=share Fail!
                 $thisLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $thisLink);
             }
         } elseif (str_contains($thisLink, "youtu.be")) {

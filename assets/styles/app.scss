@@ -389,7 +389,9 @@ main {
 
 .nav-new-menu {
     @include flex-col();
-    background-color: var(--gradiant-grey-10-alpha-90);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: var(--gradiant-grey-10-alpha-50);
     gap: 1em;
     left: 0;
     padding: 1em;
@@ -513,7 +515,7 @@ nav.active {
     }
 
     .nav-new-menu {
-        background-color: var(--gradiant-grey-90-alpha-90);
+        background-color: var(--gradiant-grey-80-alpha-50);
 
         a {
             &:hover {

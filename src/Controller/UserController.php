@@ -153,7 +153,7 @@ class UserController extends AbstractController
         $runtime['total'] = $total;
         $runtime['minutes'] = $total % 60;
         $runtime['hours'] = floor($total / 60) % 24;
-        $runtime['days'] = floor($total / 60 / 24) % 30.41666667;
+        $runtime['days'] = floor($total / 60 / 24) % 30;
         $runtime['months'] = floor($total / 60 / 24 / 30.41666667) % 12;
         $runtime['years'] = floor($total / 60 / 24 / 365);
 
