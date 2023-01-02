@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Friend;
 use App\Entity\MovieCollection;
+use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\Type\ChangePasswordType;
 use App\Form\UserType;
 use App\Repository\FriendRepository;
 use App\Repository\MovieCollectionRepository;
+use App\Repository\SettingsRepository;
 use App\Repository\UserMovieRepository;
 use App\Repository\UserRepository;
 use App\Service\BetaSeriesService;
@@ -134,7 +136,7 @@ class UserController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/personal/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function userMovies(Request $request, UserMovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
+    public function userMovies(Request $request, UserMovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
@@ -157,6 +159,15 @@ class UserController extends AbstractController
         $runtime['months'] = floor($total / 60 / 24 / 30.41666667) % 12;
         $runtime['years'] = floor($total / 60 / 24 / 365);
 
+        $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
+        if (!$settings) {
+            $settings = new Settings();
+            $settings->setUser($user);
+            $settings->setName('pinned collection');
+            $settings->setData([["pinned" => 0, "collection_id" => 0]]);
+            $settingsRepository->save($settings, true);
+        }
+
         return $this->render('user/movies.html.twig', [
             'discovers' => $movies,
             'userMovies' => $movieController->getUserMovieIds($userMovieRepository),
@@ -168,6 +179,7 @@ class UserController extends AbstractController
             'dRoute' => 'app_movie',
             'from' => 'user movies',
             'collections' => $collectionRepository->findBy(['user' => $user]),
+            'settings' => $settings,
         ]);
     }
 
@@ -194,15 +206,48 @@ class UserController extends AbstractController
     }
 
     #[Route('/{_locale}/personal/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function getCollection(Request $request, $id, MovieCollectionRepository $collectionRepository, TMDBService $TMDBService, UserMovieRepository $movieRepository): Response
+    public function getCollection(Request $request, $id, MovieCollectionRepository $collectionRepository, TMDBService $TMDBService, UserMovieRepository $movieRepository, SettingsRepository $settingsRepository): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
         /** @var MovieCollection $collection */
         $collection = $collectionRepository->find($id);
         $movies = $this->moviesToArray($request, $collectionRepository->getMoviesByReleaseDate($id, 'DESC'), $TMDBService, $movieRepository);
 
+        $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
+        if (!$settings) {
+            $settings = new Settings();
+            $settings->setUser($user);
+            $settings->setName('pinned collection');
+        }
+        $settings->setData([["pinned" => 1, "collection_id" => $id]]);
+        $settingsRepository->save($settings, true);
+
         return $this->json([
             'title' => $collection->getTitle(),
             'movies' => $movies
+        ]);
+    }
+
+    #[Route('/personal/collection/pin/status', name: 'app_personal_movie_collection_pin_status', methods: ['GET'])]
+    public function setCollectionPinStatus(Request $request, SettingsRepository $settingsRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
+        if (!$settings) {
+            $settings = new Settings();
+            $settings->setUser($user);
+            $settings->setName('pinned collection');
+        }
+        $data = $settings->getData();
+        dump($data);
+        $data[0]['pinned'] = $request->query->get('pin');
+        $settings->setData($data);
+        $settingsRepository->save($settings, true);
+
+        return $this->json([
         ]);
     }
 

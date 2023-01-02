@@ -1002,6 +1002,8 @@ h4 {
 .pinned-collection {
     background-color: var(--gradiant-grey-30-50);
     border-radius: 1em;
+    display: flex;
+    flex-direction: column;
     height: 18em;
     opacity: 0;
     overflow-x: scroll;
@@ -1024,6 +1026,7 @@ h4 {
     .wrapper {
         @include flex-row(start, start);
         gap: 1em;
+        margin: 0 auto;
 
         a {
             .movie {

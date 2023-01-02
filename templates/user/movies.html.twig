@@ -144,6 +144,9 @@
             "{{ path('app_personal_movies_more') }}",
             "{{ path('app_collection_show', {id: 0}) }}"
         ];
+        const pinnedSwitch = {{ settings.data.0.pinned }};
+        const pinnedCollectionId = {{ settings.data.0.collection_id }};
+
         window.addEventListener("DOMContentLoaded", () => {
             initButtons({{ user.id }}, "{{ locale }}", paths2, "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}");
             initMovieStuff(paths, "", "{{ locale }}");
@@ -154,9 +157,16 @@
             document.querySelector('.choose-collection').querySelector('select').addEventListener("change", getCollection);
             document.querySelector('.choose-collection').querySelector('input').addEventListener("change", showHideCollection);
 
-            function getCollection(evt) {
-                const collectionId = evt.target.value;
-                const pinned = document.querySelector(".pinned-collection");
+            getCollection(null);
+
+            function getCollection(evt = null) {
+                let collectionId, pinned = document.querySelector(".pinned-collection");
+
+                if (evt) {
+                    collectionId = evt.target.value;
+                } else {
+                    collectionId = pinnedCollectionId;
+                }
 
                 if (collectionId > 0) {
                     const xhr = new XMLHttpRequest();
@@ -165,7 +175,7 @@
                         const wrapper = document.querySelector(".pinned-collection").querySelector(".wrapper");
                         wrapper.innerHTML = "";
                         let data = JSON.parse(this.response);
-                        console.log({data});
+                        // console.log({data});
                         pinned.querySelector("h4").innerHTML = data.title;
                         data.movies.forEach((item = {id: 0, title: "", original_title: "", poster_path: "", movie_db_id: 0, release_date: "", runtime: 0, description: ""}) => {
                             let a = document.createElement("a");
@@ -227,15 +237,23 @@
                             body.appendChild(about);
                         });
 
-                        if (pinned.classList.contains("hide")) {
-                            pinned.classList.remove("hide");
-                            setTimeout(() => {
+                        if (evt) {
+                            if (pinned.classList.contains("hide")) {
+                                pinned.classList.remove("hide");
+                                setTimeout(() => {
+                                    pinned.classList.remove("mini");
+                                }, 0);
+                                setTimeout(() => {
+                                    pinned.classList.add("show");
+                                }, 0);
+                                document.querySelector('.choose-collection').querySelector('input').checked = true;
+                            }
+                        } else { // on est au chargement de la page
+                            if (pinnedSwitch) {
+                                pinned.classList.remove("hide");
                                 pinned.classList.remove("mini");
-                            }, 0);
-                            setTimeout(() => {
                                 pinned.classList.add("show");
-                            }, 0);
-                            document.querySelector('.choose-collection').querySelector('input').checked = true;
+                            }
                         }
                     }
                     xhr.open("GET", _app_personal_movie_collection.substring(0, _app_personal_movie_collection.length - 1) + collectionId);
@@ -256,7 +274,7 @@
 
             function showAbout(evt) {
                 const body = document.querySelector("body");
-                let { pageX: x, pageY: y } = evt;
+                let {pageX: x, pageY: y} = evt;
                 const width = body.clientWidth;
                 const middleX = width / 2;
                 const movie = evt.target;
@@ -316,6 +334,8 @@
 
             function showHideCollection() {
                 const pinned = document.querySelector(".pinned-collection");
+                let _app_personal_movie_collection_pin_status = "{{ path('app_personal_movie_collection_pin_status') }}";
+                let status;
 
                 if (pinned.classList.contains("show")) {
                     pinned.classList.remove("show");
@@ -325,6 +345,7 @@
                     setTimeout(() => {
                         pinned.classList.add("hide");
                     }, 300);
+                    status = "0";
                 } else {
                     pinned.classList.remove("hide");
                     setTimeout(() => {
@@ -333,7 +354,14 @@
                     setTimeout(() => {
                         pinned.classList.add("show");
                     }, 0);
+                    status = "1"
                 }
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                }
+                xhr.open("GET", _app_personal_movie_collection_pin_status + "?pin=" + status);
+                xhr.send();
             }
         })
     </script>

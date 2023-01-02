@@ -30,12 +30,12 @@
                             <select>
                                 <option value="0">{{ 'Select a collection'|trans }}</option>
                                 {% for c in collections %}
-                                    <option value="{{ c.id }}">{{ c.title }} ({{ c.movies|length }})</option>
+                                    <option value="{{ c.id }}"{% if settings %}{% if settings.data.0.collection_id == c.id %} selected{% endif %}{% endif %}>{{ c.title }} ({{ c.movies|length }})</option>
                                 {% endfor %}
                             </select>
                         </label>
                         <label class="switch">
-                            <input type="checkbox"/>
+                            <input type="checkbox"{% if settings %}{% if settings.data.0.pinned %} checked{% endif %}{% endif %}/>
                             <span></span>
                         </label>
                     </div>
