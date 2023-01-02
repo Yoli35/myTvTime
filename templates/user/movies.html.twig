@@ -237,7 +237,7 @@
                             body.appendChild(about);
                         });
 
-                        if (evt) {
+                        if (evt || pinnedSwitch) {
                             if (pinned.classList.contains("hide")) {
                                 pinned.classList.remove("hide");
                                 setTimeout(() => {
@@ -247,12 +247,6 @@
                                     pinned.classList.add("show");
                                 }, 0);
                                 document.querySelector('.choose-collection').querySelector('input').checked = true;
-                            }
-                        } else { // on est au chargement de la page
-                            if (pinnedSwitch) {
-                                pinned.classList.remove("hide");
-                                pinned.classList.remove("mini");
-                                pinned.classList.add("show");
                             }
                         }
                     }
