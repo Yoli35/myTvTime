@@ -24,6 +24,9 @@
                             {% if list.type=='serie' %}
                                 {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: item, poster_path: item.posterPath}) }}
                             {% endif %}
+                            {% if list.type=='sql serie' %}
+                                {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: item, poster_path: item.poster_path}) }}
+                            {% endif %}
                             {% if list.type=='people' %}
                                 {% if item.profile_path %}
                                     {{ include('blocks/people/_card-home.html.twig', {people: item}) }}

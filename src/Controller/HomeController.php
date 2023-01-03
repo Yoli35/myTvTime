@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\FavoriteRepository;
 use App\Repository\SerieRepository;
-use App\Repository\SerieViewingRepository;
+//use App\Repository\SerieViewingRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\LogService;
 use App\Service\TMDBService;
@@ -21,7 +21,7 @@ class HomeController extends AbstractController
     public function __construct(private readonly TMDBService            $TMDBService,
                                 private readonly UserMovieRepository    $userMovieRepository,
                                 private readonly SerieRepository        $serieRepository,
-                                private readonly SerieViewingRepository $serieViewingRepository,
+//                                private readonly SerieViewingRepository $serieViewingRepository,
                                 private readonly FavoriteRepository     $favoriteRepository,
                                 private readonly ImageConfiguration     $imageConfiguration,
                                 private readonly LogService             $logService
@@ -48,6 +48,8 @@ class HomeController extends AbstractController
             $lastAddedMovies = $this->userMovieRepository->lastAddedMovies($user->getId(), 20);
             $lastAddedSeries = $this->serieRepository->lastAddedSeries($user->getId(), 20);
             $lastUpdatedSeries = $this->serieRepository->lastUpdatedSeries($user->getId(), 20);
+            $lastWatchedSeries = $this->serieRepository->lastWatchedSeries($user->getId(), 20);
+            dump($lastWatchedSeries);
 
             $favorites = $this->favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'serie'], ['createdAt' => 'DESC']);
             $favoriteSerieIds = array_map(function ($favorite) {
@@ -55,10 +57,17 @@ class HomeController extends AbstractController
             }, $favorites);
             $favoriteSeries = $this->serieRepository->findBy(['id' => $favoriteSerieIds]/*, ['updatedAt' => 'DESC']*/);
 
-            $lastModifiedSerieViewings = $this->serieViewingRepository->findBy(['user' => $user], ['modifiedAt' => 'DESC'], 20, 0);
-            $lastModifiedSeries = array_map(function ($serieViewing) {
-                return $serieViewing->getSerie();
-            }, $lastModifiedSerieViewings);
+            /*
+             * Le critère 'viewedEpisodes' => ['>' => 0] devrait générer la clause
+             *    « WHERE viewed_episodes > ? » avec comme paramètre 0
+             * mais génère
+             *    « WHERE viewed_episodes IN ? » avec comme paramètre 0
+             */
+//            $lastModifiedSerieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'viewedEpisodes' => ['>' => 0]], ['modifiedAt' => 'DESC'], 20, 0);
+//            $lastModifiedSeries = array_map(function ($serieViewing) {
+//                return $serieViewing->getSerie();
+//            }, $lastModifiedSerieViewings);
+//            dump($lastModifiedSeries);
 
             $favorites = $this->favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'movie']);
             $favoriteMovieIds = array_map(function ($favorite) {
@@ -97,9 +106,14 @@ class HomeController extends AbstractController
                 ],
                 [
                     'name' => 'last modified series',
-                    'data' => $user ? $lastModifiedSeries : null,
-                    'type' => 'serie',
+                    'data' => $user ? $lastWatchedSeries : null,
+                    'type' => 'sql serie',
                 ],
+//                [
+//                    'name' => 'last modified series',
+//                    'data' => $user ? $lastModifiedSeries : null,
+//                    'type' => 'serie',
+//                ],
                 [
                     'name' => 'last updated series',
                     'data' => $user ? $lastUpdatedSeries : null,
