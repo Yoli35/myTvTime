@@ -115,10 +115,14 @@ class YoutubeAddVideoComponent
             }
         } elseif (str_contains($thisLink, "youtu.be")) {
             // https://youtu.be/at9h35V8rtQ
+            // https://youtu.be/bwzeqRt8dNs Fail!
+            // https://youtu.be/efUA6W5HEv4 Fail!
             $thisLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $thisLink);
         } elseif (str_contains($thisLink, 'watch')) {
             // https://www.youtube.com/watch?v=at9h35V8rtQ
             // https://www.youtube.com/watch?v=IzHJ7Jnj2LU&pp=wgIGCgQQAhgB
+            // https://www.youtube.com/watch?v=bwzeqRt8dNs Fail!
+            // https://www.youtube.com/watch?v=bwzeqRt8dNs&pp=wgIGCgQQAhgB Fail!
             $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?>&[a-z_-]+=.+)*/", "$1", $thisLink);
         }
 

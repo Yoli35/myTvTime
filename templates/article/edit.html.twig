@@ -5,9 +5,9 @@
 {% block keywords %}{{ 'article'|trans }}{% endblock %}
 
 {% block body %}
-    {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
-        <div class="my-events">
+        {{ include('blocks/_mainMenu.html.twig') }}
+        <div class="blog">
             <div class="header">
                 <h1>{{ 'Edit article'|trans }}</h1>
                 <div class="backdrop"></div>
@@ -15,9 +15,9 @@
 
             {{ include('blocks/_nav.html.twig', {thisPage:('Edit article'|trans), parent: {url: path('app_blog'), page: 'Blog'|trans}}) }}
 
-            <main>
+            <div class="content">
                 {{ include('blocks/article/_form.html.twig') }}
-            </main>
+            </div>
 
         </div>
         {{ include('blocks/_pagefooter.html.twig') }}

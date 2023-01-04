@@ -1,10 +1,10 @@
 twig:
-    default_path: '%kernel.project_dir%/templates'
-#    form_themes: ['bootstrap_5_layout.html.twig']
-    paths:
-        '%kernel.project_dir%/public/images/contact': images
-        '%kernel.project_dir%/public/styles': styles
+  default_path: '%kernel.project_dir%/templates'
+  #    form_themes: ['bootstrap_5_layout.html.twig']
+  paths:
+    '%kernel.project_dir%/public/images/contact': images
+    '%kernel.project_dir%/public/styles': styles
 
 when@test:
-    twig:
-        strict_variables: true
+  twig:
+    strict_variables: true

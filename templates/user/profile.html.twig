@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime::{{ 'My account'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {{ include('blocks/_mainMenu.html.twig') }}
+
+        <div class="user-account">
+
+            {{ include('blocks/user/_banner.html.twig') }}
+
+            {{ include('blocks/_nav.html.twig', {thisPage: 'My account'|trans}) }}
+
+            <div class="details">
+                {{ form_start(form) }}
+                <div class="form-row">
+                    <div class="field">
+                        <label for="{{ form.email.vars.id }}" class="{{ form.email.vars.required ? 'required' }}">
+                            <div>{{ form.email.vars.label|trans }}</div>
+                            {{ form_widget(form.email) }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label for="{{ form.username.vars.id }}" class="{{ form.username.vars.required ? 'required' }}">
+                            <div>{{ form.username.vars.label|trans }}</div>
+                            {{ form_widget(form.username) }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="field">
+                        <label for="{{ form.city.vars.id }}" class="{{ form.city.vars.required ? 'required' }}">
+                            <div>{{ form.city.vars.label|trans }}</div>
+                            {{ form_widget(form.city) }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label for="{{ form.zipCode.vars.id }}" class="{{ form.zipCode.vars.required ? 'required' }}">
+                            <div>{{ form.zipCode.vars.label|trans }}</div>
+                            {{ form_widget(form.zipCode) }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="field">
+                        <label for="{{ form.country.vars.id }}" class="{{ form.country.vars.required ? 'required' }}">
+                            <div>{{ form.country.vars.label|trans }}</div>
+                            {{ form_widget(form.country) }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label for="{{ form.preferredLanguage.vars.id }}" class="{{ form.preferredLanguage.vars.required ? 'required' }}">
+                            <div>{{ form.preferredLanguage.vars.label|trans }}</div>
+                            {{ form_widget(form.preferredLanguage) }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="field">
+                        <label for="{{ form.dropThumbnail.vars.id }}" class="{{ form.dropThumbnail.vars.required ? 'required' }}">
+                            <div>{{ form.dropThumbnail.vars.label|trans }}</div>
+                            {{ form_widget(form.dropThumbnail) }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label for="{{ form.dropBanner.vars.id }}" class="{{ form.dropBanner.vars.required ? 'required' }}">
+                            <div>{{ form.dropBanner.vars.label|trans }}</div>
+                            {{ form_widget(form.dropBanner) }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row right">
+                    {{ form_widget(form.save) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+
+            <div class="collections">
+                <div class="collection">
+                    <div class="count">{{ friends|length }}</div>
+                    <div class="label">{{ 'Friends'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ friendRequests|length }}</div>
+                    <div class="label">{{ 'Friend requests'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.movies|length }}</div>
+                    <div class="label">{{ 'Movies'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.movieCollections|length }}</div>
+                    <div class="label">{{ 'Movie collections'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.Series|length }}</div>
+                    <div class="label">{{ 'Series'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.serieViewings|length }}</div>
+                    <div class="label">{{ 'Serie viewings'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.youtubeVideos|length }}</div>
+                    <div class="label">{{ 'Youtube videos'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.tiktoks|length }}</div>
+                    <div class="label">{{ 'Tiktok videos'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.articles|length }}</div>
+                    <div class="label">{{ 'Articles'|trans }}</div>
+                </div>
+                <div class="collection">
+                    <div class="count">{{ user.events|length }}</div>
+                    <div class="label">{{ 'Events'|trans }}</div>
+                </div>
+            </div>
+        </div>
+
+        {{ include('blocks/_pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let friends, friendRequests;
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            getFriendsAndRequests();
+            setTimeout(() => {
+                document.querySelector('#user_email').focus();
+                document.querySelector('#user_email').select();
+            }, 2000);
+
+            const inputAvatar = document.querySelector('#user_dropThumbnail');
+            const inputBanner = document.querySelector('#user_dropBanner');
+            const banner = document.querySelector('#user-banner');
+            const avatar = document.querySelector('#user-avatar');
+
+            inputAvatar.addEventListener("mouseout", () => {
+                avatar.firstElementChild.removeAttribute("style");
+                avatar.removeAttribute("style");
+            });
+
+            inputAvatar.addEventListener("mouseenter", () => {
+                avatar.firstElementChild.setAttribute("style", "border-color: #D81F26");
+                avatar.setAttribute("style", "filter: sepia(0.8)");
+            });
+
+            inputBanner.addEventListener("mouseout", () => {
+                banner.firstElementChild.removeAttribute("style");
+                banner.querySelector("img").classList.remove("sepia");
+            });
+
+            inputBanner.addEventListener("mouseenter", () => {
+                banner.firstElementChild.setAttribute("style", "border-color: #D81F26");
+                banner.querySelector("img").classList.add("sepia");
+            });
+        });
+
+        function getFriendsAndRequests() {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let data = {friends: null, friendRequests: null};
+                data = JSON.parse(this.response);
+                friends = data.friends;
+                friendRequests = data.friendRequests;
+                console.log({friends});
+                console.log({friendRequests});
+            }
+            xhr.open("GET", '/fr/user/friends');
+            xhr.send();
+
+        }
+    </script>
+{% endblock %}

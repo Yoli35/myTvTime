@@ -49,7 +49,7 @@ class HomeController extends AbstractController
             $lastAddedSeries = $this->serieRepository->lastAddedSeries($user->getId(), 20);
             $lastUpdatedSeries = $this->serieRepository->lastUpdatedSeries($user->getId(), 20);
             $lastWatchedSeries = $this->serieRepository->lastWatchedSeries($user->getId(), 20);
-            dump($lastWatchedSeries);
+//            dump($lastWatchedSeries);
 
             $favorites = $this->favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'serie'], ['createdAt' => 'DESC']);
             $favoriteSerieIds = array_map(function ($favorite) {

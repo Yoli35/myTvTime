@@ -19,6 +19,7 @@ My Movies: Mes films
 My Series: Mes séries
 Navigation: Navigation
 Php Info: Php Info
+People search: Rechercher une personne
 Pin a collection: Épingler une collection
 Select a collection: Sélectionner une collection
 Popular Series: Séries populaires
@@ -564,6 +565,12 @@ Delete the video: Supprimer cette vidéo
 My TikTok Videos: Mes vidéos TikTok
 TikTok Link: Lien TikTok
 See more results: Voir plus de résultats
+
+# User
+yourself: vous-même
+friend: ami
+request: demande d'ami
+pending: demande en attente
 
 # User Account
 User Account: Compte utilisateur

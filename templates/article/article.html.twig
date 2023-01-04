@@ -50,7 +50,7 @@
                                     {% endif %}
                                     <div class="name">{{ user.username?:user.email }}</div>
                                 </div>
-                                <div class="form">
+                                <div>
                                     {{ form_start(form) }}
                                     {{ form_errors(form) }}
 
@@ -70,7 +70,7 @@
                                         {% if comment.answers is not empty %}
                                             <div class="reactions" id="reactions-{{ comment.id }}">
                                                 {% for answer in comment.answers %}
-                                                    <div class="reaction{% if loop.index % 2 %} odd{% endif %}">
+                                                    <div class="reaction">
                                                         {{ include('blocks/article/_reaction.html.twig', {reaction: answer}) }}
                                                     </div>
                                                 {% endfor %}
@@ -87,7 +87,8 @@
                                                             {% endif %}
                                                             <div class="name">{{ user.username?:user.email }}</div>
                                                         </div>
-                                                        <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea>
+                                                        <label>
+                                                        <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea></label>
                                                         <div class="submit" id="add-{{ comment.id }}" data-id="{{ comment.id }}">{{ 'Add'|trans }}</div>
                                                     </div>
                                                 </details>
@@ -188,7 +189,7 @@
             const id = evt.currentTarget.parentElement.getAttribute("id");
             console.log('edit', {id});
             evt.preventDefault();
-            window.location.href = "/" + locale + "/blog/edit/" + id;
+            window.location.href = "{{ path('app_blog_edit', {id: article.id})}}";
         }
 
         function deleteArticle(evt) {

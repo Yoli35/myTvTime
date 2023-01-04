@@ -1,6 +1,7 @@
 {% apply inline_css(source('@styles/contact.css')) %}
     <div class="container">
         <h1>{{ 'New contact message from'|trans }} {{ contact.username }}</h1>
+        <p>{{ 'Title'|trans }} : {{ contact.subject }}</p>
         <p>{{ 'Email address of the user'|trans }} : {{ contact.email }}</p>
         <p>{{ 'Content of the message'|trans }} :</p>
         <div class="message">{{ contact.message|nl2br }}</div>

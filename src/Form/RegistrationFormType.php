@@ -49,36 +49,6 @@ class RegistrationFormType extends AbstractType
                 'first_options'  => ['label' => 'Password', 'attr' => ['placeholder' => $this->translator->trans('Enter your password')]],
                 'second_options' => ['label' => 'Repeat Password', 'attr' => ['placeholder' => $this->translator->trans('Confirm your password')]],
             ])
-/*            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                // 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-            ])
-            ->add('confirmPlainPassword', PasswordType::class, [
-                // 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new IdenticalTo([
-                        'propertyPath' => 'plainPassword',
-                        'message' => 'Must be identical to Password'
-                    ]),
-                    new NotBlank([
-                        'message' => 'Please confirm your password',
-                    ]),
-                ],
-            ])*/
         ;
     }
 

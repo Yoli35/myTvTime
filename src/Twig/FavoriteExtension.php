@@ -9,7 +9,7 @@ use Twig\TwigFunction;
 
 class FavoriteExtension extends AbstractExtension
 {
-    public function __construct(private FavoriteRepository $repository)
+    public function __construct(private readonly FavoriteRepository $repository)
     {
     }
 

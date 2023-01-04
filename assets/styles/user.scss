@@ -1,5 +1,86 @@
 @import "variables";
 
+.users {
+    @include flex-col(center, start);
+    gap: 1em;
+
+    .user {
+        @include flex-row(center, start);
+        border-radius: 999px;
+        gap: 1em;
+        min-width: 35em;
+        padding: .25em;
+
+        .thumbnail {
+            border: 2px solid var(--gradiant-grey-90);
+            border-radius: 50%;
+            height: 3em;
+            width: 3em;
+
+            img {
+                border-radius: 50%;
+                object-fit: cover;
+            }
+        }
+
+        .username {
+            @include flex-row();
+            gap: .5em;
+
+            .self {
+
+            }
+        }
+
+        .relation {
+            @include flex-row();
+            background-color: var(--gradiant-grey-40);
+            border-radius: .25em;
+            padding: .125em 1.5em .125em .5em;
+            position: relative;
+
+            .delete {
+                cursor: pointer;
+                font-size: .75em;
+                position: absolute;
+                right: .5em;
+                top: .25em;
+            }
+        }
+
+        .request {
+            @include flex-row();
+            background-color: var(--gradiant-ardoise-40);
+            cursor: pointer;
+            border-radius: .25em;
+            margin-left: auto;
+            margin-right: 1em;
+            padding: .125em .5em;
+        }
+
+        .pending {
+            @include flex-row();
+            background-color: var(--gradiant-green-30);
+            border-radius: .25em;
+            margin-left: auto;
+            margin-right: 1em;
+            padding: .125em .5em;
+
+            &.d-none {
+                display: none;
+            }
+        }
+    }
+
+    .user:nth-child(2n+1) {
+        background-color: var(--gradiant-grey-25);
+    }
+
+    .user:nth-child(2n) {
+        background-color: var(--gradiant-grey-20);
+    }
+}
+
 .nav-to-top {
     background-color: #0d9488e6;
     background-image: url("../images/arrow-up-circle-outline.png");
@@ -714,6 +795,7 @@
                 input {
                     width: 100%;
                 }
+
                 textarea {
                     padding: .25em 1em;
                     width: 100%;

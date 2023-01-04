@@ -43,9 +43,32 @@ class UserController extends AbstractController
     public function __construct(private readonly LocaleSwitcher      $localeSwitcher,
                                 private readonly LogService          $logService,
                                 private readonly FriendRepository    $friendRepository,
+                                private readonly UserRepository      $userRepository,
                                 private readonly DateTimeFormatter   $dateTimeFormatter,
                                 private readonly TranslatorInterface $translator)
     {
+    }
+
+    #[Route('/{_locale}/user', name: 'app_personal_list', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function index(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $users = $this->userRepository->findAll();
+        $friends = $this->friendRepository->findBy(['owner' => $user, 'approved' => true]);
+        $friendsOf = $this->friendRepository->findBy(['recipient' => $user, 'approved' => true]);
+        $friends = array_merge($friends, $friendsOf);
+
+        dump($user, $users, $friends);
+
+        return $this->render('user/index.html.twig', [
+            'user' => $user,
+            'users' => $users,
+            'friends' => $friends,
+        ]);
     }
 
     /**
@@ -53,9 +76,8 @@ class UserController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[
-        Route('/{_locale}/personal/profile', name: 'app_personal_profile', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, FriendRepository $friendRepository): Response
+    #[Route('/{_locale}/user/profile', name: 'app_personal_profile', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function profile(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, FriendRepository $friendRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
@@ -96,10 +118,10 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_personal_profile');
         }
 
-        $friends = $friendRepository->findBy(['approved' => true]);
-        $friendRequests = $friendRepository->findBy(['approved' => false]);
+        $friends = $friendRepository->findBy(['owner' => $user, 'approved' => true]);
+        $friendRequests = $friendRepository->findBy(['owner' => $user, 'acceptedAt' => null, 'approved' => false]);
 
-        return $this->render('user/index.html.twig', [
+        return $this->render('user/profile.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
             'friends' => $friends,
@@ -112,24 +134,24 @@ class UserController extends AbstractController
     public function checkPendingFriendRequest()
     {
         $user = $this->getUser();
-        $pendingRequests = $this->friendRepository->findBy(['owner' => $user, 'acceptedAt' => null]);
+        $pendingRequests = $this->friendRepository->findBy(['recipient' => $user, 'acceptedAt' => null]);
 
         foreach ($pendingRequests as $request) {
-            dump($request->getCreatedAt());
+            dump($request);
             $openLetter = ['a', 'e', 'é', 'h', 'i', 'o', 'u'];
-            $name = $request->getRecipient()->getUsername() ?: $request->getRecipient()->getEmail();
+            $name = $request->getOwner()->getUsername() ?: $request->getOwner()->getEmail();
             $firstLetter = strtolower($name)[0];
 
             $this->addFlash('friendship', "Vous avez une demande d'amitié en attente de la part "
-                . (in_array($firstLetter, $openLetter) ? "d'":"de ")
+                . (in_array($firstLetter, $openLetter) ? "d'" : "de ")
                 . $name
                 . ", " . $this->dateTimeFormatter->formatDiff($request->getCreatedAt()) . "."
-                . "<button class='btn flash-accept' data-id='" . $request->getId() . "'>".$this->translator->trans("Accept")."</button>"
-                . "<button class='btn flash-reject' data-id='" . $request->getId() . "'>".$this->translator->trans("Reject")."</button>");
+                . "<button class='btn flash-accept' data-id='" . $request->getId() . "'>" . $this->translator->trans("Accept") . "</button>"
+                . "<button class='btn flash-reject' data-id='" . $request->getId() . "'>" . $this->translator->trans("Reject") . "</button>");
         }
     }
 
-    #[Route('/personal/friendship/accept/{id}', name: 'app_personal_friendship_accept', methods: ['GET'])]
+    #[Route('/user/friendship/accept/{id}', name: 'app_personal_friendship_accept', methods: ['GET'])]
     public function acceptPendingFriendRequest($id): JsonResponse
     {
         $request = $this->friendRepository->find($id);
@@ -140,7 +162,7 @@ class UserController extends AbstractController
         return $this->json([]);
     }
 
-    #[Route('/personal/friendship/reject/{id}', name: 'app_personal_friendship_reject', methods: ['GET'])]
+    #[Route('/user/friendship/reject/{id}', name: 'app_personal_friendship_reject', methods: ['GET'])]
     public function rejectPendingFriendRequest($id): JsonResponse
     {
         $request = $this->friendRepository->find($id);
@@ -151,13 +173,19 @@ class UserController extends AbstractController
         return $this->json([]);
     }
 
-    #[Route('/{_locale}/personal/friends/', name: 'app_personal_friends', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/user/friends/', name: 'app_personal_friends', requirements: ['_locale' => 'fr|en|de|es'])]
     public function getFriendsAndRequests(FriendRepository $friendRepository): JsonResponse
     {
-        $friends = $friendRepository->findBy(['approved' => true]);
-        $friendRequests = $friendRepository->findBy(['approved' => false]);
+        /** @var User $user */
+        $user = $this->getUser();
+        $friends = $friendRepository->findBy(['owner' => $user, 'approved' => true]);
+        $friendRequests = $friendRepository->findBy(['owner' => $user, 'acceptedAt' => null, 'approved' => false]);
 
-        return $this->json(['friends' => $this->getFriendsData($friends), 'friendRequests' => $this->getFriendsData($friendRequests)]);
+        dump($friends, $friendRequests);
+        return $this->json([
+            'friends' => $this->getFriendsData($friends),
+            'friendRequests' => $this->getFriendsData($friendRequests)],
+        );
     }
 
     public function getFriendsData($friends): array
@@ -174,6 +202,17 @@ class UserController extends AbstractController
         return $friendsData;
     }
 
+    #[Route('/user/friend/new/{ownerId}/{recipientId}', name: 'app_personal_friend_new', methods: ['GET'])]
+    public function newFriendRequest($ownerId, $recipientId): JsonResponse
+    {
+        $friend = new Friend();
+        $friend->setOwner($this->userRepository->find($ownerId));
+        $friend->setRecipient($this->userRepository->find($recipientId));
+        $this->friendRepository->save($friend, true);
+
+        return $this->json([]);
+    }
+
     #[Route('/{_locale}/phpinfo', name: 'app_php_info', requirements: ['_locale' => 'fr|en|de|es'])]
     public function phpInfo(): Response
     {
@@ -185,7 +224,7 @@ class UserController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[Route('/{_locale}/personal/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/user/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
     public function userMovies(Request $request, UserMovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -233,7 +272,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/personal/movies/more', name: 'app_personal_movies_more')]
+    #[Route('/user/movies/more', name: 'app_personal_movies_more')]
     public function userMoviesMore(Request $request, UserMovieRepository $userMovieRepository): Response
     {
         return $this->json([
@@ -255,7 +294,7 @@ class UserController extends AbstractController
         return $movies;
     }
 
-    #[Route('/{_locale}/personal/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/user/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
     public function getCollection(Request $request, $id, MovieCollectionRepository $collectionRepository, TMDBService $TMDBService, UserMovieRepository $movieRepository, SettingsRepository $settingsRepository): Response
     {
         /** @var User $user */
@@ -279,7 +318,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/personal/collection/pin/status', name: 'app_personal_movie_collection_pin_status', methods: ['GET'])]
+    #[Route('/user/collection/pin/status', name: 'app_personal_movie_collection_pin_status', methods: ['GET'])]
     public function setCollectionPinStatus(Request $request, SettingsRepository $settingsRepository): Response
     {
         /** @var User $user */
@@ -292,7 +331,7 @@ class UserController extends AbstractController
             $settings->setName('pinned collection');
         }
         $data = $settings->getData();
-        dump($data);
+//        dump($data);
         $data[0]['pinned'] = $request->query->get('pin');
         $settings->setData($data);
         $settingsRepository->save($settings, true);
@@ -341,7 +380,7 @@ class UserController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    #[Route('/{_locale}/personal/movies/add', name: 'app_personnel_movie_add', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/user/movies/add', name: 'app_personnel_movie_add', requirements: ['_locale' => 'fr|en|de|es'])]
     public function add(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager, MovieController $movieController): JsonResponse
     {
         /** @var User $user */
@@ -355,7 +394,7 @@ class UserController extends AbstractController
         return $this->json(['title' => $userMovie->getTitle(), 'progress_value' => $progressValue]);
     }
 
-    #[Route('/{_locale}/personal/movies/export', name: 'app_personal_movies_export', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/user/movies/export', name: 'app_personal_movies_export', requirements: ['_locale' => 'fr|en|de|es'])]
     public function export(Request $request, UserMovieRepository $userMovieRepository): JsonResponse
     {
         /** @var User $user */
@@ -430,7 +469,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{_locale}/personal/movies/ids', name: 'app_json_ids', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/user/movies/ids', name: 'app_json_ids', requirements: ['_locale' => 'fr|en|de|es'])]
     public function jsonUserMovieIds(MovieController $movieController, UserMovieRepository $userMovieRepository): JsonResponse
     {
         return $this->json([

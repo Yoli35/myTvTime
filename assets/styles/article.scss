@@ -236,13 +236,13 @@
                                 padding: .5em;
                             }
 
-                            .odd {
+                            .reaction:nth-child(2n+1) {
                                 background-color: var(--gradiant-grey-70);
                             }
                         }
 
                         .react {
-                            padding-left: 2em;
+                            //padding-left: 2em;
                             width: 100%;
 
                             .answer {
@@ -261,11 +261,15 @@
                                     }
                                 }
 
-                                textarea {
-                                    border-radius: .25em;
-                                    height: 2em;
-                                    margin: 0 1em;
-                                    width: 100%;
+                                label {
+                                    flex: 1;
+
+                                    textarea {
+                                        border-radius: .25em;
+                                        height: 2em;
+                                        margin: 0 1em;
+                                        width: calc(100% - 2em);
+                                    }
                                 }
 
                                 .submit {
@@ -337,6 +341,20 @@
             .list {
                 margin: 1em 2em;
             }
+        }
+
+        .form {
+            @include flex-100();
+
+            form {
+                @include mtt-form();
+            }
+
+            .switch {
+                @include switcher-with-label(11em, var(--gradiant-green-30), var(--gradiant-grey-60));
+                margin-left: unset;
+            }
+
         }
     }
 
@@ -546,7 +564,7 @@
                             .reactions {
                                 background-color: var(--gradiant-grey-20);
 
-                                .odd {
+                                .reaction:nth-child(2n+1) {
                                     background-color: var(--gradiant-grey-30);
                                 }
 

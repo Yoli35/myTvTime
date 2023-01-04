@@ -67,6 +67,8 @@
     <script>
         const locale = "{{ app.request.locale }}";
         let confirmDialog;
+        let path = "{{ path('app_blog_edit', {id: 0}) }}";
+        const _app_blog_edit = path.substring(0, path.length - 1);
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -195,14 +197,12 @@
 
         function editArticle(evt) {
             const id = evt.currentTarget.parentElement.getAttribute("id");
-            console.log('edit', {id});
             evt.preventDefault();
-            window.location.href = "/" + locale + "/blog/edit/" + id;
+            window.location.href = _app_blog_edit + id;
         }
 
         function deleteArticle(evt) {
             const id = evt.currentTarget.closest(".article").getAttribute("data-id");
-            console.log('delete', {id});
             evt.preventDefault();
             openDialog(confirmDialog, id, evt.currentTarget);
         }

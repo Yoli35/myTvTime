@@ -14,6 +14,7 @@ My Movie Collections: My Movie Collections
 My Movies: My Movies
 My Series: My Series
 Navigation: Navigation
+People search: People search
 Php Info: Php Info
 Popular Series: Popular Series
 Search Movies by: Search Movies by
@@ -28,6 +29,9 @@ Toolbar with button groups: Movie Search Toolbar
 Top rated Series: Top rated Series
 Tv Shows: Tv Shows
 Welcome: Welcome
+Home: Home
+search by: search by
+Contact: Contact
 
 # Registration
 Register: Register
@@ -304,6 +308,12 @@ My TikTok Videos: My TikTok Videos
 TikTok Link: TikTok Link
 Added at: Added at
 See more results: See more results
+
+# User
+yourself: yourself
+friend: your friend
+request: friend request
+pending: pending request
 
 # User Account
 User Account: User Account

@@ -5,24 +5,24 @@ window.addEventListener("DOMContentLoaded", () => {
         flash.querySelector(".close").addEventListener("click", () => {
             closeFlash(flash);
         })
-        flash.querySelector(".flash-accept").addEventListener("click", (e) => {
+        flash.querySelector(".flash-accept")?.addEventListener("click", (e) => {
             let id = e.currentTarget.getAttribute("data-id");
 
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 closeFlash(flash);
             }
-            xhr.open("GET", "/personal/friendship/accept/" + id);
+            xhr.open("GET", "/user/friendship/accept/" + id);
             xhr.send();
         })
-        flash.querySelector(".flash-reject").addEventListener("click", (e) => {
+        flash.querySelector(".flash-reject")?.addEventListener("click", (e) => {
             let id = e.currentTarget.getAttribute("data-id");
 
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 closeFlash(flash);
             }
-            xhr.open("GET", "/personal/friendship/reject/" + id);
+            xhr.open("GET", "/user/friendship/reject/" + id);
             xhr.send();
         })
     })

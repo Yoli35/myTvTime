@@ -110,6 +110,7 @@ class ArticleController extends AbstractController
         }
         return $userArticleIds;
     }
+
     #[Route('/{_locale}/blog/article/answer/{cid}', name: 'app_blog_article_add_answer', requirements: ['_locale' => 'fr|en|de|es'])]
     public function addAnswer(Request $request, $cid, CommentRepository $commentRepository, AnswerRepository $answerRepository): Response
     {
@@ -166,7 +167,7 @@ class ArticleController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->handleForm($form, $article, $fileUploader, $repository);
-            return $this->redirectToRoute('app_blog');
+            return $this->redirectToRoute('app_blog_article', ['id' => $article->getId()]);
         }
 
         return $this->render('article/edit.html.twig', [

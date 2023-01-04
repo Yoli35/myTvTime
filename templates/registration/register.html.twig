@@ -4,11 +4,11 @@
 
 {% block body %}
 
-    <div class="login">
+    <div class="register">
         {% for flash_error in app.flashes('verify_email_error') %}
             <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
         {% endfor %}
-        <div class="login-dialog">
+        <div class="register-dialog">
             {{ form_start(registrationForm) }}
             <div class="header"><h5>{{ 'Registration'|trans }}</h5></div>
             <div class="body">
