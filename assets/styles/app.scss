@@ -15,6 +15,7 @@
     background-color: var(--gradiant-purple-40);
     color: var(--gradiant-grey-100);
 }
+
 img, picture, svg, video {
     display: block;
     max-width: 100%;
@@ -931,6 +932,8 @@ h4 {
         gap: 1em;
 
         .home-discover {
+            width: 10em;
+
             .profile {
                 position: relative;
 
@@ -1285,6 +1288,14 @@ h4 {
 @media (min-width: 576px) { /* 540 */
     .home-discover {
         width: 18em;
+    }
+    .home-list {
+        .wrapper {
+            .home-discover {
+                width: 18em;
+
+            }
+        }
     }
 }
 
