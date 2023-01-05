@@ -58,9 +58,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         $users = $this->userRepository->findAll();
-        $friends = $this->friendRepository->findBy(['owner' => $user, 'approved' => true]);
-        $friendsOf = $this->friendRepository->findBy(['recipient' => $user, 'approved' => true]);
-        $friends = array_merge($friends, $friendsOf);
+        $friends = $this->getFriends($user);
 
         dump($user, $users, $friends);
 
@@ -69,6 +67,13 @@ class UserController extends AbstractController
             'users' => $users,
             'friends' => $friends,
         ]);
+    }
+
+    public function getFriends($user): array
+    {
+        $friends = $this->friendRepository->findBy(['owner' => $user, 'approved' => true]);
+        $friendsOf = $this->friendRepository->findBy(['recipient' => $user, 'approved' => true]);
+        return array_merge($friends, $friendsOf);
     }
 
     /**
@@ -118,7 +123,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_personal_profile');
         }
 
-        $friends = $friendRepository->findBy(['owner' => $user, 'approved' => true]);
+        $friends = $this->getFriends($user);
         $friendRequests = $friendRepository->findBy(['owner' => $user, 'acceptedAt' => null, 'approved' => false]);
 
         return $this->render('user/profile.html.twig', [
