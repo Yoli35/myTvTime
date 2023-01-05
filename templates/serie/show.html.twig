@@ -548,7 +548,7 @@
             "{{ path('app_user_connected') }}",
             "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}"
         ];
-        const serie = {{ serieId }};
+        const serie = "{{ serieId }}";
         const _app_serie_viewing = paths[5];
         const _app_user_connected = paths[6];
         let _app_serie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
