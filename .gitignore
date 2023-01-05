@@ -21,3 +21,4 @@ symfony.lock
 ###< liip/imagine-bundle ###
 /config/google/google.json
 /config/google/mytvtime-349019-001b2f815d02.json
+.env
