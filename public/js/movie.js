@@ -188,99 +188,7 @@ function initMovieStuff(paths, profileUrl, locale) {
             getMovieRating(badge);
         }
     })
-
-/*
-    profiles.forEach(profile => {
-        profile.addEventListener("click", getProfile);
-    });
-
-    if (personalModal) {
-        personalModal.addEventListener("click", closeProfile);
-        personalModalClose.forEach(button => {
-            button.addEventListener("click", closeProfile);
-        });
-    }
-*/
 }
-
-/*
-function closeProfile() {
-    personalModal.classList.remove("show");
-    setTimeout(() => {
-        personalModal.classList.remove("d-block");
-    }, 200);
-}
-
-function getProfile(e) {
-    let id = e.target.getAttribute("data-id").toString();
-
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        const data = JSON.parse(this.response);
-        let locale = data['locale'];
-        let person = data['person'];
-        let name = person['name'],
-            biography = person['biography'],
-            birthday = person['birthday'],
-            death_day = person['death-day'],
-            homepage = person['homepage'],
-            imdbpage = person['imdb_id'],
-            known_for_department = person['known_for_department'],
-            place_of_birth = person['place_of_birth'],
-            profile_path = person['profile_path'],
-            gender = person['gender'];
-        let department = data['department'];
-
-        document.querySelector(".person-profile").innerHTML = "";
-        personalModal.classList.add("d-block");
-        personalModal.classList.add("show");
-
-        document.querySelector(".modal-title").innerHTML = name;
-        if (biography && biography.length) {
-            document.querySelector(".biography div").innerHTML = biography;
-        } else {
-            document.querySelector(".biography div").innerHTML = '<div class="d-flex">Searching on IMDB ...&nbsp;<div class="spinner-border text-light ms-3" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-
-            const xhr2 = new XMLHttpRequest();
-            xhr2.onload = function (result) {
-                const imdb = JSON.parse(result.target.response);
-                if (imdb['success']) {
-                    let imdb_infos = imdb['person'];
-                    document.querySelector(".biography div").innerHTML =
-                        '<div>' +
-                        imdb_infos['summary'] +
-                        '</div>' +
-                        '<div style="color: #eee;font-style: italic;">' +
-                        imdb_infos['translated'] +
-                        '</div>';
-                } else
-                    document.querySelector(".biography div").setAttribute("style", "display: none");
-            }
-            xhr2.open("GET", _imdb_infos + "?name=" + name + "&locale=" + locale);
-            xhr2.send();
-        }
-        const options = {year: 'numeric', month: 'long', day: 'numeric'};
-        if (birthday && birthday.length) document.querySelector(".birthday span").innerHTML = new Date(birthday).toLocaleString(_loc, options); else document.querySelector(".birthday").setAttribute("style", "display: none");
-        if (death_day && death_day.length) document.querySelector(".death-day span").innerHTML = new Date(death_day).toLocaleString(_loc, options); else document.querySelector(".death-day").setAttribute("style", "display: none");
-        if (homepage && homepage.length) document.querySelector(".homepage span").innerHTML = '<a href="' + homepage + '" target="_blank" rel="noopener">' + homepage + '</a>'; else document.querySelector(".homepage").setAttribute("style", "display: none");
-        if (imdbpage && imdbpage.length) document.querySelector(".imdb-page span").innerHTML = '<a href="https://www.imdb.com/name/' + imdbpage + '" target="_blank" rel="noopener"></a>'; else document.querySelector(".imdb-page").setAttribute("style", "display: none");
-        if (place_of_birth && place_of_birth.length) document.querySelector(".place-of-birth span").innerHTML = place_of_birth; else document.querySelector(".place-of-birth").setAttribute("style", "display: none");
-
-        if (known_for_department && known_for_department.length) {
-            if (locale === 'en' || department[locale][known_for_department] === undefined) {
-                document.querySelector(".known-for-department span").innerHTML = '<span style="color: ' + (locale === 'en' ? 'green' : 'red') + '">' + known_for_department + '</span>';
-            } else {
-                document.querySelector(".known-for-department span").innerHTML = department[locale][known_for_department][gender];
-            }
-        } else {
-            document.querySelector(".known-for-department").setAttribute("style", "display: none");
-        }
-        document.querySelector(".person-profile").innerHTML = '<img src="' + _profile_url + profile_path + '" alt="' + name + '">';
-    }
-    xhr.open("GET", _profile_infos + "?id=" + id + "&locale=" + _loc);
-    xhr.send();
-}
-*/
 
 function toggleSeenStatus(e) {
 
@@ -302,10 +210,10 @@ function addMovie(badge) {
 
         badge.classList.add("yes");
         if (collections) {
-            setTimeout(()=> {
+            setTimeout(() => {
                 collections.classList.remove("hide");
             }, 0);
-            setTimeout(()=> {
+            setTimeout(() => {
                 collections.classList.remove("d-none");
             }, 300);
         }
@@ -325,10 +233,10 @@ function removeMovie(badge) {
 
         badge.classList.remove("yes");
         if (collections) {
-            setTimeout(()=> {
+            setTimeout(() => {
                 collections.classList.add("hide");
             }, 0);
-            setTimeout(()=> {
+            setTimeout(() => {
                 collections.classList.add("d-none");
             }, 300);
         }
@@ -456,9 +364,15 @@ function leaveStars(e) {
 }
 
 function initCollections() {
-    const collections = document.querySelector(".movie-collection").querySelectorAll(".item");
+    const movieCollection = document.querySelector(".movie-collection");
 
-    collections.forEach( collection => {
+    if (movieCollection === null) {
+        return;
+    }
+
+    const collections = movieCollection.querySelectorAll(".item");
+
+    collections.forEach(collection => {
         collection.addEventListener("click", toggleCollection);
     });
 }
@@ -470,15 +384,15 @@ function toggleCollection(e) {
 
     collection.classList.toggle("selected");
 
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            const data = JSON.parse(this.response);
-            let message = data['message'];
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        const data = JSON.parse(this.response);
+        let message = data['message'];
 
-            addNotification(message, "success");
-        }
-        xhr.open("GET", _app_movie_collection_toggle + "?c=" + id + "&m=" + movie + "&a=" + (collection.classList.contains("selected")?"a":"r"));
-        xhr.send();
+        addNotification(message, "success");
+    }
+    xhr.open("GET", _app_movie_collection_toggle + "?c=" + id + "&m=" + movie + "&a=" + (collection.classList.contains("selected") ? "a" : "r"));
+    xhr.send();
 }
 
 function initNotifications() {

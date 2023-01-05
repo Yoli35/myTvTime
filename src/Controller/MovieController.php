@@ -333,15 +333,18 @@ class MovieController extends AbstractController
     #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_movie_toggle_favorite', methods: 'GET')]
     public function toggleFavorite(bool $fav, int $userId, int $mediaId): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         if ($fav) {
             $favorite = new Favorite($userId, $mediaId, 'movie');
             $this->favoriteRepository->save($favorite, true);
-            $message = $this->translator->trans("Successfully added to favorites");
+            $message = $this->translator->trans("Successfully added to favorites", [], null, $user->getPreferredLanguage());
             $class = 'added';
         } else {
             $favorite = $this->favoriteRepository->findOneBy(['userId' => $userId, 'mediaId' => $mediaId, 'type' => 'movie']);
             $this->favoriteRepository->remove($favorite, true);
-            $message = $this->translator->trans("Successfully removed from favorites");
+            $message = $this->translator->trans("Successfully removed from favorites", [], null, $user->getPreferredLanguage());
             $class = 'removed';
         }
 

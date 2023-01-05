@@ -146,7 +146,7 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setPublishedAt(new DateTimeImmutable());
             $this->handleForm($form, $article, $fileUploader, $repository);
-            return $this->redirectToRoute('app_blog');
+            return $this->redirectToRoute('app_blog_article', ['id' => $article->getId()]);
         }
 
         return $this->render('article/new.html.twig', [

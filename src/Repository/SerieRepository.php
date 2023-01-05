@@ -102,8 +102,8 @@ class SerieRepository extends ServiceEntityRepository
     {
         $sql = "SELECT s.`id` AS `id`, s.`name` as `name`, s.`poster_path` AS `poster_path` "
             . "FROM `serie` s "
-            . "INNER JOIN `serie_user` su ON s.`id`=su.`serie_id` AND su.`user_id`=".$userId." "
-            . "INNER JOIN `serie_viewing` sv ON s.`id`=sv.`serie_id` AND sv.`viewed_episodes`>0 "
+//            . "INNER JOIN `serie_user` su ON s.`id`=su.`serie_id` AND su.`user_id`=".$userId." "
+            . "INNER JOIN `serie_viewing` sv ON s.`id`=sv.`serie_id` AND sv.`user_id`=".$userId." AND sv.`viewed_episodes`>0 "
             . "ORDER BY sv.`modified_at` DESC LIMIT ".$count;
 
         $em = $this->registry->getManager();

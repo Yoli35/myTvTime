@@ -33,6 +33,30 @@ Home: Home
 search by: search by
 Contact: Contact
 
+# Home
+last added movies: Last added movies
+last added series: Last added series
+last modified series: Latest series watched
+last updated series: Latest updated series
+favorite movies: Favorite movies
+favorite series: Favorite series
+Top rated: Top rated
+Today: Today
+On the air: On the air
+popular people: Popular people
+popular movies: Popular movies
+popular series: Popular series
+trending today: Trending today
+trending of the week: Trending of the week
+
+# Show code
+action.show_code: Show code
+action.close: Close
+title.source_code: Source code
+title.controller_code: Controller source code
+title.twig_template_code: Code source du template
+not_available: Non disponible
+
 # Registration
 Register: Register
 Registration: Registration
@@ -241,6 +265,8 @@ Original language: Original language
 Original name: Original name
 Returning Series: Returning Series
 Keywords: Keywords
+Successfully added to favorites: Successfully added to favorites ! 🥰
+Successfully removed from favorites: Successfully removed from favorites 😯
 # seasons
 episodes: episodes
 seasons: saisons
@@ -309,11 +335,12 @@ TikTok Link: TikTok Link
 Added at: Added at
 See more results: See more results
 
-# User
+# Search User
 yourself: yourself
 friend: your friend
 request: friend request
 pending: pending request
+users: users
 
 # User Account
 User Account: User Account

@@ -58,9 +58,10 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         $users = $this->userRepository->findAll();
+        usort($users, function ($u1, $u2) {
+            return strtolower($u1->getUsername()) <=> strtolower($u2->getUsername());
+        });
         $friends = $this->getFriends($user);
-
-        dump($user, $users, $friends);
 
         return $this->render('user/index.html.twig', [
             'user' => $user,

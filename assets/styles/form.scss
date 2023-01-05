@@ -83,6 +83,17 @@
     }
 }
 
+.btn-primary {
+    background-color: var(--gradiant-ardoise-50);
+    border-color: var(--gradiant-ardoise-80);
+    color: var(--gradiant-ardoise-90);
+
+    &:hover {
+        background-color: var(--gradiant-ardoise-60);
+        border-color: var(--gradiant-ardoise-90);
+    }
+}
+
 .btn-outline-secondary {
     background-color: transparent;
     border-color: var(--gradiant-grey-50);
@@ -103,7 +114,7 @@ input[type="email"] {
     font-size: 1em;
     font-weight: 200;
     height: 2em;
-    padding: .5em 1em;
+    padding: .5em;
 }
 
 @media (prefers-color-scheme: light) {

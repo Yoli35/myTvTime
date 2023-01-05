@@ -57,8 +57,8 @@ popular people: Personnes populaires
 action.show_code: Voir le code
 action.close: Fermer
 title.source_code: Code source
-title.controller_code: Code source du controller
-title.twig_template_code: Code source du template
+title.controller_code: Code source du contrôleur
+title.twig_template_code: Code source du modèle
 not_available: Non disponible
 
 # Registration
@@ -357,7 +357,7 @@ Writing: Écriture
 Favorite: Série favorite
 Add to favorites: Ajouter aux favoris
 Successfully added to favorites: Ajouté aux favoris avec succès
-Successfully removed to favorites: Retiré des favoris avec succès
+Successfully removed from favorites: Retiré des favoris avec succès
 Key facts: Faits principaux
 Network: Diffuseur télé
 Networks: Diffuseurs télé
@@ -566,11 +566,12 @@ My TikTok Videos: Mes vidéos TikTok
 TikTok Link: Lien TikTok
 See more results: Voir plus de résultats
 
-# User
+# Search User
 yourself: vous-même
 friend: ami
 request: demande d'ami
 pending: demande en attente
+users: utilisateurs
 
 # User Account
 User Account: Compte utilisateur

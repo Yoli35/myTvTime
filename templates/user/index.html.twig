@@ -13,8 +13,16 @@
             {{ include('blocks/_nav.html.twig', {thisPage: 'People search'|trans}) }}
 
             <div class="users">
+                <div class="search-bar">
+                    <div class="magnifying-glass"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <label>
+                        <input id="search" type="search">
+                    </label>
+                    <button type="submit" class="btn btn-primary">{{ 'Search'|trans }}</button>
+                    <div>{{ users|length }} {{ 'users'|trans }}</div>
+                </div>
                 {% for u in users %}
-                    <div class="user">
+                    <div class="user{% if u==user %} myself{% endif %}">
                         <div class="thumbnail"><img src="{{ getPath('userAvatar')~u.avatar }}" alt="{{ u.username }}"></div>
                         <div class="username">{{ u.username }}
                             {% if u==user %}
@@ -51,6 +59,8 @@
     <script>
         let _app_personal_friend_new = "{{ path('app_personal_friend_new', {ownerId: 0, recipientId: 0})[:-3] }}";
         window.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.querySelector("#search");
+            searchInput.focus();
             const requests = document.querySelectorAll(".request");
             requests.forEach(request => {
                 request.addEventListener("click", requestFriendship);

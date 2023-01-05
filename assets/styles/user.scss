@@ -4,12 +4,41 @@
     @include flex-col(center, start);
     gap: 1em;
 
+    .search-bar {
+        @include flex-row(center, start);
+        background-color: var(--gradiant-grey-25);
+        border-radius: 999px;
+        gap: 1em;
+        min-width: 35em;
+        padding: .25em;
+
+        .magnifying-glass {
+            @include flex-row();
+            background-color: var(--gradiant-ardoise-50);
+            border: 2px solid var(--gradiant-grey-90);
+            border-radius: 50%;
+            height: 3em;
+            width: 3em;
+
+            i {
+                font-size: 1.5em;
+            }
+        }
+
+
+    }
+
     .user {
         @include flex-row(center, start);
         border-radius: 999px;
         gap: 1em;
         min-width: 35em;
         padding: .25em;
+
+        &.myself {
+            background-color: var(--gradiant-mars-50);
+            font-weight: bold;
+        }
 
         .thumbnail {
             border: 2px solid var(--gradiant-grey-90);
@@ -75,11 +104,11 @@
         }
     }
 
-    .user:nth-child(2n+1) {
+    .user:nth-child(2n+1):not(.myself) {
         background-color: var(--gradiant-grey-25);
     }
 
-    .user:nth-child(2n) {
+    .user:nth-child(2n):not(.myself) {
         background-color: var(--gradiant-grey-20);
     }
 }
