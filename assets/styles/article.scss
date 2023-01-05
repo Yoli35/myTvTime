@@ -34,7 +34,7 @@
 
             .article {
                 @include flex-col();
-                background-color: var(--gradiant-grey-80);
+                background-color: var(--gradiant-grey-80-alpha-50);
                 border-radius: 1em;
                 margin-bottom: 1em;
                 overflow: hidden;
@@ -503,7 +503,7 @@
         .content {
             .articles {
                 .article {
-                    background-color: var(--gradiant-grey-30);
+                    background-color: var(--gradiant-grey-30-alpha-50);
 
                     .apercu {
 

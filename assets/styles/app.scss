@@ -46,7 +46,7 @@ html {
 
 body {
     background: var(--mtt-body-bg);
-    //background-image: var(--gradiant-bg);
+    background-image: var(--gradiant-light);
     background-attachment: fixed;
     color: var(--mtt-body-color);
     display: flex;
@@ -580,7 +580,7 @@ nav.active {
 
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '◦';
-    background-color: var(--gradiant-grey-20);
+    background-color: var(--gradiant-grey-20-alpha-50);
     border-radius: .5em;
     margin: 1em 0;
     padding: .5em 1em;
@@ -766,34 +766,41 @@ nav.active {
 
 @media (prefers-color-scheme: light) {
     .nav-breadcrumb {
-        background-color: var(--gradiant-grey-90);
+        background-color: var(--gradiant-grey-40-alpha-50);
+        color: var(--gradiant-grey-100);
+        font-weight: bold;
+
+        a {
+            color: var(--gradiant-grey-100);
+        }
 
         .breadcrumb {
 
             .breadcrumb-item {
                 span {
-                    color: var(--gradiant-grey-20);
+                    color: var(--gradiant-grey-100);
+                    font-weight: 500;
                 }
 
                 &.active {
-                    color: var(--gradiant-grey-20);
+                    color: var(--gradiant-grey-100);
                 }
 
                 &:before {
-                    color: var(--gradiant-grey-20);
+                    color: var(--gradiant-grey-100);
                 }
 
             }
 
             .bracket {
-                color: var(--gradiant-grey-20);
+                color: var(--gradiant-grey-100);
             }
 
             .menu {
                 color: var(--gradiant-grey-30);
 
                 img {
-                    border: 2px solid var(--gradiant-grey-20);
+                    border: 2px solid var(--gradiant-grey-100);
                 }
 
                 .menu-items {
@@ -887,13 +894,14 @@ h4 {
     background-size: cover;
     height: 20vw;
     margin: 0 0 1em 0;
+    opacity: .75;
     transition: background-position 1s;
     width: 100%;
 }
 
 .home-footer {
     @include flex-100(center, space-evenly);
-    background-color: var(--gradiant-grey-30);
+    background-color: var(--gradiant-grey-30-alpha-50);
     border-radius: 1em;
     color: var(--gradiant-grey-80);
     height: 3em;
@@ -1345,6 +1353,10 @@ h4 {
     :root {
         --bs-body-bg: var(--gradiant-grey-20);
         --bs-body-color: var(--gradiant-grey-90);
+    }
+
+    body {
+        background-image: var(--gradiant-dark);
     }
 
     a, .nav-link {

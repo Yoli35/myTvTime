@@ -105,11 +105,11 @@
     }
 
     .user:nth-child(2n+1):not(.myself) {
-        background-color: var(--gradiant-grey-25);
+        background-color: var(--gradiant-grey-20-alpha-50);
     }
 
     .user:nth-child(2n):not(.myself) {
-        background-color: var(--gradiant-grey-20);
+        background-color: var(--gradiant-grey-30-alpha-50);
     }
 }
 

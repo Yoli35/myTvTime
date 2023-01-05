@@ -8,31 +8,57 @@ $fa-font-path: "../webfonts";
 
     --button-border-radius: .25em;
 
-    --gradiant-light: linear-gradient(
-                    45deg,
-                    hsl(240deg, 30%, 90%) 0%,
-                    hsl(289deg, 30%, 90%) 4%,
-                    hsl(315deg, 30%, 90%) 14%,
-                    hsl(329deg, 30%, 90%) 27%,
-                    hsl(337deg, 30%, 90%) 43%,
-                    hsl(357deg, 30%, 90%) 59%,
-                    hsl(17deg, 30%, 90%) 74%,
-                    hsl(34deg, 30%, 90%) 87%,
-                    hsl(45deg, 30%, 90%) 96%,
-                    hsl(55deg, 30%, 90%) 100%);
-
     --gradiant-dark: linear-gradient(
                     45deg,
-                    hsl(240deg, 100%, 10%) 0%,
-                    hsl(284deg, 100%, 10%) 11%,
-                    hsl(315deg, 100%, 10%) 22%,
-                    hsl(332deg, 100%, 10%) 33%,
-                    hsl(343deg, 100%, 10%) 44%,
-                    hsl(357deg, 83%, 10%) 56%,
-                    hsl(20deg, 100%, 10%) 67%,
-                    hsl(31deg, 100%, 10%) 78%,
-                    hsl(44deg, 100%, 10%) 89%,
-                    hsl(60deg, 100%, 10%) 100%);
+                    hsl(187deg 45% 8%) 0%,
+                    hsl(186deg 44% 8%) 18%,
+                    hsl(185deg 44% 8%) 29%,
+                    hsl(185deg 43% 8%) 37%,
+                    hsl(184deg 43% 9%) 44%,
+                    hsl(183deg 43% 9%) 50%,
+                    hsl(182deg 43% 9%) 56%,
+                    hsl(181deg 42% 9%) 61%,
+                    hsl(180deg 42% 9%) 66%,
+                    hsl(180deg 41% 10%) 70%,
+                    hsl(179deg 41% 10%) 74%,
+                    hsl(178deg 41% 10%) 78%,
+                    hsl(177deg 40% 10%) 81%,
+                    hsl(176deg 40% 10%) 85%,
+                    hsl(175deg 40% 11%) 88%,
+                    hsl(174deg 39% 11%) 90%,
+                    hsl(173deg 39% 11%) 93%,
+                    hsl(172deg 38% 12%) 95%,
+                    hsl(170deg 37% 12%) 97%,
+                    hsl(169deg 37% 12%) 98%,
+                    hsl(168deg 36% 12%) 99%,
+                    hsl(167deg 35% 13%) 100%
+    );
+
+    --gradiant-light: linear-gradient(
+                    45deg,
+                    hsl(186deg 100% 32%) 0%,
+                    hsl(186deg 77% 37%) 5%,
+                    hsl(186deg 66% 41%) 10%,
+                    hsl(186deg 58% 43%) 14%,
+                    hsl(185deg 53% 46%) 19%,
+                    hsl(185deg 48% 48%) 24%,
+                    hsl(184deg 45% 50%) 29%,
+                    hsl(183deg 45% 53%) 33%,
+                    hsl(182deg 46% 55%) 38%,
+                    hsl(181deg 46% 57%) 43%,
+                    hsl(181deg 47% 59%) 48%,
+                    hsl(180deg 48% 61%) 52%,
+                    hsl(178deg 50% 63%) 57%,
+                    hsl(177deg 53% 66%) 62%,
+                    hsl(176deg 55% 68%) 67%,
+                    hsl(175deg 59% 71%) 71%,
+                    hsl(174deg 63% 73%) 76%,
+                    hsl(173deg 67% 75%) 81%,
+                    hsl(172deg 73% 78%) 86%,
+                    hsl(170deg 80% 80%) 90%,
+                    hsl(169deg 88% 82%) 95%,
+                    hsl(168deg 100% 85%) 100%
+    );
 
     //--gradiant-bg: var(--gradiant-light);
 
@@ -66,6 +92,7 @@ $fa-font-path: "../webfonts";
     --gradiant-grey-95: hsl(0, 0%, 95%);
     --gradiant-grey-90: hsl(0, 0%, 90%);
     --gradiant-grey-90-alpha-10: hsla(0, 0%, 90%, .1);
+    --gradiant-grey-90-alpha-20: hsla(0, 0%, 90%, .2);
     --gradiant-grey-90-alpha-90: hsla(0, 0%, 90%, .95);
     --gradiant-grey-80: hsl(0, 0%, 80%);
     --gradiant-grey-80-alpha-50: hsla(0, 0%, 80%, .5);
@@ -130,7 +157,7 @@ $fa-font-path: "../webfonts";
     --gradiant-red-40: hsl(0, 90%, 40%);
     --gradiant-red-40-alpha: hsla(0, 90%, 40%, .5);
 
-    --form-bg: hsl(0, 0%, 95%);
+    --form-bg: hsl(0, 0%, 95%, .5);
     --form-border: hsl(0, 0%, 15%);
     --form-text: hsl(0, 0%, 15%);
 }
@@ -142,7 +169,7 @@ $fa-font-path: "../webfonts";
         --mtt-body-bg-gradiant: var(--gradiant-grey-40);
         --mtt-body-color: var(--gradiant-grey-90);
 
-        --form-bg: hsl(0, 0%, 15%);
+        --form-bg: hsl(0, 0%, 15%, .5);
         --form-border: hsl(0, 0%, 90%);
         --form-text: hsl(0, 0%, 90%);
 
@@ -541,7 +568,7 @@ $fa-font-path: "../webfonts";
         @include flex-row(center, center);
         flex-wrap: wrap;
         gap: 1em;
-        background-color: var(--gradiant-grey-80);
+        background-color: var(--gradiant-grey-40-alpha-50);
         border-radius: .5em;
         min-height: 10em;
         margin: 0 0 1em 0;
