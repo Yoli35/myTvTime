@@ -106,23 +106,17 @@ class YoutubeAddVideoComponent
         if (str_contains($thisLink, "shorts")) {
             if (str_contains($thisLink, "www")) {
                 // https://www.youtube.com/shorts/7KFxzeyse2g
-                // https://www.youtube.com/shorts/32UE5jtEZmQ Fail!
                 $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/shorts\/(.+)/", "$1", $thisLink);
             } else {
                 // https://youtube.com/shorts/XxpFBkm5XqI?feature=share
-                // https://youtube.com/shorts/32UE5jtEZmQ?feature=share Fail!
                 $thisLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $thisLink);
             }
         } elseif (str_contains($thisLink, "youtu.be")) {
             // https://youtu.be/at9h35V8rtQ
-            // https://youtu.be/bwzeqRt8dNs Fail!
-            // https://youtu.be/efUA6W5HEv4 Fail!
             $thisLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $thisLink);
         } elseif (str_contains($thisLink, 'watch')) {
             // https://www.youtube.com/watch?v=at9h35V8rtQ
             // https://www.youtube.com/watch?v=IzHJ7Jnj2LU&pp=wgIGCgQQAhgB
-            // https://www.youtube.com/watch?v=bwzeqRt8dNs Fail!
-            // https://www.youtube.com/watch?v=bwzeqRt8dNs&pp=wgIGCgQQAhgB Fail!
             $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?>&[a-z_-]+=.+)*/", "$1", $thisLink);
         }
 
@@ -134,7 +128,6 @@ class YoutubeAddVideoComponent
             if ($link == null) {
 
                 $videoListResponse = $this->getVideoSnippet($thisLink);
-//                dump($videoListResponse);
                 $items = $videoListResponse->getItems();
                 $item = $items[0];
                 $snippet = $item['snippet'];
@@ -146,7 +139,7 @@ class YoutubeAddVideoComponent
                 $item = $items[0];
                 $snippet = $item['snippet'];
                 $thumbnails = (array)$snippet['thumbnails'];
-                $localised = $snippet['localized'];
+                $localized = $snippet['localized'];
 
                 if ($channel == null) {
                     $channel = new YoutubeChannel();
@@ -163,8 +156,8 @@ class YoutubeAddVideoComponent
                 if (array_key_exists('default', $thumbnails)) $channel->setThumbnailDefaultUrl($thumbnails['default']['url']);
                 if (array_key_exists('medium', $thumbnails)) $channel->setThumbnailMediumUrl($thumbnails['medium']['url']);
                 if (array_key_exists('high', $thumbnails)) $channel->setThumbnailHighUrl($thumbnails['high']['url']);
-                $channel->setLocalizedDescription($localised['description']);
-                $channel->setLocalizedTitle($localised['title']);
+                $channel->setLocalizedDescription($localized['description']);
+                $channel->setLocalizedTitle($localized['title']);
                 $channel->setCountry($snippet['country']);
 
                 $this->channelRepository->add($channel, true);
@@ -173,7 +166,7 @@ class YoutubeAddVideoComponent
                 $item = $items[0];
                 $snippet = $item['snippet'];
                 $thumbnails = (array)$snippet['thumbnails'];
-                $localised = $snippet['localized'];
+                $localized = $snippet['localized'];
                 $contentDetails = $item['contentDetails'];
 
                 $newVideo = new YoutubeVideo();
@@ -184,13 +177,13 @@ class YoutubeAddVideoComponent
                 $newVideo->setDescription($snippet['description']);
                 $newVideo->setPublishedAt(date_create_immutable($snippet['publishedAt']));
                 $newVideo->setTitle($snippet['title']);
-                if (array_key_exists('default', $thumbnails)) $newVideo->setThumbnailDefaultPath($thumbnails['default']['url']);
-                if (array_key_exists('medium', $thumbnails)) $newVideo->setThumbnailMediumPath($thumbnails['medium']['url']);
-                if (array_key_exists('high', $thumbnails)) $newVideo->setThumbnailHighPath($thumbnails['high']['url']);
-                if (array_key_exists('standard', $thumbnails)) $newVideo->setThumbnailStandardPath($thumbnails['standard']['url']);
-                if (array_key_exists('maxres', $thumbnails)) $newVideo->setThumbnailMaxresPath($thumbnails['maxres']['url']);
-                $newVideo->setLocalizedDescription($localised['description']);
-                $newVideo->setLocalizedTitle($localised['title']);
+                if (array_key_exists('default', $thumbnails)) $newVideo->setThumbnailDefaultPath($thumbnails['default'] ? $thumbnails['default']['url'] : null);
+                if (array_key_exists('medium', $thumbnails)) $newVideo->setThumbnailMediumPath($thumbnails['medium'] ? $thumbnails['medium']['url'] : null);
+                if (array_key_exists('high', $thumbnails)) $newVideo->setThumbnailHighPath($thumbnails['high'] ? $thumbnails['high']['url'] : null);
+                if (array_key_exists('standard', $thumbnails)) $newVideo->setThumbnailStandardPath($thumbnails['standard'] ? $thumbnails['standard']['url'] : null);
+                if (array_key_exists('maxres', $thumbnails)) $newVideo->setThumbnailMaxresPath($thumbnails['maxres'] ? $thumbnails['maxres']['url'] : null);
+                $newVideo->setLocalizedDescription($localized['description']);
+                $newVideo->setLocalizedTitle($localized['title']);
                 $newVideo->setContentDefinition($contentDetails['definition']);
                 $newVideo->setContentDimension($contentDetails['dimension']);
                 $newVideo->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
@@ -236,7 +229,7 @@ class YoutubeAddVideoComponent
 
     public function getTotalRuntime(): int
     {
-        return $this->videoRepository->getUserYTVideosRuntime($this->user_id)?:0;
+        return $this->videoRepository->getUserYTVideosRuntime($this->user_id) ?: 0;
     }
 
     public function getFirstView(): ?DateTimeImmutable

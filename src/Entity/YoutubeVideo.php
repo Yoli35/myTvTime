@@ -215,7 +215,7 @@ class YoutubeVideo
         return $this->thumbnailMaxresPath;
     }
 
-    public function setThumbnailMaxresPath(string $thumbnailMaxresPath): self
+    public function setThumbnailMaxresPath(?string $thumbnailMaxresPath): self
     {
         $this->thumbnailMaxresPath = $thumbnailMaxresPath;
 
