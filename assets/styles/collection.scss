@@ -102,6 +102,10 @@
         }
     }
 
+    a:has(.add-collection) {
+        margin-left: auto;
+    }
+
     .form {
         @include flex-row();
         width: 60em;

@@ -1,118 +1,132 @@
 @import "variables";
 
-.users {
-    @include flex-col(center, start);
-    gap: 1em;
+.user-search {
+    .wrapper {
+        @include flex-100();
 
-    .search-bar {
-        @include flex-row(center, start);
-        background-color: var(--gradiant-grey-25);
-        border-radius: 999px;
-        gap: 1em;
-        min-width: 35em;
-        padding: .25em;
+        .users {
+            @include flex-col(center, start);
+            color: var(--gradiant-grey-100);
+            gap: 1em;
 
-        .magnifying-glass {
-            @include flex-row();
-            background-color: var(--gradiant-ardoise-50);
-            border: 2px solid var(--gradiant-grey-90);
-            border-radius: 50%;
-            height: 3em;
-            width: 3em;
+            .search-bar {
+                @include flex-row(center, start);
+                background-color: var(--gradiant-grey-30-alpha-50);
+                border-radius: 999px;
+                gap: 1em;
+                min-width: 35em;
+                padding: .25em;
 
-            i {
-                font-size: 1.5em;
+                .magnifying-glass {
+                    @include flex-row();
+                    background-color: var(--gradiant-ardoise-50);
+                    border: 2px solid var(--gradiant-grey-90);
+                    border-radius: 50%;
+                    height: 3em;
+                    width: 3em;
+
+                    i {
+                        font-size: 1.5em;
+                    }
+                }
+
+
+            }
+
+            .user {
+                @include flex-row(center, start);
+                border-radius: 999px;
+                gap: 1em;
+                min-width: 35em;
+                padding: .25em;
+
+                &.myself {
+                    background-color: var(--gradiant-mars-50);
+                    font-weight: bold;
+                }
+
+                .thumbnail {
+                    border: 2px solid var(--gradiant-grey-90);
+                    border-radius: 50%;
+                    height: 3em;
+                    width: 3em;
+
+                    img {
+                        border-radius: 50%;
+                        object-fit: cover;
+                    }
+                }
+
+                .username {
+                    @include flex-row();
+                    gap: .5em;
+
+                    .self {
+
+                    }
+                }
+
+                .relation {
+                    @include flex-row();
+                    background-color: var(--gradiant-ardoise-40);
+                    border: 1px solid var(--gradiant-ardoise-80);
+                    border-radius: 999px;
+                    margin-left: auto;
+                    margin-right: 1em;
+                    padding: .125em 1.5em .125em .5em;
+                    position: relative;
+
+                    .delete {
+                        cursor: pointer;
+                        font-size: .75em;
+                        position: absolute;
+                        right: .5em;
+                        top: .25em;
+                    }
+                }
+
+                .request {
+                    @include flex-row();
+                    background-color: var(--gradiant-ardoise-40);
+                    cursor: pointer;
+                    border-radius: .25em;
+                    margin-left: auto;
+                    margin-right: 1em;
+                    padding: .125em .5em;
+                }
+
+                .pending {
+                    @include flex-row();
+                    background-color: var(--gradiant-green-30);
+                    border-radius: .25em;
+                    margin-left: auto;
+                    margin-right: 1em;
+                    padding: .125em .5em;
+
+                    &.d-none {
+                        display: none;
+                    }
+                }
+            }
+
+            .user:nth-child(2n+1):not(.myself) {
+                background-color: var(--gradiant-grey-20-alpha-50);
+            }
+
+            .user:nth-child(2n):not(.myself) {
+                background-color: var(--gradiant-grey-30-alpha-50);
             }
         }
 
-
-    }
-
-    .user {
-        @include flex-row(center, start);
-        border-radius: 999px;
-        gap: 1em;
-        min-width: 35em;
-        padding: .25em;
-
-        &.myself {
-            background-color: var(--gradiant-mars-50);
-            font-weight: bold;
+        .under-construction:first-child {
+            rotate: -45deg;
         }
 
-        .thumbnail {
-            border: 2px solid var(--gradiant-grey-90);
-            border-radius: 50%;
-            height: 3em;
-            width: 3em;
-
-            img {
-                border-radius: 50%;
-                object-fit: cover;
-            }
+        .under-construction:last-child {
+            rotate: 45deg;
         }
-
-        .username {
-            @include flex-row();
-            gap: .5em;
-
-            .self {
-
-            }
-        }
-
-        .relation {
-            @include flex-row();
-            background-color: var(--gradiant-ardoise-40);
-            border: 1px solid var(--gradiant-ardoise-80);
-            border-radius: 999px;
-            margin-left: auto;
-            margin-right: 1em;
-            padding: .125em 1.5em .125em .5em;
-            position: relative;
-
-            .delete {
-                cursor: pointer;
-                font-size: .75em;
-                position: absolute;
-                right: .5em;
-                top: .25em;
-            }
-        }
-
-        .request {
-            @include flex-row();
-            background-color: var(--gradiant-ardoise-40);
-            cursor: pointer;
-            border-radius: .25em;
-            margin-left: auto;
-            margin-right: 1em;
-            padding: .125em .5em;
-        }
-
-        .pending {
-            @include flex-row();
-            background-color: var(--gradiant-green-30);
-            border-radius: .25em;
-            margin-left: auto;
-            margin-right: 1em;
-            padding: .125em .5em;
-
-            &.d-none {
-                display: none;
-            }
-        }
-    }
-
-    .user:nth-child(2n+1):not(.myself) {
-        background-color: var(--gradiant-grey-20-alpha-50);
-    }
-
-    .user:nth-child(2n):not(.myself) {
-        background-color: var(--gradiant-grey-30-alpha-50);
     }
 }
-
 .nav-to-top {
     background-color: #0d9488e6;
     background-image: url("../images/arrow-up-circle-outline.png");
@@ -538,8 +552,8 @@
     }
 
     .search {
-        background-color: #eee;
-        border: 2px solid #dbdbdb;
+        background-color: var(--gradiant-grey-80-alpha-50);
+        border: 2px solid var(--gradiant-grey-60);
         border-radius: .5em;
         display: flex;
         flex-direction: column;

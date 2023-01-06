@@ -147,6 +147,11 @@
                 }
             }
 
+            a:has(.add-event) {
+                margin-left: auto;
+                width: unset;
+            }
+
             .no-event, .add-event {
                 border-radius: 1em;
                 color: var(--gradiant-green-70);

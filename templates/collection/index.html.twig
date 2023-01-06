@@ -11,7 +11,9 @@
             {{ include('blocks/_nav.html.twig', {thisPage: 'My Collections'|trans}) }}
             {{ include('blocks/source/_button.html.twig') }}
 
-            <div class="add-collection"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>
+            <a href="{{ path('app_collection_new') }}">
+                <div class="add-collection"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>
+            </a>
             <div class="wrapper">
                 {% if collections is empty %}
                     <div class="no-collection">
@@ -30,7 +32,7 @@
                                     <div class="backdrop" style="background-image: url('/images/collections/banners/{{ collection.banner }}')"></div>
                                     <div id="{{ collection.id }}" class="tools">
                                         <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
-{#                                        <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i>#}
+                                        {#                                        <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i> #}
                                         <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
                                     </div>
                                 </div>
@@ -73,7 +75,7 @@
 
         window.addEventListener("DOMContentLoaded", () => {
 
-            document.querySelector(".add-collection").addEventListener("click", addNewCollection);
+            // document.querySelector(".add-collection").addEventListener("click", addNewCollection);
             confirmDialog = document.querySelector(".confirm-deletion");
 
             initTools(confirmDialog);

@@ -30,7 +30,9 @@
                     {% endfor %}
                 </div>
                 <div class="articles-tools">
-                    <div class="add-article"><i class="fa-solid fa-circle-plus"></i> {{ 'Add article'|trans }}</div>
+                    <a href="{{ path('app_blog_new') }}">
+                        <div class="add-article"><i class="fa-solid fa-circle-plus"></i> {{ 'Add article'|trans }}</div>
+                    </a>
                     <div class="list">
                         <ul>
                             {% for article in articles %}
@@ -58,7 +60,7 @@
             </div>
             <div class="footer">
                 <button value="nope" class="btn btn-secondary delete-cancel">{{ 'Cancel'|trans }}</button>
-                <button value="yass" class="btn btn-secondary delete-done">{{ 'Delete'|trans }}</button>
+                <button value="yass" class="btn btn-danger delete-done">{{ 'Delete'|trans }}</button>
             </div>
         </div>
     </dialog>
@@ -78,7 +80,7 @@
             setTimeout(() => {
                 document.querySelector(".header").setAttribute("style", "background-color: transparent");
             }, 0);
-            document.querySelector(".add-article").addEventListener("click", addNewArticle);
+            // document.querySelector(".add-article").addEventListener("click", addNewArticle);
 
         })
 

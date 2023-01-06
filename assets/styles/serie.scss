@@ -399,7 +399,7 @@
             }
 
             .pages {
-                background-color: var(--gradiant-grey-90);
+                background-color: var(--gradiant-grey-80-alpha-50);
                 border-radius: 0;
                 min-height: unset;
                 padding: .5em;
@@ -500,7 +500,7 @@
             }
 
             .search-serie, .add-serie {
-                background-color: var(--gradiant-grey-90);
+                background-color: var(--gradiant-grey-80-alpha-50);
                 border-radius: 0;
                 min-height: unset;
                 padding: .5em;
@@ -567,7 +567,7 @@
 
             .settings {
                 @include flex-col(flex-start, flex-start);
-                background-color: var(--gradiant-grey-80);
+                background-color: var(--gradiant-grey-80-alpha-50);
                 border-radius: 0;
                 margin-bottom: 1em;
                 padding: .5em;
@@ -2378,7 +2378,6 @@
                 }
 
                 .pages, .numbers, .search-serie, .add-serie {
-                    background-color: var(--gradiant-grey-80);
                     border: 1em;
                     border-radius: .5em;
                     margin-bottom: 1em;

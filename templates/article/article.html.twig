@@ -30,9 +30,9 @@
                                     <div class="date" title="{{ article.createdAt|format_datetime() }}">{{ 'Created'|trans }} : {{ article.createdAt|ago }}</div>
                                     <div class="date" title="{{ article.updatedAt|format_datetime() }}">{{ 'Updated'|trans }} : {{ article.updatedAt|ago }}</div>
                                     <div class="date" title="{{ article.publishedAt|format_datetime() }}">{{ 'Published'|trans }} : {{ article.publishedAt|ago }}</div>
-                                    {#                <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div>#}
-                                    {#                <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div>#}
-                                    {#                <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div>#}
+                                    {#                <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div> #}
+                                    {#                <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div> #}
+                                    {#                <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div> #}
                                 </div>
                                 <div class="abstract full">{{ content|raw|nl2br }}</div>
                             </div>
@@ -88,7 +88,7 @@
                                                             <div class="name">{{ user.username?:user.email }}</div>
                                                         </div>
                                                         <label>
-                                                        <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea></label>
+                                                            <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea></label>
                                                         <div class="submit" id="add-{{ comment.id }}" data-id="{{ comment.id }}">{{ 'Add'|trans }}</div>
                                                     </div>
                                                 </details>
@@ -102,7 +102,9 @@
                 </div>
                 <div class="article-tools" id="{{ article.id }}">
                     {% if article.id in userArticleIds %}
-                        <div class="edit-article"><i class="fa-solid fa-pen-to-square"></i> {{ 'Edit article'|trans }}</div>
+                        <a href="{{ path('app_blog_edit', {id: article.id}) }}">
+                            <div class="edit-article"><i class="fa-solid fa-pen-to-square"></i> {{ 'Edit article'|trans }}</div>
+                        </a>
                         <div class="delete-article"><i class="fa-solid fa-trash-can"></i> {{ 'Delete article'|trans }}</div>
                     {% endif %}
                 </div>
@@ -126,7 +128,7 @@
             </div>
             <div class="footer">
                 <button value="nope" class="btn btn-secondary delete-cancel">{{ 'Cancel'|trans }}</button>
-                <button value="yass" class="btn btn-secondary delete-done">{{ 'Delete'|trans }}</button>
+                <button value="yass" class="btn btn-danger delete-done">{{ 'Delete'|trans }}</button>
             </div>
         </div>
     </dialog>
@@ -140,7 +142,7 @@
 
         window.addEventListener("DOMContentLoaded", () => {
 
-            document.querySelector(".edit-article").addEventListener("click", editArticle);
+            // document.querySelector(".edit-article").addEventListener("click", editArticle);
             document.querySelector(".delete-article").addEventListener("click", deleteArticle);
 
             const dialog = document.querySelector(".confirm-deletion");
@@ -189,7 +191,7 @@
             const id = evt.currentTarget.parentElement.getAttribute("id");
             console.log('edit', {id});
             evt.preventDefault();
-            window.location.href = "{{ path('app_blog_edit', {id: article.id})}}";
+            window.location.href = "{{ path('app_blog_edit', {id: article.id}) }}";
         }
 
         function deleteArticle(evt) {

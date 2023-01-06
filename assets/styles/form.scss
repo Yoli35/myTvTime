@@ -72,6 +72,17 @@
     }
 }
 
+.btn-primary {
+    background-color: var(--gradiant-ardoise-50);
+    border-color: var(--gradiant-ardoise-80);
+    color: var(--gradiant-ardoise-90);
+
+    &:hover {
+        background-color: var(--gradiant-ardoise-60);
+        border-color: var(--gradiant-ardoise-90);
+    }
+}
+
 .btn-secondary {
     background-color: var(--gradiant-grey-40);
     border-color: var(--gradiant-grey-50);
@@ -83,14 +94,14 @@
     }
 }
 
-.btn-primary {
-    background-color: var(--gradiant-ardoise-50);
-    border-color: var(--gradiant-ardoise-80);
-    color: var(--gradiant-ardoise-90);
+.btn-danger {
+    background-color: var(--gradiant-red-40);
+    border-color: var(--gradiant-red-80);
+    color: var(--gradiant-red-90);
 
     &:hover {
-        background-color: var(--gradiant-ardoise-60);
-        border-color: var(--gradiant-ardoise-90);
+        background-color: var(--gradiant-red-50);
+        border-color: var(--gradiant-red-90);
     }
 }
 

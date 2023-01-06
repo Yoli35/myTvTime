@@ -917,6 +917,12 @@ h4 {
         padding-left: 3em;
     }
 
+    .contact-me {
+        a {
+            color: var(--gradiant-grey-90);
+        }
+    }
+
     .powered {
         background-image: url("../images/the-movie-db.svg");
         background-size: cover;
@@ -1291,6 +1297,18 @@ h4 {
 
 .show-code {
     @include dialog3(80%);
+}
+
+.under-construction {
+    @include flex-row();
+    background-color: var(--gradiant-yellow-50);
+    border-radius: 999px;
+    color: var(--gradiant-red-90);
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1.2em;
+    padding: 1em;
+    text-align: center;
 }
 
 @media (min-width: 576px) { /* 540 */

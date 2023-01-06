@@ -16,35 +16,33 @@
 
             <main>
                 <div class="events">
-                    <div class="add-event"><i class="fa-solid fa-circle-plus"></i> {{ 'Add event'|trans }}</div>
-                    {% if events|length %}
-                        {% for event in events %}
-                            {% if event.visible %}
-                                <a href="{{ path('app_event_show', {id: event.id}) }}">
-                                    <div class="event" data-id="{{ event.id }}">
-                                        <div class="poster">
-                                            <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
-                                        </div>
-                                        <div class="infos">
-                                            <h2>{{ event.name }}</h2>
-                                            <div>{{ event.subheading }}</div>
-                                            <div id="{{ event.id }}" class="tools">
-                                                <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
-{#                                                <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i>#}
-                                                <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
-                                            </div>
-                                        </div>
-                                        <div class="countdown" id="{{ event.id }}">
-                                            {{ event.date|format_date('full') }}<br/>
-                                            {{ event.date|format_time('medium') }}
-                                        </div>
+                    <a href="{{ path('app_event_new') }}">
+                        <div class="add-event"><i class="fa-solid fa-circle-plus"></i> {{ 'Add event'|trans }}</div>
+                    </a>
+                    {% for event in events %}
+                        <a href="{{ path('app_event_show', {id: event.id}) }}">
+                            <div class="event" data-id="{{ event.id }}">
+                                <div class="poster">
+                                    <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                </div>
+                                <div class="infos">
+                                    <h2>{{ event.name }}</h2>
+                                    <div>{{ event.subheading }}</div>
+                                    <div id="{{ event.id }}" class="tools">
+                                        <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
+                                        {#                                                <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i> #}
+                                        <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
                                     </div>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
+                                </div>
+                                <div class="countdown" id="{{ event.id }}">
+                                    {{ event.date|format_date('full') }}<br/>
+                                    {{ event.date|format_time('medium') }}
+                                </div>
+                            </div>
+                        </a>
                     {% else %}
                         <div class="no-event">{{ 'No event'|trans }}</div>
-                    {% endif %}
+                    {% endfor %}
                 </div>
             </main>
         </div>
@@ -65,7 +63,7 @@
             </div>
             <div class="footer">
                 <button value="nope" class="btn btn-secondary delete-cancel">{{ 'Cancel'|trans }}</button>
-                <button value="yass" class="btn btn-secondary delete-done">{{ 'Delete'|trans }}</button>
+                <button value="yass" class="btn btn-danger delete-done">{{ 'Delete'|trans }}</button>
             </div>
         </div>
     </dialog>
@@ -79,7 +77,7 @@
         window.addEventListener("DOMContentLoaded", () => {
 
             document.querySelector(".header").setAttribute("style", "background: transparent;");
-            document.querySelector(".add-event").addEventListener("click", addNewEvent);
+            // document.querySelector(".add-event").addEventListener("click", addNewEvent);
             confirmDialog = document.querySelector(".confirm-deletion");
 
             initHeader();

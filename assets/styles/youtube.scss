@@ -18,7 +18,7 @@
 
     .yt-video {
         @include flex-col(start, start);
-        background-color: var(--gradiant-grey-80);
+        background-color: var(--gradiant-grey-80-alpha-50);
         border-radius: .5em;
         box-shadow: 0 0 1em rgba(0, 0, 0, .25);
         line-height: 1em;
@@ -906,7 +906,7 @@
 
     .yt-result {
         .yt-video {
-            background-color: var(--gradiant-grey-30);
+            background-color: var(--gradiant-grey-30-alpha-50);
         }
     }
 

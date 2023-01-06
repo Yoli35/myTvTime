@@ -179,9 +179,9 @@ Do you really want to delete this collection?: Voulez-vous vraiment supprimer ce
 First Air at: Première diffusion
 Pagination: Pagination
 Results per page: Resultats par page
-Add order: Ordre d'ajout
-Last modified by user: Date de dernière modification (utilisateur)
-Last modified by TMDB: Date de dernière modification (the Movie Database)
+Add order: Ajout
+Last modified by user: Visionnage
+Last modified by TMDB: Modification (the Movie Database)
 Order by: Tri
 Order: Sens
 Descending: Décroissant
@@ -730,3 +730,4 @@ None: Aucun
 cookie consent: Ce site utilise des cookies pour améliorer le service rendu, notamment sur la page « Mes séries ». En cliquant sur le bouton « J'accepte » vous autorisez leur utilisation.
 Accept: J'accepte
 Confidentiality policy: Politique de confidentialité
+This page is under construction: Cette page est en cours de réalisation
