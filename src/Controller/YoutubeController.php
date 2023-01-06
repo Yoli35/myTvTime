@@ -86,8 +86,8 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
     public function video(Request $request, YoutubeVideoTagRepository $repository, YoutubeVideo $youtubeVideo): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser()?:null);
 
         $tags = $repository->findAllByLabel();
         $description = preg_replace(

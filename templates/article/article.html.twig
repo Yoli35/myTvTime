@@ -20,7 +20,7 @@
                             <div class="presentation">
                                 <div class="title-author">
                                     <div class="title">{{ article.title }}</div>
-                                    {% if article.user.id == user.id %}
+                                    {% if user and article.user.id == user.id %}
                                         <div class="author">{{ 'By myself'|trans }}</div>
                                     {% else %}
                                         <div class="author">{{ 'By'|trans }} {{ article.user.username?:article.user.email }}</div>

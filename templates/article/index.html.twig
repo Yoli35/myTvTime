@@ -30,9 +30,11 @@
                     {% endfor %}
                 </div>
                 <div class="articles-tools">
-                    <a href="{{ path('app_blog_new') }}">
-                        <div class="add-article"><i class="fa-solid fa-circle-plus"></i> {{ 'Add article'|trans }}</div>
-                    </a>
+                    {% if user %}
+                        <a href="{{ path('app_blog_new') }}">
+                            <div class="add-article"><i class="fa-solid fa-circle-plus"></i> {{ 'Add article'|trans }}</div>
+                        </a>
+                    {% endif %}
                     <div class="list">
                         <ul>
                             {% for article in articles %}

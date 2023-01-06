@@ -348,6 +348,13 @@
 
             form {
                 @include mtt-form();
+
+                input {
+                    width: 100%;
+                }
+                textarea {
+                    padding: 1em;
+                }
             }
 
             .switch {

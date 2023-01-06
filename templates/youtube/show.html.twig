@@ -3,7 +3,7 @@
 {% block title %}{{ 'my TvTime::YoutubeVideo' }}{% endblock %}
 {% set user = app.user %}
 {% if video.channel.customUrl %}
-    {% set url = 'c/' ~ video.channel.customUrl %}
+    {% set url = video.channel.customUrl %}
 {% else %}
     {% set url = 'channel/' ~ video.channel.youtubeId %}
 {% endif %}

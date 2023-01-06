@@ -84,7 +84,8 @@ function initYoutube(id, locale, paths) {
                     let channel = document.createElement("div");
                     channel.setAttribute("class", "channel");
                     let aChannel = document.createElement("a");
-                    aChannel.setAttribute("href", 'https://www.youtube.com/c/' + (result['channel']['customUrl'] === null) ? result['channel']['youtubeId'] : result['channel']['customUrl']);
+                    let href = 'https://www.youtube.com/' + (result['channel']['customUrl'] === null ? result['channel']['youtubeId'] : result['channel']['customUrl']);
+                    aChannel.setAttribute("href", href);
                     aChannel.setAttribute("target", "_blank");
                     let span = document.createElement("span");
                     span.setAttribute("data-descr", result['channel']['title']);
