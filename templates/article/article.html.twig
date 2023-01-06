@@ -10,95 +10,93 @@
         {{ include('blocks/_nav.html.twig', {thisPage: article.title, parent: {url: path('app_blog'), page: 'Blog'|trans}}) }}
 
         <div class="blog">
-            <div class="content">
-                <div class="articles">
-                    <div class="article" data-id="{{ article.id }}">
-                        {% if article.banner %}
-                            <div class="banner full" style="background-image: url('/images/articles/banners/{{ article.banner }}')"></div>
-                        {% endif %}
-                        <div class="apercu">
-                            <div class="presentation">
-                                <div class="title-author">
-                                    <div class="title">{{ article.title }}</div>
-                                    {% if user and article.user.id == user.id %}
-                                        <div class="author">{{ 'By myself'|trans }}</div>
-                                    {% else %}
-                                        <div class="author">{{ 'By'|trans }} {{ article.user.username?:article.user.email }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="dates">
-                                    <div class="date" title="{{ article.createdAt|format_datetime() }}">{{ 'Created'|trans }} : {{ article.createdAt|ago }}</div>
-                                    <div class="date" title="{{ article.updatedAt|format_datetime() }}">{{ 'Updated'|trans }} : {{ article.updatedAt|ago }}</div>
-                                    <div class="date" title="{{ article.publishedAt|format_datetime() }}">{{ 'Published'|trans }} : {{ article.publishedAt|ago }}</div>
-                                    {#                <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div> #}
-                                    {#                <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div> #}
-                                    {#                <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div> #}
-                                </div>
-                                <div class="abstract full">{{ content|raw|nl2br }}</div>
+            <div class="body">
+                <div class="article" data-id="{{ article.id }}">
+                    {% if article.banner %}
+                        <div class="banner full" style="background-image: url('/images/articles/banners/{{ article.banner }}')"></div>
+                    {% endif %}
+                    <div class="wrapper">
+                        <div class="presentation">
+                            <div class="title-author">
+                                <div class="title">{{ article.title }}</div>
+                                {% if user and article.user.id == user.id %}
+                                    <div class="author">{{ 'By myself'|trans }}</div>
+                                {% else %}
+                                    <div class="author">{{ 'By'|trans }} {{ article.user.username?:article.user.email }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="dates">
+                                <div class="date" title="{{ article.createdAt|format_datetime() }}">{{ 'Created'|trans }} : {{ article.createdAt|ago }}</div>
+                                <div class="date" title="{{ article.updatedAt|format_datetime() }}">{{ 'Updated'|trans }} : {{ article.updatedAt|ago }}</div>
+                                <div class="date" title="{{ article.publishedAt|format_datetime() }}">{{ 'Published'|trans }} : {{ article.publishedAt|ago }}</div>
+                                {#                <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div> #}
+                                {#                <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div> #}
+                                {#                <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div> #}
+                            </div>
+                            <div class="content">{{ content|raw|nl2br }}</div>
+                        </div>
+                    </div>
+                    {% if is_granted("ROLE_USER") %}
+                        <div class="comment-form">
+                            {% if comments is empty %}
+                                <div class="label">{{ 'Be the first to react!'|trans }}</div>
+                            {% else %}
+                                <div class="label">{{ 'React!'|trans }} :</div>
+                            {% endif %}
+                            <div class="user">
+                                {% if user.avatar %}
+                                    <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
+                                {% endif %}
+                                <div class="name">{{ user.username?:user.email }}</div>
+                            </div>
+                            <div>
+                                {{ form_start(form) }}
+                                {{ form_errors(form) }}
+
+                                {{ form_row(form.text) }}
+
+                                {{ form_row(form.submit, { 'label': 'Add' }) }}
+                                {{ form_end(form) }}
                             </div>
                         </div>
-                        {% if is_granted("ROLE_USER") %}
-                            <div class="comment-form">
-                                {% if comments is empty %}
-                                    <div class="label">{{ 'Be the first to react!'|trans }}</div>
-                                {% else %}
-                                    <div class="label">{{ 'React!'|trans }} :</div>
-                                {% endif %}
-                                <div class="user">
-                                    {% if user.avatar %}
-                                        <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
+                    {% endif %}
+                    {% if comments is not empty %}
+                        <div class="comments">
+                            <div class="label">{{ 'Comments'|trans }} :</div>
+                            {% for comment in comments %}
+                                <div class="comment">
+                                    {{ include('blocks/article/_reaction.html.twig', {reaction: comment}) }}
+                                    {% if comment.answers is not empty %}
+                                        <div class="reactions" id="reactions-{{ comment.id }}">
+                                            {% for answer in comment.answers %}
+                                                <div class="reaction">
+                                                    {{ include('blocks/article/_reaction.html.twig', {reaction: answer}) }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
                                     {% endif %}
-                                    <div class="name">{{ user.username?:user.email }}</div>
-                                </div>
-                                <div>
-                                    {{ form_start(form) }}
-                                    {{ form_errors(form) }}
-
-                                    {{ form_row(form.text) }}
-
-                                    {{ form_row(form.submit, { 'label': 'Add' }) }}
-                                    {{ form_end(form) }}
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if comments is not empty %}
-                            <div class="comments">
-                                <div class="label">{{ 'Comments'|trans }} :</div>
-                                {% for comment in comments %}
-                                    <div class="comment">
-                                        {{ include('blocks/article/_reaction.html.twig', {reaction: comment}) }}
-                                        {% if comment.answers is not empty %}
-                                            <div class="reactions" id="reactions-{{ comment.id }}">
-                                                {% for answer in comment.answers %}
-                                                    <div class="reaction">
-                                                        {{ include('blocks/article/_reaction.html.twig', {reaction: answer}) }}
+                                    {% if is_granted("ROLE_USER") %}
+                                        <div class="react">
+                                            <details>
+                                                <summary>{{ 'Answer'|trans }}</summary>
+                                                <div class="answer">
+                                                    <div class="user">
+                                                        {% if user.avatar %}
+                                                            <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
+                                                        {% endif %}
+                                                        <div class="name">{{ user.username?:user.email }}</div>
                                                     </div>
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                        {% if is_granted("ROLE_USER") %}
-                                            <div class="react">
-                                                <details>
-                                                    <summary>{{ 'Answer'|trans }}</summary>
-                                                    <div class="answer">
-                                                        <div class="user">
-                                                            {% if user.avatar %}
-                                                                <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
-                                                            {% endif %}
-                                                            <div class="name">{{ user.username?:user.email }}</div>
-                                                        </div>
-                                                        <label>
-                                                            <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea></label>
-                                                        <div class="submit" id="add-{{ comment.id }}" data-id="{{ comment.id }}">{{ 'Add'|trans }}</div>
-                                                    </div>
-                                                </details>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
+                                                    <label>
+                                                        <textarea id="answer-{{ comment.id }}" data-id="{{ comment.id }}"></textarea></label>
+                                                    <div class="submit" id="add-{{ comment.id }}" data-id="{{ comment.id }}">{{ 'Add'|trans }}</div>
+                                                </div>
+                                            </details>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="article-tools" id="{{ article.id }}">
                     {% if article.id in userArticleIds %}

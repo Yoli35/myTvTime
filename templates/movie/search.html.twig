@@ -15,7 +15,7 @@
 
         <div class="search">
             {{ form_start(form, {'action': action}) }}
-            {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
+            {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query, 'autofocus': 'autofocus'}}) }}
             {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
             {{ form_widget(form.save, { 'label': 'Search', 'attr': {'class': 'btn btn-secondary'} }) }}
             {{ form_end(form) }}

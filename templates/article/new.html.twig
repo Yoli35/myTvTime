@@ -15,12 +15,13 @@
 
             {{ include('blocks/_nav.html.twig', {thisPage:('New article'|trans), parent: {url: path('app_blog'), page: 'Blog'|trans}}) }}
 
-            <div class="content">
+            <div class="body">
                 {{ include('blocks/article/_form.html.twig') }}
             </div>
 
         </div>
         {{ include('blocks/_pagefooter.html.twig') }}
+
     </div>
 {% endblock %}
 {% block morejs %}

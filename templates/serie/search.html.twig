@@ -16,7 +16,7 @@
             {{ include('blocks/_nav.html.twig', {thisPage: 'Series search'}) }}
             <div class="search">
                 {{ form_start(form) }}
-                {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query}}) }}
+                {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query, 'autofocus': 'autofocus'}}) }}
                 {{ form_widget(form.year, {'attr': {'class': 'form-control', 'value': year}}) }}
                 {{ form_widget(form.save, { 'attr': {'class': 'btn btn-secondary'} }) }}
                 {{ form_end(form) }}

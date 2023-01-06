@@ -17,7 +17,7 @@
 
             {{ include('blocks/_nav.html.twig', {thisPage: 'Home Page', user: app.user, from: 'blog', style: 'width: 100%'}) }}
 
-            <div class="content">
+            <div class="body">
                 <div class="articles">
                     {% for article in articles %}
                         {{ include('/blocks/article/_apercu.html.twig') }}
