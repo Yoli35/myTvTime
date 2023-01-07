@@ -62,7 +62,7 @@ class ArticleImageController extends AbstractController
         $form = $this->createForm(ArticleImageType::class, $articleImage);
         $form->handleRequest($request);
 
-        $absolutePath = $this->getParameter('article_images_directory');
+        $absolutePath = $this->getParameter('article_s_images_directory');
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -87,7 +87,7 @@ class ArticleImageController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete' . $articleImage->getId(), $request->request->get('_token'))) {
 
-            $absolutePath = $this->getParameter('article_images_directory');
+            $absolutePath = $this->getParameter('article_s_images_directory');
             unlink($absolutePath . '/' . $articleImage->getPath());
 
             $articleImageRepository->remove($articleImage, true);

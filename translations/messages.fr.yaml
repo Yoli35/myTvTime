@@ -296,10 +296,12 @@ Female: Femme
 Male: Homme
 Close: Fermer
 
-#Series
+# Series
 Top rated: Les mieux notées
 Today: Aujourd'hui
 On the air: à l'antenne
+votes: votes
+No date yet: Pas encore de date
 # descriptions
 Added at: Ajoutée le
 Country: Pays
@@ -730,4 +732,5 @@ None: Aucun
 cookie consent: Ce site utilise des cookies pour améliorer le service rendu, notamment sur la page « Mes séries ». En cliquant sur le bouton « J'accepte » vous autorisez leur utilisation.
 Accept: J'accepte
 Confidentiality policy: Politique de confidentialité
-This page is under construction: Cette page est en cours de réalisation
+This page is: Cette page est
+under construction: en cours de réalisation

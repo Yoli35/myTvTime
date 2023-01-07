@@ -17,7 +17,7 @@ class PeopleController extends AbstractController
     {
     }
 
-    #[Route('/people/{id}', name: 'app_people', methods: ['GET'])]
+    #[Route('{_locale}/people/{id}', name: 'app_people', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]
     public function people(Request $request, $id, TMDBService $TMDBService, ImageConfiguration $imageConfiguration): Response
     {
         $this->logService->log($request, $this->getUser());
@@ -38,9 +38,16 @@ class PeopleController extends AbstractController
         $noDate = 0;
         $roles = $this->makeRoles();
 
+        $locale = $request->getLocale();
+
         foreach ($credits['cast'] as $cast) {
             $role['id'] = $cast['id'];
-            $role['character'] = key_exists('character', $cast) ? ($cast['character'] ? preg_replace($roles['en'], $roles['fr'], $cast['character'] . $people['gender']) : null) : null;;
+            if ($locale =='fr') {
+                $role['character'] = key_exists('character', $cast) ? ($cast['character'] ? preg_replace($roles['en'], $roles['fr'], $cast['character'] . $people['gender']) : null) : null;
+            }
+            else {
+                $role['character'] = key_exists('character', $cast) ? ($cast['character'] ?: null) : null;
+            }
             $role['media_type'] = key_exists('media_type', $cast) ? $cast['media_type'] : null;
             $role['original_title'] = key_exists('original_title', $cast) ? $cast['original_title'] : (key_exists('original_name', $cast) ? $cast['original_name'] : null);
             $role['poster_path'] = key_exists('poster_path', $cast) ? $cast['poster_path'] : null;

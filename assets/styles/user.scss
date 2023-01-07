@@ -2,7 +2,7 @@
 
 .user-search {
     .wrapper {
-        @include flex-100();
+        @include flex-100(center, space-evenly);
 
         .users {
             @include flex-col(center, start);
@@ -20,6 +20,7 @@
                 .magnifying-glass {
                     @include flex-row();
                     background-color: var(--gradiant-ardoise-50);
+                    background-image: var(--btn-primary);
                     border: 2px solid var(--gradiant-grey-90);
                     border-radius: 50%;
                     height: 3em;
@@ -42,6 +43,7 @@
 
                 &.myself {
                     background-color: var(--gradiant-mars-50);
+                    background-image: var(--btn-warning);
                     font-weight: bold;
                 }
 
@@ -69,11 +71,12 @@
                 .relation {
                     @include flex-row();
                     background-color: var(--gradiant-ardoise-40);
+                    background-image: var(--btn-primary);
                     border: 1px solid var(--gradiant-ardoise-80);
                     border-radius: 999px;
                     margin-left: auto;
-                    margin-right: 1em;
-                    padding: .125em 1.5em .125em .5em;
+                    margin-right: .5em;
+                    padding: .25em 2em .25em 1em;
                     position: relative;
 
                     .delete {
@@ -123,10 +126,11 @@
         }
 
         .under-construction:last-child {
-            rotate: 15deg;
+            rotate: z 15deg;
         }
     }
 }
+
 .nav-to-top {
     background-color: #0d9488e6;
     background-image: url("../images/arrow-up-circle-outline.png");
@@ -529,8 +533,7 @@
     @media (min-width: 768px) {
         .details {
             .field {
-                flex: 0 0 auto;
-                width: 100%;
+                flex: 1 0 auto;
             }
         }
     }
@@ -857,8 +860,7 @@
     @media (min-width: 768px) {
         .details {
             .field {
-                flex: 0 0 auto;
-                width: 100%;
+                flex: 1 0 auto;
             }
         }
     }

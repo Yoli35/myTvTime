@@ -66,20 +66,17 @@
     }
 
     .no-collection, .add-collection {
+        background: var(--btn-primary);
+        background-color: var(--gradiant-ardoise-50);
         border-radius: 1em;
-        color: var(--gradiant-green-70);
+        color: var(--gradiant-grey-100);
         font-weight: 600;
         margin-bottom: 2em;
         padding: 1em 2em;
     }
 
-    .no-collection {
-        background-color: var(--gradiant-grey-50);
-    }
-
     .add-collection {
         align-items: center;
-        background-color: var(--gradiant-grey-50);
         box-shadow: 0 0 0 var(--gradiant-grey-20);
         cursor: pointer;
         display: flex;

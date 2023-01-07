@@ -87,6 +87,8 @@
                         {{ serie.name }}
                         {% if serie.first_air_date %}
                             <span>({{ serie.first_air_date|date("Y") }})</span>
+                        {% else %}
+                            — {{ 'No date yet'|trans }}
                         {% endif %}
                     </h1>
                     <div class="info">
@@ -117,14 +119,16 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
-                            <div class="vote-count">{{ serie.vote_count }} votes</div>
-                            <div class="vote-average">
-                                <div class="circle">
-                                    <div class="percentage">{{ (serie.vote_average * 10)|round }}%</div>
+                            {% if serie.vote_count %}
+                                <div class="vote-count">{{ serie.vote_count }} {{ 'votes'|trans }}</div>
+                                <div class="vote-average">
+                                    <div class="circle">
+                                        <div class="percentage">{{ (serie.vote_average * 10)|round }}%</div>
+                                    </div>
+                                    <div class="circle-start"></div>
+                                    <div class="circle-end"></div>
                                 </div>
-                                <div class="circle-start"></div>
-                                <div class="circle-end"></div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="info">

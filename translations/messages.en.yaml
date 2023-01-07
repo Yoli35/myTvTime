@@ -113,6 +113,23 @@ Update: Update
 back to list: Back to list
 edit: Modify
 show: View
+New article: New article
+Create a new article: Create a new article
+article: article
+Publish this article: Publish this article
+Abstract / Subtitle: Abstract / Subtitle
+Content: Content
+Thumbnail (JPG, PNG file): Thumbnail (JPG, PNG file)
+Click here or drop a thumbnail file: Click here or drop a thumbnail file
+Banner (JPG, PNG file): Banner (JPG, PNG file)
+Click here or drop a banner file: Click here or drop a banner file
+Add article: Add article
+Created: Created
+Updated: Updated
+Published: Published
+Delete this article?: Delete this article?
+Do you really want to delete this article?: Do you really want to delete this article?
+This operation is final and cannot be cancelled.: This operation is final and cannot be cancelled.
 
 # Collections
 Collections: Collections
@@ -221,7 +238,7 @@ Known for Department: Known for Department
 Place of Birth: Place of Birth
 Close: Close
 
-#Series
+# Series
 # descriptions, keywords (head)
 List of all the series I have watched in my life: List of all the series I have watched in my life
 Series, Tv Shows: Series, Tv Shows
@@ -229,6 +246,9 @@ Country: Country
 Creation: Creation
 Showrunner: Showrunner
 View on: View on
+votes: votes
+No date yet: No date yet
+
 # Status
 Canceled: Canceled
 Continuing: Continuing
@@ -340,6 +360,7 @@ yourself: yourself
 friend: your friend
 request: add
 pending: pending request
+Reject: Reject
 users: users
 
 # User Account
@@ -434,3 +455,5 @@ Movie Db Id: Movie Db Id
 None: None
 cookie consent: This site uses cookies to improve the service provided, particularly on the "My series" page. By clicking on the "I accept" button you authorize their use.
 Accept: Accept
+This page is: This page is
+under construction: under construction

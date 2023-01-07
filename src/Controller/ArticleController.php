@@ -24,30 +24,32 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    public function __construct(private readonly LogService $logService)
+    public function __construct(private readonly LogService        $logService,
+                                private readonly ArticleRepository $articleRepository,
+                                private readonly FileUploader      $fileUploader)
     {
     }
 
     #[Route('/{_locale}/blog', name: 'app_blog', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request, ArticleRepository $articleRepository): Response
+    public function index(Request $request): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
         $this->logService->log($request, $this->getUser());
-        $articles = $articleRepository->findByPublishedAtDesc();
+        $articles = $this->articleRepository->findByPublishedAtDesc();
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
-            'userArticleIds' => $this->getUserArticleIds($user, $articleRepository),
+            'userArticleIds' => $this->getUserArticleIds($user, $this->articleRepository),
         ]);
     }
 
     #[Route('/{_locale}/blog/article/{id}', name: 'app_blog_article', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function article(Request $request, $id, ArticleRepository $articleRepository, CommentRepository $commentRepository): Response
+    public function article(Request $request, $id, CommentRepository $commentRepository): Response
     {
         $this->logService->log($request, $this->getUser());
-        $article = $articleRepository->find($id);
+        $article = $this->articleRepository->find($id);
 
         $content = preg_replace(
             [
@@ -95,7 +97,7 @@ class ArticleController extends AbstractController
             'content' => $content,
             'form' => $user ? $form->createView() : null,
             'comments' => $comments,
-            'userArticleIds' => $this->getUserArticleIds($user, $articleRepository),
+            'userArticleIds' => $this->getUserArticleIds($user, $this->articleRepository),
         ]);
     }
 
@@ -133,19 +135,20 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/{_locale}/blog/new', name: 'app_blog_new', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET', 'POST'])]
-    public function new(Request $request, ArticleRepository $repository, FileUploader $fileUploader): Response
+    public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
-        $article = new Article($user);
+        $article = new Article();
+        $article->setUser($user);
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setPublishedAt(new DateTimeImmutable());
-            $this->handleForm($form, $article, $fileUploader, $repository);
+            $this->handleForm($form, $article);
             return $this->redirectToRoute('app_blog_article', ['id' => $article->getId()]);
         }
 
@@ -156,17 +159,21 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/{_locale}/blog/edit/{id}', name: 'app_blog_edit', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET', 'POST'])]
-    public function edit(Request $request, Article $article, ArticleRepository $repository, FileUploader $fileUploader): Response
+    public function edit(Request $request, int $id, Article $article): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
+        if ($article == null) {
+            $article = $this->articleRepository->find($id);
+        }
+
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->handleForm($form, $article, $fileUploader, $repository);
+            $this->handleForm($form, $article);
             return $this->redirectToRoute('app_blog_article', ['id' => $article->getId()]);
         }
 
@@ -176,7 +183,7 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    function handleForm($form, Article $article, FileUploader $fileUploader, ArticleRepository $repository): void
+    function handleForm($form, Article $article): void
     {
         /** @var UploadedFile $thumbnailFile */
         $thumbnailFile = $form->get('dropThumbnail')->getData();
@@ -184,37 +191,37 @@ class ArticleController extends AbstractController
         $bannerFile = $form->get('dropBanner')->getData();
 
         if ($thumbnailFile) {
-            $thumbnailFileName = $fileUploader->upload($thumbnailFile, 'article_thumbnail');
+            $thumbnailFileName = $this->fileUploader->upload($thumbnailFile, 'article_thumbnail');
             $fileToBeRemoved = $article->getThumbnail();
             if ($fileToBeRemoved) {
-                $fileUploader->removeFile($fileToBeRemoved, 'article_thumbnail');
+                $this->fileUploader->removeFile($fileToBeRemoved, 'article_thumbnail');
             }
             $article->setThumbnail($thumbnailFileName);
         }
         if ($bannerFile) {
-            $bannerFileName = $fileUploader->upload($bannerFile, 'article_banner');
+            $bannerFileName = $this->fileUploader->upload($bannerFile, 'article_banner');
             $fileToBeRemoved = $article->getBanner();
             if ($fileToBeRemoved) {
-                $fileUploader->removeFile($fileToBeRemoved, 'article_banner');
+                $this->fileUploader->removeFile($fileToBeRemoved, 'article_banner');
             }
             $article->setBanner($bannerFileName);
         }
 //        $article->setIsPublished(true);
         $article->setUpdatedAt(new DateTime());
-        $repository->add($article, true);
+        $this->articleRepository->add($article, true);
     }
 
     #[Route('/{_locale}/blog/delete/{id}', name: 'app_article_delete', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]
-    public function delete(Article $article, ArticleRepository $repository, FileUploader $fileUploader): JsonResponse
+    public function delete(Article $article): JsonResponse
     {
         if ($article->getThumbnail()) {
-            $fileUploader->removeFile($article->getThumbnail(), 'article_thumbnail');
+            $this->fileUploader->removeFile($article->getThumbnail(), 'article_thumbnail');
         }
         if ($article->getBanner()) {
-            $fileUploader->removeFile($article->getBanner(), 'article_banner');
+            $this->fileUploader->removeFile($article->getBanner(), 'article_banner');
         }
         // TODO : Supprimer les images associées
-        $repository->remove($article, true);
+        $this->articleRepository->remove($article, true);
 
         return $this->json(['status' => 200]);
     }

@@ -55,6 +55,100 @@ $fa-font-path: "../webfonts";
     --movie-add: hsl(212, 43%, 70%);
     --movie-seen: hsl(105, 50%, 50%);
 
+    --btn-primary: linear-gradient(
+                    0deg,
+                    hsl(212deg 51% 39%) 1%,
+                    hsl(212deg 46% 42%) 30%,
+                    hsl(212deg 42% 45%) 40%,
+                    hsl(212deg 38% 48%) 47%,
+                    hsl(212deg 36% 50%) 52%,
+                    hsl(212deg 37% 53%) 57%,
+                    hsl(212deg 38% 56%) 62%,
+                    hsl(212deg 40% 59%) 68%,
+                    hsl(212deg 41% 61%) 76%,
+                    hsl(212deg 43% 64%) 100%);
+    --btn-secondary: linear-gradient(
+                    0deg,
+                    hsl(0deg 0% 27%) 1%,
+                    hsl(344deg 0% 30%) 30%,
+                    hsl(344deg 0% 34%) 40%,
+                    hsl(344deg 0% 37%) 47%,
+                    hsl(344deg 0% 41%) 52%,
+                    hsl(344deg 0% 45%) 57%,
+                    hsl(344deg 0% 48%) 62%,
+                    hsl(344deg 0% 52%) 68%,
+                    hsl(344deg 0% 56%) 76%,
+                    hsl(0deg 0% 60%) 100%);
+    --btn-danger: linear-gradient(
+                    0deg,
+                    hsl(0deg 89% 33%) 1%,
+                    hsl(1deg 81% 36%) 30%,
+                    hsl(2deg 74% 40%) 40%,
+                    hsl(2deg 69% 43%) 47%,
+                    hsl(2deg 65% 47%) 52%,
+                    hsl(1deg 61% 50%) 57%,
+                    hsl(1deg 66% 54%) 62%,
+                    hsl(1deg 72% 57%) 68%,
+                    hsl(0deg 80% 61%) 76%,
+                    hsl(0deg 88% 64%) 100%
+    );
+    --btn-warning: linear-gradient(
+                    0deg,
+                    hsl(25deg 76% 36%) 1%,
+                    hsl(25deg 74% 38%) 30%,
+                    hsl(25deg 72% 40%) 40%,
+                    hsl(25deg 71% 42%) 47%,
+                    hsl(25deg 69% 44%) 52%,
+                    hsl(25deg 68% 47%) 57%,
+                    hsl(25deg 67% 49%) 62%,
+                    hsl(25deg 67% 51%) 68%,
+                    hsl(25deg 72% 53%) 76%,
+                    hsl(25deg 77% 55%) 100%);
+    
+    --under-construction:linear-gradient(
+                    45deg,
+                    hsl(240, 0%, 7%) 0%,
+                    hsl(240, 0%, 7%) 5%,
+                    hsl(50, 100%, 50%) 5%,
+                    hsl(50, 100%, 50%) 10%,
+                    hsl(240, 0%, 7%) 10%,
+                    hsl(240, 0%, 7%) 15%,
+                    hsl(50, 100%, 50%) 15%,
+                    hsl(50, 100%, 50%) 20%,
+                    hsl(240, 0%, 7%) 20%,
+                    hsl(240, 0%, 7%) 25%,
+                    hsl(50, 100%, 50%) 25%,
+                    hsl(50, 100%, 50%) 30%,
+                    hsl(240, 0%, 7%) 30%,
+                    hsl(240, 0%, 7%) 35%,
+                    hsl(50, 100%, 50%) 35%,
+                    hsl(50, 100%, 50%) 40%,
+                    hsl(240, 0%, 7%) 40%,
+                    hsl(240, 0%, 7%) 45%,
+                    hsl(50, 100%, 50%) 45%,
+                    hsl(50, 100%, 50%) 50%,
+                    hsl(240, 0%, 7%) 50%,
+                    hsl(240, 0%, 7%) 55%,
+                    hsl(50, 100%, 50%) 55%,
+                    hsl(50, 100%, 50%) 60%,
+                    hsl(240, 0%, 7%) 60%,
+                    hsl(240, 0%, 7%) 65%,
+                    hsl(50, 100%, 50%) 65%,
+                    hsl(50, 100%, 50%) 70%,
+                    hsl(240, 0%, 7%) 70%,
+                    hsl(240, 0%, 7%) 75%,
+                    hsl(50, 100%, 50%) 75%,
+                    hsl(50, 100%, 50%) 80%,
+                    hsl(240, 0%, 7%) 80%,
+                    hsl(240, 0%, 7%) 85%,
+                    hsl(50, 100%, 50%) 85%,
+                    hsl(50, 100%, 50%) 90%,
+                    hsl(240, 0%, 7%) 90%,
+                    hsl(240, 0%, 7%) 95%,
+                    hsl(50, 100%, 50%) 95%,
+                    hsl(50, 100%, 50%) 100%
+    );
+
     --gradiant-ardoise-100: hsl(212, 43%, 100%);
     --gradiant-ardoise-90: hsl(212, 43%, 90%);
     --gradiant-ardoise-90-alpha-10: hsla(212, 43%, 90%, .1);
@@ -146,6 +240,7 @@ $fa-font-path: "../webfonts";
     --gradiant-red-50: hsl(0, 90%, 50%);
     --gradiant-red-40: hsl(0, 90%, 40%);
     --gradiant-red-40-alpha: hsla(0, 90%, 40%, .5);
+    --gradiant-red-20: hsl(0, 90%, 20%);
 
     --gradiant-yellow-50: hsl(45, 90%, 50%);
 
@@ -862,8 +957,8 @@ $fa-font-path: "../webfonts";
     }
 
     .field {
-        flex: 0 0 auto;
-        width: calc(50% - .5em);
+        flex: 1 0 auto;
+        //width: calc(50% - .5em);
     }
 
     input[type=email], input[type=text], textarea {

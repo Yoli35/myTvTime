@@ -55,9 +55,8 @@ class Article
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    public function __construct($user)
+    public function __construct()
     {
-        $this->setUser($user);
         $this->setCreatedAt(new DateTimeImmutable());
         $this->setUpdatedAt(new DateTime());
         $this->articleImages = new ArrayCollection();

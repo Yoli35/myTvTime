@@ -18,7 +18,7 @@
         <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
         {% if from is defined %}
             {% if from == 'blog' %}
-                <div class="btn btn-secondary ml"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></div>
+{#                <div class="btn btn-secondary ml"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></div>#}
             {% endif %}
             {% if from == 'youtube' %}
                 <div class="tag-button"><a href="{{ path('app_youtube_search') }}" title="{{ 'Go to the search by tag page'|trans }}">{{ 'Search by tag'|trans }}</a></div>

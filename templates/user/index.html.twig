@@ -14,7 +14,7 @@
 
             <div class="user-search">
                 <div class="wrapper">
-                    <div class="under-construction">{{ 'This page is under construction'|trans }}</div>
+                    {{ include('blocks/_uc.html.twig') }}
                     <div class="users">
                         <div class="search-bar">
                             <div class="magnifying-glass"><i class="fa-solid fa-magnifying-glass"></i></div>
@@ -51,7 +51,7 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="under-construction">{{ 'This page is under construction'|trans }}</div>
+                    {{ include('blocks/_uc.html.twig') }}
                 </div>
             </div>
         </div>

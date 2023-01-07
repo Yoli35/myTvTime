@@ -9,6 +9,9 @@
 
     .header {
         @include animated-header("../images/blog-header.jpg");
+        .animated-h1, h1 {
+            color: var(--gradiant-grey-90);
+        }
     }
 
     .nothing {
@@ -344,8 +347,10 @@
 
                 .author {
                     color: var(--gradiant-grey-40);
+                    flex: 1;
                     font-size: 1em;
                     margin-left: auto;
+                    text-align: right;
                 }
             }
 
@@ -368,10 +373,11 @@
             .add-article, .edit-article, .delete-article {
                 @include flex-row();
                 align-items: center;
-                background-color: var(--gradiant-grey-50);
+                background: var(--btn-primary);
+                background-color: var(--gradiant-ardoise-50);
                 border-radius: 999em;
                 box-shadow: 0 0 0 var(--gradiant-grey-20);
-                color: var(--gradiant-green-70);
+                color: var(--gradiant-grey-100);
                 cursor: pointer;
                 display: flex;
                 font-weight: 600;

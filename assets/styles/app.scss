@@ -1301,14 +1301,20 @@ h4 {
 
 .under-construction {
     @include flex-row();
-    background-color: var(--gradiant-yellow-50);
+    background: var(--under-construction);
     border-radius: 999px;
-    color: var(--gradiant-red-90);
-    font-size: 1.5em;
-    font-weight: bold;
-    line-height: 1.2em;
-    padding: 1em 2em;
-    text-align: center;
+    padding: .5em;
+
+    .content {
+        background-color: hsla(50, 100%, 50%, .5);
+        border-radius: 999px;
+        color: var(--gradiant-red-20);
+        font-size: 1.5em;
+        font-weight: bold;
+        line-height: 1.2em;
+        padding: 1em 2em;
+        text-align: center;
+    }
 }
 
 @media (min-width: 576px) { /* 540 */
