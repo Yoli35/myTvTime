@@ -1301,9 +1301,12 @@ h4 {
 
 .under-construction {
     @include flex-row();
+    //animation: moving 20s infinite linear;
     background: var(--under-construction);
+    background-position-x: 0;
     border-radius: 999px;
     padding: .5em;
+    //width: 346px;
 
     .content {
         background-color: hsla(50, 100%, 50%, .5);
@@ -1314,6 +1317,12 @@ h4 {
         line-height: 1.2em;
         padding: 1em 2em;
         text-align: center;
+    }
+
+    @keyframes moving {
+        100% {
+            background-position-x: 345px;
+        }
     }
 }
 

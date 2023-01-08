@@ -768,14 +768,16 @@
                     let episodeText = data['episodeText'];
 
                     blocks.forEach(block => {
-                        console.log({block});
-                        const details = document.querySelector(".details[data-season-number=\"" + block['season'] + "\"]");
-                        if (details) {
-                            const oldViewingDiv = details.querySelector(".viewing").parentNode;
-                            const newViewingDiv = document.createElement("div");
-                            newViewingDiv.innerHTML = block.view.content;
-                            details.insertBefore(newViewingDiv, oldViewingDiv);
-                            details.removeChild(oldViewingDiv);
+                        if (block['episode_count']) {
+                            console.log({block});
+                            const details = document.querySelector(".details[data-season-number=\"" + block['season'] + "\"]");
+                            if (details) {
+                                const oldViewingDiv = details.querySelector(".viewing").parentNode;
+                                const newViewingDiv = document.createElement("div");
+                                newViewingDiv.innerHTML = block.view.content;
+                                details.insertBefore(newViewingDiv, oldViewingDiv);
+                                details.removeChild(oldViewingDiv);
+                            }
                         }
                     })
                     updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);

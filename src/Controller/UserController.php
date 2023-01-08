@@ -216,7 +216,7 @@ class UserController extends AbstractController
         $friend->setRecipient($this->userRepository->find($recipientId));
         $this->friendRepository->save($friend, true);
 
-        return $this->json([]);
+        return $this->json(['status' => 200]);
     }
 
     #[Route('/{_locale}/phpinfo', name: 'app_php_info', requirements: ['_locale' => 'fr|en|de|es'])]

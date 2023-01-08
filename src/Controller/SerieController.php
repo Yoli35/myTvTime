@@ -772,6 +772,7 @@ class SerieController extends AbstractController
             if ($season->getSeasonNumber()) { // 21/12/2022 : plus d'épisodes spéciaux
                 $blocks[] = [
                     'season' => $season->getSeasonNumber(),
+                    'episode_count' => $season->getEpisodeCount(),
                     'view' => $this->render('blocks/serie/_season_viewing.html.twig', [
                         'season' => $season,
                         'globalIndex' => $globalIndex,

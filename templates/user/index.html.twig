@@ -14,7 +14,7 @@
 
             <div class="user-search">
                 <div class="wrapper">
-                    {{ include('blocks/_uc.html.twig') }}
+                    {{ include('blocks/_uc.html.twig', {index: 0}) }}
                     <div class="users">
                         <div class="search-bar">
                             <div class="magnifying-glass"><i class="fa-solid fa-magnifying-glass"></i></div>
@@ -51,7 +51,7 @@
                             </div>
                         {% endfor %}
                     </div>
-                    {{ include('blocks/_uc.html.twig') }}
+                    {{ include('blocks/_uc.html.twig', {index: 1}) }}
                 </div>
             </div>
         </div>
@@ -64,6 +64,7 @@
     {{ parent() }}
     <script>
         let _app_personal_friend_new = "{{ path('app_personal_friend_new', {ownerId: 0, recipientId: 0})[:-3] }}";
+
         window.addEventListener("DOMContentLoaded", () => {
             const searchInput = document.querySelector("#search");
             searchInput.focus();
@@ -71,6 +72,7 @@
             requests.forEach(request => {
                 request.addEventListener("click", requestFriendship);
             });
+            animate();
         });
 
         function requestFriendship(evt) {
@@ -79,7 +81,6 @@
 
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
-                const response = JSON.parse(this.response);
                 const user = request.closest(".user");
                 const pending = user.querySelector(".pending");
                 user.removeChild(request);
@@ -87,6 +88,29 @@
             }
             xhr.open("GET", _app_personal_friend_new + {{ user.id }} +'/' + id);
             xhr.send();
+        }
+
+        function animate() {
+            const underConstructions = document.querySelectorAll(".under-construction");
+            let ticking=[];
+            underConstructions?.forEach(uc => {
+                uc.style.backgroundPositionX = "0px";
+                let index = uc.getAttribute("data-index");
+                ticking[index] = false;
+
+                setInterval(() => {
+                    if (!ticking[index]) {
+                        window.requestAnimationFrame(function () {
+                            let X = uc.style.backgroundPositionX;
+                            let px = X.substring(0, X.length - 2);
+                            uc.style.backgroundPositionX = (parseInt(px) + 1) + "px";
+
+                            ticking[index] = false;
+                        });
+                    }
+                    ticking[index] = true;
+                }, 60);
+            });
         }
     </script>
 {% endblock %}
