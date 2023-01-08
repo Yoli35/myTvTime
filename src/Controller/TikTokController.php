@@ -19,7 +19,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class TikTokController extends AbstractController
 {
-    #[Route('/{_locale}/tik/tok', name: 'app_tik_tok', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/tiktok', name: 'app_tik_tok', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

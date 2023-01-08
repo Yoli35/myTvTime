@@ -60,68 +60,70 @@ class TikTokAddVideoComponent
     #[ArrayShape(['videos' => "array", 'count' => "int", 'flash' => "array"])]
     public function tik_tok_results(): array
     {
-        // https://vm.tiktok.com/ZMNHRpwad/?k=1
-        // https://www.tiktok.com/@jessicamartinez62s/video/7119662902562376965?is_from_webapp=1&sender_device=pc
-        $thisLink = $this->link;
-        $videoId = "";
-        $valid = false;
         $is_there_a_new_one = false;
+        $flash = ['status' => 'Notice', 'message' => 'Rendering'];
+        if (strlen($this->link)) {
+            // https://vm.tiktok.com/ZMFKkSPhk/
+            // https://vm.tiktok.com/ZMNHRpwad/?k=1
+            // https://www.tiktok.com/@jessicamartinez62s/video/7119662902562376965?is_from_webapp=1&sender_device=pc
+            // https://www.tiktok.com/@woodwork.fergus/video/7184373069962579246?is_copy_url=1&is_from_webapp=v1&lang=fr&q=woodwork.fergus&t=1673165181932
+            $thisLink = $this->link;
+            $videoId = "";
+            $valid = false;
 
-        if (str_contains($thisLink, "https://www.tiktok.com/") && str_contains($thisLink, "video")) {
+            if (str_contains($thisLink, "https://www.tiktok.com/") && str_contains($thisLink, "video")) {
 
-            $hasParam = strpos($thisLink, '?');
-            if ($hasParam) {
-                $thisLink = substr($thisLink, 0, $hasParam);
-            }
-            $videoId = substr($thisLink, -19);
-            $valid = true;
-        }
-
-        if ($valid) {
-
-            $video = $this->tikTokVideoRepository->findBy(['videoId' => $videoId]);
-
-            if ($video == null) {
-                $standing = $this->tikTokService->getVideo($thisLink);
-                if ($standing['code'] == 200) {
-                    // https://www.tiktok.com/@leoobbrown/video/7089218681154145542?is_from_webapp=1&sender_device=pc&web_id=7113996049588979205
-                    $tiktok = json_decode($standing['content'], true);
-
-                    $video = new TikTokVideo();
-                    $video->setVersion($tiktok['version']);
-                    $video->setType($tiktok['type']);
-                    $video->setVideoId($videoId);
-                    $video->setTitle($tiktok['title']);
-                    $video->setAuthorUrl($tiktok['author_url']);
-                    $video->setAuthorName($tiktok['author_name']);
-                    $video->setWidth($tiktok['width']);
-                    $video->setHeight($tiktok['height']);
-                    $video->setHtml($tiktok['html']);
-                    $video->setThumbnailUrl($tiktok['thumbnail_url']);
-                    $video->setThumbnailHasExpired(false);
-                    $video->setThumbnailWidth($tiktok['thumbnail_width']);
-                    $video->setThumbnailHeight($tiktok['thumbnail_height']);
-                    $video->setProviderUrl($tiktok['provider_url']);
-                    $video->setProviderName($tiktok['provider_name']);
-                    $addedAt = new \DateTimeImmutable();
-                    $video->setAddedAt($addedAt->setTimezone((new \DateTime())->getTimezone()));
-                    $video->addUser($this->userRepository->find($this->id));
-
-                    $this->tikTokVideoRepository->add($video, true);
-
-                    $is_there_a_new_one = true;
-                    $flash = ['status' => 'Success', 'message' => 'La vidéo a bien été ajoutée'];
+                $hasParam = strpos($thisLink, '?');
+                if ($hasParam) {
+                    $thisLink = substr($thisLink, 0, $hasParam);
                 }
-                else {
-                    $flash = ['status' => 'Error', 'message' => 'La vidéo n\'a pu être ajoutée'];
+                $videoId = substr($thisLink, -19);
+                $valid = true;
+            }
+
+            if ($valid) {
+
+                $video = $this->tikTokVideoRepository->findBy(['videoId' => $videoId]);
+
+                if ($video == null) {
+                    $standing = $this->tikTokService->getVideo($thisLink);
+                    if ($standing['code'] == 200) {
+                        // https://www.tiktok.com/@leoobbrown/video/7089218681154145542?is_from_webapp=1&sender_device=pc&web_id=7113996049588979205
+                        $tiktok = json_decode($standing['content'], true);
+
+                        $video = new TikTokVideo();
+                        $video->setVersion($tiktok['version']);
+                        $video->setType($tiktok['type']);
+                        $video->setVideoId($videoId);
+                        $video->setTitle($tiktok['title']);
+                        $video->setAuthorUrl($tiktok['author_url']);
+                        $video->setAuthorName($tiktok['author_name']);
+                        $video->setWidth($tiktok['width']);
+                        $video->setHeight($tiktok['height']);
+                        $video->setHtml($tiktok['html']);
+                        $video->setThumbnailUrl($tiktok['thumbnail_url']);
+                        $video->setThumbnailHasExpired(false);
+                        $video->setThumbnailWidth($tiktok['thumbnail_width']);
+                        $video->setThumbnailHeight($tiktok['thumbnail_height']);
+                        $video->setProviderUrl($tiktok['provider_url']);
+                        $video->setProviderName($tiktok['provider_name']);
+                        $addedAt = new \DateTimeImmutable();
+                        $video->setAddedAt($addedAt->setTimezone((new \DateTime())->getTimezone()));
+                        $video->addUser($this->userRepository->find($this->id));
+
+                        $this->tikTokVideoRepository->add($video, true);
+
+                        $is_there_a_new_one = true;
+                        $flash = ['status' => 'Success', 'message' => 'La vidéo a bien été ajoutée'];
+                    } else {
+                        $flash = ['status' => 'Error', 'message' => 'La vidéo n\'a pu être ajoutée'];
+                    }
+                } else {
+                    $flash = ['status' => 'Notice', 'message' => 'La vidéo a déjà été ajoutée précédemment'];
                 }
+            } else {
+                $flash = ['status' => 'Error', 'message' => 'Le lien n\'est pas valide : ' . $this->link];
             }
-            else {
-                $flash = ['status' => 'Notice', 'message' => 'La vidéo a déjà été ajoutée précédemment'];
-            }
-        }
-        else {
-            $flash = ['status' => 'Error', 'message' => 'Le lien n\'est pas valide : ' . $this->link];
         }
 
         if (!count($this->videos) || $is_there_a_new_one) {

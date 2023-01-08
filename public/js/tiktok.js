@@ -15,8 +15,8 @@ function initTiktok(locale, paths, id) {
 
     const myLink = document.getElementById('link');
     myLink.addEventListener("input", () => {
-        setTimeout(function () {
-            $(myLink).val("");
+        setTimeout(() => {
+            myLink.val = "";
         }, 2000);
     });
 
@@ -45,7 +45,7 @@ function initTiktok(locale, paths, id) {
             let current_results = videos.length;
 
             const xhr = new XMLHttpRequest();
-            xhr.onload = function() {
+            xhr.onload = function () {
                 const response = JSON.parse(this.response);
                 const results = response['results'];
                 const count = results.length;

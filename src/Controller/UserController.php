@@ -49,7 +49,7 @@ class UserController extends AbstractController
     {
     }
 
-    #[Route('/{_locale}/user', name: 'app_personal_list', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route('/{_locale}/user/search', name: 'app_personal_list', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
