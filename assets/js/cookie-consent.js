@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
 
-    const dialog = document.querySelector("#cookies");
+    const dialog = document.querySelector("#accept");
     const actAsADialog = typeof dialog.showModal === 'function';
 
     if (!actAsADialog) {
@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         openDialog();
 
-        document.querySelector(".accept-cookies").addEventListener("click", function () {
+        document.querySelector(".accept-all").addEventListener("click", function () {
             document.cookie = "accepted_cookies=yes;path=/;max-age=604800;SameSite=Lax"
             closeDialog();
         })
@@ -21,7 +21,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         dialog.addEventListener("keyup", function(evt) {
             if (evt.keyCode === 13 || evt.key === 13 || evt.code === 'Enter' || evt.code === 'NumpadEnter') {
-                document.querySelector(".accept-cookies").click();
+                document.querySelector(".accept-all").click();
             }
             if (evt.keyCode === 27 || evt.key === 27 || evt.code === 'Escape') {
                 document.querySelector(".close").click();

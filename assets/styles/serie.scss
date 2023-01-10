@@ -1584,7 +1584,12 @@
                         }
 
                         &.active {
-                            background-color: var(--gradiant-grey-50);
+                            background-color: hsl(42, 100%, 47%);
+                            color: var(--gradiant-grey-20);
+
+                            &:hover {
+                                background-color: hsl(42, 60%, 47%);
+                            }
                         }
                     }
                 }

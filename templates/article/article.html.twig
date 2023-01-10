@@ -29,9 +29,6 @@
                                 <div class="date" title="{{ article.createdAt|format_datetime() }}">{{ 'Created'|trans }} : {{ article.createdAt|ago }}</div>
                                 <div class="date" title="{{ article.updatedAt|format_datetime() }}">{{ 'Updated'|trans }} : {{ article.updatedAt|ago }}</div>
                                 <div class="date" title="{{ article.publishedAt|format_datetime() }}">{{ 'Published'|trans }} : {{ article.publishedAt|ago }}</div>
-                                {#                <div class="date">{{ 'Created At'|trans }} : {{ article.createdAt|format_datetime() }}</div> #}
-                                {#                <div class="date">{{ 'Updated At'|trans }} : {{ article.updatedAt|format_datetime() }}</div> #}
-                                {#                <div class="date">{{ 'Published At'|trans }} : {{ article.publishedAt|format_datetime() }}</div> #}
                             </div>
                             <div class="content">{{ content|raw|nl2br }}</div>
                         </div>
@@ -131,7 +128,8 @@
         </div>
     </dialog>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         let path = "{{ path('app_blog_article_add_answer', {cid: 0}) }}";
         const _app_blog_article_add_answer = path.substring(0, path.length - 1);
@@ -153,6 +151,11 @@
             })
             dialog.querySelector(".close").addEventListener('click', function () {
                 closeDialog(dialog, false);
+            });
+
+            const images = document.querySelector(".article").querySelectorAll("img")
+            images.forEach(image => {
+                image.addEventListener("click", openDiaporama);
             });
 
             const submits = document.querySelectorAll(".submit");
@@ -229,6 +232,59 @@
                 xhr.open("GET", "/" + locale + "/blog/delete/" + deletedId);
                 xhr.send();
             }
+        }
+
+        function openDiaporama(e) {
+            const images = document.querySelector(".article").querySelector(".wrapper").querySelectorAll("img");
+            const count = images.length;
+            // const srcArray = images.map((image)=>{ return image.getAttribute("src") });
+            const backDiapo = document.createElement("div");
+            backDiapo.classList.add("back-diapo");
+            const wrapperDiv = document.createElement("div");
+            wrapperDiv.classList.add("wrapper");
+            backDiapo.appendChild(wrapperDiv);
+            document.querySelector("body").appendChild(backDiapo);
+            document.body.style.overflow = 'hidden';
+
+            const closeDiv = document.createElement("div");
+            closeDiv.classList.add("close");
+            const crossDiv = document.createElement("div");
+            closeDiv.appendChild(crossDiv);
+            closeDiv.addEventListener("click", closeDiaporama);
+            const prevDiv = document.createElement("div");
+            prevDiv.classList.add("chevron");
+            const nextDiv = document.createElement("div");
+            nextDiv.classList.add("chevron");
+            crossDiv.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            prevDiv.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            nextDiv.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+
+            const imageSrc = e.currentTarget.getAttribute("src");
+            const imgDiv = document.createElement("img");
+            imgDiv.setAttribute("src", imageSrc);
+
+            wrapperDiv.appendChild(closeDiv);
+            wrapperDiv.appendChild(prevDiv);
+            wrapperDiv.appendChild(imgDiv);
+            wrapperDiv.appendChild(nextDiv);
+
+            setTimeout(()=> {
+                imgDiv.classList.add("fade");
+            }, 0);
+            backDiapo.style.bottom = -window.scrollY + "px";
+            backDiapo.style.top = window.scrollY + "px";
+        }
+
+        function closeDiaporama() {
+            const backDiapo = document.querySelector(".back-diapo");
+            const imgDiv = backDiapo.querySelector("img");
+            document.body.style.overflow = 'unset';
+            setTimeout(() => {
+                imgDiv.classList.remove("fade");
+            }, 0);
+            setTimeout(() => {
+                document.querySelector("body").removeChild(backDiapo);
+            }, 300);
         }
     </script>
 {% endblock %}

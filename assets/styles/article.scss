@@ -9,6 +9,7 @@
 
     .header {
         @include animated-header("../images/blog-header.jpg");
+
         .animated-h1, h1 {
             color: var(--gradiant-grey-90);
         }
@@ -103,6 +104,7 @@
             flex: 1;
             margin-bottom: 1em;
             overflow: hidden;
+            position: relative;
             transition: scale 300ms ease-in-out;
 
             &.deleted {
@@ -148,6 +150,10 @@
                             li {
                                 list-style-type: disc;
                             }
+                        }
+
+                        img {
+                            cursor: pointer;
                         }
 
                         .left {
@@ -534,6 +540,62 @@
             &.visible {
                 transform: translateY(0);
             }
+        }
+    }
+}
+
+.back-diapo {
+    background-color: var(--gradiant-grey-10-alpha-90);
+    inset: 0;
+    position: absolute;
+    transition: bottom 300ms ease-in-out, top 300ms ease-in-out;
+    z-index: 999;
+
+    .wrapper {
+        @include flex-100();
+        gap: 1em;
+        height: 100%;
+        position: relative;
+
+        img {
+            border: 1em solid var(--gradiant-grey-80);
+            max-height: 95%;
+            max-width: 90%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 300ms ease-in-out;
+
+            &.fade {
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 1em;
+            top: 1em;
+
+            > div {
+                @include flex-row();
+                background-color: var(--gradiant-grey-80-alpha-50);
+                border-radius: 50%;
+                color: var(--gradiant-grey-90);
+                cursor: pointer;
+                font-size: 2em;
+                height: 1.5em;
+                width: 1.5em;
+            }
+        }
+
+        .chevron {
+            @include flex-row();
+            background-color: var(--gradiant-grey-80-alpha-50);
+            border-radius: 50%;
+            color: var(--gradiant-grey-90);
+            cursor: pointer;
+            font-size: 2em;
+            height: 1.5em;
+            width: 1.5em;
         }
     }
 }
