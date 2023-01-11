@@ -545,6 +545,7 @@
 }
 
 .back-diapo {
+    @include flex-row();
     background-color: var(--gradiant-grey-10-alpha-90);
     inset: 0;
     position: absolute;
@@ -552,30 +553,31 @@
     z-index: 999;
 
     .wrapper {
-        @include flex-100();
+        @include flex-col();
         gap: 1em;
         height: 100%;
-        position: relative;
+        width: 100%;
 
-        img {
-            border: 1em solid var(--gradiant-grey-80);
-            max-height: 95%;
-            max-width: 90%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 300ms ease-in-out;
+        .image {
+            @include flex-100();
+            gap: 1em;
+            height: 90%;
+            position: relative;
 
-            &.fade {
-                opacity: 1;
+            img {
+                border: 1em solid var(--gradiant-grey-80);
+                max-height: 95vh;
+                max-width: 90vw;
+                object-fit: cover;
+                opacity: 0;
+                transition: opacity 300ms ease-in-out;
+
+                &.fade {
+                    opacity: 1;
+                }
             }
-        }
 
-        .close {
-            position: absolute;
-            right: 1em;
-            top: 1em;
-
-            > div {
+            .chevron {
                 @include flex-row();
                 background-color: var(--gradiant-grey-80-alpha-50);
                 border-radius: 50%;
@@ -587,7 +589,29 @@
             }
         }
 
-        .chevron {
+        .thumbnails {
+            @include flex-row();
+            gap: 1em;
+
+            .thumbnail {
+
+                img {
+                    border: .25em solid var(--gradiant-grey-80);
+                    max-height: 4vh;
+                    max-width: 4vh;
+                    object-fit: cover;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    .close {
+        position: absolute;
+        right: 1em;
+        top: 1em;
+
+        > div {
             @include flex-row();
             background-color: var(--gradiant-grey-80-alpha-50);
             border-radius: 50%;

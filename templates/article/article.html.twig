@@ -237,12 +237,24 @@
         function openDiaporama(e) {
             const images = document.querySelector(".article").querySelector(".wrapper").querySelectorAll("img");
             const count = images.length;
-            // const srcArray = images.map((image)=>{ return image.getAttribute("src") });
+            const srcArray = Array.from(images, image => {
+                return image.getAttribute("src")
+            });
+
             const backDiapo = document.createElement("div");
             backDiapo.classList.add("back-diapo");
             const wrapperDiv = document.createElement("div");
             wrapperDiv.classList.add("wrapper");
+            const imageDiv = document.createElement("div");
+            imageDiv.classList.add("image");
             backDiapo.appendChild(wrapperDiv);
+            wrapperDiv.appendChild(imageDiv);
+            let thumbnails
+            if (count > 1) {
+                thumbnails = document.createElement("div");
+                thumbnails.classList.add("thumbnails");
+                wrapperDiv.appendChild(thumbnails);
+            }
             document.querySelector("body").appendChild(backDiapo);
             document.body.style.overflow = 'hidden';
 
@@ -263,12 +275,22 @@
             const imgDiv = document.createElement("img");
             imgDiv.setAttribute("src", imageSrc);
 
-            wrapperDiv.appendChild(closeDiv);
-            wrapperDiv.appendChild(prevDiv);
-            wrapperDiv.appendChild(imgDiv);
-            wrapperDiv.appendChild(nextDiv);
+            if (count > 1) {
+                srcArray.forEach(src => {
+                    const thumbnail = document.createElement("div");
+                    thumbnail.classList.add("thumbnail");
+                    const img = document.createElement("img");
+                    img.setAttribute("src", src);
+                    thumbnail.appendChild(img);
+                    thumbnails.appendChild(thumbnail);
+                });
+            }
+            backDiapo.appendChild(closeDiv);
+            imageDiv.appendChild(prevDiv);
+            imageDiv.appendChild(imgDiv);
+            imageDiv.appendChild(nextDiv);
 
-            setTimeout(()=> {
+            setTimeout(() => {
                 imgDiv.classList.add("fade");
             }, 0);
             backDiapo.style.bottom = -window.scrollY + "px";
