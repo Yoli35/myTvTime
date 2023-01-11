@@ -24,11 +24,13 @@
 
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/article.js"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             initHeader();
+            initAdditionalImages("{{ app.request.locale }}");
             document.querySelector(".header").setAttribute("style", "background: transparent;");
         })
     </script>

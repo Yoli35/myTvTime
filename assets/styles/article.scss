@@ -54,10 +54,6 @@
                     border-radius: 1em 1em 0 0;
                     height: 15em;
                     width: 100%;
-
-                    &.full {
-                        height: 15em;
-                    }
                 }
 
                 .apercu {
@@ -116,7 +112,27 @@
                 background-size: cover;
                 border-radius: 1em 1em 0 0;
                 height: 15em;
+                position: relative;
                 width: 100%;
+
+                &.full {
+                    height: 20em;
+                }
+
+                &.no-banner {
+                    height: 10em;
+                }
+
+                .thumbnail {
+                    background-size: cover;
+                    border: 2px solid;
+                    border-radius: 50%;
+                    bottom: -6em;
+                    height: 10em;
+                    position: absolute;
+                    right: 2em;
+                    width: 10em;
+                }
             }
 
             .wrapper {
@@ -342,7 +358,7 @@
         .article-preview,
         .article {
             .title-author {
-                @include flex-100(baseline, flex-start);
+                @include flex-col(start, start);
 
                 .title {
                     color: var(--gradiant-grey-20);
@@ -355,8 +371,8 @@
                     color: var(--gradiant-grey-40);
                     flex: 1;
                     font-size: 1em;
-                    margin-left: auto;
-                    text-align: right;
+                    //margin-left: auto;
+                    //text-align: right;
                 }
             }
 
@@ -420,6 +436,14 @@
 
             form {
                 @include mtt-form();
+
+                .field {
+                    .add-an-image {
+                        color: var(--gradiant-ardoise-50);
+                        cursor: pointer;
+                        text-decoration: underline;
+                    }
+                }
 
                 input {
                     width: 100%;

@@ -925,6 +925,10 @@ $fa-font-path: "../webfonts";
     label {
         @include flex-col(start, start);
         width: 100%;
+
+        &.hidden {
+            display: none;
+        }
     }
 
     label:has(select):has(.form-select) {

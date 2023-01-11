@@ -13,7 +13,17 @@
             <div class="body">
                 <div class="article" data-id="{{ article.id }}">
                     {% if article.banner %}
-                        <div class="banner full" style="background-image: url('/images/articles/banners/{{ article.banner }}')"></div>
+                        <div class="banner full" style="background-image: url('/images/articles/banners/{{ article.banner }}')">
+                            {% if article.thumbnail %}
+                                <div class="thumbnail" style="background-image: url('/images/articles/thumbnails/{{ article.thumbnail }}')"></div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="banner no-banner" style="background-image: url('/images/articles/banners/{{ article.banner }}')">
+                            {% if article.thumbnail %}
+                                <div class="thumbnail" style="background-image: url('/images/articles/thumbnails/{{ article.thumbnail }}')"></div>
+                            {% endif %}
+                        </div>
                     {% endif %}
                     <div class="wrapper">
                         <div class="presentation">

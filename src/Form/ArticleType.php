@@ -57,6 +57,50 @@ class ArticleType extends AbstractType
                     'accept' => 'image/*'
                 ],
             ])
+            ->add('image1', DropzoneType::class, [
+                'label' => 'image (JPG, PNG file)',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'data-controller' => 'mydropzone',
+                    'class' => 'hidden',
+                    'placeholder' => 'Click here or drop an image file',
+                    'accept' => 'image/*'
+                ],
+            ])
+            ->add('image2', DropzoneType::class, [
+                'label' => 'image (JPG, PNG file)',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'data-controller' => 'mydropzone',
+                    'class' => 'hidden',
+                    'placeholder' => 'Click here or drop an image file',
+                    'accept' => 'image/*'
+                ],
+            ])
+            ->add('image3', DropzoneType::class, [
+                'label' => 'image (JPG, PNG file)',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'data-controller' => 'mydropzone',
+                    'class' => 'hidden',
+                    'placeholder' => 'Click here or drop an image file',
+                    'accept' => 'image/*'
+                ],
+            ])
+            ->add('image4', DropzoneType::class, [
+                'label' => 'image (JPG, PNG file)',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'data-controller' => 'mydropzone',
+                    'class' => 'hidden',
+                    'placeholder' => 'Click here or drop an image file',
+                    'accept' => 'image/*'
+                ],
+            ])
             ->add('save', SubmitType::class, [
                 'label' => 'Add article',
                 'attr' => ['class' => 'btn btn-secondary'],

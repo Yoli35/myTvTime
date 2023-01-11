@@ -1,6 +1,15 @@
 let letterRatios = [];
 let countdownValues = [];
 const start = Date.now();
+const txt = {
+    'add': {
+        'fr': 'Ajouter une image',
+        'en': 'Add an image',
+        'de': 'Ein Bild hinzufügen',
+        'es': 'Añadir una imagen',
+    }
+}
+let _locale = "fr";
 
 function initHeader() {
     let ticking = false;
@@ -54,4 +63,30 @@ function setH1() {
         part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * letterRatios[n++]) + "deg);");
     })
     h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+}
+
+function initAdditionalImages(locale) {
+    _locale = locale
+    const imageFields = document.querySelectorAll(".field.image");
+    if (imageFields.length) {
+        const field = imageFields[0];
+        const label = field.querySelector("label");
+        if (label.classList.contains("hidden")) {
+            const addAnImage = document.createElement("div")
+            addAnImage.classList.add("add-an-image");
+            addAnImage.innerHTML = "<i class=\"fa-solid fa-plus\"></i>&nbsp;" + txt.add[locale];
+            addAnImage.addEventListener("click", revealsTheField);
+            field.insertBefore(addAnImage, label);
+        }
+    }
+}
+
+function revealsTheField(e) {
+    const field = e.currentTarget.parentElement;
+    const label = field.querySelector("label");
+    const addAnImage = field.querySelector(".add-an-image");
+    field.classList.remove("image");
+    field.removeChild(addAnImage);
+    label.classList.remove("hidden");
+    initAdditionalImages(_locale);
 }

@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Answer;
 use App\Entity\Article;
+use App\Entity\ArticleImage;
 use App\Entity\Comment;
 use App\Entity\User;
 use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Repository\AnswerRepository;
+use App\Repository\ArticleImageRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
 use App\Service\FileUploader;
@@ -24,9 +26,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    public function __construct(private readonly LogService        $logService,
-                                private readonly ArticleRepository $articleRepository,
-                                private readonly FileUploader      $fileUploader)
+    public function __construct(private readonly LogService             $logService,
+                                private readonly ArticleRepository      $articleRepository,
+                                private readonly ArticleImageRepository $imageRepository,
+                                private readonly FileUploader           $fileUploader)
     {
     }
 
@@ -166,9 +169,9 @@ class ArticleController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        if ($article == null) {
-            $article = $this->articleRepository->find($id);
-        }
+//        if ($article == null) {
+//            $article = $this->articleRepository->find($id);
+//        }
 
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -189,6 +192,12 @@ class ArticleController extends AbstractController
         $thumbnailFile = $form->get('dropThumbnail')->getData();
         /** @var UploadedFile $bannerFile */
         $bannerFile = $form->get('dropBanner')->getData();
+        /** @var UploadedFile[] $images */
+        $images = [$form->get('image1')->getData(),
+            $form->get('image2')->getData(),
+            $form->get('image3')->getData(),
+            $form->get('image4')->getData()
+        ];
 
         if ($thumbnailFile) {
             $thumbnailFileName = $this->fileUploader->upload($thumbnailFile, 'article_thumbnail');
@@ -209,6 +218,16 @@ class ArticleController extends AbstractController
 //        $article->setIsPublished(true);
         $article->setUpdatedAt(new DateTime());
         $this->articleRepository->add($article, true);
+
+        for ($i=0;$i<4;$i++) {
+            if ($images[$i]) {
+                $imageFileName = $this->fileUploader->upload($images[$i], 'article_images');
+                $articleImage = new ArticleImage();
+                $articleImage->setPath($imageFileName);
+                $articleImage->setArticle($article);
+                $this->imageRepository->add($articleImage, true);
+            }
+        }
     }
 
     #[Route('/{_locale}/blog/delete/{id}', name: 'app_article_delete', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]

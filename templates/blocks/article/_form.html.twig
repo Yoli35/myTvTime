@@ -39,6 +39,34 @@
             </label>
         </div>
     </div>
+    <div class="form-row">
+        <div class="field image">
+            <label for="{{ form.image1.vars.id }}" class="{{ form.image1.vars.attr.class }}">
+                <div>{{ form.image1.vars.label|trans }}</div>
+                {{ form_widget(form.image1) }}
+            </label>
+        </div>
+        <div class="field image">
+            <label for="{{ form.image2.vars.id }}" class="{{ form.image1.vars.attr.class }}">
+                <div>{{ form.image2.vars.label|trans }}</div>
+                {{ form_widget(form.image2) }}
+            </label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="field image">
+            <label for="{{ form.image3.vars.id }}" class="{{ form.image1.vars.attr.class }}">
+                <div>{{ form.image3.vars.label|trans }}</div>
+                {{ form_widget(form.image3) }}
+            </label>
+        </div>
+        <div class="field image">
+            <label for="{{ form.image4.vars.id }}" class="{{ form.image1.vars.attr.class }}">
+                <div>{{ form.image4.vars.label|trans }}</div>
+                {{ form_widget(form.image4) }}
+            </label>
+        </div>
+    </div>
     <div class="form-row right">
         {{ form_widget(form.save) }}
     </div>
