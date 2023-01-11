@@ -135,6 +135,7 @@
         const _app_blog_article_add_answer = path.substring(0, path.length - 1);
         const locale = "{{ app.request.locale }}";
         let confirmDialog;
+        let diaporamaIndex, diaporamaCount, diaporamaSrc;
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -237,9 +238,14 @@
         function openDiaporama(e) {
             const images = document.querySelector(".article").querySelector(".wrapper").querySelectorAll("img");
             const count = images.length;
+            let prevDiv, nextDiv;
             const srcArray = Array.from(images, image => {
                 return image.getAttribute("src")
             });
+
+            diaporamaIndex = 0;
+            diaporamaCount = count;
+            diaporamaSrc = srcArray;
 
             const backDiapo = document.createElement("div");
             backDiapo.classList.add("back-diapo");
@@ -263,32 +269,45 @@
             const crossDiv = document.createElement("div");
             closeDiv.appendChild(crossDiv);
             closeDiv.addEventListener("click", closeDiaporama);
-            const prevDiv = document.createElement("div");
-            prevDiv.classList.add("chevron");
-            const nextDiv = document.createElement("div");
-            nextDiv.classList.add("chevron");
             crossDiv.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-            prevDiv.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
-            nextDiv.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            if (count > 1) {
+                prevDiv = document.createElement("div");
+                prevDiv.classList.add("chevron");
+                nextDiv = document.createElement("div");
+                nextDiv.classList.add("chevron");
+                prevDiv.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+                nextDiv.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            }
 
             const imageSrc = e.currentTarget.getAttribute("src");
             const imgDiv = document.createElement("img");
             imgDiv.setAttribute("src", imageSrc);
 
             if (count > 1) {
-                srcArray.forEach(src => {
+                srcArray.forEach((src, index) => {
                     const thumbnail = document.createElement("div");
                     thumbnail.classList.add("thumbnail");
+                    thumbnail.setAttribute("data-index", index.toString());
+                    if (src === imageSrc) {
+                        thumbnail.classList.add("active");
+                        diaporamaIndex = index;
+                    }
                     const img = document.createElement("img");
                     img.setAttribute("src", src);
                     thumbnail.appendChild(img);
+                    thumbnail.addEventListener("click", gotoImage);
                     thumbnails.appendChild(thumbnail);
                 });
+                prevDiv.addEventListener("click", prevImage);
+                nextDiv.addEventListener("click", nextImage);
             }
+
+            document.addEventListener("keydown", getKey);
+
             backDiapo.appendChild(closeDiv);
-            imageDiv.appendChild(prevDiv);
+            if (count > 1) imageDiv.appendChild(prevDiv);
             imageDiv.appendChild(imgDiv);
-            imageDiv.appendChild(nextDiv);
+            if (count > 1) imageDiv.appendChild(nextDiv);
 
             setTimeout(() => {
                 imgDiv.classList.add("fade");
@@ -297,9 +316,58 @@
             backDiapo.style.top = window.scrollY + "px";
         }
 
+        function nextImage() {
+            thumbnailDeactivate(diaporamaIndex);
+            diaporamaIndex = (diaporamaIndex + 1) % diaporamaCount;
+            thumbnailActivate(diaporamaIndex);
+            const img = document.querySelector(".back-diapo").querySelector(".image").querySelector("img");
+            img.setAttribute("src", diaporamaSrc[diaporamaIndex]);
+        }
+
+        function prevImage() {
+            thumbnailDeactivate(diaporamaIndex);
+            diaporamaIndex = (diaporamaIndex + (diaporamaCount - 1)) % diaporamaCount;
+            thumbnailActivate(diaporamaIndex);
+            const img = document.querySelector(".back-diapo").querySelector(".image").querySelector("img");
+            img.setAttribute("src", diaporamaSrc[diaporamaIndex]);
+        }
+
+        function gotoImage(e) {
+            thumbnailDeactivate(diaporamaIndex);
+            diaporamaIndex = parseInt(e.currentTarget.getAttribute("data-index"));
+            thumbnailActivate(diaporamaIndex);
+            const img = document.querySelector(".back-diapo").querySelector(".image").querySelector("img");
+            img.setAttribute("src", diaporamaSrc[diaporamaIndex]);
+        }
+
+        function thumbnailDeactivate(index) {
+            const selector = '.thumbnail[data-index="' + index + '"]'
+            const thumbnail = document.querySelector(selector);
+            thumbnail.classList.remove("active");
+        }
+
+        function thumbnailActivate(index) {
+            const selector = '.thumbnail[data-index="' + index + '"]'
+            const thumbnail = document.querySelector(selector);
+            thumbnail.classList.add("active");
+        }
+
         function closeDiaporama() {
             const backDiapo = document.querySelector(".back-diapo");
             const imgDiv = backDiapo.querySelector("img");
+
+            if (diaporamaCount > 1) {
+                for (let i = 0; i < diaporamaCount; i++) {
+                    const selector = '.thumbnail[data-index="' + i + '"]'
+                    const thumbnail = document.querySelector(selector);
+                    thumbnail.removeEventListener("click", gotoImage);
+                }
+                const prevDiv = document.querySelector(".back-diapo").querySelector(".fa-chevron-left").parentElement;
+                const nextDiv = document.querySelector(".back-diapo").querySelector(".fa-chevron-right").parentElement;
+                prevDiv.removeEventListener("click", prevImage);
+                nextDiv.removeEventListener("click", nextImage);
+            }
+            document.removeEventListener("keydown", getKey);
             document.body.style.overflow = 'unset';
             setTimeout(() => {
                 imgDiv.classList.remove("fade");
@@ -307,6 +375,16 @@
             setTimeout(() => {
                 document.querySelector("body").removeChild(backDiapo);
             }, 300);
+        }
+
+        function getKey(e) {
+            if (e.key === "ArrowLeft") {
+                if (diaporamaCount > 1) prevImage();
+            } else if (e.key === "ArrowRight") {
+                if (diaporamaCount > 1) nextImage();
+            } else if (e.key === "Escape") {
+                closeDiaporama();
+            }
         }
     </script>
 {% endblock %}

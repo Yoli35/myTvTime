@@ -594,6 +594,7 @@
             gap: 1em;
 
             .thumbnail {
+                position: relative;
 
                 img {
                     border: .25em solid var(--gradiant-grey-80);
@@ -601,6 +602,36 @@
                     max-width: 4vh;
                     object-fit: cover;
                     opacity: 1;
+                }
+
+                &.active {
+                    img {
+                        border: .25em solid var(--gradiant-yellow-50);
+                    }
+                }
+
+                &.active::before {
+                    @include flex-col();
+                    background-color: var(--gradiant-yellow-50);
+                    border-radius: 999px;
+                    content: '';
+                    height: .5em;
+                    left: 0;
+                    position: absolute;
+                    top: -1em;
+                    width: 100%;
+                }
+
+                &.active::after {
+                    @include flex-col();
+                    background-color: var(--gradiant-yellow-50);
+                    border-radius: 999px;
+                    bottom: -1em;
+                    content: '';
+                    height: .5em;
+                    left: 0;
+                    position: absolute;
+                    width: 100%;
                 }
             }
         }
