@@ -324,6 +324,8 @@
             }, 0);
             backDiapo.style.bottom = -window.scrollY + "px";
             backDiapo.style.top = window.scrollY + "px";
+
+            initShortcutsHelp(backDiapo, count);
         }
 
         function nextImage() {
@@ -395,6 +397,70 @@
             } else if (e.key === "Escape") {
                 closeDiaporama();
             }
+        }
+
+        function initShortcutsHelp(back, count) {
+            const txt = {
+                'title': {
+                    'fr': 'Raccourcis clavier',
+                    'en': 'Keyboard shortcuts',
+                    'de': 'Tastaturkürzel',
+                    'es': 'Atajos de teclado',
+                },
+                'left': {
+                    'fr': 'Image précédente',
+                    'en': 'Previous image',
+                    'de': 'Vorheriges Bild',
+                    'es': 'Imagen anterior',
+                }
+,
+                'right': {
+                    'fr': 'Image suivante',
+                    'en': 'Next image',
+                    'de': 'Nächstes Bild',
+                    'es': 'Imagen siguiente',
+                }
+,
+                'escape': {
+                    'fr': 'Quitter le diaporama',
+                    'en': 'Quit diaporama',
+                    'de': 'Diashow beenden',
+                    'es': 'Salir de la presentación',
+                }
+            };
+            const navigation = document.createElement("div");
+            navigation.classList.add("navigation");
+            const help = document.createElement("div");
+            help.classList.add("help");
+            navigation.appendChild(help);
+            const title = document.createElement("div");
+            title.classList.add("title");
+            title.innerHTML = txt.title["{{ app.request.locale }}"];
+            help.appendChild(title);
+            if (count) {
+                addKey(help, "left", txt.left["{{ app.request.locale }}"]);
+                addKey(help, "right", txt.right["{{ app.request.locale }}"]);
+            }
+            addKey(help, "escape", txt.escape["{{ app.request.locale }}"]);
+            const close = document.createElement("div");
+            close.classList.add("close");
+            close.innerHTML = '<i class="fa-solid fa-circle-chevron-down"></i>';
+            help.appendChild(close);
+            back.appendChild(navigation);
+        }
+
+
+
+        function addKey(parent, name, txt) {
+            const key= document.createElement("div");
+            key.classList.add("key")
+            const img = document.createElement("img");
+            img.setAttribute("src", "/images/interface/key-" + name + ".jpg");
+            key.appendChild(img);
+            const text = document.createElement("div");
+            text.appendChild(document.createTextNode(txt));
+            key.appendChild(text);
+            parent.appendChild(key);
         }
     </script>
 {% endblock %}

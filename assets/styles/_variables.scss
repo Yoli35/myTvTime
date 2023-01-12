@@ -901,7 +901,7 @@ $fa-font-path: "../webfonts";
 @mixin mtt-form($angle: 0deg) {
     @include flex-col();
     background-color: var(--form-bg);
-    border: 2px dashed var(--form-border);
+    //border: 2px dashed var(--form-border);
     border-radius: 1em;
     box-shadow: 0 0 1em hsla(0, 0, 0%, .2), 0 0 3em hsla(0, 0, 0%, .15), 0 0 10em hsla(0, 0, 0%, .1);
     gap: 1em;

@@ -6,19 +6,21 @@ use App\Entity\User;
 use App\Service\LogService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 //use Symfony\Component\HttpFoundation\RedirectResponse;
 //use Symfony\Component\HttpFoundation\Response;
 //use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
+
 //use Symfony\Component\Security\Http\Event\LogoutEvent;
 use Symfony\Component\Translation\LocaleSwitcher;
 
-class LoginSubscriber implements EventSubscriberInterface
+readonly class LoginSubscriber implements EventSubscriberInterface
 {
     public function __construct(/*private readonly UrlGeneratorInterface $urlGenerator,*/
-                                private readonly Security              $security,
-                                private readonly LogService            $logService,
-                                private readonly LocaleSwitcher        $localeSwitcher
+        private Security       $security,
+        private LogService     $logService,
+        private LocaleSwitcher $localeSwitcher
     )
     {
     }
@@ -35,7 +37,7 @@ class LoginSubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $this->logService->log($request, $user);
-
+        dump($request, $event);
         $preferredLanguage = $user->getPreferredLanguage();
 
         if ($preferredLanguage) {

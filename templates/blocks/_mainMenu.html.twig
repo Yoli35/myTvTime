@@ -107,6 +107,11 @@
                 evt.stopPropagation();
                 hamburgerButton.classList.toggle("active");
                 navigation.classList.toggle("active");
+                if (navigation.classList.contains("active")) {
+                    hideConnexion();
+                } else {
+                    showConnexion();
+                }
             }
 
             function closeNav(evt) {
@@ -129,14 +134,14 @@
             function hideConnexion() {
                 connexion.classList.remove("visible");
                 setTimeout(() => {
-                    connexion.classList.remove("visible")
+                    connexion.classList.remove("show")
                 }, 300);
             }
         </script>
     </div>
 </div>
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success" role="alert">
-        {{ message|trans }}
-    </div>
-{% endfor %}
+{#{% for message in app.flashes('success') %}#}
+{#    <div class="alert alert-success" role="alert">#}
+{#        {{ message|trans }}#}
+{#    </div>#}
+{#{% endfor %}#}

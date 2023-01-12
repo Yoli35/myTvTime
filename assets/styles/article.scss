@@ -532,7 +532,7 @@
         transition: background-color .5s, opacity .5s;
 
         &.visible {
-            background-color: var(--gradiant-grey-80) 7 f;
+            background-color: var(--gradiant-grey-80);
             display: flex;
             opacity: 1;
         }
@@ -675,6 +675,47 @@
             font-size: 2em;
             height: 1.5em;
             width: 1.5em;
+        }
+    }
+
+    .navigation {
+        background-color: var(--gradiant-ardoise-70);
+        border-radius: 1em;
+        bottom: 1em;
+        color: var(--gradiant-ardoise-90);
+        padding: 1em;
+        position: absolute;
+        right: 1em;
+
+        .help {
+            position: relative;
+
+            .title {
+                font-weight: bold;
+            }
+
+            .key {
+                @include flex-100(center, start);
+                margin-top: .5em;
+
+                img {
+                    border: 1px solid;
+                    border-radius: .25em;
+                    height: 2em;
+                    width: auto;
+                }
+
+                > div {
+                    flex-shrink: 0;
+                    margin-left: 1em;
+                }
+            }
+
+            .close {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
         }
     }
 }
