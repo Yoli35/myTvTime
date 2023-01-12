@@ -679,43 +679,82 @@
     }
 
     .navigation {
-        background-color: var(--gradiant-ardoise-70);
-        border-radius: 1em;
         bottom: 1em;
         color: var(--gradiant-ardoise-90);
-        padding: 1em;
         position: absolute;
         right: 1em;
+        transition: height 300ms ease-in-out, width 100ms ease-in-out;
 
         .help {
+            height: 11em;
             position: relative;
+            width: 15em;
 
-            .title {
-                font-weight: bold;
-            }
-
-            .key {
-                @include flex-100(center, start);
-                margin-top: .5em;
-
-                img {
-                    border: 1px solid;
-                    border-radius: .25em;
-                    height: 2em;
-                    width: auto;
-                }
-
-                > div {
-                    flex-shrink: 0;
-                    margin-left: 1em;
-                }
-            }
-
-            .close {
+            .maxi {
+                background-color: var(--gradiant-ardoise-60);
+                border-radius: 1em;
+                inset: 0;
+                padding: 1em;
                 position: absolute;
-                right: 0;
-                top: 0;
+
+                .title {
+                    font-weight: bold;
+                }
+
+                .key {
+                    @include flex-100(center, start);
+                    margin-top: .5em;
+
+                    img {
+                        border: 1px solid;
+                        border-radius: .25em;
+                        height: 2em;
+                        width: auto;
+                    }
+
+                    > div {
+                        flex-shrink: 0;
+                        margin-left: 1em;
+                    }
+                }
+
+                .close {
+                    cursor: pointer;
+                    position: absolute;
+                    right: 1em;
+                    top: 1em;
+                }
             }
+
+            .mini {
+                align-items: center;
+                background-color: var(--gradiant-ardoise-60);
+                border-radius: 999px;
+                cursor: pointer;
+                display: flex;
+                font-size: 2em;
+                font-weight: bold;
+                height: 1.2em;
+                justify-content: center;
+                inset: 0;
+                position: absolute;
+                width: 1.2em;
+            }
+
+            &.minimise {
+                height: .75em;
+                width: .75em;
+
+                .maxi {
+                    display: none;
+                }
+            }
+        }
+        &:has(.help.minimise) {
+            bottom: 2em;
+            height: 2.4em;
+            right: 2em;
+            width: 2.4em;
         }
     }
 }

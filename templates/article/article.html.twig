@@ -433,29 +433,46 @@
             const help = document.createElement("div");
             help.classList.add("help");
             navigation.appendChild(help);
+            const mini = document.createElement("div");
+            mini.classList.add("mini");
+            mini.innerHTML = '<i class="fa-solid fa-circle-question"></i>';
+            mini.addEventListener("click", maximiseHelp);
+            help.appendChild(mini);
+            const maxi = document.createElement("div");
+            maxi.classList.add("maxi");
+            help.appendChild(maxi);
             const title = document.createElement("div");
             title.classList.add("title");
             title.innerHTML = txt.title["{{ app.request.locale }}"];
-            help.appendChild(title);
+            maxi.appendChild(title);
             if (count) {
-                addKey(help, "left", txt.left["{{ app.request.locale }}"]);
-                addKey(help, "right", txt.right["{{ app.request.locale }}"]);
+                addKey(maxi, "left", txt.left["{{ app.request.locale }}"]);
+                addKey(maxi, "right", txt.right["{{ app.request.locale }}"]);
             }
-            addKey(help, "escape", txt.escape["{{ app.request.locale }}"]);
+            addKey(maxi, "escape", txt.escape["{{ app.request.locale }}"]);
             const close = document.createElement("div");
             close.classList.add("close");
             close.innerHTML = '<i class="fa-solid fa-circle-chevron-down"></i>';
-            help.appendChild(close);
+            close.addEventListener("click", minimiseHelp);
+            maxi.appendChild(close);
             back.appendChild(navigation);
         }
 
+        function minimiseHelp() {
+            const help = document.querySelector(".back-diapo").querySelector(".navigation").querySelector(".help");
+            help.classList.add("minimise");
+        }
 
+        function maximiseHelp() {
+            const help = document.querySelector(".back-diapo").querySelector(".navigation").querySelector(".help");
+            help.classList.remove("minimise");
+        }
 
         function addKey(parent, name, txt) {
             const key= document.createElement("div");
             key.classList.add("key")
             const img = document.createElement("img");
-            img.setAttribute("src", "/images/interface/key-" + name + ".jpg");
+            img.setAttribute("src", "/images/interface/key-" + name + ".png");
             key.appendChild(img);
             const text = document.createElement("div");
             text.appendChild(document.createTextNode(txt));
