@@ -330,7 +330,7 @@
                             <h5>{{ 'Posters'|trans }}</h5>
                             <div>
                                 {% for poster in images.posters %}
-                                    <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.2 ~ poster.file_path }}" alt="Some poster">
+                                    <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster.file_path }}" alt="Some poster">
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -343,6 +343,7 @@
 {% endblock %}
 {% block morejs %}
     <script src="/js/movie.js"></script>
+    <script src="/js/diaporama.js"></script>
     <script>
         const paths = [
             "{{ path('profile_infos') }}",
@@ -360,6 +361,9 @@
             initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.2 }}", "{{ locale }}");
 
             initCollections();
+
+            const images = document.querySelector(".movie-info").querySelector(".images").querySelectorAll("img");
+            initDiaporama(images, "{{ app.request.locale }}");
 
             const poster = document.querySelector(".movie-poster");
             const image = poster.querySelector("img");

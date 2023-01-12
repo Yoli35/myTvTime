@@ -290,17 +290,21 @@
         margin-top: 1em;
     }
 
-    .image {
+    .images {
         @include flex-100();
-        margin-bottom: 2em;
+        flex-wrap: wrap;
+        gap: 1em;
+        .image {
+            @include flex-row();
 
-        figure {
-            max-width: 100%;
-
-            img {
-                border-radius: 1em;
-                margin-inline: auto;
+            figure {
                 max-width: 100%;
+
+                img {
+                    border-radius: 1em;
+                    margin-inline: auto;
+                    max-width: 20em;
+                }
             }
         }
     }

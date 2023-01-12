@@ -240,6 +240,7 @@
 {% endblock %}
 {% block morejs %}
     <script src="/js/source.js"></script>
+    <script src="/js/diaporama.js"></script>
     <script>
         const _app_serie_get_overview = "{{ path('app_serie_get_overview', {id: 0}) }}";
         const imgUrl = "{{ imageConfig.url ~ imageConfig.profile_sizes.2 }}";
@@ -251,6 +252,13 @@
             });
             document.addEventListener("click", hideInfos);
             initInfos();
+
+            const images = document.querySelector(".person").querySelector(".images").querySelectorAll("img");
+            initDiaporama(images, "{{ app.request.locale }}");
+            images.forEach(image => {
+                image.classList.add("pointer");
+                image.addEventListener("click", openDiaporama);
+            });
         });
 
         function initInfos() {

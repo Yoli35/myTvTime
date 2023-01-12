@@ -36,27 +36,32 @@
 
             <div class="description">{{ event.description|raw }}</div>
 
-            {% for image in event.images %}
-                <div class="image">
-                    <figure>
-                        <img src="/images/events/images/{{ image.path }}" alt="{{ image.caption }}">
-                        <figcaption>{{ image.caption }}</figcaption>
-                    </figure>
-                </div>
-            {% endfor %}
-
+            <div class="images">
+                {% for image in event.images %}
+                    <div class="image">
+                        <figure>
+                            <img src="/images/events/images/{{ image.path }}" alt="{{ image.caption }}">
+                            <figcaption>{{ image.caption }}</figcaption>
+                        </figure>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
 {% block morejs %}
     <script src="/js/event.js"></script>
+    <script src="/js/diaporama.js"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
             initCountdowns(setCountdownValues());
             document.querySelector(".header").setAttribute("style", "background: transparent;");
+
+            const images = document.querySelector(".my-event").querySelector(".images").querySelectorAll("img");
+            initDiaporama(images, "{{ app.request.locale }}");
         })
 
         function setCountdownValues() {

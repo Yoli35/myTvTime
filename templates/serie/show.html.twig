@@ -306,7 +306,7 @@
                                     <h5>{{ 'Backdrops'|trans }}</h5>
                                     <div>
                                         {% for backdrop in images.backdrops %}
-                                            <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.2 ~ backdrop.file_path }}" alt="Some backdrop">
+                                            <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop.file_path }}" alt="Some backdrop">
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -315,12 +315,12 @@
                                     <div>
                                         <div class="logo-bg-dark">
                                             {% for logo in images.logos %}
-                                                <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
+                                                <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.3 ~ logo.file_path }}" alt="Some logo">
                                             {% endfor %}
                                         </div>
                                         <div class="logo-bg-light">
                                             {% for logo in images.logos %}
-                                                <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
+                                                <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.3 ~ logo.file_path }}" alt="Some logo">
                                             {% endfor %}
                                         </div>
                                     </div>
@@ -329,7 +329,7 @@
                                     <h5>{{ 'Posters'|trans }}</h5>
                                     <div>
                                         {% for poster in images.posters %}
-                                            <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.2 ~ poster.file_path }}" alt="Some poster">
+                                            <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster.file_path }}" alt="Some poster">
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -541,6 +541,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="/js/serie.js"></script>
+    <script src="/js/diaporama.js"></script>
     <script>
         const paths = [
             "{{ path('app_serie_render_translation_fields') }}",
@@ -580,11 +581,11 @@
                 {% endif %}
             ]);
 
+            {% if user and serieId %}
             viewedEpisodesDialog = document.querySelector(".viewed-episode");
             initViewedEpisodes(viewedEpisodesDialog);
             episodeAddEvent();
 
-            {% if user and serieId %}
             document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
 
             function toggleFavorite(evt) {
@@ -608,7 +609,6 @@
                 xhr.open("GET", url);
                 xhr.send();
             }
-            {% endif %}
 
             function episodeAddEvent() {
                 const episodes = document.querySelectorAll(".ep");
@@ -817,6 +817,10 @@
                 xhr.open("GET", _app_user_connected);
                 xhr.send();
             }
+            {% endif %}
+
+            const images = document.querySelector(".serie-page").querySelector(".images").querySelectorAll("img");
+            initDiaporama(images, _locale);
         });
     </script>
 {% endblock %}
