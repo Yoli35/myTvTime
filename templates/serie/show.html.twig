@@ -530,6 +530,11 @@
                         <input type="checkbox" id="rememberChoice" checked title="{{ 'Remember my choice as long as I stay on this page'|trans }}">{{ 'Remember my choices'|trans }}
                     </label>
                 </div>
+                <div class="live-watch">
+                    <label for="liveWatch">
+                        <input type="checkbox" id="liveWatch" title="{{ 'Episodes seen as they happen'|trans }}">{{ 'Episodes seen as they happen'|trans }}
+                    </label>
+                </div>
             </div>
             <div class="footer">
                 <button value="nope" class="btn btn-secondary viewed-episode-cancel">{{ 'Cancel'|trans }}</button>
@@ -707,7 +712,8 @@
                     let network = dialog.querySelector(".network.active");
                     let device = dialog.querySelector(".device.active");
                     let all = dialog.querySelector("#checkThemAll").checked;
-                    toggleEpisodeView(network, device, all);
+                    let liveWatch = dialog.querySelector("#liveWatch");
+                    toggleEpisodeView(network, device, all, liveWatch);
                 }
             }
 
@@ -742,11 +748,11 @@
                 return false;
             }
 
-            function toggleEpisodeView(network = null, device = null, all = false) {
+            function toggleEpisodeView(network = null, device = null, all = false, liveWatch = null) {
 
                 stillConnected();
 
-                let networkId = null, networkType = null, deviceType = null;
+                let networkId = null, networkType = null, deviceType = null, live = null;
 
                 if (network) {
                     networkType = network.getAttribute("data-type");
@@ -754,6 +760,9 @@
                 }
                 if (device) {
                     deviceType = device.getAttribute("data-type");
+                }
+                if (liveWatch) {
+                    live = liveWatch.checked;
                 }
 
                 const e_viewed = episodeClicked.viewed;
@@ -788,7 +797,7 @@
                     }, 300);
 
                 }
-                xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : ""));
+                xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : "") + (live ? "&live=1" : ""));
                 xhr.send();
                 update.showModal();
                 setTimeout(() => {
@@ -819,7 +828,7 @@
             }
             {% endif %}
 
-            const images = document.querySelector(".serie-page").querySelector(".images").querySelectorAll("img");
+            const images = document.querySelector(".serie-page").querySelector(".images")?.querySelectorAll("img");
             initDiaporama(images, _locale);
         });
     </script>

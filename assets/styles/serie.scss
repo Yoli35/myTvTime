@@ -1610,7 +1610,7 @@
                 }
             }
 
-            .remember-choice {
+            .remember-choice, .live-watch {
                 @include flex-100(end, end);
             }
 

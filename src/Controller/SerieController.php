@@ -370,7 +370,7 @@ class SerieController extends AbstractController
     {
         if ($serieViewing->getSeasonCount() != $tv['number_of_seasons']) {
             $serieViewing->setSeasonCount($tv['number_of_seasons']);
-            $serieViewing->setModifiedAt(new DateTime());
+//            $serieViewing->setModifiedAt(new DateTime());
             $this->serieViewingRepository->save($serieViewing, true);
 
             if ($serie !== null) {
@@ -706,6 +706,7 @@ class SerieController extends AbstractController
         $episode = $request->query->getInt('e');
         $newValue = $request->query->getInt('v');
         $allBefore = $request->query->getInt('all');
+        $liveWatch = $request->query->getInt('live');
 
         $user = $this->getUser();
         $serie = $this->serieRepository->find($serieId);
@@ -723,17 +724,28 @@ class SerieController extends AbstractController
             foreach ($episodeViewings as $episode) {
 
                 if ($episode->getViewedAt() == null) {
-                    $episode->setNetworkId($networkId ?: null);
-                    $episode->setNetworkType($networkType != "" ? $networkType : null);
-                    $episode->setDeviceType($deviceType != "" ? $deviceType : null);
-                    $episode->setViewedAt(new DateTimeImmutable());
-
+                    $episodeTmdb = null;
                     if (!$episode->getAirDate()) {
                         $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber(), $request->getLocale()), true);
                         if ($episodeTmdb) {
                             $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
                         }
                     }
+
+                    $episode->setNetworkId($networkId ?: null);
+                    $episode->setNetworkType($networkType != "" ? $networkType : null);
+                    $episode->setDeviceType($deviceType != "" ? $deviceType : null);
+                    if ($liveWatch) {
+                        if (!$episodeTmdb) {
+                            $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber(), $request->getLocale()), true);
+                            if ($episodeTmdb) {
+                                $episode->setViewedAt(new DateTimeImmutable($episodeTmdb['air_date']));
+                            }
+                        }
+                    } else {
+                        $episode->setViewedAt(new DateTimeImmutable());
+                    }
+
                     $this->episodeViewingRepository->save($episode, true);
                 }
             }
@@ -760,7 +772,13 @@ class SerieController extends AbstractController
                 $this->seasonViewingRepository->save($episode->getSeason(), true);
             }
         }
-        $serieViewing->setModifiedAt(new DateTime());
+        /*
+         * Si "Épisodes vus au fur et à mesure" cochés, pour que la série reste à sa place
+         * avec le tri "visionnage", ne pas mettre à jour le champ "modifiedAt"
+         */
+        if (!$liveWatch) {
+            $serieViewing->setModifiedAt(new DateTime());
+        }
         $this->serieViewingRepository->save($serieViewing);
         $this->setViewedEpisodeCount($serieViewing);
         /* ----end---- entity based viewing ----end---- */
@@ -815,7 +833,7 @@ class SerieController extends AbstractController
     {
         $viewedEpisodeCount = 0;
         foreach ($serieViewing->getSeasons() as $season) {
-            if ($season->getSeasonNumber()) { // 21/12/2022 : plus d'épisodes spéciaux
+            if ($season->getSeasonNumber()) { // 21/12/2022 : finito les épisodes spéciaux
                 $viewedEpisodeCount += $season->getViewedEpisodeCount();
             }
         }

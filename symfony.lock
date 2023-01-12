@@ -213,9 +213,6 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
-    "ramsey/collection": {
-        "version": "1.2.2"
-    },
     "ramsey/uuid": {
         "version": "4.3.1"
     },

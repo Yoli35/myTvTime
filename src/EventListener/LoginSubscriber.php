@@ -37,7 +37,6 @@ readonly class LoginSubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $this->logService->log($request, $user);
-        dump($request, $event);
         $preferredLanguage = $user->getPreferredLanguage();
 
         if ($preferredLanguage) {

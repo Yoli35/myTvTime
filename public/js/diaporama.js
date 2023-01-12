@@ -1,6 +1,7 @@
 let diaporamaImages, diaporamaIndex, diaporamaCount, diaporamaSrc, _loc;
 
 function initDiaporama(images, locale) {
+    if (!images) return;
     diaporamaImages = images;
     _loc = locale;
     images.forEach(image => {
