@@ -681,22 +681,22 @@ $fa-font-path: "../webfonts";
         @include flex-row(center, center);
         flex-wrap: wrap;
         gap: 1em;
-        background-color: var(--gradiant-grey-30);
+        background-color: var(--gradiant-grey-20);
         border-radius: .5em;
-        height: 100%;
+        //height: 100%;
         padding: 1em;
-        width: calc(50% - 2em);
+        //width: calc(50% - 2em);
     }
 
     .logo-bg-light {
         @include flex-row(center, center);
         flex-wrap: wrap;
         gap: 1em;
-        background-color: var(--gradiant-grey-70);
+        background-color: var(--gradiant-grey-80);
         border-radius: .5em;
-        height: 100%;
+        //height: 100%;
         padding: 1em;
-        width: calc(50% - 2em);
+        //width: calc(50% - 2em);
     }
 
     h4, h5 {

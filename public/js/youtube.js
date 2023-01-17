@@ -15,7 +15,7 @@ function initYoutube(id, locale, paths) {
     const ytLink = document.getElementById('link');
     ytLink.addEventListener("input", () => {
         setTimeout(function () {
-            $(ytLink).val("");
+            ytLink.value = "";
         }, 2000);
     });
     document.addEventListener("visibilitychange", () => {

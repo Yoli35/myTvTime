@@ -619,6 +619,8 @@ class SerieController extends AbstractController
                     $seasonsWithAView[] = $seasonWithAView;
                 }
                 $tv['seasons'] = $seasonsWithAView;
+
+//                $this->testViewingAfterward($serieViewing);
             }
         }
         $ygg = str_replace(' ', '+', $tv['name']);
@@ -650,6 +652,41 @@ class SerieController extends AbstractController
         ]);
 
     }
+
+//    public function testViewingAfterward(SerieViewing $serie): void
+//    {
+//        $seasonInterval = [];
+//        $seasonInterval['interval'] = [];
+//        $seasonInterval['average'] = [];
+//        $seasonInterval['days'] = [];
+//        foreach ($serie->getSeasons() as $season) {
+//            if ($season->getSeasonNumber() && $season->getViewedEpisodeCount() > 1) {
+//                $interval = [];
+//                $index = 0;
+//                $daysArray = [];
+//                $totalDays = 0;
+//                foreach ($season->getEpisodes() as $episode) {
+//                    if ($episode->getViewedAt()) {
+//                        $interval[] = date_diff($episode->getAirDate(), $episode->getViewedAt());
+//
+//                        if (!$index++) {
+//                            $first = $episode->getViewedAt();
+//                        } else {
+//                            $days = date_diff($episode->getViewedAt(), $first)->days;
+//                            $totalDays += $days;
+//                            $daysArray[] = $days;
+//                        }
+//                    }
+//                }
+//                $averageDays = $totalDays / ($index - 1);
+//                $seasonInterval['interval'][] = $interval;
+//                $seasonInterval['average'][] = $averageDays;
+//                $seasonInterval['days'][] = $daysArray;
+//            }
+//        }
+//        dump($serie);
+//        dump($seasonInterval);
+//    }
 
     public function whatsNew($tv, $serie, $serieRepository): array|null
     {

@@ -2,6 +2,7 @@
 
 namespace App\Components;
 
+use App\Controller\UserController;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
 use App\Repository\UserRepository;
@@ -57,22 +58,27 @@ class YoutubeAddVideoComponent
     #[LiveProp]
     public string $time2Human = "";
 
-    private UserRepository $userRepository;
-    private EntityManagerInterface $entityManager;
-    private YoutubeVideoRepository $videoRepository;
-    private YoutubeChannelRepository $channelRepository;
+//    private UserRepository $userRepository;
+//    private EntityManagerInterface $entityManager;
+//    private YoutubeVideoRepository $videoRepository;
+//    private YoutubeChannelRepository $channelRepository;
     private Google_Service_YouTube $service_YouTube;
 
 
     /**
      * @throws Exception
      */
-    public function __construct(YoutubeVideoRepository $videoRepository, YoutubeChannelRepository $channelRepository, EntityManagerInterface $entityManager, UserRepository $userRepository)
+    public function __construct(
+        private readonly YoutubeVideoRepository   $videoRepository,
+        private readonly YoutubeChannelRepository $channelRepository,
+        private readonly EntityManagerInterface   $entityManager,
+        private readonly UserController           $userController,
+        private readonly UserRepository           $userRepository)
     {
-        $this->videoRepository = $videoRepository;
-        $this->channelRepository = $channelRepository;
-        $this->entityManager = $entityManager;
-        $this->userRepository = $userRepository;
+//        $this->videoRepository = $videoRepository;
+//        $this->channelRepository = $channelRepository;
+//        $this->entityManager = $entityManager;
+//        $this->userRepository = $userRepository;
 
         $client = new Google_Client();
         $client->setApplicationName('mytvtime');
@@ -99,9 +105,9 @@ class YoutubeAddVideoComponent
 
     public function newVideo(): array
     {
-
         $thisLink = $this->link;
         $this->justAdded = 0;
+//        $this->userController->isFullyConnected();
 
         if (str_contains($thisLink, "shorts")) {
             if (str_contains($thisLink, "www")) {

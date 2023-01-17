@@ -650,6 +650,11 @@ class UserController extends AbstractController
         return $this->json(['connected' => ($user !== null)]);
     }
 
+    public function isFullyConnected()
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    }
+
     #[Route('/change-password', name: 'app_user_change_password', methods: ['GET', 'POST'])]
     public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {

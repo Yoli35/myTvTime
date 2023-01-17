@@ -1118,7 +1118,8 @@
     }
 
     main {
-        @include flex-100(flex-start, flex-start);
+        @include flex-col(flex-start, flex-start);
+        gap: 1em;
 
         h4 {
             margin-top: .5em;
@@ -1137,12 +1138,11 @@
                     @include flex-col(flex-start, flex-start);
                     background-color: var(--gradiant-grey-80);
                     border-radius: .5em;
-                    padding: 0 1em;
+                    padding: 0 1em 1em 1em;
                     width: 100%;
 
                     .list {
                         @include flex-row(stretch, flex-start);
-                        margin: 1em;
                         overflow-x: auto;
                         width: 100%;
 
@@ -1170,23 +1170,26 @@
                             @include flex-row(center, flex-start);
                             background-color: var(--gradiant-grey-90);
                             border-radius: 0;
-                            height: 10em;
+                            height: 12em;
                             width: 100%;
 
                             .poster {
-                                height: 10em;
+                                flex-shrink: 0;
+                                height: 12em;
+                                width: 8em;
                                 z-index: 0;
 
                                 img {
                                     border-radius: 0;
-                                    height: 10em;
+                                    height: 12em;
                                     object-fit: cover;
-                                    width: auto;
+                                    width: 8em;
                                 }
                             }
 
                             .infos {
                                 @include flex-col(flex-start, flex-start);
+                                height: 12em;
                                 padding: .5em;
 
                                 div {
@@ -1295,18 +1298,32 @@
             }
         }
 
+        .desktop {
+            display: none;
+        }
+
+        .tablet {
+            display: flex;
+
+            .key-facts {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1em;
+                justify-content: space-around;
+            }
+        }
+
         aside {
             @include flex-col(flex-start, flex-start);
             background-color: var(--gradiant-grey-80);
             border-radius: .5em;
-            margin-left: 1em;
-            min-height: 50vh;
+            //min-height: 50vh;
             padding: 0 1em;
             width: 100%;
 
             .favorite {
                 @include flex-col();
-                padding: 1em .5em;
+                margin-top: 1em;
                 width: 100%;
 
                 .control {
@@ -1322,8 +1339,9 @@
                     border-radius: .5em;
                     color: var(--gradiant-grey-100);
                     font-weight: 300;
+                    line-height: 2em;
                     margin-top: 1em;
-                    padding: .5em;
+                    //padding: .5em;
 
                     &.added {
                         background-color: var(--gradiant-green-30);
@@ -1336,8 +1354,18 @@
             }
 
             .key-facts {
+                width: 100%;
+
+                h4 {
+                    width: 100%;
+                }
+
                 .fact {
                     margin: .5em 0;
+
+                    &:has(.similar) {
+                        width: 100%;
+                    }
 
                     .label {
                         font-weight: 400;
@@ -1391,28 +1419,22 @@
                     }
 
                     .similar {
-                        @include flex-100();
-                        flex-wrap: wrap;
+                        @include flex-100(start, start);
+                        //flex-wrap: wrap;
                         gap: .5em;
                         max-height: 50em;
-                        overflow: scroll;
+                        overflow-x: auto;
 
                         a {
                             .poster {
+                                height: 12em;
                                 position: relative;
+                                width: 8em;
 
                                 img {
                                     border-radius: .5em;
-                                    height: 12em;
+                                    height: 100%;
                                     object-fit: cover;
-                                    width: 8em;
-                                }
-
-                                .name {
-                                    bottom: 1em;
-                                    font-size: .5em;
-                                    padding: .5em;
-                                    text-align: center;
                                     width: 100%;
                                 }
 
@@ -2465,15 +2487,21 @@
 
                 &.bottom {
                     bottom: 0;
+                    margin-bottom: 0;
                     position: absolute;
                     right: 0;
                 }
             }
         }
     }
+}
 
+@media (min-width: 1200px) {
     .serie-page {
         main {
+            flex-direction: row;
+            width: 100%;
+
             article {
                 width: 70%;
 
@@ -2519,8 +2547,26 @@
                 }
             }
 
+            .desktop {
+                display: flex;
+            }
+
+            .tablet {
+                display: none;
+            }
+
             aside {
                 width: calc(30% - 1em);
+
+                .key-facts {
+                    .fact {
+                        .similar {
+                            flex-wrap: wrap;
+                            overflow-x: unset;
+                            overflow-y: auto;
+                        }
+                    }
+                }
             }
         }
     }

@@ -180,6 +180,13 @@ main {
 .d-flex {
     display: flex;
 }
+.f-wrap {
+    flex-wrap: wrap;
+}
+
+.f-gap-1 {
+    gap: 1em;
+}
 
 .d-flex-1 {
     display: flex;
