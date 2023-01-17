@@ -188,7 +188,8 @@
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         const _app_serie_new = "{{ path('app_serie_new') }}";
         const _app_serie_set_settings = "{{ path('app_serie_set_settings') }}";

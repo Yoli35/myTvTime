@@ -1765,6 +1765,19 @@
     }
 }
 
+.today-series {
+    .header {
+        @include flex-100();
+        padding: 2em 0;
+
+        .date {
+            font-size: 10em;
+            font-weight: 900;
+            line-height: 1.1em;
+        }
+    }
+}
+
 .person {
     @include flex-100(stretch, start);
     min-height: 50vh;

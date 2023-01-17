@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MyTvTime::{{ 'My Series airing today'|trans }}{% endblock %}
+{% block description %}{{ 'List of the series I\'m watching, aired today '|trans }}{% endblock %}
+{% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
+{% block body %}
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container">
+        <div class="today-series">
+            <div class="header">
+                <div class="date">{{ date|date("d/m/Y") }}</div>
+            </div>
+            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('My Series airing today'|trans)}) }}
+            <main>
+            </main>
+        </div>
+        {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -160,6 +160,63 @@ class SerieController extends AbstractController
         ]);
     }
 
+    #[Route('/today', name: 'app_serie_today')]
+    public function today(): Response
+    {
+        $now = new DateTime();
+        $todayAirings = $this->todayAiringSeries();
+        dump($todayAirings);
+
+        return $this->render('serie/today.html.twig', [
+            'todayAirings' => $todayAirings,
+            'date' => $now,
+        ]);
+    }
+
+    public function todayAiringSeries(): array
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $serieViewings = $this->serieViewingRepository->findBy(['user' => $user]);
+
+        $now = new DateTimeImmutable();
+        $todaySeries = [];
+        $newEpisodeTotal = 0;
+
+        foreach ($serieViewings as $serieViewing) {
+            $todaySeasons = [];
+            $newEpisodeCount = 0;
+            if (!$serieViewing->isSerieCompleted() /*&& $serieViewing->getViewedEpisodes()*/) {
+                foreach ($serieViewing->getSeasons() as $season) {
+                    if (!$season->isSeasonCompleted()) {
+                        $todayEpisodes = [];
+                        foreach ($season->getEpisodes() as $episode) {
+                            if ($episode->getAirDate() === $now) {
+                                $todayEpisodes[] = $episode->getEpisodeNumber();
+                                $newEpisodeCount++;
+                            }
+                        }
+                        $todaySeasons[] = [
+                            'seasonNumber' => $season->getSeasonNumber(),
+                            'episodes' => $todayEpisodes
+                        ];
+                    }
+                }
+            }
+            if ($newEpisodeCount) {
+                $newEpisodeTotal += $newEpisodeCount;
+                $todaySeries[] = [
+                    'id' => $serieViewing->getSerie()->getId(),
+                    'name' => $serieViewing->getSerie()->getName(),
+                    'poster' => $serieViewing->getSerie()->getPosterPath(),
+                    'newEpisodes' => $todaySeasons,
+                    'numberOfNewEpisodes' => $newEpisodeCount,
+                ];
+            }
+        }
+        return $todaySeries;
+    }
+
     public function getSeriesViews($user, $results): array
     {
         $ids = array_map(function ($result) {
