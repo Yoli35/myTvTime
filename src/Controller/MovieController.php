@@ -324,13 +324,13 @@ class MovieController extends AbstractController
             }
         }
 
-        dump($sortedCrewWithProfile, $sortedCrewWithoutProfile);
+//        dump($sortedCrewWithProfile, $sortedCrewWithoutProfile);
         ksort($sortedCrewWithProfile);
         ksort($sortedCrewWithoutProfile);
 //        dump($sortedCrewWithProfile, $sortedCrewWithoutProfile);
         $sortedCrewWithProfile = $this->skipKeys($sortedCrewWithProfile);
         $sortedCrewWithoutProfile = $this->skipKeys($sortedCrewWithoutProfile);
-        dump($sortedCrewWithProfile, $sortedCrewWithoutProfile);
+//        dump($sortedCrewWithProfile, $sortedCrewWithoutProfile);
 
         return array_merge($sortedCrewWithProfile, $sortedCrewWithoutProfile);
     }
