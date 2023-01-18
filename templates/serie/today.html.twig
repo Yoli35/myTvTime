@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}MyTvTime::{{ 'My Series airing today'|trans }}{% endblock %}
-{% block description %}{{ 'List of the series I\'m watching, aired today '|trans }}{% endblock %}
+{% block description %}{{ 'List of the series I\'m watching, aired today'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
@@ -12,6 +12,13 @@
             </div>
             {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('My Series airing today'|trans)}) }}
             <main>
+                <div class="wrapper">
+                    {% for serie in todayAirings %}
+                        {{ include('blocks/serie/_card-home.html.twig', {type: 'show', from: 'today', poster_path: serie.posterPath}) }}
+                    {% else %}
+                        {{ 'Nothing to show here'|trans }}
+                    {% endfor %}
+                </div>
             </main>
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}

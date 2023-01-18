@@ -1771,9 +1771,20 @@
         padding: 2em 0;
 
         .date {
+            background-clip:text;
+            background-image: linear-gradient(90deg, red, blue);
+            color: transparent;
             font-size: 10em;
             font-weight: 900;
             line-height: 1.1em;
+        }
+    }
+
+    main {
+        .wrapper {
+            @include flex-100();
+            flex-wrap: wrap;
+            gap: 1em;
         }
     }
 }

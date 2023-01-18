@@ -98,7 +98,6 @@ class SerieController extends AbstractController
         $totalResults = count($list);
 
         $series = $totalResults ? $this->getSeriesViews($user, $results, $request->getLocale()) : null;
-        dump($series);
 
         $leafSettings = $settingsRepository->findOneBy(["user" => $user, "name" => "leaf"]);
         if ($leafSettings == null) {
@@ -166,11 +165,11 @@ class SerieController extends AbstractController
     {
         $now = new DateTime();
         $todayAirings = $this->todayAiringSeries();
-        dump($todayAirings);
 
         return $this->render('serie/today.html.twig', [
             'todayAirings' => $todayAirings,
             'date' => $now,
+            'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
 
@@ -178,43 +177,27 @@ class SerieController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $serieViewings = $this->serieViewingRepository->findBy(['user' => $user]);
 
         $now = new DateTimeImmutable();
-        $todaySeries = [];
-        $newEpisodeTotal = 0;
+        $today = $now->setTime(0, 0, 0);
+        $episodeViewings = $this->episodeViewingRepository->findBy(['airDate' => $today]);
 
-        foreach ($serieViewings as $serieViewing) {
-            $todaySeasons = [];
-            $newEpisodeCount = 0;
-            if (!$serieViewing->isSerieCompleted() /*&& $serieViewing->getViewedEpisodes()*/) {
-                foreach ($serieViewing->getSeasons() as $season) {
-                    if (!$season->isSeasonCompleted()) {
-                        $todayEpisodes = [];
-                        foreach ($season->getEpisodes() as $episode) {
-                            if ($episode->getAirDate() === $now) {
-                                $todayEpisodes[] = $episode->getEpisodeNumber();
-                                $newEpisodeCount++;
-                            }
-                        }
-                        $todaySeasons[] = [
-                            'seasonNumber' => $season->getSeasonNumber(),
-                            'episodes' => $todayEpisodes
-                        ];
-                    }
-                }
-            }
-            if ($newEpisodeCount) {
-                $newEpisodeTotal += $newEpisodeCount;
-                $todaySeries[] = [
-                    'id' => $serieViewing->getSerie()->getId(),
-                    'name' => $serieViewing->getSerie()->getName(),
-                    'poster' => $serieViewing->getSerie()->getPosterPath(),
-                    'newEpisodes' => $todaySeasons,
-                    'numberOfNewEpisodes' => $newEpisodeCount,
-                ];
+        $seasonViewings = [];
+        foreach ($episodeViewings as $episodeViewing) {
+            $seasonViewings[] = $episodeViewing->getSeason();
+        }
+        $serieViewings = [];
+        foreach ($seasonViewings as $seasonViewing) {
+            $serieViewing = $seasonViewing->getSerieViewing();
+            if (!in_array($serieViewing, $serieViewings) && $serieViewing->getUser() === $user) {
+                $serieViewings[] = $seasonViewing->getSerieViewing();
             }
         }
+        $todaySeries = [];
+        foreach ($serieViewings as $serieViewing) {
+            $todaySeries[] = $serieViewing->getSerie();
+        }
+
         return $todaySeries;
     }
 

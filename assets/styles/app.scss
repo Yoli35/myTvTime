@@ -642,7 +642,7 @@ nav.active {
             overflow: hidden;
             position: absolute;
             top: 2em;
-            width: 15em;
+            //width: 15em;
             z-index: 53;
 
             .menu-item {
@@ -654,6 +654,7 @@ nav.active {
                     font-weight: 100;
                     padding: 0 1em;
                     width: 100%;
+                    white-space: nowrap;
 
                     &:hover {
                         background-color: var(--gradiant-grey-80);
