@@ -97,7 +97,8 @@ class SerieController extends AbstractController
         $list = $serieRepository->listUserSeries($user->getId());
         $totalResults = count($list);
 
-        $series = $totalResults ? $this->getSeriesViews($user, $results) : null;
+        $series = $totalResults ? $this->getSeriesViews($user, $results, $request->getLocale()) : null;
+        dump($series);
 
         $leafSettings = $settingsRepository->findOneBy(["user" => $user, "name" => "leaf"]);
         if ($leafSettings == null) {
@@ -217,7 +218,7 @@ class SerieController extends AbstractController
         return $todaySeries;
     }
 
-    public function getSeriesViews($user, $results): array
+    public function getSeriesViews($user, $results, $locale): array
     {
         $ids = array_map(function ($result) {
             return $result->getId();
@@ -227,7 +228,7 @@ class SerieController extends AbstractController
         $series = [];
         /** @var Serie $result */
         foreach ($results as $result) {
-            $serie = $this->serie2array($result);
+            $serie = $this->serie2array($result, $locale);
             $serie['viewing'] = $this->getSerieViews($result, $serieViewings);
 
             $series[] = $serie;
@@ -246,8 +247,13 @@ class SerieController extends AbstractController
         return null;
     }
 
-    public function serie2array(Serie $result): array
+    public function serie2array(Serie $result, $locale): array
     {
+        $tv = json_decode($this->TMDBService->getTv($result->getSerieId(), $locale), true);
+
+        if ($result->getStatus() != $tv['status']) {
+
+        }
         $serie['id'] = $result->getId();
         $serie['name'] = $result->getName();
         $serie['posterPath'] = $result->getPosterPath();
@@ -257,11 +263,14 @@ class SerieController extends AbstractController
         $serie['addedAt'] = $result->getAddedAt();
         $serie['updatedAt'] = $result->getUpdatedAt();
         $serie['status'] = $result->getStatus();
+        $serie['tmdb_status'] = $tv['status'];
         $serie['overview'] = $result->getOverview();
         $serie['networks'] = $result->getNetworks();
         $serie['numberOfEpisodes'] = $result->getNumberOfEpisodes();
         $serie['numberOfSeasons'] = $result->getNumberOfSeasons();
         $serie['originalName'] = $result->getOriginalName();
+
+        $serie['tmdb_next_episode_to_air'] = $tv['next_episode_to_air'];
 
         return $serie;
     }

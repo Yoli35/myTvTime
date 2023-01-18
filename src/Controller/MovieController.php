@@ -292,32 +292,72 @@ class MovieController extends AbstractController
         return $localeDates;
     }
 
-    function sortCrew($crew): array
+    public function sortCrew($crew): array
     {
         $sortedCrewWithProfile = [];
         $sortedCrewWithoutProfile = [];
 
         foreach ($crew as $people) {
-            if ($people['profile_path']) {
-                if ($this->peopleInSortedCrew($people, $sortedCrewWithProfile)) {
-                    $sortedCrewWithProfile[$people['name']]['job'] .= ', ' . $people['job'];
-                } else {
-                    $sortedCrewWithProfile[$people['name']]['id'] = $people['id'];
-                    $sortedCrewWithProfile[$people['name']]['profile_path'] = $people['profile_path'];
-                    $sortedCrewWithProfile[$people['name']]['job'] = $people['job'];
-                }
+            $profil = $people['profile_path'];
+
+            if ($profil) {
+//                if (!array_key_exists($job, $sortedCrewWithProfile)) {
+//                    $sortedCrewWithProfile[$job] = [];
+//                }
+//                if ($this->peopleInSortedCrew($people, $sortedCrewWithProfile[$job])) {
+//                    $sortedCrewWithProfile[$job][$name]['job'] .= ', ' . $job;
+//                } else {
+//                    $sortedCrewWithProfile[$job][$name]['id'] = $id;
+//                    $sortedCrewWithProfile[$job][$name]['profile_path'] = $profil;
+//                    $sortedCrewWithProfile[$job][$name]['job'] = $job;
+//                }
+                $sortedCrewWithProfile = $this->collectPeopleJobs($people, $sortedCrewWithProfile);
             } else {
-                if ($this->peopleInSortedCrew($people, $sortedCrewWithoutProfile)) {
-                    $sortedCrewWithoutProfile[$people['name']]['job'] .= ', ' . $people['job'];
-                } else {
-                    $sortedCrewWithoutProfile[$people['name']]['id'] = $people['id'];
-                    $sortedCrewWithoutProfile[$people['name']]['profile_path'] = $people['profile_path'];
-                    $sortedCrewWithoutProfile[$people['name']]['job'] = $people['job'];
-                }
+//                if ($this->peopleInSortedCrew($people, $sortedCrewWithoutProfile)) {
+//                    $sortedCrewWithoutProfile[$people['name']]['job'] .= ', ' . $people['job'];
+//                } else {
+//                    $sortedCrewWithoutProfile[$people['name']]['id'] = $people['id'];
+//                    $sortedCrewWithoutProfile[$people['name']]['profile_path'] = $people['profile_path'];
+//                    $sortedCrewWithoutProfile[$people['name']]['job'] = $people['job'];
+//                }
+                $sortedCrewWithoutProfile = $this->collectPeopleJobs($people, $sortedCrewWithoutProfile);
             }
         }
 
+        dump($sortedCrewWithProfile, $sortedCrewWithoutProfile);
+        ksort($sortedCrewWithProfile);
+        ksort($sortedCrewWithoutProfile);
+//        dump($sortedCrewWithProfile, $sortedCrewWithoutProfile);
+        $sortedCrewWithProfile = $this->skipKeys($sortedCrewWithProfile);
+        $sortedCrewWithoutProfile = $this->skipKeys($sortedCrewWithoutProfile);
+        dump($sortedCrewWithProfile, $sortedCrewWithoutProfile);
+
         return array_merge($sortedCrewWithProfile, $sortedCrewWithoutProfile);
+    }
+
+    public function skipKeys($array): array
+    {
+        $newArray = [];
+        foreach ($array as $key => $varrayValue) {
+            foreach ($varrayValue as $k => $value) {
+                $newArray[] = $value;
+            }
+        }
+        return $newArray;
+    }
+
+    public function collectPeopleJobs($people, $sortedCrew): array
+    {
+        $id = $people['id'];
+        $name = $people['name'];
+        $job = $people['job'];
+        $profil = $people['profile_path'];
+
+        if (!array_key_exists($job, $sortedCrew)) {
+            $sortedCrew[$job] = [];
+        }
+        $sortedCrew[$job][] = ['id' => $id, 'name' => $name, 'profile_path' => $profil, 'job' => $job];
+        return $sortedCrew;
     }
 
     function peopleInSortedCrew($p, $s): bool

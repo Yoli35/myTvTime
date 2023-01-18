@@ -288,16 +288,16 @@
                 <h2>{{ 'Crew'|trans }}</h2>
                 <div class="crew">
                     <div class="content">
-                        {% for name, data in sortedCrew %}
+                        {% for data in sortedCrew %}
                             <a href="{{ path('app_people', {id: data.id}) }}">
                                 <div class="member">
-                                    {% if data.profile_path | length %}
+                                    {% if data.profile_path|length %}
                                         <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ data.profile_path }}')" data-id="{{ data.id }}"></div>
                                     {% else %}
                                         <div class="profile" data-id="{{ data.id }}"></div>
                                     {% endif %}
                                     <div>
-                                        <div class="name">{{ name }}</div>
+                                        <div class="name">{{ data.name }}</div>
                                         <div class="job">{{ data.job }}</div>
                                     </div>
                                 </div>
