@@ -10,7 +10,22 @@
         <div class="series-search">
             <div class="header">
                 {{ include('blocks/serie/_quotes.html.twig') }}
-                <h1>{{ 'Series search'|trans }}</h1>
+{#                <h1>{{ 'Series search'|trans }}</h1>#}
+                <h1 class="typed"><span {{ stimulus_controller('symfony/ux-typed', {
+                        strings: [
+                            'Series search'|trans,
+                            'Browse results'|trans,
+                            'See the details of a series'|trans,
+                            'Add a series'|trans,
+                        ],
+                        smartBackspace: true,
+                        startDelay: 100,
+                        backSpeed: 40,
+                        backDelay: 1000,
+                        loop: true,
+                        showCursor: true,
+                        cursorChar: '◻️',
+                    }) }}></span></h1>
                 <div class="backdrop"></div>
             </div>
             {{ include('blocks/_nav.html.twig', {thisPage: 'Series search'}) }}
@@ -62,11 +77,12 @@
 
         window.addEventListener("DOMContentLoaded", () => {
 
-            initHeader();
+            // initHeader();
             initPages();
             initSerieStuff(paths);
             animateQuotes();
             document.querySelector("#serie_search_query").focus();
+            document.querySelector(".header").classList.add("fade-bg");
         })
 
         function initHeader() {
@@ -115,8 +131,10 @@
             const viewportWidth = document.body.clientWidth;
             if (viewportWidth > 768) {
                 const seriesDiv = document.querySelector(".series");
-                const seriesToolsDiv = seriesDiv.querySelector(".series-tools:not(.mobile)");
-                seriesToolsDiv.classList.add("sticky");
+                if (seriesDiv) {
+                    const seriesToolsDiv = seriesDiv.querySelector(".series-tools:not(.mobile)");
+                    seriesToolsDiv.classList.add("sticky");
+                }
             }
         }
 
@@ -137,7 +155,7 @@
                 const quoteDiv = quoteDivs[idx];
                 str = data['quote'];
                 // console.log({str});
-                quotes[idx] = str.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                quotes[idx] = str.replace(/\r\n|\r|\n/g, '<br>');
                 quoteInterval[idx] = Math.floor(2000 + (30 * 1000 * Math.random()));
 
                 quoteDiv.classList.add("hidden");

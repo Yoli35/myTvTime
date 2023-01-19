@@ -185,8 +185,9 @@ $fa-font-path: "../webfonts";
     --gradiant-grey-40-alpha-50: hsla(0, 0%, 40%, .5);
     --gradiant-grey-40-alpha-20: hsla(0, 0%, 40%, .2);
     --gradiant-grey-30: hsl(0, 0%, 30%);
-    --gradiant-grey-30-alpha-50: hsla(0, 0%, 30%, .5);
     --gradiant-grey-30-alpha-90: hsla(0, 0%, 30%, .9);
+    --gradiant-grey-30-alpha-50: hsla(0, 0%, 30%, .5);
+    --gradiant-grey-30-alpha-10: hsla(0, 0%, 30%, .1);
     --gradiant-grey-25: hsl(0, 0%, 25%);
     --gradiant-grey-20: hsl(0, 0%, 20%);
     --gradiant-grey-20-alpha-50: hsla(0, 0%, 20%, .5);
@@ -479,7 +480,7 @@ $fa-font-path: "../webfonts";
     width: 100%;
 
     &.fade-bg {
-        background-color: var(--gradiant-grey-10-alpha-20);
+        background-color: var(--gradiant-grey-10-alpha-90);
     }
 
     h1 {
@@ -488,6 +489,12 @@ $fa-font-path: "../webfonts";
         font-weight: bold;
         opacity: 1;
         position: absolute;
+
+        &.typed {
+            @include flex-row();
+            inset: 0;
+            position: absolute;
+        }
     }
 
     .animated-h1 {

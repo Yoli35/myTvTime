@@ -17,6 +17,12 @@
                     "@symfony/ux-live-component/styles/live.css": true
                 }
             }
+        },
+        "@symfony/ux-typed": {
+            "typed": {
+                "enabled": true,
+                "fetch": "eager"
+            }
         }
     },
     "entrypoints": []
