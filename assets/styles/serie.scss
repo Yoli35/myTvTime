@@ -1777,11 +1777,11 @@
         padding: 2em 0;
 
         .date {
-            background-clip:text;
+            background-clip: text;
             background-image: linear-gradient(90deg, red, blue);
             background-position: center 25%;
             color: transparent;
-            font-size: 10em;
+            font-size: 10vw;
             font-weight: 900;
             line-height: 1.1em;
             text-stroke: 2px var(--gradiant-grey-90);
@@ -1791,16 +1791,55 @@
     }
 
     main {
-        .wrapper {
-            @include flex-100();
+        .time-travel {
+            align-items: center;
+            display: flex;
             flex-wrap: wrap;
             gap: 1em;
+            justify-content: center;
+            margin: 1em auto;
+
+            .prev-next {
+                @include flex-row();
+                gap: 1em;
+            }
+        }
+
+        .wrapper {
+            @include flex-100(stretch, center);
+            flex-wrap: wrap;
+            gap: 1em;
+            min-height: 25em;
 
             .episode {
                 @include flex-100();
-                background-color: var(--gradiant-yellow-50);
+                background-color: var(--gradiant-ardoise-40);
                 border-radius: .5em;
                 color: var(--gradiant-grey-90);
+                margin-top: .5em;
+                padding: .5em;
+
+                &:has(div span.all) {
+                    background-color: var(--gradiant-green-30);
+                }
+
+                &:has(div span.spe) {
+                    background-color: var(--gradiant-mars-40);
+                }
+
+                div {
+                    line-height: 1.25em;
+                    text-align: center;
+                }
+            }
+
+            .nothing {
+                @include flex-row();
+                background: var(--btn-warning);
+                border-radius: 1em;
+                font-size: 2em;
+                font-weight: 500;
+                padding: 1rem 2rem;
             }
         }
     }
@@ -2627,6 +2666,7 @@
             h1 {
                 color: var(--gradiant-grey-90);
             }
+
             .quote {
                 color: var(--gradiant-grey-80);
             }

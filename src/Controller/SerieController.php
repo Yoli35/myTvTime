@@ -160,33 +160,42 @@ class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/today', name: 'app_serie_today')]
-    public function today(): Response
+    #[Route('/today', name: 'app_serie_today', methods: ['GET'])]
+    public function today(Request $request): Response
     {
-        $now = new DateTime();
+        $day = $request->query->getInt('d');
+        $week = $request->query->getInt('w');
+        $month = $request->query->getInt('m');
+
+        $datetime = $day . ' day ' . $week . ' week ' . $month . ' month';
+        $date = new DateTimeImmutable($datetime);
+        $date = $date->setTime(0, 0, 0);
+        $now = new DateTimeImmutable();
+        $now = $now->setTime(0, 0, 0);
+        $diff = date_diff($now, $date);
+        $delta = $diff->days;
+//        dump($datetime, $diff, $delta);
         /** @var Serie[] $todayAirings */
-        $todayAirings = $this->todayAiringSeries();
-        $count = count($todayAirings);
-        $backdrop = null;
-        if ($count) {
-            $backdrop = $todayAirings[rand(0, $count - 1)]['serie']?->getBackdropPath();
-        }
+        $todayAirings = $this->todayAiringSeries($date);
+
+        $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [
             'todayAirings' => $todayAirings,
-            'date' => $now,
+            'date' => $date,
             'backdrop' => $backdrop,
+            'prev' => $delta * ($diff->invert ? -1 : 1),
+            'next' => $delta * ($diff->invert ? -1 : 1),
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
 
-    public function todayAiringSeries(): array
+    public function todayAiringSeries($day): array
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        $now = new DateTimeImmutable();
-        $today = $now->setTime(0, 0, 0);
+        $today = $day->setTime(0, 0, 0);
         $episodeViewings = $this->episodeViewingRepository->findBy(['airDate' => $today]);
 
         $seasonViewings = [];
@@ -204,22 +213,49 @@ class SerieController extends AbstractController
             $serieViewing = $season->getSerieViewing();
             if (!in_array($serieViewing, $serieViewings) && $serieViewing->getUser() === $user) {
                 $serieViewings[] = [
-                    'serieViewing'=>$season->getSerieViewing(),
+                    'serieViewing' => $season->getSerieViewing(),
                     'seasonViewing' => $seasonViewing,
-                    'season_number'=>$season->getSeasonNumber()
+                    'season_number' => $season->getSeasonNumber()
                 ];
             }
         }
-        dump($episodeViewings, $seasonViewings, $serieViewings);
+//        dump($episodeViewings, $seasonViewings, $serieViewings);
         $todaySeries = [];
         foreach ($serieViewings as $serieViewing) {
-            /** @var SerieViewing $serie */
+            /** @var SerieViewing $s */
             $s = $serieViewing['serieViewing'];
-            $todaySeries[] = ['serie' => $s->getSerie(), 'serieViewing'=> $serieViewing];
+            $season = $serieViewing['seasonViewing'];
+            $season_number = $serieViewing['season_number'];
+            $id = $s->getSerie()->getId();
+            if (!key_exists($id, $todaySeries)) {
+                $todaySeries[$id] = ['serie' => $s->getSerie(), 'serieViewing' => $serieViewing];
+            }
+            if (!key_exists('seasons', $todaySeries[$id])) {
+                $todaySeries[$id]['seasons'] = [];
+            }
+            if (!key_exists($season_number, $todaySeries[$id]['seasons'])) {
+                $todaySeries[$id]['seasons'][$season_number] = [];
+            }
+            if (!key_exists('episodes', $todaySeries[$id]['seasons'][$season_number])) {
+                $todaySeries[$id]['seasons'][$season_number]['episodes'] = [];
+            }
+            $todaySeries[$id]['seasons'][$season_number]['episodes'][] = $season['episode_number'];
         }
-        dump($todaySeries);
+//        dump($todaySeries);
 
         return $todaySeries;
+    }
+
+    public function getTodayAiringBackdrop($airings): ?string
+    {
+        $index = rand(0, count($airings) - 1);
+        $pos = 0;
+        foreach ($airings as $airing) {
+            if ($index === $pos++) {
+                return $airing['serie']->getBackdropPath();
+            }
+        }
+        return null;
     }
 
     public function getSeriesViews($user, $results, $locale): array

@@ -10,13 +10,51 @@
             <div class="header">
                 <div class="date"{% if backdrop %} style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop }}')"{% endif %}>{{ date|date("d/m/Y") }}</div>
             </div>
-            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('My Series airing today'|trans)}) }}
+            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('New episodes'|trans ~ ' : ' ~ date|format_date('full'))}) }}
             <main>
+                <div class="time-travel">
+                    <div>
+                        <a href="{{ path('app_serie_today') }}">
+                            <button class="btn btn-primary">{{ 'Today'|trans }}</i></button>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{{ path('app_serie_today', {d: prev, m: -1}) }}">
+                            <button class="btn btn-primary">{{ 'Previous month'|trans }}</i></button>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{{ path('app_serie_today', {d: prev, w: -1}) }}">
+                            <button class="btn btn-primary">{{ 'Previous week'|trans }}</i></button>
+                        </a>
+                    </div>
+                    <div class="prev-next">
+                        <a href="{{ path('app_serie_today', {d: prev-1}) }}">
+                            <button class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i></button>
+                        </a>
+                        {{ date|format_date('full') }}
+                        <a href="{{ path('app_serie_today', {d: next+1}) }}">
+                            <button class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i></button>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{{ path('app_serie_today', {d: next, w: 1}) }}">
+                            <button class="btn btn-primary">{{ 'Next week'|trans }}</i></button>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{{ path('app_serie_today', {d: next, m: 1}) }}">
+                            <button class="btn btn-primary">{{ 'Next month'|trans }}</i></button>
+                        </a>
+                    </div>
+                </div>
                 <div class="wrapper">
                     {% for todayAiring in todayAirings %}
                         {{ include('blocks/serie/_card-today.html.twig') }}
                     {% else %}
-                        {{ 'Nothing to show here'|trans }}
+                        <div class="nothing">
+                            {{ 'Nothing to show here'|trans }}
+                        </div>
                     {% endfor %}
                 </div>
             </main>
