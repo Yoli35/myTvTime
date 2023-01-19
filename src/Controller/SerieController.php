@@ -177,7 +177,7 @@ class SerieController extends AbstractController
 //        dump($datetime, $diff, $delta);
         /** @var Serie[] $todayAirings */
         $todayAirings = $this->todayAiringSeries($date);
-
+        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [

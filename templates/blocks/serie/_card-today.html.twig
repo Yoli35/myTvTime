@@ -17,7 +17,7 @@
                     {% if value.episodes|length == 1 %}
                         {{ 'Episode'|trans }} {{ value.episodes.0 }}
                     {% else %}
-                        {% if value.episodes|length == todayAiring.serie.numberOfEpisodes %}
+                        {% if value.episodes|length == todayAiring.serieViewing.seasonViewing.seasonViewing.episodeCount %}
                             <span class="all">{{ 'All episodes'|trans }}</span>
                         {% else %}
                             {{ 'Episodes'|trans }}
