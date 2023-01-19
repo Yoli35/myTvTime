@@ -1368,7 +1368,13 @@
                     padding: .5em;
 
                     &:has(.similar) {
+                        padding: .5em 0;
                         width: 100%;
+
+                        .label {
+                            padding-bottom: .5em;
+                            padding-left: .5em;
+                        }
                     }
 
                     .label {
@@ -1773,10 +1779,13 @@
         .date {
             background-clip:text;
             background-image: linear-gradient(90deg, red, blue);
+            background-position: center 25%;
             color: transparent;
             font-size: 10em;
             font-weight: 900;
             line-height: 1.1em;
+            text-stroke: 2px var(--gradiant-grey-90);
+            -webkit-text-stroke: 2px var(--gradiant-grey-90);
         }
     }
 

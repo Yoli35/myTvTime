@@ -8,7 +8,7 @@
     <div class="container">
         <div class="today-series">
             <div class="header">
-                <div class="date">{{ date|date("d/m/Y") }}</div>
+                <div class="date"{% if backdrop %} style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop }}')"{% endif %}>{{ date|date("d/m/Y") }}</div>
             </div>
             {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('My Series airing today'|trans)}) }}
             <main>

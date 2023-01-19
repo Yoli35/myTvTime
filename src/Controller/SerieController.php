@@ -164,11 +164,18 @@ class SerieController extends AbstractController
     public function today(): Response
     {
         $now = new DateTime();
+        /** @var Serie[] $todayAirings */
         $todayAirings = $this->todayAiringSeries();
+        $count = count($todayAirings);
+        $backdrop = null;
+        if ($count){
+            $backdrop = $todayAirings[rand(0, $count-1)]?->getBackdropPath();
+        }
 
         return $this->render('serie/today.html.twig', [
             'todayAirings' => $todayAirings,
             'date' => $now,
+            'backdrop' => $backdrop,
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
