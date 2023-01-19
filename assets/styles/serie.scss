@@ -1786,6 +1786,7 @@
             line-height: 1.1em;
             text-stroke: 2px var(--gradiant-grey-90);
             -webkit-text-stroke: 2px var(--gradiant-grey-90);
+            //text-shadow: 0 0 2px var(--gradiant-grey-90);
         }
     }
 
@@ -1794,6 +1795,13 @@
             @include flex-100();
             flex-wrap: wrap;
             gap: 1em;
+
+            .episode {
+                @include flex-100();
+                background-color: var(--gradiant-yellow-50);
+                border-radius: .5em;
+                color: var(--gradiant-grey-90);
+            }
         }
     }
 }

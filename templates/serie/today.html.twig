@@ -13,8 +13,8 @@
             {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('My Series airing today'|trans)}) }}
             <main>
                 <div class="wrapper">
-                    {% for serie in todayAirings %}
-                        {{ include('blocks/serie/_card-home.html.twig', {type: 'show', from: 'today', poster_path: serie.posterPath}) }}
+                    {% for todayAiring in todayAirings %}
+                        {{ include('blocks/serie/_card-today.html.twig') }}
                     {% else %}
                         {{ 'Nothing to show here'|trans }}
                     {% endfor %}

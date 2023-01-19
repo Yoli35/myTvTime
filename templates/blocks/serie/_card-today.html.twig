@@ -1,0 +1,11 @@
+<div class="home-discover" data-id="{{ todayAiring.serie.id }}">
+    <a href="{{ path('app_serie_show', {'id': todayAiring.serie.id}) }}?from=today" title="{{ todayAiring.serie.name }}">
+        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ todayAiring.serie.posterPath }}" alt="{{ 'Poster' }}">
+        <div class="title">
+            <div>{{ todayAiring.serie.name }}</div>
+        </div>
+        <div class="episode">
+            <div>{{ 'Season'|trans }} {{ todayAiring.serieViewing.season_number }} - {{ 'Episode'|trans }} {{ todayAiring.serieViewing.seasonViewing.episode_number }}</div>
+        </div>
+    </a>
+</div>

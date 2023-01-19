@@ -168,8 +168,8 @@ class SerieController extends AbstractController
         $todayAirings = $this->todayAiringSeries();
         $count = count($todayAirings);
         $backdrop = null;
-        if ($count){
-            $backdrop = $todayAirings[rand(0, $count-1)]?->getBackdropPath();
+        if ($count) {
+            $backdrop = $todayAirings[rand(0, $count - 1)]['serie']?->getBackdropPath();
         }
 
         return $this->render('serie/today.html.twig', [
@@ -191,19 +191,33 @@ class SerieController extends AbstractController
 
         $seasonViewings = [];
         foreach ($episodeViewings as $episodeViewing) {
-            $seasonViewings[] = $episodeViewing->getSeason();
+            $seasonViewings[] = [
+                'seasonViewing' => $episodeViewing->getSeason(),
+                'episodeViewing' => $episodeViewing,
+                'episode_number' => $episodeViewing->getEpisodeNumber()
+            ];
         }
         $serieViewings = [];
         foreach ($seasonViewings as $seasonViewing) {
-            $serieViewing = $seasonViewing->getSerieViewing();
+            /** @var SeasonViewing $season */
+            $season = $seasonViewing['seasonViewing'];
+            $serieViewing = $season->getSerieViewing();
             if (!in_array($serieViewing, $serieViewings) && $serieViewing->getUser() === $user) {
-                $serieViewings[] = $seasonViewing->getSerieViewing();
+                $serieViewings[] = [
+                    'serieViewing'=>$season->getSerieViewing(),
+                    'seasonViewing' => $seasonViewing,
+                    'season_number'=>$season->getSeasonNumber()
+                ];
             }
         }
+        dump($episodeViewings, $seasonViewings, $serieViewings);
         $todaySeries = [];
         foreach ($serieViewings as $serieViewing) {
-            $todaySeries[] = $serieViewing->getSerie();
+            /** @var SerieViewing $serie */
+            $s = $serieViewing['serieViewing'];
+            $todaySeries[] = ['serie' => $s->getSerie(), 'serieViewing'=> $serieViewing];
         }
+        dump($todaySeries);
 
         return $todaySeries;
     }
