@@ -177,7 +177,7 @@ class SerieController extends AbstractController
 //        dump($datetime, $diff, $delta);
         /** @var Serie[] $todayAirings */
         $todayAirings = $this->todayAiringSeries($date);
-        dump($todayAirings);
+//        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [
@@ -291,9 +291,9 @@ class SerieController extends AbstractController
     {
         $tv = json_decode($this->TMDBService->getTv($result->getSerieId(), $locale), true);
 
-        if ($result->getStatus() != $tv['status']) {
-
-        }
+//        if ($result->getStatus() != $tv['status']) {
+//
+//        }
         $serie['id'] = $result->getId();
         $serie['name'] = $result->getName();
         $serie['posterPath'] = $result->getPosterPath();
@@ -578,7 +578,7 @@ class SerieController extends AbstractController
         $query = $request->query->get('query', "");
         $year = $request->query->get('year', "");
 
-        $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale());
+        $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images']);
         if ($standing == "") {
             return $this->render('serie/_error.html.twig', [
                 'serie' => $serie,
@@ -598,7 +598,7 @@ class SerieController extends AbstractController
         $query = $request->query->get('query', "");
         $year = $request->query->get('year', "");
 
-        $standing = $this->TMDBService->getTv($id, $request->getLocale());
+        $standing = $this->TMDBService->getTv($id, $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images']);
         $tv = json_decode($standing, true);
 
         return $this->getSerie($request, $tv, $page, $from, $id, null, $query, $year);
@@ -667,27 +667,32 @@ class SerieController extends AbstractController
         $imageConfiguration = $this->imageConfiguration;
 
         $id = $tv['id'];
-        $standing = $tmdbService->getTvCredits($id, $request->getLocale());
-        $credits = json_decode($standing, true);
+//        $standing = $tmdbService->getTvCredits($id, $request->getLocale());
+//        $credits = json_decode($standing, true);
+        $credits = $tv['credits'];
 //        dump($credits);
 
-        $standing = $tmdbService->getTvKeywords($id, $request->getLocale());
-        $keywords = json_decode($standing, true);
+//        $standing = $tmdbService->getTvKeywords($id, $request->getLocale());
+//        $keywords = json_decode($standing, true);
+        $keywords = $tv['keywords'];
         $missingTranslations = $this->keywordsTranslation($keywords, $request->getLocale());
 
-        $standing = $tmdbService->getTvWatchProviders($id);
-        $temp = json_decode($standing, true);
+//        $standing = $tmdbService->getTvWatchProviders($id);
+//        $temp = json_decode($standing, true);
+        $temp = $tv['watch/providers'];
         if ($temp && array_key_exists('FR', $temp['results'])) {
-            $watchProviders = json_decode($standing, true)['results']['FR'];
+            $watchProviders = $temp['results']['FR'];
         } else {
             $watchProviders = null;
         }
 
-        $standing = $tmdbService->getTvSimilar($id);
-        $similar = json_decode($standing, true);
+//        $standing = $tmdbService->getTvSimilar($id);
+//        $similar = json_decode($standing, true);
+        $similar = $tv['similar'];
 
-        $standing = $tmdbService->getTvImages($id, $request->getLocale());
-        $images = json_decode($standing, true);
+//        $standing = $tmdbService->getTvImages($id, $request->getLocale());
+//        $images = json_decode($standing, true);
+        $images = $tv['images'];
 
         $index = false;
         $serieIds = [];
