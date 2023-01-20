@@ -163,6 +163,9 @@ class SerieController extends AbstractController
     #[Route('/today', name: 'app_serie_today', methods: ['GET'])]
     public function today(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
+
         $day = $request->query->getInt('d');
         $week = $request->query->getInt('w');
         $month = $request->query->getInt('m');
@@ -578,7 +581,7 @@ class SerieController extends AbstractController
         $query = $request->query->get('query', "");
         $year = $request->query->get('year', "");
 
-        $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images']);
+        $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']);
         if ($standing == "") {
             return $this->render('serie/_error.html.twig', [
                 'serie' => $serie,
@@ -662,7 +665,7 @@ class SerieController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $tmdbService = $this->TMDBService;
+//        $tmdbService = $this->TMDBService;
         $serieRepository = $this->serieRepository;
         $imageConfiguration = $this->imageConfiguration;
 
@@ -763,41 +766,6 @@ class SerieController extends AbstractController
         ]);
 
     }
-
-//    public function testViewingAfterward(SerieViewing $serie): void
-//    {
-//        $seasonInterval = [];
-//        $seasonInterval['interval'] = [];
-//        $seasonInterval['average'] = [];
-//        $seasonInterval['days'] = [];
-//        foreach ($serie->getSeasons() as $season) {
-//            if ($season->getSeasonNumber() && $season->getViewedEpisodeCount() > 1) {
-//                $interval = [];
-//                $index = 0;
-//                $daysArray = [];
-//                $totalDays = 0;
-//                foreach ($season->getEpisodes() as $episode) {
-//                    if ($episode->getViewedAt()) {
-//                        $interval[] = date_diff($episode->getAirDate(), $episode->getViewedAt());
-//
-//                        if (!$index++) {
-//                            $first = $episode->getViewedAt();
-//                        } else {
-//                            $days = date_diff($episode->getViewedAt(), $first)->days;
-//                            $totalDays += $days;
-//                            $daysArray[] = $days;
-//                        }
-//                    }
-//                }
-//                $averageDays = $totalDays / ($index - 1);
-//                $seasonInterval['interval'][] = $interval;
-//                $seasonInterval['average'][] = $averageDays;
-//                $seasonInterval['days'][] = $daysArray;
-//            }
-//        }
-//        dump($serie);
-//        dump($seasonInterval);
-//    }
 
     public function whatsNew($tv, $serie, $serieRepository): array|null
     {
@@ -934,18 +902,18 @@ class SerieController extends AbstractController
         $blocks = [];
         $globalIndex = 1;
         $viewed = 0;
-        foreach ($serieViewing->getSeasons() as $season) {
-            if ($season->getSeasonNumber()) { // 21/12/2022 : plus d'épisodes spéciaux
+        foreach ($serieViewing->getSeasons() as $seasonViewing) {
+            if ($seasonViewing->getSeasonNumber()) { // 21/12/2022 : plus d'épisodes spéciaux
                 $blocks[] = [
-                    'season' => $season->getSeasonNumber(),
-                    'episode_count' => $season->getEpisodeCount(),
+                    'season' => $seasonViewing->getSeasonNumber(),
+                    'episode_count' => $seasonViewing->getEpisodeCount(),
                     'view' => $this->render('blocks/serie/_season_viewing.html.twig', [
-                        'season' => $season,
+                        'season' => $seasonViewing,
                         'globalIndex' => $globalIndex,
                     ])
                 ];
-                $viewed += $season->getViewedEpisodeCount();
-                $globalIndex += $season->getEpisodeCount();
+                $viewed += $seasonViewing->getViewedEpisodeCount();
+                $globalIndex += $seasonViewing->getEpisodeCount();
             }
         }
 
@@ -953,6 +921,7 @@ class SerieController extends AbstractController
             'blocks' => $blocks,
             'viewedEpisodes' => $viewed,
             'episodeText' => $translator->trans($viewed > 1 ? "viewed episodes" : "viewed episode"),
+            'seasonCompleted' => $serieViewing->getSeasonByNumber($season)->isSeasonCompleted(),
         ]);
     }
 

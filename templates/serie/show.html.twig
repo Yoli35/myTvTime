@@ -339,6 +339,24 @@
                             </div>
                         </section>
                     {% endif %}
+                    {% if serie.videos|length %}
+                        {% if serie.videos.results|length %}
+                            <section>
+                                <div class="videos">
+                                    <h4>{{ 'Videos'|trans }}</h4>
+                                    <div>
+                                        {% for video in serie.videos.results %}
+                                            <div class="video">
+                                                <h5>{{ video.type }}</h5>
+                                                <h6>{{ 'Published at'|trans }} {{ video.published_at|format_datetime() }}</h6>
+                                                <iframe src="https://www.youtube.com/embed/{{ video.key }}" title="{{ video.name }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </section>
+                        {% endif %}
+                    {% endif %}
                 </article>
                 <aside class="desktop">
                     {{ include('blocks/serie/_aside.html.twig') }}
@@ -456,292 +474,333 @@
     </dialog>
 {% endblock %}
 {% block javascripts %}
-    {{ parent() }}
-    <script src="/js/serie.js"></script>
-    <script src="/js/diaporama.js"></script>
-    <script>
-        const paths = [
-            "{{ path('app_serie_render_translation_fields') }}",
-            "{{ path('app_serie_render_translation_select') }}",
-            "{{ path('app_serie_render_translation_save') }}",
-            "{{ path('app_serie_new') }}",
-            "{{ path('app_serie_show', {id:0}) }}",
-            "{{ path('app_serie_viewing') }}",
-            "{{ path('app_user_connected') }}",
-            "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}"
-        ];
-        const serie = "{{ serieId }}";
-        const _app_serie_viewing = paths[5];
-        const _app_user_connected = paths[6];
-        let _app_serie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
-        const _locale = "{{ app.request.locale }}";
-        const txt = {
-            "vu": {"fr": "vu", "en": "seen"},
-            "pasVu": {"fr": "pas vu", "en": "not seen"}
+{{ parent() }}
+<script src="/js/serie.js"></script>
+<script src="/js/diaporama.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+    const paths = [
+        "{{ path('app_serie_render_translation_fields') }}",
+        "{{ path('app_serie_render_translation_select') }}",
+        "{{ path('app_serie_render_translation_save') }}",
+        "{{ path('app_serie_new') }}",
+        "{{ path('app_serie_show', {id:0}) }}",
+        "{{ path('app_serie_viewing') }}",
+        "{{ path('app_user_connected') }}",
+        "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}"
+    ];
+    const serie = "{{ serieId }}";
+    const _app_serie_viewing = paths[5];
+    const _app_user_connected = paths[6];
+    let _app_serie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
+    const _locale = "{{ app.request.locale }}";
+    const txt = {
+        "vu": {"fr": "vu", "en": "seen"},
+        "pasVu": {"fr": "pas vu", "en": "not seen"}
+    }
+    const number_of_episodes = {{ serie.number_of_episodes }};
+    let viewedEpisodesDialog, currentDialog, episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0},
+        mouseX, mouseY, myCanvas, palettes;
+
+    window.addEventListener("DOMContentLoaded", () => {
+        {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+        {% if percent > 100 %}
+        {% set percent = 100 %}
+        {% endif %}
+        initSerieStuff(paths, [
+            [".vote-average", 10 * parseFloat({{ serie.vote_average }})
+            ],
+            {% if index is defined %}
+            {% if index %}
+            [".view-average", parseFloat({{ percent }})
+            ]
+            {% endif %}
+            {% endif %}
+        ]);
+
+        {% if user and serieId %}
+        viewedEpisodesDialog = document.querySelector(".viewed-episode");
+        initViewedEpisodes(viewedEpisodesDialog);
+        episodeAddEvent();
+
+        document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
+
+        function toggleFavorite(evt) {
+            const fav = evt.target.checked ? 1 : 0;
+            const userId = "{{ user.id }}";
+            const mediaId = "{{ serieId }}";
+
+            // console.log({fav});
+            let url = _app_serie_toggle_favorite + '/' + userId + '/' + mediaId + '/' + fav;
+            // console.log({url});
+
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let data = JSON.parse(this.response);
+                let message = evt.target.closest(".favorite").querySelector(".message");
+                // console.log({data});
+                message.innerHTML = data.message;
+                message.classList.remove("added", "removed");
+                message.classList.add(data.class);
+            }
+            xhr.open("GET", url);
+            xhr.send();
         }
-        const number_of_episodes = {{ serie.number_of_episodes }};
-        let viewedEpisodesDialog, currentDialog, episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0};
 
-        window.addEventListener("DOMContentLoaded", () => {
-            {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
-            {% if percent > 100 %}
-            {% set percent = 100 %}
-            {% endif %}
-            initSerieStuff(paths, [
-                [".vote-average", 10 * parseFloat({{ serie.vote_average }})
-                ],
-                {% if index is defined %}
-                {% if index %}
-                [".view-average", parseFloat({{ percent }})
-                ]
-                {% endif %}
-                {% endif %}
-            ]);
+        function episodeAddEvent() {
+            const episodes = document.querySelectorAll(".ep");
+            episodes.forEach(episode => {
+                episode.addEventListener('mousemove', bubbleIt);
+                episode.addEventListener('mouseenter', bubbleItShow);
+                episode.addEventListener('mouseleave', bubbleItHide);
+                episode.addEventListener('click', toggleView);
+            })
+        }
 
-            {% if user and serieId %}
-            viewedEpisodesDialog = document.querySelector(".viewed-episode");
-            initViewedEpisodes(viewedEpisodesDialog);
-            episodeAddEvent();
+        function bubbleItShow(evt) {
+            const bubble = document.querySelector(".bubble");
+            const viewed = parseInt(this.getAttribute("data-viewed"));
+            const episode = this.getAttribute("data-number");
+            bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
+            bubble.querySelector("span").innerText = episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
+            bubble.classList.add("show");
+        }
 
-            document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
+        function bubbleItHide() {
+            const bubble = document.querySelector(".bubble");
+            bubble.classList.remove("show");
+            bubble.querySelector("span").innerText = "";
+        }
 
-            function toggleFavorite(evt) {
-                const fav = evt.target.checked ? 1 : 0;
-                const userId = "{{ user.id }}";
-                const mediaId = "{{ serieId }}";
+        function bubbleIt(evt) {
+            const bubble = document.querySelector(".bubble");
+            bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
+        }
 
-                // console.log({fav});
-                let url = _app_serie_toggle_favorite + '/' + userId + '/' + mediaId + '/' + fav;
-                // console.log({url});
+        function initViewedEpisodes(dialog) {
+            const devices = dialog.querySelectorAll(".device");
+            const networks = dialog.querySelectorAll(".network");
 
-                const xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    let data = JSON.parse(this.response);
-                    let message = evt.target.closest(".favorite").querySelector(".message");
-                    // console.log({data});
-                    message.innerHTML = data.message;
-                    message.classList.remove("added", "removed");
-                    message.classList.add(data.class);
-                }
-                xhr.open("GET", url);
-                xhr.send();
-            }
+            currentDialog = dialog;
 
-            function episodeAddEvent() {
-                const episodes = document.querySelectorAll(".ep");
-                episodes.forEach(episode => {
-                    episode.addEventListener('mousemove', bubbleIt);
-                    episode.addEventListener('mouseenter', bubbleItShow);
-                    episode.addEventListener('mouseleave', bubbleItHide);
-                    episode.addEventListener('click', toggleView);
-                })
-            }
-
-            function bubbleItShow(evt) {
-                const bubble = document.querySelector(".bubble");
-                const viewed = parseInt(this.getAttribute("data-viewed"));
-                const episode = this.getAttribute("data-number");
-                bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
-                bubble.querySelector("span").innerText = episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
-                bubble.classList.add("show");
-            }
-
-            function bubbleItHide() {
-                const bubble = document.querySelector(".bubble");
-                bubble.classList.remove("show");
-                bubble.querySelector("span").innerText = "";
-            }
-
-            function bubbleIt(evt) {
-                const bubble = document.querySelector(".bubble");
-                bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
-            }
-
-            function initViewedEpisodes(dialog) {
-                const devices = dialog.querySelectorAll(".device");
-                const networks = dialog.querySelectorAll(".network");
-
-                currentDialog = dialog;
-
-                dialog.querySelector(".viewed-episode-done").addEventListener("click", () => {
-                    closeDialog(dialog, true);
-                })
-                dialog.querySelector(".viewed-episode-cancel").addEventListener("click", () => {
-                    closeDialog(dialog, false);
-                })
-                dialog.querySelector(".close").addEventListener('click', function () {
-                    closeDialog(dialog, false);
-                });
-                devices.forEach(device => {
-                    device.addEventListener("click", (evt) => {
-                        devices.forEach(d => d.classList.remove("active"));
-                        evt.currentTarget.classList.add("active");
-                    })
-                })
-                networks.forEach(network => {
-                    network.addEventListener("click", (evt) => {
-                        networks.forEach(n => n.classList.remove("active"));
-                        evt.currentTarget.classList.add("active");
-                    })
-                })
-            }
-
-            function openDialog(dialog) {
-                const devices = dialog.querySelectorAll(".device");
-                const networks = dialog.querySelectorAll(".network");
-                const checkThemAllDiv = dialog.querySelector(".check-them-all");
-
-                if (!dialog.querySelector("#rememberChoice").checked) {
+            dialog.querySelector(".viewed-episode-done").addEventListener("click", () => {
+                closeDialog(dialog, true);
+            })
+            dialog.querySelector(".viewed-episode-cancel").addEventListener("click", () => {
+                closeDialog(dialog, false);
+            })
+            dialog.querySelector(".close").addEventListener('click', function () {
+                closeDialog(dialog, false);
+            });
+            devices.forEach(device => {
+                device.addEventListener("click", (evt) => {
                     devices.forEach(d => d.classList.remove("active"));
+                    evt.currentTarget.classList.add("active");
+                })
+            })
+            networks.forEach(network => {
+                network.addEventListener("click", (evt) => {
                     networks.forEach(n => n.classList.remove("active"));
-                    checkThemAllDiv.classList.remove("show");
-                }
+                    evt.currentTarget.classList.add("active");
+                })
+            })
+        }
 
-                if (typeof dialog.showModal === "function") {
-                    dialog.showModal();
-                    setTimeout(() => {
-                        dialog.classList.add("show")
-                    }, 0);
-                } else {
-                    console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
-                    /*dialog.setAttribute("open");
-                    let offset = document.querySelector("html").scrollTop;
-                    dialog.setAttribute("style", "translate: 0 " + offset + "px;");
-                    dialog.classList.remove("d-none");
-                    dialog.classList.add("d-block");*/
-                }
+        function openDialog(dialog) {
+            const devices = dialog.querySelectorAll(".device");
+            const networks = dialog.querySelectorAll(".network");
+            const checkThemAllDiv = dialog.querySelector(".check-them-all");
+
+            if (!dialog.querySelector("#rememberChoice").checked) {
+                devices.forEach(d => d.classList.remove("active"));
+                networks.forEach(n => n.classList.remove("active"));
+                checkThemAllDiv.classList.remove("show");
             }
 
-            function closeDialog(dialog, toggle) {
-                /*dialog.classList.add("d-none");
-                dialog.classList.remove("d-block");
-                dialog.removeAttribute("style");*/
-                dialog.classList.remove("show");
+            if (typeof dialog.showModal === "function") {
+                dialog.showModal();
                 setTimeout(() => {
-                    dialog.close()
-                }, 300);
-                if (toggle) {
-                    let network = dialog.querySelector(".network.active");
-                    let device = dialog.querySelector(".device.active");
-                    let all = dialog.querySelector("#checkThemAll").checked;
-                    let liveWatch = dialog.querySelector("#liveWatch");
-                    toggleEpisodeView(network, device, all, liveWatch);
-                }
-            }
-
-            function toggleView(evt) {
-                const ep = this;
-                episodeClicked.viewed = parseInt(ep.getAttribute("data-viewed")) === 0 ? 1 : 0;
-                episodeClicked.episodeNumber = parseInt(ep.getAttribute("data-number"));
-                episodeClicked.seasonNumber = parseInt(ep.parentElement.getAttribute("data-season-number"));
-                evt.preventDefault();
-
-                if (episodeClicked.viewed) {
-                    const checkThemAllDiv = currentDialog.querySelector(".check-them-all");
-                    if (areUnseenEpisodesBefore(parseInt(ep.getAttribute("data-global-index")))) {
-                        checkThemAllDiv.classList.add("show");
-                    } else {
-                        checkThemAllDiv.classList.remove("show");
-                        checkThemAllDiv.querySelector("#checkThemAll").checked = false;
-                    }
-                    openDialog(viewedEpisodesDialog);
-                } else {
-                    toggleEpisodeView();
-                }
-            }
-
-            function areUnseenEpisodesBefore(index) {
-                if (index === 1) return false;
-                const eps = document.querySelector("main").querySelector(".seasons").querySelectorAll(".ep");
-
-                for (let i = 0; i < index - 1; i++) {
-                    if (parseInt(eps[i].getAttribute("data-viewed")) === 0) return true;
-                }
-                return false;
-            }
-
-            function toggleEpisodeView(network = null, device = null, all = false, liveWatch = null) {
-
-                stillConnected();
-
-                let networkId = null, networkType = null, deviceType = null, live = null;
-
-                if (network) {
-                    networkType = network.getAttribute("data-type");
-                    networkId = network.getAttribute("data-id");
-                }
-                if (device) {
-                    deviceType = device.getAttribute("data-type");
-                }
-                if (liveWatch) {
-                    live = liveWatch.checked;
-                }
-
-                const e_viewed = episodeClicked.viewed;
-                const e_number = episodeClicked.episodeNumber;
-                const s_number = episodeClicked.seasonNumber;
-                const update = document.querySelector(".viewed-update-db-world");
-                const xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    let data = JSON.parse(this.response);
-                    let blocks = data['blocks'];
-                    let viewedEpisodes = data['viewedEpisodes'];
-                    let episodeText = data['episodeText'];
-
-                    blocks.forEach(block => {
-                        if (block['episode_count']) {
-                            console.log({block});
-                            const details = document.querySelector(".details[data-season-number=\"" + block['season'] + "\"]");
-                            if (details) {
-                                const oldViewingDiv = details.querySelector(".viewing").parentNode;
-                                const newViewingDiv = document.createElement("div");
-                                newViewingDiv.innerHTML = block.view.content;
-                                details.insertBefore(newViewingDiv, oldViewingDiv);
-                                details.removeChild(oldViewingDiv);
-                            }
-                        }
-                    })
-                    updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
-                    episodeAddEvent();
-                    update.classList.remove("show");
-                    setTimeout(() => {
-                        update.close()
-                    }, 300);
-
-                }
-                xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : "") + (live ? "&live=1" : ""));
-                xhr.send();
-                update.showModal();
-                setTimeout(() => {
-                    update.classList.add("show")
+                    dialog.classList.add("show")
                 }, 0);
-
+            } else {
+                console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
+                /*dialog.setAttribute("open");
+                let offset = document.querySelector("html").scrollTop;
+                dialog.setAttribute("style", "translate: 0 " + offset + "px;");
+                dialog.classList.remove("d-none");
+                dialog.classList.add("d-block");*/
             }
+        }
 
-            function updateViewCount(textSelector, graphSelector, viewedEpisodes, episodeText) {
-                let percent = Math.round(viewedEpisodes / number_of_episodes * 100);
-                if (percent > 100) percent = 100;
-                setVote([[graphSelector, percent]]);
-                document.querySelector(graphSelector).querySelector(".percentage").innerHTML = percent + "%";
-                document.querySelector(textSelector).innerHTML = viewedEpisodes + " " + episodeText;
+        function closeDialog(dialog, toggle) {
+            /*dialog.classList.add("d-none");
+            dialog.classList.remove("d-block");
+            dialog.removeAttribute("style");*/
+            dialog.classList.remove("show");
+            setTimeout(() => {
+                dialog.close()
+            }, 300);
+            if (toggle) {
+                let network = dialog.querySelector(".network.active");
+                let device = dialog.querySelector(".device.active");
+                let all = dialog.querySelector("#checkThemAll").checked;
+                let liveWatch = dialog.querySelector("#liveWatch");
+                toggleEpisodeView(network, device, all, liveWatch);
             }
+        }
 
-            function stillConnected() {
-                const xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    let data = JSON.parse(this.response);
+        function toggleView(evt) {
+            const ep = this;
+            episodeClicked.viewed = parseInt(ep.getAttribute("data-viewed")) === 0 ? 1 : 0;
+            episodeClicked.episodeNumber = parseInt(ep.getAttribute("data-number"));
+            episodeClicked.seasonNumber = parseInt(ep.parentElement.getAttribute("data-season-number"));
+            evt.preventDefault();
+            mouseX = evt.clientX / evt.view.innerWidth;
+            mouseY = evt.clientY / evt.view.innerHeight;
+            console.log({mouseX, mouseY});
 
-                    if (!data.connected) {
-                        window.location.reload();
-                    }
+            if (episodeClicked.viewed) {
+                const checkThemAllDiv = currentDialog.querySelector(".check-them-all");
+                if (areUnseenEpisodesBefore(parseInt(ep.getAttribute("data-global-index")))) {
+                    checkThemAllDiv.classList.add("show");
+                } else {
+                    checkThemAllDiv.classList.remove("show");
+                    checkThemAllDiv.querySelector("#checkThemAll").checked = false;
                 }
-                xhr.open("GET", _app_user_connected);
-                xhr.send();
+                openDialog(viewedEpisodesDialog);
+            } else {
+                toggleEpisodeView();
             }
-            {% endif %}
+        }
 
-            const images = document.querySelector(".serie-page").querySelector(".images")?.querySelectorAll("img");
-            initDiaporama(images, _locale);
-        });
-    </script>
+        function areUnseenEpisodesBefore(index) {
+            if (index === 1) return false;
+            const eps = document.querySelector("main").querySelector(".seasons").querySelectorAll(".ep");
+
+            for (let i = 0; i < index - 1; i++) {
+                if (parseInt(eps[i].getAttribute("data-viewed")) === 0) return true;
+            }
+            return false;
+        }
+
+        function toggleEpisodeView(network = null, device = null, all = false, liveWatch = null) {
+
+            stillConnected();
+
+            let networkId = null, networkType = null, deviceType = null, live = null;
+
+            if (network) {
+                networkType = network.getAttribute("data-type");
+                networkId = network.getAttribute("data-id");
+            }
+            if (device) {
+                deviceType = device.getAttribute("data-type");
+            }
+            if (liveWatch) {
+                live = liveWatch.checked;
+            }
+
+            const e_viewed = episodeClicked.viewed;
+            const e_number = episodeClicked.episodeNumber;
+            const s_number = episodeClicked.seasonNumber;
+            const update = document.querySelector(".viewed-update-db-world");
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let data = JSON.parse(this.response);
+                let blocks = data['blocks'];
+                let viewedEpisodes = data['viewedEpisodes'];
+                let episodeText = data['episodeText'];
+                let seasonCompleted = data['seasonCompleted'];
+
+                blocks.forEach(block => {
+                    if (block['episode_count']) {
+                        console.log({block});
+                        const details = document.querySelector(".details[data-season-number=\"" + block['season'] + "\"]");
+                        if (details) {
+                            const oldViewingDiv = details.querySelector(".viewing").parentNode;
+                            const newViewingDiv = document.createElement("div");
+                            newViewingDiv.innerHTML = block.view.content;
+                            details.insertBefore(newViewingDiv, oldViewingDiv);
+                            details.removeChild(oldViewingDiv);
+                        }
+                    }
+                })
+                updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
+                episodeAddEvent();
+                update.classList.remove("show");
+                setTimeout(() => {
+                    update.close()
+                }, 300);
+
+                if (seasonCompleted) {
+                    setTimeout(celebrate, 1000);
+                }
+            }
+            xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : "") + (live ? "&live=1" : ""));
+            xhr.send();
+            update.showModal();
+            setTimeout(() => {
+                update.classList.add("show")
+            }, 0);
+
+        }
+
+        function updateViewCount(textSelector, graphSelector, viewedEpisodes, episodeText) {
+            let percent = Math.round(viewedEpisodes / number_of_episodes * 100);
+            if (percent > 100) percent = 100;
+            setVote([[graphSelector, percent]]);
+            document.querySelector(graphSelector).querySelector(".percentage").innerHTML = percent + "%";
+            document.querySelector(textSelector).innerHTML = viewedEpisodes + " " + episodeText;
+        }
+
+        function stillConnected() {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let data = JSON.parse(this.response);
+
+                if (!data.connected) {
+                    window.location.reload();
+                }
+            }
+            xhr.open("GET", _app_user_connected);
+            xhr.send();
+        }
+        {% endif %}
+
+        const images = document.querySelector(".serie-page").querySelector(".images")?.querySelectorAll("img");
+        initDiaporama(images, _locale);
+
+        myCanvas = document.createElement('canvas');
+        document.body.appendChild(myCanvas);
+        palettes = [
+            ['#940079', '#ff61e2', '#ffa7ef', '#ffa7bf', '#ff618b', '#940027'],
+            ['#255480', '#6aa1d4', '#9bc0e2', '#9be2d2', '#6ad4bb', '#25806b'],
+            ['#89a9c8', '#749abe', '#5f8bb4', '#4e7ca6', '#456d92', '#3b5d7d'],
+            ['#1bbd1f', '#36d55d', '#6ad49b', '#8dd7bf', '#aedcd8', '#cce2e5'],
+            ['#804625', '#d4906a', '#e2b59b', '#e29bb5', '#d46a90', '#802546'],
+            ['#fa9e6b', '#fa8e52', '#f97e39', '#f86e20', '#f75e08', '#df5407'],
+            ['#be88c8', '#b373bf', '#a75eb5', '#994da8', '#864393', '#733a7e']
+        ];
+
+        function celebrate() {
+            const particuleCount = 50 + Math.floor(Math.random() * 100);
+            const spread = 90 + Math.floor(Math.random() * 270);
+            const palette = palettes[Math.floor(Math.random() * palettes.length)];
+            const position = {x: mouseX, y: mouseY};
+            const myConfetti = window.confetti.create(myCanvas, {
+                resize: true,
+                useWorker: true,
+                particleCount: particuleCount,
+                spread: spread,
+                colors: palette,
+                origin: position
+            });
+
+            myConfetti();
+            setTimeout(() => {
+                myConfetti.reset()
+            }, 300);
+        }
+    });
+</script>
 {% endblock %}

@@ -1295,6 +1295,34 @@
                 .images {
                     @include images-tmdb;
                 }
+
+                .videos {
+                    width: 100%;
+
+                    h4, h5, h6 {
+                        text-transform: uppercase;
+                    }
+
+                    > div {
+                        @include flex-100();
+                        background-color: var(--gradiant-grey-40-alpha-50);
+                        border-radius: .5em;
+                        flex-wrap: wrap;
+                        gap: 1em;
+                        padding: 1em;
+
+                        .video {
+                            aspect-ratio: 16 / 9;
+                            height: auto;
+                            width: 40em;
+
+                            iframe {
+                                height: 100%;
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -1812,12 +1840,13 @@
             min-height: 25em;
 
             .episode {
-                @include flex-100();
+                @include flex-col();
                 background-color: var(--gradiant-ardoise-40);
                 border-radius: .5em;
                 color: var(--gradiant-grey-90);
                 margin-top: .5em;
                 padding: .5em;
+                width: 100%;
 
                 &:has(div span.all) {
                     background-color: var(--gradiant-green-30);

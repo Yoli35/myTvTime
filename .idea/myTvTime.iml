@@ -158,5 +158,6 @@
     <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="bootstrap-icons" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="canvas-confetti" level="application" />
   </component>
 </module>

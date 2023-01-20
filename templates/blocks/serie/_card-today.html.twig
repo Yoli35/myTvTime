@@ -4,10 +4,10 @@
         <div class="title">
             <div>{{ todayAiring.serie.name }}</div>
         </div>
-        <div class="episode">
-            {#            <div>{{ 'Season'|trans }} {{ todayAiring.serieViewing.season_number }} - {{ 'Episode'|trans }} {{ todayAiring.serieViewing.seasonViewing.episode_number }}</div> #}
-            <div>
-                {% for seasonNumber, value in todayAiring.seasons %}
+        {#            <div>{{ 'Season'|trans }} {{ todayAiring.serieViewing.season_number }} - {{ 'Episode'|trans }} {{ todayAiring.serieViewing.seasonViewing.episode_number }}</div> #}
+        {% for seasonNumber, value in todayAiring.seasons %}
+            <div class="episode">
+                <div>
                     {% if seasonNumber %}
                         {{ 'Season'|trans }} {{ seasonNumber }}
                     {% else %}
@@ -26,8 +26,8 @@
                             {% endfor %}
                         {% endif %}
                     {% endif %}
-                {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </a>
 </div>
