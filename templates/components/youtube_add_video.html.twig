@@ -21,14 +21,23 @@
             <div class="input">
                 <form data-model="*">
                     <div class="link">
+                        <div>{{ 'Link'|trans }} :</div>
                         <label for="link">
-                            <div>{{ 'Link'|trans }} :</div>
                             <input id="link" type="search" name="link" autofocus>
                         </label>
                     </div>
                     <div class="page">
                         <input type="checkbox" id="page" name="page"{{ page ? " checked": "" }}>
                         <label for="page">{{ 'Go to the video page'|trans }}</label>
+                    </div>
+                    <div class="order">
+                        <div>{{ 'order'|trans }} :</div>
+                        <label for="order">
+                            <select id="order" type="search" name="order">
+                                <option value="addedAt">{{ 'Last added'|trans }}</option>
+                                <option value="publishedAt">{{ 'Last published'|trans }}</option>
+                            </select>
+                        </label>
                     </div>
                 </form>
             </div>

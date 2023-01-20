@@ -35,6 +35,8 @@ class YoutubeAddVideoComponent
     public string $link = '';
     #[LiveProp(writable: true)]
     public bool $page = true;
+    #[LiveProp(writable: true)]
+    public string $order = 'addedAt';
     #[LiveProp]
     public int $justAdded = 0;
     #[LiveProp]
@@ -230,7 +232,7 @@ class YoutubeAddVideoComponent
 
     public function getVideos(): array
     {
-        return $this->videoRepository->findAllByDate($this->user_id); // Au max les 20 premières
+        return $this->videoRepository->findAllByDate($this->user_id, $this->order);
     }
 
     public function getTotalRuntime(): int
