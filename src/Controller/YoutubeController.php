@@ -49,7 +49,7 @@ class YoutubeController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var YoutubeVideo [] $vids */
-        $vids = $youtubeVideoRepository->findAllByDate($request->query->get('id'), $request->query->get('offset'));
+        $vids = $youtubeVideoRepository->findAllByDate($request->query->get('id'), $request->query->get('sort'), $request->query->get('order'), $request->query->get('offset'));
         $videos = [];
 
         foreach ($vids as $vid) {

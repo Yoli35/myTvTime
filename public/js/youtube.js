@@ -41,6 +41,8 @@ function initYoutube(id, locale, paths) {
             const h1 = document.getElementById('h1');
             const videos = document.getElementsByClassName('yt-video');
             const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
+            const sort = document.querySelector("#sort").value;
+            const order = document.querySelector("#order").value;
 
             total_results = parseInt(h1.getAttribute('data-total-results'));
             let current_results = videos.length;
@@ -130,7 +132,7 @@ function initYoutube(id, locale, paths) {
                 }
             }
 
-            xhr.open("GET", _yt_videos_more + '?id=' + _user_id + '&offset=' + current_results);
+            xhr.open("GET", _yt_videos_more + '?id=' + _user_id + '&sort=' + sort + '&order=' + order + '&offset=' + current_results);
             xhr.send();
         });
     }

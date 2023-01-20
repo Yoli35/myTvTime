@@ -44,14 +44,14 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         }
     }
 
-    public function findAllByDate($userId, $order = 'publishedAt', $offset = 0): array
+    public function findAllByDate($userId, $sort = 'publishedAt', $order = 'DESC', $offset = 0): array
     {
         if ($offset < 0) {
             $offset = 0;
         }
         return $this->createQueryBuilder('y')
             ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
-            ->orderBy('y.'.$order, 'DESC')
+            ->orderBy('y.'.$sort, $order)
             ->setFirstResult($offset)
             ->setMaxResults(20)
             ->getQuery()

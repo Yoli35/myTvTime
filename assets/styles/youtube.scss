@@ -153,6 +153,7 @@
 
         .content {
             @include flex-col(center, space-around);
+            flex: 1;
             padding: .5em;
 
             label {
@@ -163,9 +164,17 @@
                 @include flex-row();
                 background-color: var(--gradiant-grey-80);
                 border-radius: .5em;
+                flex: 1;
+                gap: 1em;
                 padding: .5em;
 
-                .link {
+                .link, .sort, .order {
+                    @include flex-row();
+                    gap: .5em;
+
+                    > div {
+                        flex-shrink: 0;
+                    }
                     label {
                         margin-left: 0;
 
@@ -176,9 +185,8 @@
                 }
 
                 .page {
-                    @include flex-100(center, center);
+                    @include flex-row(center, center);
                     height: 1.5em;
-                    padding-top: .5em;
                 }
             }
 
@@ -223,6 +231,8 @@
 
                     form {
                         @include flex-row();
+                        flex: 1;
+                        flex-wrap: wrap;
                         gap: 1em;
 
                         label {

@@ -36,7 +36,9 @@ class YoutubeAddVideoComponent
     #[LiveProp(writable: true)]
     public bool $page = true;
     #[LiveProp(writable: true)]
-    public string $order = 'addedAt';
+    public string $sort = 'addedAt';
+    #[LiveProp(writable: true)]
+    public string $order = 'DESC';
     #[LiveProp]
     public int $justAdded = 0;
     #[LiveProp]
@@ -232,7 +234,7 @@ class YoutubeAddVideoComponent
 
     public function getVideos(): array
     {
-        return $this->videoRepository->findAllByDate($this->user_id, $this->order);
+        return $this->videoRepository->findAllByDate($this->user_id, $this->sort, $this->order);
     }
 
     public function getTotalRuntime(): int
