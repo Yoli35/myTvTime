@@ -58,18 +58,16 @@
 
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/youtube.js"></script>
     <script>
+        const paths =[
+            "{{ path('app_youtube_video', {id: 0}) }}",
+            "{{ path('app_youtube_more') }}"
+        ];
         window.addEventListener("DOMContentLoaded", () => {
-            initYoutube(
-                    {{ app.user.id }},
-                "{{ locale }}",
-                [
-                    "{{ path('app_youtube_video', {id: 0}) }}",
-                    "{{ path('app_youtube_more') }}"
-                ]
-            );
+            initYoutube({{ app.user.id }}, "{{ locale }}", paths);
         })
     </script>
 {% endblock %}

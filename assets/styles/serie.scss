@@ -1870,6 +1870,10 @@
                 font-weight: 500;
                 padding: 1rem 2rem;
             }
+
+            &:has(.nothing) {
+                align-items: center;
+            }
         }
     }
 }

@@ -27,8 +27,10 @@
                         </label>
                     </div>
                     <div class="page">
-                        <input type="checkbox" id="page" name="page"{{ page ? " checked": "" }}>
-                        <label for="page">{{ 'Go to the video page'|trans }}</label>
+                        <label for="page">
+                            <input type="checkbox" id="page" name="page"{{ page ? " checked": "" }}>
+                            {{ 'Go to the video page'|trans }}
+                        </label>
                     </div>
                     <div class="sort">
                         <div>{{ 'sort'|trans }} :</div>
@@ -36,7 +38,6 @@
                             <select id="sort" type="search" name="sort">
                                 <option value="addedAt">{{ 'Date added'|trans }}</option>
                                 <option value="publishedAt">{{ 'Date of publication'|trans }}</option>
-                                <option value="channel">{{ 'Channel'|trans }}</option>
                             </select>
                         </label>
                     </div>

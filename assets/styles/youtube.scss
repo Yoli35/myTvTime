@@ -168,9 +168,10 @@
                 gap: 1em;
                 padding: .5em;
 
-                .link, .sort, .order {
+                .link, .page, .sort, .order {
                     @include flex-row();
-                    gap: .5em;
+                    font-weight: 100;
+                    text-transform: capitalize;
 
                     > div {
                         flex-shrink: 0;
@@ -180,6 +181,34 @@
 
                         input {
                             margin-left: .5em;
+                        }
+
+                        &:has(input[type=checkbox]) {
+                            input {
+                                @include flex-row();
+                                appearance: none;
+                                background-color: var(--gradiant-grey-40);
+                                border: 1px solid var(--gradiant-grey-80);
+                                border-radius: .25em;
+                                height: 1em;
+                                width: 1em;
+
+                                &:checked {
+                                    background-color: var(--gradiant-ardoise-60);
+                                }
+                            }
+                        }
+
+                        &:has(select) {
+                            @include customSelect;
+
+                            &::after {
+                                right: 0.75em;
+                            }
+
+                            select {
+                                margin: 0 0 0 .5em;
+                            }
                         }
                     }
                 }
