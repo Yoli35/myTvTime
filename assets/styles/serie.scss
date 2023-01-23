@@ -1170,34 +1170,36 @@
                             @include flex-row(center, flex-start);
                             background-color: var(--gradiant-grey-90);
                             border-radius: 0;
-                            height: 12em;
+                            height: 15em;
                             width: 100%;
 
                             .poster {
                                 flex-shrink: 0;
-                                height: 12em;
-                                width: 8em;
+                                height: 15em;
+                                width: 10em;
                                 z-index: 0;
 
                                 img {
                                     border-radius: 0;
-                                    height: 12em;
+                                    height: 15em;
                                     object-fit: cover;
-                                    width: 8em;
+                                    width: 10em;
                                 }
                             }
 
                             .infos {
                                 @include flex-col(flex-start, flex-start);
-                                height: 12em;
+                                height: 15em;
                                 padding: .5em;
+                                width: calc(100% - 10em);
 
                                 div {
                                     color: var(--mmt-body-color);
                                     font-weight: 100;
                                     margin: .25em 0;
-                                    max-height: 3em;
+                                    max-height: 6em;
                                     overflow-y: scroll;
+                                    width: 100%;
                                 }
 
                                 .details {
@@ -1582,6 +1584,7 @@
                     border: none;
                     border-radius: var(--button-border-radius);
                     color: var(--gradiant-grey-90);
+                    cursor: pointer;
                     font-weight: 100;
                     margin-left: 1em;
                     padding: .25em 1em;
@@ -2634,14 +2637,11 @@
                         a {
                             .season, .episode {
                                 border-radius: .5em;
-                                height: 12em;
 
                                 .poster {
-                                    height: 12em;
 
                                     img {
                                         border-radius: .5em 0 0 .5em;
-                                        height: 12em;
                                         max-width: 20em;
                                         object-fit: cover;
                                     }

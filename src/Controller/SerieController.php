@@ -601,7 +601,7 @@ class SerieController extends AbstractController
         $query = $request->query->get('query', "");
         $year = $request->query->get('year', "");
 
-        $standing = $this->TMDBService->getTv($id, $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images']);
+        $standing = $this->TMDBService->getTv($id, $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']);
         $tv = json_decode($standing, true);
 
         return $this->getSerie($request, $tv, $page, $from, $id, null, $query, $year);

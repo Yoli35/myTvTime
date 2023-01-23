@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EpisodeViewingRepository;
+use App\Service\LogService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -40,7 +41,11 @@ class EpisodeViewing
     {
         $this->episodeNumber = $episodeNumber;
         if ($airDate) {
-            $this->airDate = new DateTimeImmutable($airDate);
+            try {
+                $this->airDate = new DateTimeImmutable($airDate);
+            } catch (\Exception $e) {
+                $this->airDate = null;
+            }
         }
     }
     public function getId(): ?int

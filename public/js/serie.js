@@ -51,14 +51,15 @@ function setVote(circles) {
 
 function translateKeywords() {
 
-    const keywords = document.querySelector(".keywords");
+    const keywordsBlocks = document.querySelectorAll(".keywords");
 
-    if (keywords) {
-        const newKeywords = keywords.querySelectorAll(".new");
-
-        newKeywords.forEach(newKeyword => {
-            newKeyword.addEventListener("click", openModal);
-        })
+    if (keywordsBlocks) {
+        keywordsBlocks.forEach(keywords => {
+            const newKeywords = keywords.querySelectorAll(".new");
+            newKeywords.forEach(newKeyword => {
+                newKeyword.addEventListener("click", openModal);
+            });
+        });
     }
 }
 

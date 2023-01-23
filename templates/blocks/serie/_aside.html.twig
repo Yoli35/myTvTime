@@ -62,8 +62,8 @@
                 <div class="label">{{ 'Keywords'|trans }}</div>
                 <div class="keywords">
                     {% for keyword in keywords.results %}
-                        <div class="keyword{% if keyword.name in missingTranslations %} new{% endif %}" data-original="{{ keyword.name }}">
-                            <div class="original">{{ keyword.name }}</div>
+                        <div class="keyword{% if keyword.name in missingTranslations %} new{% endif %}" data-original="{{ keyword.name|trim }}">
+                            <div class="original">{{ keyword.name|trim }}</div>
                             {% if keyword.name not in missingTranslations %}
                                 <div class="translated">{{ keyword.name|trans({},'tags') }}</div>
                             {% endif %}
