@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -18,6 +19,8 @@ class Event
     #[ORM\Column]
     private ?int $id = null;
 
+    // https://symfony.com/doc/current/validation.html
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -54,7 +57,7 @@ class Event
 
     public function __construct($user = null)
     {
-        $this->date = new DateTime();
+        $this->date = new DateTime('now', new \DateTimeZone('+0100'));
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTime();
         $this->visible = false;

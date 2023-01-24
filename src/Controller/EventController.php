@@ -16,11 +16,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/{_locale}/event', requirements: ['_locale' => 'fr|en|de|es'])]
 class EventController extends AbstractController
 {
-    public function __construct(private readonly LogService $logService)
+    public function __construct(private readonly LogService          $logService,
+                                private readonly TranslatorInterface $translator)
     {
     }
 
@@ -41,7 +44,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EventRepository $eventRepository, FileUploader $fileUploader): Response
+    public function new(Request $request, EventRepository $eventRepository, FileUploader $fileUploader, ValidatorInterface $validator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
@@ -49,16 +52,21 @@ class EventController extends AbstractController
         $user = $this->getUser();
 
         $event = new Event($user);
+        $event->setName($this->translator->trans('New event'));
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->handleForm($form, $event, $fileUploader, $eventRepository);
             return $this->redirectToRoute('app_event');
         }
+        // https://symfony.com/doc/current/validation.html
+        $errors = $validator->validate($event);
+//        dump($errors);
 
         return $this->render('event/new.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
+            'errors' => $errors
         ]);
     }
 

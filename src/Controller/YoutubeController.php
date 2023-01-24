@@ -89,6 +89,8 @@ class YoutubeController extends AbstractController
 //        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser()?:null);
 
+        $userAlreadyLinked = $request->query->get('user-already-linked');
+
         $tags = $repository->findAllByLabel();
         $description = preg_replace(
             ['/(https:\/\/\S+)/',
@@ -104,6 +106,7 @@ class YoutubeController extends AbstractController
                 'video' => $youtubeVideo,
                 'description' => $description,
                 'other_tags' => array_diff($tags, $youtubeVideo->getTags()->toArray()),
+                'userAlreadyLinked' => $userAlreadyLinked,
             ]
         );
     }

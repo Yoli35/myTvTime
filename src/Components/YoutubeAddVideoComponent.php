@@ -42,6 +42,8 @@ class YoutubeAddVideoComponent
     #[LiveProp]
     public int $justAdded = 0;
     #[LiveProp]
+    public bool $userAlreadyLinked = false;
+    #[LiveProp]
     public int $user_id = 0;
     #[LiveProp]
     public int $videoCount = 0;
@@ -132,6 +134,8 @@ class YoutubeAddVideoComponent
 
         if (strlen($thisLink) == 11) {
 
+            $user = $this->userRepository->find($this->user_id);
+
             $link = $this->videoRepository->findOneBy(['link' => $thisLink]);
 
             // Si le lien n'a pas déjà été ajouté 12345678912
@@ -200,7 +204,7 @@ class YoutubeAddVideoComponent
                 $newVideo->setContentProjection($contentDetails['projection']);
                 $addedAt = new DateTimeImmutable();
                 $newVideo->setAddedAt($addedAt->setTimezone((new DateTime())->getTimezone()));
-                $newVideo->addUser($this->userRepository->find($this->user_id));
+                $newVideo->addUser($user);
 
                 $this->videoRepository->add($newVideo, true);
 
@@ -211,8 +215,20 @@ class YoutubeAddVideoComponent
                 $this->totalRuntime = $this->getTotalRuntime();
                 $this->time2Human = $this->getTime2human();
             } else {
-                $link->addUser($this->userRepository->find($this->user_id));
-                $this->videoRepository->add($link, true);
+                // Si le lien a déjà été ajouté, on vérifie que l'utilisateur n'est pas déjà lié à la vidéo
+                $users = $link->getUsers();
+                $this->userAlreadyLinked = false;
+                foreach ($users as $u) {
+                    if ($u->getId() == $user->getId()) {
+                        $this->userAlreadyLinked = true;
+                    }
+                }
+                // Si l'utilisateur n'est pas encore lié à la vidéo, on le lie
+                if (!$this->userAlreadyLinked) {
+                    $link->addUser($user);
+                    $this->videoRepository->add($link, true);
+                }
+                $this->justAdded = $link->getId();
             }
         }
 

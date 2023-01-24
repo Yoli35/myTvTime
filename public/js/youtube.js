@@ -29,8 +29,9 @@ function initYoutube(id, locale, paths) {
         const redirect = document.querySelector(".redirect");
         if (redirect) {
             const video = redirect.getAttribute("data-id");
+            const userAlreadyLinked = redirect.getAttribute("data-user-already-linked");
             redirect.remove();
-            window.location.href = _yt_video_page + video;
+            window.location.href = _yt_video_page + video + (userAlreadyLinked ? '?user-already-linked=1' : '');
         }
     }, 1000);
 

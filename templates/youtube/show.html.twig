@@ -10,6 +10,14 @@
 
 {% block body %}
     <div class="container">
+        {% if userAlreadyLinked %}
+            <div class="flash-messages">
+                <div class="flash-message success">
+                    {{ 'You have already added this video previously.'|trans }}
+                    <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
+                </div>
+            </div>
+        {% endif %}
 
         {{ include('blocks/_mainMenu.html.twig') }}
 

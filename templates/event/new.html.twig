@@ -13,7 +13,7 @@
                 <div class="backdrop"></div>
             </div>
 
-            {{ include('blocks/_nav.html.twig', {thisPage:('New event'|trans), parent: {url: path('app_event'), page: 'My events'|trans}}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage:('New event'|trans), parent: {url: path('app_event'), page: 'My events'}}) }}
 
             <main>
                 {{ include('blocks/event/_form.html.twig') }}

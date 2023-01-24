@@ -1,4 +1,5 @@
 {% set newVideo = this.newVideo %}
+{% set userAlreadyLinked = this.userAlreadyLinked %}
 {% set videos = this.videos %}
 {% set count = this.videoCount %}
 {% set beginning = this.firstView %}
@@ -9,7 +10,7 @@
 
 <div {{ attributes }}>
     {% if page and this.justAdded %}
-        <div class="redirect" data-id="{{ this.justAdded }}"></div>
+        <div class="redirect" data-id="{{ this.justAdded }}" data-user-already-linked="{{ userAlreadyLinked }}"></div>
     {% endif %}
     <h1 id="h1" data-total-results="{{ count }}">
         {{ count ?: 'No'|trans }} {{ count > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ beginning|format_date('short') }}
