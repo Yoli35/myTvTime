@@ -14,27 +14,34 @@ class Cast
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $castId = null;
+    private ?int $tmdbId = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profilePath = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    public function __construct($tmdbId, $name, $profilePath)
+    {
+        $this->tmdbId = $tmdbId;
+        $this->name = $name;
+        $this->profilePath = $profilePath;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCastId(): ?int
+    public function getTmdbId(): ?int
     {
-        return $this->castId;
+        return $this->tmdbId;
     }
 
-    public function setCastId(int $castId): self
+    public function setTmdbId(int $tmdbId): self
     {
-        $this->castId = $castId;
+        $this->tmdbId = $tmdbId;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SerieCastRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SerieCastRepository::class)]
@@ -22,10 +23,22 @@ class SerieCast
     private ?Cast $cast = null;
 
     #[ORM\Column]
-    private ?int $numberOfEpisodes = null;
-
-    #[ORM\Column]
     private ?bool $recurringCharacter = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $characterName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $knownForDepartment = null;
+
+    #[ORM\Column(type: Types::JSON)]
+    private array $episodes = [];
+
+    public function __construct(SerieViewing $serieViewing, Cast $cast)
+    {
+        $this->serieViewing = $serieViewing;
+        $this->cast = $cast;
+    }
 
     public function getId(): ?int
     {
@@ -56,18 +69,6 @@ class SerieCast
         return $this;
     }
 
-    public function getNumberOfEpisodes(): ?int
-    {
-        return $this->numberOfEpisodes;
-    }
-
-    public function setNumberOfEpisodes(int $numberOfEpisodes): self
-    {
-        $this->numberOfEpisodes = $numberOfEpisodes;
-
-        return $this;
-    }
-
     public function isRecurringCharacter(): ?bool
     {
         return $this->recurringCharacter;
@@ -76,6 +77,52 @@ class SerieCast
     public function setRecurringCharacter(bool $recurringCharacter): self
     {
         $this->recurringCharacter = $recurringCharacter;
+
+        return $this;
+    }
+
+    public function getEpisodes(): array
+    {
+        return $this->episodes;
+    }
+
+    public function setEpisodes(array $episodes): self
+    {
+        $this->episodes = $episodes;
+
+        return $this;
+    }
+
+    public function addEpisode(int $seasonNumber, int $episodeNumber): self
+    {
+        $this->episodes[] = [
+            'seasonNumber' => $seasonNumber,
+            'episodeNumber' => $episodeNumber,
+        ];
+
+        return $this;
+    }
+
+    public function getKnownForDepartment(): ?string
+    {
+        return $this->knownForDepartment;
+    }
+
+    public function setKnownForDepartment(?string $knownForDepartment): self
+    {
+        $this->knownForDepartment = $knownForDepartment;
+
+        return $this;
+    }
+
+    public function getCharacterName(): ?string
+    {
+        return $this->characterName;
+    }
+
+    public function setCharacterName(?string $characterName): self
+    {
+        $this->characterName = $characterName;
 
         return $this;
     }

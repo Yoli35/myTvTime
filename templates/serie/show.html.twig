@@ -214,7 +214,7 @@
                             {% if credits.cast|length %}
                                 <section>
                                     <div class="cast">
-                                        <h4>{{ 'Cast'|trans }}</h4>
+                                        <h4>{{ 'Cast'|trans }} ({{ credits.cast|length }})</h4>
                                         <div class="list">
                                             {% for people in credits.cast %}
                                                 <a href="{{ path('app_people', {id: people.id}) }}">
