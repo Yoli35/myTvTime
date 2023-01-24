@@ -464,11 +464,14 @@ class SerieController extends AbstractController
                 $this->seasonViewingRepository->save($season, true);
 
                 for ($i = 1; $i <= $season->getEpisodeCount(); $i++) {
-                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr');
+                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr', ['credits']);
                     $tmdbEpisode = json_decode($standing, true);
                     $episode = new EpisodeViewing($i, $tmdbEpisode ? $tmdbEpisode['air_date'] : null);
                     $season->addEpisode($episode);
                     $this->episodeViewingRepository->save($episode, true);
+
+                    $credits = $tmdbEpisode['credits'];
+                    dump($credits);
                 }
             }
         }
@@ -505,13 +508,13 @@ class SerieController extends AbstractController
                     $season = new SeasonViewing($s['air_date'], $s['season_number'], $s['episode_count'], false);
                     $serieViewing->addSeason($season);
                     for ($i = 1; $i <= $s['episode_count']; $i++) {
-                        $this->addNewEpisode($tv, $season, $i);
+                        $this->addNewEpisode($tv, $serieViewing, $season, $i);
                     }
                     $this->seasonViewingRepository->save($season, true);
                 } else {
                     if ($season->getEpisodeCount() < $s['episode_count']) {
                         for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
-                            $this->addNewEpisode($tv, $season, $i);
+                            $this->addNewEpisode($tv, $serieViewing, $season, $i);
                         }
                         $season->setEpisodeCount($s['episode_count']);
                         $this->seasonViewingRepository->save($season, true);
@@ -526,7 +529,52 @@ class SerieController extends AbstractController
         return $serieViewing;
     }
 
-    public function addNewEpisode(array $tv, SeasonViewing $season, int $episodeNumber)
+    public function updateTvCast($tv, $serieViewing): array
+    {
+        $tvCast = $tv['credits']['cast'];
+
+        foreach ($tv['seasons'] as $s) {
+            if ($s['season_number']) { // 21/12/2022 : plus d'épisodes spéciaux
+                $season = $serieViewing->getSeasonByNumber($s['season_number']);
+                dump($tvCast);
+                for ($i = 1; $i <= $s['episode_count']; $i++) {
+                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $season->getSeasonNumber(), $i, 'fr', ['credits']);
+                    $tmdbEpisode = json_decode($standing, true);
+                    $credits = $tmdbEpisode['credits'];
+                    dump($credits);
+                    if ($credits['cast']) {
+                        foreach ($credits['cast'] as $cast) {
+                            if (!$this->inTvCast($tvCast, $cast['id'])) {
+                                $tvCast[] = $cast;
+                            }
+                        }
+                    }
+                    if ($credits['guest_stars']) {
+                        foreach ($credits['guest_stars'] as $guestStar) {
+                            if (!$this->inTvCast($tvCast, $guestStar['id'])) {
+                                $tvCast[] = $guestStar;
+                            }
+                        }
+                    }
+                }
+                dump($tvCast);
+            }
+        }
+
+        return $tvCast;
+    }
+
+    public function inTvCast($tvCast, $personId): bool
+    {
+        foreach ($tvCast as $cast) {
+            if ($cast['id'] == $personId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function addNewEpisode(array $tv, SerieViewing $serieViewing, SeasonViewing $season, int $episodeNumber)
     {
         $standing = $this->TMDBService->getTvEpisode($tv['id'], $season->getSeasonNumber(), $episodeNumber, 'fr');
         $tmdbEpisode = json_decode($standing, true);
@@ -726,6 +774,7 @@ class SerieController extends AbstractController
                 } else {
                     $serieViewing = $this->updateSerieViewing($serieViewing, $tv, $serie);
                 }
+                $credits['cast'] = $this->updateTvCast($tv, $serieViewing);
                 $seasonsWithAView = [];
                 foreach ($tv['seasons'] as $season) {
                     $seasonWithAView = $season;

@@ -46,11 +46,15 @@ class SerieViewing
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $createdAt;
 
+    #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SerieCast::class)]
+    private Collection $serieCasts;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->modifiedAt = new DateTime();
         $this->seasons = new ArrayCollection();
+        $this->serieCasts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +195,36 @@ class SerieViewing
     public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SerieCast>
+     */
+    public function getSerieCasts(): Collection
+    {
+        return $this->serieCasts;
+    }
+
+    public function addSerieCast(SerieCast $serieCast): self
+    {
+        if (!$this->serieCasts->contains($serieCast)) {
+            $this->serieCasts->add($serieCast);
+            $serieCast->setSerieViewing($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSerieCast(SerieCast $serieCast): self
+    {
+        if ($this->serieCasts->removeElement($serieCast)) {
+            // set the owning side to null (unless already changed)
+            if ($serieCast->getSerieViewing() === $this) {
+                $serieCast->setSerieViewing(null);
+            }
+        }
 
         return $this;
     }
