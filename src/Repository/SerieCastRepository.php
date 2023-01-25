@@ -30,6 +30,11 @@ class SerieCastRepository extends ServiceEntityRepository
         }
     }
 
+    public function saveAll(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function remove(SerieCast $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);

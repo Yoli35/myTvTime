@@ -535,99 +535,6 @@ class SerieController extends AbstractController
         return $serieViewing;
     }
 
-    public function updateTvCast($tv, $serieViewing): array
-    {
-        $recurringCharacters = $tv['credits']['cast'];
-        $tvCast = $tv['credits']['cast'];
-
-        foreach ($tv['seasons'] as $s) {
-            $seasonNumber = $s['season_number'];
-            if ($seasonNumber) { // 21/12/2022 : plus d'épisodes spéciaux
-                $season = $serieViewing->getSeasonByNumber($seasonNumber);
-//                dump($tvCast);
-                for ($i = 1; $i <= $s['episode_count']; $i++) {
-                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $season->getSeasonNumber(), $i, 'fr', ['credits']);
-                    $tmdbEpisode = json_decode($standing, true);
-                    $credits = $tmdbEpisode['credits'];
-//                    dump($credits);
-                    if ($credits['cast']) {
-                        foreach ($credits['cast'] as $cast) {
-                            $recurringCharacter = $this->inTvCast($recurringCharacters, $cast['id']);
-                            $this->episodesCast($cast, $seasonNumber, $i, $recurringCharacter, $serieViewing);
-                            if (!$this->inTvCast($tvCast, $cast['id'])) {
-                                $tvCast[] = $cast;
-                            }
-                        }
-                    }
-                    if ($credits['guest_stars']) {
-                        foreach ($credits['guest_stars'] as $guestStar) {
-                            $this->episodesCast($guestStar, $seasonNumber, $i, false, $serieViewing);
-                            if (!$this->inTvCast($tvCast, $guestStar['id'])) {
-                                $tvCast[] = $guestStar;
-                            }
-                        }
-                    }
-                }
-//                dump($tvCast);
-            }
-        }
-
-        return $tvCast;
-    }
-
-    public function inTvCast($tvCast, $personId): bool
-    {
-        foreach ($tvCast as $cast) {
-            if ($cast['id'] == $personId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, $serieViewing)
-    {
-        $dbCast = $this->castRepository->findOneBy(['tmdbId' => $cast['id']]);
-        $serieCast = null;
-        if ($dbCast) {
-            $serieCast = $this->serieCastRepository->findOneBy(['serieViewing' => $serieViewing, 'cast' => $dbCast]);
-        }
-        if ($serieCast === null) {
-            $serieCast = $this->createSerieCast($cast, $dbCast, $recurringCharacter, $serieViewing);
-        }
-        $episodes = $serieCast->getEpisodes();
-        if (!$this->episodeInSerieCastEpisodes($episodes, $seasonNumber, $episodeNumber)) {
-            $serieCast->addEpisode($seasonNumber, $episodeNumber);
-            $this->serieCastRepository->save($serieCast, true);
-        }
-    }
-
-    public function episodeInSerieCastEpisodes($episodes, $seasonNumber, $episodeNumber): bool
-    {
-        foreach ($episodes as $season => $episode) {
-            if ($season == $seasonNumber && $episode == $episodeNumber) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function createSerieCast($cast, $dbCast, $recurringCharacter, $serieViewing): SerieCast
-    {
-        if ($dbCast === null) {
-            $dbCast = new Cast($cast['id'], $cast['name'], $cast['profile_path']);
-            $this->castRepository->save($dbCast, true);
-        }
-        $serieCast = new SerieCast($serieViewing, $dbCast);
-        $serieCast->setKnownForDepartment($cast['known_for_department']);
-        $serieCast->setCharacterName($cast['character']);
-        $serieCast->setRecurringCharacter($recurringCharacter);
-        $this->serieCastRepository->save($serieCast, true);
-        $this->serieViewingRepository->save($serieViewing->addSerieCast($serieCast), true);
-
-        return $serieCast;
-    }
-
     public function addNewEpisode(array $tv, SeasonViewing $season, int $episodeNumber)
     {
         $standing = $this->TMDBService->getTvEpisode($tv['id'], $season->getSeasonNumber(), $episodeNumber, 'fr');
@@ -881,6 +788,99 @@ class SerieController extends AbstractController
             'imageConfig' => $imageConfiguration->getConfig(),
         ]);
 
+    }
+
+    public function updateTvCast($tv, $serieViewing): array
+    {
+        $recurringCharacters = $tv['credits']['cast'];
+        $tvCast = $tv['credits']['cast'];
+
+        foreach ($tv['seasons'] as $s) {
+            $seasonNumber = $s['season_number'];
+            if ($seasonNumber) { // 21/12/2022 : plus d'épisodes spéciaux
+                $season = $serieViewing->getSeasonByNumber($seasonNumber);
+//                dump($tvCast);
+                for ($i = 1; $i <= $s['episode_count']; $i++) {
+                    $standing = $this->TMDBService->getTvEpisodeCredits($tv['id'], $season->getSeasonNumber(), $i, 'fr');
+                    $credits = json_decode($standing, true);
+//                    dump($credits);
+                    if ($credits['cast']) {
+                        foreach ($credits['cast'] as $cast) {
+                            $recurringCharacter = $this->inTvCast($recurringCharacters, $cast['id']);
+                            $this->episodesCast($cast, $seasonNumber, $i, $recurringCharacter, $serieViewing);
+                            if (!$this->inTvCast($tvCast, $cast['id'])) {
+                                $tvCast[] = $cast;
+                            }
+                        }
+                    }
+                    if ($credits['guest_stars']) {
+                        foreach ($credits['guest_stars'] as $guestStar) {
+                            $this->episodesCast($guestStar, $seasonNumber, $i, false, $serieViewing);
+                            if (!$this->inTvCast($tvCast, $guestStar['id'])) {
+                                $tvCast[] = $guestStar;
+                            }
+                        }
+                    }
+                }
+//                dump($tvCast);
+            }
+        }
+        $this->serieCastRepository->saveAll();
+
+        return $tvCast;
+    }
+
+    public function inTvCast($tvCast, $personId): bool
+    {
+        foreach ($tvCast as $cast) {
+            if ($cast['id'] == $personId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, $serieViewing)
+    {
+        $dbCast = $this->castRepository->findOneBy(['tmdbId' => $cast['id']]);
+        $serieCast = null;
+        if ($dbCast) {
+            $serieCast = $this->serieCastRepository->findOneBy(['serieViewing' => $serieViewing, 'cast' => $dbCast]);
+        }
+        if ($serieCast === null) {
+            $serieCast = $this->createSerieCast($cast, $dbCast, $recurringCharacter, $serieViewing);
+        }
+        $episodes = $serieCast->getEpisodes();
+        if (!$this->episodeInSerieCastEpisodes($episodes, $seasonNumber, $episodeNumber)) {
+            $serieCast->addEpisode($seasonNumber, $episodeNumber);
+            $this->serieCastRepository->save($serieCast, false);
+        }
+    }
+
+    public function episodeInSerieCastEpisodes($episodes, $seasonNumber, $episodeNumber): bool
+    {
+        foreach ($episodes as $season => $episode) {
+            if ($season == $seasonNumber && $episode == $episodeNumber) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function createSerieCast($cast, $dbCast, $recurringCharacter, $serieViewing): SerieCast
+    {
+        if ($dbCast === null) {
+            $dbCast = new Cast($cast['id'], $cast['name'], $cast['profile_path']);
+            $this->castRepository->save($dbCast, true);
+        }
+        $serieCast = new SerieCast($serieViewing, $dbCast);
+        $serieCast->setKnownForDepartment($cast['known_for_department']);
+        $serieCast->setCharacterName($cast['character']);
+        $serieCast->setRecurringCharacter($recurringCharacter);
+        $this->serieCastRepository->save($serieCast, true);
+        $this->serieViewingRepository->save($serieViewing->addSerieCast($serieCast), true);
+
+        return $serieCast;
     }
 
     public function whatsNew($tv, $serie, $serieRepository): array|null
