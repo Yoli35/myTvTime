@@ -745,6 +745,8 @@ class SerieController extends AbstractController
                         $c['name'] = $serieCast->getCast()->getName();
                         $c['known_for_department'] = $serieCast->getKnownForDepartment();
                         $c['character'] = $serieCast->getCharacterName();
+                        $c['recurring_character'] = $serieCast->isRecurringCharacter();
+                        $c['guest_star'] = $serieCast->isGuestStar();
                         return $c;
                     }, $serieViewing->getSerieCasts()->toArray());
                     $credits['cast'] = $cast;
@@ -763,6 +765,7 @@ class SerieController extends AbstractController
         $ygg = str_replace(' ', '+', $tv['name']);
         $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
+        dump($credits);
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serieId,
@@ -807,7 +810,7 @@ class SerieController extends AbstractController
                     if ($credits['cast']) {
                         foreach ($credits['cast'] as $cast) {
                             $recurringCharacter = $this->inTvCast($recurringCharacters, $cast['id']);
-                            $this->episodesCast($cast, $seasonNumber, $i, $recurringCharacter, $serieViewing);
+                            $this->episodesCast($cast, $seasonNumber, $i, $recurringCharacter, false, $serieViewing);
                             if (!$this->inTvCast($tvCast, $cast['id'])) {
                                 $tvCast[] = $cast;
                             }
@@ -815,7 +818,7 @@ class SerieController extends AbstractController
                     }
                     if ($credits['guest_stars']) {
                         foreach ($credits['guest_stars'] as $guestStar) {
-                            $this->episodesCast($guestStar, $seasonNumber, $i, false, $serieViewing);
+                            $this->episodesCast($guestStar, $seasonNumber, $i, false, true, $serieViewing);
                             if (!$this->inTvCast($tvCast, $guestStar['id'])) {
                                 $tvCast[] = $guestStar;
                             }
@@ -840,7 +843,7 @@ class SerieController extends AbstractController
         return false;
     }
 
-    public function episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, $serieViewing)
+    public function episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, $guestStar, $serieViewing)
     {
         $dbCast = $this->castRepository->findOneBy(['tmdbId' => $cast['id']]);
         $serieCast = null;
@@ -848,7 +851,7 @@ class SerieController extends AbstractController
             $serieCast = $this->serieCastRepository->findOneBy(['serieViewing' => $serieViewing, 'cast' => $dbCast]);
         }
         if ($serieCast === null) {
-            $serieCast = $this->createSerieCast($cast, $dbCast, $recurringCharacter, $serieViewing);
+            $serieCast = $this->createSerieCast($cast, $dbCast, $recurringCharacter, $guestStar, $serieViewing);
         }
         $episodes = $serieCast->getEpisodes();
         if (!$this->episodeInSerieCastEpisodes($episodes, $seasonNumber, $episodeNumber)) {
@@ -867,7 +870,7 @@ class SerieController extends AbstractController
         return false;
     }
 
-    public function createSerieCast($cast, $dbCast, $recurringCharacter, $serieViewing): SerieCast
+    public function createSerieCast($cast, $dbCast, $recurringCharacter, $guestStar, $serieViewing): SerieCast
     {
         if ($dbCast === null) {
             $dbCast = new Cast($cast['id'], $cast['name'], $cast['profile_path']);
@@ -877,6 +880,7 @@ class SerieController extends AbstractController
         $serieCast->setKnownForDepartment($cast['known_for_department']);
         $serieCast->setCharacterName($cast['character']);
         $serieCast->setRecurringCharacter($recurringCharacter);
+        $serieCast->setGuestStar($guestStar);
         $this->serieCastRepository->save($serieCast, true);
         $this->serieViewingRepository->save($serieViewing->addSerieCast($serieCast), true);
 

@@ -34,6 +34,9 @@ class SerieCast
     #[ORM\Column(type: Types::JSON)]
     private array $episodes = [];
 
+    #[ORM\Column]
+    private ?bool $guestStar = null;
+
     public function __construct(SerieViewing $serieViewing, Cast $cast)
     {
         $this->serieViewing = $serieViewing;
@@ -123,6 +126,18 @@ class SerieCast
     public function setCharacterName(?string $characterName): self
     {
         $this->characterName = $characterName;
+
+        return $this;
+    }
+
+    public function isGuestStar(): ?bool
+    {
+        return $this->guestStar;
+    }
+
+    public function setGuestStar(bool $guestStar): self
+    {
+        $this->guestStar = $guestStar;
 
         return $this;
     }

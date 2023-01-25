@@ -1151,6 +1151,22 @@
 
                             .people {
                                 @include human-profile();
+
+                                .profile {
+                                    position: relative;
+
+                                    .status {
+                                        @include flex-row(center, end);
+                                        background-color: var(--gradiant-ardoise-30);
+                                        bottom: 0;
+                                        border-radius: 999px;
+                                        color: var(--gradiant-yellow-50);
+                                        font-size: 1.5em;
+                                        padding: .25em;
+                                        position: absolute;
+                                        right: 0;
+                                    }
+                                }
                             }
                         }
                     }

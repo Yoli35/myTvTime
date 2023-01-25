@@ -97,7 +97,9 @@
                                         {{ movie.runtime//60 }}
                                         {% if movie.runtime//60>1 %}{{ 'Hours'|trans }}{% else %}{{ 'Hour'|trans }}{% endif %}
                                     {% endif %}
-                                    {{ movie.runtime%60 }} {{ 'Minute'|trans }}{% if movie.runtime%60>1 %}s{% endif %}
+                                    {% if movie.runtime%60 %}
+                                        {{ movie.runtime%60 }} {{ 'Minute'|trans }}{% if movie.runtime%60>1 %}s{% endif %}
+                                    {% endif %}
                                 </div>
                             {% endif %}
                             {% if movie.revenue > 0 %}
@@ -185,10 +187,10 @@
                                         </div>
                                     {% endif %}
                                     <div class="content">
-                                    <h2>{{ movie.belongs_to_collection.name }}</h2>
-                                    <div class="poster"><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
-                                    <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
-                                </div>
+                                        <h2>{{ movie.belongs_to_collection.name }}</h2>
+                                        <div class="poster"><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
+                                        <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
+                                    </div>
                                 </div>
                             </div>
                         {% endif %}
