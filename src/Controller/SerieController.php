@@ -54,6 +54,7 @@ class SerieController extends AbstractController
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly CastRepository           $castRepository,
                                 private readonly SerieCastRepository      $serieCastRepository,
+                                private readonly TranslatorInterface      $translator,
                                 private readonly LogService               $logService)
     {
     }
@@ -736,21 +737,23 @@ class SerieController extends AbstractController
                     $serieViewing = $this->updateSerieViewing($serieViewing, $tv, $serie);
                 }
                 if (!count($serieViewing->getSerieCasts())) {
-                    $credits['cast'] = $this->updateTvCast($tv, $serieViewing);
+                    $this->updateTvCast($tv, $serieViewing);
+                    $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
                 }
-                else {
-                    $cast = array_map(function ($serieCast) {
-                        $c['id'] = $serieCast->getCast()->getTmdbId();
-                        $c['profile_path'] = $serieCast->getCast()->getProfilePath();
-                        $c['name'] = $serieCast->getCast()->getName();
-                        $c['known_for_department'] = $serieCast->getKnownForDepartment();
-                        $c['character'] = $serieCast->getCharacterName();
-                        $c['recurring_character'] = $serieCast->isRecurringCharacter();
-                        $c['guest_star'] = $serieCast->isGuestStar();
-                        return $c;
-                    }, $serieViewing->getSerieCasts()->toArray());
-                    $credits['cast'] = $cast;
-                }
+                $cast = array_map(function ($serieCast) {
+                    $c['id'] = $serieCast->getCast()->getTmdbId();
+                    $c['profile_path'] = $serieCast->getCast()->getProfilePath();
+                    $c['name'] = $serieCast->getCast()->getName();
+                    $c['known_for_department'] = $serieCast->getKnownForDepartment();
+                    $c['character'] = $serieCast->getCharacterName();
+                    $c['recurring_character'] = $serieCast->isRecurringCharacter();
+                    $c['guest_star'] = $serieCast->isGuestStar();
+                    $count = $serieCast->getEpisodesCount();
+                    $c['episodes'] = $count . ' ' . $this->translator->trans($count > 1 ? 'episodes' : 'episode');
+                    return $c;
+                }, $serieViewing->getSerieCasts()->toArray());
+                $credits['cast'] = $cast;
+
                 $seasonsWithAView = [];
                 foreach ($tv['seasons'] as $season) {
                     $seasonWithAView = $season;
@@ -765,7 +768,6 @@ class SerieController extends AbstractController
         $ygg = str_replace(' ', '+', $tv['name']);
         $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
-        dump($credits);
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serieId,
@@ -793,7 +795,7 @@ class SerieController extends AbstractController
 
     }
 
-    public function updateTvCast($tv, $serieViewing): array
+    public function updateTvCast($tv, $serieViewing): void
     {
         $recurringCharacters = $tv['credits']['cast'];
         $tvCast = $tv['credits']['cast'];
@@ -802,35 +804,27 @@ class SerieController extends AbstractController
             $seasonNumber = $s['season_number'];
             if ($seasonNumber) { // 21/12/2022 : plus d'épisodes spéciaux
                 $season = $serieViewing->getSeasonByNumber($seasonNumber);
-//                dump($tvCast);
-                for ($i = 1; $i <= $s['episode_count']; $i++) {
-                    $standing = $this->TMDBService->getTvEpisodeCredits($tv['id'], $season->getSeasonNumber(), $i, 'fr');
+                $episodeCount = $season->getEpisodeCount();
+
+                for ($episodeNumber = 1; $episodeNumber <= $episodeCount; $episodeNumber++) {
+                    $standing = $this->TMDBService->getTvEpisodeCredits($tv['id'], $season->getSeasonNumber(), $episodeNumber, 'fr');
                     $credits = json_decode($standing, true);
-//                    dump($credits);
+
                     if ($credits['cast']) {
                         foreach ($credits['cast'] as $cast) {
                             $recurringCharacter = $this->inTvCast($recurringCharacters, $cast['id']);
-                            $this->episodesCast($cast, $seasonNumber, $i, $recurringCharacter, false, $serieViewing);
-                            if (!$this->inTvCast($tvCast, $cast['id'])) {
-                                $tvCast[] = $cast;
-                            }
+                            $this->episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, false, $serieViewing);
                         }
                     }
                     if ($credits['guest_stars']) {
                         foreach ($credits['guest_stars'] as $guestStar) {
-                            $this->episodesCast($guestStar, $seasonNumber, $i, false, true, $serieViewing);
-                            if (!$this->inTvCast($tvCast, $guestStar['id'])) {
-                                $tvCast[] = $guestStar;
-                            }
+                            $this->episodesCast($guestStar, $seasonNumber, $episodeNumber, false, true, $serieViewing);
                         }
                     }
                 }
-//                dump($tvCast);
             }
         }
         $this->serieCastRepository->saveAll();
-
-        return $tvCast;
     }
 
     public function inTvCast($tvCast, $personId): bool
@@ -856,7 +850,7 @@ class SerieController extends AbstractController
         $episodes = $serieCast->getEpisodes();
         if (!$this->episodeInSerieCastEpisodes($episodes, $seasonNumber, $episodeNumber)) {
             $serieCast->addEpisode($seasonNumber, $episodeNumber);
-            $this->serieCastRepository->save($serieCast, false);
+            $this->serieCastRepository->save($serieCast, true);
         }
     }
 

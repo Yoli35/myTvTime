@@ -1153,7 +1153,12 @@
                                 @include human-profile();
 
                                 .profile {
+                                    font-size: unset;
                                     position: relative;
+
+                                    img {
+                                        height: 12em;
+                                    }
 
                                     .status {
                                         @include flex-row(center, end);
@@ -1161,7 +1166,7 @@
                                         bottom: 0;
                                         border-radius: 999px;
                                         color: var(--gradiant-yellow-50);
-                                        font-size: 1.5em;
+                                        font-size: 1em;
                                         padding: .25em;
                                         position: absolute;
                                         right: 0;

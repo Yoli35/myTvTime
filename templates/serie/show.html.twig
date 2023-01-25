@@ -225,14 +225,12 @@
                                                             {% else %}
                                                                 <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
                                                             {% endif %}
-                                                            <div class="status">
-                                                                {% if people.recurring_character %}
-                                                                    <i class="fa-solid fa-rotate-right" title="{{ 'Recurring character'|trans }}"></i>
-                                                                {% endif %}
-                                                                {% if people.guest_star %}
-                                                                    <i class="fa-solid fa-star" title="{{ 'Guest star'|trans }}"></i>
-                                                                {% endif %}
-                                                            </div>
+                                                            {% if people.recurring_character %}
+                                                                <div class="status"><i class="fa-solid fa-rotate-right" title="{{ 'Recurring character'|trans }}"></i></div>
+                                                            {% endif %}
+                                                            {% if people.guest_star %}
+                                                                <div class="status"><i class="fa-solid fa-star" title="{{ 'Guest star'|trans }}"></i></div>
+                                                            {% endif %}
                                                         </div>
                                                         <div>{{ people.name }}</div>
                                                         {% if people.character is defined %}
@@ -245,6 +243,7 @@
                                                                 {{ people.known_for_department|trans }}
                                                             {% endif %}
                                                         </div>
+                                                        <div>{{ people.episodes }}</div>
                                                     </div>
                                                 </a>
                                             {% endfor %}
@@ -544,17 +543,17 @@
 
         window.addEventListener("DOMContentLoaded", () => {
             {% if user and serieId %}
-                {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
-                {% if percent > 100 %} {% set percent = 100 %} {% endif %}
-                initSerieStuff(paths, [
-                    [".vote-average", 10 * parseFloat({{ serie.vote_average }})],
-                    [".view-average", parseFloat({{ percent }})]
-                ]);
+            {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+            {% if percent > 100 %} {% set percent = 100 %} {% endif %}
+            initSerieStuff(paths, [
+                [".vote-average", 10 * parseFloat({{ serie.vote_average }})],
+                [".view-average", parseFloat({{ percent }})]
+            ]);
             {% else %}
-                initSerieStuff(paths, [
-                    [".vote-average", 10 * parseFloat({{ serie.vote_average }})],
-                    undefined
-                ]);
+            initSerieStuff(paths, [
+                [".vote-average", 10 * parseFloat({{ serie.vote_average }})],
+                undefined
+            ]);
             {% endif %}
 
             const images = document.querySelector(".serie-page").querySelector(".images")?.querySelectorAll("img");
@@ -840,7 +839,7 @@
                     if (Date.now() < end) {
                         requestAnimationFrame(frame);
                     } else {
-                        setTimeout(()=> {
+                        setTimeout(() => {
                             document.body.removeChild(myCanvas);
                         }, 3000);
                     }

@@ -458,84 +458,154 @@ Foley Editor.he: Rédacteur bruitage
 Foley Editor.she: Rédactrice bruitage
 Foley Mixer.he: Mixeur bruitage
 Foley Mixer.she: Mixeuse bruitage
-Foley Supervisor.he: Foley Supervisor.he
-Gaffer.he: Gaffer.he
-Generator Operator.he: Generator Operator.he
-Hair Department Head.he: Hair Department Head.he
-Hairstylist.he: Hairstylist.he
-Key Grip.he: Key Grip.he
-Key Hair Stylist.he: Key Hair Stylist.he
-Key Makeup Artist.he: Key Makeup Artist.he
-Key Rigging Grip.he: Key Rigging Grip.he
-Lead Set Dresser.he: Lead Set Dresser.he
-Leadman.he: Leadman.he
-Local Casting.he: Local Casting.he
-Local Casting.she: Local Casting.she
-Location Coordinator.he: Location Coordinator.he
-Location Manager.he: Location Manager.he
-Makeup Department Head.she: Makeup Department Head.she
-Music Editor.he: Music Editor.he
-Music Supervisor.he: Music Supervisor.he
-Online Editor.he: Online Editor.he
-Original Music Composer.he: Original Music Composer.he
-Other.he: Other.he
-Paint Coordinator.he: Paint Coordinator.he
-Picture Car Coordinator.he: Picture Car Coordinator.he
-Post Production Assistant.he: Post Production Assistant.he
-Post Production Assistant.she: Post Production Assistant.she
-Post Production Coordinator.he: Post Production Coordinator.he
-Post Production Supervisor.he: Post Production Supervisor.he
-Producer's Assistant.he: Producer's Assistant.he
-Producer.he: Producer.he
-Producer.she: Producer.she
-Production Accountant.he: Production Accountant.he
-Production Assistant.he: Production Assistant.he
-Production Coordinator.he: Production Coordinator.he
-Production Design.he: Production Design.he
-Production Manager.he: Production Manager.he
-Production Sound Mixer.he: Production Sound Mixer.he
-Property Builder.he: Property Builder.he
-Property Buyer.she: Property Buyer.she
-Property Master.he: Property Master.he
-Prosthetic Designer.he: Prosthetic Designer.he
-Prosthetic Makeup Artist.he: Prosthetic Makeup Artist.he
-Prosthetic Supervisor.he: Prosthetic Supervisor.he
-Rigging Gaffer.he: Rigging Gaffer.he
-Script Coordinator.he: Script Coordinator.he
-Script Supervisor.he: Script Supervisor.he
-Set Decorating Coordinator.he: Set Decorating Coordinator.he
-Set Decoration Buyer.he: Set Decoration Buyer.he
-Set Decoration.he: Set Decoration.he
-Set Dresser.he: Set Dresser.he
-Set Supervisor.he: Set Supervisor.he
-Sound Designer.he: Sound Designer.he
-Sound Effects Editor.he: Sound Effects Editor.he
-Sound Mix Technician.he: Sound Mix Technician.he
-Sound Re-Recording Mixer.he: Sound Re-Recording Mixer.he
-Special Effects Coordinator.he: Special Effects Coordinator.he
-Special Effects Supervisor.he: Special Effects Supervisor.he
-Stunt Coordinator.he: Stunt Coordinator.he
-Stunt Coordinator.she: Stunt Coordinator.she
-Stunt Double.he: Stunt Double.he
-Supervising Art Director.he: Supervising Art Director.he
-Supervising Sound Editor.he: Supervising Sound Editor.he
-Trainee Production Coordinator.he: Trainee Production Coordinator.he
-Transportation Captain.he: Transportation Captain.he
-Transportation Coordinator.he: Transportation Coordinator.he
-Travel Coordinator.he: Travel Coordinator.he
-Truck Supervisor.he: Truck Supervisor.he
-Unit Manager.he: Unit Manager.he
-Unit Production Manager.she: Unit Production Manager.she
-Utility Sound.he: Utility Sound.he
-VFX Editor.he: VFX Editor.he
-Video Assist Operator.he: Video Assist Operator.he
-Video Game.he: Video Game.he
-Visual Effects Assistant Editor.he: Visual Effects Assistant Editor.he
-Visual Effects Coordinator.he: Visual Effects Coordinator.he
-Visual Effects Producer.he: Visual Effects Producer.he
-Visual Effects Production Assistant.he: Visual Effects Production Assistant.he
-Visual Effects Production Manager.he: Visual Effects Production Manager.he
-Visual Effects Supervisor.he: Visual Effects Supervisor.he
+Foley Supervisor.he: Superviseur bruitage
+Foley Supervisor.she: Superviseuse bruitage
+Gaffer.he: Gaffeur
+Gaffer.she: Gaffeuse
+Generator Operator.he: Opérateur de générateur
+Generator Operator.she: Opératrice de générateur
+Hair Department Head.he: Chef du département de coiffure
+Hair Department Head.she: Cheffe du département de coiffure
+Hairstylist.he: Coiffeur
+Hairstylist.she: Coiffeuse
+Key Grip.he: Key Grip
+Key Grip.she: Key Grip
+Key Hair Stylist.he: Styliste en chef
+Key Hair Stylist.she: Styliste en chef
+Key Makeup Artist.he: Maquilleur principal
+Key Makeup Artist.she: Maquilleuse principale
+Key Rigging Grip.he: Key Rigging Grip
+Key Rigging Grip.she: Key Rigging Grip
+Lead Set Dresser.he: Chef décorateur
+Lead Set Dresser.she: Cheffe décoratrice
+Leadman.he: Chef d'équipe
+Leadman.she: Cheffe d'équipe
+Local Casting.he: Casting local
+Local Casting.she: Casting local
+Location Coordinator.he: Coordinateur de site
+Location Coordinator.she: Coordinatrice de site
+Location Manager.he: Responsable de site
+Location Manager.she: Responsable de site
+Makeup Department Head.he: Chef du département maquillage
+Makeup Department Head.she: Cheffe du département maquillage
+Music Editor.he: Éditeur de musique
+Music Editor.she: Éditrice de musique
+Music Supervisor.he: Superviseur musical
+Music Supervisor.she: Superviseuse musicale
+Online Editor.he: Éditeur en ligne
+Online Editor.she: Éditrice en ligne
+Original Music Composer.he: Compositeur de la musique originale
+Original Music Composer.she: Compositrice de la musique originale
+Other.he: Autre
+Other.she: Autre
+Paint Coordinator.he: Coordinateur peinture
+Paint Coordinator.she: Coordinatrice peinture
+Picture Car Coordinator.he: Coordinateur véhicule de tournage
+Picture Car Coordinator.she: Coordinatrice véhicule de tournage
+Post Production Assistant.he: Assistant post-production
+Post Production Assistant.she: Assistante post-production
+Post Production Coordinator.he: Coordinateur post-production
+Post Production Coordinator.she: Coordinatrice post-production
+Post Production Supervisor.he: Superviseur post-production
+Post Production Supervisor.she: Superviseuse post-production
+Producer's Assistant.he: Assistant de production
+Producer's Assistant.she: Assistante de production
+Producer.he: Producteur
+Producer.she: Productrice
+Production Accountant.he: Comptable de production
+Production Accountant.she: Comptable de production
+Production Assistant.he: Assistant de production
+Production Assistant.she: Assistante de production
+Production Coordinator.he: Coordinateur de production
+Production Coordinator.she: Coordinatrice de production
+Production Design.he: Design de production
+Production Design.she: Design de production
+Production Manager.he: Directeur de la production
+Production Manager.she: Directrice de la production
+Production Sound Mixer.he: Mixeur son de production
+Production Sound Mixer.she: Mixeuse son de production
+Property Builder.he: Constructeur immobilier
+Property Builder.she: Constructrice immobilier
+Property Buyer.he: Acheteur de biens immobiliers
+Property Buyer.she: Acheteuse de biens immobiliers
+Property Master.he: Maître d'œuvre
+Property Master.she: Maîtresse d'œuvre
+Prosthetic Designer.he: Concepteur de prothèses
+Prosthetic Designer.she: Conceptrice de prothèses
+Prosthetic Makeup Artist.he: Maquilleur prothésiste
+Prosthetic Makeup Artist.she: Maquilleuse prothésiste
+Prosthetic Supervisor.he: Superviseur prothèses
+Prosthetic Supervisor.she: Superviseuse prothèses
+Rigging Gaffer.he: Gaffeur de gréement
+Rigging Gaffer.she: Gaffeuse de gréement
+Script Coordinator.he: Coordinateur scénario
+Script Coordinator.she: Coordinatrice scénario
+Script Supervisor.he: Superviseur scénario
+Script Supervisor.she: Superviseuse scénario
+Set Decorating Coordinator.he: Coordinateur décoration de plateau
+Set Decorating Coordinator.she: Coordinatrice décoration de plateau
+Set Decoration Buyer.he: Acheteur décors
+Set Decoration Buyer.she: Acheteuse décors
+Set Decoration.he: Décors
+Set Decoration.she: Décors
+Set Dresser.he: Décors plateau
+Set Dresser.she: Décors plateau
+Set Supervisor.he: Superviseur plateau
+Set Supervisor.she: Superviseuse plateau
+Sound Designer.he: Concepteur du son
+Sound Designer.she: Conceptrice du son
+Sound Effects Editor.he: Monteur d'effets sonores
+Sound Effects Editor.she: Monteuse d'effets sonores
+Sound Mix Technician.he: Technicien mixage sonore
+Sound Mix Technician.she: Technicienne mixage sonore
+Sound Re-Recording Mixer.he: Mixeur réenregistrement sonore
+Sound Re-Recording Mixer.she: Mixeuse réenregistrement sonore
+Special Effects Coordinator.he: Coordinateur effets spéciaux
+Special Effects Coordinator.she: Coordinatrice effets spéciaux
+Special Effects Supervisor.he: Superviseur effets spéciaux
+Special Effects Supervisor.she: Superviseuse effets spéciaux
+Stunt Coordinator.he: Coordinateur cascades
+Stunt Coordinator.she: Coordinatrice cascades
+Stunt Double.he: Doublure cascade
+Stunt Double.she: Doublure cascade
+Supervising Art Director.he: Directeur artistique superviseur
+Supervising Art Director.she: Directrice artistique superviseur
+Supervising Sound Editor.he: Superviseur montage sonore
+Supervising Sound Editor.she: Superviseuse montage sonore
+Trainee Production Coordinator.he: Coordinateur de production stagiaire
+Trainee Production Coordinator.she: Coordinatrice de production stagiaire
+Transportation Captain.he: Capitaine du transport
+Transportation Captain.she: Capitaine du transport
+Transportation Coordinator.he: Coordinateur transport
+Transportation Coordinator.she: Coordinatrice transport
+Travel Coordinator.he: Coordinateur voyages
+Travel Coordinator.she: Coordinatrice voyages
+Truck Supervisor.he: Superviseur camions
+Truck Supervisor.she: Superviseuse camions
+Unit Manager.he: Chef d'unité
+Unit Manager.she: Cheffe d'unité
+Unit Production Manager.he: Chef d'unité de production
+Unit Production Manager.she: Cheffe d'unité de production
+Utility Sound.he: Assistant son
+Utility Sound.she: Assistante son
+VFX Editor.he: Monteur VFX
+VFX Editor.she: Monteuse VFX
+Video Assist Operator.he: Opérateur assistance vidéo
+Video Assist Operator.she: Opératrice assistance vidéo
+Video Game.he: Jeu vidéo
+Video Game.she: Jeu vidéo
+Visual Effects Assistant Editor.he: Assistant monteur effets visuels
+Visual Effects Assistant Editor.she: Assistante monteuse effets visuels
+Visual Effects Coordinator.he: Coordinateur effets visuels
+Visual Effects Coordinator.she: Coordinatrice effets visuels
+Visual Effects Producer.he: Producteur effets visuels
+Visual Effects Producer.she: Productrice effets visuels
+Visual Effects Production Assistant.he: Assistant de production effets visuels
+Visual Effects Production Assistant.she: Assistante de production effets visuels
+Visual Effects Production Manager.he: Directeur de production effets visuels
+Visual Effects Production Manager.she: Directrice de production effets visuels
+Visual Effects Supervisor.he: Superviseur effets visuels
+Visual Effects Supervisor.she: Superviseuse effets visuels
 
 # key facts
 Favorite: Série favorite

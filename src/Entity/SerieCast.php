@@ -16,11 +16,11 @@ class SerieCast
 
     #[ORM\ManyToOne(inversedBy: 'serieCasts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?SerieViewing $serieViewing = null;
+    private ?SerieViewing $serieViewing;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Cast $cast = null;
+    private ?Cast $cast;
 
     #[ORM\Column]
     private ?bool $recurringCharacter = null;
@@ -87,6 +87,21 @@ class SerieCast
     public function getEpisodes(): array
     {
         return $this->episodes;
+    }
+
+    public function getEpisodesString(): string
+    {
+        $episodes = [];
+        foreach ($this->episodes as $episode) {
+            $episodes[] = sprintf('S%02dE%02d', $episode['seasonNumber'], $episode['episodeNumber']);
+        }
+
+        return implode(', ', $episodes);
+    }
+
+    public function getEpisodesCount(): int
+    {
+        return count($this->episodes);
     }
 
     public function setEpisodes(array $episodes): self
