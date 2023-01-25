@@ -810,15 +810,17 @@ class SerieController extends AbstractController
                     $standing = $this->TMDBService->getTvEpisodeCredits($tv['id'], $season->getSeasonNumber(), $episodeNumber, 'fr');
                     $credits = json_decode($standing, true);
 
-                    if ($credits['cast']) {
-                        foreach ($credits['cast'] as $cast) {
-                            $recurringCharacter = $this->inTvCast($recurringCharacters, $cast['id']);
-                            $this->episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, false, $serieViewing);
+                    if ($credits) {
+                        if ($credits['cast']) {
+                            foreach ($credits['cast'] as $cast) {
+                                $recurringCharacter = $this->inTvCast($recurringCharacters, $cast['id']);
+                                $this->episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, false, $serieViewing);
+                            }
                         }
-                    }
-                    if ($credits['guest_stars']) {
-                        foreach ($credits['guest_stars'] as $guestStar) {
-                            $this->episodesCast($guestStar, $seasonNumber, $episodeNumber, false, true, $serieViewing);
+                        if ($credits['guest_stars']) {
+                            foreach ($credits['guest_stars'] as $guestStar) {
+                                $this->episodesCast($guestStar, $seasonNumber, $episodeNumber, false, true, $serieViewing);
+                            }
                         }
                     }
                 }
