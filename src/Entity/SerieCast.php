@@ -18,9 +18,8 @@ class SerieCast
     #[ORM\JoinColumn(nullable: false)]
     private ?SerieViewing $serieViewing;
 
-    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Cast $cast;
+    #[ORM\Column(nullable: false)]
+    private int $castId;
 
     #[ORM\Column]
     private ?bool $recurringCharacter = null;
@@ -37,10 +36,10 @@ class SerieCast
     #[ORM\Column]
     private ?bool $guestStar = null;
 
-    public function __construct(SerieViewing $serieViewing, Cast $cast)
+    public function __construct(SerieViewing $serieViewing, int $castId)
     {
         $this->serieViewing = $serieViewing;
-        $this->cast = $cast;
+        $this->castId = $castId;
     }
 
     public function getId(): ?int
@@ -60,14 +59,14 @@ class SerieCast
         return $this;
     }
 
-    public function getCast(): ?Cast
+    public function getCastId(): int
     {
-        return $this->cast;
+        return $this->castId;
     }
 
-    public function setCast(Cast $cast): self
+    public function setCastId(int $castId): self
     {
-        $this->cast = $cast;
+        $this->castId = $castId;
 
         return $this;
     }

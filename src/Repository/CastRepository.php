@@ -39,6 +39,11 @@ class CastRepository extends ServiceEntityRepository
         }
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
 //    /**
 //     * @return Cast[] Returns an array of Cast objects
 //     */
