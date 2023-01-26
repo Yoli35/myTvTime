@@ -71,34 +71,6 @@
                     <section>
                         <div class="episodes">
                             {% for episode in season.episodes %}
-                                {#
-                                "air_date" => "2022-08-21"
-                                "episode_number" => 1
-                                "id" => 1971015
-                                "name" => "Les héritiers du dragon"
-                                "overview" => "A Westeros, la chute de la maison Targaryen s'annonce. Une guerre civile arrive et va s'appeler la Danse des Dragons."
-                                "production_code" => ""
-                                "runtime" => 66
-                                "season_number" => 1
-                                "show_id" => 94997
-                                "still_path" => "/3oumSnkavc4pcMFvPbgWDUTclNb.jpg"
-                                "vote_average" => 7.9
-                                "vote_count" => 38
-                                "crew" => array:4 [▶]
-                                "guest_stars" => array:28 [▼
-                                0 => array:11 [▼
-                                    "character" => "Lord Corlys 'The Sea Snake' Velaryon"
-                                    "credit_id" => "60257dc1dd2589003ebdb5ba"
-                                    "order" => 5
-                                    "adult" => false
-                                    "gender" => 2
-                                    "id" => 55412
-                                    "known_for_department" => "Acting"
-                                    "name" => "Steve Toussaint"
-                                    "original_name" => "Steve Toussaint"
-                                    "popularity" => 13.914
-                                    "profile_path" => "/s4qDz1g0UzasoQlcUtgqkaAVbdC.jpg"
-                                #}
                                 <div class="episode">
                                     <div class="still">
                                         {% if episode.still_path|length %}
@@ -130,23 +102,6 @@
                                                 {% endif %}
                                             </div>
                                         {% endif %}
-{#                                        {% if episode.guest_stars|length %}#}
-{#                                            <div class="guests">#}
-{#                                                {% for guest in episode.guest_stars %}#}
-{#                                                    <div class="guest">#}
-{#                                                        <div class="profile">#}
-{#                                                            {% if guest.profile_path %}#}
-{#                                                                <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ guest.profile_path }}" alt="{{ guest.name }}">#}
-{#                                                            {% else %}#}
-{#                                                                <img src="/images/default/no_avatar.png" alt="{{ guest.name }}">#}
-{#                                                            {% endif %}#}
-{#                                                        </div>#}
-{#                                                        <div>{{ guest.name }}</div>#}
-{#                                                        <div>{{ guest.character }}</div>#}
-{#                                                    </div>#}
-{#                                                {% endfor %}#}
-{#                                            </div>#}
-{#                                        {% endif %}#}
                                     </div>
                                 </div>
                             {% endfor %}

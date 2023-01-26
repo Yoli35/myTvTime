@@ -328,12 +328,19 @@ class TMDBService
         }
     }
 
-    public function getTvSeason($tvId, $seasonNumber, $locale): ?string
+    public function getTvSeason($tvId, $seasonNumber, $locale, $details = null): ?string
     {
+        $request = 'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '?api_key=' . $this->api_key . '&language=' . $locale;
+        if ($details) {
+            $request .= '&append_to_response=';
+            foreach ($details as $detail) {
+                $request .= $detail . ',';
+            }
+        }
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '?api_key=' . $this->api_key . '&language=' . $locale,
+                $request,
             );
             try {
                 return $response->getContent();

@@ -60,6 +60,9 @@ class Serie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $originalName = null;
 
+    #[ORM\Column(type: Types::JSON)]
+    private array $episodeDurations = [];
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -261,6 +264,18 @@ class Serie
     public function setStatus(?string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getEpisodeDurations(): array
+    {
+        return $this->episodeDurations;
+    }
+
+    public function setEpisodeDurations(?array $episodeDurations): self
+    {
+        $this->episodeDurations = $episodeDurations;
 
         return $this;
     }

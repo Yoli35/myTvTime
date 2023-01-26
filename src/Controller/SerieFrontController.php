@@ -33,18 +33,22 @@ class SerieFrontController extends AbstractController
     const LATEST = 'latest';
     const SEARCH = 'search';
 
-    public function __construct(private readonly SerieController $serieController,
-                                private readonly FavoriteRepository $favoriteRepository,
-                                private readonly TranslatorInterface $translator)
+    public function __construct(private readonly SerieController     $serieController,
+                                private readonly FavoriteRepository  $favoriteRepository,
+                                private readonly TranslatorInterface $translator,
+                                private readonly TMDBService         $tmdbService)
     {
     }
 
     /**
      * @throws Exception
      */
-    #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
-    public function new(Request $request, TMDBService $tmdbService, SerieRepository $serieRepository, NetworksRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
+    #[
+        Route('/new', name: 'app_serie_new', methods: ['GET'])]
+    public function new(Request $request, SerieRepository $serieRepository, NetworksRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
     {
+        $tmdbService = $this->tmdbService;
+
         /** @var User $user */
         $user = $this->getUser();
         $from = $request->query->get('from', self::MY_SERIES);
@@ -95,6 +99,7 @@ class SerieFrontController extends AbstractController
 
                 $serie->setOriginalName($tv['original_name']);
                 $serie->setStatus($tv['status']);
+                $serie->setEpisodeDurations($this->collectEpisodeDurations($serie));
 
                 foreach ($tv['networks'] as $network) {
                     $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);
@@ -148,6 +153,28 @@ class SerieFrontController extends AbstractController
             'userSerieId' => $serie?->getId(),
             'pagination' => $pagination,
         ]);
+    }
+
+    public function collectEpisodeDurations(Serie $serie): array
+    {
+        $tmdb = $this->tmdbService;
+        $standing = $tmdb->getTv($serie->getSerieId(), 'fr');
+        $tv = json_decode($standing, true);
+        $durations = [];
+
+        foreach ($tv['seasons'] as $season) {
+            $seasonNumber = $season['season_number'];
+            if ($seasonNumber == 0) {
+                continue;
+            }
+            $durations[$seasonNumber] = [];
+            $standing = $tmdb->getTvSeason($serie->getSerieId(), $seasonNumber, 'fr');
+            $tmdbSeason = json_decode($standing, true);
+            foreach ($tmdbSeason['episodes'] as $episode) {
+                $durations[$seasonNumber][] = [$episode['episode_number'] => $episode['runtime']];
+            }
+        }
+        return $durations;
     }
 
     #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_serie_toggle_favorite', methods: 'GET')]

@@ -478,7 +478,7 @@ class SerieController extends AbstractController
                     $this->episodeViewingRepository->save($episode, true);
 
                     $credits = $tmdbEpisode['credits'];
-                    dump($credits);
+//                    dump($credits);
                 }
             }
         }
@@ -628,10 +628,10 @@ class SerieController extends AbstractController
         $backId = $request->query->get('back');
 
         $serie = $this->serie($id, $request->getLocale());
-        $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale());
+        $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale(), ['credits']);
         $season = json_decode($standing, true);
-        $standing = $this->TMDBService->getTvSeasonCredits($id, $seasonNumber, $request->getLocale());
-        $credits = json_decode($standing, true);
+        $credits = $season['credits'];
+
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
@@ -675,23 +675,15 @@ class SerieController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-//        $tmdbService = $this->TMDBService;
         $serieRepository = $this->serieRepository;
         $imageConfiguration = $this->imageConfiguration;
 
         $id = $tv['id'];
-//        $standing = $tmdbService->getTvCredits($id, $request->getLocale());
-//        $credits = json_decode($standing, true);
         $credits = $tv['credits'];
-//        dump($credits);
 
-//        $standing = $tmdbService->getTvKeywords($id, $request->getLocale());
-//        $keywords = json_decode($standing, true);
         $keywords = $tv['keywords'];
         $missingTranslations = $this->keywordsTranslation($keywords, $request->getLocale());
 
-//        $standing = $tmdbService->getTvWatchProviders($id);
-//        $temp = json_decode($standing, true);
         $temp = $tv['watch/providers'];
         if ($temp && array_key_exists('FR', $temp['results'])) {
             $watchProviders = $temp['results']['FR'];
@@ -699,12 +691,8 @@ class SerieController extends AbstractController
             $watchProviders = null;
         }
 
-//        $standing = $tmdbService->getTvSimilar($id);
-//        $similar = json_decode($standing, true);
         $similar = $tv['similar'];
 
-//        $standing = $tmdbService->getTvImages($id, $request->getLocale());
-//        $images = json_decode($standing, true);
         $images = $tv['images'];
 
         $index = false;
@@ -750,8 +738,6 @@ class SerieController extends AbstractController
                     $seasonsWithAView[] = $seasonWithAView;
                 }
                 $tv['seasons'] = $seasonsWithAView;
-
-//                $this->testViewingAfterward($serieViewing);
             }
         }
         $ygg = str_replace(' ', '+', $tv['name']);
@@ -806,7 +792,7 @@ class SerieController extends AbstractController
 
         $casts = $castRepository->findBy(['id' => $castIds]);
 
-        dump($casts);
+//        dump($casts);
 
         foreach ($casts as $cast) {
             $castRepository->remove($cast);
@@ -834,6 +820,7 @@ class SerieController extends AbstractController
             $c['guest_star'] = $serieCast->isGuestStar();
             $count = $serieCast->getEpisodesCount();
             $c['episodes'] = $count . ' ' . $this->translator->trans($count > 1 ? 'episodes' : 'episode');
+            $c['episodesString'] = $serieCast->getEpisodesString();
             return $c;
         }, $castDbArray, $serieViewing->getSerieCasts()->toArray());
     }
