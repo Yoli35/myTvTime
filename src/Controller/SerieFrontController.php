@@ -167,6 +167,9 @@ class SerieFrontController extends AbstractController
             if ($seasonNumber == 0) {
                 continue;
             }
+            if (key_exists($seasonNumber, $durations) && count($durations[$seasonNumber]) == $season['episode_count']) {
+                continue;
+            }
             $durations[$seasonNumber] = [];
             $standing = $tmdb->getTvSeason($serie->getSerieId(), $seasonNumber, 'fr');
             $tmdbSeason = json_decode($standing, true);
