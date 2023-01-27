@@ -6,6 +6,7 @@ use App\Controller\SerieFrontController;
 use App\Repository\SerieRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -24,18 +25,26 @@ class SerieEpisodeDurationCommand extends Command
 
     protected function configure(): void
     {
+        $this
+            ->addArgument('serieId', InputArgument::OPTIONAL, 'Serie\'s Id');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Collecting episode duration for all series');
-        $series = $this->serieRepository->findAll();
+        $id = $input->getArgument('serieId');
+        if ($id) {
+            $series = [$this->serieRepository->find($id)];
+        }
+        else {
+            $series = $this->serieRepository->findAll();
+        }
 
         foreach ($series as $serie) {
-            if (count($serie->getEpisodeDurations())) {
-                continue;
-            }
+//            if (count($serie->getEpisodeDurations())) {
+//                continue;
+//            }
             $io->text('Collecting episode duration for serie: ' . $serie->getName());
             $serie->setEpisodeDurations($this->serieFrontController->collectEpisodeDurations($serie));
             $this->serieRepository->save($serie);

@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Repository\FavoriteRepository;
 use App\Repository\NetworksRepository;
 use App\Repository\SerieRepository;
+use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
@@ -33,18 +34,19 @@ class SerieFrontController extends AbstractController
     const LATEST = 'latest';
     const SEARCH = 'search';
 
-    public function __construct(private readonly SerieController     $serieController,
-                                private readonly FavoriteRepository  $favoriteRepository,
-                                private readonly TranslatorInterface $translator,
-                                private readonly TMDBService         $tmdbService)
+    public function __construct(private readonly SerieController        $serieController,
+                                private readonly FavoriteRepository     $favoriteRepository,
+                                private readonly TranslatorInterface    $translator,
+                                private readonly TMDBService            $tmdbService,
+                                private readonly SerieRepository        $serieRepository,
+                                private readonly SerieViewingRepository $serieViewingRepository)
     {
     }
 
     /**
      * @throws Exception
      */
-    #[
-        Route('/new', name: 'app_serie_new', methods: ['GET'])]
+    #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
     public function new(Request $request, SerieRepository $serieRepository, NetworksRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
     {
         $tmdbService = $this->tmdbService;
@@ -178,6 +180,81 @@ class SerieFrontController extends AbstractController
             }
         }
         return $durations;
+    }
+
+    #[Route('/duration', name: 'app_serie_duration')]
+    public function getViewedEpisodesDuration(Request $request): Response
+    {
+        $t0 = microtime(true);
+        $duration = 0;
+        $serieCount = 0;
+        $seasonCount = 0;
+        $episodeCount = 0;
+        $nullDurationCount = 0;
+        $log = "";
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $serieId = $request->query->get('id');
+        if ($serieId) {
+            $serie = $this->serieRepository->findOneBy(['id' => $serieId]);
+            $SerieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'serie' => $serie]);
+        } else {
+            $SerieViewings = $this->serieViewingRepository->findBy(['user' => $user]);
+        }
+
+        foreach ($SerieViewings as $serieViewing) {
+            $serie = $serieViewing->getSerie();
+            $durations = $serie->getEpisodeDurations();
+            $last = 0;
+            $serieCount++;
+
+            foreach ($serieViewing->getSeasons() as $seasonViewing) {
+                $seasonNumber = $seasonViewing->getSeasonNumber();
+                if ($seasonNumber == 0) {
+                    continue;
+                }
+                $seasonCount++;
+                foreach ($seasonViewing->getEpisodes() as $episodeViewing) {
+                    if ($episodeViewing->getViewedAt() == null) {
+                        continue;
+                    }
+                    $episodeCount++;
+                    $episodeNumber = $episodeViewing->getEpisodeNumber();
+                    if (key_exists($seasonNumber, $durations)) {
+                        if (key_exists($episodeNumber - 1, $durations[$seasonNumber])) {
+                            if (key_exists($episodeNumber, $durations[$seasonNumber][$episodeNumber - 1])) {
+                                $minutes = $durations[$seasonNumber][$episodeNumber - 1][$episodeNumber];
+                                if ($minutes == null) {
+                                    $minutes = $last;
+                                    $nullDurationCount++;
+                                } else {
+                                    $last = $minutes;
+                                }
+                                $duration += $minutes;
+                            } else {
+                                $log .= sprintf("%s : S%02dE%02d (episode)\n", $serie->getName(), $seasonNumber, $episodeNumber);
+                            }
+                        } else {
+                            $log .= sprintf("%s : S%02dE%02d (episode-1)\n", $serie->getName(), $seasonNumber, $episodeNumber);
+                        }
+                    } else {
+                        $log .= sprintf("%s : S%02dE%02d (season)\n", $serie->getName(), $seasonNumber, $episodeNumber);
+                    }
+                }
+            }
+        }
+        $t1 = microtime(true);
+
+        return $this->json([
+            'duration' => $duration,
+            'time' => sprintf("%.02f", $t1 - $t0),
+            'log' => $log,
+            'serieCount' => $serieCount,
+            'seasonCount' => $seasonCount,
+            'episodeCount' => $episodeCount,
+            'nullDurationCount' => $nullDurationCount,
+            ]);
     }
 
     #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_serie_toggle_favorite', methods: 'GET')]

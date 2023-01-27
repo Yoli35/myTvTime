@@ -105,6 +105,10 @@
                             <div class="tagline">{{ serie.tagline }}</div>
                             {% if index is defined %}
                                 {% if index %}
+                                    <div class="d-flex-1">
+                                        <div class="duration-string"></div>
+                                        <button id="test" data-id="{{ serieId }}" class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button>
+                                    </div>
                                     <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
                                     <div class="view-average">
                                         <div class="circle">
@@ -526,11 +530,13 @@
             "{{ path('app_serie_show', {id:0}) }}",
             "{{ path('app_serie_viewing') }}",
             "{{ path('app_user_connected') }}",
-            "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}"
+            "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}",
+            "{{ path('app_serie_duration') }}"
         ];
         const serie = "{{ serieId }}";
         const _app_serie_viewing = paths[5];
         const _app_user_connected = paths[6];
+        const _app_serie_duration = paths[8];
         let _app_serie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
         const _locale = "{{ app.request.locale }}";
         const txt = {
@@ -565,6 +571,52 @@
             episodeAddEvent();
 
             document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
+
+            const test = document.querySelector("#test");
+            test.addEventListener("click", getViewedEpisodesDuration);
+
+            function getViewedEpisodesDuration(evt) {
+                const durationString = document.querySelector('.duration-string');
+                const serieId = evt.currentTarget.getAttribute("data-id");
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    let data = {duration: 0, episodeCount: 0, log: "", nullDurationCount: 0, seasonCount: 0, serieCount: 0, time: "0"};
+                    data = JSON.parse(this.response);
+                    console.log({data});
+                    let duration = data.duration;
+                    let convertedTime = convertSeconds(duration * 60);
+                    durationString.innerHTML = "Durée totale des épisodes vus parmi "
+                        + data.serieCount + " séries, "
+                        + data.seasonCount + " saisons et "
+                        + data.episodeCount + " épisodes (" + data.nullDurationCount + ") : "
+                        + (convertedTime.months ? (convertedTime.months + " mois ") : "")
+                        + (convertedTime.days ? (convertedTime.days + " jour" + (convertedTime.days > 1 ? "s " : " ")) : "")
+                        + (convertedTime.hours ? (convertedTime.hours + " heure" + (convertedTime.hours > 1 ? "s " : " ")) : "")
+                        + (convertedTime.minutes ? (convertedTime.minutes + " minute" + (convertedTime.minutes > 1 ? "s " : " ")) : "")
+                        + "(" + data.time + "sec)";
+                    durationString.parentElement.querySelector("button").remove();
+                }
+                xhr.open("GET", _app_serie_duration /*+ "?id=" + serieId*/);
+                xhr.send();
+            }
+
+            function convertSeconds(seconds) {
+                let months = Math.floor(seconds / 2628000);
+                seconds -= months * 2628000;
+                let days = Math.floor(seconds / 86400);
+                seconds -= days * 86400;
+                let hours = Math.floor(seconds / 3600);
+                seconds -= hours * 3600;
+                let minutes = Math.floor(seconds / 60);
+                seconds -= minutes * 60;
+                return {
+                    months: months,
+                    days: days,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds
+                };
+            }
 
             function toggleFavorite(evt) {
                 const fav = evt.target.checked ? 1 : 0;

@@ -989,11 +989,14 @@
 
                     .view-count {
                         color: var(--gradiant-grey-80);
+                        margin-left: 2em;
+                        flex-shrink: 0;
                     }
 
                     .vote-count {
                         color: var(--gradiant-grey-80);
                         margin-left: 2em;
+                        flex-shrink: 0;
                     }
 
                     .vote-average, .view-average {
