@@ -744,6 +744,7 @@ class SerieController extends AbstractController
         $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
 //        $this->cleanCastTable();
+//        dump($tv);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,

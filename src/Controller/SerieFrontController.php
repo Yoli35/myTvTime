@@ -163,6 +163,7 @@ class SerieFrontController extends AbstractController
         $standing = $tmdb->getTv($serie->getSerieId(), 'fr');
         $tv = json_decode($standing, true);
         $durations = [];
+        $durations['episode_run_time'] = $tv['episode_run_time'];
 
         foreach ($tv['seasons'] as $season) {
             $seasonNumber = $season['season_number'];
@@ -191,7 +192,7 @@ class SerieFrontController extends AbstractController
         $seasonCount = 0;
         $episodeCount = 0;
         $nullDurationCount = 0;
-        $log = "";
+        $log = [];
 
         /** @var User $user */
         $user = $this->getUser();
@@ -205,8 +206,13 @@ class SerieFrontController extends AbstractController
 
         foreach ($SerieViewings as $serieViewing) {
             $serie = $serieViewing->getSerie();
+            $id = $serie->getId();
             $durations = $serie->getEpisodeDurations();
             $last = 0;
+            $episodeRuntimeExists = key_exists('episode_run_time', $durations);
+            if ($episodeRuntimeExists) {
+                $last = $durations['episode_run_time'][0];
+            }
             $serieCount++;
 
             foreach ($serieViewing->getSeasons() as $seasonViewing) {
@@ -227,19 +233,25 @@ class SerieFrontController extends AbstractController
                                 $minutes = $durations[$seasonNumber][$episodeNumber - 1][$episodeNumber];
                                 if ($minutes == null) {
                                     $minutes = $last;
-                                    $nullDurationCount++;
+                                    if (!$episodeRuntimeExists) {
+                                        $nullDurationCount++;
+                                        $log[] = sprintf("%s : S%02dE%02d (%d - null)\n", $serie->getName(), $seasonNumber, $episodeNumber, $id);
+                                    }
                                 } else {
-                                    $last = $minutes;
+                                    if (!$episodeRuntimeExists) {
+                                        $last = $minutes;
+                                    }
                                 }
                                 $duration += $minutes;
                             } else {
-                                $log .= sprintf("%s : S%02dE%02d (episode)\n", $serie->getName(), $seasonNumber, $episodeNumber);
+                                $log[] = sprintf("%s : S%02dE%02d (%d - episode)\n", $serie->getName(), $seasonNumber, $episodeNumber, $id);
+                                $duration += $last;
                             }
                         } else {
-                            $log .= sprintf("%s : S%02dE%02d (episode-1)\n", $serie->getName(), $seasonNumber, $episodeNumber);
+                            $log[] = sprintf("%s : S%02dE%02d (%d - episode-1)\n", $serie->getName(), $seasonNumber, $episodeNumber, $id);
                         }
                     } else {
-                        $log .= sprintf("%s : S%02dE%02d (season)\n", $serie->getName(), $seasonNumber, $episodeNumber);
+                        $log[] = sprintf("%s : S%02dE%02d (%d - season)\n", $serie->getName(), $seasonNumber, $episodeNumber, $id);
                     }
                 }
             }

@@ -576,8 +576,10 @@
             test.addEventListener("click", getViewedEpisodesDuration);
 
             function getViewedEpisodesDuration(evt) {
+                const button = evt.currentTarget;
                 const durationString = document.querySelector('.duration-string');
-                const serieId = evt.currentTarget.getAttribute("data-id");
+                const loading = document.querySelector('.viewed-update');
+                // const serieId = evt.currentTarget.getAttribute("data-id");
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     let data = {duration: 0, episodeCount: 0, log: "", nullDurationCount: 0, seasonCount: 0, serieCount: 0, time: "0"};
@@ -588,16 +590,26 @@
                     durationString.innerHTML = "Durée totale des épisodes vus parmi "
                         + data.serieCount + " séries, "
                         + data.seasonCount + " saisons et "
-                        + data.episodeCount + " épisodes (" + data.nullDurationCount + ") : "
+                        + data.episodeCount + " épisodes " + (data.nullDurationCount?("(" + data.nullDurationCount + ")"):"") + "&nbsp;:<br>"
                         + (convertedTime.months ? (convertedTime.months + " mois ") : "")
                         + (convertedTime.days ? (convertedTime.days + " jour" + (convertedTime.days > 1 ? "s " : " ")) : "")
                         + (convertedTime.hours ? (convertedTime.hours + " heure" + (convertedTime.hours > 1 ? "s " : " ")) : "")
                         + (convertedTime.minutes ? (convertedTime.minutes + " minute" + (convertedTime.minutes > 1 ? "s " : " ")) : "")
                         + "(" + data.time + "sec)";
-                    durationString.parentElement.querySelector("button").remove();
+                    button.remove();
+
+                    loading.classList.remove("show");
+                    setTimeout(() => {
+                        loading.close()
+                    }, 300);
                 }
                 xhr.open("GET", _app_serie_duration /*+ "?id=" + serieId*/);
                 xhr.send();
+                loading.showModal();
+                setTimeout(() => {
+                    loading.classList.add("show")
+                }, 0);
+
             }
 
             function convertSeconds(seconds) {
