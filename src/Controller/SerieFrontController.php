@@ -210,8 +210,8 @@ class SerieFrontController extends AbstractController
             $durations = $serie->getEpisodeDurations();
             $last = 0;
             $episodeRuntimeExists = key_exists('episode_run_time', $durations);
-            if ($episodeRuntimeExists) {
-                $last = $durations['episode_run_time'][0];
+            if ($episodeRuntimeExists && count($durations['episode_run_time']) > 0) {
+                $last = reset($durations['episode_run_time']);
             }
             $serieCount++;
 

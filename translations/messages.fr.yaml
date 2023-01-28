@@ -352,8 +352,12 @@ Available to buy: Disponible à l'achat
 Available to rent: Disponible à la location
 Watch now: Regarder maintenant
 # cast / crew
+'"A" Camera Operator.he': Opérateur de caméra "A"
+'"A" Camera Operator.she': Opératrice de caméra "A"
 24 Frame Playback.he: Lecture à 24 images
 24 Frame Playback.she: Lecture à 24 images
+ADR Supervisor.he: Superviseur ADR
+ADR Supervisor.she: Superviseuse ADR
 ADR Voice Casting.he: Casting de voix ADR
 ADR Voice Casting.she: Casting de voix ADR
 Acting.he: Acteur
@@ -410,6 +414,8 @@ Clearances Coordinator.he: Coordinateur des habilitations
 Clearances Coordinator.she: Coordinatrice des habilitations
 Co-Executive Producer.he: Co-producteur exécutif
 Co-Executive Producer.she: Co-productrice exécutive
+Co-Producer.he: Co-producteur
+Co-Producer.she: Co-productrice
 Colorist.he: Coloriste
 Colorist.she: Coloriste
 Comic Book.he: Bande dessinée
@@ -422,6 +428,8 @@ Construction Coordinator.he: Coordinateur de construction
 Construction Coordinator.she: Coordinatrice de construction
 Construction Foreman.he: Contremaître de construction
 Construction Foreman.she: Contremaîtresse de construction
+Construction Manager.he: Chef de construction
+Construction Manager.she: Cheffe de construction
 Consulting Producer.he: Producteur conseil
 Consulting Producer.she: Productrice conseil
 Controller.he: Contrôleur
@@ -460,10 +468,14 @@ Dolly Grip.he: Dolly Grip
 Dolly Grip.she: Dolly Grip
 Editor.he: Rédacteur en chef
 Editor.she: Rédactrice en chef
+Executive Consultant.he: Consultant exécutif
+Executive Consultant.she: Consultante exécutive
 Executive Producer's Assistant.he: Assistant du producteur exécutif
 Executive Producer's Assistant.she: Assistante du producteur exécutif
 Executive Producer.he: Producteur exécutif
 Executive Producer.she: Productrice exécutive
+Executive Story Editor.he: Rédacteur exécutif en chef
+Executive Story Editor.she: Rédactrice exécutive en chef
 Extras Casting.he: Casting de figurants
 Extras Casting.she: Casting de figurants
 Finishing Producer.he: Producteur de finition
@@ -547,6 +559,8 @@ Novel.he: Nouvelle
 Novel.she: Nouvelle
 Online Editor.he: Éditeur en ligne
 Online Editor.she: Éditrice en ligne
+Original Concept.he: Concept original
+Original Concept.she: Concept original
 Original Music Composer.he: Compositeur de la musique originale
 Original Music Composer.she: Compositrice de la musique originale
 Other.he: Autre
@@ -603,6 +617,10 @@ Recording Supervision.she: Supervision enregistrement
 Recurring character: Personnage récurrent
 Rigging Gaffer.he: Gaffeur de gréement
 Rigging Gaffer.she: Gaffeuse de gréement
+Scenario Writer.he: Scénariste
+Scenario Writer.she: Scénariste
+Screenplay.he: Scénario
+Screenplay.she: Scénario
 Script Coordinator.he: Coordinateur scénario
 Script Coordinator.she: Coordinatrice scénario
 Script Supervisor.he: Superviseur scénario
@@ -621,12 +639,17 @@ Set Supervisor.he: Superviseur plateau
 Set Supervisor.she: Superviseuse plateau
 Sound Designer.he: Concepteur du son
 Sound Designer.she: Conceptrice du son
+Sound Editor.he: Éditeur sonore
+Sound Editor.she: Éditrice sonore
 Sound Effects Editor.he: Monteur d'effets sonores
 Sound Effects Editor.she: Monteuse d'effets sonores
 Sound Mix Technician.he: Technicien mixage sonore
 Sound Mix Technician.she: Technicienne mixage sonore
+Sound Mixer.he: Mixeur son
+Sound Mixer.she: Mixeuse son
 Sound Re-Recording Mixer.he: Mixeur réenregistrement sonore
 Sound Re-Recording Mixer.she: Mixeuse réenregistrement sonore
+Sound Supervisor.he: Superviseur son
 Sound.he: Son
 Special Effects Coordinator.he: Coordinateur effets spéciaux
 Special Effects Coordinator.she: Coordinatrice effets spéciaux
@@ -634,8 +657,12 @@ Special Effects Makeup Artist.he: Maquilleur effets spéciaux
 Special Effects Makeup Artist.she: Maquilleuse effets spéciaux
 Special Effects Supervisor.he: Superviseur effets spéciaux
 Special Effects Supervisor.she: Superviseuse effets spéciaux
+Staff Writer.he: Rédacteur
+Staff Writer.she: Rédactrice
 Still Photographer.he: Photographe de plateau
 Still Photographer.she: Photographe de plateau
+Story Editor.he: Rédacteur en chef
+Story Editor.she: Rédactrice en chef
 Story.he: Récit
 Story.she: Récit
 Stunt Coordinator.he: Coordinateur cascades
@@ -695,14 +722,6 @@ Writer.she: Autrice
 Writing.he: Auteur
 Writing.she: Autrice
 Writing: Écriture
-'"A" Camera Operator.he': Opérateur de caméra "A"
-'"A" Camera Operator.she': Opératrice de caméra "A"
-Original Concept.he: Concept original
-Original Concept.she: Concept original
-Scenario Writer.he: Scénariste
-Scenario Writer.she: Scénariste
-Screenplay.he: Scénario
-Screenplay.she: Scénario
 
 # key facts
 Favorite: Série favorite

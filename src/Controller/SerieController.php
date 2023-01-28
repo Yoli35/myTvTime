@@ -811,7 +811,7 @@ class SerieController extends AbstractController
         $serieCastArray = $serieViewing->getSerieCasts()->toArray();
 
         /** @var SerieCast[] $serieCasts */
-        return array_map(function ($castDb) use ($serieCastArray) {
+        $cast = array_map(function ($castDb) use ($serieCastArray) {
             $serieCast = array_filter($serieCastArray, function ($serieCast) use ($castDb) {
                 return $serieCast->getCastId() == $castDb->getId();
             });
@@ -829,6 +829,13 @@ class SerieController extends AbstractController
             $c['episodesString'] = $serieCast->getEpisodesString();
             return $c;
         }, $castDbArray);
+
+        // on replace les personnages récurrents en tête de liste
+        usort($cast, function ($a, $b) {
+            return $a['recurring_character'] < $b['recurring_character'];
+        });
+
+        return $cast;
     }
     public function updateTvCast($tv, $serieViewing): void
     {
