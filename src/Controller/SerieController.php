@@ -808,9 +808,14 @@ class SerieController extends AbstractController
         }, $serieViewing->getSerieCasts()->toArray());
 
         $castDbArray = $this->castRepository->findBy(['id' => $ids]);
+        $serieCastArray = $serieViewing->getSerieCasts()->toArray();
 
         /** @var SerieCast[] $serieCasts */
-        return array_map(function ($castDb, $serieCast) {
+        return array_map(function ($castDb) use ($serieCastArray) {
+            $serieCast = array_filter($serieCastArray, function ($serieCast) use ($castDb) {
+                return $serieCast->getCastId() == $castDb->getId();
+            });
+            $serieCast = array_values($serieCast)[0];
             /** @var SerieCast $serieCast */
             $c['id'] = $castDb->getTmdbId();
             $c['profile_path'] = $castDb->getProfilePath();
@@ -823,7 +828,7 @@ class SerieController extends AbstractController
             $c['episodes'] = $count . ' ' . $this->translator->trans($count > 1 ? 'episodes' : 'episode');
             $c['episodesString'] = $serieCast->getEpisodesString();
             return $c;
-        }, $castDbArray, $serieViewing->getSerieCasts()->toArray());
+        }, $castDbArray);
     }
     public function updateTvCast($tv, $serieViewing): void
     {

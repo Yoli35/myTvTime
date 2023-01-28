@@ -588,14 +588,15 @@
                     let duration = data.duration;
                     let convertedTime = convertSeconds(duration * 60);
                     durationString.innerHTML = "Durée totale des épisodes vus parmi "
-                        + data.serieCount + " séries, "
-                        + data.seasonCount + " saisons et "
-                        + data.episodeCount + " épisodes " + (data.nullDurationCount?("(" + data.nullDurationCount + ")"):"") + "&nbsp;:<br>"
-                        + (convertedTime.months ? (convertedTime.months + " mois ") : "")
-                        + (convertedTime.days ? (convertedTime.days + " jour" + (convertedTime.days > 1 ? "s " : " ")) : "")
-                        + (convertedTime.hours ? (convertedTime.hours + " heure" + (convertedTime.hours > 1 ? "s " : " ")) : "")
-                        + (convertedTime.minutes ? (convertedTime.minutes + " minute" + (convertedTime.minutes > 1 ? "s " : " ")) : "")
-                        + "(" + data.time + "sec)";
+                        + data.serieCount + "&nbsp;séries, "
+                        + data.seasonCount + "&nbsp;saisons et "
+                        + data.episodeCount + "&nbsp;épisodes" + (data.nullDurationCount ? (" (" + data.nullDurationCount + ")") : "") + "&nbsp;: <b>"
+                        + (convertedTime.months ? (convertedTime.months + "&nbsp;mois ") : "")
+                        + (convertedTime.days ? (convertedTime.days + "&nbsp;jour" + (convertedTime.days > 1 ? "s " : " ")) : "")
+                        + (convertedTime.hours ? (convertedTime.hours + "&nbsp;heure" + (convertedTime.hours > 1 ? "s " : " ")) : "")
+                        + (convertedTime.minutes ? (convertedTime.minutes + "&nbsp;minute" + (convertedTime.minutes > 1 ? "s " : " ")) : "")
+                        + "</b>";
+                    // + "(" + data.time + "sec)";
                     button.remove();
 
                     loading.classList.remove("show");
