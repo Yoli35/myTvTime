@@ -40,6 +40,9 @@ function setVote(circles) {
     circles.forEach(circle => {
         const element = document.querySelector(circle[0]);
         const value = circle[1];
+
+        if (element === null) return;
+
         const arc = element.querySelector(".circle");
         const start = element.querySelector(".circle-start");
         const end = element.querySelector(".circle-end");

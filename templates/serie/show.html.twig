@@ -11,6 +11,10 @@
             MyTvTime::{{ 'Series On The Air'|trans }}::{{ serie.name }}
         {% elseif from == 'search' %}
             MyTvTime::{{ 'Series search'|trans }}::{{ serie.name }}
+        {% elseif from == 'my_series_to_start' %}
+            MyTvTime::{{ 'My Series to start'|trans }}::{{ serie.name }}
+        {% elseif from == 'my_series_to_end' %}
+            MyTvTime::{{ 'My Series to end'|trans }}::{{ serie.name }}
         {% else %}
             MyTvTime::{{ 'My Series'|trans }}::{{ serie.name }}
         {% endif %}
@@ -18,7 +22,7 @@
 
 {% block body %}
     <div class="bubble">
-        <div class="body">{{ 'Episode'|trans }}&nbsp;<span></span></div>
+        <div class="body"></div>
         <div class="tail"></div>
     </div>
     {{ include('blocks/_mainMenu.html.twig') }}
@@ -33,6 +37,10 @@
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series On The Air', url: path('app_serie_on_the_air')~'?p='~page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'search' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: page})~'?query='~query~'&year='~year~'#'~serie.id}, thisPage: serie.name}) }}
+        {% elseif from == 'my_series_to_start' %}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to start', url: path('app_serie_to_start', {page: page})}, thisPage: serie.name}) }}
+        {% elseif from == 'my_series_to_end' %}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to end', url: path('app_serie_to_end', {page: page})}, thisPage: serie.name}) }}
         {% else %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~page~'&b=1#'~backId}, thisPage: serie.name}) }}
         {% endif %}
@@ -140,31 +148,38 @@
                             <div>{{ serie.overview }}</div>
                         {% endif %}
                     </div>
-                    {% if serie.created_by|length %}
-                        <div class="creators">
-                            {% for c in serie.created_by %}
-                                <a href="{{ path('app_people', {id: c.id}) }}">
-                                    <div class="creator">
-                                        <div class="profile">
-                                            {% if c.profile_path %}
-                                                <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}" alt="{{ c.name }}">
-                                            {% else %}
-                                                <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
-                                            {% endif %}
+                    <div class="info">
+                        {% if serie.created_by|length %}
+                            <div class="creators">
+                                {% for c in serie.created_by %}
+                                    <a href="{{ path('app_people', {id: c.id}) }}">
+                                        <div class="creator">
+                                            <div class="profile">
+                                                {% if c.profile_path %}
+                                                    <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}" alt="{{ c.name }}">
+                                                {% else %}
+                                                    <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
+                                                {% endif %}
+                                            </div>
+                                            <div>{{ c.name }}</div>
+                                            <div>
+                                                {% if c.gender is defined %}
+                                                    {{ (c.gender==1?'creator.she':'creator.he')|trans }}
+                                                {% else %}
+                                                    {{ 'creation'|trans }}
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                        <div>{{ c.name }}</div>
-                                        <div>
-                                            {% if c.gender is defined %}
-                                                {{ (c.gender==1?'creator.she':'creator.he')|trans }}
-                                            {% else %}
-                                                {{ 'creation'|trans }}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </a>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if nextEpisodeToWatch %}
+                            <div class="next-episode-to-watch">
+
+                            </div>
+                        {% endif %}
+                    </div>
                     {% if whatsNew %}
                         <div class="what-s-new">
                             {% if whatsNew.original_name|length %}
@@ -229,10 +244,10 @@
                                                             {% else %}
                                                                 <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
                                                             {% endif %}
-                                                            {% if people.recurring_character %}
+                                                            {% if people.recurring_character is defined and people.recurring_character %}
                                                                 <div class="status"><i class="fa-solid fa-rotate-right" title="{{ 'Recurring character'|trans }}"></i></div>
                                                             {% endif %}
-                                                            {% if people.guest_star %}
+                                                            {% if people.guest_star is defined and people.guest_star %}
                                                                 <div class="status"><i class="fa-solid fa-star" title="{{ 'Guest star'|trans }}"></i></div>
                                                             {% endif %}
                                                         </div>
@@ -247,7 +262,9 @@
                                                                 {{ people.known_for_department|trans }}
                                                             {% endif %}
                                                         </div>
-                                                        <div title="{{ people.episodesString }}">{{ people.episodes }}</div>
+                                                        {% if people.episodeString is defined %}
+                                                            <div title="{{ people.episodesString }}">{{ people.episodes }}</div>
+                                                        {% endif %}
                                                     </div>
                                                 </a>
                                             {% endfor %}
@@ -579,7 +596,88 @@
                 const button = evt.currentTarget;
                 const durationString = document.querySelector('.duration-string');
                 const loading = document.querySelector('.viewed-update');
-                // const serieId = evt.currentTarget.getAttribute("data-id");
+                const txt = {
+                    'fr': {
+                        'Total duration of episodes seen among': 'Durée totale des épisodes vus parmi',
+                        'year': 'année',
+                        'years': 'années',
+                        'month': 'mois',
+                        'months': 'mois',
+                        'day': 'jour',
+                        'days': 'jours',
+                        'hour': 'heure',
+                        'hours': 'heures',
+                        'minute': 'minute',
+                        'minutes': 'minutes',
+                        'serie': 'série',
+                        'series': 'séries',
+                        'season': 'saison',
+                        'seasons': 'saisons',
+                        'episode': 'épisode',
+                        'episodes': 'épisodes',
+                        'and': 'et',
+                    },
+                    'en': {
+                        'Total duration of episodes seen among': 'Total duration of episodes seen among',
+                        'year': 'year',
+                        'years': 'years',
+                        'month': 'month',
+                        'months': 'months',
+                        'day': 'day',
+                        'days': 'days',
+                        'hour': 'hour',
+                        'hours': 'hours',
+                        'minute': 'minute',
+                        'minutes': 'minutes',
+                        'serie': 'serie',
+                        'series': 'series',
+                        'season': 'season',
+                        'seasons': 'seasons',
+                        'episode': 'episode',
+                        'episodes': 'episodes',
+                        'and': 'and',
+                    },
+                    'de': {
+                        'Total duration of episodes seen among': 'Gesamtdauer der gesehenen Episoden unter',
+                        'year': 'Jahr',
+                        'years': 'Jahre',
+                        'month': 'Monat',
+                        'months': 'Monate',
+                        'day': 'Tag',
+                        'days': 'Tage',
+                        'hour': 'Stunde',
+                        'hours': 'Stunden',
+                        'minute': 'Minute',
+                        'minutes': 'Minuten',
+                        'serie': 'Serie',
+                        'series': 'Serien',
+                        'season': 'Staffel',
+                        'seasons': 'Staffeln',
+                        'episode': 'Episode',
+                        'episodes': 'Episoden',
+                        'and': 'und',
+                    },
+                    'es': {
+                        'Total duration of episodes seen among': 'Duración total de episodios vistos entre',
+                        'year': 'año',
+                        'years': 'años',
+                        'month': 'mes',
+                        'months': 'meses',
+                        'day': 'día',
+                        'days': 'días',
+                        'hour': 'hora',
+                        'hours': 'horas',
+                        'minute': 'minuto',
+                        'minutes': 'minutos',
+                        'serie': 'serie',
+                        'series': 'series',
+                        'season': 'temporada',
+                        'seasons': 'temporadas',
+                        'episode': 'episodio',
+                        'episodes': 'episodios',
+                        'and': 'y',
+                    },
+                }
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     let data = {duration: 0, episodeCount: 0, log: "", nullDurationCount: 0, seasonCount: 0, serieCount: 0, time: "0"};
@@ -587,14 +685,16 @@
                     console.log({data});
                     let duration = data.duration;
                     let convertedTime = convertSeconds(duration * 60);
-                    durationString.innerHTML = "Durée totale des épisodes vus parmi "
-                        + data.serieCount + "&nbsp;séries, "
-                        + data.seasonCount + "&nbsp;saisons et "
-                        + data.episodeCount + "&nbsp;épisodes" + (data.nullDurationCount ? (" (" + data.nullDurationCount + ")") : "") + "&nbsp;: <b>"
-                        + (convertedTime.months ? (convertedTime.months + "&nbsp;mois ") : "")
-                        + (convertedTime.days ? (convertedTime.days + "&nbsp;jour" + (convertedTime.days > 1 ? "s " : " ")) : "")
-                        + (convertedTime.hours ? (convertedTime.hours + "&nbsp;heure" + (convertedTime.hours > 1 ? "s " : " ")) : "")
-                        + (convertedTime.minutes ? (convertedTime.minutes + "&nbsp;minute" + (convertedTime.minutes > 1 ? "s " : " ")) : "")
+                    durationString.innerHTML = txt[_locale]['Total duration of episodes seen among'] + "&nbsp;: "
+                        + data.serieCount + "&nbsp;" + (data.serieCount > 1 ? txt[_locale].series : txt[_locale].serie) + ", "
+                        + data.seasonCount + "&nbsp;" + (data.seasonCount > 1 ? txt[_locale].seasons : txt[_locale].season) + " " + txt[_locale]['and'] + " "
+                        + data.episodeCount + "&nbsp;" + (data.episodeCount > 1 ? txt[_locale].episodes : txt[_locale].episode)
+                        + (data.nullDurationCount ? (" (" + data.nullDurationCount + ")") : "") + "&nbsp;: <b>"
+                        + (convertedTime.years ? (convertedTime.years + "&nbsp;" + (convertedTime.years > 1 ? txt[_locale].years : txt[_locale].year)) : "") + " "
+                        + (convertedTime.months ? (convertedTime.months + "&nbsp;" + (convertedTime.months > 1 ? txt[_locale].months : txt[_locale].month)) : "") + " "
+                        + (convertedTime.days ? (convertedTime.days + "&nbsp;" + (convertedTime.days > 1 ? txt[_locale].days : txt[_locale].day)) : "") + " "
+                        + (convertedTime.hours ? (convertedTime.hours + "&nbsp;" + (convertedTime.hours > 1 ? txt[_locale].hours : txt[_locale].hour)) : "") + " "
+                        + (convertedTime.minutes ? (convertedTime.minutes + "&nbsp;" + (convertedTime.minutes > 1 ? txt[_locale].minutes : txt[_locale].minute)) : "")
                         + "</b>";
                     // + "(" + data.time + "sec)";
                     button.remove();
@@ -614,6 +714,8 @@
             }
 
             function convertSeconds(seconds) {
+                let years = Math.floor(seconds / 31536000);
+                seconds -= years * 31536000;
                 let months = Math.floor(seconds / 2628000);
                 seconds -= months * 2628000;
                 let days = Math.floor(seconds / 86400);
@@ -623,6 +725,7 @@
                 let minutes = Math.floor(seconds / 60);
                 seconds -= minutes * 60;
                 return {
+                    years: years,
                     months: months,
                     days: days,
                     hours: hours,
@@ -666,16 +769,17 @@
             function bubbleItShow(evt) {
                 const bubble = document.querySelector(".bubble");
                 const viewed = parseInt(this.getAttribute("data-viewed"));
-                const episode = this.getAttribute("data-number");
+                const episode = evt.currentTarget.getAttribute("data-number");
+                const season = evt.currentTarget.parentElement.getAttribute("data-season-number");
                 bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
-                bubble.querySelector("span").innerText = episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
+                bubble.querySelector(".body").innerHTML = "{{ 'Season'|trans }}&nbsp;" + season.toString() + "<br>{{ 'Episode'|trans }}&nbsp;" + episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
                 bubble.classList.add("show");
             }
 
             function bubbleItHide() {
                 const bubble = document.querySelector(".bubble");
                 bubble.classList.remove("show");
-                bubble.querySelector("span").innerText = "";
+                bubble.querySelector(".body").innerHTML = "";
             }
 
             function bubbleIt(evt) {
@@ -763,7 +867,7 @@
                 evt.preventDefault();
                 mouseX = evt.clientX / evt.view.innerWidth;
                 mouseY = evt.clientY / evt.view.innerHeight;
-                console.log({mouseX, mouseY});
+                // console.log({mouseX, mouseY});
 
                 if (episodeClicked.viewed) {
                     const checkThemAllDiv = currentDialog.querySelector(".check-them-all");
@@ -820,7 +924,7 @@
 
                     blocks.forEach(block => {
                         if (block['episode_count']) {
-                            console.log({block});
+                            // console.log({block});
                             const details = document.querySelector(".details[data-season-number=\"" + block['season'] + "\"]");
                             if (details) {
                                 const oldViewingDiv = details.querySelector(".viewing").parentNode;

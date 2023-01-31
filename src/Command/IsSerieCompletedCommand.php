@@ -55,10 +55,6 @@ class IsSerieCompletedCommand extends Command
                     $io->comment('Setting "modifiedAt"');
                     $serieViewing->setModifiedAt(new DateTime());
                 }
-                if ($serieViewing->isSpecialEpisodes() != $specialEpisodes) {
-                    $io->comment('Setting "specialEpisodes"');
-                    $serieViewing->setSpecialEpisodes($specialEpisodes);
-                }
                 $io->comment('Updating "' . $serie->getName() . '" (' . $serie->getId() . ',' . $serieViewing->getId() . ') for user ' . $user->getUsername() ?: $user->getEmail());
 
                 $seasonCompleted = [];

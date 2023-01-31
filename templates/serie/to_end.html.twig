@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MyTvTime::{{ 'My Series to end'|trans }}{% endblock %}
+{% block description %}{{ 'List of my series to end'|trans }}{% endblock %}
+{% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
+{% block body %}
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container">
+        <div class="my-series">
+            <div class="header">
+                {{ include('blocks/serie/_quotes.html.twig') }}
+                <h1>{{ 'My Series to end'|trans }}</h1>
+                <div class="backdrop"></div>
+            </div>
+
+            {{ include('blocks/_nav.html.twig', {thisPage:('My Series to end'|trans)}) }}
+
+            <main>
+                <div class="series">
+                    <div class="series-tools mobile">
+                        <div class="pages mobile">
+                            {{ include('blocks/serie/_pagination-start.html.twig') }}
+                        </div>
+                    </div>
+                    <div class="wrapper">
+                        {% if series|length %}
+                            {% for serie in series %}
+                                <div data-id="{{ serie.id }}">
+                                    {{ include('blocks/serie/_card.html.twig') }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            Rien à afficher
+                        {% endif %}
+                    </div>
+                    <div class="series-tools desktop">
+                        <div class="pages desktop">
+                            {{ include('blocks/serie/_pagination-start.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        window.addEventListener("DOMContentLoaded", () => {
+            initHeader();
+        })
+
+        function initHeader() {
+            const header = document.querySelector(".header");
+            let ticking = false;
+            setH1();
+            window.addEventListener('resize', setH1);
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(function () {
+                        setH1();
+                        ticking = false;
+                    });
+                }
+                ticking = true;
+            });
+
+            setTimeout(() => header.classList.add("fade-bg"), 3000);
+        }
+
+        function setH1() {
+            const header = document.querySelector(".header");
+            const h1 = document.querySelector("h1");
+            let left, ratio, top;
+            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
+            left = (header.clientWidth - h1.clientWidth) / 2;
+            top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
+            if (ratio < 0) ratio = 0;
+            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
+        }
+    </script>
+{% endblock %}

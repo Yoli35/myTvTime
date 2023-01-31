@@ -28,11 +28,11 @@ class SerieViewing
     #[ORM\Column(nullable: true)]
     private ?int $viewedEpisodes = null;
 
-    #[ORM\Column]
-    private ?bool $specialEpisodes = false;
+    #[ORM\Column(nullable: true)]
+    private ?int $numberOfEpisodes = null;
 
     #[ORM\Column]
-    private ?int $seasonCount = null;
+    private ?int $numberOfSeasons = null;
 
     #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class, cascade: ['persist'])]
     private Collection $seasons;
@@ -94,30 +94,6 @@ class SerieViewing
     public function setViewedEpisodes(?int $viewedEpisodes): self
     {
         $this->viewedEpisodes = $viewedEpisodes;
-
-        return $this;
-    }
-
-    public function isSpecialEpisodes(): ?bool
-    {
-        return $this->specialEpisodes;
-    }
-
-    public function setSpecialEpisodes(bool $specialEpisodes): self
-    {
-        $this->specialEpisodes = $specialEpisodes;
-
-        return $this;
-    }
-
-    public function getSeasonCount(): ?int
-    {
-        return $this->seasonCount;
-    }
-
-    public function setSeasonCount(int $seasonCount): self
-    {
-        $this->seasonCount = $seasonCount;
 
         return $this;
     }
@@ -227,5 +203,27 @@ class SerieViewing
         }
 
         return $this;
+    }
+
+    public function getNumberOfEpisodes(): ?int
+    {
+        return $this->numberOfEpisodes;
+    }
+
+    public function setNumberOfEpisodes(?int $numberOfEpisodes): self
+    {
+        $this->numberOfEpisodes = $numberOfEpisodes;
+
+        return $this;
+    }
+
+    public function getNumberOfSeasons(): ?int
+    {
+        return $this->numberOfSeasons;
+    }
+
+    public function setNumberOfSeasons(?int $numberOfSeasons): void
+    {
+        $this->numberOfSeasons = $numberOfSeasons;
     }
 }

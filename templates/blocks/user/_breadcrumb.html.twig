@@ -6,16 +6,18 @@
             <img class="avatar" src="/images/default/no_avatar.png" alt="{{ user.username }}">
         {% endif %}
         <div class="menu-items">
-            <div class="menu-item"><a href="{{ path('app_personal_profile') }}">{{ 'My Account'|trans }}</a></div>
-            <div class="menu-item"><a href="{{ path('app_personal_list') }}">{{ 'People search'|trans }}</a></div>
-            <div class="menu-item"><a href="{{ path('app_event') }}">{{ 'My Events'|trans }}</a></div>
-            <div class="menu-item"><a href="{{ path('app_personal_movies') }}">{{ 'My Movies'|trans }}</a></div>
-            <div class="menu-item"><a href="{{ path('app_collection') }}">{{ 'My Movie Collections'|trans }}</a></div>
-            <div class="menu-item"><a href="{{ path('app_serie_index') }}">{{ 'My Series'|trans }}</a></div>
-            <div class="menu-item"><a href="{{ path('app_serie_today') }}">{{ 'My Series airing today'|trans }}</a></div>
-            <div class="menu-item"><a href="{{ path('app_youtube') }}">{{ 'My Youtube Videos'|trans }}</a></div>
-            <div class="menu-item youtube-video-search"><a href="{{ path('app_youtube_search') }}">{{ 'Youtube video search'|trans }}</a></div>
-            <div class="menu-item"><a href="{{ path('app_tik_tok') }}">{{ 'My TikTok Videos'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_personal_profile') }}"><i class="fa-solid fa-user"></i>{{ 'My Account'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_personal_list') }}"><i class="fa-solid fa-children"></i>{{ 'People search'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_event') }}"><i class="fa-solid fa-calendar-days"></i>{{ 'My Events'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_personal_movies') }}"><i class="fa-sharp fa-solid fa-film"></i>{{ 'My Movies'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_collection') }}"><i class="fa-solid fa-clapperboard"></i>{{ 'My Movie Collections'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_serie_index') }}"><i class="fa-solid fa-tv"></i> {{ 'My Series'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_serie_today') }}"><i class="fa-solid fa-calendar-day"></i> {{ 'My Series airing today'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_serie_to_start') }}"><i class="fa-solid fa-play"></i> {{ 'My Series to start'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_serie_to_end') }}"><i class="fa-solid fa-forward-step"></i> {{ 'My Series to end'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_youtube') }}"><i class="fa-brands fa-youtube"></i>{{ 'My Youtube Videos'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_youtube_search') }}"><i class="fa-solid fa-magnifying-glass"></i>{{ 'Youtube video search'|trans }}</a></div>
+            <div class="menu-item"><a href="{{ path('app_tik_tok') }}"><i class="fa-brands fa-tiktok"></i>{{ 'My TikTok Videos'|trans }}</a></div>
         </div>
     </div>
 {% endif %}

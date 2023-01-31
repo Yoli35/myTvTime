@@ -17,33 +17,38 @@
                 <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ serie.networks.0.logoPath }}" alt="{{ 'Network' }}">
             </div>
         {% endif %}
-        <div class="status
+        {% if from == 'my_series' or from == 'my_series_to_start' or from == 'my_series_to_end' %}
+            <div class="status
             {% if serie.viewing.viewedEpisodes == 0 %} start-watching {% endif %}
             {% if serie.viewing.serieCompleted and  serie.status in ["Returning Series"] %} more-to-come {% endif %}
             {% if serie.viewing.serieCompleted and  serie.status in ["Ended","Canceled"] %} that-s-all {% endif %}
             ">
-            {{ serie.status|trans }} —
-            {% if serie.viewing.serieCompleted %}
-                {% if serie.status in ["Ended","Canceled"] %}
-                    {{ 'That\'s all'|trans }}
-                {% endif %}
-                {% if serie.status in ["Returning Series"] %}
-                    {{ 'More episodes to come'|trans }}
-                {% endif %}
-            {% else %}
-                {% if serie.viewing.viewedEpisodes > 0 %}
-                    {% set more = serie.numberOfEpisodes - serie.viewing.viewedEpisodes %}
-                    {{ 'Watching in progress'|trans }}, {{ more }} {{ (more > 1 ? 'episodes more':'episode more')|trans }}
+                {{ serie.status|trans }} —
+                {% if serie.viewing.serieCompleted %}
+                    {% if serie.status in ["Ended","Canceled"] %}
+                        {{ 'That\'s all'|trans }}
+                    {% endif %}
+                    {% if serie.status in ["Returning Series"] %}
+                        {{ 'More episodes to come'|trans }}
+                    {% endif %}
                 {% else %}
-                    {{ 'Start watching the show'| trans }}, {{ serie.numberOfEpisodes }} {{ (serie.numberOfEpisodes>1?'episodes':'episode')|trans }}
+                    {% if serie.viewing.viewedEpisodes > 0 %}
+                        {% set more = serie.numberOfEpisodes - serie.viewing.viewedEpisodes %}
+                        {{ 'Watching in progress'|trans }}, {{ more }} {{ (more > 1 ? 'episodes more':'episode more')|trans }}
+                    {% else %}
+                        {{ 'Start watching the show'| trans }}, {{ serie.numberOfEpisodes }} {{ (serie.numberOfEpisodes>1?'episodes':'episode')|trans }}
+                    {% endif %}
                 {% endif %}
+            </div>
+            {% if is_favorite(user.id, serie.id, 'serie') %}
+                <div class="favorite">{{ 'Favorite'|trans }}</div>
             {% endif %}
-        </div>
-        {% if is_favorite(user.id, serie.id, 'serie') %}
-            <div class="favorite">{{ 'Favorite'|trans }}</div>
-        {% endif %}
-        {% if serie.today %}
-            <div class="today">{{ 'New episode'|trans }}</div>
+            {% if serie.today %}
+                <div class="today">{{ 'New episode today'|trans }}</div>
+            {% endif %}
+            {% if serie.tomorrow %}
+                <div class="tomorrow">{{ 'New episode tomorrow'|trans }}</div>
+            {% endif %}
         {% endif %}
         <div class="front"></div>
     </div>

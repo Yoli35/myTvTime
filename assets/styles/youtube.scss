@@ -185,6 +185,7 @@
 
                         &:has(input[type=checkbox]) {
                             gap: .25em;
+                            text-transform: unset;
 
                             input {
                                 @include flex-row();

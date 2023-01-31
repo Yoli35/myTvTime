@@ -8,6 +8,8 @@
                      data-global-index="{{ globalIndex }}">
                     {% if episode.viewedAt %}
                         <i class="fa-solid fa-circle-check"></i>
+                    {% else %}
+                        <span>{{ episode.episodeNumber }}</span>
                     {% endif %}
                     {% set globalIndex = globalIndex + 1 %}
                 </div>

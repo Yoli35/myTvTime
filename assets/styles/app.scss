@@ -619,7 +619,6 @@ nav.active {
         }
 
         &:hover {
-
             .menu-items {
                 display: block;
             }
@@ -646,6 +645,7 @@ nav.active {
             z-index: 53;
 
             .menu-item {
+                white-space: nowrap;
                 width: 100%;
 
                 a {
@@ -659,6 +659,10 @@ nav.active {
                     &:hover {
                         background-color: var(--gradiant-grey-80);
                         color: var(--gradiant-grey-30);
+                    }
+
+                    i {
+                        width: 2em;
                     }
                 }
             }

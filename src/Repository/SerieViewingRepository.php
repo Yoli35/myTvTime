@@ -34,6 +34,11 @@ class SerieViewingRepository extends ServiceEntityRepository
         }
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function remove(SerieViewing $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
@@ -43,38 +48,52 @@ class SerieViewingRepository extends ServiceEntityRepository
         }
     }
 
-    public function getSeriesViewings(User $user, string $ids)
+    public function getSeriesToEnd(User $user, $perPage, $page): array
     {
-        $sql = "SELECT * FROM `serie_viewing` s WHERE s.`user_id`=" . $user->getId() . " AND s.`serie_id` in " . $ids;
-
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-
-        return $resultSet->fetchAll();
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('s.viewedEpisodes > 0')
+            ->andWhere('s.viewedEpisodes < s.numberOfEpisodes')
+            ->orderBy('s.modifiedAt', 'DESC')
+            ->setMaxResults($perPage)
+            ->setFirstResult(($page - 1) * $perPage)
+            ->getQuery()
+            ->getResult();
+//        $sql = "SELECT * FROM `serie_viewing` s "
+//            . "WHERE s.`user_id`=" . $user->getId() . " "
+//            . "AND s.`viewed_episodes` > 0 "
+//            . "AND s.`viewed_episodes` < s.`number_of_episodes` "
+//            . "ORDER BY s.`modified_at` DESC "
+//            . "LIMIT " . $perPage . " "
+//            . "OFFSET " . ($page - 1) * $perPage;
+//
+//        $em = $this->registry->getManager();
+//        $statement = $em->getConnection()->prepare($sql);
+//        $resultSet = $statement->executeQuery();
+//
+//        return $resultSet->fetchAll();
     }
-//    /**
-//     * @return SerieViewing[] Returns an array of SerieViewing objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?SerieViewing
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function countUserSeriesToEnd(User $user)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('COUNT(s.id)')
+            ->andWhere('s.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('s.viewedEpisodes > 0')
+            ->andWhere('s.viewedEpisodes < s.numberOfEpisodes')
+            ->getQuery()
+            ->getSingleScalarResult();
+//        $sql = "SELECT COUNT(*) FROM `serie_viewing` s "
+//            . "WHERE s.`user_id`=" . $user->getId() . " "
+//            . "AND s.`viewed_episodes` > 0 "
+//            . "AND s.`viewed_episodes` < s.`number_of_episodes`";
+//
+//        $em = $this->registry->getManager();
+//        $statement = $em->getConnection()->prepare($sql);
+//        $resultSet = $statement->executeQuery();
+//
+//        return $resultSet->fetchOne();
+    }
 }

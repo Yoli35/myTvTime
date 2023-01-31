@@ -369,6 +369,8 @@ Additional Script Supervisor.he: Superviseur du scénario additionnel
 Additional Script Supervisor.she: Superviseuse du scénario additionnel
 Animal Wrangler.he: Dresseur d'animaux
 Animal Wrangler.she: Dresseuse d'animaux
+Animation.he: Animation
+Animation.she: Animation
 Armorer.he: Armurier
 Armorer.she: Armurière
 Art Department Coordinator.he: Coordinateur du département artistique
@@ -384,6 +386,8 @@ Assistant Costume Designer.he: Assistant costumier
 Assistant Costume Designer.she: Assistante costumière
 Assistant Director.he: Assistant réalisateur
 Assistant Director.she: Assistante réalisateur
+Assistant Editor.he: Rédacteur adjoint
+Assistant Editor.she: Rédactrice adjointe
 Assistant Production Coordinator.he: Assistant coordinateur de production
 Assistant Production Coordinator.she: Assistante coordinateur de production
 Assistant Production Manager.he: Directeur adjoint de production
@@ -392,16 +396,22 @@ Assistant Property Master.he: Assistant maître d'œuvre
 Assistant Property Master.she: Assistante maître d'œuvre
 Assistant Set Decoration.he: Assistant Décorateur
 Assistant Set Decoration.she: Assistante Décoratrice
+Assistant Sound Editor.he: Assistant monteur son
+Assistant Sound Editor.she: Assistante monteuse son
 Associate Producer.he: Producteur associé
 Associate Producer.she: Productrice associée
 Best Boy Grip.he: Assistant chef de département Key grip
 Boom Operator.he: Opérateur de perche
 Boom Operator.she: Opératrice de perche
+Camera Operator.he: Opérateur caméra
+Camera Operator.she: Opératrice caméra
 Camera Trainee.he: Stagiaire caméra
 Camera Trainee.she: Stagiaire caméra
 Cast: Distribution des rôles
 Casting Associate.he: Associé de distribution
 Casting Associate.she: Associée de distribution
+Casting Coordinator.he: Coordinateur casting
+Casting Coordinator.she: Coordinatrice casting
 Casting Director.he: Directeur de casting
 Casting Director.she: Directrice de casting
 Casting.he: Distribution
@@ -445,6 +455,8 @@ Costume Designer.he: Concepteur de costumes
 Costume Designer.she: Conceptrice de costumes
 Costume Supervisor.he: 	Superviseur des costumes
 Costume Supervisor.she: Superviseuse des costumes
+Costumer.he: Costumier
+Costumer.she: Costumière
 Creator.he: Créateur
 Creator.she: Créatrice
 Creator: Création
@@ -468,6 +480,8 @@ Dolly Grip.he: Dolly Grip
 Dolly Grip.she: Dolly Grip
 Editor.he: Rédacteur en chef
 Editor.she: Rédactrice en chef
+Executive Assistant.he: Assistant de direction
+Executive Assistant.she: Assistante de direction
 Executive Consultant.he: Consultant exécutif
 Executive Consultant.she: Consultante exécutive
 Executive Producer's Assistant.he: Assistant du producteur exécutif
@@ -549,6 +563,8 @@ Makeup Designer.he: Maquilleur
 Makeup Designer.she: Maquilleuse
 Makeup Trainee.he: Stagiaire maquillage
 Makeup Trainee.she: Stagiaire maquillage
+Music Coordinator.he: Coordinateur musique
+Music Coordinator.she: Coordinatrice musique
 Music Editor.he: Éditeur de musique
 Music Editor.she: Éditrice de musique
 Music Supervisor.he: Superviseur musical
@@ -617,16 +633,24 @@ Recording Supervision.she: Supervision enregistrement
 Recurring character: Personnage récurrent
 Rigging Gaffer.he: Gaffeur de gréement
 Rigging Gaffer.she: Gaffeuse de gréement
+Rigging Grip.he: Rigging Grip
+Rigging Grip.she: Rigging Grip
 Scenario Writer.he: Scénariste
 Scenario Writer.she: Scénariste
+Scientific Consultant.he: Consultant scientifique
+Scientific Consultant.she: Consultante scientifique
 Screenplay.he: Scénario
 Screenplay.she: Scénario
 Script Coordinator.he: Coordinateur scénario
 Script Coordinator.she: Coordinatrice scénario
 Script Supervisor.he: Superviseur scénario
 Script Supervisor.she: Superviseuse scénario
+Second Assistant Accountant.he: Second assistant comptable
+Second Assistant Accountant.she: Seconde assistante comptable
 Second Assistant Director.he: Second assistant réalisateur
 Second Assistant Director.she: Seconde assistante réalisateur
+Set Costumer.he: Costumier de plateau
+Set Costumer.she: Costumière de plateau
 Set Decorating Coordinator.he: Coordinateur décoration de plateau
 Set Decorating Coordinator.she: Coordinatrice décoration de plateau
 Set Decoration Buyer.he: Acheteur décors
@@ -639,8 +663,8 @@ Set Supervisor.he: Superviseur plateau
 Set Supervisor.she: Superviseuse plateau
 Sound Designer.he: Concepteur du son
 Sound Designer.she: Conceptrice du son
-Sound Editor.he: Éditeur sonore
-Sound Editor.she: Éditrice sonore
+Sound Editor.he: Monteur son
+Sound Editor.she: Monteuse son
 Sound Effects Editor.he: Monteur d'effets sonores
 Sound Effects Editor.she: Monteuse d'effets sonores
 Sound Mix Technician.he: Technicien mixage sonore
@@ -717,11 +741,67 @@ Visual Effects Production Manager.he: Directeur de production effets visuels
 Visual Effects Production Manager.she: Directrice de production effets visuels
 Visual Effects Supervisor.he: Superviseur effets visuels
 Visual Effects Supervisor.she: Superviseuse effets visuels
+Visual Effects.he: Effets visuels
+Visual Effects.she: Effets visuels
 Writer.he: Auteur
 Writer.she: Autrice
+Writers' Production.he: Production des auteurs
+Writers' Production.she: Production des auteures
 Writing.he: Auteur
 Writing.she: Autrice
 Writing: Écriture
+Makeup Artist.he: Maquilleur
+Makeup Artist.she: Maquilleuse
+Visual Development.he: Développement visuel
+Visual Development.she: Développement visuel
+Lead Character Designer.he: Concepteur principal de personnage
+Lead Character Designer.she: Conceptrice principale de personnage
+Animation Supervisor.he: Superviseur animation
+Animation Supervisor.she: Superviseuse animation
+Character Designer.he: Concepteur de personnages
+Character Designer.she: Conceptrice de personnages
+3D Artist.she: Artiste 3D
+3D Artist.he: Artiste 3D
+Layout Supervisor.he: Superviseur agencement
+Layout Supervisor.she: Superviseuse agencement
+Digital Compositor.he: Compositeur numérique
+Digital Compositor.she: Compositrice numérique
+Concept Artist.he: Artiste conceptuel
+Concept Artist.she: Artiste conceptuelle
+Conceptual Illustrator.he: Illustrateur conceptuel
+Conceptual Illustrator.she: Illustratrice conceptuelle
+Sculptor.he: Sculpteur
+Sculptor.she: Sculptrice
+Supervising Music Editor.he: Supervision montage musical
+Supervising Music Editor.she: Supervision montage musical
+Post Production Accountant.he: Comptable de post-production
+Post Production Accountant.she: Comptable de post-production
+Payroll Accountant.he: Comptable salaires
+Payroll Accountant.she: Comptable salaires
+Assistant Accountant.he: Assistant comptable
+Assistant Accountant.she: Assistante comptable
+Casting Assistant.he: Assistant de casting
+Casting Assistant.she: Assistante de casting
+Development Manager.he: Directeur du développement
+Development Manager.she: Directrice du développement
+ADR Editor.she: Monteuse ADR
+ADR Editor.he: Monteur ADR
+ADR Mixer.he: Mixeur ADR
+ADR Mixer.she: Mixeuse ADR
+Orchestrator.he: Orchestrateur
+Orchestrator.she: Orchestratrice
+Conductor.he: Conducteur
+Conductor.she: Conductrice
+Scoring Mixer.he: Mixeur score
+Scoring Mixer.she: Mixeuse score
+Thanks.he: Remerciements
+Thanks.she: Remerciements
+Storyboard Artist.he: Artiste storyboard
+Storyboard Artist.she: Artiste storyboard
+Accountant.he: Comptable
+Accountant.she: Comptable
+Stereoscopic Supervisor.he: Superviseur stéréoscopie
+Stereoscopic Supervisor.she: Superviseuse stéréoscopie
 
 # key facts
 Favorite: Série favorite
@@ -766,7 +846,9 @@ Episodes seen as they happen: Épisodes vus au fur et à mesure
 Mark previous episodes as viewed: Marquer les épisodes précédents comme vus
 update: Mise à jour
 Done: Terminé
-New episode: Nouvel épisode aujourd'hui
+New episode today: Nouvel épisode aujourd'hui
+New episode tomorrow: Nouvel épisode demain
+
 #search user's series
 Search my series: Rechercher parmi mes séries
 Name of the serie: Nom de la série
@@ -786,6 +868,14 @@ Series search: Rechercher une série
 Browse results: Parcourir les résultats
 See the details of a series: Voir les détails d'une série
 Add a series: Ajouter une série
+
+#Series to start
+My Series to start: Mes séries à commencer
+My Series to end: Mes séries à terminer
+
+#Series to end
+List of my series to start: Liste de mes séries à commencer
+List of my series to end: Liste de mes séries à terminer
 
 # People
 Known for: Célèbre pour

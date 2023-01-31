@@ -43,25 +43,27 @@ class CopySerieViewingDataCommand extends Command
                 $output->writeln('Serie: ' . $serie->getName() . '(' . $serieViewing->getId() . ') - for user: ' . $user->getUsername() ?: $user->getEmail());
 
                 foreach ($data as $seasonData) {
-                    $seasonViewing = $serieViewing->getSeasonByNumber($seasonData['season_number']);
-                    if ($seasonViewing) {
-                        $episodeData = $seasonData['episodes'];
-                        $episodeStr = '';
-                        for ($i = 0; $i < $seasonData['episode_count']; $i++) {
-                            $episodeStr .= '[' . ($episodeData[$i] ? '*' : '-') . ']';
-                            if ($episodeData[$i]) {
-                                $episodeViewing = $seasonViewing->getEpisodeByNumber($i + 1);
-                                $episodeViewing->setViewedAt(new DateTimeImmutable());
-                                $this->episodeViewingRepository->save($episodeViewing, true);
+                    if ($seasonData['season_number']) {
+                        $seasonViewing = $serieViewing->getSeasonByNumber($seasonData['season_number']);
+                        if ($seasonViewing) {
+                            $episodeData = $seasonData['episodes'];
+                            $episodeStr = '';
+                            for ($i = 0; $i < $seasonData['episode_count']; $i++) {
+                                $episodeStr .= '[' . ($episodeData[$i] ? '*' : '-') . ']';
+                                if ($episodeData[$i]) {
+                                    $episodeViewing = $seasonViewing->getEpisodeByNumber($i + 1);
+                                    $episodeViewing->setViewedAt(new DateTimeImmutable());
+                                    $this->episodeViewingRepository->save($episodeViewing, true);
+                                }
                             }
+                            $output->writeln([
+                                'Season number: ',
+                                '    Air date: ' . ($seasonData['air_date'] ?: 'None'),
+                                '    Episode count: ' . $seasonData['episode_count'],
+                                '    Season completed: ' . ($seasonData['season_completed'] ? 'Yes' : 'No'),
+                                '    Episodes: ' . $episodeStr
+                            ]);
                         }
-                        $output->writeln([
-                            'Season number: ' . ($seasonData['season_number'] ?: 'Special episodes'),
-                            '    Air date: ' . ($seasonData['air_date'] ?: 'None'),
-                            '    Episode count: ' . $seasonData['episode_count'],
-                            '    Season completed: ' . ($seasonData['season_completed'] ? 'Yes' : 'No'),
-                            '    Episodes: ' . $episodeStr
-                        ]);
                     }
                 }
                 $output->writeln('');
