@@ -19,10 +19,9 @@
         {% endif %}
         {% if from == 'my_series' or from == 'my_series_to_start' or from == 'my_series_to_end' %}
             <div class="status
-            {% if serie.viewing.viewedEpisodes == 0 %} start-watching {% endif %}
-            {% if serie.viewing.serieCompleted and  serie.status in ["Returning Series"] %} more-to-come {% endif %}
-            {% if serie.viewing.serieCompleted and  serie.status in ["Ended","Canceled"] %} that-s-all {% endif %}
-            ">
+            {% if serie.viewing.viewedEpisodes == 0 %} start-watching{% endif %}
+            {% if serie.viewing.serieCompleted and  serie.status in ["Returning Series"] %} more-to-come{% endif %}
+            {% if serie.viewing.serieCompleted and  serie.status in ["Ended","Canceled"] %} that-s-all{% endif %}">
                 {{ serie.status|trans }} —
                 {% if serie.viewing.serieCompleted %}
                     {% if serie.status in ["Ended","Canceled"] %}
@@ -48,6 +47,12 @@
             {% endif %}
             {% if serie.tomorrow %}
                 <div class="tomorrow">{{ 'New episode tomorrow'|trans }}</div>
+            {% endif %}
+            {% if serie.next is defined %}
+                <div class="next">{{ 'Next episode'|trans }} {{ serie.nextEpisode }} : {{ serie.nextText }}, {{ serie.next|format_date('full') }}</div>
+            {% endif %}
+            {% if serie.passed is defined %}
+                <div class="passed">{{ 'Next episode'|trans }} {{ serie.nextEpisode }} : {{ serie.passedText }} ({{ serie.passed }})</div>
             {% endif %}
         {% endif %}
         <div class="front"></div>

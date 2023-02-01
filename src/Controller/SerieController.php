@@ -154,25 +154,48 @@ class SerieController extends AbstractController
         $serie['today'] = false;
         $serie['tomorrow'] = false;
         $viewing = $serie['viewing'];
+        $findIt = false;
         /** @var SerieViewing $viewing */
         if (!$viewing->isSerieCompleted()) {
             foreach ($viewing->getSeasons() as $season) {
-//                    dump($serie['name'] . ": season " . $season->getSeasonNumber() . ' -> ' . $season->getAirAt()->format("d/m/Y"));
-                $diff = date_diff($now, $season->getAirAt());
-                if (!$season->isSeasonCompleted() && $diff->invert) {
-                    foreach ($season->getEpisodes() as $episode) {
-                        if ($episode->getAirDate()) {
-                            $diff = date_diff($now, $episode->getAirDate());
-                            if ($diff->y == 0 && $diff->m == 0 && $diff->d == 0) {
-                                $serie['today'] = (bool)$diff->invert;
-                                $serie['tomorrow'] = !$diff->invert;
-                                dump($serie, $diff);
+                if ($season->getSeasonNumber()) {
+                    if (!$season->isSeasonCompleted()) {
+                        foreach ($season->getEpisodes() as $episode) {
+                            if ($episode->getAirDate() && !$episode->getViewedAt()) {
+                                $episodeDiff = date_diff($now, $episode->getAirDate());
+                                if (!$findIt) {
+                                    if ($episodeDiff->y == 0 && $episodeDiff->m == 0 && $episodeDiff->d == 0) {
+                                        $serie['today'] = (bool)$episodeDiff->invert;
+                                        $serie['tomorrow'] = !$episodeDiff->invert;
+                                        $findIt = true;
+                                    }
+                                }
+                                if ($episodeDiff->days) {
+                                    if (!$findIt) {
+                                        if ($episodeDiff->invert) {
+                                            $serie['passed'] = $episode->getAirDate()->format("d/m/Y");
+                                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                                            $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days]);
+                                            $findIt = true;
+                                        }
+                                    }
+                                    if (!$findIt) {
+                                        if (!$episodeDiff->invert) {
+                                            $serie['next'] = $episode->getAirDate()->format("m/d/Y");
+                                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                                            $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days]);
+                                            $findIt = true;
+                                        }
+                                    }
+                                }
+                            }
+                            if ($findIt) {
                                 break;
                             }
                         }
                     }
                 }
-                if ($serie['today'] || $serie['tomorrow']) {
+                if ($findIt) {
                     break;
                 }
             }
@@ -458,7 +481,7 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function seriesToBeToArray($serieViewings, $locale)
+    public function seriesToBeToArray($serieViewings, $locale): array
     {
         $seriesToBe = array_map(function ($serieViewing) use ($locale) {
             $serie = $this->serie2array($serieViewing->getSerie(), $locale);
@@ -956,7 +979,7 @@ class SerieController extends AbstractController
     {
         $lastNotViewedEpisode = null;
         $seasons = $serieViewing->getSeasons();
-        dump($seasons);
+//        dump($seasons);
         foreach ($seasons as $season) {
             if ($season->getSeasonNumber() && !$season->isSeasonCompleted()) {
                 $episodes = $season->getEpisodes();

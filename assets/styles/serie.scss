@@ -264,18 +264,33 @@
                         width: 8em;
                     }
 
-                    .today, .tomorrow {
+                    .today, .tomorrow, .next, .passed {
                         @include flex-row();
-                        background-color: var(--gradiant-mars-50);
                         border-radius: .5em;
                         color: var(--gradiant-grey-100);
                         font-weight: 300;
                         height: 2em;
                         padding: 0 .5em;
                         position: absolute;
-                        right: 14em;
+                        right: 1em;
                         text-align: center;
-                        top: 2em;
+                        bottom: 1em;
+                    }
+
+                    .today {
+                        background-color: var(--gradiant-mars-50);
+                    }
+
+                    .tomorrow {
+                        background-color: var(--gradiant-green-40);
+                    }
+
+                    .next {
+                        background-color: var(--gradiant-ardoise-50);
+                    }
+
+                    .passed {
+                        background-color: var(--gradiant-purple-40);
                     }
 
                     .add {
