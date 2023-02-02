@@ -32,8 +32,21 @@
                     {% endif %}
                 {% else %}
                     {% if serie.viewing.viewedEpisodes > 0 %}
-                        {% set more = serie.numberOfEpisodes - serie.viewing.viewedEpisodes %}
-                        {{ 'Watching in progress'|trans }}, {{ more }} {{ (more > 1 ? 'episodes more':'episode more')|trans }}
+                        {% if serie.nextEpisodeDays is defined %}
+                            {{ 'Up to date!'|trans }}
+                            {% if serie.nextEpisodeDays == 0 %}
+                                {{ 'New episode today'|trans }}
+                            {% elseif serie.nextEpisodeDays == 1 %}
+                                {{ 'New episode tomorrow'|trans }}
+                            {% else %}
+                                {{ 'Next episode in'|trans }} {{ serie.nextEpisodeDays }} {{ 'days'|trans }}
+                            {% endif %}
+                        {% elseif serie.nextEpisodeNoDate is defined %}
+                            {{ 'Up to date!'|trans }} {{ 'No date for the moment'|trans }}
+                        {% else %}
+                            {% set more = serie.numberOfEpisodes - serie.viewing.viewedEpisodes %}
+                            {{ 'Watching in progress'|trans }}, {{ more }} {{ (more > 1 ? 'episodes more':'episode more')|trans }}
+                        {% endif %}
                     {% else %}
                         {{ 'Start watching the show'| trans }}, {{ serie.numberOfEpisodes }} {{ (serie.numberOfEpisodes>1?'episodes':'episode')|trans }}
                     {% endif %}

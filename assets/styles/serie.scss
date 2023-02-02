@@ -227,6 +227,7 @@
                         border: 2px solid;
                         border-radius: .5em;
                         color: var(--gradiant-green-90);
+                        font-weight: 300;
                         height: 2em;
                         padding: 0 1em;
                         position: absolute;
@@ -1073,9 +1074,16 @@
 
                 .next-episode-to-watch {
                     @include flex-row();
-                    background-color: var(--gradiant-grey-30-alpha-50);
+                    background-color: var(--gradiant-green-40-alpha-50);
                     border-radius: 1em;
-                    height: 100%;
+                    font-size: 1.5em;
+                    font-weight: 300;
+                    line-height: 1.25em;
+                    margin-left: auto;
+                    min-width: -moz-fit-content;
+                    min-width: -webkit-fit-content;
+                    min-width: fit-content;
+                    padding: 1em;
                 }
             }
 
@@ -2534,6 +2542,10 @@
             position: relative;
             width: 100%;
 
+            &.stretch {
+                align-items: stretch;
+            }
+
             .wrapper {
                 width: calc(70% - 1em);
 
@@ -2568,6 +2580,11 @@
 
                     &.mobile {
                         display: none;
+                    }
+
+                    &.desktop {
+                        position: sticky;
+                        top: 4em;
                     }
                 }
 
