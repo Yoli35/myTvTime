@@ -1,0 +1,21 @@
+{% if nextEpisodeToWatch %}
+    <div class="next-episode-to-watch">
+        {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}&nbsp;{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp;{{ nextEpisodeToWatch.seasonNumber }}
+        {% if nextEpisodeToWatch.airDate %}
+            {% if nextEpisodeToWatch.interval.invert == 0 %}
+                <br>{{ nextEpisodeToWatch.airDate|format_date('full')|capitalize }},
+            {% endif %}
+        {% else %}
+            <br>{{ 'No date for the moment'|trans }}
+        {% endif %}
+        {% if nextEpisodeToWatch.interval %}
+            {% if nextEpisodeToWatch.interval.days == 0 %}
+                <br>{{ (nextEpisodeToWatch.interval.invert == 0 ? 'tomorrow' : 'today')|trans|capitalize }}.
+            {% else %}
+                {% if nextEpisodeToWatch.interval.invert == 0 %}
+                    {{ 'in'|trans }} {{ nextEpisodeToWatch.interval.days+1 }} {{ 'days'|trans }}.
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+{% endif %}

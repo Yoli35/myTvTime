@@ -174,31 +174,9 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        {% if nextEpisodeToWatch %}
-                            <div class="next-episode-to-watch">
-                                {#                                'episodeNumber' #}
-                                {#                                'seasonNumber' #}
-                                {#                                'airDate' may be null #}
-                                {#                                'interval' may be null #}
-                                {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}&nbsp;{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp;{{ nextEpisodeToWatch.seasonNumber }}
-                                {% if nextEpisodeToWatch.airDate %}
-                                    {% if nextEpisodeToWatch.interval.invert == 0 %}
-                                        <br>{{ nextEpisodeToWatch.airDate|format_date('full')|capitalize }},
-                                    {% endif %}
-                                {% else %}
-                                    <br>{{ 'No date for the moment'|trans }}
-                                {% endif %}
-                                {% if nextEpisodeToWatch.interval %}
-                                    {% if nextEpisodeToWatch.interval.days == 0 %}
-                                        <br>{{ (nextEpisodeToWatch.interval.invert == 0 ? 'tomorrow' : 'today')|trans|capitalize }}.
-                                    {% else %}
-                                        {% if nextEpisodeToWatch.interval.invert == 0 %}
-                                            {{ 'in'|trans }} {{ nextEpisodeToWatch.interval.days+1 }} {{ 'days'|trans }}.
-                                        {% endif %}
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        {% endif %}
+                        <div class="next-block">
+                            {{ include('blocks/serie/_next_episode_to_watch.html.twig') }}
+                        </div>
                     </div>
                     {% if whatsNew %}
                         <div class="what-s-new">
@@ -938,6 +916,7 @@
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
                     let blocks = data['blocks'];
+                    let blockNextEpisodeToWatch = data['blockNextEpisodeToWatch'];
                     let viewedEpisodes = data['viewedEpisodes'];
                     let episodeText = data['episodeText'];
                     let seasonCompleted = data['seasonCompleted'];
@@ -957,6 +936,17 @@
                     })
                     updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
                     episodeAddEvent();
+
+                    if (blockNextEpisodeToWatch) {
+                        const oldNextEpisodeToWatch = document.querySelector(".next-episode-to-watch").parentNode;
+                        const newNextEpisodeToWatch = document.createElement("div");
+                        newNextEpisodeToWatch.classList.add("next-block");
+                        newNextEpisodeToWatch.innerHTML = blockNextEpisodeToWatch.content;
+                        const info = oldNextEpisodeToWatch.closest(".info");
+                        info.insertBefore(newNextEpisodeToWatch, oldNextEpisodeToWatch);
+                        info.removeChild(oldNextEpisodeToWatch);
+                    }
+
                     update.classList.remove("show");
                     setTimeout(() => {
                         update.close()

@@ -4,7 +4,7 @@
         <li class="breadcrumb-item"><a href="{{ path('app_movie_list') }}">{{ 'Movies'|trans }}</a></li>
         {{ include('blocks/movie/_bracket.html.twig') }}
         {% if from is defined %}
-            {% if from == 'home' %}
+            {% if from in ['home', 'my_series', 'my_series_to_start', 'my_series_to_end', 'search'] %}
                 <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}">{{ 'Series'|trans }}</a></li>
                 {{ include('blocks/serie/_bracket.html.twig') }}
             {% endif %}

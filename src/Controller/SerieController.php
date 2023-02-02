@@ -902,8 +902,8 @@ class SerieController extends AbstractController
                     $serieViewing = $this->createSerieViewing($user, $tv, $serie);
                 } else {
                     $serieViewing = $this->updateSerieViewing($serieViewing, $tv, $serie);
-                    $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
                 }
+                $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
                 if (!count($serieViewing->getSerieCasts())) {
                     $this->updateTvCast($tv, $serieViewing);
                     $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
@@ -1233,6 +1233,7 @@ class SerieController extends AbstractController
         $serie = $this->serieRepository->find($serieId);
         $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
         $episodeViewings = $this->getEpisodeViewings($serieViewing, $season, $episode, $allBefore);
+        $locale = $request->getLocale();
 
         /* ---start--- entity based viewing ---start--- */
         if ($newValue) {
@@ -1290,7 +1291,7 @@ class SerieController extends AbstractController
             $episode->setNetworkType(null);
             $episode->setNetworkId(null);
             if (!$episode->getAirDate()) {
-                $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $season, $episode, $request->getLocale()), true);
+                $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $season, $episode, $locale), true);
                 if ($episodeTmdb) {
                     try {
                         $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
@@ -1340,8 +1341,14 @@ class SerieController extends AbstractController
             }
         }
 
+        $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
+        $blockNextEpisodeToWatch = $this->render('blocks/serie/_next_episode_to_watch.html.twig', [
+            'nextEpisodeToWatch' => $nextEpisodeToWatch,
+        ]);
+
         return $this->json([
             'blocks' => $blocks,
+            'blockNextEpisodeToWatch' => $blockNextEpisodeToWatch,
             'viewedEpisodes' => $viewed,
             'episodeText' => $translator->trans($viewed > 1 ? "viewed episodes" : "viewed episode"),
             'seasonCompleted' => $serieViewing->getSeasonByNumber($season)->isSeasonCompleted(),
