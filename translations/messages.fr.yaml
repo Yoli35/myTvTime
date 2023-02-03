@@ -856,6 +856,7 @@ of season: de la saison
 in: dans
 today: aujourd'hui
 tomorrow: demain
+available since: disponible depuis
 
 #search user's series
 Search my series: Rechercher parmi mes séries
@@ -1080,8 +1081,8 @@ Download: Télécharger
 minutes: minutes
 minute: minute
 i.e.: c.à.d
-years: années
-year: année
+years: ans
+year: an
 months: mois
 month: mois
 days: jours

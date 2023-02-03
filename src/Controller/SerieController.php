@@ -176,7 +176,17 @@ class SerieController extends AbstractController
                                             if ($episodeDiff->invert) {
                                                 $serie['passed'] = $episode->getAirDate()->format("d/m/Y");
                                                 $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                                                $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days]);
+                                                if ($episodeDiff->y) {
+                                                    $serie['passedText'] = $this->translator->trans("available since"). " ". $episodeDiff->y. " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
+                                                } else {
+                                                    if ($episodeDiff->m) {
+                                                        $serie['passedText'] = $this->translator->trans("available since"). " ". $episodeDiff->m. " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
+                                                    } else {
+                                                        if ($episodeDiff->d) {
+                                                            $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days + 1]);
+                                                        }
+                                                    }
+                                                }
                                                 $findIt = true;
                                             }
                                         }
