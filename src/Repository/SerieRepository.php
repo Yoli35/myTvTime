@@ -175,18 +175,14 @@ class SerieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-//    public function getViewing(): array
-//    {
-//
-//    }
-
-//    public function findOneBySomeField($value): ?Serie
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function networks($serieIds): array
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.networks', 'n')
+            ->select("n.id id, n.name name, n.logoPath logoPath, n.originCountry originCountry, s.id serieId")
+            ->where('s.id IN (:serieIds)')
+            ->setParameter('serieIds', $serieIds)
+            ->getQuery()
+            ->getResult();
+    }
 }

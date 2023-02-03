@@ -585,7 +585,11 @@
             initViewedEpisodes(viewedEpisodesDialog);
             episodeAddEvent();
 
-            document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
+            const checkFavorites = document.querySelectorAll(".favorite");
+            checkFavorites.forEach(checkFavorite => {
+                checkFavorite.querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
+                // checkFavorite.addEventListener("click", toggleFavorite);
+            });
 
             const test = document.querySelector("#test");
             test.addEventListener("click", getViewedEpisodesDuration);

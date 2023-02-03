@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Cast;
 use App\Entity\EpisodeViewing;
+use App\Entity\Favorite;
+use App\Entity\Networks;
 use App\Entity\SeasonViewing;
 use App\Entity\Serie;
 use App\Entity\SerieCast;
@@ -13,6 +15,7 @@ use App\Entity\User;
 use App\Form\SerieSearchType;
 use App\Repository\CastRepository;
 use App\Repository\EpisodeViewingRepository;
+use App\Repository\FavoriteRepository;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieCastRepository;
 use App\Repository\SerieRepository;
@@ -48,16 +51,17 @@ class SerieController extends AbstractController
     const ON_THE_AIR = 'on_the_air';
     const SEARCH = 'search';
 
-    public function __construct(private readonly TMDBService              $TMDBService,
-                                private readonly SerieRepository          $serieRepository,
-                                private readonly ImageConfiguration       $imageConfiguration,
-                                private readonly SerieViewingRepository   $serieViewingRepository,
-                                private readonly SeasonViewingRepository  $seasonViewingRepository,
+    public function __construct(private readonly CastRepository           $castRepository,
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
-                                private readonly CastRepository           $castRepository,
+                                private readonly FavoriteRepository       $favoriteRepository,
+                                private readonly ImageConfiguration       $imageConfiguration,
+                                private readonly LogService               $logService,
+                                private readonly SeasonViewingRepository  $seasonViewingRepository,
                                 private readonly SerieCastRepository      $serieCastRepository,
-                                private readonly TranslatorInterface      $translator,
-                                private readonly LogService               $logService)
+                                private readonly SerieRepository          $serieRepository,
+                                private readonly SerieViewingRepository   $serieViewingRepository,
+                                private readonly TMDBService              $TMDBService,
+                                private readonly TranslatorInterface      $translator)
     {
     }
 
@@ -226,12 +230,16 @@ class SerieController extends AbstractController
             return $result->getId();
         }, $results);
         $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'serie' => $ids]);
+        $favorites = $this->favoriteRepository->findBy(['type' => 'serie', 'userId' => $user->getId(), 'mediaId' => $ids]);
+        $networks = $this->serieRepository->networks($ids);
 
         $series = [];
         /** @var Serie $result */
         foreach ($results as $result) {
             $serie = $this->serie2array($result, $locale);
             $serie['viewing'] = $this->getSerieViews($result, $serieViewings);
+            $serie['favorite'] = $this->isFavorite($serie, $favorites);
+            $serie['networks'] = $this->getNetworks($serie, $networks);
 
             $series[] = $serie;
         }
@@ -249,13 +257,33 @@ class SerieController extends AbstractController
         return null;
     }
 
+    public function isFavorite($serie, $favorites): bool
+     {
+         /** @var Favorite $favorite */
+         foreach ($favorites as $favorite) {
+             if ($favorite->getMediaId() == $serie['id']) {
+                 return true;
+             }
+         }
+         return false;
+     }
+
+    public function getNetworks($serie, $networks): array
+    {
+        $serieNetworks = [];
+        /** @var Networks $network */
+        foreach ($networks as $network) {
+            if ($network['serieId'] == $serie['id']) {
+                $serieNetworks[] = $network;
+            }
+        }
+        return $serieNetworks;
+    }
+
     public function serie2array(Serie $result, $locale): array
     {
         $tv = json_decode($this->TMDBService->getTv($result->getSerieId(), $locale), true);
 
-//        if ($result->getStatus() != $tv['status']) {
-//
-//        }
         $serie['id'] = $result->getId();
         $serie['name'] = $result->getName();
         $serie['posterPath'] = $result->getPosterPath();
@@ -394,7 +422,7 @@ class SerieController extends AbstractController
         $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'viewedEpisodes' => 0], [$orderBy => $order], $perPage, ($page - 1) * $perPage);
 
         $locale = $request->getLocale();
-        $seriesToBeStarted = $this->seriesToBeToArray($serieViewings, $locale);
+        $seriesToBeStarted = $this->seriesToBeToArray($user, $serieViewings, $locale);
 
         $totalResults = $this->serieViewingRepository->count(['user' => $user, 'viewedEpisodes' => 0]);
 
@@ -477,7 +505,7 @@ class SerieController extends AbstractController
         $serieViewings = $this->serieViewingRepository->getSeriesToEnd($user, $perPage, $page);
 
         $locale = $request->getLocale();
-        $seriesToBeEnded = $this->seriesToBeToArray($serieViewings, $locale);
+        $seriesToBeEnded = $this->seriesToBeToArray($user, $serieViewings, $locale);
 
         $totalResults = $this->serieViewingRepository->countUserSeriesToEnd($user);
 
@@ -498,13 +526,26 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function seriesToBeToArray($serieViewings, $locale): array
+    public function seriesToBeToArray($user, $serieViewings, $locale): array
     {
-        $seriesToBe = array_map(function ($serieViewing) use ($locale) {
-            $serie = $this->serie2array($serieViewing->getSerie(), $locale);
-            $serie['viewing'] = $serieViewing;
-            return $serie;
+        $results = array_map(function ($serieViewing) {
+            return $serieViewing->getSerie();
         }, $serieViewings);
+        $ids = array_map(function ($result) {
+            return $result->getId();
+        }, $results);
+
+        $favorites = $this->favoriteRepository->findBy(['type' => 'serie', 'userId' => $user->getId(), 'mediaId' => $ids]);
+        $networks = $this->serieRepository->networks($ids);
+
+        /** @var Serie $result */
+        $seriesToBe = array_map(function ($result) use ($serieViewings, $locale, $favorites, $networks) {
+            $serie = $this->serie2array($result, $locale);
+            $serie['viewing'] = $this->getSerieViews($result, $serieViewings);
+            $serie['favorite'] = $this->isFavorite($serie, $favorites);
+            $serie['networks'] = $this->getNetworks($serie, $networks);
+            return $serie;
+        }, $results);
 
         $now = new DateTime();
         foreach ($seriesToBe as &$serie) {

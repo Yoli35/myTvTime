@@ -2507,11 +2507,57 @@
                             justify-content: center;
                         }
 
-                        .network {
-                            bottom: unset;
-                            left: unset;
+                        .network-list {
+                            @include flex-col();
+                            position: absolute;
                             right: -.5em;
-                            top: 1em;
+                            top: 2em;
+
+                            .network-item {
+                                @include flex-row();
+                                background-color: var(--gradiant-grey-90);
+                                border: 2px solid var(--gradiant-grey-10);
+                                border-radius: 50%;
+                                color: var(--gradiant-grey-30);
+                                font-size: 2em;
+                                font-weight: bold;
+                                height: 4rem;
+                                object-fit: cover;
+                                overflow: hidden;
+                                margin-top: -1rem;
+                                padding: .25rem;
+                                width: 4rem;
+                                z-index: 11;
+
+                                img {
+                                    width: 100%;
+                                }
+
+                                .network-name {
+                                    align-items: center;
+                                    background-color: var(--gradiant-grey-30);
+                                    border: 2px solid var(--gradiant-grey-70);
+                                    border-radius: .25em;
+                                    color: var(--gradiant-grey-70);
+                                    display: none;
+                                    font-size: 1rem;
+                                    font-weight: normal;
+                                    height: 2rem;
+                                    justify-content: center;
+                                    padding: 0 1em;
+                                    position: absolute;
+                                    right: 0;
+                                    top: -2.5rem;
+                                    width: max-content;
+                                    z-index: 12;
+                                }
+
+                                &:hover {
+                                    .network-name {
+                                        display: flex;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -2886,6 +2932,7 @@
                                                 .ep {
                                                     border: 2px solid var(--gradiant-grey-80);
                                                     color: var(--gradiant-ardoise-60);
+
                                                     span {
                                                         color: var(--gradiant-grey-80);
                                                     }
