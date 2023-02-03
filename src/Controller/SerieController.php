@@ -162,62 +162,54 @@ class SerieController extends AbstractController
         /** @var SerieViewing $viewing */
         if (!$viewing->isSerieCompleted()) {
             foreach ($viewing->getSeasons() as $season) {
-                if ($season->getSeasonNumber()) {
-                    if (!$season->isSeasonCompleted()) {
-                        foreach ($season->getEpisodes() as $episode) {
-                            if ($episode->getAirDate()) {
-                                if (!$episode->getViewedAt()) {
-                                    $episodeDiff = date_diff($now, $episode->getAirDate());
-                                    if (!$findIt) {
-                                        if ($episodeDiff->y == 0 && $episodeDiff->m == 0 && $episodeDiff->d == 0) {
-                                            $serie['today'] = (bool)$episodeDiff->invert;
-                                            $serie['tomorrow'] = !$episodeDiff->invert;
-                                            $findIt = true;
-                                        }
-                                    }
-                                    if ($episodeDiff->days) {
-                                        if (!$findIt) {
-                                            if ($episodeDiff->invert) {
-                                                $serie['passed'] = $episode->getAirDate()->format("d/m/Y");
-                                                $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                                                if ($episodeDiff->y) {
-                                                    $serie['passedText'] = $this->translator->trans("available since"). " ". $episodeDiff->y. " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
-                                                } else {
-                                                    if ($episodeDiff->m) {
-                                                        $serie['passedText'] = $this->translator->trans("available since"). " ". $episodeDiff->m. " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
-                                                    } else {
-                                                        if ($episodeDiff->d) {
-                                                            $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days + 1]);
-                                                        }
-                                                    }
-                                                }
-                                                $findIt = true;
-                                            }
-                                        }
-                                        if (!$findIt) {
-                                            if (!$episodeDiff->invert) {
-                                                $serie['next'] = $episode->getAirDate()->format("m/d/Y");
-                                                $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                                                $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days + 1]);
-                                                $serie['nextEpisodeDays'] = $episodeDiff->days + 1;
-                                                $findIt = true;
-                                            }
-                                        }
-                                    }
-                                }
-                            } else { // Nouvelle saison et nouvel épisode sans date de diffusion
+                if ($season->isSeasonCompleted() || $season->getSeasonNumber() == 0) {
+                    continue;
+                }
+                foreach ($season->getEpisodes() as $episode) {
+                    if ($episode->getViewedAt()) {
+                        continue;
+                    }
+                    if ($episode->getAirDate()) {
+                        $episodeDiff = date_diff($now, $episode->getAirDate());
+                        if (!$findIt) {
+                            if ($episodeDiff->y == 0 && $episodeDiff->m == 0 && $episodeDiff->d == 0) {
+                                $serie['today'] = (bool)$episodeDiff->invert;
+                                $serie['tomorrow'] = !$episodeDiff->invert;
                                 $findIt = true;
-                                $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                                $serie['nextEpisodeNoDate'] = true;
-                            }
-                            if ($findIt) {
-                                break;
                             }
                         }
+                        if (!$findIt) {
+                            if ($episodeDiff->days) {
+                                if ($episodeDiff->invert) {
+                                    $serie['passed'] = $episode->getAirDate()->format("d/m/Y");
+                                    if ($episodeDiff->y) {
+                                        $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
+                                    } else {
+                                        if ($episodeDiff->m) {
+                                            $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->m . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
+                                        } else {
+                                            if ($episodeDiff->d) {
+                                                $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days + 1]);
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    $serie['next'] = $episode->getAirDate()->format("m/d/Y");
+                                    $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days + 1]);
+                                    $serie['nextEpisodeDays'] = $episodeDiff->days + 1;
+                                }
+                                $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                                $findIt = true;
+                            }
+                        }
+                    } else { // Nouvelle saison et nouvel épisode sans date de diffusion
+                        $findIt = true;
+                        $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                        $serie['nextEpisodeNoDate'] = true;
                     }
-                }
-                if ($findIt) {
-                    break;
+                    if ($findIt) {
+                        break;
+                    }
                 }
             }
         }
@@ -258,15 +250,15 @@ class SerieController extends AbstractController
     }
 
     public function isFavorite($serie, $favorites): bool
-     {
-         /** @var Favorite $favorite */
-         foreach ($favorites as $favorite) {
-             if ($favorite->getMediaId() == $serie['id']) {
-                 return true;
-             }
-         }
-         return false;
-     }
+    {
+        /** @var Favorite $favorite */
+        foreach ($favorites as $favorite) {
+            if ($favorite->getMediaId() == $serie['id']) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public function getNetworks($serie, $networks): array
     {
