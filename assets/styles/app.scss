@@ -2,6 +2,10 @@
 @import "variables";
 @import "~highlight.js/styles/github-dark-dimmed.css";
 
+@font-face {
+    font-family: "clock Font";
+    src: url("../fonts/secrcode.ttf") format("truetype");
+}
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -180,6 +184,7 @@ main {
 .d-flex {
     display: flex;
 }
+
 .f-wrap {
     flex-wrap: wrap;
 }
@@ -883,8 +888,142 @@ h4 {
     height: 20vw;
     margin: 0 0 1em 0;
     opacity: .75;
+    position: relative;
     transition: background-position 1s;
     width: 100%;
+}
+
+.clock {
+    @include flex-row();
+    height: 200px;
+    left: 4em;
+    position: absolute;
+    top: 3em;
+    width: 200px;
+
+    .face {
+        background-color: var(--gradiant-grey-30-alpha-50);
+        border-radius: 50%;
+        height: 200px;
+        position: relative;
+        width: 200px;
+
+        .number {
+            font-family: "clock Font", monospace;
+            font-size: 1em;
+            font-weight: 300;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+        }
+
+        .number-1 {
+            transform: rotate(30deg) translate(0, -80px) rotate(-30deg) translate(-50%, -50%);
+        }
+
+        .number-2 {
+            transform: rotate(60deg) translate(0, -80px) rotate(-60deg) translate(-50%, -50%);
+        }
+
+        .number-3 {
+            transform: rotate(90deg) translate(0, -80px) rotate(-90deg) translate(-50%, -50%);
+        }
+
+        .number-4 {
+            transform: rotate(120deg) translate(0, -80px) rotate(-120deg) translate(-50%, -50%);
+        }
+
+        .number-5 {
+            transform: rotate(150deg) translate(0, -80px) rotate(-150deg) translate(-50%, -50%);
+        }
+
+        .number-6 {
+            transform: rotate(180deg) translate(0, -80px) rotate(-180deg) translate(-50%, -50%);
+        }
+
+        .number-7 {
+            transform: rotate(210deg) translate(0, -80px) rotate(-210deg) translate(-50%, -50%);
+        }
+
+        .number-8 {
+            transform: rotate(240deg) translate(0, -80px) rotate(-240deg) translate(-50%, -50%);
+        }
+
+        .number-9 {
+            transform: rotate(270deg) translate(0, -80px) rotate(-270deg) translate(-50%, -50%);
+        }
+
+        .number-10 {
+            transform: rotate(300deg) translate(0, -80px) rotate(-300deg) translate(-50%, -50%);
+        }
+
+        .number-11 {
+            transform: rotate(330deg) translate(0, -80px) rotate(-330deg) translate(-50%, -50%);
+        }
+
+        .number-12 {
+            transform: rotate(360deg) translate(0, -80px) rotate(-360deg) translate(-50%, -50%);
+        }
+    }
+
+    .time {
+        color: var(--gradiant-grey-90);
+        font-family: 'clock Font', monospace;
+        font-size: 1.5em;
+        font-weight: 100;
+        left: 50%;
+        position: absolute;
+        top: 112%;
+        transform: translate(-50%, -50%);
+    }
+
+    .hands {
+        border: 1px dashed;
+        border-radius: 50%;
+        height: 100%;
+        inset: 0;
+        position: absolute;
+        width: 100%;
+
+        .hand {
+            border-radius: 999px;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform-origin: 50% 100%;
+
+            &.hour {
+                background-color: var(--gradiant-grey-80);
+                border: 2 xp solid var(--gradiant-yellow-80);
+                height: 50px;
+                width: 8px;
+            }
+
+            &.minute {
+                background-color: var(--gradiant-grey-80);
+                border: 2 xp solid var(--gradiant-yellow-80);
+                height: 70px;
+                width: 6px;
+            }
+
+            &.second {
+                background-color: var(--gradiant-red-40);
+                height: 90px;
+                width: 4px;
+            }
+        }
+
+        .center {
+            background-color: var(--gradiant-grey-80);
+            border-radius: 50%;
+            height: 20px;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+        }
+    }
 }
 
 .home-footer {
@@ -1367,7 +1506,6 @@ h4 {
         justify-content: space-between;
     }
 }
-
 
 @media (prefers-color-scheme: dark) {
 

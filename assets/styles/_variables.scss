@@ -245,6 +245,7 @@ $fa-font-path: "../webfonts";
     --gradiant-red-20: hsl(0, 90%, 20%);
 
     --gradiant-yellow-50: hsl(45, 90%, 50%);
+    --gradiant-yellow-80: hsl(45, 90%, 80%);
 
     --form-bg: hsl(0, 0%, 95%, .5);
     --form-border: hsl(0, 0%, 15%);
@@ -280,32 +281,6 @@ $fa-font-path: "../webfonts";
         position: relative;
         transition: width .5s;
         width: 100%;
-
-        .nav-breadcrumb {
-            bottom: -2em;
-            left: -1em;
-            padding: .25em .75em;
-            position: absolute;
-
-            .breadcrumb {
-                background-color: #efefef;
-                padding: 0 .5em;
-            }
-        }
-
-        .debug {
-            @include flex-row();
-            background-color: #0000007f;
-            border: 2px dashed;
-            border-radius: 1.5em;
-            color: #fff;
-            font-weight: 600;
-            height: 3em;
-            position: absolute;
-            right: 1em;
-            top: 1em;
-            width: 20em;
-        }
     }
 }
 

@@ -6,7 +6,9 @@
 
         {{ include('blocks/_mainMenu.html.twig') }}
 
-        <div class="home-header"></div>
+        <div class="home-header">
+            {{ include('blocks/_clock.html.twig') }}
+        </div>
 
         {{ include('blocks/_nav.html.twig', {thisPage: 'Home'|trans, user: app.user}) }}
         {{ include('blocks/source/_button.html.twig') }}

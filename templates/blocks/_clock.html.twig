@@ -1,0 +1,58 @@
+<div class="clock">
+    <div class="face">
+        <div class="number number-1">1</div>
+        <div class="number number-2">2</div>
+        <div class="number number-3">3</div>
+        <div class="number number-4">4</div>
+        <div class="number number-5">5</div>
+        <div class="number number-6">6</div>
+        <div class="number number-7">7</div>
+        <div class="number number-8">8</div>
+        <div class="number number-9">9</div>
+        <div class="number number-10">10</div>
+        <div class="number number-11">11</div>
+        <div class="number number-12">12</div>
+    </div>
+    <div class="time"></div>
+    <div class="hands">
+        <div class="hand second" style="transform: translate(-50%, -100%) rotate(0deg)"></div>
+        <div class="hand minute" style="transform: translate(-50%, -100%) rotate(0deg)"></div>
+        <div class="hand hour" style="transform: translate(-50%, -100%) rotate(0deg) "></div>
+        <div class="center"></div>
+    </div>
+</div>
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        // Clock en javascript vanilla
+        const clock = document.querySelector('.clock');
+        const secondHand = clock.querySelector('.second');
+        const minuteHand = clock.querySelector('.minute');
+        const hourHand = clock.querySelector('.hour');
+        const time = clock.querySelector('.time');
+
+        setInterval(setDate, 1000);
+        setDate();
+
+        function setDate() {
+            const now = new Date();
+
+            const seconds = now.getSeconds();
+            const secondsDegrees = (seconds * 6);
+            secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
+
+            const minutes = now.getMinutes();
+            const minutesDegrees = (minutes * 6) + (seconds / 10);
+            minuteHand.style.transform = `translate(-50%, -100%) rotate(${minutesDegrees}deg)`;
+
+            const hours = now.getHours();
+            const hoursDegrees = (hours * 30) + (minutes / 2) + (seconds / 120);
+            hourHand.style.transform = `translate(-50%, -100%) rotate(${hoursDegrees}deg)`;
+
+            time.innerHTML = now.toLocaleTimeString();
+        }
+
+    });
+
+
+</script>
+
