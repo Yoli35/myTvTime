@@ -79,31 +79,18 @@ class SerieController extends AbstractController
         $backFromDetail = $request->query->getInt('b');
         $page = $request->query->getInt('p', 1);
         $perPage = $request->query->getInt('pp', 20);
-        $orderBy = $request->query->getAlpha('ob', 'firstDateAir');
+        $sort = $request->query->getAlpha('ob', 'firstDateAir');
         $order = $request->query->getAlpha('o', 'desc');
 
-        if ($settingsChanged) {
-            setcookie("series", json_encode(['pp' => $perPage, 'ob' => $orderBy, 'o' => $order]), strtotime('+30 days'), '/');
-        }
-        if ($request->query->count() == 0 || $backFromDetail) {
-            if (isset($_COOKIE['series'])) {
-                $cookie = json_decode($_COOKIE['series'], true);
-                $perPage = $cookie['pp'];
-                $orderBy = $cookie['ob'];
-                $order = $cookie['o'];
-            } else {
-                $perPage = 20;
-                $orderBy = 'firstDateAir';
-                $order = 'desc';
-            }
-        }
-        if ($orderBy == 'modifiedAt') {
+        list($perPage, $sort, $order) = $this->cookies($request, $backFromDetail, $settingsChanged, $perPage, $sort, $order);
+
+        if ($sort == 'modifiedAt') {
             $lastModifiedSerieViewings = $this->serieViewingRepository->findBy(['user' => $user], ['modifiedAt' => $order], $perPage, $perPage * ($page - 1));
             $results = array_map(function ($serieViewing) {
                 return $serieViewing->getSerie();
             }, $lastModifiedSerieViewings);
         } else {
-            $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $orderBy, $order);
+            $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $sort, $order);
         }
 
         // Liste des séries ajoutées par l'utilisateur pour le menu de recherche
@@ -143,7 +130,7 @@ class SerieController extends AbstractController
                 'link_count' => self::LINK_COUNT,
                 'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
                 'per_page_values' => self::PER_PAGE_ARRAY,
-                'order_by' => $orderBy,
+                'order_by' => $sort,
                 'order' => $order],
             'user' => $user,
             'quotes' => (new QuoteService)->getRandomQuotes(),
@@ -151,6 +138,27 @@ class SerieController extends AbstractController
             'from' => self::MY_SERIES,
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
+    }
+
+    public function cookies($request, $backFromDetail, $somethingChanged, $perPage, $sort, $order): array
+    {
+        if ($somethingChanged) {
+            setcookie("series", json_encode(['pp' => $perPage, 'ob' => $sort, 'o' => $order]), strtotime('+30 days'), '/');
+        }
+        if ($request->query->count() == 0 || $backFromDetail) {
+            if (isset($_COOKIE['series'])) {
+                $cookie = json_decode($_COOKIE['series'], true);
+                $perPage = $cookie['pp'];
+                $sort = $cookie['ob'];
+                $order = $cookie['o'];
+            } else {
+                $perPage = 20;
+                $sort = 'firstDateAir';
+                $order = 'desc';
+            }
+        }
+
+        return [$perPage, $sort, $order];
     }
 
     public function isSerieAiringSoon($serie, $now): array
@@ -406,12 +414,12 @@ class SerieController extends AbstractController
 
         $page = $request->query->getInt('p', 1);
         $perPage = 10;
-        $orderBy = 'createdAt';
+        $sort = 'createdAt';
         $order = 'DESC';
 
         /** @var User $user */
         $user = $this->getUser();
-        $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'viewedEpisodes' => 0], [$orderBy => $order], $perPage, ($page - 1) * $perPage);
+        $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'viewedEpisodes' => 0], [$sort => $order], $perPage, ($page - 1) * $perPage);
 
         $locale = $request->getLocale();
         $seriesToBeStarted = $this->seriesToBeToArray($user, $serieViewings, $locale);
@@ -429,7 +437,7 @@ class SerieController extends AbstractController
                 'link_count' => self::LINK_COUNT,
                 'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
                 'per_page_values' => self::PER_PAGE_ARRAY,
-                'order_by' => $orderBy,
+                'order_by' => $sort,
                 'order' => $order],
             'user' => $user,
             'from' => self::MY_SERIES_TO_START,
@@ -489,7 +497,7 @@ class SerieController extends AbstractController
 
         $page = $request->query->getInt('p', 1);
         $perPage = 10;
-        $orderBy = 'createdAt';
+        $sort = 'createdAt';
         $order = 'ASC';
 
         /** @var User $user */
@@ -510,7 +518,7 @@ class SerieController extends AbstractController
                 'link_count' => self::LINK_COUNT,
                 'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
                 'per_page_values' => self::PER_PAGE_ARRAY,
-                'order_by' => $orderBy,
+                'order_by' => $sort,
                 'order' => $order],
             'user' => $user,
             'from' => self::MY_SERIES_TO_END,

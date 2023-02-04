@@ -288,10 +288,12 @@
 
                     .next {
                         background-color: var(--gradiant-ardoise-50);
+                        color: var(--gradiant-ardoise-80);
                     }
 
                     .passed {
-                        background-color: var(--gradiant-purple-40);
+                        background-color: var(--gradiant-red-40-alpha);
+                        color: var(--gradiant-red-80);
                     }
 
                     .add {

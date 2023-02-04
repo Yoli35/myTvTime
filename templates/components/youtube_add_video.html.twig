@@ -4,6 +4,8 @@
 {% set count = this.videoCount %}
 {% set beginning = this.firstView %}
 {% set time_2_human = this.time2Human %}
+{% set sort = this.sort %}
+{% set order = this.order %}
 
 {% set preview_url = this.preview_url %}
 {% set preview_title = this.preview_title %}
@@ -37,8 +39,8 @@
                         <div>{{ 'sort'|trans }} :</div>
                         <label for="sort">
                             <select id="sort" type="search" name="sort">
-                                <option value="addedAt">{{ 'Date added'|trans }}</option>
-                                <option value="publishedAt">{{ 'Date of publication'|trans }}</option>
+                                <option value="addedAt"{% if sort == 'AddedAt' %} selected{% endif %}>{{ 'Date added'|trans }}</option>
+                                <option value="publishedAt"{% if sort == 'publishedAt' %} selected{% endif %}>{{ 'Date of publication'|trans }}</option>
                             </select>
                         </label>
                     </div>
@@ -46,8 +48,8 @@
                         <div>{{ 'order'|trans }} :</div>
                         <label for="order">
                             <select id="order" type="search" name="order">
-                                <option value="DESC">{{ 'Descendant'|trans }}</option>
-                                <option value="ASC">{{ 'Ascendant'|trans }}</option>
+                                <option value="DESC"{% if order == 'DESC' %} selected{% endif %}>{{ 'Descendant'|trans }}</option>
+                                <option value="ASC"{% if order == 'ASC' %} selected{% endif %}>{{ 'Ascendant'|trans }}</option>
                             </select>
                         </label>
                     </div>

@@ -5,6 +5,7 @@ namespace App\Components;
 use App\Controller\UserController;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
+use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
@@ -64,6 +65,9 @@ class YoutubeAddVideoComponent
     #[LiveProp]
     public string $time2Human = "";
 
+    private string $oldSort = "";
+    private string $oldOrder = "";
+
 //    private UserRepository $userRepository;
 //    private EntityManagerInterface $entityManager;
 //    private YoutubeVideoRepository $videoRepository;
@@ -79,7 +83,9 @@ class YoutubeAddVideoComponent
         private readonly YoutubeChannelRepository $channelRepository,
         private readonly EntityManagerInterface   $entityManager,
         private readonly UserController           $userController,
-        private readonly UserRepository           $userRepository)
+        private readonly UserRepository           $userRepository,
+        private readonly SettingsRepository       $settingsRepository,
+    )
     {
 //        $this->videoRepository = $videoRepository;
 //        $this->channelRepository = $channelRepository;
@@ -95,11 +101,17 @@ class YoutubeAddVideoComponent
         $this->service_YouTube = new Google_Service_YouTube($client);
     }
 
-    public function mount($id, $preview, $locale): void
+    public function mount($id, $preview, $settings, $locale): void
     {
         $this->user_id = $id;
         $this->locale = $locale;
         $this->preview = $preview;
+
+        $this->sort = $settings['sort'];
+        $this->order = $settings['order'];
+
+        $this->oldSort = $this->sort;
+        $this->oldOrder = $this->order;
 
         $this->videos = $this->getVideos();
         $this->videoCount = $this->getVideosCount();
@@ -114,6 +126,10 @@ class YoutubeAddVideoComponent
         $thisLink = $this->link;
         $this->justAdded = 0;
 //        $this->userController->isFullyConnected();
+
+        if ($this->oldSort !== $this->sort || $this->oldOrder !== $this->order) {
+            $this->saveSettings();
+        }
 
         if (str_contains($thisLink, "shorts")) {
             if (str_contains($thisLink, "www")) {
@@ -351,5 +367,15 @@ class YoutubeAddVideoComponent
             return $result;
         }
         return "";
+    }
+
+    private function saveSettings(): void
+    {
+        $user = $this->userRepository->findOneBy(['id' => $this->user_id]);
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'youtube']);
+        $settings->setData(['sort' => $this->sort, 'order' => $this->order]);
+        $this->settingsRepository->save($settings, true);
+        $this->oldSort = $this->sort;
+        $this->oldOrder = $this->order;
     }
 }

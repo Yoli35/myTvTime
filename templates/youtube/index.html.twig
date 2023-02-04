@@ -51,7 +51,7 @@
 
         <div class="yt-videos">
             {{ include('blocks/_nav.html.twig', {thisPage: 'My Youtube Videos'|trans}) }}
-            {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'locale': locale}) }}
+            {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'settings': settings, 'locale': locale}) }}
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}
