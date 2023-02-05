@@ -326,7 +326,7 @@ class SerieController extends AbstractController
 //        dump($datetime, $diff, $delta);
         /** @var Serie[] $todayAirings */
         $todayAirings = $this->todayAiringSeries($date, $request->getLocale());
-        dump($todayAirings);
+//        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [
@@ -339,18 +339,16 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function todayAiringSeries($day, $locale = 'fr'): array
+    public function todayAiringSeries(DateTimeImmutable $day, string $locale = 'fr'): array
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        /** @var DateTimeImmutable $day */
-        // Date du jour précédent
         $theDayBefore = $day->sub(new DateInterval('P1D'));
 
         $episodeViewings = $this->episodeViewingRepository->findBy(['airDate' => $day]);
         $episodeViewings = array_merge($episodeViewings, $this->episodeViewingRepository->findBy(['airDate' => $theDayBefore]));
-        dump($episodeViewings);
+//        dump($episodeViewings);
 
         $seasonArrays = [];
         foreach ($episodeViewings as $episodeViewing) {
@@ -374,7 +372,6 @@ class SerieController extends AbstractController
                 ];
             }
         }
-//        dump($episodeViewings, $seasonViewings, $serieViewings);
         $theseDaysSeries = [];
         foreach ($serieArrays as $serieArray) {
             /** @var SerieViewing $s */
@@ -404,7 +401,7 @@ class SerieController extends AbstractController
             }, $theseDaysSeries[$id]['tmdbSerie']['networks']);
             $theseDaysSeries[$id]['networks'] = $networks;
         }
-        dump($theseDaysSeries);
+//        dump($theseDaysSeries);
         $timeShiftedNetworks = [
             [2 => "ABC"],
             [16 => "CBS"],
@@ -421,10 +418,10 @@ class SerieController extends AbstractController
                     $isTimeShifted = true;
                 }
             }
-            dump($serie['serie']->getName());
-            dump($isTimeShifted);
-            dump(date_diff($serie['serieArray']['seasonArray']['air_date'], $theDayBefore)->days);
-            dump(date_diff($serie['serieArray']['seasonArray']['air_date'], $day)->days);
+            dump($serie['serie']->getName(), $serie['networks']);
+//            dump($isTimeShifted);
+//            dump(date_diff($serie['serieArray']['seasonArray']['air_date'], $theDayBefore)->days);
+//            dump(date_diff($serie['serieArray']['seasonArray']['air_date'], $day)->days);
 
             if ($isTimeShifted && !date_diff($serie['serieArray']['seasonArray']['air_date'], $theDayBefore)->days) {
                 $todaySeries[] = $serie;
@@ -797,6 +794,24 @@ class SerieController extends AbstractController
                         }
                         $season->setEpisodeCount($s['episode_count']);
                         $this->seasonViewingRepository->save($season, true);
+                    } else {
+                        foreach ($season->getEpisodes() as $episode) {
+                            if ($episode->getAirDate() === null) {
+                                $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $episode->getEpisodeNumber(), 'fr');
+                                $tmdbEpisode = json_decode($standing, true);
+                                if ($tmdbEpisode['air_date']) {
+                                    try {
+                                        $episode->setAirDate(new DateTimeImmutable($tmdbEpisode['air_date']));
+                                        $this->episodeViewingRepository->save($episode, true);
+                                        $this->addFlash('success', 'Date mise à jour : ' . $tmdbEpisode['air_date']);
+//                                        dump($serieViewing->getSerie()->getName() . ' S' . $season->getSeasonNumber() . 'E' . $episode->getEpisodeNumber() . ' : ' . $tmdbEpisode['air_date']);
+                                    } catch (Exception $e) {
+//                                        dump($e);
+                                        $this->addFlash('danger', 'Erreur de date : ' . $e->getMessage());
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

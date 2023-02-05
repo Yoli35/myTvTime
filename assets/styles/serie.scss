@@ -1939,8 +1939,8 @@
 
             .nothing {
                 @include flex-row();
-                background: var(--btn-warning);
-                border-radius: 1em;
+                background: var(--gradiant-grey-50);
+                border-radius: .5rem;
                 font-size: 2em;
                 font-weight: 500;
                 padding: 1rem 2rem;
