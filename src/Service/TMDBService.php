@@ -189,10 +189,7 @@ class TMDBService
     {
         $request = 'https://api.themoviedb.org/3/tv/' . $showId . '?api_key=' . $this->api_key . '&language=' . $locale;
         if ($details) {
-            $request .= '&append_to_response=';
-            foreach ($details as $detail) {
-                $request .= $detail . ',';
-            }
+            $request .= '&append_to_response=' . implode(',', $details);
         }
         try {
             $response = $this->client->request(
@@ -332,10 +329,7 @@ class TMDBService
     {
         $request = 'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '?api_key=' . $this->api_key . '&language=' . $locale;
         if ($details) {
-            $request .= '&append_to_response=';
-            foreach ($details as $detail) {
-                $request .= $detail . ',';
-            }
+            $request .= '&append_to_response=' . implode(',', $details);
         }
         try {
             $response = $this->client->request(
@@ -373,10 +367,7 @@ class TMDBService
     {
         $request = 'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '/episode/' . $episodeNumber . '?api_key=' . $this->api_key . '&language=' . $locale;
         if ($details) {
-            $request .= '&append_to_response=';
-            foreach ($details as $detail) {
-                $request .= $detail . ',';
-            }
+            $request .= '&append_to_response='.implode(',', $details);
         }
         try {
             $response = $this->client->request(

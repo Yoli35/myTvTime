@@ -25,6 +25,7 @@ use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
+use DateInterval;
 use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -324,8 +325,8 @@ class SerieController extends AbstractController
         $delta = $diff->days;
 //        dump($datetime, $diff, $delta);
         /** @var Serie[] $todayAirings */
-        $todayAirings = $this->todayAiringSeries($date);
-//        dump($todayAirings);
+        $todayAirings = $this->todayAiringSeries($date, $request->getLocale());
+        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [
@@ -338,58 +339,100 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function todayAiringSeries($day): array
+    public function todayAiringSeries($day, $locale = 'fr'): array
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        $today = $day->setTime(0, 0, 0);
-        $episodeViewings = $this->episodeViewingRepository->findBy(['airDate' => $today]);
+        /** @var DateTimeImmutable $day */
+        // Date du jour précédent
+        $theDayBefore = $day->sub(new DateInterval('P1D'));
 
-        $seasonViewings = [];
+        $episodeViewings = $this->episodeViewingRepository->findBy(['airDate' => $day]);
+        $episodeViewings = array_merge($episodeViewings, $this->episodeViewingRepository->findBy(['airDate' => $theDayBefore]));
+        dump($episodeViewings);
+
+        $seasonArrays = [];
         foreach ($episodeViewings as $episodeViewing) {
-            $seasonViewings[] = [
+            $seasonArrays[] = [
                 'seasonViewing' => $episodeViewing->getSeason(),
                 'episodeViewing' => $episodeViewing,
-                'episode_number' => $episodeViewing->getEpisodeNumber()
+                'episode_number' => $episodeViewing->getEpisodeNumber(),
+                'air_date' => $episodeViewing->getAirDate()
             ];
         }
-        $serieViewings = [];
-        foreach ($seasonViewings as $seasonViewing) {
+        $serieArrays = [];
+        foreach ($seasonArrays as $seasonArray) {
             /** @var SeasonViewing $season */
-            $season = $seasonViewing['seasonViewing'];
+            $season = $seasonArray['seasonViewing'];
             $serieViewing = $season->getSerieViewing();
-            if (!in_array($serieViewing, $serieViewings) && $serieViewing->getUser() === $user) {
-                $serieViewings[] = [
+            if (!in_array($serieViewing, $serieArrays) && $serieViewing->getUser() === $user) {
+                $serieArrays[] = [
                     'serieViewing' => $season->getSerieViewing(),
-                    'seasonViewing' => $seasonViewing,
+                    'seasonArray' => $seasonArray,
                     'season_number' => $season->getSeasonNumber()
                 ];
             }
         }
 //        dump($episodeViewings, $seasonViewings, $serieViewings);
-        $todaySeries = [];
-        foreach ($serieViewings as $serieViewing) {
+        $theseDaysSeries = [];
+        foreach ($serieArrays as $serieArray) {
             /** @var SerieViewing $s */
-            $s = $serieViewing['serieViewing'];
-            $season = $serieViewing['seasonViewing'];
-            $season_number = $serieViewing['season_number'];
+            $s = $serieArray['serieViewing'];
+            $season = $serieArray['seasonArray'];
+            $season_number = $serieArray['season_number'];
             $id = $s->getSerie()->getId();
-            if (!key_exists($id, $todaySeries)) {
-                $todaySeries[$id] = ['serie' => $s->getSerie(), 'serieViewing' => $serieViewing];
+            if (!key_exists($id, $theseDaysSeries)) {
+                $theseDaysSeries[$id] = ['serie' => $s->getSerie(), 'serieArray' => $serieArray];
             }
-            if (!key_exists('seasons', $todaySeries[$id])) {
-                $todaySeries[$id]['seasons'] = [];
+            if (!key_exists('seasons', $theseDaysSeries[$id])) {
+                $theseDaysSeries[$id]['seasons'] = [];
             }
-            if (!key_exists($season_number, $todaySeries[$id]['seasons'])) {
-                $todaySeries[$id]['seasons'][$season_number] = [];
+            if (!key_exists($season_number, $theseDaysSeries[$id]['seasons'])) {
+                $theseDaysSeries[$id]['seasons'][$season_number] = [];
             }
-            if (!key_exists('episodes', $todaySeries[$id]['seasons'][$season_number])) {
-                $todaySeries[$id]['seasons'][$season_number]['episodes'] = [];
+            if (!key_exists('episodes', $theseDaysSeries[$id]['seasons'][$season_number])) {
+                $theseDaysSeries[$id]['seasons'][$season_number]['episodes'] = [];
             }
-            $todaySeries[$id]['seasons'][$season_number]['episodes'][] = $season['episode_number'];
+            $theseDaysSeries[$id]['seasons'][$season_number]['episodes'][] = $season['episode_number'];
+
+            $standing = $this->TMDBService->getTv($s->getSerie()->getSerieId(), $locale);
+            $theseDaysSeries[$id]['tmdbSerie'] = json_decode($standing, true);
+
+            $networks = array_map(function ($network) {
+                return [$network['id']=>$network['name']];
+            }, $theseDaysSeries[$id]['tmdbSerie']['networks']);
+            $theseDaysSeries[$id]['networks'] = $networks;
         }
-//        dump($todaySeries);
+        dump($theseDaysSeries);
+        $timeShiftedNetworks = [
+            [2 => "ABC"],
+            [16 => "CBS"],
+            [49 => "HBO"],
+            [71 => "The CW"],
+            [2552 => "Apple TV+"],
+        ];
+
+        $todaySeries = [];
+        foreach ($theseDaysSeries as $serie) {
+            $isTimeShifted = false;
+            foreach ($serie['networks'] as $network) {
+                if (in_array($network, $timeShiftedNetworks)) {
+                    $isTimeShifted = true;
+                }
+            }
+            dump($serie['serie']->getName());
+            dump($isTimeShifted);
+            dump(date_diff($serie['serieArray']['seasonArray']['air_date'], $theDayBefore)->days);
+            dump(date_diff($serie['serieArray']['seasonArray']['air_date'], $day)->days);
+
+            if ($isTimeShifted && !date_diff($serie['serieArray']['seasonArray']['air_date'], $theDayBefore)->days) {
+                $todaySeries[] = $serie;
+            }
+            if (!$isTimeShifted && !date_diff($serie['serieArray']['seasonArray']['air_date'], $day)->days) {
+                $todaySeries[] = $serie;
+            }
+        }
 
         return $todaySeries;
     }

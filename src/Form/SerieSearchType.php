@@ -32,8 +32,8 @@ class SerieSearchType extends AbstractType
                     'placeHolder' => $this->translator->trans('Enter a year'),
                 ]
             ])
-            ->add('save', SubmitType::class, [
-                'label' => $this->translator->trans('Search'),
+            ->add('search', SubmitType::class, [
+//                'label' => $this->translator->trans('Search'),
             ]);
     }
 }
