@@ -30,14 +30,28 @@
         const hourHand = clock.querySelector('.hour');
         const time = clock.querySelector('.time');
 
-        setInterval(setDate, 1000);
+        setInterval(setDate, 100);
         setDate();
 
         function setDate() {
             const now = new Date();
 
+            if (clock.querySelectorAll('.unit').length === 0) {
+                const face = clock.querySelector('.face');
+                for (let i = 0; i < 60; i++) {
+                    const unit = document.createElement('div');
+                    unit.classList.add('unit');
+                    if (i % 5 === 0) {
+                        unit.classList.add('unit-big');
+                    }
+                    unit.style.transform = `translate(-50%, 0) rotate(${i * 6}deg) translate(0, -68px)`;
+                    face.appendChild(unit);
+                }
+            }
+
             const seconds = now.getSeconds();
-            const secondsDegrees = (seconds * 6);
+            const milliseconds = now.getMilliseconds();
+            const secondsDegrees = ((seconds + (milliseconds / 1000)) * 6);
             secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
 
             const minutes = now.getMinutes();

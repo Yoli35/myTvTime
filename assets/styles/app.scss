@@ -908,6 +908,21 @@ h4 {
         position: relative;
         width: 200px;
 
+        .unit {
+            background-color: var(--gradiant-grey-80);
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform-origin: 50% 0;
+            width: 2px;
+
+            &.unit-big {
+                height: 12px;
+                width: 2px;
+            }
+        }
+
         .number {
             font-family: "clock Font", monospace;
             font-size: 1em;
@@ -978,7 +993,7 @@ h4 {
     }
 
     .hands {
-        border: 1px dashed;
+        border: 1px dotted var(--gradiant-grey-80);
         border-radius: 50%;
         height: 100%;
         inset: 0;
@@ -991,30 +1006,32 @@ h4 {
             position: absolute;
             top: 50%;
             transform-origin: 50% 100%;
+            //transition: transform 1s linear;
 
             &.hour {
-                background-color: var(--gradiant-grey-80);
-                border: 2 xp solid var(--gradiant-yellow-80);
+                background-color: var(--gradiant-grey-20);
+                border: 2px solid var(--gradiant-yellow-80);
                 height: 50px;
                 width: 8px;
             }
 
             &.minute {
-                background-color: var(--gradiant-grey-80);
-                border: 2 xp solid var(--gradiant-yellow-80);
+                background-color: var(--gradiant-grey-30);
+                border: 2px solid var(--gradiant-yellow-80);
                 height: 70px;
                 width: 6px;
             }
 
             &.second {
-                background-color: var(--gradiant-red-40);
+                background-color: var(--gradiant-yellow-50);
                 height: 90px;
                 width: 4px;
             }
         }
 
         .center {
-            background-color: var(--gradiant-grey-80);
+            background-color: var(--gradiant-grey-20);
+            border: 2px solid var(--gradiant-yellow-80);
             border-radius: 50%;
             height: 20px;
             left: 50%;

@@ -166,7 +166,16 @@
                 border-radius: .5em;
                 flex: 1;
                 gap: 1em;
-                padding: .5em;
+                padding: 1em;
+
+                form {
+                    align-items: center;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 1em;
+                    justify-content: center;
+                    width: 100%;
+                }
 
                 .link, .page, .sort, .order {
                     @include flex-row();
@@ -184,6 +193,8 @@
                         }
 
                         &:has(input[type=checkbox]) {
+                            align-items: center;
+                            display: flex;
                             gap: .25em;
                             text-transform: unset;
 
