@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}MyTvTime::{{ 'My Series'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'My Series'|trans }}{% endblock %}
 {% block description %}{{ 'List of all the series I have watched in my life'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
@@ -227,29 +227,6 @@
         function checkHeight() {
             const container = document.querySelector(".container");
             if (container.clientHeight === 496) {
-                container.classList.add("d-none");
-                const body = document.querySelector("body");
-                body.classList.add("p-relative");
-                const reload = document.createElement("div");
-                reload.classList.add("reload");
-                const circle = document.createElement("div");
-                circle.classList.add("circle");
-                reload.appendChild(circle);
-                body.appendChild(reload);
-                setTimeout(() => {
-                    circle.classList.add("full")
-                }, 0);
-                setTimeout(() => {
-                    const inside = document.createElement("div");
-                    inside.classList.add("inside");
-                    circle.appendChild(inside);
-                    setTimeout(() => {
-                        inside.classList.add("full")
-                    }, 200);
-                })
-                setTimeout(() => {
-                    body.removeChild(reload)
-                }, 1200);
                 window.location.reload();
             }
         }

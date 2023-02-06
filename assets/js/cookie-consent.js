@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
 
-    const dialog = document.querySelector("#accept");
+    const dialog = document.querySelector("#accept-cookies");
     const actAsADialog = typeof dialog.showModal === 'function';
 
     if (!actAsADialog) {

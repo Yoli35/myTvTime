@@ -1,23 +1,24 @@
 {% extends 'base.html.twig' %}
 
-    {% block title %}
+    {% block title %}myTvTime ▶ ︎
         {% if from == 'popular' %}
-            MyTvTime::{{ 'Popular Series'|trans }}::{{ serie.name }}
+            {{ 'Popular Series'|trans }}
         {% elseif from == 'top_rated' %}
-            MyTvTime::{{ 'Top Rated Series'|trans }}::{{ serie.name }}
+            {{ 'Top Rated Series'|trans }}
         {% elseif from == 'airing_today' %}
-            MyTvTime::{{ 'Series Airaing Today'|trans }}::{{ serie.name }}
+            {{ 'Series Airaing Today'|trans }}
         {% elseif from == 'on_the_air' %}
-            MyTvTime::{{ 'Series On The Air'|trans }}::{{ serie.name }}
+            {{ 'Series On The Air'|trans }}
         {% elseif from == 'search' %}
-            MyTvTime::{{ 'Series search'|trans }}::{{ serie.name }}
+            {{ 'Series search'|trans }}
         {% elseif from == 'my_series_to_start' %}
-            MyTvTime::{{ 'My Series to start'|trans }}::{{ serie.name }}
+            {{ 'My Series to start'|trans }}
         {% elseif from == 'my_series_to_end' %}
-            MyTvTime::{{ 'My Series to end'|trans }}::{{ serie.name }}
+            {{ 'My Series to end'|trans }}
         {% else %}
-            MyTvTime::{{ 'My Series'|trans }}::{{ serie.name }}
+            {{ 'My Series'|trans }}
         {% endif %}
+        ▶ ︎{{ serie.name }}
     {% endblock %}
 
 {% block body %}

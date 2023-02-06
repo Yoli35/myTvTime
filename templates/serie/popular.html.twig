@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
+{% block title %}myTvTime ▶ ︎
     {% if from == 'popular' %}
-        MyTvTime::{{ 'Popular Series'|trans }}
+        {{ 'Popular Series'|trans }}
     {% elseif from == 'top_rated' %}
-        MyTvTime::{{ 'Top rated Series'|trans }}
+        {{ 'Top rated Series'|trans }}
     {% elseif from == 'airing_today' %}
-        MyTvTime::{{ 'Series Airing Today'|trans }}
+        {{ 'Series Airing Today'|trans }}
     {% elseif from == 'on_the_air' %}
-        MyTvTime::{{ 'Series On The Air'|trans }}
+        {{ 'Series On The Air'|trans }}
     {% elseif from == 'latest' %}
-        MyTvTime::{{ 'Latest Series'|trans }}
+        {{ 'Latest Series'|trans }}
     {% endif %}
 {% endblock %}
 

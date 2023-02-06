@@ -3,7 +3,7 @@
     {#    <link href="{{ asset("movie.css") }}" rel="stylesheet"> #}
 {% endblock %}
 
-{% block title %}myTvTime::{{ 'Movies'|trans }}::{{ 'Search by Name'|trans }}{% if discovers.page %}::{{ 'Page'|trans }} {{ discovers.page }}{% endif %}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'Movies'|trans }} ▶ ︎{{ 'Search by Name'|trans }}{% if discovers.page %} ▶ ︎{{ 'Page'|trans }} {{ discovers.page }}{% endif %}{% endblock %}
 {% block body %}
     <div class="container">
 

@@ -20,6 +20,7 @@
         <div class="hand hour" style="transform: translate(-50%, -100%) rotate(0deg) "></div>
         <div class="center"></div>
     </div>
+    <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
 </div>
 <script>
     window.addEventListener("DOMContentLoaded", () => {
@@ -29,30 +30,24 @@
         const minuteHand = clock.querySelector('.minute');
         const hourHand = clock.querySelector('.hour');
         const time = clock.querySelector('.time');
+        const close = clock.querySelector('.close');
 
-        setInterval(setDate, 100);
+        createClock();
         setDate();
+        setInterval(setDate, 1000);
 
         function setDate() {
             const now = new Date();
 
-            if (clock.querySelectorAll('.unit').length === 0) {
-                const face = clock.querySelector('.face');
-                for (let i = 0; i < 60; i++) {
-                    const unit = document.createElement('div');
-                    unit.classList.add('unit');
-                    if (i % 5 === 0) {
-                        unit.classList.add('unit-big');
-                    }
-                    unit.style.transform = `translate(-50%, 0) rotate(${i * 6}deg) translate(0, -72px)`;
-                    face.appendChild(unit);
-                }
-            }
-
             const seconds = now.getSeconds();
-            const milliseconds = now.getMilliseconds();
-            const secondsDegrees = ((seconds + (milliseconds / 1000)) * 6);
+            // const milliseconds = now.getMilliseconds();
+            // const secondsDegrees = ((seconds + (milliseconds / 1000)) * 6);
+            // secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
+            // secondHand.style.transition = (seconds === 0 && milliseconds < 100) ? 'none' : 'all 0.2s linear';
+            // secondHand.style.backgroundColor = (Math.floor(secondsDegrees) % 30) ? 'hsl(45, 90%, 50%)' : 'hsl(0, 90%, 50%)';
+            const secondsDegrees = (seconds * 6);
             secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
+            secondHand.style.backgroundColor = (Math.floor(secondsDegrees) % 30) ? 'hsl(45, 90%, 50%)' : 'hsl(0, 90%, 50%)';
 
             const minutes = now.getMinutes();
             const minutesDegrees = (minutes * 6) + (seconds / 10);
@@ -63,6 +58,22 @@
             hourHand.style.transform = `translate(-50%, -100%) rotate(${hoursDegrees}deg)`;
 
             time.innerHTML = now.toLocaleTimeString();
+        }
+
+        function createClock() {
+            const face = clock.querySelector('.face');
+            for (let i = 0; i < 60; i++) {
+                const unit = document.createElement('div');
+                unit.classList.add('unit');
+                if (i % 5 === 0) {
+                    unit.classList.add('unit-big');
+                }
+                unit.style.transform = `translate(-50%, 0) rotate(${i * 6}deg) translate(0, -72px)`;
+                face.appendChild(unit);
+            }
+            close.addEventListener('click', () => {
+               clock.remove();
+            });
         }
 
     });

@@ -1,5 +1,9 @@
-<li class="bracket">[</li>
-<li class="breadcrumb-item"><a href="{{ path('app_movies_search') }}"><span>{{ 'Name'|trans }}</span></a></li>
-<li class="breadcrumb-item"><a href="{{ path('app_movies_by_genre', {genres: '1'}) }}"><span>{{ 'Genre'|trans }}</span></a></li>
-<li class="breadcrumb-item"><a href="{{ path('app_movies_by_date', {date: '2022'}) }}"><span>{{ 'Date'|trans }}</span></a></li>
-<li class="bracket">]</li>
+<li class="bracket">
+    [
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('app_movies_search') }}"><span>{{ 'Name'|trans }}</span></a></li>
+        <li class="breadcrumb-item"><a href="{{ path('app_movies_by_genre', {genres: '1'}) }}"><span>{{ 'Genre'|trans }}</span></a></li>
+        <li class="breadcrumb-item"><a href="{{ path('app_movies_by_date', {date: '2022'}) }}"><span>{{ 'Date'|trans }}</span></a></li>
+    </ol>
+    ]
+</li>

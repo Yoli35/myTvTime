@@ -1,21 +1,22 @@
 {% extends 'base.html.twig' %}
 {% set user = app.user %}
-{% block title %}
+{% block title %}myTvTime ▶ ︎
     {% if parameters.from == 'popular' %}
-        MyTvTime::{{ 'Popular Series'|trans }}::{{ serie.name }}
+        {{ 'Popular Series'|trans }}::{{ serie.name }}
     {% elseif parameters.from == 'top_rated' %}
-        MyTvTime::{{ 'Top Rated Series'|trans }}::{{ serie.name }}
+        {{ 'Top Rated Series'|trans }}::{{ serie.name }}
     {% elseif parameters.from == 'airing_today' %}
-        MyTvTime::{{ 'Series Airaing Today'|trans }}::{{ serie.name }}
+        {{ 'Series Airaing Today'|trans }}
     {% elseif parameters.from == 'on_the_air' %}
-        MyTvTime::{{ 'Series On The Air'|trans }}::{{ serie.name }}
+        {{ 'Series On The Air'|trans }}
     {% elseif parameters.from == 'search' %}
-        MyTvTime::{{ 'Series search'|trans }}::{{ serie.name }}
+        {{ 'Series search'|trans }}
     {% elseif parameters.from == 'latest' %}
-        MyTvTime::{{ 'Latest Serie'|trans }}::{{ serie.name }}
+        {{ 'Latest Serie'|trans }}
     {% else %}
-        MyTvTime::{{ 'My Series'|trans }}::{{ serie.name }}
+        {{ 'My Series'|trans }}
     {% endif %}
+    ▶ ︎{{ serie.name }}
 {% endblock %}
 
 {% block body %}

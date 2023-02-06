@@ -16,34 +16,31 @@
             <li class="breadcrumb-item"><a href="{{ parent.url }}" accesskey="<">{{ parent.page|trans }}</a></li>
         {% endif %}
         <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
-        {% if from is defined %}
-            {% if from == 'blog' %}
-{#                <div class="btn btn-secondary ml"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></div>#}
-            {% endif %}
-            {% if from == 'youtube' %}
-                <div class="tag-button"><a href="{{ path('app_youtube_search') }}" title="{{ 'Go to the search by tag page'|trans }}">{{ 'Search by tag'|trans }}</a></div>
-            {% endif %}
-            {% if from == 'user movies' %}
-                {% if collections|length %}
-                    <div class="choose-collection">
-                        <label>{{ 'Pin a collection'|trans }}
-                            <select>
-                                <option value="0">{{ 'Select a collection'|trans }}</option>
-                                {% for c in collections %}
-                                    <option value="{{ c.id }}"{% if settings %}{% if settings.data.0.collection_id == c.id %} selected{% endif %}{% endif %}>{{ c.title }} ({{ c.movies|length }})</option>
-                                {% endfor %}
-                            </select>
-                        </label>
-                        <label class="switch">
-                            <input type="checkbox"{% if settings %}{% if settings.data.0.pinned %} checked{% endif %}{% endif %}/>
-                            <span></span>
-                        </label>
-                    </div>
-                {% endif %}
-            {% endif %}
-            {% if from == 'profile' %}
-                <div class="btn btn-secondary ml"><a href="{{ path('app_user_change_password') }}">{{ 'Change password'|trans }}</a></div>
+    </ol>
+    {% if from is defined %}
+        {% if from == 'blog' %}
+            {#                <div class="btn btn-secondary ml"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></div> #}
+        {% endif %}
+        {% if from == 'user movies' %}
+            {% if collections|length %}
+                <div class="choose-collection">
+                    <label>{{ 'Pin a collection'|trans }}
+                        <select>
+                            <option value="0">{{ 'Select a collection'|trans }}</option>
+                            {% for c in collections %}
+                                <option value="{{ c.id }}"{% if settings %}{% if settings.data.0.collection_id == c.id %} selected{% endif %}{% endif %}>{{ c.title }} ({{ c.movies|length }})</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label class="switch">
+                        <input type="checkbox"{% if settings %}{% if settings.data.0.pinned %} checked{% endif %}{% endif %}/>
+                        <span></span>
+                    </label>
+                </div>
             {% endif %}
         {% endif %}
-    </ol>
+        {% if from == 'profile' %}
+            <div class="btn btn-secondary ml"><a href="{{ path('app_user_change_password') }}">{{ 'Change password'|trans }}</a></div>
+        {% endif %}
+    {% endif %}
 </nav>

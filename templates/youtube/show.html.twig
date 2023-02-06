@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'my TvTime::YoutubeVideo' }}{% endblock %}
+{% block title %}myTvTime ▶ ︎Youtube ▶ ︎{{ video.title }}{% endblock %}
 {% set user = app.user %}
 {% if video.channel.customUrl %}
     {% set url = video.channel.customUrl %}
