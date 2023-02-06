@@ -614,13 +614,16 @@ nav.active {
             position: absolute;
             left: -1em;
             top: .25em;
+            width: 1em;
         }
 
         &:after {
             content: '◦';
             position: absolute;
             right: -1em;
+            text-align: right;
             top: .25em;
+            width: 1em;
         }
 
         &:hover {

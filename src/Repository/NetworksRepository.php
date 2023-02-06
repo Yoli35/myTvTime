@@ -30,6 +30,11 @@ class NetworksRepository extends ServiceEntityRepository
         }
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function remove(Networks $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);

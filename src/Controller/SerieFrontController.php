@@ -90,24 +90,24 @@ class SerieFrontController extends AbstractController
                     $response = "Update";
                 }
 
-                $serie->setName($tv['name']);
-                $serie->setPosterPath($tv['poster_path']);
                 $serie->setBackdropPath($tv['backdrop_path']);
-                $serie->setOverview($tv['overview']);
-                $serie->setSerieId($tv['id']);
-                $serie->setNumberOfSeasons($tv['number_of_seasons']);
-                $serie->setNumberOfEpisodes($tv['number_of_episodes']);
-                $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
-
-                $serie->setOriginalName($tv['original_name']);
-                $serie->setStatus($tv['status']);
                 $serie->setEpisodeDurations($this->collectEpisodeDurations($serie));
+                $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
+                $serie->setName($tv['name']);
+                $serie->setNumberOfEpisodes($tv['number_of_episodes']);
+                $serie->setNumberOfSeasons($tv['number_of_seasons']);
+                $serie->setOriginalName($tv['original_name']);
+                $serie->setOverview($tv['overview']);
+                $serie->setPosterPath($tv['poster_path']);
+                $serie->setSerieId($tv['id']);
+                $serie->setStatus($tv['status']);
 
                 foreach ($tv['networks'] as $network) {
                     $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);
 
                     if ($m2mNetwork == null) {
                         $m2mNetwork = new Networks();
+                        $m2mNetwork->setNetworkId($network['id']);
                         $m2mNetwork->setName($network['name']);
                         $m2mNetwork->setLogoPath($network['logo_path']);
                         $m2mNetwork->setOriginCountry($network['origin_country']);

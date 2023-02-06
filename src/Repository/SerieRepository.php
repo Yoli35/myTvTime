@@ -179,7 +179,7 @@ class SerieRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->innerJoin('s.networks', 'n')
-            ->select("n.id id, n.name name, n.logoPath logoPath, n.originCountry originCountry, s.id serieId")
+            ->select("n.id id, n.name name, n.logoPath logoPath, n.originCountry originCountry, n.networkId networkId, s.id serieId")
             ->where('s.id IN (:serieIds)')
             ->setParameter('serieIds', $serieIds)
             ->getQuery()

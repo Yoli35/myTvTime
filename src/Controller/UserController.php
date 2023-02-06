@@ -143,7 +143,6 @@ class UserController extends AbstractController
         $pendingRequests = $this->friendRepository->findBy(['recipient' => $user, 'acceptedAt' => null]);
 
         foreach ($pendingRequests as $request) {
-//            dump($request);
             $openLetter = ['a', 'e', 'é', 'h', 'i', 'o', 'u'];
             $name = $request->getOwner()->getUsername() ?: $request->getOwner()->getEmail();
             $firstLetter = strtolower($name)[0];
@@ -187,7 +186,6 @@ class UserController extends AbstractController
         $friends = $friendRepository->findBy(['owner' => $user, 'approved' => true]);
         $friendRequests = $friendRepository->findBy(['owner' => $user, 'acceptedAt' => null, 'approved' => false]);
 
-//        dump($friends, $friendRequests);
         return $this->json([
             'friends' => $this->getFriendsData($friends),
             'friendRequests' => $this->getFriendsData($friendRequests)],
@@ -337,7 +335,6 @@ class UserController extends AbstractController
             $settings->setName('pinned collection');
         }
         $data = $settings->getData();
-//        dump($data);
         $data[0]['pinned'] = $request->query->get('pin');
         $settings->setData($data);
         $settingsRepository->save($settings, true);

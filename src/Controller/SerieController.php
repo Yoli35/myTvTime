@@ -52,6 +52,14 @@ class SerieController extends AbstractController
     const ON_THE_AIR = 'on_the_air';
     const SEARCH = 'search';
 
+    private array $timeShiftedNetworks = [
+        [2 => "ABC"],
+        [16 => "CBS"],
+        [49 => "HBO"],
+        [71 => "The CW"],
+        [2552 => "Apple TV+"],
+    ];
+
     public function __construct(private readonly CastRepository           $castRepository,
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FavoriteRepository       $favoriteRepository,
@@ -116,6 +124,8 @@ class SerieController extends AbstractController
         }
 
         $now = new DateTime();
+        $now->setTime(0, 0);
+
         foreach ($series as &$serie) {
             $serie = $this->isSerieAiringSoon($serie, $now);
         }
@@ -166,62 +176,84 @@ class SerieController extends AbstractController
     {
         $serie['today'] = false;
         $serie['tomorrow'] = false;
+        if ($serie['viewing']->isSerieCompleted()) {
+            return $serie;
+        }
         $viewing = $serie['viewing'];
+        $networks = $serie['networks'];
         $findIt = false;
         /** @var SerieViewing $viewing */
-        if (!$viewing->isSerieCompleted()) {
-            foreach ($viewing->getSeasons() as $season) {
-                if ($season->isSeasonCompleted() || $season->getSeasonNumber() == 0) {
+        foreach ($viewing->getSeasons() as $season) {
+            if ($season->isSeasonCompleted() || $season->getSeasonNumber() == 0) {
+                continue;
+            }
+            foreach ($season->getEpisodes() as $episode) {
+                if ($episode->getViewedAt()) {
                     continue;
                 }
-                foreach ($season->getEpisodes() as $episode) {
-                    if ($episode->getViewedAt()) {
-                        continue;
-                    }
-                    if ($episode->getAirDate()) {
-                        $episodeDiff = date_diff($now, $episode->getAirDate());
-                        if (!$findIt) {
-                            if ($episodeDiff->y == 0 && $episodeDiff->m == 0 && $episodeDiff->d == 0) {
-                                $serie['today'] = (bool)$episodeDiff->invert;
-                                $serie['tomorrow'] = !$episodeDiff->invert;
-                                $findIt = true;
-                            }
+                if ($episode->getAirDate()) {
+                    $date = $episode->getAirDate();
+                    $isTimeShifted = false;
+                    foreach ($networks as $network) {
+                        $n = [$network['networkId'] => $network['name']];
+                        if (in_array($n, $this->timeShiftedNetworks)) {
+                            $isTimeShifted = true;
+                            break;
                         }
-                        if (!$findIt) {
-                            if ($episodeDiff->days) {
-                                if ($episodeDiff->invert) {
-                                    $serie['passed'] = $episode->getAirDate()->format("d/m/Y");
-                                    if ($episodeDiff->y) {
-                                        $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
+                    }
+                    if ($isTimeShifted) {
+                        $date = $date->modify('+1 day');
+                    }
+                    $episodeDiff = date_diff($now, $date);
+                    if (!$findIt) {
+                        if ($episodeDiff->days == 0) {
+                            $serie['today'] = true;
+                            $findIt = true;
+                        }
+                    }
+                    if (!$findIt) {
+                        if ($episodeDiff->days) {
+                            if ($episodeDiff->invert) {
+                                $serie['passed'] = $episode->getAirDate()->format("d/m/Y");
+                                if ($episodeDiff->y) {
+                                    $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
+                                } else {
+                                    if ($episodeDiff->m) {
+                                        $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->m . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
                                     } else {
-                                        if ($episodeDiff->m) {
-                                            $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->m . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
-                                        } else {
-                                            if ($episodeDiff->d) {
-                                                $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days + 1]);
+                                        if ($episodeDiff->d) {
+                                            if ($episodeDiff->d == 1) {
+                                                $serie['passedText'] = $this->translator->trans("available yesterday");
+                                            } else {
+                                                $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days]);
                                             }
                                         }
                                     }
+                                }
+                            } else {
+                                if ($episodeDiff->days == 1) {
+                                    $serie['tomorrow'] = true;
                                 } else {
                                     $serie['next'] = $episode->getAirDate()->format("m/d/Y");
-                                    $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days + 1]);
-                                    $serie['nextEpisodeDays'] = $episodeDiff->days + 1;
+                                    $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days]);
+                                    $serie['nextEpisodeDays'] = $episodeDiff->days;
                                 }
-                                $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                                $findIt = true;
                             }
+                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                            $findIt = true;
                         }
-                    } else { // Nouvelle saison et nouvel épisode sans date de diffusion
-                        $findIt = true;
-                        $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                        $serie['nextEpisodeNoDate'] = true;
                     }
-                    if ($findIt) {
-                        break;
-                    }
+                } else { // Nouvelle saison et nouvel épisode sans date de diffusion
+                    $findIt = true;
+                    $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                    $serie['nextEpisodeNoDate'] = true;
+                }
+                if ($findIt) {
+                    break;
                 }
             }
         }
+
         return $serie;
     }
 
@@ -318,15 +350,14 @@ class SerieController extends AbstractController
 
         $datetime = $day . ' day ' . $week . ' week ' . $month . ' month';
         $date = new DateTimeImmutable($datetime);
-        $date = $date->setTime(0, 0, 0);
+        $date = $date->setTime(0, 0);
         $now = new DateTimeImmutable();
-        $now = $now->setTime(0, 0, 0);
+        $now = $now->setTime(0, 0);
         $diff = date_diff($now, $date);
         $delta = $diff->days;
-//        dump($datetime, $diff, $delta);
+
         /** @var Serie[] $todayAirings */
         $todayAirings = $this->todayAiringSeries($date, $request->getLocale());
-//        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [
@@ -348,7 +379,6 @@ class SerieController extends AbstractController
 
         $episodeViewings = $this->episodeViewingRepository->findBy(['airDate' => $day]);
         $episodeViewings = array_merge($episodeViewings, $this->episodeViewingRepository->findBy(['airDate' => $theDayBefore]));
-//        dump($episodeViewings);
 
         $seasonArrays = [];
         foreach ($episodeViewings as $episodeViewing) {
@@ -395,33 +425,20 @@ class SerieController extends AbstractController
 
             $standing = $this->TMDBService->getTv($s->getSerie()->getSerieId(), $locale);
             $theseDaysSeries[$id]['tmdbSerie'] = json_decode($standing, true);
-
             $networks = array_map(function ($network) {
-                return [$network['id']=>$network['name']];
+                return [$network['id'] => $network['name']];
             }, $theseDaysSeries[$id]['tmdbSerie']['networks']);
             $theseDaysSeries[$id]['networks'] = $networks;
         }
-//        dump($theseDaysSeries);
-        $timeShiftedNetworks = [
-            [2 => "ABC"],
-            [16 => "CBS"],
-            [49 => "HBO"],
-            [71 => "The CW"],
-            [2552 => "Apple TV+"],
-        ];
 
         $todaySeries = [];
         foreach ($theseDaysSeries as $serie) {
             $isTimeShifted = false;
             foreach ($serie['networks'] as $network) {
-                if (in_array($network, $timeShiftedNetworks)) {
+                if (in_array($network, $this->timeShiftedNetworks)) {
                     $isTimeShifted = true;
                 }
             }
-            dump($serie['serie']->getName(), $serie['networks']);
-//            dump($isTimeShifted);
-//            dump(date_diff($serie['serieArray']['seasonArray']['air_date'], $theDayBefore)->days);
-//            dump(date_diff($serie['serieArray']['seasonArray']['air_date'], $day)->days);
 
             if ($isTimeShifted && !date_diff($serie['serieArray']['seasonArray']['air_date'], $theDayBefore)->days) {
                 $todaySeries[] = $serie;
@@ -588,6 +605,7 @@ class SerieController extends AbstractController
         }, $results);
 
         $now = new DateTime();
+        $now->setTime(0, 0);
         foreach ($seriesToBe as &$serie) {
             $serie = $this->isSerieAiringSoon($serie, $now);
         }
@@ -740,14 +758,11 @@ class SerieController extends AbstractController
                 $this->seasonViewingRepository->save($season, true);
 
                 for ($i = 1; $i <= $season->getEpisodeCount(); $i++) {
-                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr'/*, ['credits']*/);
+                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr');
                     $tmdbEpisode = json_decode($standing, true);
                     $episode = new EpisodeViewing($i, $tmdbEpisode ? $tmdbEpisode['air_date'] : null);
                     $season->addEpisode($episode);
                     $this->episodeViewingRepository->save($episode, true);
-
-//                    $credits = $tmdbEpisode['credits'];
-//                    dump($credits);
                 }
             }
         }
@@ -804,9 +819,7 @@ class SerieController extends AbstractController
                                         $episode->setAirDate(new DateTimeImmutable($tmdbEpisode['air_date']));
                                         $this->episodeViewingRepository->save($episode, true);
                                         $this->addFlash('success', 'Date mise à jour : ' . $tmdbEpisode['air_date']);
-//                                        dump($serieViewing->getSerie()->getName() . ' S' . $season->getSeasonNumber() . 'E' . $episode->getEpisodeNumber() . ' : ' . $tmdbEpisode['air_date']);
                                     } catch (Exception $e) {
-//                                        dump($e);
                                         $this->addFlash('danger', 'Erreur de date : ' . $e->getMessage());
                                     }
                                 }
@@ -1012,7 +1025,7 @@ class SerieController extends AbstractController
                 } else {
                     $serieViewing = $this->updateSerieViewing($serieViewing, $tv, $serie);
                 }
-                $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
+                $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $tv['networks'], $locale);
                 if (!count($serieViewing->getSerieCasts())) {
                     $this->updateTvCast($tv, $serieViewing);
                     $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
@@ -1033,7 +1046,6 @@ class SerieController extends AbstractController
         $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
 //        $this->cleanCastTable();
-//        dump($tv);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -1083,19 +1095,17 @@ class SerieController extends AbstractController
 
         $casts = $castRepository->findBy(['id' => $castIds]);
 
-//        dump($casts);
-
         foreach ($casts as $cast) {
             $castRepository->remove($cast);
         }
         $castRepository->flush();
     }
 
-    public function getNextEpisodeToWatch(SerieViewing $serieViewing, $locale): ?array
+    public function getNextEpisodeToWatch(SerieViewing $serieViewing, array $networks, $locale): ?array
     {
         $lastNotViewedEpisode = null;
         $seasons = $serieViewing->getSeasons();
-//        dump($seasons);
+
         foreach ($seasons as $season) {
             if ($season->getSeasonNumber() && !$season->isSeasonCompleted()) {
                 $episodes = $season->getEpisodes();
@@ -1120,6 +1130,7 @@ class SerieController extends AbstractController
 
             $airDate = null;
             $interval = null;
+
             if ($tmdbEpisode['air_date'] == null) {
                 return [
                     'episodeNumber' => $tmdbEpisode['episode_number'],
@@ -1139,7 +1150,17 @@ class SerieController extends AbstractController
                 ];
             }
 
-            $now = new \DateTimeImmutable();
+            $networks = array_map(function ($network) {
+                return [$network['id'] => $network['name']];
+            }, $networks);
+            foreach ($networks as $network) {
+                if (in_array($network, $this->timeShiftedNetworks)) {
+                    $airDate = $airDate->modify('+1 day');
+                    break;
+                }
+            }
+
+            $now = new \DateTimeImmutable('now');
             $interval = date_diff($now, $airDate);
 
             if ($lastNotViewedEpisode->getAirDate() == null) {

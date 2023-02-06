@@ -61,7 +61,6 @@ class EventController extends AbstractController
         }
         // https://symfony.com/doc/current/validation.html
         $errors = $validator->validate($event);
-//        dump($errors);
 
         return $this->render('event/new.html.twig', [
             'form' => $form->createView(),
