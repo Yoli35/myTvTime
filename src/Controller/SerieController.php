@@ -1471,7 +1471,7 @@ class SerieController extends AbstractController
             }
         }
 
-        $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
+        $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $this->networks2Array($serie->getNetworks()), $locale);
         $blockNextEpisodeToWatch = $this->render('blocks/serie/_next_episode_to_watch.html.twig', [
             'nextEpisodeToWatch' => $nextEpisodeToWatch,
         ]);
@@ -1485,6 +1485,19 @@ class SerieController extends AbstractController
         ]);
     }
 
+    public function networks2Array($networks): array
+    {
+        $networksArray = [];
+        foreach ($networks as $network) {
+            $netWorkArray['id'] = $network->getNetworkId();
+            $networkArray['name'] = $network->getName();
+            $networkArray['logoPath'] = $network->getLogoPath();
+            $networkArray['originCountry'] = $network->getOriginCountry();
+            $networkArray['networkId'] = $network->getNetworkId();
+            $networksArray[] = $networkArray;
+        }
+        return $networksArray;
+    }
     public function getSerieViewingCreatedAt($serieViewing, $request): DateTimeImmutable|null
     {
         $createdAt = $serieViewing->getCreatedAt();
