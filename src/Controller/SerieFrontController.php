@@ -107,9 +107,9 @@ class SerieFrontController extends AbstractController
 
                     if ($m2mNetwork == null) {
                         $m2mNetwork = new Networks();
-                        $m2mNetwork->setNetworkId($network['id']);
-                        $m2mNetwork->setName($network['name']);
                         $m2mNetwork->setLogoPath($network['logo_path']);
+                        $m2mNetwork->setName($network['name']);
+                        $m2mNetwork->setNetworkId($network['id']);
                         $m2mNetwork->setOriginCountry($network['origin_country']);
                         $networkRepository->save($m2mNetwork, true);
                     }

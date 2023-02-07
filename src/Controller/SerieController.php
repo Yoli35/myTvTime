@@ -21,6 +21,7 @@ use App\Repository\SerieCastRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
+use App\Repository\TimeShiftedNetworkRepository;
 use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
@@ -53,25 +54,25 @@ class SerieController extends AbstractController
     const SEARCH = 'search';
 
     private array $timeShiftedNetworks = [
-        [2 => "ABC"],
-        [16 => "CBS"],
-        [49 => "HBO"],
-        [71 => "The CW"],
-        [2552 => "Apple TV+"],
     ];
 
-    public function __construct(private readonly CastRepository           $castRepository,
-                                private readonly EpisodeViewingRepository $episodeViewingRepository,
-                                private readonly FavoriteRepository       $favoriteRepository,
-                                private readonly ImageConfiguration       $imageConfiguration,
-                                private readonly LogService               $logService,
-                                private readonly SeasonViewingRepository  $seasonViewingRepository,
-                                private readonly SerieCastRepository      $serieCastRepository,
-                                private readonly SerieRepository          $serieRepository,
-                                private readonly SerieViewingRepository   $serieViewingRepository,
-                                private readonly TMDBService              $TMDBService,
-                                private readonly TranslatorInterface      $translator)
+    public function __construct(private readonly CastRepository               $castRepository,
+                                private readonly EpisodeViewingRepository     $episodeViewingRepository,
+                                private readonly FavoriteRepository           $favoriteRepository,
+                                private readonly ImageConfiguration           $imageConfiguration,
+                                private readonly LogService                   $logService,
+                                private readonly SeasonViewingRepository      $seasonViewingRepository,
+                                private readonly SerieCastRepository          $serieCastRepository,
+                                private readonly SerieRepository              $serieRepository,
+                                private readonly SerieViewingRepository       $serieViewingRepository,
+                                private readonly TimeShiftedNetworkRepository $timeShiftedNetworkRepository,
+                                private readonly TMDBService                  $TMDBService,
+                                private readonly TranslatorInterface          $translator)
     {
+        $timeShiftedNetworks = $this->timeShiftedNetworkRepository->findAll();
+        $this->timeShiftedNetworks = array_map(function ($timeShiftedNetwork) {
+            return [$timeShiftedNetwork->getNetworkId() => $timeShiftedNetwork->getName()];
+        }, $timeShiftedNetworks);
     }
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
@@ -193,12 +194,16 @@ class SerieController extends AbstractController
                 }
                 if ($episode->getAirDate()) {
                     $date = $episode->getAirDate();
-                    $isTimeShifted = false;
-                    foreach ($networks as $network) {
-                        $n = [$network['networkId'] => $network['name']];
-                        if (in_array($n, $this->timeShiftedNetworks)) {
-                            $isTimeShifted = true;
-                            break;
+                    $isTimeShifted = $viewing->isTimeShifted();
+                    if (!$isTimeShifted) {
+                        foreach ($networks as $network) {
+                            $n = [$network['networkId'] => $network['name']];
+                            if (in_array($n, $this->timeShiftedNetworks)) {
+                                $isTimeShifted = true;
+                                $viewing->setTimeShifted(true);
+                                $this->serieViewingRepository->save($viewing, true);
+                                break;
+                            }
                         }
                     }
                     if ($isTimeShifted) {
@@ -433,10 +438,16 @@ class SerieController extends AbstractController
 
         $todaySeries = [];
         foreach ($theseDaysSeries as $serie) {
-            $isTimeShifted = false;
-            foreach ($serie['networks'] as $network) {
-                if (in_array($network, $this->timeShiftedNetworks)) {
-                    $isTimeShifted = true;
+            $viewing = $serie['serieArray']['serieViewing'];
+            $isTimeShifted = $viewing->isTimeShifted();
+            if (!$isTimeShifted) {
+                foreach ($serie['networks'] as $network) {
+                    if (in_array($network, $this->timeShiftedNetworks)) {
+                        $isTimeShifted = true;
+                        $viewing->setTimeShifted(true);
+                        $this->serieViewingRepository->save($viewing, true);
+                        break;
+                    }
                 }
             }
 
@@ -742,6 +753,9 @@ class SerieController extends AbstractController
         $viewing->setUser($user);
         $viewing->setSerie($serie);
         $viewing->setNumberOfSeasons($tv['number_of_seasons']);
+        $viewing->setNumberOfEpisodes($tv['number_of_episodes']);
+        $viewing->setSerieCompleted(false);
+        $viewing->setTimeShifted(false);
         $viewing->setViewedEpisodes(0);
         $viewing = $this->createSerieViewingContent($viewing, $tv);
         $this->serieViewingRepository->save($viewing, true);
@@ -771,10 +785,38 @@ class SerieController extends AbstractController
 
     public function updateSerieViewing(SerieViewing $serieViewing, array $tv, ?Serie $serie): SerieViewing
     {
+        $modified = false;
         if ($serieViewing->getNumberOfSeasons() != $tv['number_of_seasons']) {
             $serieViewing->setNumberOfSeasons($tv['number_of_seasons']);
-//            $serieViewing->setModifiedAt(new DateTime());
+            $modified = true;
+        }
+        if ($serieViewing->getNumberOfEpisodes() != $tv['number_of_episodes']) {
+            $serieViewing->setNumberOfEpisodes($tv['number_of_episodes']);
+            $modified = true;
+        }
+        if ($serieViewing->isSerieCompleted()==NULL) {
+            $serieViewing->setSerieCompleted(false);
+            $modified = true;
+        }
+        if ($serieViewing->getCreatedAt() == null) {
+            try {
+                $serieViewing->setCreatedAt(new DateTimeImmutable($tv['first_air_date']));
+            } catch (\Exception $e) {
+                $serieViewing->setCreatedAt(new DateTimeImmutable());
+            }
+            $modified = true;
+        }
+        if ($serieViewing->getModifiedAt() == null) {
+            try {
+                $serieViewing->setModifiedAt(new DateTime($tv['first_air_date']));
+            } catch (\Exception $e) {
+                $serieViewing->setModifiedAt(new DateTime());
+            }
+            $modified = true;
+        }
+        if ($modified) {
             $this->serieViewingRepository->save($serieViewing, true);
+        }
 
             if ($serie !== null) {
                 $modified = false;
@@ -791,7 +833,7 @@ class SerieController extends AbstractController
                     $this->serieRepository->save($serie, true);
                 }
             }
-        }
+
         foreach ($tv['seasons'] as $s) {
             if ($s['season_number']) { // 21/12/2022 : plus d'épisodes spéciaux
                 $season = $serieViewing->getSeasonByNumber($s['season_number']);
@@ -1025,7 +1067,7 @@ class SerieController extends AbstractController
                 } else {
                     $serieViewing = $this->updateSerieViewing($serieViewing, $tv, $serie);
                 }
-                $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $tv['networks'], $locale);
+                $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $tv['networks'], true, $locale);
                 if (!count($serieViewing->getSerieCasts())) {
                     $this->updateTvCast($tv, $serieViewing);
                     $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
@@ -1101,7 +1143,7 @@ class SerieController extends AbstractController
         $castRepository->flush();
     }
 
-    public function getNextEpisodeToWatch(SerieViewing $serieViewing, array $networks, $locale): ?array
+    public function getNextEpisodeToWatch(SerieViewing $serieViewing, array $networks, bool $tvNetworks, $locale): ?array
     {
         $lastNotViewedEpisode = null;
         $seasons = $serieViewing->getSeasons();
@@ -1150,8 +1192,8 @@ class SerieController extends AbstractController
                 ];
             }
 
-            $networks = array_map(function ($network) {
-                return [$network['id'] => $network['name']];
+            $networks = array_map(function ($network) use ($tvNetworks) {
+                return $tvNetworks ? [$network['id'] => $network['name']] : [$network['networkId'] => $network['name']];
             }, $networks);
             foreach ($networks as $network) {
                 if (in_array($network, $this->timeShiftedNetworks)) {
@@ -1471,7 +1513,7 @@ class SerieController extends AbstractController
             }
         }
 
-        $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $this->networks2Array($serie->getNetworks()), $locale);
+        $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $this->networks2Array($serie->getNetworks()), false, $locale);
         $blockNextEpisodeToWatch = $this->render('blocks/serie/_next_episode_to_watch.html.twig', [
             'nextEpisodeToWatch' => $nextEpisodeToWatch,
         ]);
@@ -1498,6 +1540,7 @@ class SerieController extends AbstractController
         }
         return $networksArray;
     }
+
     public function getSerieViewingCreatedAt($serieViewing, $request): DateTimeImmutable|null
     {
         $createdAt = $serieViewing->getCreatedAt();

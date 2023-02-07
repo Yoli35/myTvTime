@@ -873,8 +873,8 @@ nav.active {
     width: 200px;
 
     .face {
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
         background-color: var(--gradiant-grey-10-alpha-50);
         border-radius: 1em;
         height: 200px;

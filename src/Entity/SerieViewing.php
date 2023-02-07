@@ -34,20 +34,23 @@ class SerieViewing
     #[ORM\Column]
     private ?int $numberOfSeasons = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $serieCompleted = null;
+
+    #[ORM\Column]
+    private ?bool $timeShifted = null;
+
+    #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SerieCast::class)]
+    private Collection $serieCasts;
+
     #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class, cascade: ['persist'])]
     private Collection $seasons;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTime $modifiedAt;
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $serieCompleted = null;
-
-    #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $createdAt;
 
-    #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SerieCast::class)]
-    private Collection $serieCasts;
+    #[ORM\Column(nullable: true)]
+    private ?DateTime $modifiedAt;
 
     public function __construct()
     {
@@ -225,5 +228,17 @@ class SerieViewing
     public function setNumberOfSeasons(?int $numberOfSeasons): void
     {
         $this->numberOfSeasons = $numberOfSeasons;
+    }
+
+    public function isTimeShifted(): ?bool
+    {
+        return $this->timeShifted;
+    }
+
+    public function setTimeShifted(bool $timeShifted): self
+    {
+        $this->timeShifted = $timeShifted;
+
+        return $this;
     }
 }
