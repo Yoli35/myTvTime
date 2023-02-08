@@ -66,41 +66,50 @@
     {{ parent() }}
     <script src="/js/source.js"></script>
     <script>
-        let posters = [];
         window.addEventListener("DOMContentLoaded", () => {
             const container = document.querySelector(".container");
             if (container.clientWidth < 1200) {
                 return;
             }
             const header = document.querySelector(".home-header");
-            const div = document.createElement("div");
+            const div1 = document.createElement("div");
+            const div2 = document.createElement("div");
 
-            div.classList.add("posters");
-            header.appendChild(div);
-            getPosters(div);
+            div1.classList.add("posters");
+            header.appendChild(div1);
+            getPosters(div1, 1);
+
+            div2.classList.add("posters", "second");
+            header.appendChild(div2);
+            getPosters(div2, 2);
         });
 
-        function getPosters(div) {
+        function getPosters(div, n) {
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 let data = JSON.parse(this.response);
                 console.log({data});
-                posters = data;
-                cyclePosters(div);
+                cyclePosters(div, data['posters'], n);
             }
-            xhr.open("GET", '/get-posters');
+            xhr.open("GET", '/get-posters?n=' + n, true);
             xhr.send();
         }
 
-        function cyclePosters(div) {
+        function cyclePosters(div, posters, n) {
             let i = 0;
             const img = document.createElement("img");
             img.src = posters[i++];
             div.appendChild(img);
             setTimeout(() => {
                 img.classList.add("end");
-            }, 0);
+            }, (n - 1) * 2500);
 
+            setTimeout(() => {
+                launchCycle(div, posters, i);
+            }, (n-1) * 2500);
+        }
+
+        function launchCycle(div, posters, i) {
             setInterval(() => {
                 const newImg = document.createElement("img");
                 const oldImg = div.querySelector("img");

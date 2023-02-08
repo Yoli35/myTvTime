@@ -156,14 +156,17 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/get-posters', name: 'app_home_get_posters', methods: ['GET'])]
-    public function getRandomPosters(): Response
+    #[Route('/get-posters', name: 'app_home_get_posters', methods: ['GET'], format: 'json',)]
+    public function getRandomPosters(Request $request): Response
     {
+        $n = $request->query->getInt('n');
+        $time = $n * time();
+        srand($time);
         $imageConfig = $this->imageConfiguration->getConfig();
         $movieCount = $this->userMovieRepository->userMoviesCount();
-        $movies = $this->userMovieRepository->findBy([], ['createdAt' => 'DESC'], 20, $movieCount - 20);
+        $movies = $this->userMovieRepository->findBy([], ['createdAt' => 'DESC'], 20, rand(0, $movieCount - 20));
         $serieCount = $this->serieRepository->seriesCount();
-        $series = $this->serieRepository->findBy([], ['createdAt' => 'DESC'], 20, $serieCount - 20);
+        $series = $this->serieRepository->findBy([], ['createdAt' => 'DESC'], 20, rand(0, $serieCount - 20));
         $movies = array_map(function ($movie) use ($imageConfig) {
             return $imageConfig['url'] . $imageConfig['poster_sizes'][2] . $movie->getPosterPath();
         }, $movies);
@@ -173,6 +176,6 @@ class HomeController extends AbstractController
         $posters = array_merge($movies, $series);
         shuffle($posters);
 
-        return $this->json($posters);
+        return $this->json(['n' => $n, 'time' => $time, 'posters' => $posters]);
     }
 }

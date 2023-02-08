@@ -893,11 +893,15 @@ nav.active {
         top: 1em;
         width: 12em;
 
+        &.second {
+            left: 33em;
+        }
+
         img {
             height: 100%;
             object-fit: cover;
             transform: scale(1);
-            transition: transform 5s ease-in;
+            transition: transform 5s linear;
 
             &.end {
                 transform: scale(1.5);
