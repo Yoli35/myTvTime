@@ -888,20 +888,30 @@ nav.active {
         border: 2px solid;
         height: 17.5em;
         left: 20em;
+        opacity: 0;
         overflow: clip;
         position: absolute;
         top: 1em;
+        transition: opacity 1s ease-in-out;
         width: 12em;
 
         &.second {
             left: 33em;
         }
 
+        &.third {
+            left: 46em;
+        }
+
+        &.fade {
+            opacity: 1;
+        }
+
         img {
             height: 100%;
             object-fit: cover;
             transform: scale(1);
-            transition: transform 5s linear;
+            transition: transform 5s linear, src 1s ease-in-out;
 
             &.end {
                 transform: scale(1.5);

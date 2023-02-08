@@ -168,10 +168,10 @@ class HomeController extends AbstractController
         $serieCount = $this->serieRepository->seriesCount();
         $series = $this->serieRepository->findBy([], ['createdAt' => 'DESC'], 20, rand(0, $serieCount - 20));
         $movies = array_map(function ($movie) use ($imageConfig) {
-            return $imageConfig['url'] . $imageConfig['poster_sizes'][2] . $movie->getPosterPath();
+            return $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $movie->getPosterPath();
         }, $movies);
         $series = array_map(function ($serie) use ($imageConfig) {
-            return $imageConfig['url'] . $imageConfig['poster_sizes'][2] . $serie->getPosterPath();
+            return $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie->getPosterPath();
         }, $series);
         $posters = array_merge($movies, $series);
         shuffle($posters);

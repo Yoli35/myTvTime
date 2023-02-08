@@ -73,15 +73,24 @@
             }
             const header = document.querySelector(".home-header");
             const div1 = document.createElement("div");
-            const div2 = document.createElement("div");
 
             div1.classList.add("posters");
             header.appendChild(div1);
             getPosters(div1, 1);
 
-            div2.classList.add("posters", "second");
-            header.appendChild(div2);
-            getPosters(div2, 2);
+            if (container.clientWidth > 1500) {
+                const div2 = document.createElement("div");
+                div2.classList.add("posters", "second");
+                header.appendChild(div2);
+                getPosters(div2, 2);
+            }
+
+            if (container.clientWidth > 1800) {
+                const div3 = document.createElement("div");
+                div3.classList.add("posters", "third");
+                header.appendChild(div3);
+                getPosters(div3, 3);
+            }
         });
 
         function getPosters(div, n) {
@@ -100,11 +109,10 @@
             const img = document.createElement("img");
             img.src = posters[i++];
             div.appendChild(img);
-            setTimeout(() => {
-                img.classList.add("end");
-            }, (n - 1) * 2500);
 
             setTimeout(() => {
+                div.classList.add("fade");
+                img.classList.add("end");
                 launchCycle(div, posters, i);
             }, (n-1) * 2500);
         }
