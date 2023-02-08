@@ -405,7 +405,8 @@ main {
             padding: .125em 1em;
 
             &:hover {
-                background-color: var(--gradiant-grey-50);
+                background-color: var(--gradiant-mars-50);
+                color: var(--gradiant-mars-90);
             }
         }
 
@@ -437,8 +438,9 @@ main {
         padding: .125em 1em;
 
         &:hover {
-            background-color: var(--gradiant-grey-50);
+            background-color: var(--gradiant-mars-50);
             border-radius: 9999px;
+            color: var(--gradiant-mars-90);
         }
     }
 
@@ -596,6 +598,10 @@ nav.active {
     top: 0;
     z-index: 50;
 
+    &:hover {
+        background-color: var(--gradiant-grey-20);
+    }
+
     a {
         text-decoration: none;
     }
@@ -666,8 +672,8 @@ nav.active {
                     white-space: nowrap;
 
                     &:hover {
-                        background-color: var(--gradiant-grey-80);
-                        color: var(--gradiant-grey-30);
+                        background-color: var(--gradiant-mars-50);
+                        color: var(--gradiant-mars-90);
                     }
 
                     div:first-child {
@@ -701,7 +707,12 @@ nav.active {
                 padding: 0 .5em;
 
                 &:hover {
-                    background-color: var(--gradiant-mars-40-alpha-50);
+                    background-color: var(--gradiant-mars-50);
+                    color: var(--gradiant-mars-90);
+
+                    span {
+                        color: var(--gradiant-mars-80);
+                    }
                 }
             }
 
@@ -773,6 +784,10 @@ nav.active {
         background-color: var(--gradiant-grey-40-alpha-50);
         color: var(--gradiant-grey-100);
         font-weight: bold;
+
+        &:hover {
+            background-color: var(--gradiant-grey-40);
+        }
 
         a {
             color: var(--gradiant-grey-100);
