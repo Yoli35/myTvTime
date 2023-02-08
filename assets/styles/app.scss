@@ -658,8 +658,9 @@ nav.active {
 
                 a {
                     color: var(--gradiant-grey-80);
-                    display: block;
+                    display: flex;
                     font-weight: 100;
+                    gap: .5em;
                     padding: 0 1em;
                     width: 100%;
                     white-space: nowrap;
@@ -669,7 +670,10 @@ nav.active {
                         color: var(--gradiant-grey-30);
                     }
 
-                    i {
+                    div:first-child {
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
                         width: 2em;
                     }
                 }
@@ -697,7 +701,7 @@ nav.active {
                 padding: 0 .5em;
 
                 &:hover {
-                    background-color: var(--gradiant-grey-40-alpha-50);
+                    background-color: var(--gradiant-mars-40-alpha-50);
                 }
             }
 

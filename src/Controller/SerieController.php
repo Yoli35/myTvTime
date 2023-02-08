@@ -963,6 +963,7 @@ class SerieController extends AbstractController
     public function season(Request $request, $id, $seasonNumber): Response
     {
         $this->logService->log($request, $this->getUser());
+
         $from = $request->query->get('from');
         $page = $request->query->get('p');
         $query = $request->query->get('query');
@@ -973,10 +974,31 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale(), ['credits']);
         $season = json_decode($standing, true);
         $credits = $season['credits'];
+        $episodes = [];
+        foreach ($season['episodes'] as $episode) {
+            $standing = $this->TMDBService->getTvEpisode($id, $seasonNumber, $episode['episode_number'], $request->getLocale());
+            $tmdbEpisode = json_decode($standing, true);
+            if ($serie['userSerieViewing']) {
+                if ($serie['userSerieViewing']->isTimeShifted()) {
+                    if ($tmdbEpisode['air_date']) {
+                        $dateString = $tmdbEpisode['air_date'] . 'T00:00:00';
+                        try {
+                            $airDate = new \DateTime($dateString);
+                            $airDate->modify('+1 day');
+                            $tmdbEpisode['air_date'] = $airDate->format('Y-m-d');
+                        } catch (\Exception $e) {
+
+                        }
+                    }
+                }
+            }
+            $episodes[] = $tmdbEpisode;
+        }
 
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
+            'episodes' => $episodes,
             'credits' => $credits,
             'parameters' => [
                 'from' => $from,
@@ -991,9 +1013,12 @@ class SerieController extends AbstractController
 
     public function serie($id, $locale): array
     {
+        /** @var User $user */
+        $user = $this->getUser();
         $serie = [];
         /** @var Serie $userSerie */
         $userSerie = $this->serieRepository->findOneBy(['serieId' => $id]);
+
         if ($userSerie == null) {
             $standing = $this->TMDBService->getTv($id, $locale);
             $tmdbSerie = json_decode($standing, true);
@@ -1002,12 +1027,20 @@ class SerieController extends AbstractController
             $serie['backdropPath'] = $tmdbSerie['backdrop_path'];
             $serie['firstDateAir'] = $tmdbSerie['last_air_date'];
             $serie['posterPath'] = $tmdbSerie['poster_path'];
+            $serie['userSerie'] = null;
+            $serie['userSerieViewing'] = null;
         } else {
             $serie['id'] = $userSerie->getSerieId();
             $serie['name'] = $userSerie->getName();
             $serie['backdropPath'] = $userSerie->getBackdropPath();
             $serie['firstDateAir'] = $userSerie->getFirstDateAir();
             $serie['posterPath'] = $userSerie->getPosterPath();
+            $serie['userSerie'] = $userSerie;
+            if ($user != null) {
+                $serie['userSerieViewing'] = $this->serieViewingRepository->findOneBy(['serie' => $userSerie, 'user' => $user]);
+            } else {
+                $serie['userSerieViewing'] = null;
+            }
         }
 
         return $serie;
@@ -1617,8 +1650,6 @@ class SerieController extends AbstractController
         $serieViewing->setViewedEpisodes($viewedEpisodeCount);
         $this->serieViewingRepository->save($serieViewing, true);
     }
-
-//    public function setSeason
 
     public function getEpisodeViewings(SerieViewing $serieViewing, int $seasonNumber, int $episodeNumber, bool $allBefore = false): array
     {

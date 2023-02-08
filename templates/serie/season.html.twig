@@ -71,7 +71,7 @@
                 <article class="full">
                     <section>
                         <div class="episodes">
-                            {% for episode in season.episodes %}
+                            {% for episode in episodes %}
                                 <div class="episode">
                                     <div class="still">
                                         {% if episode.still_path|length %}
@@ -90,7 +90,7 @@
                                             <div class="info">{{ episode.overview }}</div>
                                         {% endif %}
                                         {% if episode.runtime %}
-                                            <div class="info">{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ 'minutes' }}</div>
+                                            <div class="info">{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ episode.runtime>1 ? 'minutes':'minute' }}</div>
                                         {% endif %}
                                         {% if episode.air_date %}
                                             <div class="info">
