@@ -34,7 +34,7 @@ class Serie
     private ?DateTimeImmutable $firstDateAir = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $addedAt;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
     private ?DateTime $updatedAt;
@@ -66,7 +66,7 @@ class Serie
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->addedAt = new DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTime();
         $this->networks = new ArrayCollection();
     }
@@ -124,14 +124,14 @@ class Serie
         return $this;
     }
 
-    public function getAddedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
-        return $this->addedAt;
+        return $this->createdAt;
     }
 
-    public function setAddedAt(DateTimeImmutable $addedAt): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
-        $this->addedAt = $addedAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }

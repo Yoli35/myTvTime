@@ -185,4 +185,14 @@ class SerieRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function seriesCount(): int
+    {
+        $sql = "SELECT count(*) as count FROM `serie`";
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        $result = $resultSet->fetchAssociative();
+        return $result['count'];
+    }
 }

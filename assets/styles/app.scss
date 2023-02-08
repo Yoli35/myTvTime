@@ -587,7 +587,7 @@ nav.active {
 }
 
 .nav-breadcrumb {
-    --bs-breadcrumb-divider: '◎';
+    --bs-breadcrumb-divider: '°';
     @include flex-row(center, start);
     background-color: var(--gradiant-grey-20-alpha-50);
     border-radius: .5em;
@@ -616,19 +616,19 @@ nav.active {
         z-index: 52;
 
         &:before {
-            content: '◦';
+            content: '°';
             position: absolute;
             left: -1em;
-            top: .25em;
+            top: .5em;
             width: 1em;
         }
 
         &:after {
-            content: '◦';
+            content: '°';
             position: absolute;
             right: -1em;
             text-align: right;
-            top: .25em;
+            top: .5em;
             width: 1em;
         }
 
@@ -732,7 +732,7 @@ nav.active {
                 &::before {
                     float: left;
                     height: 100%;
-                    padding: 0.75rem 0;
+                    padding: 1rem 0;
                     color: #6c757d;
                     content: var(--bs-breadcrumb-divider, "/");
                 }
@@ -881,6 +881,29 @@ nav.active {
     position: relative;
     transition: background-position 1s;
     width: 100%;
+
+    .posters {
+        @include flex-row();
+        background-color: var(--gradiant-grey-10-alpha-50);
+        border: 2px solid;
+        height: 17.5em;
+        left: 20em;
+        overflow: clip;
+        position: absolute;
+        top: 1em;
+        width: 12em;
+
+        img {
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1);
+            transition: transform 5s ease-in;
+
+            &.end {
+                transform: scale(1.5);
+            }
+        }
+    }
 }
 
 .clock {

@@ -39,7 +39,9 @@ class SerieFrontController extends AbstractController
                                 private readonly TranslatorInterface    $translator,
                                 private readonly TMDBService            $tmdbService,
                                 private readonly SerieRepository        $serieRepository,
-                                private readonly SerieViewingRepository $serieViewingRepository)
+                                private readonly SerieViewingRepository $serieViewingRepository,
+                                private readonly NetworksRepository     $networkRepository,
+                                private readonly ImageConfiguration     $imageConfiguration)
     {
     }
 
@@ -47,9 +49,12 @@ class SerieFrontController extends AbstractController
      * @throws Exception
      */
     #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
-    public function new(Request $request, SerieRepository $serieRepository, NetworksRepository $networkRepository, ImageConfiguration $imageConfiguration): Response
+    public function new(Request $request): Response
     {
         $tmdbService = $this->tmdbService;
+        $serieRepository = $this->serieRepository;
+        $networkRepository = $this->networkRepository;
+        $imageConfiguration = $this->imageConfiguration;
 
         /** @var User $user */
         $user = $this->getUser();
@@ -266,7 +271,7 @@ class SerieFrontController extends AbstractController
             'seasonCount' => $seasonCount,
             'episodeCount' => $episodeCount,
             'nullDurationCount' => $nullDurationCount,
-            ]);
+        ]);
     }
 
     #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_serie_toggle_favorite', methods: 'GET')]

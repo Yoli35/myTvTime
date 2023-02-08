@@ -57,6 +57,18 @@ class UserMovieRepository extends ServiceEntityRepository
         ;
     }
 
+    public function userMoviesCount(): int
+    {
+        $sql = 'SELECT COUNT(*) as `count` FROM `user_movie`';
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        $result = $resultSet->fetchAssociative();
+
+        return $result['count'];
+    }
+
 //    /**
 //     * @return UserMovie[] Returns an array of UserMovie objects
 //     */

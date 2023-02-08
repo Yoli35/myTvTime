@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\FavoriteRepository;
 use App\Repository\SerieRepository;
+
 //use App\Repository\SerieViewingRepository;
 use App\Repository\UserMovieRepository;
 use App\Service\LogService;
@@ -18,13 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    public function __construct(private readonly TMDBService            $TMDBService,
-                                private readonly UserMovieRepository    $userMovieRepository,
-                                private readonly SerieRepository        $serieRepository,
+    public function __construct(private readonly TMDBService         $TMDBService,
+                                private readonly UserMovieRepository $userMovieRepository,
+                                private readonly SerieRepository     $serieRepository,
 //                                private readonly SerieViewingRepository $serieViewingRepository,
-                                private readonly FavoriteRepository     $favoriteRepository,
-                                private readonly ImageConfiguration     $imageConfiguration,
-                                private readonly LogService             $logService
+                                private readonly FavoriteRepository  $favoriteRepository,
+                                private readonly ImageConfiguration  $imageConfiguration,
+                                private readonly LogService          $logService
     )
     {
     }
@@ -84,6 +85,7 @@ class HomeController extends AbstractController
         $trendingOfTheDay = json_decode($standing, true);
         $standing = $this->TMDBService->trending('all', 'week', $locale);
         $trendingOfTheWeek = json_decode($standing, true);
+
         $imageConfig = $this->imageConfiguration->getConfig();
 
         return $this->render('home/index.html.twig', [
@@ -152,5 +154,25 @@ class HomeController extends AbstractController
             'from' => 'home',
             'imageConfig' => $imageConfig,
         ]);
+    }
+
+    #[Route('/get-posters', name: 'app_home_get_posters', methods: ['GET'])]
+    public function getRandomPosters(): Response
+    {
+        $imageConfig = $this->imageConfiguration->getConfig();
+        $movieCount = $this->userMovieRepository->userMoviesCount();
+        $movies = $this->userMovieRepository->findBy([], ['createdAt' => 'DESC'], 20, $movieCount - 20);
+        $serieCount = $this->serieRepository->seriesCount();
+        $series = $this->serieRepository->findBy([], ['createdAt' => 'DESC'], 20, $serieCount - 20);
+        $movies = array_map(function ($movie) use ($imageConfig) {
+            return $imageConfig['url'] . $imageConfig['poster_sizes'][2] . $movie->getPosterPath();
+        }, $movies);
+        $series = array_map(function ($serie) use ($imageConfig) {
+            return $imageConfig['url'] . $imageConfig['poster_sizes'][2] . $serie->getPosterPath();
+        }, $series);
+        $posters = array_merge($movies, $series);
+        shuffle($posters);
+
+        return $this->json($posters);
     }
 }

@@ -9,7 +9,7 @@
         <div class="infos">
             <div>{{ serie.name }}</div>
             <div>{{ 'First Air at'|trans }} : {{ serie.firstDateAir ? serie.firstDateAir|format_date() : '' }}</div>
-            <div>{{ 'Added at'|trans }} : {{ serie.addedAt ? serie.addedAt|format_date() : '' }} — {{ 'Updated at'|trans }} : {{ serie.updatedAt ? serie.updatedAt|format_datetime() : '' }}</div>
+            <div>{{ 'Added at'|trans }} : {{ serie.createdAt ? serie.createdAt|format_date() : '' }} — {{ 'Updated at'|trans }} : {{ serie.updatedAt ? serie.updatedAt|format_datetime() : '' }}</div>
             <div>{{ serie.overview }}</div>
         </div>
         {% if serie.networks|length %}

@@ -328,7 +328,7 @@ class SerieController extends AbstractController
         $serie['backdropPath'] = $result->getBackdropPath();
         $serie['serieId'] = $result->getSerieId();
         $serie['firstDateAir'] = $result->getFirstDateAir();
-        $serie['addedAt'] = $result->getAddedAt();
+        $serie['createdAt'] = $result->getCreatedAt();
         $serie['updatedAt'] = $result->getUpdatedAt();
         $serie['status'] = $result->getStatus();
         $serie['tmdb_status'] = $tv['status'];
