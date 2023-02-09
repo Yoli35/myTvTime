@@ -363,7 +363,6 @@ class SerieController extends AbstractController
 
         /** @var Serie[] $todayAirings */
         $todayAirings = $this->todayAiringSeries($date, $request->getLocale());
-        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [
@@ -975,9 +974,12 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale(), ['credits']);
         $season = json_decode($standing, true);
         $credits = $season['credits'];
+        if (!key_exists('cast', $credits)) {
+            $credits['cast'] = [];
+        }
         $episodes = [];
         foreach ($season['episodes'] as $episode) {
-            $standing = $this->TMDBService->getTvEpisode($id, $seasonNumber, $episode['episode_number'], $request->getLocale());
+            $standing = $this->TMDBService->getTvEpisode($id, $seasonNumber, $episode['episode_number'], $request->getLocale(), ['credits']);
             $tmdbEpisode = json_decode($standing, true);
             if ($serie['userSerieViewing']) {
                 if ($serie['userSerieViewing']->isTimeShifted()) {
@@ -994,6 +996,13 @@ class SerieController extends AbstractController
                 }
             }
             $episodes[] = $tmdbEpisode;
+            if (key_exists('cast', $tmdbEpisode['credits'])) {
+                foreach ($tmdbEpisode['credits']['cast'] as $cast) {
+                    if (!in_array($cast, $credits['cast'])) {
+                        $credits['cast'][] = $cast;
+                    }
+                }
+            }
         }
 
         return $this->render('serie/season.html.twig', [

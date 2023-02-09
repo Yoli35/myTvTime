@@ -1,0 +1,44 @@
+{% if credits.cast %}
+    {% if credits.cast|length %}
+        <section>
+            <div class="cast">
+                <h4>{{ 'Cast'|trans }} ({{ credits.cast|length }})</h4>
+                <div class="list">
+                    {% for people in credits.cast %}
+                        <a href="{{ path('app_people', {id: people.id}) }}">
+                            <div class="people">
+                                <div class="profile">
+                                    {% if people.profile_path %}
+                                        <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
+                                    {% else %}
+                                        <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
+                                    {% endif %}
+                                    {% if people.recurring_character is defined and people.recurring_character %}
+                                        <div class="status"><i class="fa-solid fa-rotate-right" title="{{ 'Recurring character'|trans }}"></i></div>
+                                    {% endif %}
+                                    {% if people.guest_star is defined and people.guest_star %}
+                                        <div class="status"><i class="fa-solid fa-star" title="{{ 'Guest star'|trans }}"></i></div>
+                                    {% endif %}
+                                </div>
+                                <div>{{ people.name }}</div>
+                                {% if people.character is defined %}
+                                    <div>{{ people.character }}</div>
+                                {% endif %}
+                                <div>
+                                    {% if people.gender is defined %}
+                                        {{ (people.known_for_department~(people.gender==1?'.she':'.he'))|trans }}
+                                    {% else %}
+                                        {{ people.known_for_department|trans }}
+                                    {% endif %}
+                                </div>
+                                {% if people.episodeString is defined %}
+                                    <div title="{{ people.episodesString }}">{{ people.episodes }}</div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endif %}

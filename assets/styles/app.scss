@@ -589,7 +589,7 @@ nav.active {
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '°';
     @include flex-row(center, start);
-    background-color: var(--gradiant-grey-20-alpha-50);
+    background-color: hsla(206deg, 50%, 24%, .25);/*var(--gradiant-grey-20-alpha-50);*/
     border-radius: .5em;
     height: 3em;
     margin: 1em 0;
@@ -599,7 +599,7 @@ nav.active {
     z-index: 50;
 
     &:hover {
-        background-color: var(--gradiant-grey-20);
+        background-color: hsl(206deg, 50%, 24%); /*var(--gradiant-grey-20);*/
     }
 
     a {
@@ -607,7 +607,7 @@ nav.active {
     }
 
     .menu {
-        color: var(--gradiant-grey-60);
+        color: var(--gradiant-ardoise-90);
         cursor: pointer;
         height: 2em;
         margin: 0 2em 0 1em;
@@ -647,9 +647,9 @@ nav.active {
         }
 
         .menu-items {
-            background-color: var(--gradiant-grey-30);
+            background-color: hsl(206deg, 50%, 24%); /*var(--gradiant-grey-30);*/
             border-radius: .25em;
-            box-shadow: 0 0 1em var(--gradiant-grey-10-alpha-20);
+            box-shadow: 0 0 1em var(--gradiant-grey-10-alpha-50);
             display: none;
             left: -6em;
             overflow: hidden;
@@ -663,7 +663,7 @@ nav.active {
                 width: 100%;
 
                 a {
-                    color: var(--gradiant-grey-80);
+                    color: var(--gradiant-ardoise-90);
                     display: flex;
                     font-weight: 100;
                     gap: .5em;
@@ -722,7 +722,7 @@ nav.active {
             }
 
             span {
-                color: var(--gradiant-grey-60);
+                color: var(--gradiant-ardoise-90);
                 font-size: .875em;
                 font-variant: small-caps;
                 font-weight: 100;
@@ -740,7 +740,7 @@ nav.active {
 
             &.active {
                 align-items: center;
-                color: var(--gradiant-grey-60);
+                color: var(--gradiant-ardoise-90);
                 display: flex;
                 height: 100%;
                 max-width: 50%;

@@ -69,6 +69,10 @@
             </div>
             <main>
                 <article class="full">
+                    {% if credits %}
+                        {{ include('blocks/serie/_cast.html.twig') }}
+                        {{ include('blocks/serie/_crew.html.twig') }}
+                    {% endif %}
                     <section>
                         <div class="episodes">
                             {% for episode in episodes %}

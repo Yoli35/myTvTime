@@ -1,0 +1,32 @@
+{% if credits.crew %}
+    {% if credits.crew|length %}
+        <section>
+            <div class="cast">
+                <h4>{{ 'Crew'|trans }} ({{ credits.crew|length }})</h4>
+                <div class="list">
+                    {% for people in credits.crew %}
+                        <a href="{{ path('app_people', {id: people.id}) }}">
+                            <div class="people">
+                                <div class="profile">
+                                    {% if people.profile_path %}
+                                        <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
+                                    {% else %}
+                                        <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
+                                    {% endif %}
+                                </div>
+                                <div>{{ people.name }}</div>
+                                <div>
+                                    {% if people.gender is defined %}
+                                        {{ (people.job~(people.gender==1?'.she':'.he'))|trans }}
+                                    {% else %}
+                                        {{ people.job|trans }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endif %}
