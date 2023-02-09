@@ -64,4 +64,64 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        let myCanvas, palettes;
+        window.addEventListener("DOMContentLoaded", () => {
+            const newSeason = document.querySelector('.new-season');
+
+            if (newSeason) {
+                setTimeout(celebrate, 300);
+            }
+
+            palettes = [
+                ['#940079', '#ff61e2', '#ffa7ef', '#ffa7bf', '#ff618b', '#940027'],
+                ['#255480', '#6aa1d4', '#9bc0e2', '#9be2d2', '#6ad4bb', '#25806b'],
+                ['#89a9c8', '#749abe', '#5f8bb4', '#4e7ca6', '#456d92', '#3b5d7d'],
+                ['#1bbd1f', '#36d55d', '#6ad49b', '#8dd7bf', '#aedcd8', '#cce2e5'],
+                ['#804625', '#d4906a', '#e2b59b', '#e29bb5', '#d46a90', '#802546'],
+                ['#fa9e6b', '#fa8e52', '#f97e39', '#f86e20', '#f75e08', '#df5407'],
+                ['#be88c8', '#b373bf', '#a75eb5', '#994da8', '#864393', '#733a7e']
+            ];
+
+            function celebrate() {
+                let duration = 3 * 1000;
+                let end = Date.now() + duration;
+                myCanvas = document.createElement('canvas');
+                document.body.appendChild(myCanvas);
+                (function frame() {
+                    const particuleCount = 10 + Math.floor(Math.random() * 10);
+                    const spread = 90 + Math.floor(Math.random() * 30);
+                    const palette = palettes[Math.floor(Math.random() * palettes.length)];
+                    const position = [{x: 0, y: .5}, {x: 1, y: .5}];
+                    confetti({
+                        resize: true,
+                        useWorker: true,
+                        particleCount: particuleCount,
+                        angle: 60,
+                        spread: spread,
+                        colors: palette,
+                        origin: position[0]
+                    });
+                    confetti({
+                        resize: true,
+                        useWorker: true,
+                        particleCount: particuleCount,
+                        angle: 120,
+                        spread: spread,
+                        colors: palette,
+                        origin: position[1]
+                    });
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    } else {
+                        setTimeout(() => {
+                            document.body.removeChild(myCanvas);
+                        }, 3000);
+                    }
+                }());
+            }
+        });
+
+    </script>
 {% endblock %}
