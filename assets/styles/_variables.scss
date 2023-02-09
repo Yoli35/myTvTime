@@ -287,8 +287,9 @@ $fa-font-path: "../webfonts";
 
     .banner {
         background-image: url($image);
-        background-position: left center;
-        background-size: cover;
+        background-position: 75% center;
+        background-repeat: no-repeat;
+        background-size: contain;
         border-radius: 1em;
         height: 160px;
         position: relative;

@@ -6,6 +6,11 @@
 .yt-header {
     @include banner("../images/youtube.png");
     background-color:  hsla(206deg, 50%, 24%, .2);
+    border-radius: 1em;
+    margin-top: 1em;
+    &:hover {
+        background-color:  hsl(206deg, 50%, 24%);
+    }
 }
 
 .yt-result {
@@ -573,7 +578,7 @@
     padding-top: 1em;
 
     .header {
-        @include animated-header("../images/youtube-light.png");
+        @include animated-header("../images/youtube.png");
     }
 
     .search {
@@ -936,7 +941,7 @@
     .youtube-search {
         .header {
             .backdrop {
-                background-image: url("../images/youtube-dark.png");
+                background-image: url("../images/youtube.png");
             }
         }
     }
