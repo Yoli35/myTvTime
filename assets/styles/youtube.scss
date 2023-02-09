@@ -4,7 +4,8 @@
 @import "../fontawesome/scss/brands.scss";
 
 .yt-header {
-    @include banner("../images/youtube-light.png");
+    @include banner("../images/youtube.png");
+    background-color:  hsla(206deg, 50%, 24%, .2);
 }
 
 .yt-result {
@@ -931,12 +932,6 @@
 }
 
 @media (prefers-color-scheme: dark) {
-
-    .yt-header {
-        .banner {
-            background-image: url("../images/youtube-dark.png");
-        }
-    }
 
     .youtube-search {
         .header {
