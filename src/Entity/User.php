@@ -52,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 8, nullable: true)]
     private ?string $preferredLanguage = null;
 
-    #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'users')]
     private Collection $movies;
 
     #[ORM\ManyToMany(targetEntity: TikTokVideo::class, inversedBy: 'users')]
@@ -253,14 +253,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, UserMovie>
+     * @return Collection<int, Movie>
      */
     public function getMovies(): Collection
     {
         return $this->movies;
     }
 
-    public function addMovie(UserMovie $movie): self
+    public function addMovie(Movie $movie): self
     {
         if (!$this->movies->contains($movie)) {
             $this->movies[] = $movie;
@@ -269,7 +269,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeMovie(UserMovie $movie): self
+    public function removeMovie(Movie $movie): self
     {
         $this->movies->removeElement($movie);
 

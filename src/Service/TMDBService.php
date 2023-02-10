@@ -133,12 +133,17 @@ class TMDBService
         }
     }
 
-    public function getMovie($movieId, $locale): ?string
+    public function getMovie($movieId, $locale, $details = null): ?string
     {
+        $request = 'https://api.themoviedb.org/3/movie/' . $movieId . '?api_key=' . $this->api_key . '&language=' . $locale;
+        if ($details) {
+            $request .= '&append_to_response='.implode(',', $details);
+        }
+
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/movie/' . $movieId . '?api_key=' . $this->api_key . '&language=' . $locale,
+                $request,
             );
             try {
                 return $response->getContent();

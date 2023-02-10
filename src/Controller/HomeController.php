@@ -7,7 +7,7 @@ use App\Repository\FavoriteRepository;
 use App\Repository\SerieRepository;
 
 //use App\Repository\SerieViewingRepository;
-use App\Repository\UserMovieRepository;
+use App\Repository\MovieRepository;
 use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
@@ -19,13 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    public function __construct(private readonly TMDBService         $TMDBService,
-                                private readonly UserMovieRepository $userMovieRepository,
-                                private readonly SerieRepository     $serieRepository,
+    public function __construct(private readonly TMDBService        $TMDBService,
+                                private readonly MovieRepository    $userMovieRepository,
+                                private readonly SerieRepository    $serieRepository,
 //                                private readonly SerieViewingRepository $serieViewingRepository,
-                                private readonly FavoriteRepository  $favoriteRepository,
-                                private readonly ImageConfiguration  $imageConfiguration,
-                                private readonly LogService          $logService
+                                private readonly FavoriteRepository $favoriteRepository,
+                                private readonly ImageConfiguration $imageConfiguration,
+                                private readonly LogService         $logService
     )
     {
     }

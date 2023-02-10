@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Entity\UserMovie;
+use App\Entity\Movie;
 use App\Service\TMDBService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -49,8 +49,8 @@ class UserMovieUpdateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $repoUM = $this->managerRegistry->getRepository(UserMovie::class);
-        /** @var UserMovie $userMovies */
+        $repoUM = $this->managerRegistry->getRepository(Movie::class);
+        /** @var Movie $userMovies */
         $userMovies = $repoUM->findAll();
 
         $total_runtime = 0;

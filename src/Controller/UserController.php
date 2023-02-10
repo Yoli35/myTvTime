@@ -11,7 +11,7 @@ use App\Form\UserType;
 use App\Repository\FriendRepository;
 use App\Repository\MovieCollectionRepository;
 use App\Repository\SettingsRepository;
-use App\Repository\UserMovieRepository;
+use App\Repository\MovieRepository;
 use App\Repository\UserRepository;
 use App\Service\BetaSeriesService;
 use App\Service\LogService;
@@ -229,7 +229,7 @@ class UserController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/user/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function userMovies(Request $request, UserMovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
+    public function userMovies(Request $request, MovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
@@ -277,7 +277,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/movies/more', name: 'app_personal_movies_more')]
-    public function userMoviesMore(Request $request, UserMovieRepository $userMovieRepository): Response
+    public function userMoviesMore(Request $request, MovieRepository $userMovieRepository): Response
     {
         return $this->json([
 //            'results' => $userMovieRepository->findUserMovies($request->query->get('id'), $request->query->get('offset')),
@@ -299,7 +299,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{_locale}/user/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function getCollection(Request $request, $id, MovieCollectionRepository $collectionRepository, TMDBService $TMDBService, UserMovieRepository $movieRepository, SettingsRepository $settingsRepository): Response
+    public function getCollection(Request $request, $id, MovieCollectionRepository $collectionRepository, TMDBService $TMDBService, MovieRepository $movieRepository, SettingsRepository $settingsRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -384,7 +384,7 @@ class UserController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/{_locale}/user/movies/add', name: 'app_personnel_movie_add', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function add(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, EntityManagerInterface $entityManager, MovieController $movieController): JsonResponse
+    public function add(Request $request, TMDBService $callTmdbService, MovieRepository $userMovieRepository, EntityManagerInterface $entityManager, MovieController $movieController): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -398,7 +398,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{_locale}/user/movies/export', name: 'app_personal_movies_export', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function export(Request $request, UserMovieRepository $userMovieRepository): JsonResponse
+    public function export(Request $request, MovieRepository $userMovieRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -441,7 +441,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{_locale}/movielist/updateSample', name: 'app_json_sample', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function updateSample(Request $request, UserMovieRepository $userMovieRepository, UserRepository $userRepository): JsonResponse
+    public function updateSample(Request $request, MovieRepository $userMovieRepository, UserRepository $userRepository): JsonResponse
     {
         $userId = $request->get('user_id');
         $ids = $request->get('ids');
@@ -473,7 +473,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{_locale}/user/movies/ids', name: 'app_json_ids', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function jsonUserMovieIds(MovieController $movieController, UserMovieRepository $userMovieRepository): JsonResponse
+    public function jsonUserMovieIds(MovieController $movieController, MovieRepository $userMovieRepository): JsonResponse
     {
         return $this->json([
             'movie_ids' => $movieController->getUserMovieIds($userMovieRepository),

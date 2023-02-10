@@ -152,7 +152,7 @@
             margin-top: .5em;
         }
 
-        .icon {
+        .icon-minimise {
             flex-shrink: 0;
             cursor: pointer;
         }
@@ -959,18 +959,27 @@
 
     .yt-result {
         .yt-video {
-            background-color: var(--gradiant-grey-30-alpha-50);
+            background-color: var(--gradiant-ardoise-30-alpha-50);
         }
     }
 
     .yt-videos {
 
         .parameters {
-            background-color: var(--gradiant-grey-20);
+            background-color: var(--gradiant-ardoise-20);
 
             .content {
                 .input {
-                    background-color: var(--gradiant-grey-30);
+                    background-color: var(--gradiant-ardoise-30);
+
+                    .sort, .order {
+                        label:has(select) {
+                            select {
+                                background-color: var(--gradiant-ardoise-40);
+                                color: var(--gradiant-ardoise-90);
+                            }
+                        }
+                    }
                 }
                 &.minimise {
                     .input {
@@ -981,16 +990,16 @@
             }
 
             span {
-                color: var(--gradiant-grey-60);
+                color: var(--gradiant-ardoise-60);
 
                 span {
-                    color: var(--gradiant-grey-70);
+                    color: var(--gradiant-ardoise-70);
                 }
             }
         }
 
         .search-tags {
-            background-color: var(--gradiant-grey-20);
+            background-color: var(--gradiant-ardoise-20);
         }
 
         .result {
@@ -998,7 +1007,7 @@
     }
 
     .yt-video {
-        background-color: var(--gradiant-grey-20);
+        background-color: var(--gradiant-ardoise-20);
     }
 
     .yt-video-page {
@@ -1009,7 +1018,7 @@
         .details {
             .description {
                 a {
-                    color: var(--gradiant-grey-70);
+                    color: var(--gradiant-ardoise-70);
                 }
             }
         }

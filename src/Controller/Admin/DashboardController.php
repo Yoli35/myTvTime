@@ -11,7 +11,7 @@ use App\Entity\ImageConfig;
 use App\Entity\MovieCollection;
 use App\Entity\TikTokVideo;
 use App\Entity\User;
-use App\Entity\UserMovie;
+use App\Entity\Movie;
 use App\Entity\YoutubeVideo;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -62,7 +62,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('articles', 'fa-solid fa-newspaper', Article::class);
         yield MenuItem::linkToCrud('Images', 'fa fa-image', ArticleImage::class);
         yield MenuItem::section('Movies');
-        yield MenuItem::linkToCrud('Movies', 'fa-solid fa-film', UserMovie::class);
+        yield MenuItem::linkToCrud('Movies', 'fa-solid fa-film', Movie::class);
         yield MenuItem::linkToCrud('Collections', 'fa-solid fa-film', MovieCollection::class);
         yield MenuItem::section('Events');
         yield MenuItem::linkToCrud('Events', 'fa-solid fa-calendar', Event::class);

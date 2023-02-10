@@ -96,7 +96,7 @@ class SerieFrontController extends AbstractController
                 }
 
                 $serie->setBackdropPath($tv['backdrop_path']);
-                $serie->setEpisodeDurations($this->collectEpisodeDurations($serie));
+                $serie->setEpisodeDurations($this->collectEpisodeDurations($tv));
                 $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
                 $serie->setName($tv['name']);
                 $serie->setNumberOfEpisodes($tv['number_of_episodes']);
@@ -162,11 +162,10 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    public function collectEpisodeDurations(Serie $serie): array
+    public function collectEpisodeDurations($tv): array
     {
         $tmdb = $this->tmdbService;
-        $standing = $tmdb->getTv($serie->getSerieId(), 'fr');
-        $tv = json_decode($standing, true);
+        $id = $tv['id'];
         $durations = [];
         $durations['episode_run_time'] = $tv['episode_run_time'];
 
@@ -179,7 +178,7 @@ class SerieFrontController extends AbstractController
                 continue;
             }
             $durations[$seasonNumber] = [];
-            $standing = $tmdb->getTvSeason($serie->getSerieId(), $seasonNumber, 'fr');
+            $standing = $tmdb->getTvSeason($id, $seasonNumber, 'fr');
             $tmdbSeason = json_decode($standing, true);
             foreach ($tmdbSeason['episodes'] as $episode) {
                 $durations[$seasonNumber][] = [$episode['episode_number'] => $episode['runtime']];

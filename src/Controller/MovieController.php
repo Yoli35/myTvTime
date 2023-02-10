@@ -5,13 +5,13 @@ namespace App\Controller;
 use App\Entity\Favorite;
 use App\Entity\Rating;
 use App\Entity\User;
-use App\Entity\UserMovie;
+use App\Entity\Movie;
 use App\Form\MovieByNameType;
 use App\Repository\FavoriteRepository;
 use App\Repository\GenreRepository;
 use App\Repository\MovieCollectionRepository;
 use App\Repository\RatingRepository;
-use App\Repository\UserMovieRepository;
+use App\Repository\MovieRepository;
 use App\Service\CallImdbService;
 use App\Service\LogService;
 use App\Service\TMDBService;
@@ -28,21 +28,34 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MovieController extends AbstractController
 {
-    public function __construct(private readonly FavoriteRepository  $favoriteRepository,
-                                private readonly TranslatorInterface $translator,
-                                private readonly LogService          $logService)
+    public function __construct(
+        private readonly FavoriteRepository        $favoriteRepository,
+        private readonly GenreRepository           $genreRepository,
+        private readonly ImageConfiguration        $imageConfiguration,
+        private readonly LogService                $logService,
+        private readonly MovieCollectionRepository $movieCollectionRepository,
+        private readonly MovieRepository           $movieRepository,
+        private readonly RatingRepository          $ratingRepository,
+        private readonly TMDBService               $tmdbService,
+        private readonly TranslatorInterface       $translator,
+    )
     {
     }
 
     #[Route(['fr' => '/{_locale}/films/', 'en' => '/{_locale}/movies/', 'de' => '/{_locale}/filme/', 'es' => '/{_locale}/peliculas/'], name: 'app_movie_list', requirements: ['_locale' => 'fr|en|de|es', 'page' => 1, 'sort_by' => 'popularity.desc'])]
-    public function index(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
+    public function index(Request $request): Response
     {
+        $imageConfiguration = $this->imageConfiguration;
+        $movieRepository = $this->movieRepository;
+        $tmdbService = $this->tmdbService;
+
+
         $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
         $userMovieIds = [];
         if ($user) {
-            $userMovies = $userMovieRepository->findUserMovieIds($user->getId());
+            $userMovies = $movieRepository->findUserMovieIds($user->getId());
             foreach ($userMovies as $userMovie) {
                 $userMovieIds[] = $userMovie['movie_db_id'];
             }
@@ -122,7 +135,7 @@ class MovieController extends AbstractController
         ];
 
         $page = $request->query->getInt('page', 1);
-        $standing = $callTmdbService->discoverMovies($page, $sortBy, $locale);
+        $standing = $tmdbService->discoverMovies($page, $sortBy, $locale);
         $discovers = json_decode($standing, true);
         $imageConfig = $imageConfiguration->getConfig();
 
@@ -150,29 +163,26 @@ class MovieController extends AbstractController
     }
 
     #[Route(['fr' => '/{_locale}/film/{id}', 'en' => '/{_locale}/movie/{id}', 'de' => '/{_locale}/filme/{id}', 'es' => '/{_locale}/pelicula/{id}'], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function show(Request $request, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, MovieCollectionRepository $collectionRepository, ImageConfiguration $imageConfiguration): Response
+    public function show(Request $request, $id): Response
     {
         $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
         $locale = $request->getLocale();
-        $standing = $callTmdbService->getMovie($id, $locale);
+        $standing = $this->tmdbService->getMovie($id, $locale, ['videos,images,credits,recommendations,watch/providers']);
         $movieDetail = json_decode($standing, true);
-
-        $standing = $callTmdbService->getMovieRecommendations($id, $locale);
-        $recommendations = json_decode($standing, true);
-
-        $standing = $callTmdbService->getMovieCredits($id, $locale);
-        $credits = json_decode($standing, true);
+        $recommendations = $movieDetail['recommendations']['results'];
+        $credits = $movieDetail['credits'];
         $cast = $credits['cast'];
         $sortedCrew = $this->sortCrew($credits['crew']);
+        $videos = $movieDetail['videos']['results'];
+        $images = $movieDetail['images'];
+        $watchProviders = $movieDetail['watch/providers']['results'];
 
-        $standing = $callTmdbService->getCountries();
+        $standing = $this->tmdbService->getCountries();
         $countries = json_decode($standing, true);
 
-        $standing = $callTmdbService->getWatchProviders($id);
-        $watchProviders = json_decode($standing, true);
         if (key_exists('results', $watchProviders)) {
             $watchProviders = $watchProviders['results'];
             if (key_exists(strtoupper($locale), $watchProviders)) {
@@ -182,11 +192,11 @@ class MovieController extends AbstractController
             }
         }
 
-        $standing = $callTmdbService->getMovieReleaseDates($id);
+        $standing = $this->tmdbService->getMovieReleaseDates($id);
         $releaseDates = json_decode($standing, true);
         $releaseDates = $this->getLocaleDates($releaseDates['results'], $countries, $locale);
 
-        $imageConfig = $imageConfiguration->getConfig();
+        $imageConfig = $this->imageConfiguration->getConfig();
 
         $hasBeenSeen = false;//$this->hasBeenSeen($id, $userMovieRepository);
         $collections = [];
@@ -194,10 +204,10 @@ class MovieController extends AbstractController
         $userMovieId = 0;
 
         if ($user) {
-            $collections = $collectionRepository->findBy(['user' => $user]);
-            $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
+            $collections = $this->movieCollectionRepository->findBy(['user' => $user]);
+            $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
             if ($userMovie) {
-                $hasBeenSeen = count($userMovieRepository->isInUserMovies($user->getId(), $userMovie->getId()));
+                $hasBeenSeen = count($this->movieRepository->isInUserMovies($user->getId(), $userMovie->getId()));
 
                 $userMovieId = $userMovie->getId();
                 $movieCollections = $userMovie->getMovieCollections();
@@ -212,14 +222,11 @@ class MovieController extends AbstractController
             $movieDetail['release_date'] = "";
         }
 
-        $standing = $callTmdbService->getMovieImages($id, $locale);
-        $images = json_decode($standing, true);
-
         $ygg = str_replace(' ', '+', $movieDetail['title']);
         $ygg = str_replace('\'', '+', $ygg);
 
         if (!$movieDetail['overview'] || !strlen($movieDetail['overview'])) {
-            $movie = $userMovieRepository->findOneBy(['movieDbId' => $id]);
+            $movie = $this->movieRepository->findOneBy(['movieDbId' => $id]);
             switch ($locale) {
                 case 'fr':
                     if ($movie && $movie->getOverviewFr()) {
@@ -243,10 +250,11 @@ class MovieController extends AbstractController
                     break;
             }
         }
+        dump($movieDetail);
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
-            'recommendations' => $recommendations['results'],
+            'recommendations' => $recommendations,
             'dates' => $releaseDates,
             'watchProviders' => $watchProviders,
             'hasBeenSeen' => $hasBeenSeen,
@@ -256,6 +264,7 @@ class MovieController extends AbstractController
             'collections' => $collections,
             'movieCollection' => $movieCollectionIds,
             'images' => $images,
+            'videos' => $videos,
             'user' => $user,
             'ygg' => $ygg,
             'imageConfig' => $imageConfig,
@@ -390,15 +399,15 @@ class MovieController extends AbstractController
     }
 
     #[Route(['fr' => '/{_locale}/film/collection/{mid}/{id}', 'en' => '/{_locale}/movie/collection/{mid}/{id}', 'de' => '/{_locale}/filme/sammlung/{mid}/{id}', 'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function movieCollection(Request $request, $mid, $id, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository, GenreRepository $genreRepository, ImageConfiguration $imageConfiguration): Response
+    public function movieCollection(Request $request, $mid, $id): Response
     {
         $locale = $request->getLocale();
-        $standing = $callTmdbService->getMovieCollection($id, $locale);
+        $standing = $this->tmdbService->getMovieCollection($id, $locale);
         $collection = json_decode($standing, true);
-        $standing = $callTmdbService->getMovie($mid, $locale);
+        $standing = $this->tmdbService->getMovie($mid, $locale);
         $movie = json_decode($standing, true);
 
-        $genresEntity = $genreRepository->findAll();
+        $genresEntity = $this->genreRepository->findAll();
         $genres = [];
         foreach ($genresEntity as $genre) {
             $genres[$genre->getGenreId()] = $genre->getName();
@@ -411,12 +420,12 @@ class MovieController extends AbstractController
             }
         }
 
-        $imageConfig = $imageConfiguration->getConfig();
+        $imageConfig = $this->imageConfiguration->getConfig();
 
         return $this->render('movie/collection.html.twig', [
             'movie' => $movie,
             'collection' => $collection,
-            'userMovies' => $this->getUserMovieIds($userMovieRepository),
+            'userMovies' => $this->getUserMovieIds(),
             'genres' => $genres,
             'user' => $this->getUser(),
             'imageConfig' => $imageConfig,
@@ -426,21 +435,21 @@ class MovieController extends AbstractController
     }
 
     #[Route(['fr' => '/{_locale}/films/recherche/par/genre/{genres}/{page}', 'en' => '/{_locale}/movies/by/genre/{genres}/{page}', 'de' => '/{_locale}/filmen/nach/genre/{genres}/{page}', 'es' => '/{_locale}/peliculas/por/genero/{genres}/{page}'], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesByGenres(Request $request, $page, $genres, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function moviesByGenres(Request $request, $page, $genres): Response
     {
         $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
-        $standing = $callTmdbService->moviesByGenres($page, $genres, $locale);
+        $standing = $this->tmdbService->moviesByGenres($page, $genres, $locale);
         $discovers = json_decode($standing, true);
-        $standing = $callTmdbService->getGenres($locale);
+        $standing = $this->tmdbService->getGenres($locale);
         $possibleGenres = json_decode($standing, true);
 
         $currentGenres = explode(',', $genres); // "Action,Adventure" => ['Action', 'Adventure']
-        $imageConfig = $imageConfiguration->getConfig();
+        $imageConfig = $this->imageConfiguration->getConfig();
 
         return $this->render('movie/genre.html.twig', [
             'discovers' => $discovers,
-            'userMovies' => $this->getUserMovieIds($userMovieRepository),
+            'userMovies' => $this->getUserMovieIds(),
             'genres' => $genres,
             'possible_genres' => $possibleGenres,
             'current_genres' => $currentGenres,
@@ -452,13 +461,13 @@ class MovieController extends AbstractController
     }
 
     #[Route(['fr' => '/{_locale}/films/recherche/par/date/{date}/{page}', 'en' => '/{_locale}/movies/by/date/{date}/{page}', 'de' => '/{_locale}/filmen/nach/datum/{date}/{page}', 'es' => '/{_locale}/peliculas/por/fecha/{date}/{page}'], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesByDate(Request $request, $page, $date, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function moviesByDate(Request $request, $page, $date): Response
     {
         $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
-        $standing = $callTmdbService->moviesByDate($page, $date, $locale);
+        $standing = $this->tmdbService->moviesByDate($page, $date, $locale);
         $discovers = json_decode($standing, true);
-        $imageConfig = $imageConfiguration->getConfig();
+        $imageConfig = $this->imageConfiguration->getConfig();
 
         $now = intval(date("Y"));
         $years = [];
@@ -468,7 +477,7 @@ class MovieController extends AbstractController
 
         return $this->render('movie/date.html.twig', [
             'discovers' => $discovers,
-            'userMovies' => $this->getUserMovieIds($userMovieRepository),
+            'userMovies' => $this->getUserMovieIds(),
             'date' => $date,
             'years' => $years,
             'imageConfig' => $imageConfig,
@@ -479,14 +488,14 @@ class MovieController extends AbstractController
     }
 
     #[Route(['fr' => '/{_locale}/films/recherche/par/nom/{page}', 'en' => '/{_locale}/movies/search/{page}', 'de' => '/{_locale}/filmen/suche/{page}', 'es' => '/{_locale}/peliculas/buscar/{page}'], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesSearch(Request $request, $page, UserMovieRepository $userMovieRepository, TMDBService $callTmdbService, ImageConfiguration $imageConfiguration): Response
+    public function moviesSearch(Request $request, $page): Response
     {
         $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         $query = $request->query->get('query');
         $year = $request->query->get('year');
-        $imageConfig = $imageConfiguration->getConfig();
+        $imageConfig = $this->imageConfiguration->getConfig();
 
         $form = $this->createForm(MovieByNameType::class, ['query' => $query, 'year' => $year]);
         $form->handleRequest($request);
@@ -498,7 +507,7 @@ class MovieController extends AbstractController
             $page = 1;
         }
         if ($query && strlen($query)) {
-            $standing = $callTmdbService->moviesSearch($page, $query, $year, $locale);
+            $standing = $this->tmdbService->moviesSearch($page, $query, $year, $locale);
             $discovers = json_decode($standing, true);
         }
 
@@ -511,7 +520,7 @@ class MovieController extends AbstractController
             'year' => $year,
             'page' => $page,
             'discovers' => $discovers,
-            'userMovies' => $this->getUserMovieIds($userMovieRepository),
+            'userMovies' => $this->getUserMovieIds(),
             'imageConfig' => $imageConfig,
             'user' => $this->getUser(),
             'dRoute' => 'app_movie',
@@ -519,36 +528,36 @@ class MovieController extends AbstractController
         ]);
     }
 
-    public function getUserMovieIds(UserMovieRepository $userMovieRepository): array
+    public function getUserMovieIds(): array
     {
         /** @var User $user */
         $user = $this->getUser();
         $userMovieIds = [];
         if ($user) {
-            $userMovies = $userMovieRepository->findUserMovieIds($user->getId());
-            foreach ($userMovies as $userMovie) {
-                $userMovieIds[] = $userMovie['movie_db_id'];
-            }
+            $userMovies = $this->movieRepository->findUserMovieIds($user->getId());
+            $userMovieIds = array_map(function ($userMovie) {
+                return $userMovie['movie_db_id'];
+            }, $userMovies);
         }
         return $userMovieIds;
     }
 
     #[Route('/movie/collection/toggle', name: 'app_movie_collection_toggle')]
-    public function toggleMovieToCollection(Request $request, MovieCollectionRepository $collectionRepository, UserMovieRepository $movieRepository, TranslatorInterface $translator): Response
+    public function toggleMovieToCollection(Request $request): Response
     {
         $collectionId = $request->query->getInt("c");
         $action = $request->query->get("a");
         $movieId = $request->query->getInt("m");
 
-        $collection = $collectionRepository->find($collectionId);
-        $movie = $movieRepository->findOneBy(["movieDbId" => $movieId]);
+        $collection = $this->movieCollectionRepository->find($collectionId);
+        $movie = $this->movieRepository->findOneBy(["movieDbId" => $movieId]);
 
         if ($action == "a") $collection->addMovie($movie);
         if ($action == "r") $collection->removeMovie($movie);
-        $collectionRepository->add($collection, true);
+        $this->movieCollectionRepository->add($collection, true);
 
         $message = "The movie « movie_name » has been " . ($action == "a" ? "added to" : "removed from") . " your collection « collection_name ».";
-        $message = $translator->trans($message, ["movie_name" => $movie->getTitle(), "collection_name" => $collection->getTitle()], "messages");
+        $message = $this->translator->trans($message, ["movie_name" => $movie->getTitle(), "collection_name" => $collection->getTitle()], "messages");
         return $this->json(["message" => $message]);
     }
 
@@ -564,82 +573,82 @@ class MovieController extends AbstractController
         return $this->json(['success' => true, 'person' => $person, 'department' => $department, 'locale' => $locale,]);
     }
 
-    #[Route('/{_locale}/imdb', name: 'imdb_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
-    public function getPersonInfosOnIMDB(Request $request, CallImdbService $callImdbService, TranslatorInterface $translator): JsonResponse
-    {
-        $name = $request->query->get('name');
-        $standing = $callImdbService->searchName($name);
-        $search = json_decode($standing, true);
-        $result = $search['results'][0];
-        $namePart = explode(" ", $name);
-
-        if (!strcmp($result['title'], $name) || !strcmp($result['title'], $namePart[1] . " " . $namePart[0])) {
-            $locale = $request->query->get('locale');
-            $standing = $callImdbService->getPerson($result['id'], $locale);
-            $person = json_decode($standing, true);
-//            $summary = $translator->trans($person['summary']);
-
-            /*
-             * composer require "google/cloud-translate"
-             */
-//            if ($locale !== 'en') {
-//                $config = [
-//                    'credentials' => [
-//                        "type" => "service_account",
-//                        "project_id" => "mytvtime-349019",
-//                        "private_key_id" => "001b2f815d020608bcf09f3278e808fa0c52a6b7",
-//                        "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyXis5yVetkdre\niZqN7yrzy0kIydA4G/g9Wyh+b6VpOEz2kFjG5tIcibsEh8TP1mHPn0N95zovYv9S\n4bR3xfz1TJq9rxiVDgBLiKqQj/r8quLup0Uows3NohxtommAx2MybUrd+hngbzFD\nom+ELBty1TW3bZOz5kTpwdLKfrS5BgPdR01bJCPFn4STcc9gxGJAKXHDBF1+nbTk\n6c7vWBvKJUR8mxY20FfNEVeCoNAfBfyne2ZqOO5G8LOGFoYSjx0hNib84eB1cGCg\ncV+Ue/cpxyd3mn2v4maScs0CdAXhEAUKlQLMgCrnBUInu7lb4rfO4WJCvcg4Lr1+\nCIp62cK1AgMBAAECggEABj1GDNDuuLsb6WHt3p4ppfqL9Ps+ReAwmFDag0W7hwk5\no/xbpqWHXwkwWhG3wD9zD3S2Qy61+ddgMBGGIxRxa1FBLnZ0CS7CsuG2ebUXpgQC\nSS/fuvPJiDJuBSXDxAX1gduR3V70zcWF9yQ0+24hjaxIo0B5hLb+3SBzE7NH9hrh\nTmA3kyenwIrrzu/n+sM/edQZIj0r3Irhg3oO48UJS7HrDWwssTfHhZoE89oMNZBy\nqthl3nYkjcHtC1PuYLeg+gLyoVucoGE71zqACvbD9RjCHnlUHbgO6Q+DnKjwmLRj\nSC6qwUp/ZjxLFIYGuOjKj1nqQaU+RYdcJ/zJmIbGFwKBgQDbD7w8QWYUCo31uXE+\nf5tR8/UBV7bphcBuMGb2EJEA0ifT5Se0ePnT8PW0EtZf/TYEG0wxKIcFZVIVaeFp\nbh1fpj13rwwo+EN1n5EAbMK+A+AiLeJR8shwKirooddEuVVKm7hDH/Q2i4IoaZCO\naxBurr6WwX3HycEcY+RDQYcwRwKBgQDQcc4SyjVyCGExvGLX8ArxPsvdpixxmmvt\nKbL9vXP1+wl47b6+xf4vuxr2XWvZFoQtjrCNUqrRKbQxF+k1zpkxfP1qM/TfvxNS\nPsIw32I+BWH/2JrnVh+kpxpP5Quc2MgS+nQfUqAW5JBMSxUV9EgZbVuCsLWKwhvs\nU++6mSYPIwKBgCRiP6xuXEr12dA3RbTQsvZwo3/elrXAjk5+4Yr7A2p0fUL3a5nR\nAgWOnvCStGJrBv61nfkINyzRQEnoNRUywdQyI0FupIFlgqbVotrENbAjqqVio5Vi\n0qG2jzvmLX/vnFfw9zDG7OPmVe7qYaUV6TvI8ETPzFlTjCxv9uioyJBfAoGAHn7H\n20/iCdDYB2K8Q0NHFoxNXxwUnHovF/9lxGGXOYGEnUCLC3YD/g+tniWExbnZlKCv\ni71waDFlv1j0MX8MQoU6vfLj/GgD96Be4K+Nu+0lrTyPTRD4iCo6Wz3zOPsuKjii\nDIMWEMNXqRHC//dBJRcusCwSIz7KvwR4qiAFxWkCgYEAsCRAxJrGJMrh41nGLink\nGBP8NsWxysJi2ObeKmWWGnu7Gr7Vc7TYNVAsYBIoRHEhhUrSxz+VgJnVDPW7aC5p\nncR3Q7gHMd91wRJD3muP0ocDkPrZXiqdK9oiEbhU33KJGR9OD1Dvpcxvvhhyfgi5\npB++X6dH68Y7UIC8hM2i7GY=\n-----END PRIVATE KEY-----\n",
-//                        "client_email" => "translate@mytvtime-349019.iam.gserviceaccount.com",
-//                        "client_id" => "106684530697242476361",
-//                        "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
-//                        "token_uri" => "https://oauth2.googleapis.com/token",
-//                        "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
-//                        "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/translate%40mytvtime-349019.iam.gserviceaccount.com"
-//                    ]
-//                ];
+//    #[Route('/{_locale}/imdb', name: 'imdb_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
+//    public function getPersonInfosOnIMDB(Request $request): JsonResponse
+//    {
+//        $name = $request->query->get('name');
+//        $standing = $this->tmdbService->searchName($name);
+//        $search = json_decode($standing, true);
+//        $result = $search['results'][0];
+//        $namePart = explode(" ", $name);
 //
-//                $person['translated'] = '';
-//                $translationClient = new TranslationServiceClient($config);
-//                $content = [$summary];
-//                $targetLanguage = $locale;
-//                $response = $translationClient->translateText($content, $targetLanguage, TranslationServiceClient::locationName('mytvtime-349019', 'global'));
+//        if (!strcmp($result['title'], $name) || !strcmp($result['title'], $namePart[1] . " " . $namePart[0])) {
+//            $locale = $request->query->get('locale');
+//            $standing = $this->tmdbService->getPerson($result['id'], $locale);
+//            $person = json_decode($standing, true);
+////            $summary = $translator->trans($person['summary']);
 //
-//                foreach ($response->getTranslations() as $key => $translation) {
-//                    $person['translated'] .= $translation->getTranslatedText();
-//                }
-//            } else {
-            $person['translated'] = '';
-//            }
-            $success = true;
-        } else {
-            $person = null;
-            $success = false;
-        }
-
-        return $this->json(['success' => $success, 'person' => $person,]);
-    }
+//            /*
+//             * composer require "google/cloud-translate"
+//             */
+////            if ($locale !== 'en') {
+////                $config = [
+////                    'credentials' => [
+////                        "type" => "service_account",
+////                        "project_id" => "mytvtime-349019",
+////                        "private_key_id" => "001b2f815d020608bcf09f3278e808fa0c52a6b7",
+////                        "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyXis5yVetkdre\niZqN7yrzy0kIydA4G/g9Wyh+b6VpOEz2kFjG5tIcibsEh8TP1mHPn0N95zovYv9S\n4bR3xfz1TJq9rxiVDgBLiKqQj/r8quLup0Uows3NohxtommAx2MybUrd+hngbzFD\nom+ELBty1TW3bZOz5kTpwdLKfrS5BgPdR01bJCPFn4STcc9gxGJAKXHDBF1+nbTk\n6c7vWBvKJUR8mxY20FfNEVeCoNAfBfyne2ZqOO5G8LOGFoYSjx0hNib84eB1cGCg\ncV+Ue/cpxyd3mn2v4maScs0CdAXhEAUKlQLMgCrnBUInu7lb4rfO4WJCvcg4Lr1+\nCIp62cK1AgMBAAECggEABj1GDNDuuLsb6WHt3p4ppfqL9Ps+ReAwmFDag0W7hwk5\no/xbpqWHXwkwWhG3wD9zD3S2Qy61+ddgMBGGIxRxa1FBLnZ0CS7CsuG2ebUXpgQC\nSS/fuvPJiDJuBSXDxAX1gduR3V70zcWF9yQ0+24hjaxIo0B5hLb+3SBzE7NH9hrh\nTmA3kyenwIrrzu/n+sM/edQZIj0r3Irhg3oO48UJS7HrDWwssTfHhZoE89oMNZBy\nqthl3nYkjcHtC1PuYLeg+gLyoVucoGE71zqACvbD9RjCHnlUHbgO6Q+DnKjwmLRj\nSC6qwUp/ZjxLFIYGuOjKj1nqQaU+RYdcJ/zJmIbGFwKBgQDbD7w8QWYUCo31uXE+\nf5tR8/UBV7bphcBuMGb2EJEA0ifT5Se0ePnT8PW0EtZf/TYEG0wxKIcFZVIVaeFp\nbh1fpj13rwwo+EN1n5EAbMK+A+AiLeJR8shwKirooddEuVVKm7hDH/Q2i4IoaZCO\naxBurr6WwX3HycEcY+RDQYcwRwKBgQDQcc4SyjVyCGExvGLX8ArxPsvdpixxmmvt\nKbL9vXP1+wl47b6+xf4vuxr2XWvZFoQtjrCNUqrRKbQxF+k1zpkxfP1qM/TfvxNS\nPsIw32I+BWH/2JrnVh+kpxpP5Quc2MgS+nQfUqAW5JBMSxUV9EgZbVuCsLWKwhvs\nU++6mSYPIwKBgCRiP6xuXEr12dA3RbTQsvZwo3/elrXAjk5+4Yr7A2p0fUL3a5nR\nAgWOnvCStGJrBv61nfkINyzRQEnoNRUywdQyI0FupIFlgqbVotrENbAjqqVio5Vi\n0qG2jzvmLX/vnFfw9zDG7OPmVe7qYaUV6TvI8ETPzFlTjCxv9uioyJBfAoGAHn7H\n20/iCdDYB2K8Q0NHFoxNXxwUnHovF/9lxGGXOYGEnUCLC3YD/g+tniWExbnZlKCv\ni71waDFlv1j0MX8MQoU6vfLj/GgD96Be4K+Nu+0lrTyPTRD4iCo6Wz3zOPsuKjii\nDIMWEMNXqRHC//dBJRcusCwSIz7KvwR4qiAFxWkCgYEAsCRAxJrGJMrh41nGLink\nGBP8NsWxysJi2ObeKmWWGnu7Gr7Vc7TYNVAsYBIoRHEhhUrSxz+VgJnVDPW7aC5p\nncR3Q7gHMd91wRJD3muP0ocDkPrZXiqdK9oiEbhU33KJGR9OD1Dvpcxvvhhyfgi5\npB++X6dH68Y7UIC8hM2i7GY=\n-----END PRIVATE KEY-----\n",
+////                        "client_email" => "translate@mytvtime-349019.iam.gserviceaccount.com",
+////                        "client_id" => "106684530697242476361",
+////                        "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
+////                        "token_uri" => "https://oauth2.googleapis.com/token",
+////                        "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
+////                        "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/translate%40mytvtime-349019.iam.gserviceaccount.com"
+////                    ]
+////                ];
+////
+////                $person['translated'] = '';
+////                $translationClient = new TranslationServiceClient($config);
+////                $content = [$summary];
+////                $targetLanguage = $locale;
+////                $response = $translationClient->translateText($content, $targetLanguage, TranslationServiceClient::locationName('mytvtime-349019', 'global'));
+////
+////                foreach ($response->getTranslations() as $key => $translation) {
+////                    $person['translated'] .= $translation->getTranslatedText();
+////                }
+////            } else {
+//            $person['translated'] = '';
+////            }
+//            $success = true;
+//        } else {
+//            $person = null;
+//            $success = false;
+//        }
+//
+//        return $this->json(['success' => $success, 'person' => $person,]);
+//    }
 
     #[Route('/movie/add', name: 'app_movie_add')]
-    public function addMovieToUser(Request $request, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository): JsonResponse
+    public function addMovieToUser(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         $movieId = $request->query->get('movie_db_id');
         $locale = $request->getLocale();
 
-        $userMovie = $this->addMovie($user, $movieId, $locale, $callTmdbService, $userMovieRepository);
+        $userMovie = $this->addMovie($user, $movieId, $locale);
         return $this->json(['title' => $userMovie->getTitle()]);
     }
 
-    public function addMovie($user, $movieId, $locale, TMDBService $callTmdbService, UserMovieRepository $userMovieRepository): UserMovie
+    public function addMovie($user, $movieId, $locale): Movie
     {
-        $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
+        $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
 
         if (!$userMovie) {
-            $standing = $callTmdbService->getMovie($movieId, $locale);
+            $standing = $this->tmdbService->getMovie($movieId, $locale);
             $movieDetail = json_decode($standing, true);
 
-            $userMovie = new UserMovie();
+            $userMovie = new Movie();
             $userMovie->setTitle($movieDetail['title']);
             $userMovie->setOriginalTitle($movieDetail['original_title']);
             $userMovie->setPosterPath($movieDetail['poster_path']);
@@ -648,39 +657,39 @@ class MovieController extends AbstractController
             $userMovie->setRuntime($movieDetail['runtime']);
         }
         $userMovie->addUser($user);
-        $userMovieRepository->add($userMovie, true);
+        $this->movieRepository->add($userMovie, true);
 
         return $userMovie;
     }
 
     #[Route('/movie/remove', name: 'app_movie_remove')]
-    public function removeMovieFromUser(Request $request, UserMovieRepository $userMovieRepository): JsonResponse
+    public function removeMovieFromUser(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         $movieId = $request->query->get('movie_db_id');
 
-        $userMovie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
+        $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
 
         if ($userMovie) {
             $userMovie->removeUser($user);
-            $userMovieRepository->add($userMovie, true);
+            $this->movieRepository->add($userMovie, true);
         }
 
         return $this->json(['/movie/remove' => 'success']);
     }
 
     #[Route('/movie/set/rating', name: 'app_movie_set_rating')]
-    public function setMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository): JsonResponse
+    public function setMovieRating(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         $movieId = $request->query->get('movie_db_id');
-        $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
+        $movie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
         $vote = $request->query->get('rating');
         $result = "update";
 
-        $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
+        $rating = $this->ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
 
         if (!$rating) {
             $rating = new Rating();
@@ -689,19 +698,19 @@ class MovieController extends AbstractController
             $result = "create";
         }
         $rating->setValue($vote);
-        $ratingRepository->add($rating, true);
+        $this->ratingRepository->add($rating, true);
 
         return $this->json(['result' => $result]);
     }
 
     #[Route('/movie/get/rating', name: 'app_movie_get_rating')]
-    public function getMovieRating(Request $request, RatingRepository $ratingRepository, UserMovieRepository $userMovieRepository): JsonResponse
+    public function getMovieRating(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         $movieId = $request->query->get('movie_db_id');
-        $movie = $userMovieRepository->findOneBy(['movieDbId' => $movieId]);
-        $rating = $ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
+        $movie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
+        $rating = $this->ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
 
         return $this->json(['rating' => $rating ? $rating->getValue() : 0]);
     }

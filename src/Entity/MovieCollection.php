@@ -37,7 +37,7 @@ class MovieCollection
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $banner = null;
 
-    #[ORM\ManyToMany(targetEntity: UserMovie::class, inversedBy: 'movieCollections', cascade: ['remove'])]
+    #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'movieCollections', cascade: ['remove'])]
     private Collection $movies;
 
     #[ORM\Column]
@@ -138,14 +138,14 @@ class MovieCollection
     }
 
     /**
-     * @return Collection<int, UserMovie>
+     * @return Collection<int, Movie>
      */
     public function getMovies(): Collection
     {
         return $this->movies;
     }
 
-    public function addMovie(UserMovie $movie): self
+    public function addMovie(Movie $movie): self
     {
         if (!$this->movies->contains($movie)) {
             $this->movies->add($movie);
@@ -155,7 +155,7 @@ class MovieCollection
         return $this;
     }
 
-    public function removeMovie(UserMovie $movie): self
+    public function removeMovie(Movie $movie): self
     {
         $this->movies->removeElement($movie);
 

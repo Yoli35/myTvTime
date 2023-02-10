@@ -6,7 +6,7 @@ use App\Entity\MovieCollection;
 use App\Entity\User;
 use App\Form\MovieCollectionType;
 use App\Repository\MovieCollectionRepository;
-use App\Repository\UserMovieRepository;
+use App\Repository\MovieRepository;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
 use App\Service\LogService;
@@ -41,7 +41,7 @@ class CollectionController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'app_collection_show', methods: ['GET'])]
-    public function show(Request $request, MovieCollection $movieCollection, MovieController $movieController, UserMovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
+    public function show(Request $request, MovieCollection $movieCollection, MovieController $movieController, MovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());

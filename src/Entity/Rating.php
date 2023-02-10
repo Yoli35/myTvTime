@@ -19,7 +19,7 @@ class Rating
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?UserMovie $movie = null;
+    private ?Movie $movie = null;
 
     #[ORM\Column]
     private ?int $value = null;
@@ -41,12 +41,12 @@ class Rating
         return $this;
     }
 
-    public function getMovie(): ?UserMovie
+    public function getMovie(): ?Movie
     {
         return $this->movie;
     }
 
-    public function setMovie(?UserMovie $movie): self
+    public function setMovie(?Movie $movie): self
     {
         $this->movie = $movie;
 

@@ -2,7 +2,7 @@
 
 namespace App\Components;
 
-use App\Repository\UserMovieRepository;
+use App\Repository\MovieRepository;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
@@ -22,7 +22,7 @@ class UserMovieSearchComponent
 
     private ObjectRepository $repoUM;
 
-    public function __construct(UserMovieRepository $repoUM)
+    public function __construct(MovieRepository $repoUM)
     {
         $this->repoUM = $repoUM;
     }

@@ -13,12 +13,11 @@
   "build/fonts/fa-solid-900.ttf": "/build/fonts/fa-solid-900.422cfe28.ttf",
   "build/fonts/fa-brands-400.ttf": "/build/fonts/fa-brands-400.aff1938a.ttf",
   "build/fonts/fa-solid-900.woff2": "/build/fonts/fa-solid-900.64d495f5.woff2",
-  "build/images/youtube-light.png": "/build/images/youtube-light.933acd12.png",
   "build/images/tiktok-header3.jpg": "/build/images/tiktok-header3.31b2a098.jpg",
-  "build/images/youtube-dark.png": "/build/images/youtube-dark.add64810.png",
   "build/images/tiktok-header5.jpg": "/build/images/tiktok-header5.4662e987.jpg",
   "build/images/rgpd.jpg": "/build/images/rgpd.59d8af3e.jpg",
   "build/fonts/fa-brands-400.woff2": "/build/fonts/fa-brands-400.a914b121.woff2",
+  "build/images/youtube.png": "/build/images/youtube.a69d354b.png",
   "build/images/event-header.jpg": "/build/images/event-header.2227954c.jpg",
   "build/images/tiktok-header4.jpg": "/build/images/tiktok-header4.8573f3f0.jpg",
   "build/images/mytvtime-light.png": "/build/images/mytvtime-light.439d4aca.png",
@@ -105,6 +104,5 @@
   "build/images/the-movie-db.svg": "/build/images/the-movie-db.da3f379f.svg",
   "build/images/arrow-up-circle-outline.png": "/build/images/arrow-up-circle-outline.137a27d1.png",
   "build/images/star-outline.png": "/build/images/star-outline.3e7dbff2.png",
-  "build/images/star.png": "/build/images/star.16ef0d59.png",
-  "build/images/youtube.png": "/build/images/youtube.a69d354b.png"
+  "build/images/star.png": "/build/images/star.16ef0d59.png"
 }
