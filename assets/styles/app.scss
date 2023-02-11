@@ -875,7 +875,7 @@ nav.active {
     background-image: url("../images/mytvtime-light.png");
     background-position: center center;
     background-size: cover;
-    height: 20vw;
+    height: clamp(16.5em, 20vw, 20em);
     margin: 0 0 1em 0;
     opacity: .75;
     position: relative;
@@ -925,7 +925,7 @@ nav.active {
     height: 200px;
     left: 4em;
     position: absolute;
-    top: 3em;
+    top: clamp(1em, .25vw, 4em);
     width: 200px;
 
     .face {

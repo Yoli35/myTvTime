@@ -5,11 +5,13 @@
 
 .yt-header {
     @include banner("../images/youtube.png");
-    background-color:  hsla(206deg, 50%, 24%, .2);
+    background-color: hsla(206deg, 50%, 24%, .2);
     border-radius: 1em;
+    height: clamp(16.5em, 20vw, 20em);
     margin-top: 1em;
+
     &:hover {
-        background-color:  hsl(206deg, 50%, 24%);
+        background-color: hsl(206deg, 50%, 24%);
     }
 }
 
@@ -191,6 +193,7 @@
                     > div {
                         flex-shrink: 0;
                     }
+
                     label {
                         margin-left: 0;
 
@@ -981,6 +984,7 @@
                         }
                     }
                 }
+
                 &.minimise {
                     .input {
                         background-color: transparent;
