@@ -1225,7 +1225,7 @@
 
                 .seasons, .episodes {
                     @include flex-col();
-                    background-color: var(--gradiant-grey-80);
+                    background-color: var(--gradiant-ardoise-80);
                     gap: 1em;
                     margin: 1em 0;
                     width: 100%;
@@ -1235,7 +1235,7 @@
 
                         .season {
                             @include flex-row(center, flex-start);
-                            background-color: var(--gradiant-grey-90);
+                            background-color: var(--gradiant-ardoise-90);
                             border-radius: 0;
                             height: 15em;
                             width: 100%;
@@ -1286,9 +1286,9 @@
 
                                             .ep {
                                                 @include flex-row(center, center);
-                                                border: 2px solid var(--gradiant-grey-20);
+                                                border: 2px solid var(--gradiant-ardoise-20);
                                                 border-radius: .25em;
-                                                color: var(--gradiant-grey-20);
+                                                color: var(--gradiant-ardoise-20);
                                                 height: 2em;
                                                 margin: 0 .5em;
                                                 overflow: hidden;
@@ -1296,7 +1296,7 @@
                                                 width: 2em;
 
                                                 span {
-                                                    color: var(--gradiant-grey-20);
+                                                    color: var(--gradiant-ardoise-20);
                                                     font-weight: bold;
                                                 }
 
@@ -1326,7 +1326,7 @@
 
                     .episode {
                         @include flex-row(center, flex-start);
-                        background-color: var(--gradiant-grey-90);
+                        background-color: var(--gradiant-ardoise-90);
                         border-radius: 0;
                         color: var(--mmt-body-color);
                         height: 14em;
@@ -1364,7 +1364,7 @@
                                 width: 100%;
 
                                 .guest {
-                                    @include human-profile(var(--gradiant-grey-40));
+                                    @include human-profile(var(--gradiant-ardoise-40));
                                 }
                             }
                         }
@@ -1384,7 +1384,7 @@
 
                     > div {
                         @include flex-100();
-                        background-color: var(--gradiant-grey-40-alpha-50);
+                        background-color: var(--gradiant-ardoise-40-alpha-50);
                         border-radius: .5em;
                         flex-wrap: wrap;
                         gap: 1em;
@@ -1423,7 +1423,7 @@
 
         aside {
             @include flex-col(flex-start, flex-start);
-            background-color: var(--gradiant-grey-80);
+            background-color: var(--gradiant-ardoise-80);
             border-radius: .5em;
             //min-height: 50vh;
             padding: 0 1em;
@@ -1438,14 +1438,14 @@
                     @include flex-100();
 
                     .switch {
-                        @include switcher(var(--gradiant-green-30), var(--gradiant-grey-80))
+                        @include switcher(var(--gradiant-green-30), var(--gradiant-ardoise-80))
                     }
                 }
 
                 .message {
                     @include flex-100();
                     border-radius: .5em;
-                    color: var(--gradiant-grey-100);
+                    color: var(--gradiant-ardoise-100);
                     font-weight: 300;
                     line-height: 2em;
                     margin-top: 1em;
@@ -1469,7 +1469,7 @@
                 }
 
                 .fact {
-                    background-color: var(--gradiant-grey-40-alpha-20);
+                    background-color: var(--gradiant-ardoise-40-alpha-20);
                     border-radius: .5em;
                     margin: .5em 0;
                     padding: .5em;
@@ -1494,7 +1494,7 @@
                         padding-left: .5em;
 
                         .frame {
-                            background-color: var(--gradiant-grey-90);
+                            background-color: var(--gradiant-ardoise-90);
                             border-radius: .25em;
                             display: inline-block;
                             max-height: 4em;
@@ -1512,9 +1512,9 @@
 
                         .keyword {
                             @include flex-col();
-                            background-color: var(--gradiant-grey-40);
+                            background-color: var(--gradiant-ardoise-40);
                             border-radius: .25em;
-                            color: var(--gradiant-grey-80);
+                            color: var(--gradiant-ardoise-80);
                             padding: .25em .5em;
                             margin: .125em;
 
@@ -1571,7 +1571,7 @@
     }
 
     .translationModalBack {
-        background-color: var(--gradiant-grey-10-alpha-90);
+        background-color: var(--gradiant-ardoise-10-alpha-90);
         display: none;
         inset: 0;
         opacity: 0;
@@ -1587,10 +1587,10 @@
         }
 
         .translationModal {
-            background-color: var(--gradiant-grey-30);
+            background-color: var(--gradiant-ardoise-30);
             border-radius: 1em;
             display: none;
-            color: var(--gradiant-grey-80);
+            color: var(--gradiant-ardoise-80);
             opacity: 0;
             transition: opacity 500ms;
             width: 50em;
@@ -1604,7 +1604,7 @@
             }
 
             .trans-header {
-                border-bottom: 1px solid var(--gradiant-grey-50);
+                border-bottom: 1px solid var(--gradiant-ardoise-50);
                 padding: 1em;
                 width: 100%;
             }
@@ -1651,16 +1651,16 @@
 
             .trans-footer {
                 @include flex-100(center, flex-end);
-                border-top: 1px solid var(--gradiant-grey-50);
+                border-top: 1px solid var(--gradiant-ardoise-50);
                 padding: 1em;
                 width: 100%;
 
                 button {
                     appearance: unset;
-                    background-color: var(--gradiant-grey-50);
+                    background-color: var(--gradiant-ardoise-50);
                     border: none;
                     border-radius: var(--button-border-radius);
-                    color: var(--gradiant-grey-90);
+                    color: var(--gradiant-ardoise-90);
                     cursor: pointer;
                     font-weight: 100;
                     margin-left: 1em;
@@ -1968,11 +1968,15 @@
 
             .nothing {
                 @include flex-row();
-                background: var(--gradiant-grey-50);
+                aspect-ratio: 512 / 508;
+                background-image: url("../images/today-nothing.png");
+                background-size: cover;
                 border-radius: .5rem;
                 font-size: 2em;
                 font-weight: 500;
+                height: auto;
                 padding: 1rem 2rem;
+                width: clamp(64px, 16vw, 512px);
             }
 
             &:has(.nothing) {
@@ -2951,23 +2955,23 @@
                 section {
                     .seasons, .episodes, .cast {
                         color: var(--gradiant-grey-90);
-                        background-color: var(--gradiant-grey-20-alpha-50);
+                        background-color: var(--gradiant-ardoise-20-alpha-50);
 
                         a {
                             .season {
-                                color: var(--gradiant-grey-90);
-                                background-color: var(--gradiant-grey-30-alpha-50);
+                                color: var(--gradiant-ardoise-90);
+                                background-color: var(--gradiant-ardoise-30-alpha-50);
 
                                 .infos {
                                     .details {
                                         div {
                                             .viewing {
                                                 .ep {
-                                                    border: 2px solid var(--gradiant-grey-80);
+                                                    border: 2px solid var(--gradiant-ardoise-80);
                                                     color: var(--gradiant-ardoise-60);
 
                                                     span {
-                                                        color: var(--gradiant-grey-80);
+                                                        color: var(--gradiant-ardoise-80);
                                                     }
                                                 }
                                             }
@@ -2978,14 +2982,14 @@
                         }
 
                         .episode {
-                            color: var(--gradiant-grey-90);
-                            background-color: var(--gradiant-grey-30-alpha-50);
+                            color: var(--gradiant-ardoise-90);
+                            background-color: var(--gradiant-ardoise-30-alpha-50);
                         }
                     }
 
                     .images {
                         > div {
-                            background-color: var(--gradiant-grey-20-alpha-50);
+                            background-color: var(--gradiant-ardoise-20-alpha-50);
                             border-radius: .5em;
                         }
                     }
@@ -2993,7 +2997,12 @@
             }
 
             aside {
-                background-color: var(--gradiant-grey-20-alpha-50);
+                background-color: var(--gradiant-ardoise-20-alpha-50);
+                .key-facts {
+                    .fact {
+                        background-color: var(--gradiant-ardoise-30-alpha-50);
+                    }
+                }
             }
         }
     }

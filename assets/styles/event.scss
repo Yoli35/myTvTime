@@ -43,6 +43,11 @@
             height: 6rem;
             width: 2.5em;
 
+            &:first-child {
+                margin-right: .25em;
+                width: unset;
+            }
+
             .count {
                 display: block;
                 font-size: 4rem;
