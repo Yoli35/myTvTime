@@ -1919,6 +1919,30 @@
             gap: 1em;
             min-height: 25em;
 
+            .home-discover {
+                a {
+                    div:has(img) {
+                        position: relative;
+
+                        .new-season {
+                            background-color: var(--gradiant-mars-50);
+                            border-radius: .25em;
+                            color: var(--gradiant-grey-90);
+                            font-weight: 300;
+                            leading-trim: both;
+                            left: 50%;
+                            line-height: 1.5em;
+                            padding: .5em 1em;
+                            position: absolute;
+                            text-edge: cap alphabetic;
+                            top: 1em;
+                            transform: translate(-50%, 0);
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+
             .episode {
                 @include flex-col();
                 background-color: var(--gradiant-ardoise-40);
@@ -2271,6 +2295,7 @@
 
 .series-search {
 
+    /*
     .header {
         h1 {
             //position: relative;
@@ -2304,64 +2329,64 @@
 
             @keyframes type {
                 0% {
-                    width: 100%; /* R */
+                    width: 100%; !* R *!
                 }
                 1% {
-                    width: 93.5%; /* e */
+                    width: 93.5%; !* e *!
                 }
                 4% {
-                    width: 87.5%; /* c */
+                    width: 87.5%; !* c *!
                 }
                 5% {
-                    width: 81.5%; /* h */
+                    width: 81.5%; !* h *!
                 }
                 9% {
-                    width: 76%; /* e */
+                    width: 76%; !* e *!
                 }
                 10% {
-                    width: 70%; /* r */
+                    width: 70%; !* r *!
                 }
                 12.5% {
-                    width: 66.4%; /* c */
+                    width: 66.4%; !* c *!
                 }
                 15% {
-                    width: 60.4%; /* h */
+                    width: 60.4%; !* h *!
                 }
                 20% {
-                    width: 54.4%; /* e */
+                    width: 54.4%; !* e *!
                 }
                 21.5% {
-                    width: 48.5%; /* r */
+                    width: 48.5%; !* r *!
                 }
                 25% {
-                    width: 45.5%; /* _ */
+                    width: 45.5%; !* _ *!
                 }
                 27.5% {
-                    width: 43%; /* u */
+                    width: 43%; !* u *!
                 }
                 28.5% {
-                    width: 37%; /* n */
+                    width: 37%; !* n *!
                 }
                 31% {
-                    width: 31%; /* e */
+                    width: 31%; !* e *!
                 }
                 32.5% {
-                    width: 25%; /* _ */
+                    width: 25%; !* _ *!
                 }
                 35% {
-                    width: 23.5%; /* s */
+                    width: 23.5%; !* s *!
                 }
                 37.5% {
-                    width: 18%; /* é */
+                    width: 18%; !* é *!
                 }
                 42.5% {
-                    width: 12%; /* r */
+                    width: 12%; !* r *!
                 }
                 45% {
-                    width: 8%; /* i */
+                    width: 8%; !* i *!
                 }
                 47.5% {
-                    width: 6%; /* e */
+                    width: 6%; !* e *!
                 }
                 50% {
                     width: 0;
@@ -2370,64 +2395,64 @@
 
             @keyframes cur-pos {
                 0% {
-                    right: calc(100% - .1em); /* R */
+                    right: calc(100% - .1em); !* R *!
                 }
                 1% {
-                    right: calc(93.5% - .1em); /* e */
+                    right: calc(93.5% - .1em); !* e *!
                 }
                 4% {
-                    right: calc(87.5% - .1em); /* c */
+                    right: calc(87.5% - .1em); !* c *!
                 }
                 5% {
-                    right: calc(81.5% - .1em); /* h */
+                    right: calc(81.5% - .1em); !* h *!
                 }
                 9% {
-                    right: calc(76% - .1em); /* e */
+                    right: calc(76% - .1em); !* e *!
                 }
                 10% {
-                    right: calc(70% - .1em); /* r */
+                    right: calc(70% - .1em); !* r *!
                 }
                 12.5% {
-                    right: calc(66.4% - .1em); /* c */
+                    right: calc(66.4% - .1em); !* c *!
                 }
                 15% {
-                    right: calc(60.4% - .1em); /* h */
+                    right: calc(60.4% - .1em); !* h *!
                 }
                 20% {
-                    right: calc(54.4% - .1em); /* e */
+                    right: calc(54.4% - .1em); !* e *!
                 }
                 21.5% {
-                    right: calc(48.5% - .1em); /* r */
+                    right: calc(48.5% - .1em); !* r *!
                 }
                 25% {
-                    right: calc(45.5% - .1em); /* _ */
+                    right: calc(45.5% - .1em); !* _ *!
                 }
                 27.5% {
-                    right: calc(43% - .1em); /* u */
+                    right: calc(43% - .1em); !* u *!
                 }
                 28.5% {
-                    right: calc(37% - .1em); /* n */
+                    right: calc(37% - .1em); !* n *!
                 }
                 31% {
-                    right: calc(31% - .1em); /* e */
+                    right: calc(31% - .1em); !* e *!
                 }
                 32.5% {
-                    right: calc(25% - .1em); /* _ */
+                    right: calc(25% - .1em); !* _ *!
                 }
                 35% {
-                    right: calc(23.5% - .1em); /* s */
+                    right: calc(23.5% - .1em); !* s *!
                 }
                 37.5% {
-                    right: calc(18% - .1em); /* é */
+                    right: calc(18% - .1em); !* é *!
                 }
                 42.5% {
-                    right: calc(12% - .1em); /* r */
+                    right: calc(12% - .1em); !* r *!
                 }
                 45% {
-                    right: calc(8% - .1em); /* i */
+                    right: calc(8% - .1em); !* i *!
                 }
                 47.5% {
-                    right: calc(6% - .1em); /* e */
+                    right: calc(6% - .1em); !* e *!
                 }
                 50% {
                     right: -.1em;
@@ -2441,6 +2466,7 @@
             }
         }
     }
+    */
 
     .search {
         @include flex-100();

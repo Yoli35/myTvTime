@@ -363,6 +363,7 @@ class SerieController extends AbstractController
 
         /** @var Serie[] $todayAirings */
         $todayAirings = $this->todayAiringSeries($date, $request->getLocale());
+        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [
@@ -794,7 +795,7 @@ class SerieController extends AbstractController
             $serieViewing->setNumberOfEpisodes($tv['number_of_episodes']);
             $modified = true;
         }
-        if ($serieViewing->isSerieCompleted()==NULL) {
+        if ($serieViewing->isSerieCompleted() == NULL) {
             $serieViewing->setSerieCompleted(false);
             $modified = true;
         }
@@ -818,21 +819,21 @@ class SerieController extends AbstractController
             $this->serieViewingRepository->save($serieViewing, true);
         }
 
-            if ($serie !== null) {
-                $modified = false;
-                if ($serie->getNumberOfSeasons() != $tv['number_of_seasons']) {
-                    $serie->setNumberOfSeasons($tv['number_of_seasons']);
-                    $modified = true;
-                }
-                if ($serie->getNumberOfEpisodes() != $tv['number_of_episodes']) {
-                    $serie->setNumberOfEpisodes($tv['number_of_episodes']);
-                    $modified = true;
-                }
-                if ($modified) {
-                    $serie->setUpdatedAt(new DateTime());
-                    $this->serieRepository->save($serie, true);
-                }
+        if ($serie !== null) {
+            $modified = false;
+            if ($serie->getNumberOfSeasons() != $tv['number_of_seasons']) {
+                $serie->setNumberOfSeasons($tv['number_of_seasons']);
+                $modified = true;
             }
+            if ($serie->getNumberOfEpisodes() != $tv['number_of_episodes']) {
+                $serie->setNumberOfEpisodes($tv['number_of_episodes']);
+                $modified = true;
+            }
+            if ($modified) {
+                $serie->setUpdatedAt(new DateTime());
+                $this->serieRepository->save($serie, true);
+            }
+        }
 
         foreach ($tv['seasons'] as $s) {
             if ($s['season_number']) { // 21/12/2022 : plus d'épisodes spéciaux
