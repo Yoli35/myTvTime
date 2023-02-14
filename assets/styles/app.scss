@@ -589,7 +589,7 @@ nav.active {
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '°';
     @include flex-row(center, start);
-    background-color: hsla(206deg, 50%, 24%, .25);/*var(--gradiant-grey-20-alpha-50);*/
+    background-color: hsla(206deg, 50%, 24%, .25);
     border-radius: .5em;
     height: 3em;
     margin: 1em 0;
@@ -781,12 +781,14 @@ nav.active {
 
 @media (prefers-color-scheme: light) {
     .nav-breadcrumb {
-        background-color: var(--gradiant-grey-40-alpha-50);
+        background-color: hsla(120deg, 50%, 24%, .25);
+        //background-color: var(--gradiant-grey-40-alpha-50);
         color: var(--gradiant-grey-100);
         font-weight: bold;
 
         &:hover {
-            background-color: var(--gradiant-grey-40);
+            background-color: hsla(120deg, 20%, 44%, .5);
+            //background-color: var(--gradiant-grey-40);
         }
 
         a {

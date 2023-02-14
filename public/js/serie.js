@@ -38,17 +38,19 @@ function initAddSerie() {
 function setVote(circles) {
 
     circles.forEach(circle => {
-        const element = document.querySelector(circle[0]);
-        const value = circle[1];
+        if (circle !== undefined) {
+            const element = document.querySelector(circle[0]);
+            const value = circle[1];
 
-        if (element === null) return;
+            if (element === null) return;
 
-        const arc = element.querySelector(".circle");
-        const start = element.querySelector(".circle-start");
-        const end = element.querySelector(".circle-end");
-        arc.setAttribute("style", "background: conic-gradient(var(--gradiant-grey-60) 0%, var(--gradiant-grey-60) " + value + "%, var(--gradiant-grey-10) " + value + "%);");
-        start.setAttribute("style", "translate: 0 -1.5em;");
-        end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-1.5em)");
+            const arc = element.querySelector(".circle");
+            const start = element.querySelector(".circle-start");
+            const end = element.querySelector(".circle-end");
+            arc.setAttribute("style", "background: conic-gradient(var(--gradiant-grey-60) 0%, var(--gradiant-grey-60) " + value + "%, var(--gradiant-grey-10) " + value + "%);");
+            start.setAttribute("style", "translate: 0 -1.5em;");
+            end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-1.5em)");
+        }
     });
 }
 

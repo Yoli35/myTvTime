@@ -1079,15 +1079,14 @@
 
                     .next-episode-to-watch {
                         @include flex-row();
-                        background-color: var(--gradiant-green-40-alpha-50);
-                        border-radius: 1em;
+                        background-color: var(--gradiant-green-30);
+                        border-radius: .25em;
                         font-size: 1.5em;
                         font-weight: 300;
+                        leading-trim: both;
                         line-height: 1.25em;
-                        min-width: -moz-fit-content;
-                        min-width: -webkit-fit-content;
-                        min-width: fit-content;
-                        padding: 1em;
+                        padding: .25em 1em;
+                        text-edge: cap alphabetic;
                     }
                 }
             }
@@ -1100,66 +1099,112 @@
 
                 .new-status, .new-episode, .new-season {
                     background-color: var(--gradiant-mars-50);
-                    border-radius: .5em;
+                    border-radius: .25em;
                     color: var(--gradiant-mars-90);
+                    font-weight: 300;
+                    leading-trim: both;
                     margin: 0 .5em;
-                    padding: .5em 1em;
-                    font-weight: 100;
+                    padding: .25em 1em;
+                    text-edge: cap alphabetic;
                 }
             }
         }
 
-        .add {
-            @include seen(var(--serie-add), 2.5em, 2rem);
-        }
+        .add-and-others {
+            @include flex-row(center, revert);
+            bottom: 1em;
+            font-size: 1.5em;
+            gap: 1em;
+            position: absolute;
+            right: 1em;
 
-        .seen {
-            @include seen(var(--serie-seen), 2.5em, 2rem);
-        }
+            .add {
+                @include flat-button();
+            }
 
-        .ygg {
-            @include seen(hsl(0, 0%, 0%), 1.5em, 6rem);
-            background-image: url("../images/yggland.png");
-            background-position: center;
-            background-size: cover;
-            bottom: 1.75rem;
+            .ygg {
+                background-image: url("../images/yggland.png");
+            }
 
-            a {
-                div {
-                    height: 1em;
-                    width: 1em;
+            .ygg-original {
+                background-image: url("../images/yggland.png");
+            }
+
+            .tmdb {
+                background-image: url("../images/the-movie-database.png");
+            }
+
+            .ygg, .ygg-original, .tmdb {
+                @include flex-row();
+                background-position: center;
+                background-size: cover;
+                border-radius: 50%;
+                cursor: pointer;
+                height: 1.25em;
+                width: 1.25em;
+
+                a {
+                    div {
+                        height: 1em;
+                        width: 1em;
+                    }
                 }
             }
-        }
 
-        .ygg-original {
-            @include seen(hsl(0, 0%, 0%), 1.5em, 9rem);
-            background-image: url("../images/yggland.png");
-            background-position: center;
-            background-size: cover;
-            bottom: 1.75rem;
+            /*
+            .add {
+                @include seen(var(--serie-add), 2.5em, 2rem);
+            }
 
-            a {
-                div {
-                    height: 1em;
-                    width: 1em;
+            .seen {
+                @include seen(var(--serie-seen), 2.5em, 2rem);
+            }
+
+            .ygg {
+                @include seen(hsl(0, 0%, 0%), 1.5em, 6rem);
+                background-image: url("../images/yggland.png");
+                background-position: center;
+                background-size: cover;
+                bottom: 1.75rem;
+
+                a {
+                    div {
+                        height: 1em;
+                        width: 1em;
+                    }
                 }
             }
-        }
 
-        .tmdb {
-            @include seen(hsl(0, 0%, 0%), 1.5em, 12rem);
-            background-image: url("../images/the-movie-database.png");
-            background-position: center;
-            background-size: cover;
-            bottom: 1.75rem;
+            .ygg-original {
+                @include seen(hsl(0, 0%, 0%), 1.5em, 9rem);
+                background-image: url("../images/yggland.png");
+                background-position: center;
+                background-size: cover;
+                bottom: 1.75rem;
 
-            a {
-                div {
-                    height: 1em;
-                    width: 1em;
+                a {
+                    div {
+                        height: 1em;
+                        width: 1em;
+                    }
                 }
             }
+
+            .tmdb {
+                @include seen(hsl(0, 0%, 0%), 1.5em, 12rem);
+                background-image: url("../images/the-movie-database.png");
+                background-position: center;
+                background-size: cover;
+                bottom: 1.75rem;
+
+                a {
+                    div {
+                        height: 1em;
+                        width: 1em;
+                    }
+                }
+            }
+            */
         }
     }
 
