@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,7 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => ['user:item']]),
+        new GetCollection(normalizationContext: ['groups' => ['user:list']])
+            ],
+            order: ['username' => 'ASC'],
+    paginationItemsPerPage: 10,
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -17,8 +29,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['user:item', 'user:list'])]
     private int $id;
 
+    #[Groups(['user:item', 'user:list'])]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $email;
 
@@ -28,27 +42,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $password;
 
+    #[Groups(['user:item', 'user:list'])]
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $username;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
+    #[Groups(['user:item'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $avatar;
 
+    #[Groups(['user:item'])]
+    private string $avatarPath = '/images/users/avatars/';
+
+    #[Groups(['user:item'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $banner;
 
+    #[Groups(['user:item'])]
+    private string $bannerPath = '/images/users/banners/';
+
+    #[Groups(['user:item'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $city;
 
+    #[Groups(['user:item'])]
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
     private ?string $zipCode;
 
+    #[Groups(['user:item'])]
     #[ORM\Column(type: 'string', length: 32, nullable: true)]
     private ?string $country;
 
+    #[Groups(['user:item'])]
     #[ORM\Column(length: 8, nullable: true)]
     private ?string $preferredLanguage = null;
 
@@ -508,5 +535,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->youtubeVideos->removeElement($youtubeVideo);
 
         return $this;
+    }
+
+    public function getAvatarPath(): string
+    {
+        return $this->avatarPath;
+    }
+
+    public function getBannerPath(): string
+    {
+        return $this->bannerPath;
     }
 }
