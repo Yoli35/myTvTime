@@ -146,6 +146,9 @@ class YoutubeAddVideoComponent
             // https://www.youtube.com/watch?v=at9h35V8rtQ
             // https://www.youtube.com/watch?v=IzHJ7Jnj2LU&pp=wgIGCgQQAhgB
             $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?>&[a-z_-]+=.+)*/", "$1", $thisLink);
+        } elseif (str_contains($thisLink, 'live')) {
+            // https://www.youtube.com/live/vBWcWIim5Js?feature=share
+            $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/live\/([a-zA-Z0-9_-]+)(?>\?[a-zA-Z]+=.+)*/", "$1", $thisLink);
         }
 
         if (strlen($thisLink) == 11) {

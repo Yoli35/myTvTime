@@ -36,8 +36,10 @@ class Article
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['article:item'])]
     private ?string $content = null;
+
+    #[Groups(['article:item'])]
+    private ?string $contentReady = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['article:item'])]
@@ -137,6 +139,28 @@ class Article
         $this->content = $content;
 
         return $this;
+    }
+
+    public function getContentReady(): ?string
+    {
+        $this->contentReady = preg_replace(
+            [
+                '#{"path": "(.*?)", "class": "(.*?)", "style": "(.*?)"}#',
+                '#{"path": "(.*?)", "class": "(.*?)"}#',
+                '#{"path": "(.*?)", "style": "(.*?)"}#',
+                '#\r\n#',
+                '#\n#'
+            ],
+            [
+                '<img src="http://localhost:3200/images/articles/images/$1" class="$2" style="$3" alt="$1">',
+                '<img src="http://localhost:3200/images/articles/images/$1" class="$2" alt="$1">',
+                '<img src="http://localhost:3200/images/articles/images/$1" style="$2" alt="$1">',
+                '<br>',
+                '<br>'
+            ],
+            $this->getContent());
+
+        return $this->contentReady;
     }
 
     public function getAbstract(): ?string
