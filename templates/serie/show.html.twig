@@ -15,6 +15,8 @@
             {{ 'My Series to start'|trans }}
         {% elseif from == 'my_series_to_end' %}
             {{ 'My Series to end'|trans }}
+        {% elseif from == 'today' %}
+            {{ 'My Series airing today'|trans }}
         {% else %}
             {{ 'My Series'|trans }}
         {% endif %}
@@ -42,6 +44,8 @@
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to start', url: path('app_serie_to_start', {page: page})}, thisPage: serie.name}) }}
         {% elseif from == 'my_series_to_end' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to end', url: path('app_serie_to_end', {page: page})}, thisPage: serie.name}) }}
+        {% elseif from == 'today' %}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series airing today', url: path('app_serie_today')}, thisPage: serie.name}) }}
         {% else %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~page~'&b=1#'~backId}, thisPage: serie.name}) }}
         {% endif %}
@@ -480,13 +484,15 @@
             "{{ path('app_serie_viewing') }}",
             "{{ path('app_user_connected') }}",
             "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}",
-            "{{ path('app_serie_duration') }}"
+            "{{ path('app_serie_duration') }}",
+            "{{ path('app_serie_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3}) }}"
         ];
         const serie = "{{ serieId }}";
         const _app_serie_viewing = paths[5];
         const _app_user_connected = paths[6];
         const _app_serie_duration = paths[8];
         let _app_serie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
+        let _app_serie_toggle_time_shifted = paths[9].substring(0, paths[9].length - 6);
         const _locale = "{{ app.request.locale }}";
         const txt = {
             "vu": {"fr": "vu", "en": "seen"},
@@ -523,6 +529,11 @@
             checkFavorites.forEach(checkFavorite => {
                 checkFavorite.querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
                 // checkFavorite.addEventListener("click", toggleFavorite);
+            });
+
+            const checkTimeShifted = document.querySelectorAll(".timeShifted");
+            checkTimeShifted.forEach(check => {
+                check.querySelector("input[type='checkbox']").addEventListener("change", toggleTimeShifted);
             });
 
             const test = document.querySelector("#test");
@@ -687,6 +698,25 @@
                     message.innerHTML = data.message;
                     message.classList.remove("added", "removed");
                     message.classList.add(data.class);
+                }
+                xhr.open("GET", url);
+                xhr.send();
+            }
+
+            function toggleTimeShifted(evt) {
+                const shifted = evt.target.checked ? 1 : 0;
+                const userId = "{{ user.id }}";
+                const serieId = "{{ serieId }}";
+
+                // console.log({fav});
+                let url = _app_serie_toggle_time_shifted + '/' + userId + '/' + serieId + '/' + shifted;
+                // console.log({url});
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    let data = JSON.parse(this.response);
+                    console.log(data);
+                    window.location.reload();
                 }
                 xhr.open("GET", url);
                 xhr.send();

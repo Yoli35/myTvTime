@@ -292,6 +292,16 @@ class SerieFrontController extends AbstractController
         return $this->json(['message' => $message, 'class' => $class]);
     }
 
+    #[Route('/timeShifted/{userId}/{serieId}/{shifted}', name: 'app_serie_toggle_time_shifted', methods: 'GET')]
+    public function toggleTimeShifted(bool $shifted, int $userId, int $serieId): Response
+    {
+        $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $userId, 'serie' => $serieId]);
+        $serieViewing->setTimeShifted($shifted);
+        $this->serieViewingRepository->save($serieViewing, true);
+
+        return $this->json(['status' => 'ok']);
+    }
+
     #[Route('/overview/{id}', name: 'app_serie_get_overview', methods: 'GET')]
     public function getOverview(Request $request, $id, TMDBService $service, TranslatorInterface $translator): Response
     {

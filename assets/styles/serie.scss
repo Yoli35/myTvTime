@@ -1474,7 +1474,7 @@
             padding: 0 1em;
             width: 100%;
 
-            .favorite {
+            .favorite, .timeShifted {
                 @include flex-col();
                 margin-top: 1em;
                 width: 100%;
@@ -1504,6 +1504,10 @@
                         background-color: var(--gradiant-mars-30);
                     }
                 }
+            }
+
+            .timeShifted {
+                margin-bottom: 1em;
             }
 
             .key-facts {
@@ -2900,15 +2904,15 @@
 @media (prefers-color-scheme: dark) {
 
     .my-series, .series-search {
-        color: var(--gradiant-grey-80);
+        color: var(--gradiant-ardoise-80);
 
         .header {
             h1 {
-                color: var(--gradiant-grey-90);
+                color: var(--gradiant-ardoise-90);
             }
 
             .quote {
-                color: var(--gradiant-grey-80);
+                color: var(--gradiant-ardoise-80);
             }
         }
 
@@ -2916,37 +2920,37 @@
             .wrapper {
                 a {
                     .serie {
-                        background-color: var(--gradiant-grey-10);
+                        background-color: var(--gradiant-ardoise-10);
                     }
                 }
             }
 
             .series-tools {
                 .search-serie, .add-serie, .numbers, .settings {
-                    background-color: var(--gradiant-grey-30);
+                    background-color: var(--gradiant-ardoise-30);
                 }
 
                 .pages {
-                    background-color: var(--gradiant-grey-30);
+                    background-color: var(--gradiant-ardoise-30);
 
                     .position {
-                        color: var(--gradiant-grey-70);
+                        color: var(--gradiant-ardoise-70);
                     }
 
                     .page-group {
                         .page {
-                            border-color: var(--gradiant-grey-70);
+                            border-color: var(--gradiant-ardoise-70);
 
                             &.current {
-                                background-color: var(--gradiant-grey-40);
-                                color: var(--gradiant-grey-90);
+                                background-color: var(--gradiant-ardoise-40);
+                                color: var(--gradiant-ardoise-90);
                             }
 
                             &:hover {
-                                background-color: var(--gradiant-grey-60);
+                                background-color: var(--gradiant-ardoise-60);
 
                                 a {
-                                    color: var(--gradiant-grey-20);
+                                    color: var(--gradiant-ardoise-20);
                                 }
                             }
                         }
@@ -2955,29 +2959,29 @@
 
                 .search-serie, .add-serie, .settings {
                     .label {
-                        color: var(--gradiant-grey-70);
+                        color: var(--gradiant-ardoise-70);
                     }
                 }
 
                 .search-serie {
                     .autocomplete-items {
-                        border: 1px solid var(--gradiant-grey-40);
+                        border: 1px solid var(--gradiant-ardoise-40);
                     }
 
                     .autocomplete-items div {
-                        background-color: var(--gradiant-grey-30);
-                        border-bottom: 1px solid var(--gradiant-grey-40);
+                        background-color: var(--gradiant-ardoise-30);
+                        border-bottom: 1px solid var(--gradiant-ardoise-40);
                     }
 
                     .autocomplete-items div:hover {
                         /*when hovering an item:*/
-                        background-color: var(--gradiant-grey-60);
+                        background-color: var(--gradiant-ardoise-60);
                     }
 
                     //.autocomplete-active {
                     //    /*when navigating through the items using the arrow keys:*/
-                    //    background-color: var(--gradiant-grey-70) !important;
-                    //    color: var(--gradiant-grey-90);
+                    //    background-color: var(--gradiant-ardoise-70) !important;
+                    //    color: var(--gradiant-ardoise-90);
                     //}
                 }
 
@@ -2985,7 +2989,7 @@
                     .help {
                         details {
                             div {
-                                background-color: var(--gradiant-grey-30);
+                                background-color: var(--gradiant-ardoise-30);
                             }
                         }
                     }
@@ -2999,7 +3003,7 @@
             article {
                 section {
                     .seasons, .episodes, .cast {
-                        color: var(--gradiant-grey-90);
+                        color: var(--gradiant-ardoise-90);
                         background-color: var(--gradiant-ardoise-20-alpha-50);
 
                         a {
@@ -3043,6 +3047,7 @@
 
             aside {
                 background-color: var(--gradiant-ardoise-20-alpha-50);
+
                 .key-facts {
                     .fact {
                         background-color: var(--gradiant-ardoise-30-alpha-50);
@@ -3054,13 +3059,13 @@
 
     .viewed-episode {
         .overlay {
-            background-color: var(--gradiant-grey-20);
-            border-color: var(--gradiant-grey-50);
-            color: var(--gradiant-grey-80);
+            background-color: var(--gradiant-ardoise-20);
+            border-color: var(--gradiant-ardoise-50);
+            color: var(--gradiant-ardoise-80);
 
             .header {
                 .close {
-                    color: var(--gradiant-grey-80);
+                    color: var(--gradiant-ardoise-80);
                 }
             }
 
@@ -3069,7 +3074,7 @@
                     .wrapper {
                         .network {
                             .logo {
-                                border-color: var(--gradiant-grey-80);
+                                border-color: var(--gradiant-ardoise-80);
 
                                 &.other {
                                     background-image: url("../images/devices/network-other-dark.png");
@@ -3077,7 +3082,7 @@
                             }
 
                             &:hover {
-                                background-color: var(--gradiant-grey-40);
+                                background-color: var(--gradiant-ardoise-40);
                             }
                         }
                     }
@@ -3088,46 +3093,46 @@
 
     .viewed-update {
         .loading {
-            background-color: var(--gradiant-grey-20);
-            border-color: var(--gradiant-grey-50);
-            color: var(--gradiant-grey-80);
+            background-color: var(--gradiant-ardoise-20);
+            border-color: var(--gradiant-ardoise-50);
+            color: var(--gradiant-ardoise-80);
 
             .dot {
-                background-color: var(--gradiant-grey-30);
-                border: 1px solid var(--gradiant-grey-60);
+                background-color: var(--gradiant-ardoise-30);
+                border: 1px solid var(--gradiant-ardoise-60);
             }
         }
     }
 
     .person {
         .left-column {
-            background-color: var(--gradiant-grey-10-alpha-20);
+            background-color: var(--gradiant-ardoise-10-alpha-20);
 
             .infos {
                 h4 {
-                    color: var(--gradiant-grey-20);
+                    color: var(--gradiant-ardoise-20);
                 }
             }
         }
 
         .right-column {
             .content {
-                background-color: var(--gradiant-grey-10-alpha-20);
+                background-color: var(--gradiant-ardoise-10-alpha-20);
 
                 h1 {
-                    color: var(--gradiant-grey-80);
+                    color: var(--gradiant-ardoise-80);
                 }
 
                 .known-for {
-                    background-color: var(--gradiant-grey-20-alpha-50);
+                    background-color: var(--gradiant-ardoise-20-alpha-50);
                 }
 
                 .credits {
                     .acting, .sub-credits {
-                        background-color: var(--gradiant-grey-20-alpha-50);
+                        background-color: var(--gradiant-ardoise-20-alpha-50);
 
                         .separation {
-                            border-bottom: 1px solid var(--gradiant-grey-40-alpha-50);
+                            border-bottom: 1px solid var(--gradiant-ardoise-40-alpha-50);
                         }
                     }
                 }
@@ -3136,33 +3141,33 @@
 
         .pop-infos {
             .content {
-                background-color: var(--gradiant-grey-10);
-                color: var(--gradiant-grey-90);
+                background-color: var(--gradiant-ardoise-10);
+                color: var(--gradiant-ardoise-90);
 
                 .body {
                     .spinner {
                         .circle1 {
-                            //background-color: var(--gradiant-grey-90);
+                            //background-color: var(--gradiant-ardoise-90);
                             animation: 1s infinite clockwise linear;
                             background: conic-gradient(
-                                            var(--gradiant-grey-90) 0deg,
-                                            var(--gradiant-grey-90) 270deg,
-                                            var(--gradiant-grey-10) 270deg,
-                                            var(--gradiant-grey-10) 360deg);
+                                            var(--gradiant-ardoise-90) 0deg,
+                                            var(--gradiant-ardoise-90) 270deg,
+                                            var(--gradiant-ardoise-10) 270deg,
+                                            var(--gradiant-ardoise-10) 360deg);
 
                             .circle2 {
-                                background-color: var(--gradiant-grey-10);
+                                background-color: var(--gradiant-ardoise-10);
 
                                 .circle3 {
-                                    //background-color: var(--gradiant-grey-90);
+                                    //background-color: var(--gradiant-ardoise-90);
                                     background: conic-gradient(
-                                                    var(--gradiant-grey-10) 0deg,
-                                                    var(--gradiant-grey-10) 90deg,
-                                                    var(--gradiant-grey-80) 90deg,
-                                                    var(--gradiant-grey-80) 360deg);
+                                                    var(--gradiant-ardoise-10) 0deg,
+                                                    var(--gradiant-ardoise-10) 90deg,
+                                                    var(--gradiant-ardoise-80) 90deg,
+                                                    var(--gradiant-ardoise-80) 360deg);
 
                                     .circle4 {
-                                        background-color: var(--gradiant-grey-10);
+                                        background-color: var(--gradiant-ardoise-10);
                                     }
                                 }
                             }
@@ -3172,7 +3177,7 @@
             }
 
             .tail {
-                background-color: var(--gradiant-grey-10);
+                background-color: var(--gradiant-ardoise-10);
             }
         }
     }

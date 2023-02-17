@@ -53,8 +53,7 @@ class SerieController extends AbstractController
     const ON_THE_AIR = 'on_the_air';
     const SEARCH = 'search';
 
-    private array $timeShiftedNetworks = [
-    ];
+    private array $timeShiftedNetworks;
 
     public function __construct(private readonly CastRepository               $castRepository,
                                 private readonly EpisodeViewingRepository     $episodeViewingRepository,
@@ -239,7 +238,7 @@ class SerieController extends AbstractController
                                 if ($episodeDiff->days == 1) {
                                     $serie['tomorrow'] = true;
                                 } else {
-                                    $serie['next'] = $episode->getAirDate()->format("m/d/Y");
+                                    $serie['next'] = $date->format("m/d/Y");
                                     $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days]);
                                     $serie['nextEpisodeDays'] = $episodeDiff->days;
                                 }
@@ -879,7 +878,7 @@ class SerieController extends AbstractController
         return $serieViewing;
     }
 
-    public function addNewEpisode(array $tv, SeasonViewing $season, int $episodeNumber)
+    public function addNewEpisode(array $tv, SeasonViewing $season, int $episodeNumber): void
     {
         $standing = $this->TMDBService->getTvEpisode($tv['id'], $season->getSeasonNumber(), $episodeNumber, 'fr');
         $tmdbEpisode = json_decode($standing, true);
@@ -1153,6 +1152,7 @@ class SerieController extends AbstractController
             'user' => $user,
             'whatsNew' => $whatsNew,
             'viewedEpisodes' => $serieViewing?->getViewedEpisodes(),
+            'isTimeShifted' => $serieViewing?->isTimeShifted(),
             'nextEpisodeToWatch' => $nextEpisodeToWatch ?? null,
             'ygg' => $ygg,
             'yggOriginal' => $yggOriginal,
@@ -1236,13 +1236,18 @@ class SerieController extends AbstractController
                 ];
             }
 
-            $networks = array_map(function ($network) use ($tvNetworks) {
-                return $tvNetworks ? [$network['id'] => $network['name']] : [$network['networkId'] => $network['name']];
-            }, $networks);
-            foreach ($networks as $network) {
-                if (in_array($network, $this->timeShiftedNetworks)) {
-                    $airDate = $airDate->modify('+1 day');
-                    break;
+            if ($serieViewing->isTimeShifted()) {
+                $airDate = $airDate->modify('+1 day');
+            } else {
+
+                $networks = array_map(function ($network) use ($tvNetworks) {
+                    return $tvNetworks ? [$network['id'] => $network['name']] : [$network['networkId'] => $network['name']];
+                }, $networks);
+                foreach ($networks as $network) {
+                    if (in_array($network, $this->timeShiftedNetworks)) {
+                        $airDate = $airDate->modify('+1 day');
+                        break;
+                    }
                 }
             }
 
@@ -1347,7 +1352,7 @@ class SerieController extends AbstractController
         return false;
     }
 
-    public function episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, $guestStar, $serieViewing)
+    public function episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, $guestStar, $serieViewing): void
     {
         $dbCast = $this->castRepository->findOneBy(['tmdbId' => $cast['id']]);
         $serieCast = null;
@@ -1627,7 +1632,7 @@ class SerieController extends AbstractController
         return $createdAt;
     }
 
-    public function viewingCompleted(SerieViewing $serieViewing)
+    public function viewingCompleted(SerieViewing $serieViewing): void
     {
         $seasonsCompleted = 0;
         foreach ($serieViewing->getSeasons() as $season) {

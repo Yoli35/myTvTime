@@ -9,6 +9,15 @@
             </div>
             <span class="message"></span>
         </div>
+        <div class="timeShifted" data-user="{{ user.id }}" data-media="{{ serieId }}">
+            <div class="control">
+                {{ 'Airing D+1'|trans }}
+                <label class="switch">
+                    <input type="checkbox" {% if isTimeShifted %} checked{% endif %}/>
+                    <span></span>
+                </label>
+            </div>
+        </div>
     {% endif %}
     <div class="key-facts">
         <h4>{{ 'Key facts'|trans }}</h4>
