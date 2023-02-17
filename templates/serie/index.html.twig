@@ -59,6 +59,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="search-serie">
+                            <h2>{{ 'Search series'|trans }}</h2>
+                            <label class="label" for="search-tmdb-name">{{ 'Name of the serie'|trans }}</label>
+                            <div class="group">
+                                <div class="field">
+                                    <input id="search-tmdb-name" type="search" value="" placeholder="{{ 'Start taping the name'|trans }}">
+                                </div>
+                                <div>
+                                    <button id="search-tmdb-series" type="submit">{{ 'Search'|trans }}</button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="add-serie">
                             <h2>{{ 'Add'|trans }}</h2>
 
@@ -222,7 +234,14 @@
             initAnimation();
 
             autocomplete(document.querySelector("#search-name"), createList());
-        })
+
+            document.querySelector("#search-tmdb-series").addEventListener("click", () => {
+                let query = document.querySelector("#search-tmdb-name").value;
+                if (query.length > 0) {
+                    window.location.href = "{{ path('app_serie_search') }}?query=" + query;
+                }
+            });
+        });
 
         function checkHeight() {
             const container = document.querySelector(".container");
