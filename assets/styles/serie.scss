@@ -1352,6 +1352,12 @@
                                                     margin: 0;
                                                 }
 
+                                                &:has(i) {
+                                                    background-color: var(--gradiant-green-30);
+                                                    border-color: var(--gradiant-yellow-50);
+                                                    color: var(--gradiant-yellow-50);
+                                                }
+
                                                 &.full {
                                                     color: var(--gradiant-green-50);
                                                 }
@@ -3021,6 +3027,12 @@
 
                                                     span {
                                                         color: var(--gradiant-ardoise-80);
+                                                    }
+
+                                                    &:has(i) {
+                                                        background-color: var(--gradiant-green-30);
+                                                        border-color: var(--gradiant-yellow-50);
+                                                        color: var(--gradiant-yellow-50);
                                                     }
                                                 }
                                             }

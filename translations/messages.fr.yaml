@@ -357,10 +357,18 @@ Watch now: Regarder maintenant
 '"A" Camera Operator.she': Opératrice de caméra "A"
 24 Frame Playback.he: Lecture à 24 images
 24 Frame Playback.she: Lecture à 24 images
+3D Artist.he: Artiste 3D
+3D Artist.she: Artiste 3D
+ADR Editor.he: Monteur ADR
+ADR Editor.she: Monteuse ADR
+ADR Mixer.he: Mixeur ADR
+ADR Mixer.she: Mixeuse ADR
 ADR Supervisor.he: Superviseur ADR
 ADR Supervisor.she: Superviseuse ADR
 ADR Voice Casting.he: Casting de voix ADR
 ADR Voice Casting.she: Casting de voix ADR
+Accountant.he: Comptable
+Accountant.she: Comptable
 Acting.he: Acteur
 Acting.she: Actrice
 Acting: Interprétation
@@ -370,6 +378,8 @@ Additional Script Supervisor.he: Superviseur du scénario additionnel
 Additional Script Supervisor.she: Superviseuse du scénario additionnel
 Animal Wrangler.he: Dresseur d'animaux
 Animal Wrangler.she: Dresseuse d'animaux
+Animation Supervisor.he: Superviseur animation
+Animation Supervisor.she: Superviseuse animation
 Animation.he: Animation
 Animation.she: Animation
 Armorer.he: Armurier
@@ -381,6 +391,8 @@ Art Direction.she: Directrice artistique
 Art.he: Directeur artistique
 Art.she: Directrice artistique
 Art: Direction artistique
+Assistant Accountant.he: Assistant comptable
+Assistant Accountant.she: Assistante comptable
 Assistant Art Director.he: Directeur artistique adjoint
 Assistant Art Director.she: Directrice artistique adjointe
 Assistant Costume Designer.he: Assistant costumier
@@ -402,6 +414,8 @@ Assistant Sound Editor.she: Assistante monteuse son
 Associate Producer.he: Producteur associé
 Associate Producer.she: Productrice associée
 Best Boy Grip.he: Assistant chef de département Key grip
+Book.he: Livre
+Book.she: Livre
 Boom Operator.he: Opérateur de perche
 Boom Operator.she: Opératrice de perche
 Camera Operator.he: Opérateur caméra
@@ -409,6 +423,8 @@ Camera Operator.she: Opératrice caméra
 Camera Trainee.he: Stagiaire caméra
 Camera Trainee.she: Stagiaire caméra
 Cast: Distribution des rôles
+Casting Assistant.he: Assistant de casting
+Casting Assistant.she: Assistante de casting
 Casting Associate.he: Associé de distribution
 Casting Associate.she: Associée de distribution
 Casting Coordinator.he: Coordinateur casting
@@ -417,6 +433,8 @@ Casting Director.he: Directeur de casting
 Casting Director.she: Directrice de casting
 Casting.he: Distribution
 Casting.she: Distribution
+Character Designer.he: Concepteur de personnages
+Character Designer.she: Conceptrice de personnages
 Characters.he: Personnages
 Characters.she: Personnages
 Cinematography.he: Cinématographie
@@ -433,6 +451,12 @@ Comic Book.he: Bande dessinée
 Comic Book.she: Bande dessinée
 Compositing Supervisor.he: Superviseur du compositing
 Compositing Supervisor.she: Superviseuse du compositing
+Concept Artist.he: Artiste conceptuel
+Concept Artist.she: Artiste conceptuelle
+Conceptual Illustrator.he: Illustrateur conceptuel
+Conceptual Illustrator.she: Illustratrice conceptuelle
+Conductor.he: Conducteur
+Conductor.she: Conductrice
 Construction Buyer.he: Acheteur de construction
 Construction Buyer.she: Acheteuse de construction
 Construction Coordinator.he: Coordinateur de construction
@@ -464,10 +488,14 @@ Creator: Création
 Crew.he: Équipe technique
 Dailies Operator.he: Opérateur des rushes
 Dailies Operator.she: Opératrice des rushes
+Development Manager.he: Directeur du développement
+Development Manager.she: Directrice du développement
 Dialect Coach.he: Coach en dialecte
 Dialect Coach.she: Coach en dialecte
 Dialogue Editor.he: Éditeur de dialogue
 Dialogue Editor.she: Éditrice de dialogue
+Digital Compositor.he: Compositeur numérique
+Digital Compositor.she: Compositrice numérique
 Digital Imaging Technician.he: Technicien en imagerie numérique
 Digital Imaging Technician.she: Technicienne en imagerie numérique
 Directing.he: Metteur en scène
@@ -538,6 +566,10 @@ Key Makeup Artist.he: Maquilleur principal
 Key Makeup Artist.she: Maquilleuse principale
 Key Rigging Grip.he: Key Rigging Grip
 Key Rigging Grip.she: Key Rigging Grip
+Layout Supervisor.he: Superviseur agencement
+Layout Supervisor.she: Superviseuse agencement
+Lead Character Designer.he: Concepteur principal de personnage
+Lead Character Designer.she: Conceptrice principale de personnage
 Lead Set Dresser.he: Chef décorateur
 Lead Set Dresser.she: Cheffe décoratrice
 Leadman.he: Chef d'équipe
@@ -558,6 +590,8 @@ Makeup & Hair Assistant.he: Assistant maquillage et coiffure
 Makeup & Hair Assistant.she: Assistante maquillage et coiffure
 Makeup & Hair.he: Maquillage et coiffure
 Makeup & Hair.she: Maquillage et coiffure
+Makeup Artist.he: Maquilleur
+Makeup Artist.she: Maquilleuse
 Makeup Department Head.he: Chef du département maquillage
 Makeup Department Head.she: Cheffe du département maquillage
 Makeup Designer.he: Maquilleur
@@ -576,6 +610,8 @@ Novel.he: Nouvelle
 Novel.she: Nouvelle
 Online Editor.he: Éditeur en ligne
 Online Editor.she: Éditrice en ligne
+Orchestrator.he: Orchestrateur
+Orchestrator.she: Orchestratrice
 Original Concept.he: Concept original
 Original Concept.she: Concept original
 Original Music Composer.he: Compositeur de la musique originale
@@ -584,10 +620,14 @@ Other.he: Autre
 Other.she: Autre
 Paint Coordinator.he: Coordinateur peinture
 Paint Coordinator.she: Coordinatrice peinture
+Payroll Accountant.he: Comptable salaires
+Payroll Accountant.she: Comptable salaires
 Picture Car Coordinator.he: Coordinateur véhicule de tournage
 Picture Car Coordinator.she: Coordinatrice véhicule de tournage
 Post Producer.he: Post-Producteur
 Post Producer.she: Post-Productrice
+Post Production Accountant.he: Comptable de post-production
+Post Production Accountant.she: Comptable de post-production
 Post Production Assistant.he: Assistant post-production
 Post Production Assistant.she: Assistante post-production
 Post Production Coordinator.he: Coordinateur post-production
@@ -640,12 +680,16 @@ Scenario Writer.he: Scénariste
 Scenario Writer.she: Scénariste
 Scientific Consultant.he: Consultant scientifique
 Scientific Consultant.she: Consultante scientifique
+Scoring Mixer.he: Mixeur score
+Scoring Mixer.she: Mixeuse score
 Screenplay.he: Scénario
 Screenplay.she: Scénario
 Script Coordinator.he: Coordinateur scénario
 Script Coordinator.she: Coordinatrice scénario
 Script Supervisor.he: Superviseur scénario
 Script Supervisor.she: Superviseuse scénario
+Sculptor.he: Sculpteur
+Sculptor.she: Sculptrice
 Second Assistant Accountant.he: Second assistant comptable
 Second Assistant Accountant.she: Seconde assistante comptable
 Second Assistant Director.he: Second assistant réalisateur
@@ -684,12 +728,16 @@ Special Effects Supervisor.he: Superviseur effets spéciaux
 Special Effects Supervisor.she: Superviseuse effets spéciaux
 Staff Writer.he: Rédacteur
 Staff Writer.she: Rédactrice
+Stereoscopic Supervisor.he: Superviseur stéréoscopie
+Stereoscopic Supervisor.she: Superviseuse stéréoscopie
 Still Photographer.he: Photographe de plateau
 Still Photographer.she: Photographe de plateau
 Story Editor.he: Rédacteur en chef
 Story Editor.she: Rédactrice en chef
 Story.he: Récit
 Story.she: Récit
+Storyboard Artist.he: Artiste storyboard
+Storyboard Artist.she: Artiste storyboard
 Stunt Coordinator.he: Coordinateur cascades
 Stunt Coordinator.she: Coordinatrice cascades
 Stunt Double.he: Doublure cascade
@@ -698,10 +746,14 @@ Stunts.he: Cascades
 Stunts.she: Cascades
 Supervising Art Director.he: Directeur artistique superviseur
 Supervising Art Director.she: Directrice artistique superviseur
+Supervising Music Editor.he: Supervision montage musical
+Supervising Music Editor.she: Supervision montage musical
 Supervising Producer.he: Producteur délégué
 Supervising Producer.she: Productrice déléguée
 Supervising Sound Editor.he: Superviseur montage sonore
 Supervising Sound Editor.she: Superviseuse montage sonore
+Thanks.he: Remerciements
+Thanks.she: Remerciements
 Theme Song Performance.he: Interprétation thème
 Theme Song Performance.she: Interprétation thème
 Third Assistant Director.he: Troisième assistant réalisateur
@@ -730,6 +782,8 @@ Video Assist Operator.he: Opérateur assistance vidéo
 Video Assist Operator.she: Opératrice assistance vidéo
 Video Game.he: Jeu vidéo
 Video Game.she: Jeu vidéo
+Visual Development.he: Développement visuel
+Visual Development.she: Développement visuel
 Visual Effects Assistant Editor.he: Assistant monteur effets visuels
 Visual Effects Assistant Editor.she: Assistante monteuse effets visuels
 Visual Effects Coordinator.he: Coordinateur effets visuels
@@ -751,58 +805,6 @@ Writers' Production.she: Production des auteures
 Writing.he: Auteur
 Writing.she: Autrice
 Writing: Écriture
-Makeup Artist.he: Maquilleur
-Makeup Artist.she: Maquilleuse
-Visual Development.he: Développement visuel
-Visual Development.she: Développement visuel
-Lead Character Designer.he: Concepteur principal de personnage
-Lead Character Designer.she: Conceptrice principale de personnage
-Animation Supervisor.he: Superviseur animation
-Animation Supervisor.she: Superviseuse animation
-Character Designer.he: Concepteur de personnages
-Character Designer.she: Conceptrice de personnages
-3D Artist.she: Artiste 3D
-3D Artist.he: Artiste 3D
-Layout Supervisor.he: Superviseur agencement
-Layout Supervisor.she: Superviseuse agencement
-Digital Compositor.he: Compositeur numérique
-Digital Compositor.she: Compositrice numérique
-Concept Artist.he: Artiste conceptuel
-Concept Artist.she: Artiste conceptuelle
-Conceptual Illustrator.he: Illustrateur conceptuel
-Conceptual Illustrator.she: Illustratrice conceptuelle
-Sculptor.he: Sculpteur
-Sculptor.she: Sculptrice
-Supervising Music Editor.he: Supervision montage musical
-Supervising Music Editor.she: Supervision montage musical
-Post Production Accountant.he: Comptable de post-production
-Post Production Accountant.she: Comptable de post-production
-Payroll Accountant.he: Comptable salaires
-Payroll Accountant.she: Comptable salaires
-Assistant Accountant.he: Assistant comptable
-Assistant Accountant.she: Assistante comptable
-Casting Assistant.he: Assistant de casting
-Casting Assistant.she: Assistante de casting
-Development Manager.he: Directeur du développement
-Development Manager.she: Directrice du développement
-ADR Editor.she: Monteuse ADR
-ADR Editor.he: Monteur ADR
-ADR Mixer.he: Mixeur ADR
-ADR Mixer.she: Mixeuse ADR
-Orchestrator.he: Orchestrateur
-Orchestrator.she: Orchestratrice
-Conductor.he: Conducteur
-Conductor.she: Conductrice
-Scoring Mixer.he: Mixeur score
-Scoring Mixer.she: Mixeuse score
-Thanks.he: Remerciements
-Thanks.she: Remerciements
-Storyboard Artist.he: Artiste storyboard
-Storyboard Artist.she: Artiste storyboard
-Accountant.he: Comptable
-Accountant.she: Comptable
-Stereoscopic Supervisor.he: Superviseur stéréoscopie
-Stereoscopic Supervisor.she: Superviseuse stéréoscopie
 
 # key facts
 Favorite: Série favorite
