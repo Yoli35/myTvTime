@@ -7,7 +7,7 @@
         .device {
             background-position: center;
             background-size: cover;
-            border: 2px solid var(--gradiant-grey-20);
+            border: 2px solid var(--gradient-grey-20);
             border-radius: .5em;
             cursor: pointer;
             height: 4em;
@@ -67,7 +67,7 @@
     .devices {
         .choice {
             .device {
-                border: 2px solid var(--gradiant-grey-80);
+                border: 2px solid var(--gradient-grey-80);
 
                 &.desktop {
                     background-image: url("../images/devices/device-desktop-dark.png");

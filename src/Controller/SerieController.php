@@ -362,7 +362,7 @@ class SerieController extends AbstractController
 
         /** @var Serie[] $todayAirings */
         $todayAirings = $this->todayAiringSeries($date, $request->getLocale());
-        dump($todayAirings);
+//        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
         return $this->render('serie/today.html.twig', [

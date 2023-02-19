@@ -27,8 +27,8 @@
 }
 
 ::selection {
-    background-color: var(--gradiant-purple-40);
-    color: var(--gradiant-grey-100);
+    background-color: var(--gradient-purple-40);
+    color: var(--gradient-ardoise-100);
 }
 
 html {
@@ -38,7 +38,7 @@ html {
 
 body {
     background: var(--mtt-body-bg);
-    background-image: var(--gradiant-light);
+    background-image: var(--gradient-light);
     background-attachment: fixed;
     color: var(--mtt-body-color);
     display: flex;
@@ -74,7 +74,7 @@ body {
 
     h1, h2 {
         a {
-            color: var(--gradiant-grey-20);
+            color: var(--gradient-ardoise-20);
             font-weight: 100;
         }
     }
@@ -153,33 +153,33 @@ body {
         transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, padding 500ms ease-in-out;
 
         &.success {
-            background-color: var(--gradiant-green-40-alpha-50);
-            border-color: var(--gradiant-green-90);
-            color: var(--gradiant-green-90);
+            background-color: var(--gradient-green-40-alpha-50);
+            border-color: var(--gradient-green-90);
+            color: var(--gradient-green-90);
         }
 
         &.friendship {
-            background-color: var(--gradiant-ardoise-40-alpha-50);
-            border-color: var(--gradiant-ardoise-90);
-            color: var(--gradiant-ardoise-90);
+            background-color: var(--gradient-ardoise-40-alpha-50);
+            border-color: var(--gradient-ardoise-90);
+            color: var(--gradient-ardoise-90);
 
             button {
-                background-color: var(--gradiant-ardoise-50);
-                border-color: var(--gradiant-ardoise-90);
-                color: var(--gradiant-ardoise-90);
+                background-color: var(--gradient-ardoise-50);
+                border-color: var(--gradient-ardoise-90);
+                color: var(--gradient-ardoise-90);
             }
         }
 
         &.warning {
-            background-color: var(--gradiant-mars-40-alpha-50);
-            border-color: var(--gradiant-mars-90);
-            color: var(--gradiant-mars-90);
+            background-color: var(--gradient-mars-40-alpha-50);
+            border-color: var(--gradient-mars-90);
+            color: var(--gradient-mars-90);
         }
 
         &.danger {
-            background-color: var(--gradiant-red-40);
-            border-color: var(--gradiant-red-90);
-            color: var(--gradiant-red-90);
+            background-color: var(--gradient-red-40);
+            border-color: var(--gradient-red-90);
+            color: var(--gradient-red-90);
         }
 
         button:first-child {
@@ -207,7 +207,7 @@ main {
 }
 
 #accept-cookies {
-    background-color: var(--gradiant-grey-10-alpha-90);
+    background-color: var(--gradient-ardoise-10-alpha-90);
     height: 100vh;
     max-height: 100vh;
     max-width: 100vw;
@@ -215,9 +215,9 @@ main {
 
     .accept-overlay {
         background-color: hsl(346.84, 77.17%, 49.8%);
-        //background-color: var(--gradiant-grey-30);
+        //background-color: var(--gradient-ardoise-30);
         border: 1px solid hsl(214.29, 31.82%, 91.37%);
-        //border: 1px solid var(--gradiant-grey-50);
+        //border: 1px solid var(--gradient-ardoise-50);
         border-radius: .5em;
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
         color: #fff;
@@ -266,7 +266,7 @@ main {
     }
 
     &::backdrop {
-        background: var(--gradiant-grey-30-alpha-50);
+        background: var(--gradient-ardoise-30-alpha-50);
     }
 }
 
@@ -350,7 +350,7 @@ main {
     .toggler {
         button {
             @include flex-row();
-            background: var(--gradiant-grey-10-alpha-50);
+            background: var(--gradient-ardoise-10-alpha-50);
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -400,13 +400,13 @@ main {
         transition: opacity 300ms ease-in-out;
 
         > a {
-            background-color: var(--gradiant-grey-30);
+            background-color: var(--gradient-ardoise-30);
             border-radius: 9999px;
             padding: .125em 1em;
 
             &:hover {
-                background-color: var(--gradiant-mars-50);
-                color: var(--gradiant-mars-90);
+                background-color: var(--gradient-mars-50);
+                color: var(--gradient-mars-90);
             }
         }
 
@@ -424,7 +424,7 @@ main {
     @include flex-col();
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    background-color: var(--gradiant-grey-10-alpha-50);
+    background-color: var(--gradient-ardoise-10-alpha-50);
     gap: 1em;
     left: 0;
     padding: 1em;
@@ -438,15 +438,15 @@ main {
         padding: .125em 1em;
 
         &:hover {
-            background-color: var(--gradiant-mars-50);
+            background-color: var(--gradient-mars-50);
             border-radius: 9999px;
-            color: var(--gradiant-mars-90);
+            color: var(--gradient-mars-90);
         }
     }
 
     .general {
         @include flex-col(start, start);
-        background-color: var(--gradiant-grey-20-alpha-50);
+        background-color: var(--gradient-ardoise-20-alpha-50);
         border-radius: .5em;
         padding: 1em;
 
@@ -477,7 +477,7 @@ main {
 
         .user-links {
             @include flex-col(end, start);
-            background-color: var(--gradiant-grey-20-alpha-50);
+            background-color: var(--gradient-ardoise-20-alpha-50);
             border-radius: .5em;
             padding: 1em;
 
@@ -488,7 +488,7 @@ main {
                 margin-right: 1em;
 
                 .thumbnail {
-                    border: 2px solid var(--gradiant-grey-80);
+                    border: 2px solid var(--gradient-ardoise-80);
                     border-radius: 50%;
                     height: 2em;
                     width: 2em;
@@ -502,7 +502,7 @@ main {
 
         .legal {
             @include flex-col(end, start);
-            background-color: var(--gradiant-grey-20-alpha-50);
+            background-color: var(--gradient-ardoise-20-alpha-50);
             border-radius: .5em;
             padding: 0 1em 1em 1em;
 
@@ -515,7 +515,7 @@ main {
                 }
 
                 img {
-                    border: 2px solid var(--gradiant-grey-80);
+                    border: 2px solid var(--gradient-ardoise-80);
                     border-radius: 50%;
                     height: 1em;
                     width: 1em;
@@ -538,47 +538,47 @@ nav.active {
     .nav-toggler {
         .connexion {
             > a {
-                background-color: var(--gradiant-grey-100);
+                background-color: var(--gradient-ardoise-100);
 
                 &:hover {
-                    background-color: var(--gradiant-grey-40);
-                    color: var(--gradiant-grey-90);
+                    background-color: var(--gradient-ardoise-40);
+                    color: var(--gradient-ardoise-90);
                 }
             }
         }
     }
 
     .nav-new-menu {
-        background-color: var(--gradiant-grey-80-alpha-50);
+        background-color: var(--gradient-ardoise-80-alpha-50);
 
         a {
             &:hover {
-                background-color: var(--gradiant-grey-40);
-                color: var(--gradiant-grey-90);
+                background-color: var(--gradient-ardoise-40);
+                color: var(--gradient-ardoise-90);
             }
         }
 
         .general {
-            background-color: var(--gradiant-grey-80-alpha-50);
+            background-color: var(--gradient-ardoise-80-alpha-50);
         }
 
         .user-legal {
             .user-links {
-                background-color: var(--gradiant-grey-80-alpha-50);
+                background-color: var(--gradient-ardoise-80-alpha-50);
 
                 .user {
                     .thumbnail {
-                        border: 2px solid var(--gradiant-grey-80);
+                        border: 2px solid var(--gradient-ardoise-80);
                     }
                 }
             }
 
             .legal {
-                background-color: var(--gradiant-grey-80-alpha-50);
+                background-color: var(--gradient-ardoise-80-alpha-50);
 
                 .locales {
                     img {
-                        border: 2px solid var(--gradiant-grey-80);
+                        border: 2px solid var(--gradient-ardoise-80);
                     }
                 }
             }
@@ -599,7 +599,7 @@ nav.active {
     z-index: 50;
 
     &:hover {
-        background-color: hsl(206deg, 50%, 24%); /*var(--gradiant-grey-20);*/
+        background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-20);*/
     }
 
     a {
@@ -607,7 +607,7 @@ nav.active {
     }
 
     .menu {
-        color: var(--gradiant-ardoise-90);
+        color: var(--gradient-ardoise-90);
         cursor: pointer;
         height: 2em;
         margin: 0 2em 0 1em;
@@ -639,7 +639,7 @@ nav.active {
         }
 
         img {
-            border: 2px solid var(--gradiant-grey-80);
+            border: 2px solid var(--gradient-ardoise-80);
             border-radius: .5em;
             height: 2em;
             object-fit: cover;
@@ -647,9 +647,9 @@ nav.active {
         }
 
         .menu-items {
-            background-color: hsl(206deg, 50%, 24%); /*var(--gradiant-grey-30);*/
+            background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-30);*/
             border-radius: .25em;
-            box-shadow: 0 0 1em var(--gradiant-grey-10-alpha-50);
+            box-shadow: 0 0 1em var(--gradient-ardoise-10-alpha-50);
             display: none;
             left: -6em;
             overflow: hidden;
@@ -663,7 +663,7 @@ nav.active {
                 width: 100%;
 
                 a {
-                    color: var(--gradiant-ardoise-90);
+                    color: var(--gradient-ardoise-90);
                     display: flex;
                     font-weight: 100;
                     gap: .5em;
@@ -672,8 +672,8 @@ nav.active {
                     white-space: nowrap;
 
                     &:hover {
-                        background-color: var(--gradiant-mars-50);
-                        color: var(--gradiant-mars-90);
+                        background-color: var(--gradient-mars-50);
+                        color: var(--gradient-mars-90);
                     }
 
                     div:first-child {
@@ -707,11 +707,11 @@ nav.active {
                 padding: 0 .5em;
 
                 &:hover {
-                    background-color: var(--gradiant-mars-50);
-                    color: var(--gradiant-mars-90);
+                    background-color: var(--gradient-mars-50);
+                    color: var(--gradient-mars-90);
 
                     span {
-                        color: var(--gradiant-mars-80);
+                        color: var(--gradient-mars-80);
                     }
                 }
             }
@@ -722,7 +722,7 @@ nav.active {
             }
 
             span {
-                color: var(--gradiant-ardoise-90);
+                color: var(--gradient-ardoise-90);
                 font-size: .875em;
                 font-variant: small-caps;
                 font-weight: 100;
@@ -740,7 +740,7 @@ nav.active {
 
             &.active {
                 align-items: center;
-                color: var(--gradiant-ardoise-90);
+                color: var(--gradient-ardoise-90);
                 display: flex;
                 height: 100%;
                 max-width: 50%;
@@ -750,14 +750,14 @@ nav.active {
             }
 
             &:before {
-                color: var(--gradiant-grey-60);
+                color: var(--gradient-ardoise-60);
             }
 
         }
 
         .bracket {
             align-items: center;
-            color: var(--gradiant-grey-30);
+            color: var(--gradient-ardoise-30);
             display: flex;
             gap: .5em;
             height: 100%;
@@ -774,7 +774,7 @@ nav.active {
         }
 
         .switch {
-            @include switcher(var(--gradiant-green-30), var(--gradiant-grey-80))
+            @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
         }
     }
 }
@@ -782,59 +782,59 @@ nav.active {
 @media (prefers-color-scheme: light) {
     .nav-breadcrumb {
         background-color: hsla(120deg, 50%, 24%, .25);
-        //background-color: var(--gradiant-grey-40-alpha-50);
-        color: var(--gradiant-grey-100);
+        //background-color: var(--gradient-ardoise-40-alpha-50);
+        color: var(--gradient-ardoise-100);
         font-weight: bold;
 
         &:hover {
             background-color: hsla(120deg, 20%, 44%, .5);
-            //background-color: var(--gradiant-grey-40);
+            //background-color: var(--gradient-ardoise-40);
         }
 
         a {
-            color: var(--gradiant-grey-100);
+            color: var(--gradient-ardoise-100);
         }
 
         .breadcrumb {
 
             .breadcrumb-item {
                 span {
-                    color: var(--gradiant-grey-100);
+                    color: var(--gradient-ardoise-100);
                     font-weight: 500;
                 }
 
                 &.active {
-                    color: var(--gradiant-grey-100);
+                    color: var(--gradient-ardoise-100);
                 }
 
                 &:before {
-                    color: var(--gradiant-grey-100);
+                    color: var(--gradient-ardoise-100);
                 }
 
             }
 
             .bracket {
-                color: var(--gradiant-grey-100);
+                color: var(--gradient-ardoise-100);
             }
 
             .menu {
-                color: var(--gradiant-grey-30);
+                color: var(--gradient-ardoise-30);
 
                 img {
-                    border: 2px solid var(--gradiant-grey-100);
+                    border: 2px solid var(--gradient-ardoise-100);
                 }
 
                 .menu-items {
-                    background-color: var(--gradiant-grey-90);
+                    background-color: var(--gradient-ardoise-90);
 
                     .menu-item {
 
                         a {
-                            color: var(--gradiant-grey-20);
+                            color: var(--gradient-ardoise-20);
 
                             &:hover {
-                                background-color: var(--gradiant-grey-20);
-                                color: var(--gradiant-grey-70);
+                                background-color: var(--gradient-ardoise-20);
+                                color: var(--gradient-ardoise-70);
                             }
                         }
                     }
@@ -842,15 +842,15 @@ nav.active {
             }
 
             .tag-button {
-                background-color: var(--gradiant-purple-90);
-                border: 1px solid var(--gradiant-purple-50);
+                background-color: var(--gradient-purple-90);
+                border: 1px solid var(--gradient-purple-50);
 
                 a {
-                    color: var(--gradiant-purple-20);
+                    color: var(--gradient-purple-20);
                 }
 
                 &:hover {
-                    background-color: var(--gradiant-purple-60);
+                    background-color: var(--gradient-purple-60);
                 }
             }
 
@@ -859,13 +859,13 @@ nav.active {
                 label:has(select) {
 
                     &::after {
-                        border-bottom: 2px solid var(--gradiant-grey-80);
-                        border-right: 2px solid var(--gradiant-grey-80);
+                        border-bottom: 2px solid var(--gradient-ardoise-80);
+                        border-right: 2px solid var(--gradient-ardoise-80);
                     }
 
                     select {
-                        background: var(--gradiant-grey-90);
-                        color: var(--gradiant-grey-20);
+                        background: var(--gradient-ardoise-90);
+                        color: var(--gradient-ardoise-20);
                     }
                 }
             }
@@ -886,7 +886,7 @@ nav.active {
 
     .posters {
         @include flex-row();
-        background-color: var(--gradiant-grey-10-alpha-50);
+        background-color: var(--gradient-ardoise-10-alpha-50);
         border: 2px solid;
         height: 17.5em;
         left: 20em;
@@ -925,22 +925,22 @@ nav.active {
 .clock {
     @include flex-row();
     height: 200px;
-    left: 4em;
+    left: 1em;//4em;
     position: absolute;
-    top: clamp(1em, .25vw, 4em);
+    top: 1em;//clamp(1em, .25vw, 4em);
     width: 200px;
 
     .face {
         backdrop-filter: blur(6px);
         -webkit-backdrop-filter: blur(6px);
-        background-color: var(--gradiant-grey-10-alpha-50);
+        background-color: var(--gradient-ardoise-10-alpha-50);
         border-radius: 1em;
         height: 200px;
         position: relative;
         width: 200px;
 
         .unit {
-            background-color: var(--gradiant-grey-80);
+            background-color: var(--gradient-ardoise-80);
             height: 4px;
             left: 50%;
             position: absolute;
@@ -955,7 +955,7 @@ nav.active {
         }
 
         .number {
-            color: var(--gradiant-grey-80);
+            color: var(--gradient-ardoise-80);
             font-family: "red hat light", monospace;
             font-size: 1em;
             font-weight: 300;
@@ -1014,7 +1014,7 @@ nav.active {
     }
 
     .time {
-        color: var(--gradiant-grey-90);
+        color: var(--gradient-ardoise-90);
         font-family: 'red hat regular', monospace;
         font-size: 1.5em;
         font-weight: 100;
@@ -1025,7 +1025,7 @@ nav.active {
     }
 
     .hands {
-        border: 1px solid var(--gradiant-grey-50);
+        border: 1px solid var(--gradient-ardoise-50);
         border-radius: 1em;
         height: 100%;
         inset: 0;
@@ -1041,29 +1041,29 @@ nav.active {
             //transition: transform 1s linear;
 
             &.hour {
-                background-color: var(--gradiant-grey-20);
-                border: 2px solid var(--gradiant-yellow-80);
+                background-color: var(--gradient-ardoise-20);
+                border: 2px solid var(--gradient-yellow-80);
                 height: 50px;
                 width: 8px;
             }
 
             &.minute {
-                background-color: var(--gradiant-grey-30);
-                border: 2px solid var(--gradiant-yellow-80);
+                background-color: var(--gradient-ardoise-30);
+                border: 2px solid var(--gradient-yellow-80);
                 height: 70px;
                 width: 6px;
             }
 
             &.second {
-                background-color: var(--gradiant-yellow-50);
+                background-color: var(--gradient-yellow-50);
                 height: 90px;
                 width: 4px;
             }
         }
 
         .center {
-            background-color: var(--gradiant-grey-20);
-            border: 2px solid var(--gradiant-yellow-80);
+            background-color: var(--gradient-ardoise-20);
+            border: 2px solid var(--gradient-yellow-80);
             border-radius: 50%;
             height: 20px;
             left: 50%;
@@ -1076,9 +1076,9 @@ nav.active {
 
     .close {
         align-items: center;
-        background-color: var(--gradiant-grey-30-alpha-50);
+        background-color: var(--gradient-ardoise-30-alpha-50);
         border-radius: 50%;
-        color: var(--gradiant-grey-80);
+        color: var(--gradient-ardoise-80);
         cursor: pointer;
         display: flex;
         justify-content: center;
@@ -1099,9 +1099,9 @@ nav.active {
 
 .home-footer {
     @include flex-100(center, space-evenly);
-    background-color: var(--gradiant-grey-30-alpha-50);
+    background-color: var(--gradient-ardoise-30-alpha-50);
     border-radius: 1em;
-    color: var(--gradiant-grey-80);
+    color: var(--gradient-ardoise-80);
     height: 3em;
     margin: 1em 0;
 
@@ -1117,7 +1117,7 @@ nav.active {
 
     .contact-me {
         a {
-            color: var(--gradiant-grey-90);
+            color: var(--gradient-ardoise-90);
         }
     }
 
@@ -1161,7 +1161,7 @@ nav.active {
                         justify-content: center;
 
                         img {
-                            border: 2px solid var(--gradiant-grey-90);
+                            border: 2px solid var(--gradient-ardoise-90);
                             border-radius: .25em;
                             height: 8em;
                             object-fit: cover;
@@ -1191,7 +1191,7 @@ nav.active {
 }
 
 .user-menu-img {
-    border: 2px solid var(--gradiant-grey-70);
+    border: 2px solid var(--gradient-ardoise-70);
     border-radius: 50%;
     cursor: pointer;
     height: 32px;
@@ -1205,7 +1205,7 @@ nav.active {
     padding-left: 1.25em;
 
     .genre {
-        border: .125em solid var(--gradiant-grey-50);
+        border: .125em solid var(--gradient-ardoise-50);
         border-radius: 1em;
         cursor: pointer;
         margin: .25em;
@@ -1213,9 +1213,9 @@ nav.active {
     }
 
     .active {
-        background-color: var(--gradiant-grey-30);
+        background-color: var(--gradient-ardoise-30);
         border-color: #5e9ac5;
-        color: var(--gradiant-grey-90);
+        color: var(--gradient-ardoise-90);
     }
 }
 
@@ -1240,7 +1240,7 @@ nav.active {
 }
 
 .pinned-collection {
-    background-color: var(--gradiant-grey-30-50);
+    background-color: var(--gradient-ardoise-30-50);
     border-radius: 1em;
     display: flex;
     flex-direction: column;
@@ -1271,9 +1271,9 @@ nav.active {
         a {
             .movie {
                 @include flex-col(center, start);
-                background-color: var(--gradiant-grey-40);
+                background-color: var(--gradient-ardoise-40);
                 border-radius: .5em;
-                color: var(--gradiant-grey-80);
+                color: var(--gradient-ardoise-80);
                 height: 14em;
                 isolation: isolate;
                 width: 8em;
@@ -1302,9 +1302,9 @@ nav.active {
 
 .about-pinned-movie {
     @include flex-row(start, start);
-    background-color: var(--gradiant-grey-10);
+    background-color: var(--gradient-ardoise-10);
     border-radius: 1em;
-    color: var(--gradiant-grey-80);
+    color: var(--gradient-ardoise-80);
     font-weight: 100;
     height: 24em;
     left: 0;
@@ -1342,7 +1342,7 @@ nav.active {
         }
 
         .shade {
-            background: linear-gradient(rgba(0, 0, 0, 0), var(--gradiant-grey-10) 75%);
+            background: linear-gradient(rgba(0, 0, 0, 0), var(--gradient-ardoise-10) 75%);
             bottom: 0.5em;
             height: 3em;
             left: 16em;
@@ -1414,7 +1414,7 @@ nav.active {
         }
 
         .title {
-            color: var(--gradiant-ardoise-30);
+            color: var(--gradient-ardoise-30);
             line-height: 1em;
             margin-top: auto;
             padding-top: .5em;
@@ -1422,12 +1422,12 @@ nav.active {
         }
 
         .date {
-            color: var(--gradiant-ardoise-20);
+            color: var(--gradient-ardoise-20);
             text-align: center;
         }
 
         .logo {
-            border: 4px solid var(--gradiant-grey-70);
+            border: 4px solid var(--gradient-ardoise-70);
             border-radius: 50%;
             height: auto;
             position: absolute;
@@ -1445,16 +1445,16 @@ nav.active {
 
         .has-been-seen {
             @include flex-row();
-            background-color: var(--gradiant-grey-20);
+            background-color: var(--gradient-ardoise-20);
             border-radius: 50%;
-            color: var(--gradiant-grey-80);
+            color: var(--gradient-ardoise-80);
             cursor: pointer;
             height: 1.35em;
             padding: 0 .2em;
             width: 1.35em;
 
             &.yes {
-                color: var(--gradiant-green-60);
+                color: var(--gradient-green-60);
             }
         }
 
@@ -1508,7 +1508,7 @@ nav.active {
     .content {
         background-color: hsla(50, 100%, 50%, .5);
         border-radius: 999px;
-        color: var(--gradiant-red-20);
+        color: var(--gradient-red-20);
         font-size: 1.5em;
         font-weight: bold;
         line-height: 1.2em;
@@ -1581,27 +1581,27 @@ nav.active {
 @media (prefers-color-scheme: dark) {
 
     :root {
-        --bs-body-bg: var(--gradiant-grey-20);
-        --bs-body-color: var(--gradiant-grey-90);
+        --bs-body-bg: var(--gradient-ardoise-20);
+        --bs-body-color: var(--gradient-ardoise-90);
     }
 
     body {
-        background-image: var(--gradiant-dark);
+        background-image: var(--gradient-dark);
     }
 
     a, .nav-link {
-        color: var(--gradiant-grey-80);
+        color: var(--gradient-ardoise-80);
 
         &:hover {
-            color: var(--gradiant-mars-60);
+            color: var(--gradient-mars-60);
         }
 
         &:visited {
-            color: var(--gradiant-grey-80);
+            color: var(--gradient-ardoise-80);
         }
 
         &:focus {
-            color: var(--gradiant-mars-60);
+            color: var(--gradient-mars-60);
         }
     }
 
@@ -1611,26 +1611,26 @@ nav.active {
     }
 
     .dropdown-menu {
-        color: var(--gradiant-grey-80);
-        background-color: var(--gradiant-grey-30);
+        color: var(--gradient-ardoise-80);
+        background-color: var(--gradient-ardoise-30);
     }
 
     .dropdown-item-text {
-        color: var(--gradiant-grey-80);
+        color: var(--gradient-ardoise-80);
     }
 
     h1, h2, {
-        color: var(--gradiant-grey-80);
+        color: var(--gradient-ardoise-80);
 
         a {
-            color: var(--gradiant-grey-80);
+            color: var(--gradient-ardoise-80);
         }
     }
 
     .nav-breadcrumb {
         .breadcrumb {
             .bracket {
-                color: var(--gradiant-grey-80);
+                color: var(--gradient-ardoise-80);
             }
         }
     }
@@ -1641,20 +1641,20 @@ nav.active {
 
     .genres {
         .genre {
-            border: .125em solid var(--gradiant-grey-50);
+            border: .125em solid var(--gradient-ardoise-50);
         }
 
         .active {
-            background-color: var(--gradiant-grey-90);
+            background-color: var(--gradient-ardoise-90);
             border-color: #5e9ac5;
-            color: var(--gradiant-grey-10);
+            color: var(--gradient-ardoise-10);
         }
     }
 
     .home-discover {
         a {
             .title, .date {
-                color: var(--gradiant-grey-80);
+                color: var(--gradient-ardoise-80);
             }
         }
     }
@@ -1662,7 +1662,7 @@ nav.active {
     .home-discovers {
         .footer-infos {
             div {
-                color: var(--gradiant-grey-80);
+                color: var(--gradient-ardoise-80);
             }
         }
     }
@@ -1680,22 +1680,22 @@ nav.active {
     }
 
     .modal-content {
-        background-color: var(--gradiant-grey-20);
+        background-color: var(--gradient-ardoise-20);
     }
 
     .modal-header {
-        border-bottom: 1px solid var(--gradiant-grey-30);
+        border-bottom: 1px solid var(--gradient-ardoise-30);
     }
 
     .show-code {
         .overlay {
-            background-color: var(--gradiant-grey-20);
-            border: 1px solid var(--gradiant-grey-50);
-            color: var(--gradiant-grey-80);
+            background-color: var(--gradient-ardoise-20);
+            border: 1px solid var(--gradient-ardoise-50);
+            color: var(--gradient-ardoise-80);
 
             .header {
                 .close {
-                    color: var(--gradiant-grey-80);
+                    color: var(--gradient-ardoise-80);
                 }
             }
         }
@@ -1712,23 +1712,23 @@ nav.active {
     width: 100vw;
 
     .login-dialog, .register-dialog {
-        background-color: var(--gradiant-grey-100);
-        border: 1px solid var(--gradiant-grey-60);
+        background-color: var(--gradient-ardoise-100);
+        border: 1px solid var(--gradient-ardoise-60);
         border-radius: calc(0.5rem - 1px);
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.25), 0 0 40px rgba(0, 0, 0, 0.25), 0 0 100px rgba(0, 0, 0, 0.25);
-        color: var(--gradiant-grey-20);
+        color: var(--gradient-ardoise-20);
         font-weight: 200;
 
         .header {
-            background-color: var(--gradiant-grey-90);
-            border-bottom: 1px solid var(--gradiant-grey-60);
+            background-color: var(--gradient-ardoise-90);
+            border-bottom: 1px solid var(--gradient-ardoise-60);
             border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
             padding: .5em 1em;
             margin-bottom: 0;
         }
 
         .body {
-            border-bottom: 1px solid var(--gradiant-grey-60);
+            border-bottom: 1px solid var(--gradient-ardoise-60);
             padding: 1em;
 
             .control {
@@ -1749,7 +1749,7 @@ nav.active {
                     input {
                         appearance: unset;
                         border: none;
-                        border-bottom: 1px solid var(--gradiant-grey-70);
+                        border-bottom: 1px solid var(--gradient-ardoise-70);
                         font-weight: 200;
                         outline-offset: 1px;
                         width: 100%;
@@ -1774,7 +1774,7 @@ nav.active {
                 width: 20em;
 
                 label {
-                    color: var(--gradiant-grey-40);
+                    color: var(--gradient-ardoise-40);
                     margin-bottom: .25em;
                     width: 100%;
                 }
@@ -1782,7 +1782,7 @@ nav.active {
                 input {
                     appearance: unset;
                     border: none;
-                    border-bottom: 1px solid var(--gradiant-grey-70);
+                    border-bottom: 1px solid var(--gradient-ardoise-70);
                     font-weight: 200;
                     outline-offset: 1px;
                     width: 100%;
@@ -1792,14 +1792,14 @@ nav.active {
 
         .footer {
             @include flex-100(end, end);
-            background-color: var(--gradiant-grey-90);
+            background-color: var(--gradient-ardoise-90);
             border-radius: 0 0 calc(0.5rem - 1px) calc(0.5rem - 1px);
             padding: .5em 1em;
 
             .btn {
-                background-color: var(--gradiant-grey-80);
-                border: 1px solid var(--gradiant-grey-40);
-                color: var(--gradiant-grey-0);
+                background-color: var(--gradient-ardoise-80);
+                border: 1px solid var(--gradient-ardoise-40);
+                color: var(--gradient-ardoise-0);
             }
         }
     }
@@ -1808,28 +1808,28 @@ nav.active {
 @media (prefers-color-scheme: dark) {
     .login, .register {
         .login-dialog, .register-dialog {
-            background-color: var(--gradiant-grey-30);
-            border-color: var(--gradiant-grey-0);
-            color: var(--gradiant-grey-90);
+            background-color: var(--gradient-ardoise-30);
+            border-color: var(--gradient-ardoise-0);
+            color: var(--gradient-ardoise-90);
 
             .header {
-                background-color: var(--gradiant-grey-20);
-                border-bottom-color: var(--gradiant-grey-40);
+                background-color: var(--gradient-ardoise-20);
+                border-bottom-color: var(--gradient-ardoise-40);
             }
 
             .body {
-                border-bottom-color: var(--gradiant-grey-40);
+                border-bottom-color: var(--gradient-ardoise-40);
 
                 .control {
                     > div {
                         label {
-                            color: var(--gradiant-grey-80);
+                            color: var(--gradient-ardoise-80);
                         }
 
                         input {
-                            background-color: var(--gradiant-grey-30);
-                            border-color: var(--gradiant-grey-60);
-                            color: var(--gradiant-grey-90);
+                            background-color: var(--gradient-ardoise-30);
+                            border-color: var(--gradient-ardoise-60);
+                            color: var(--gradient-ardoise-90);
                         }
                     }
                 }
@@ -1837,31 +1837,31 @@ nav.active {
                 .checkbox {
                     > div {
                         label {
-                            color: var(--gradiant-grey-80);
+                            color: var(--gradient-ardoise-80);
                         }
                     }
                 }
 
                 .input {
                     label {
-                        color: var(--gradiant-grey-80);
+                        color: var(--gradient-ardoise-80);
                     }
 
                     input {
-                        background-color: var(--gradiant-grey-30);
-                        border-color: var(--gradiant-grey-60);
-                        color: var(--gradiant-grey-90);
+                        background-color: var(--gradient-ardoise-30);
+                        border-color: var(--gradient-ardoise-60);
+                        color: var(--gradient-ardoise-90);
                     }
                 }
             }
 
             .footer {
-                background-color: var(--gradiant-grey-20);
+                background-color: var(--gradient-ardoise-20);
 
                 .btn {
-                    background-color: var(--gradiant-grey-40);
-                    border: 1px solid var(--gradiant-grey-50);
-                    color: var(--gradiant-grey-90);
+                    background-color: var(--gradient-ardoise-40);
+                    border: 1px solid var(--gradient-ardoise-50);
+                    color: var(--gradient-ardoise-90);
                 }
             }
         }

@@ -47,7 +47,7 @@ function setVote(circles) {
             const arc = element.querySelector(".circle");
             const start = element.querySelector(".circle-start");
             const end = element.querySelector(".circle-end");
-            arc.setAttribute("style", "background: conic-gradient(var(--gradiant-grey-60) 0%, var(--gradiant-grey-60) " + value + "%, var(--gradiant-grey-10) " + value + "%);");
+            arc.setAttribute("style", "background: conic-gradient(var(--gradient-grey-60) 0%, var(--gradient-grey-60) " + value + "%, var(--gradient-grey-10) " + value + "%);");
             start.setAttribute("style", "translate: 0 -1.5em;");
             end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-1.5em)");
         }

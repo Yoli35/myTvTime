@@ -13,7 +13,7 @@
         --quote-opacity: 1;
 
         @include animated-header("../images/serie-header.jpg");
-        background-color: var(--gradiant-grey-10);
+        background-color: var(--gradient-ardoise-10);
         transition: background-color 3s ease-in-out;
 
         .quote {
@@ -61,18 +61,18 @@
             }
 
             div {
-                //background-color: var(--gradiant-grey-40-alpha-50);
+                //background-color: var(--gradient-ardoise-40-alpha-50);
                 border-radius: .5em;
                 max-width: 48%;
                 padding: .5em 1em;
                 text-align: right;
 
                 b {
-                    color: var(--gradiant-purple-70);
+                    color: var(--gradient-purple-70);
                 }
 
                 em {
-                    color: var(--gradiant-mars-70);
+                    color: var(--gradient-mars-70);
                 }
             }
         }
@@ -84,7 +84,7 @@
             position: absolute;
 
             .indicator {
-                background-color: var(--gradiant-grey-90);
+                background-color: var(--gradient-ardoise-90);
                 border-radius: .125em;
                 cursor: pointer;
                 height: .25em;
@@ -111,7 +111,7 @@
             width: 1.5em;
 
             &:hover {
-                background-color: var(--gradiant-grey-90-alpha-10);
+                background-color: var(--gradient-ardoise-90-alpha-10);
             }
         }
 
@@ -146,7 +146,7 @@
 
                 .serie {
                     @include flex-row(flex-start, flex-start);
-                    background-color: var(--gradiant-grey-90);
+                    background-color: var(--gradient-ardoise-90);
                     border-radius: 0;
                     height: var(--serie-lg-height);
                     margin-bottom: 1em;
@@ -156,7 +156,7 @@
                     width: 100%;
 
                     .backdrop {
-                        background-color: var(--gradiant-grey-90);
+                        background-color: var(--gradient-ardoise-90);
                         background-position: center center;
                         background-size: cover;
                         border-radius: 0 .5em .5em 0;
@@ -203,8 +203,8 @@
 
                     .network {
                         @include flex-row();
-                        background-color: var(--gradiant-grey-90);
-                        border: 2px solid var(--gradiant-grey-10);
+                        background-color: var(--gradient-ardoise-90);
+                        border: 2px solid var(--gradient-ardoise-10);
                         border-radius: 50%;
                         bottom: 1em;
                         height: 4em;
@@ -223,10 +223,10 @@
 
                     .status {
                         @include flex-row();
-                        background-color: var(--gradiant-green-30);
+                        background-color: var(--gradient-green-30);
                         border: 2px solid;
                         border-radius: .5em;
-                        color: var(--gradiant-green-90);
+                        color: var(--gradient-green-90);
                         font-weight: 300;
                         height: 2em;
                         padding: 0 1em;
@@ -236,26 +236,26 @@
                         z-index: 10;
 
                         &.start-watching {
-                            background-color: var(--gradiant-mars-50);
-                            color: var(--gradiant-mars-90);
+                            background-color: var(--gradient-mars-50);
+                            color: var(--gradient-mars-90);
                         }
 
                         &.more-to-come {
-                            background-color: var(--gradiant-ardoise-50);
-                            color: var(--gradiant-ardoise-90);
+                            background-color: var(--gradient-ardoise-50);
+                            color: var(--gradient-ardoise-90);
                         }
 
                         &.that-s-all {
-                            background-color: var(--gradiant-grey-50);
-                            color: var(--gradiant-grey-90);
+                            background-color: var(--gradient-ardoise-50);
+                            color: var(--gradient-ardoise-90);
                         }
                     }
 
                     .favorite {
                         @include flex-row();
-                        background-color: var(--gradiant-green-30);
+                        background-color: var(--gradient-green-30);
                         border-radius: .5em;
-                        color: var(--gradiant-grey-100);
+                        color: var(--gradient-ardoise-100);
                         font-weight: 300;
                         height: 2em;
                         position: absolute;
@@ -268,7 +268,7 @@
                     .today, .tomorrow, .next, .passed {
                         @include flex-row();
                         border-radius: .5em;
-                        color: var(--gradiant-grey-100);
+                        color: var(--gradient-ardoise-100);
                         font-weight: 300;
                         height: 2em;
                         padding: 0 .5em;
@@ -279,21 +279,21 @@
                     }
 
                     .today {
-                        background-color: var(--gradiant-mars-50);
+                        background-color: var(--gradient-mars-50);
                     }
 
                     .tomorrow {
-                        background-color: var(--gradiant-green-40);
+                        background-color: var(--gradient-green-40);
                     }
 
                     .next {
-                        background-color: var(--gradiant-ardoise-50);
-                        color: var(--gradiant-ardoise-80);
+                        background-color: var(--gradient-ardoise-50);
+                        color: var(--gradient-ardoise-80);
                     }
 
                     .passed {
-                        background-color: var(--gradiant-red-40-alpha);
-                        color: var(--gradiant-red-80);
+                        background-color: var(--gradient-mars-40);
+                        color: var(--gradient-mars-90);
                     }
 
                     .add {
@@ -305,7 +305,7 @@
                     }
 
                     &.search {
-                        background-color: var(--gradiant-grey-20);
+                        background-color: var(--gradient-ardoise-20);
                         height: var(--serie-md-height);
 
                         .backdrop {
@@ -326,7 +326,7 @@
                         transition: border 100ms ease-in-out;
 
                         &:hover {
-                            border: .25em solid var(--gradiant-grey-90);
+                            border: .25em solid var(--gradient-ardoise-90);
                             //outline-offset: -.25em;
                         }
                     }
@@ -365,7 +365,7 @@
 
         .new-serie-preview {
             @include flex-col();
-            background-color: var(--gradiant-grey-10);
+            background-color: var(--gradient-ardoise-10);
             inset: 0;
             display: none;
             opacity: 0;
@@ -385,9 +385,9 @@
                 position: relative;
 
                 .content {
-                    background-color: var(--gradiant-grey-30);
+                    background-color: var(--gradient-ardoise-30);
                     border-radius: .5em;
-                    color: var(--gradiant-grey-90);
+                    color: var(--gradient-ardoise-90);
                     font-size: 2em;
                     font-weight: bold;
                     padding: 1em 2em;
@@ -417,7 +417,7 @@
             }
 
             .pages {
-                background-color: var(--gradiant-grey-80-alpha-50);
+                background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 0;
                 min-height: unset;
                 padding: .5em;
@@ -427,7 +427,7 @@
                 }
 
                 .position {
-                    color: var(--gradiant-grey-30);
+                    color: var(--gradient-ardoise-30);
                     font-weight: 100;
                     text-align: center;
                     text-transform: uppercase;
@@ -439,15 +439,15 @@
                     border-radius: .25em;
 
                     .page:nth-child(1n+0) {
-                        border-bottom: 1px solid var(--gradiant-grey-80);
+                        border-bottom: 1px solid var(--gradient-ardoise-80);
                         border-left: 0;
-                        border-right: 1px solid var(--gradiant-grey-80);
-                        border-top: 1px solid var(--gradiant-grey-80);
+                        border-right: 1px solid var(--gradient-ardoise-80);
+                        border-top: 1px solid var(--gradient-ardoise-80);
                         padding: .25em 0;
                     }
 
                     .page:first-child {
-                        border-left: 1px solid var(--gradiant-grey-80);
+                        border-left: 1px solid var(--gradient-ardoise-80);
                         border-radius: .25em 0 0 .25em;
                     }
 
@@ -463,13 +463,13 @@
 
                         &.current {
                             @include flex-row();
-                            background-color: var(--gradiant-grey-80);
-                            color: var(--gradiant-grey-30);
+                            background-color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-30);
                         }
 
                         &:hover {
-                            background-color: var(--gradiant-grey-80);
-                            color: var(--gradiant-grey-20);
+                            background-color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-20);
                         }
 
                         a, div {
@@ -485,10 +485,10 @@
 
             button {
                 appearance: unset;
-                background-color: var(--gradiant-grey-20);
-                border: 1px solid var(--gradiant-grey-80);
+                background-color: var(--gradient-ardoise-20);
+                border: 1px solid var(--gradient-ardoise-80);
                 border-radius: var(--button-border-radius);
-                color: var(--gradiant-grey-80);
+                color: var(--gradient-ardoise-80);
                 cursor: pointer;
                 font-weight: 100;
                 padding: .25em 1em;
@@ -496,29 +496,29 @@
                 width: 100%;
 
                 &.disabled {
-                    background-color: var(--gradiant-grey-50);
-                    border: 1px solid var(--gradiant-grey-60);
-                    color: var(--gradiant-grey-60);
+                    background-color: var(--gradient-ardoise-50);
+                    border: 1px solid var(--gradient-ardoise-60);
+                    color: var(--gradient-ardoise-60);
                     cursor: default;
                 }
             }
 
             .label {
-                color: var(--gradiant-grey-30);
+                color: var(--gradient-ardoise-30);
                 font-weight: 100;
                 display: none;
                 text-transform: uppercase;
             }
 
             h2 {
-                color: var(---gradiant-mars-70);
+                color: var(---gradient-mars-70);
                 display: none;
                 font-size: 1.5em;
                 margin-top: 0;
             }
 
             .search-serie, .add-serie {
-                background-color: var(--gradiant-grey-80-alpha-50);
+                background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 0;
                 min-height: unset;
                 padding: .5em;
@@ -533,7 +533,7 @@
 
                     details {
                         div {
-                            background-color: var(--gradiant-grey-80);
+                            background-color: var(--gradient-ardoise-80);
                             border-radius: .5em;
                             padding: .5em;
                         }
@@ -549,7 +549,7 @@
                     }
 
                     .autocomplete-items {
-                        border: 1px solid var(--gradiant-grey-80);
+                        border: 1px solid var(--gradient-ardoise-80);
                         border-bottom: none;
                         border-top: none;
                         left: 0;
@@ -565,27 +565,27 @@
                     .autocomplete-items div {
                         padding: .25em .5em calc(.25em - 1px);
                         cursor: pointer;
-                        background-color: var(--gradiant-grey-90);
-                        border-bottom: 1px solid var(--gradiant-grey-70);
-                        color: var(--gradiant-grey-30);
+                        background-color: var(--gradient-ardoise-90);
+                        border-bottom: 1px solid var(--gradient-ardoise-70);
+                        color: var(--gradient-ardoise-30);
                     }
 
                     .autocomplete-items div:hover {
                         /*when hovering an item:*/
-                        background-color: var(--gradiant-grey-80);
+                        background-color: var(--gradient-ardoise-80);
                     }
 
                     .autocomplete-active {
                         /*when navigating through the items using the arrow keys:*/
-                        background-color: var(--gradiant-grey-40) !important;
-                        color: var(--gradiant-grey-90) !important;
+                        background-color: var(--gradient-ardoise-40) !important;
+                        color: var(--gradient-ardoise-90) !important;
                     }
                 }
             }
 
             .settings {
                 @include flex-col(flex-start, flex-start);
-                background-color: var(--gradiant-grey-80-alpha-50);
+                background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 0;
                 margin-bottom: 1em;
                 padding: .5em;
@@ -601,8 +601,8 @@
                             width: 100%;
 
                             &::after {
-                                border-bottom: 2px solid var(--gradiant-grey-80);
-                                border-right: 2px solid var(--gradiant-grey-80);
+                                border-bottom: 2px solid var(--gradient-ardoise-80);
+                                border-right: 2px solid var(--gradient-ardoise-80);
                                 content: '';
                                 height: .5em;
                                 position: absolute;
@@ -615,9 +615,9 @@
 
                             select {
                                 appearance: unset;
-                                background-color: var(--gradiant-grey-40);
-                                border: 0 solid var(--gradiant-grey-80);
-                                color: var(--gradiant-grey-80);
+                                background-color: var(--gradient-ardoise-40);
+                                border: 0 solid var(--gradient-ardoise-80);
+                                color: var(--gradient-ardoise-80);
                                 font-weight: 100;
                                 padding: .25em 1em .25em .25em;
                                 position: relative;
@@ -650,7 +650,7 @@
 
                         .value {
                             @include flex-col();
-                            background-color: var(--gradiant-grey-40);
+                            background-color: var(--gradient-ardoise-40);
                             border-radius: .5em;
                             font-weight: 100;
                             margin: .5em;
@@ -693,7 +693,7 @@
                             @include flex-100(center, start);
 
                             .switch {
-                                @include switcher(var(--gradiant-green-30), var(--gradiant-grey-80))
+                                @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
                             }
 
                             .anim-settings-toggler {
@@ -741,13 +741,13 @@
                                             padding: .125em .25em;
 
                                             &.min {
-                                                background-color: var(--gradiant-mars-90);
-                                                color: var(--gradiant-mars-20);
+                                                background-color: var(--gradient-mars-90);
+                                                color: var(--gradient-mars-20);
                                             }
 
                                             &.max {
-                                                background-color: var(--gradiant-green-90);
-                                                color: var(--gradiant-green-20);
+                                                background-color: var(--gradient-green-90);
+                                                color: var(--gradient-green-20);
                                             }
                                         }
                                     }
@@ -767,8 +767,8 @@
                                         //width: 100%;
 
                                         .bar {
-                                            background: var(--gradiant-grey-20);
-                                            background: linear-gradient(180deg, var(--gradiant-grey-10) 0%, var(--gradiant-grey-25) 100%);
+                                            background: var(--gradient-ardoise-20);
+                                            background: linear-gradient(180deg, var(--gradient-ardoise-10) 0%, var(--gradient-ardoise-25) 100%);
                                             border-radius: 2px;
                                             height: 5px;
                                             left: 0;
@@ -779,8 +779,8 @@
 
                                             .between {
                                                 background-color: transparent;
-                                                border-bottom: 1px solid var(--gradiant-grey-80-alpha-50);
-                                                border-top: 1px solid var(--gradiant-grey-80-alpha-50);
+                                                border-bottom: 1px solid var(--gradient-ardoise-80-alpha-50);
+                                                border-top: 1px solid var(--gradient-ardoise-80-alpha-50);
                                                 height: 7px;
                                                 left: 0;
                                                 position: relative;
@@ -790,7 +790,7 @@
                                             }
 
                                             .handle {
-                                                background-color: var(--gradiant-grey-100);
+                                                background-color: var(--gradient-ardoise-100);
                                                 border-radius: 50%;
                                                 cursor: pointer;
                                                 height: 1em;
@@ -801,12 +801,12 @@
                                                 width: 1em;
 
                                                 &.min {
-                                                    background-color: var(--gradiant-mars-80);
+                                                    background-color: var(--gradient-mars-80);
                                                     top: -12px;
                                                 }
 
                                                 &.max {
-                                                    background-color: var(--gradiant-green-80);
+                                                    background-color: var(--gradient-green-80);
                                                     top: -28px;
                                                 }
 
@@ -858,16 +858,16 @@
 
     .body {
         @include flex-row();
-        background-color: var(--gradiant-grey-10);
+        background-color: var(--gradient-ardoise-10);
         border-radius: .25em;
-        color: var(--gradiant-grey-80);
+        color: var(--gradient-ardoise-80);
         min-height: 2em;
         width: 10em;
         z-index: 2;
     }
 
     .tail {
-        background-color: var(--gradiant-grey-10);
+        background-color: var(--gradient-ardoise-10);
         border-radius: .125em;
         min-height: 1em;
         rotate: 45deg;
@@ -910,9 +910,9 @@
 
                 .watch-provider {
                     @include flex-row();
-                    background-color: var(--gradiant-grey-10);
+                    background-color: var(--gradient-ardoise-10);
                     border-radius: 0 0 .5em .5em;
-                    color: var(--gradiant-grey-80);
+                    color: var(--gradient-ardoise-80);
                     height: 4em;
                     //margin: 1px;
                     width: 20em;
@@ -947,10 +947,10 @@
 
             .arrow {
                 @include flex-row();
-                background-color: var(--gradiant-grey-20);
+                background-color: var(--gradient-ardoise-20);
                 border-radius: .25em;
                 bottom: 1em;
-                color: var(--gradiant-grey-80);
+                color: var(--gradient-ardoise-80);
                 display: none;
                 height: 2em;
                 position: absolute;
@@ -1006,20 +1006,20 @@
                     margin-left: auto;
 
                     .view-count {
-                        color: var(--gradiant-grey-80);
+                        color: var(--gradient-ardoise-80);
                         margin-left: 2em;
                         flex-shrink: 0;
                     }
 
                     .vote-count {
-                        color: var(--gradiant-grey-80);
+                        color: var(--gradient-ardoise-80);
                         margin-left: 2em;
                         flex-shrink: 0;
                     }
 
                     .vote-average, .view-average {
                         @include flex-row(center, center);
-                        background-color: var(--gradiant-grey-20);
+                        background-color: var(--gradient-ardoise-20);
                         border-radius: 50%;
                         height: 3.5em;
                         margin-left: 1em;
@@ -1028,7 +1028,7 @@
 
                         .circle {
                             @include flex-row(center, center);
-                            //background: conic-gradient(var(--gradiant-grey-60) 0%, var(--gradiant-grey-60) 1%, #000 1%);
+                            //background: conic-gradient(var(--gradient-ardoise-60) 0%, var(--gradient-ardoise-60) 1%, #000 1%);
                             border-radius: 50%;
                             height: calc(3.5em - 4px);
                             width: calc(3.5em - 4px);
@@ -1036,16 +1036,16 @@
 
                             .percentage {
                                 @include flex-row(center, center);
-                                background-color: var(--gradiant-grey-20);
+                                background-color: var(--gradient-ardoise-20);
                                 border-radius: 50%;
-                                color: var(--gradiant-grey-80);
+                                color: var(--gradient-ardoise-80);
                                 height: calc(3.5em - 12px);
                                 width: calc(3.5em - 12px);
                             }
                         }
 
                         .circle-start, .circle-end {
-                            background-color: var(--gradiant-grey-60);
+                            background-color: var(--gradient-ardoise-60);
                             border-radius: 50%;
                             height: 4px;
                             position: absolute;
@@ -1065,7 +1065,7 @@
                     margin-top: 1em;
 
                     .creator {
-                        @include human-profile(var(--gradiant-grey-20));
+                        @include human-profile(var(--gradient-ardoise-20));
                         margin: 0;
 
                         img {
@@ -1079,7 +1079,7 @@
 
                     .next-episode-to-watch {
                         @include flex-row();
-                        background-color: var(--gradiant-green-30);
+                        background-color: var(--gradient-green-30);
                         border-radius: .25em;
                         font-size: 1.5em;
                         font-weight: 300;
@@ -1098,9 +1098,9 @@
                 top: 1em;
 
                 .new-status, .new-episode, .new-season {
-                    background-color: var(--gradiant-mars-50);
+                    background-color: var(--gradient-mars-50);
                     border-radius: .25em;
-                    color: var(--gradiant-mars-90);
+                    color: var(--gradient-mars-90);
                     font-weight: 300;
                     leading-trim: both;
                     margin: 0 .5em;
@@ -1227,7 +1227,7 @@
 
                 .cast {
                     @include flex-col(flex-start, flex-start);
-                    background-color: var(--gradiant-grey-80);
+                    background-color: var(--gradient-ardoise-80);
                     border-radius: .5em;
                     padding: 0 1em 1em 1em;
                     width: 100%;
@@ -1253,10 +1253,10 @@
 
                                     .status {
                                         @include flex-row(center, end);
-                                        background-color: var(--gradiant-ardoise-30);
+                                        background-color: var(--gradient-ardoise-30);
                                         bottom: 0;
                                         border-radius: 999px;
-                                        color: var(--gradiant-yellow-50);
+                                        color: var(--gradient-yellow-50);
                                         font-size: 1em;
                                         padding: .25em;
                                         position: absolute;
@@ -1270,7 +1270,7 @@
 
                 .seasons, .episodes {
                     @include flex-col();
-                    background-color: var(--gradiant-ardoise-80);
+                    background-color: var(--gradient-ardoise-80);
                     gap: 1em;
                     margin: 1em 0;
                     width: 100%;
@@ -1280,7 +1280,7 @@
 
                         .season {
                             @include flex-row(center, flex-start);
-                            background-color: var(--gradiant-ardoise-90);
+                            background-color: var(--gradient-ardoise-90);
                             border-radius: 0;
                             height: 15em;
                             width: 100%;
@@ -1331,9 +1331,9 @@
 
                                             .ep {
                                                 @include flex-row(center, center);
-                                                border: 2px solid var(--gradiant-ardoise-20);
+                                                border: 2px solid var(--gradient-ardoise-20);
                                                 border-radius: .25em;
-                                                color: var(--gradiant-ardoise-20);
+                                                color: var(--gradient-ardoise-20);
                                                 height: 2em;
                                                 margin: 0 .5em;
                                                 overflow: hidden;
@@ -1341,25 +1341,25 @@
                                                 width: 2em;
 
                                                 span {
-                                                    color: var(--gradiant-ardoise-20);
+                                                    color: var(--gradient-ardoise-20);
                                                     font-weight: bold;
                                                 }
 
                                                 &:hover {
-                                                    border-color: var(--gradiant-mars-50);
+                                                    border-color: var(--gradient-mars-50);
                                                     border-radius: 50%;
                                                     font-size: 1.5em;
                                                     margin: 0;
                                                 }
 
                                                 &:has(i) {
-                                                    background-color: var(--gradiant-green-30);
-                                                    border-color: var(--gradiant-yellow-50);
-                                                    color: var(--gradiant-yellow-50);
+                                                    background-color: var(--gradient-green-30);
+                                                    border-color: var(--gradient-yellow-50);
+                                                    color: var(--gradient-yellow-50);
                                                 }
 
                                                 &.full {
-                                                    color: var(--gradiant-green-50);
+                                                    color: var(--gradient-green-50);
                                                 }
                                             }
                                         }
@@ -1377,7 +1377,7 @@
 
                     .episode {
                         @include flex-row(center, flex-start);
-                        background-color: var(--gradiant-ardoise-90);
+                        background-color: var(--gradient-ardoise-90);
                         border-radius: 0;
                         color: var(--mmt-body-color);
                         height: 14em;
@@ -1415,7 +1415,7 @@
                                 width: 100%;
 
                                 .guest {
-                                    @include human-profile(var(--gradiant-ardoise-40));
+                                    @include human-profile(var(--gradient-ardoise-40));
                                 }
                             }
                         }
@@ -1435,7 +1435,7 @@
 
                     > div {
                         @include flex-100();
-                        background-color: var(--gradiant-ardoise-40-alpha-50);
+                        background-color: var(--gradient-ardoise-40-alpha-50);
                         border-radius: .5em;
                         flex-wrap: wrap;
                         gap: 1em;
@@ -1474,7 +1474,7 @@
 
         aside {
             @include flex-col(flex-start, flex-start);
-            background-color: var(--gradiant-ardoise-80);
+            background-color: var(--gradient-ardoise-80);
             border-radius: .5em;
             //min-height: 50vh;
             padding: 0 1em;
@@ -1489,25 +1489,25 @@
                     @include flex-100();
 
                     .switch {
-                        @include switcher(var(--gradiant-green-30), var(--gradiant-ardoise-80))
+                        @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
                     }
                 }
 
                 .message {
                     @include flex-100();
                     border-radius: .5em;
-                    color: var(--gradiant-ardoise-100);
+                    color: var(--gradient-ardoise-100);
                     font-weight: 300;
                     line-height: 2em;
                     margin-top: 1em;
                     //padding: .5em;
 
                     &.added {
-                        background-color: var(--gradiant-green-30);
+                        background-color: var(--gradient-green-30);
                     }
 
                     &.removed {
-                        background-color: var(--gradiant-mars-30);
+                        background-color: var(--gradient-mars-30);
                     }
                 }
             }
@@ -1524,7 +1524,7 @@
                 }
 
                 .fact {
-                    background-color: var(--gradiant-ardoise-40-alpha-20);
+                    background-color: var(--gradient-ardoise-40-alpha-20);
                     border-radius: .5em;
                     margin: .5em 0;
                     padding: .5em;
@@ -1549,7 +1549,7 @@
                         padding-left: .5em;
 
                         .frame {
-                            background-color: var(--gradiant-ardoise-90);
+                            background-color: var(--gradient-ardoise-90);
                             border-radius: .25em;
                             display: inline-block;
                             max-height: 4em;
@@ -1567,9 +1567,9 @@
 
                         .keyword {
                             @include flex-col();
-                            background-color: var(--gradiant-ardoise-40);
+                            background-color: var(--gradient-ardoise-40);
                             border-radius: .25em;
-                            color: var(--gradiant-ardoise-80);
+                            color: var(--gradient-ardoise-80);
                             padding: .25em .5em;
                             margin: .125em;
 
@@ -1584,7 +1584,7 @@
                             }
 
                             &.new {
-                                background-color: var(--gradiant-purple-40);
+                                background-color: var(--gradient-purple-40);
                                 cursor: pointer;
                             }
                         }
@@ -1626,7 +1626,7 @@
     }
 
     .translationModalBack {
-        background-color: var(--gradiant-ardoise-10-alpha-90);
+        background-color: var(--gradient-ardoise-10-alpha-90);
         display: none;
         inset: 0;
         opacity: 0;
@@ -1642,10 +1642,10 @@
         }
 
         .translationModal {
-            background-color: var(--gradiant-ardoise-30);
+            background-color: var(--gradient-ardoise-30);
             border-radius: 1em;
             display: none;
-            color: var(--gradiant-ardoise-80);
+            color: var(--gradient-ardoise-80);
             opacity: 0;
             transition: opacity 500ms;
             width: 50em;
@@ -1659,7 +1659,7 @@
             }
 
             .trans-header {
-                border-bottom: 1px solid var(--gradiant-ardoise-50);
+                border-bottom: 1px solid var(--gradient-ardoise-50);
                 padding: 1em;
                 width: 100%;
             }
@@ -1706,16 +1706,16 @@
 
             .trans-footer {
                 @include flex-100(center, flex-end);
-                border-top: 1px solid var(--gradiant-ardoise-50);
+                border-top: 1px solid var(--gradient-ardoise-50);
                 padding: 1em;
                 width: 100%;
 
                 button {
                     appearance: unset;
-                    background-color: var(--gradiant-ardoise-50);
+                    background-color: var(--gradient-ardoise-50);
                     border: none;
                     border-radius: var(--button-border-radius);
-                    color: var(--gradiant-ardoise-90);
+                    color: var(--gradient-ardoise-90);
                     cursor: pointer;
                     font-weight: 100;
                     margin-left: 1em;
@@ -1736,7 +1736,7 @@
 
             .networks {
                 @include flex-row(stretch, start);
-                border-bottom: 1px solid var(--gradiant-grey-50);
+                border-bottom: 1px solid var(--gradient-ardoise-50);
                 overflow-x: scroll;
                 padding: 1em 0;
                 width: 46em;
@@ -1756,7 +1756,7 @@
                             background-position: center;
                             background-repeat: no-repeat;
                             background-size: contain;
-                            border: 2px solid var(--gradiant-grey-20);
+                            border: 2px solid var(--gradient-ardoise-20);
                             border-radius: .5em;
                             cursor: pointer;
                             height: 4em;
@@ -1774,13 +1774,13 @@
                         }
 
                         &:hover {
-                            background-color: var(--gradiant-grey-80);
-                            color: var(--gradiant-grey-20);
+                            background-color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-20);
                         }
 
                         &.active {
                             background-color: hsl(42, 100%, 47%);
-                            color: var(--gradiant-grey-20);
+                            color: var(--gradient-ardoise-20);
 
                             &:hover {
                                 background-color: hsl(42, 60%, 47%);
@@ -1827,8 +1827,8 @@
 
     .loading {
         @include flex-row();
-        background-color: var(--gradiant-grey-100);
-        border: 4px solid var(--gradiant-grey-50);
+        background-color: var(--gradient-ardoise-100);
+        border: 4px solid var(--gradient-ardoise-50);
         border-radius: 50%;
         gap: 1em;
         height: 12em;
@@ -1836,8 +1836,8 @@
         width: 12em;
 
         .dot {
-            background-color: var(--gradiant-grey-60);
-            border: 1px solid var(--gradiant-grey-30);
+            background-color: var(--gradient-ardoise-60);
+            border: 1px solid var(--gradient-ardoise-30);
             border-radius: 50%;
             height: 1.5em;
             translate: 0 -.75em;
@@ -1866,8 +1866,8 @@
 
     .loading {
         @include flex-col();
-        background-color: var(--gradiant-grey-100);
-        border: 4px solid var(--gradiant-grey-50);
+        background-color: var(--gradient-ardoise-100);
+        border: 4px solid var(--gradient-ardoise-50);
         border-radius: 50%;
         gap: 1em;
         height: 12em;
@@ -1947,9 +1947,9 @@
             font-size: 10vw;
             font-weight: 900;
             line-height: 1.1em;
-            text-stroke: 2px var(--gradiant-grey-90);
-            -webkit-text-stroke: 2px var(--gradiant-grey-90);
-            //text-shadow: 0 0 2px var(--gradiant-grey-90);
+            text-stroke: 2px var(--gradient-ardoise-90);
+            -webkit-text-stroke: 2px var(--gradient-ardoise-90);
+            //text-shadow: 0 0 2px var(--gradient-ardoise-90);
         }
     }
 
@@ -1980,9 +1980,9 @@
                         position: relative;
 
                         .new-season {
-                            background-color: var(--gradiant-mars-50);
+                            background-color: var(--gradient-mars-50);
                             border-radius: .25em;
-                            color: var(--gradiant-grey-90);
+                            color: var(--gradient-ardoise-90);
                             font-weight: 300;
                             leading-trim: both;
                             left: 50%;
@@ -2000,19 +2000,19 @@
 
             .episode {
                 @include flex-col();
-                background-color: var(--gradiant-ardoise-40);
+                background-color: var(--gradient-ardoise-40);
                 border-radius: .5em;
-                color: var(--gradiant-grey-90);
+                color: var(--gradient-ardoise-90);
                 margin-top: .5em;
                 padding: .5em;
                 width: 100%;
 
                 &:has(div span.all) {
-                    background-color: var(--gradiant-green-30);
+                    background-color: var(--gradient-green-30);
                 }
 
                 &:has(div span.spe) {
-                    background-color: var(--gradiant-mars-40);
+                    background-color: var(--gradient-mars-40);
                 }
 
                 div {
@@ -2047,7 +2047,7 @@
 
     .left-column {
         @include flex-col(start, start);
-        background-color: var(--gradiant-grey-90-alpha-10);
+        background-color: var(--gradient-ardoise-90-alpha-10);
         border-radius: 1em;
         min-height: 80vh;
         width: 18em;
@@ -2072,7 +2072,7 @@
             padding: 1em;
 
             h4 {
-                color: var(--gradiant-grey-20);
+                color: var(--gradient-ardoise-20);
             }
 
             .info {
@@ -2108,13 +2108,13 @@
         width: calc(100% - 18em);
 
         .content {
-            background-color: var(--gradiant-grey-90-alpha-10);
+            background-color: var(--gradient-ardoise-90-alpha-10);
             border-radius: 1em;
             padding: 1em;
             width: 100%;
 
             h1 {
-                color: var(--gradiant-grey-20);
+                color: var(--gradient-ardoise-20);
                 font-weight: 300;
             }
 
@@ -2123,7 +2123,7 @@
             }
 
             .known-for {
-                background-color: var(--gradiant-grey-90-alpha-10);
+                background-color: var(--gradient-ardoise-90-alpha-10);
                 border-radius: .5em;
                 overflow-x: scroll;
                 padding: 1em;
@@ -2166,7 +2166,7 @@
             .credits {
                 .acting, .sub-credits {
                     @include flex-col(start, start);
-                    background-color: var(--gradiant-grey-90-alpha-10);
+                    background-color: var(--gradient-ardoise-90-alpha-10);
                     border-radius: 1em;
                     gap: 1em;
                     padding: 1em;
@@ -2202,7 +2202,7 @@
                     }
 
                     .separation {
-                        border-bottom: 1px solid var(--gradiant-grey-40-alpha-50);
+                        border-bottom: 1px solid var(--gradient-ardoise-40-alpha-50);
                         width: 100%;
                     }
                 }
@@ -2228,9 +2228,9 @@
 
         .content {
             @include flex-row(start, start);
-            background-color: var(--gradiant-grey-90);
+            background-color: var(--gradient-ardoise-90);
             border-radius: 1em;
-            color: var(--gradiant-grey-10);
+            color: var(--gradient-ardoise-10);
             font-weight: 100;
             height: 10em;
             width: 32em;
@@ -2273,40 +2273,40 @@
 
                     .circle1 {
                         @include flex-row();
-                        //background-color: var(--gradiant-grey-90);
+                        //background-color: var(--gradient-ardoise-90);
                         animation: 1s infinite clockwise linear;
                         background: conic-gradient(
-                                        var(--gradiant-grey-10) 0deg,
-                                        var(--gradiant-grey-10) 270deg,
-                                        var(--gradiant-grey-90) 270deg,
-                                        var(--gradiant-grey-90) 360deg);
+                                        var(--gradient-ardoise-10) 0deg,
+                                        var(--gradient-ardoise-10) 270deg,
+                                        var(--gradient-ardoise-90) 270deg,
+                                        var(--gradient-ardoise-90) 360deg);
                         border-radius: 50%;
                         height: 4em;
                         width: 4em;
 
                         .circle2 {
                             @include flex-row();
-                            background-color: var(--gradiant-grey-90);
+                            background-color: var(--gradient-ardoise-90);
                             border-radius: 50%;
                             height: 3.8em;
                             width: 3.8em;
 
                             .circle3 {
                                 @include flex-row();
-                                //background-color: var(--gradiant-grey-90);
+                                //background-color: var(--gradient-ardoise-90);
                                 animation: 1s infinite counter-clockwise ease-in-out;
                                 background: conic-gradient(
-                                                var(--gradiant-grey-90) 0deg,
-                                                var(--gradiant-grey-90) 90deg,
-                                                var(--gradiant-grey-20) 90deg,
-                                                var(--gradiant-grey-20) 360deg);
+                                                var(--gradient-ardoise-90) 0deg,
+                                                var(--gradient-ardoise-90) 90deg,
+                                                var(--gradient-ardoise-20) 90deg,
+                                                var(--gradient-ardoise-20) 360deg);
                                 border-radius: 50%;
                                 height: 3em;
                                 width: 3em;
 
                                 .circle4 {
                                     @include flex-row();
-                                    background-color: var(--gradiant-grey-90);
+                                    background-color: var(--gradient-ardoise-90);
                                     border-radius: 50%;
                                     height: 2.8em;
                                     width: 2.8em;
@@ -2331,7 +2331,7 @@
         }
 
         .tail {
-            background-color: var(--gradiant-grey-90);
+            background-color: var(--gradient-ardoise-90);
             border-radius: .25em;
             height: 2em;
             rotate: 45deg;
@@ -2361,7 +2361,7 @@
 
             .mask {
                 animation: 12s step-start 0s infinite type;
-                background-color: var(--gradiant-grey-10);
+                background-color: var(--gradient-ardoise-10);
                 height: 70%;
                 position: absolute;
                 right: 0;
@@ -2371,7 +2371,7 @@
 
             .cursor {
                 animation: 1s infinite blink, 12s step-start 0s infinite cur-pos;
-                background-color: var(--gradiant-grey-80);
+                background-color: var(--gradient-ardoise-80);
                 height: 80%;
                 opacity: 1;
                 position: absolute;
@@ -2529,13 +2529,13 @@
 
     .search {
         @include flex-100();
-        background-color: var(--gradiant-grey-20);
+        background-color: var(--gradient-ardoise-20);
         margin: 1em 0;
         padding: .5em;
         //
         //input {
         //    appearance: unset;
-        //    border: 1px solid var(--gradiant-grey-40);
+        //    border: 1px solid var(--gradient-ardoise-40);
         //    padding: .5em;
         //}
     }
@@ -2543,9 +2543,9 @@
 
 .particule {
     @include flex-100();
-    background-color: var(--gradiant-purple-90);
+    background-color: var(--gradient-purple-90);
     border-radius: .5em;
-    color: var(--gradiant-purple-30);
+    color: var(--gradient-purple-30);
     height: 4em;
     position: absolute;
     transition: opacity 800ms ease-in-out, translate 1s linear, rotate 1s linear;
@@ -2561,8 +2561,8 @@
     }
 
     &.new {
-        background-color: var(--gradiant-mars-80);
-        color: var(--gradiant-mars-30);
+        background-color: var(--gradient-mars-80);
+        color: var(--gradient-mars-30);
     }
 
     @for $i from 1 through 42 {
@@ -2607,10 +2607,10 @@
 
                             .network-item {
                                 @include flex-row();
-                                background-color: var(--gradiant-grey-90);
-                                border: 2px solid var(--gradiant-grey-10);
+                                background-color: var(--gradient-ardoise-90);
+                                border: 2px solid var(--gradient-ardoise-10);
                                 border-radius: 50%;
-                                color: var(--gradiant-grey-30);
+                                color: var(--gradient-ardoise-30);
                                 font-size: 2em;
                                 font-weight: bold;
                                 height: 4rem;
@@ -2627,10 +2627,10 @@
 
                                 .network-name {
                                     align-items: center;
-                                    background-color: var(--gradiant-grey-30);
-                                    border: 2px solid var(--gradiant-grey-70);
+                                    background-color: var(--gradient-ardoise-30);
+                                    border: 2px solid var(--gradient-ardoise-70);
                                     border-radius: .25em;
-                                    color: var(--gradiant-grey-70);
+                                    color: var(--gradient-ardoise-70);
                                     display: none;
                                     font-size: 1rem;
                                     font-weight: normal;
@@ -2910,15 +2910,15 @@
 @media (prefers-color-scheme: dark) {
 
     .my-series, .series-search {
-        color: var(--gradiant-ardoise-80);
+        color: var(--gradient-ardoise-80);
 
         .header {
             h1 {
-                color: var(--gradiant-ardoise-90);
+                color: var(--gradient-ardoise-90);
             }
 
             .quote {
-                color: var(--gradiant-ardoise-80);
+                color: var(--gradient-ardoise-80);
             }
         }
 
@@ -2926,37 +2926,37 @@
             .wrapper {
                 a {
                     .serie {
-                        background-color: var(--gradiant-ardoise-10);
+                        background-color: var(--gradient-ardoise-10);
                     }
                 }
             }
 
             .series-tools {
                 .search-serie, .add-serie, .numbers, .settings {
-                    background-color: var(--gradiant-ardoise-30);
+                    background-color: var(--gradient-ardoise-30);
                 }
 
                 .pages {
-                    background-color: var(--gradiant-ardoise-30);
+                    background-color: var(--gradient-ardoise-30);
 
                     .position {
-                        color: var(--gradiant-ardoise-70);
+                        color: var(--gradient-ardoise-70);
                     }
 
                     .page-group {
                         .page {
-                            border-color: var(--gradiant-ardoise-70);
+                            border-color: var(--gradient-ardoise-70);
 
                             &.current {
-                                background-color: var(--gradiant-ardoise-40);
-                                color: var(--gradiant-ardoise-90);
+                                background-color: var(--gradient-ardoise-40);
+                                color: var(--gradient-ardoise-90);
                             }
 
                             &:hover {
-                                background-color: var(--gradiant-ardoise-60);
+                                background-color: var(--gradient-ardoise-60);
 
                                 a {
-                                    color: var(--gradiant-ardoise-20);
+                                    color: var(--gradient-ardoise-20);
                                 }
                             }
                         }
@@ -2965,29 +2965,29 @@
 
                 .search-serie, .add-serie, .settings {
                     .label {
-                        color: var(--gradiant-ardoise-70);
+                        color: var(--gradient-ardoise-70);
                     }
                 }
 
                 .search-serie {
                     .autocomplete-items {
-                        border: 1px solid var(--gradiant-ardoise-40);
+                        border: 1px solid var(--gradient-ardoise-40);
                     }
 
                     .autocomplete-items div {
-                        background-color: var(--gradiant-ardoise-30);
-                        border-bottom: 1px solid var(--gradiant-ardoise-40);
+                        background-color: var(--gradient-ardoise-30);
+                        border-bottom: 1px solid var(--gradient-ardoise-40);
                     }
 
                     .autocomplete-items div:hover {
                         /*when hovering an item:*/
-                        background-color: var(--gradiant-ardoise-60);
+                        background-color: var(--gradient-ardoise-60);
                     }
 
                     //.autocomplete-active {
                     //    /*when navigating through the items using the arrow keys:*/
-                    //    background-color: var(--gradiant-ardoise-70) !important;
-                    //    color: var(--gradiant-ardoise-90);
+                    //    background-color: var(--gradient-ardoise-70) !important;
+                    //    color: var(--gradient-ardoise-90);
                     //}
                 }
 
@@ -2995,7 +2995,7 @@
                     .help {
                         details {
                             div {
-                                background-color: var(--gradiant-ardoise-30);
+                                background-color: var(--gradient-ardoise-30);
                             }
                         }
                     }
@@ -3009,30 +3009,30 @@
             article {
                 section {
                     .seasons, .episodes, .cast {
-                        color: var(--gradiant-ardoise-90);
-                        background-color: var(--gradiant-ardoise-20-alpha-50);
+                        color: var(--gradient-ardoise-90);
+                        background-color: var(--gradient-ardoise-20-alpha-50);
 
                         a {
                             .season {
-                                color: var(--gradiant-ardoise-90);
-                                background-color: var(--gradiant-ardoise-30-alpha-50);
+                                color: var(--gradient-ardoise-90);
+                                background-color: var(--gradient-ardoise-30-alpha-50);
 
                                 .infos {
                                     .details {
                                         div {
                                             .viewing {
                                                 .ep {
-                                                    border: 2px solid var(--gradiant-ardoise-80);
-                                                    color: var(--gradiant-ardoise-60);
+                                                    border: 2px solid var(--gradient-ardoise-80);
+                                                    color: var(--gradient-ardoise-60);
 
                                                     span {
-                                                        color: var(--gradiant-ardoise-80);
+                                                        color: var(--gradient-ardoise-80);
                                                     }
 
                                                     &:has(i) {
-                                                        background-color: var(--gradiant-green-30);
-                                                        border-color: var(--gradiant-yellow-50);
-                                                        color: var(--gradiant-yellow-50);
+                                                        background-color: var(--gradient-green-30);
+                                                        border-color: var(--gradient-yellow-50);
+                                                        color: var(--gradient-yellow-50);
                                                     }
                                                 }
                                             }
@@ -3043,14 +3043,14 @@
                         }
 
                         .episode {
-                            color: var(--gradiant-ardoise-90);
-                            background-color: var(--gradiant-ardoise-30-alpha-50);
+                            color: var(--gradient-ardoise-90);
+                            background-color: var(--gradient-ardoise-30-alpha-50);
                         }
                     }
 
                     .images {
                         > div {
-                            background-color: var(--gradiant-ardoise-20-alpha-50);
+                            background-color: var(--gradient-ardoise-20-alpha-50);
                             border-radius: .5em;
                         }
                     }
@@ -3058,11 +3058,11 @@
             }
 
             aside {
-                background-color: var(--gradiant-ardoise-20-alpha-50);
+                background-color: var(--gradient-ardoise-20-alpha-50);
 
                 .key-facts {
                     .fact {
-                        background-color: var(--gradiant-ardoise-30-alpha-50);
+                        background-color: var(--gradient-ardoise-30-alpha-50);
                     }
                 }
             }
@@ -3071,13 +3071,13 @@
 
     .viewed-episode {
         .overlay {
-            background-color: var(--gradiant-ardoise-20);
-            border-color: var(--gradiant-ardoise-50);
-            color: var(--gradiant-ardoise-80);
+            background-color: var(--gradient-ardoise-20);
+            border-color: var(--gradient-ardoise-50);
+            color: var(--gradient-ardoise-80);
 
             .header {
                 .close {
-                    color: var(--gradiant-ardoise-80);
+                    color: var(--gradient-ardoise-80);
                 }
             }
 
@@ -3086,7 +3086,7 @@
                     .wrapper {
                         .network {
                             .logo {
-                                border-color: var(--gradiant-ardoise-80);
+                                border-color: var(--gradient-ardoise-80);
 
                                 &.other {
                                     background-image: url("../images/devices/network-other-dark.png");
@@ -3094,7 +3094,7 @@
                             }
 
                             &:hover {
-                                background-color: var(--gradiant-ardoise-40);
+                                background-color: var(--gradient-ardoise-40);
                             }
                         }
                     }
@@ -3105,46 +3105,46 @@
 
     .viewed-update {
         .loading {
-            background-color: var(--gradiant-ardoise-20);
-            border-color: var(--gradiant-ardoise-50);
-            color: var(--gradiant-ardoise-80);
+            background-color: var(--gradient-ardoise-20);
+            border-color: var(--gradient-ardoise-50);
+            color: var(--gradient-ardoise-80);
 
             .dot {
-                background-color: var(--gradiant-ardoise-30);
-                border: 1px solid var(--gradiant-ardoise-60);
+                background-color: var(--gradient-ardoise-30);
+                border: 1px solid var(--gradient-ardoise-60);
             }
         }
     }
 
     .person {
         .left-column {
-            background-color: var(--gradiant-ardoise-10-alpha-20);
+            background-color: var(--gradient-ardoise-10-alpha-20);
 
             .infos {
                 h4 {
-                    color: var(--gradiant-ardoise-20);
+                    color: var(--gradient-ardoise-20);
                 }
             }
         }
 
         .right-column {
             .content {
-                background-color: var(--gradiant-ardoise-10-alpha-20);
+                background-color: var(--gradient-ardoise-10-alpha-20);
 
                 h1 {
-                    color: var(--gradiant-ardoise-80);
+                    color: var(--gradient-ardoise-80);
                 }
 
                 .known-for {
-                    background-color: var(--gradiant-ardoise-20-alpha-50);
+                    background-color: var(--gradient-ardoise-20-alpha-50);
                 }
 
                 .credits {
                     .acting, .sub-credits {
-                        background-color: var(--gradiant-ardoise-20-alpha-50);
+                        background-color: var(--gradient-ardoise-20-alpha-50);
 
                         .separation {
-                            border-bottom: 1px solid var(--gradiant-ardoise-40-alpha-50);
+                            border-bottom: 1px solid var(--gradient-ardoise-40-alpha-50);
                         }
                     }
                 }
@@ -3153,33 +3153,33 @@
 
         .pop-infos {
             .content {
-                background-color: var(--gradiant-ardoise-10);
-                color: var(--gradiant-ardoise-90);
+                background-color: var(--gradient-ardoise-10);
+                color: var(--gradient-ardoise-90);
 
                 .body {
                     .spinner {
                         .circle1 {
-                            //background-color: var(--gradiant-ardoise-90);
+                            //background-color: var(--gradient-ardoise-90);
                             animation: 1s infinite clockwise linear;
                             background: conic-gradient(
-                                            var(--gradiant-ardoise-90) 0deg,
-                                            var(--gradiant-ardoise-90) 270deg,
-                                            var(--gradiant-ardoise-10) 270deg,
-                                            var(--gradiant-ardoise-10) 360deg);
+                                            var(--gradient-ardoise-90) 0deg,
+                                            var(--gradient-ardoise-90) 270deg,
+                                            var(--gradient-ardoise-10) 270deg,
+                                            var(--gradient-ardoise-10) 360deg);
 
                             .circle2 {
-                                background-color: var(--gradiant-ardoise-10);
+                                background-color: var(--gradient-ardoise-10);
 
                                 .circle3 {
-                                    //background-color: var(--gradiant-ardoise-90);
+                                    //background-color: var(--gradient-ardoise-90);
                                     background: conic-gradient(
-                                                    var(--gradiant-ardoise-10) 0deg,
-                                                    var(--gradiant-ardoise-10) 90deg,
-                                                    var(--gradiant-ardoise-80) 90deg,
-                                                    var(--gradiant-ardoise-80) 360deg);
+                                                    var(--gradient-ardoise-10) 0deg,
+                                                    var(--gradient-ardoise-10) 90deg,
+                                                    var(--gradient-ardoise-80) 90deg,
+                                                    var(--gradient-ardoise-80) 360deg);
 
                                     .circle4 {
-                                        background-color: var(--gradiant-ardoise-10);
+                                        background-color: var(--gradient-ardoise-10);
                                     }
                                 }
                             }
@@ -3189,7 +3189,7 @@
             }
 
             .tail {
-                background-color: var(--gradiant-ardoise-10);
+                background-color: var(--gradient-ardoise-10);
             }
         }
     }

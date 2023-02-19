@@ -31,7 +31,7 @@
         }
 
         &.fade {
-            color: var(--gradiant-grey-90);
+            color: var(--gradient-ardoise-90);
         }
 
         &.past {
@@ -73,7 +73,7 @@
 
         .date {
             @include flex-100();
-            color: var(--gradiant-grey-20);
+            color: var(--gradient-ardoise-20);
             inset: 0;
             line-height: 1.1em;
             opacity: 0;
@@ -121,9 +121,9 @@
 
                 .event {
                     @include flex-row(flex-start, flex-start);
-                    background-color: var(--gradiant-grey-90);
+                    background-color: var(--gradient-ardoise-90);
                     border-radius: .5em;
-                    color: var(--gradiant-grey-30);
+                    color: var(--gradient-ardoise-30);
                     overflow: hidden;
                     width: 100%;
 
@@ -158,17 +158,17 @@
             }
 
             .no-event, .add-event {
-                background: var(--btn-primary);
-                background-color: var(--gradiant-ardoise-50);
+                //background: var(--btn-primary);
+                background-color: var(--gradient-ardoise-50);
                 border-radius: 1em;
-                color: var(--gradiant-grey-100);
+                color: var(--gradient-ardoise-100);
                 font-weight: 600;
                 padding: 1em 2em;
             }
 
             .add-event {
                 align-items: center;
-                box-shadow: 0 0 0 var(--gradiant-grey-20);
+                box-shadow: 0 0 0 var(--gradient-ardoise-20);
                 cursor: pointer;
                 display: flex;
                 margin-left: auto;
@@ -180,12 +180,12 @@
                 }
 
                 &:hover {
-                    box-shadow: 0 4px 0 var(--gradiant-grey-20);
+                    box-shadow: 0 4px 0 var(--gradient-ardoise-20);
                     translate: 0 -4px;
                 }
 
                 &.click {
-                    box-shadow: 0 0 0 var(--gradiant-grey-20);
+                    box-shadow: 0 0 0 var(--gradient-ardoise-20);
                     translate: 0 0;
                 }
             }
@@ -199,7 +199,7 @@
             }
 
             .switch {
-                @include switcher-with-label(11em, var(--gradiant-green-30), var(--gradiant-grey-60));
+                @include switcher-with-label(11em, var(--gradient-green-30), var(--gradient-ardoise-60));
                 margin-left: unset;
             }
 
@@ -230,13 +230,13 @@
 
     .confirm-deletion {
         .overlay {
-            background-color: var(--gradiant-grey-20);
-            border-color: var(--gradiant-grey-50);
-            color: var(--gradiant-grey-80);
+            background-color: var(--gradient-ardoise-20);
+            border-color: var(--gradient-ardoise-50);
+            color: var(--gradient-ardoise-80);
 
             .header {
                 .close {
-                    color: var(--gradiant-grey-80);
+                    color: var(--gradient-ardoise-80);
                 }
             }
         }
@@ -256,7 +256,7 @@
         }
 
         .thumbnail {
-            border: 4px solid var(--gradiant-grey-90);
+            border: 4px solid var(--gradient-ardoise-90);
             border-radius: 50%;
             height: 8em;
             width: 8em;
@@ -320,27 +320,27 @@
     .my-events, .my-event {
 
         .header {
-            background-color: var(--gradiant-grey-20);
+            background-color: var(--gradient-ardoise-20);
             border-radius: 1em;
-            color: var(--gradiant-grey-70);
+            color: var(--gradient-ardoise-70);
 
             h1 {
-                color: var(--gradiant-grey-70);
+                color: var(--gradient-ardoise-70);
             }
 
             .animated-h1 {
-                color: var(--gradiant-grey-70);
+                color: var(--gradient-ardoise-70);
             }
         }
 
         .countdown {
             &.fade {
                 color: transparent;
-                //color: var(--gradiant-grey-30);
+                //color: var(--gradient-ardoise-30);
             }
 
             .date {
-                color: var(--gradiant-grey-90);
+                color: var(--gradient-ardoise-90);
             }
         }
     }
@@ -351,8 +351,8 @@
             .events {
                 a {
                     .event {
-                        background-color: var(--gradiant-grey-30);
-                        color: var(--gradiant-grey-90);
+                        background-color: var(--gradient-ardoise-30);
+                        color: var(--gradient-ardoise-90);
                     }
                 }
             }
@@ -362,11 +362,11 @@
     //.my-event {
     //    .countdown {
     //        &.fade {
-    //            color: var(--gradiant-grey-30);
+    //            color: var(--gradient-ardoise-30);
     //        }
     //
     //        .date {
-    //            color: var(--gradiant-grey-90);
+    //            color: var(--gradient-ardoise-90);
     //        }
     //    }
     //}

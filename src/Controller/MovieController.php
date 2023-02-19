@@ -250,7 +250,7 @@ class MovieController extends AbstractController
                     break;
             }
         }
-        dump($movieDetail);
+//        dump($movieDetail);
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,

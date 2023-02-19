@@ -6,12 +6,12 @@
 
         .users {
             @include flex-col(center, start);
-            color: var(--gradiant-grey-100);
+            color: var(--gradient-ardoise-100);
             gap: 1em;
 
             .search-bar {
                 @include flex-row(center, start);
-                background-color: var(--gradiant-grey-30-alpha-50);
+                background-color: var(--gradient-ardoise-30-alpha-50);
                 border-radius: 999px;
                 gap: 1em;
                 min-width: 35em;
@@ -19,9 +19,9 @@
 
                 .magnifying-glass {
                     @include flex-row();
-                    background-color: var(--gradiant-ardoise-50);
-                    background-image: var(--btn-primary);
-                    border: 2px solid var(--gradiant-grey-90);
+                    background-color: var(--gradient-ardoise-50);
+                    //background-image: var(--btn-primary);
+                    border: 2px solid var(--gradient-ardoise-90);
                     border-radius: 50%;
                     height: 3em;
                     width: 3em;
@@ -42,13 +42,13 @@
                 padding: .25em;
 
                 &.myself {
-                    background-color: var(--gradiant-mars-50);
-                    background-image: var(--btn-warning);
+                    background-color: var(--gradient-mars-50);
+                    //background-image: var(--btn-warning);
                     font-weight: bold;
                 }
 
                 .thumbnail {
-                    border: 2px solid var(--gradiant-grey-90);
+                    border: 2px solid var(--gradient-ardoise-90);
                     border-radius: 50%;
                     height: 3em;
                     width: 3em;
@@ -70,9 +70,9 @@
 
                 .relation {
                     @include flex-row();
-                    background-color: var(--gradiant-ardoise-40);
-                    background-image: var(--btn-primary);
-                    border: 1px solid var(--gradiant-ardoise-80);
+                    background-color: var(--gradient-ardoise-40);
+                    //background-image: var(--btn-primary);
+                    border: 1px solid var(--gradient-ardoise-80);
                     border-radius: 999px;
                     margin-left: auto;
                     margin-right: .5em;
@@ -90,7 +90,7 @@
 
                 .request {
                     @include flex-row();
-                    background-color: var(--gradiant-ardoise-40);
+                    background-color: var(--gradient-ardoise-40);
                     cursor: pointer;
                     border-radius: .25em;
                     margin-left: auto;
@@ -100,7 +100,7 @@
 
                 .pending {
                     @include flex-row();
-                    background-color: var(--gradiant-green-30);
+                    background-color: var(--gradient-green-30);
                     border-radius: .25em;
                     margin-left: auto;
                     margin-right: 1em;
@@ -113,11 +113,11 @@
             }
 
             .user:nth-child(2n+1):not(.myself) {
-                background-color: var(--gradiant-grey-20-alpha-50);
+                background-color: var(--gradient-ardoise-20-alpha-50);
             }
 
             .user:nth-child(2n):not(.myself) {
-                background-color: var(--gradiant-grey-30-alpha-50);
+                background-color: var(--gradient-ardoise-30-alpha-50);
             }
         }
 
@@ -501,9 +501,9 @@
 
     .collections {
         @include flex-100(stretch);
-        background-color: var(--gradiant-grey-80);
+        background-color: var(--gradient-ardoise-80);
         border-radius: 1em;
-        color: var(--gradiant-grey-20);
+        color: var(--gradient-ardoise-20);
         flex-wrap: wrap;
         font-weight: 100;
         //gap: 1em;
@@ -516,7 +516,7 @@
 
             .count {
                 @include flex-row();
-                border: 4px solid var(--gradiant-grey-40);
+                border: 4px solid var(--gradient-ardoise-40);
                 border-radius: 50%;
                 font-size: 2em;
                 height: 2.5em;
@@ -555,8 +555,8 @@
     }
 
     .search {
-        background-color: var(--gradiant-grey-80-alpha-50);
-        border: 2px solid var(--gradiant-grey-60);
+        background-color: var(--gradient-ardoise-80-alpha-50);
+        border: 2px solid var(--gradient-ardoise-60);
         border-radius: .5em;
         display: flex;
         flex-direction: column;
@@ -689,16 +689,16 @@
 
                 &::file-selector-button {
                     appearance: none;
-                    background-color: var(--gradiant-grey-40);
-                    border: 1px solid var(--gradiant-grey-60);
+                    background-color: var(--gradient-ardoise-40);
+                    border: 1px solid var(--gradient-ardoise-60);
                     border-radius: .5em;
-                    color: var(--gradiant-grey-80);
+                    color: var(--gradient-ardoise-80);
                     font-weight: 100;
                     padding: .25em .5em;
 
                     &:hover {
-                        background-color: var(--gradiant-grey-50);
-                        color: var(--gradiant-grey-90);
+                        background-color: var(--gradient-ardoise-50);
+                        color: var(--gradient-ardoise-90);
                     }
                 }
             }
@@ -970,13 +970,13 @@
         }
 
         .collections {
-            background-color: var(--gradiant-grey-30);
-            color: var(--gradiant-grey-90);
+            background-color: var(--gradient-ardoise-30);
+            color: var(--gradient-ardoise-90);
 
             .collection {
 
                 .count {
-                    border: 2px solid var(--gradiant-grey-90);
+                    border: 2px solid var(--gradient-ardoise-90);
                 }
 
                 .label {
@@ -988,23 +988,23 @@
     .user-movies {
 
         .search {
-            background-color: #444;
+            background-color: var(--gradient-ardoise-30);
 
             .result {
-                background-color: #444;
+                background-color: var(--gradient-ardoise-30);
             }
         }
     }
 
     .export-movies, .append-movies {
         .overlay {
-            background-color: var(--gradiant-grey-20);
-            border-color: var(--gradiant-grey-50);
-            color: var(--gradiant-grey-80);
+            background-color: var(--gradient-ardoise-20);
+            border-color: var(--gradient-ardoise-50);
+            color: var(--gradient-ardoise-80);
 
             .header {
                 .close {
-                    color: var(--gradiant-grey-80);
+                    color: var(--gradient-ardoise-80);
                 }
             }
 

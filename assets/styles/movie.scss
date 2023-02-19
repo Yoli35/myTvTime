@@ -8,13 +8,13 @@
     z-index: 1000;
 
     &.debug {
-        border: 2px dashed var(--gradiant-grey-70);
+        border: 2px dashed var(--gradient-ardoise-70);
         border-radius: .5em;
     }
 
     .notification {
         border-radius: .5em;
-        color: var(--gradiant-grey-90);
+        color: var(--gradient-ardoise-90);
         margin-bottom: 1em;
         opacity: 0;
         padding: 1em 2em;
@@ -91,20 +91,20 @@
     }
 
     .ygg {
-        @include seen(var(--gradiant-mars-50), 2.5em, 7.5em);
+        @include seen(var(--gradient-mars-50), 2.5em, 7.5em);
         bottom: 32px;
         left: 32px;
         right: unset;
 
         a {
-            color: var(--gradiant-mars-50);
+            color: var(--gradient-mars-50);
         }
     }
 }
 
 .has-been-seen {
     @include flex-row();
-    background-color: var(--gradiant-grey-30);
+    background-color: var(--gradient-ardoise-30);
     border-radius: 50%;
     color: var(--movie-add);
     cursor: pointer;
@@ -190,7 +190,7 @@
                     flex-wrap: wrap;
 
                     .provider {
-                        background-color: var(--gradiant-grey-10);
+                        background-color: var(--gradient-ardoise-10);
                         border-radius: .5em;
                         @include flex-row(center, start);
                         margin: .125em;
@@ -208,7 +208,7 @@
                         }
 
                         .name {
-                            color: var(--gradiant-ardoise-80);
+                            color: var(--gradient-ardoise-80);
                             font-weight: 100;
                             margin-right: 1em;
                         }
@@ -224,12 +224,12 @@
                 margin-right: auto;
 
                 .genre {
-                    background-color: var(--gradiant-grey-20-alpha-50);
-                    border-color: var(--gradiant-grey-80);
-                    color: var(--gradiant-grey-80);
+                    background-color: var(--gradient-ardoise-20-alpha-50);
+                    border-color: var(--gradient-ardoise-80);
+                    color: var(--gradient-ardoise-80);
 
                     a {
-                        color: var(--gradiant-grey-80);
+                        color: var(--gradient-ardoise-80);
                         height: 100%;
                         padding: .25em 1em;
                         text-decoration: none;
@@ -257,7 +257,7 @@
 
                     .collection {
                         @include flex-col();
-                        background-color: var(--gradiant-grey-30-alpha-50);
+                        background-color: var(--gradient-ardoise-30-alpha-50);
                         border-radius: 1em;
                         overflow: hidden;
 
@@ -321,9 +321,9 @@
 
                     .production {
                         @include flex-row(unset, unset);
-                        background-color: var(--gradiant-grey-80);
+                        background-color: var(--gradient-ardoise-80);
                         border-radius: .5em;
-                        color: var(--gradiant-grey-20);
+                        color: var(--gradient-ardoise-20);
                         font-size: .75em;
                         font-weight: 100;
                         margin: .5em .5em 0 0;
@@ -341,14 +341,14 @@
             width: 100%;
 
             img {
-                border: 8px solid var(--gradiant-grey-90);
+                border: 8px solid var(--gradient-ardoise-90);
                 width: 100%;
             }
 
             .replacement {
                 background: rgb(131, 58, 180);
                 background: linear-gradient(225deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
-                border: 8px solid var(--gradiant-grey-90);
+                border: 8px solid var(--gradient-ardoise-90);
                 height: 30vw;
                 width: 100%;
             }
@@ -361,24 +361,24 @@
                 .control {
                     @include flex-100();
                     .switch {
-                        @include switcher(var(--gradiant-green-30), var(--gradiant-grey-80))
+                        @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
                     }
                 }
 
                 .message {
                     @include flex-100();
                     border-radius: .5em;
-                    color: var(--gradiant-grey-100);
+                    color: var(--gradient-ardoise-100);
                     font-weight: 300;
                     margin-top: 1em;
                     padding: .5em;
 
                     &.added {
-                        background-color: var(--gradiant-green-30);
+                        background-color: var(--gradient-green-30);
                     }
 
                     &.removed {
-                        background-color: var(--gradiant-mars-30);
+                        background-color: var(--gradient-mars-30);
                     }
                 }
             }
@@ -398,7 +398,7 @@
                 }
 
                 .label {
-                    color: var(--gradiant-grey-70);
+                    color: var(--gradient-ardoise-70);
                     font-weight: 100;
                     text-transform: uppercase;
                 }
@@ -410,23 +410,23 @@
                     .list {
                         @include flex-row(flex-start, center);
                         flex-wrap: wrap;
-                        background-color: var(--gradiant-grey-10-alpha-50);
-                        color: var(--gradiant-grey-80);
+                        background-color: var(--gradient-ardoise-10-alpha-50);
+                        color: var(--gradient-ardoise-80);
                         border: 0;
                         border-radius: .5em;
                         padding: .5em;
                         width: 100%;
 
                         .item {
-                            background-color: var(--gradiant-grey-30);
+                            background-color: var(--gradient-ardoise-30);
                             border-radius: .25em;
-                            color: var(--gradiant-grey-80);
+                            color: var(--gradient-ardoise-80);
                             cursor: pointer;
                             padding: .25em .5em;
                             margin: .25em;
 
                             &.selected {
-                                background-color: var(--gradiant-mars-50);
+                                background-color: var(--gradient-mars-50);
                             }
                         }
                     }
@@ -440,10 +440,10 @@
             position: relative;
 
             &:hover::after {
-                background-color: var(--gradiant-grey-10);
-                border: 2px var(--gradiant-grey-60) solid;
+                background-color: var(--gradient-ardoise-10);
+                border: 2px var(--gradient-ardoise-60) solid;
                 border-radius: .5em;
-                color: var(--gradiant-grey-60);
+                color: var(--gradient-ardoise-60);
                 content: attr(data-descr);
                 font-size: .75em;
                 font-weight: 100;
@@ -459,7 +459,7 @@
 
     .cast, .crew {
         @include flex-row();
-        background-color: var(--gradiant-grey-40-alpha-50);
+        background-color: var(--gradient-ardoise-40-alpha-50);
         border-radius: 1em;
         font-family: 'Montserrat', sans-serif;
         font-weight: 400;
@@ -475,7 +475,7 @@
 
             .actor, .member {
                 @include flex-col(center, unset);
-                background-color: var(--gradiant-grey-80);
+                background-color: var(--gradient-ardoise-80);
                 border-radius: .5em;
                 cursor: grab;
                 height: 12.5em;
@@ -566,7 +566,7 @@
 
 .recommendations {
     @include flex-row(stretch, space-around);
-    background-color: var(--gradiant-grey-40-alpha-50);
+    background-color: var(--gradient-ardoise-40-alpha-50);
     border-radius: 1em;
     flex-wrap: wrap;
     max-height: 20em;
@@ -583,7 +583,7 @@
         width: 10em;
 
         .no-poster {
-            color: var(--gradiant-grey-70);
+            color: var(--gradient-ardoise-70);
             font-weight: 100;
             position: relative;
 
@@ -688,23 +688,23 @@
 }
 
 .collection .card {
-    background-color: var(--gradiant-grey-90);
+    background-color: var(--gradient-ardoise-90);
 }
 
 @media (prefers-color-scheme: dark) {
 
     .movie-detail .title {
-        color: var(--gradiant-grey-90);
+        color: var(--gradient-ardoise-90);
     }
 
     .movie-info, .tv-info {
         .cast, .crew {
-            background-color: var(--gradiant-grey-30-alpha-50);
+            background-color: var(--gradient-ardoise-30-alpha-50);
 
             .content {
 
                 .actor, .member {
-                    background-color: var(--gradiant-grey-30);
+                    background-color: var(--gradient-ardoise-30);
 
                     .profile {
                         background-image: url("../images/profile_dark.jpg");
@@ -715,17 +715,17 @@
 
         .images {
             > div {
-                background-color: var(--gradiant-grey-20-alpha-50);
+                background-color: var(--gradient-ardoise-20-alpha-50);
                 border-radius: .5em;
             }
         }
     }
 
     .collection .card {
-        background-color: var(--gradiant-grey-30);
+        background-color: var(--gradient-ardoise-30);
     }
 
     .recommendations {
-        background-color: var(--gradiant-grey-10-alpha-50);
+        background-color: var(--gradient-ardoise-10-alpha-50);
     }
 }

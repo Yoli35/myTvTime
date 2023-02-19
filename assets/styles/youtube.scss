@@ -26,7 +26,7 @@
 
     .yt-video {
         @include flex-col(center, start);
-        background-color: var(--gradiant-grey-80-alpha-50);
+        background-color: var(--gradient-ardoise-80-alpha-50);
         border-radius: .5em;
         box-shadow: 0 0 1em rgba(0, 0, 0, .25);
         line-height: 1em;
@@ -47,7 +47,7 @@
             }
 
             .duration {
-                background-color: var(--gradiant-grey-10);
+                background-color: var(--gradient-ardoise-10);
                 border-radius: .125em;
                 bottom: .5em;
                 font-size: .75em;
@@ -67,18 +67,18 @@
                 width: calc(100% - 1em);
 
                 .tag {
-                    background-color: var(--gradiant-grey-40);
-                    border: 1px solid var(--gradiant-grey-90);
+                    background-color: var(--gradient-ardoise-40);
+                    border: 1px solid var(--gradient-ardoise-90);
                     border-radius: .5em;
-                    color: var(--gradiant-grey-90);
+                    color: var(--gradient-ardoise-90);
                     font-size: .75em;
                     font-weight: 400;
                     padding: 0 .5em;
 
                     &.highlight {
-                        background-color: var(--gradiant-purple-40);
-                        border: 1px solid var(--gradiant-purple-90);
-                        color: var(--gradiant-purple-90);
+                        background-color: var(--gradient-purple-40);
+                        border: 1px solid var(--gradient-purple-90);
+                        color: var(--gradient-purple-90);
                     }
                 }
             }
@@ -89,7 +89,7 @@
             padding: .5em;
 
             .channel {
-                @include author(var(--gradiant-grey-60));
+                @include author(var(--gradient-ardoise-60));
             }
 
             .infos {
@@ -138,7 +138,7 @@
 
     .parameters {
         @include flex-100(start, space-between);
-        background-color: var(--gradiant-grey-90);
+        background-color: var(--gradient-ardoise-90);
         border-radius: .5em;
         box-shadow: 0 0 1em rgba(0, 0, 0, .5);
         gap: 1em;
@@ -170,7 +170,7 @@
 
             .input {
                 @include flex-row();
-                background-color: var(--gradiant-grey-80);
+                background-color: var(--gradient-ardoise-80);
                 border-radius: .5em;
                 flex: 1;
                 gap: 1em;
@@ -210,14 +210,14 @@
                             input {
                                 @include flex-row();
                                 appearance: none;
-                                background-color: var(--gradiant-grey-40);
-                                border: 1px solid var(--gradiant-grey-80);
+                                background-color: var(--gradient-ardoise-40);
+                                border: 1px solid var(--gradient-ardoise-80);
                                 border-radius: .25em;
                                 height: 1em;
                                 width: 1em;
 
                                 &:checked {
-                                    background-color: var(--gradiant-ardoise-60);
+                                    background-color: var(--gradient-ardoise-60);
                                 }
                             }
                         }
@@ -252,10 +252,10 @@
                 }
 
                 span {
-                    color: var(--gradiant-grey-50);
+                    color: var(--gradient-ardoise-50);
 
                     span {
-                        color: var(--gradiant-grey-70);
+                        color: var(--gradient-ardoise-70);
                         font-weight: bold;
                     }
                 }
@@ -263,7 +263,7 @@
 
             .thumbnail {
                 @include flex-row();
-                background-color: var(--gradiant-grey-30);
+                background-color: var(--gradient-ardoise-30);
                 border-radius: .5em;
                 padding: .5em;
 
@@ -307,7 +307,7 @@
 
     .search-tags {
         @include flex-col();
-        background-color: var(--gradiant-grey-80);
+        background-color: var(--gradient-ardoise-80);
         border-radius: .5em;
         margin: .25em auto;
         overflow: hidden;
@@ -344,7 +344,7 @@
 
 
 .yt-videos-none {
-    background-color: var(--gradiant-grey-50);
+    background-color: var(--gradient-ardoise-50);
     border-radius: .25em;
     font-size: 3em;
     font-weight: normal;
@@ -417,36 +417,36 @@
                         position: relative;
 
                         input {
-                            background-color: var(--gradiant-grey-40);
-                            border: 1px solid var(--gradiant-grey-90);
+                            background-color: var(--gradient-ardoise-40);
+                            border: 1px solid var(--gradient-ardoise-90);
                             border-radius: .5em;
-                            caret-color: var(--gradiant-grey-90);
-                            color: var(--gradiant-grey-90);
+                            caret-color: var(--gradient-ardoise-90);
+                            color: var(--gradient-ardoise-90);
                             padding-left: .5em;
                         }
 
                         .results {
-                            background-color: var(--gradiant-grey-40);
-                            border: 1px solid var(--gradiant-grey-90);
+                            background-color: var(--gradient-ardoise-40);
+                            border: 1px solid var(--gradient-ardoise-90);
                             border-radius: .25em;
                             left: 1em;
                             position: absolute;
                             top: 1.75em;
 
                             .item {
-                                color: var(--gradiant-grey-90);
+                                color: var(--gradient-ardoise-90);
                                 padding: 0 1em;
 
                                 &:hover {
-                                    background-color: var(--gradiant-grey-90);
-                                    color: var(--gradiant-grey-40);
+                                    background-color: var(--gradient-ardoise-90);
+                                    color: var(--gradient-ardoise-40);
                                     cursor: pointer;
                                 }
                             }
                         }
 
                         .add {
-                            color: var(--gradiant-grey-90);
+                            color: var(--gradient-ardoise-90);
                             cursor: pointer;
                             position: absolute;
                             right: .25em;
@@ -455,10 +455,10 @@
                     }
 
                     .tag {
-                        background-color: var(--gradiant-grey-40);
-                        border: 1px solid var(--gradiant-grey-90);
+                        background-color: var(--gradient-ardoise-40);
+                        border: 1px solid var(--gradient-ardoise-90);
                         border-radius: .5em;
-                        color: var(--gradiant-grey-90);
+                        color: var(--gradient-ardoise-90);
                         font-size: 1em;
                         font-weight: 100;
                         padding: 1px 1.5em 1px .5em; /* -> same height as input */
@@ -466,7 +466,7 @@
                         position: relative;
 
                         &.new {
-                            background-color: var(--gradiant-mars-50);
+                            background-color: var(--gradient-mars-50);
                         }
 
                         .close {
@@ -484,7 +484,7 @@
 
             .description {
                 a {
-                    color: var(--gradiant-grey-40);
+                    color: var(--gradient-ardoise-40);
                 }
             }
 
@@ -498,7 +498,7 @@
                 }
 
                 .thumbnail {
-                    @include author(var(--gradiant-grey-60));
+                    @include author(var(--gradient-ardoise-60));
                 }
             }
         }
@@ -515,9 +515,9 @@
     }
 
     .copied-text {
-        background-color: var(--gradiant-green-30);
+        background-color: var(--gradient-green-30);
         border-radius: .25em;
-        color: var(-gradiant-grey-100);
+        color: var(-gradiant-ardoise-100);
         font-weight: bold;
         opacity: 0;
         padding: .25em .5em;
@@ -552,24 +552,24 @@
 @media (prefers-color-scheme: dark) {
     .delete-video {
         .overlay {
-            background-color: var(--gradiant-grey-20);
-            border: 1px solid var(--gradiant-grey-50);
-            color: var(--gradiant-grey-90);
+            background-color: var(--gradient-ardoise-20);
+            border: 1px solid var(--gradient-ardoise-50);
+            color: var(--gradient-ardoise-90);
 
             .header {
-                border-bottom: 1px solid var(--gradiant-grey-50);
+                border-bottom: 1px solid var(--gradient-ardoise-50);
 
                 .close {
-                    color: var(--gradiant-grey-90);
+                    color: var(--gradient-ardoise-90);
                 }
             }
 
             .footer {
-                border-top: 1px solid var(--gradiant-grey-50);
+                border-top: 1px solid var(--gradient-ardoise-50);
 
                 button:hover {
-                    background-color: var(--gradiant-grey-40);
-                    border-color: var(--gradiant-grey-50);
+                    background-color: var(--gradient-ardoise-40);
+                    border-color: var(--gradient-ardoise-50);
                 }
             }
         }
@@ -586,7 +586,7 @@
 
     .search {
         @include flex-100(start, start);
-        background-color: var(--gradiant-grey-20);
+        background-color: var(--gradient-ardoise-20);
         margin: 1em 0;
         padding: 1em;
 
@@ -602,8 +602,8 @@
                 position: relative;
 
                 input {
-                    background-color: var(--gradiant-grey-30);
-                    color: var(--gradiant-grey-70);
+                    background-color: var(--gradient-ardoise-30);
+                    color: var(--gradient-ardoise-70);
                     border: 0;
                     border-radius: .25em;
                     font-weight: 100;
@@ -613,7 +613,7 @@
                 }
 
                 .autocomplete-items {
-                    border: 1px solid var(--gradiant-grey-80);
+                    border: 1px solid var(--gradient-ardoise-80);
                     border-bottom: none;
                     border-top: none;
                     left: 0;
@@ -628,17 +628,17 @@
                     div {
                         padding: .25em .5em calc(.25em - 1px);
                         cursor: pointer;
-                        background-color: var(--gradiant-grey-90);
-                        border-bottom: 1px solid var(--gradiant-grey-70);
-                        color: var(--gradiant-grey-30);
+                        background-color: var(--gradient-ardoise-90);
+                        border-bottom: 1px solid var(--gradient-ardoise-70);
+                        color: var(--gradient-ardoise-30);
 
                         &:hover {
-                            background-color: var(--gradiant-grey-80);
+                            background-color: var(--gradient-ardoise-80);
                         }
 
                         &.active {
-                            background-color: var(--gradiant-grey-40) !important;
-                            color: var(--gradiant-grey-90) !important;
+                            background-color: var(--gradient-ardoise-40) !important;
+                            color: var(--gradient-ardoise-90) !important;
                         }
                     }
                 }
@@ -654,9 +654,9 @@
 
                 .tag {
                     @include flex-row();
-                    background-color: var(--gradiant-purple-30);
+                    background-color: var(--gradient-purple-30);
                     border-radius: .25em;
-                    color: var(--gradiant-grey-90);
+                    color: var(--gradient-ardoise-90);
                     font-weight: 100;
                     padding: .25em .5em;
 
@@ -670,7 +670,7 @@
 
             .method {
 
-                color: var(--gradiant-grey-70);
+                color: var(--gradient-ardoise-70);
                 margin-left: auto;
                 position: relative;
 
@@ -680,10 +680,10 @@
 
                 select {
                     appearance: none;
-                    background-color: var(--gradiant-grey-30);
+                    background-color: var(--gradient-ardoise-30);
                     border: none;
                     border-radius: .25em;
-                    color: var(--gradiant-grey-70);
+                    color: var(--gradient-ardoise-70);
                     font-weight: 100;
                     padding: .25em 2em .25em 1em;
                 }
@@ -700,24 +700,24 @@
 
             .apply {
                 appearance: unset;
-                background-color: var(--gradiant-grey-20);
-                border: 1px solid var(--gradiant-grey-80);
+                background-color: var(--gradient-ardoise-20);
+                border: 1px solid var(--gradient-ardoise-80);
                 border-radius: var(--button-border-radius);
-                color: var(--gradiant-grey-80);
+                color: var(--gradient-ardoise-80);
                 font-weight: 100;
                 margin-left: 1em;
                 padding: .25em 1em;
                 text-transform: uppercase;
 
                 &:hover {
-                    background-color: var(--gradiant-grey-50);
-                    color: var(--gradiant-mars-80);
+                    background-color: var(--gradient-ardoise-50);
+                    color: var(--gradient-mars-80);
                 }
 
                 &.disabled {
-                    background-color: var(--gradiant-grey-50);
-                    border: 1px solid var(--gradiant-grey-60);
-                    color: var(--gradiant-grey-60);
+                    background-color: var(--gradient-ardoise-50);
+                    border: 1px solid var(--gradient-ardoise-60);
+                    color: var(--gradient-ardoise-60);
                     cursor: default;
                 }
             }
@@ -737,17 +737,10 @@
 }
 
 @media (min-width: 575.98px) {
-    .yt-video-page {
-        //.video {
-        //    height: 240px; /* 239,625 */
-        //    width: 426px;
-        //}
-    }
-
     .yt-header {
 
         .banner {
-            height: 120px;
+            //height: 120px;
             width: 100%;
 
             .nav-breadcrumb {
@@ -766,25 +759,13 @@
             }
         }
     }
-
-    /*.yt-videos .search .parameters::before {*/
-    /*    color: yellow;*/
-    /*    content: 'sm';*/
-    /*}*/
 }
 
 @media (min-width: 767.98px) {
-    .yt-video-page {
-        //.video {
-        //    height: 324px;
-        //    width: 576px;
-        //}
-    }
-
     .yt-header {
 
         .banner {
-            height: 160px;
+            //height: 160px;
             width: 100%;
 
             .nav-breadcrumb {
@@ -813,25 +794,13 @@
             border-radius: .5em;
         }
     }
-
-    /*.yt-videos .search .parameters::before {*/
-    /*    color: yellow;*/
-    /*    content: 'md';*/
-    /*}*/
 }
 
 @media (min-width: 991.98px) {
-    .yt-video-page {
-        //.video {
-        //    height: 437px; /* 436,5 */
-        //    width: 776px;
-        //}
-    }
-
     .yt-header {
 
         .banner {
-            height: 240px;
+            //height: 240px;
             width: 100%;
 
             .nav-breadcrumb {
@@ -856,25 +825,13 @@
 
         }
     }
-
-    /*.yt-videos .search .parameters::before {*/
-    /*    color: yellow;*/
-    /*    content: 'lg';*/
-    /*}*/
 }
 
 @media (min-width: 1199.98px) {
-    .yt-video-page {
-        //.video {
-        //    height: 521px; /* 520,875 */
-        //    width: 926px;
-        //}
-    }
-
     .yt-header {
 
         .banner {
-            height: 320px;
+            //height: 320px;
             width: 100%;
 
             .nav-breadcrumb {
@@ -894,25 +851,13 @@
             }
         }
     }
-
-    /*.yt-videos .search .parameters::before {*/
-    /*    color: yellow;*/
-    /*    content: 'xl';*/
-    /*}*/
 }
 
 @media (min-width: 1399.98px) {
-    .yt-video-page {
-        //.video {
-        //    height: 606px; /* 605,25 */
-        //    width: 1076px;
-        //}
-    }
-
     .yt-header {
 
         .banner {
-            height: 320px;
+            //height: 320px;
             //width: 80%;
 
             .nav-breadcrumb {
@@ -932,11 +877,6 @@
             }
         }
     }
-
-    /*.yt-videos .search .parameters::before {*/
-    /*    color: yellow;*/
-    /*    content: 'xxl';*/
-    /*}*/
 }
 
 @media (prefers-color-scheme: dark) {
@@ -962,24 +902,24 @@
 
     .yt-result {
         .yt-video {
-            background-color: var(--gradiant-ardoise-30-alpha-50);
+            background-color: var(--gradient-ardoise-30-alpha-50);
         }
     }
 
     .yt-videos {
 
         .parameters {
-            background-color: var(--gradiant-ardoise-20);
+            background-color: var(--gradient-ardoise-20);
 
             .content {
                 .input {
-                    background-color: var(--gradiant-ardoise-30);
+                    background-color: var(--gradient-ardoise-30);
 
                     .sort, .order {
                         label:has(select) {
                             select {
-                                background-color: var(--gradiant-ardoise-40);
-                                color: var(--gradiant-ardoise-90);
+                                background-color: var(--gradient-ardoise-40);
+                                color: var(--gradient-ardoise-90);
                             }
                         }
                     }
@@ -994,16 +934,16 @@
             }
 
             span {
-                color: var(--gradiant-ardoise-60);
+                color: var(--gradient-ardoise-60);
 
                 span {
-                    color: var(--gradiant-ardoise-70);
+                    color: var(--gradient-ardoise-70);
                 }
             }
         }
 
         .search-tags {
-            background-color: var(--gradiant-ardoise-20);
+            background-color: var(--gradient-ardoise-20);
         }
 
         .result {
@@ -1011,7 +951,7 @@
     }
 
     .yt-video {
-        background-color: var(--gradiant-ardoise-20);
+        background-color: var(--gradient-ardoise-20);
     }
 
     .yt-video-page {
@@ -1022,7 +962,7 @@
         .details {
             .description {
                 a {
-                    color: var(--gradiant-ardoise-70);
+                    color: var(--gradient-ardoise-70);
                 }
             }
         }

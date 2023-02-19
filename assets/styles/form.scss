@@ -6,10 +6,10 @@
 
 .form-select {
     appearance: none;
-    background-color: var(--gradiant-grey-90);
-    border: 1px solid var(--gradiant-grey-50);
+    background-color: var(--gradient-ardoise-90);
+    border: 1px solid var(--gradient-ardoise-50);
     border-radius: .25em;
-    color: var(--gradiant-grey-10);
+    color: var(--gradient-ardoise-10);
     font-size: 1em;
     font-weight: 200;
     height: 2em;
@@ -26,23 +26,23 @@
 
 .form-control {
     appearance: unset;
-    border: 1px solid var(--gradiant-grey-40);
+    border: 1px solid var(--gradient-ardoise-40);
     padding: .125em .5em;
 }
 
 .btn {
     appearance: none;
-    background-color: var(--gradiant-grey-90);
-    border: 1px solid var(--gradiant-grey-50);
+    background-color: var(--gradient-ardoise-90);
+    border: 1px solid var(--gradient-ardoise-50);
     border-radius: .25em;
-    color: var(--gradiant-grey-10);
+    color: var(--gradient-ardoise-10);
     cursor: pointer;
     font-size: 1em;
     font-weight: 200;
     padding: .25em 1em;
 
     &:hover {
-        background-color: var(--gradiant-grey-80);
+        background-color: var(--gradient-ardoise-80);
     }
 }
 
@@ -50,7 +50,7 @@
     @include flex-row();
 
     .btn:first-child {
-        border-left: 1px solid var(--gradiant-grey-50);
+        border-left: 1px solid var(--gradient-ardoise-50);
         border-radius: .25em 0 0 .25em;
     }
 
@@ -73,61 +73,61 @@
 }
 
 .btn-primary {
-    background-color: var(--gradiant-ardoise-50);
-    background-image: var(--btn-primary);
-    border-color: var(--gradiant-ardoise-80);
-    color: var(--gradiant-ardoise-90);
+    background-color: var(--gradient-ardoise-50);
+    //background-image: var(--btn-primary);
+    border-color: var(--gradient-ardoise-80);
+    color: var(--gradient-ardoise-90);
 
     &:hover {
-        background-color: var(--gradiant-ardoise-60);
-        border-color: var(--gradiant-ardoise-90);
+        background-color: var(--gradient-ardoise-60);
+        border-color: var(--gradient-ardoise-90);
     }
 }
 
 .btn-secondary {
-    background-color: var(--gradiant-grey-40);
-    background-image: var(--btn-secondary);
-    border-color: var(--gradiant-grey-50);
-    color: var(--gradiant-grey-90);
+    background-color: var(--gradient-ardoise-40);
+    //background-image: var(--btn-secondary);
+    border-color: var(--gradient-ardoise-50);
+    color: var(--gradient-ardoise-90);
 
     &:hover {
-        background-color: var(--gradiant-grey-50);
-        border-color: var(--gradiant-grey-60);
+        background-color: var(--gradient-ardoise-50);
+        border-color: var(--gradient-ardoise-60);
     }
 }
 
 .btn-danger {
-    background-color: var(--gradiant-red-40);
-    background-image: var(--btn-danger);
-    border-color: var(--gradiant-red-80);
-    color: var(--gradiant-red-90);
+    background-color: var(--gradient-red-40);
+    //background-image: var(--btn-danger);
+    border-color: var(--gradient-red-80);
+    color: var(--gradient-red-90);
 
     &:hover {
-        background-color: var(--gradiant-red-50);
-        border-color: var(--gradiant-red-90);
+        background-color: var(--gradient-red-50);
+        border-color: var(--gradient-red-90);
     }
 }
 
 .btn-warning {
-    background-color: var(--gradiant-mars-50);
-    background-image: var(--btn-warning);
-    border-color: var(--gradiant-mars-80);
-    color: var(--gradiant-mars-90);
+    background-color: var(--gradient-mars-50);
+    //background-image: var(--btn-warning);
+    border-color: var(--gradient-mars-80);
+    color: var(--gradient-mars-90);
 
     &:hover {
-        background-color: var(--gradiant-mars-60);
-        border-color: var(--gradiant-mars-90);
+        background-color: var(--gradient-mars-60);
+        border-color: var(--gradient-mars-90);
     }
 }
 
 .btn-outline-secondary {
     background-color: transparent;
-    border-color: var(--gradiant-grey-50);
-    color: var(--gradiant-grey-90);
+    border-color: var(--gradient-ardoise-50);
+    color: var(--gradient-ardoise-90);
 
     &:hover {
-        background-color: var(--gradiant-grey-30-alpha-50);
-        border-color: var(--gradiant-grey-60);
+        background-color: var(--gradient-ardoise-30-alpha-50);
+        border-color: var(--gradient-ardoise-60);
     }
 }
 
@@ -146,49 +146,49 @@ input[type="email"] {
 @media (prefers-color-scheme: light) {
 
     .form-select {
-        background-color: var(--gradiant-grey-80);
-        border: 1px solid var(--gradiant-grey-10);
-        color: var(--gradiant-grey-10);
+        background-color: var(--gradient-ardoise-80);
+        border: 1px solid var(--gradient-ardoise-10);
+        color: var(--gradient-ardoise-10);
     }
 
     .form-control {
-        border: 1px solid var(--gradiant-grey-60);
+        border: 1px solid var(--gradient-ardoise-60);
     }
 
     .btn {
-        background-color: var(--gradiant-grey-10);
-        border: 1px solid var(--gradiant-grey-50);
-        color: var(--gradiant-grey-90);
+        background-color: var(--gradient-ardoise-10);
+        border: 1px solid var(--gradient-ardoise-50);
+        color: var(--gradient-ardoise-90);
 
         &:hover {
-            background-color: var(--gradiant-grey-20);
+            background-color: var(--gradient-ardoise-20);
         }
     }
 
     .btn-group {
         .btn:first-child {
-            border-left: 1px solid var(--gradiant-grey-50);
+            border-left: 1px solid var(--gradient-ardoise-50);
         }
     }
 
     .btn-secondary {
-        background-color: var(--gradiant-grey-80);
-        border-color: var(--gradiant-grey-50);
-        color: var(--gradiant-grey-10);
+        background-color: var(--gradient-ardoise-80);
+        border-color: var(--gradient-ardoise-50);
+        color: var(--gradient-ardoise-10);
 
         &:hover {
-            background-color: var(--gradiant-grey-50);
-            border-color: var(--gradiant-grey-40);
+            background-color: var(--gradient-ardoise-50);
+            border-color: var(--gradient-ardoise-40);
         }
     }
 
     .btn-outline-secondary {
         background-color: transparent;
-        color: var(--gradiant-grey-10);
+        color: var(--gradient-ardoise-10);
 
         &:hover {
-            background-color: var(--gradiant-grey-30-alpha-50);
-            border-color: var(--gradiant-grey-40);
+            background-color: var(--gradient-ardoise-30-alpha-50);
+            border-color: var(--gradient-ardoise-40);
         }
     }
 }
