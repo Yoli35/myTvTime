@@ -14,6 +14,7 @@
         <div class="number number-12">12</div>
     </div>
     <div class="time"></div>
+    <div class="date"></div>
     <div class="hands">
         <div class="hand second" style="transform: translate(-50%, -100%) rotate(0deg)"></div>
         <div class="hand minute" style="transform: translate(-50%, -100%) rotate(0deg)"></div>
@@ -30,7 +31,9 @@
         const minuteHand = clock.querySelector('.minute');
         const hourHand = clock.querySelector('.hour');
         const time = clock.querySelector('.time');
+        const date = clock.querySelector('.date');
         const close = clock.querySelector('.close');
+        const options = { weekday: 'long', month: 'long', day: 'numeric' };
 
         createClock();
         setDate();
@@ -58,6 +61,7 @@
             hourHand.style.transform = `translate(-50%, -100%) rotate(${hoursDegrees}deg)`;
 
             time.innerHTML = now.toLocaleTimeString();
+            date.innerHTML = now.toLocaleDateString("{{ app.request.locale }}", options).replace(/ /g, "&nbsp;");
         }
 
         function createClock() {

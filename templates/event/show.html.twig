@@ -13,39 +13,41 @@
 
             {{ include('blocks/_nav.html.twig', {thisPage: event.name, user: app.user, parent: {url: path('app_event'), page: 'My Events'}}) }}
 
-            <div class="sub-header">
-                <div class="thumbnail">
-                    <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
-                </div>
-                <div class="banner">
-                    <img src="/images/events/banners/{{ event.banner }}" alt="{{ event.name }}">
-                </div>
-            </div>
-            <h2>{{ event.name }}</h2>
-            <h3>{{ event.subheading }}</h3>
-
-            <div class="dates">
-                <div class="date">{{ 'Created At'|trans }} : {{ event.createdAt|format_datetime() }}</div>
-                <div class="date">{{ 'Updated At'|trans }} : {{ event.updatedAt|format_datetime() }}</div>
-            </div>
-
-            <div class="countdown" id="{{ event.id }}">
-                {{ event.date|format_date('full') }}<br/>
-                {{ event.date|format_time('medium') }}
-            </div>
-
-            <div class="description">{{ event.description|raw }}</div>
-
-            <div class="images">
-                {% for image in event.images %}
-                    <div class="image">
-                        <figure>
-                            <img src="/images/events/images/{{ image.path }}" alt="{{ image.caption }}">
-                            <figcaption>{{ image.caption }}</figcaption>
-                        </figure>
+            <main>
+                <div class="sub-header">
+                    <div class="thumbnail">
+                        <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
                     </div>
-                {% endfor %}
-            </div>
+                    <div class="banner">
+                        <img src="/images/events/banners/{{ event.banner }}" alt="{{ event.name }}">
+                    </div>
+                </div>
+                <h2>{{ event.name }}</h2>
+                <h3>{{ event.subheading }}</h3>
+
+                <div class="dates">
+                    <div class="date">{{ 'Created At'|trans }} : {{ event.createdAt|format_datetime() }}</div>
+                    <div class="date">{{ 'Updated At'|trans }} : {{ event.updatedAt|format_datetime() }}</div>
+                </div>
+
+                <div class="countdown" id="{{ event.id }}">
+                    {{ event.date|format_date('full') }}<br/>
+                    {{ event.date|format_time('medium') }}
+                </div>
+
+                <div class="description">{{ event.description|raw }}</div>
+
+                <div class="images">
+                    {% for image in event.images %}
+                        <div class="image">
+                            <figure>
+                                <img src="/images/events/images/{{ image.path }}" alt="{{ image.caption }}">
+                                <figcaption>{{ image.caption }}</figcaption>
+                            </figure>
+                        </div>
+                    {% endfor %}
+                </div>
+            </main>
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>

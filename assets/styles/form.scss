@@ -40,6 +40,8 @@
     font-size: 1em;
     font-weight: 200;
     padding: .25em 1em;
+    leading-trim: both;
+    text-edge: cap alphabetic;
 
     &:hover {
         background-color: var(--gradient-ardoise-80);

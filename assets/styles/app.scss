@@ -27,8 +27,8 @@
 }
 
 ::selection {
-    background-color: var(--gradient-purple-40);
-    color: var(--gradient-ardoise-100);
+    background-color: var(--gradient-mars-50);
+    color: var(--gradient-mars-90);
 }
 
 html {
@@ -204,6 +204,7 @@ body {
 
 main {
     flex: 1;
+    margin-bottom: 1em;
 }
 
 #accept-cookies {
@@ -214,13 +215,13 @@ main {
     width: 100vw;
 
     .accept-overlay {
-        background-color: hsl(346.84, 77.17%, 49.8%);
-        //background-color: var(--gradient-ardoise-30);
-        border: 1px solid hsl(214.29, 31.82%, 91.37%);
-        //border: 1px solid var(--gradient-ardoise-50);
+        //background-color: hsl(346.84, 77.17%, 49.8%);
+        background-color: var(--gradient-ardoise-30);
+        //border: 1px solid hsl(214.29, 31.82%, 91.37%);
+        border: 1px solid var(--gradient-ardoise-50);
         border-radius: .5em;
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-        color: #fff;
+        color: var(--gradient-ardoise-90);
         margin: calc(50vh - 8em) auto;
         padding: 2em;
         width: 30em;
@@ -254,12 +255,14 @@ main {
             margin-top: 1em;
 
             .btn-accept {
-                background-color: hsl(343, 80%, 35%);
-                border-color: hsl(343, 80%, 70%);
-                color: #fff;
+                background-color: var(--gradient-ardoise-40);
+                border-color: var(--gradient-ardoise-80);
+                color: var(--gradient-ardoise-90);
+                leading-trim: both;
+                text-edge: cap alphabetic;
 
                 &:hover {
-                    background-color: hsl(343, 75%, 30%);
+                    background-color: var(--gradient-ardoise-50);
                 }
             }
         }
@@ -285,9 +288,12 @@ main {
 }
 
 .container, .container-fluid {
+    display: flex;
+    flex-direction: column;
     background-color: transparent;
     margin-left: auto;
     margin-right: auto;
+    min-height: 100vh;
     padding-left: 0;
     padding-right: 0;
     width: 100%;
@@ -706,9 +712,10 @@ nav.active {
                 height: 100%;
                 padding: 0 .5em;
 
-                &:hover {
+                &:hover, &:focus, &:active {
                     background-color: var(--gradient-mars-50);
                     color: var(--gradient-mars-90);
+                    outline-color: var(--gradient-mars-50);
 
                     span {
                         color: var(--gradient-mars-80);
@@ -925,9 +932,9 @@ nav.active {
 .clock {
     @include flex-row();
     height: 200px;
-    left: 1em;//4em;
+    left: 1em; //4em;
     position: absolute;
-    top: 1em;//clamp(1em, .25vw, 4em);
+    top: 1em; //clamp(1em, .25vw, 4em);
     width: 200px;
 
     .face {
@@ -1013,7 +1020,7 @@ nav.active {
         }
     }
 
-    .time {
+    .time, .date {
         color: var(--gradient-ardoise-90);
         font-family: 'red hat regular', monospace;
         font-size: 1.5em;
@@ -1022,6 +1029,18 @@ nav.active {
         position: absolute;
         top: 112%;
         transform: translate(-50%, -50%);
+    }
+
+    .date {
+        background-color: var(--gradient-ardoise-90);
+        border-radius: .125em;
+        color: var(--gradient-ardoise-20);
+        font-family: unset;
+        font-weight: 300;
+        leading-trim: both;
+        padding: .25em .5em;
+        text-edge: cap alphabetic;
+        top: 126%;
     }
 
     .hands {
@@ -1103,7 +1122,7 @@ nav.active {
     border-radius: 1em;
     color: var(--gradient-ardoise-80);
     height: 3em;
-    margin: 1em 0;
+    margin: auto 0 1em 0;
 
     .logo {
         @include flex-row(center, end);

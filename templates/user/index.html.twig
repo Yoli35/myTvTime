@@ -12,48 +12,50 @@
 
             {{ include('blocks/_nav.html.twig', {thisPage: 'People search'|trans}) }}
 
-            <div class="user-search">
-                <div class="wrapper">
-                    {{ include('blocks/_uc.html.twig', {index: 0}) }}
-                    <div class="users">
-                        <div class="search-bar">
-                            <div class="magnifying-glass"><i class="fa-solid fa-magnifying-glass"></i></div>
-                            <label>
-                                <input id="search" type="search">
-                            </label>
-                            <button type="submit" class="btn btn-primary">{{ 'Search'|trans }}</button>
-                            <div>{{ users|length }} {{ 'users'|trans }}</div>
-                        </div>
-                        {% for u in users %}
-                            <div class="user{% if u==user %} myself{% endif %}">
-                                <div class="thumbnail"><img src="{{ getPath('userAvatar')~u.avatar }}" alt="{{ u.username }}"></div>
-                                <div class="username">{{ u.username }}
-                                    {% if u==user %}
-                                        <div class="self">({{ 'yourself'|trans }})</div>
+            <main>
+                <div class="user-search">
+                    <div class="wrapper">
+                        {{ include('blocks/_uc.html.twig', {index: 0}) }}
+                        <div class="users">
+                            <div class="search-bar">
+                                <div class="magnifying-glass"><i class="fa-solid fa-magnifying-glass"></i></div>
+                                <label>
+                                    <input id="search" type="search">
+                                </label>
+                                <button type="submit" class="btn btn-primary">{{ 'Search'|trans }}</button>
+                                <div>{{ users|length }} {{ 'users'|trans }}</div>
+                            </div>
+                            {% for u in users %}
+                                <div class="user{% if u==user %} myself{% endif %}">
+                                    <div class="thumbnail"><img src="{{ getPath('userAvatar')~u.avatar }}" alt="{{ u.username }}"></div>
+                                    <div class="username">{{ u.username }}
+                                        {% if u==user %}
+                                            <div class="self">({{ 'yourself'|trans }})</div>
+                                        {% endif %}
+                                    </div>
+                                    {% if u!=user %}
+                                        {% if isFriend(u.id, friends) %}
+                                            <div class="relation">{{ 'friend'|trans }}
+                                                <div class="delete"><i class="fa-solid fa-xmark"></i></div>
+                                            </div>
+                                        {% else %}
+                                            {% set situation = isPending(user, u) %}
+                                            {% if situation==1 %} {# pending request #}
+                                                <div class="pending" data-id="{{ u.id }}">{{ 'pending'|trans }}</div>
+                                            {% endif %}
+                                            {% if situation==0 %} {# declined request #}
+                                                <div class="request" data-id="{{ u.id }}">{{ 'request'|trans }}</div>
+                                                <div class="pending d-none" data-id="{{ u.id }}">{{ 'pending'|trans }}</div>
+                                            {% endif %}
+                                        {% endif %}
                                     {% endif %}
                                 </div>
-                                {% if u!=user %}
-                                    {% if isFriend(u.id, friends) %}
-                                        <div class="relation">{{ 'friend'|trans }}
-                                            <div class="delete"><i class="fa-solid fa-xmark"></i></div>
-                                        </div>
-                                    {% else %}
-                                        {% set situation = isPending(user, u) %}
-                                        {% if situation==1 %} {# pending request #}
-                                            <div class="pending" data-id="{{ u.id }}">{{ 'pending'|trans }}</div>
-                                        {% endif %}
-                                        {% if situation==0 %} {# declined request #}
-                                            <div class="request" data-id="{{ u.id }}">{{ 'request'|trans }}</div>
-                                            <div class="pending d-none" data-id="{{ u.id }}">{{ 'pending'|trans }}</div>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
+                        {{ include('blocks/_uc.html.twig', {index: 1}) }}
                     </div>
-                    {{ include('blocks/_uc.html.twig', {index: 1}) }}
                 </div>
-            </div>
+            </main>
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}
@@ -92,7 +94,7 @@
 
         function animate() {
             const underConstructions = document.querySelectorAll(".under-construction");
-            let ticking=[];
+            let ticking = [];
             underConstructions?.forEach(uc => {
                 uc.style.backgroundPositionX = "0px";
                 let index = uc.getAttribute("data-index");

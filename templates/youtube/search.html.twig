@@ -48,28 +48,30 @@
                 <div class="backdrop"></div>
             </div>
             {{ include('blocks/_nav.html.twig', {thisPage: 'Youtube video search'|trans}) }}
-            <div class="search">
-                <div class="group">
-                    <div class="field">
-                        <label class="label" for="search-tag">{{ 'Tags'|trans }}&nbsp;:</label>
-                        <input id="search-tag" type="text" value="" placeholder="{{ 'Start taping…'|trans }}">
+            <main>
+                <div class="search">
+                    <div class="group">
+                        <div class="field">
+                            <label class="label" for="search-tag">{{ 'Tags'|trans }}&nbsp;:</label>
+                            <input id="search-tag" type="text" value="" placeholder="{{ 'Start taping…'|trans }}">
+                        </div>
+                        <div class="tags"></div>
+                        <div class="method">
+                            <label for="method">{{ 'Selection'|trans }}&nbsp;<select id="method">
+                                    <option value="and">Tous le mots-clés</option>
+                                    <option value="or" selected>Au moins un mot-clé</option>
+                                </select>
+                            </label>
+                            <div class="arrow"><i class="fa-solid fa-caret-down"></i></div>
+                        </div>
+                        <button class="apply" type="submit">{{ 'Apply'|trans }}</button>
                     </div>
-                    <div class="tags"></div>
-                    <div class="method">
-                        <label for="method">{{ 'Selection'|trans }}&nbsp;<select id="method">
-                                <option value="and">Tous le mots-clés</option>
-                                <option value="or" selected>Au moins un mot-clé</option>
-                            </select>
-                        </label>
-                        <div class="arrow"><i class="fa-solid fa-caret-down"></i></div>
-                    </div>
-                    <button class="apply" type="submit">{{ 'Apply'|trans }}</button>
                 </div>
-            </div>
-            <div class="results">
-            </div>
+                <div class="results">
+            </main>
         </div>
-        {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+    {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
 {% block morejs %}

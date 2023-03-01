@@ -23,61 +23,63 @@
 
         {{ include('blocks/_nav.html.twig', {parent: {url: path('app_youtube'), page: 'My Youtube Videos'}, thisPage: video.title}) }}
 
-        <div class="yt-video-page">
-            <div class="video">
-                <iframe src="https://www.youtube.com/embed/{{ video.link }}" title="{{ video.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="the-video">
-                <div class="details">
-                    <div class="title-tags">
-                        <div class="title-trash">
-                            <div class="title">{{ video.title }}</div>
-                            <div class="youtube" title="{{ 'See this video on Youtube'|trans }}"><a href="https://youtu.be/{{ video.link }}" target="_blank"><i class="fa-brands fa-youtube"></i></a></div>
-                            <div class="copy" data-url="https://youtu.be/{{ video.link }}" title="{{ 'Copy the link'|trans }}"><i class="fa-solid fa-copy"></i></div>
-                            <div class="trash" data-dialog="delete-video" title="{{ 'Delete the video'|trans }}"><i class="fa-solid fa-trash"></i></div>
-                        </div>
-                        {#                  {{ component('youtube_video_tags', {class: 'tags', 'id': user.id, 'video': video.id}) }} #}
-                        <div class="tags">
-                            <div class="add-tag">
-                                <label for="new-tag">{{ 'Tags' }}
-                                    <input id="new-tag" type="search" name="tag_query" list="other-tags" autocomplete="off" autofocus>
-                                    <datalist id="other-tags">
-                                        {% for tag in other_tags %}
-                                        <option value="{{ tag }}">
-                                            {% endfor %}
-                                    </datalist>
-                                </label>
-                                <div class="add"><i class="fa-solid fa-circle-plus"></i></div>
+        <main>
+            <div class="yt-video-page">
+                <div class="video">
+                    <iframe src="https://www.youtube.com/embed/{{ video.link }}" title="{{ video.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="the-video">
+                    <div class="details">
+                        <div class="title-tags">
+                            <div class="title-trash">
+                                <div class="title">{{ video.title }}</div>
+                                <div class="youtube" title="{{ 'See this video on Youtube'|trans }}"><a href="https://youtu.be/{{ video.link }}" target="_blank"><i class="fa-brands fa-youtube"></i></a></div>
+                                <div class="copy" data-url="https://youtu.be/{{ video.link }}" title="{{ 'Copy the link'|trans }}"><i class="fa-solid fa-copy"></i></div>
+                                <div class="trash" data-dialog="delete-video" title="{{ 'Delete the video'|trans }}"><i class="fa-solid fa-trash"></i></div>
                             </div>
-                            {% for tag in video.tags %}
-                                <div class="tag">
-                                    #{{ tag }}
-                                    <div class="close" data-id="{{ tag.id }}"><i class="fa-solid fa-circle-xmark"></i></div>
+                            {#                  {{ component('youtube_video_tags', {class: 'tags', 'id': user.id, 'video': video.id}) }} #}
+                            <div class="tags">
+                                <div class="add-tag">
+                                    <label for="new-tag">{{ 'Tags' }}
+                                        <input id="new-tag" type="search" name="tag_query" list="other-tags" autocomplete="off" autofocus>
+                                        <datalist id="other-tags">
+                                            {% for tag in other_tags %}
+                                            <option value="{{ tag }}">
+                                                {% endfor %}
+                                        </datalist>
+                                    </label>
+                                    <div class="add"><i class="fa-solid fa-circle-plus"></i></div>
                                 </div>
-                            {% endfor %}
+                                {% for tag in video.tags %}
+                                    <div class="tag">
+                                        #{{ tag }}
+                                        <div class="close" data-id="{{ tag.id }}"><i class="fa-solid fa-circle-xmark"></i></div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="date">{{ 'Published at'|trans }} : {{ video.publishedAt|format_date('full')|capitalize }}</div>
+                        <div class="description">{{ description|raw }}</div>
+                        <div class="channel">
+                            <div class="thumbnail">
+                                <a href="https://www.youtube.com/{{ url }}" target="_blank" rel="noopener">
+                                    {% if video.channel.thumbnailDefaultUrl %}
+                                        <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
+                                    {% else %}
+                                        {{ video.channel.title|first }}
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="title">{{ video.channel.title }}</div>
                         </div>
                     </div>
-                    <div class="date">{{ 'Published at'|trans }} : {{ video.publishedAt|format_date('full')|capitalize }}</div>
-                    <div class="description">{{ description|raw }}</div>
-                    <div class="channel">
-                        <div class="thumbnail">
-                            <a href="https://www.youtube.com/{{ url }}" target="_blank" rel="noopener">
-                                {% if video.channel.thumbnailDefaultUrl %}
-                                    <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
-                                {% else %}
-                                    {{ video.channel.title|first }}
-                                {% endif %}
-                            </a>
-                        </div>
-                        <div class="title">{{ video.channel.title }}</div>
+                    <div class="qr-code">
+                        <img src="https://api.qrcode-monkey.com/qr/custom?data=https://www.youtube.com/watch?v={{ video.link }}">
                     </div>
                 </div>
-                <div class="qr-code">
-                    <img src="https://api.qrcode-monkey.com/qr/custom?data=https://www.youtube.com/watch?v={{ video.link }}">
-                </div>
+                <div class="copied-text">{{ 'Copied!'|trans }}</div>
             </div>
-            <div class="copied-text">{{ 'Copied!'|trans }}</div>
-        </div>
+        </main>
 
         {{ include('blocks/_pageFooter.html.twig') }}
 
