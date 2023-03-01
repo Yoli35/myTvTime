@@ -61,7 +61,7 @@
             hourHand.style.transform = `translate(-50%, -100%) rotate(${hoursDegrees}deg)`;
 
             time.innerHTML = now.toLocaleTimeString();
-            date.innerHTML = now.toLocaleDateString("{{ app.request.locale }}", options).replace(/ /g, "&nbsp;");
+            date.innerHTML = now.toLocaleDateString("{{ app.request.locale }}", options).replace(/ 1 /g, " 1<sup>er</sup> ").replace(/ /g, "&nbsp;");
         }
 
         function createClock() {
