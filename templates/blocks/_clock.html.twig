@@ -38,7 +38,7 @@
         const close = clock.querySelector('.close');
         const goal = clock.querySelector('.goal-achieved');
         const options = {weekday: 'long', month: 'long', day: 'numeric'};
-        let clockInterval, warningZone = false, relaxZone = true, goalAchieved = false;
+        let clockInterval, warningZone = false, relaxZone = true, goalAchieved = false, goalHour = new Date().getHours();
 
         createClock();
         setDate();
@@ -75,12 +75,15 @@
                     warning.classList.add('visible');
                 }
             }
-            if (minutes < 50 && warningZone) {
+            // Si on est dans la zone de relâchement (0-50 minutes) et que l'heure a changé (warningZone = true)
+            // ou que la page redevient visible après 1h ou plus d'inactivité (relaxZone && goalHour !== hours)
+            if (minutes < 50 && (warningZone || (relaxZone && goalHour !== hours))) {
                 warningZone = false;
                 relaxZone = true;
                 warning.classList.remove('visible');
                 goalAchieved = false;
                 goal.classList.add('false');
+                goalHour = new Date().getHours();
             }
         }
 
