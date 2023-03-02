@@ -73,12 +73,14 @@
                     warningZone = true;
                     relaxZone = false;
                     warning.classList.add('visible');
-                } else if (minutes < 50 && warningZone) {
-                    warningZone = false;
-                    relaxZone = true;
-                    warning.classList.remove('visible');
                 }
             }
+            if (minutes < 50 && warningZone) {
+                warningZone = false;
+                relaxZone = true;
+                warning.classList.remove('visible');
+            }
+
             if (minutes === 0) {
                 goalAchieved = false;
                 goal.classList.add('false');
