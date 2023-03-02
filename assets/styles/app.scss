@@ -961,6 +961,23 @@ nav.active {
             }
         }
 
+        .warning {
+            background: conic-gradient(hsla(0,0,0,0) 0%, hsla(0,0,0,0) 83%, var(--gradient-red-50-alpha-50) 83%, var(--gradient-red-50-alpha-50) 100%);
+            border-radius: 50%;
+            height: 148px;
+            left: 50%;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 300ms ease-in-out;
+            width: 148px;
+
+            &.visible {
+                opacity: 1;
+            }
+        }
+
         .number {
             color: var(--gradient-ardoise-80);
             font-family: "red hat light", monospace;
@@ -1093,11 +1110,9 @@ nav.active {
         }
     }
 
-    .close {
+    .close, .goal-achieved {
         align-items: center;
-        background-color: var(--gradient-ardoise-30-alpha-50);
         border-radius: 50%;
-        color: var(--gradient-ardoise-80);
         cursor: pointer;
         display: flex;
         justify-content: center;
@@ -1105,12 +1120,32 @@ nav.active {
         opacity: 0;
         position: absolute;
         transition: opacity 300ms ease-in-out;
-        right: .5em;
         top: .5em;
     }
 
+    .close {
+        background-color: var(--gradient-ardoise-30-alpha-50);
+        color: var(--gradient-ardoise-80);
+        right: .5em;
+    }
+
+    .goal-achieved {
+        background-color: var(--gradient-green-50);
+        color: var(--gradient-ardoise-30-alpha-50);
+        left: .5em;
+        width: 1em;
+
+        i {
+            transform: scale(.75);
+        }
+
+        &.false {
+            background-color: var(--gradient-mars-50);
+        }
+    }
+
     &:hover {
-        .close {
+        .close, .goal-achieved {
             opacity: 1;
         }
     }

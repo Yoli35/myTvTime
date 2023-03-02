@@ -1,5 +1,6 @@
 <div class="clock">
     <div class="face">
+        <div class="warning"></div>
         <div class="number number-1">1</div>
         <div class="number number-2">2</div>
         <div class="number number-3">3</div>
@@ -21,23 +22,27 @@
         <div class="hand hour" style="transform: translate(-50%, -100%) rotate(0deg) "></div>
         <div class="center"></div>
     </div>
+    <div class="goal-achieved false"><i class="fa-solid fa-person-walking"></i></div>
     <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
 </div>
 <script>
     window.addEventListener("DOMContentLoaded", () => {
         // Clock en javascript vanilla
         const clock = document.querySelector('.clock');
+        const warning = clock.querySelector('.warning');
         const secondHand = clock.querySelector('.second');
         const minuteHand = clock.querySelector('.minute');
         const hourHand = clock.querySelector('.hour');
         const time = clock.querySelector('.time');
         const date = clock.querySelector('.date');
         const close = clock.querySelector('.close');
-        const options = { weekday: 'long', month: 'long', day: 'numeric' };
+        const goal = clock.querySelector('.goal-achieved');
+        const options = {weekday: 'long', month: 'long', day: 'numeric'};
+        let clockInterval, warningZone = false, relaxZone = true, goalAchieved = false;
 
         createClock();
         setDate();
-        setInterval(setDate, 1000);
+        clockInterval = setInterval(setDate, 1000);
 
         function setDate() {
             const now = new Date();
@@ -62,10 +67,27 @@
 
             time.innerHTML = now.toLocaleTimeString();
             date.innerHTML = now.toLocaleDateString("{{ app.request.locale }}", options).replace(/ 1 /g, " 1<sup>er</sup> ").replace(/ /g, "&nbsp;");
+
+            if (!goalAchieved) {
+                if (minutes >= 50 && relaxZone) {
+                    warningZone = true;
+                    relaxZone = false;
+                    warning.classList.add('visible');
+                } else if (minutes < 50 && warningZone) {
+                    warningZone = false;
+                    relaxZone = true;
+                    warning.classList.remove('visible');
+                }
+            }
+            if (minutes === 0) {
+                goalAchieved = false;
+                goal.classList.add('false');
+            }
         }
 
         function createClock() {
             const face = clock.querySelector('.face');
+
             for (let i = 0; i < 60; i++) {
                 const unit = document.createElement('div');
                 unit.classList.add('unit');
@@ -76,7 +98,17 @@
                 face.appendChild(unit);
             }
             close.addEventListener('click', () => {
-               clock.remove();
+                clearInterval(clockInterval);
+                clock.remove();
+            });
+            goal.addEventListener('click', () => {
+                if (!goalAchieved) {
+                    goalAchieved = true;
+                    goal.classList.remove('false');
+                    warningZone = false;
+                    relaxZone = true;
+                    warning.classList.remove('visible');
+                }
             });
         }
 
