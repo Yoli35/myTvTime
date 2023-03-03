@@ -896,7 +896,7 @@ nav.active {
         background-color: var(--gradient-ardoise-10-alpha-50);
         border: 2px solid;
         height: 17.5em;
-        left: 20em;
+        left: 14.5em;
         opacity: 0;
         overflow: clip;
         position: absolute;
@@ -905,11 +905,11 @@ nav.active {
         width: 12em;
 
         &.second {
-            left: 33em;
+            left: 27.5em;
         }
 
         &.third {
-            left: 46em;
+            left: 40.5em;
         }
 
         &.fade {
@@ -1037,6 +1037,15 @@ nav.active {
         }
     }
 
+    .username {
+        font-size: 0.875em;
+        font-weight: 500;
+        left: 50%;
+        position: absolute;
+        top: 50px;
+        transform: translate(-50%, 0);
+    }
+
     .time, .date {
         color: var(--gradient-ardoise-90);
         font-family: 'red hat regular', monospace;
@@ -1044,7 +1053,7 @@ nav.active {
         font-weight: 100;
         left: 50%;
         position: absolute;
-        top: 112%;
+        top: 14rem;
         transform: translate(-50%, -50%);
     }
 
@@ -1057,7 +1066,7 @@ nav.active {
         leading-trim: both;
         padding: .25em .5em;
         text-edge: cap alphabetic;
-        top: 126%;
+        top: 16rem;
     }
 
     .hands {
@@ -1079,20 +1088,20 @@ nav.active {
             &.hour {
                 background-color: var(--gradient-ardoise-20);
                 border: 2px solid var(--gradient-yellow-80);
-                height: 50px;
+                height: 40px;
                 width: 8px;
             }
 
             &.minute {
                 background-color: var(--gradient-ardoise-30);
                 border: 2px solid var(--gradient-yellow-80);
-                height: 70px;
+                height: 66px;
                 width: 6px;
             }
 
             &.second {
                 background-color: var(--gradient-yellow-50);
-                height: 90px;
+                height: 72px;
                 width: 4px;
             }
         }
