@@ -14,7 +14,9 @@
         <div class="number number-11">11</div>
         <div class="number number-12">12</div>
     </div>
-    <div class="username">{{ app.user.username }}</div>
+    {% if app.user %}
+        <div class="username">{{ app.user.username }}</div>
+    {% endif %}
     <div class="time"></div>
     <div class="date"></div>
     <div class="hands">
