@@ -106,6 +106,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: YoutubeVideo::class, inversedBy: 'users')]
     private Collection $youtubeVideos;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Activity $activity = null;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -545,5 +548,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getBannerPath(): string
     {
         return $this->bannerPath;
+    }
+
+    public function getActivity(): ?Activity
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?Activity $activity): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($activity === null && $this->activity !== null) {
+            $this->activity->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($activity !== null && $activity->getUser() !== $this) {
+            $activity->setUser($this);
+        }
+
+        $this->activity = $activity;
+
+        return $this;
     }
 }

@@ -84,7 +84,7 @@
                 }
             }
             // Si on est dans la zone de relâchement (0-50 minutes) et que l'heure a changé (warningZone = true)
-            // ou que la page redevient visible après 1h ou plus d'inactivité (relaxZone && goalHour !== hours)
+            // ou que la page redevient visible après 1 heure ou plus d'inactivité (relaxZone && goalHour !== hours)
             if (minutes < 50 && (warningZone || (relaxZone && goalHour !== hours))) {
                 warningZone = false;
                 relaxZone = true;

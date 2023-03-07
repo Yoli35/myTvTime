@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activity{% endblock %}
+
+{% block body %}
+    <h1>Activity</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ activity.id }}</td>
+            </tr>
+            <tr>
+                <th>StandUpRingCompleted</th>
+                <td>{{ activity.standUpRingCompleted ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>MoveRingCompleted</th>
+                <td>{{ activity.moveRingCompleted ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>ExerciceRingCompleted</th>
+                <td>{{ activity.exerciceRingCompleted ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>StandUp</th>
+                <td>{{ activity.standUp ? activity.standUp|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>StandUpGoal</th>
+                <td>{{ activity.standUpGoal }}</td>
+            </tr>
+            <tr>
+                <th>StandUpResult</th>
+                <td>{{ activity.standUpResult }}</td>
+            </tr>
+            <tr>
+                <th>MoveGoal</th>
+                <td>{{ activity.moveGoal }}</td>
+            </tr>
+            <tr>
+                <th>MoveResult</th>
+                <td>{{ activity.moveResult }}</td>
+            </tr>
+            <tr>
+                <th>ExerciceGoal</th>
+                <td>{{ activity.exerciceGoal }}</td>
+            </tr>
+            <tr>
+                <th>ExerciceResult</th>
+                <td>{{ activity.exerciceResult }}</td>
+            </tr>
+            <tr>
+                <th>Steps</th>
+                <td>{{ activity.steps }}</td>
+            </tr>
+            <tr>
+                <th>Distance</th>
+                <td>{{ activity.distance }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_activity_index') }}">back to list</a>
+
+    <a href="{{ path('app_activity_edit', {'id': activity.id}) }}">edit</a>
+
+    {{ include('activity/_delete_form.html.twig') }}
+{% endblock %}
