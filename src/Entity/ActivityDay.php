@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ActivityDayRepository;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,42 +20,43 @@ class ActivityDay
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'activityDays')]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'activityDays')]
     private ?Activity $activity = null;
 
     #[ORM\Column]
-    private ?bool $standUpRingCompleted = null;
+    private ?bool $standUpRingCompleted = false;
 
     #[ORM\Column]
-    private ?bool $moveRingCompleted = null;
+    private ?bool $moveRingCompleted = false;
 
     #[ORM\Column]
-    private ?bool $exerciceRingCompleted = null;
+    private ?bool $exerciceRingCompleted = false;
 
     #[ORM\Column(type: Types::JSON)]
     private array $standUp = [];
 
     #[ORM\Column]
-    private ?int $standUpResult = null;
+    private ?int $standUpResult = 0;
 
     #[ORM\Column]
-    private ?int $moveResult = null;
+    private ?int $moveResult = 0;
 
     #[ORM\Column]
-    private ?int $exerciceResult = null;
+    private ?int $exerciceResult = 0;
 
     #[ORM\Column]
-    private ?int $steps = null;
+    private ?int $steps = 0;
 
     #[ORM\Column]
-    private ?float $distance = null;
+    private ?float $distance = 0;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?DateTimeInterface $day;
 
-    public function __construct()
+    public function __construct($activity)
     {
-        $this->day = new \DateTimeImmutable();
+        $this->activity = $activity;
+        $this->day = new DateTimeImmutable();
     }
 
     public function getId(): ?int

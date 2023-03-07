@@ -430,6 +430,7 @@ class SerieController extends AbstractController
 
             $standing = $this->TMDBService->getTv($s->getSerie()->getSerieId(), $locale);
             $theseDaysSeries[$id]['tmdbSerie'] = json_decode($standing, true);
+            dump($theseDaysSeries[$id]['tmdbSerie']);
             $networks = array_map(function ($network) {
                 return [$network['id'] => $network['name']];
             }, $theseDaysSeries[$id]['tmdbSerie']['networks']);

@@ -17,8 +17,72 @@
             {{ include('blocks/_nav.html.twig', {thisPage: 'Activity', user: app.user, from: 'home', style: 'width: 100%'}) }}
 
             <main>
-                {% if user.activity is null %}
-                    <a href="{{ path('app_activity_new') }}" class="btn btn-primary m-auto">{{ 'Activate'|trans }}</a>
+                {% if activity is null %}
+                    <a href="{{ path('app_activity_new') }}" class="no-activity btn btn-primary m-auto">{{ 'Activate'|trans }}</a>
+                {% else %}
+                    <div class="recent-activity">
+                        <h2>{{ 'Reccent activity'|trans }}</h2>
+                        <div class="days">
+                            {% for day in activity.activityDays %}
+                                <div class="day">
+                                    <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
+                                    <div class="activity-of-the-day">
+                                        <div class="stand-up">
+                                            <div class="title">{{ 'Stand up'|trans }}</div>
+                                            <div class="description">
+                                                <div class="progress stand-up">
+                                                    <div class="circle">
+                                                        {% set percent = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                                        <div class="percentage">{{ percent }}%</div>
+                                                    </div>
+                                                    <div class="circle-start"></div>
+                                                    <div class="circle-end"></div>
+                                                </div>
+                                                <div class="details">
+                                                    <div class="result">{{ day.standUpResult }}</div>
+                                                    <div class="goal">{{ activity.standUpGoal }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="move">
+                                            <div class="title">{{ 'Move'|trans }}</div>
+                                            <div class="description">
+                                                <div class="progress move">
+                                                    <div class="circle">
+                                                        {% set percent = (day.moveResult / activity.moveGoal * 100)|round %}
+                                                        <div class="percentage">{{ percent }}%</div>
+                                                    </div>
+                                                    <div class="circle-start"></div>
+                                                    <div class="circle-end"></div>
+                                                </div>
+                                                <div class="details">
+                                                    <div class="result">{{ day.moveResult }} KCal</div>
+                                                    <div class="goal">{{ activity.moveGoal }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="exercice">
+                                            <div class="title">{{ 'Exercice'|trans }}</div>
+                                            <div class="description">
+                                                <div class="progress exercice">
+                                                    <div class="circle">
+                                                        {% set percent = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
+                                                        <div class="percentage">{{ percent }}%</div>
+                                                    </div>
+                                                    <div class="circle-start"></div>
+                                                    <div class="circle-end"></div>
+                                                </div>
+                                                <div class="details">
+                                                    <div class="result">{{ day.exerciceResult }} {{ 'minutes'|trans }}</div>
+                                                    <div class="goal">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 {% endif %}
             </main>
             {{ include('blocks/_pageFooter.html.twig') }}

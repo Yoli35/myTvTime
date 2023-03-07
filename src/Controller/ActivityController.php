@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
+use App\Entity\ActivityDay;
 use App\Entity\User;
 use App\Form\ActivityType;
+use App\Repository\ActivityDayRepository;
 use App\Repository\ActivityRepository;
 use App\Service\LogService;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +18,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/activity')]
 class ActivityController extends AbstractController
 {
-    public function __construct(private readonly LogService          $logService)
+    public function __construct(private readonly LogService            $logService,
+                                private readonly ActivityRepository    $activityRepository,
+                                private readonly ActivityDayRepository $activityDayRepository)
     {
 
     }
@@ -30,8 +35,13 @@ class ActivityController extends AbstractController
 
         $activity = $user->getActivity();
 
-        // Existe-t-il une activité (ActivityDay) pour le jour courant ?
-
+        if ($activity) {
+            $days = $activity->getActivityDays();
+            if (!$days->count() || !$this->todayActivityExist($days)) {
+                $today = new ActivityDay($activity);
+                $this->activityDayRepository->save($today, true);
+            }
+        }
 
         dump($activity);
         return $this->render('activity/index.html.twig', [
@@ -39,8 +49,20 @@ class ActivityController extends AbstractController
         ]);
     }
 
+    public function todayActivityExist($days): bool
+    {
+        $today = new DateTimeImmutable();
+        $today = $today->setTime(0, 0);
+        foreach ($days as $day) {
+            if ($day->getDay()->format('Y-m-d') === $today->format('Y-m-d')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     #[Route('/new', name: 'app_activity_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ActivityRepository $activityRepository): Response
+    public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
@@ -52,14 +74,14 @@ class ActivityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $activityRepository->save($activity, true);
+            $this->activityRepository->save($activity, true);
 
             return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('activity/new.html.twig', [
+        return $this->render('activity/new.html.twig', [
             'activity' => $activity,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -72,13 +94,13 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_activity_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Activity $activity, ActivityRepository $activityRepository): Response
+    public function edit(Request $request, Activity $activity): Response
     {
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $activityRepository->save($activity, true);
+            $this->activityRepository->save($activity, true);
 
             return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -90,10 +112,10 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_activity_delete', methods: ['POST'])]
-    public function delete(Request $request, Activity $activity, ActivityRepository $activityRepository): Response
+    public function delete(Request $request, Activity $activity): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$activity->getId(), $request->request->get('_token'))) {
-            $activityRepository->remove($activity, true);
+        if ($this->isCsrfTokenValid('delete' . $activity->getId(), $request->request->get('_token'))) {
+            $this->activityRepository->remove($activity, true);
         }
 
         return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);

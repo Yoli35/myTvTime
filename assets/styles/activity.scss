@@ -51,6 +51,12 @@
         min-height: 20em;
         width: 100%;
 
+        .no-activity {
+            font-size: 2em;
+            font-weight: 300;
+            padding: 1em 2em;
+        }
+
         .form {
             background-color: var(--gradient-ardoise-40-alpha-50);
             border-radius: 1em;
@@ -68,6 +74,135 @@
 
                 input {
                     font-weight: 400;
+                }
+            }
+        }
+
+        .recent-activity {
+            @include flex-col(flex-start, center);
+            width: 100%;
+
+            .days {
+                @include flex-col(start, start);
+                gap: 1em;
+                width: 100%;
+
+                .day {
+                    @include flex-col(flex-start, center);
+                    background-color: var(--gradient-ardoise-40-alpha-50);
+                    border-radius: 1em;
+                    gap: 1em;
+                    padding: 1em 2em;
+                    width: 100%;
+
+                    &.active {
+                        background-color: var(--gradient-ardoise-50-alpha-50);
+                    }
+
+                    .date {
+                        font-size: 1.5em;
+                        font-weight: 400;
+                    }
+
+                    .activity-of-the-day {
+                        @include flex-row();
+                        gap: 1em;
+                        width: 100%;
+
+                        .stand-up, .move, .exercice {
+                            @include flex-col(flex-start, center);
+                            background-color: var(--gradient-ardoise-20-alpha-50);
+                            border-radius: 1em;
+                            font-size: 1em;
+                            font-weight: 300;
+                            gap: 1em;
+                            padding: 1em;
+                            width: 100%;
+
+                            .title {
+                                font-size: 1.5em;
+                                font-weight: 400;
+                            }
+
+                            .description {
+                                @include flex-row(flex-start, center);
+                                font-size: 1em;
+                                font-weight: 300;
+                                gap: 1em;
+
+                                .details {
+                                    @include flex-col(flex-start, center);
+                                    gap: .5em;
+                                    width: 100%;
+
+                                    .result, .goal {
+                                        font-size: 1em;
+                                        font-weight: 400;
+                                    }
+                                }
+                            }
+                        }
+
+                        .progress {
+                            @include flex-row(center, center);
+                            background-color: var(--gradient-ardoise-20);
+                            border-radius: 50%;
+                            height: 3.5em;
+                            margin-left: 1em;
+                            position: relative;
+                            width: 3.5em;
+
+                            .circle {
+                                @include flex-row(center, center);
+                                //background: conic-gradient(var(--gradient-ardoise-60) 0%, var(--gradient-ardoise-60) 1%, #000 1%);
+                                border-radius: 50%;
+                                height: 3.25em;
+                                transition: background 1s;
+                                width: 3.25em;
+
+                                .percentage {
+                                    @include flex-row(center, center);
+                                    background-color: var(--gradient-ardoise-20);
+                                    border-radius: 50%;
+                                    color: var(--gradient-ardoise-80);
+                                    height: 2.75em;
+                                    width: 2.75em;
+                                }
+                            }
+
+                            .circle-start, .circle-end {
+                                background-color: var(--gradient-ardoise-60);
+                                border-radius: 50%;
+                                height: .25em;
+                                position: absolute;
+                                width: .25em;
+                            }
+
+                            &.stand-up {
+                                background-color: var(--activity-stand-up);
+
+                                .circle-start, .circle-end {
+                                    background-color: var(--activity-stand-up);
+                                }
+                            }
+
+                            &.move {
+                                background-color: var(--activity-move);
+
+                                .circle-start, .circle-end {
+                                    background-color: var(--activity-move);
+                                }
+                            }
+
+                            &.exercice {
+                                background-color: var(--activity-exercice);
+
+                                .circle-start, .circle-end {
+                                    background-color: var(--activity-exercice);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
