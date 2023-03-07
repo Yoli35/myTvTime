@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
+use App\Entity\User;
 use App\Form\ActivityType;
 use App\Repository\ActivityRepository;
+use App\Service\LogService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,18 +15,39 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/activity')]
 class ActivityController extends AbstractController
 {
-    #[Route('/', name: 'app_activity_index', methods: ['GET'])]
-    public function index(ActivityRepository $activityRepository): Response
+    public function __construct(private readonly LogService          $logService)
     {
+
+    }
+
+    #[Route('/', name: 'app_activity_index', methods: ['GET'])]
+    public function index(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $activity = $user->getActivity();
+
+        // Existe-t-il une activité (ActivityDay) pour le jour courant ?
+
+
+        dump($activity);
         return $this->render('activity/index.html.twig', [
-            'activities' => $activityRepository->findAll(),
+            'activity' => $activity
         ]);
     }
 
     #[Route('/new', name: 'app_activity_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ActivityRepository $activityRepository): Response
     {
-        $activity = new Activity();
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $activity = new Activity($user);
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
 

@@ -1,4 +1,25 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="form">
+    {{ form_start(form) }}
+    <div class="form-row w100">
+        <div class="field">
+            <label for="{{ form.standUpGoal.vars.id }}" class="{{ form.standUpGoal.vars.required ? 'required' }}">
+                <div>{{ form.standUpGoal.vars.label|trans }}</div>
+                {{ form_widget(form.standUpGoal) }}
+            </label>
+        </div>
+        <div class="field">
+            <label for="{{ form.moveGoal.vars.id }}" class="{{ form.moveGoal.vars.required ? 'required' }}">
+                <div>{{ form.moveGoal.vars.label|trans }}</div>
+                {{ form_widget(form.moveGoal) }}
+            </label>
+        </div>
+        <div class="field">
+            <label for="{{ form.exerciceGoal.vars.id }}" class="{{ form.exerciceGoal.vars.required ? 'required' }}">
+                <div>{{ form.exerciceGoal.vars.label|trans }}</div>
+                {{ form_widget(form.exerciceGoal) }}
+            </label>
+        </div>
+    </div>
+    <button class="btn btn-primary ml-auto">{{ button_label|default('Activate'|trans) }}</button>
+    {{ form_end(form) }}
+</div>

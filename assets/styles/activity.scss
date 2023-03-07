@@ -1,0 +1,75 @@
+@import "variables";
+
+.activity {
+    @include flex-col(flex-start, center);
+    padding-top: 1em;
+
+    .header {
+        @include animated-header("../images/activity-header.jpeg");
+
+        .animated-h1 {
+            color: var(--gradient-ardoise-90);
+        }
+
+        .clock {
+            left: unset;
+            right: 1em;
+
+            .face {
+                background-color: var(--gradient-mars-40-alpha-50);
+
+                .number {
+                    color: var(--gradient-ardoise-100);
+                }
+
+                .unit {
+                    background-color: var(--gradient-ardoise-100);
+                }
+
+                .warning {
+                    background: conic-gradient(hsla(0, 0, 0, 0) 0%, hsla(0, 0, 0, 0) 75%, var(--gradient-red-50-alpha-50) 100%);
+                }
+            }
+
+            .username, .time {
+                color: var(--gradient-ardoise-100);
+                font-weight: 400;
+            }
+
+            .hands {
+                border: 1px solid var(--gradient-ardoise-100);
+            }
+        }
+    }
+
+    .nav-breadcrumb {
+        margin: 1em 0 1em auto;
+    }
+
+    main {
+        @include flex-col(center, center);
+        min-height: 20em;
+        width: 100%;
+
+        .form {
+            background-color: var(--gradient-ardoise-40-alpha-50);
+            border-radius: 1em;
+            margin-bottom: 2em;
+            padding: 2em;
+
+            form {
+                @include flex-col(flex-start, center);
+                gap: 1em;
+
+                > div {
+                    @include flex-row();
+                    gap: 1em;
+                }
+
+                input {
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+}

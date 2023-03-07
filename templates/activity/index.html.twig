@@ -1,9 +1,97 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Activity index{% endblock %}
+{% set user = app.user %}
+{% block title %}{{ 'Activity'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Activity index</h1>
+    <div class="container">
 
-    <a href="{{ path('app_activity_new') }}">Create new</a>
+        {{ include('blocks/_mainMenu.html.twig') }}
+
+        <div class="activity">
+            <div class="header">
+                <h1>{{ 'Activity'|trans }}</h1>
+                <div class="backdrop"></div>
+                {{ include('blocks/_clock.html.twig') }}
+            </div>
+
+            {{ include('blocks/_nav.html.twig', {thisPage: 'Activity', user: app.user, from: 'home', style: 'width: 100%'}) }}
+
+            <main>
+                {% if user.activity is null %}
+                    <a href="{{ path('app_activity_new') }}" class="btn btn-primary m-auto">{{ 'Activate'|trans }}</a>
+                {% endif %}
+            </main>
+            {{ include('blocks/_pageFooter.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let letterRatios = [];
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            setTimeout(() => {
+                initHeader();
+                document.querySelector(".header").setAttribute("style", "background-color: transparent");
+            }, 0);
+
+        })
+
+        function initHeader() {
+            const header = document.querySelector(".header");
+            let ticking = false;
+            let letters, animatedH1, index = 0;
+
+            animatedH1 = document.createElement("div");
+            animatedH1.classList.add("animated-h1");
+            animatedH1 = header.insertBefore(animatedH1, document.querySelector(".backdrop"));
+            letters = document.querySelector("h1").innerText.split('');
+
+            document.querySelector("h1").innerText = "";
+
+            letters.forEach(letter => {
+                let part = document.createElement("div");
+                part.classList.add("part");
+                if (letter === " ") {
+                    part.innerHTML = "&nbsp;"
+                } else {
+                    part.innerText = letter;
+                }
+                animatedH1.appendChild(part);
+                letterRatios[index] = 2 * (Math.random() - .5);
+                index++;
+            })
+            setH1();
+            window.addEventListener('resize', setH1);
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(function () {
+                        setH1();
+                        ticking = false;
+                    });
+                }
+                ticking = true;
+            });
+            header.setAttribute("style", "background-color: transparent;");
+        }
+
+        function setH1() {
+            const header = document.querySelector(".header");
+            const h1 = document.querySelector(".animated-h1");
+            const parts = h1.querySelectorAll(".part");
+            let left, ratio, top, n = 0;
+            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
+            left = (header.clientWidth - h1.clientWidth) / 2;
+            top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
+            if (ratio < 0) ratio = 0;
+            if (ratio > 1) ratio = 1;
+            parts.forEach(part => {
+                part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * letterRatios[n++]) + "deg);");
+            })
+            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+        }
+    </script>
 {% endblock %}

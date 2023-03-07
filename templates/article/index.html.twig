@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 {% set user = app.user %}
 {% block title %}myTvTime ▶ ︎{{ 'Blog'|trans }}{% endblock %}
-{% block morecss %}
-{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -67,7 +65,8 @@
         </div>
     </dialog>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         const locale = "{{ app.request.locale }}";
         let confirmDialog;

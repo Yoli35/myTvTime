@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\ActivityRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Repository\ActivityDayRepository;
+use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ActivityRepository::class)]
+#[ORM\Entity(repositoryClass: ActivityDayRepository::class)]
 #[ApiResource]
 class Activity
 {
@@ -20,40 +22,29 @@ class Activity
     private ?User $user = null;
 
     #[ORM\Column]
-    private ?bool $standUpRingCompleted = null;
-
-    #[ORM\Column]
-    private ?bool $moveRingCompleted = null;
-
-    #[ORM\Column]
-    private ?bool $exerciceRingCompleted = null;
-
-    #[ORM\Column(type: Types::JSON)]
-    private array $standUp = [];
-
-    #[ORM\Column]
     private ?int $standUpGoal = null;
-
-    #[ORM\Column]
-    private ?int $standUpResult = null;
 
     #[ORM\Column]
     private ?int $moveGoal = null;
 
     #[ORM\Column]
-    private ?int $moveResult = null;
-
-    #[ORM\Column]
     private ?int $exerciceGoal = null;
 
     #[ORM\Column]
-    private ?int $exerciceResult = null;
+    private ?DateTimeImmutable $createdAt;
 
-    #[ORM\Column]
-    private ?int $steps = null;
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ActivityDay::class)]
+    private Collection $activityDays;
 
-    #[ORM\Column]
-    private ?float $distance = null;
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+        $this->createdAt = new DateTimeImmutable();
+        $this->activityDays = new ArrayCollection();
+        $this->standUpGoal = 12;
+        $this->moveGoal = 500;
+        $this->exerciceGoal = 30;
+    }
 
     public function getId(): ?int
     {
@@ -68,54 +59,6 @@ class Activity
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getStandUp(): array
-    {
-        return $this->standUp;
-    }
-
-    public function setStandUp(array $standUp): self
-    {
-        $this->standUp = $standUp;
-
-        return $this;
-    }
-
-    public function isMoveRingCompleted(): ?bool
-    {
-        return $this->moveRingCompleted;
-    }
-
-    public function setMoveRingCompleted(bool $moveRingCompleted): self
-    {
-        $this->moveRingCompleted = $moveRingCompleted;
-
-        return $this;
-    }
-
-    public function isExerciceRingCompleted(): ?bool
-    {
-        return $this->exerciceRingCompleted;
-    }
-
-    public function setExerciceRingCompleted(bool $exerciceRingCompleted): self
-    {
-        $this->exerciceRingCompleted = $exerciceRingCompleted;
-
-        return $this;
-    }
-
-    public function isStandUpRingCompleted(): ?bool
-    {
-        return $this->standUpRingCompleted;
-    }
-
-    public function setStandUpRingCompleted(bool $standUpRingCompleted): self
-    {
-        $this->standUpRingCompleted = $standUpRingCompleted;
 
         return $this;
     }
@@ -144,18 +87,6 @@ class Activity
         return $this;
     }
 
-    public function getMoveResult(): ?int
-    {
-        return $this->moveResult;
-    }
-
-    public function setMoveResult(int $moveResult): self
-    {
-        $this->moveResult = $moveResult;
-
-        return $this;
-    }
-
     public function getExerciceGoal(): ?int
     {
         return $this->exerciceGoal;
@@ -168,50 +99,44 @@ class Activity
         return $this;
     }
 
-    public function getExerciceResult(): ?int
+    public function getCreatedAt(): ?DateTimeImmutable
     {
-        return $this->exerciceResult;
+        return $this->createdAt;
     }
 
-    public function setExerciceResult(int $exerciceResult): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
-        $this->exerciceResult = $exerciceResult;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getStandUpResult(): ?int
+    /**
+     * @return Collection<int, ActivityDay>
+     */
+    public function getActivityDays(): Collection
     {
-        return $this->standUpResult;
+        return $this->activityDays;
     }
 
-    public function setStandUpResult(int $standUpResult): self
+    public function addActivityDay(ActivityDay $activityDay): self
     {
-        $this->standUpResult = $standUpResult;
+        if (!$this->activityDays->contains($activityDay)) {
+            $this->activityDays->add($activityDay);
+            $activityDay->setActivity($this);
+        }
 
         return $this;
     }
 
-    public function getSteps(): ?int
+    public function removeActivityDay(ActivityDay $activityDay): self
     {
-        return $this->steps;
-    }
-
-    public function setSteps(int $steps): self
-    {
-        $this->steps = $steps;
-
-        return $this;
-    }
-
-    public function getDistance(): ?float
-    {
-        return $this->distance;
-    }
-
-    public function setDistance(float $distance): self
-    {
-        $this->distance = $distance;
+        if ($this->activityDays->removeElement($activityDay)) {
+            // set the owning side to null (unless already changed)
+            if ($activityDay->getActivity() === $this) {
+                $activityDay->setActivity(null);
+            }
+        }
 
         return $this;
     }
