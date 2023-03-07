@@ -131,7 +131,7 @@
                                 gap: 1em;
 
                                 .details {
-                                    @include flex-col(flex-start, center);
+                                    @include flex-row(flex-start, center);
                                     gap: .5em;
                                     width: 100%;
 
@@ -147,58 +147,87 @@
                             @include flex-row(center, center);
                             background-color: var(--gradient-ardoise-20);
                             border-radius: 50%;
-                            height: 3.5em;
+                            height: 4em;
                             margin-left: 1em;
                             position: relative;
-                            width: 3.5em;
+                            width: 4em;
 
                             .circle {
                                 @include flex-row(center, center);
                                 //background: conic-gradient(var(--gradient-ardoise-60) 0%, var(--gradient-ardoise-60) 1%, #000 1%);
                                 border-radius: 50%;
-                                height: 3.25em;
+                                flex-shrink: 0;
+                                height: 3.75em;
                                 transition: background 1s;
-                                width: 3.25em;
+                                width: 3.75em;
 
                                 .percentage {
                                     @include flex-row(center, center);
                                     background-color: var(--gradient-ardoise-20);
                                     border-radius: 50%;
                                     color: var(--gradient-ardoise-80);
-                                    height: 2.75em;
-                                    width: 2.75em;
+                                    height: 3.25em;
+                                    width: 3.25em;
                                 }
                             }
 
                             .circle-start, .circle-end {
                                 background-color: var(--gradient-ardoise-60);
                                 border-radius: 50%;
-                                height: .25em;
+                                height: 4px;
                                 position: absolute;
-                                width: .25em;
+                                width: 4px;
+                            }
+
+                            .circle-end {
+                                background-color: transparent;
+                                border-bottom: 1px solid transparent;
+                                border-left: 1px solid transparent;
+                                border-right: 1px solid var(--gradient-ardoise-20);
+                                border-top: 1px solid var(--gradient-ardoise-20);
+                                height: 6px;
+                                width: 6px;
                             }
 
                             &.stand-up {
-                                background-color: var(--activity-stand-up);
-
-                                .circle-start, .circle-end {
+                                .circle {
                                     background-color: var(--activity-stand-up);
+                                }
+                                .circle-start {
+                                    background-color: var(--activity-stand-up);
+                                }
+                                .circle-end {
+                                    > div {
+                                        background-color: var(--activity-stand-up);
+                                    }
                                 }
                             }
 
                             &.move {
-                                background-color: var(--activity-move);
-
-                                .circle-start, .circle-end {
+                                .circle {
                                     background-color: var(--activity-move);
+                                }
+                                .circle-start {
+                                    background-color: var(--activity-move);
+                                }
+                                .circle-end {
+                                    > div {
+                                        background-color: var(--activity-move);
+                                    }
                                 }
                             }
 
                             &.exercice {
-                                background-color: var(--activity-exercice);
-
-                                .circle-start, .circle-end {
+                                .circle {
                                     background-color: var(--activity-exercice);
+                                }
+                                .circle-start {
+                                    background-color: var(--activity-exercice);
+                                }
+                                .circle-end {
+                                    > div {
+                                        background-color: var(--activity-exercice);
+                                    }
                                 }
                             }
                         }

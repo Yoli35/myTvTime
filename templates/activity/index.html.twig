@@ -21,7 +21,7 @@
                     <a href="{{ path('app_activity_new') }}" class="no-activity btn btn-primary m-auto">{{ 'Activate'|trans }}</a>
                 {% else %}
                     <div class="recent-activity">
-                        <h2>{{ 'Reccent activity'|trans }}</h2>
+                        <h2>{{ 'Recent activity'|trans }}</h2>
                         <div class="days">
                             {% for day in activity.activityDays %}
                                 <div class="day">
@@ -30,16 +30,17 @@
                                         <div class="stand-up">
                                             <div class="title">{{ 'Stand up'|trans }}</div>
                                             <div class="description">
-                                                <div class="progress stand-up">
+                                                {% set percent = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                                <div class="progress stand-up" data-percent="{{ percent }}">
                                                     <div class="circle">
-                                                        {% set percent = (day.standUpResult / activity.standUpGoal * 100)|round %}
                                                         <div class="percentage">{{ percent }}%</div>
                                                     </div>
                                                     <div class="circle-start"></div>
-                                                    <div class="circle-end"></div>
+                                                    <div class="circle-end"><div></div></div>
                                                 </div>
                                                 <div class="details">
                                                     <div class="result">{{ day.standUpResult }}</div>
+                                                    /
                                                     <div class="goal">{{ activity.standUpGoal }}</div>
                                                 </div>
                                             </div>
@@ -47,33 +48,35 @@
                                         <div class="move">
                                             <div class="title">{{ 'Move'|trans }}</div>
                                             <div class="description">
-                                                <div class="progress move">
+                                                {% set percent = (day.moveResult / activity.moveGoal * 100)|round %}
+                                                <div class="progress move" data-percent="{{ percent }}">
                                                     <div class="circle">
-                                                        {% set percent = (day.moveResult / activity.moveGoal * 100)|round %}
                                                         <div class="percentage">{{ percent }}%</div>
                                                     </div>
                                                     <div class="circle-start"></div>
-                                                    <div class="circle-end"></div>
+                                                    <div class="circle-end"><div></div></div>
                                                 </div>
                                                 <div class="details">
                                                     <div class="result">{{ day.moveResult }} KCal</div>
-                                                    <div class="goal">{{ activity.moveGoal }}</div>
+                                                    /
+                                                    <div class="goal">{{ activity.moveGoal }}KCal</div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="exercice">
                                             <div class="title">{{ 'Exercice'|trans }}</div>
                                             <div class="description">
-                                                <div class="progress exercice">
+                                                {% set percent = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
+                                                <div class="progress exercice" data-percent="{{ percent }}">
                                                     <div class="circle">
-                                                        {% set percent = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
                                                         <div class="percentage">{{ percent }}%</div>
                                                     </div>
                                                     <div class="circle-start"></div>
-                                                    <div class="circle-end"></div>
+                                                    <div class="circle-end"><div></div></div>
                                                 </div>
                                                 <div class="details">
                                                     <div class="result">{{ day.exerciceResult }} {{ 'minutes'|trans }}</div>
+                                                    /
                                                     <div class="goal">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
                                                 </div>
                                             </div>
@@ -96,8 +99,10 @@
 
         window.addEventListener("DOMContentLoaded", () => {
 
+            initHeader();
+            initProgress(["stand-up", "move", "exercice"]);
+
             setTimeout(() => {
-                initHeader();
                 document.querySelector(".header").setAttribute("style", "background-color: transparent");
             }, 0);
 
@@ -156,6 +161,25 @@
                 part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * letterRatios[n++]) + "deg);");
             })
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+        }
+
+        function initProgress(circles) {
+            circles.forEach(circle => {
+
+                const element = document.querySelector(".progress." + circle);
+
+                if (element === null) return;
+
+                const value = element.getAttribute("data-percent");
+                const arc = element.querySelector(".circle");
+                const start = element.querySelector(".circle-start");
+                const end = element.querySelector(".circle-end");
+                const style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-grey-10) " + value + "%);";
+                arc.setAttribute("style", style);
+                start.setAttribute("style", "translate: 0 -1.75em;");
+                end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-1.75em) rotate(45deg)");
+
+            });
         }
     </script>
 {% endblock %}
