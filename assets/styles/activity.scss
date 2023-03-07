@@ -131,13 +131,42 @@
                                 gap: 1em;
 
                                 .details {
-                                    @include flex-row(flex-start, center);
+                                    @include flex-col(flex-start, flex-start);
                                     gap: .5em;
                                     width: 100%;
 
-                                    .result, .goal {
-                                        font-size: 1em;
-                                        font-weight: 400;
+                                    .detail {
+                                        @include flex-row(center, flex-start);
+                                        gap: .75em;
+                                        width: 100%;
+
+                                        .result, .goal {
+                                            font-size: 1em;
+                                            font-weight: 400;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .stand-up {
+                            .details {
+                                .hours {
+                                    @include flex-row(flex-start, center);
+                                    gap: 1px;
+
+                                    .hour {
+                                        border-radius: 4px;
+                                        height: 32px;
+                                        width: 8px;
+
+                                        &.up {
+                                            background-color: var(--activity-stand-up);
+                                        }
+
+                                        &.down {
+                                            background-color: var(--activity-stand-down);
+                                        }
                                     }
                                 }
                             }
@@ -145,10 +174,9 @@
 
                         .progress {
                             @include flex-row(center, center);
-                            background-color: var(--gradient-ardoise-20);
+                            background-color: var(--gradient-ardoise-10);
                             border-radius: 50%;
                             height: 4em;
-                            margin-left: 1em;
                             position: relative;
                             width: 4em;
 
@@ -193,9 +221,11 @@
                                 .circle {
                                     background-color: var(--activity-stand-up);
                                 }
+
                                 .circle-start {
                                     background-color: var(--activity-stand-up);
                                 }
+
                                 .circle-end {
                                     > div {
                                         background-color: var(--activity-stand-up);
@@ -207,9 +237,11 @@
                                 .circle {
                                     background-color: var(--activity-move);
                                 }
+
                                 .circle-start {
                                     background-color: var(--activity-move);
                                 }
+
                                 .circle-end {
                                     > div {
                                         background-color: var(--activity-move);
@@ -221,9 +253,11 @@
                                 .circle {
                                     background-color: var(--activity-exercice);
                                 }
+
                                 .circle-start {
                                     background-color: var(--activity-exercice);
                                 }
+
                                 .circle-end {
                                     > div {
                                         background-color: var(--activity-exercice);

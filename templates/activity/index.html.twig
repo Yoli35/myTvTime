@@ -36,12 +36,21 @@
                                                         <div class="percentage">{{ percent }}%</div>
                                                     </div>
                                                     <div class="circle-start"></div>
-                                                    <div class="circle-end"><div></div></div>
+                                                    <div class="circle-end">
+                                                        <div></div>
+                                                    </div>
                                                 </div>
                                                 <div class="details">
-                                                    <div class="result">{{ day.standUpResult }}</div>
-                                                    /
-                                                    <div class="goal">{{ activity.standUpGoal }}</div>
+                                                    <div class="detail">
+                                                        <div class="result">{{ day.standUpResult }}</div>
+                                                        /
+                                                        <div class="goal">{{ activity.standUpGoal }}</div>
+                                                    </div>
+                                                    <div class="hours">
+                                                        {% for hour in day.standUp %}
+                                                            <div class="hour {% if hour %}up{% else %}down{% endif %}"></div>
+                                                        {% endfor %}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -54,12 +63,20 @@
                                                         <div class="percentage">{{ percent }}%</div>
                                                     </div>
                                                     <div class="circle-start"></div>
-                                                    <div class="circle-end"><div></div></div>
+                                                    <div class="circle-end">
+                                                        <div></div>
+                                                    </div>
                                                 </div>
                                                 <div class="details">
-                                                    <div class="result">{{ day.moveResult }} KCal</div>
-                                                    /
-                                                    <div class="goal">{{ activity.moveGoal }}KCal</div>
+                                                    <div class="detail">
+                                                        <div class="result">{{ day.moveResult }} KCal</div>
+                                                        /
+                                                        <div class="goal">{{ activity.moveGoal }}KCal</div>
+                                                    </div>
+                                                    <div class="detail">
+                                                        <div>{{ 'Steps'|trans }} : {{ day.steps }}</div>
+                                                        <div>{{ 'Distance'|trans }} : {{ day.distance }}km</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -72,12 +89,16 @@
                                                         <div class="percentage">{{ percent }}%</div>
                                                     </div>
                                                     <div class="circle-start"></div>
-                                                    <div class="circle-end"><div></div></div>
+                                                    <div class="circle-end">
+                                                        <div></div>
+                                                    </div>
                                                 </div>
                                                 <div class="details">
-                                                    <div class="result">{{ day.exerciceResult }} {{ 'minutes'|trans }}</div>
-                                                    /
-                                                    <div class="goal">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
+                                                    <div class="detail">
+                                                        <div class="result">{{ day.exerciceResult }} {{ 'minutes'|trans }}</div>
+                                                        /
+                                                        <div class="goal">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
