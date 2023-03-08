@@ -10,6 +10,8 @@ use App\Repository\ActivityDayRepository;
 use App\Repository\ActivityRepository;
 use App\Service\LogService;
 use DateTimeImmutable;
+use DateTimeZone;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,19 +42,31 @@ class ActivityController extends AbstractController
             if (!$days->count() || !$this->todayActivityExist($days)) {
                 $today = new ActivityDay($activity);
                 $this->activityDayRepository->save($today, true);
+                $activity->addActivityDay($today);
             }
         }
 
-        dump($activity);
+        $days = array_reverse($activity->getActivityDays()->toArray());
+
+//        usort($days, function (ActivityDay $a, ActivityDay $b) {
+//            return $b->getDay() <=> $a->getDay();
+//        });
+
         return $this->render('activity/index.html.twig', [
-            'activity' => $activity
+            'activity' => $activity,
+            'days' => $days,
         ]);
     }
 
     public function todayActivityExist($days): bool
     {
-        $today = new DateTimeImmutable();
+        try {
+            $today = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+        } catch (Exception) {
+            $today = new DateTimeImmutable();
+        }
         $today = $today->setTime(0, 0);
+
         foreach ($days as $day) {
             if ($day->getDay()->format('Y-m-d') === $today->format('Y-m-d')) {
                 return true;
@@ -94,8 +108,11 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_activity_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Activity $activity): Response
+    public function edit(Request $request, int $id): Response
     {
+        dump($id);
+        $activity = $this->activityRepository->find($id);
+
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
 
@@ -105,9 +122,9 @@ class ActivityController extends AbstractController
             return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('activity/edit.html.twig', [
+        return $this->render('activity/edit.html.twig', [
             'activity' => $activity,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 

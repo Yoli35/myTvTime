@@ -44,6 +44,7 @@ Youtube video search: Recherche de vidéo Youtube
 # Activity
 Activity: Activité
 Activate: Activer
+Goals: Objectifs
 Activate Activity: Activer Activité
 Stand Up Goal: Objectif de se lever
 Move Goal (KCal): Objectif de mouvement (KCal)
@@ -52,9 +53,9 @@ back to activity: Retour à Activité
 Recent activity: Activité récente
 Stand up: Se lever
 Move: Bouger
+Exercice: Exercice
 Steps: Nombre de pas
 Distance: Distance
-Exercise: Exercice
 
 #home
 last added movies: Derniers films ajoutés

@@ -54,7 +54,13 @@
         .no-activity {
             font-size: 2em;
             font-weight: 300;
+            margin: 0 auto;
             padding: 1em 2em;
+        }
+
+        .activity-goals {
+            margin-left: auto;
+            padding: .25em 2em;
         }
 
         .form {
@@ -125,7 +131,7 @@
                             }
 
                             .description {
-                                @include flex-row(flex-start, center);
+                                @include flex-row(center, center);
                                 font-size: 1em;
                                 font-weight: 300;
                                 gap: 1em;

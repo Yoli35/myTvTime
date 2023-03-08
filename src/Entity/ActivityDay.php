@@ -6,8 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ActivityDayRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -21,7 +20,7 @@ class ActivityDay
     private ?int $id = null;
 
     #[ORM\ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'activityDays')]
-    private ?Activity $activity = null;
+    private ?Activity $activity;
 
     #[ORM\Column]
     private ?bool $standUpRingCompleted = false;
@@ -33,7 +32,7 @@ class ActivityDay
     private ?bool $exerciceRingCompleted = false;
 
     #[ORM\Column(type: Types::JSON)]
-    private array $standUp = [];
+    private array $standUp;
 
     #[ORM\Column]
     private ?int $standUpResult = 0;
@@ -56,7 +55,8 @@ class ActivityDay
     public function __construct($activity)
     {
         $this->activity = $activity;
-        $this->day = new DateTimeImmutable();
+        $this->standUp = array_fill(0, 24, 0);
+        $this->day = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
     }
 
     public function getId(): ?int
