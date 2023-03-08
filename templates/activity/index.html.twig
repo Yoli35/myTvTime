@@ -29,8 +29,11 @@
                                     <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
                                     <div class="activity-of-the-day">
                                         <div class="stand-up">
-                                            <div class="title">{{ 'Stand up'|trans }}</div>
-                                            <div class="description">
+                                            <div class="block-header">
+                                                <div class="title">{{ 'Stand up'|trans }}</div>
+                                                <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
+                                            </div>
+                                            <div class="block-body">
                                                 {% set percent = (day.standUpResult / activity.standUpGoal * 100)|round %}
                                                 <div class="progress stand-up" data-percent="{{ percent }}">
                                                     <div class="circle">
@@ -47,17 +50,26 @@
                                                         /
                                                         <div class="goal">{{ activity.standUpGoal }}</div>
                                                     </div>
-                                                    <div class="hours">
-                                                        {% for hour in day.standUp %}
-                                                            <div class="hour {% if hour %}up{% else %}down{% endif %}"></div>
-                                                        {% endfor %}
+                                                    <div class="wrapper">
+                                                        <div class="hours" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                            {{ include('blocks/activity/_standUp.html.twig', {ups: day.standUp}) }}
+                                                        </div>
+                                                        <div class="graduations">
+                                                            <div class="quarter">0</div>
+                                                            <div class="quarter">6</div>
+                                                            <div class="quarter">12</div>
+                                                            <div class="quarter">18</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="move">
-                                            <div class="title">{{ 'Move'|trans }}</div>
-                                            <div class="description">
+                                            <div class="block-header">
+                                                <div class="title">{{ 'Move'|trans }}</div>
+                                                <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
+                                            </div>
+                                            <div class="block-body">
                                                 {% set percent = (day.moveResult / activity.moveGoal * 100)|round %}
                                                 <div class="progress move" data-percent="{{ percent }}">
                                                     <div class="circle">
@@ -70,20 +82,32 @@
                                                 </div>
                                                 <div class="details">
                                                     <div class="detail">
-                                                        <div class="result">{{ day.moveResult }} KCal</div>
+                                                        <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                            <span>{{ day.moveResult }}</span> KCal
+                                                            <input type="number" name="moveResult" value="{{ day.moveResult }}"/>
+                                                        </div>
                                                         /
                                                         <div class="goal">{{ activity.moveGoal }} KCal</div>
                                                     </div>
                                                     <div class="detail">
-                                                        <div>{{ 'Steps'|trans }} : {{ day.steps }}</div>
-                                                        <div>{{ 'Distance'|trans }} : {{ day.distance }}km</div>
+                                                        <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                            {{ 'Steps'|trans }} : <span>{{ day.steps }}</span>
+                                                            <input type="number" name="steps" value="{{ day.steps }}"/>
+                                                        </div>
+                                                        <div class="distance" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                            {{ 'Distance'|trans }} : <span>{{ day.distance }}</span>km
+                                                            <input type="number" name="distance" value="{{ day.distance }}"/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="exercice">
-                                            <div class="title">{{ 'Exercice'|trans }}</div>
-                                            <div class="description">
+                                            <div class="block-header">
+                                                <div class="title">{{ 'Exercice'|trans }}</div>
+                                                <div class="completed{% if day.isExerciceRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
+                                            </div>
+                                            <div class="block-body">
                                                 {% set percent = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
                                                 <div class="progress exercice" data-percent="{{ percent }}">
                                                     <div class="circle">
@@ -96,7 +120,10 @@
                                                 </div>
                                                 <div class="details">
                                                     <div class="detail">
-                                                        <div class="result">{{ day.exerciceResult }} {{ 'minutes'|trans }}</div>
+                                                        <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                            <span>{{ day.exerciceResult }}</span> {{ 'minutes'|trans }}
+                                                            <input type="number" name="exerciceResult" value="{{ day.exerciceResult }}"/>
+                                                        </div>
                                                         /
                                                         <div class="goal">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
                                                     </div>
@@ -122,7 +149,9 @@
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
-            initProgress(["stand-up", "move", "exercice"]);
+            setProgress(["stand-up", "move", "exercice"]);
+            initStandUp();
+            initInputs();
 
             setTimeout(() => {
                 document.querySelector(".header").setAttribute("style", "background-color: transparent");
@@ -185,7 +214,7 @@
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
         }
 
-        function initProgress(circles) {
+        function setProgress(circles) {
             circles.forEach(circle => {
 
                 const elements = document.querySelectorAll(".progress." + circle);
@@ -203,6 +232,143 @@
                 });
 
             });
+        }
+
+        function initStandUp() {
+            const ups = document.querySelectorAll(".stand-up .hour");
+            ups.forEach(up => {
+                up.addEventListener("click", toggleUp);
+            });
+        }
+
+        function toggleUp(evt) {
+            const up = evt.currentTarget;
+            const hours = up.closest(".hours");
+            const hoursNode = up.parentNode;
+
+            const id = hours.getAttribute("data-id");
+            const day = hours.getAttribute("data-day");
+            const index = up.getAttribute("data-index");
+            const value = parseInt(up.getAttribute("data-up"));
+            console.log({id, day, index, value});
+
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let {success, html, result, goal} = JSON.parse(this.response);
+                if (!success) return;
+
+                const resultDiv = document.querySelector(".stand-up").querySelector(".result");
+                const standUpRingCompleted = goal;
+
+                resultDiv.innerText = result;
+
+                const wrapper = document.querySelector(".stand-up").querySelector(".wrapper");
+                const oldHoursDiv = up.parentNode;
+                const hoursDiv = document.createElement("div");
+                hoursDiv.classList.add("hours");
+                hoursDiv.innerHTML = html.content;
+                wrapper.insertBefore(hoursDiv, oldHoursDiv);
+                wrapper.removeChild(oldHoursDiv);
+
+                if (standUpRingCompleted) {
+                    const standUpRing = document.querySelector(".stand-up").querySelector(".completed");
+                    standUpRing.classList.add("visible");
+                }
+            }
+            xhr.open("GET", "{{ path('app_activity_stand_up_toggle', {id: activity.id}) }}" + "?day=" + day + "&up=" + index + "&val=" + (1 - value));
+            xhr.send();
+            /*
+                    const hour = up.getAttribute("data-hour");
+                    const day = up.getAttribute("data-day");
+                    const url = "{# { path('activity_stand_up') } #}";
+                    const data = new FormData();
+                    data.append("hour", hour);
+                    data.append("day", day);
+                    fetch(url, {
+                        method: "POST",
+                        body: data
+                    }).then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                    }).then(data => {
+                        if (data.success) {
+                            const element = document.querySelector(".stand-up .hour[data-hour='" + hour + "'][data-day='" + day + "']");
+                            element.classList.add("done");
+                            element.querySelector(".result").innerText = data.result;
+                            element.querySelector(".goal").innerText = data.goal;
+                            const percent = (data.result / data.goal * 100)|round;
+                            element.querySelector(".progress").setAttribute("data-percent", percent);
+                            setProgress(["stand-up"]);
+                        }
+                    });
+*/
+        }
+
+        function initInputs() {
+            const inputContainers = document.querySelectorAll(".activity-of-the-day > .move, .activity-of-the-day > .exercice");
+
+            inputContainers.forEach(container => {
+                const inputs = container.querySelectorAll("div > input");
+                inputs.forEach(input => {
+                    console.log({input});
+                    const div = input.parentElement;
+                    div.addEventListener("click", () => {
+                        input.classList.add("visible");
+                        input.focus();
+                    });
+                    // input.addEventListener("blur", () => {
+                    //     saveInput(input);
+                    // });
+                    input.addEventListener("keydown", (evt) => {
+                        if (evt.key === "Enter" || evt.key === "Tab") {
+                            saveInput(input);
+                            evt.preventDefault();
+                        }
+                        if (evt.key === "Escape") {
+                            input.classList.remove("visible");
+                            evt.preventDefault();
+                        }
+                    });
+                });
+            });
+        }
+
+        function inputKeys(evt) {
+            const input = evt.currentTarget;
+            if (evt.key === "Enter") {
+                saveInput(input);
+            }
+        }
+
+        function saveInput(input) {
+            const name = input.getAttribute("name");
+            const value = input.value;
+            const parent = input.parentElement;
+            const day = parent.getAttribute("data-day");
+
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                let {success, goal, blockSelector, percent, circleSelector} = JSON.parse(this.response);
+                if (!success) return;
+
+                input.classList.remove("visible");
+                parent.querySelector("span").innerText = value;
+
+                const progress = parent.closest(".activity-of-the-day").querySelector(".progress." + circleSelector);
+                progress.setAttribute("data-percent", percent);
+                progress.querySelector(".percentage").innerText = percent + '%';
+                setProgress([circleSelector]);
+
+                const block = input.closest(".activity-of-the-day").querySelector(blockSelector);
+                if (goal) {
+                    block.querySelector(".completed").classList.add("visible");
+                } else {
+                    block.querySelector(".completed").classList.remove("visible");
+                }
+            }
+            xhr.open("GET", "{{ path('app_activity_save_data', {id: activity.id}) }}" + "?day=" + day + "&name=" + name + "&value=" + value);
+            xhr.send();
         }
     </script>
 {% endblock %}

@@ -70,8 +70,13 @@ $fa-font-path: "../webfonts";
 
     --activity-stand-up: hsl(173, 100%, 42%);
     --activity-stand-down: hsl(173, 100%, 22%);
+    --activity-stand-up-hover: hsl(173, 100%, 52%);
+    --activity-stand-down-hover: hsl(173, 100%, 32%);
+    --activity-stand-up-fade: hsla(173, 100%, 42%, .25);
     --activity-move: hsl(0, 100%, 50%);
+    --activity-move-fade: hsla(0, 100%, 50%, .25);
     --activity-exercice: hsl(77, 100%, 50%);
+    --activity-exercice-fade: hsla(77, 100%, 50%, .25);
 
     --btn-primary: linear-gradient(
                     0deg,

@@ -1,0 +1,3 @@
+{% for up in ups %}
+    <div class="hour {% if up %}up{% else %}down{% endif %}" data-up="{{ up }}" data-index="{{ loop.index0 }}"></div>
+{% endfor %}

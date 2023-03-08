@@ -99,14 +99,6 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_activity_show', methods: ['GET'])]
-    public function show(Activity $activity): Response
-    {
-        return $this->render('activity/show.html.twig', [
-            'activity' => $activity,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_activity_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
@@ -128,13 +120,83 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_activity_delete', methods: ['POST'])]
-    public function delete(Request $request, Activity $activity): Response
+    // /activity/3/stand-up/7/13/1
+    #[Route('/{id}/stand-up', name: 'app_activity_stand_up_toggle', methods: ['GET'])]
+    public function standUpToggle(Request $request, int $id): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $activity->getId(), $request->request->get('_token'))) {
-            $this->activityRepository->remove($activity, true);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
+
+        /** @var Activity $activity */
+        $activity = $this->activityRepository->find($id);
+
+        $day = $request->query->getInt('day');
+        $up = $request->query->getInt('up');
+        $newValue = $request->query->getInt('val');
+
+        $activityDay = $this->activityDayRepository->find($day);
+        $ups = $activityDay->getStandUp();
+        $ups[$up] = $newValue;
+        $standUpResult = array_sum($ups);
+        $activityDay->setStandUp($ups);
+        $activityDay->setStandUpResult($standUpResult);
+        $activityDay->setStandUpRingCompleted($standUpResult >= $activity->getStandUpGoal());
+        $this->activityDayRepository->save($activityDay, true);
+
+        $hours = $this->render('blocks/activity/_standUp.html.twig', [
+            'ups' => $ups,
+        ]);
+
+        return $this->json([
+            'success' => true,
+            'html' => $hours,
+            'result' => $standUpResult,
+            'goal' => $activityDay->isStandUpRingCompleted(),
+        ]);
+    }
+
+    #[Route('/{id}/save/data', name: 'app_activity_save_data', methods: ['GET'])]
+    public function saveDataActivity(Request $request, int $id): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->logService->log($request, $this->getUser());
+
+        /** @var Activity $activity */
+        $activity = $this->activityRepository->find($id);
+
+        $day = $request->query->getInt('day');
+        $name = $request->query->getAlpha('name');
+        $value = $request->query->get('value');
+
+        $goalCompleted = false;
+        $blockName = "";
+
+        $activityDay = $this->activityDayRepository->find($day);
+        $activityDay->{'set' . ucfirst($name)}($value);
+        $this->activityDayRepository->save($activityDay, true);
+
+        // si le nom (name) contient "Result" alors on compare la valeur à la valeur de l'objectif
+        if (str_contains($name, 'Result')) {
+            $blockName = str_replace('Result', '', $name);
+            $getter = 'get' . ucfirst(str_replace('Result', 'Goal', $name));
+            $setter = 'set' . ucfirst(str_replace('Result', 'RingCompleted', $name));
+
+            $goal = $activity->{$getter}();
+            $goalCompleted = ($value >= $goal);
+            $activityDay->{$setter}($goalCompleted);
+            $this->activityDayRepository->save($activityDay, true);
+            $percent = round(($value / $goal) * 100);
+        } else {
+            $blockName = $name;
+            $percent = 0;
         }
 
-        return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json([
+            'success' => true,
+            'goal' => $goalCompleted,
+            'blockSelector' => '.' . $blockName,
+            'percent' => $percent,
+            'circleSelector' => $blockName,
+        ]);
     }
 }
