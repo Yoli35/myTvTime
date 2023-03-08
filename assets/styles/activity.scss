@@ -221,6 +221,11 @@
                                 border-top: 1px solid var(--gradient-ardoise-20);
                                 height: 6px;
                                 width: 6px;
+
+                                > div {
+                                    border-radius: 50%;
+                                    height: 100%;
+                                }
                             }
 
                             &.stand-up {
