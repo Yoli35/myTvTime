@@ -138,9 +138,10 @@ class ActivityController extends AbstractController
         $ups = $activityDay->getStandUp();
         $ups[$up] = $newValue;
         $standUpResult = array_sum($ups);
+        $standUpGoal = $activity->getStandUpGoal();
         $activityDay->setStandUp($ups);
         $activityDay->setStandUpResult($standUpResult);
-        $activityDay->setStandUpRingCompleted($standUpResult >= $activity->getStandUpGoal());
+        $activityDay->setStandUpRingCompleted($standUpResult >= $standUpGoal);
         $this->activityDayRepository->save($activityDay, true);
 
         $hours = $this->render('blocks/activity/_standUp.html.twig', [
@@ -151,6 +152,7 @@ class ActivityController extends AbstractController
             'success' => true,
             'html' => $hours,
             'result' => $standUpResult,
+            'percent' => floor($standUpResult / $standUpGoal * 100),
             'goal' => $activityDay->isStandUpRingCompleted(),
         ]);
     }

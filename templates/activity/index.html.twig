@@ -254,7 +254,7 @@
 
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
-                let {success, html, result, goal} = JSON.parse(this.response);
+                let {success, html, result, percent, goal} = JSON.parse(this.response);
                 if (!success) return;
 
                 const resultDiv = document.querySelector(".stand-up").querySelector(".result");
@@ -266,13 +266,23 @@
                 const oldHoursDiv = up.parentNode;
                 const hoursDiv = document.createElement("div");
                 hoursDiv.classList.add("hours");
+                hoursDiv.setAttribute("data-id", id);
+                hoursDiv.setAttribute("data-day", day);
                 hoursDiv.innerHTML = html.content;
                 wrapper.insertBefore(hoursDiv, oldHoursDiv);
                 wrapper.removeChild(oldHoursDiv);
+                initStandUp();
 
+                const progress = wrapper.closest(".activity-of-the-day").querySelector(".progress.stand-up");
+                progress.setAttribute("data-percent", percent);
+                progress.querySelector(".percentage").innerText = percent + '%';
+                setProgress(["stand-up"]);
+
+                const standUpRing = document.querySelector(".stand-up").querySelector(".completed");
                 if (standUpRingCompleted) {
-                    const standUpRing = document.querySelector(".stand-up").querySelector(".completed");
                     standUpRing.classList.add("visible");
+                } else {
+                    standUpRing.classList.remove("visible");
                 }
             }
             xhr.open("GET", "{{ path('app_activity_stand_up_toggle', {id: activity.id}) }}" + "?day=" + day + "&up=" + index + "&val=" + (1 - value));
@@ -332,13 +342,6 @@
                     });
                 });
             });
-        }
-
-        function inputKeys(evt) {
-            const input = evt.currentTarget;
-            if (evt.key === "Enter") {
-                saveInput(input);
-            }
         }
 
         function saveInput(input) {
