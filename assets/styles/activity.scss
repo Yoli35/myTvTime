@@ -99,10 +99,11 @@
                     border-radius: 1em;
                     gap: 1em;
                     padding: 1em 2em;
+                    transition: background-color 2s ease-in-out;
                     width: 100%;
 
-                    &.active {
-                        background-color: var(--gradient-ardoise-50-alpha-50);
+                    &.three-rings {
+                        background-color: var(--gradient-green-30-alpha-50);
                     }
 
                     .date {
@@ -169,6 +170,11 @@
                                         .result, .goal {
                                             font-size: 1em;
                                             font-weight: 400;
+                                        }
+
+                                        // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
+                                        &:nth-child(2 of .detail) {
+                                            border-bottom: 1px solid var(--gradient-ardoise-100);
                                         }
                                     }
                                 }
@@ -424,6 +430,10 @@
 
     &.show {
         opacity: 1;
+    }
+
+    &.masked {
+        display: none;
     }
 
     .body {

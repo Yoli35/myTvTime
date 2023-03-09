@@ -154,9 +154,10 @@
 
             initHeader();
             setProgress(["stand-up", "move", "exercice"]);
+            initThreeRings();
             initStandUp();
             initInputs();
-            replaceTitleAttribute();
+            initToolTips();
 
             setTimeout(() => {
                 document.querySelector(".header").setAttribute("style", "background-color: transparent");
@@ -236,6 +237,13 @@
                     end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-27px) rotate(45deg)");
                 });
 
+            });
+        }
+
+        function initThreeRings() {
+            const days = document.querySelectorAll(".day");
+            days.forEach(day => {
+                threeRings(day);
             });
         }
 
@@ -326,22 +334,21 @@
             inputContainers.forEach(container => {
                 const inputs = container.querySelectorAll("div > input");
                 inputs.forEach(input => {
-                    // console.log({input});
                     const div = input.parentElement;
                     div.addEventListener("click", () => {
+                        document.querySelector(".tool-tips").classList.add("masked");
                         input.classList.add("visible");
                         input.focus();
                     });
-                    // input.addEventListener("blur", () => {
-                    //     saveInput(input);
-                    // });
                     input.addEventListener("keydown", (evt) => {
                         if (evt.key === "Enter" || evt.key === "Tab") {
                             saveInput(input);
+                            document.querySelector(".tool-tips").classList.remove("masked");
                             evt.preventDefault();
                         }
                         if (evt.key === "Escape") {
                             input.classList.remove("visible");
+                            document.querySelector(".tool-tips").classList.remove("masked");
                             evt.preventDefault();
                         }
                     });
@@ -379,12 +386,23 @@
                         completed.classList.remove("visible");
                     }
                 }
+                threeRings(input.closest(".day"));
             }
             xhr.open("GET", "{{ path('app_activity_save_data', {id: activity.id}) }}" + "?day=" + day + "&name=" + name + "&value=" + value);
             xhr.send();
         }
 
-        function replaceTitleAttribute() {
+        function threeRings(dayBlock) {
+
+            if (dayBlock.querySelectorAll(".completed.visible").length === 3) {
+                dayBlock.classList.add("three-rings");
+            } else {
+                dayBlock.classList.remove("three-rings");
+            }
+
+        }
+
+        function initToolTips() {
             const divs = document.querySelectorAll("div[data-title]");
             divs.forEach(div => {
 
@@ -409,7 +427,7 @@
         function toolTipsHide() {
             const tooltips = document.querySelector(".tool-tips");
             tooltips.classList.remove("show");
-            tooltips.querySelector(".body").innerHTML = "";
+            tooltips.setAttribute("style", "translate: 0px 0px;");
         }
 
         function toolTipsMove(evt) {
