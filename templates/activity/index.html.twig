@@ -82,19 +82,19 @@
                                                 </div>
                                                 <div class="details">
                                                     <div class="detail">
-                                                        <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                        <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
                                                             <span>{{ day.moveResult }}</span> KCal
                                                             <input type="number" name="moveResult" value="{{ day.moveResult }}"/>
                                                         </div>
                                                         /
-                                                        <div class="goal">{{ activity.moveGoal }} KCal</div>
+                                                        <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.moveGoal }} KCal</div>
                                                     </div>
                                                     <div class="detail">
-                                                        <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                        <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
                                                             {{ 'Steps'|trans }} : <span>{{ day.steps }}</span>
                                                             <input type="number" name="steps" value="{{ day.steps }}"/>
                                                         </div>
-                                                        <div class="distance" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                        <div class="distance" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
                                                             {{ 'Distance'|trans }} : <span>{{ day.distance }}</span>km
                                                             <input type="number" name="distance" value="{{ day.distance }}"/>
                                                         </div>
@@ -120,12 +120,12 @@
                                                 </div>
                                                 <div class="details">
                                                     <div class="detail">
-                                                        <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                        <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
                                                             <span>{{ day.exerciceResult }}</span> {{ 'minutes'|trans }}
                                                             <input type="number" name="exerciceResult" value="{{ day.exerciceResult }}"/>
                                                         </div>
                                                         /
-                                                        <div class="goal">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
+                                                        <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -140,6 +140,10 @@
             {{ include('blocks/_pageFooter.html.twig') }}
         </div>
     </div>
+    <div class="tool-tips">
+        <div class="body"></div>
+        <div class="tail"></div>
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
@@ -152,6 +156,7 @@
             setProgress(["stand-up", "move", "exercice"]);
             initStandUp();
             initInputs();
+            replaceTitleAttribute();
 
             setTimeout(() => {
                 document.querySelector(".header").setAttribute("style", "background-color: transparent");
@@ -321,7 +326,7 @@
             inputContainers.forEach(container => {
                 const inputs = container.querySelectorAll("div > input");
                 inputs.forEach(input => {
-                    console.log({input});
+                    // console.log({input});
                     const div = input.parentElement;
                     div.addEventListener("click", () => {
                         input.classList.add("visible");
@@ -359,9 +364,11 @@
                 parent.querySelector("span").innerText = value;
 
                 const progress = parent.closest(".activity-of-the-day").querySelector(".progress." + circleSelector);
-                progress.setAttribute("data-percent", percent);
-                progress.querySelector(".percentage").innerText = percent + '%';
-                setProgress([circleSelector]);
+                if (progress) {
+                    progress.setAttribute("data-percent", percent);
+                    progress.querySelector(".percentage").innerText = percent + '%';
+                    setProgress([circleSelector]);
+                }
 
                 const block = input.closest(".activity-of-the-day").querySelector(blockSelector);
                 if (goal) {
@@ -372,6 +379,42 @@
             }
             xhr.open("GET", "{{ path('app_activity_save_data', {id: activity.id}) }}" + "?day=" + day + "&name=" + name + "&value=" + value);
             xhr.send();
+        }
+
+        function replaceTitleAttribute() {
+            const divs = document.querySelectorAll("div[data-title]");
+            divs.forEach(div => {
+
+                div.addEventListener('mousemove', toolTipsMove);
+                div.addEventListener('mouseenter', toolTipsShow);
+                div.addEventListener('mouseleave', toolTipsHide);
+            });
+        }
+
+        function toolTipsShow(evt) {
+            const tooltips = document.querySelector(".tool-tips");
+            const text = evt.currentTarget.getAttribute("data-title");
+            const body = tooltips.querySelector(".body");
+            const width = body.offsetWidth;
+
+            tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
+            body.innerHTML = text;
+
+            tooltips.classList.add("show");
+        }
+
+        function toolTipsHide() {
+            const tooltips = document.querySelector(".tool-tips");
+            tooltips.classList.remove("show");
+            tooltips.querySelector(".body").innerHTML = "";
+        }
+
+        function toolTipsMove(evt) {
+            const tooltips = document.querySelector(".tool-tips");
+            const body = tooltips.querySelector(".body");
+            const width = body.offsetWidth;
+
+            tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
         }
     </script>
 {% endblock %}
