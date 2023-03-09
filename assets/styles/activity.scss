@@ -136,14 +136,16 @@
 
                                 .completed {
                                     border-radius: .5em;
-                                    display: none;
+                                    display: flex;
                                     font-size: .75em;
                                     font-weight: 400;
                                     margin-left: auto;
+                                    opacity: 0;
                                     padding: 0 1em;
+                                    transition: opacity .300s ease-in-out;
 
                                     &.visible {
-                                        display: flex;
+                                        opacity: 1;
                                     }
                                 }
                             }
