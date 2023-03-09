@@ -371,10 +371,13 @@
                 }
 
                 const block = input.closest(".activity-of-the-day").querySelector(blockSelector);
-                if (goal) {
-                    block.querySelector(".completed").classList.add("visible");
-                } else {
-                    block.querySelector(".completed").classList.remove("visible");
+                const completed = block.querySelector(".completed"); // null pour steps et distance
+                if (completed) {
+                    if (goal) {
+                        completed.classList.add("visible");
+                    } else {
+                        completed.classList.remove("visible");
+                    }
                 }
             }
             xhr.open("GET", "{{ path('app_activity_save_data', {id: activity.id}) }}" + "?day=" + day + "&name=" + name + "&value=" + value);
@@ -395,10 +398,10 @@
             const tooltips = document.querySelector(".tool-tips");
             const text = evt.currentTarget.getAttribute("data-title");
             const body = tooltips.querySelector(".body");
-            const width = body.offsetWidth;
-
-            tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
             body.innerHTML = text;
+
+            const width = body.offsetWidth;
+            tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
 
             tooltips.classList.add("show");
         }
@@ -406,7 +409,9 @@
         function toolTipsHide() {
             const tooltips = document.querySelector(".tool-tips");
             tooltips.classList.remove("show");
-            tooltips.querySelector(".body").innerHTML = "";
+            setTimeout(() => {
+                tooltips.querySelector(".body").innerHTML = "";
+            }, 500);
         }
 
         function toolTipsMove(evt) {
