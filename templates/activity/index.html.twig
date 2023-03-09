@@ -148,7 +148,10 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        const initialDate = new Date();
         let letterRatios = [];
+
+        console.log({initialDate})
 
         window.addEventListener("DOMContentLoaded", () => {
 
@@ -158,6 +161,7 @@
             initStandUp();
             initInputs();
             initToolTips();
+            initDateChange();
 
             setTimeout(() => {
                 document.querySelector(".header").setAttribute("style", "background-color: transparent");
@@ -218,6 +222,18 @@
                 part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * letterRatios[n++]) + "deg);");
             })
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+        }
+
+        function initDateChange() {
+            setInterval(checkNewDate, 60000);
+        }
+
+        function checkNewDate() {
+            const date = new Date();
+
+            if (date.getDate() !== initialDate.getDate()) {
+                window.location.reload();
+            }
         }
 
         function setProgress(circles) {

@@ -99,11 +99,45 @@
                     border-radius: 1em;
                     gap: 1em;
                     padding: 1em 2em;
-                    transition: background-color 2s ease-in-out;
+                    transition: background-color 1s ease-in-out;
                     width: 100%;
+
+                    &:hover {
+                        background-color: var(--gradient-ardoise-40);
+                    }
 
                     &.three-rings {
                         background-color: var(--gradient-green-30-alpha-50);
+
+                        &:hover {
+                            background-color: var(--gradient-green-30);
+                            .activity-of-the-day {
+                                .move {
+                                    .block-body {
+                                        .details {
+                                            .detail {
+                                                &:nth-child(2 of .detail) {
+                                                    background-color: var(--gradient-green-40);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .activity-of-the-day {
+                            .move {
+                                .block-body {
+                                    .details {
+                                        .detail {
+                                            &:nth-child(2 of .detail) {
+                                                background-color: var(--gradient-green-30);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     .date {
@@ -156,6 +190,7 @@
                                 font-size: 1em;
                                 font-weight: 300;
                                 gap: 1em;
+                                width: 100%;
 
                                 .details {
                                     @include flex-col(flex-start, flex-start);
@@ -174,7 +209,11 @@
 
                                         // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
                                         &:nth-child(2 of .detail) {
-                                            border-bottom: 1px solid var(--gradient-ardoise-100);
+                                            border-radius: .25em;
+                                            padding: .125em .5em;
+                                            background-color: var(--gradient-ardoise-40);
+                                            margin-left: -.5em;
+                                            transition: background-color 1s ease-in-out;
                                         }
                                     }
                                 }
