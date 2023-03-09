@@ -409,9 +409,7 @@
         function toolTipsHide() {
             const tooltips = document.querySelector(".tool-tips");
             tooltips.classList.remove("show");
-            setTimeout(() => {
-                tooltips.querySelector(".body").innerHTML = "";
-            }, 500);
+            tooltips.querySelector(".body").innerHTML = "";
         }
 
         function toolTipsMove(evt) {
