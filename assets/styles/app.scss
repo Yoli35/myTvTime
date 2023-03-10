@@ -303,6 +303,10 @@ main {
     width: 100%;
 }
 
+.container-fluid {
+    padding: 1em 0;
+}
+
 @media (min-width: 576px) {
     .container {
         //max-width: 540px;
@@ -317,11 +321,15 @@ main {
     }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
     .container {
         max-width: 1024px;
         padding-left: unset;
         padding-right: unset;
+    }
+    .container-fluid {
+        padding-left: 1em;
+        padding-right: 1em;
     }
 }
 

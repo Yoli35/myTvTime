@@ -3,7 +3,7 @@
 {% block title %}{{ 'Activity'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container-fluid">
 
         {{ include('blocks/_mainMenu.html.twig') }}
 
@@ -91,11 +91,11 @@
                                                     </div>
                                                     <div class="detail">
                                                         <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
-                                                            {{ 'Steps'|trans }} : <span>{{ day.steps }}</span>
+                                                            {{ 'Steps'|trans }}&nbsp;: <span>{{ day.steps }}</span>
                                                             <input type="number" name="steps" value="{{ day.steps }}"/>
                                                         </div>
                                                         <div class="distance" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
-                                                            {{ 'Distance'|trans }} : <span>{{ day.distance }}</span>km
+                                                            {{ 'Distance'|trans }}&nbsp;: <span>{{ day.distance }}</span>km
                                                             <input type="number" name="distance" value="{{ day.distance }}"/>
                                                         </div>
                                                     </div>

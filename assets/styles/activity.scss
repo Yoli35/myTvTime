@@ -111,6 +111,7 @@
 
                         &:hover {
                             background-color: var(--gradient-green-30);
+
                             .activity-of-the-day {
                                 .move {
                                     .block-body {
@@ -125,6 +126,7 @@
                                 }
                             }
                         }
+
                         .activity-of-the-day {
                             .move {
                                 .block-body {
@@ -206,15 +208,6 @@
                                             font-size: 1em;
                                             font-weight: 400;
                                         }
-
-                                        // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
-                                        &:nth-child(2 of .detail) {
-                                            border-radius: .25em;
-                                            padding: .125em .5em;
-                                            background-color: var(--gradient-ardoise-40);
-                                            margin-left: -.5em;
-                                            transition: background-color 1s ease-in-out;
-                                        }
                                     }
                                 }
                             }
@@ -290,6 +283,22 @@
                             }
 
                             .block-body {
+
+                                .details {
+                                    .detail {
+                                        // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
+                                        //&:nth-child(2 of .detail) {
+                                        &:nth-child(2) {
+                                            border-radius: .25em;
+                                            flex-direction: column;
+                                            gap: 0;
+                                            padding: .125em .5em;
+                                            background-color: var(--gradient-ardoise-40);
+                                            margin-left: -.5em;
+                                            transition: background-color 1s ease-in-out;
+                                        }
+                                    }
+                                }
                                 .result, .steps, .distance {
                                     position: relative;
 
@@ -492,5 +501,32 @@
         translate: 0 -.55em;
         width: 1em;
         z-index: 1;
+    }
+}
+
+@media (min-width: 1600px) {
+    main {
+        .recent-activity {
+            .days {
+                .day {
+                    .activity-of-the-day {
+                        .move, {
+                            .block-body {
+                                .details {
+                                    .detail {
+                                        // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
+                                        //&:nth-child(2 of .detail) {
+                                        &:nth-child(2) {
+                                            flex-direction: row !important;
+                                            gap: .75em !important;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
