@@ -261,6 +261,7 @@
         }
 
         function setProgressAll(circles) {
+            const y = {'stand-up': -18, 'exercice': -36, 'move': -54};
             circles.forEach(circle => {
 
                 const elements = document.querySelectorAll(".progress." + circle);
@@ -269,12 +270,20 @@
 
                     const value = element.getAttribute("data-percent");
                     const arc = element.querySelector(".circle");
-                    const start = element.querySelector(".circle-start");
-                    const end = element.querySelector(".circle-end");
-                    const style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-grey-10) " + value + "%);";
+                    let start = element.querySelector(".circle-start");
+                    let end = element.querySelector(".circle-end");
+                    let style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-grey-10) " + value + "%);";
                     arc.setAttribute("style", style);
                     start.setAttribute("style", "translate: 0 -27px;");
                     end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-27px) rotate(45deg)");
+
+                    const ring = element.closest(".day").querySelector(".rings").querySelector(".circle." + circle + "-ring");
+                    start = ring.querySelector(":scope > div.circle-start");
+                    end = ring.querySelector(":scope > div.circle-end");
+                    style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--activity-" + circle + "-fade) " + value + "%);";
+                    ring.setAttribute("style", style);
+                    start.setAttribute("style", "translate: 0 " + y[circle] + "px;");
+                    end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(" + y[circle] + "px) rotate(45deg)");
                 });
 
             });
@@ -296,8 +305,8 @@
                 end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-27px) rotate(45deg)");
 
                 const ring = day.querySelector(".rings").querySelector(".circle." + circle + "-ring");
-                start = ring.querySelector("div.circle-start");
-                end = ring.querySelector("div.circle-end");
+                start = ring.querySelector(":scope > div.circle-start");
+                end = ring.querySelector(":scope > div.circle-end");
                 style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--activity-" + circle + "-fade) " + value + "%);";
                 ring.setAttribute("style", style);
                 start.setAttribute("style", "translate: 0 " + y[circle] + "px;");
@@ -322,6 +331,7 @@
         function toggleUp(evt) {
             const up = evt.currentTarget;
             const hours = up.closest(".hours");
+            const dayDiv = hours.closest(".day");
             // const hoursNode = up.parentNode;
 
             const id = hours.getAttribute("data-id");
@@ -354,7 +364,7 @@
                 const progress = wrapper.closest(".activity-of-the-day").querySelector(".progress.stand-up");
                 progress.setAttribute("data-percent", percent);
                 progress.querySelector(".percentage").innerText = percent + '%';
-                setProgress(hours.closest(".day"), ["stand-up"]);
+                setProgress(dayDiv, ["stand-up"]);
 
                 const standUpRing = document.querySelector(".stand-up").querySelector(".completed");
                 if (standUpRingCompleted) {
