@@ -700,6 +700,11 @@ nav.active {
                         justify-content: center;
                         width: 2em;
                     }
+
+                    .icon:has(.fa-brands.fa-youtube),
+                    .icon:has(.fa-solid.fa-magnifying-glass) {
+                        color: var(--gradient-red-50);
+                    }
                 }
             }
         }

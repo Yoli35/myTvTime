@@ -150,6 +150,7 @@
     <script>
         const initialDate = new Date();
         let letterRatios = [];
+        let editing = false;
 
         console.log({initialDate})
 
@@ -350,29 +351,50 @@
             inputContainers.forEach(container => {
                 const inputs = container.querySelectorAll("div > input");
                 inputs.forEach(input => {
+                    const card = input.closest(".block-body").parentElement;
                     const div = input.parentElement;
-                    div.addEventListener("click", () => {
+                    div.addEventListener("click", (evt) => {
+                        editing = true;
+                        evt.preventDefault();
+                        evt.stopPropagation();
                         document.querySelector(".tool-tips").classList.add("masked");
                         input.classList.add("visible");
                         input.focus();
+                        card.addEventListener("click", (evt) => {
+                            finishEditing(evt, input, card, true);
+                        });
                     });
                     input.addEventListener("keydown", (evt) => {
                         if (evt.key === "Enter" || evt.key === "Tab") {
-                            saveInput(input);
-                            document.querySelector(".tool-tips").classList.remove("masked");
-                            evt.preventDefault();
+                            finishEditing(evt, input, card, true);
                         }
                         if (evt.key === "Escape") {
-                            input.classList.remove("visible");
-                            document.querySelector(".tool-tips").classList.remove("masked");
-                            evt.preventDefault();
+                            finishEditing(evt, input, card, false);
                         }
                     });
                 });
             });
         }
 
+        function finishEditing(evt, input, card, save) {
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            card.removeEventListener("click", () => {
+                finishEditing(evt, input, card, true);
+            });
+
+            if (save && editing) {
+                editing = false;
+                saveInput(input);
+            }
+
+            input.classList.remove("visible");
+            document.querySelector(".tool-tips").classList.remove("masked");
+        }
+
         function saveInput(input) {
+
             const name = input.getAttribute("name");
             const value = input.value;
             const parent = input.parentElement;
@@ -383,7 +405,6 @@
                 let {success, goal, blockSelector, percent, circleSelector} = JSON.parse(this.response);
                 if (!success) return;
 
-                input.classList.remove("visible");
                 parent.querySelector("span").innerText = value;
 
                 const progress = parent.closest(".activity-of-the-day").querySelector(".progress." + circleSelector);
