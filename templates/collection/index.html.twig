@@ -9,7 +9,7 @@
         <div class="my-collections-page">
 
             {{ include('blocks/_nav.html.twig', {thisPage: 'My Collections'|trans}) }}
-            {{ include('blocks/source/_button.html.twig') }}
+{#            {{ include('blocks/source/_button.html.twig') }}#}
 
             <main>
                 <a href="{{ path('app_collection_new') }}">
@@ -66,7 +66,7 @@
         </div>
     </dialog>
 
-    {{ show_source_code(_self) }}
+{#    {{ show_source_code(_self) }}#}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

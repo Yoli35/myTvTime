@@ -11,7 +11,7 @@
         </div>
 
         {{ include('blocks/_nav.html.twig', {thisPage: 'Home'|trans, user: app.user}) }}
-        {{ include('blocks/source/_button.html.twig') }}
+{#        {{ include('blocks/source/_button.html.twig') }}#}
 
         <main>
             {% for list in lists %}
@@ -61,7 +61,7 @@
 
     </div>
 
-    {{ show_source_code(_self) }}
+{#    {{ show_source_code(_self) }}#}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
