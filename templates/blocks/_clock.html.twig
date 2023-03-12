@@ -46,11 +46,14 @@
         createClock();
         setDate();
         clockInterval = setInterval(setDate, 100);
+        setTimeout(() => {clock.classList.add('fade');}, 1000);
 
         function setDate() {
             const now = new Date();
 
             const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
 
             if (seconds === currentSeconds) {
                 return;
@@ -61,15 +64,13 @@
             // secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
             // secondHand.style.transition = (seconds === 0 && milliseconds < 100) ? 'none' : 'all 0.2s linear';
             // secondHand.style.backgroundColor = (Math.floor(secondsDegrees) % 30) ? 'hsl(45, 90%, 50%)' : 'hsl(0, 90%, 50%)';
-            const secondsDegrees = (seconds * 6);
+            const secondsDegrees = ((hours * 3600) + (minutes * 360) + seconds * 6);
             secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
-            secondHand.style.backgroundColor = (Math.floor(secondsDegrees) % 30) ? 'hsl(45, 90%, 50%)' : 'hsl(0, 90%, 50%)';
+            secondHand.style.backgroundColor = /*(Math.floor(secondsDegrees) % 30) ? 'hsl(45, 90%, 50%)' :*/ 'hsl(0, 90%, 50%)';
 
-            const minutes = now.getMinutes();
             const minutesDegrees = (minutes * 6) + (seconds / 10);
             minuteHand.style.transform = `translate(-50%, -100%) rotate(${minutesDegrees}deg)`;
 
-            const hours = now.getHours();
             const hoursDegrees = (hours * 30) + (minutes / 2) + (seconds / 120);
             hourHand.style.transform = `translate(-50%, -100%) rotate(${hoursDegrees}deg)`;
 

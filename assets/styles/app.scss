@@ -950,9 +950,15 @@ nav.active {
     @include flex-row();
     height: 200px;
     left: 1em; //4em;
+    opacity: 0;
     position: absolute;
     top: 1em; //clamp(1em, .25vw, 4em);
+    transition: opacity 1s ease-in-out;
     width: 200px;
+
+    &.fade {
+        opacity: 1;
+    }
 
     .face {
         backdrop-filter: blur(6px);
@@ -1100,7 +1106,7 @@ nav.active {
             position: absolute;
             top: 50%;
             transform-origin: 50% 100%;
-            //transition: transform 1s linear;
+            transition: transform 1s linear;
 
             &.hour {
                 background-color: var(--gradient-ardoise-20);
