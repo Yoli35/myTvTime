@@ -21,7 +21,6 @@ use App\Repository\SerieCastRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
-use App\Repository\TimeShiftedNetworkRepository;
 use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
@@ -53,8 +52,6 @@ class SerieController extends AbstractController
     const ON_THE_AIR = 'on_the_air';
     const SEARCH = 'search';
 
-    private array $timeShiftedNetworks;
-
     public function __construct(private readonly CastRepository               $castRepository,
                                 private readonly EpisodeViewingRepository     $episodeViewingRepository,
                                 private readonly FavoriteRepository           $favoriteRepository,
@@ -64,14 +61,9 @@ class SerieController extends AbstractController
                                 private readonly SerieCastRepository          $serieCastRepository,
                                 private readonly SerieRepository              $serieRepository,
                                 private readonly SerieViewingRepository       $serieViewingRepository,
-                                private readonly TimeShiftedNetworkRepository $timeShiftedNetworkRepository,
                                 private readonly TMDBService                  $TMDBService,
                                 private readonly TranslatorInterface          $translator)
     {
-        $timeShiftedNetworks = $this->timeShiftedNetworkRepository->findAll();
-        $this->timeShiftedNetworks = array_map(function ($timeShiftedNetwork) {
-            return [$timeShiftedNetwork->getNetworkId() => $timeShiftedNetwork->getName()];
-        }, $timeShiftedNetworks);
     }
 
     #[Route('/', name: 'app_serie_index', methods: ['GET'])]
@@ -180,7 +172,6 @@ class SerieController extends AbstractController
             return $serie;
         }
         $viewing = $serie['viewing'];
-        $networks = $serie['networks'];
         $findIt = false;
         /** @var SerieViewing $viewing */
         foreach ($viewing->getSeasons() as $season) {
@@ -193,19 +184,8 @@ class SerieController extends AbstractController
                 }
                 if ($episode->getAirDate()) {
                     $date = $episode->getAirDate();
-                    $isTimeShifted = $viewing->isTimeShifted();
-                    if (!$isTimeShifted) {
-                        foreach ($networks as $network) {
-                            $n = [$network['networkId'] => $network['name']];
-                            if (in_array($n, $this->timeShiftedNetworks)) {
-                                $isTimeShifted = true;
-                                $viewing->setTimeShifted(true);
-                                $this->serieViewingRepository->save($viewing, true);
-                                break;
-                            }
-                        }
-                    }
-                    if ($isTimeShifted) {
+
+                    if ($viewing->isTimeShifted()) {
                         $date = $date->modify('+1 day');
                     }
                     $episodeDiff = date_diff($now, $date);
@@ -441,16 +421,6 @@ class SerieController extends AbstractController
         foreach ($theseDaysSeries as $serie) {
             $viewing = $serie['serieArray']['serieViewing'];
             $isTimeShifted = $viewing->isTimeShifted();
-            if (!$isTimeShifted) {
-                foreach ($serie['networks'] as $network) {
-                    if (in_array($network, $this->timeShiftedNetworks)) {
-                        $isTimeShifted = true;
-                        $viewing->setTimeShifted(true);
-                        $this->serieViewingRepository->save($viewing, true);
-                        break;
-                    }
-                }
-            }
 
             if ($isTimeShifted && !date_diff($serie['serieArray']['seasonArray']['air_date'], $theDayBefore)->days) {
                 $todaySeries[] = $serie;
@@ -1239,19 +1209,7 @@ class SerieController extends AbstractController
 
             if ($serieViewing->isTimeShifted()) {
                 $airDate = $airDate->modify('+1 day');
-            } else {
-
-                $networks = array_map(function ($network) use ($tvNetworks) {
-                    return $tvNetworks ? [$network['id'] => $network['name']] : [$network['networkId'] => $network['name']];
-                }, $networks);
-                foreach ($networks as $network) {
-                    if (in_array($network, $this->timeShiftedNetworks)) {
-                        $airDate = $airDate->modify('+1 day');
-                        break;
-                    }
-                }
             }
-
             $now = new \DateTimeImmutable('now');
             $interval = date_diff($now, $airDate);
 
