@@ -1,13 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Activity{% endblock %}
+{% block title %}{{ 'Activity goals'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Activity</h1>
+    <div class="container">
 
-    {{ include('activity/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('blocks/_mainMenu.html.twig') }}
 
-    <a href="{{ path('app_activity_index') }}">back to list</a>
+        <div class="activity">
+            <div class="header">
+                <h1>{{ 'Activate Activity'|trans }}</h1>
+                <div class="backdrop"></div>
+                {{ include('blocks/_clock.html.twig') }}
+            </div>
 
-{#    {{ include('activity/_delete_form.html.twig') }}#}
+            {{ include('blocks/_nav.html.twig', {thisPage: 'Activity', user: app.user, from: 'home', style: 'width: 100%'}) }}
+
+            <main>
+
+                {{ include('blocks/activity/_form.html.twig') }}
+
+                <a href="{{ path('app_activity_index') }}" class="btn btn-primary">{{ 'back to activity'|trans }}</a>
+            </main>
+            {{ include('blocks/_pageFooter.html.twig') }}
+        </div>
+    </div>
 {% endblock %}
