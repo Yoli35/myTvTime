@@ -573,7 +573,7 @@
     left: 0;
     opacity: 0;
     position: absolute;
-    top: -4em;
+    top: -5em;
     transition: opacity .125s;
     z-index: 1000;
 
@@ -629,5 +629,11 @@
                 }
             }
         }
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .days {
+        color: var(--gradient-ardoise-90);
     }
 }
