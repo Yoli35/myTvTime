@@ -898,6 +898,7 @@ nav.active {
 }
 
 .home-header {
+    background-color: hsla(206deg, 50%, 95%, .2);
     background-image: url("../images/mytvtime-light.png");
     background-position: center center;
     background-size: cover;
@@ -907,6 +908,10 @@ nav.active {
     position: relative;
     transition: background-position 1s;
     width: 100%;
+
+    &:hover {
+        background-color: hsla(206deg, 50%, 75%, .4);
+    }
 
     .posters {
         @include flex-row();
@@ -1106,7 +1111,7 @@ nav.active {
             position: absolute;
             top: 50%;
             transform-origin: 50% 100%;
-            transition: transform 1s linear;
+            //transition: transform 1s linear;
 
             &.hour {
                 background-color: var(--gradient-ardoise-20);
@@ -1722,7 +1727,13 @@ nav.active {
     }
 
     .home-header {
+        background-color: hsla(206deg, 50%, 24%, .2);
         background-image: url("../images/mytvtime-dark.png");
+
+        &:hover {
+            background-color: hsl(206deg, 50%, 24%);
+        }
+
     }
 
     .genres {
