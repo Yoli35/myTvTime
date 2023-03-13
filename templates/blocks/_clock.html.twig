@@ -64,7 +64,7 @@
             // secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
             // secondHand.style.transition = (seconds === 0 && milliseconds < 100) ? 'none' : 'all 0.2s linear';
             // secondHand.style.backgroundColor = (Math.floor(secondsDegrees) % 30) ? 'hsl(45, 90%, 50%)' : 'hsl(0, 90%, 50%)';
-            const secondsDegrees = ((hours * 3600) + (minutes * 360) + seconds * 6);
+            const secondsDegrees = ((hours * 3600) + (minutes * 60) + seconds) * 6;
             secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
             secondHand.style.backgroundColor = /*(Math.floor(secondsDegrees) % 30) ? 'hsl(45, 90%, 50%)' :*/ 'hsl(0, 90%, 50%)';
 
