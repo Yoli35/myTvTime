@@ -280,7 +280,7 @@
                     const ring = element.closest(".day").querySelector(".rings").querySelector(".circle." + circle + "-ring");
                     start = ring.querySelector(":scope > div.circle-start");
                     end = ring.querySelector(":scope > div.circle-end");
-                    style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--activity-" + circle + "-fade) " + value + "%);";
+                    style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-ardoise-30) " + value + "%);";
                     ring.setAttribute("style", style);
                     start.setAttribute("style", "translate: 0 " + y[circle] + "px;");
                     end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(" + y[circle] + "px) rotate(45deg)");

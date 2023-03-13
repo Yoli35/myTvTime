@@ -482,6 +482,7 @@
                                 .percentage {
                                     @include flex-row(center, center);
                                     background-color: var(--gradient-ardoise-30-alpha-90);
+                                    border: 2px solid var(--gradient-ardoise-10);
                                     border-radius: 50%;
                                     color: var(--gradient-ardoise-80);
                                     height: 3em;
