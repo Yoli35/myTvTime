@@ -34,19 +34,37 @@
                                                     <div class="circle exercice-ring">
                                                         <div class="circle stand-up-ring">
                                                             <div class="center"></div>
-                                                            <div class="circle-start"></div>
-                                                            <div class="circle-end">
+                                                            <div class="circle-new-start">
+                                                                <div>
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="circle-new-end">
+                                                                <div>
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="circle-new-start">
+                                                            <div>
                                                                 <div></div>
                                                             </div>
                                                         </div>
-                                                        <div class="circle-start"></div>
-                                                        <div class="circle-end">
+                                                        <div class="circle-new-end">
+                                                            <div>
+                                                                <div></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="circle-new-start">
+                                                        <div>
                                                             <div></div>
                                                         </div>
                                                     </div>
-                                                    <div class="circle-start"></div>
-                                                    <div class="circle-end">
-                                                        <div></div>
+                                                    <div class="circle-new-end">
+                                                        <div>
+                                                            <div></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -278,12 +296,15 @@
                     end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-27px) rotate(45deg)");
 
                     const ring = element.closest(".day").querySelector(".rings").querySelector(".circle." + circle + "-ring");
-                    start = ring.querySelector(":scope > div.circle-start");
-                    end = ring.querySelector(":scope > div.circle-end");
-                    style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-ardoise-30) " + value + "%);";
+                    start = ring.querySelector(":scope > div.circle-new-start");
+                    end = ring.querySelector(":scope > div.circle-new-end");
+                    // style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-ardoise-30) " + value + "%);";
+                    style = "--" + circle + ": " + value + "%;";
                     ring.setAttribute("style", style);
-                    start.setAttribute("style", "translate: 0 " + y[circle] + "px;");
-                    end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(" + y[circle] + "px) rotate(45deg)");
+                    // start.setAttribute("style", "translate: 0 " + y[circle] + "px;");
+                    // end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(" + y[circle] + "px) rotate(45deg)");
+                    start.setAttribute("style", "display: " + ((value >= 100) ? "none" : "block"));
+                    end.setAttribute("style", "rotate: " + (value * 3.6) + "deg");
                 });
 
             });
@@ -305,12 +326,15 @@
                 end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-27px) rotate(45deg)");
 
                 const ring = day.querySelector(".rings").querySelector(".circle." + circle + "-ring");
-                start = ring.querySelector(":scope > div.circle-start");
-                end = ring.querySelector(":scope > div.circle-end");
-                style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--activity-" + circle + "-fade) " + value + "%);";
+                start = ring.querySelector(":scope > div.circle-new-start");
+                end = ring.querySelector(":scope > div.circle-new-end");
+                // style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-ardoise-30) " + value + "%);";
+                style = "--" + circle + ": " + value + "%;";
                 ring.setAttribute("style", style);
-                start.setAttribute("style", "translate: 0 " + y[circle] + "px;");
-                end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(" + y[circle] + "px) rotate(45deg)");
+                // start.setAttribute("style", "translate: 0 " + y[circle] + "px;");
+                // end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(" + y[circle] + "px) rotate(45deg)");
+                start.setAttribute("style", "display: " + ((value >= 100) ? "none" : "block"));
+                end.setAttribute("style", "rotate: " + (value * 3.6) + "deg");
             });
         }
 

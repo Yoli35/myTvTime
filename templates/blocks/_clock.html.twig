@@ -68,10 +68,10 @@
             secondHand.style.transform = `translate(-50%, -100%) rotate(${secondsDegrees}deg)`;
             secondHand.style.backgroundColor = /*(Math.floor(secondsDegrees) % 30) ? 'hsl(45, 90%, 50%)' :*/ 'hsl(0, 90%, 50%)';
 
-            const minutesDegrees = (minutes * 6) + (seconds / 10);
+            const minutesDegrees = ((hours * 60) + minutes + (seconds / 60)) * 6;
             minuteHand.style.transform = `translate(-50%, -100%) rotate(${minutesDegrees}deg)`;
 
-            const hoursDegrees = (hours * 30) + (minutes / 2) + (seconds / 120);
+            const hoursDegrees = (hours + (minutes / 60) + (seconds / 3600)) * 30;
             hourHand.style.transform = `translate(-50%, -100%) rotate(${hoursDegrees}deg)`;
 
             time.innerHTML = now.toLocaleTimeString();
