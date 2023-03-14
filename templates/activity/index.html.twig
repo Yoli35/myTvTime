@@ -68,7 +68,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="drawn-rings">
+                                            {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
+                                            {% set percentExercice = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
+                                            {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                            <div class="drawn-rings" data-move="{{ percentMove }}" data-exercice="{{ percentExercice }}" data-stand-up="{{ percentStandUp }}">
                                                 <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37% -37%;"></canvas>
                                             </div>
                                         </div>
@@ -203,7 +206,9 @@
             initHeader();
             initProgress();
             setProgressAll(["stand-up", "move", "exercice"]);
-            drawRings("rings-13", 126, 150, 125);
+            setTimeout(() => {
+                ringsOfTheDay();
+            }, 2000);
             initThreeRings();
             initStandUp();
             initInputs();
@@ -596,6 +601,19 @@
             tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
         }
 
+        function ringsOfTheDay() {
+            const ringsOfTheDays = document.querySelectorAll(".rings-of-the-day");
+
+            ringsOfTheDays.forEach(ringsOfTheDay => {
+                const drawnRings = ringsOfTheDay.querySelector(".drawn-rings");
+                const move = drawnRings.getAttribute("data-move");
+                const exercice = drawnRings.getAttribute("data-exercice");
+                const standUp = drawnRings.getAttribute("data-stand-up");
+                const id = drawnRings.querySelector("canvas").getAttribute("id");
+                drawRings(id, move, exercice, standUp);
+            });
+        }
+
         function drawRings(canvasId, progressMove, progressExercice, progressStandUp) {
             const canvas = document.getElementById(canvasId);
             const context = canvas.getContext('2d');
@@ -627,7 +645,7 @@
                 } else {
                     clearInterval(interval);
                 }
-            }, 2000 / (progress-progressStart));
+            }, 2000 / (progress - progressStart));
         }
 
         function drawRing(context, x, y, radius, thickness, stroke, color, progress) {
