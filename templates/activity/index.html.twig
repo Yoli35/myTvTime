@@ -203,7 +203,7 @@
             initHeader();
             initProgress();
             setProgressAll(["stand-up", "move", "exercice"]);
-            drawRings("rings-13", 80, 60, 75);
+            drawRings("rings-13", 126, 150, 125);
             initThreeRings();
             initStandUp();
             initInputs();
@@ -600,7 +600,7 @@
             const canvas = document.getElementById(canvasId);
             const context = canvas.getContext('2d');
             const PIx2 = Math.PI * 2;
-            const thickness = 18;
+            const thickness = 16;
             const scale = canvas.width / 128;
             const x = canvas.width / 2;
             const y = canvas.height / 2;
@@ -611,15 +611,17 @@
             context.fillStyle = '#0F1924';
             context.fill();
 
-            drawRing(context, x, y, scale * 53, scale * thickness, '#F00', progressMove);
-            drawRing(context, x, y, scale * 33, scale * thickness, '#B7FF00', progressExercice);
-            drawRing(context, x, y, scale * 13, scale * thickness, '#00D6BD', progressStandUp);
+            drawRing(context, x, y, scale * 54, scale * thickness, scale * 2, '#F00', progressMove);
+            drawRing(context, x, y, scale * 36, scale * thickness, scale * 2, '#B7FF00', progressExercice);
+            drawRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp);
         }
 
-        function drawRing(context, x, y, radius, thickness, color, progress) {
+        function drawRing(context, x, y, radius, thickness, stroke, color, progress) {
             const PIx2 = Math.PI * 2;
             const offset = PIx2 / -4;
             const endAngle = (PIx2 * progress / 100);
+            const endX = x + (radius * Math.sin(endAngle));
+            const endY = y - (radius * Math.cos(endAngle));
 
             context.beginPath();
             context.arc(x, y - radius, thickness / 2, 0, PIx2, false);
@@ -627,14 +629,20 @@
             context.fill();
 
             context.beginPath();
-            context.arc(x + (radius * Math.sin(endAngle)), y - (radius * Math.cos(endAngle)), thickness / 2, 0, PIx2, false);
+            context.arc(x, y, radius, offset, offset + (PIx2 * progress / 100), false);
+            context.lineWidth = thickness;
+            context.strokeStyle = color;
+            context.stroke();
+
+            context.beginPath();
+            context.arc(endX, endY, thickness / 2, 0, PIx2, false);
             context.fillStyle = color;
             context.fill();
 
             context.beginPath();
-            context.arc(x, y, radius, offset, offset + (PIx2 * progress / 100), false);
-            context.lineWidth = thickness;
-            context.strokeStyle = color;
+            context.arc(endX, endY, (thickness + stroke) / 2, offset + (PIx2 * progress / 100), -offset + (PIx2 * progress / 100), false);
+            context.lineWidth = stroke;
+            context.strokeStyle = '#0F1924';
             context.stroke();
         }
 
