@@ -172,11 +172,13 @@
                         width: 100%;
 
                         .rings-of-the-day {
-                            @include flex-col();
+                            @include flex-row();
                             background-color: var(--gradient-ardoise-20-alpha-50);
                             border-radius: 1em;
                             aspect-ratio: 1;
+                            gap: 1em;
                             height: 10em;
+                            padding: 0 1em;
 
                             .rings {
                                 @include flex-row();
@@ -243,7 +245,6 @@
                                         background: conic-gradient(var(--activity-move) 0%, var(--activity-move) var(--move), var(--gradient-ardoise-30) var(--move), var(--gradient-ardoise-30) 100%);
                                         border: 2px solid var(--gradient-ardoise-10);
                                         height: 128px;
-                                        transition: --move 2s ease-in-out;
                                         width: 128px;
 
                                         .circle-new-start, .circle-new-end {
@@ -259,13 +260,16 @@
                                         }
                                     }
 
+                                    &.move-fluid {
+                                        transition: --move 2s ease-in-out;
+                                    }
+
                                     &.exercice-ring {
                                         --exercice: 0%;
                                         //background-color: var(--activity-exercice);
                                         background: conic-gradient(var(--activity-exercice) 0%, var(--activity-exercice) var(--exercice), var(--gradient-ardoise-30) var(--exercice), var(--gradient-ardoise-30) 100%);
                                         border: 2px solid var(--gradient-ardoise-10);
                                         height: 92px;
-                                        transition: --exercice 2s ease-in-out;
                                         width: 92px;
 
                                         .circle-new-start, .circle-new-end {
@@ -281,13 +285,16 @@
                                         }
                                     }
 
+                                    &.exercice-fluid {
+                                        transition: --exercice 2s ease-in-out;
+                                    }
+
                                     &.stand-up-ring {
                                         --stand-up: 0%;
                                         //background-color: var(--activity-stand-up);
                                         background: conic-gradient(var(--activity-stand-up) 0%, var(--activity-stand-up) var(--stand-up), var(--gradient-ardoise-30) var(--stand-up), var(--gradient-ardoise-30) 100%);
                                         border: 2px solid var(--gradient-ardoise-10);
                                         height: 56px;
-                                        transition: --stand-up 2s ease-in-out;
                                         width: 56px;
 
                                         .circle-new-start, .circle-new-end {
@@ -302,7 +309,16 @@
                                             }
                                         }
                                     }
+
+                                    &.stand-up-fluid {
+                                        transition: --stand-up 2s ease-in-out;
+                                    }
                                 }
+                            }
+
+                            .drawn-rings {
+                                height: 8em;
+                                width: 8em;
                             }
                         }
 

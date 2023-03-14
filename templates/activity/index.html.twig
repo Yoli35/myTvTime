@@ -68,6 +68,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="drawn-rings">
+                                                <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37% -37%;"></canvas>
+                                            </div>
                                         </div>
                                         <div class="stand-up">
                                             <div class="block-header">
@@ -198,7 +201,9 @@
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
+            initProgress();
             setProgressAll(["stand-up", "move", "exercice"]);
+            drawRings("rings-13", 80, 60, 75);
             initThreeRings();
             initStandUp();
             initInputs();
@@ -276,6 +281,40 @@
             if (date.getDate() !== initialDate.getDate()) {
                 window.location.reload();
             }
+        }
+
+        function initProgress() {
+            if (typeof window.CSS.registerProperty === "function") {
+                window.CSS.registerProperty({
+                    name: "--move",
+                    syntax: "<percentage>",
+                    inherits: false,
+                    initialValue: '0%'
+                });
+                window.CSS.registerProperty({
+                    name: "--exercice",
+                    syntax: "<percentage>",
+                    inherits: false,
+                    initialValue: '0%'
+                });
+                window.CSS.registerProperty({
+                    name: "--stand-up",
+                    syntax: "<percentage>",
+                    inherits: false,
+                    initialValue: '0%'
+                });
+            }
+
+            const ringsOfTheDays = document.querySelectorAll(".rings-of-the-day");
+
+            ringsOfTheDays.forEach(ringOfTheDay => {
+                const moveRing = ringOfTheDay.querySelector(".circle.move-ring");
+                const exerciceRing = ringOfTheDay.querySelector(".circle.exercice-ring");
+                const standUpRing = ringOfTheDay.querySelector(".circle.stand-up-ring");
+                moveRing.classList.add("move-fluid");
+                exerciceRing.classList.add("exercice-fluid");
+                standUpRing.classList.add("stand-up-fluid");
+            });
         }
 
         function setProgressAll(circles) {
@@ -556,5 +595,48 @@
 
             tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
         }
+
+        function drawRings(canvasId, progressMove, progressExercice, progressStandUp) {
+            const canvas = document.getElementById(canvasId);
+            const context = canvas.getContext('2d');
+            const PIx2 = Math.PI * 2;
+            const thickness = 18;
+            const scale = canvas.width / 128;
+            const x = canvas.width / 2;
+            const y = canvas.height / 2;
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.beginPath();
+            context.arc(x, y, scale * 64, 0, PIx2, false);
+            context.fillStyle = '#0F1924';
+            context.fill();
+
+            drawRing(context, x, y, scale * 53, scale * thickness, '#F00', progressMove);
+            drawRing(context, x, y, scale * 33, scale * thickness, '#B7FF00', progressExercice);
+            drawRing(context, x, y, scale * 13, scale * thickness, '#00D6BD', progressStandUp);
+        }
+
+        function drawRing(context, x, y, radius, thickness, color, progress) {
+            const PIx2 = Math.PI * 2;
+            const offset = PIx2 / -4;
+            const endAngle = (PIx2 * progress / 100);
+
+            context.beginPath();
+            context.arc(x, y - radius, thickness / 2, 0, PIx2, false);
+            context.fillStyle = color;
+            context.fill();
+
+            context.beginPath();
+            context.arc(x + (radius * Math.sin(endAngle)), y - (radius * Math.cos(endAngle)), thickness / 2, 0, PIx2, false);
+            context.fillStyle = color;
+            context.fill();
+
+            context.beginPath();
+            context.arc(x, y, radius, offset, offset + (PIx2 * progress / 100), false);
+            context.lineWidth = thickness;
+            context.strokeStyle = color;
+            context.stroke();
+        }
+
     </script>
 {% endblock %}
