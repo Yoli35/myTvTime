@@ -611,9 +611,23 @@
             context.fillStyle = '#0F1924';
             context.fill();
 
-            drawRing(context, x, y, scale * 54, scale * thickness, scale * 2, '#F00', progressMove);
-            drawRing(context, x, y, scale * 36, scale * thickness, scale * 2, '#B7FF00', progressExercice);
-            drawRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp);
+            let incMove = 0, incExercice = 0, incStandUp = 0;
+
+            animeRing(context, x, y, scale * 54, scale * thickness, scale * 2, '#F00', progressMove, incMove);
+            animeRing(context, x, y, scale * 36, scale * thickness, scale * 2, '#B7FF00', progressExercice, incExercice);
+            animeRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp, incStandUp);
+        }
+
+        function animeRing(context, x, y, radius, thickness, stroke, color, progress, progressStart = 0) {
+            let inc = progressStart;
+            const interval = setInterval(() => {
+                if (inc <= progress) {
+                    drawRing(context, x, y, radius, thickness, stroke, color, inc);
+                    inc += 1;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 2000 / (progress-progressStart));
         }
 
         function drawRing(context, x, y, radius, thickness, stroke, color, progress) {
