@@ -168,7 +168,7 @@
                                                 <div class="details">
                                                     <div class="detail">
                                                         <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
-                                                            <span>{{ day.exerciceResult }}</span> {{ 'minutes'|trans }}
+                                                            <span>{{ day.exerciceResult }}</span> {{ day.exerciceResult>1?'minutes'|trans:'minute'|trans }}
                                                             <input type="number" name="exerciceResult" value="{{ day.exerciceResult }}"/>
                                                         </div>
                                                         /
@@ -198,6 +198,7 @@
         const initialDate = new Date();
         let letterRatios = [];
         let editing = false;
+        const PIx2 = Math.PI * 2;
 
         console.log({initialDate})
 
@@ -434,6 +435,9 @@
                 progress.querySelector(".percentage").innerText = percent + '%';
                 setProgress(dayDiv, ["stand-up"]);
 
+                const canvasId = wrapper.closest(".day").querySelector("canvas").getAttribute("id");
+                updateRings(canvasId, 2, "stand-up", percent);
+
                 const standUpRing = document.querySelector(".stand-up").querySelector(".completed");
                 if (standUpRingCompleted) {
                     standUpRing.classList.add("visible");
@@ -540,6 +544,13 @@
                     setProgress(input.closest(".day"), [circleSelector]);
                 }
 
+                if (circleSelector === "exercice" || circleSelector === "move") {
+                    const canvasId = input.closest(".day").querySelector("canvas").getAttribute("id");
+                    const ringIndex = circleSelector === "exercice" ? 1 : 0
+                    updateRings(canvasId, ringIndex, circleSelector, percent);
+                }
+
+
                 const block = input.closest(".activity-of-the-day").querySelector(blockSelector);
                 const completed = block.querySelector(".completed"); // null pour steps et distance
                 if (completed) {
@@ -617,11 +628,35 @@
         function drawRings(canvasId, progressMove, progressExercice, progressStandUp) {
             const canvas = document.getElementById(canvasId);
             const context = canvas.getContext('2d');
-            const PIx2 = Math.PI * 2;
             const thickness = 16;
             const scale = canvas.width / 128;
             const x = canvas.width / 2;
             const y = canvas.height / 2;
+
+            drawBaseRings(canvas, context, x, y, thickness, scale);
+
+            animeRing(context, x, y, scale * 54, scale * thickness, scale * 2, '#F00', progressMove, 0);
+            animeRing(context, x, y, scale * 36, scale * thickness, scale * 2, '#B7FF00', progressExercice, 0);
+            animeRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp, 0);
+        }
+
+        function updateRings(canvasId, ringIndex, ringName, progressTo) {
+            const canvas = document.getElementById(canvasId);
+            const canvasParent = canvas.parentElement;
+            const progressFrom = parseInt(canvasParent.getAttribute("data-" + ringName));
+            const context = canvas.getContext('2d');
+            const thickness = 16;
+            const scale = canvas.width / 128;
+            const x = canvas.width / 2;
+            const y = canvas.height / 2;
+            const colors = ['#F00', '#B7FF00', '#00D6BD'];
+            const radius = [scale * 54, scale * 36, scale * 18];
+
+            canvasParent.setAttribute("data-" + ringName, progressTo);
+            animeRing(context, x, y, radius[ringIndex], scale * thickness, scale * 2, colors[ringIndex], progressTo, progressFrom);
+        }
+
+        function drawBaseRings(canvas, context, x, y, thickness, scale) {
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.beginPath();
@@ -629,27 +664,62 @@
             context.fillStyle = '#0F1924';
             context.fill();
 
-            let incMove = 0, incExercice = 0, incStandUp = 0;
+            context.beginPath();
+            context.arc(x, y, scale * 54, 0, PIx2, false);
+            context.lineWidth = scale * thickness;
+            context.strokeStyle = '#2C4A6D';
+            context.stroke();
 
-            animeRing(context, x, y, scale * 54, scale * thickness, scale * 2, '#F00', progressMove, incMove);
-            animeRing(context, x, y, scale * 36, scale * thickness, scale * 2, '#B7FF00', progressExercice, incExercice);
-            animeRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp, incStandUp);
+            context.beginPath();
+            context.arc(x, y, scale * 36, 0, PIx2, false);
+            context.lineWidth = scale * thickness;
+            context.strokeStyle = '#2C4A6D';
+            context.stroke();
+
+            context.beginPath();
+            context.arc(x, y, scale * 18, 0, PIx2, false);
+            context.lineWidth = scale * thickness;
+            context.strokeStyle = '#2C4A6D';
+            context.stroke();
         }
 
         function animeRing(context, x, y, radius, thickness, stroke, color, progress, progressStart = 0) {
             let inc = progressStart;
-            const interval = setInterval(() => {
-                if (inc <= progress) {
-                    drawRing(context, x, y, radius, thickness, stroke, color, inc);
-                    inc += 1;
-                } else {
-                    clearInterval(interval);
-                }
-            }, 2000 / (progress - progressStart));
+            let way = progressStart < progress ? 1 : -1;
+            if (way === 1) {
+                const interval = setInterval(() => {
+                    if (inc <= progress) {
+                        clearRing(context, x, y, radius, thickness);
+                        drawRing(context, x, y, radius, thickness, stroke, color, inc);
+                        inc += .5;
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 5);
+                // }, 2000 / (progress - progressStart));
+            } else {
+                const interval = setInterval(() => {
+                    if (inc >= progress) {
+                        clearRing(context, x, y, radius, thickness);
+                        drawRing(context, x, y, radius, thickness, stroke, color, inc);
+                        inc -= .5;
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 5);
+                // }, 2000 / (progressStart - progress));
+            }
+        }
+
+        function clearRing(context, x, y, radius, thickness) {
+            context.beginPath();
+            context.arc(x, y, radius, 0, PIx2, false);
+            context.lineWidth = thickness;
+            context.strokeStyle = "#2C4A6D";
+            context.stroke();
         }
 
         function drawRing(context, x, y, radius, thickness, stroke, color, progress) {
-            const PIx2 = Math.PI * 2;
             const offset = PIx2 / -4;
             const endAngle = (PIx2 * progress / 100);
             const endX = x + (radius * Math.sin(endAngle));
