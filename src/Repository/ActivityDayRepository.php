@@ -30,6 +30,11 @@ class ActivityDayRepository extends ServiceEntityRepository
         }
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function remove(ActivityDay $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);

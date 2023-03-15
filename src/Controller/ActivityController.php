@@ -52,9 +52,30 @@ class ActivityController extends AbstractController
 //            return $b->getDay() <=> $a->getDay();
 //        });
 
+//      Ajout du numéro de semaine
+//      --------------------------
+//        foreach ($days as $day) {
+//            $day->setWeek($day->getDay()->format('W'));
+//            $this->activityDayRepository->save($day, false);
+//        }
+//        $this->activityDayRepository->flush();
+
+        $currentWeek = $days[0]->getWeek();
+        $currentYear = $days[0]->getDay()->format('Y');
+        $weeks = [];
+
+        foreach ($days as $day) {
+            $week = $day->getWeek();
+            $year = $day->getDay()->format('Y');
+            $weeks[$currentYear - $year][$currentWeek - $week][] = $day;
+        }
+        dump($weeks);
+
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
             'days' => $days,
+            'years' => $weeks,
+            'currentWeek' => $currentWeek,
         ]);
     }
 
@@ -102,7 +123,6 @@ class ActivityController extends AbstractController
     #[Route('/{id}/edit', name: 'app_activity_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
-        dump($id);
         $activity = $this->activityRepository->find($id);
 
         $form = $this->createForm(ActivityType::class, $activity);

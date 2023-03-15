@@ -9,6 +9,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 #[ORM\Entity(repositoryClass: ActivityDayRepository::class)]
 #[ApiResource]
@@ -52,11 +53,22 @@ class ActivityDay
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?DateTimeInterface $day;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $week = null;
+
     public function __construct($activity)
     {
+        try {
+            $today = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+        } catch (Exception) {
+            $today = new DateTimeImmutable();
+        }
+        $today = $today->setTime(0, 0);
+
         $this->activity = $activity;
         $this->standUp = array_fill(0, 24, 0);
-        $this->day = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+        $this->day = $today;
+        $this->week = $today->format('W');
     }
 
     public function getId(): ?int
@@ -192,6 +204,18 @@ class ActivityDay
     public function setActivity(?Activity $activity): self
     {
         $this->activity = $activity;
+
+        return $this;
+    }
+
+    public function getWeek(): ?int
+    {
+        return $this->week;
+    }
+
+    public function setWeek(?int $week): self
+    {
+        $this->week = $week;
 
         return $this;
     }
