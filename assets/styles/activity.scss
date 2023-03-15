@@ -1,24 +1,6 @@
 @import "variables";
 
 
-@property --move {
-    syntax: "<percentage>";
-    initial-value: 0%;
-    inherits: no;
-}
-
-@property --exercice {
-    syntax: "<percentage>";
-    initial-value: 0%;
-    inherits: no;
-}
-
-@property --stand-up {
-    syntax: "<percentage>";
-    initial-value: 0%;
-    inherits: no;
-}
-
 .activity {
     @include flex-col(flex-start, center);
     padding-top: 1em;
@@ -179,142 +161,6 @@
                             gap: 1em;
                             height: 10em;
                             padding: 0 1em;
-
-                            .rings {
-                                @include flex-row();
-                                background-color: var(--gradient-ardoise-10);
-                                border-radius: 50%;
-                                height: 8em;
-                                width: 8em;
-
-                                .circle {
-                                    @include flex-row();
-                                    border-radius: 50%;
-                                    position: relative;
-
-                                    .center {
-                                        background-color: var(--gradient-ardoise-10);
-                                        border-radius: 50%;
-                                        height: 20px;
-                                        width: 20px;
-                                    }
-
-                                    .circle-new-start, .circle-new-end {
-                                        height: 64px;
-                                        left: 50%;
-                                        position: absolute;
-                                        top: -2px;
-                                        transform: translate(-50%, 0);
-                                        transform-origin: 0 64px;
-                                        transition: rotate 2s ease-in-out;
-                                        width: 20px;
-
-                                        > div {
-                                            background-color: transparent;
-                                            border-bottom: 2px solid transparent;
-                                            border-left: 2px solid transparent;
-                                            border-right: 2px solid var(--gradient-ardoise-10);
-                                            border-top: 2px solid var(--gradient-ardoise-10);
-                                            border-radius: 50%;
-                                            height: 20px;
-                                            width: 20px;
-
-                                            > div {
-                                                border-radius: 50%;
-                                                height: 100%;
-                                                width: 100%;
-                                            }
-                                        }
-                                    }
-
-                                    .circle-new-start {
-                                        > div {
-                                            transform: rotate(-135deg);
-                                        }
-                                    }
-
-                                    .circle-new-end {
-                                        > div {
-                                            transform: rotate(45deg);
-                                        }
-                                    }
-
-                                    &.move-ring {
-                                        --move: 0%;
-                                        //background-color: var(--activity-move);
-                                        background: conic-gradient(var(--activity-move) 0%, var(--activity-move) var(--move), var(--gradient-ardoise-30) var(--move), var(--gradient-ardoise-30) 100%);
-                                        border: 2px solid var(--gradient-ardoise-10);
-                                        height: 128px;
-                                        width: 128px;
-
-                                        .circle-new-start, .circle-new-end {
-                                            height: 64px;
-                                            top: -2px;
-                                            transform-origin: 0 64px;
-
-                                            > div {
-                                                > div {
-                                                    background-color: var(--activity-move);
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    &.move-fluid {
-                                        transition: --move 2s ease-in-out;
-                                    }
-
-                                    &.exercice-ring {
-                                        --exercice: 0%;
-                                        //background-color: var(--activity-exercice);
-                                        background: conic-gradient(var(--activity-exercice) 0%, var(--activity-exercice) var(--exercice), var(--gradient-ardoise-30) var(--exercice), var(--gradient-ardoise-30) 100%);
-                                        border: 2px solid var(--gradient-ardoise-10);
-                                        height: 92px;
-                                        width: 92px;
-
-                                        .circle-new-start, .circle-new-end {
-                                            height: 46px;
-                                            top: -2px;
-                                            transform-origin: 0 46px;
-
-                                            > div {
-                                                > div {
-                                                    background-color: var(--activity-exercice);
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    &.exercice-fluid {
-                                        transition: --exercice 2s ease-in-out;
-                                    }
-
-                                    &.stand-up-ring {
-                                        --stand-up: 0%;
-                                        //background-color: var(--activity-stand-up);
-                                        background: conic-gradient(var(--activity-stand-up) 0%, var(--activity-stand-up) var(--stand-up), var(--gradient-ardoise-30) var(--stand-up), var(--gradient-ardoise-30) 100%);
-                                        border: 2px solid var(--gradient-ardoise-10);
-                                        height: 56px;
-                                        width: 56px;
-
-                                        .circle-new-start, .circle-new-end {
-                                            height: 28px;
-                                            top: -2px;
-                                            transform-origin: 0 28px;
-
-                                            > div {
-                                                > div {
-                                                    background-color: var(--activity-stand-up);
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    &.stand-up-fluid {
-                                        transition: --stand-up 2s ease-in-out;
-                                    }
-                                }
-                            }
 
                             .drawn-rings {
                                 height: 8em;
@@ -628,6 +474,70 @@
                                     > div {
                                         background-color: var(--activity-exercice);
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .week {
+            @include flex-col(start, start);
+            width: 100%;
+
+            .days {
+                @include flex-row(start, space-evenly);
+                background-color: var(--gradient-ardoise-40-alpha-50);
+                border-radius: 1em;
+                padding: 1em;
+                width: 100%;
+
+                &:hover {
+                    background-color: var(--gradient-ardoise-40);
+                }
+
+                &.seven-rings {
+                    background-color: var(--gradient-green-30-alpha-50);
+
+                    &:hover {
+                        background-color: var(--gradient-green-30);
+                    }
+                }
+
+                .day {
+                    .rings-of-the-day {
+                        @include flex-col();
+                        gap: 1em;
+
+                        .drawn-rings {
+                            height: 8em;
+                            width: 8em;
+                        }
+
+                        .date {
+                            font-weight: 400;
+                        }
+
+                        .values {
+                            @include flex-row();
+                            background-color: var(--gradient-ardoise-10);
+                            border-radius: .25em;
+                            font-weight: 400;
+                            gap: .5em;
+                            padding: .5em 1em;
+
+                            .value {
+                                &:nth-child(1) {
+                                    color: var(--activity-move);
+                                }
+
+                                &:nth-child(2) {
+                                    color: var(--activity-exercice);
+                                }
+
+                                &:nth-child(3) {
+                                    color: var(--activity-stand-up);
                                 }
                             }
                         }

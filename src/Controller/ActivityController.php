@@ -69,7 +69,6 @@ class ActivityController extends AbstractController
             $year = $day->getDay()->format('Y');
             $weeks[$currentYear - $year][$currentWeek - $week][] = $day;
         }
-        dump($weeks);
 
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,

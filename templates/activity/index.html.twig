@@ -21,131 +21,158 @@
                     <a href="{{ path('app_activity_new') }}" class="no-activity btn btn-primary">{{ 'Activate'|trans }}</a>
                 {% else %}
                     <a href="{{ path('app_activity_edit', {id: activity.id}) }}" class="activity-goals btn btn-primary">{{ 'Goals'|trans }}</a>
-                    <div class="recent-activity">
-                        <h2>{{ 'Recent activity'|trans }} : {{ 'Week'|trans }} {{ currentWeek }}</h2>
-                        <div class="days">
-
-                            {% for day in days %}
-                                {% if day.week == currentWeek %}
-                                <div class="day">
-                                    <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
-                                    <div class="activity-of-the-day">
-                                        <div class="rings-of-the-day">
-                                            {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
-                                            {% set percentExercice = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
-                                            {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
-                                            <div class="drawn-rings" data-move="{{ percentMove }}" data-exercice="{{ percentExercice }}" data-stand-up="{{ percentStandUp }}">
-                                                <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37% -37%;"></canvas>
-                                            </div>
-                                        </div>
-                                        <div class="stand-up">
-                                            <div class="block-header">
-                                                <div class="title">{{ 'Stand up'|trans }}</div>
-                                                <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
-                                            </div>
-                                            <div class="block-body">
-                                                {% set percent = (day.standUpResult / activity.standUpGoal * 100)|round %}
-                                                <div class="progress stand-up" data-percent="{{ percent }}">
-                                                    <div class="circle">
-                                                        <div class="percentage">{{ percent }}%</div>
-                                                    </div>
-                                                    <div class="circle-start"></div>
-                                                    <div class="circle-end">
-                                                        <div></div>
-                                                    </div>
-                                                </div>
-                                                <div class="details">
-                                                    <div class="detail">
-                                                        <div class="result">{{ day.standUpResult }}</div>
-                                                        /
-                                                        <div class="goal">{{ activity.standUpGoal }}</div>
-                                                    </div>
-                                                    <div class="wrapper">
-                                                        <div class="hours" data-id="{{ activity.id }}" data-day="{{ day.id }}">
-                                                            {{ include('blocks/activity/_standUp.html.twig', {ups: day.standUp}) }}
-                                                        </div>
-                                                        <div class="graduations">
-                                                            <div class="quarter">0</div>
-                                                            <div class="quarter">6</div>
-                                                            <div class="quarter">12</div>
-                                                            <div class="quarter">18</div>
+                    {% for year in years %}
+                        {% for week in year %}
+                            {% if week.0.week == currentWeek %}
+                                <div class="recent-activity">
+                                    <h2>{{ 'Recent activity'|trans }} : {{ 'Week'|trans }} {{ currentWeek }}</h2>
+                                    <div class="days">
+                                        {% for day in week %}
+                                            <div class="day">
+                                                <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
+                                                <div class="activity-of-the-day">
+                                                    <div class="rings-of-the-day">
+                                                        {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
+                                                        {% set percentExercice = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
+                                                        {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                                        <div class="drawn-rings" data-move="{{ percentMove }}" data-exercice="{{ percentExercice }}" data-stand-up="{{ percentStandUp }}">
+                                                            <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37% -37%;"></canvas>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="move">
-                                            <div class="block-header">
-                                                <div class="title">{{ 'Move'|trans }}</div>
-                                                <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
-                                            </div>
-                                            <div class="block-body">
-                                                {% set percent = (day.moveResult / activity.moveGoal * 100)|round %}
-                                                <div class="progress move" data-percent="{{ percent }}">
-                                                    <div class="circle">
-                                                        <div class="percentage">{{ percent }}%</div>
-                                                    </div>
-                                                    <div class="circle-start"></div>
-                                                    <div class="circle-end">
-                                                        <div></div>
-                                                    </div>
-                                                </div>
-                                                <div class="details">
-                                                    <div class="detail">
-                                                        <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
-                                                            <span>{{ day.moveResult }}</span> KCal
-                                                            <input type="number" name="moveResult" value="{{ day.moveResult }}"/>
+                                                    <div class="move">
+                                                        <div class="block-header">
+                                                            <div class="title">{{ 'Move'|trans }}</div>
+                                                            <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
                                                         </div>
-                                                        /
-                                                        <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.moveGoal }} KCal</div>
-                                                    </div>
-                                                    <div class="detail">
-                                                        <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
-                                                            {{ 'Steps'|trans }}&nbsp;: <span>{{ day.steps }}</span>
-                                                            <input type="number" name="steps" value="{{ day.steps }}"/>
+                                                        <div class="block-body">
+                                                            {% set percent = (day.moveResult / activity.moveGoal * 100)|round %}
+                                                            <div class="progress move" data-percent="{{ percent }}">
+                                                                <div class="circle">
+                                                                    <div class="percentage">{{ percent }}%</div>
+                                                                </div>
+                                                                <div class="circle-start"></div>
+                                                                <div class="circle-end">
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="details">
+                                                                <div class="detail">
+                                                                    <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+                                                                        <span>{{ day.moveResult }}</span> KCal
+                                                                        <input type="number" name="moveResult" value="{{ day.moveResult }}"/>
+                                                                    </div>
+                                                                    /
+                                                                    <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.moveGoal }} KCal</div>
+                                                                </div>
+                                                                <div class="detail">
+                                                                    <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+                                                                        {{ 'Steps'|trans }}&nbsp;: <span>{{ day.steps }}</span>
+                                                                        <input type="number" name="steps" value="{{ day.steps }}"/>
+                                                                    </div>
+                                                                    <div class="distance" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+                                                                        {{ 'Distance'|trans }}&nbsp;: <span>{{ day.distance }}</span>km
+                                                                        <input type="number" name="distance" value="{{ day.distance }}"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="distance" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
-                                                            {{ 'Distance'|trans }}&nbsp;: <span>{{ day.distance }}</span>km
-                                                            <input type="number" name="distance" value="{{ day.distance }}"/>
+                                                    </div>
+                                                    <div class="exercice">
+                                                        <div class="block-header">
+                                                            <div class="title">{{ 'Exercice'|trans }}</div>
+                                                            <div class="completed{% if day.isExerciceRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
+                                                        </div>
+                                                        <div class="block-body">
+                                                            {% set percent = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
+                                                            <div class="progress exercice" data-percent="{{ percent }}">
+                                                                <div class="circle">
+                                                                    <div class="percentage">{{ percent }}%</div>
+                                                                </div>
+                                                                <div class="circle-start"></div>
+                                                                <div class="circle-end">
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="details">
+                                                                <div class="detail">
+                                                                    <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+                                                                        <span>{{ day.exerciceResult }}</span> {{ day.exerciceResult>1?'minutes'|trans:'minute'|trans }}
+                                                                        <input type="number" name="exerciceResult" value="{{ day.exerciceResult }}"/>
+                                                                    </div>
+                                                                    /
+                                                                    <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="stand-up">
+                                                        <div class="block-header">
+                                                            <div class="title">{{ 'Stand up'|trans }}</div>
+                                                            <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
+                                                        </div>
+                                                        <div class="block-body">
+                                                            {% set percent = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                                            <div class="progress stand-up" data-percent="{{ percent }}">
+                                                                <div class="circle">
+                                                                    <div class="percentage">{{ percent }}%</div>
+                                                                </div>
+                                                                <div class="circle-start"></div>
+                                                                <div class="circle-end">
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="details">
+                                                                <div class="detail">
+                                                                    <div class="result">{{ day.standUpResult }}</div>
+                                                                    /
+                                                                    <div class="goal">{{ activity.standUpGoal }}</div>
+                                                                </div>
+                                                                <div class="wrapper">
+                                                                    <div class="hours" data-id="{{ activity.id }}" data-day="{{ day.id }}">
+                                                                        {{ include('blocks/activity/_standUp.html.twig', {ups: day.standUp}) }}
+                                                                    </div>
+                                                                    <div class="graduations">
+                                                                        <div class="quarter">0</div>
+                                                                        <div class="quarter">6</div>
+                                                                        <div class="quarter">12</div>
+                                                                        <div class="quarter">18</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="exercice">
-                                            <div class="block-header">
-                                                <div class="title">{{ 'Exercice'|trans }}</div>
-                                                <div class="completed{% if day.isExerciceRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
-                                            </div>
-                                            <div class="block-body">
-                                                {% set percent = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
-                                                <div class="progress exercice" data-percent="{{ percent }}">
-                                                    <div class="circle">
-                                                        <div class="percentage">{{ percent }}%</div>
-                                                    </div>
-                                                    <div class="circle-start"></div>
-                                                    <div class="circle-end">
-                                                        <div></div>
-                                                    </div>
-                                                </div>
-                                                <div class="details">
-                                                    <div class="detail">
-                                                        <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
-                                                            <span>{{ day.exerciceResult }}</span> {{ day.exerciceResult>1?'minutes'|trans:'minute'|trans }}
-                                                            <input type="number" name="exerciceResult" value="{{ day.exerciceResult }}"/>
-                                                        </div>
-                                                        /
-                                                        <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+                            {% else %}
+                                <div class="week">
+                                    <h2>{{ 'Activity of week'|trans }} {{ week.0.week }}</h2>
+                                    <div class="days">
+                                        {% for day in week|reverse %}
+                                            <div class="day">
+                                                {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
+                                                {% set percentExercice = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
+                                                {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                                <div class="rings-of-the-day">
+                                                    <div class="drawn-rings" data-move="{{ percentMove }}" data-exercice="{{ percentExercice }}" data-stand-up="{{ percentStandUp }}">
+                                                        <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37% -37%;"></canvas>
+                                                    </div>
+                                                    <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
+                                                    <div class="values">
+                                                        <div class="value">{{ day.moveResult }}</div>
+                                                        <div class="value">{{ day.exerciceResult }}</div>
+                                                        <div class="value">{{ day.standUpResult }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
                 {% endif %}
             </main>
             {{ include('blocks/_pageFooter.html.twig') }}
@@ -167,7 +194,8 @@
         window.addEventListener("DOMContentLoaded", () => {
 
             initHeader();
-                ringsOfTheDay();
+            setProgressAll(["stand-up", "move", "exercice"]);
+            ringsOfTheDay();
             initThreeRings();
             initStandUp();
             initInputs();
@@ -247,6 +275,36 @@
             }
         }
 
+        function setProgressAll(circles) {
+            circles.forEach(circle => {
+                const elements = document.querySelectorAll(".progress." + circle);
+                elements.forEach(element => {
+                    const value = element.getAttribute("data-percent");
+                    const arc = element.querySelector(".circle");
+                    let start = element.querySelector(".circle-start");
+                    let end = element.querySelector(".circle-end");
+                    let style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-grey-10) " + value + "%);";
+                    arc.setAttribute("style", style);
+                    start.setAttribute("style", "translate: 0 -27px;");
+                    end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-27px) rotate(45deg)");
+                });
+            });
+        }
+
+        function setProgress(day, circles) {
+            circles.forEach(circle => {
+                const element = day.querySelector(".progress." + circle);
+                const value = element.getAttribute("data-percent");
+                const arc = element.querySelector(".circle");
+                let start = element.querySelector(".circle-start");
+                let end = element.querySelector(".circle-end");
+                let style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-grey-10) " + value + "%);";
+                arc.setAttribute("style", style);
+                start.setAttribute("style", "translate: 0 -27px;");
+                end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-27px) rotate(45deg)");
+            });
+        }
+
         function initThreeRings() {
             const days = document.querySelectorAll(".day");
             days.forEach(day => {
@@ -264,6 +322,7 @@
         function toggleUp(evt) {
             const up = evt.currentTarget;
             const hours = up.closest(".hours");
+            const dayDiv = hours.closest(".day");
 
             const id = hours.getAttribute("data-id");
             const day = hours.getAttribute("data-day");
@@ -291,6 +350,11 @@
                 wrapper.insertBefore(hoursDiv, oldHoursDiv);
                 wrapper.removeChild(oldHoursDiv);
                 initStandUp();
+
+                const progress = wrapper.closest(".activity-of-the-day").querySelector(".progress.stand-up");
+                progress.setAttribute("data-percent", percent);
+                progress.querySelector(".percentage").innerText = percent + '%';
+                setProgress(dayDiv, ["stand-up"]);
 
                 const canvasId = wrapper.closest(".day").querySelector("canvas").getAttribute("id");
                 updateRings(canvasId, 2, "stand-up", percent);
@@ -394,12 +458,18 @@
 
                 parent.querySelector("span").innerText = value;
 
+                const progress = parent.closest(".activity-of-the-day").querySelector(".progress." + circleSelector);
+                if (progress) {
+                    progress.setAttribute("data-percent", percent);
+                    progress.querySelector(".percentage").innerText = percent + '%';
+                    setProgress(input.closest(".day"), [circleSelector]);
+                }
+
                 if (circleSelector === "exercice" || circleSelector === "move") {
                     const canvasId = input.closest(".day").querySelector("canvas").getAttribute("id");
                     const ringIndex = circleSelector === "exercice" ? 1 : 0
                     updateRings(canvasId, ringIndex, circleSelector, percent);
                 }
-
 
                 const block = input.closest(".activity-of-the-day").querySelector(blockSelector);
                 const completed = block.querySelector(".completed"); // null pour steps et distance
