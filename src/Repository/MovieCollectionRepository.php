@@ -46,8 +46,8 @@ class MovieCollectionRepository extends ServiceEntityRepository
     public function getMoviesByReleaseDate($id, $order)
     {
         $sql = "SELECT t0.`id` AS `id`, t0.`movie_db_id` AS `movie_db_id`, t0.`title` AS `title`, t0.`poster_path` AS `poster_path`, t0.`overview_fr` AS `overview_fr`, t0.`overview_fr` AS `overview_fr`, t0.`overview_en` AS `overview_en`, t0.`overview_de` AS `overview_de`, t0.`overview_es` AS `overview_es` "
-            . "FROM `user_movie` t0 "
-            . "INNER JOIN `movie_collection_user_movie` t1 ON t0.`id` = t1.`user_movie_id` and t1.`movie_collection_id` = " . $id . " "
+            . "FROM `movie` t0 "
+            . "INNER JOIN `movie_collection_movie` t1 ON t0.`id` = t1.`movie_id` and t1.`movie_collection_id` = " . $id . " "
             . "ORDER BY t0.`release_date` " . $order;
 
         $em = $this->registry->getManager();
