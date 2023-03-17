@@ -1985,13 +1985,14 @@
 
                         .new-season {
                             background-color: var(--gradient-mars-50);
-                            border-radius: .25em;
+                            border-radius: .25rem;
                             color: var(--gradient-ardoise-90);
+                            font-size: 1rem;
                             font-weight: 300;
                             leading-trim: both;
                             left: 50%;
-                            line-height: 1.5em;
-                            padding: .5em 1em;
+                            line-height: 1.5rem;
+                            padding: .5rem 1rem;
                             position: absolute;
                             text-edge: cap alphabetic;
                             top: 1em;

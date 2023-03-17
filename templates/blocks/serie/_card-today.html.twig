@@ -3,7 +3,11 @@
         <div>
             <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ todayAiring.serie.posterPath }}" alt="{{ 'Poster' }}">
             {% if todayAiring.serieArray.seasonArray.episode_number == 1 %}
-                <div class="new-season">{{ 'New season'|trans }}</div>
+                {% if todayAiring.serieArray.season_number == 1 %}
+                    <div class="new-season">{{ 'Premiere'|trans }}</div>
+                {% else %}
+                    <div class="new-season">{{ 'New season'|trans }}</div>
+                {% endif %}
             {% endif %}
         </div>
         <div class="title">
