@@ -368,32 +368,6 @@
             }
             xhr.open("GET", "{{ path('app_activity_stand_up_toggle', {id: activity.id}) }}" + "?day=" + day + "&up=" + index + "&val=" + (1 - value));
             xhr.send();
-            /*
-                    const hour = up.getAttribute("data-hour");
-                    const day = up.getAttribute("data-day");
-                    const url = "{# { path('activity_stand_up') } #}";
-                    const data = new FormData();
-                    data.append("hour", hour);
-                    data.append("day", day);
-                    fetch(url, {
-                        method: "POST",
-                        body: data
-                    }).then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                    }).then(data => {
-                        if (data.success) {
-                            const element = document.querySelector(".stand-up .hour[data-hour='" + hour + "'][data-day='" + day + "']");
-                            element.classList.add("done");
-                            element.querySelector(".result").innerText = data.result;
-                            element.querySelector(".goal").innerText = data.goal;
-                            const percent = (data.result / data.goal * 100)|round;
-                            element.querySelector(".progress").setAttribute("data-percent", percent);
-                            setProgress(["stand-up"]);
-                        }
-                    });
-*/
         }
 
         function initInputs() {
