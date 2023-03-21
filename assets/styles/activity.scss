@@ -1,5 +1,16 @@
 @import "variables";
 
+header:before {
+    content: "";
+    background-color: #288690;
+    height: 70px;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
+}
 
 .activity {
     @include flex-col(flex-start, center);
@@ -487,9 +498,10 @@
             width: 100%;
 
             .days {
-                @include flex-row(start, space-evenly);
+                @include flex-row(stretch, space-evenly);
                 background-color: var(--gradient-ardoise-40-alpha-50);
                 border-radius: 1em;
+                height: 16em;
                 padding: 1em;
                 width: 100%;
 
@@ -506,6 +518,8 @@
                 }
 
                 .day {
+                    height: 100%;
+
                     .rings-of-the-day {
                         @include flex-col();
                         gap: 1em;
@@ -541,6 +555,12 @@
                                 }
                             }
                         }
+                    }
+
+                    .no-data {
+                        @include flex-col(center, center);
+                        height: 100%;
+                        width: 8.5em;
                     }
                 }
             }

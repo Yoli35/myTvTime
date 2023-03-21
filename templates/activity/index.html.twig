@@ -3,6 +3,7 @@
 {% block title %}{{ 'Activity'|trans }}{% endblock %}
 
 {% block body %}
+    <header><div>Activity</div></header>
     <div class="container-fluid">
 
         {{ include('blocks/_mainMenu.html.twig') }}
@@ -152,20 +153,26 @@
                                     <div class="days">
                                         {% for day in week|reverse %}
                                             <div class="day">
-                                                {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
-                                                {% set percentExercice = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
-                                                {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
-                                                <div class="rings-of-the-day">
-                                                    <div class="drawn-rings" data-move="{{ percentMove }}" data-exercice="{{ percentExercice }}" data-stand-up="{{ percentStandUp }}">
-                                                        <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37% -37%;"></canvas>
+                                                {% if day is not null %}
+                                                    <div class="rings-of-the-day">
+                                                        {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
+                                                        {% set percentExercice = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
+                                                        {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                                        <div class="drawn-rings" data-move="{{ percentMove }}" data-exercice="{{ percentExercice }}" data-stand-up="{{ percentStandUp }}">
+                                                            <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37% -37%;"></canvas>
+                                                        </div>
+                                                        <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
+                                                        <div class="values">
+                                                            <div class="value">{{ day.moveResult }}</div>
+                                                            <div class="value">{{ day.exerciceResult }}</div>
+                                                            <div class="value">{{ day.standUpResult }}</div>
+                                                        </div>
                                                     </div>
-                                                    <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
-                                                    <div class="values">
-                                                        <div class="value">{{ day.moveResult }}</div>
-                                                        <div class="value">{{ day.exerciceResult }}</div>
-                                                        <div class="value">{{ day.standUpResult }}</div>
+                                                {% else %}
+                                                    <div class="no-data">
+                                                        <div class="date">{{ 'No activity'|trans }}</div>
                                                     </div>
-                                                </div>
+                                                {% endif %}
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -511,11 +518,13 @@
 
             ringsOfTheDays.forEach(ringsOfTheDay => {
                 const drawnRings = ringsOfTheDay.querySelector(".drawn-rings");
-                const move = drawnRings.getAttribute("data-move");
-                const exercice = drawnRings.getAttribute("data-exercice");
-                const standUp = drawnRings.getAttribute("data-stand-up");
-                const id = drawnRings.querySelector("canvas").getAttribute("id");
-                drawRings(id, move, exercice, standUp);
+                if (drawnRings) {
+                    const move = drawnRings.getAttribute("data-move");
+                    const exercice = drawnRings.getAttribute("data-exercice");
+                    const standUp = drawnRings.getAttribute("data-stand-up");
+                    const id = drawnRings.querySelector("canvas").getAttribute("id");
+                    drawRings(id, move, exercice, standUp);
+                }
             });
         }
 

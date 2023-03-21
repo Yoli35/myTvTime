@@ -23,7 +23,8 @@
 
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/tiktok.js"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {

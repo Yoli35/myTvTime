@@ -20,7 +20,8 @@
         </footer>
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             document.querySelector("#movie_collection_save").innerHTML = "{{ "Update the collection"|trans }}";

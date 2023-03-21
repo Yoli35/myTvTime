@@ -23,7 +23,8 @@
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/event.js"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {

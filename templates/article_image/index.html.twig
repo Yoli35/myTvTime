@@ -93,7 +93,8 @@
         </div>
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         window.addEventListener("DOMContentLoaded", () => {
 

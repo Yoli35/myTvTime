@@ -35,7 +35,8 @@
         </div>
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             document.querySelector("#registration_form_email").focus();

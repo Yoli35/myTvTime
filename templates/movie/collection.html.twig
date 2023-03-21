@@ -85,7 +85,8 @@
     </div>
 {% endblock %}
 
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/movie.js"></script>
     <script>
         const paths = [

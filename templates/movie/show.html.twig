@@ -343,7 +343,8 @@
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
-{% block morejs %}
+{% block javascripts %}
+    {{ parent() }}
     <script src="/js/movie.js"></script>
     <script src="/js/diaporama.js"></script>
     <script>

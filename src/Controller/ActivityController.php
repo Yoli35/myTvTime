@@ -62,18 +62,31 @@ class ActivityController extends AbstractController
 
         $currentWeek = $days[0]->getWeek();
         $currentYear = $days[0]->getDay()->format('Y');
-        $weeks = [];
+        $years = [];
 
         foreach ($days as $day) {
             $week = $day->getWeek();
             $year = $day->getDay()->format('Y');
-            $weeks[$currentYear - $year][$currentWeek - $week][] = $day;
+            $years[$currentYear - $year][$currentWeek - $week][] = $day;
+        }
+//        dump($years);
+        $yearIndex = count($years) - 1;
+        $weekIndex = count($years[$yearIndex]) - 1;
+        if ($weekIndex) {
+            $firstWeekDayCount = count($years[$yearIndex][$weekIndex]);
+//            dump($firstWeekDayCount);
+            if ($firstWeekDayCount < 7) {
+                $years[$yearIndex][$weekIndex] = array_merge($years[$yearIndex][$weekIndex], array_fill(0, 7 - $firstWeekDayCount, null));
+//                dump($years[$yearIndex][$weekIndex]);
+//                dump($years[$yearIndex]);
+//                dump($years);
+            }
         }
 
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
             'days' => $days,
-            'years' => $weeks,
+            'years' => $years,
             'currentWeek' => $currentWeek,
         ]);
     }

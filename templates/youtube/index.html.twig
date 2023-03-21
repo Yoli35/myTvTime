@@ -1,46 +1,13 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/styles/youtube.css">
+{% endblock %}
 
 {% block title %}myTvTime ▶ ︎Youtube{% endblock %}
 {% set user = app.user %}
 
 {% block body %}
-    <style>
-        @media (min-width: 768px) {
-            .container {
-                max-width: 720px;
-            }
-        }
-
-        @media (min-width: 1016px) {
-            .container {
-                max-width: 1016px;
-            }
-        }
-
-        @media (min-width: 1352px) {
-            .container {
-                max-width: 1352px;
-            }
-        }
-
-        @media (min-width: 1688px) {
-            .container {
-                max-width: 1688px;
-            }
-        }
-
-        @media (min-width: 2024px) {
-            .container {
-                max-width: 2024px;
-            }
-        }
-
-        @media (min-width: 2360px) {
-            .container {
-                max-width: 2360px;
-            }
-        }
-    </style>
     <div class="container">
 
         {{ include('blocks/_mainMenu.html.twig') }}
