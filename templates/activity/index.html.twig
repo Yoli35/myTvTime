@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 {% set user = app.user %}
+{% block themecolor %}
+    <meta name="theme-color" content="#142C3D" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#F6EAE4" media="(prefers-color-scheme: light)">
+{% endblock %}
 {% block title %}{{ 'Activity'|trans }}{% endblock %}
 
 {% block body %}
-    <header><div>Activity</div></header>
     <div class="container-fluid">
 
         {{ include('blocks/_mainMenu.html.twig') }}
@@ -28,6 +31,7 @@
                                 <div class="recent-activity">
                                     <h2>{{ 'Recent activity'|trans }} : {{ 'Week'|trans }} {{ currentWeek }}</h2>
                                     <div class="days">
+                                        {% set tab = 1 %}
                                         {% for day in week %}
                                             <div class="day">
                                                 <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
@@ -58,21 +62,27 @@
                                                             </div>
                                                             <div class="details">
                                                                 <div class="detail">
-                                                                    <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+                                                                    <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}"
+                                                                         data-title="{{ 'Click me to edit'|trans }}"
+                                                                         tabindex="{{ tab }}">{% set tab = tab + 1 %}
                                                                         <span>{{ day.moveResult }}</span> KCal
-                                                                        <input type="number" name="moveResult" value="{{ day.moveResult }}"/>
+                                                                        <label><input type="number" name="moveResult" value="{{ day.moveResult }}"/></label>
                                                                     </div>
                                                                     /
                                                                     <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.moveGoal }} KCal</div>
                                                                 </div>
                                                                 <div class="detail">
-                                                                    <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+                                                                    <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}"
+                                                                         data-title="{{ 'Click me to edit'|trans }}"
+                                                                         tabindex="{{ tab }}">{% set tab = tab + 1 %}
                                                                         {{ 'Steps'|trans }}&nbsp;: <span>{{ day.steps }}</span>
-                                                                        <input type="number" name="steps" value="{{ day.steps }}"/>
+                                                                        <label><input type="number" name="steps" value="{{ day.steps }}"/></label>
                                                                     </div>
-                                                                    <div class="distance" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+                                                                    <div class="distance" data-id="{{ activity.id }}" data-day="{{ day.id }}"
+                                                                         data-title="{{ 'Click me to edit'|trans }}"
+                                                                         tabindex="{{ tab }}">{% set tab = tab + 1 %}
                                                                         {{ 'Distance'|trans }}&nbsp;: <span>{{ day.distance }}</span>km
-                                                                        <input type="number" name="distance" value="{{ day.distance }}"/>
+                                                                        <label><input type="number" name="distance" value="{{ day.distance }}"/></label>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -96,9 +106,11 @@
                                                             </div>
                                                             <div class="details">
                                                                 <div class="detail">
-                                                                    <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+                                                                    <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}"
+                                                                         data-title="{{ 'Click me to edit'|trans }}"
+                                                                         tabindex="{{ tab }}">{% set tab = tab + 1 %}
                                                                         <span>{{ day.exerciceResult }}</span> {{ day.exerciceResult>1?'minutes'|trans:'minute'|trans }}
-                                                                        <input type="number" name="exerciceResult" value="{{ day.exerciceResult }}"/>
+                                                                        <label><input type="number" name="exerciceResult" value="{{ day.exerciceResult }}"/></label>
                                                                     </div>
                                                                     /
                                                                     <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.exerciceGoal }} {{ 'minutes'|trans }}</div>
@@ -159,7 +171,7 @@
                                                         {% set percentExercice = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
                                                         {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
                                                         <div class="drawn-rings" data-move="{{ percentMove }}" data-exercice="{{ percentExercice }}" data-stand-up="{{ percentStandUp }}">
-                                                            <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37% -37%;"></canvas>
+                                                            <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37.5% -37.5%;"></canvas>
                                                         </div>
                                                         <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
                                                         <div class="values">
@@ -381,39 +393,46 @@
             const inputContainers = document.querySelectorAll(".activity-of-the-day > .move, .activity-of-the-day > .exercice");
 
             inputContainers.forEach(container => {
-                const inputs = container.querySelectorAll("div > input");
+                const inputs = container.querySelectorAll("div > label > input");
                 inputs.forEach(input => {
                     const card = input.closest(".block-body").parentElement;
-                    const div = input.parentElement;
+                    const div = input.closest("div");
                     div.addEventListener("click", (evt) => {
-                        editing = true;
-                        evt.preventDefault();
-                        evt.stopPropagation();
-                        document.querySelector(".tool-tips").classList.add("masked");
-                        input.classList.add("visible");
-                        input.focus();
-                        card.addEventListener("click", (evt) => {
-                            finishEditing(evt, input, card, true);
-                        });
+                        startEditing(evt, div, input, card);
+                    });
+                    div.addEventListener("focusin", (evt) => {
+                        startEditing(evt, div, input, card);
                     });
                     input.addEventListener("keydown", (evt) => {
                         if (evt.key === "Enter" || evt.key === "Tab") {
-                            finishEditing(evt, input, card, true);
+                            finishEditing(evt, div, input, card, true);
                         }
                         if (evt.key === "Escape") {
-                            finishEditing(evt, input, card, false);
+                            finishEditing(evt, div, input, card, false);
                         }
                     });
                 });
             });
         }
 
-        function finishEditing(evt, input, card, save) {
+        function startEditing(evt, div, input, card) {
+            editing = true;
+            evt.preventDefault();
+            evt.stopPropagation();
+            document.querySelector(".tool-tips").classList.add("masked");
+            input.classList.add("visible");
+            input.focus();
+            card.addEventListener("click", (evt) => {
+                finishEditing(evt, div, input, card, true);
+            });
+        }
+
+        function finishEditing(evt, div, input, card, save) {
             evt.preventDefault();
             evt.stopPropagation();
 
             card.removeEventListener("click", () => {
-                finishEditing(evt, input, card, true);
+                finishEditing(evt, div, input, card, true);
             });
 
             if (save && editing) {
@@ -423,13 +442,14 @@
 
             input.classList.remove("visible");
             document.querySelector(".tool-tips").classList.remove("masked");
+            card.focus();
         }
 
         function saveInput(input) {
 
             const name = input.getAttribute("name");
             const value = input.value;
-            const parent = input.parentElement;
+            const parent = input.closest("div");
             const day = parent.getAttribute("data-day");
 
             const xhr = new XMLHttpRequest();

@@ -1,17 +1,5 @@
 @import "variables";
 
-header:before {
-    content: "";
-    background-color: #288690;
-    height: 70px;
-    width: 100%;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
-}
-
 .activity {
     @include flex-col(flex-start, center);
     padding-top: 1em;
@@ -20,7 +8,7 @@ header:before {
         @include animated-header("../images/activity-header.jpeg");
 
         .animated-h1 {
-            color: var(--gradient-ardoise-90);
+            color: var(--light-theme-text);
         }
 
         .clock {
@@ -634,7 +622,114 @@ header:before {
 }
 
 @media (prefers-color-scheme: light) {
-    .days {
-        color: var(--gradient-ardoise-90);
+
+    .activity {
+        .header {
+            //color: var(--gradient-ardoise-30);
+
+            .animated-h1 {
+                color: var(--light-theme-text);
+            }
+
+            .clock {
+                .face {
+                    .number {
+                        color: var(--light-theme-bg);
+                    }
+
+                    .unit {
+                        background-color: var(--light-theme-bg);
+                    }
+                }
+
+                .username, .time {
+                    color: var(--light-theme-text);
+                }
+
+                .date {
+                    background-color: transparent;
+                    color: var(--light-theme-text);
+                }
+
+                .hands {
+                    border: 1px solid var(--gradient-ardoise-100);
+                }
+            }
+        }
+
+        main {
+            .recent-activity {
+                .days {
+                    color: var(--light-theme-text);
+
+                    .day {
+                        background-color: var(--light-theme-button);
+
+                        &:hover {
+                            background-color: var(--light-theme-button-hover);
+                            color: var(--light-theme-bg);
+
+                            .activity-of-the-day {
+                                .stand-up {
+                                    .block-body {
+                                        .details {
+                                            .wrapper {
+                                                .graduations {
+                                                    .quarter {
+                                                        border-left: 1px solid var(--light-theme-bg);
+                                                        color: var(--light-theme-bg);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .activity-of-the-day {
+                            .move, .exercice, .stand-up {
+                                background-color: var(--gradient-grey-40-alpha-20);
+                            }
+
+                            .move {
+                                .block-body {
+                                    .details {
+                                        .detail:nth-child(2) {
+                                            background-color: var(--gradient-grey-40-alpha-20);
+                                        }
+                                    }
+                                }
+                            }
+
+                            .stand-up {
+                                .block-body {
+                                    .details {
+                                        .wrapper {
+                                            .graduations {
+                                                .quarter {
+                                                    border-left: 1px solid var(--light-theme-text);
+                                                    color: var(--light-theme-text);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .week {
+                .days {
+                    background-color: var(--light-theme-button);
+
+                    &:hover {
+                        background-color: var(--light-theme-button-hover);
+                    }
+                }
+            }
+        }
     }
 }

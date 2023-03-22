@@ -805,60 +805,60 @@ nav.active {
 
 @media (prefers-color-scheme: light) {
     .nav-breadcrumb {
-        background-color: hsla(120deg, 50%, 24%, .25);
+        background-color: var(--light-theme-button);
         //background-color: var(--gradient-ardoise-40-alpha-50);
         color: var(--gradient-ardoise-100);
         font-weight: bold;
 
         &:hover {
-            background-color: hsla(120deg, 20%, 44%, .5);
+            background-color: var(--light-theme-hover);
             //background-color: var(--gradient-ardoise-40);
         }
 
         a {
-            color: var(--gradient-ardoise-100);
+            color: var(--light-theme-text);
         }
 
         .breadcrumb {
 
             .breadcrumb-item {
                 span {
-                    color: var(--gradient-ardoise-100);
+                    color: var(--light-theme-text);
                     font-weight: 500;
                 }
 
                 &.active {
-                    color: var(--gradient-ardoise-100);
+                    color: var(--light-theme-text);
                 }
 
                 &:before {
-                    color: var(--gradient-ardoise-100);
+                    color: var(--light-theme-text);
                 }
 
             }
 
             .bracket {
-                color: var(--gradient-ardoise-100);
+                color: var(--light-theme-text);
             }
 
             .menu {
-                color: var(--gradient-ardoise-30);
+                color: var(--light-theme-text);
 
                 img {
-                    border: 2px solid var(--gradient-ardoise-100);
+                    border: 2px solid var(--light-theme-bg);
                 }
 
                 .menu-items {
-                    background-color: var(--gradient-ardoise-90);
+                    background-color: var(--light-theme-button);
 
                     .menu-item {
 
                         a {
-                            color: var(--gradient-ardoise-20);
+                            color: var(--light-theme-text);
 
                             &:hover {
-                                background-color: var(--gradient-ardoise-20);
-                                color: var(--gradient-ardoise-70);
+                                background-color: var(--light-theme-hover);
+                                color: var(--light-theme-bg);
                             }
                         }
                     }
@@ -1193,9 +1193,9 @@ nav.active {
 
 .home-footer {
     @include flex-100(center, space-evenly);
-    background-color: var(--gradient-ardoise-30-alpha-50);
+    background-color: var(--light-theme-button);
     border-radius: 1em;
-    color: var(--gradient-ardoise-80);
+    color: var(--light-theme-text);
     height: 3em;
     margin: auto 0 1em 0;
 
@@ -1209,11 +1209,10 @@ nav.active {
         padding-left: 3em;
     }
 
-    .contact-me {
         a {
-            color: var(--gradient-ardoise-90);
+            color: var(--light-theme-text);
         }
-    }
+
 
     .powered {
         background-image: url("../images/the-movie-db.svg");
@@ -1799,6 +1798,11 @@ nav.active {
                 }
             }
         }
+    }
+
+    .home-footer {
+        background-color: var(--gradient-ardoise-30-alpha-50);
+        color: var(--gradient-ardoise-80);
     }
 }
 
