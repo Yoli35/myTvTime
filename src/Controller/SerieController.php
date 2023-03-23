@@ -1400,8 +1400,6 @@ class SerieController extends AbstractController
     #[Route(path: '/viewing', name: 'app_serie_viewing')]
     public function setSerieViewing(Request $request, TranslatorInterface $translator): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $serieId = $request->query->getInt('id');
         $season = $request->query->getInt('s');
         $episode = $request->query->getInt('e');
