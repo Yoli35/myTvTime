@@ -990,7 +990,7 @@ nav.active {
         }
 
         .warning {
-            background: conic-gradient(hsla(0,0,0,0) 0%, hsla(0,0,0,0) 83%, var(--gradient-red-50-alpha-50) 83%, var(--gradient-red-50-alpha-50) 100%);
+            background: conic-gradient(hsla(0, 0, 0, 0) 0%, hsla(0, 0, 0, 0) 83%, var(--gradient-red-50-alpha-50) 83%, var(--gradient-red-50-alpha-50) 100%);
             border-radius: 50%;
             height: 148px;
             left: 50%;
@@ -1209,9 +1209,9 @@ nav.active {
         padding-left: 3em;
     }
 
-        a {
-            color: var(--light-theme-text);
-        }
+    a {
+        color: var(--light-theme-text);
+    }
 
 
     .powered {
@@ -1227,6 +1227,19 @@ nav.active {
         }
     }
 }
+
+@media (prefers-color-scheme: dark) {
+
+    .home-footer {
+        background-color: var(--gradient-ardoise-30-alpha-50);
+        color: var(--gradient-ardoise-80);
+
+        a {
+            color: var(--gradient-ardoise-80);
+        }
+    }
+}
+
 
 .home-list {
     @include flex-100(start, start);
