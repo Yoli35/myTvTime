@@ -105,7 +105,7 @@
                                                                     <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}"
                                                                          data-title="{{ 'Click me to edit'|trans }}"
                                                                          tabindex="{{ tab }}">{% set tab = tab + 1 %}
-                                                                        <span>{{ day.exerciceResult }}</span> {{ day.exerciceResult>1?'minutes'|trans:'minute'|trans }}
+                                                                        <span class="value">{{ day.exerciceResult }}</span> <span class="unit">{{ day.exerciceResult>1?'minutes'|trans:'minute'|trans }}</span>
                                                                         <label><input type="number" name="exerciceResult" value="{{ day.exerciceResult }}"/></label>
                                                                     </div>
                                                                     /
@@ -453,7 +453,12 @@
                 let {success, goal, blockSelector, percent, circleSelector} = JSON.parse(this.response);
                 if (!success) return;
 
-                parent.querySelector("span").innerText = value;
+                if (circleSelector === 'exercice') {
+                    parent.querySelector('span.value').innerText = value;
+                    parent.querySelector('span.unit').innerText = (value > 1 ? 'minutes' : 'minute');
+                } else {
+                    parent.querySelector("span").innerText = value;
+                }
 
                 const progress = parent.closest(".activity-of-the-day").querySelector(".progress." + circleSelector);
                 if (progress) {
