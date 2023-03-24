@@ -65,7 +65,7 @@
 
         .form {
             background-color: var(--gradient-ardoise-40-alpha-50);
-            border-radius: 1em;
+            border-radius: .25em;
             margin-bottom: 2em;
             padding: 2em;
 
@@ -96,9 +96,9 @@
                 .day {
                     @include flex-col(flex-start, center);
                     background-color: var(--gradient-ardoise-40-alpha-50);
-                    border-radius: 1em;
-                    gap: 1em;
-                    padding: 1em 2em;
+                    border-radius: .25em;
+                    gap: .5em;
+                    padding: 1em;
                     transition: background-color 1s ease-in-out;
                     width: 100%;
 
@@ -155,7 +155,7 @@
                         .rings-of-the-day {
                             @include flex-row();
                             background-color: var(--gradient-ardoise-20-alpha-50);
-                            border-radius: 1em;
+                            border-radius: .25em;
                             aspect-ratio: 1;
                             gap: 1em;
                             height: 10em;
@@ -170,7 +170,7 @@
                         .stand-up, .move, .exercice {
                             @include flex-col(flex-start, flex-start);
                             background-color: var(--gradient-ardoise-20-alpha-50);
-                            border-radius: 1em;
+                            border-radius: .25em;
                             font-size: 1em;
                             font-weight: 300;
                             gap: 1em;
@@ -187,7 +187,7 @@
                                 }
 
                                 .completed {
-                                    border-radius: .5em;
+                                    border-radius: .25em;
                                     display: flex;
                                     font-size: .75em;
                                     font-weight: 400;
@@ -488,8 +488,8 @@
             .days {
                 @include flex-row(stretch, space-evenly);
                 background-color: var(--gradient-ardoise-40-alpha-50);
-                border-radius: 1em;
-                height: 16em;
+                border-radius: .25em;
+                height: 14.5em;
                 padding: 1em;
                 width: 100%;
 
@@ -510,7 +510,7 @@
 
                     .rings-of-the-day {
                         @include flex-col();
-                        gap: 1em;
+                        gap: .25em;
 
                         .drawn-rings {
                             height: 8em;
