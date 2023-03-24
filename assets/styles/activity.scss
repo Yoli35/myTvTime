@@ -187,13 +187,13 @@
                                 }
 
                                 .completed {
-                                    border-radius: .25em;
-                                    display: flex;
-                                    font-size: .75em;
-                                    font-weight: 400;
+                                    //border-radius: .25em;
+                                    //display: flex;
+                                    font-size: 1.5em;
+                                    //font-weight: 400;
                                     margin-left: auto;
                                     opacity: 0;
-                                    padding: 0 1em;
+                                    //padding: 0 1em;
                                     transition: opacity .300s ease-in-out;
 
                                     &.visible {
@@ -231,9 +231,10 @@
                         .stand-up {
                             .block-header {
                                 .completed {
-                                    background-color: var(--activity-stand-up-fade);
-                                    border: 2px solid var(--activity-stand-up);
-                                    color: var(--activity-stand-up-hover);
+                                    //background-color: var(--activity-stand-up-fade);
+                                    //border: 2px solid var(--activity-stand-up);
+                                    //color: var(--activity-stand-up-hover);
+                                    color: var(--activity-stand-up);
                                 }
                             }
 
@@ -291,9 +292,10 @@
                         .move {
                             .block-header {
                                 .completed {
-                                    background-color: var(--activity-move-fade);
-                                    border: 2px solid var(--activity-move);
-                                    color: var(--activity-move-light);
+                                    //background-color: var(--activity-move-fade);
+                                    //border: 2px solid var(--activity-move);
+                                    //color: var(--activity-move-light);
+                                    color: var(--activity-move);
                                 }
                             }
 
@@ -344,8 +346,8 @@
                         .exercice {
                             .block-header {
                                 .completed {
-                                    background-color: var(--activity-exercice-fade);
-                                    border: 2px solid var(--activity-exercice);
+                                    //background-color: var(--activity-exercice-fade);
+                                    //border: 2px solid var(--activity-exercice);
                                     color: var(--activity-exercice);
                                 }
                             }

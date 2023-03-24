@@ -43,7 +43,8 @@
                                                     <div class="move">
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Move'|trans }}</div>
-                                                            <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
+                                                            <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}"><i class="fa-solid fa-circle-check"></i></div>
+{#                                                            <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>#}
                                                         </div>
                                                         <div class="block-body">
                                                             {% set percent = (day.moveResult / activity.moveGoal * 100)|round %}
@@ -87,7 +88,8 @@
                                                     <div class="exercice">
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Exercice'|trans }}</div>
-                                                            <div class="completed{% if day.isExerciceRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
+                                                            <div class="completed{% if day.isExerciceRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}"><i class="fa-solid fa-circle-check"></i></div>
+{#                                                            <div class="completed{% if day.isExerciceRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>#}
                                                         </div>
                                                         <div class="block-body">
                                                             {% set percent = (day.exerciceResult / activity.exerciceGoal * 100)|round %}
@@ -117,7 +119,8 @@
                                                     <div class="stand-up">
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Stand up'|trans }}</div>
-                                                            <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>
+                                                            <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}"><i class="fa-solid fa-circle-check"></i></div>
+{#                                                            <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>#}
                                                         </div>
                                                         <div class="block-body">
                                                             {% set percent = (day.standUpResult / activity.standUpGoal * 100)|round %}
