@@ -245,7 +245,7 @@
 
                                         .hours {
                                             @include flex-row(flex-start, center);
-                                            gap: 1px;
+                                            gap: 2px;
 
                                             .hour {
                                                 border-radius: 4px;

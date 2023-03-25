@@ -289,7 +289,7 @@
             const date = new Date();
 
             if (date.getDate() !== initialDate.getDate()) {
-                window.location.reload();
+                setTimeout(()=> { window.location.reload(); }, 2000);
             }
         }
 
