@@ -52,17 +52,17 @@ class SerieController extends AbstractController
     const ON_THE_AIR = 'on_the_air';
     const SEARCH = 'search';
 
-    public function __construct(private readonly CastRepository               $castRepository,
-                                private readonly EpisodeViewingRepository     $episodeViewingRepository,
-                                private readonly FavoriteRepository           $favoriteRepository,
-                                private readonly ImageConfiguration           $imageConfiguration,
-                                private readonly LogService                   $logService,
-                                private readonly SeasonViewingRepository      $seasonViewingRepository,
-                                private readonly SerieCastRepository          $serieCastRepository,
-                                private readonly SerieRepository              $serieRepository,
-                                private readonly SerieViewingRepository       $serieViewingRepository,
-                                private readonly TMDBService                  $TMDBService,
-                                private readonly TranslatorInterface          $translator)
+    public function __construct(private readonly CastRepository           $castRepository,
+                                private readonly EpisodeViewingRepository $episodeViewingRepository,
+                                private readonly FavoriteRepository       $favoriteRepository,
+                                private readonly ImageConfiguration       $imageConfiguration,
+                                private readonly LogService               $logService,
+                                private readonly SeasonViewingRepository  $seasonViewingRepository,
+                                private readonly SerieCastRepository      $serieCastRepository,
+                                private readonly SerieRepository          $serieRepository,
+                                private readonly SerieViewingRepository   $serieViewingRepository,
+                                private readonly TMDBService              $TMDBService,
+                                private readonly TranslatorInterface      $translator)
     {
     }
 
@@ -1093,6 +1093,16 @@ class SerieController extends AbstractController
                 foreach ($tv['seasons'] as $season) {
                     $seasonWithAView = $season;
                     $seasonWithAView['seasonViewing'] = $serieViewing->getSeasonByNumber($season['season_number']);
+
+                    if ($serieViewing->isTimeShifted()) {
+                        try {
+                            $airDate = new \DateTimeImmutable($season['air_date']);
+                            $airDate = $airDate->modify('+1 day');
+                            $seasonWithAView['air_date'] = $airDate->format('Y-m-d');
+                        } catch (\Exception $e) {
+
+                        }
+                    }
                     $seasonsWithAView[] = $seasonWithAView;
                 }
                 $tv['seasons'] = $seasonsWithAView;
