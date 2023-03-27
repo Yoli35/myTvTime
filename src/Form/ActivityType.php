@@ -21,8 +21,8 @@ class ActivityType extends AbstractType
                 'label' => 'Move Goal (KCal)',
                 'required' => true,
             ])
-            ->add('exerciceGoal', IntegerType::class, [
-                'label' => 'Exercice Goal (minutes)',
+            ->add('exerciseGoal', IntegerType::class, [
+                'label' => 'Exercise Goal (minutes)',
                 'required' => true,
             ])
         ;

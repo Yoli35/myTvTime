@@ -4,10 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Activity;
 use App\Entity\ActivityDay;
+use App\Entity\ActivityExerciseGoal;
+use App\Entity\ActivityMoveGoal;
+use App\Entity\ActivityStandUpGoal;
 use App\Entity\User;
 use App\Form\ActivityType;
 use App\Repository\ActivityDayRepository;
+use App\Repository\ActivityExerciseGoalRepository;
+use App\Repository\ActivityMoveGoalRepository;
 use App\Repository\ActivityRepository;
+use App\Repository\ActivityStandUpGoalRepository;
 use App\Service\LogService;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -20,9 +26,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/activity')]
 class ActivityController extends AbstractController
 {
-    public function __construct(private readonly LogService            $logService,
-                                private readonly ActivityRepository    $activityRepository,
-                                private readonly ActivityDayRepository $activityDayRepository)
+    public function __construct(private readonly LogService                     $logService,
+                                private readonly ActivityRepository             $activityRepository,
+                                private readonly ActivityDayRepository          $activityDayRepository,
+                                private readonly ActivityMoveGoalRepository     $activityMoveGoalRepository,
+                                private readonly ActivityExerciseGoalRepository $activityExerciseGoalRepository,
+                                private readonly ActivityStandUpGoalRepository  $activityStandUpGoalRepository)
     {
 
     }
@@ -36,6 +45,7 @@ class ActivityController extends AbstractController
         $user = $this->getUser();
 
         $activity = $user->getActivity();
+        dump($activity);
 
         if ($activity) {
             $days = $activity->getActivityDays();
@@ -51,14 +61,6 @@ class ActivityController extends AbstractController
 //        usort($days, function (ActivityDay $a, ActivityDay $b) {
 //            return $b->getDay() <=> $a->getDay();
 //        });
-
-//      Ajout du numéro de semaine
-//      --------------------------
-//        foreach ($days as $day) {
-//            $day->setWeek($day->getDay()->format('W'));
-//            $this->activityDayRepository->save($day, false);
-//        }
-//        $this->activityDayRepository->flush();
 
         $currentWeek = $days[0]->getWeek();
         $currentYear = $days[0]->getDay()->format('Y');
@@ -121,6 +123,18 @@ class ActivityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->activityRepository->save($activity, false);
+            $start = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+            $start = $start->setTime(0, 0);
+            $moveGoal = new ActivityMoveGoal($activity, $activity->getMoveGoal(), $start);
+            $this->activityMoveGoalRepository->save($moveGoal);
+            $activity->addMoveGoal($moveGoal);
+            $exerciseGoal = new ActivityExerciseGoal($activity, $activity->getExerciseGoal(), $start);
+            $this->activityExerciseGoalRepository->save($exerciseGoal);
+            $activity->addExerciseGoal($exerciseGoal);
+            $standUpGoal = new ActivityStandUpGoal($activity, $activity->getStandUpGoal(), $start);
+            $this->activityStandUpGoalRepository->save($standUpGoal);
+            $activity->addStandUpGoal($standUpGoal);
             $this->activityRepository->save($activity, true);
 
             return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
@@ -137,10 +151,74 @@ class ActivityController extends AbstractController
     {
         $activity = $this->activityRepository->find($id);
 
+        $moveGoals = $activity->getMoveGoals();
+        $count = count($moveGoals);
+        /** @var ActivityMoveGoal $lastMoveGoal */
+        $lastMoveGoal = $count ? $moveGoals[$count - 1] : null;
+        $exerciseGoals = $activity->getExerciseGoals();
+        $count = count($exerciseGoals);
+        /** @var ActivityExerciseGoal $lastExerciseGoal */
+        $lastExerciseGoal = $count ? $exerciseGoals[$count - 1] : null;
+        $standUpGoals = $activity->getStandUpGoals();
+        $count = count($standUpGoals);
+        /** @var ActivityStandUpGoal $lastStandUpGoal */
+        $lastStandUpGoal = $count ? $standUpGoals[$count - 1] : null;
+
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->activityRepository->save($activity, true);
+
+            $newMoveGoal = $activity->getMoveGoal();
+            $newExerciseGoal = $activity->getExerciseGoal();
+            $newStandUpGoal = $activity->getStandUpGoal();
+
+            $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+            $now = $now->setTime(0, 0);
+
+            if ($lastMoveGoal === null || $lastMoveGoal->getAmount() !== $newMoveGoal) {
+                if ($lastMoveGoal && $lastMoveGoal->getStart()->format("Y-m-d") === $now->format("Y-m-d")) {
+                    $lastMoveGoal->setAmount($newMoveGoal);
+                    $this->activityMoveGoalRepository->save($lastMoveGoal);
+                } else {
+                    if ($lastMoveGoal) {
+                        $lastMoveGoal->setEnd($now);
+                        $this->activityMoveGoalRepository->save($lastMoveGoal);
+                    }
+                    $moveGoal = new ActivityMoveGoal($activity, $activity->getMoveGoal(), $now);
+                    $this->activityMoveGoalRepository->save($moveGoal);
+                    $activity->addMoveGoal($moveGoal);
+                }
+            }
+            if ($lastExerciseGoal === null || $lastExerciseGoal->getAmount() !== $newExerciseGoal) {
+                if ($lastExerciseGoal && $lastExerciseGoal->getStart()->format("Y-m-d") === $now->format("Y-m-d")) {
+                    $lastExerciseGoal->setAmount($newExerciseGoal);
+                    $this->activityExerciseGoalRepository->save($lastExerciseGoal);
+                } else {
+                    if ($lastExerciseGoal) {
+                        $lastExerciseGoal->setEnd($now);
+                        $this->activityExerciseGoalRepository->save($lastExerciseGoal);
+                    }
+                    $exerciseGoal = new ActivityExerciseGoal($activity, $activity->getExerciseGoal(), $now);
+                    $this->activityExerciseGoalRepository->save($exerciseGoal);
+                    $activity->addExerciseGoal($exerciseGoal);
+                }
+            }
+            if ($lastStandUpGoal === null || $lastStandUpGoal !== $newStandUpGoal) {
+                if ($lastStandUpGoal && $lastStandUpGoal->getStart()->format("Y-m-d") === $now->format("Y-m-d")) {
+                    $lastStandUpGoal->setAmount($newStandUpGoal);
+                    $this->activityStandUpGoalRepository->save($lastStandUpGoal);
+                } else {
+                    if ($lastStandUpGoal) {
+                        $lastStandUpGoal->setEnd($now);
+                        $this->activityStandUpGoalRepository->save($lastStandUpGoal);
+                    }
+                    $standUpGoal = new ActivityStandUpGoal($activity, $activity->getStandUpGoal(), $now);
+                    $this->activityStandUpGoalRepository->save($standUpGoal);
+                    $activity->addStandUpGoal($standUpGoal);
+                }
+            }
             $this->activityRepository->save($activity, true);
 
             return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
@@ -152,11 +230,11 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    // /activity/3/stand-up/7/13/1
+
     #[Route('/{id}/stand-up', name: 'app_activity_stand_up_toggle', methods: ['GET'])]
     public function standUpToggle(Request $request, int $id): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
 
         /** @var Activity $activity */
@@ -192,7 +270,7 @@ class ActivityController extends AbstractController
     #[Route('/{id}/save/data', name: 'app_activity_save_data', methods: ['GET'])]
     public function saveDataActivity(Request $request, int $id): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->logService->log($request, $this->getUser());
 
         /** @var Activity $activity */
@@ -203,7 +281,6 @@ class ActivityController extends AbstractController
         $value = $request->query->get('value');
 
         $goalCompleted = false;
-        $blockName = "";
 
         $activityDay = $this->activityDayRepository->find($day);
         $activityDay->{'set' . ucfirst($name)}($value);

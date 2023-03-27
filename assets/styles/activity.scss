@@ -167,7 +167,7 @@
                             }
                         }
 
-                        .stand-up, .move, .exercice {
+                        .stand-up, .move, .exercise {
                             @include flex-col(flex-start, flex-start);
                             background-color: var(--gradient-ardoise-20-alpha-50);
                             border-radius: .25em;
@@ -343,12 +343,12 @@
                             }
                         }
 
-                        .exercice {
+                        .exercise {
                             .block-header {
                                 .completed {
-                                    //background-color: var(--activity-exercice-fade);
-                                    //border: 2px solid var(--activity-exercice);
-                                    color: var(--activity-exercice);
+                                    //background-color: var(--activity-exercise-fade);
+                                    //border: 2px solid var(--activity-exercise);
+                                    color: var(--activity-exercise);
                                 }
                             }
 
@@ -362,7 +362,7 @@
 
                                     input {
                                         background-color: var(--gradient-green-90);
-                                        border: 1px solid var(--activity-exercice);
+                                        border: 1px solid var(--activity-exercise);
                                         border-radius: .25em;
                                         display: none;
                                         font-size: 1em;
@@ -462,18 +462,18 @@
                                 }
                             }
 
-                            &.exercice {
+                            &.exercise {
                                 .circle {
-                                    background-color: var(--activity-exercice);
+                                    background-color: var(--activity-exercise);
                                 }
 
                                 .circle-start {
-                                    background-color: var(--activity-exercice);
+                                    background-color: var(--activity-exercise);
                                 }
 
                                 .circle-end {
                                     > div {
-                                        background-color: var(--activity-exercice);
+                                        background-color: var(--activity-exercise);
                                     }
                                 }
                             }
@@ -537,7 +537,7 @@
                                 }
 
                                 &:nth-child(2) {
-                                    color: var(--activity-exercice);
+                                    color: var(--activity-exercise);
                                 }
 
                                 &:nth-child(3) {
@@ -690,7 +690,7 @@
                         }
 
                         .activity-of-the-day {
-                            .move, .exercice, .stand-up {
+                            .move, .exercise, .stand-up {
                                 background-color: var(--gradient-grey-40-alpha-20);
                             }
 

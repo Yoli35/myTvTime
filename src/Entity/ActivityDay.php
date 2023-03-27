@@ -30,7 +30,7 @@ class ActivityDay
     private ?bool $moveRingCompleted = false;
 
     #[ORM\Column]
-    private ?bool $exerciceRingCompleted = false;
+    private ?bool $exerciseRingCompleted = false;
 
     #[ORM\Column(type: Types::JSON)]
     private array $standUp;
@@ -42,7 +42,7 @@ class ActivityDay
     private ?int $moveResult = 0;
 
     #[ORM\Column]
-    private ?int $exerciceResult = 0;
+    private ?int $exerciseResult = 0;
 
     #[ORM\Column]
     private ?int $steps = 0;
@@ -100,14 +100,14 @@ class ActivityDay
         return $this;
     }
 
-    public function isExerciceRingCompleted(): ?bool
+    public function isExerciseRingCompleted(): ?bool
     {
-        return $this->exerciceRingCompleted;
+        return $this->exerciseRingCompleted;
     }
 
-    public function setExerciceRingCompleted(bool $exerciceRingCompleted): self
+    public function setExerciseRingCompleted(bool $exerciseRingCompleted): self
     {
-        $this->exerciceRingCompleted = $exerciceRingCompleted;
+        $this->exerciseRingCompleted = $exerciseRingCompleted;
 
         return $this;
     }
@@ -136,14 +136,14 @@ class ActivityDay
         return $this;
     }
 
-    public function getExerciceResult(): ?int
+    public function getExerciseResult(): ?int
     {
-        return $this->exerciceResult;
+        return $this->exerciseResult;
     }
 
-    public function setExerciceResult(int $exerciceResult): self
+    public function setExerciseResult(int $exerciseResult): self
     {
-        $this->exerciceResult = $exerciceResult;
+        $this->exerciseResult = $exerciseResult;
 
         return $this;
     }

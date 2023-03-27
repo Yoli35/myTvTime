@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\ActivityDayRepository;
+use App\Repository\ActivityRepository;
 use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ActivityDayRepository::class)]
+#[ORM\Entity(repositoryClass: ActivityRepository::class)]
 #[ApiResource]
 class Activity
 {
@@ -19,19 +20,28 @@ class Activity
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'activity', cascade: ['persist', 'remove'])]
-    private ?User $user = null;
+    private ?User $user;
 
     #[ORM\Column]
-    private ?int $standUpGoal = null;
+    private ?int $standUpGoal;
 
     #[ORM\Column]
-    private ?int $moveGoal = null;
+    private ?int $moveGoal;
 
     #[ORM\Column]
-    private ?int $exerciceGoal = null;
+    private ?int $exerciseGoal;
 
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt;
+
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ActivityMoveGoal::class)]
+    private Collection $moveGoals;
+
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ActivityExerciseGoal::class)]
+    private Collection $exerciseGoals;
+
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ActivityStandUpGoal::class)]
+    private Collection $standUpGoals;
 
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ActivityDay::class)]
     private Collection $activityDays;
@@ -39,11 +49,15 @@ class Activity
     public function __construct(User $user)
     {
         $this->user = $user;
-        $this->createdAt = new DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
         $this->activityDays = new ArrayCollection();
         $this->standUpGoal = 12;
         $this->moveGoal = 500;
-        $this->exerciceGoal = 30;
+        $this->exerciseGoal = 30;
+
+        $this->moveGoals = new ArrayCollection();
+        $this->exerciseGoals = new ArrayCollection();
+        $this->standUpGoals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,14 +101,14 @@ class Activity
         return $this;
     }
 
-    public function getExerciceGoal(): ?int
+    public function getExerciseGoal(): ?int
     {
-        return $this->exerciceGoal;
+        return $this->exerciseGoal;
     }
 
-    public function setExerciceGoal(int $exerciceGoal): self
+    public function setExerciseGoal(int $exerciseGoal): self
     {
-        $this->exerciceGoal = $exerciceGoal;
+        $this->exerciseGoal = $exerciseGoal;
 
         return $this;
     }
@@ -132,9 +146,96 @@ class Activity
     public function removeActivityDay(ActivityDay $activityDay): self
     {
         if ($this->activityDays->removeElement($activityDay)) {
-            // set the owning side to null (unless already changed)
             if ($activityDay->getActivity() === $this) {
                 $activityDay->setActivity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActivityMoveGoal>
+     */
+    public function getMoveGoals(): Collection
+    {
+        return $this->moveGoals;
+    }
+
+    public function addMoveGoal(ActivityMoveGoal $moveGoal): self
+    {
+        if (!$this->moveGoals->contains($moveGoal)) {
+            $this->moveGoals->add($moveGoal);
+            $moveGoal->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGoal(ActivityMoveGoal $moveGoal): self
+    {
+        if ($this->moveGoals->removeElement($moveGoal)) {
+            if ($moveGoal->getActivity() === $this) {
+                $moveGoal->setActivity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActivityMoveGoal>
+     */
+    public function getExerciseGoals(): Collection
+    {
+        return $this->exerciseGoals;
+    }
+
+    public function addExerciseGoal(ActivityExerciseGoal $exerciseGoal): self
+    {
+        if (!$this->exerciseGoals->contains($exerciseGoal)) {
+            $this->exerciseGoals->add($exerciseGoal);
+            $exerciseGoal->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExerciseGoal(ActivityExerciseGoal $exerciseGoal): self
+    {
+        if ($this->exerciseGoals->removeElement($exerciseGoal)) {
+            // set the owning side to null (unless already changed)
+            if ($exerciseGoal->getActivity() === $this) {
+                $exerciseGoal->setActivity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActivityMoveGoal>
+     */
+    public function getStandUpGoals(): Collection
+    {
+        return $this->standUpGoals;
+    }
+
+    public function addStandUpGoal(ActivityStandUpGoal $standUpGoal): self
+    {
+        if (!$this->standUpGoals->contains($standUpGoal)) {
+            $this->standUpGoals->add($standUpGoal);
+            $standUpGoal->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStandUpGoal(ActivityStandUpGoal $standUpGoal): self
+    {
+        if ($this->standUpGoals->removeElement($standUpGoal)) {
+            if ($standUpGoal->getActivity() === $this) {
+                $standUpGoal->setActivity(null);
             }
         }
 

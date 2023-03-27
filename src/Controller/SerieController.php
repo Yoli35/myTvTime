@@ -1081,7 +1081,7 @@ class SerieController extends AbstractController
                 } else {
                     $serieViewing = $this->updateSerieViewing($serieViewing, $tv, $serie);
                 }
-                $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $tv['networks'], true, $locale);
+                $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
                 if (!count($serieViewing->getSerieCasts())) {
                     $this->updateTvCast($tv, $serieViewing);
                     $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
@@ -1099,7 +1099,7 @@ class SerieController extends AbstractController
                             $airDate = new \DateTimeImmutable($season['air_date']);
                             $airDate = $airDate->modify('+1 day');
                             $seasonWithAView['air_date'] = $airDate->format('Y-m-d');
-                        } catch (\Exception $e) {
+                        } catch (\Exception) {
 
                         }
                     }
@@ -1168,7 +1168,7 @@ class SerieController extends AbstractController
         $castRepository->flush();
     }
 
-    public function getNextEpisodeToWatch(SerieViewing $serieViewing, array $networks, bool $tvNetworks, $locale): ?array
+    public function getNextEpisodeToWatch(SerieViewing $serieViewing, $locale): ?array
     {
         $lastNotViewedEpisode = null;
         $seasons = $serieViewing->getSeasons();
@@ -1529,7 +1529,7 @@ class SerieController extends AbstractController
             }
         }
 
-        $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $this->networks2Array($serie->getNetworks()), false, $locale);
+        $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
         $blockNextEpisodeToWatch = $this->render('blocks/serie/_next_episode_to_watch.html.twig', [
             'nextEpisodeToWatch' => $nextEpisodeToWatch,
         ]);

@@ -25,8 +25,8 @@ class ActivityDayType extends AbstractType
                 'label' => 'Move Ring Completed',
                 'required' => true,
             ])
-            ->add('exerciceRingCompleted', CheckboxType::class, [
-                'label' => 'Exercice Ring Completed',
+            ->add('exerciseRingCompleted', CheckboxType::class, [
+                'label' => 'Exercise Ring Completed',
                 'required' => true,
             ])
             ->add('standUp', StandUpType::class, [
@@ -41,8 +41,8 @@ class ActivityDayType extends AbstractType
                 'label' => 'Move Result (KCal)',
                 'required' => true,
             ])
-            ->add('exerciceResult', IntegerType::class, [
-                'label' => 'Exercice Result (minutes)',
+            ->add('exerciseResult', IntegerType::class, [
+                'label' => 'Exercise Result (minutes)',
                 'required' => true,
             ])
             ->add('steps', IntegerType::class, [
