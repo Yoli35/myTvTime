@@ -437,7 +437,7 @@ $fa-font-path: "../webfonts";
     }
 }
 
-@mixin seen($color: var(--serie-add), $size: 1em, $right: 1em) {
+@mixin seen($color: var(--serie-add), $size: 1rem, $right: 1rem) {
     @include flex-row();
     border-radius: 50%;
     bottom: 1rem;

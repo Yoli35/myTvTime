@@ -1614,8 +1614,18 @@
                                     width: 100%;
                                 }
 
+                                .name {
+                                    color: var(--gradient-ardoise-20);
+                                    font-weight: 300;
+                                    padding: 0 .5em;
+                                    position: absolute;
+                                    text-align: center;
+                                    top: 1rem;
+                                    width: 100%;
+                                }
+
                                 .add {
-                                    @include seen(var(--serie-add), 1.5em);
+                                    @include seen(var(--serie-add), 1.25em);
                                 }
 
                                 .seen {
