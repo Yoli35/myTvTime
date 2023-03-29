@@ -15,9 +15,11 @@ use App\Repository\ActivityMoveGoalRepository;
 use App\Repository\ActivityRepository;
 use App\Repository\ActivityStandUpGoalRepository;
 use App\Service\LogService;
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ActivityController extends AbstractController
 {
     public function __construct(private readonly LogService                     $logService,
+                                private readonly LoggerInterface                $loggerInterface,
                                 private readonly ActivityRepository             $activityRepository,
                                 private readonly ActivityDayRepository          $activityDayRepository,
                                 private readonly ActivityMoveGoalRepository     $activityMoveGoalRepository,
@@ -51,8 +54,8 @@ class ActivityController extends AbstractController
             $days = $activity->getActivityDays();
             if (!$days->count() || !$this->todayActivityExist($days)) {
                 $today = new ActivityDay($activity);
-                $this->activityDayRepository->save($today, true);
                 $activity->addActivityDay($today);
+                $this->activityDayRepository->save($today, true);
             }
         }
 
@@ -71,22 +74,29 @@ class ActivityController extends AbstractController
             $year = $day->getDay()->format('Y');
             $years[$currentYear - $year][$currentWeek - $week][] = $day;
         }
-//        dump($years);
+
         $yearIndex = count($years) - 1;
         $weekIndex = count($years[$yearIndex]) - 1;
         if ($weekIndex) {
             $firstWeekDayCount = count($years[$yearIndex][$weekIndex]);
-//            dump($firstWeekDayCount);
+
             if ($firstWeekDayCount < 7) {
                 $years[$yearIndex][$weekIndex] = array_merge($years[$yearIndex][$weekIndex], array_fill(0, 7 - $firstWeekDayCount, null));
-//                dump($years[$yearIndex][$weekIndex]);
-//                dump($years[$yearIndex]);
-//                dump($years);
             }
         }
 
+        $goals = [];
+        $goals['move'] = $activity->getMoveGoals()->toArray();
+        $goals['move'][count($goals['move']) - 1]->setEnd($this->now());
+        $goals['exercise'] = $activity->getExerciseGoals()->toArray();
+        $goals['exercise'][count($goals['exercise']) - 1]->setEnd($this->now());
+        $goals['standUp'] = $activity->getStandUpGoals()->toArray();
+        $goals['standUp'][count($goals['standUp']) - 1]->setEnd($this->now());
+        dump($goals);
+
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
+            'goals' => $goals,
             'days' => $days,
             'years' => $years,
             'currentWeek' => $currentWeek,
@@ -123,8 +133,8 @@ class ActivityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->activityRepository->save($activity, false);
-            $start = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+            $this->activityRepository->save($activity);
+            $start = $this->now();
             $start = $start->setTime(0, 0);
             $moveGoal = new ActivityMoveGoal($activity, $activity->getMoveGoal(), $start);
             $this->activityMoveGoalRepository->save($moveGoal);
@@ -155,10 +165,12 @@ class ActivityController extends AbstractController
         $count = count($moveGoals);
         /** @var ActivityMoveGoal $lastMoveGoal */
         $lastMoveGoal = $count ? $moveGoals[$count - 1] : null;
+
         $exerciseGoals = $activity->getExerciseGoals();
         $count = count($exerciseGoals);
         /** @var ActivityExerciseGoal $lastExerciseGoal */
         $lastExerciseGoal = $count ? $exerciseGoals[$count - 1] : null;
+
         $standUpGoals = $activity->getStandUpGoals();
         $count = count($standUpGoals);
         /** @var ActivityStandUpGoal $lastStandUpGoal */
@@ -174,8 +186,8 @@ class ActivityController extends AbstractController
             $newExerciseGoal = $activity->getExerciseGoal();
             $newStandUpGoal = $activity->getStandUpGoal();
 
-            $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-            $now = $now->setTime(0, 0);
+            $now = $this->now();
+            $yesterday = $now->sub(new DateInterval('P1D'));
 
             if ($lastMoveGoal === null || $lastMoveGoal->getAmount() !== $newMoveGoal) {
                 if ($lastMoveGoal && $lastMoveGoal->getStart()->format("Y-m-d") === $now->format("Y-m-d")) {
@@ -183,7 +195,7 @@ class ActivityController extends AbstractController
                     $this->activityMoveGoalRepository->save($lastMoveGoal);
                 } else {
                     if ($lastMoveGoal) {
-                        $lastMoveGoal->setEnd($now);
+                        $lastMoveGoal->setEnd($yesterday);
                         $this->activityMoveGoalRepository->save($lastMoveGoal);
                     }
                     $moveGoal = new ActivityMoveGoal($activity, $activity->getMoveGoal(), $now);
@@ -197,7 +209,7 @@ class ActivityController extends AbstractController
                     $this->activityExerciseGoalRepository->save($lastExerciseGoal);
                 } else {
                     if ($lastExerciseGoal) {
-                        $lastExerciseGoal->setEnd($now);
+                        $lastExerciseGoal->setEnd($yesterday);
                         $this->activityExerciseGoalRepository->save($lastExerciseGoal);
                     }
                     $exerciseGoal = new ActivityExerciseGoal($activity, $activity->getExerciseGoal(), $now);
@@ -211,7 +223,7 @@ class ActivityController extends AbstractController
                     $this->activityStandUpGoalRepository->save($lastStandUpGoal);
                 } else {
                     if ($lastStandUpGoal) {
-                        $lastStandUpGoal->setEnd($now);
+                        $lastStandUpGoal->setEnd($yesterday);
                         $this->activityStandUpGoalRepository->save($lastStandUpGoal);
                     }
                     $standUpGoal = new ActivityStandUpGoal($activity, $activity->getStandUpGoal(), $now);
@@ -230,6 +242,16 @@ class ActivityController extends AbstractController
         ]);
     }
 
+    public function now(): ?DateTimeImmutable
+    {
+        try {
+            $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+            return $now->setTime(0, 0);
+        } catch (Exception $e) {
+            $this->loggerInterface->error('New date with "Europe/Paris" time zone : ' . $e->getFile() . ' (line ' . $e->getLine() . ') : ' . $e->getMessage() . ' ' . $e->getTraceAsString());
+            return new DateTimeImmutable();
+        }
+    }
 
     #[Route('/{id}/stand-up', name: 'app_activity_stand_up_toggle', methods: ['GET'])]
     public function standUpToggle(Request $request, int $id): Response

@@ -44,10 +44,15 @@
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Move'|trans }}</div>
                                                             <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}"><i class="fa-solid fa-circle-check"></i></div>
-{#                                                            <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>#}
                                                         </div>
                                                         <div class="block-body">
-                                                            {% set percent = (day.moveResult / activity.moveGoal * 100)|round %}
+                                                            {% set goal = activity.moveGoal %}
+                                                            {% for objective in goals.move %}
+                                                                {% if day.day|date("Y-m-d") >= objective.start|date("Y-m-d") and day.day|date("Y-m-d") <= objective.end|date("Y-m-d") %}
+                                                                    {% set goal = objective.amount %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {% set percent = (day.moveResult / goal * 100)|round %}
                                                             <div class="progress move" data-percent="{{ percent }}">
                                                                 <div class="circle">
                                                                     <div class="percentage">{{ percent }}%</div>
@@ -57,7 +62,7 @@
                                                                     <div></div>
                                                                 </div>
                                                             </div>
-                                                            <div class="details">
+                                                                  <div class="details">
                                                                 <div class="detail">
                                                                     <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}"
                                                                          data-title="{{ 'Click me to edit'|trans }}"
@@ -66,7 +71,7 @@
                                                                         <label><input type="number" name="moveResult" value="{{ day.moveResult }}"/></label>
                                                                     </div>
                                                                     /
-                                                                    <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.moveGoal }} KCal</div>
+                                                                    <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ goal }} KCal</div>
                                                                 </div>
                                                                 <div class="detail">
                                                                     <div class="steps" data-id="{{ activity.id }}" data-day="{{ day.id }}"
@@ -89,10 +94,15 @@
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Exercise'|trans }}</div>
                                                             <div class="completed{% if day.isExerciseRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}"><i class="fa-solid fa-circle-check"></i></div>
-{#                                                            <div class="completed{% if day.isExerciseRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>#}
                                                         </div>
                                                         <div class="block-body">
-                                                            {% set percent = (day.exerciseResult / activity.exerciseGoal * 100)|round %}
+                                                            {% set goal = activity.exerciseGoal %}
+                                                            {% for objective in goals.exercise %}
+                                                                {% if day.day|date("Y-m-d") >= objective.start|date("Y-m-d") and day.day|date("Y-m-d") <= objective.end|date("Y-m-d") %}
+                                                                    {% set goal = objective.amount %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {% set percent = (day.exerciseResult / goal * 100)|round %}
                                                             <div class="progress exercise" data-percent="{{ percent }}">
                                                                 <div class="circle">
                                                                     <div class="percentage">{{ percent }}%</div>
@@ -111,7 +121,7 @@
                                                                         <label><input type="number" name="exerciseResult" value="{{ day.exerciseResult }}"/></label>
                                                                     </div>
                                                                     /
-                                                                    <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ activity.exerciseGoal }} {{ 'minutes'|trans }}</div>
+                                                                    <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">{{ goal }} {{ 'minutes'|trans }}</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -120,10 +130,15 @@
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Stand up'|trans }}</div>
                                                             <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}"><i class="fa-solid fa-circle-check"></i></div>
-{#                                                            <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}">{{ 'goal'|trans }}</div>#}
                                                         </div>
                                                         <div class="block-body">
-                                                            {% set percent = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                                            {% set goal = activity.standUpGoal %}
+                                                            {% for objective in goals.standUp %}
+                                                                {% if day.day|date("Y-m-d") >= objective.start|date("Y-m-d") and day.day|date("Y-m-d") <= objective.end|date("Y-m-d") %}
+                                                                    {% set goal = objective.amount %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {% set percent = (day.standUpResult / goal * 100)|round %}
                                                             <div class="progress stand-up" data-percent="{{ percent }}">
                                                                 <div class="circle">
                                                                     <div class="percentage">{{ percent }}%</div>
@@ -137,7 +152,7 @@
                                                                 <div class="detail">
                                                                     <div class="result">{{ day.standUpResult }}</div>
                                                                     /
-                                                                    <div class="goal">{{ activity.standUpGoal }}</div>
+                                                                    <div class="goal">{{ goal }}</div>
                                                                 </div>
                                                                 <div class="wrapper">
                                                                     <div class="hours" data-id="{{ activity.id }}" data-day="{{ day.id }}">
@@ -623,7 +638,6 @@
                         clearInterval(interval);
                     }
                 }, 5);
-                // }, 2000 / (progress - progressStart));
             } else {
                 const interval = setInterval(() => {
                     if (inc >= progress) {
@@ -634,7 +648,6 @@
                         clearInterval(interval);
                     }
                 }, 5);
-                // }, 2000 / (progressStart - progress));
             }
         }
 
