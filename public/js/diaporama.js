@@ -1,9 +1,9 @@
-let diaporamaImages, diaporamaIndex, diaporamaCount, diaporamaSrc, _loc;
+let diaporamaImages, diaporamaIndex, diaporamaCount, diaporamaSrc, _diaporama_locale;
 
 function initDiaporama(images, locale) {
     if (!images) return;
     diaporamaImages = images;
-    _loc = locale;
+    _diaporama_locale = locale;
     images.forEach(image => {
         image.classList.add("pointer");
         image.addEventListener("click", openDiaporama);
@@ -207,13 +207,13 @@ function initShortcutsHelp(back, count) {
     help.appendChild(maxi);
     const title = document.createElement("div");
     title.classList.add("title");
-    title.innerHTML = txt.title[_loc];
+    title.innerHTML = txt.title[_diaporama_locale];
     maxi.appendChild(title);
     if (count) {
-        addKey(maxi, "left", txt.left[_loc]);
-        addKey(maxi, "right", txt.right[_loc]);
+        addKey(maxi, "left", txt.left[_diaporama_locale]);
+        addKey(maxi, "right", txt.right[_diaporama_locale]);
     }
-    addKey(maxi, "escape", txt.escape[_loc]);
+    addKey(maxi, "escape", txt.escape[_diaporama_locale]);
     const close = document.createElement("div");
     close.classList.add("close");
     close.innerHTML = '<i class="fa-solid fa-circle-chevron-down"></i>';
