@@ -217,7 +217,7 @@ class ActivityController extends AbstractController
                     $activity->addExerciseGoal($exerciseGoal);
                 }
             }
-            if ($lastStandUpGoal === null || $lastStandUpGoal !== $newStandUpGoal) {
+            if ($lastStandUpGoal === null || $lastStandUpGoal->getAmount() !== $newStandUpGoal) {
                 if ($lastStandUpGoal && $lastStandUpGoal->getStart()->format("Y-m-d") === $now->format("Y-m-d")) {
                     $lastStandUpGoal->setAmount($newStandUpGoal);
                     $this->activityStandUpGoalRepository->save($lastStandUpGoal);

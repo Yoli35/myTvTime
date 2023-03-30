@@ -22,3 +22,7 @@ symfony.lock
 /config/google/google.json
 /config/google/mytvtime-349019-001b2f815d02.json
 .env
+.gitignore
+.php-version
+composer.lock
+yarn.lock

@@ -62,7 +62,7 @@
                                                                     <div></div>
                                                                 </div>
                                                             </div>
-                                                                  <div class="details">
+                                                            <div class="details">
                                                                 <div class="detail">
                                                                     <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}"
                                                                          data-title="{{ 'Click me to edit'|trans }}"
@@ -304,7 +304,9 @@
             const date = new Date();
 
             if (date.getDate() !== initialDate.getDate()) {
-                setTimeout(()=> { window.location.reload(); }, 2000);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             }
         }
 
