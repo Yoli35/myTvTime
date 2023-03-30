@@ -1119,8 +1119,6 @@ class SerieController extends AbstractController
             return $season;
         }, $tv['seasons']);
 
-        dump($tv);
-
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serieId,
