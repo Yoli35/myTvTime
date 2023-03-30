@@ -1,15 +1,20 @@
-{% if season %}
-    {% if season.episodeCount > 0 %}
-        <div class="viewing" data-season-number="{{ season.seasonNumber }}">
-            {% for episode in season.episodes %}
-                <div class="ep{% if season.seasonCompleted %} full{% endif %}"
-                     data-number="{{ episode.episodeNumber }}"
-                     data-viewed="{{ episode.viewedAt?1:0 }}"
+{% set seasonViewing = season.seasonViewing %}
+{% set episodes = season.episodes %}
+{% if seasonViewing %}
+    {% if seasonViewing.episodeCount > 0 %}
+        <div class="viewing" data-season-number="{{ seasonViewing.seasonNumber }}">
+            {% for episodeViewing in seasonViewing.episodes %}
+                <div class="ep{% if seasonViewing.seasonCompleted %} full{% endif %}"
+                     data-number="{{ episodeViewing.episodeNumber }}"
+                     data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
+                     data-air-date="{{ episodes[episodeViewing.episodeNumber-1].air_date|format_date('long') }}"
+                     data-name="{{ episodes[episodeViewing.episodeNumber-1].name }}"
+                     data-still-path="{{ episodes[episodeViewing.episodeNumber-1].still_path }}"
                      data-global-index="{{ globalIndex }}">
-                    {% if episode.viewedAt %}
+                    {% if episodeViewing.viewedAt %}
                         <i class="fa-solid fa-circle-check"></i>
                     {% else %}
-                        <span>{{ episode.episodeNumber }}</span>
+                        <span>{{ episodeViewing.episodeNumber }}</span>
                     {% endif %}
                     {% set globalIndex = globalIndex + 1 %}
                 </div>

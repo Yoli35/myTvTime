@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+    {% block title %}myTvTime ▶ ︎{{ 'serie.error' }}
+    {% endblock %}
+
+{% block body %}
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container">
+            {{ include('blocks/_nav.html.twig', {thisPage: serie.name, user: app.user}) }}
+
+        <div class="serie-page">
+            <div class="header">
+            </div>
+        </div>
+        {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

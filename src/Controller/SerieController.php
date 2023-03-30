@@ -906,7 +906,7 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']);
         if ($standing == "") {
-            return $this->render('serie/_error.html.twig', [
+            return $this->render('serie/error.html.twig', [
                 'serie' => $serie,
             ]);
         }
@@ -1112,6 +1112,14 @@ class SerieController extends AbstractController
         $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
 //        $this->cleanCastTable();
+        $tv['seasons'] = array_map(function ($season) use ($tv, $locale) {
+            $standing = $this->TMDBService->getTvSeason($tv['id'], $season['season_number'], $locale);
+            $seasonTMDB = json_decode($standing, true);
+            $season['episodes'] = $seasonTMDB['episodes'];
+            return $season;
+        }, $tv['seasons']);
+
+        dump($tv);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,

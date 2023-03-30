@@ -877,6 +877,46 @@
     }
 }
 
+.bubble-v2 {
+    @include flex-row();
+    background-color: var(--gradient-ardoise-10);
+    border-radius: .25em;
+    color: var(--gradient-ardoise-80);
+    opacity: 0;
+    position: absolute;
+    left: -10.5em;
+    top: -12em;
+    transition: opacity .25s;
+    z-index: 1000;
+
+    &.show {
+        opacity: 1;
+    }
+
+    .still {
+        height: 10em;
+        width: 7em;
+
+        img {
+            height: 10em;
+            object-fit: cover;
+            width: 7em;
+        }
+    }
+
+    .infos {
+        @include flex-col(start, center);
+        height: 10em;
+        padding: 1em;
+        width: 14em;
+
+        div:first-child {
+            font-size: 1.5em;
+            font-weight: 300;
+        }
+    }
+}
+
 .serie-page {
     .header {
         @include flex-row(flex-start, flex-start);

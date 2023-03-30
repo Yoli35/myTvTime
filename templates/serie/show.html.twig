@@ -28,6 +28,10 @@
         <div class="body"></div>
         <div class="tail"></div>
     </div>
+    <div class="bubble-v2">
+        <div class="still"></div>
+        <div class="infos"></div>
+    </div>
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
         {% if from == 'popular' %}
@@ -271,7 +275,7 @@
                                                 {% if season.seasonViewing is defined %}
                                                     <div class="details" data-season-number="{{ season.season_number }}">
                                                         <div>
-                                                            {{ include('blocks/serie/_season_viewing.html.twig', {season: season.seasonViewing}) }}
+                                                            {{ include('blocks/serie/_season_viewing.html.twig') }}
                                                         </div>
                                                     </div>
                                                 {% endif %}
@@ -734,23 +738,44 @@
 
             function bubbleItShow(evt) {
                 const bubble = document.querySelector(".bubble");
+                const bubbleV2 = document.querySelector(".bubble-v2");
                 const viewed = parseInt(this.getAttribute("data-viewed"));
                 const episode = evt.currentTarget.getAttribute("data-number");
                 const season = evt.currentTarget.parentElement.getAttribute("data-season-number");
+                const name = evt.currentTarget.getAttribute("data-name");
+                const airDate = evt.currentTarget.getAttribute("data-air-date");
+                const stillPath = evt.currentTarget.getAttribute("data-still-path");
+
+                if (stillPath) {
+                    const img = document.createElement("img");
+                    img.setAttribute("src", "{{ imageConfig.url ~ imageConfig.still_sizes.3 }}" + stillPath);
+                    img.setAttribute("alt", name);
+                    bubbleV2.querySelector(".still").appendChild(img);
+                }
+                bubbleV2.querySelector(".infos").innerHTML = "<div>" + name + "</div><div>" + airDate + "</div>";
+
                 bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
+                bubbleV2.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
                 bubble.querySelector(".body").innerHTML = "{{ 'Season'|trans }}&nbsp;" + season.toString() + "<br>{{ 'Episode'|trans }}&nbsp;" + episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
                 bubble.classList.add("show");
+                bubbleV2.classList.add("show");
             }
 
             function bubbleItHide() {
                 const bubble = document.querySelector(".bubble");
+                const bubbleV2 = document.querySelector(".bubble-v2");
                 bubble.classList.remove("show");
+                bubbleV2.classList.remove("show");
                 bubble.querySelector(".body").innerHTML = "";
+                bubbleV2.querySelector(".still").innerHTML = "";
+                bubbleV2.querySelector(".infos").innerHTML = "";
             }
 
             function bubbleIt(evt) {
                 const bubble = document.querySelector(".bubble");
+                const bubbleV2 = document.querySelector(".bubble-v2");
                 bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
+                bubbleV2.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
             }
 
             function initViewedEpisodes(dialog) {
