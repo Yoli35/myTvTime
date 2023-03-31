@@ -1520,13 +1520,18 @@ class SerieController extends AbstractController
         $blocks = [];
         $globalIndex = 1;
         $viewed = 0;
+        $s = [];
         foreach ($serieViewing->getSeasons() as $seasonViewing) {
             if ($seasonViewing->getSeasonNumber()) { // 21/12/2022 : plus d'épisodes spéciaux
+                $standing = $this->TMDBService->getTvSeason($serie->getSerieId(), $seasonViewing->getSeasonNumber(), $locale);
+                $seasonTMDB = json_decode($standing, true);
+                $s['episodes'] = $seasonTMDB['episodes'];
+                $s['seasonViewing'] = $seasonViewing;
                 $blocks[] = [
                     'season' => $seasonViewing->getSeasonNumber(),
                     'episode_count' => $seasonViewing->getEpisodeCount(),
                     'view' => $this->render('blocks/serie/_season_viewing.html.twig', [
-                        'season' => $seasonViewing,
+                        'season' => $s,
                         'globalIndex' => $globalIndex,
                     ])
                 ];
