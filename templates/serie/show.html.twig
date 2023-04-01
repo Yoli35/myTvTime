@@ -154,7 +154,7 @@
                     </div>
                     <div class="info">
                         {% if serie.overview|length %}
-                            <div>{{ serie.overview }}</div>
+                            <div>{{ serie.overview|e }}</div>
                         {% endif %}
                     </div>
                     <div class="info">
@@ -280,7 +280,7 @@
                                                     </div>
                                                 {% endif %}
                                                 {% if season.overview|length %}
-                                                    <div>{{ season.overview }}</div>
+                                                    <div>{{ season.overview|e }}</div>
                                                 {% endif %}
                                                 {% if season.air_date %}
                                                     <div>

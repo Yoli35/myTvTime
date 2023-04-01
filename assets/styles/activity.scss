@@ -155,11 +155,11 @@
                         .rings-of-the-day {
                             @include flex-row();
                             background-color: var(--gradient-ardoise-20-alpha-50);
-                            border-radius: .25em;
+                            border-radius: 50% .25em .25em 50%;
                             aspect-ratio: 1;
                             gap: 1em;
                             height: 10em;
-                            padding: 0 1em;
+                            width: 10em;
 
                             .drawn-rings {
                                 height: 8em;
@@ -179,6 +179,7 @@
 
                             .block-header {
                                 @include flex-row(flex-start, flex-start);
+                                gap: 1em;
                                 width: 100%;
 
                                 .title {
@@ -187,14 +188,30 @@
                                 }
 
                                 .completed {
-                                    //border-radius: .25em;
-                                    //display: flex;
                                     font-size: 1.5em;
-                                    //font-weight: 400;
+                                    opacity: 0;
+                                    transition: opacity .300s ease-in-out;
+
+                                    &.visible {
+                                        opacity: 1;
+                                    }
+                                }
+
+                                .doubled {
+                                    @include flex-row();
+                                    border-radius: 50%;
+                                    color: var(--gradient-ardoise-100);
+                                    font-size: 1em;
+                                    font-weight: 400;
+                                    height: 1.5em;
                                     margin-left: auto;
                                     opacity: 0;
-                                    //padding: 0 1em;
                                     transition: opacity .300s ease-in-out;
+                                    width: 1.5em;
+
+                                    div {
+                                        font-size: .875em;
+                                    }
 
                                     &.visible {
                                         opacity: 1;
@@ -230,10 +247,10 @@
 
                         .stand-up {
                             .block-header {
+                                .doubled {
+                                    background-color: var(--activity-stand-up);
+                                }
                                 .completed {
-                                    //background-color: var(--activity-stand-up-fade);
-                                    //border: 2px solid var(--activity-stand-up);
-                                    //color: var(--activity-stand-up-hover);
                                     color: var(--activity-stand-up);
                                 }
                             }
@@ -291,10 +308,10 @@
 
                         .move {
                             .block-header {
+                                .doubled {
+                                    background-color: var(--activity-move);
+                                }
                                 .completed {
-                                    //background-color: var(--activity-move-fade);
-                                    //border: 2px solid var(--activity-move);
-                                    //color: var(--activity-move-light);
                                     color: var(--activity-move);
                                 }
                             }
@@ -345,9 +362,11 @@
 
                         .exercise {
                             .block-header {
+                                .doubled {
+                                    background-color: var(--activity-exercise);
+                                    color: var(--gradient-ardoise-10);
+                                }
                                 .completed {
-                                    //background-color: var(--activity-exercise-fade);
-                                    //border: 2px solid var(--activity-exercise);
                                     color: var(--activity-exercise);
                                 }
                             }
