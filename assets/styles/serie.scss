@@ -1589,14 +1589,14 @@
                         padding-left: .5em;
 
                         .frame {
-                            background-color: var(--gradient-ardoise-10);
+                            background-color: var(--gradient-ardoise-90);
                             border-radius: .25em;
                             display: inline-block;
                             max-height: 4em;
                             padding: .25em .5em;
 
                             &:hover {
-                                background-color: var(--gradient-ardoise-90);
+                                background-color: var(--gradient-ardoise-10);
                             }
 
                             img {
