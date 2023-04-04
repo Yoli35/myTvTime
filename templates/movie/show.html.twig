@@ -22,6 +22,11 @@
         {% else %}
             <div class="movie-header no-header">
                 {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
+                <div class="ygg">
+                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </a>
+                </div>
             </div>
         {% endif %}
 
@@ -366,7 +371,7 @@
 
             initCollections();
 
-            const images = document.querySelector(".movie-info").querySelector(".images").querySelectorAll("img");
+            const images = document.querySelector(".movie-info")?.querySelector(".images")?.querySelectorAll("img");
             initDiaporama(images, "{{ app.request.locale }}");
 
             const poster = document.querySelector(".movie-poster");
@@ -381,7 +386,7 @@
                 alert("Alerte Poster !!!");
             })
 
-            document.querySelector(".favorite").querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
+            document.querySelector(".favorite")?.querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
 
             function toggleFavorite(evt) {
                 const fav = evt.target.checked ? 1 : 0;

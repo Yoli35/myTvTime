@@ -330,6 +330,14 @@
             header.addEventListener("mouseenter", stopSlide);
             header.addEventListener("mouseleave", startSlide);
 
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === 'visible') {
+                    startSlide();
+                } else {
+                    stopSlide();
+                }
+            });
+
             document.addEventListener("visibilitychange", () => (document.visibilityState === 'visible') ? startSlide() : stopSlide());
 
             slideInterval = setInterval(slideFunc, slideDuration);
@@ -1166,7 +1174,7 @@
         }
 
         function getLeafSettings() {
-            let settings = [], settingR, settingI;
+            let settings = [], settingR, settingI, slider1 = 0, slider2 = 0;
             {% for slider in leafSettings.data %}
             {% if slider.type == "range" %}
             settingR = {data: 0, name: "", type: ""};
@@ -1176,8 +1184,10 @@
             settings.push(settingR);
             {% endif %}
             {% if slider.type == "interval" %}
+            slider1 = {{ slider.data.0 }};
+            slider2 = {{ slider.data.1 }};
             settingI = {data: [0, 0], name: "", type: ""};
-            settingI.data = [{{ slider.data.0 }}, {{ slider.data.1 }}];
+            settingI.data = [slider1, slider2];
             settingI.name = "{{ slider.name }}";
             settingI.type = "{{ slider.type }}";
             settings.push(settingI);
