@@ -48,7 +48,7 @@ class ActivityController extends AbstractController
         $user = $this->getUser();
 
         $activity = $user->getActivity();
-        dump($activity);
+//        dump($activity);
 
         if ($activity) {
             $days = $activity->getActivityDays();
@@ -92,7 +92,7 @@ class ActivityController extends AbstractController
         $goals['exercise'][count($goals['exercise']) - 1]->setEnd($this->now());
         $goals['standUp'] = $activity->getStandUpGoals()->toArray();
         $goals['standUp'][count($goals['standUp']) - 1]->setEnd($this->now());
-        dump($goals);
+//        dump($goals);
 
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
