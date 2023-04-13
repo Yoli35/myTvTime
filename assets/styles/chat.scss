@@ -1,0 +1,107 @@
+@import "variables";
+
+.chat-users {
+    background-color: var(--gradient-ardoise-90);
+    border-left: 1px solid var(--gradient-ardoise-20);
+    border-radius: .25rem 0 0 0;
+    border-top: 1px solid var(--gradient-ardoise-20);
+    bottom: 0;
+    max-height: 320rem;
+    position: fixed;
+    right: 0;
+    width: 20rem;
+
+    .chat-users-header {
+        @include flex-row(center, flex-start);
+        background-color: var(--gradient-ardoise-70);
+        border-bottom: 1px solid var(--gradient-ardoise-20);
+        border-radius: .25rem 0 0 0;
+        color: var(--gradient-ardoise-20);
+        cursor: pointer;
+        padding: .5rem 1rem;
+    }
+
+    .chat-users-list {
+        @include flex-col(center, flex-start);
+        background-color: var(--gradient-ardoise-90);
+        color: var(--gradient-ardoise-20);
+        overflow: auto;
+        padding: 0;
+        transition: height 0.5s ease-in-out;
+
+        &.collapsed {
+            height: 0;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+
+            li {
+                @include flex-row(center, flex-start);
+                font-weight: 300;
+                gap: 1rem;
+                padding: 0.5rem 1rem;
+                width: 100%;
+
+                &:hover {
+                    background-color: var(--gradient-ardoise-60);
+                    color: var(--gradient-ardoise-90);
+                    cursor: pointer;
+
+                    .last {
+                        color: var(--gradient-ardoise-80);
+                    }
+                }
+
+                .user-avatar {
+                    img {
+                        border-radius: 50%;
+                        height: 2rem;
+                        width: 2rem;
+                    }
+                }
+
+                .online {
+                    color: var(--gradient-green-40);
+                    margin-left: auto;
+                }
+
+                .last {
+                    color: var(--gradient-ardoise-70);
+                    font-size: .875rem;
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .chat-users {
+        background-color: var(--gradient-ardoise-20);
+        border-color: var(--gradient-ardoise-90);
+
+        .chat-users-header {
+            background-color: var(--gradient-ardoise-30);
+            border-color: var(--gradient-ardoise-90);
+            color: var(--gradient-ardoise-90);
+        }
+
+        .chat-users-list {
+            background-color: var(--gradient-ardoise-20);
+            color: var(--gradient-ardoise-90);
+
+            ul {
+                li {
+                    &:hover {
+                        background-color: var(--gradient-ardoise-50);
+                        color: var(--gradient-ardoise-90);
+                    }
+                }
+            }
+        }
+    }
+}

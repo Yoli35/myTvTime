@@ -3,6 +3,7 @@
 namespace App\EventListener;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Service\LogService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -18,9 +19,10 @@ use Symfony\Component\Translation\LocaleSwitcher;
 readonly class LoginSubscriber implements EventSubscriberInterface
 {
     public function __construct(/*private readonly UrlGeneratorInterface $urlGenerator,*/
-        private Security       $security,
-        private LogService     $logService,
-        private LocaleSwitcher $localeSwitcher
+        private readonly Security                $security,
+        private readonly LogService              $logService,
+        private readonly LocaleSwitcher          $localeSwitcher,
+        private readonly UserRepository $userRepository
     )
     {
     }
@@ -34,6 +36,13 @@ readonly class LoginSubscriber implements EventSubscriberInterface
     {
         /** @var User $user */
         $user = $this->security->getUser();
+        try {
+            $user->setLastLogin(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+        } catch (\Exception $e) {
+            $user->setLastLogin(new \DateTimeImmutable());
+        }
+        $user->setLastLogout(null);
+        $this->userRepository->save($user, true);
 
         $request = $event->getRequest();
         $this->logService->log($request, $user);

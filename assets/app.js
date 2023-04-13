@@ -1,6 +1,7 @@
 import './styles/activity.scss';
 import './styles/app.scss';
 import './styles/article.scss';
+import './styles/chat.scss';
 import './styles/collection.scss';
 import './styles/devices.scss';
 import './styles/diaporama.scss';

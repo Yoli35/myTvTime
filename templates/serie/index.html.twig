@@ -5,7 +5,7 @@
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container">
+    <div class="container-fluid">
         <div class="my-series">
             <div class="header">
                 {{ include('blocks/serie/_quotes.html.twig') }}
@@ -244,7 +244,7 @@
         });
 
         function checkHeight() {
-            const container = document.querySelector(".container");
+            const container = document.querySelector(".container-fluid");
             if (container.clientHeight === 496) {
                 window.location.reload();
             }

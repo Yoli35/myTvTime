@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -109,6 +110,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Activity $activity = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ChatDiscussion::class, orphanRemoval: true)]
+    private Collection $chatDiscussions;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $lastLogin = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $lastLogout = null;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -120,6 +130,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->serieViewings = new ArrayCollection();
         $this->friends = new ArrayCollection();
         $this->youtubeVideos = new ArrayCollection();
+        $this->chatDiscussions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -568,6 +579,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->activity = $activity;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChatDiscussion>
+     */
+    public function getChatDiscussions(): Collection
+    {
+        return $this->chatDiscussions;
+    }
+
+    public function addChatDiscussion(ChatDiscussion $chatDiscussion): self
+    {
+        if (!$this->chatDiscussions->contains($chatDiscussion)) {
+            $this->chatDiscussions->add($chatDiscussion);
+            $chatDiscussion->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChatDiscussion(ChatDiscussion $chatDiscussion): self
+    {
+        if ($this->chatDiscussions->removeElement($chatDiscussion)) {
+            // set the owning side to null (unless already changed)
+            if ($chatDiscussion->getUser() === $this) {
+                $chatDiscussion->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
+    }
+
+    public function getLastLogout(): ?\DateTimeInterface
+    {
+        return $this->lastLogout;
+    }
+
+    public function setLastLogout(?\DateTimeInterface $lastLogout): self
+    {
+        $this->lastLogout = $lastLogout;
 
         return $this;
     }

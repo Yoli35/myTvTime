@@ -1,0 +1,56 @@
+{% set user = app.user %}
+{% set users = userList() %}
+{% if user %}
+    <div class="chat-users">
+        <div class="chat-users-header">
+            {{ 'Users'|trans }}
+        </div>
+        <div class="chat-users-list">
+            <ul>
+                {% for u in users %}
+                    {% if u.id != user.id %}
+                        <li data-id="{{ u.id }}">
+                            <div class="user-avatar">
+                                <img src="/images/users/avatars/{{ u.avatar }}" alt="{{ u.username }}">
+                            </div>
+                            <span>{{ u.username }}</span>
+                            {% if u.lastLogin is not null %}
+                                {% if  u.lastLogout is null %}
+                                    <div class="online">●</div>
+                                {% else %}
+                                    <div class="last">{{ u.lastLogout|ago }}</div>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const user = {
+            id: {{ user.id }},
+            username: '{{ user.username }}',
+            avatar: '{{ user.avatar }}'
+        };
+        window.addEventListener("DOMContentLoaded", () => {
+            const chatUsers = document.querySelector(".chat-users");
+            const chatHeader = chatUsers.querySelector(".chat-users-header");
+            const chatUsersList = chatUsers.querySelector(".chat-users-list");
+            const chatUsersListItems = chatUsersList.querySelectorAll("li");
+            const chatUsersListItemsArray = Array.from(chatUsersListItems);
+
+            chatHeader.addEventListener("click", () => {
+                chatUsersList.classList.toggle("collapsed");
+            });
+            chatUsersListItemsArray.forEach(item => {
+                item.addEventListener("click", () => {
+                    const id = item.getAttribute("data-id");
+                    console.log({id});
+                });
+            });
+        });
+
+    </script>
+{% endif %}

@@ -2,6 +2,8 @@
 
 namespace App\EventListener;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Service\LogService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -14,7 +16,8 @@ class LogoutSubscriber implements EventSubscriberInterface
 {
     public function __construct(private readonly UrlGeneratorInterface $urlGenerator,
                                 private readonly Security              $security,
-                                private readonly LogService            $logService
+                                private readonly LogService            $logService,
+                                private readonly UserRepository        $userRepository
     )
     {
     }
@@ -26,6 +29,16 @@ class LogoutSubscriber implements EventSubscriberInterface
 
     public function onLogout(LogoutEvent $event): void
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
+
+        try {
+            $user->setLastLogout(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+        } catch (\Exception $e) {
+            $user->setLastLogout(new \DateTimeImmutable());
+        }
+        $this->userRepository->save($user, true);
+
         $request = $event->getRequest();
         $this->logService->log($request, $this->security->getUser());
 

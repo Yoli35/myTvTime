@@ -539,7 +539,7 @@ $fa-font-path: "../webfonts";
     .backdrop {
         @include flex-row(end, start);
         background-image: url($bg-image);
-        background-position: center;
+        background-position: center top;
         background-size: cover;
         border-radius: 1em;
         inset: 0;

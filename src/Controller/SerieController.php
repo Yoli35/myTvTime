@@ -759,10 +759,12 @@ class SerieController extends AbstractController
         $modified = false;
         if ($serieViewing->getNumberOfSeasons() != $tv['number_of_seasons']) {
             $serieViewing->setNumberOfSeasons($tv['number_of_seasons']);
+            $serieViewing->setSerieCompleted(false);
             $modified = true;
         }
         if ($serieViewing->getNumberOfEpisodes() != $tv['number_of_episodes']) {
             $serieViewing->setNumberOfEpisodes($tv['number_of_episodes']);
+            $serieViewing->setSerieCompleted(false);
             $modified = true;
         }
         if ($serieViewing->isSerieCompleted() == NULL) {
@@ -1381,6 +1383,7 @@ class SerieController extends AbstractController
 
             $serie->setNumberOfSeasons($tv['number_of_seasons']);
             $serie->setUpdatedAt(new DateTime());
+
         }
         if ($serie->getNumberOfEpisodes() !== $tv['number_of_episodes']) {
             $whatsNew['episode'] = $tv['number_of_episodes'] - $serie->getNumberOfEpisodes();
