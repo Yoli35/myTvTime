@@ -11,6 +11,10 @@
       color: var(--light-theme-text);
     }
 
+    .backdrop {
+      background-position: center;
+    }
+
     .clock {
       left: unset;
       right: 1em;
