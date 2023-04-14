@@ -244,7 +244,7 @@
         });
 
         function checkHeight() {
-            const container = document.querySelector(".container-fluid");
+            const container = document.querySelector(".my-series");
             if (container.clientHeight === 496) {
                 window.location.reload();
             }
@@ -1008,7 +1008,7 @@
 
                             /*
                              * Si on est sur la première page avec le tri par "ordre d'ajout décroissant",
-                             * alors on insère la nouvelle série au début
+                             * alors, on insère la nouvelle série au début
                              */
                             if (data.response === "New" && _current_page === 1 && _order_by === 'id' && _order === 'desc') {
                                 const wrapper = document.querySelector(".series").querySelector(".wrapper");

@@ -1,7 +1,7 @@
 @import "variables";
 
 .chat-users {
-    background-color: var(--gradient-ardoise-90);
+    background-color: transparent;
     border-left: 1px solid var(--gradient-ardoise-20);
     border-radius: .25rem 0 0 0;
     border-top: 1px solid var(--gradient-ardoise-20);
@@ -10,6 +10,24 @@
     position: fixed;
     right: 0;
     width: 20rem;
+
+    &:has(.chat-users-list.collapsed) {
+        border: 1px solid var(--gradient-ardoise-20);
+        border-radius: 50%;
+        bottom: 1rem;
+        height: 2rem;
+        right: 1rem;
+        width: 2rem;
+
+        .chat-users-header {
+            @include flex-row(center, center);
+            border: 1px solid var(--gradient-ardoise-50);
+            border-radius: 50%;
+            height: 100%;
+            padding: 0;
+            width: 100%;
+        }
+    }
 
     .chat-users-header {
         @include flex-row(center, flex-start);
@@ -23,7 +41,9 @@
 
     .chat-users-list {
         @include flex-col(center, flex-start);
-        background-color: var(--gradient-ardoise-90);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        background-color: var(--gradient-ardoise-90-alpha-10);
         color: var(--gradient-ardoise-20);
         overflow: auto;
         padding: 0;
@@ -79,9 +99,127 @@
     }
 }
 
+.conversation {
+    @include flex-col(flex-start, flex-start);
+    background-color: var(--gradient-ardoise-90);
+    border: 1px solid var(--gradient-ardoise-20);
+    border-radius: .25rem .25rem 0 0;
+    bottom: 0;
+    height: 20rem;
+    position: fixed;
+    right: 20rem;
+    width: 20rem;
+
+    .header {
+        @include flex-row(center, flex-start);
+        background-color: var(--gradient-ardoise-70);
+        border-bottom: 1px solid var(--gradient-ardoise-20);
+        border-radius: .25rem .25rem 0 0;
+        color: var(--gradient-ardoise-20);
+        cursor: pointer;
+        padding: .5rem 1rem;
+        width: 100%;
+
+        .title {
+            font-weight: 300;
+            margin-right: auto;
+
+            span {
+                color: var(--gradient-ardoise-20);
+                font-weight: 400;
+            }
+        }
+    }
+
+    .body {
+        @include flex-col(flex-start, flex-start);
+        padding: 0;
+        transition: height 0.5s ease-in-out;
+        width: 100%;
+
+        &.collapsed {
+            height: 0;
+        }
+
+        .messages {
+            @include flex-col(flex-start, flex-start);
+            background-color: var(--gradient-ardoise-90);
+            color: var(--gradient-ardoise-20);
+            height: calc(15.5rem - 1px);
+            overflow: auto;
+            padding: .25rem;
+            width: 100%;
+
+            .message {
+                @include flex-row(flex-start, flex-start);
+                font-weight: 300;
+                margin-top: .5rem;
+                width: 18rem;
+
+                .message-content {
+                    width: 100%;
+
+                    .message-time {
+                        color: var(--gradient-ardoise-70);
+                        font-size: .75rem;
+                        width: 100%;
+                    }
+
+                    .message-text {
+                        border-radius: .5rem;
+                        font-size: .875rem;
+                        padding: .5rem 1rem;
+                        width: 100%;
+                    }
+                }
+
+                &.user-message {
+                    margin-left: auto;
+
+                    .message-content {
+                        .message-text {
+                            background-color: var(--gradient-ardoise-70);
+                            color: var(--gradient-ardoise-20);
+                            justify-content: flex-end;
+                        }
+                    }
+                }
+
+                &.recipient-message {
+                    .message-content {
+                        .message-text {
+                            background-color: var(--gradient-green-90);
+                            color: var(--gradient-green-20);
+                        }
+                    }
+                }
+            }
+        }
+
+        .new-message {
+            @include flex-row(center, flex-start);
+            background-color: var(--gradient-ardoise-70);
+            border-top: 1px solid var(--gradient-ardoise-20);
+            color: var(--gradient-ardoise-20);
+            padding: 0;
+            width: 100%;
+
+            label {
+                width: 100%;
+
+                input {
+                    appearance: none;
+                    border-radius: 0;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     .chat-users {
-        background-color: var(--gradient-ardoise-20);
+        //background-color: var(--gradient-ardoise-10-alpha-20);
         border-color: var(--gradient-ardoise-90);
 
         .chat-users-header {
@@ -91,13 +229,76 @@
         }
 
         .chat-users-list {
-            background-color: var(--gradient-ardoise-20);
+            background-color: var(--gradient-ardoise-20-alpha-50);
             color: var(--gradient-ardoise-90);
 
             ul {
                 li {
                     &:hover {
                         background-color: var(--gradient-ardoise-50);
+                        color: var(--gradient-ardoise-90);
+                    }
+                }
+            }
+        }
+    }
+
+    .conversation {
+        border-color: var(--gradient-ardoise-80);
+
+        .header {
+            background-color: var(--gradient-ardoise-30);
+            border-bottom-color: var(--gradient-ardoise-80);
+            color: var(--gradient-ardoise-90);
+
+            .title {
+                span {
+                    color: var(--gradient-ardoise-80);
+                }
+            }
+        }
+
+        .body {
+            .messages {
+                background-color: var(--gradient-ardoise-20);
+
+                .message {
+
+                    .message-content {
+
+                        .message-time {
+                            color: var(--gradient-ardoise-70);
+                        }
+                    }
+
+                    &.user-message {
+                        margin-left: auto;
+
+                        .message-content {
+                            .message-text {
+                                background-color: var(--gradient-ardoise-30);
+                                color: var(--gradient-ardoise-90);
+                            }
+                        }
+                    }
+
+                    &.recipient-message {
+                        .message-content {
+                            .message-text {
+                                background-color: var(--gradient-green-20);
+                                color: var(--gradient-green-90);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .new-message {
+                border-top-color: var(--gradient-ardoise-60);
+
+                label {
+                    input {
+                        background-color: var(--gradient-ardoise-30);
                         color: var(--gradient-ardoise-90);
                     }
                 }

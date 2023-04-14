@@ -3,9 +3,9 @@
 {% if user %}
     <div class="chat-users">
         <div class="chat-users-header">
-            {{ 'Users'|trans }}
+            <i class="fa-solid fa-users"></i>
         </div>
-        <div class="chat-users-list">
+        <div class="chat-users-list collapsed">
             <ul>
                 {% for u in users %}
                     {% if u.id != user.id %}
@@ -28,6 +28,8 @@
         </div>
     </div>
 
+{#    {{ include('blocks/chat/_conversation.html.twig') }}#}
+
     <script>
         const user = {
             id: {{ user.id }},
@@ -36,14 +38,38 @@
         };
         window.addEventListener("DOMContentLoaded", () => {
             const chatUsers = document.querySelector(".chat-users");
+            const conversations = document.querySelectorAll(".conversation");
             const chatHeader = chatUsers.querySelector(".chat-users-header");
             const chatUsersList = chatUsers.querySelector(".chat-users-list");
             const chatUsersListItems = chatUsersList.querySelectorAll("li");
             const chatUsersListItemsArray = Array.from(chatUsersListItems);
 
+            getChatUsersWindowStatus();
+
+            conversations?.forEach(conversation => {
+                const header = conversation.querySelector(".header");
+                const body = conversation.querySelector(".body");
+                header.addEventListener("click", () => {
+                    body.classList.toggle("collapsed");
+                });
+                conversation.addEventListener("click", () => {
+                    conversations.forEach(conversation => {
+                        conversation.classList.remove("active");
+                    });
+                    conversation.classList.add("active");
+                });
+            });
+
             chatHeader.addEventListener("click", () => {
                 chatUsersList.classList.toggle("collapsed");
+                if (chatUsersList.classList.contains("collapsed")) {
+                    chatHeader.innerHTML = '<i class="fa-solid fa-users"></i>';
+                } else {
+                    chatHeader.innerHTML = "{{ 'Users'|trans }} ({{ users|length - 1 }})";
+                }
+                setChatUsersWindowStatus();
             });
+
             chatUsersListItemsArray.forEach(item => {
                 item.addEventListener("click", () => {
                     const id = item.getAttribute("data-id");
@@ -52,5 +78,25 @@
             });
         });
 
+        function setChatUsersWindowStatus() {
+            const chatWindow = document.querySelector(".chat-users-list");
+            const chatWindowStatus = chatWindow.classList.contains("collapsed") ? "collapsed" : "expanded";
+            localStorage.setItem("mytvtime.chatWindowStatus", chatWindowStatus);
+        }
+
+        function getChatUsersWindowStatus() {
+            const chatWindowStatus = localStorage.getItem("mytvtime.chatWindowStatus");
+            const chatUsers = document.querySelector(".chat-users");
+            const chatWindow = chatUsers.querySelector(".chat-users-list");
+            const chatHeader = chatUsers.querySelector(".chat-users-header");
+
+            if (chatWindowStatus === "collapsed") {
+                chatWindow.classList.add("collapsed");
+                chatHeader.innerHTML = '<i class="fa-solid fa-users"></i>';
+            } else {
+                chatWindow.classList.remove("collapsed");
+                chatHeader.innerHTML = "{{ 'Users'|trans }} ({{ users|length - 1 }})";
+            }
+        }
     </script>
 {% endif %}

@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -31,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups(['user:item', 'user:list'])]
-    private int $id;
+    private ?int $id = null;
 
     #[Groups(['user:item', 'user:list'])]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
@@ -114,10 +115,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $chatDiscussions;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $lastLogin = null;
+    private ?DateTimeInterface $lastLogin = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $lastLogout = null;
+    private ?DateTimeInterface $lastLogout = null;
 
     public function __construct()
     {
@@ -613,24 +614,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLastLogin(): ?\DateTimeInterface
+    public function getLastLogin(): ?DateTimeInterface
     {
         return $this->lastLogin;
     }
 
-    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    public function setLastLogin(?DateTimeInterface $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
 
         return $this;
     }
 
-    public function getLastLogout(): ?\DateTimeInterface
+    public function getLastLogout(): ?DateTimeInterface
     {
         return $this->lastLogout;
     }
 
-    public function setLastLogout(?\DateTimeInterface $lastLogout): self
+    public function setLastLogout(?DateTimeInterface $lastLogout): self
     {
         $this->lastLogout = $lastLogout;
 
