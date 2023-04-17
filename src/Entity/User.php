@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
+use DateInterval;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -120,18 +121,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $lastLogout = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?DateTimeInterface $lastActivityAt = null;
+
     public function __construct()
     {
-        $this->movies = new ArrayCollection();
-        $this->tiktoks = new ArrayCollection();
         $this->articles = new ArrayCollection();
-        $this->movieCollections = new ArrayCollection();
-        $this->series = new ArrayCollection();
-        $this->events = new ArrayCollection();
-        $this->serieViewings = new ArrayCollection();
-        $this->friends = new ArrayCollection();
-        $this->youtubeVideos = new ArrayCollection();
         $this->chatDiscussions = new ArrayCollection();
+        $this->events = new ArrayCollection();
+        $this->friends = new ArrayCollection();
+        $this->movieCollections = new ArrayCollection();
+        $this->movies = new ArrayCollection();
+        $this->serieViewings = new ArrayCollection();
+        $this->series = new ArrayCollection();
+        $this->tiktoks = new ArrayCollection();
+        $this->youtubeVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -636,5 +640,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lastLogout = $lastLogout;
 
         return $this;
+    }
+
+    public function getLastActivityAt(): ?DateTimeInterface
+    {
+        return $this->lastActivityAt;
+    }
+
+    public function setLastActivityAt(?DateTimeInterface $lastActivityAt): self
+    {
+        $this->lastActivityAt = $lastActivityAt;
+
+        return $this;
+    }
+
+    public function isOnLine($now): bool
+    {
+        if ($this->lastLogout) {
+            return false;
+        } else {
+            return $this->lastActivityAt >= $now->sub(new DateInterval('PT5M'));
+        }
     }
 }

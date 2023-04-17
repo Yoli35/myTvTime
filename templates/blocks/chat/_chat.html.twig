@@ -15,7 +15,7 @@
                             </div>
                             <span>{{ u.username }}</span>
                             {% if u.lastLogin is not null %}
-                                {% if  u.lastLogout is null %}
+                                {% if u.isOnLine %}
                                     <div class="online">●</div>
                                 {% else %}
                                     <div class="last">{{ u.lastLogout|ago }}</div>
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-{#    {{ include('blocks/chat/_conversation.html.twig') }}#}
+    {#    {{ include('blocks/chat/_conversation.html.twig') }} #}
 
     <script>
         const user = {

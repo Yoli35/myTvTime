@@ -11,7 +11,13 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\User;
+use App\Service\LogService;
 use App\Twig\SourceCodeExtension;
+use DateTimeImmutable;
+use DateTimeZone;
+use Exception;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -23,11 +29,14 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class ControllerSubscriber implements EventSubscriberInterface
+readonly class ControllerSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly SourceCodeExtension $twigExtension
-    ) {
+        private LogService          $logService,
+        private Security            $security,
+        private SourceCodeExtension $twigExtension
+    )
+    {
     }
 
     public static function getSubscribedEvents(): array
@@ -43,7 +52,18 @@ class ControllerSubscriber implements EventSubscriberInterface
         // number of sub-requests. See
         // https://symfony.com/doc/current/components/http_kernel.html#sub-requests
         if ($event->isMainRequest()) {
+            /** @var User $user */
+            $user = $this->security->getUser();
             $this->twigExtension->setController($event->getController());
+            $this->logService->log($event->getRequest(), $user);
+            if ($user) {
+                try {
+                    $user->setLastActivityAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Paris')));
+                } catch (Exception $e) {
+                    $user->setLastActivityAt(new DateTimeImmutable());
+                }
+
+            }
         }
     }
 }
