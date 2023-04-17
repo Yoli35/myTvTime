@@ -21,12 +21,13 @@ use App\Repository\SerieCastRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
-use App\Service\LogService;
+//use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
 use DateInterval;
 use DateTime;
+use DateTimeZone;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +57,7 @@ class SerieController extends AbstractController
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FavoriteRepository       $favoriteRepository,
                                 private readonly ImageConfiguration       $imageConfiguration,
-                                private readonly LogService               $logService,
+//                                private readonly LogService               $logService,
                                 private readonly SeasonViewingRepository  $seasonViewingRepository,
                                 private readonly SerieCastRepository      $serieCastRepository,
                                 private readonly SerieRepository          $serieRepository,
@@ -70,7 +71,7 @@ class SerieController extends AbstractController
     public function index(Request $request, SettingsRepository $settingsRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         /** @var User $user */
         $user = $this->getUser();
@@ -115,11 +116,12 @@ class SerieController extends AbstractController
             $settingsRepository->save($leafSettings, true);
         }
 
-        $now = new DateTime();
-        $now->setTime(0, 0);
+       if ($series) {
+        $now = $this->newDateImmutable('now', 'Europe/Paris');
 
-        foreach ($series as &$serie) {
-            $serie = $this->isSerieAiringSoon($serie, $now);
+           foreach ($series as &$serie) {
+                $serie = $this->isSerieAiringSoon($serie, $now);
+            }
         }
 
         return $this->render('serie/index.html.twig', [
@@ -141,6 +143,30 @@ class SerieController extends AbstractController
             'from' => self::MY_SERIES,
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
+    }
+
+//    public function newDate($dateString, $timeZone, $allDay = false): DateTime
+//    {
+//        try {
+//            $date = new DateTime($dateString, new DateTimeZone($timeZone));
+//        } catch (Exception) {
+//            $date = new DateTime();
+//        }
+//        if (!$allDay)   $date->setTime(0, 0);
+//
+//        return $date;
+//    }
+
+    public function newDateImmutable($dateString, $timeZone, $allDay = false): DateTimeImmutable
+    {
+        try {
+            $date = new DateTimeImmutable($dateString, new DateTimeZone($timeZone));
+        } catch (Exception) {
+            $date = new DateTimeImmutable();
+        }
+        if (!$allDay)   $date->setTime(0, 0);
+
+        return $date;
     }
 
     public function cookies($request, $backFromDetail, $somethingChanged, $perPage, $sort, $order): array
@@ -326,16 +352,16 @@ class SerieController extends AbstractController
     public function today(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         $day = $request->query->getInt('d');
         $week = $request->query->getInt('w');
         $month = $request->query->getInt('m');
 
         $datetime = $day . ' day ' . $week . ' week ' . $month . ' month';
-        $date = new DateTimeImmutable($datetime);
+        $date = $this->newDateImmutable($datetime, 'Europe/Paris');
         $date = $date->setTime(0, 0);
-        $now = new DateTimeImmutable();
+        $now = $this->newDateImmutable('now', 'Europe/Paris');
         $now = $now->setTime(0, 0);
         $diff = date_diff($now, $date);
         $delta = $diff->days;
@@ -449,7 +475,7 @@ class SerieController extends AbstractController
     public function seriesToStart(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         $page = $request->query->getInt('p', 1);
         $perPage = 10;
@@ -532,7 +558,7 @@ class SerieController extends AbstractController
     public function seriesToEnd(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         $page = $request->query->getInt('p', 1);
         $perPage = 10;
@@ -598,7 +624,7 @@ class SerieController extends AbstractController
     #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
     public function search(Request $request, int $page): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         $tmdbService = $this->TMDBService;
         $series = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         $query = $request->query->get('query');
@@ -641,28 +667,28 @@ class SerieController extends AbstractController
     #[Route('/popular', name: 'app_serie_popular', methods: ['GET'])]
     public function popular(Request $request): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         return $this->series($request, self::POPULAR);
     }
 
     #[Route('/top/rated', name: 'app_serie_top_rated', methods: ['GET'])]
     public function topRated(Request $request): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         return $this->series($request, self::TOP_RATED);
     }
 
     #[Route('/airing/today', name: 'app_serie_airing_today', methods: ['GET'])]
     public function topAiringToday(Request $request): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         return $this->series($request, self::AIRING_TODAY);
     }
 
     #[Route('/on/the/air', name: 'app_serie_on_the_air', methods: ['GET'])]
     public function topOnTheAir(Request $request): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         return $this->series($request, self::ON_THE_AIR);
     }
 
@@ -774,7 +800,7 @@ class SerieController extends AbstractController
         if ($serieViewing->getCreatedAt() == null) {
             try {
                 $serieViewing->setCreatedAt(new DateTimeImmutable($tv['first_air_date']));
-            } catch (\Exception $e) {
+            } catch (Exception) {
                 $serieViewing->setCreatedAt(new DateTimeImmutable());
             }
             $modified = true;
@@ -782,7 +808,7 @@ class SerieController extends AbstractController
         if ($serieViewing->getModifiedAt() == null) {
             try {
                 $serieViewing->setModifiedAt(new DateTime($tv['first_air_date']));
-            } catch (\Exception $e) {
+            } catch (Exception) {
                 $serieViewing->setModifiedAt(new DateTime());
             }
             $modified = true;
@@ -897,7 +923,7 @@ class SerieController extends AbstractController
     public function show(Request $request, Serie $serie): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         $tmdbService = $this->TMDBService;
 
@@ -920,7 +946,7 @@ class SerieController extends AbstractController
     #[Route('/tmdb/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
     public function tmdb(Request $request, $id): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::POPULAR);
         $query = $request->query->get('query', "");
@@ -935,7 +961,7 @@ class SerieController extends AbstractController
     #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
     public function season(Request $request, $id, $seasonNumber): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         $from = $request->query->get('from');
         $page = $request->query->get('p');
@@ -959,10 +985,10 @@ class SerieController extends AbstractController
                     if ($tmdbEpisode['air_date']) {
                         $dateString = $tmdbEpisode['air_date'] . 'T00:00:00';
                         try {
-                            $airDate = new \DateTime($dateString);
+                            $airDate = new DateTime($dateString);
                             $airDate->modify('+1 day');
                             $tmdbEpisode['air_date'] = $airDate->format('Y-m-d');
-                        } catch (\Exception $e) {
+                        } catch (Exception) {
 
                         }
                     }
@@ -1098,10 +1124,10 @@ class SerieController extends AbstractController
 
                     if ($serieViewing->isTimeShifted()) {
                         try {
-                            $airDate = new \DateTimeImmutable($season['air_date']);
+                            $airDate = new DateTimeImmutable($season['air_date']);
                             $airDate = $airDate->modify('+1 day');
                             $seasonWithAView['air_date'] = $airDate->format('Y-m-d');
-                        } catch (\Exception) {
+                        } catch (Exception) {
 
                         }
                     }
@@ -1215,8 +1241,8 @@ class SerieController extends AbstractController
                 ];
             }
             try {
-                $airDate = new \DateTimeImmutable($tmdbEpisode['air_date']);
-            } catch (\Exception $e) {
+                $airDate = new DateTimeImmutable($tmdbEpisode['air_date']);
+            } catch (Exception) {
                 return [
                     'episodeNumber' => $tmdbEpisode['episode_number'],
                     'seasonNumber' => $tmdbEpisode['season_number'],
@@ -1228,7 +1254,7 @@ class SerieController extends AbstractController
             if ($serieViewing->isTimeShifted()) {
                 $airDate = $airDate->modify('+1 day');
             }
-            $now = new \DateTimeImmutable('now');
+            $now = new DateTimeImmutable('now');
             $interval = date_diff($now, $airDate);
 
             if ($lastNotViewedEpisode->getAirDate() == null) {
@@ -1287,7 +1313,7 @@ class SerieController extends AbstractController
     public function updateTvCast($tv, $serieViewing): void
     {
         $recurringCharacters = $tv['credits']['cast'];
-        $tvCast = $tv['credits']['cast'];
+//        $tvCast = $tv['credits']['cast'];
 
         foreach ($tv['seasons'] as $s) {
             $seasonNumber = $s['season_number'];
@@ -1449,7 +1475,7 @@ class SerieController extends AbstractController
                         if ($episodeTmdb) {
                             try {
                                 $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
-                            } catch (Exception $e) {
+                            } catch (Exception) {
                                 $episode->setAirDate(null);
                             }
                         }
@@ -1464,7 +1490,7 @@ class SerieController extends AbstractController
                             if ($episodeTmdb) {
                                 try {
                                     $episode->setViewedAt(new DateTimeImmutable($episodeTmdb['air_date']));
-                                } catch (Exception $e) {
+                                } catch (Exception) {
                                     $episode->setViewedAt(new DateTimeImmutable());
                                 }
                             }
@@ -1492,7 +1518,7 @@ class SerieController extends AbstractController
                 if ($episodeTmdb) {
                     try {
                         $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         $episode->setAirDate(new DateTimeImmutable());
                     }
                 }
@@ -1591,23 +1617,25 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTvEpisode($serie->getSerieId(), 1, 1, $request->getLocale());
         $firstEpisode = json_decode($standing, true);
         if ($firstEpisode && $firstEpisode['air_date']) {
-            try {
-                $createdAt = new DateTimeImmutable($firstEpisode['air_date']);
-            } catch (Exception $e) {
-                $createdAt = new DateTimeImmutable();
-            }
+            $createdAt =$this->newDateImmutable($firstEpisode['air_date'], 'Europe/Paris');
+//            try {
+//                $createdAt = new DateTimeImmutable($firstEpisode['air_date']);
+//            } catch (Exception) {
+//                $createdAt = new DateTimeImmutable();
+//            }
             $serieViewing->setCreatedAt($createdAt);
             return $createdAt;
         }
 
         $standing = $this->TMDBService->getTv($serie->getSerieId(), $request->getLocale());
-        $firstAirDate = json_decode($standing, true);
-        if ($firstAirDate && $firstAirDate['first_air_date']) {
-            try {
-                $createdAt = new DateTimeImmutable($firstAirDate['first_air_date']);
-            } catch (Exception $e) {
-                $createdAt = new DateTimeImmutable();
-            }
+        $tv = json_decode($standing, true);
+        if ($tv && $tv['first_air_date']) {
+            $createdAt = $this->newDateImmutable($tv['first_air_date'], 'Europe/Paris');
+//            try {
+//                $createdAt = new DateTimeImmutable($tv['first_air_date']);
+//            } catch (Exception $e) {
+//                $createdAt = new DateTimeImmutable();
+//            }
             $serieViewing->setCreatedAt($createdAt);
         }
         return $createdAt;

@@ -18,7 +18,11 @@
                                 {% if u.isOnLine %}
                                     <div class="online">●</div>
                                 {% else %}
-                                    <div class="last">{{ u.lastLogout|ago }}</div>
+                                    {% if u.lastLogout is not null %}
+                                        <div class="last">{{ u.lastLogout|ago }}</div>
+                                    {% else %}
+                                        <div class="last">{{ u.lastActivity|ago }}</div>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </li>

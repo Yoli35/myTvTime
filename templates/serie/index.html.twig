@@ -18,176 +18,190 @@
 
             <main>
                 <div class="series">
-                    <div class="series-tools mobile">
-                        <div class="pages mobile">
-                            {{ include('blocks/serie/_pagination.html.twig') }}
+                    {% if series|length %}
+                        <div class="series-tools mobile">
+                            <div class="pages mobile">
+                                {{ include('blocks/serie/_pagination.html.twig') }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="wrapper">
-                        {% if series|length %}
+                        <div class="wrapper">
                             {% for serie in series %}
                                 <div data-id="{{ serie.id }}">
                                     {{ include('blocks/serie/_card.html.twig') }}
                                 </div>
                             {% endfor %}
-                        {% else %}
-                            Rien à afficher
-                        {% endif %}
-                    </div>
-                    <div class="series-tools bottom">
-                        <div class="pages">
-                            {{ include('blocks/serie/_pagination.html.twig') }}
                         </div>
-                    </div>
-                    <div class="series-tools">
-                        <div class="pages">
-                            {{ include('blocks/serie/_pagination.html.twig') }}
-                        </div>
-                        <div class="numbers">
-                            {{ numbers.episodes }} {{ 'episodes'|trans }} / {{ numbers.seasons }} {{ 'seasons'|trans }}
-                        </div>
-                        <div class="search-serie">
-                            <h2>{{ 'Search my series'|trans }}</h2>
-                            <label class="label" for="search-name">{{ 'Name of the serie'|trans }}</label>
-                            <div class="group">
-                                <div class="field">
-                                    <input id="search-name" type="search" value="" placeholder="{{ 'Start taping the name'|trans }}">
-                                    <input id="search-id" type="hidden" value="-1">
-                                </div>
-                                <div>
-                                    <button id="search_serie" class="disabled" type="submit">{{ 'Show'|trans }}</button>
-                                </div>
+                        <div class="series-tools bottom">
+                            <div class="pages">
+                                {{ include('blocks/serie/_pagination.html.twig') }}
                             </div>
                         </div>
-                        <div class="search-serie">
-                            <h2>{{ 'Search series'|trans }}</h2>
-                            <label class="label" for="search-tmdb-name">{{ 'Name of the serie'|trans }}</label>
-                            <div class="group">
-                                <div class="field">
-                                    <input id="search-tmdb-name" type="search" value="" placeholder="{{ 'Start taping the name'|trans }}">
-                                </div>
-                                <div>
-                                    <button id="search-tmdb-series" type="submit">{{ 'Search'|trans }}</button>
-                                </div>
+                        <div class="series-tools">
+                            <div class="pages">
+                                {{ include('blocks/serie/_pagination.html.twig') }}
                             </div>
-                        </div>
-                        <div class="add-serie">
-                            <h2>{{ 'Add'|trans }}</h2>
-
-                            <label class="label" for="new_serie">{{ 'New Serie Id'|trans }}</label>
-                            <div class="group">
-                                <div class="field">
-                                    <input id="new_serie" type="text" value="">
-                                </div>
-                                <div>
-                                    <button id="add_serie" type="submit">{{ 'Add'|trans }}</button>
-                                </div>
+                            <div class="numbers">
+                                {{ numbers.episodes }} {{ 'episodes'|trans }}
+                                / {{ numbers.seasons }} {{ 'seasons'|trans }}
                             </div>
-                            <div class="help">
-                                <details>
-                                    <summary><span class="label">{{ 'Help'|trans }}</span></summary>
+                            <div class="search-serie">
+                                <h2>{{ 'Search my series'|trans }}</h2>
+                                <label class="label" for="search-name">{{ 'Name of the serie'|trans }}</label>
+                                <div class="group">
+                                    <div class="field">
+                                        <input id="search-name" type="search" value=""
+                                               placeholder="{{ 'Start taping the name'|trans }}">
+                                        <input id="search-id" type="hidden" value="-1">
+                                    </div>
                                     <div>
-                                        <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="The Movie Database (TMDB)" width="154" height="20"><br>
-                                        {{ 'New Serie Help'|trans({
-                                            '%link1%': '<a href="https://www.themoviedb.org" target="_blank" rel="noopener">The Movie Db site <i class="fa-solid fa-paperclip"></i></a>',
-                                            '%link2%': '<a href="https://www.themoviedb.org/tv/4607-lost" target="_blank" rel="noopener">https://www.themoviedb.org/tv/4607-lost</a>',
-                                            '%id%': '4607'})|raw }}
+                                        <button id="search_serie" class="disabled"
+                                                type="submit">{{ 'Show'|trans }}</button>
                                     </div>
-                                </details>
+                                </div>
                             </div>
-                        </div>
-                        <div class="settings">
-                            <h2>{{ 'Settings'|trans }}</h2>
+                            <div class="search-serie">
+                                <h2>{{ 'Search series'|trans }}</h2>
+                                <label class="label" for="search-tmdb-name">{{ 'Name of the serie'|trans }}</label>
+                                <div class="group">
+                                    <div class="field">
+                                        <input id="search-tmdb-name" type="search" value=""
+                                               placeholder="{{ 'Start taping the name'|trans }}">
+                                    </div>
+                                    <div>
+                                        <button id="search-tmdb-series" type="submit">{{ 'Search'|trans }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-serie">
+                                <h2>{{ 'Add'|trans }}</h2>
 
-                            <div class="per-page">
-                                <label class="label" for="per-page">{{ 'Results per page'|trans }}</label>
-                                <div class="field">
-                                    {% set slider_value = 2 %}
-                                    {% for key, value in pages.per_page_values %}
-                                        {% if value == pages.per_page %}
-                                            {% set slider_value = key %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    <input id="per-page" type="range" value="{{ slider_value }}" list="per-page-list" min="1" max="{{ pages.per_page_values|length }}">
-                                    <datalist id="per-page-list">
+                                <label class="label" for="new_serie">{{ 'New Serie Id'|trans }}</label>
+                                <div class="group">
+                                    <div class="field">
+                                        <input id="new_serie" type="text" value="">
+                                    </div>
+                                    <div>
+                                        <button id="add_serie" type="submit">{{ 'Add'|trans }}</button>
+                                    </div>
+                                </div>
+                                <div class="help">
+                                    <details>
+                                        <summary><span class="label">{{ 'Help'|trans }}</span></summary>
+                                        <div>
+                                            <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
+                                                 alt="The Movie Database (TMDB)" width="154" height="20"><br>
+                                            {{ 'New Serie Help'|trans({
+                                                '%link1%': '<a href="https://www.themoviedb.org" target="_blank" rel="noopener">The Movie Db site <i class="fa-solid fa-paperclip"></i></a>',
+                                                '%link2%': '<a href="https://www.themoviedb.org/tv/4607-lost" target="_blank" rel="noopener">https://www.themoviedb.org/tv/4607-lost</a>',
+                                                '%id%': '4607'})|raw }}
+                                        </div>
+                                    </details>
+                                </div>
+                            </div>
+                            <div class="settings">
+                                <h2>{{ 'Settings'|trans }}</h2>
+
+                                <div class="per-page">
+                                    <label class="label" for="per-page">{{ 'Results per page'|trans }}</label>
+                                    <div class="field">
+                                        {% set slider_value = 2 %}
                                         {% for key, value in pages.per_page_values %}
-                                            <option value="{{ key }}" label="{{ value }}"></option>
+                                            {% if value == pages.per_page %}
+                                                {% set slider_value = key %}
+                                            {% endif %}
                                         {% endfor %}
-                                    </datalist>
-                                    <div class="value">{{ pages.per_page }}</div>
+                                        <input id="per-page" type="range" value="{{ slider_value }}"
+                                               list="per-page-list"
+                                               min="1" max="{{ pages.per_page_values|length }}">
+                                        <datalist id="per-page-list">
+                                            {% for key, value in pages.per_page_values %}
+                                                <option value="{{ key }}" label="{{ value }}"></option>
+                                            {% endfor %}
+                                        </datalist>
+                                        <div class="value">{{ pages.per_page }}</div>
+                                    </div>
+                                </div>
+                                <div class="sort">
+                                    <div class="group-settings">
+                                        <div class="order-by">
+                                            <label class="label" for="order-by">{{ 'Order by'|trans }}</label>
+                                            <div class="field">
+                                                <select id="order-by" class="left">
+                                                    <option value="firstDateAir"{% if pages.order_by=='firstDateAir' %} selected{% endif %}>{{ 'First Air Date'|trans }}</option>
+                                                    <option value="id"{% if pages.order_by=='id' %} selected{% endif %}>{{ 'Add order'|trans }}</option>
+                                                    <option value="modifiedAt"{% if pages.order_by=='modifiedAt' %} selected{% endif %}>{{ 'Last modified by user'|trans }}</option>
+                                                    <option value="updatedAt"{% if pages.order_by=='updatedAt' %} selected{% endif %}>{{ 'Last modified by TMDB'|trans }}</option>
+                                                    <option value="name"{% if pages.order_by=='name' %} selected{% endif %}>{{ 'Name'|trans }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="order">
+                                            <label class="label" for="order">{{ 'Order'|trans }}</label>
+                                            <div class="field">
+                                                <select id="order" class="right">
+                                                    <option value="desc"{% if pages.order=='desc' %} selected{% endif %}>{{ 'Descending'|trans }}</option>
+                                                    <option value="asc"{% if pages.order=='asc' %} selected{% endif %}>{{ 'Ascending'|trans }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="apply">
+                                        <button id="apply" type="submit">{{ 'Apply'|trans }}</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="sort">
-                                <div class="group-settings">
-                                    <div class="order-by">
-                                        <label class="label" for="order-by">{{ 'Order by'|trans }}</label>
-                                        <div class="field">
-                                            <select id="order-by" class="left">
-                                                <option value="firstDateAir"{% if pages.order_by=='firstDateAir' %} selected{% endif %}>{{ 'First Air Date'|trans }}</option>
-                                                <option value="id"{% if pages.order_by=='id' %} selected{% endif %}>{{ 'Add order'|trans }}</option>
-                                                <option value="modifiedAt"{% if pages.order_by=='modifiedAt' %} selected{% endif %}>{{ 'Last modified by user'|trans }}</option>
-                                                <option value="updatedAt"{% if pages.order_by=='updatedAt' %} selected{% endif %}>{{ 'Last modified by TMDB'|trans }}</option>
-                                                <option value="name"{% if pages.order_by=='name' %} selected{% endif %}>{{ 'Name'|trans }}</option>
-                                            </select>
+                            <div class="settings">
+                                <div class="animation">
+                                    <h3>{{ 'Animation'|trans }}</h3>
+                                    <div class="leaf">
+                                        <h4>
+                                            {{ 'Leaf' }}
+                                            <label class="switch">
+                                                <input type="checkbox"/>
+                                                <span></span>
+                                            </label>
+                                            <div class="anim-settings-toggler"></div>
+                                            {#                                            <div class="anim-settings-toggler"><i class="fa-solid fa-gear"></i></div> #}
+                                        </h4>
+                                        <div class="anim-settings">
+                                            <div class="slider" id="frequency">
+                                                <div class="label">{{ 'Number'|trans }} (0-100)</div>
+                                                <div class="control" data-name="number" data-type="range" data-min="0"
+                                                     data-max="100" data-value="10"></div>
+                                            </div>
+                                            <div class="slider" id="life-length">
+                                                <div class="label">{{ 'Life\'s Length'|trans }} (0-300sec)</div>
+                                                <div class="control" data-name="life-length" data-type="interval"
+                                                     data-min="0" data-max="300" data-min-value="2"
+                                                     data-max-value="60"></div>
+                                            </div>
+                                            <div class="slider" id="initial-angle">
+                                                <div class="label">{{ 'Initial angle'|trans }} (0°-360°)</div>
+                                                <div class="control" data-name="initial-angle" data-type="range"
+                                                     data-min="0" data-max="360" data-value="0"></div>
+                                            </div>
+                                            <div class="slider" id="turn-per-minute">
+                                                <div class="label">{{ 'Turn per minute'|trans }} (0-100)</div>
+                                                <div class="control" data-name="turn-per-minute" data-type="range"
+                                                     data-min="0" data-max="100" data-value="5"></div>
+                                            </div>
+                                            <div class="slider" id="scale">
+                                                <div class="label">{{ 'Scale'|trans }} (25%-500%)</div>
+                                                <div class="control" data-name="scale" data-type="interval"
+                                                     data-min="25"
+                                                     data-max="500" data-min-value="25" data-max-value="200"></div>
+                                            </div>
+                                            <div class="save">
+                                                <button>{{ 'Save'|trans }}</button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="order">
-                                        <label class="label" for="order">{{ 'Order'|trans }}</label>
-                                        <div class="field">
-                                            <select id="order" class="right">
-                                                <option value="desc"{% if pages.order=='desc' %} selected{% endif %}>{{ 'Descending'|trans }}</option>
-                                                <option value="asc"{% if pages.order=='asc' %} selected{% endif %}>{{ 'Ascending'|trans }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="apply">
-                                    <button id="apply" type="submit">{{ 'Apply'|trans }}</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="settings">
-                            <div class="animation">
-                                <h3>{{ 'Animation'|trans }}</h3>
-                                <div class="leaf">
-                                    <h4>
-                                        {{ 'Leaf' }}
-                                        <label class="switch">
-                                            <input type="checkbox"/>
-                                            <span></span>
-                                        </label>
-                                        <div class="anim-settings-toggler"></div>
-                                        {#                                            <div class="anim-settings-toggler"><i class="fa-solid fa-gear"></i></div> #}
-                                    </h4>
-                                    <div class="anim-settings">
-                                        <div class="slider" id="frequency">
-                                            <div class="label">{{ 'Number'|trans }} (0-100)</div>
-                                            <div class="control" data-name="number" data-type="range" data-min="0" data-max="100" data-value="10"></div>
-                                        </div>
-                                        <div class="slider" id="life-length">
-                                            <div class="label">{{ 'Life\'s Length'|trans }} (0-300sec)</div>
-                                            <div class="control" data-name="life-length" data-type="interval" data-min="0" data-max="300" data-min-value="2" data-max-value="60"></div>
-                                        </div>
-                                        <div class="slider" id="initial-angle">
-                                            <div class="label">{{ 'Initial angle'|trans }} (0°-360°)</div>
-                                            <div class="control" data-name="initial-angle" data-type="range" data-min="0" data-max="360" data-value="0"></div>
-                                        </div>
-                                        <div class="slider" id="turn-per-minute">
-                                            <div class="label">{{ 'Turn per minute'|trans }} (0-100)</div>
-                                            <div class="control" data-name="turn-per-minute" data-type="range" data-min="0" data-max="100" data-value="5"></div>
-                                        </div>
-                                        <div class="slider" id="scale">
-                                            <div class="label">{{ 'Scale'|trans }} (25%-500%)</div>
-                                            <div class="control" data-name="scale" data-type="interval" data-min="25" data-max="500" data-min-value="25" data-max-value="200"></div>
-                                        </div>
-                                        <div class="save">
-                                            <button>{{ 'Save'|trans }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% else %}
+                        <div>Rien à afficher</div>
+                    {% endif %}
                     <div class="new-serie-preview">
                         <div class="message">
                             <div class="content"></div>
@@ -226,21 +240,25 @@
 
         window.addEventListener("DOMContentLoaded", () => {
 
+            const tools = document.querySelector(".series-tools");
+
             checkHeight();
-            initSettings();
-            initPreview();
-            newSerie();
+            if (tools) {
+                initSettings();
+                initPreview();
+                newSerie();
+
+                autocomplete(document.querySelector("#search-name"), createList());
+
+                document.querySelector("#search-tmdb-series").addEventListener("click", () => {
+                    let query = document.querySelector("#search-tmdb-name").value;
+                    if (query.length > 0) {
+                        window.location.href = "{{ path('app_serie_search') }}?query=" + query;
+                    }
+                });
+            }
             initHeader();
             initAnimation();
-
-            autocomplete(document.querySelector("#search-name"), createList());
-
-            document.querySelector("#search-tmdb-series").addEventListener("click", () => {
-                let query = document.querySelector("#search-tmdb-name").value;
-                if (query.length > 0) {
-                    window.location.href = "{{ path('app_serie_search') }}?query=" + query;
-                }
-            });
         });
 
         function checkHeight() {
@@ -295,6 +313,8 @@
             let indicatorDiv, indicatorsDiv, left, right, modulo, link;
 
             slideImages = getBackdrops();
+            if (!slideImages.length) return;
+
             slideNames = getNames();
             slideLinks = getLinks();
             slideIndex = 0;
@@ -775,7 +795,15 @@
             const scaleMax = parseInt(leaf.querySelector(".control[data-name='scale']").getAttribute("data-max-value"));
             const pCount = parseInt(leaf.querySelector(".control[data-name='number']").getAttribute("data-value"));
 
-            return {count: pCount, lifeMin: lifeLengthMin, lifeMax: lifeLengthMax, initialAngle: initialAngle, turnPerMinute: turnPerMinute, scaleMin: scaleMin, scaleMax: scaleMax}
+            return {
+                count: pCount,
+                lifeMin: lifeLengthMin,
+                lifeMax: lifeLengthMax,
+                initialAngle: initialAngle,
+                turnPerMinute: turnPerMinute,
+                scaleMin: scaleMin,
+                scaleMax: scaleMax
+            }
         }
 
         function startLeaves() {
@@ -786,7 +814,22 @@
             console.log({html})
 
             for (let i = 0; i < leafValues.count; i++) {
-                let particule = {interval: 0, loop: 1, frame: 0, maxF: 0, maxY: 0, div: undefined, bg: "b0", x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
+                let particule = {
+                    interval: 0,
+                    loop: 1,
+                    frame: 0,
+                    maxF: 0,
+                    maxY: 0,
+                    div: undefined,
+                    bg: "b0",
+                    x: 0,
+                    dx: 0,
+                    y: 0,
+                    dy: 0,
+                    initialAngle: 0,
+                    turnPerSeconde: 0,
+                    scale: 1
+                };
                 particule.div = document.createElement("div");
                 particule.div.classList.add("particule");
                 particule.div.classList.add("b0");
@@ -811,7 +854,22 @@
                     leaf_particules[i].interval = -1;
                 }
                 leaf_particules[i].div.remove();
-                leaf_particules[i] = {interval: 0, loop: 1, frame: 0, maxF: 0, maxY: 0, div: undefined, bg: "b0", x: 0, dx: 0, y: 0, dy: 0, initialAngle: 0, turnPerSeconde: 0, scale: 1};
+                leaf_particules[i] = {
+                    interval: 0,
+                    loop: 1,
+                    frame: 0,
+                    maxF: 0,
+                    maxY: 0,
+                    div: undefined,
+                    bg: "b0",
+                    x: 0,
+                    dx: 0,
+                    y: 0,
+                    dy: 0,
+                    initialAngle: 0,
+                    turnPerSeconde: 0,
+                    scale: 1
+                };
             }
         }
 
@@ -952,6 +1010,9 @@
         }
 
         function newSerie() {
+            if (document.querySelector("#new-serie") == null) {
+                return;
+            }
             document.querySelector("#new_serie").focus();
             document.querySelector("#new_serie").addEventListener("paste", addSerie);
             document.querySelector("#add_serie").addEventListener("click", addSerie);
@@ -1167,7 +1228,11 @@
             let list = [{id: 0, name: '', original: '', firstDateAir: 0}];
 
             {% for serie in list %}
-            list[{{ loop.index0 }}] = {id: {{ serie.id }}, name: "{{ serie.name }}", original: "{{ serie.original }}", firstDateAir: {{ serie.firstDateAir|date("Y") }} };
+            list[{{ loop.index0 }}] = {
+                id: {{ serie.id }},
+                name: "{{ serie.name }}",
+                original: "{{ serie.original }}",
+                firstDateAir: {{ serie.firstDateAir|date("Y") }} };
             {% endfor %}
 
             return list;

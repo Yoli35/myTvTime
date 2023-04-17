@@ -39,7 +39,7 @@ class ArticleController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         $articles = $this->articleRepository->findByPublishedAtDesc();
 
         return $this->render('article/index.html.twig', [
@@ -51,7 +51,7 @@ class ArticleController extends AbstractController
     #[Route('/{_locale}/blog/article/{id}', name: 'app_blog_article', requirements: ['_locale' => 'fr|en|de|es'])]
     public function article(Request $request, $id, CommentRepository $commentRepository): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         $article = $this->articleRepository->find($id);
 
         $content = preg_replace(
@@ -141,7 +141,7 @@ class ArticleController extends AbstractController
     public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -165,7 +165,7 @@ class ArticleController extends AbstractController
     public function edit(Request $request, int $id, Article $article): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 

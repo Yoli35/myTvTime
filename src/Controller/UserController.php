@@ -53,7 +53,7 @@ class UserController extends AbstractController
     public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -86,7 +86,7 @@ class UserController extends AbstractController
     public function profile(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, FriendRepository $friendRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -232,7 +232,7 @@ class UserController extends AbstractController
     public function userMovies(Request $request, MovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         /** @var User $user */
         $user = $this->getUser();

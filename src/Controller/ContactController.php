@@ -27,7 +27,7 @@ class ContactController extends AbstractController
     public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
         $from = $request->query->get('from');

@@ -28,7 +28,7 @@ class CollectionController extends AbstractController
     public function index(Request $request, MovieCollectionRepository $collectionRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -44,7 +44,7 @@ class CollectionController extends AbstractController
     public function show(Request $request, MovieCollection $movieCollection, MovieController $movieController, MovieRepository $userMovieRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -63,7 +63,7 @@ class CollectionController extends AbstractController
     public function new(Request $request, MovieCollectionRepository $repository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -87,7 +87,7 @@ class CollectionController extends AbstractController
     public function edit(Request $request, MovieCollection $collection, MovieCollectionRepository $repository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 

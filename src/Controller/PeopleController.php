@@ -20,7 +20,7 @@ class PeopleController extends AbstractController
     #[Route('{_locale}/people/{id}', name: 'app_people', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]
     public function people(Request $request, $id, TMDBService $TMDBService, ImageConfiguration $imageConfiguration): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         $standing = $TMDBService->getPerson($id, $request->getLocale(), true);
         $people = json_decode($standing, true);
         $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);

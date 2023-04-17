@@ -18,7 +18,7 @@ class LoginController extends AbstractController
     #[Route('/{_locale}/login', name: 'app_login', requirements: ['locale' => 'fr|en|de|es'])]
     public function index(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 

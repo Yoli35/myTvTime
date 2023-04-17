@@ -128,711 +128,725 @@
         margin: 1em 0 1em auto;
     }
 
-    .series {
-        @include flex-col();
-        flex-direction: column-reverse;
+    main {
+        width: 100%;
 
-        .wrapper {
-            @include flex-col(flex-start, flex-start);
-            //font-size: .75em;
-            font-weight: 100;
-            gap: 1em;
+        .series {
+            @include flex-col();
+            flex-direction: column-reverse;
 
-            > div {
-                width: 100%;
-            }
+            .wrapper {
+                @include flex-col(flex-start, flex-start);
+                //font-size: .75em;
+                font-weight: 100;
+                gap: 1em;
 
-            a {
-
-                .serie {
-                    @include flex-row(flex-start, flex-start);
-                    background-color: var(--gradient-ardoise-90);
-                    border-radius: 0;
-                    height: var(--serie-lg-height);
-                    margin-bottom: 1em;
-                    //overflow: hidden;
-                    position: relative;
-                    transition: scale 300ms ease-in-out;
+                > div {
                     width: 100%;
+                }
 
-                    .backdrop {
+                .nothing {
+                    background-color: var(--gradient-ardoise-50);
+                    border-radius: .25em;
+                    font-size: 3em;
+                    font-weight: normal;
+                    margin: 2em;
+                    padding: 1em 2em;
+                    text-align: center;
+                }
+
+                a {
+
+                    .serie {
+                        @include flex-row(flex-start, flex-start);
                         background-color: var(--gradient-ardoise-90);
-                        background-position: center center;
-                        background-size: cover;
-                        border-radius: 0 .5em .5em 0;
-                        inset: 0 0 0 var(--serie-lg-poster-width);
-                        opacity: .1;
-                        position: absolute;
-                    }
-
-                    .poster {
+                        border-radius: 0;
                         height: var(--serie-lg-height);
-                        z-index: 0;
-
-                        img {
-                            border-radius: 0;
-                            height: var(--serie-lg-height);
-                            object-fit: cover;
-                            width: var(--serie-lg-poster-width)
-                        }
-                    }
-
-                    .infos {
-                        @include flex-col(flex-start, flex-start);
-                        height: var(--serie-lg-height);
-                        padding: .5em;
-                        width: calc(100% - var(--serie-lg-poster-width));
-                        z-index: 0;
-
-                        div {
-                            color: var(--mtt-body-color);
-                        }
-
-                        div:first-child {
-                            font-size: 1.5em;
-                            font-weight: 200;
-                        }
-
-                        div:last-child {
-                            max-height: calc(var(--serie-lg-height) - 8em);
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            width: 100%;
-                        }
-                    }
-
-                    .network {
-                        @include flex-row();
-                        background-color: var(--gradient-ardoise-90);
-                        border: 2px solid var(--gradient-ardoise-10);
-                        border-radius: 50%;
-                        bottom: 1em;
-                        height: 4em;
-                        left: 1em;
-                        object-fit: cover;
-                        overflow: hidden;
-                        padding: .25em;
-                        position: absolute;
-                        width: 4em;
-                        z-index: 1;
-
-                        img {
-                            width: 100%;
-                        }
-                    }
-
-                    .status {
-                        @include flex-row();
-                        background-color: var(--gradient-green-30);
-                        border: 2px solid;
-                        border-radius: .5em;
-                        color: var(--gradient-green-90);
-                        font-weight: 300;
-                        height: 2em;
-                        padding: 0 1em;
-                        position: absolute;
-                        right: 4em;
-                        top: -.75em;
-                        z-index: 10;
-
-                        &.start-watching {
-                            background-color: var(--gradient-mars-50);
-                            color: var(--gradient-mars-90);
-                        }
-
-                        &.more-to-come {
-                            background-color: var(--gradient-ardoise-50);
-                            color: var(--gradient-ardoise-90);
-                        }
-
-                        &.that-s-all {
-                            background-color: var(--gradient-ardoise-50);
-                            color: var(--gradient-ardoise-90);
-                        }
-                    }
-
-                    .favorite {
-                        @include flex-row();
-                        background-color: var(--gradient-green-30);
-                        border-radius: .5em;
-                        color: var(--gradient-ardoise-100);
-                        font-weight: 300;
-                        height: 2em;
-                        position: absolute;
-                        right: 4em;
-                        text-align: center;
-                        top: 2em;
-                        width: 8em;
-                    }
-
-                    .today, .tomorrow, .next, .passed {
-                        @include flex-row();
-                        border-radius: .5em;
-                        color: var(--gradient-ardoise-100);
-                        font-weight: 300;
-                        height: 2em;
-                        padding: 0 .5em;
-                        position: absolute;
-                        right: 1em;
-                        text-align: center;
-                        bottom: 1em;
-                    }
-
-                    .today {
-                        background-color: var(--gradient-mars-50);
-                    }
-
-                    .tomorrow {
-                        background-color: var(--gradient-green-40);
-                    }
-
-                    .next {
-                        background-color: var(--gradient-ardoise-50);
-                        color: var(--gradient-ardoise-80);
-                    }
-
-                    .passed {
-                        background-color: var(--gradient-mars-40);
-                        color: var(--gradient-mars-90);
-                    }
-
-                    .add {
-                        @include seen(var(--serie-add), 1.5em);
-                    }
-
-                    .seen {
-                        @include seen(var(--serie-seen), 1.5em);
-                    }
-
-                    &.search {
-                        background-color: var(--gradient-ardoise-20);
-                        height: var(--serie-md-height);
+                        margin-bottom: 1em;
+                        //overflow: hidden;
+                        position: relative;
+                        transition: scale 300ms ease-in-out;
+                        width: 100%;
 
                         .backdrop {
-                            left: var(--serie-md-poster-width);
+                            background-color: var(--gradient-ardoise-90);
+                            background-position: center center;
+                            background-size: cover;
+                            border-radius: 0 .5em .5em 0;
+                            inset: 0 0 0 var(--serie-lg-poster-width);
+                            opacity: .1;
+                            position: absolute;
                         }
 
                         .poster {
-                            height: var(--serie-md-height);
-                            width: var(--serie-md-poster-width);
-                        }
-                    }
+                            height: var(--serie-lg-height);
+                            z-index: 0;
 
-                    .front {
-                        border: .25em solid transparent;
-                        border-radius: .5em;
-                        inset: 0;
-                        position: absolute;
-                        transition: border 100ms ease-in-out;
+                            img {
+                                border-radius: 0;
+                                height: var(--serie-lg-height);
+                                object-fit: cover;
+                                width: var(--serie-lg-poster-width)
+                            }
+                        }
+
+                        .infos {
+                            @include flex-col(flex-start, flex-start);
+                            height: var(--serie-lg-height);
+                            padding: .5em;
+                            width: calc(100% - var(--serie-lg-poster-width));
+                            z-index: 0;
+
+                            div {
+                                color: var(--mtt-body-color);
+                            }
+
+                            div:first-child {
+                                font-size: 1.5em;
+                                font-weight: 200;
+                            }
+
+                            div:last-child {
+                                max-height: calc(var(--serie-lg-height) - 8em);
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                width: 100%;
+                            }
+                        }
+
+                        .network {
+                            @include flex-row();
+                            background-color: var(--gradient-ardoise-90);
+                            border: 2px solid var(--gradient-ardoise-10);
+                            border-radius: 50%;
+                            bottom: 1em;
+                            height: 4em;
+                            left: 1em;
+                            object-fit: cover;
+                            overflow: hidden;
+                            padding: .25em;
+                            position: absolute;
+                            width: 4em;
+                            z-index: 1;
+
+                            img {
+                                width: 100%;
+                            }
+                        }
+
+                        .status {
+                            @include flex-row();
+                            background-color: var(--gradient-green-30);
+                            border: 2px solid;
+                            border-radius: .5em;
+                            color: var(--gradient-green-90);
+                            font-weight: 300;
+                            height: 2em;
+                            padding: 0 1em;
+                            position: absolute;
+                            right: 4em;
+                            top: -.75em;
+                            z-index: 10;
+
+                            &.start-watching {
+                                background-color: var(--gradient-mars-50);
+                                color: var(--gradient-mars-90);
+                            }
+
+                            &.more-to-come {
+                                background-color: var(--gradient-ardoise-50);
+                                color: var(--gradient-ardoise-90);
+                            }
+
+                            &.that-s-all {
+                                background-color: var(--gradient-ardoise-50);
+                                color: var(--gradient-ardoise-90);
+                            }
+                        }
+
+                        .favorite {
+                            @include flex-row();
+                            background-color: var(--gradient-green-30);
+                            border-radius: .5em;
+                            color: var(--gradient-ardoise-100);
+                            font-weight: 300;
+                            height: 2em;
+                            position: absolute;
+                            right: 4em;
+                            text-align: center;
+                            top: 2em;
+                            width: 8em;
+                        }
+
+                        .today, .tomorrow, .next, .passed {
+                            @include flex-row();
+                            border-radius: .5em;
+                            color: var(--gradient-ardoise-100);
+                            font-weight: 300;
+                            height: 2em;
+                            padding: 0 .5em;
+                            position: absolute;
+                            right: 1em;
+                            text-align: center;
+                            bottom: 1em;
+                        }
+
+                        .today {
+                            background-color: var(--gradient-mars-50);
+                        }
+
+                        .tomorrow {
+                            background-color: var(--gradient-green-40);
+                        }
+
+                        .next {
+                            background-color: var(--gradient-ardoise-50);
+                            color: var(--gradient-ardoise-80);
+                        }
+
+                        .passed {
+                            background-color: var(--gradient-mars-40);
+                            color: var(--gradient-mars-90);
+                        }
+
+                        .add {
+                            @include seen(var(--serie-add), 1.5em);
+                        }
+
+                        .seen {
+                            @include seen(var(--serie-seen), 1.5em);
+                        }
+
+                        &.search {
+                            background-color: var(--gradient-ardoise-20);
+                            height: var(--serie-md-height);
+
+                            .backdrop {
+                                left: var(--serie-md-poster-width);
+                            }
+
+                            .poster {
+                                height: var(--serie-md-height);
+                                width: var(--serie-md-poster-width);
+                            }
+                        }
+
+                        .front {
+                            border: .25em solid transparent;
+                            border-radius: .5em;
+                            inset: 0;
+                            position: absolute;
+                            transition: border 100ms ease-in-out;
+
+                            &:hover {
+                                border: .25em solid var(--gradient-ardoise-90);
+                                //outline-offset: -.25em;
+                            }
+                        }
 
                         &:hover {
-                            border: .25em solid var(--gradient-ardoise-90);
-                            //outline-offset: -.25em;
+                            //animation: wobble 200ms;
+                            scale: 1.02;
                         }
-                    }
 
-                    &:hover {
-                        //animation: wobble 200ms;
-                        scale: 1.02;
-                    }
-
-                    @keyframes wobble {
-                        50% {
-                            rotate: -1deg;
-                        }
-                        75% {
-                            rotate: .5deg;
-                        }
-                        87.5% {
-                            rotate: -.25deg;
-                        }
-                        93.75% {
-                            rotate: .125deg;
-                        }
-                        96.875% {
-                            rotate: -.0625deg;
-                        }
-                        98.4375% {
-                            rotate: .03125deg;
-                        }
-                        99.21875% {
-                            rotate: -.015625deg;
+                        @keyframes wobble {
+                            50% {
+                                rotate: -1deg;
+                            }
+                            75% {
+                                rotate: .5deg;
+                            }
+                            87.5% {
+                                rotate: -.25deg;
+                            }
+                            93.75% {
+                                rotate: .125deg;
+                            }
+                            96.875% {
+                                rotate: -.0625deg;
+                            }
+                            98.4375% {
+                                rotate: .03125deg;
+                            }
+                            99.21875% {
+                                rotate: -.015625deg;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        .new-serie-preview {
-            @include flex-col();
-            background-color: var(--gradient-ardoise-10);
-            inset: 0;
-            display: none;
-            opacity: 0;
-            position: fixed;
-            transition: all .5s;
-            z-index: 1000;
+            .new-serie-preview {
+                @include flex-col();
+                background-color: var(--gradient-ardoise-10);
+                inset: 0;
+                display: none;
+                opacity: 0;
+                position: fixed;
+                transition: all .5s;
+                z-index: 1000;
 
-            &.visible {
-                background-color: #888888df;
-                display: flex;
-                opacity: 1;
-            }
-
-            .message {
-                @include flex-row(center, flex-start);
-                margin-bottom: 2em;
-                position: relative;
-
-                .content {
-                    background-color: var(--gradient-ardoise-30);
-                    border-radius: .5em;
-                    color: var(--gradient-ardoise-90);
-                    font-size: 2em;
-                    font-weight: bold;
-                    padding: 1em 2em;
+                &.visible {
+                    background-color: #888888df;
+                    display: flex;
+                    opacity: 1;
                 }
 
-                .close {
-                    border-radius: 50%;
+                .message {
+                    @include flex-row(center, flex-start);
+                    margin-bottom: 2em;
+                    position: relative;
+
+                    .content {
+                        background-color: var(--gradient-ardoise-30);
+                        border-radius: .5em;
+                        color: var(--gradient-ardoise-90);
+                        font-size: 2em;
+                        font-weight: bold;
+                        padding: 1em 2em;
+                    }
+
+                    .close {
+                        border-radius: 50%;
+                        cursor: pointer;
+                        font-size: 1.5em;
+                        margin-left: auto;
+                        position: absolute;
+                        right: .25em;
+                        top: 0;
+                    }
+                }
+            }
+
+            .series-tools {
+                margin-bottom: 1em;
+                position: unset;
+                top: unset;
+                width: 100%;
+
+                &.sticky {
+                    position: sticky;
+                    top: 4em;
+                }
+
+                .pages {
+                    background-color: var(--gradient-ardoise-80-alpha-50);
+                    border-radius: 0;
+                    min-height: unset;
+                    padding: .5em;
+
+                    &.mobile {
+                        display: block;
+                    }
+
+                    .position {
+                        color: var(--gradient-ardoise-30);
+                        font-weight: 100;
+                        text-align: center;
+                        text-transform: uppercase;
+                        width: 100%;
+                    }
+
+                    .page-group {
+                        @include flex-row();
+                        border-radius: .25em;
+
+                        .page:nth-child(1n+0) {
+                            border-bottom: 1px solid var(--gradient-ardoise-80);
+                            border-left: 0;
+                            border-right: 1px solid var(--gradient-ardoise-80);
+                            border-top: 1px solid var(--gradient-ardoise-80);
+                            padding: .25em 0;
+                        }
+
+                        .page:first-child {
+                            border-left: 1px solid var(--gradient-ardoise-80);
+                            border-radius: .25em 0 0 .25em;
+                        }
+
+                        .page:last-child {
+                            border-radius: 0 .25em .25em 0;
+                        }
+
+                        .page {
+                            font-weight: 100;
+                            min-height: calc(2em + 2px);
+                            min-width: 2em;
+                            transition: all .3s;
+
+                            &.current {
+                                @include flex-row();
+                                background-color: var(--gradient-ardoise-80);
+                                color: var(--gradient-ardoise-30);
+                            }
+
+                            &:hover {
+                                background-color: var(--gradient-ardoise-80);
+                                color: var(--gradient-ardoise-20);
+                            }
+
+                            a, div {
+                                @include flex-row();
+                                height: 100%;
+                                min-height: 2em;
+                                width: 100%;
+                            }
+                        }
+                    }
+
+                }
+
+                button {
+                    appearance: unset;
+                    background-color: var(--gradient-ardoise-20);
+                    border: 1px solid var(--gradient-ardoise-80);
+                    border-radius: var(--button-border-radius);
+                    color: var(--gradient-ardoise-80);
                     cursor: pointer;
-                    font-size: 1.5em;
-                    margin-left: auto;
-                    position: absolute;
-                    right: .25em;
-                    top: 0;
-                }
-            }
-        }
-
-        .series-tools {
-            margin-bottom: 1em;
-            position: unset;
-            top: unset;
-            width: 100%;
-
-            &.sticky {
-                position: sticky;
-                top: 4em;
-            }
-
-            .pages {
-                background-color: var(--gradient-ardoise-80-alpha-50);
-                border-radius: 0;
-                min-height: unset;
-                padding: .5em;
-
-                &.mobile {
-                    display: block;
-                }
-
-                .position {
-                    color: var(--gradient-ardoise-30);
                     font-weight: 100;
-                    text-align: center;
+                    padding: .25em 1em;
                     text-transform: uppercase;
                     width: 100%;
+
+                    &.disabled {
+                        background-color: var(--gradient-ardoise-50);
+                        border: 1px solid var(--gradient-ardoise-60);
+                        color: var(--gradient-ardoise-60);
+                        cursor: default;
+                    }
                 }
 
-                .page-group {
-                    @include flex-row();
-                    border-radius: .25em;
+                .label {
+                    color: var(--gradient-ardoise-30);
+                    font-weight: 100;
+                    display: none;
+                    text-transform: uppercase;
+                }
 
-                    .page:nth-child(1n+0) {
-                        border-bottom: 1px solid var(--gradient-ardoise-80);
-                        border-left: 0;
-                        border-right: 1px solid var(--gradient-ardoise-80);
-                        border-top: 1px solid var(--gradient-ardoise-80);
-                        padding: .25em 0;
+                h2 {
+                    color: var(---gradient-mars-70);
+                    display: none;
+                    font-size: 1.5em;
+                    margin-top: 0;
+                }
+
+                .search-serie, .add-serie {
+                    background-color: var(--gradient-ardoise-80-alpha-50);
+                    border-radius: 0;
+                    min-height: unset;
+                    padding: .5em;
+
+                    .group {
+                        @include flex-100(center, space-between);
                     }
 
-                    .page:first-child {
-                        border-left: 1px solid var(--gradient-ardoise-80);
-                        border-radius: .25em 0 0 .25em;
-                    }
-
-                    .page:last-child {
-                        border-radius: 0 .25em .25em 0;
-                    }
-
-                    .page {
+                    .help {
+                        display: none;
                         font-weight: 100;
-                        min-height: calc(2em + 2px);
-                        min-width: 2em;
-                        transition: all .3s;
 
-                        &.current {
-                            @include flex-row();
-                            background-color: var(--gradient-ardoise-80);
+                        details {
+                            div {
+                                background-color: var(--gradient-ardoise-80);
+                                border-radius: .5em;
+                                padding: .5em;
+                            }
+                        }
+                    }
+
+                }
+
+                .search-serie {
+                    .group {
+                        .field {
+                            position: relative;
+                        }
+
+                        .autocomplete-items {
+                            border: 1px solid var(--gradient-ardoise-80);
+                            border-bottom: none;
+                            border-top: none;
+                            left: 0;
+                            max-height: 32em;
+                            overflow: scroll;
+                            position: absolute;
+                            right: 0;
+                            top: 100%;
+                            width: 22em;
+                            z-index: 99;
+                        }
+
+                        .autocomplete-items div {
+                            padding: .25em .5em calc(.25em - 1px);
+                            cursor: pointer;
+                            background-color: var(--gradient-ardoise-90);
+                            border-bottom: 1px solid var(--gradient-ardoise-70);
                             color: var(--gradient-ardoise-30);
                         }
 
-                        &:hover {
+                        .autocomplete-items div:hover {
+                            /*when hovering an item:*/
                             background-color: var(--gradient-ardoise-80);
-                            color: var(--gradient-ardoise-20);
                         }
 
-                        a, div {
-                            @include flex-row();
-                            height: 100%;
-                            min-height: 2em;
-                            width: 100%;
+                        .autocomplete-active {
+                            /*when navigating through the items using the arrow keys:*/
+                            background-color: var(--gradient-ardoise-40) !important;
+                            color: var(--gradient-ardoise-90) !important;
                         }
                     }
                 }
 
-            }
+                .settings {
+                    @include flex-col(flex-start, flex-start);
+                    background-color: var(--gradient-ardoise-80-alpha-50);
+                    border-radius: 0;
+                    margin-bottom: 1em;
+                    padding: .5em;
 
-            button {
-                appearance: unset;
-                background-color: var(--gradient-ardoise-20);
-                border: 1px solid var(--gradient-ardoise-80);
-                border-radius: var(--button-border-radius);
-                color: var(--gradient-ardoise-80);
-                cursor: pointer;
-                font-weight: 100;
-                padding: .25em 1em;
-                text-transform: uppercase;
-                width: 100%;
-
-                &.disabled {
-                    background-color: var(--gradient-ardoise-50);
-                    border: 1px solid var(--gradient-ardoise-60);
-                    color: var(--gradient-ardoise-60);
-                    cursor: default;
-                }
-            }
-
-            .label {
-                color: var(--gradient-ardoise-30);
-                font-weight: 100;
-                display: none;
-                text-transform: uppercase;
-            }
-
-            h2 {
-                color: var(---gradient-mars-70);
-                display: none;
-                font-size: 1.5em;
-                margin-top: 0;
-            }
-
-            .search-serie, .add-serie {
-                background-color: var(--gradient-ardoise-80-alpha-50);
-                border-radius: 0;
-                min-height: unset;
-                padding: .5em;
-
-                .group {
-                    @include flex-100(center, space-between);
-                }
-
-                .help {
-                    display: none;
-                    font-weight: 100;
-
-                    details {
-                        div {
-                            background-color: var(--gradient-ardoise-80);
-                            border-radius: .5em;
-                            padding: .5em;
-                        }
-                    }
-                }
-
-            }
-
-            .search-serie {
-                .group {
-                    .field {
-                        position: relative;
-                    }
-
-                    .autocomplete-items {
-                        border: 1px solid var(--gradient-ardoise-80);
-                        border-bottom: none;
-                        border-top: none;
-                        left: 0;
-                        max-height: 32em;
-                        overflow: scroll;
-                        position: absolute;
-                        right: 0;
-                        top: 100%;
-                        width: 22em;
-                        z-index: 99;
-                    }
-
-                    .autocomplete-items div {
-                        padding: .25em .5em calc(.25em - 1px);
-                        cursor: pointer;
-                        background-color: var(--gradient-ardoise-90);
-                        border-bottom: 1px solid var(--gradient-ardoise-70);
-                        color: var(--gradient-ardoise-30);
-                    }
-
-                    .autocomplete-items div:hover {
-                        /*when hovering an item:*/
-                        background-color: var(--gradient-ardoise-80);
-                    }
-
-                    .autocomplete-active {
-                        /*when navigating through the items using the arrow keys:*/
-                        background-color: var(--gradient-ardoise-40) !important;
-                        color: var(--gradient-ardoise-90) !important;
-                    }
-                }
-            }
-
-            .settings {
-                @include flex-col(flex-start, flex-start);
-                background-color: var(--gradient-ardoise-80-alpha-50);
-                border-radius: 0;
-                margin-bottom: 1em;
-                padding: .5em;
-
-                .sort {
-                    @include flex-100();
-
-                    .group-settings {
+                    .sort {
                         @include flex-100();
 
-                        .field {
-                            position: relative;
-                            width: 100%;
+                        .group-settings {
+                            @include flex-100();
 
-                            &::after {
-                                border-bottom: 2px solid var(--gradient-ardoise-80);
-                                border-right: 2px solid var(--gradient-ardoise-80);
-                                content: '';
-                                height: .5em;
-                                position: absolute;
-                                right: .5em;
-                                top: .75em;
-                                transform: rotate(45deg);
-                                width: .5em;
-                                z-index: 2;
-                            }
-
-                            select {
-                                appearance: unset;
-                                background-color: var(--gradient-ardoise-40);
-                                border: 0 solid var(--gradient-ardoise-80);
-                                color: var(--gradient-ardoise-80);
-                                font-weight: 100;
-                                padding: .25em 1em .25em .25em;
+                            .field {
                                 position: relative;
                                 width: 100%;
 
-                                &.left {
-                                    border-width: 1px 0 1px 1px;
-                                    border-radius: var(--button-border-radius) 0 0 var(--button-border-radius);
+                                &::after {
+                                    border-bottom: 2px solid var(--gradient-ardoise-80);
+                                    border-right: 2px solid var(--gradient-ardoise-80);
+                                    content: '';
+                                    height: .5em;
+                                    position: absolute;
+                                    right: .5em;
+                                    top: .75em;
+                                    transform: rotate(45deg);
+                                    width: .5em;
+                                    z-index: 2;
                                 }
 
-                                &.right {
-                                    border-width: 1px 0 1px 1px;
-                                    border-radius: 0 0 0 0;
+                                select {
+                                    appearance: unset;
+                                    background-color: var(--gradient-ardoise-40);
+                                    border: 0 solid var(--gradient-ardoise-80);
+                                    color: var(--gradient-ardoise-80);
+                                    font-weight: 100;
+                                    padding: .25em 1em .25em .25em;
+                                    position: relative;
+                                    width: 100%;
+
+                                    &.left {
+                                        border-width: 1px 0 1px 1px;
+                                        border-radius: var(--button-border-radius) 0 0 var(--button-border-radius);
+                                    }
+
+                                    &.right {
+                                        border-width: 1px 0 1px 1px;
+                                        border-radius: 0 0 0 0;
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                .per-page {
-                    @include flex-col(flex-start, center);
-                    width: 100%;
+                    .per-page {
+                        @include flex-col(flex-start, center);
+                        width: 100%;
 
-                    .field {
+                        .field {
+                            @include flex-100();
+
+                            input {
+                                width: 80%;
+                            }
+
+                            .value {
+                                @include flex-col();
+                                background-color: var(--gradient-ardoise-40);
+                                border-radius: .5em;
+                                font-weight: 100;
+                                margin: .5em;
+                                padding: .5em 1em;
+                                width: calc(20% - 2em);
+                            }
+                        }
+                    }
+
+                    .order-by {
+                        @include flex-col(flex-start, center);
+                        width: 100%;
+                    }
+
+                    .order {
+                        @include flex-col(flex-start, center);
+                        width: 100%;
+                    }
+
+                    .apply {
                         @include flex-100();
+                        flex: 1;
+                        margin-top: auto;
 
-                        input {
-                            width: 80%;
-                        }
-
-                        .value {
-                            @include flex-col();
-                            background-color: var(--gradient-ardoise-40);
-                            border-radius: .5em;
-                            font-weight: 100;
-                            margin: .5em;
-                            padding: .5em 1em;
-                            width: calc(20% - 2em);
+                        button {
+                            border-radius: 0 var(--button-border-radius) var(--button-border-radius) 0;
+                            margin: 0;
                         }
                     }
-                }
 
-                .order-by {
-                    @include flex-col(flex-start, center);
-                    width: 100%;
-                }
-
-                .order {
-                    @include flex-col(flex-start, center);
-                    width: 100%;
-                }
-
-                .apply {
-                    @include flex-100();
-                    flex: 1;
-                    margin-top: auto;
-
-                    button {
-                        border-radius: 0 var(--button-border-radius) var(--button-border-radius) 0;
-                        margin: 0;
-                    }
-                }
-
-                .animation {
-                    @include flex-col(start, start);
-                    width: 100%;
-
-                    .leaf {
+                    .animation {
                         @include flex-col(start, start);
                         width: 100%;
 
-                        h4 {
-                            @include flex-100(center, start);
-
-                            .switch {
-                                @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
-                            }
-
-                            .anim-settings-toggler {
-                                background-image: url("../images/settings.png");
-                                background-size: cover;
-                                cursor: pointer;
-                                height: 1.5em;
-                                margin-left: .5em;
-                                transition: rotate .2s ease-in-out;
-                                width: 1.5em;
-
-                                &:hover {
-                                    rotate: 180deg;
-                                }
-                            }
-                        }
-
-                        .anim-settings {
+                        .leaf {
                             @include flex-col(start, start);
-                            height: 32em;
-                            overflow: hidden;
-                            transition: height 500ms ease-in-out;
                             width: 100%;
 
-                            .slider {
-                                @include flex-col(start, start);
-                                margin-bottom: 1em;
-                                width: 100%;
+                            h4 {
+                                @include flex-100(center, start);
 
-                                .label {
-                                    @include flex-100(start, center);
-                                    font-weight: 100;
-                                    text-transform: uppercase;
-                                    margin-bottom: .5em;
-
-                                    .values {
-                                        margin-left: auto;
-
-                                        .value {
-                                            border: none;
-                                            border-radius: .25em;
-                                            font-weight: 100;
-                                            margin: 0 .5em;
-                                            max-width: 6em;
-                                            padding: .125em .25em;
-
-                                            &.min {
-                                                background-color: var(--gradient-mars-90);
-                                                color: var(--gradient-mars-20);
-                                            }
-
-                                            &.max {
-                                                background-color: var(--gradient-green-90);
-                                                color: var(--gradient-green-20);
-                                            }
-                                        }
-                                    }
+                                .switch {
+                                    @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
                                 }
 
-                                .control {
-                                    @include flex-100();
+                                .anim-settings-toggler {
+                                    background-image: url("../images/settings.png");
+                                    background-size: cover;
+                                    cursor: pointer;
+                                    height: 1.5em;
+                                    margin-left: .5em;
+                                    transition: rotate .2s ease-in-out;
+                                    width: 1.5em;
 
-                                    input {
-                                        width: 100%;
+                                    &:hover {
+                                        rotate: 180deg;
                                     }
+                                }
+                            }
 
-                                    .interval {
-                                        @include flex-100();
-                                        height: 1em;
-                                        //position: relative;
-                                        //width: 100%;
+                            .anim-settings {
+                                @include flex-col(start, start);
+                                height: 32em;
+                                overflow: hidden;
+                                transition: height 500ms ease-in-out;
+                                width: 100%;
 
-                                        .bar {
-                                            background: var(--gradient-ardoise-20);
-                                            background: linear-gradient(180deg, var(--gradient-ardoise-10) 0%, var(--gradient-ardoise-25) 100%);
-                                            border-radius: 2px;
-                                            height: 5px;
-                                            left: 0;
-                                            position: relative;
-                                            //position: absolute;
-                                            top: calc(.5em - 2px);
-                                            width: 100%;
+                                .slider {
+                                    @include flex-col(start, start);
+                                    margin-bottom: 1em;
+                                    width: 100%;
 
-                                            .between {
-                                                background-color: transparent;
-                                                border-bottom: 1px solid var(--gradient-ardoise-80-alpha-50);
-                                                border-top: 1px solid var(--gradient-ardoise-80-alpha-50);
-                                                height: 7px;
-                                                left: 0;
-                                                position: relative;
-                                                //position: absolute;
-                                                top: -1px;
-                                                width: 100%;
-                                            }
+                                    .label {
+                                        @include flex-100(start, center);
+                                        font-weight: 100;
+                                        text-transform: uppercase;
+                                        margin-bottom: .5em;
 
-                                            .handle {
-                                                background-color: var(--gradient-ardoise-100);
-                                                border-radius: 50%;
-                                                cursor: pointer;
-                                                height: 1em;
-                                                left: 0;
-                                                position: relative;
-                                                //position: absolute;
-                                                transition: scale .2s ease-in-out;
-                                                width: 1em;
+                                        .values {
+                                            margin-left: auto;
+
+                                            .value {
+                                                border: none;
+                                                border-radius: .25em;
+                                                font-weight: 100;
+                                                margin: 0 .5em;
+                                                max-width: 6em;
+                                                padding: .125em .25em;
 
                                                 &.min {
-                                                    background-color: var(--gradient-mars-80);
-                                                    top: -12px;
+                                                    background-color: var(--gradient-mars-90);
+                                                    color: var(--gradient-mars-20);
                                                 }
 
                                                 &.max {
-                                                    background-color: var(--gradient-green-80);
-                                                    top: -28px;
+                                                    background-color: var(--gradient-green-90);
+                                                    color: var(--gradient-green-20);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .control {
+                                        @include flex-100();
+
+                                        input {
+                                            width: 100%;
+                                        }
+
+                                        .interval {
+                                            @include flex-100();
+                                            height: 1em;
+                                            //position: relative;
+                                            //width: 100%;
+
+                                            .bar {
+                                                background: var(--gradient-ardoise-20);
+                                                background: linear-gradient(180deg, var(--gradient-ardoise-10) 0%, var(--gradient-ardoise-25) 100%);
+                                                border-radius: 2px;
+                                                height: 5px;
+                                                left: 0;
+                                                position: relative;
+                                                //position: absolute;
+                                                top: calc(.5em - 2px);
+                                                width: 100%;
+
+                                                .between {
+                                                    background-color: transparent;
+                                                    border-bottom: 1px solid var(--gradient-ardoise-80-alpha-50);
+                                                    border-top: 1px solid var(--gradient-ardoise-80-alpha-50);
+                                                    height: 7px;
+                                                    left: 0;
+                                                    position: relative;
+                                                    //position: absolute;
+                                                    top: -1px;
+                                                    width: 100%;
                                                 }
 
-                                                &.drag {
-                                                    cursor: grab;
-                                                }
+                                                .handle {
+                                                    background-color: var(--gradient-ardoise-100);
+                                                    border-radius: 50%;
+                                                    cursor: pointer;
+                                                    height: 1em;
+                                                    left: 0;
+                                                    position: relative;
+                                                    //position: absolute;
+                                                    transition: scale .2s ease-in-out;
+                                                    width: 1em;
 
-                                                &:hover {
-                                                    scale: 2;
+                                                    &.min {
+                                                        background-color: var(--gradient-mars-80);
+                                                        top: -12px;
+                                                    }
+
+                                                    &.max {
+                                                        background-color: var(--gradient-green-80);
+                                                        top: -28px;
+                                                    }
+
+                                                    &.drag {
+                                                        cursor: grab;
+                                                    }
+
+                                                    &:hover {
+                                                        scale: 2;
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
 
-                            .save {
-                                @include flex-100(end, end);
+                                .save {
+                                    @include flex-100(end, end);
 
-                                button {
-                                    width: unset;
+                                    button {
+                                        width: unset;
+                                    }
                                 }
-                            }
 
-                            &.hide {
-                                height: 0;
+                                &.hide {
+                                    height: 0;
+                                }
                             }
                         }
                     }

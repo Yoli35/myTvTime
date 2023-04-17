@@ -40,7 +40,7 @@ class HomeController extends AbstractController
     #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
         $locale = $request->getLocale();

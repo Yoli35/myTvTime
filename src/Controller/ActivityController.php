@@ -43,7 +43,7 @@ class ActivityController extends AbstractController
     public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -124,7 +124,7 @@ class ActivityController extends AbstractController
     public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -257,7 +257,7 @@ class ActivityController extends AbstractController
     public function standUpToggle(Request $request, int $id): Response
     {
 //        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         /** @var Activity $activity */
         $activity = $this->activityRepository->find($id);
@@ -293,7 +293,7 @@ class ActivityController extends AbstractController
     public function saveDataActivity(Request $request, int $id): Response
     {
 //        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
 
         /** @var Activity $activity */
         $activity = $this->activityRepository->find($id);

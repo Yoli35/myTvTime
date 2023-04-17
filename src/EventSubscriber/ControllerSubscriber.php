@@ -12,6 +12,7 @@
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Service\LogService;
 use App\Twig\SourceCodeExtension;
 use DateTimeImmutable;
@@ -34,7 +35,8 @@ readonly class ControllerSubscriber implements EventSubscriberInterface
     public function __construct(
         private LogService          $logService,
         private Security            $security,
-        private SourceCodeExtension $twigExtension
+        private SourceCodeExtension $twigExtension,
+        private UserRepository      $userRepository
     )
     {
     }
@@ -59,10 +61,10 @@ readonly class ControllerSubscriber implements EventSubscriberInterface
             if ($user) {
                 try {
                     $user->setLastActivityAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Paris')));
-                } catch (Exception $e) {
+                } catch (Exception) {
                     $user->setLastActivityAt(new DateTimeImmutable());
                 }
-
+                $this->userRepository->save($user, true);
             }
         }
     }

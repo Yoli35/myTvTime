@@ -2,12 +2,11 @@
 
 namespace App\Twig;
 
-use App\Config\FavoriteType;
-use App\Entity\Friend;
 use App\Entity\User;
-use App\Repository\FavoriteRepository;
 use App\Repository\UserRepository;
-use DateInterval;
+use DateTimeImmutable;
+use DateTimeZone;
+use Exception;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -29,9 +28,9 @@ class UsersExtension extends AbstractExtension
         $users = $this->userRepository->findAll();
 //        dump($users);
         try {
-            $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
-        } catch (\Exception $e) {
-            $now = new \DateTimeImmutable();
+            $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+        } catch (Exception) {
+            $now = new DateTimeImmutable();
         }
         return array_map(function (User $user) use ($now) {
             return [

@@ -17,7 +17,7 @@ class RgpdController extends AbstractController
     #[Route('/rgpd', name: 'app_rgpd')]
     public function index(Request $request): Response
     {
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         return $this->render('rgpd/index.html.twig', [
         ]);
     }

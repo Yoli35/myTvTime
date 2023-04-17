@@ -5,6 +5,9 @@ namespace App\EventListener;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\LogService;
+use DateTimeImmutable;
+use DateTimeZone;
+use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -12,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 
-class LogoutSubscriber implements EventSubscriberInterface
+readonly class LogoutSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly UrlGeneratorInterface $urlGenerator,
-                                private readonly Security              $security,
-                                private readonly LogService            $logService,
-                                private readonly UserRepository        $userRepository
+    public function __construct(private UrlGeneratorInterface $urlGenerator,
+                                private Security              $security,
+                                private LogService            $logService,
+                                private UserRepository        $userRepository
     )
     {
     }
@@ -33,14 +36,14 @@ class LogoutSubscriber implements EventSubscriberInterface
         $user = $this->security->getUser();
 
         try {
-            $user->setLastLogout(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
-        } catch (\Exception $e) {
-            $user->setLastLogout(new \DateTimeImmutable());
+            $user->setLastLogout(new DateTimeImmutable('now', new DateTimeZone('Europe/Paris')));
+        } catch (Exception) {
+            $user->setLastLogout(new DateTimeImmutable());
         }
         $this->userRepository->save($user, true);
 
         $request = $event->getRequest();
-        $this->logService->log($request, $this->security->getUser());
+//        $this->logService->log($request, $this->security->getUser());
 
         $response = new RedirectResponse(
             $this->urlGenerator->generate('app_home'),

@@ -31,7 +31,7 @@ class EventController extends AbstractController
     public function index(Request $request, EventRepository $eventRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -47,7 +47,7 @@ class EventController extends AbstractController
     public function new(Request $request, EventRepository $eventRepository, FileUploader $fileUploader, ValidatorInterface $validator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -73,7 +73,7 @@ class EventController extends AbstractController
     public function edit(Request $request, Event $event, EventRepository $eventRepository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->logService->log($request, $this->getUser());
+//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
