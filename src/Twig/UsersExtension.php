@@ -39,6 +39,14 @@ class UsersExtension extends AbstractExtension
     public function userList(): array
     {
         $users = $this->userRepository->findAll();
+
+        usort($users, function (User $a, User $b) {
+            $lastA = $a->getLastLogout()?:$a->getLastActivityAt();
+            $lastB = $b->getLastLogout()?:$b->getLastActivityAt();
+
+            return $lastB->getTimestamp() <=> $lastA->getTimestamp();
+        });
+
 //        dump($users);
         try {
             $date = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
