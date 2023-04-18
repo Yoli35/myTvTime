@@ -56,9 +56,13 @@ readonly class ControllerSubscriber implements EventSubscriberInterface
         if ($event->isMainRequest()) {
             /** @var User $user */
             $user = $this->security->getUser();
-            $this->twigExtension->setController($event->getController());
+
+            $controller = $event->getController();
+            $this->twigExtension->setController($controller);
+
             $this->logService->log($event->getRequest(), $user);
-            if ($user) {
+
+            if ($user && $controller[1] !== 'chatUpdate') {
                 try {
                     $user->setLastActivityAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Paris')));
                 } catch (Exception) {

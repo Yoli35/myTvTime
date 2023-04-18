@@ -78,7 +78,6 @@ class UsersExtension extends AbstractExtension
         );
 
         $diff = date_diff($date, $lastActivityAt);
-        dump($timeZone, $lastActivityAt, $date, $diff);
 
         foreach ($units as $attribute => $unit) {
             $count = $diff->$attribute;
