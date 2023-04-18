@@ -62,7 +62,7 @@
             li {
                 @include flex-row(center, flex-start);
                 font-weight: 300;
-                gap: 1rem;
+                gap: .5rem;
                 padding: 0.5rem 1rem;
                 width: 100%;
 
@@ -84,9 +84,13 @@
                     }
                 }
 
-                .online {
+                .last-activity {
                     color: var(--gradient-green-40);
                     margin-left: auto;
+                }
+
+                .online {
+                    color: var(--gradient-green-40);
                 }
 
                 .last {

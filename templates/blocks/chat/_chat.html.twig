@@ -16,12 +16,13 @@
                             <span>{{ u.username }}</span>
                             {% if u.lastLogin is not null %}
                                 {% if u.isOnLine %}
+                                    <div class="last-activity">{{ u.lastActivity|lastActivityAgo }}</div>
                                     <div class="online">●</div>
                                 {% else %}
                                     {% if u.lastLogout is not null %}
-                                        <div class="last">{{ u.lastLogout|ago }}</div>
+                                        <div class="last">{{ u.lastLogout|lastActivityAgo }}</div>
                                     {% else %}
-                                        <div class="last">{{ u.lastActivity|ago }}</div>
+                                        <div class="last">{{ u.lastActivity|lastActivityAgo }}</div>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
