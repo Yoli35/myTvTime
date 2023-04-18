@@ -19,7 +19,6 @@ readonly class LogoutSubscriber implements EventSubscriberInterface
 {
     public function __construct(private UrlGeneratorInterface $urlGenerator,
                                 private Security              $security,
-                                private LogService            $logService,
                                 private UserRepository        $userRepository
     )
     {

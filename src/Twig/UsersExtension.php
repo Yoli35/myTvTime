@@ -41,11 +41,11 @@ class UsersExtension extends AbstractExtension
         $users = $this->userRepository->findAll();
 //        dump($users);
         try {
-            $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+            $date = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
         } catch (Exception) {
-            $now = new DateTimeImmutable();
+            $date = new DateTimeImmutable();
         }
-        return array_map(function (User $user) use ($now) {
+        return array_map(function (User $user) use ($date) {
             return [
                 'id' => $user->getId(),
                 'username' => $user->getUsername(),
@@ -53,7 +53,7 @@ class UsersExtension extends AbstractExtension
                 'lastLogin' => $user->getLastLogin(),
                 'lastLogout' => $user->getLastLogout(),
                 'lastActivity' => $user->getLastActivityAt(),
-                'isOnLine' => $user->isOnLine($now),
+                'isOnLine' => $user->isOnLine($date),
             ];
         }, $users);
     }

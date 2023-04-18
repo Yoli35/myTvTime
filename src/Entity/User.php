@@ -7,11 +7,14 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
 use DateInterval;
+use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -654,12 +657,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isOnLine($now): bool
+    public function isOnLine($date): bool
     {
         if ($this->lastLogout) {
             return false;
         } else {
-            return $this->lastActivityAt >= $now->sub(new DateInterval('PT5M'));
+            try {
+                $lastActivityAt = new DateTimeImmutable($this->lastActivityAt->format('Y-m-d H:i:s'), new DateTimeZone('Europe/Paris'));
+            } catch (Exception) {
+                $lastActivityAt = $this->lastActivityAt;
+            }
+            return $lastActivityAt >= $date->sub(new DateInterval('PT5M'));
         }
     }
 }

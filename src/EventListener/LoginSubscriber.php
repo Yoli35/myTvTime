@@ -23,7 +23,6 @@ readonly class LoginSubscriber implements EventSubscriberInterface
 {
     public function __construct(/*private readonly UrlGeneratorInterface $urlGenerator,*/
         private Security       $security,
-        private LogService     $logService,
         private LocaleSwitcher $localeSwitcher,
         private UserRepository $userRepository
     )
@@ -47,8 +46,6 @@ readonly class LoginSubscriber implements EventSubscriberInterface
         $user->setLastLogout(null);
         $this->userRepository->save($user, true);
 
-        $request = $event->getRequest();
-//        $this->logService->log($request, $user);
         $preferredLanguage = $user->getPreferredLanguage();
 
         if ($preferredLanguage) {
