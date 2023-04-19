@@ -667,7 +667,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             } catch (Exception) {
                 $lastActivityAt = $this->lastActivityAt;
             }
-            return $lastActivityAt >= $date->sub(new DateInterval('PT5M'));
+            return $lastActivityAt >= $date->sub(new DateInterval('PT10M'));
         }
     }
 }

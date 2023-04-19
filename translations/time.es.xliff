@@ -28,7 +28,7 @@
             </trans-unit>
             <trans-unit id="7">
                 <source>diff.empty</source>
-                <target>ahora</target>
+                <target>ahora mismo</target>
             </trans-unit>
             <trans-unit id="8">
                 <source>diff.in.second</source>

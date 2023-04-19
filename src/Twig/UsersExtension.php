@@ -81,8 +81,7 @@ class UsersExtension extends AbstractExtension
             'm' => 'month',
             'd' => 'day',
             'h' => 'hour',
-            'i' => 'minute',
-            's' => 'second'
+            'i' => 'minute'
         );
 
         $diff = date_diff($date, $lastActivityAt);
