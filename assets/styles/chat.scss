@@ -1,7 +1,7 @@
 @import "variables";
 
 .chat-wrapper {
-    bottom: 0;
+    bottom: 36px;
     position: fixed;
     right: 0;
     width: 20rem;
@@ -17,7 +17,7 @@
         right: 0;
         width: 20rem;
 
-        &:has(.chat-users-list.collapsed) {
+        &:has(.chat-users-list.minimized) {
             border: 1px solid var(--gradient-ardoise-20);
             border-radius: 50%;
             bottom: 1rem;
@@ -32,6 +32,10 @@
                 height: 100%;
                 padding: 0;
                 width: 100%;
+
+                .my-avatar, .my-name, .list-count {
+                    display: none;
+                }
             }
         }
 
@@ -43,19 +47,41 @@
             color: var(--gradient-ardoise-20);
             cursor: pointer;
             padding: .5rem 1rem;
+
+            .my-avatar {
+                border: 1px solid;
+                border-radius: 50%;
+                height: 1.5rem;
+                width: 1.5rem;
+
+                img {
+                    border-radius: 50%;
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+
+            .my-name {
+                font-weight: 300;
+                margin-left: .5rem;
+            }
+
+            .list-count {
+                margin-left: auto;
+            }
         }
 
         .chat-users-list {
             @include flex-col(center, flex-start);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
-            background-color: var(--gradient-ardoise-90-alpha-10);
+            background-color: var(--gradient-ardoise-80-alpha-50);
             color: var(--gradient-ardoise-20);
             overflow: auto;
             padding: 0;
             transition: height 0.5s ease-in-out;
 
-            &.collapsed {
+            &.minimized {
                 height: 0;
             }
 
@@ -148,7 +174,7 @@
             transition: height 0.5s ease-in-out;
             width: 100%;
 
-            &.collapsed {
+            &.minimized {
                 height: 0;
             }
 
@@ -241,7 +267,7 @@
             }
 
             .chat-users-list {
-                background-color: var(--gradient-ardoise-20-alpha-50);
+                background-color: var(--gradient-ardoise-20-alpha-80);
                 color: var(--gradient-ardoise-90);
 
                 ul {

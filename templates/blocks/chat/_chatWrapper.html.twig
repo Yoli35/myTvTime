@@ -1,4 +1,8 @@
 <div class="chat-wrapper" id="chat">
     {% include "blocks/chat/_chat.html.twig" %}
 </div>
-<script src="{{ asset('js/chat.js') }}"></script>
+<script>
+    localStorage.setItem("mytvtime.username", "{{ app.user.username }}");
+    localStorage.setItem("mytvtime.avatar", "{{ app.user.avatar }}");
+</script>
+<script src="/js/chat.js"></script>

@@ -1,27 +1,22 @@
-const chatTitle = {'fr': 'Utilisateurs', 'en': 'Users', 'de': 'Nutzer', 'es': 'Usuarios'};
+const chatTitle = {'fr': 'utilisateurs', 'en': 'users', 'de': 'Nutzer', 'es': 'usuarios'};
 const chatLocale = document.querySelector("html").getAttribute("lang");
+let chatIntervalID = 0, username = "", avatar = "";
 
 window.addEventListener("DOMContentLoaded", () => {
     initChatWindow();
     initConversationWindows();
 
-    setInterval(() => {
-        updateChat();
-    }, 30000);
+    const chatUsers = document.querySelector(".chat-users");
+    const chatUsersList = chatUsers.querySelector(".chat-users-list");
 
-    function updateChat() {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            document.querySelector(".chat-wrapper").innerHTML = this.response;
-            initChatWindow();
-            initConversationWindows();
-        }
-        xhr.open("GET", "/chat/update");
-        xhr.send();
+    if (!chatUsersList.classList.contains("minimized")) {
+        chatIntervalID = setInterval(updateChat, 30000);
     }
 });
 
 function initChatWindow() {
+    username = localStorage.getItem("mytvtime.username");
+    avatar = localStorage.getItem("mytvtime.avatar");
 
     getChatUsersWindowStatus();
 
@@ -32,13 +27,16 @@ function initChatWindow() {
     const chatUsersListItemsArray = Array.from(chatUsersListItems);
 
     chatHeader.addEventListener("click", () => {
-        chatUsersList.classList.toggle("collapsed");
-        if (chatUsersList.classList.contains("collapsed")) {
+        chatUsersList.classList.toggle("minimized");
+        if (chatUsersList.classList.contains("minimized")) {
             chatHeader.innerHTML = '<i class="fa-solid fa-users"></i>';
-            localStorage.setItem("mytvtime.chatWindowStatus", "collapsed");
+            localStorage.setItem("mytvtime.chatWindowStatus", "minimized");
+            clearInterval(chatIntervalID);
         } else {
-            chatHeader.innerHTML = chatTitle[chatLocale] + " (" + chatUsersListItems.length + ")";
+            chatHeader.innerHTML = chatUsersListItems.length + " " + chatTitle[chatLocale];
             localStorage.setItem("mytvtime.chatWindowStatus", "expanded");
+            updateChat();
+            chatIntervalID = setInterval(updateChat, 30000);
         }
     });
 
@@ -57,7 +55,7 @@ function initConversationWindows() {
         const header = conversation.querySelector(".header");
         const body = conversation.querySelector(".body");
         header.addEventListener("click", () => {
-            body.classList.toggle("collapsed");
+            body.classList.toggle("minimized");
         });
         conversation.addEventListener("click", () => {
             conversations.forEach(conversation => {
@@ -76,11 +74,27 @@ function getChatUsersWindowStatus() {
     const chatUsersListItems = chatUsersList.querySelectorAll("li");
     const chatHeader = chatUsers.querySelector(".chat-users-header");
 
-    if (chatWindowStatus === "collapsed") {
-        chatWindow.classList.add("collapsed");
+    if (chatWindowStatus === "minimized") {
+        chatWindow.classList.add("minimized");
         chatHeader.innerHTML = '<i class="fa-solid fa-users"></i>';
     } else {
-        chatWindow.classList.remove("collapsed");
-        chatHeader.innerHTML = chatTitle[chatLocale] + " (" + chatUsersListItems.length + ")";
+        chatWindow.classList.remove("minimized");
+        chatHeader.innerHTML =
+              '<div class="my-avatar">'
+            + '    <img src="/images/users/avatars/' + avatar + '" alt="' + username + '">'
+            + '</div>'
+            + '<div class="my-name">' + username + '</div>'
+            + '<div class="list-count">' + chatUsersListItems.length + ' ' + chatTitle[chatLocale] + '</div>';
     }
+}
+
+function updateChat() {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        document.querySelector(".chat-wrapper").innerHTML = this.response;
+        initChatWindow();
+        initConversationWindows();
+    }
+    xhr.open("GET", "/chat/update");
+    xhr.send();
 }
