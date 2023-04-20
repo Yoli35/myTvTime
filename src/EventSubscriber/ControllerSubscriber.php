@@ -68,6 +68,11 @@ readonly class ControllerSubscriber implements EventSubscriberInterface
                 } catch (Exception) {
                     $user->setLastActivityAt(new DateTimeImmutable());
                 }
+                // If the user is logged in from two browsers and logs out from one of them,
+                // the last logout date field is no longer null. You have to set the logout date to null.
+                if ($user->getLastLogout()) {
+                    $user->setLastLogout(null);
+                }
                 $this->userRepository->save($user, true);
             }
         }
