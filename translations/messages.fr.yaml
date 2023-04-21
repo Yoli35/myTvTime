@@ -382,8 +382,6 @@ Watch now: Regarder maintenant
 24 Frame Playback.she: Lecture à 24 images
 3D Artist.he: Artiste 3D
 3D Artist.she: Artiste 3D
-Additional Music.he: Musique additionnelle
-Additional Music.she: Musique additionnelle
 ADR Editor.he: Monteur ADR
 ADR Editor.she: Monteuse ADR
 ADR Mixer.he: Mixeur ADR
@@ -399,6 +397,8 @@ Acting.she: Actrice
 Acting: Interprétation
 Actor's Assistant.he: Assistant d'acteur
 Actor's Assistant.she: Assistante d'acteur
+Additional Music.he: Musique additionnelle
+Additional Music.she: Musique additionnelle
 Additional Script Supervisor.he: Superviseur du scénario additionnel
 Additional Script Supervisor.she: Superviseuse du scénario additionnel
 Animal Wrangler.he: Dresseur d'animaux
@@ -443,6 +443,8 @@ Book.he: Livre
 Book.she: Livre
 Boom Operator.he: Opérateur de perche
 Boom Operator.she: Opératrice de perche
+Business Affairs Coordinator.he: Coordinateur affaires commerciales
+Business Affairs Coordinator.she: Coordinatrice affaires commerciales
 Camera Operator.he: Opérateur caméra
 Camera Operator.she: Opératrice caméra
 Camera Trainee.he: Stagiaire caméra
@@ -601,6 +603,8 @@ Lead Set Dresser.he: Chef décorateur
 Lead Set Dresser.she: Cheffe décoratrice
 Leadman.he: Chef d'équipe
 Leadman.she: Cheffe d'équipe
+Legal Services.he: Services juridiques
+Legal Services.she: Services juridiques
 Lighting Technician.he: Technicien lumière
 Lighting Technician.she: Technicienne lumière
 Line Producer.he: Producteur délégué
@@ -684,6 +688,8 @@ Production Supervisor.she: Superviseuse de la production
 Production.he: Producteur
 Production.she: Productrice
 Production: Production
+Project Manager.he: Chef de projet
+Project Manager.she: Cheffe de projet
 Property Builder.he: Constructeur immobilier
 Property Builder.she: Constructrice immobilier
 Property Buyer.he: Acheteur de biens immobiliers
@@ -735,6 +741,8 @@ Set Dresser.he: Décors plateau
 Set Dresser.she: Décors plateau
 Set Supervisor.he: Superviseur plateau
 Set Supervisor.she: Superviseuse plateau
+Sound Assistant.he: Assistant son
+Sound Assistant.she: Assistante son
 Sound Designer.he: Concepteur du son
 Sound Designer.she: Conceptrice du son
 Sound Editor.he: Monteur son
@@ -803,6 +811,8 @@ Unit Production Manager.he: Chef d'unité de production
 Unit Production Manager.she: Cheffe d'unité de production
 Utility Sound.he: Assistant son
 Utility Sound.she: Assistante son
+VFX Artist.he: Artiste VFX
+VFX Artist.she: Artiste VFX
 VFX Editor.he: Monteur VFX
 VFX Editor.she: Monteuse VFX
 VFX Supervisor.he: Superviseur VFX
