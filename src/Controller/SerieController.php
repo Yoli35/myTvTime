@@ -1646,12 +1646,14 @@ class SerieController extends AbstractController
         $seasonsCompleted = 0;
         foreach ($serieViewing->getSeasons() as $season) {
             if ($season->getSeasonNumber()) {
-                $completed = $season->getViewedEpisodeCount() == $season->getEpisodeCount();
-                if ($completed && !$season->isSeasonCompleted()) {
-                    $season->setSeasonCompleted(true);
-                    $this->seasonViewingRepository->save($season, true);
+                if ($season->getEpisodeCount()) { //une saison peut être annoncée/ajoutée avec zéro épisode
+                    $completed = $season->getViewedEpisodeCount() == $season->getEpisodeCount();
+                    if ($completed && !$season->isSeasonCompleted()) {
+                        $season->setSeasonCompleted(true);
+                        $this->seasonViewingRepository->save($season, true);
+                    }
+                    if ($completed) $seasonsCompleted++;
                 }
-                if ($completed) $seasonsCompleted++;
             }
         }
         if ($serieViewing->getNumberOfSeasons() == 0) {
