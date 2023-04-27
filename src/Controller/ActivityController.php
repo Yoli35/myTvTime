@@ -14,7 +14,6 @@ use App\Repository\ActivityExerciseGoalRepository;
 use App\Repository\ActivityMoveGoalRepository;
 use App\Repository\ActivityRepository;
 use App\Repository\ActivityStandUpGoalRepository;
-use App\Service\LogService;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -28,8 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/activity')]
 class ActivityController extends AbstractController
 {
-    public function __construct(private readonly LogService                     $logService,
-                                private readonly LoggerInterface                $loggerInterface,
+    public function __construct(private readonly LoggerInterface                $loggerInterface,
                                 private readonly ActivityRepository             $activityRepository,
                                 private readonly ActivityDayRepository          $activityDayRepository,
                                 private readonly ActivityMoveGoalRepository     $activityMoveGoalRepository,
@@ -40,10 +38,9 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/', name: 'app_activity_index', methods: ['GET'])]
-    public function index(Request $request): Response
+    public function index(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -86,12 +83,13 @@ class ActivityController extends AbstractController
         }
 
         $goals = [];
+        $now = $this->now();
         $goals['move'] = $activity->getMoveGoals()->toArray();
-        $goals['move'][count($goals['move']) - 1]->setEnd($this->now());
+        $goals['move'][count($goals['move']) - 1]->setEnd($now);
         $goals['exercise'] = $activity->getExerciseGoals()->toArray();
-        $goals['exercise'][count($goals['exercise']) - 1]->setEnd($this->now());
+        $goals['exercise'][count($goals['exercise']) - 1]->setEnd($now);
         $goals['standUp'] = $activity->getStandUpGoals()->toArray();
-        $goals['standUp'][count($goals['standUp']) - 1]->setEnd($this->now());
+        $goals['standUp'][count($goals['standUp']) - 1]->setEnd($now);
 //        dump($goals);
 
         return $this->render('activity/index.html.twig', [
@@ -246,11 +244,11 @@ class ActivityController extends AbstractController
     {
         try {
             $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-            return $now->setTime(0, 0);
         } catch (Exception $e) {
             $this->loggerInterface->error('New date with "Europe/Paris" time zone : ' . $e->getFile() . ' (line ' . $e->getLine() . ') : ' . $e->getMessage() . ' ' . $e->getTraceAsString());
-            return new DateTimeImmutable();
+            $now = new DateTimeImmutable();
         }
+        return $now->setTime(0, 0);
     }
 
     #[Route('/{id}/stand-up', name: 'app_activity_stand_up_toggle', methods: ['GET'])]
@@ -308,7 +306,7 @@ class ActivityController extends AbstractController
         $activityDay->{'set' . ucfirst($name)}($value);
         $this->activityDayRepository->save($activityDay, true);
 
-        // si le nom (name) contient "Result" alors on compare la valeur à la valeur de l'objectif
+        // si le nom (name) contient "Result" alors, on compare la valeur à la valeur de l'objectif
         if (str_contains($name, 'Result')) {
             $blockName = str_replace('Result', '', $name);
             $getter = 'get' . ucfirst(str_replace('Result', 'Goal', $name));
