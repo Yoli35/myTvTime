@@ -1,10 +1,14 @@
 @import "variables";
 
 .chat-wrapper {
-    bottom: 36px;
+    bottom: 0;
     position: fixed;
     right: 0;
     width: 20rem;
+
+    &.dev {
+        bottom: 36px;
+    }
 
     .chat-users {
         background-color: transparent;

@@ -1,8 +1,10 @@
-<div class="chat-wrapper" id="chat">
-    {% include "blocks/chat/_chat.html.twig" %}
-</div>
-<script>
-    localStorage.setItem("mytvtime.username", "{{ app.user.username }}");
-    localStorage.setItem("mytvtime.avatar", "{{ app.user.avatar }}");
-</script>
-<script src="/js/chat.js"></script>
+{% if app.user %}
+    <div class="chat-wrapper{% if app.environment is same as 'dev' %} dev{% endif %}" id="chat">
+        {% include "blocks/chat/_chat.html.twig" %}
+    </div>
+    <script>
+        localStorage.setItem("mytvtime.username", "{{ app.user.username }}");
+        localStorage.setItem("mytvtime.avatar", "{{ app.user.avatar }}");
+    </script>
+    <script src="/js/chat.js"></script>
+{% endif %}

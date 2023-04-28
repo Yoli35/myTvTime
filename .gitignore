@@ -26,3 +26,7 @@ symfony.lock
 .php-version
 composer.lock
 yarn.lock
+.idea/php.xml
+.idea/php.xml
+.idea/phpspec.xml
+composer.lock

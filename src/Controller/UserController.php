@@ -13,12 +13,9 @@ use App\Repository\MovieCollectionRepository;
 use App\Repository\SettingsRepository;
 use App\Repository\MovieRepository;
 use App\Repository\UserRepository;
-use App\Service\BetaSeriesService;
-use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
-use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\TimeBundle\DateTimeFormatter;
@@ -33,7 +30,6 @@ use Symfony\Component\Translation\LocaleSwitcher;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserController extends AbstractController
@@ -41,7 +37,6 @@ class UserController extends AbstractController
     private string $json_header = '"json_format":"myTvTime","json_version":"1.0",';
 
     public function __construct(private readonly LocaleSwitcher      $localeSwitcher,
-                                private readonly LogService          $logService,
                                 private readonly FriendRepository    $friendRepository,
                                 private readonly UserRepository      $userRepository,
                                 private readonly DateTimeFormatter   $dateTimeFormatter,
@@ -50,10 +45,9 @@ class UserController extends AbstractController
     }
 
     #[Route('/{_locale}/user/search', name: 'app_personal_list', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request): Response
+    public function index(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -137,9 +131,12 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function checkPendingFriendRequest()
+    public function checkPendingFriendRequest(): void
     {
         $user = $this->getUser();
+        if (!$user) {
+            return;
+        }
         $pendingRequests = $this->friendRepository->findBy(['recipient' => $user, 'acceptedAt' => null]);
 
         foreach ($pendingRequests as $request) {
@@ -232,7 +229,6 @@ class UserController extends AbstractController
     public function userMovies(Request $request, MovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
 
         /** @var User $user */
         $user = $this->getUser();
@@ -263,7 +259,7 @@ class UserController extends AbstractController
 
         return $this->render('user/movies.html.twig', [
             'discovers' => $movies,
-            'userMovies' => $movieController->getUserMovieIds($userMovieRepository),
+            'userMovies' => $movieController->getUserMovieIds(),
             'count' => count($items),
             'runtime' => $runtime,
             'locale' => $request->getLocale(),
@@ -378,13 +374,8 @@ class UserController extends AbstractController
         return $tab;
     }
 
-    /**
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
     #[Route('/{_locale}/user/movies/add', name: 'app_personnel_movie_add', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function add(Request $request, TMDBService $callTmdbService, MovieRepository $userMovieRepository, EntityManagerInterface $entityManager, MovieController $movieController): JsonResponse
+    public function add(Request $request, MovieController $movieController): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -392,7 +383,7 @@ class UserController extends AbstractController
         $progressValue = $request->query->get('progress_value');
         $locale = $request->getLocale();
 
-        $userMovie = $movieController->addMovie($user, $movieId, $locale, $callTmdbService, $userMovieRepository, $entityManager);
+        $userMovie = $movieController->addMovie($user, $movieId, $locale);
 
         return $this->json(['title' => $userMovie->getTitle(), 'progress_value' => $progressValue]);
     }
@@ -473,10 +464,10 @@ class UserController extends AbstractController
     }
 
     #[Route('/{_locale}/user/movies/ids', name: 'app_json_ids', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function jsonUserMovieIds(MovieController $movieController, MovieRepository $userMovieRepository): JsonResponse
+    public function jsonUserMovieIds(MovieController $movieController): JsonResponse
     {
         return $this->json([
-            'movie_ids' => $movieController->getUserMovieIds($userMovieRepository),
+            'movie_ids' => $movieController->getUserMovieIds(),
         ]);
     }
 
@@ -622,22 +613,6 @@ class UserController extends AbstractController
         return $newJson;
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
-    public function setRandomBanner(BetaSeriesService $betaSeriesService): array
-    {
-        $standing = $betaSeriesService->showsList(rand(1, 10));
-        $discovers = json_decode($standing, true);
-        $discover = $discovers['shows'][rand(0, 19)];
-        $banner['image'] = $discover['images']['show'] ?: $discover['images']['banner'];
-        $banner['title'] = $discover['title'];
-        return $banner;
-    }
-
     #[Route('/still-connected/', name: 'app_user_connected')]
     public function stillConnected(): Response
     {
@@ -647,7 +622,7 @@ class UserController extends AbstractController
         return $this->json(['connected' => ($user !== null)]);
     }
 
-    public function isFullyConnected()
+    public function isFullyConnected(): void
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     }
