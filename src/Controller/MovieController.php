@@ -12,8 +12,6 @@ use App\Repository\GenreRepository;
 use App\Repository\MovieCollectionRepository;
 use App\Repository\RatingRepository;
 use App\Repository\MovieRepository;
-use App\Service\CallImdbService;
-use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 
@@ -32,7 +30,6 @@ class MovieController extends AbstractController
         private readonly FavoriteRepository        $favoriteRepository,
         private readonly GenreRepository           $genreRepository,
         private readonly ImageConfiguration        $imageConfiguration,
-        private readonly LogService                $logService,
         private readonly MovieCollectionRepository $movieCollectionRepository,
         private readonly MovieRepository           $movieRepository,
         private readonly RatingRepository          $ratingRepository,
@@ -49,8 +46,6 @@ class MovieController extends AbstractController
         $movieRepository = $this->movieRepository;
         $tmdbService = $this->tmdbService;
 
-
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
         $userMovieIds = [];
@@ -366,16 +361,6 @@ class MovieController extends AbstractController
         return $sortedCrew;
     }
 
-    function peopleInSortedCrew($p, $s): bool
-    {
-        foreach ($s as $key => $value) {
-            if ($key == $p['name']) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_movie_toggle_favorite', methods: 'GET')]
     public function toggleFavorite(bool $fav, int $userId, int $mediaId): Response
     {
@@ -437,7 +422,6 @@ class MovieController extends AbstractController
     #[Route(['fr' => '/{_locale}/films/recherche/par/genre/{genres}/{page}', 'en' => '/{_locale}/movies/by/genre/{genres}/{page}', 'de' => '/{_locale}/filmen/nach/genre/{genres}/{page}', 'es' => '/{_locale}/peliculas/por/genero/{genres}/{page}'], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByGenres(Request $request, $page, $genres): Response
     {
-//        $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
         $standing = $this->tmdbService->moviesByGenres($page, $genres, $locale);
         $discovers = json_decode($standing, true);
@@ -463,7 +447,6 @@ class MovieController extends AbstractController
     #[Route(['fr' => '/{_locale}/films/recherche/par/date/{date}/{page}', 'en' => '/{_locale}/movies/by/date/{date}/{page}', 'de' => '/{_locale}/filmen/nach/datum/{date}/{page}', 'es' => '/{_locale}/peliculas/por/fecha/{date}/{page}'], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByDate(Request $request, $page, $date): Response
     {
-//        $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
         $standing = $this->tmdbService->moviesByDate($page, $date, $locale);
         $discovers = json_decode($standing, true);
@@ -490,7 +473,6 @@ class MovieController extends AbstractController
     #[Route(['fr' => '/{_locale}/films/recherche/par/nom/{page}', 'en' => '/{_locale}/movies/search/{page}', 'de' => '/{_locale}/filmen/suche/{page}', 'es' => '/{_locale}/peliculas/buscar/{page}'], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesSearch(Request $request, $page): Response
     {
-//        $this->logService->log($request, $this->getUser());
         $locale = $request->getLocale();
         $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         $query = $request->query->get('query');

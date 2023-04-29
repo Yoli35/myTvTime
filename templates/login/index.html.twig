@@ -6,38 +6,39 @@
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="login">
         <div class="login-dialog">
-            {{ form_start(loginForm) }}
-            {#            <form action="{{ path('app_login') }}" method="post"> #}
-            <div class="header">{{ 'Connexion'|trans }}</div>
-            <div class="body">
-                {% if error is defined %}
-                    <p class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
-                {% endif %}
-                {#                    <div class="input"> #}
-                {#                        <label for="username">{{ 'Email'|trans }}</label> #}
-                {#                        <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'Email address'|trans }}" aria-label="Username" aria-describedby="Username field"> #}
-                {#                    </div> #}
-                <div class="control">
-                    {{ form_row(loginForm.username) }}
+            <form action="{{ path('app_login') }}" method="post">
+                <div class="header">{{ 'Connexion'|trans }}</div>
+                <div class="body">
+                    {% if error %}
+                        <p class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                    {% endif %}
+                    <div class="control">
+                        <div class="input">
+                            <label for="username">{{ 'Email'|trans }}</label>
+                            <input type="text" id="username" name="_username" value="{{ last_username }}"
+                                   placeholder="{{ 'Email address'|trans }}" aria-label="Username"
+                                   aria-describedby="Username field">
+                        </div>
+                    </div>
+                    <div class="control">
+                        <div class="input">
+                            <label for="password">{{ 'Password'|trans }}</label>
+                            <input type="password" id="password" name="_password" value=""
+                                   placeholder="{{ 'Enter your password'|trans }}" aria-label="Password"
+                                   aria-describedby="Password field">
+                        </div>
+                    </div>
+                    <label>
+                        <input type="checkbox" name="_remember_me" checked/>
+                        {{ 'Keep me logged in'|trans }}
+                    </label>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 </div>
-                {#                    <div class="input"> #}
-                {#                        <label for="password">{{ 'Password'|trans }}</label> #}
-                {#                        <input type="password" id="password" name="_password" value="" placeholder="{{ 'Enter your password'|trans }}" aria-label="Password" aria-describedby="Password field"> #}
-                {#                    </div> #}
-                <div class="control">
-                    {{ form_row(loginForm.password) }}
+                <div class="footer">
+                    <button type="submit" class="btn">{{ 'Login'|trans }}</button>
                 </div>
-                {#                    <label> #}
-                {#                        <input type="checkbox" name="_remember_me" checked/> #}
-                {#                        {{ 'Keep me logged in'|trans }} #}
-                {#                    </label> #}
-                {#                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"> #}
-            </div>
-            <div class="footer">
-                <button type="submit" class="btn">{{ 'Login'|trans }}</button>
-            </div>
-            {{ form_end(loginForm) }}
-            {#            </form> #}
+                {#                {{ form_end(loginForm) }} #}
+            </form>
         </div>
     </div>
 {% endblock %}

@@ -1,0 +1,12 @@
+{% set user = app.user %}
+{% set route = app.request.attributes.get('_route') %}
+{% set parameters = app.request.query %}
+{% set route_params = app.request.attributes.get('_route_params') %}
+
+<nav class="top-menu">
+    <a href="{{ path('app_home') }}" class="top-item">{{ 'Home'|trans }}</a>
+    <a href="{{ path('app_blog') }}" class="top-item">{{ 'Blog'|trans }}</a>
+    <a href="{{ path('app_movie_list') }}" class="top-item">{{ 'Movies'|trans }}</a>
+    <a href="{{ path('app_serie_top_rated') }}" class="top-item">{{ 'Series'|trans }}</a>
+    <a href="{{ path('app_contact', {from: route|slice(4), params: route_params|serialize(format = 'json', context = [])}) }}" class="top-item">{{ 'Contact'|trans }}</a>
+</nav>
