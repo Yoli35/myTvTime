@@ -48,6 +48,11 @@
     }
 }
 
+.btn-sm {
+    font-size: .75em;
+    //padding: .125em .5em;
+}
+
 .btn-group {
     @include flex-row();
 

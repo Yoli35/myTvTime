@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\EpisodeViewingRepository;
-use App\Service\LogService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 #[ORM\Entity(repositoryClass: EpisodeViewingRepository::class)]
 class EpisodeViewing
@@ -16,7 +16,7 @@ class EpisodeViewing
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $episodeNumber = null;
+    private ?int $episodeNumber;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'episodes')]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,10 +32,13 @@ class EpisodeViewing
     private ?string $deviceType = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $viewedAt = null;
+    private ?DateTimeImmutable $viewedAt = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $airDate = null;
+    private ?DateTimeImmutable $airDate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $substituteName = null;
 
     public function __construct($episodeNumber, $airDate)
     {
@@ -43,7 +46,7 @@ class EpisodeViewing
         if ($airDate) {
             try {
                 $this->airDate = new DateTimeImmutable($airDate);
-            } catch (\Exception $e) {
+            } catch (Exception) {
                 $this->airDate = null;
             }
         }
@@ -113,26 +116,38 @@ class EpisodeViewing
         return $this;
     }
 
-    public function getViewedAt(): ?\DateTimeImmutable
+    public function getViewedAt(): ?DateTimeImmutable
     {
         return $this->viewedAt;
     }
 
-    public function setViewedAt(?\DateTimeImmutable $viewedAt): self
+    public function setViewedAt(?DateTimeImmutable $viewedAt): self
     {
         $this->viewedAt = $viewedAt;
 
         return $this;
     }
 
-    public function getAirDate(): ?\DateTimeImmutable
+    public function getAirDate(): ?DateTimeImmutable
     {
         return $this->airDate;
     }
 
-    public function setAirDate(?\DateTimeImmutable $airDate): self
+    public function setAirDate(?DateTimeImmutable $airDate): self
     {
         $this->airDate = $airDate;
+
+        return $this;
+    }
+
+    public function getSubstituteName(): ?string
+    {
+        return $this->substituteName;
+    }
+
+    public function setSubstituteName(?string $substituteName): self
+    {
+        $this->substituteName = $substituteName;
 
         return $this;
     }

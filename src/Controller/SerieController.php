@@ -21,7 +21,6 @@ use App\Repository\SerieCastRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
-//use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
@@ -57,7 +56,6 @@ class SerieController extends AbstractController
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FavoriteRepository       $favoriteRepository,
                                 private readonly ImageConfiguration       $imageConfiguration,
-//                                private readonly LogService               $logService,
                                 private readonly SeasonViewingRepository  $seasonViewingRepository,
                                 private readonly SerieCastRepository      $serieCastRepository,
                                 private readonly SerieRepository          $serieRepository,
@@ -71,7 +69,6 @@ class SerieController extends AbstractController
     public function index(Request $request, SettingsRepository $settingsRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
 
         /** @var User $user */
         $user = $this->getUser();
@@ -116,10 +113,10 @@ class SerieController extends AbstractController
             $settingsRepository->save($leafSettings, true);
         }
 
-       if ($series) {
-        $now = $this->newDateImmutable('now', 'Europe/Paris');
+        if ($series) {
+            $now = $this->newDateImmutable('now', 'Europe/Paris');
 
-           foreach ($series as &$serie) {
+            foreach ($series as &$serie) {
                 $serie = $this->isSerieAiringSoon($serie, $now);
             }
         }
@@ -164,7 +161,7 @@ class SerieController extends AbstractController
         } catch (Exception) {
             $date = new DateTimeImmutable();
         }
-        if (!$allDay)   $date->setTime(0, 0);
+        if (!$allDay) $date->setTime(0, 0);
 
         return $date;
     }
@@ -961,8 +958,6 @@ class SerieController extends AbstractController
     #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
     public function season(Request $request, $id, $seasonNumber): Response
     {
-//        $this->logService->log($request, $this->getUser());
-
         $from = $request->query->get('from');
         $page = $request->query->get('p');
         $query = $request->query->get('query');
@@ -1003,10 +998,17 @@ class SerieController extends AbstractController
                 }
             }
         }
+        if ($serie['userSerieViewing']) {
+        $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
+        $episodeViewings = $seasonViewing?->getEpisodes();
+        } else {
+            $episodeViewings = null;
+        }
 
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
+            'episodeViewings' => $episodeViewings,
             'episodes' => $episodes,
             'credits' => $credits,
             'parameters' => [
@@ -1018,6 +1020,32 @@ class SerieController extends AbstractController
             ],
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
+    }
+
+    #[Route('/episode/substitute/name', name: 'app_episode_substitute_name', methods: ['GET'])]
+    public function saveSubstituteName(Request $request): Response
+    {
+        $data = json_decode($request->query->get('data'), true);
+
+        $episodeViewing = $this->episodeViewingRepository->findOneBy(['id' => $data['id']]);
+        $episodeViewing->setSubstituteName($data['substituteName']);
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        return $this->json([
+            'data id' => $data['id'],
+            'data substituteName' => $data['substituteName'],
+        ]);
+    }
+
+    public function getSeasonViewing(SerieViewing $serieViewing, int $seasonNumber): ?SeasonViewing
+    {
+        $seasonViewing = null;
+        foreach ($serieViewing->getSeasons() as $season) {
+            if ($season->getSeasonNumber() == $seasonNumber) {
+                $seasonViewing = $season;
+            }
+        }
+        return $seasonViewing;
     }
 
     public function serie($id, $locale): array
@@ -1617,7 +1645,7 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTvEpisode($serie->getSerieId(), 1, 1, $request->getLocale());
         $firstEpisode = json_decode($standing, true);
         if ($firstEpisode && $firstEpisode['air_date']) {
-            $createdAt =$this->newDateImmutable($firstEpisode['air_date'], 'Europe/Paris');
+            $createdAt = $this->newDateImmutable($firstEpisode['air_date'], 'Europe/Paris');
 //            try {
 //                $createdAt = new DateTimeImmutable($firstEpisode['air_date']);
 //            } catch (Exception) {

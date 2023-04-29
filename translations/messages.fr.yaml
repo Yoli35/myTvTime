@@ -876,6 +876,7 @@ The episode episode_number, season season_number of serie_name is aired from tod
 This episode aired from episode_air_date.: Cet épisode a été diffusé à partir du episode_air_date.
 This episode will be aired from episode_air_date.: Cet épisode sera diffusé à partir du episode_air_date.
 This episode is aired from today.: Cet épisode est diffusée à partir d'aujourd'hui.
+Substitute name: Nom de remplacement
 #episodes
 Where did you watched it?: Où l'avez-vous vu ?
 Desktop: Ordinateur de bureau

@@ -1,14 +1,8 @@
 {% extends 'base.html.twig' %}
 
     {% block title %}myTvTime ▶ ︎
-        {% if from == 'popular' %}
-            {{ 'Popular Series'|trans }}
-        {% elseif from == 'top_rated' %}
+        {% if from == 'top_rated' %}
             {{ 'Top Rated Series'|trans }}
-        {% elseif from == 'airing_today' %}
-            {{ 'Series Airaing Today'|trans }}
-        {% elseif from == 'on_the_air' %}
-            {{ 'Series On The Air'|trans }}
         {% elseif from == 'search' %}
             {{ 'Series search'|trans }}
         {% elseif from == 'my_series_to_start' %}
@@ -34,14 +28,8 @@
     </div>
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
-        {% if from == 'popular' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Popular Series', url: path('app_serie_popular')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif from == 'top_rated' %}
+        {% if from == 'top_rated' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif from == 'airing_today' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series Airing Today', url: path('app_serie_airing_today')~'?p='~page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif from == 'on_the_air' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series On The Air', url: path('app_serie_on_the_air')~'?p='~page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'search' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: page})~'?query='~query~'&year='~year~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'my_series_to_start' %}
@@ -57,13 +45,15 @@
         <div class="serie-page">
             <div class="header">
                 {% if serie.backdrop_path|length %}
-                    <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
+                    <div class="backdrop"
+                         style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
                 {% else %}
                     <div class="backdrop" style="background-image: url('/images/default/no_banner_dark.png')"></div>
                 {% endif %}
                 <div class="poster">
                     {% if serie.poster_path|length %}
-                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
+                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}"
+                             alt="{{ serie.name }}">
                     {% else %}
                         <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
                     {% endif %}
@@ -73,7 +63,8 @@
                                 {% for flatrate in watchProviders.flatrate %}
                                     <div class="watch-provider">
                                         <div class="logo">
-                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}" alt="{{ flatrate.provider_name }}">
+                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}"
+                                                 alt="{{ flatrate.provider_name }}">
                                         </div>
                                         <div class="watch">
                                             <div>{{ 'Available in streaming'|trans }}</div>
@@ -86,7 +77,8 @@
                                 {% for buy in watchProviders.buy %}
                                     <div class="watch-provider">
                                         <div class="logo">
-                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}" alt="{{ buy.provider_name }}">
+                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}"
+                                                 alt="{{ buy.provider_name }}">
                                         </div>
                                         <div class="watch">
                                             <div>{{ 'Available to rent or buy'|trans }}</div>
@@ -124,7 +116,8 @@
                                 {% if index %}
                                     <div class="d-flex-1">
                                         <div class="duration-string"></div>
-                                        <button id="test" data-id="{{ serieId }}" class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button>
+                                        <button id="test" data-id="{{ serieId }}"
+                                                class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button>
                                     </div>
                                     <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
                                     <div class="view-average">
@@ -165,7 +158,8 @@
                                         <div class="creator">
                                             <div class="profile">
                                                 {% if c.profile_path %}
-                                                    <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}" alt="{{ c.name }}">
+                                                    <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}"
+                                                         alt="{{ c.name }}">
                                                 {% else %}
                                                     <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
                                                 {% endif %}
@@ -220,12 +214,14 @@
                         {% endif %}
                     {% endif %}
                     <div class="ygg">
-                        <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
+                        <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date"
+                           target="_blank">
                             <div></div>
                         </a>
                     </div>
                     <div class="ygg-original">
-                        <a href="https://www5.yggtorrent.fi/engine/search?name={{ yggOriginal }}&do=search&order=desc&sort=publish_date" target="_blank">
+                        <a href="https://www5.yggtorrent.fi/engine/search?name={{ yggOriginal }}&do=search&order=desc&sort=publish_date"
+                           target="_blank">
                             <div></div>
                         </a>
                     </div>
@@ -259,12 +255,15 @@
                                         <div class="season">
                                             <div class="poster">
                                                 {% if season.poster_path|length %}
-                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
+                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}"
+                                                         alt="{{ season.name }}">
                                                 {% else %}
                                                     {% if serie.poster_path %}
-                                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ season.name }}">
+                                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}"
+                                                             alt="{{ season.name }}">
                                                     {% else %}
-                                                        <img src="/images/default/no_poster.png" alt="{{ season.name }}">
+                                                        <img src="/images/default/no_poster.png"
+                                                             alt="{{ season.name }}">
                                                     {% endif %}
                                                 {% endif %}
                                             </div>
@@ -273,7 +272,8 @@
                                                 {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
                                                 {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
                                                 {% if season.seasonViewing is defined %}
-                                                    <div class="details" data-season-number="{{ season.season_number }}">
+                                                    <div class="details"
+                                                         data-season-number="{{ season.season_number }}">
                                                         <div>
                                                             {{ include('blocks/serie/_season_viewing.html.twig') }}
                                                         </div>
@@ -309,7 +309,9 @@
                                     <h5>{{ 'Backdrops'|trans }}</h5>
                                     <div>
                                         {% for backdrop in images.backdrops %}
-                                            <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop.file_path }}" alt="Some backdrop">
+                                            <img class="backdrop"
+                                                 src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop.file_path }}"
+                                                 alt="Some backdrop">
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -318,12 +320,16 @@
                                     <div class="d-flex f-wrap f-gap-1">
                                         <div class="logo-bg-dark">
                                             {% for logo in images.logos %}
-                                                <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.3 ~ logo.file_path }}" alt="Some logo">
+                                                <img class="logo"
+                                                     src="{{ imageConfig.url ~ imageConfig.logo_sizes.3 ~ logo.file_path }}"
+                                                     alt="Some logo">
                                             {% endfor %}
                                         </div>
                                         <div class="logo-bg-light">
                                             {% for logo in images.logos %}
-                                                <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.3 ~ logo.file_path }}" alt="Some logo">
+                                                <img class="logo"
+                                                     src="{{ imageConfig.url ~ imageConfig.logo_sizes.3 ~ logo.file_path }}"
+                                                     alt="Some logo">
                                             {% endfor %}
                                         </div>
                                     </div>
@@ -332,7 +338,9 @@
                                     <h5>{{ 'Posters'|trans }}</h5>
                                     <div>
                                         {% for poster in images.posters %}
-                                            <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster.file_path }}" alt="Some poster">
+                                            <img class="poster"
+                                                 src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster.file_path }}"
+                                                 alt="Some poster">
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -349,7 +357,10 @@
                                             <div class="video">
                                                 <h5>{{ video.type }}</h5>
                                                 <h6>{{ 'Published at'|trans }} {{ video.published_at|format_datetime() }}</h6>
-                                                <iframe src="https://www.youtube.com/embed/{{ video.key }}" title="{{ video.name }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                <iframe src="https://www.youtube.com/embed/{{ video.key }}"
+                                                        title="{{ video.name }}"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowfullscreen></iframe>
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -369,8 +380,10 @@
                     </div>
                     <div class="trans-content"></div>
                     <div class="trans-footer">
-                        <button type="button" aria-label="{{ 'Cancel'|trans }}" aria-roledescription="{{ 'Cancel and close the dialog'|trans }}">{{ 'Cancel'|trans }}</button>
-                        <button type="submit" aria-label="{{ 'Translate'|trans }}" aria-roledescription="{{ 'Add translated keywords, close the dialog and reload the page'|trans }}">{{ 'Translate'|trans }}</button>
+                        <button type="button" aria-label="{{ 'Cancel'|trans }}"
+                                aria-roledescription="{{ 'Cancel and close the dialog'|trans }}">{{ 'Cancel'|trans }}</button>
+                        <button type="submit" aria-label="{{ 'Translate'|trans }}"
+                                aria-roledescription="{{ 'Add translated keywords, close the dialog and reload the page'|trans }}">{{ 'Translate'|trans }}</button>
                     </div>
                 </div>
             </div>
@@ -402,14 +415,16 @@
                     <div class="wrapper">
                         {% for network in serie.networks %}
                             <div class="network" data-type="network" data-id="{{ network.id }}">
-                                <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}')"></div>
+                                <div class="logo"
+                                     style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}')"></div>
                                 <div class="label">{{ network.name }}</div>
                             </div>
                         {% endfor %}
                         {% if watchProviders.flatrate is defined %}
                             {% for flatrate in watchProviders.flatrate %}
                                 <div class="network" data-type="flatrate" data-id="{{ flatrate.provider_id }}">
-                                    <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}')"></div>
+                                    <div class="logo"
+                                         style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}')"></div>
                                     <div class="label">{{ flatrate.provider_name }}</div>
                                 </div>
                             {% endfor %}
@@ -417,7 +432,8 @@
                         {% if watchProviders.buy is defined %}
                             {% for buy in watchProviders.buy %}
                                 <div class="network" data-type="buy" data-id="{{ buy.provider_id }}">
-                                    <div class="logo" style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}')"></div>
+                                    <div class="logo"
+                                         style="background-image: url('{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}')"></div>
                                     <div class="label">{{ buy.provider_name }}</div>
                                 </div>
                             {% endfor %}
@@ -457,12 +473,14 @@
                 </div>
                 <div class="remember-choice">
                     <label for="rememberChoice">
-                        <input type="checkbox" id="rememberChoice" checked title="{{ 'Remember my choice as long as I stay on this page'|trans }}">{{ 'Remember my choices'|trans }}
+                        <input type="checkbox" id="rememberChoice" checked
+                               title="{{ 'Remember my choice as long as I stay on this page'|trans }}">{{ 'Remember my choices'|trans }}
                     </label>
                 </div>
                 <div class="live-watch">
                     <label for="liveWatch">
-                        <input type="checkbox" id="liveWatch" title="{{ 'Episodes seen as they happen'|trans }}">{{ 'Episodes seen as they happen'|trans }}
+                        <input type="checkbox" id="liveWatch"
+                               title="{{ 'Episodes seen as they happen'|trans }}">{{ 'Episodes seen as they happen'|trans }}
                     </label>
                 </div>
             </div>
@@ -631,7 +649,15 @@
                 }
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
-                    let data = {duration: 0, episodeCount: 0, log: "", nullDurationCount: 0, seasonCount: 0, serieCount: 0, time: "0"};
+                    let data = {
+                        duration: 0,
+                        episodeCount: 0,
+                        log: "",
+                        nullDurationCount: 0,
+                        seasonCount: 0,
+                        serieCount: 0,
+                        time: "0"
+                    };
                     data = JSON.parse(this.response);
                     console.log({data});
                     let duration = data.duration;

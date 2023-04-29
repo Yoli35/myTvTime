@@ -1,17 +1,11 @@
 {% extends 'base.html.twig' %}
 {% set user = app.user %}
 {% block title %}myTvTime ▶ ︎
-    {% if parameters.from == 'popular' %}
-        {{ 'Popular Series'|trans }}::{{ serie.name }}
-    {% elseif parameters.from == 'top_rated' %}
+    {% if parameters.from == 'top_rated' %}
         {{ 'Top Rated Series'|trans }}::{{ serie.name }}
-    {% elseif parameters.from == 'airing_today' %}
-        {{ 'Series Airaing Today'|trans }}
-    {% elseif parameters.from == 'on_the_air' %}
-        {{ 'Series On The Air'|trans }}
     {% elseif parameters.from == 'search' %}
         {{ 'Series search'|trans }}
-    {% elseif parameters.from == 'latest' %}
+    {% elseif parameters.from == 'today' %}
         {{ 'Latest Serie'|trans }}
     {% else %}
         {{ 'My Series'|trans }}
@@ -22,17 +16,11 @@
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
-        {% if parameters.from == 'popular' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Popular Series', url: path('app_serie_popular')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif parameters.from == 'top_rated' %}
+        {% if parameters.from == 'top_rated' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif parameters.from == 'airing_today' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series Airing Today', url: path('app_serie_airing_today')~'?p='~parameters.page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif parameters.from == 'on_the_air' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series On The Air', url: path('app_serie_on_the_air')~'?p='~parameters.page~'&b=1#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'search' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: parameters.page})~'?query='~parameters.query~'&year='~parameters.year~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif parameters.from == 'latest' %}
+        {% elseif parameters.from == 'today' %}
             {{ include('blocks/_nav.html.twig', {thisPage: serie.name}) }}
         {% else %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
@@ -41,13 +29,15 @@
         <div class="serie-page">
             <div class="header">
                 {% if serie.backdropPath|length %}
-                    <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
+                    <div class="backdrop"
+                         style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
                 {% else %}
                     <div class="backdrop" style="background-image: url('/images/default/no_banner_dark.png')"></div>
                 {% endif %}
                 <div class="poster">
                     {% if season.poster_path|length %}
-                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
+                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}"
+                             alt="{{ season.name }}">
                     {% else %}
                         <img src="/images/default/no_poster.png" alt="{{ season.name }}">
                     {% endif %}
@@ -76,25 +66,54 @@
                     <section>
                         <div class="episodes">
                             {% for episode in episodes %}
+                                {% if episodeViewings %}
+                                    {% set episodeViewing = episodeViewings[episode.episode_number-1] %}
+                                {% endif %}
                                 <div class="episode">
                                     <div class="still">
                                         {% if episode.still_path|length %}
-                                            <img src="{{ imageConfig.url ~ imageConfig.still_sizes.3 ~ episode.still_path }}" alt="{{ episode.name }}">
+                                            <img src="{{ imageConfig.url ~ imageConfig.still_sizes.3 ~ episode.still_path }}"
+                                                 alt="{{ episode.name }}">
                                         {% else %}
                                             {% if serie.posterPath %}
-                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ episode.name }}">
+                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}"
+                                                     alt="{{ episode.name }}">
                                             {% else %}
                                                 <img src="/images/default/no_poster.png" alt="{{ episode.name }}">
                                             {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="infos">
-                                        <h4>{{ 'Episode'|trans }} {{ episode.episode_number }} : {{ episode.name }}</h4>
+                                        <h4>
+                                            {{ 'Episode'|trans }} {{ episode.episode_number }} :
+                                            {% if episodeViewings
+                                                and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
+                                                and episodeViewing.substituteName is not null %}
+                                                {{ episodeViewing.substituteName }}
+                                            {% else %}
+                                                {{ episode.name }}
+                                            {% endif %}
+                                        </h4>
+
+                                        {% if episodeViewings
+                                            and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
+                                            and episodeViewing.substituteName is null %}
+                                            <div class="substituteName">
+                                                <label>
+                                                    {{ 'Substitute name'|trans }} :
+                                                    <input type="text" data-id="{{ episodeViewing.id }}">
+                                                </label>
+                                                <button class="btn btn-primary btn-sm"
+                                                        data-id="{{ episodeViewing.id }}">{{ 'Apply'|trans }}</button>
+                                            </div>
+                                        {% endif %}
+
                                         {% if episode.overview|length %}
                                             <div class="info">{{ episode.overview }}</div>
                                         {% endif %}
                                         {% if episode.runtime %}
-                                            <div class="info">{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ episode.runtime>1 ? 'minutes':'minute' }}</div>
+                                            <div class="info">{{ 'Runtime'|trans }}
+                                                : {{ episode.runtime }} {{ episode.runtime>1 ? 'minutes':'minute' }}</div>
                                         {% endif %}
                                         {% if episode.air_date %}
                                             <div class="info">
@@ -119,4 +138,39 @@
         {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const substituteNameApplies = document.querySelectorAll('.substituteName button');
+            const substituteNameInputs = document.querySelectorAll('.substituteName input');
+            substituteNameApplies.forEach((substituteNameApply) => {
+                substituteNameApply.addEventListener('click', saveSubstituteName);
+            });
+            substituteNameInputs.forEach((substituteNameInput) => {
+                substituteNameInput.addEventListener('keyup', (e) => {
+                    if (e.keyCode === 13) {
+                        saveSubstituteName(e);
+                    }
+                });
+            });
+
+            function saveSubstituteName(e) {
+                const substituteName = e.target.parentElement.querySelector('input').value;
+                const id = e.target.dataset.id;
+                const url = '{{ path('app_episode_substitute_name') }}';
+                const data = JSON.stringify({
+                    id: id,
+                    substituteName: substituteName
+                });
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    window.location.reload();
+                }
+                xhr.open("GET", url + '?data=' + data, true);
+                xhr.send();
+            }
+        });
+    </script>
 {% endblock %}

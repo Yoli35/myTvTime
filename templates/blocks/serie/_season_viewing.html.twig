@@ -4,11 +4,17 @@
     {% if seasonViewing.episodeCount > 0 %}
         <div class="viewing" data-season-number="{{ seasonViewing.seasonNumber }}">
             {% for episodeViewing in seasonViewing.episodes %}
+                {% if episodes[episodeViewing.episodeNumber-1].name matches '/[EÉ]pisod[eio]+\\s\\d+/'
+                    and episodeViewing.substituteName is not null %}
+                    {% set name = episodeViewing.substituteName %}
+                {% else %}
+                    {% set name = episodes[episodeViewing.episodeNumber-1].name %}
+                {% endif %}
                 <div class="ep{% if seasonViewing.seasonCompleted %} full{% endif %}"
                      data-number="{{ episodeViewing.episodeNumber }}"
                      data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
                      data-air-date="{{ episodes[episodeViewing.episodeNumber-1].air_date|format_date('long') }}"
-                     data-name="{{ episodes[episodeViewing.episodeNumber-1].name }}"
+                     data-name="{{ name }}"
                      data-still-path="{{ episodes[episodeViewing.episodeNumber-1].still_path }}"
                      data-global-index="{{ globalIndex }}">
                     {% if episodeViewing.viewedAt %}
