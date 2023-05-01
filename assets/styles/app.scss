@@ -555,12 +555,13 @@ nav.active {
 
 .top-menu {
     @include flex-row(center, space-around);
+    background-color: hsla(206deg, 50%, 24%, .25);
     height: 3rem;
     position: sticky;
     top: 0;
 
     &:hover {
-        background-color: var(--gradient-ardoise-20);
+        background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-20);*/
     }
 
     .top-item {
@@ -634,7 +635,7 @@ nav.active {
     margin: 1em 0;
     padding: 0 1em;
     position: sticky;
-    top: 0;
+    top: 3rem;
     z-index: 50;
 
     &:hover {

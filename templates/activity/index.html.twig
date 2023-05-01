@@ -30,7 +30,8 @@
                                         {% set tab = 1 %}
                                         {% for day in week %}
                                             <div class="day">
-                                                <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
+                                                {% set date = day.day|format_date('full')|capitalize %}
+                                                <div class="date">{{ fixIfFirstDayOfTheMonth(date) }}</div>
                                                 <div class="activity-of-the-day">
                                                     <div class="rings-of-the-day">
                                                         {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
