@@ -249,10 +249,14 @@
                                     </div>
                                     <div class="graphs">
                                         {% set moveMax = 0 %}
+                                        {% set stepsMax = 0 %}
+                                        {% set distanceMax = 0 %}
                                         {% set exerciseMax = 0 %}
                                         {% set standUpMax = 0 %}
                                         {% for day in week|reverse %}
                                             {% set moveMax = moveMax > (day ? day.moveResult : 0) ? moveMax : (day ? day.moveResult : 0) %}
+                                            {% set stepsMax = stepsMax > (day ? day.steps : 0) ? stepsMax : (day ? day.steps : 0) %}
+                                            {% set distanceMax = distanceMax > (day ? day.distance : 0) ? distanceMax : (day ? day.distance : 0) %}
                                             {% set exerciseMax = exerciseMax > (day ? day.exerciseResult : 0) ? exerciseMax : (day ? day.exerciseResult : 0) %}
                                             {% set standUpMax = standUpMax > (day ? day.standUpResult : 0) ? standUpMax : (day ? day.standUpResult : 0) %}
                                         {% endfor %}
@@ -263,6 +267,26 @@
                                                     {% set height = height / moveMax * 100 %}
                                                 {% endif %}
                                                 <div class="bar bar-move" style="height: {{ height }}px">
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                         <div class="graph">
+                                            {% for day in week|reverse %}
+                                                {% set height = day ? day.steps : 0 %}
+                                                {% if height %}
+                                                    {% set height = height / stepsMax * 100 %}
+                                                {% endif %}
+                                                <div class="bar bar-steps" style="height: {{ height }}px">
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="graph">
+                                            {% for day in week|reverse %}
+                                                {% set height = day ? day.distance : 0 %}
+                                                {% if height %}
+                                                    {% set height = height / distanceMax * 100 %}
+                                                {% endif %}
+                                                <div class="bar bar-distance" style="height: {{ height }}px">
                                                 </div>
                                             {% endfor %}
                                         </div>

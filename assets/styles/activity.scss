@@ -620,6 +620,15 @@
                         &.bar-move {
                             background-color: var(--activity-move);
                         }
+                        &.bar-steps {
+                            background-color: var(--gradient-green-40);
+                        }
+                        &.bar-distance {
+                            background-color: var(--gradient-purple-50);
+                        }
+                        &.bar-move {
+                            background-color: var(--activity-move);
+                        }
                         &.bar-exercise {
                             background-color: var(--activity-exercise);
                         }
