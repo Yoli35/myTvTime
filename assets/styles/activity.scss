@@ -1,777 +1,812 @@
 @import "variables";
 
 .activity {
-  @include flex-col(flex-start, center);
-  padding-top: 1em;
+    @include flex-col(flex-start, center);
+    padding-top: 1em;
 
-  .header {
-    @include animated-header("../images/activity-header.jpeg");
+    .header {
+        @include animated-header("../images/activity-header.jpeg");
 
-    .animated-h1 {
-      color: var(--light-theme-text);
-    }
-
-    .backdrop {
-      background-position: center;
-    }
-
-    .clock {
-      left: unset;
-      right: 1em;
-
-      .face {
-        background-color: var(--gradient-mars-40-alpha-50);
-
-        .number {
-          color: var(--gradient-ardoise-100);
+        .animated-h1 {
+            color: var(--light-theme-text);
         }
 
-        .unit {
-          background-color: var(--gradient-ardoise-100);
+        .backdrop {
+            background-position: center;
         }
 
-        .warning {
-          background: conic-gradient(hsla(0, 0, 0, 0) 0%, hsla(0, 0, 0, 0) 75%, var(--gradient-red-50-alpha-50) 100%);
+        .clock {
+            left: unset;
+            right: 1em;
+
+            .face {
+                background-color: var(--gradient-mars-40-alpha-50);
+
+                .number {
+                    color: var(--gradient-ardoise-100);
+                }
+
+                .unit {
+                    background-color: var(--gradient-ardoise-100);
+                }
+
+                .warning {
+                    background: conic-gradient(hsla(0, 0, 0, 0) 0%, hsla(0, 0, 0, 0) 75%, var(--gradient-red-50-alpha-50) 100%);
+                }
+            }
+
+            .username, .time {
+                color: var(--gradient-ardoise-100);
+                font-weight: 400;
+            }
+
+            .hands {
+                border: 1px solid var(--gradient-ardoise-100);
+            }
         }
-      }
-
-      .username, .time {
-        color: var(--gradient-ardoise-100);
-        font-weight: 400;
-      }
-
-      .hands {
-        border: 1px solid var(--gradient-ardoise-100);
-      }
-    }
-  }
-
-  .nav-breadcrumb {
-    margin: 1em 0 1em auto;
-  }
-
-  main {
-    @include flex-col(center, center);
-    min-height: 20em;
-    width: 100%;
-
-    .no-activity {
-      font-size: 2em;
-      font-weight: 300;
-      margin: 0 auto;
-      padding: 1em 2em;
     }
 
-    .activity-goals {
-      margin-left: auto;
-      padding: .25em 2em;
+    .nav-breadcrumb {
+        margin: 1em 0 1em auto;
     }
 
-    .form {
-      background-color: var(--gradient-ardoise-40-alpha-50);
-      border-radius: .25em;
-      margin-bottom: 2em;
-      padding: 2em;
-
-      form {
-        @include flex-col(flex-start, center);
-        gap: 1em;
-
-        > div {
-          @include flex-row();
-          gap: 1em;
-        }
-
-        input {
-          font-weight: 400;
-        }
-      }
-    }
-
-    .recent-activity {
-      @include flex-col(flex-start, center);
-      width: 100%;
-
-      .days {
-        @include flex-col(start, start);
-        gap: 1em;
+    main {
+        @include flex-col(center, center);
+        min-height: 20em;
         width: 100%;
 
-        .day {
-          @include flex-col(flex-start, center);
-          background-color: var(--gradient-ardoise-40-alpha-50);
-          border-radius: .25em;
-          gap: .5em;
-          padding: 1em;
-          transition: background-color 1s ease-in-out;
-          width: 100%;
+        .no-activity {
+            font-size: 2em;
+            font-weight: 300;
+            margin: 0 auto;
+            padding: 1em 2em;
+        }
 
-          &:hover {
-            background-color: var(--gradient-ardoise-40);
+        .activity-goals {
+            margin-left: auto;
+            padding: .25em 2em;
+        }
 
-            .activity-of-the-day {
-              @include flex-row(stretch, center);
+        .form {
+            background-color: var(--gradient-ardoise-40-alpha-50);
+            border-radius: .25em;
+            margin-bottom: 2em;
+            padding: 2em;
 
-              .rings-of-the-day {
-                background-color: var(--gradient-ardoise-10-alpha-50);
-              }
-
-              .stand-up, .move, .exercise {
-                background-color: var(--gradient-ardoise-10-alpha-50);
-              }
-            }
-          }
-
-          &.three-rings {
-            background-color: var(--gradient-green-30-alpha-50);
-
-            &:hover {
-              background-color: var(--gradient-green-30);
-
-              .activity-of-the-day {
-                .move {
-                  .block-body {
-                    .details {
-                      .detail {
-                        &:nth-child(2 of .detail) {
-                          background-color: var(--gradient-green-40);
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            .activity-of-the-day {
-              .move {
-                .block-body {
-                  .details {
-                    .detail {
-                      &:nth-child(2 of .detail) {
-                        background-color: var(--gradient-green-30);
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          .date {
-            font-size: 1.5em;
-            font-weight: 400;
-          }
-
-          .activity-of-the-day {
-            @include flex-row(stretch, center);
-            gap: 1em;
-            width: 100%;
-
-            .rings-of-the-day {
-              @include flex-row();
-              background-color: var(--gradient-ardoise-20-alpha-50);
-              border-radius: 50% .25em .25em 50%;
-              aspect-ratio: 1;
-              gap: 1em;
-              height: 10em;
-              transition: background-color 1s ease-in-out;
-              width: 10em;
-
-              .drawn-rings {
-                height: 8em;
-                width: 8em;
-              }
-            }
-
-            .stand-up, .move, .exercise {
-              @include flex-col(flex-start, flex-start);
-              background-color: var(--gradient-ardoise-20-alpha-50);
-              border-radius: .25em;
-              font-size: 1em;
-              font-weight: 300;
-              gap: 1em;
-              padding: 1em;
-              transition: background-color 1s ease-in-out;
-              width: 100%;
-
-              .block-header {
-                @include flex-row(flex-start, flex-start);
+            form {
+                @include flex-col(flex-start, center);
                 gap: 1em;
-                width: 100%;
-
-                .title {
-                  font-size: 1.5em;
-                  font-weight: 400;
-                }
-
-                .completed {
-                  font-size: 1.5em;
-                  opacity: 0;
-                  transition: opacity .300s ease-in-out;
-
-                  &.visible {
-                    opacity: 1;
-                  }
-                }
-
-                .doubled {
-                  @include flex-row();
-                  border-radius: 50%;
-                  color: var(--gradient-ardoise-100);
-                  font-size: 1em;
-                  font-weight: 400;
-                  height: 1.5em;
-                  margin-left: auto;
-                  opacity: 0;
-                  transition: opacity .300s ease-in-out;
-                  width: 1.5em;
-
-                  div {
-                    font-size: .875em;
-                  }
-
-                  &.visible {
-                    opacity: 1;
-                  }
-                }
-              }
-
-              .block-body {
-                @include flex-row(center, center);
-                font-size: 1em;
-                font-weight: 300;
-                gap: 1em;
-                width: 100%;
-
-                .details {
-                  @include flex-col(flex-start, flex-start);
-                  gap: .5em;
-                  width: 100%;
-
-                  .detail {
-                    @include flex-row(center, flex-start);
-                    gap: .75em;
-                    width: 100%;
-
-                    .result, .goal {
-                      font-size: 1em;
-                      font-weight: 400;
-                    }
-                  }
-                }
-              }
-            }
-
-            .stand-up {
-              .block-header {
-                .doubled {
-                  background-color: var(--activity-stand-up);
-                }
-
-                .completed {
-                  color: var(--activity-stand-up);
-                }
-              }
-
-              .block-body {
-                .details {
-                  .wrapper {
-                    @include flex-col();
-
-                    .hours {
-                      @include flex-row(flex-start, center);
-                      gap: 2px;
-
-                      .hour {
-                        border-radius: 4px;
-                        height: 32px;
-                        width: 8px;
-
-                        &.up {
-                          background-color: var(--activity-stand-up);
-
-                          &:hover {
-                            background-color: var(--activity-stand-up-hover);
-                          }
-                        }
-
-                        &.down {
-                          background-color: var(--activity-stand-down);
-
-                          &:hover {
-                            background-color: var(--activity-stand-down-hover);
-                          }
-                        }
-                      }
-                    }
-
-                    .graduations {
-                      @include flex-row(flex-start, flex-start);
-                      font-size: .5em;
-                      height: 2em;
-                      width: 100%;
-
-                      .quarter {
-                        border-left: 1px solid var(--gradient-ardoise-60);
-                        color: var(--gradient-ardoise-60);
-                        height: 2em;
-                        flex: 1;
-                        padding-left: .25em;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            .move {
-              .block-header {
-                .doubled {
-                  background-color: var(--activity-move);
-                }
-
-                .completed {
-                  color: var(--activity-move);
-                }
-              }
-
-              .block-body {
-
-                .details {
-                  .detail {
-                    // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
-                    //&:nth-child(2 of .detail) {
-                    &:nth-child(2) {
-                      border-radius: .25em;
-                      flex-direction: column;
-                      gap: 0;
-                      padding: .125em .5em;
-                      background-color: var(--gradient-ardoise-40);
-                      margin-left: -.5em;
-                      transition: background-color 1s ease-in-out;
-                    }
-                  }
-                }
-
-                .result, .steps, .distance {
-                  position: relative;
-
-                  span {
-                    cursor: pointer;
-                  }
-
-                  input {
-                    background-color: var(--gradient-red-90);
-                    border: 1px solid var(--activity-move);
-                    border-radius: .25em;
-                    display: none;
-                    font-size: 1em;
-                    font-weight: 400;
-                    inset: -.125em 0 -.125em -.5em;
-                    padding: .5em;
-                    position: absolute;
-
-                    &.visible {
-                      display: block;
-                    }
-                  }
-                }
-              }
-            }
-
-            .exercise {
-              .block-header {
-                .doubled {
-                  background-color: var(--activity-exercise);
-                  color: var(--gradient-ardoise-10);
-                }
-
-                .completed {
-                  color: var(--activity-exercise);
-                }
-              }
-
-              .block-body {
-                .result {
-                  position: relative;
-
-                  span {
-                    cursor: pointer;
-                  }
-
-                  input {
-                    background-color: var(--gradient-green-90);
-                    border: 1px solid var(--activity-exercise);
-                    border-radius: .25em;
-                    display: none;
-                    font-size: 1em;
-                    font-weight: 400;
-                    inset: -.125em 0 -.125em -.5em;
-                    padding: .5em;
-                    position: absolute;
-
-                    &.visible {
-                      display: block;
-                    }
-                  }
-                }
-              }
-            }
-
-            .progress {
-              @include flex-row(center, center);
-              background-color: var(--gradient-ardoise-10);
-              border-radius: 50%;
-              height: 4em;
-              position: relative;
-              width: 4em;
-
-              .circle {
-                @include flex-row(center, center);
-                //background: conic-gradient(var(--gradient-ardoise-60) 0%, var(--gradient-ardoise-60) 1%, #000 1%);
-                border-radius: 50%;
-                flex-shrink: 0;
-                height: 3.75em;
-                transition: background 1s;
-                width: 3.75em;
-
-                .percentage {
-                  @include flex-row(center, center);
-                  background-color: var(--gradient-ardoise-30-alpha-90);
-                  border: 2px solid var(--gradient-ardoise-10);
-                  border-radius: 50%;
-                  color: var(--gradient-ardoise-80);
-                  height: 3em;
-                  width: 3em;
-                }
-              }
-
-              .circle-start, .circle-end {
-                background-color: var(--gradient-ardoise-60);
-                border-radius: 50%;
-                height: 6px;
-                position: absolute;
-                width: 6px;
-              }
-
-              .circle-end {
-                background-color: transparent;
-                border-bottom: 1px solid transparent;
-                border-left: 1px solid transparent;
-                border-right: 1px solid var(--gradient-ardoise-20);
-                border-top: 1px solid var(--gradient-ardoise-20);
-                height: 8px;
-                width: 8px;
 
                 > div {
-                  border-radius: 50%;
-                  height: 100%;
-                }
-              }
-
-              &.stand-up {
-                .circle {
-                  background-color: var(--activity-stand-up);
+                    @include flex-row();
+                    gap: 1em;
                 }
 
-                .circle-start {
-                  background-color: var(--activity-stand-up);
+                input {
+                    font-weight: 400;
                 }
-
-                .circle-end {
-                  > div {
-                    background-color: var(--activity-stand-up);
-                  }
-                }
-              }
-
-              &.move {
-                .circle {
-                  background-color: var(--activity-move);
-                }
-
-                .circle-start {
-                  background-color: var(--activity-move);
-                }
-
-                .circle-end {
-                  > div {
-                    background-color: var(--activity-move);
-                  }
-                }
-              }
-
-              &.exercise {
-                .circle {
-                  background-color: var(--activity-exercise);
-                }
-
-                .circle-start {
-                  background-color: var(--activity-exercise);
-                }
-
-                .circle-end {
-                  > div {
-                    background-color: var(--activity-exercise);
-                  }
-                }
-              }
             }
-          }
         }
-      }
+
+        .recent-activity {
+            @include flex-col(flex-start, center);
+            width: 100%;
+
+            .days {
+                @include flex-col(start, start);
+                gap: 1em;
+                width: 100%;
+
+                .day {
+                    @include flex-col(flex-start, center);
+                    background-color: var(--gradient-ardoise-40-alpha-50);
+                    border-radius: .25em;
+                    gap: .5em;
+                    padding: 1em;
+                    transition: background-color 1s ease-in-out;
+                    width: 100%;
+
+                    &:hover {
+                        background-color: var(--gradient-ardoise-40);
+
+                        .activity-of-the-day {
+                            @include flex-row(stretch, center);
+
+                            .rings-of-the-day {
+                                background-color: var(--gradient-ardoise-10-alpha-50);
+                            }
+
+                            .stand-up, .move, .exercise {
+                                background-color: var(--gradient-ardoise-10-alpha-50);
+                            }
+                        }
+                    }
+
+                    &.three-rings {
+                        background-color: var(--gradient-green-30-alpha-50);
+
+                        &:hover {
+                            background-color: var(--gradient-green-30);
+
+                            .activity-of-the-day {
+                                .move {
+                                    .block-body {
+                                        .details {
+                                            .detail {
+                                                &:nth-child(2 of .detail) {
+                                                    background-color: var(--gradient-green-40);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .activity-of-the-day {
+                            .move {
+                                .block-body {
+                                    .details {
+                                        .detail {
+                                            &:nth-child(2 of .detail) {
+                                                background-color: var(--gradient-green-30);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .date {
+                        font-size: 1.5em;
+                        font-weight: 400;
+                    }
+
+                    .activity-of-the-day {
+                        @include flex-row(stretch, center);
+                        gap: 1em;
+                        width: 100%;
+
+                        .rings-of-the-day {
+                            @include flex-row();
+                            background-color: var(--gradient-ardoise-20-alpha-50);
+                            border-radius: 50% .25em .25em 50%;
+                            aspect-ratio: 1;
+                            gap: 1em;
+                            height: 10em;
+                            transition: background-color 1s ease-in-out;
+                            width: 10em;
+
+                            .drawn-rings {
+                                height: 8em;
+                                width: 8em;
+                            }
+                        }
+
+                        .stand-up, .move, .exercise {
+                            @include flex-col(flex-start, flex-start);
+                            background-color: var(--gradient-ardoise-20-alpha-50);
+                            border-radius: .25em;
+                            font-size: 1em;
+                            font-weight: 300;
+                            gap: 1em;
+                            padding: 1em;
+                            transition: background-color 1s ease-in-out;
+                            width: 100%;
+
+                            .block-header {
+                                @include flex-row(flex-start, flex-start);
+                                gap: 1em;
+                                width: 100%;
+
+                                .title {
+                                    font-size: 1.5em;
+                                    font-weight: 400;
+                                }
+
+                                .completed {
+                                    font-size: 1.5em;
+                                    opacity: 0;
+                                    transition: opacity .300s ease-in-out;
+
+                                    &.visible {
+                                        opacity: 1;
+                                    }
+                                }
+
+                                .doubled {
+                                    @include flex-row();
+                                    border-radius: 50%;
+                                    color: var(--gradient-ardoise-100);
+                                    font-size: 1em;
+                                    font-weight: 400;
+                                    height: 1.5em;
+                                    margin-left: auto;
+                                    opacity: 0;
+                                    transition: opacity .300s ease-in-out;
+                                    width: 1.5em;
+
+                                    div {
+                                        font-size: .875em;
+                                    }
+
+                                    &.visible {
+                                        opacity: 1;
+                                    }
+                                }
+                            }
+
+                            .block-body {
+                                @include flex-row(center, center);
+                                font-size: 1em;
+                                font-weight: 300;
+                                gap: 1em;
+                                width: 100%;
+
+                                .details {
+                                    @include flex-col(flex-start, flex-start);
+                                    gap: .5em;
+                                    width: 100%;
+
+                                    .detail {
+                                        @include flex-row(center, flex-start);
+                                        gap: .75em;
+                                        width: 100%;
+
+                                        .result, .goal {
+                                            font-size: 1em;
+                                            font-weight: 400;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .stand-up {
+                            .block-header {
+                                .doubled {
+                                    background-color: var(--activity-stand-up);
+                                }
+
+                                .completed {
+                                    color: var(--activity-stand-up);
+                                }
+                            }
+
+                            .block-body {
+                                .details {
+                                    .wrapper {
+                                        @include flex-col();
+
+                                        .hours {
+                                            @include flex-row(flex-start, center);
+                                            gap: 2px;
+
+                                            .hour {
+                                                border-radius: 4px;
+                                                height: 32px;
+                                                width: 8px;
+
+                                                &.up {
+                                                    background-color: var(--activity-stand-up);
+
+                                                    &:hover {
+                                                        background-color: var(--activity-stand-up-hover);
+                                                    }
+                                                }
+
+                                                &.down {
+                                                    background-color: var(--activity-stand-down);
+
+                                                    &:hover {
+                                                        background-color: var(--activity-stand-down-hover);
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        .graduations {
+                                            @include flex-row(flex-start, flex-start);
+                                            font-size: .5em;
+                                            height: 2em;
+                                            width: 100%;
+
+                                            .quarter {
+                                                border-left: 1px solid var(--gradient-ardoise-60);
+                                                color: var(--gradient-ardoise-60);
+                                                height: 2em;
+                                                flex: 1;
+                                                padding-left: .25em;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .move {
+                            .block-header {
+                                .doubled {
+                                    background-color: var(--activity-move);
+                                }
+
+                                .completed {
+                                    color: var(--activity-move);
+                                }
+                            }
+
+                            .block-body {
+
+                                .details {
+                                    .detail {
+                                        // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
+                                        //&:nth-child(2 of .detail) {
+                                        &:nth-child(2) {
+                                            border-radius: .25em;
+                                            flex-direction: column;
+                                            gap: 0;
+                                            padding: .125em .5em;
+                                            background-color: var(--gradient-ardoise-40);
+                                            margin-left: -.5em;
+                                            transition: background-color 1s ease-in-out;
+                                        }
+                                    }
+                                }
+
+                                .result, .steps, .distance {
+                                    position: relative;
+
+                                    span {
+                                        cursor: pointer;
+                                    }
+
+                                    input {
+                                        background-color: var(--gradient-red-90);
+                                        border: 1px solid var(--activity-move);
+                                        border-radius: .25em;
+                                        display: none;
+                                        font-size: 1em;
+                                        font-weight: 400;
+                                        inset: -.125em 0 -.125em -.5em;
+                                        padding: .5em;
+                                        position: absolute;
+
+                                        &.visible {
+                                            display: block;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .exercise {
+                            .block-header {
+                                .doubled {
+                                    background-color: var(--activity-exercise);
+                                    color: var(--gradient-ardoise-10);
+                                }
+
+                                .completed {
+                                    color: var(--activity-exercise);
+                                }
+                            }
+
+                            .block-body {
+                                .result {
+                                    position: relative;
+
+                                    span {
+                                        cursor: pointer;
+                                    }
+
+                                    input {
+                                        background-color: var(--gradient-green-90);
+                                        border: 1px solid var(--activity-exercise);
+                                        border-radius: .25em;
+                                        display: none;
+                                        font-size: 1em;
+                                        font-weight: 400;
+                                        inset: -.125em 0 -.125em -.5em;
+                                        padding: .5em;
+                                        position: absolute;
+
+                                        &.visible {
+                                            display: block;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .progress {
+                            @include flex-row(center, center);
+                            background-color: var(--gradient-ardoise-10);
+                            border-radius: 50%;
+                            height: 4em;
+                            position: relative;
+                            width: 4em;
+
+                            .circle {
+                                @include flex-row(center, center);
+                                //background: conic-gradient(var(--gradient-ardoise-60) 0%, var(--gradient-ardoise-60) 1%, #000 1%);
+                                border-radius: 50%;
+                                flex-shrink: 0;
+                                height: 3.75em;
+                                transition: background 1s;
+                                width: 3.75em;
+
+                                .percentage {
+                                    @include flex-row(center, center);
+                                    background-color: var(--gradient-ardoise-30-alpha-90);
+                                    border: 2px solid var(--gradient-ardoise-10);
+                                    border-radius: 50%;
+                                    color: var(--gradient-ardoise-80);
+                                    height: 3em;
+                                    width: 3em;
+                                }
+                            }
+
+                            .circle-start, .circle-end {
+                                background-color: var(--gradient-ardoise-60);
+                                border-radius: 50%;
+                                height: 6px;
+                                position: absolute;
+                                width: 6px;
+                            }
+
+                            .circle-end {
+                                background-color: transparent;
+                                border-bottom: 1px solid transparent;
+                                border-left: 1px solid transparent;
+                                border-right: 1px solid var(--gradient-ardoise-20);
+                                border-top: 1px solid var(--gradient-ardoise-20);
+                                height: 8px;
+                                width: 8px;
+
+                                > div {
+                                    border-radius: 50%;
+                                    height: 100%;
+                                }
+                            }
+
+                            &.stand-up {
+                                .circle {
+                                    background-color: var(--activity-stand-up);
+                                }
+
+                                .circle-start {
+                                    background-color: var(--activity-stand-up);
+                                }
+
+                                .circle-end {
+                                    > div {
+                                        background-color: var(--activity-stand-up);
+                                    }
+                                }
+                            }
+
+                            &.move {
+                                .circle {
+                                    background-color: var(--activity-move);
+                                }
+
+                                .circle-start {
+                                    background-color: var(--activity-move);
+                                }
+
+                                .circle-end {
+                                    > div {
+                                        background-color: var(--activity-move);
+                                    }
+                                }
+                            }
+
+                            &.exercise {
+                                .circle {
+                                    background-color: var(--activity-exercise);
+                                }
+
+                                .circle-start {
+                                    background-color: var(--activity-exercise);
+                                }
+
+                                .circle-end {
+                                    > div {
+                                        background-color: var(--activity-exercise);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .week {
+            @include flex-col(start, start);
+            gap: 1rem;
+            width: 100%;
+
+            .days {
+                @include flex-row(stretch, space-evenly);
+                background-color: var(--gradient-ardoise-40-alpha-50);
+                border-radius: .25em;
+                height: 14.5em;
+                padding: 1em;
+                width: 100%;
+
+                &:hover {
+                    background-color: var(--gradient-ardoise-40);
+                }
+
+                &.seven-rings {
+                    background-color: var(--gradient-green-30-alpha-50);
+
+                    &:hover {
+                        background-color: var(--gradient-green-30);
+                    }
+                }
+
+                .day {
+                    height: 100%;
+
+                    .rings-of-the-day {
+                        @include flex-col();
+                        gap: .25em;
+
+                        .drawn-rings {
+                            height: 8em;
+                            width: 8em;
+                        }
+
+                        .date {
+                            font-weight: 400;
+                        }
+
+                        .values {
+                            @include flex-row();
+                            background-color: var(--gradient-ardoise-10);
+                            border-radius: .25em;
+                            font-weight: 400;
+                            gap: .5em;
+                            padding: .5em 1em;
+
+                            .value {
+                                &:nth-child(1) {
+                                    color: var(--activity-move);
+                                }
+
+                                &:nth-child(2) {
+                                    color: var(--activity-exercise);
+                                }
+
+                                &:nth-child(3) {
+                                    color: var(--activity-stand-up);
+                                }
+                            }
+                        }
+                    }
+
+                    .no-data {
+                        @include flex-col(center, center);
+                        height: 100%;
+                        width: 8.5em;
+                    }
+                }
+            }
+
+            .graphs {
+                @include flex-row(stretch, start);
+                background-color: var(--gradient-ardoise-40-alpha-50);
+                border-radius: .25em;
+                gap: 1rem;
+                padding: 1em;
+                width: 100%;
+
+                &:hover {
+                    background-color: var(--gradient-ardoise-40);
+                }
+
+                .graph {
+                    @include flex-row(flex-end, flex-start);
+                    flex-grow: 1;
+                    gap: .25rem;
+
+                    .bar {
+                        border-radius: .25rem;
+                        flex-grow: 1;
+
+                        &.bar-move {
+                            background-color: var(--activity-move);
+                        }
+                        &.bar-exercise {
+                            background-color: var(--activity-exercise);
+                        }
+                        &.bar-stand-up {
+                            background-color: var(--activity-stand-up);
+                        }
+                    }
+                }
+            }
+        }
     }
-
-    .week {
-      @include flex-col(start, start);
-      width: 100%;
-
-      .days {
-        @include flex-row(stretch, space-evenly);
-        background-color: var(--gradient-ardoise-40-alpha-50);
-        border-radius: .25em;
-        height: 14.5em;
-        padding: 1em;
-        width: 100%;
-
-        &:hover {
-          background-color: var(--gradient-ardoise-40);
-        }
-
-        &.seven-rings {
-          background-color: var(--gradient-green-30-alpha-50);
-
-          &:hover {
-            background-color: var(--gradient-green-30);
-          }
-        }
-
-        .day {
-          height: 100%;
-
-          .rings-of-the-day {
-            @include flex-col();
-            gap: .25em;
-
-            .drawn-rings {
-              height: 8em;
-              width: 8em;
-            }
-
-            .date {
-              font-weight: 400;
-            }
-
-            .values {
-              @include flex-row();
-              background-color: var(--gradient-ardoise-10);
-              border-radius: .25em;
-              font-weight: 400;
-              gap: .5em;
-              padding: .5em 1em;
-
-              .value {
-                &:nth-child(1) {
-                  color: var(--activity-move);
-                }
-
-                &:nth-child(2) {
-                  color: var(--activity-exercise);
-                }
-
-                &:nth-child(3) {
-                  color: var(--activity-stand-up);
-                }
-              }
-            }
-          }
-
-          .no-data {
-            @include flex-col(center, center);
-            height: 100%;
-            width: 8.5em;
-          }
-        }
-      }
-    }
-  }
 }
 
 .tool-tips {
-  @include flex-col(center, revert);
-  height: 4em;
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  top: -5em;
-  transition: opacity .125s;
-  z-index: 1000;
+    @include flex-col(center, revert);
+    height: 4em;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: -5em;
+    transition: opacity .125s;
+    z-index: 1000;
 
-  &.show {
-    opacity: 1;
-  }
+    &.show {
+        opacity: 1;
+    }
 
-  &.masked {
-    display: none;
-  }
+    &.masked {
+        display: none;
+    }
 
-  .body {
-    @include flex-row();
-    background-color: var(--gradient-ardoise-10);
-    border-radius: .25em;
-    color: var(--gradient-ardoise-80);
-    padding: .5em 1em;
-    z-index: 2;
-  }
+    .body {
+        @include flex-row();
+        background-color: var(--gradient-ardoise-10);
+        border-radius: .25em;
+        color: var(--gradient-ardoise-80);
+        padding: .5em 1em;
+        z-index: 2;
+    }
 
-  .tail {
-    background-color: var(--gradient-ardoise-10);
-    border-radius: .125em;
-    min-height: 1em;
-    rotate: 45deg;
-    translate: 0 -.55em;
-    width: 1em;
-    z-index: 1;
-  }
+    .tail {
+        background-color: var(--gradient-ardoise-10);
+        border-radius: .125em;
+        min-height: 1em;
+        rotate: 45deg;
+        translate: 0 -.55em;
+        width: 1em;
+        z-index: 1;
+    }
 }
 
 @media (min-width: 1600px) {
-  main {
-    .recent-activity {
-      .days {
-        .day {
-          .activity-of-the-day {
-            .move, {
-              .block-body {
-                .details {
-                  .detail {
-                    // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
-                    //&:nth-child(2 of .detail) {
-                    &:nth-child(2) {
-                      flex-direction: row !important;
-                      gap: .75em !important;
+    main {
+        .recent-activity {
+            .days {
+                .day {
+                    .activity-of-the-day {
+                        .move, {
+                            .block-body {
+                                .details {
+                                    .detail {
+                                        // Supporté seulement par Safari (9+) et Chrome (111+) pour le moment
+                                        //&:nth-child(2 of .detail) {
+                                        &:nth-child(2) {
+                                            flex-direction: row !important;
+                                            gap: .75em !important;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                  }
                 }
-              }
             }
-          }
         }
-      }
     }
-  }
 }
 
 @media (prefers-color-scheme: light) {
 
-  .activity {
-    .header {
-      //color: var(--gradient-ardoise-30);
+    .activity {
+        .header {
+            //color: var(--gradient-ardoise-30);
 
-      .animated-h1 {
-        color: var(--light-theme-text);
-      }
+            .animated-h1 {
+                color: var(--light-theme-text);
+            }
 
-      .clock {
-        .face {
-          .number {
-            color: var(--light-theme-bg);
-          }
+            .clock {
+                .face {
+                    .number {
+                        color: var(--light-theme-bg);
+                    }
 
-          .unit {
-            background-color: var(--light-theme-bg);
-          }
+                    .unit {
+                        background-color: var(--light-theme-bg);
+                    }
+                }
+
+                .username, .time {
+                    color: var(--light-theme-text);
+                }
+
+                .date {
+                    background-color: transparent;
+                    color: var(--light-theme-text);
+                }
+
+                .hands {
+                    border: 1px solid var(--gradient-ardoise-100);
+                }
+            }
         }
 
-        .username, .time {
-          color: var(--light-theme-text);
-        }
+        main {
+            .recent-activity {
+                .days {
+                    color: var(--light-theme-text);
 
-        .date {
-          background-color: transparent;
-          color: var(--light-theme-text);
-        }
+                    .day {
+                        background-color: var(--light-theme-button);
 
-        .hands {
-          border: 1px solid var(--gradient-ardoise-100);
-        }
-      }
-    }
-
-    main {
-      .recent-activity {
-        .days {
-          color: var(--light-theme-text);
-
-          .day {
-            background-color: var(--light-theme-button);
-
-            &:hover {
-              background-color: var(--light-theme-button-hover);
-              color: var(--light-theme-bg);
-
-              .activity-of-the-day {
-                .stand-up {
-                  .block-body {
-                    .details {
-                      .wrapper {
-                        .graduations {
-                          .quarter {
-                            border-left: 1px solid var(--light-theme-bg);
+                        &:hover {
+                            background-color: var(--light-theme-button-hover);
                             color: var(--light-theme-bg);
-                          }
+
+                            .activity-of-the-day {
+                                .stand-up {
+                                    .block-body {
+                                        .details {
+                                            .wrapper {
+                                                .graduations {
+                                                    .quarter {
+                                                        border-left: 1px solid var(--light-theme-bg);
+                                                        color: var(--light-theme-bg);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                      }
+
+                        .activity-of-the-day {
+                            .move, .exercise, .stand-up {
+                                background-color: var(--gradient-grey-40-alpha-20);
+                            }
+
+                            .move {
+                                .block-body {
+                                    .details {
+                                        .detail:nth-child(2) {
+                                            background-color: var(--gradient-grey-40-alpha-20);
+                                        }
+                                    }
+                                }
+                            }
+
+                            .stand-up {
+                                .block-body {
+                                    .details {
+                                        .wrapper {
+                                            .graduations {
+                                                .quarter {
+                                                    border-left: 1px solid var(--light-theme-text);
+                                                    color: var(--light-theme-text);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                  }
                 }
-              }
             }
 
-            .activity-of-the-day {
-              .move, .exercise, .stand-up {
-                background-color: var(--gradient-grey-40-alpha-20);
-              }
+            .week {
+                .days {
+                    background-color: var(--light-theme-button);
 
-              .move {
-                .block-body {
-                  .details {
-                    .detail:nth-child(2) {
-                      background-color: var(--gradient-grey-40-alpha-20);
+                    &:hover {
+                        background-color: var(--light-theme-button-hover);
                     }
-                  }
                 }
-              }
-
-              .stand-up {
-                .block-body {
-                  .details {
-                    .wrapper {
-                      .graduations {
-                        .quarter {
-                          border-left: 1px solid var(--light-theme-text);
-                          color: var(--light-theme-text);
-                        }
-                      }
-                    }
-                  }
-                }
-              }
             }
-          }
         }
-      }
-
-      .week {
-        .days {
-          background-color: var(--light-theme-button);
-
-          &:hover {
-            background-color: var(--light-theme-button-hover);
-          }
-        }
-      }
     }
-  }
 }
