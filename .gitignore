@@ -21,12 +21,9 @@ symfony.lock
 ###< liip/imagine-bundle ###
 /config/google/google.json
 /config/google/mytvtime-349019-001b2f815d02.json
-.env
-.gitignore
-.php-version
-composer.lock
-yarn.lock
-.idea/php.xml
-.idea/php.xml
-.idea/phpspec.xml
-composer.lock
+/.env
+/.gitignore
+/.php-version
+/composer.lock
+/yarn.lock
+/.idea/
