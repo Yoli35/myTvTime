@@ -1477,6 +1477,17 @@
                     }
                 }
 
+                .episodes {
+                    .episode {
+                        .infos {
+                            .substituteName {
+                                @include flex-row(center, flex-start);
+                                gap: 1rem;
+                            }
+                        }
+                    }
+                }
+
                 .images {
                     @include images-tmdb;
                 }

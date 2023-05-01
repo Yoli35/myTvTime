@@ -145,16 +145,20 @@
         window.addEventListener("DOMContentLoaded", () => {
             const substituteNameApplies = document.querySelectorAll('.substituteName button');
             const substituteNameInputs = document.querySelectorAll('.substituteName input');
-            substituteNameApplies.forEach((substituteNameApply) => {
+            const firstSubstituteNameInput = document.querySelector('.substituteName input');
+            substituteNameApplies?.forEach((substituteNameApply) => {
                 substituteNameApply.addEventListener('click', saveSubstituteName);
             });
-            substituteNameInputs.forEach((substituteNameInput) => {
+            substituteNameInputs?.forEach((substituteNameInput) => {
                 substituteNameInput.addEventListener('keyup', (e) => {
                     if (e.keyCode === 13) {
                         saveSubstituteName(e);
                     }
                 });
             });
+            if (firstSubstituteNameInput) {
+                firstSubstituteNameInput.focus();
+            }
 
             function saveSubstituteName(e) {
                 const substituteName = e.target.parentElement.querySelector('input').value;
