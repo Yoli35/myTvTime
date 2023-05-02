@@ -266,7 +266,7 @@
                                                 {% if height %}
                                                     {% set height = height / moveMax * 100 %}
                                                 {% endif %}
-                                                <div class="bar bar-move" style="height: {{ height }}px">
+                                                <div class="bar bar-move" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -276,7 +276,7 @@
                                                 {% if height %}
                                                     {% set height = height / stepsMax * 100 %}
                                                 {% endif %}
-                                                <div class="bar bar-steps" style="height: {{ height }}px">
+                                                <div class="bar bar-steps" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -286,7 +286,7 @@
                                                 {% if height %}
                                                     {% set height = height / distanceMax * 100 %}
                                                 {% endif %}
-                                                <div class="bar bar-distance" style="height: {{ height }}px">
+                                                <div class="bar bar-distance" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -296,7 +296,7 @@
                                             {% if height %}
                                                 {% set height = height / exerciseMax * 100 %}
                                             {% endif %}
-                                            <div class="bar bar-exercise" style="height: {{ height }}px">
+                                            <div class="bar bar-exercise" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
                                             </div>
                                         {% endfor %}
                                         </div>
@@ -306,7 +306,7 @@
                                                 {% if height %}
                                                     {% set height = height / standUpMax * 100 %}
                                                 {% endif %}
-                                                <div class="bar bar-stand-up" style="height: {{ height }}px">
+                                                <div class="bar bar-stand-up" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
                                                 </div>
                                             {% endfor %}
                                         </div>

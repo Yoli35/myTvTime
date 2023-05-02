@@ -614,26 +614,33 @@
                     gap: .25rem;
 
                     .bar {
+                        background-size: 100px 100px;
                         border-radius: .25rem;
                         flex-grow: 1;
 
                         &.bar-move {
                             background-color: var(--activity-move);
+                            background-image: var(--activity-move-gradient);
                         }
+
                         &.bar-steps {
-                            background-color: var(--gradient-green-40);
+                            background-color: var(--activity-steps);
+                            background-image: var(--activity-steps-gradient);
                         }
+
                         &.bar-distance {
-                            background-color: var(--gradient-purple-50);
+                            background-color: var(--activity-distance);
+                            background-image: var(--activity-distance-gradient);
                         }
-                        &.bar-move {
-                            background-color: var(--activity-move);
-                        }
+
                         &.bar-exercise {
                             background-color: var(--activity-exercise);
+                            background-image: var(--activity-exercise-gradient);
                         }
+
                         &.bar-stand-up {
                             background-color: var(--activity-stand-up);
+                            background-image: var(--activity-stand-up-gradient);
                         }
                     }
                 }

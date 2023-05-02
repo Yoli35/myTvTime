@@ -84,6 +84,39 @@ $fa-font-path: "../webfonts";
     --activity-move-fade: hsla(0, 100%, 50%, .25);
     --activity-exercise: hsl(77, 100%, 50%);
     --activity-exercise-fade: hsla(77, 100%, 50%, .25);
+    --activity-steps: hsl(77deg 17% 50%);
+    --activity-distance: hsl(77deg 39% 48%);
+
+    --activity-move-gradient: linear-gradient(
+                    180deg,
+                    hsl(0deg 100% 50%) 0%,
+                    hsl(8deg 82% 26%) 50%,
+                    hsl(0deg 0% 0%) 100%
+    );
+    --activity-exercise-gradient: linear-gradient(
+                    180deg,
+                    hsl(77deg 100% 50%) 0%,
+                    hsl(79deg 64% 28%) 50%,
+                    hsl(0deg 0% 0%) 100%
+    );
+    --activity-stand-up-gradient: linear-gradient(
+                    180deg,
+                    hsl(173deg 100% 42%) 0%,
+                    hsl(170deg 53% 26%) 50%,
+                    hsl(0deg 0% 0%) 100%
+    );
+    --activity-steps-gradient: linear-gradient(
+                    180deg,
+                    hsl(77deg 17% 50%) 0%,
+                    hsl(76deg 15% 25%) 50%,
+                    hsl(0deg 0% 0%) 100%
+    );
+    --activity-distance-gradient: linear-gradient(
+                    180deg,
+                    hsl(77deg 39% 48%) 0%,
+                    hsl(76deg 34% 24%) 50%,
+                    hsl(0deg 0% 0%) 100%
+    );
 
     --btn-primary: linear-gradient(
                     0deg,
