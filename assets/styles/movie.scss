@@ -278,7 +278,52 @@
             }
 
             .overview {
+                @include flex-col(flex-start, flex-start);
                 padding: 0 1.25em 1.25em;
+                width: 100%;
+
+                .overview-add {
+                    @include flex-row(center, center);
+                    border: 2px solid var(--mtt-body-color);
+                    border-radius: 50%;
+                    cursor: pointer;
+                    margin-bottom: .5rem;
+                    width: 20px;
+                }
+
+                .overview-textarea {
+                    @include flex-row(flex-start, flex-start);
+                    gap: .5rem;
+                    height: 0;
+                    overflow: hidden;
+                    transition: height 300ms ease-in-out, padding 300ms ease-in-out;
+                    transform-origin: 0 0;
+                    width: 100%;
+
+                    &.open {
+                        height: 10rem;
+
+                        textarea {
+                            padding: .5rem;
+                        }
+                    }
+
+                    textarea {
+                        border: none;
+                        border-radius: .5rem;
+                        height: 100%;
+                        width: 100%;
+                    }
+
+                    .overview-buttons {
+                        @include flex-col(flex-start, flex-start);
+                        gap: .5rem;
+                    }
+                }
+
+                .overview-textarea:has(.open) {
+
+                }
             }
 
             .info {
@@ -360,6 +405,7 @@
 
                 .control {
                     @include flex-100();
+
                     .switch {
                         @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
                     }

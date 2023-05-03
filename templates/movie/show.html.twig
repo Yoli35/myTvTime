@@ -11,10 +11,12 @@
 
         {% if movie.backdrop_path %}
             <div class="movie-header">
-                <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" alt="{{ movie.title }}">
+                <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}"
+                     alt="{{ movie.title }}">
                 {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
                 <div class="ygg">
-                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
+                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date"
+                       target="_blank">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </a>
                 </div>
@@ -23,7 +25,8 @@
             <div class="movie-header no-header">
                 {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
                 <div class="ygg">
-                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
+                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date"
+                       target="_blank">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </a>
                 </div>
@@ -47,7 +50,8 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}"
+                                                         alt="{{ provider.provider_name }}">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -60,7 +64,8 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}"
+                                                         alt="{{ provider.provider_name }}">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -73,7 +78,8 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}"
+                                                         alt="{{ provider.provider_name }}">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -83,15 +89,31 @@
                         {% endif %}
                         <div class="genres">
                             {% for genre in movie.genres %}
-                                <div class="genre"><a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a></div>
+                                <div class="genre"><a
+                                            href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a>
+                                </div>
                             {% endfor %}
                         </div>
-                        {% if movie.overview | length %}
-                            <div class="overview">
-                                {{ 'Overview'|trans }} :
+                        <label for="overview" class="overview">
+                            {{ 'Overview'|trans }} :
+                            {% if movie.overview|length %}
                                 {{ movie.overview|raw }}
-                            </div>
-                        {% endif %}
+                            {% else %}
+                                <div class="overview-add"><i class="fa-solid fa-plus"></i></div>
+                                <div class="overview-textarea">
+                                    <textarea name="overview" id="overview"
+                                              placeholder="{{ 'Add an overview'|trans }} ..."></textarea>
+                                    <div class="overview-buttons">
+                                        <button class="btn btn-primary btn-sm"
+                                                id="overview-btn">{{ 'Save'|trans }}</button>
+                                        <button class="btn btn-warning btn-sm"
+                                                id="overview-cancel">{{ 'Cancel'|trans }}</button>
+                                        <button class="btn btn-danger btn-sm"
+                                                id="overview-delete">{{ 'Delete'|trans }}</button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </label>
                     </div>
                     <div class="part-2">
                         <div class="part-2L">
@@ -128,7 +150,8 @@
                             {% endif %}
                             {% if movie.imdb_id | length %}
                                 <div class="info">
-                                    <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank" rel="noopener">
+                                    <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank"
+                                       rel="noopener">
                                         <span data-descr="{{ 'Visit the Movie Page on IMDB'|trans }}">
                                             {{ 'IMDB Page'|trans }}&nbsp;<i class="bi bi-link-45deg"></i>
                                         </span>
@@ -149,7 +172,8 @@
                                             <div class="dates">
                                                 {% for date in location.release_dates %}
                                                     <div class="event">
-                                                        {{ date.type|trans }}{% if date.note is defined and date.note|length %}&nbsp;-&nbsp;{{ date.note }}{% endif %}&nbsp;:&nbsp;{{ date.release_date|format_date('short') }}
+                                                        {{ date.type|trans }}{% if date.note is defined and date.note|length %}&nbsp;-&nbsp;{{ date.note }}{% endif %}
+                                                        &nbsp;:&nbsp;{{ date.release_date|format_date('short') }}
                                                     </div>
                                                 {% endfor %}
                                             </div>
@@ -188,13 +212,18 @@
                                 <div class="collection">
                                     {% if movie.belongs_to_collection.backdrop_path %}
                                         <div class="banner">
-                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" class="card-img-top" alt="movie.belongs_to_collection.name">
+                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}"
+                                                 class="card-img-top" alt="movie.belongs_to_collection.name">
                                         </div>
                                     {% endif %}
                                     <div class="content">
                                         <h2>{{ movie.belongs_to_collection.name }}</h2>
-                                        <div class="poster"><img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt=""></div>
-                                        <div><a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}" class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
+                                        <div class="poster"><img
+                                                    src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}"
+                                                    alt=""></div>
+                                        <div>
+                                            <a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}"
+                                               class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +232,8 @@
                 </div>
                 <div class="movie-poster">
                     {% if movie.poster_path %}
-                        <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                        <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}"
+                             alt="{{ movie.title }}">
                     {% else %}
                         <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
                     {% endif %}
@@ -227,7 +257,8 @@
                             <div class="field">
                                 <div class="list" data-movie="{{ movie.id }}">
                                     {% for collection in collections %}
-                                        <div class="item{% if collection.id in movieCollection %} selected{% endif %}" data-id="{{ collection.id }}">{{ collection.title }}</div>
+                                        <div class="item{% if collection.id in movieCollection %} selected{% endif %}"
+                                             data-id="{{ collection.id }}">{{ collection.title }}</div>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -243,10 +274,12 @@
                         <div class="recommendation">
                             <a href="{{ path('app_movie', {id: recommendation.id}) }}">
                                 {% if recommendation.poster_path %}
-                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
+                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}"
+                                         alt="{{ recommendation.original_title }}">
                                 {% else %}
                                     <div class="no-poster">
-                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
+                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100"
+                                             alt="{{ recommendation.original_title }}">
                                         <div class="title">{{ recommendation.title }}</div>
                                         <div class="original-title">{{ recommendation.original_title }}</div>
                                     </div>
@@ -265,7 +298,9 @@
                             {% if actor.profile_path|length %}
                                 <a href="{{ path('app_people', {id: actor.id}) }}">
                                     <div class="actor">
-                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
+                                        <div class="profile"
+                                             style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')"
+                                             data-id="{{ actor.id }}"></div>
                                         <div>
                                             <div class="name">{{ actor.name }}</div>
                                             <div class="character">{{ actor.character }}</div>
@@ -299,7 +334,9 @@
                             <a href="{{ path('app_people', {id: data.id}) }}">
                                 <div class="member">
                                     {% if data.profile_path|length %}
-                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ data.profile_path }}')" data-id="{{ data.id }}"></div>
+                                        <div class="profile"
+                                             style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ data.profile_path }}')"
+                                             data-id="{{ data.id }}"></div>
                                     {% else %}
                                         <div class="profile" data-id="{{ data.id }}"></div>
                                     {% endif %}
@@ -321,7 +358,9 @@
                             <h5>{{ 'Backdrops'|trans }}</h5>
                             <div>
                                 {% for backdrop in images.backdrops %}
-                                    <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.2 ~ backdrop.file_path }}" alt="Some backdrop">
+                                    <img class="backdrop"
+                                         src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.2 ~ backdrop.file_path }}"
+                                         alt="Some backdrop">
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -329,7 +368,9 @@
                             <h5>{{ 'Logos'|trans }}</h5>
                             <div>
                                 {% for logo in images.logos %}
-                                    <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}" alt="Some logo">
+                                    <img class="logo"
+                                         src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}"
+                                         alt="Some logo">
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -337,7 +378,9 @@
                             <h5>{{ 'Posters'|trans }}</h5>
                             <div>
                                 {% for poster in images.posters %}
-                                    <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster.file_path }}" alt="Some poster">
+                                    <img class="poster"
+                                         src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster.file_path }}"
+                                         alt="Some poster">
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -384,7 +427,14 @@
                 div.classList.add("replacement");
                 poster.appendChild(div);
                 alert("Alerte Poster !!!");
-            })
+            });
+
+            document.querySelector(".overview-add")?.addEventListener("click", (evt) => {
+                evt.preventDefault();
+                const overviewTextarea = document.querySelector(".overview-textarea");
+                overviewTextarea.classList.toggle("open");
+                evt.currentTarget.innerHTML = overviewTextarea.classList.contains("open") ? '<i class="fa-solid fa-minus"></i>' : '<i class="fa-solid fa-plus"></i>';
+            });
 
             document.querySelector(".favorite")?.querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
 

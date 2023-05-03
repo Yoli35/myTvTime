@@ -305,25 +305,8 @@ class MovieController extends AbstractController
             $profil = $people['profile_path'];
 
             if ($profil) {
-//                if (!array_key_exists($job, $sortedCrewWithProfile)) {
-//                    $sortedCrewWithProfile[$job] = [];
-//                }
-//                if ($this->peopleInSortedCrew($people, $sortedCrewWithProfile[$job])) {
-//                    $sortedCrewWithProfile[$job][$name]['job'] .= ', ' . $job;
-//                } else {
-//                    $sortedCrewWithProfile[$job][$name]['id'] = $id;
-//                    $sortedCrewWithProfile[$job][$name]['profile_path'] = $profil;
-//                    $sortedCrewWithProfile[$job][$name]['job'] = $job;
-//                }
                 $sortedCrewWithProfile = $this->collectPeopleJobs($people, $sortedCrewWithProfile);
             } else {
-//                if ($this->peopleInSortedCrew($people, $sortedCrewWithoutProfile)) {
-//                    $sortedCrewWithoutProfile[$people['name']]['job'] .= ', ' . $people['job'];
-//                } else {
-//                    $sortedCrewWithoutProfile[$people['name']]['id'] = $people['id'];
-//                    $sortedCrewWithoutProfile[$people['name']]['profile_path'] = $people['profile_path'];
-//                    $sortedCrewWithoutProfile[$people['name']]['job'] = $people['job'];
-//                }
                 $sortedCrewWithoutProfile = $this->collectPeopleJobs($people, $sortedCrewWithoutProfile);
             }
         }
