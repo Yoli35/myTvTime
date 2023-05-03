@@ -105,7 +105,7 @@
                                               placeholder="{{ 'Add an overview'|trans }} ..."></textarea>
                                     <div class="overview-buttons">
                                         <button class="btn btn-primary btn-sm"
-                                                id="overview-btn">{{ 'Save'|trans }}</button>
+                                                id="overview-save">{{ 'Save'|trans }}</button>
                                         <button class="btn btn-warning btn-sm"
                                                 id="overview-cancel">{{ 'Cancel'|trans }}</button>
                                         <button class="btn btn-danger btn-sm"
@@ -405,9 +405,14 @@
             "{{ path('app_movie_get_rating') }}",
             "{{ path('app_movie_set_rating') }}",
             "{{ path('app_movie_collection_toggle') }}",
-            "{{ path('app_movie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}"
+            "{{ path('app_movie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}",
+            "{{ path('app_movie_overview_save') }}",
+            "{{ path('app_movie_overview_delete') }}",
         ];
         const _app_movie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
+        const _app_movie_overview_save = paths[8];
+        const _app_movie_overview_delete = paths[9];
+        const movieId = {{ userMovieId }};
 
         window.addEventListener("DOMContentLoaded", () => {
             initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.2 }}", "{{ locale }}");
@@ -431,10 +436,49 @@
 
             document.querySelector(".overview-add")?.addEventListener("click", (evt) => {
                 evt.preventDefault();
-                const overviewTextarea = document.querySelector(".overview-textarea");
-                overviewTextarea.classList.toggle("open");
-                evt.currentTarget.innerHTML = overviewTextarea.classList.contains("open") ? '<i class="fa-solid fa-minus"></i>' : '<i class="fa-solid fa-plus"></i>';
+                toggleTextarea();
             });
+            document.querySelector("#overview-save")?.addEventListener("click", () => {
+                const value = document.querySelector("#overview").value;
+                const xhr = new XMLHttpRequest();
+                console.log({value})
+                xhr.onload = function () {
+                    let data = JSON.parse(this.response);
+                    console.log({data});
+                    //overview-add & overview-textarea
+                    toggleTextarea();
+                }
+                xhr.open("GET", _app_movie_overview_save + "?id=" + movieId + "&overview=" + value);
+                xhr.send();
+            });
+            document.querySelector("#overview-cancel")?.addEventListener("click", () => {
+
+                toggleTextarea();
+            });
+            document.querySelector("#overview-delete")?.addEventListener("click", () => {
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    let data = JSON.parse(this.response);
+                    console.log({data});
+
+                    toggleTextarea();
+                }
+                xhr.open("GET", _app_movie_overview_delete + "?id=" + movieId);
+                xhr.send();
+                toggleTextarea();
+            });
+
+            function toggleTextarea() {
+                const overviewTextarea = document.querySelector(".overview-textarea");
+                const add = document.querySelector(".overview-add");
+                overviewTextarea.classList.toggle("open");
+                if (overviewTextarea.classList.contains("open")) {
+                    add.innerHTML = '<i class="fa-solid fa-minus"></i>';
+                    document.querySelector("#overview").focus();
+                } else {
+                    add.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                }
+            }
 
             document.querySelector(".favorite")?.querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
 

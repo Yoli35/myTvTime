@@ -25,7 +25,7 @@ class MovieRepository extends ServiceEntityRepository
         $this->registry = $registry;
     }
 
-    public function add(Movie $entity, bool $flush = false): void
+    public function save(Movie $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 

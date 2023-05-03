@@ -263,7 +263,8 @@ class MovieController extends AbstractController
             'user' => $user,
             'ygg' => $ygg,
             'imageConfig' => $imageConfig,
-            'locale' => $locale,]);
+            'locale' => $locale,
+        ]);
     }
 
     public function getLocaleDates($dates, $countries, $locale): array
@@ -364,6 +365,61 @@ class MovieController extends AbstractController
 
 //        $serie = $this->serieRepository->findOneBy(['']);
         return $this->json(['message' => $message, 'class' => $class]);
+    }
+
+    #[Route('/overview/save', name: 'app_movie_overview_save', methods: 'GET')]
+    function saveOverview(Request $request): Response
+    {
+        $overview = $request->query->get('overview');
+        $id = $request->query->getInt('id');
+
+        $movie = $this->movieRepository->find($id);
+
+        switch ($request->getLocale()) {
+            case 'fr':
+                $movie->setOverviewFr($overview);
+                break;
+            case 'en':
+                $movie->setOverviewEn($overview);
+                break;
+            case 'de':
+                $movie->setOverviewDe($overview);
+                break;
+            case 'es':
+                $movie->setOverviewEs($overview);
+                break;
+        }
+
+        $this->movieRepository->save($movie, true);
+
+        return $this->json(['message' => 'ok']);
+    }
+
+    #[Route('/overview/delete', name: 'app_movie_overview_delete', methods: 'GET')]
+    function deleteOverview(Request $request): Response
+    {
+        $id = $request->query->getInt('id');
+
+        $movie = $this->movieRepository->find($id);
+
+        switch ($request->getLocale()) {
+            case 'fr':
+                $movie->setOverviewFr(null);
+                break;
+            case 'en':
+                $movie->setOverviewEn(null);
+                break;
+            case 'de':
+                $movie->setOverviewDe(null);
+                break;
+            case 'es':
+                $movie->setOverviewEs(null);
+                break;
+        }
+
+        $this->movieRepository->save($movie, true);
+
+        return $this->json(['message' => 'ok']);
     }
 
     #[Route(['fr' => '/{_locale}/film/collection/{mid}/{id}', 'en' => '/{_locale}/movie/collection/{mid}/{id}', 'de' => '/{_locale}/filme/sammlung/{mid}/{id}', 'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -622,7 +678,7 @@ class MovieController extends AbstractController
             $userMovie->setRuntime($movieDetail['runtime']);
         }
         $userMovie->addUser($user);
-        $this->movieRepository->add($userMovie, true);
+        $this->movieRepository->save($userMovie, true);
 
         return $userMovie;
     }
@@ -638,7 +694,7 @@ class MovieController extends AbstractController
 
         if ($userMovie) {
             $userMovie->removeUser($user);
-            $this->movieRepository->add($userMovie, true);
+            $this->movieRepository->save($userMovie, true);
         }
 
         return $this->json(['/movie/remove' => 'success']);

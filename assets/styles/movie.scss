@@ -316,7 +316,7 @@
                     }
 
                     .overview-buttons {
-                        @include flex-col(flex-start, flex-start);
+                        @include flex-col(safe, flex-start);
                         gap: .5rem;
                     }
                 }
