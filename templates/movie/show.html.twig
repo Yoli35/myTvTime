@@ -98,15 +98,17 @@
                             {{ 'Overview'|trans }} :
                             <div class="the-overview">
                                 {% if movie.overview|length %}
-                                    {{ movie.overview|raw }}
+                                    {% if movie.overview matches '/\\n/' %}
+                                        {{ movie.overview|raw|nl2br }}
+                                    {% else %}
+                                        {{ movie.overview|raw }}
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             {% if overviewWasEmpty %}
                                 <div class="overview-add" title="{{ 'Edit the overview'|trans }}"><i class="fa-solid fa-plus"></i></div>
                                 <div class="overview-textarea">
-                                    <textarea name="overview" id="overview" placeholder="{{ 'Add an overview'|trans }} ...">
-                                        {{ movie.overview|raw|trim }}
-                                    </textarea>
+                                    <textarea name="overview" id="overview" placeholder="{{ 'Add an overview'|trans }} ...">{{ movie.overview|trim }}</textarea>
                                     <div class="overview-buttons">
                                         <button class="btn btn-primary btn-sm" id="overview-save">{{ 'Save'|trans }}</button>
                                         <button class="btn btn-warning btn-sm" id="overview-cancel">{{ 'Cancel'|trans }}</button>
@@ -464,7 +466,8 @@
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
                     console.log({data});
-
+                    const overview = document.querySelector(".the-overview");
+                    overview.innerHTML = data.overview;
                     toggleTextarea();
                 }
                 xhr.open("GET", _app_movie_overview_delete + "?id=" + movieId);
@@ -481,6 +484,8 @@
                     add.setAttribute('title', txt['later']);
                     document.querySelector("#overview").focus();
                 } else {
+                    const overview = document.querySelector(".the-overview");
+                    document.querySelector("#overview").value = overview.innerHTML;
                     add.innerHTML = '<i class="fa-solid fa-plus"></i>';
                     add.setAttribute('title', txt['edit']);
                 }
