@@ -4,7 +4,7 @@ let _profile_infos, _imdb_infos,
     _app_movie_collection_toggle,
     _profile_url;
 let _loc;
-const txt = {
+let txt = {
     'rating': {
         'vote': {
             'fr': 'Merci pour votre vote !',

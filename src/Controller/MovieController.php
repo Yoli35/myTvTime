@@ -220,7 +220,10 @@ class MovieController extends AbstractController
         $ygg = str_replace(' ', '+', $movieDetail['title']);
         $ygg = str_replace('\'', '+', $ygg);
 
+        $overviewWasEmpty = false;
+
         if (!$movieDetail['overview'] || !strlen($movieDetail['overview'])) {
+            $overviewWasEmpty = true;
             $movie = $this->movieRepository->findOneBy(['movieDbId' => $id]);
             switch ($locale) {
                 case 'fr':
@@ -249,6 +252,7 @@ class MovieController extends AbstractController
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
+            'overviewWasEmpty' => $overviewWasEmpty,
             'recommendations' => $recommendations,
             'dates' => $releaseDates,
             'watchProviders' => $watchProviders,
@@ -392,7 +396,7 @@ class MovieController extends AbstractController
 
         $this->movieRepository->save($movie, true);
 
-        return $this->json(['message' => 'ok']);
+        return $this->json(['message' => 'ok', 'overview' => $overview]);
     }
 
     #[Route('/overview/delete', name: 'app_movie_overview_delete', methods: 'GET')]

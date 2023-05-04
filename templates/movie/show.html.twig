@@ -96,20 +96,21 @@
                         </div>
                         <label for="overview" class="overview">
                             {{ 'Overview'|trans }} :
-                            {% if movie.overview|length %}
-                                {{ movie.overview|raw }}
-                            {% else %}
-                                <div class="overview-add"><i class="fa-solid fa-plus"></i></div>
+                            <div class="the-overview">
+                                {% if movie.overview|length %}
+                                    {{ movie.overview|raw }}
+                                {% endif %}
+                            </div>
+                            {% if overviewWasEmpty %}
+                                <div class="overview-add" title="{{ 'Edit the overview'|trans }}"><i class="fa-solid fa-plus"></i></div>
                                 <div class="overview-textarea">
-                                    <textarea name="overview" id="overview"
-                                              placeholder="{{ 'Add an overview'|trans }} ..."></textarea>
+                                    <textarea name="overview" id="overview" placeholder="{{ 'Add an overview'|trans }} ...">
+                                        {{ movie.overview|raw|trim }}
+                                    </textarea>
                                     <div class="overview-buttons">
-                                        <button class="btn btn-primary btn-sm"
-                                                id="overview-save">{{ 'Save'|trans }}</button>
-                                        <button class="btn btn-warning btn-sm"
-                                                id="overview-cancel">{{ 'Cancel'|trans }}</button>
-                                        <button class="btn btn-danger btn-sm"
-                                                id="overview-delete">{{ 'Delete'|trans }}</button>
+                                        <button class="btn btn-primary btn-sm" id="overview-save">{{ 'Save'|trans }}</button>
+                                        <button class="btn btn-warning btn-sm" id="overview-cancel">{{ 'Cancel'|trans }}</button>
+                                        <button class="btn btn-danger btn-sm" id="overview-delete">{{ 'Delete'|trans }}</button>
                                     </div>
                                 </div>
                             {% endif %}
@@ -413,6 +414,8 @@
         const _app_movie_overview_save = paths[8];
         const _app_movie_overview_delete = paths[9];
         const movieId = {{ userMovieId }};
+        txt['edit'] = "{{ 'Edit the overview'|trans }}";
+        txt['later'] = "{{ 'Edit later'|trans }}";
 
         window.addEventListener("DOMContentLoaded", () => {
             initMovieStuff(paths, "{{ imageConfig.url }}{{ imageConfig.profile_sizes.2 }}", "{{ locale }}");
@@ -445,7 +448,8 @@
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
                     console.log({data});
-                    //overview-add & overview-textarea
+                    const overview = document.querySelector(".the-overview");
+                    overview.innerHTML = data.overview;
                     toggleTextarea();
                 }
                 xhr.open("GET", _app_movie_overview_save + "?id=" + movieId + "&overview=" + value);
@@ -474,9 +478,11 @@
                 overviewTextarea.classList.toggle("open");
                 if (overviewTextarea.classList.contains("open")) {
                     add.innerHTML = '<i class="fa-solid fa-minus"></i>';
+                    add.setAttribute('title', txt['later']);
                     document.querySelector("#overview").focus();
                 } else {
                     add.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                    add.setAttribute('title', txt['edit']);
                 }
             }
 
