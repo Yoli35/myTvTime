@@ -365,7 +365,7 @@ class UserController extends AbstractController
                         $m->setOverviewEs($overview);
                         break;
                 }
-                $movieRepository->add($m, true);
+                $movieRepository->save($m, true);
             }
             $movie['description'] = $overview;
             $tab[] = $movie;
