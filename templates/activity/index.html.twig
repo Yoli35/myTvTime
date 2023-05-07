@@ -467,24 +467,25 @@
             const up = evt.currentTarget;
             const hours = up.closest(".hours");
             const dayDiv = hours.closest(".day");
+            const standUpDiv = up.closest(".stand-up");
 
             const id = hours.getAttribute("data-id");
             const day = hours.getAttribute("data-day");
             const index = up.getAttribute("data-index");
             const value = parseInt(up.getAttribute("data-up"));
-            console.log({id, day, index, value});
+            // console.log({id, day, index, value});
 
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 let {success, html, result, percent, goal} = JSON.parse(this.response);
                 if (!success) return;
 
-                const resultDiv = document.querySelector(".stand-up").querySelector(".result");
+                const resultDiv = standUpDiv.querySelector(".result");
                 const standUpRingCompleted = goal;
 
                 resultDiv.innerText = result;
 
-                const wrapper = document.querySelector(".stand-up").querySelector(".wrapper");
+                const wrapper = standUpDiv.querySelector(".wrapper");
                 const oldHoursDiv = up.parentNode;
                 const hoursDiv = document.createElement("div");
                 hoursDiv.classList.add("hours");
@@ -503,7 +504,7 @@
                 const canvasId = wrapper.closest(".day").querySelector("canvas").getAttribute("id");
                 updateRings(canvasId, 2, "stand-up", percent);
 
-                const standUpRing = document.querySelector(".stand-up").querySelector(".completed");
+                const standUpRing = standUpDiv.querySelector(".completed");
                 if (standUpRingCompleted) {
                     standUpRing.classList.add("visible");
                 } else {
@@ -696,9 +697,13 @@
 
             drawBaseRings(canvas, context, x, y, thickness, scale);
 
-            animeRing(context, x, y, scale * 54, scale * thickness, scale * 2, '#FF0000', progressMove, 0);
-            animeRing(context, x, y, scale * 36, scale * thickness, scale * 2, '#B7FF00', progressExercise, 0);
-            animeRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp, 0);
+            // animeRing(context, x, y, scale * 54, scale * thickness, scale * 2, '#FF0000', progressMove, 0);
+            // animeRing(context, x, y, scale * 36, scale * thickness, scale * 2, '#B7FF00', progressExercise, 0);
+            // animeRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp, 0);
+
+            drawRing(context, x, y, scale * 54, scale * thickness, scale * 2, '#FF0000', progressMove);
+            drawRing(context, x, y, scale * 36, scale * thickness, scale * 2, '#B7FF00', progressExercise);
+            drawRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp);
         }
 
         function updateRings(canvasId, ringIndex, ringName, progressTo) {
