@@ -13,6 +13,18 @@
     &:hover {
         background-color: hsl(206deg, 50%, 24%);
     }
+
+    .banner {
+        .history {
+            @include flex-row();
+            border: 2px solid var(--gradient-ardoise-90);
+            border-radius: 50%;
+            bottom: 1rem;
+            position: absolute;
+            right: 1rem;
+            width: calc(1.5rem + 4px);
+        }
+    }
 }
 
 .yt-result {
