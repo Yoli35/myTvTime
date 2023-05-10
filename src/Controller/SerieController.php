@@ -1185,7 +1185,7 @@ class SerieController extends AbstractController
             $season['episodes'] = $seasonTMDB['episodes'];
             return $season;
         }, $tv['seasons']);
-        dump($tv);
+//        dump($tv);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
