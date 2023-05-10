@@ -841,13 +841,7 @@ class SerieController extends AbstractController
                     }
                     $this->seasonViewingRepository->save($season, true);
                 } else {
-                    if ($season->getEpisodeCount() < $s['episode_count']) {
-                        for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
-                            $this->addNewEpisode($tv, $season, $i);
-                        }
-                        $season->setEpisodeCount($s['episode_count']);
-                        $this->seasonViewingRepository->save($season, true);
-                    } else {
+                    if ($season->getEpisodeCount() === $s['episode_count']) {
                         foreach ($season->getEpisodes() as $episode) {
                             if ($episode->getAirDate() === null) {
                                 $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $episode->getEpisodeNumber(), 'fr');
@@ -863,6 +857,23 @@ class SerieController extends AbstractController
                                 }
                             }
                         }
+                    } else {
+                        if ($season->getEpisodeCount() < $s['episode_count']) {
+                            for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
+                                $this->addNewEpisode($tv, $season, $i);
+                            }
+                        } else {
+//                            $this->addFlash('danger', 'Erreur : nombre d\'épisodes de la saison ' . $s['season_number'] . ' inférieur à celui de la base de données');
+                            for ($i = $s['episode_count'] + 1; $i <= $season->getEpisodeCount(); $i++) {
+                                $episode = $season->getEpisodeByNumber($i);
+                                if ($episode !== null) {
+                                    $season->removeEpisodeViewing($episode);
+                                    $this->episodeViewingRepository->remove($episode, true);
+                                }
+                            }
+                        }
+                        $season->setEpisodeCount($s['episode_count']);
+                        $this->seasonViewingRepository->save($season, true);
                     }
                 }
             }
@@ -999,8 +1010,8 @@ class SerieController extends AbstractController
             }
         }
         if ($serie['userSerieViewing']) {
-        $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
-        $episodeViewings = $seasonViewing?->getEpisodes();
+            $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
+            $episodeViewings = $seasonViewing?->getEpisodes();
         } else {
             $episodeViewings = null;
         }
@@ -1174,6 +1185,7 @@ class SerieController extends AbstractController
             $season['episodes'] = $seasonTMDB['episodes'];
             return $season;
         }, $tv['seasons']);
+        dump($tv);
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
