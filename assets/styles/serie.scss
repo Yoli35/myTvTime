@@ -1136,11 +1136,11 @@
                         @include flex-row();
                         background-color: var(--gradient-green-30);
                         border-radius: .25em;
-                        font-size: 1.5em;
+                        //font-size: 1.5em;
                         font-weight: 300;
                         leading-trim: both;
                         line-height: 1.25em;
-                        padding: .25em 1em;
+                        padding: .5em 1em;
                         text-edge: cap alphabetic;
                     }
                 }
