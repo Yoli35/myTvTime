@@ -39,6 +39,9 @@
                                                         {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
                                                         {% set percentExercise = (day.exerciseResult / activity.exerciseGoal * 100)|round %}
                                                         {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
+                                                        {% set timesMove = (day.moveResult / activity.moveGoal)|round(0, 'floor') %}
+                                                        {% set timesExercise = (day.exerciseResult / activity.exerciseGoal)|round(0, 'floor') %}
+                                                        {% set timesStandUp = (day.standUpResult / activity.standUpGoal)|round(0, 'floor') %}
                                                         <div class="drawn-rings" data-move="{{ percentMove }}"
                                                              data-exercise="{{ percentExercise }}"
                                                              data-stand-up="{{ percentStandUp }}">
@@ -51,7 +54,7 @@
                                                             <div class="title">{{ 'Move'|trans }}</div>
                                                             <div class="doubled{% if percentMove >= 200 %} visible{% endif %}"
                                                                  title="{{ 'goal'|trans }}">
-                                                                <div>x2</div>
+                                                                <div>x{{ timesMove }}</div>
                                                             </div>
                                                             <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}"
                                                                  title="{{ 'goal'|trans }}"><i
@@ -118,7 +121,7 @@
                                                             <div class="title">{{ 'Exercise'|trans }}</div>
                                                             <div class="doubled{% if percentExercise >= 200 %} visible{% endif %}"
                                                                  title="{{ 'goal'|trans }}">
-                                                                <div>x2</div>
+                                                                <div>x{{ timesExercise }}</div>
                                                             </div>
                                                             <div class="completed{% if day.isExerciseRingCompleted %} visible{% endif %}"
                                                                  title="{{ 'goal'|trans }}"><i
@@ -165,7 +168,7 @@
                                                             <div class="title">{{ 'Stand up'|trans }}</div>
                                                             <div class="doubled{% if percentStandUp >= 200 %} visible{% endif %}"
                                                                  title="{{ 'goal'|trans }}">
-                                                                <div>x2</div>
+                                                                <div>x{{ (timesStandUp) }}</div>
                                                             </div>
                                                             <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}"
                                                                  title="{{ 'goal'|trans }}"><i
@@ -232,7 +235,7 @@
                                                             <canvas id="rings-{{ day.id }}" width="512" height="512"
                                                                     style="scale: .25; translate: -37.5% -37.5%;"></canvas>
                                                         </div>
-                                                        <div class="date">{{ day.day|format_date('full')|capitalize }}</div>
+                                                        <div class="date">{{ day.day|format_date('short')|capitalize }}</div>
                                                         <div class="values">
                                                             <div class="value">{{ day.moveResult }}</div>
                                                             <div class="value">{{ day.exerciseResult }}</div>
@@ -270,7 +273,7 @@
                                                 </div>
                                             {% endfor %}
                                         </div>
-                                         <div class="graph">
+                                        <div class="graph">
                                             {% for day in week|reverse %}
                                                 {% set height = day ? day.steps : 0 %}
                                                 {% if height %}
@@ -291,14 +294,14 @@
                                             {% endfor %}
                                         </div>
                                         <div class="graph">
-                                        {% for day in week|reverse %}
-                                            {% set height = day ? day.exerciseResult : 0 %}
-                                            {% if height %}
-                                                {% set height = height / exerciseMax * 100 %}
-                                            {% endif %}
-                                            <div class="bar bar-exercise" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
-                                            </div>
-                                        {% endfor %}
+                                            {% for day in week|reverse %}
+                                                {% set height = day ? day.exerciseResult : 0 %}
+                                                {% if height %}
+                                                    {% set height = height / exerciseMax * 100 %}
+                                                {% endif %}
+                                                <div class="bar bar-exercise" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
+                                                </div>
+                                            {% endfor %}
                                         </div>
                                         <div class="graph">
                                             {% for day in week|reverse %}
@@ -510,6 +513,16 @@
                 } else {
                     standUpRing.classList.remove("visible");
                 }
+                const doubled = standUpDiv.querySelector(".doubled");
+                if (doubled) {
+                    if (percent >= 200) {
+                        let times = Math.floor(percent / 100);
+                        doubled.querySelector("div").innerText = "x" + times;
+                        doubled.classList.add("visible");
+                    } else {
+                        doubled.classList.remove("visible");
+                    }
+                }
             }
             xhr.open("GET", "{{ path('app_activity_stand_up_toggle', {id: activity.id}) }}" + "?day=" + day + "&up=" + index + "&val=" + (1 - value));
             xhr.send();
@@ -615,6 +628,8 @@
                 const doubled = block.querySelector(".doubled");
                 if (doubled) {
                     if (percent >= 200) {
+                        let times = Math.floor(percent / 100);
+                        doubled.querySelector("div").innerText = "x" + times;
                         doubled.classList.add("visible");
                     } else {
                         doubled.classList.remove("visible");
