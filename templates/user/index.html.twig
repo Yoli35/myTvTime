@@ -8,7 +8,7 @@
 
         <div class="user-account">
 
-            {{ include('blocks/user/_banner.html.twig') }}
+            {{ include('blocks/user/_banner.html.twig', {locale: app.request.locale}) }}
 
             {{ include('blocks/_nav.html.twig', {thisPage: 'People search'|trans}) }}
 

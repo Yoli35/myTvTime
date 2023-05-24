@@ -225,6 +225,9 @@
                             info.appendChild(document.createTextNode(txt.movie.original_title[_locale] + ' : ' + item.original_title));
                             infos.appendChild(info);
                             info = document.createElement("div");
+                            info.appendChild(document.createTextNode(item.runtime + ' ' + txt.movie.minutes[_locale]));
+                            infos.appendChild(info);
+                            info = document.createElement("div");
                             info.appendChild(document.createTextNode(txt.movie.runtime[_locale] + ' : ' + item.runtime + ' ' + txt.movie.minutes[_locale]));
                             info = document.createElement("div");
                             info.appendChild(document.createTextNode(item.description));
