@@ -19,16 +19,16 @@ class SeasonViewing
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTimeImmutable $airAt = null;
+    private ?DateTimeImmutable $airAt;
 
     #[ORM\Column]
-    private ?int $seasonNumber = null;
+    private ?int $seasonNumber;
 
     #[ORM\Column]
-    private ?int $episodeCount = null;
+    private ?int $episodeCount;
 
     #[ORM\Column]
-    private ?bool $seasonCompleted = null;
+    private ?bool $seasonCompleted;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'seasons')]
     private ?SerieViewing $serieViewing = null;
