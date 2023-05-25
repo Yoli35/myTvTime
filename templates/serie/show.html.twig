@@ -27,7 +27,7 @@
         <div class="infos"></div>
     </div>
     {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container">
+    <div class="container-fluid">
         {% if from == 'top_rated' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'search' %}
