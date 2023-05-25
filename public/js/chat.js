@@ -49,19 +49,37 @@ function initChatWindow() {
 }
 
 function initConversationWindows() {
-    const conversations = document.querySelectorAll(".conversation");
+//     const xhr = new XMLHttpRequest();
+//     const chatWrapper = document.querySelector(".chat-wrapper");
+//
+//     xhr.onload = function () {
+//         chatWrapper.appendChild(this.response);
+//     }
+//     xhr.open("GET", '/chat/discussion/' + userId);
+//     xhr.send();
+    const discussions = document.querySelectorAll(".discussion");
 
-    conversations?.forEach(conversation => {
-        const header = conversation.querySelector(".header");
-        const body = conversation.querySelector(".body");
+    discussions?.forEach(discussion => {
+        const discussionId = discussion.getAttribute("data-id");
+        const discussionStatus = localStorage.getItem("mytvtime.discussion." + discussionId);
+        const header = discussion.querySelector(".header");
+
+        if (discussionStatus === "minimized") {
+            discussion.classList.add("minimized");
+        }
         header.addEventListener("click", () => {
-            body.classList.toggle("minimized");
+            discussion.classList.toggle("minimized");
+            if (discussion.classList.contains("minimized")) {
+                localStorage.setItem("mytvtime.discussion." + discussion.getAttribute("data-id"), "minimized");
+            } else {
+                localStorage.setItem("mytvtime.discussion." + discussion.getAttribute("data-id"), "expanded");
+            }
         });
-        conversation.addEventListener("click", () => {
-            conversations.forEach(conversation => {
-                conversation.classList.remove("active");
+        discussion.addEventListener("click", () => {
+            discussions.forEach(discussion => {
+                discussion.classList.remove("active");
             });
-            conversation.classList.add("active");
+            discussion.classList.add("active");
         });
     });
 }

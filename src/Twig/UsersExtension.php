@@ -2,7 +2,9 @@
 
 namespace App\Twig;
 
+use App\Entity\ChatDiscussion;
 use App\Entity\User;
+use App\Repository\ChatDiscussionRepository;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -15,8 +17,9 @@ use Twig\TwigFunction;
 class UsersExtension extends AbstractExtension
 {
     public function __construct(
-        private readonly UserRepository      $userRepository,
-        private readonly TranslatorInterface $translator,
+        private readonly UserRepository           $userRepository,
+        private readonly ChatDiscussionRepository $chatDiscussionRepository,
+        private readonly TranslatorInterface      $translator,
     )
     {
     }
@@ -25,6 +28,7 @@ class UsersExtension extends AbstractExtension
     {
         return [
             new TwigFunction('userList', [$this, 'userList'], ['is_safe' => ['html']]),
+            new TwigFunction('userDiscussions', [$this, 'userDiscussions'], ['is_safe' => ['html']]),
             new TwigFunction('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
         ];
     }
@@ -41,8 +45,8 @@ class UsersExtension extends AbstractExtension
         $users = $this->userRepository->findAll();
 
         usort($users, function (User $a, User $b) {
-            $lastA = $a->getLastLogout()?:$a->getLastActivityAt();
-            $lastB = $b->getLastLogout()?:$b->getLastActivityAt();
+            $lastA = $a->getLastLogout() ?: $a->getLastActivityAt();
+            $lastB = $b->getLastLogout() ?: $b->getLastActivityAt();
 
             return $lastB->getTimestamp() <=> $lastA->getTimestamp();
         });
@@ -64,6 +68,20 @@ class UsersExtension extends AbstractExtension
                 'isOnLine' => $user->isOnLine($date),
             ];
         }, $users);
+    }
+
+    public function userDiscussions(User $user): array
+    {
+        $conv1 = $this->chatDiscussionRepository->findBy(['user' => $user]);
+        $conv2 = $this->chatDiscussionRepository->findBy(['recipient' => $user]);
+        $conversations = array_merge($conv1, $conv2);
+        usort($conversations, function (ChatDiscussion $a, ChatDiscussion $b) {
+            $lastA = $a->getLastMessageAt();
+            $lastB = $b->getLastMessageAt();
+
+            return $lastB->getTimestamp() <=> $lastA->getTimestamp();
+        });
+        return $conversations;
     }
 
     public function lastActivityAgo($lastActivityAt, $locale = null): string

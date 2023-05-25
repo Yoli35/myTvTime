@@ -1,6 +1,12 @@
 {% if app.user %}
     {% set user = app.user %}
     {% set users = userList() %}
+    {% set discussions = userDiscussions(user) %}
+
+    {% for discussion in discussions %}
+        {{ include('blocks/chat/_conversation.html.twig') }}
+    {% endfor %}
+
     <div class="chat-users">
         <div class="chat-users-header">
             <i class="fa-solid fa-users"></i>
@@ -32,6 +38,4 @@
             </ul>
         </div>
     </div>
-
-    {#    {{ include('blocks/chat/_conversation.html.twig') }} #}
 {% endif %}

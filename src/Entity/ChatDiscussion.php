@@ -25,21 +25,29 @@ class ChatDiscussion
     private ?User $recipient;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at;
+    private ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $modified_at;
+    private ?\DateTimeInterface $lastMessageAt;
 
     #[ORM\OneToMany(mappedBy: 'chatDiscussion', targetEntity: ChatMessage::class, orphanRemoval: true)]
     private Collection $chatMessages;
+
+    #[ORM\Column]
+    private ?bool $open;
+
+    #[ORM\Column]
+    private ?bool $expanded = null;
 
     public function __construct($user, $recipient)
     {
         $this->user = $user;
         $this->recipient = $recipient;
-        $this->created_at = new \DateTimeImmutable();
-        $this->modified_at = new \DateTime();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->lastMessageAt = new \DateTime();
         $this->chatMessages = new ArrayCollection();
+        $this->open = true;
+        $this->expanded = true;
     }
 
     public function getId(): ?int
@@ -73,24 +81,24 @@ class ChatDiscussion
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getModifiedAt(): ?\DateTimeInterface
+    public function getLastMessageAt(): ?\DateTimeInterface
     {
-        return $this->modified_at;
+        return $this->lastMessageAt;
     }
 
-    public function setModifiedAt(\DateTimeInterface $modified_at): self
+    public function setLastMessageAt(\DateTimeInterface $lastMessageAt): self
     {
-        $this->modified_at = $modified_at;
+        $this->lastMessageAt = $lastMessageAt;
 
         return $this;
     }
@@ -107,6 +115,7 @@ class ChatDiscussion
     {
         if (!$this->chatMessages->contains($chatMessage)) {
             $this->chatMessages->add($chatMessage);
+            $this->lastMessageAt = new \DateTime();
             $chatMessage->setChatDiscussion($this);
         }
 
@@ -121,6 +130,30 @@ class ChatDiscussion
                 $chatMessage->setChatDiscussion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isOpen(): ?bool
+    {
+        return $this->open;
+    }
+
+    public function setOpen(bool $open): self
+    {
+        $this->open = $open;
+
+        return $this;
+    }
+
+    public function isExpanded(): ?bool
+    {
+        return $this->expanded;
+    }
+
+    public function setExpanded(bool $expanded): self
+    {
+        $this->expanded = $expanded;
 
         return $this;
     }

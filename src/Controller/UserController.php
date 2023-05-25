@@ -144,7 +144,7 @@ class UserController extends AbstractController
             $name = $request->getOwner()->getUsername() ?: $request->getOwner()->getEmail();
             $firstLetter = strtolower($name)[0];
 
-            $this->addFlash('friendship', "Vous avez une demande d'amitié en attente de la part "
+            $this->addFlash('friendship', $this->translator->trans("You have a friend request from") . " "
                 . (in_array($firstLetter, $openLetter) ? "d'" : "de ")
                 . $name
                 . ", " . $this->dateTimeFormatter->formatDiff($request->getCreatedAt()) . "."

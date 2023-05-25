@@ -1,10 +1,10 @@
 @import "variables";
 
 .chat-wrapper {
+    @include flex-row(end, end);
     bottom: 0;
     position: fixed;
     right: 0;
-    width: 20rem;
 
     &.dev {
         bottom: 36px;
@@ -15,10 +15,7 @@
         border-left: 1px solid var(--gradient-ardoise-20);
         border-radius: calc(.25rem + 1px) 0 0 0;
         border-top: 1px solid var(--gradient-ardoise-20);
-        bottom: 0;
         max-height: 320rem;
-        position: absolute;
-        right: 0;
         width: 20rem;
 
         &:has(.chat-users-list.minimized) {
@@ -140,16 +137,39 @@
         }
     }
 
-    .conversation {
+    .discussion {
         @include flex-col(flex-start, flex-start);
         background-color: var(--gradient-ardoise-90);
         border: 1px solid var(--gradient-ardoise-20);
         border-radius: .25rem .25rem 0 0;
-        bottom: 0;
+        overflow: hidden;
         height: 20rem;
-        position: fixed;
-        right: 20rem;
         width: 20rem;
+
+        &.minimized {
+            border-radius: 50%;
+            height: 2rem;
+            width: 2rem;
+
+            .header {
+                border: none;
+                border-radius: 50%;
+                padding: 0;
+
+                .buddy {
+                    .user-avatar {
+                        img {
+                            height: 2rem;
+                            width: 2rem;
+                        }
+                    }
+
+                    span {
+                        display: none;
+                    }
+                }
+            }
+        }
 
         .header {
             @include flex-row(center, flex-start);
@@ -161,9 +181,19 @@
             padding: .5rem 1rem;
             width: 100%;
 
-            .title {
-                font-weight: 300;
-                margin-right: auto;
+            .buddy {
+                @include flex-row(center, flex-start);
+                gap: .5em;
+
+                .user-avatar {
+                    img {
+                        border: 1px solid var(--gradient-ardoise-20);
+                        border-radius: 50%;
+                        height: 1.5rem;
+                        object-fit: cover;
+                        width: 1.5rem;
+                    }
+                }
 
                 span {
                     color: var(--gradient-ardoise-20);
@@ -285,7 +315,7 @@
             }
         }
 
-        .conversation {
+        .discussion {
             border-color: var(--gradient-ardoise-80);
 
             .header {
@@ -293,7 +323,13 @@
                 border-bottom-color: var(--gradient-ardoise-80);
                 color: var(--gradient-ardoise-90);
 
-                .title {
+                .buddy {
+                    .user-avatar {
+                        img {
+                            border: 1px solid var(--gradient-ardoise-80);
+                        }
+                    }
+
                     span {
                         color: var(--gradient-ardoise-80);
                     }

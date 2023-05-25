@@ -1143,11 +1143,15 @@ and: and
 Friends: Amis
 Friend requests: Demandes d'ami
 Reject: Refuser
+You have a friend request from: Vous avez une demande d'amitié en attente de la part de
 Movie collections: Collections de films
 Serie viewings: Visionnages de séries renseignés
 Youtube videos: Vidéos Youtube
 Tiktok videos: Vidéos Tiktok
 Articles: Articles
+
+# Chat
+new message: nouveau message
 
 # Weather
 Update Profile: Mettre à jour le profil

@@ -30,6 +30,10 @@ class ChatMessage
     #[ORM\Column]
     private ?bool $isRead = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
     public function __construct(ChatDiscussion $chatDiscussion, string $message, ?string $image = null)
     {
         $this->chatDiscussion = $chatDiscussion;
@@ -100,6 +104,18 @@ class ChatMessage
     public function setIsRead(bool $isRead): self
     {
         $this->isRead = $isRead;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
