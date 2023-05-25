@@ -361,8 +361,8 @@
                             <h5>{{ 'Backdrops'|trans }}</h5>
                             <div>
                                 {% for backdrop in images.backdrops %}
-                                    <img class="backdrop"
-                                         src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.2 ~ backdrop.file_path }}"
+                                    <img class="backdrop"                               {# 3: original #}
+                                         src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop.file_path }}"
                                          alt="Some backdrop">
                                 {% endfor %}
                             </div>
@@ -371,8 +371,8 @@
                             <h5>{{ 'Logos'|trans }}</h5>
                             <div>
                                 {% for logo in images.logos %}
-                                    <img class="logo"
-                                         src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ logo.file_path }}"
+                                    <img class="logo"                               {# 6: original #}
+                                         src="{{ imageConfig.url ~ imageConfig.logo_sizes.6 ~ logo.file_path }}"
                                          alt="Some logo">
                                 {% endfor %}
                             </div>
@@ -381,8 +381,8 @@
                             <h5>{{ 'Posters'|trans }}</h5>
                             <div>
                                 {% for poster in images.posters %}
-                                    <img class="poster"
-                                         src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster.file_path }}"
+                                    <img class="poster"                               {# 6: original #}
+                                         src="{{ imageConfig.url ~ imageConfig.poster_sizes.6 ~ poster.file_path }}"
                                          alt="Some poster">
                                 {% endfor %}
                             </div>

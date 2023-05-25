@@ -87,11 +87,6 @@ class YoutubeAddVideoComponent
         private readonly SettingsRepository       $settingsRepository,
     )
     {
-//        $this->videoRepository = $videoRepository;
-//        $this->channelRepository = $channelRepository;
-//        $this->entityManager = $entityManager;
-//        $this->userRepository = $userRepository;
-
         $client = new Google_Client();
         $client->setApplicationName('mytvtime');
         $client->setScopes(['https://www.googleapis.com/auth/youtube.readonly',]);

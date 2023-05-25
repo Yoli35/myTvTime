@@ -560,7 +560,7 @@ nav.active {
     height: 3rem;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 998;
 
     &:hover {
         background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-20);*/
