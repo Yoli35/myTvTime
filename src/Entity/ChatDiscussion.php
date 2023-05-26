@@ -111,7 +111,7 @@ class ChatDiscussion
     {
         if (!$this->chatMessages->contains($chatMessage)) {
             $this->chatMessages->add($chatMessage);
-            $this->lastMessageAt = new \DateTime();
+            $this->lastMessageAt = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
             $chatMessage->setChatDiscussion($this);
         }
 

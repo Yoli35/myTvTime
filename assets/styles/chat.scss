@@ -243,7 +243,7 @@
                     @include flex-row(flex-start, flex-start);
                     font-weight: 300;
                     margin-top: .5rem;
-                    width: 18rem;
+                    width: 16rem;
 
                     .message-content {
                         width: 100%;
@@ -255,7 +255,7 @@
                         }
 
                         .message-text {
-                            border-radius: .5rem;
+                            border-radius: .25rem;
                             font-size: .875rem;
                             padding: .5rem 1rem;
                             width: 100%;

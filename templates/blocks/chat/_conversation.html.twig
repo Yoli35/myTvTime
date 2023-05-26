@@ -4,7 +4,7 @@
     {% else %}
         {% set buddy = discussion.user %}
     {% endif %}
-    <div class="discussion" data-id="{{ discussion.id }}" data-user-id="{{ buddy.id }}">
+    <div class="discussion{% if activate is defined %} active{% endif %}" data-id="{{ discussion.id }}" data-user-id="{{ buddy.id }}">
         <div class="header">
             <div class="buddy">
                 <div class="user-avatar">
@@ -29,10 +29,16 @@
                     {% else %}
                         {% set person = 'recipient' %}
                     {% endif %}
+                    {% set day = "now"|date("d") %}
+                    {% set messageDay = message.createdAt|date('d') %}
                     <div class="message {{ person }}-message">
                         <div class="message-content">
                             <div class="message-time">
-                                {{ message.createdAt|date('H:i') }}
+                                {% if day == messageDay %}
+                                    {{ message.createdAt|date('H:i') }}
+                                {% else %}
+                                    {{ message.createdAt|date('d/m/Y H:i') }}
+                                {% endif %}
                             </div>
                             <div class="message-text">
                                 {{ message.message }}

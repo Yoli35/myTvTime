@@ -34,12 +34,13 @@ class ChatMessage
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
-    public function __construct(ChatDiscussion $chatDiscussion, string $message, ?string $image = null)
+    public function __construct(ChatDiscussion $chatDiscussion, User $owner, string $message, ?string $image = null)
     {
         $this->chatDiscussion = $chatDiscussion;
+        $this->owner = $owner;
         $this->message = $message;
         $this->image = $image;
-        $this->created_at = new \DateTimeImmutable();
+        $this->created_at = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
         $this->isRead = false;
     }
 

@@ -4,7 +4,7 @@ let chatIntervalID = 0, username = "", avatar = "";
 
 window.addEventListener("DOMContentLoaded", () => {
     initChatWindow();
-    initConversationWindows();
+    initDiscussions();
 
     const chatUsers = document.querySelector(".chat-users");
     const chatUsersList = chatUsers.querySelector(".chat-users-list");
@@ -44,77 +44,61 @@ function initChatWindow() {
         item.addEventListener("click", () => {
             const id = item.getAttribute("data-id");
             console.log({id});
-            openConversation(id);
+            openDiscussion(id);
         });
     });
 }
 
-function initConversationWindows() {
-//     const xhr = new XMLHttpRequest();
-//     const chatWrapper = document.querySelector(".chat-wrapper");
-//
-//     xhr.onload = function () {
-//         chatWrapper.appendChild(this.response);
-//     }
-//     xhr.open("GET", '/chat/discussion/' + userId);
-//     xhr.send();
+function initDiscussions() {
     const discussions = document.querySelectorAll(".discussion");
 
     discussions?.forEach(discussion => {
-        const discussionId = discussion.getAttribute("data-id");
-        const discussionStatus = localStorage.getItem("mytvtime.discussion." + discussionId);
-        const header = discussion.querySelector(".header");
-        const minimize = header.querySelector(".minimize");
-        const close = header.querySelector(".close");
-
-        if (discussionStatus === "minimized") {
-            discussion.classList.add("minimized");
-        }
-        minimize.addEventListener("click", () => {
-            discussion.classList.toggle("minimized");
-            if (discussion.classList.contains("minimized")) {
-                localStorage.setItem("mytvtime.discussion." + discussion.getAttribute("data-id"), "minimized");
-                if (discussion.classList.contains("active")) {
-                    const discussions = discussion.closest(".chat-wrapper").querySelectorAll(".discussion:not(.minimized)");
-                    if (discussions.length > 0)
-                        discussions[0].classList.add("active");
-                }
-            } else {
-                localStorage.setItem("mytvtime.discussion." + discussion.getAttribute("data-id"), "expanded");
-            }
-        });
-        close.addEventListener("click", (e) => {
-            closeDiscussion(e);
-        });
-        discussion.addEventListener("click", () => {
-            discussions.forEach(discussion => {
-                discussion.classList.remove("active");
-            });
-            discussion.classList.add("active");
-        });
+        initDiscussion(discussion);
     });
 }
 
-function openConversation(id) {
-    const discussion = document.querySelector(".discussion[data-user-id='" + id + "']");
+function initDiscussion(discussion) {
+    const discussionId = discussion.getAttribute("data-id");
+    const discussionStatus = localStorage.getItem("mytvtime.discussion." + discussionId);
+    const header = discussion.querySelector(".header");
+    const minimize = header.querySelector(".minimize");
+    const close = header.querySelector(".close");
+
+    if (discussionStatus === "minimized") {
+        discussion.classList.add("minimized");
+    } else {
+        discussion.querySelector(".message:last-child").scrollIntoView();
+        minimize.addEventListener("click", minimizeDiscussion);
+        close.addEventListener("click", closeDiscussion);
+        discussion.addEventListener("click", e => {
+            activeDiscussion(e.currentTarget);
+        });
+    }
+}
+
+function openDiscussion(userId) {
+    const discussion = document.querySelector(".discussion[data-user-id='" + userId + "']");
 
     if (discussion) {
-        const discussions = document.querySelectorAll(".discussion");
-        discussions.forEach(discussion => {
-            discussion.classList.remove("active");
-        });
-        discussion.classList.add("active");
+        if (discussion.classList.contains("minimized")) {
+            expande(discussion);
+        } else {
+            activeDiscussion(discussion);
+        }
     } else {
         const xhr = new XMLHttpRequest();
         const chatWrapper = document.querySelector(".chat-wrapper");
 
         xhr.onload = function () {
             chatWrapper.innerHTML = this.response;
-            const discussion = document.querySelector(".discussion[data-user-id='" + id + "']");
-            discussion.classList.add("active");
-            initConversationWindows();
+            const discussion = document.querySelector(".discussion[data-user-id='" + userId + "']");
+            const discussionId = discussion.getAttribute("data-id");
+            activeDiscussion(discussion);
+            localStorage.setItem("mytvtime.discussion." + discussionId, "expanded");
+            initChatWindow();
+            initDiscussions();
         }
-        xhr.open("GET", '/chat/discussion/open/' + id);
+        xhr.open("GET", '/chat/discussion/open/' + userId);
         xhr.send();
     }
 }
@@ -126,18 +110,90 @@ function closeDiscussion(e) {
 
     if (discussion.classList.contains("active")) {
         chatWrapper.removeChild(discussion);
-        const discussions = chatWrapper.querySelectorAll(".discussion");
-        if (discussions.length > 0)
-            discussions[0].classList.add("active");
+        const remainingDiscussion = chatWrapper.querySelector(".discussion");
+        if (remainingDiscussion)
+            remainingDiscussion.classList.add("active");
     } else {
         chatWrapper.removeChild(discussion);
     }
+    localStorage.removeItem("mytvtime.discussion." + discussionId);
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         console.log(this.response);
     }
     xhr.open("GET", '/chat/discussion/close/' + discussionId);
     xhr.send();
+}
+
+function minimizeDiscussion(e) {
+    const discussion = e.target.closest(".discussion");
+    const header = discussion.querySelector(".header");
+    const discussionId = discussion.getAttribute("data-id");
+
+    discussion.classList.add("minimized");
+    localStorage.setItem("mytvtime.discussion." + discussionId, "minimized");
+    if (discussion.classList.contains("active")) {
+        discussion.classList.remove("active");
+        const discussions = discussion.closest(".chat-wrapper").querySelectorAll(".discussion:not(.minimized)");
+        if (discussions.length > 0)
+            discussions[0].classList.add("active");
+    }
+    header.addEventListener("click", expandeDiscussion);
+}
+
+function expandeDiscussion(e) {
+    const discussion = e.target.closest(".discussion");
+    expande(discussion);
+}
+
+function expande(discussion) {
+    const header = discussion.querySelector(".header");
+    const discussionId = discussion.getAttribute("data-id");
+
+    discussion.classList.remove("minimized");
+    activeDiscussion(discussion);
+    localStorage.setItem("mytvtime.discussion." + discussionId, "expanded");
+    header.removeEventListener("click", expandeDiscussion);
+}
+
+function activeDiscussion(discussion) {
+    const discussions = document.querySelectorAll(".discussion");
+    discussions.forEach(discussion => {
+        discussion.classList.remove("active");
+        const input = discussion.querySelector("input");
+        input.removeEventListener("keyup", inputSend);
+    });
+    discussion.classList.add("active");
+    const input = discussion.querySelector("input");
+    input.focus();
+    input.addEventListener("keyup", inputSend);
+}
+
+function inputSend(e) {
+    if (e.keyCode === 13) {
+        const message = e.target.value;
+        const discussion = e.target.closest(".discussion");
+        const discussionId = discussion.getAttribute("data-id");
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const newDiv = document.createElement("div");
+            newDiv.innerHTML = this.response;
+            const newBody = newDiv.querySelector(".body");
+            const body = discussion.querySelector(".body");
+            body.innerHTML = newBody.innerHTML;
+            body.querySelector(".message:last-child").scrollIntoView();
+        }
+        xhr.open("POST", '/chat/discussion/message/' + discussionId);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify({message}));
+    }
+    if (e.keyCode === 27) {
+        e.target.value = "";
+    }
+}
+
+function scrollToBottom(element) {
+    element.scrollTop = element.scrollHeight;
 }
 
 function getChatUsersWindowStatus() {
@@ -167,7 +223,7 @@ function updateChat() {
     xhr.onload = function () {
         document.querySelector(".chat-wrapper").innerHTML = this.response;
         initChatWindow();
-        initConversationWindows();
+        initDiscussions();
     }
     xhr.open("GET", "/chat/update");
     xhr.send();
