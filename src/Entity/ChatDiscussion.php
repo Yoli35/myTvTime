@@ -36,9 +36,6 @@ class ChatDiscussion
     #[ORM\Column]
     private ?bool $open;
 
-    #[ORM\Column]
-    private ?bool $expanded = null;
-
     public function __construct($user, $recipient)
     {
         $this->user = $user;
@@ -47,7 +44,6 @@ class ChatDiscussion
         $this->lastMessageAt = new \DateTime();
         $this->chatMessages = new ArrayCollection();
         $this->open = true;
-        $this->expanded = true;
     }
 
     public function getId(): ?int
@@ -142,18 +138,6 @@ class ChatDiscussion
     public function setOpen(bool $open): self
     {
         $this->open = $open;
-
-        return $this;
-    }
-
-    public function isExpanded(): ?bool
-    {
-        return $this->expanded;
-    }
-
-    public function setExpanded(bool $expanded): self
-    {
-        $this->expanded = $expanded;
 
         return $this;
     }

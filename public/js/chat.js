@@ -44,6 +44,7 @@ function initChatWindow() {
         item.addEventListener("click", () => {
             const id = item.getAttribute("data-id");
             console.log({id});
+            openConversation(id);
         });
     });
 }
@@ -63,17 +64,27 @@ function initConversationWindows() {
         const discussionId = discussion.getAttribute("data-id");
         const discussionStatus = localStorage.getItem("mytvtime.discussion." + discussionId);
         const header = discussion.querySelector(".header");
+        const minimize = header.querySelector(".minimize");
+        const close = header.querySelector(".close");
 
         if (discussionStatus === "minimized") {
             discussion.classList.add("minimized");
         }
-        header.addEventListener("click", () => {
+        minimize.addEventListener("click", () => {
             discussion.classList.toggle("minimized");
             if (discussion.classList.contains("minimized")) {
                 localStorage.setItem("mytvtime.discussion." + discussion.getAttribute("data-id"), "minimized");
+                if (discussion.classList.contains("active")) {
+                    const discussions = discussion.closest(".chat-wrapper").querySelectorAll(".discussion:not(.minimized)");
+                    if (discussions.length > 0)
+                        discussions[0].classList.add("active");
+                }
             } else {
                 localStorage.setItem("mytvtime.discussion." + discussion.getAttribute("data-id"), "expanded");
             }
+        });
+        close.addEventListener("click", (e) => {
+            closeDiscussion(e);
         });
         discussion.addEventListener("click", () => {
             discussions.forEach(discussion => {
@@ -82,6 +93,51 @@ function initConversationWindows() {
             discussion.classList.add("active");
         });
     });
+}
+
+function openConversation(id) {
+    const discussion = document.querySelector(".discussion[data-user-id='" + id + "']");
+
+    if (discussion) {
+        const discussions = document.querySelectorAll(".discussion");
+        discussions.forEach(discussion => {
+            discussion.classList.remove("active");
+        });
+        discussion.classList.add("active");
+    } else {
+        const xhr = new XMLHttpRequest();
+        const chatWrapper = document.querySelector(".chat-wrapper");
+
+        xhr.onload = function () {
+            chatWrapper.innerHTML = this.response;
+            const discussion = document.querySelector(".discussion[data-user-id='" + id + "']");
+            discussion.classList.add("active");
+            initConversationWindows();
+        }
+        xhr.open("GET", '/chat/discussion/open/' + id);
+        xhr.send();
+    }
+}
+
+function closeDiscussion(e) {
+    const discussion = e.target.closest(".discussion");
+    const discussionId = discussion.getAttribute("data-id");
+    const chatWrapper = document.querySelector(".chat-wrapper");
+
+    if (discussion.classList.contains("active")) {
+        chatWrapper.removeChild(discussion);
+        const discussions = chatWrapper.querySelectorAll(".discussion");
+        if (discussions.length > 0)
+            discussions[0].classList.add("active");
+    } else {
+        chatWrapper.removeChild(discussion);
+    }
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        console.log(this.response);
+    }
+    xhr.open("GET", '/chat/discussion/close/' + discussionId);
+    xhr.send();
 }
 
 function getChatUsersWindowStatus() {
@@ -98,7 +154,7 @@ function getChatUsersWindowStatus() {
     } else {
         chatWindow.classList.remove("minimized");
         chatHeader.innerHTML =
-              '<div class="my-avatar">'
+            '<div class="my-avatar">'
             + '    <img src="/images/users/avatars/' + avatar + '" alt="' + username + '">'
             + '</div>'
             + '<div class="my-name">' + username + '</div>'

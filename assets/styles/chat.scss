@@ -169,6 +169,17 @@
                         display: none;
                     }
                 }
+
+                .buttons {
+                    display: none;
+                }
+            }
+        }
+
+        &.active {
+            .header {
+                @include flex-row(center, flex-start);
+                background-color: var(--gradient-mars-70);
             }
         }
 
@@ -200,6 +211,12 @@
                     color: var(--gradient-ardoise-20);
                     font-weight: 400;
                 }
+            }
+
+            .buttons {
+                @include flex-row();
+                gap: .5rem;
+                margin-left: auto;
             }
         }
 
@@ -318,6 +335,13 @@
 
         .discussion {
             border-color: var(--gradient-ardoise-80);
+
+            &.active {
+                .header {
+                    @include flex-row(center, flex-start);
+                    background-color: var(--gradient-mars-40);
+                }
+            }
 
             .header {
                 background-color: var(--gradient-ardoise-30);
