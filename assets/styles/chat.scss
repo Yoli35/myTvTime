@@ -118,10 +118,23 @@
                         }
                     }
 
+                    .writing {
+                        color: var(--gradient-ardoise-80);
+                        font-size: .75rem;
+                        margin-left: auto;
+
+                        &.hidden {
+                            display: none;
+                        }
+                    }
+
                     .last-activity {
                         color: var(--gradient-green-40);
                         font-size: .75rem;
-                        margin-left: auto;
+
+                        &.right {
+                            margin-left: auto;
+                        }
                     }
 
                     .online {
@@ -131,7 +144,10 @@
                     .last {
                         color: var(--gradient-ardoise-70);
                         font-size: .75rem;
-                        margin-left: auto;
+
+                        &.right {
+                            margin-left: auto;
+                        }
                     }
                 }
             }

@@ -1,5 +1,7 @@
 {% set user = app.user %}
 {% set users = userList() %}
+{% set chatterboxes = whoIsTyping(user) %}
+
 <div class="chat-users">
     <div class="chat-users-header">
         <i class="fa-solid fa-users"></i>
@@ -8,20 +10,22 @@
         <ul>
             {% for u in users %}
                 {% if u.id != user.id %}
+                    {% set chatterbox = u.id in chatterboxes %}
                     <li data-id="{{ u.id }}">
                         <div class="user-avatar">
                             <img src="/images/users/avatars/{{ u.avatar }}" alt="{{ u.username }}">
                         </div>
                         <span>{{ u.username }}</span>
+                        <div class="writing{% if not chatterbox %} hidden{% endif %}"><i class="fa-regular fa-pen-to-square"></i></div>
                         {% if u.lastLogin is not null %}
                             {% if u.isOnLine %}
-                                <div class="last-activity">{{ u.lastActivity|lastActivityAgo }}</div>
+                                <div class="last-activity{% if not chatterbox %} right{% endif %}">{{ u.lastActivity|lastActivityAgo }}</div>
                                 <div class="online">●</div>
                             {% else %}
                                 {% if u.lastLogout is not null %}
-                                    <div class="last">{{ u.lastLogout|lastActivityAgo }}</div>
+                                    <div class="last{% if not chatterbox %} right{% endif %}">{{ u.lastLogout|lastActivityAgo }}</div>
                                 {% else %}
-                                    <div class="last">{{ u.lastActivity|lastActivityAgo }}</div>
+                                    <div class="last{% if not chatterbox %} right{% endif %}">{{ u.lastActivity|lastActivityAgo }}</div>
                                 {% endif %}
                             {% endif %}
                         {% endif %}

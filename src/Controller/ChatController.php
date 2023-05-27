@@ -8,6 +8,9 @@ use App\Entity\User;
 use App\Repository\ChatDiscussionRepository;
 use App\Repository\ChatMessageRepository;
 use App\Repository\UserRepository;
+use DateTime;
+use DateTimeZone;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,6 +81,25 @@ class ChatController extends AbstractController
         return $this->json(['success' => true]);
     }
 
+    #[Route(path: '/chat/discussion/typing/{discussionId}', name: 'app_chat_typing', methods: ['POST'])]
+    public function chatDiscussionTyping(Request $request, int $discussionId): Response
+    {
+        $typing = json_decode($request->getContent(), true)['typing'];
+        $user = $this->getUser();
+        $discussion = $this->chatDiscussionRepository->find($discussionId);
+        if (!$discussion) {
+            return $this->json(['success' => false]);
+        }
+        if ($discussion->getUser() === $user) {
+            $discussion->setTypingUser($typing);
+        } else {
+            $discussion->setTypingRecipient($typing);
+        }
+        $this->chatDiscussionRepository->save($discussion, true);
+
+        return $this->json(['success' => true]);
+    }
+
     #[Route(path: '/chat/discussion/message/{discussionId}', name: 'app_chat_discussion', methods: ['POST'])]
     public function chatDiscussion(Request $request, int $discussionId): Response
     {
@@ -89,6 +111,9 @@ class ChatController extends AbstractController
         $chatMessage = new ChatMessage($discussion, $user, $message);
         $this->chatMessageRepository->save($chatMessage, true);
         $discussion->addChatMessage($chatMessage);
+        $discussion->setTypingUser(false);
+        $discussion->setTypingRecipient(false);
+        $discussion->setLastMessageAt($this->newDate('now', 'Europe/Paris'));
         $this->chatDiscussionRepository->save($discussion, true);
 
         if ($discussion->getUser() !== $user && $discussion->getRecipient() !== $user) {
@@ -100,5 +125,17 @@ class ChatController extends AbstractController
             'user'       => $user,
             'activate'   => true,
         ]);
+    }
+
+    public function newDate($dateString, $timeZone, $allDay = false): DateTime
+    {
+        try {
+            $date = new DateTime($dateString, new DateTimeZone($timeZone));
+        } catch (Exception) {
+            $date = new DateTime();
+        }
+        if ($allDay)   $date->setTime(0, 0);
+
+        return $date;
     }
 }

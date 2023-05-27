@@ -29,6 +29,7 @@ class UsersExtension extends AbstractExtension
         return [
             new TwigFunction('userList', [$this, 'userList'], ['is_safe' => ['html']]),
             new TwigFunction('userDiscussions', [$this, 'userDiscussions'], ['is_safe' => ['html']]),
+            new TwigFunction('whoIsTyping', [$this, 'whoIsTyping'], ['is_safe' => ['html']]),
             new TwigFunction('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
         ];
     }
@@ -72,16 +73,38 @@ class UsersExtension extends AbstractExtension
 
     public function userDiscussions(User $user): array
     {
-        $conv1 = $this->chatDiscussionRepository->findBy(['user' => $user]);
-        $conv2 = $this->chatDiscussionRepository->findBy(['recipient' => $user]);
-        $conversations = array_merge($conv1, $conv2);
-        usort($conversations, function (ChatDiscussion $a, ChatDiscussion $b) {
+        $discussion1 = $this->chatDiscussionRepository->findBy(['user' => $user]);
+        $discussion2 = $this->chatDiscussionRepository->findBy(['recipient' => $user]);
+        $discussions = array_merge($discussion1, $discussion2);
+        usort($discussions, function (ChatDiscussion $a, ChatDiscussion $b) {
             $lastA = $a->getLastMessageAt();
             $lastB = $b->getLastMessageAt();
 
             return $lastB->getTimestamp() <=> $lastA->getTimestamp();
         });
-        return $conversations;
+        return $discussions;
+    }
+
+    public function whoIsTyping(User $user): array
+    {
+        $discussion1 = $this->chatDiscussionRepository->findBy(['user' => $user]);
+        $discussion2 = $this->chatDiscussionRepository->findBy(['recipient' => $user]);
+        $discussions = array_merge($discussion1, $discussion2);
+        $chatterBoxes = [];
+
+        foreach ($discussions as $discussion) {
+            if ($discussion->getUser()->getId() == $user->getId()) {
+                if ($discussion->isTypingRecipient()) {
+                    $chatterBoxes[] = $discussion->getRecipient()->getId();
+                }
+            }
+            else {
+                if ($discussion->isTypingUser()) {
+                    $chatterBoxes[] = $discussion->getUser()->getId();
+                }
+            }
+        }
+        return $chatterBoxes;
     }
 
     public function lastActivityAgo($lastActivityAt, $locale = null): string

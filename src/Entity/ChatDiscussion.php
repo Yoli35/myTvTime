@@ -40,10 +40,10 @@ class ChatDiscussion
     private ?bool $openRecipient;
 
     #[ORM\Column]
-    private ?bool $writingUser;
+    private ?bool $typingUser;
 
     #[ORM\Column]
-    private ?bool $writingRecipient;
+    private ?bool $typingRecipient;
 
     public function __construct($user, $recipient)
     {
@@ -54,8 +54,8 @@ class ChatDiscussion
         $this->chatMessages = new ArrayCollection();
         $this->openUser = true;
         $this->openRecipient = false;
-        $this->writingUser = false;
-        $this->writingRecipient = false;
+        $this->typingUser = false;
+        $this->typingRecipient = false;
     }
 
     public function getId(): ?int
@@ -164,23 +164,23 @@ class ChatDiscussion
         $this->openRecipient = $openRecipient;
     }
 
-    public function isWritingUser(): ?bool
+    public function isTypingUser(): ?bool
     {
-        return $this->writingUser;
+        return $this->typingUser;
     }
 
-    public function setWritingUser(?bool $writingUser): void
+    public function setTypingUser(?bool $typingUser): void
     {
-        $this->writingUser = $writingUser;
+        $this->typingUser = $typingUser;
     }
 
-    public function isWritingRecipient(): ?bool
+    public function isTypingRecipient(): ?bool
     {
-        return $this->writingRecipient;
+        return $this->typingRecipient;
     }
 
-    public function setWritingRecipient(?bool $writingRecipient): void
+    public function setTypingRecipient(?bool $typingRecipient): void
     {
-        $this->writingRecipient = $writingRecipient;
+        $this->typingRecipient = $typingRecipient;
     }
 }

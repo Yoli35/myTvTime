@@ -1,6 +1,7 @@
 const chatTitle = {'fr': 'utilisateurs', 'en': 'users', 'de': 'Nutzer', 'es': 'usuarios'};
 const chatLocale = document.querySelector("html").getAttribute("lang");
 let chatIntervalID = 0, username = "", avatar = "";
+let newMessagesLengths = [];
 
 window.addEventListener("DOMContentLoaded", () => {
     initChatWindow();
@@ -64,6 +65,7 @@ function initDiscussion(discussion) {
     const minimize = header.querySelector(".minimize");
     const close = header.querySelector(".close");
 
+    newMessagesLengths[discussionId] = 0;
     if (discussionStatus === "minimized") {
         discussion.classList.add("minimized");
     } else {
@@ -76,8 +78,8 @@ function initDiscussion(discussion) {
     }
 }
 
-function openDiscussion(userId) {
-    const discussion = document.querySelector(".discussion[data-user-id='" + userId + "']");
+function openDiscussion(buddyId) {
+    const discussion = document.querySelector(".discussion[data-buddy-id='" + buddyId + "']");
 
     if (discussion) {
         if (discussion.classList.contains("minimized")) {
@@ -91,14 +93,15 @@ function openDiscussion(userId) {
 
         xhr.onload = function () {
             chatWrapper.innerHTML = this.response;
-            const discussion = document.querySelector(".discussion[data-user-id='" + userId + "']");
+            const discussion = document.querySelector(".discussion[data-buddy-id='" + buddyId + "']");
             const discussionId = discussion.getAttribute("data-id");
             activeDiscussion(discussion);
             localStorage.setItem("mytvtime.discussion." + discussionId, "expanded");
+            newMessagesLengths[discussionId] = 0;
             initChatWindow();
             initDiscussions();
         }
-        xhr.open("GET", '/chat/discussion/open/' + userId);
+        xhr.open("GET", '/chat/discussion/open/' + buddyId);
         xhr.send();
     }
 }
@@ -117,6 +120,7 @@ function closeDiscussion(e) {
         chatWrapper.removeChild(discussion);
     }
     localStorage.removeItem("mytvtime.discussion." + discussionId);
+    newMessagesLengths[discussionId] = 0;
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         console.log(this.response);
@@ -159,9 +163,11 @@ function expande(discussion) {
 function activeDiscussion(discussion) {
     const discussions = document.querySelectorAll(".discussion");
     discussions.forEach(discussion => {
-        discussion.classList.remove("active");
-        const input = discussion.querySelector("input");
-        input.removeEventListener("keyup", inputSend);
+        if (discussion.classList.contains("active")) {
+            discussion.classList.remove("active");
+            const input = discussion.querySelector("input");
+            input.removeEventListener("keyup", inputSend);
+        }
     });
     discussion.classList.add("active");
     const input = discussion.querySelector("input");
@@ -170,31 +176,54 @@ function activeDiscussion(discussion) {
 }
 
 function inputSend(e) {
-    if (e.keyCode === 13) {
-        const message = e.target.value;
-        const discussion = e.target.closest(".discussion");
-        const discussionId = discussion.getAttribute("data-id");
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            const newDiv = document.createElement("div");
-            newDiv.innerHTML = this.response;
-            const newBody = newDiv.querySelector(".body");
-            const body = discussion.querySelector(".body");
-            body.innerHTML = newBody.innerHTML;
-            body.querySelector(".message:last-child").scrollIntoView();
-        }
-        xhr.open("POST", '/chat/discussion/message/' + discussionId);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(JSON.stringify({message}));
-    }
-    if (e.keyCode === 27) {
-        e.target.value = "";
+    const message = e.target.value;
+    const discussion = e.target.closest(".discussion");
+    const discussionId = discussion.getAttribute("data-id");
+
+    switch (e.keyCode) {
+        case 13:
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                const newDiv = document.createElement("div");
+                newDiv.innerHTML = this.response;
+                const newBody = newDiv.querySelector(".body");
+                const body = discussion.querySelector(".body");
+                body.innerHTML = newBody.innerHTML;
+                body.querySelector(".message:last-child").scrollIntoView();
+                newMessagesLengths[discussionId] = 0;
+            }
+            xhr.open("POST", '/chat/discussion/message/' + discussionId);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({message}));
+            break;
+        case 27:
+            e.target.value = "";
+            break;
+        default:
+            const userId = discussion.getAttribute("data-user-id");
+            if (message.length && newMessagesLengths[discussionId] === 0) {
+                setTyping(discussionId, userId, true, message.length);
+            }
+            if (!message.length && newMessagesLengths[discussionId] !== 0) {
+                setTyping(discussionId, userId, false, 0);
+            }
     }
 }
 
-function scrollToBottom(element) {
-    element.scrollTop = element.scrollHeight;
+function setTyping(discussionId, userId, typing, length) {
+    newMessagesLengths[discussionId] = length;
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        console.log(this.response);
+    }
+    xhr.open("POST", '/chat/discussion/typing/' + discussionId);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify({userId:userId, typing:typing}));
 }
+
+// function scrollToBottom(element) {
+//     element.scrollTop = element.scrollHeight;
+// }
 
 function getChatUsersWindowStatus() {
     const chatWindowStatus = localStorage.getItem("mytvtime.chatWindowStatus");
