@@ -1,0 +1,5 @@
+{% set user = app.user %}
+{% set discussions = userDiscussions(user) %}
+{% for discussion in discussions %}
+    {{ include('blocks/chat/_discussion.html.twig') }}
+{% endfor %}

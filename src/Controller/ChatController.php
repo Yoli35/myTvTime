@@ -26,7 +26,7 @@ class ChatController extends AbstractController
     #[Route(path: '/chat/update', name: 'app_chat_update', methods: ['GET'])]
     public function chatUpdate(): Response
     {
-        return $this->render('blocks/chat/_chat.html.twig');
+        return $this->render('blocks/chat/_userList.html.twig');
     }
 
     #[Route(path: '/chat/discussion/open/{recipientId}', name: 'app_chat_open')]
@@ -35,7 +35,14 @@ class ChatController extends AbstractController
         $user = $this->getUser();
 
         $recipient = $this->userRepository->find($recipientId);
-        $chatDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $user, 'recipient' => $recipient]);
+        $chatDiscussion = null;
+        $myDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $user, 'recipient' => $recipient]);
+        $buddyDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $recipient, 'recipient' => $user]);
+        if ($myDiscussion) {
+            $chatDiscussion = $myDiscussion;
+        } elseif ($buddyDiscussion) {
+            $chatDiscussion = $buddyDiscussion;
+        }
         if (!$chatDiscussion) {
             $chatDiscussion = new ChatDiscussion($user, $recipient);
         } else {
@@ -43,7 +50,7 @@ class ChatController extends AbstractController
         }
         $this->chatDiscussionRepository->save($chatDiscussion, true);
 
-//        return $this->render('blocks/chat/_conversation.html.twig', [
+//        return $this->render('blocks/chat/_discussion.html.twig', [
 //            'discussion' => $chatDiscussion,
 //            'user'       => $user,
 //        ]);
@@ -77,7 +84,7 @@ class ChatController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        return $this->render('blocks/chat/_conversation.html.twig', [
+        return $this->render('blocks/chat/_discussion.html.twig', [
             'discussion' => $discussion,
             'user'       => $user,
             'activate'   => true,

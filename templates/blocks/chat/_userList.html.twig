@@ -1,0 +1,33 @@
+{% set user = app.user %}
+{% set users = userList() %}
+<div class="chat-users">
+    <div class="chat-users-header">
+        <i class="fa-solid fa-users"></i>
+    </div>
+    <div class="chat-users-list minimized">
+        <ul>
+            {% for u in users %}
+                {% if u.id != user.id %}
+                    <li data-id="{{ u.id }}">
+                        <div class="user-avatar">
+                            <img src="/images/users/avatars/{{ u.avatar }}" alt="{{ u.username }}">
+                        </div>
+                        <span>{{ u.username }}</span>
+                        {% if u.lastLogin is not null %}
+                            {% if u.isOnLine %}
+                                <div class="last-activity">{{ u.lastActivity|lastActivityAgo }}</div>
+                                <div class="online">●</div>
+                            {% else %}
+                                {% if u.lastLogout is not null %}
+                                    <div class="last">{{ u.lastLogout|lastActivityAgo }}</div>
+                                {% else %}
+                                    <div class="last">{{ u.lastActivity|lastActivityAgo }}</div>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>

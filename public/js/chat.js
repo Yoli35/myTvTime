@@ -10,7 +10,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const chatUsersList = chatUsers.querySelector(".chat-users-list");
 
     if (!chatUsersList.classList.contains("minimized")) {
-        chatIntervalID = setInterval(updateChat, 30000);
+        chatIntervalID = setInterval(updateChat, 10000);
     }
 });
 
@@ -67,7 +67,7 @@ function initDiscussion(discussion) {
     if (discussionStatus === "minimized") {
         discussion.classList.add("minimized");
     } else {
-        discussion.querySelector(".message:last-child").scrollIntoView();
+        discussion.querySelector(".message:last-child")?.scrollIntoView();
         minimize.addEventListener("click", minimizeDiscussion);
         close.addEventListener("click", closeDiscussion);
         discussion.addEventListener("click", e => {
@@ -221,7 +221,9 @@ function getChatUsersWindowStatus() {
 function updateChat() {
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
-        document.querySelector(".chat-wrapper").innerHTML = this.response;
+        const container = document.createElement("div");
+        container.innerHTML = this.response;
+        document.querySelector(".chat-users").innerHTML = container.innerHTML;
         initChatWindow();
         initDiscussions();
     }
