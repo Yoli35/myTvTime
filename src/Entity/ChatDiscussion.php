@@ -34,7 +34,16 @@ class ChatDiscussion
     private Collection $chatMessages;
 
     #[ORM\Column]
-    private ?bool $open;
+    private ?bool $openUser;
+
+    #[ORM\Column]
+    private ?bool $openRecipient;
+
+    #[ORM\Column]
+    private ?bool $writingUser;
+
+    #[ORM\Column]
+    private ?bool $writingRecipient;
 
     public function __construct($user, $recipient)
     {
@@ -43,7 +52,10 @@ class ChatDiscussion
         $this->createdAt = new \DateTimeImmutable();
         $this->lastMessageAt = new \DateTime();
         $this->chatMessages = new ArrayCollection();
-        $this->open = true;
+        $this->openUser = true;
+        $this->openRecipient = false;
+        $this->writingUser = false;
+        $this->writingRecipient = false;
     }
 
     public function getId(): ?int
@@ -130,15 +142,45 @@ class ChatDiscussion
         return $this;
     }
 
-    public function isOpen(): ?bool
+    public function isOpenUser(): ?bool
     {
-        return $this->open;
+        return $this->openUser;
     }
 
-    public function setOpen(bool $open): self
+    public function setOpenUser(bool $openUser): self
     {
-        $this->open = $open;
+        $this->openUser = $openUser;
 
         return $this;
+    }
+
+    public function isOpenRecipient(): ?bool
+    {
+        return $this->openRecipient;
+    }
+
+    public function setOpenRecipient(?bool $openRecipient): void
+    {
+        $this->openRecipient = $openRecipient;
+    }
+
+    public function isWritingUser(): ?bool
+    {
+        return $this->writingUser;
+    }
+
+    public function setWritingUser(?bool $writingUser): void
+    {
+        $this->writingUser = $writingUser;
+    }
+
+    public function isWritingRecipient(): ?bool
+    {
+        return $this->writingRecipient;
+    }
+
+    public function setWritingRecipient(?bool $writingRecipient): void
+    {
+        $this->writingRecipient = $writingRecipient;
     }
 }

@@ -1,9 +1,11 @@
-{% if discussion.open %}
-    {% if discussion.user.id == user.id %}
-        {% set buddy = discussion.recipient %}
-    {% else %}
-        {% set buddy = discussion.user %}
-    {% endif %}
+{% if discussion.user.id == user.id %}
+    {% set buddy = discussion.recipient %}
+    {% set open = discussion.openUser %}
+{% else %}
+    {% set buddy = discussion.user %}
+    {% set open = discussion.openrecipient %}
+{% endif %}
+{% if open %}
     <div class="discussion{% if activate is defined %} active{% endif %}" data-id="{{ discussion.id }}" data-user-id="{{ buddy.id }}">
         <div class="header">
             <div class="buddy">

@@ -223,7 +223,7 @@ function updateChat() {
     xhr.onload = function () {
         const container = document.createElement("div");
         container.innerHTML = this.response;
-        document.querySelector(".chat-users").innerHTML = container.innerHTML;
+        document.querySelector(".chat-users").innerHTML = container.querySelector(".chat-users").innerHTML;
         initChatWindow();
         initDiscussions();
     }

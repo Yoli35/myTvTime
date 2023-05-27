@@ -36,17 +36,23 @@ class ChatController extends AbstractController
 
         $recipient = $this->userRepository->find($recipientId);
         $chatDiscussion = null;
+        $discussionOwner = false;
         $myDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $user, 'recipient' => $recipient]);
         $buddyDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $recipient, 'recipient' => $user]);
         if ($myDiscussion) {
             $chatDiscussion = $myDiscussion;
+            $discussionOwner = true;
         } elseif ($buddyDiscussion) {
             $chatDiscussion = $buddyDiscussion;
         }
         if (!$chatDiscussion) {
             $chatDiscussion = new ChatDiscussion($user, $recipient);
         } else {
-            $chatDiscussion->setOpen(true);
+            if ($discussionOwner) {
+                $chatDiscussion->setOpenUser(true);
+            } else {
+                $chatDiscussion->setOpenRecipient(true);
+            }
         }
         $this->chatDiscussionRepository->save($chatDiscussion, true);
 
@@ -60,8 +66,13 @@ class ChatController extends AbstractController
     #[Route(path: '/chat/discussion/close/{discussionId}', name: 'app_chat_close')]
     public function chatDiscussionClose(int $discussionId): Response
     {
+        /* @var User $user */
+        $user = $this->getUser();
         $discussion = $this->chatDiscussionRepository->find($discussionId);
-        $discussion->setOpen(false);
+        if ($discussion->getUser()->getId() == $user->getId())
+            $discussion->setOpenUser(false);
+        else
+            $discussion->setOpenRecipient(false);
         $this->chatDiscussionRepository->save($discussion, true);
 
         return $this->json(['success' => true]);

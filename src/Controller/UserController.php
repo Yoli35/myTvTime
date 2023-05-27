@@ -8,8 +8,11 @@ use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\Type\ChangePasswordType;
 use App\Form\UserType;
+use App\Repository\EpisodeViewingRepository;
 use App\Repository\FriendRepository;
 use App\Repository\MovieCollectionRepository;
+use App\Repository\SeasonViewingRepository;
+use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
 use App\Repository\MovieRepository;
 use App\Repository\UserRepository;
@@ -36,11 +39,15 @@ class UserController extends AbstractController
 {
     private string $json_header = '"json_format":"myTvTime","json_version":"1.0",';
 
-    public function __construct(private readonly LocaleSwitcher      $localeSwitcher,
-                                private readonly FriendRepository    $friendRepository,
-                                private readonly UserRepository      $userRepository,
-                                private readonly DateTimeFormatter   $dateTimeFormatter,
-                                private readonly TranslatorInterface $translator)
+    public function __construct(private readonly DateTimeFormatter        $dateTimeFormatter,
+                                private readonly EpisodeViewingRepository $episodeViewingRepository,
+                                private readonly FriendRepository         $friendRepository,
+                                private readonly LocaleSwitcher           $localeSwitcher,
+                                private readonly SeasonViewingRepository  $seasonViewingRepository,
+                                private readonly SerieViewingRepository   $serieViewingRepository,
+                                private readonly TranslatorInterface      $translator,
+                                private readonly UserRepository           $userRepository,
+    )
     {
     }
 
@@ -121,11 +128,17 @@ class UserController extends AbstractController
         $friends = $this->getFriends($user);
         $friendRequests = $friendRepository->findBy(['owner' => $user, 'acceptedAt' => null, 'approved' => false]);
 
+        $series = $this->serieViewingRepository->findBy(['user' => $user]);
+        $seasons = $this->seasonViewingRepository->findBy(['serieViewing' => $series]);
+        $episodes = $this->episodeViewingRepository->findBy(['season' => $seasons]);
+        $episodesNotViewed = $this->episodeViewingRepository->findBy(['season' => $seasons, 'viewedAt' => null]);
+
         return $this->render('user/profile.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
             'friends' => $friends,
             'friendRequests' => $friendRequests,
+            'episodes' => ['viewed' => count($episodes) - count($episodesNotViewed), 'total' => count($episodes)],
             'from' => 'profile',
             'locale' => $request->getLocale(),
         ]);

@@ -3,7 +3,7 @@
 {% block title %}myTvTime ▶ ︎{{ 'My account'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container-fluid">
         {{ include('blocks/_mainMenu.html.twig') }}
 
         <div class="user-account">
@@ -86,7 +86,11 @@
                         <div class="label">{{ 'Friend requests'|trans }}</div>
                     </div>
                     <div class="collection">
-                        <div class="count">{{ user.movies|length }}</div>
+                        {% set count = user.movies|length %}
+                        {% if count > 1000 %}
+                            {% set count = (count / 1000)|round(1, 'floor') ~ 'k' %}
+                        {% endif %}
+                        <div class="count">{{ count }}</div>
                         <div class="label">{{ 'Movies'|trans }}</div>
                     </div>
                     <div class="collection">
@@ -98,11 +102,27 @@
                         <div class="label">{{ 'Series'|trans }}</div>
                     </div>
                     <div class="collection">
-                        <div class="count">{{ user.serieViewings|length }}</div>
-                        <div class="label">{{ 'Serie viewings'|trans }}</div>
+                        {% set count = episodes.viewed %}
+                        {% if count > 1000 %}
+                            {% set count = (count / 1000)|round(1, 'floor') ~ 'k' %}
+                        {% endif %}
+                        <div class="count">{{ count }}</div>
+                        <div class="label">{{ 'Viewed episodes'|trans }}</div>
                     </div>
                     <div class="collection">
-                        <div class="count">{{ user.youtubeVideos|length }}</div>
+                        {% set count = episodes.total %}
+                        {% if count > 1000 %}
+                            {% set count = (count / 1000)|round(1, 'floor') ~ 'k' %}
+                        {% endif %}
+                        <div class="count">{{ count }}</div>
+                        <div class="label">{{ 'Episodes'|trans }}</div>
+                    </div>
+                    <div class="collection">
+                        {% set count = user.youtubeVideos|length %}
+                        {% if count > 1000 %}
+                            {% set count = (count / 1000)|round(1, 'floor') ~ 'k' %}
+                        {% endif %}
+                        <div class="count">{{ count }}</div>
                         <div class="label">{{ 'Youtube videos'|trans }}</div>
                     </div>
                     <div class="collection">

@@ -22,7 +22,7 @@ class WeatherComponent extends AbstractController
         $this->weatherService = $weatherService;
     }
 
-    public function mount($locale)
+    public function mount($locale): void
     {
         $this->locale = $locale;
     }
