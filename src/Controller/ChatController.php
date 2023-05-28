@@ -32,7 +32,7 @@ class ChatController extends AbstractController
         return $this->render('blocks/chat/_userList.html.twig');
     }
 
-    #[Route(path: '/chat/discussion/open/{recipientId}', name: 'app_chat_open')]
+    #[Route(path: '/chat/discussion/open/{recipientId}', name: 'app_chat_discussion_open')]
     public function chatDiscussionOpen(int $recipientId): Response
     {
         $user = $this->getUser();
@@ -65,28 +65,19 @@ class ChatController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/chat/discussion/update/{recipientId}', name: 'app_chat_open')]
-    public function chatDiscussionUpdate(int $recipientId): Response
+    #[Route(path: '/chat/discussion/update/{discussionId}', name: 'app_chat_discussion_update')]
+    public function chatDiscussionUpdate(int $discussionId): Response
     {
         $user = $this->getUser();
-
-        $recipient = $this->userRepository->find($recipientId);
-        $chatDiscussion = null;
-        $myDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $user, 'recipient' => $recipient]);
-        $buddyDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $recipient, 'recipient' => $user]);
-        if ($myDiscussion) {
-            $chatDiscussion = $myDiscussion;
-        } elseif ($buddyDiscussion) {
-            $chatDiscussion = $buddyDiscussion;
-        }
+        $discussion = $this->chatDiscussionRepository->find($discussionId);
 
         return $this->render('blocks/chat/_messages.html.twig', [
-            'discussion' => $chatDiscussion,
+            'discussion' => $discussion,
             'user'       => $user,
         ]);
     }
 
-    #[Route(path: '/chat/discussion/close/{discussionId}', name: 'app_chat_close')]
+    #[Route(path: '/chat/discussion/close/{discussionId}', name: 'app_chat_discussion_close')]
     public function chatDiscussionClose(int $discussionId): Response
     {
         /* @var User $user */
@@ -131,8 +122,11 @@ class ChatController extends AbstractController
         $chatMessage = new ChatMessage($discussion, $user, $message);
         $this->chatMessageRepository->save($chatMessage, true);
         $discussion->addChatMessage($chatMessage);
-        $discussion->setTypingUser(false);
-        $discussion->setTypingRecipient(false);
+        if ($discussion->getUser() === $user) {
+            $discussion->setTypingUser(false);
+        } else {
+            $discussion->setTypingRecipient(false);
+        }
         $discussion->setLastMessageAt($this->newDate('now', 'Europe/Paris'));
         $this->chatDiscussionRepository->save($discussion, true);
 
@@ -140,10 +134,9 @@ class ChatController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        return $this->render('blocks/chat/_discussion.html.twig', [
+        return $this->render('blocks/chat/_messages.html.twig', [
             'discussion' => $discussion,
             'user'       => $user,
-            'activate'   => true,
         ]);
     }
 

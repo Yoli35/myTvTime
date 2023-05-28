@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ChatMessageRepository;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -21,7 +23,7 @@ class ChatMessage
     private ?string $image;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at;
+    private ?DateTimeImmutable $created_at;
 
     #[ORM\ManyToOne(inversedBy: 'chatMessages')]
     #[ORM\JoinColumn(nullable: false)]
@@ -40,7 +42,7 @@ class ChatMessage
         $this->owner = $owner;
         $this->message = $message;
         $this->image = $image;
-        $this->created_at = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+        $this->created_at = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
         $this->isRead = false;
     }
 
@@ -73,12 +75,12 @@ class ChatMessage
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
 

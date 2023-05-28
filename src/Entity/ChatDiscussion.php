@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ChatDiscussionRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -50,7 +52,7 @@ class ChatDiscussion
         $this->user = $user;
         $this->recipient = $recipient;
         $this->createdAt = new \DateTimeImmutable();
-        $this->lastMessageAt = new \DateTime();
+        $this->lastMessageAt = new DateTime();
         $this->chatMessages = new ArrayCollection();
         $this->openUser = true;
         $this->openRecipient = false;
@@ -123,7 +125,6 @@ class ChatDiscussion
     {
         if (!$this->chatMessages->contains($chatMessage)) {
             $this->chatMessages->add($chatMessage);
-            $this->lastMessageAt = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
             $chatMessage->setChatDiscussion($this);
         }
 

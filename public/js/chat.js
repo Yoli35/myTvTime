@@ -68,6 +68,11 @@ function initDiscussion(discussion) {
     const close = header.querySelector(".close");
 
     newMessageLengths[discussionId] = 0;
+    discussionMessageCount[discussionId] = discussion.querySelectorAll(".message").length;
+    discussionIntervals[discussionId] = setInterval(() => {
+        updateDiscussion(discussionId);
+    }, 5000);
+
     if (discussionStatus === "minimized") {
         discussion.classList.add("minimized");
     } else {
@@ -98,18 +103,12 @@ function openDiscussion(buddyId) {
             div.innerHTML = this.response;
             const firstDiv = chatWrapper.querySelector("div");
             const discussion = div.querySelector(".discussion");
+            discussion.setAttribute('data-update', "0");
             chatWrapper.insertBefore(discussion, firstDiv);
-            const discussionId = discussion.getAttribute("data-id");
             activeDiscussion(discussion);
+            const discussionId = discussion.getAttribute("data-id");
             localStorage.setItem("mytvtime.discussion." + discussionId, "expanded");
-            newMessageLengths[discussionId] = 0;
-            discussionMessageCount[discussionId] = discussion.querySelectorAll(".message").length;
-            discussionIntervals[discussionId] = setInterval(() => {
-                updateDiscussion(discussionId);
-            }, 5000);
 
-            // initChatWindow();
-            // initDiscussions();
             initDiscussion(discussion);
         }
         xhr.open("GET", '/chat/discussion/open/' + buddyId);
@@ -120,6 +119,7 @@ function openDiscussion(buddyId) {
 function updateDiscussion(discussionId) {
     const discussion = document.querySelector(".discussion[data-id='" + discussionId + "']");
     const messages = discussion.querySelector(".messages");
+    const update = parseInt(discussion.getAttribute("data-update"));
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
@@ -133,6 +133,7 @@ function updateDiscussion(discussionId) {
             discussionMessageCount[discussionId] = newMessagesLength;
             discussion.querySelector(".message:last-child")?.scrollIntoView();
         }
+        discussion.setAttribute("data-update", update + 1);
     }
     xhr.open("GET", '/chat/discussion/update/' + discussionId);
     xhr.send();
@@ -216,14 +217,15 @@ function inputSend(e) {
 
     switch (e.keyCode) {
         case 13:
+            e.target.value = "";
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 const newDiv = document.createElement("div");
                 newDiv.innerHTML = this.response;
-                const newBody = newDiv.querySelector(".body");
-                const body = discussion.querySelector(".body");
-                body.innerHTML = newBody.innerHTML;
-                body.querySelector(".message:last-child").scrollIntoView();
+                const newMessages = newDiv.querySelector(".messages");
+                const messages = discussion.querySelector(".messages");
+                messages.innerHTML = newMessages.innerHTML;
+                messages.querySelector(".message:last-child").scrollIntoView();
                 newMessageLengths[discussionId] = 0;
             }
             xhr.open("POST", '/chat/discussion/message/' + discussionId);
@@ -252,7 +254,7 @@ function setTyping(discussionId, userId, typing, length) {
     }
     xhr.open("POST", '/chat/discussion/typing/' + discussionId);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({userId:userId, typing:typing}));
+    xhr.send(JSON.stringify({typing}));
 }
 
 // function scrollToBottom(element) {
