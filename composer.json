@@ -49,7 +49,7 @@
         "symfony/string": "6.2.*",
         "symfony/translation": "6.2.*",
         "symfony/twig-bundle": "6.2.*",
-        "symfony/ux-dropzone": "2.*",
+        "symfony/ux-dropzone": "2.8.*",
         "symfony/ux-live-component": "2.4.*",
         "symfony/ux-twig-component": "2.4.*",
         "symfony/ux-typed": "^2.6",

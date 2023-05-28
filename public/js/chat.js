@@ -1,7 +1,9 @@
 const chatTitle = {'fr': 'utilisateurs', 'en': 'users', 'de': 'Nutzer', 'es': 'usuarios'};
 const chatLocale = document.querySelector("html").getAttribute("lang");
 let chatIntervalID = 0, username = "", avatar = "";
-let newMessagesLengths = [];
+let newMessageLengths = [];
+let discussionIntervals = [];
+let discussionMessageCount = [];
 
 window.addEventListener("DOMContentLoaded", () => {
     initChatWindow();
@@ -65,7 +67,7 @@ function initDiscussion(discussion) {
     const minimize = header.querySelector(".minimize");
     const close = header.querySelector(".close");
 
-    newMessagesLengths[discussionId] = 0;
+    newMessageLengths[discussionId] = 0;
     if (discussionStatus === "minimized") {
         discussion.classList.add("minimized");
     } else {
@@ -92,24 +94,56 @@ function openDiscussion(buddyId) {
         const chatWrapper = document.querySelector(".chat-wrapper");
 
         xhr.onload = function () {
-            chatWrapper.innerHTML = this.response;
-            const discussion = document.querySelector(".discussion[data-buddy-id='" + buddyId + "']");
+            const div = document.createElement("div");
+            div.innerHTML = this.response;
+            const firstDiv = chatWrapper.querySelector("div");
+            const discussion = div.querySelector(".discussion");
+            chatWrapper.insertBefore(discussion, firstDiv);
             const discussionId = discussion.getAttribute("data-id");
             activeDiscussion(discussion);
             localStorage.setItem("mytvtime.discussion." + discussionId, "expanded");
-            newMessagesLengths[discussionId] = 0;
-            initChatWindow();
-            initDiscussions();
+            newMessageLengths[discussionId] = 0;
+            discussionMessageCount[discussionId] = discussion.querySelectorAll(".message").length;
+            discussionIntervals[discussionId] = setInterval(() => {
+                updateDiscussion(discussionId);
+            }, 5000);
+
+            // initChatWindow();
+            // initDiscussions();
+            initDiscussion(discussion);
         }
         xhr.open("GET", '/chat/discussion/open/' + buddyId);
         xhr.send();
     }
 }
 
+function updateDiscussion(discussionId) {
+    const discussion = document.querySelector(".discussion[data-id='" + discussionId + "']");
+    const messages = discussion.querySelector(".messages");
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        const div = document.createElement("div");
+        div.innerHTML = this.response;
+        const newMessages = div.querySelector(".messages");
+        const newMessagesLength = newMessages.querySelectorAll(".message").length;
+
+        if (newMessagesLength > discussionMessageCount[discussionId]) {
+            messages.innerHTML = newMessages.innerHTML;
+            discussionMessageCount[discussionId] = newMessagesLength;
+            discussion.querySelector(".message:last-child")?.scrollIntoView();
+        }
+    }
+    xhr.open("GET", '/chat/discussion/update/' + discussionId);
+    xhr.send();
+}
+
 function closeDiscussion(e) {
     const discussion = e.target.closest(".discussion");
     const discussionId = discussion.getAttribute("data-id");
     const chatWrapper = document.querySelector(".chat-wrapper");
+
+    clearInterval(discussionIntervals[discussionId]);
 
     if (discussion.classList.contains("active")) {
         chatWrapper.removeChild(discussion);
@@ -120,7 +154,7 @@ function closeDiscussion(e) {
         chatWrapper.removeChild(discussion);
     }
     localStorage.removeItem("mytvtime.discussion." + discussionId);
-    newMessagesLengths[discussionId] = 0;
+    newMessageLengths[discussionId] = 0;
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         console.log(this.response);
@@ -190,7 +224,7 @@ function inputSend(e) {
                 const body = discussion.querySelector(".body");
                 body.innerHTML = newBody.innerHTML;
                 body.querySelector(".message:last-child").scrollIntoView();
-                newMessagesLengths[discussionId] = 0;
+                newMessageLengths[discussionId] = 0;
             }
             xhr.open("POST", '/chat/discussion/message/' + discussionId);
             xhr.setRequestHeader("Content-Type", "application/json");
@@ -201,17 +235,17 @@ function inputSend(e) {
             break;
         default:
             const userId = discussion.getAttribute("data-user-id");
-            if (message.length && newMessagesLengths[discussionId] === 0) {
+            if (message.length && newMessageLengths[discussionId] === 0) {
                 setTyping(discussionId, userId, true, message.length);
             }
-            if (!message.length && newMessagesLengths[discussionId] !== 0) {
+            if (!message.length && newMessageLengths[discussionId] !== 0) {
                 setTyping(discussionId, userId, false, 0);
             }
     }
 }
 
 function setTyping(discussionId, userId, typing, length) {
-    newMessagesLengths[discussionId] = length;
+    newMessageLengths[discussionId] = length;
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         console.log(this.response);

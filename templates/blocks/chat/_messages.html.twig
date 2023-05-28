@@ -1,0 +1,25 @@
+<div class="messages">
+    {% for message in discussion.chatMessages %}
+        {% if message.owner.id == user.id %}
+            {% set person = 'user' %}
+        {% else %}
+            {% set person = 'recipient' %}
+        {% endif %}
+        {% set day = "now"|date("d") %}
+        {% set messageDay = message.createdAt|date('d') %}
+        <div class="message {{ person }}-message">
+            <div class="message-content">
+                <div class="message-time">
+                    {% if day == messageDay %}
+                        {{ message.createdAt|date('H:i') }}
+                    {% else %}
+                        {{ message.createdAt|date('d/m/Y H:i') }}
+                    {% endif %}
+                </div>
+                <div class="message-text">
+                    {{ message.message }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

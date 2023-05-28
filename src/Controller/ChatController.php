@@ -59,11 +59,31 @@ class ChatController extends AbstractController
         }
         $this->chatDiscussionRepository->save($chatDiscussion, true);
 
-//        return $this->render('blocks/chat/_discussion.html.twig', [
-//            'discussion' => $chatDiscussion,
-//            'user'       => $user,
-//        ]);
-        return $this->render('blocks/chat/_chat.html.twig');
+        return $this->render('blocks/chat/_discussion.html.twig', [
+            'discussion' => $chatDiscussion,
+            'user'       => $user,
+        ]);
+    }
+
+    #[Route(path: '/chat/discussion/update/{recipientId}', name: 'app_chat_open')]
+    public function chatDiscussionUpdate(int $recipientId): Response
+    {
+        $user = $this->getUser();
+
+        $recipient = $this->userRepository->find($recipientId);
+        $chatDiscussion = null;
+        $myDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $user, 'recipient' => $recipient]);
+        $buddyDiscussion = $this->chatDiscussionRepository->findOneBy(['user' => $recipient, 'recipient' => $user]);
+        if ($myDiscussion) {
+            $chatDiscussion = $myDiscussion;
+        } elseif ($buddyDiscussion) {
+            $chatDiscussion = $buddyDiscussion;
+        }
+
+        return $this->render('blocks/chat/_messages.html.twig', [
+            'discussion' => $chatDiscussion,
+            'user'       => $user,
+        ]);
     }
 
     #[Route(path: '/chat/discussion/close/{discussionId}', name: 'app_chat_close')]
