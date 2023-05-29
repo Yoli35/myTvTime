@@ -4,14 +4,22 @@ class Discussion {
         this.id = id;
         this.discussion = document.querySelector('.discussion[data-id=' + id + ']');
         this.chatWrapper = this.discussion.closest('.chat-wrapper');
-        this.xhr = new XMLHttpRequest();
-        this.newMessageLength = 0;
-        this.messageCount = 0;
-        this.intervalID = setInterval(() => this.update(), 5000);
+        this.header = this.discussion.querySelector('.header');
+        this.closeButton = this.header.querySelector('.close');
+        this.minimizeButton = this.header.querySelector('.minimize');
         this.form = this.discussion.querySelector('form');
         this.input = this.discussion.querySelector('input');
         this.messages = this.discussion.querySelector('.messages');
         this.buffer = document.createElement('div');
+
+        this.xhr = new XMLHttpRequest();
+        this.newMessageLength = 0;
+        this.messageCount = this.messages.querySelectorAll(".message").length;
+
+        this.intervalID = setInterval(() => this.update(), 5000);
+
+        this.closeButton.addEventListener('click', () => this.close());
+        this.minimizeButton.addEventListener('click', () => this.minimize());
 
         this.input.addEventListener('change', (e) => this.typing(e));
         this.form.addEventListener('submit', (e) => this.submit(e));
@@ -66,6 +74,25 @@ class Discussion {
         });
         this.discussion.classList.add("active");
         this.input.focus();
+    }
+
+    minimize() {
+        this.discussion.classList.add("minimized");
+        localStorage.setItem("mytvtime.discussion." + this.id, "minimized");
+        if (this.discussion.classList.contains("active")) {
+            this.discussion.classList.remove("active");
+            const discussions = this.chatWrapper.querySelectorAll(".discussion:not(.minimized)");
+            if (discussions.length > 0)
+                discussions[0].classList.add("active");
+        }
+        this.header.addEventListener("click", expande);
+    }
+
+    expande() {
+        this.discussion.classList.remove("minimized");
+        this.activate();
+        localStorage.setItem("mytvtime.discussion." + this.id, "expanded");
+        this.header.removeEventListener("click", expande);
     }
 
     submit(e) {
