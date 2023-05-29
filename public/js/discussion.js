@@ -39,7 +39,7 @@ class Discussion {
                 this.messageCount = newMessagesLength;
                 this.discussion.querySelector(".message:last-child")?.scrollIntoView();
             }
-            this.discussion.setAttribute("data-update", Number::toString(update + 1));
+            this.discussion.setAttribute("data-update", (update + 1));
         }
         this.xhr.open("GET", '/chat/discussion/update/' + this.id);
         this.xhr.send();
@@ -47,6 +47,12 @@ class Discussion {
 
     close() {
         clearInterval(this.intervalID);
+
+        this.closeButton.removeEventListener('click', () => this.close());
+        this.minimizeButton.removeEventListener('click', () => this.minimize());
+
+        this.input.removeEventListener('change', (e) => this.typing(e));
+        this.form.removeEventListener('submit', (e) => this.submit(e));
 
         if (this.discussion.classList.contains("active")) {
             this.chatWrapper.removeChild(this.discussion);
@@ -85,14 +91,14 @@ class Discussion {
             if (discussions.length > 0)
                 discussions[0].classList.add("active");
         }
-        this.header.addEventListener("click", expande);
+        this.header.addEventListener("click", this.expande);
     }
 
     expande() {
         this.discussion.classList.remove("minimized");
         this.activate();
         localStorage.setItem("mytvtime.discussion." + this.id, "expanded");
-        this.header.removeEventListener("click", expande);
+        this.header.removeEventListener("click", this.expande);
     }
 
     submit(e) {

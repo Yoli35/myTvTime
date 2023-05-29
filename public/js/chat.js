@@ -1,10 +1,13 @@
+import Discussion from "./discussion";
+"use strict";
+
 const chatTitle = {'fr': 'utilisateurs', 'en': 'users', 'de': 'Nutzer', 'es': 'usuarios'};
 const chatLocale = document.querySelector("html").getAttribute("lang");
 let chatWrapper;
 let chatIntervalID = 0, username = "", avatar = "";
 let newMessageLengths = [];
-let discussionIntervals = [];
-let discussionMessageCount = [];
+// let discussionIntervals = [];
+// let discussionMessageCount = [];
 
 window.addEventListener("DOMContentLoaded", () => {
     initChatWindow();
@@ -52,35 +55,36 @@ function initChatWindow() {
 }
 
 function initDiscussions() {
-    const discussions = chatWrapper.querySelectorAll(".discussion");
+    const discussionDivs = chatWrapper.querySelectorAll(".discussion");
 
-    discussions?.forEach(discussion => {
-        initDiscussion(discussion);
+    discussionDivs?.forEach(discussionDiv => {
+       // initDiscussion(discussion);
+        new Discussion(discussionDiv.getAttribute("data-id"));
     });
 }
 
-function initDiscussion(discussion) {
-    const discussionId = discussion.getAttribute("data-id");
-    const discussionStatus = localStorage.getItem("mytvtime.discussion." + discussionId);
-    const header = discussion.querySelector(".header");
-    const minimize = header.querySelector(".minimize");
-    const close = header.querySelector(".close");
-
-    newMessageLengths[discussionId] = 0;
-    discussionMessageCount[discussionId] = discussion.querySelectorAll(".message").length;
-    discussionIntervals[discussionId] = setInterval(updateDiscussion, 5000, discussionId);
-
-    if (discussionStatus === "minimized") {
-        discussion.classList.add("minimized");
-    } else {
-        discussion.querySelector(".message:last-child")?.scrollIntoView();
-        minimize.addEventListener("click", minimizeDiscussion);
-        close.addEventListener("click", closeDiscussion);
-        discussion.addEventListener("click", e => {
-            activateDiscussion(e.currentTarget);
-        });
-    }
-}
+// function initDiscussion(discussion) {
+//     const discussionId = discussion.getAttribute("data-id");
+//     const discussionStatus = localStorage.getItem("mytvtime.discussion." + discussionId);
+//     const header = discussion.querySelector(".header");
+//     const minimize = header.querySelector(".minimize");
+//     const close = header.querySelector(".close");
+//
+//     newMessageLengths[discussionId] = 0;
+//     discussionMessageCount[discussionId] = discussion.querySelectorAll(".message").length;
+//     discussionIntervals[discussionId] = setInterval(updateDiscussion, 5000, discussionId);
+//
+//     if (discussionStatus === "minimized") {
+//         discussion.classList.add("minimized");
+//     } else {
+//         discussion.querySelector(".message:last-child")?.scrollIntoView();
+//         minimize.addEventListener("click", minimizeDiscussion);
+//         close.addEventListener("click", closeDiscussion);
+//         discussion.addEventListener("click", e => {
+//             activateDiscussion(e.currentTarget);
+//         });
+//     }
+// }
 
 function openDiscussion(buddyId) {
     const discussion = document.querySelector(".discussion[data-buddy-id='" + buddyId + "']");
@@ -106,76 +110,77 @@ function openDiscussion(buddyId) {
             const discussionId = discussion.getAttribute("data-id");
             localStorage.setItem("mytvtime.discussion." + discussionId, "expanded");
 
-            initDiscussion(discussion);
+            // initDiscussion(discussion);
+            new Discussion(discussion.getAttribute("data-id"));
         }
         xhr.open("GET", '/chat/discussion/open/' + buddyId);
         xhr.send();
     }
 }
 
-function updateDiscussion(discussionId) {
-    const discussion = document.querySelector(".discussion[data-id='" + discussionId + "']");
-    const messages = discussion.querySelector(".messages");
-    const update = parseInt(discussion.getAttribute("data-update"));
-    const xhr = new XMLHttpRequest();
+// function updateDiscussion(discussionId) {
+//     const discussion = document.querySelector(".discussion[data-id='" + discussionId + "']");
+//     const messages = discussion.querySelector(".messages");
+//     const update = parseInt(discussion.getAttribute("data-update"));
+//     const xhr = new XMLHttpRequest();
+//
+//     xhr.onload = function () {
+//         const div = document.createElement("div");
+//         div.innerHTML = this.response;
+//         const newMessages = div.querySelector(".messages");
+//         const newMessagesLength = newMessages.querySelectorAll(".message").length;
+//
+//         if (newMessagesLength > discussionMessageCount[discussionId]) {
+//             messages.innerHTML = newMessages.innerHTML;
+//             discussionMessageCount[discussionId] = newMessagesLength;
+//             discussion.querySelector(".message:last-child")?.scrollIntoView();
+//         }
+//         discussion.setAttribute("data-update", (update + 1));
+//     }
+//     xhr.open("GET", '/chat/discussion/update/' + discussionId);
+//     xhr.send();
+// }
 
-    xhr.onload = function () {
-        const div = document.createElement("div");
-        div.innerHTML = this.response;
-        const newMessages = div.querySelector(".messages");
-        const newMessagesLength = newMessages.querySelectorAll(".message").length;
+// function closeDiscussion(e) {
+//     const discussion = e.target.closest(".discussion");
+//     const discussionId = discussion.getAttribute("data-id");
+//     const chatWrapper = document.querySelector(".chat-wrapper");
+//
+//     clearInterval(discussionIntervals[discussionId]);
+//
+//     if (discussion.classList.contains("active")) {
+//         chatWrapper.removeChild(discussion);
+//         const remainingDiscussion = chatWrapper.querySelector(".discussion");
+//         if (remainingDiscussion)
+//             remainingDiscussion.classList.add("active");
+//     } else {
+//         chatWrapper.removeChild(discussion);
+//     }
+//     localStorage.removeItem("mytvtime.discussion." + discussionId);
+//     newMessageLengths[discussionId] = 0;
+//     const xhr = new XMLHttpRequest();
+//     xhr.onload = function () {
+//         console.log(this.response);
+//     }
+//     xhr.open("GET", '/chat/discussion/close/' + discussionId);
+//     xhr.send();
+// }
 
-        if (newMessagesLength > discussionMessageCount[discussionId]) {
-            messages.innerHTML = newMessages.innerHTML;
-            discussionMessageCount[discussionId] = newMessagesLength;
-            discussion.querySelector(".message:last-child")?.scrollIntoView();
-        }
-        discussion.setAttribute("data-update", Number::toString(update + 1));
-    }
-    xhr.open("GET", '/chat/discussion/update/' + discussionId);
-    xhr.send();
-}
-
-function closeDiscussion(e) {
-    const discussion = e.target.closest(".discussion");
-    const discussionId = discussion.getAttribute("data-id");
-    const chatWrapper = document.querySelector(".chat-wrapper");
-
-    clearInterval(discussionIntervals[discussionId]);
-
-    if (discussion.classList.contains("active")) {
-        chatWrapper.removeChild(discussion);
-        const remainingDiscussion = chatWrapper.querySelector(".discussion");
-        if (remainingDiscussion)
-            remainingDiscussion.classList.add("active");
-    } else {
-        chatWrapper.removeChild(discussion);
-    }
-    localStorage.removeItem("mytvtime.discussion." + discussionId);
-    newMessageLengths[discussionId] = 0;
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        console.log(this.response);
-    }
-    xhr.open("GET", '/chat/discussion/close/' + discussionId);
-    xhr.send();
-}
-
-function minimizeDiscussion(e) {
-    const discussion = e.target.closest(".discussion");
-    const header = discussion.querySelector(".header");
-    const discussionId = discussion.getAttribute("data-id");
-
-    discussion.classList.add("minimized");
-    localStorage.setItem("mytvtime.discussion." + discussionId, "minimized");
-    if (discussion.classList.contains("active")) {
-        discussion.classList.remove("active");
-        const discussions = discussion.closest(".chat-wrapper").querySelectorAll(".discussion:not(.minimized)");
-        if (discussions.length > 0)
-            discussions[0].classList.add("active");
-    }
-    header.addEventListener("click", expandeDiscussion);
-}
+// function minimizeDiscussion(e) {
+//     const discussion = e.target.closest(".discussion");
+//     const header = discussion.querySelector(".header");
+//     const discussionId = discussion.getAttribute("data-id");
+//
+//     discussion.classList.add("minimized");
+//     localStorage.setItem("mytvtime.discussion." + discussionId, "minimized");
+//     if (discussion.classList.contains("active")) {
+//         discussion.classList.remove("active");
+//         const discussions = discussion.closest(".chat-wrapper").querySelectorAll(".discussion:not(.minimized)");
+//         if (discussions.length > 0)
+//             discussions[0].classList.add("active");
+//     }
+//     header.addEventListener("click", expandeDiscussion);
+// }
 
 function expandeDiscussion(e) {
     const discussion = e.target.closest(".discussion");
