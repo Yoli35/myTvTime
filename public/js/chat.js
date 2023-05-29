@@ -1,5 +1,6 @@
 const chatTitle = {'fr': 'utilisateurs', 'en': 'users', 'de': 'Nutzer', 'es': 'usuarios'};
 const chatLocale = document.querySelector("html").getAttribute("lang");
+let chatWrapper;
 let chatIntervalID = 0, username = "", avatar = "";
 let newMessageLengths = [];
 let discussionIntervals = [];
@@ -8,22 +9,17 @@ let discussionMessageCount = [];
 window.addEventListener("DOMContentLoaded", () => {
     initChatWindow();
     initDiscussions();
-
-    const chatUsers = document.querySelector(".chat-users");
-    const chatUsersList = chatUsers.querySelector(".chat-users-list");
-
-    if (!chatUsersList.classList.contains("minimized")) {
-        chatIntervalID = setInterval(updateChat, 10000);
-    }
 });
 
 function initChatWindow() {
     username = localStorage.getItem("mytvtime.username");
     avatar = localStorage.getItem("mytvtime.avatar");
 
+    chatWrapper = document.querySelector(".chat-wrapper");
+
     getChatUsersWindowStatus();
 
-    const chatUsers = document.querySelector(".chat-users");
+    const chatUsers = chatWrapper.querySelector(".chat-users");
     const chatHeader = chatUsers.querySelector(".chat-users-header");
     const chatUsersList = chatUsers.querySelector(".chat-users-list");
     const chatUsersListItems = chatUsersList.querySelectorAll("li");
@@ -46,14 +42,17 @@ function initChatWindow() {
     chatUsersListItemsArray.forEach(item => {
         item.addEventListener("click", () => {
             const id = item.getAttribute("data-id");
-            console.log({id});
             openDiscussion(id);
         });
     });
+
+    if (!chatUsersList.classList.contains("minimized")) {
+        chatIntervalID = setInterval(updateChat, 10000);
+    }
 }
 
 function initDiscussions() {
-    const discussions = document.querySelectorAll(".discussion");
+    const discussions = chatWrapper.querySelectorAll(".discussion");
 
     discussions?.forEach(discussion => {
         initDiscussion(discussion);
@@ -69,9 +68,7 @@ function initDiscussion(discussion) {
 
     newMessageLengths[discussionId] = 0;
     discussionMessageCount[discussionId] = discussion.querySelectorAll(".message").length;
-    discussionIntervals[discussionId] = setInterval(() => {
-        updateDiscussion(discussionId);
-    }, 5000);
+    discussionIntervals[discussionId] = setInterval(updateDiscussion, 5000, discussionId);
 
     if (discussionStatus === "minimized") {
         discussion.classList.add("minimized");
@@ -80,7 +77,7 @@ function initDiscussion(discussion) {
         minimize.addEventListener("click", minimizeDiscussion);
         close.addEventListener("click", closeDiscussion);
         discussion.addEventListener("click", e => {
-            activeDiscussion(e.currentTarget);
+            activateDiscussion(e.currentTarget);
         });
     }
 }
@@ -92,7 +89,7 @@ function openDiscussion(buddyId) {
         if (discussion.classList.contains("minimized")) {
             expande(discussion);
         } else {
-            activeDiscussion(discussion);
+            activateDiscussion(discussion);
         }
     } else {
         const xhr = new XMLHttpRequest();
@@ -105,7 +102,7 @@ function openDiscussion(buddyId) {
             const discussion = div.querySelector(".discussion");
             discussion.setAttribute('data-update', "0");
             chatWrapper.insertBefore(discussion, firstDiv);
-            activeDiscussion(discussion);
+            activateDiscussion(discussion);
             const discussionId = discussion.getAttribute("data-id");
             localStorage.setItem("mytvtime.discussion." + discussionId, "expanded");
 
@@ -133,7 +130,7 @@ function updateDiscussion(discussionId) {
             discussionMessageCount[discussionId] = newMessagesLength;
             discussion.querySelector(".message:last-child")?.scrollIntoView();
         }
-        discussion.setAttribute("data-update", update + 1);
+        discussion.setAttribute("data-update", Number::toString(update + 1));
     }
     xhr.open("GET", '/chat/discussion/update/' + discussionId);
     xhr.send();
@@ -190,12 +187,12 @@ function expande(discussion) {
     const discussionId = discussion.getAttribute("data-id");
 
     discussion.classList.remove("minimized");
-    activeDiscussion(discussion);
+    activateDiscussion(discussion);
     localStorage.setItem("mytvtime.discussion." + discussionId, "expanded");
     header.removeEventListener("click", expandeDiscussion);
 }
 
-function activeDiscussion(discussion) {
+function activateDiscussion(discussion) {
     const discussions = document.querySelectorAll(".discussion");
     discussions.forEach(discussion => {
         if (discussion.classList.contains("active")) {
@@ -263,7 +260,7 @@ function setTyping(discussionId, userId, typing, length) {
 
 function getChatUsersWindowStatus() {
     const chatWindowStatus = localStorage.getItem("mytvtime.chatWindowStatus");
-    const chatUsers = document.querySelector(".chat-users");
+    const chatUsers = chatWrapper.querySelector(".chat-users");
     const chatWindow = chatUsers.querySelector(".chat-users-list");
     const chatUsersList = chatUsers.querySelector(".chat-users-list");
     const chatUsersListItems = chatUsersList.querySelectorAll("li");

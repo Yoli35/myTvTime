@@ -30,9 +30,11 @@
         <div class="body">
             {% include('blocks/chat/_messages.html.twig') %}
             <div class="new-message">
-                <label>
-                    <input type="text" placeholder="{{ 'new message'|trans }}">
-                </label>
+                <form>
+                    <label>
+                        <input type="text" placeholder="{{ 'new message'|trans }}">
+                    </label>
+                </form>
             </div>
         </div>
     </div>
