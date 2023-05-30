@@ -1,11 +1,12 @@
-import { Discussion } from "./Discussion.js";
+import {Discussion} from "./Discussion.js";
+
 "use strict";
 
 const chatTitle = {'fr': 'utilisateurs', 'en': 'users', 'de': 'Nutzer', 'es': 'usuarios'};
 const chatLocale = document.querySelector("html").getAttribute("lang");
 let chatWrapper;
 let chatIntervalID = 0, username = "", avatar = "";
-const discussions = [];
+let discussions = [];
 
 window.addEventListener("DOMContentLoaded", () => {
     initChatWindow();
@@ -77,8 +78,21 @@ function getDiscussionById(id) {
     return discussion;
 }
 
+function updateDiscussions() {
+    const updatedDiscussions = [];
+    discussions.forEach(d => {
+        const discussionDiv = chatWrapper.querySelector(".discussion[data-buddy-id='" + d.id + "']");
+        if (discussionDiv) {
+            updatedDiscussions.push(d);
+        }
+    });
+    return updatedDiscussions;
+}
+
 function openDiscussion(buddyId) {
-    const discussionDiv = document.querySelector(".discussion[data-buddy-id='" + buddyId + "']");
+    const discussionDiv = chatWrapper.querySelector(".discussion[data-buddy-id='" + buddyId + "']");
+
+    discussions = updateDiscussions();
 
     if (discussionDiv) {
         const discussionObj = getDiscussionById(discussionDiv.getAttribute("data-id"));
@@ -90,7 +104,6 @@ function openDiscussion(buddyId) {
         }
     } else {
         const xhr = new XMLHttpRequest();
-        const chatWrapper = document.querySelector(".chat-wrapper");
 
         xhr.onload = function () {
             const div = document.createElement("div");

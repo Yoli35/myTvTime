@@ -62,7 +62,7 @@ readonly class ControllerSubscriber implements EventSubscriberInterface
 
             $this->logService->log($event->getRequest(), $user);
 
-            if ($user && $controller[1] !== 'chatUpdate') {
+            if ($user && $controller[1] !== 'chatUpdate' && $controller[1] !== 'chatDiscussionUpdate') {
                 try {
                     $user->setLastActivityAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Paris')));
                 } catch (Exception) {
