@@ -1,8 +1,9 @@
 
-class Discussion {
-    constructor(id) {
-        this.id = id;
-        this.discussion = document.querySelector('.discussion[data-id=' + id + ']');
+export class Discussion {
+    constructor(discussion) {
+        this.discussion = discussion;
+        this.id = this.discussion.getAttribute("data-id");
+        // this.discussion = document.querySelector('.discussion[data-id=' + id + ']');
         this.chatWrapper = this.discussion.closest('.chat-wrapper');
         this.header = this.discussion.querySelector('.header');
         this.closeButton = this.header.querySelector('.close');
@@ -24,22 +25,26 @@ class Discussion {
         this.input.addEventListener('change', (e) => this.typing(e));
         this.form.addEventListener('submit', (e) => this.submit(e));
         this.discussion.setAttribute('data-update', "0");
+
+        this.discussion.querySelector(".message:last-child")?.scrollIntoView();
+
         this.update();
     }
 
     update() {
+        const thisClass = this;
         this.xhr.onload = function () {
-            this.buffer.innerHTML = this.response;
-            const newMessages = this.buffer.querySelector(".messages");
+            thisClass.buffer.innerHTML = this.response;
+            const newMessages = thisClass.buffer.querySelector(".messages");
             const newMessagesLength = newMessages.querySelectorAll(".message").length;
-            const update = parseInt(this.discussion.getAttribute("data-update"));
+            const update = parseInt(thisClass.discussion.getAttribute("data-update"));
 
-            if (newMessagesLength > this.messageCount) {
-                this.messages.innerHTML = newMessages.innerHTML;
-                this.messageCount = newMessagesLength;
-                this.discussion.querySelector(".message:last-child")?.scrollIntoView();
+            if (newMessagesLength > thisClass.messageCount) {
+                thisClass.messages.innerHTML = newMessages.innerHTML;
+                thisClass.messageCount = newMessagesLength;
+                thisClass.discussion.querySelector(".message:last-child")?.scrollIntoView();
             }
-            this.discussion.setAttribute("data-update", (update + 1));
+            thisClass.discussion.setAttribute("data-update", (update + 1));
         }
         this.xhr.open("GET", '/chat/discussion/update/' + this.id);
         this.xhr.send();
@@ -102,12 +107,15 @@ class Discussion {
     }
 
     submit(e) {
+        const thisClass = this;
+        const message = this.input.value;
+        this.input.value = "";
         e.preventDefault();
         this.xhr.onload = function () {
-            this.buffer.innerHTML = this.response;
-            this.messages.innerHTML = this.buffer.querySelector(".messages").innerHTML;
-            this.messages.querySelector(".message:last-child").scrollIntoView();
-            this.newMessageLength = 0;
+            thisClass.buffer.innerHTML = this.response;
+            thisClass.messages.innerHTML = thisClass.buffer.querySelector(".messages").innerHTML;
+            thisClass.messages.querySelector(".message:last-child").scrollIntoView();
+            thisClass.newMessageLength = 0;
         }
         this.xhr.open("POST", '/chat/discussion/message/' + this.id);
         this.xhr.setRequestHeader("Content-Type", "application/json");
@@ -127,4 +135,4 @@ class Discussion {
     }
 }
 
-export default Discussion;
+
