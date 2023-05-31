@@ -180,6 +180,7 @@
 
                     .poster {
                         height: var(--serie-lg-height);
+                        position: relative;
                         z-index: 0;
 
                         img {
@@ -346,7 +347,7 @@
 
                     &:hover {
                         //animation: wobble 200ms;
-                        scale: 1.02;
+                        //scale: 1.02;
                     }
 
                     @keyframes wobble {
@@ -2527,6 +2528,7 @@
                                 overflow: hidden;
                                 margin-top: -1rem;
                                 padding: .25rem;
+                                position: relative;
                                 width: 4rem;
                                 z-index: 11;
 

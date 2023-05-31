@@ -3,7 +3,6 @@ export class Discussion {
     constructor(discussion) {
         this.discussion = discussion;
         this.id = this.discussion.getAttribute("data-id");
-        // this.discussion = document.querySelector('.discussion[data-id=' + id + ']');
         this.chatWrapper = this.discussion.closest('.chat-wrapper');
         this.header = this.discussion.querySelector('.header');
         this.closeButton = this.header.querySelector('.close');
@@ -29,6 +28,7 @@ export class Discussion {
         this.discussion.querySelector(".message:last-child")?.scrollIntoView();
 
         this.update();
+        this.activate();
     }
 
     update() {

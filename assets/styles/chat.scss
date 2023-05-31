@@ -162,6 +162,7 @@
         overflow: hidden;
         height: 20rem;
         width: 20rem;
+        z-index: 997;
 
         &.minimized {
             border-radius: 50%;

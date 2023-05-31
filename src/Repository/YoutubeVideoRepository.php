@@ -50,8 +50,8 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             $offset = 0;
         }
         return $this->createQueryBuilder('y')
-            ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id='.$userId)
-            ->orderBy('y.'.$sort, $order)
+            ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
+            ->orderBy('y.' . $sort, $order)
             ->setFirstResult($offset)
             ->setMaxResults(20)
             ->getQuery()
@@ -62,12 +62,12 @@ class YoutubeVideoRepository extends ServiceEntityRepository
     {
         $duration = -1;
         try {
-        $duration = $this->createQueryBuilder('y')
-            ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
-            ->select('sum(y.contentDuration)')
-            ->getQuery()
-            ->getSingleScalarResult();
-        } catch(Throwable $e) {
+            $duration = $this->createQueryBuilder('y')
+                ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
+                ->select('sum(y.contentDuration)')
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (Throwable) {
         }
         return $duration;
     }
@@ -91,7 +91,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
                 . "INNER JOIN `youtube_video_tag_youtube_video` t2 "
                 . "ON t2.`youtube_video_tag_id` IN (" . $list . ") AND t0.`id`=t2.`youtube_video_id` "
                 . "INNER JOIN user_youtube_video u2 ON t0.id = u2.youtube_video_id "
-                . "INNER JOIN user u1 ON u1.id = u2.user_id AND u1.id = " .$userId;
+                . "INNER JOIN user u1 ON u1.id = u2.user_id AND u1.id = " . $userId;
         } else {
             $sql = "SELECT t0.id "
                 . "FROM `youtube_video` t0 "

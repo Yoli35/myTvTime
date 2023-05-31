@@ -84,6 +84,8 @@ function updateDiscussions() {
         const discussionDiv = chatWrapper.querySelector(".discussion[data-buddy-id='" + d.id + "']");
         if (discussionDiv) {
             updatedDiscussions.push(d);
+        } else {
+            d = null;
         }
     });
     return updatedDiscussions;
