@@ -123,9 +123,25 @@
                     @include flex-row(flex-start, flex-start);
                     background-color: var(--gradient-ardoise-90);
                     border-radius: .5em;
-                    color: var(--gradient-ardoise-30);
+                    //color: var(--gradient-ardoise-30);
                     overflow: hidden;
                     width: 100%;
+
+                    &.light {
+                        color: var(--gradient-ardoise-30);
+
+                        h2 {
+                            color: var(--gradient-ardoise-30);
+                        }
+                    }
+
+                    &.dark {
+                        color: var(--gradient-ardoise-90);
+
+                        h2 {
+                            color: var(--gradient-ardoise-90);
+                        }
+                    }
 
                     .poster {
                         height: var(--event-height);
@@ -352,7 +368,7 @@
                 a {
                     .event {
                         background-color: var(--gradient-ardoise-30);
-                        color: var(--gradient-ardoise-90);
+                        //color: var(--gradient-ardoise-90);
                     }
                 }
             }
