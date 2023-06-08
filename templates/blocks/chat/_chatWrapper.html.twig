@@ -1,11 +1,16 @@
-{#{% if app.user %}#}
+{# {% if app.user %} #}
 {% if 1 %}
     <div class="chat-wrapper{% if app.environment is same as 'dev' %} dev{% endif %}" id="chat">
         {% include "blocks/chat/_chat.html.twig" %}
     </div>
     <script>
-        localStorage.setItem("mytvtime.username", "{{ app.user.username }}");
-        localStorage.setItem("mytvtime.avatar", "{{ app.user.avatar }}");
+        {% if app.user %}
+            localStorage.setItem("mytvtime.username", "{{ app.user.username }}");
+            localStorage.setItem("mytvtime.avatar", "{{ app.user.avatar }}");
+        {% else %}
+            localStorage.setItem("mytvtime.username", "Guest");
+            localStorage.setItem("mytvtime.avatar", "/images/default/no_avatar.png");
+        {% endif %}
     </script>
     <script src="/js/chat.js" type="module"></script>
 {% endif %}
