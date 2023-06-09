@@ -215,6 +215,23 @@
                         }
                     }
 
+                    &.light {
+                        .infos {
+                            div {
+                                color: var(--gradient-ardoise-20);
+                                font-weight: 300;
+                            }
+                        }
+                    }
+
+                    &.dark {
+                        .infos {
+                            div {
+                                color: var(--gradient-ardoise-90);
+                            }
+                        }
+                    }
+
                     .network {
                         @include flex-row();
                         background-color: var(--gradient-ardoise-90);
@@ -2838,6 +2855,23 @@
                 a {
                     .serie {
                         background-color: var(--gradient-ardoise-10);
+
+                        &.light {
+                            .infos {
+                                div {
+                                    color: var(--gradient-ardoise-20);
+                                    font-weight: 300;
+                                }
+                            }
+                        }
+
+                        &.dark {
+                            .infos {
+                                div {
+                                    color: var(--gradient-ardoise-90);
+                                }
+                            }
+                        }
                     }
                 }
             }

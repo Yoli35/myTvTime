@@ -96,7 +96,8 @@ class SerieController extends AbstractController
         $list = $serieRepository->listUserSeries($user->getId());
         $totalResults = count($list);
 
-        $series = $totalResults ? $this->getSeriesViews($user, $results, $request->getLocale()) : null;
+        $imageConfig = $this->imageConfiguration->getConfig();
+        $series = $totalResults ? $this->getSeriesViews($user, $results, $imageConfig, $request->getLocale()) : null;
 
         $leafSettings = $settingsRepository->findOneBy(["user" => $user, "name" => "leaf"]);
         if ($leafSettings == null) {
@@ -138,7 +139,7 @@ class SerieController extends AbstractController
             'quotes' => (new QuoteService)->getRandomQuotes(),
             'leafSettings' => $leafSettings,
             'from' => self::MY_SERIES,
-            'imageConfig' => $this->imageConfiguration->getConfig(),
+            'imageConfig' => $imageConfig,
         ]);
     }
 
@@ -264,7 +265,7 @@ class SerieController extends AbstractController
         return $serie;
     }
 
-    public function getSeriesViews($user, $results, $locale): array
+    public function getSeriesViews($user, $results, $imageConfig, $locale): array
     {
         $ids = array_map(function ($result) {
             return $result->getId();
@@ -280,6 +281,11 @@ class SerieController extends AbstractController
             $serie['viewing'] = $this->getSerieViews($result, $serieViewings);
             $serie['favorite'] = $this->isFavorite($serie, $favorites);
             $serie['networks'] = $this->getNetworks($serie, $networks);
+
+            $this->saveImageFromUrl(
+                $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie['posterPath'],
+                "../public/images/series/posters" . $serie['posterPath']
+            );
 
             $series[] = $serie;
         }
@@ -343,6 +349,34 @@ class SerieController extends AbstractController
         $serie['tmdb_next_episode_to_air'] = $tv['next_episode_to_air'];
 
         return $serie;
+    }
+
+    public function saveImageFromUrl($imageUrl, $localeFile): bool
+    {
+        dump($imageUrl);
+        dump($localeFile);
+        if (!file_exists($localeFile)) {
+
+            // Vérifier si l'URL de l'image est valide
+            if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+                // Récupérer le contenu de l'image à partir de l'URL
+                $imageContent = file_get_contents($imageUrl);
+
+                // Ouvrir un fichier en mode écriture binaire
+                $file = fopen($localeFile, 'wb');
+
+                // Écrire le contenu de l'image dans le fichier
+                fwrite($file, $imageContent);
+
+                // Fermer le fichier
+                fclose($file);
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     #[Route('/today', name: 'app_serie_today', methods: ['GET'])]
@@ -863,7 +897,6 @@ class SerieController extends AbstractController
                                 $this->addNewEpisode($tv, $season, $i);
                             }
                         } else {
-//                            $this->addFlash('danger', 'Erreur : nombre d\'épisodes de la saison ' . $s['season_number'] . ' inférieur à celui de la base de données');
                             for ($i = $s['episode_count'] + 1; $i <= $season->getEpisodeCount(); $i++) {
                                 $episode = $season->getEpisodeByNumber($i);
                                 if ($episode !== null) {
@@ -1216,7 +1249,7 @@ class SerieController extends AbstractController
 
     }
 
-    public function cleanCastTable()
+    public function cleanCastTable(): void
     {
         // Suppression des casts non-utilisés
         $castRepository = $this->castRepository;

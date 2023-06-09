@@ -217,6 +217,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script src="/js/getAverageColor.js"></script>
     <script>
         const _app_serie_new = "{{ path('app_serie_new') }}";
         const _app_serie_set_settings = "{{ path('app_serie_set_settings') }}";
@@ -259,6 +260,7 @@
             }
             initHeader();
             initAnimation();
+            setBackgrounds(document.querySelectorAll(".serie"));
         });
 
         function checkHeight() {
@@ -308,6 +310,19 @@
             setTimeout(() => quotes.forEach(quote => header.removeChild(quote)), 500);
         }
 
+        function setBackgrounds(series) {
+            series.forEach(serie => {
+                const poster = serie.querySelector(".poster");
+                const img = poster.querySelector("img");
+                const color = getAverageColor(img);
+                if (color.lightness > 150) {
+                    serie.classList.add("light");
+                } else {
+                    serie.classList.add("dark");
+                }
+                serie.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
+            });
+        }
         function backdropSlide() {
             const header = document.querySelector(".header");
             let indicatorDiv, indicatorsDiv, left, right, modulo, link;
