@@ -353,8 +353,6 @@ class SerieController extends AbstractController
 
     public function saveImageFromUrl($imageUrl, $localeFile): bool
     {
-        dump($imageUrl);
-        dump($localeFile);
         if (!file_exists($localeFile)) {
 
             // Vérifier si l'URL de l'image est valide
