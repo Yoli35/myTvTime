@@ -518,7 +518,8 @@ class SerieController extends AbstractController
         $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'viewedEpisodes' => 0], [$sort => $order], $perPage, ($page - 1) * $perPage);
 
         $locale = $request->getLocale();
-        $seriesToBeStarted = $this->seriesToBeToArray($user, $serieViewings, $locale);
+        $imageConfig = $this->imageConfiguration->getConfig();
+        $seriesToBeStarted = $this->seriesToBeToArray($user, $serieViewings, $imageConfig, $locale);
 
         $totalResults = $this->serieViewingRepository->count(['user' => $user, 'viewedEpisodes' => 0]);
 
@@ -537,7 +538,7 @@ class SerieController extends AbstractController
                 'order' => $order],
             'user' => $user,
             'from' => self::MY_SERIES_TO_START,
-            'imageConfig' => $this->imageConfiguration->getConfig(),
+            'imageConfig' => $imageConfig,
         ]);
     }
 
@@ -601,7 +602,8 @@ class SerieController extends AbstractController
         $serieViewings = $this->serieViewingRepository->getSeriesToEnd($user, $perPage, $page);
 
         $locale = $request->getLocale();
-        $seriesToBeEnded = $this->seriesToBeToArray($user, $serieViewings, $locale);
+        $imageConfig = $this->imageConfiguration->getConfig();
+        $seriesToBeEnded = $this->seriesToBeToArray($user, $serieViewings, $imageConfig, $locale);
 
         $totalResults = $this->serieViewingRepository->countUserSeriesToEnd($user);
 
@@ -618,11 +620,11 @@ class SerieController extends AbstractController
                 'order' => $order],
             'user' => $user,
             'from' => self::MY_SERIES_TO_END,
-            'imageConfig' => $this->imageConfiguration->getConfig(),
+            'imageConfig' => $imageConfig,
         ]);
     }
 
-    public function seriesToBeToArray($user, $serieViewings, $locale): array
+    public function seriesToBeToArray($user, $serieViewings, $imageConfig, $locale): array
     {
         $results = array_map(function ($serieViewing) {
             return $serieViewing->getSerie();
@@ -635,11 +637,16 @@ class SerieController extends AbstractController
         $networks = $this->serieRepository->networks($ids);
 
         /** @var Serie $result */
-        $seriesToBe = array_map(function ($result) use ($serieViewings, $locale, $favorites, $networks) {
+        $seriesToBe = array_map(function ($result) use ($serieViewings, $imageConfig, $locale, $favorites, $networks) {
             $serie = $this->serie2array($result, $locale);
             $serie['viewing'] = $this->getSerieViews($result, $serieViewings);
             $serie['favorite'] = $this->isFavorite($serie, $favorites);
             $serie['networks'] = $this->getNetworks($serie, $networks);
+
+            $this->saveImageFromUrl(
+                $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie['posterPath'],
+                "../public/images/series/posters" . $serie['posterPath']
+            );
             return $serie;
         }, $results);
 

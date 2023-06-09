@@ -46,10 +46,12 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script src="/js/getAverageColor.js"></script>
     <script>
 
         window.addEventListener("DOMContentLoaded", () => {
             initHeader();
+            setBackgrounds(document.querySelectorAll(".serie"));
         })
 
         function initHeader() {
@@ -80,6 +82,20 @@
             top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
             if (ratio < 0) ratio = 0;
             h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
+        }
+
+        function setBackgrounds(series) {
+            series.forEach(serie => {
+                const poster = serie.querySelector(".poster");
+                const img = poster.querySelector("img");
+                const color = getAverageColor(img);
+                if (color.lightness > 150) {
+                    serie.classList.add("light");
+                } else {
+                    serie.classList.add("dark");
+                }
+                serie.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
+            });
         }
     </script>
 {% endblock %}
