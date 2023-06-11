@@ -19,13 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    public function __construct(private readonly TMDBService        $TMDBService,
-                                private readonly MovieRepository    $userMovieRepository,
-                                private readonly SerieRepository    $serieRepository,
-//                                private readonly SerieViewingRepository $serieViewingRepository,
-                                private readonly FavoriteRepository $favoriteRepository,
+    public function __construct(private readonly FavoriteRepository $favoriteRepository,
                                 private readonly ImageConfiguration $imageConfiguration,
-                                private readonly LogService         $logService
+                                private readonly MovieRepository    $userMovieRepository,
+                                private readonly SerieController    $serieController,
+                                private readonly SerieRepository    $serieRepository,
+                                private readonly TMDBService        $TMDBService,
     )
     {
     }
@@ -40,7 +39,6 @@ class HomeController extends AbstractController
     #[Route('/{_locale}', name: 'app_home', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request): Response
     {
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
         $locale = $request->getLocale();
@@ -162,16 +160,27 @@ class HomeController extends AbstractController
         $n = $request->query->getInt('n');
         $time = $n * time();
         srand($time);
+        $serieController = $this->serieController;
         $imageConfig = $this->imageConfiguration->getConfig();
         $movieCount = $this->userMovieRepository->userMoviesCount();
         $movies = $this->userMovieRepository->findBy([], ['createdAt' => 'DESC'], 20, rand(0, $movieCount - 20));
         $serieCount = $this->serieRepository->seriesCount();
         $series = $this->serieRepository->findBy([], ['createdAt' => 'DESC'], 20, rand(0, $serieCount - 20));
-        $movies = array_map(function ($movie) use ($imageConfig) {
-            return $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $movie->getPosterPath();
+        $movies = array_map(function ($movie) use ($imageConfig, $serieController) {
+            $filename = $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $movie->getPosterPath();
+            $localName = "../public/images/movies/posters" . $movie->getPosterPath();
+            if ($serieController->saveImageFromUrl($filename, $localName)) {
+                $filename = "/images/movies/posters" . $movie->getPosterPath();
+            }
+            return $filename;
         }, $movies);
-        $series = array_map(function ($serie) use ($imageConfig) {
-            return $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie->getPosterPath();
+        $series = array_map(function ($serie) use ($imageConfig, $serieController) {
+            $filename = $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie->getPosterPath();
+            $localName = "../public/images/series/posters" . $serie->getPosterPath();
+            if ($serieController->saveImageFromUrl($filename, $localName)) {
+                $filename = "/images/series/posters" . $serie->getPosterPath();
+            }
+            return $filename;
         }, $series);
         $posters = array_merge($movies, $series);
         shuffle($posters);

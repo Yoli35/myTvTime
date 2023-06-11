@@ -6,7 +6,7 @@ function getAverageColor(img, square = false) {
     let imageData, width, height,
         i = -4,
         length,
-        rgb = {r: 0, g: 0, b: 0},
+        rgb = {r: 0, g: 0, b: 0, lightness: 0},
         count = 0;
 
     if (!context) {

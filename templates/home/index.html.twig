@@ -7,11 +7,13 @@
         {{ include('blocks/_mainMenu.html.twig') }}
 
         <div class="home-header">
-            {{ include('blocks/_clock.html.twig') }}
+            <div class="home-header-bg">
+                {{ include('blocks/_clock.html.twig') }}
+            </div>
         </div>
 
         {{ include('blocks/_nav.html.twig', {thisPage: 'Home'|trans, user: app.user}) }}
-{#        {{ include('blocks/source/_button.html.twig') }}#}
+        {#        {{ include('blocks/source/_button.html.twig') }} #}
 
         <main>
             {% for list in lists %}
@@ -61,18 +63,21 @@
 
     </div>
 
-{#    {{ show_source_code(_self) }}#}
+    {#    {{ show_source_code(_self) }} #}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-{#    <script src="/js/source.js"></script>#}
+    {#    <script src="/js/source.js"></script> #}
+    <script src="/js/getAverageColor.js"></script>
     <script>
+        let linearGradient = "linear-gradient(90deg, rgb(0,0,0) 0%, rgb(0,0,0) 100%)";
+
         window.addEventListener("DOMContentLoaded", () => {
             const container = document.querySelector(".container");
             if (container.clientWidth < 1200) {
                 return;
             }
-            const header = document.querySelector(".home-header");
+            const header = document.querySelector(".home-header-bg");
             const div1 = document.createElement("div");
 
             div1.classList.add("posters");
@@ -90,6 +95,7 @@
                 const div3 = document.createElement("div");
                 div3.classList.add("posters", "third");
                 header.appendChild(div3);
+                linearGradient = "linear-gradient(90deg, rgb(0,0,0) 0%, rgb(0,0,0) 50%, rgb(0,0,0) 100%)";
                 getPosters(div3, 3);
             }
         });
@@ -110,15 +116,16 @@
             const img = document.createElement("img");
             img.src = posters[i++];
             div.appendChild(img);
+            updateHeaderBackground(img, n);
 
             setTimeout(() => {
                 div.classList.add("fade");
                 img.classList.add("end");
-                launchCycle(div, posters, i);
+                launchCycle(div, posters, i, n);
             }, (n - 1) * 2500);
         }
 
-        function launchCycle(div, posters, i) {
+        function launchCycle(div, posters, i, n) {
             setInterval(() => {
                 const newImg = document.createElement("img");
                 const oldImg = div.querySelector("img");
@@ -132,7 +139,32 @@
                 if (i >= posters.length) {
                     i = 0;
                 }
+                setTimeout(() => {
+                    updateHeaderBackground(newImg, n);
+                }, 0);
             }, 5000);
+        }
+
+        function updateHeaderBackground(img, n)
+        {
+            const color = getAverageColor(img);
+            console.log(color);
+            if (color.lightness) {
+                const homeHeader = document.querySelector(".home-header");
+                const rgb = "rgb(" + color.r + "," + color.g + "," + color.b + ")";
+                if (n===1) {
+                    linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 0%/, rgb + " 0%");
+                    homeHeader.setAttribute("style", "background-image: " + linearGradient);
+                }
+                if (n===3) {
+                    linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 50%/, rgb + " 50%");
+                    homeHeader.setAttribute("style", "background-image: " + linearGradient);
+                }
+                if (n===2) {
+                    linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 100%/, rgb + " 100%");
+                    homeHeader.setAttribute("style", "background-image: " + linearGradient);
+                }
+            }
         }
     </script>
 {% endblock %}

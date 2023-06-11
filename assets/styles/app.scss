@@ -923,55 +923,60 @@ nav.active {
 
 .home-header {
     background-color: hsla(206deg, 50%, 95%, .2);
-    background-image: url("../images/mytvtime-light.png");
-    background-position: center center;
-    background-size: cover;
-    height: clamp(18em, 20vw, 22em);
-    margin: 0 0 1em 0;
-    opacity: .75;
-    position: relative;
-    transition: background-position 1s;
-    width: 100%;
+    transition: background 300ms ease-in-out;
+
+    .home-header-bg {
+        background-image: url("../images/mytvtime-light.png");
+        background-position: center center;
+        background-size: cover;
+        height: clamp(18em, 20vw, 22em);
+        margin: 0 0 1em 0;
+        opacity: .75;
+        position: relative;
+        transition: background-position 1s;
+        width: 100%;
+
+
+        .posters {
+            @include flex-row();
+            background-color: var(--gradient-ardoise-10-alpha-50);
+            border: 2px solid;
+            height: 17.5em;
+            left: 14.5em;
+            opacity: 0;
+            overflow: clip;
+            position: absolute;
+            top: 1em;
+            transition: opacity 1s ease-in-out;
+            width: 12em;
+
+            &.second {
+                left: 27.5em;
+            }
+
+            &.third {
+                left: 40.5em;
+            }
+
+            &.fade {
+                opacity: 1;
+            }
+
+            img {
+                height: 100%;
+                object-fit: cover;
+                transform: scale(1);
+                transition: transform 5s linear, src 1s ease-in-out;
+
+                &.end {
+                    transform: scale(1.5);
+                }
+            }
+        }
+    }
 
     &:hover {
         background-color: hsla(206deg, 50%, 75%, .4);
-    }
-
-    .posters {
-        @include flex-row();
-        background-color: var(--gradient-ardoise-10-alpha-50);
-        border: 2px solid;
-        height: 17.5em;
-        left: 14.5em;
-        opacity: 0;
-        overflow: clip;
-        position: absolute;
-        top: 1em;
-        transition: opacity 1s ease-in-out;
-        width: 12em;
-
-        &.second {
-            left: 27.5em;
-        }
-
-        &.third {
-            left: 40.5em;
-        }
-
-        &.fade {
-            opacity: 1;
-        }
-
-        img {
-            height: 100%;
-            object-fit: cover;
-            transform: scale(1);
-            transition: transform 5s linear, src 1s ease-in-out;
-
-            &.end {
-                transform: scale(1.5);
-            }
-        }
     }
 }
 
@@ -1684,6 +1689,10 @@ nav.active {
     .home-header {
         border-radius: 1em;
         margin: 1em 0;
+
+        .home-header-bg {
+            border-radius: 1em;
+        }
     }
 
     .home-discovers {
@@ -1767,13 +1776,14 @@ nav.active {
 
     .home-header {
         background-color: hsla(206deg, 50%, 24%, .2);
-        background-image: url("../images/mytvtime-dark.png");
+
+        .home-header-bg {
+            background-image: url("../images/mytvtime-dark.png");
+        }
 
         &:hover {
             background-color: hsl(206deg, 50%, 24%);
-        }
-
-    }
+        }}
 
     .genres {
         .genre {
