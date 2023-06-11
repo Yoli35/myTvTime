@@ -56,7 +56,7 @@ class MovieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function userMoviesCount(): int
+    public function moviesCount(): int
     {
         $sql = 'SELECT COUNT(*) as `count` FROM `movie`';
 

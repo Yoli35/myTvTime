@@ -6,9 +6,7 @@ use App\Entity\User;
 use App\Repository\FavoriteRepository;
 use App\Repository\SerieRepository;
 
-//use App\Repository\SerieViewingRepository;
 use App\Repository\MovieRepository;
-use App\Service\LogService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +19,7 @@ class HomeController extends AbstractController
 {
     public function __construct(private readonly FavoriteRepository $favoriteRepository,
                                 private readonly ImageConfiguration $imageConfiguration,
-                                private readonly MovieRepository    $userMovieRepository,
+                                private readonly MovieRepository    $movieRepository,
                                 private readonly SerieController    $serieController,
                                 private readonly SerieRepository    $serieRepository,
                                 private readonly TMDBService        $TMDBService,
@@ -44,7 +42,7 @@ class HomeController extends AbstractController
         $locale = $request->getLocale();
 
         if ($user) {
-            $lastAddedMovies = $this->userMovieRepository->lastAddedMovies($user->getId(), 20);
+            $lastAddedMovies = $this->movieRepository->lastAddedMovies($user->getId(), 20);
             $lastAddedSeries = $this->serieRepository->lastAddedSeries($user->getId(), 20);
             $lastUpdatedSeries = $this->serieRepository->lastUpdatedSeries($user->getId(), 20);
             $lastWatchedSeries = $this->serieRepository->lastWatchedSeries($user->getId(), 20);
@@ -55,23 +53,11 @@ class HomeController extends AbstractController
             }, $favorites);
             $favoriteSeries = $this->serieRepository->findBy(['id' => $favoriteSerieIds]/*, ['updatedAt' => 'DESC']*/);
 
-            /*
-             * Le critère 'viewedEpisodes' => ['>' => 0] devrait générer la clause
-             *    « WHERE viewed_episodes > ? » avec comme paramètre 0
-             * mais génère
-             *    « WHERE viewed_episodes IN ? » avec comme paramètre 0
-             */
-//            $lastModifiedSerieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'viewedEpisodes' => ['>' => 0]], ['modifiedAt' => 'DESC'], 20, 0);
-//            $lastModifiedSeries = array_map(function ($serieViewing) {
-//                return $serieViewing->getSerie();
-//            }, $lastModifiedSerieViewings);
-//            dump($lastModifiedSeries);
-
             $favorites = $this->favoriteRepository->findBy(['userId' => $user->getId(), 'type' => 'movie']);
             $favoriteMovieIds = array_map(function ($favorite) {
                 return $favorite->getMediaId();
             }, $favorites);
-            $favoriteMovies = $this->userMovieRepository->findBy(['id' => $favoriteMovieIds], ['createdAt' => 'DESC']);
+            $favoriteMovies = $this->movieRepository->findBy(['id' => $favoriteMovieIds], ['createdAt' => 'DESC']);
         }
         $standing = $this->TMDBService->discoverMovies(1, 'popularity.desc', $locale);
         $popularMovies = json_decode($standing, true);
@@ -162,8 +148,8 @@ class HomeController extends AbstractController
         srand($time);
         $serieController = $this->serieController;
         $imageConfig = $this->imageConfiguration->getConfig();
-        $movieCount = $this->userMovieRepository->userMoviesCount();
-        $movies = $this->userMovieRepository->findBy([], ['createdAt' => 'DESC'], 20, rand(0, $movieCount - 20));
+        $movieCount = $this->movieRepository->moviesCount();
+        $movies = $this->movieRepository->findBy([], ['createdAt' => 'DESC'], 20, rand(0, $movieCount - 20));
         $serieCount = $this->serieRepository->seriesCount();
         $series = $this->serieRepository->findBy([], ['createdAt' => 'DESC'], 20, rand(0, $serieCount - 20));
         $movies = array_map(function ($movie) use ($imageConfig, $serieController) {

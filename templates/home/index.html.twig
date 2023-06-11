@@ -71,6 +71,7 @@
     <script src="/js/getAverageColor.js"></script>
     <script>
         let linearGradient = "linear-gradient(90deg, rgb(0,0,0) 0%, rgb(0,0,0) 100%)";
+        let postersCount = 0;
 
         window.addEventListener("DOMContentLoaded", () => {
             const container = document.querySelector(".container");
@@ -82,12 +83,14 @@
 
             div1.classList.add("posters");
             header.appendChild(div1);
+            postersCount = 1;
             getPosters(div1, 1);
 
             if (container.clientWidth > 1500) {
                 const div2 = document.createElement("div");
                 div2.classList.add("posters", "second");
                 header.appendChild(div2);
+                postersCount = 2;
                 getPosters(div2, 2);
             }
 
@@ -95,6 +98,7 @@
                 const div3 = document.createElement("div");
                 div3.classList.add("posters", "third");
                 header.appendChild(div3);
+                postersCount = 3;
                 linearGradient = "linear-gradient(90deg, rgb(0,0,0) 0%, rgb(0,0,0) 50%, rgb(0,0,0) 100%)";
                 getPosters(div3, 3);
             }
@@ -104,7 +108,7 @@
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 let data = JSON.parse(this.response);
-                console.log({data});
+                // console.log({data});
                 cyclePosters(div, data['posters'], n);
             }
             xhr.open("GET", '/get-posters?n=' + n, true);
@@ -148,22 +152,25 @@
         function updateHeaderBackground(img, n)
         {
             const color = getAverageColor(img);
-            console.log(color);
+            // console.log(color);
             if (color.lightness) {
                 const homeHeader = document.querySelector(".home-header");
                 const rgb = "rgb(" + color.r + "," + color.g + "," + color.b + ")";
+                img.closest(".posters").setAttribute("style", "border-color: " + rgb);
                 if (n===1) {
                     linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 0%/, rgb + " 0%");
                     homeHeader.setAttribute("style", "background-image: " + linearGradient);
                 }
-                if (n===3) {
+                if (n===2 && postersCount===3) {
                     linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 50%/, rgb + " 50%");
                     homeHeader.setAttribute("style", "background-image: " + linearGradient);
                 }
-                if (n===2) {
+                if ((n===2 && postersCount===2) || (n===3 && postersCount===3)) {
                     linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 100%/, rgb + " 100%");
                     homeHeader.setAttribute("style", "background-image: " + linearGradient);
                 }
+            } else {
+                img.closest(".posters").setAttribute("style", "border-color: rgb(255,255,255)");
             }
         }
     </script>
