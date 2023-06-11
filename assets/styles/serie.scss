@@ -174,7 +174,8 @@
                         background-size: cover;
                         border-radius: 0 .5em .5em 0;
                         inset: 0 0 0 var(--serie-lg-poster-width);
-                        opacity: .1;
+                        mix-blend-mode: plus-lighter;
+                        opacity: .2;
                         position: absolute;
                     }
 
@@ -2653,7 +2654,7 @@
 
                     &.desktop {
                         position: sticky;
-                        top: 4em;
+                        top: 6em;
                     }
                 }
 
