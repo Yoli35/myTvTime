@@ -125,7 +125,7 @@ class SerieController extends AbstractController
         return $this->render('serie/index.html.twig', [
             'series' => $series,
             'numbers' => $serieRepository->numbers($user->getId())[0],
-            'list' => $list,
+            'seriesList' => $list,
             'pages' => [
                 'total_results' => $totalResults,
                 'page' => $page,

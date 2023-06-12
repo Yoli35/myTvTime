@@ -68,152 +68,18 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/event.js"></script>
-    <script src="/js/getAverageColor.js"></script>
+    <script src="/js/event.js" type="module"></script>
     <script>
-        const locale = "{{ app.request.locale }}";
-        let confirmDialog;
-
-        window.addEventListener("DOMContentLoaded", () => {
-
-            document.querySelector(".header").setAttribute("style", "background: transparent;");
-            document.querySelector(".add-event").addEventListener("click", addNewEvent);
-            confirmDialog = document.querySelector(".confirm-deletion");
-
-            initHeader();
-            initCountdowns(setCountdownValues());
-            initTools(confirmDialog);
-            setBackgrounds(document.querySelectorAll(".event"));
-        });
+        initEvents(setCountdownValues(), "{{ app.request.locale }}");
 
         function setCountdownValues() {
             countdownValues = [];
             {% for e in events %}
+
             countdownValues[{{ loop.index0 }}] = {"id": {{ e.id }}, "interval": -1, "date": "{{ e.date|format_datetime('short','short', locale='en-US') }}"};
             {% endfor %}
+
             return countdownValues;
-        }
-
-        function initTools(dialog) {
-            const tools = document.querySelectorAll(".tools");
-            const events = document.querySelectorAll(".event");
-
-            tools.forEach(tool => {
-                tool.querySelector(".fa-pen-to-square").addEventListener("click", editEvent);
-                // tool.querySelector(".fa-eye-slash").addEventListener("click", hideEvent);
-                tool.querySelector(".fa-trash-can").addEventListener("click", deleteEvent);
-            });
-
-            events.forEach(event => {
-                event.addEventListener("mouseenter", showTools);
-                event.addEventListener("mouseleave", hideTools);
-            });
-
-
-            dialog.querySelector(".delete-done").addEventListener("click", () => {
-                closeDialog(dialog, true);
-            })
-            dialog.querySelector(".delete-cancel").addEventListener("click", () => {
-                closeDialog(dialog, false);
-            })
-            dialog.querySelector(".close").addEventListener('click', function () {
-                closeDialog(dialog, false);
-            });
-        }
-
-        function openDialog(dialog, id, elem) {
-            const infos = elem.closest(".infos");
-            dialog.querySelector("span").innerHTML = infos.querySelector("h2").innerHTML;
-            dialog.setAttribute("data-id", id);
-
-            if (typeof dialog.showModal === "function") {
-                dialog.showModal();
-                setTimeout(() => {
-                    dialog.classList.add("show")
-                }, 0);
-            } else {
-                console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
-            }
-        }
-
-        function closeDialog(dialog, deleteEvent) {
-            let deletedId = parseInt(dialog.getAttribute("data-id"));
-            let countdownValue = countdownValues.find(({id}) => id === deletedId);
-            dialog.removeAttribute("data-id");
-            dialog.classList.remove("show");
-            setTimeout(() => {
-                dialog.close()
-            }, 300);
-            if (deleteEvent) {
-                const xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    const selector = ".event[data-id=\"" + deletedId + "\"]";
-                    const event = document.querySelector(selector);
-                    const a = event.closest("a");
-                    setTimeout(() => {
-                        a.classList.add("deleted");
-                    }, 0);
-                    setTimeout(() => {
-                        const events = a.closest(".events");
-                        clearInterval(countdownValue.interval);
-                        countdownValue.interval = -1;
-                        events.removeChild(a);
-                    }, 300);
-                }
-                xhr.open("GET", "/" + locale + "/event/delete/" + deletedId);
-                xhr.send();
-            }
-        }
-
-        function showTools(evt) {
-            const tools = evt.currentTarget.querySelector(".tools");
-            tools.classList.add("visible");
-        }
-
-        function hideTools(evt) {
-            const tools = evt.currentTarget.querySelector(".tools");
-            tools.classList.remove("visible");
-        }
-
-        function addNewEvent(evt) {
-            evt.currentTarget.classList.add("click");
-            setTimeout(() => {
-                window.location.href = "{{ path('app_event_new') }}";
-            }, 100);
-        }
-
-        function editEvent(evt) {
-            const id = evt.currentTarget.parentElement.getAttribute("id");
-            console.log('edit', {id});
-            evt.preventDefault();
-            window.location.href = "/" + locale + "/event/edit/" + id;
-        }
-
-        // function hideEvent(evt) {
-        //     const id = evt.currentTarget.parentElement.getAttribute("id");
-        //     console.log('hide', {id});
-        //     evt.preventDefault();
-        // }
-
-        function deleteEvent(evt) {
-            const id = evt.currentTarget.parentElement.getAttribute("id");
-            console.log('delete', {id});
-            evt.preventDefault();
-            openDialog(confirmDialog, id, evt.currentTarget);
-        }
-
-        function setBackgrounds(events) {
-            events.forEach(event => {
-                const poster = event.querySelector(".poster");
-                const img = poster.querySelector("img");
-                const color = getAverageColor(img);
-                if (color.lightness > 150) {
-                    event.classList.add("light");
-                } else {
-                    event.classList.add("dark");
-                }
-                event.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
-            });
         }
     </script>
 {% endblock %}
