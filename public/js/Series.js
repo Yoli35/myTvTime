@@ -1,5 +1,7 @@
 import {AverageColor} from '/js/AverageColor.js';
 
+let thisGlobal;
+
 export class Series {
     constructor(globs) {
         this.app_serie_index = globs.app_serie_index;
@@ -32,11 +34,15 @@ export class Series {
             "updated": {"fr": "Série mise à jour", "en": "Serie updated", "de": "Serie aktualisiert", "es": "Serie actualizada"},
             "not found": {"fr": "Série introuvable", "en": "Serie not found", "de": "Serie nicht gefunden", "es": "Serie no encontrada"},
         }
+
+
         this.init();
     }
 
     init() {
         const tools = document.querySelector(".series-tools");
+
+        thisGlobal = this;
 
         this.checkHeight();
         if (tools) {
@@ -67,7 +73,6 @@ export class Series {
 
     initHeader() {
         const header = document.querySelector(".header");
-        const thisInitHeader = this;
         let ticking = false;
         this.setH1();
         window.addEventListener('resize', this.setH1);
@@ -75,7 +80,7 @@ export class Series {
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 window.requestAnimationFrame(function () {
-                    thisInitHeader.setH1();
+                    thisGlobal.setH1();
                     ticking = false;
                 });
             }
@@ -129,23 +134,23 @@ export class Series {
         const header = document.querySelector(".header");
         let indicatorDiv, indicatorsDiv, left, right, modulo, link;
 
-        this.slideImages = this.getBackdrops();
-        if (!this.slideImages.length) return;
+        thisGlobal.slideImages = thisGlobal.getBackdrops();
+        if (!thisGlobal.slideImages.length) return;
 
-        this.slideNames = this.getNames();
-        this.slideLinks = this.getLinks();
-        this.slideIndex = 0;
-        modulo = this.slideImages.length;
+        thisGlobal.slideNames = thisGlobal.getNames();
+        thisGlobal.slideLinks = thisGlobal.getLinks();
+        thisGlobal.slideIndex = 0;
+        modulo = thisGlobal.slideImages.length;
 
         left = document.createElement("div");
         left.classList.add("left-arrow");
         left.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
-        left.addEventListener("click", this.previousSlide);
+        left.addEventListener("click", thisGlobal.previousSlide);
         header.appendChild(left);
         right = document.createElement("div");
         right.classList.add("right-arrow");
         right.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-        right.addEventListener("click", this.nextSlide);
+        right.addEventListener("click", thisGlobal.nextSlide);
         header.appendChild(right);
 
         indicatorsDiv = document.createElement("div");
@@ -154,7 +159,7 @@ export class Series {
             indicatorDiv = document.createElement("div");
             indicatorDiv.classList.add("indicator");
             indicatorDiv.setAttribute("data-index", i.toString());
-            indicatorDiv.addEventListener("click", this.gotoSlide);
+            indicatorDiv.addEventListener("click", thisGlobal.gotoSlide);
             indicatorsDiv.appendChild(indicatorDiv);
         }
         indicatorsDiv.setAttribute("style", "left: " + ((header.clientWidth - (20 * modulo)) / 2) + "px");
@@ -164,30 +169,30 @@ export class Series {
         link.classList.add("link");
         header.insertBefore(link, header.querySelector(".left-arrow"));
 
-        header.addEventListener("mouseenter", this.stopSlide);
-        header.addEventListener("mouseleave", this.startSlide);
+        header.addEventListener("mouseenter", thisGlobal.stopSlide);
+        header.addEventListener("mouseleave", thisGlobal.startSlide);
 
         document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === 'visible') {
-                this.startSlide();
+                thisGlobal.startSlide();
             } else {
-                this.stopSlide();
+                thisGlobal.stopSlide();
             }
         });
 
-        document.addEventListener("visibilitychange", () => (document.visibilityState === 'visible') ? this.startSlide() : this.stopSlide());
+        document.addEventListener("visibilitychange", () => (document.visibilityState === 'visible') ? thisGlobal.startSlide() : thisGlobal.stopSlide());
 
-        this.slideInterval = setInterval(this.slideFunc, this.slideDuration);
+        thisGlobal.slideInterval = setInterval(thisGlobal.slideFunc, thisGlobal.slideDuration);
     }
 
     slideFunc() {
         const header = document.querySelector(".header");
-        const modulo = this.slideImages.length;
+        const modulo = thisGlobal.slideImages.length;
         let filename, nameDiv, name, backdrop, newBackdrop, link, newLink, href;
 
-        filename = this.slideImages[this.slideIndex];
-        name = this.slideNames[this.slideIndex];
-        href = this.slideLinks[this.slideIndex];
+        filename = thisGlobal.slideImages[thisGlobal.slideIndex];
+        name = thisGlobal.slideNames[thisGlobal.slideIndex];
+        href = thisGlobal.slideLinks[thisGlobal.slideIndex];
         backdrop = header.querySelector(".backdrop");
         newBackdrop = document.createElement("div");
         newBackdrop.classList.add("backdrop", "right");
@@ -209,9 +214,9 @@ export class Series {
             newBackdrop.classList.remove("right");
             link.classList.add("left");
             newLink.classList.remove("right");
-            this.indicators(header, this.slideIndex, modulo);
-        }, this.actionDelay);
-        this.slideIndex = (this.slideIndex + 1) % modulo;
+            thisGlobal.indicators(header, thisGlobal.slideIndex, modulo);
+        }, thisGlobal.actionDelay);
+        thisGlobal.slideIndex = (thisGlobal.slideIndex + 1) % modulo;
         setTimeout(() => {
             let leftBackdrop = header.querySelector(".backdrop.left");
             let leftLink = header.querySelector(".link.left");
@@ -225,49 +230,49 @@ export class Series {
                 while (header.querySelectorAll(".backdrop").length > 1) {
                     header.removeChild(header.lastChild); // Dernière div.backdrop
                 }
-            }, this.removeDelay);
-        }, this.translateDuration + this.removeDelay);
+            }, thisGlobal.removeDelay);
+        }, thisGlobal.translateDuration + thisGlobal.removeDelay);
     }
 
     gotoSlide(evt) {
         const target = parseInt(evt.target.getAttribute("data-index"));
-        const modulo = this.slideImages.length;
+        const modulo = thisGlobal.slideImages.length;
 
-        if ((target + 1) % modulo === this.slideIndex) return;
+        if ((target + 1) % modulo === thisGlobal.slideIndex) return;
 
-        this.slideIndex = target;
-        this.setSlide();
-        this.slideIndex = (this.slideIndex + 1) % modulo;
+        thisGlobal.slideIndex = target;
+        thisGlobal.setSlide();
+        thisGlobal.slideIndex = (thisGlobal.slideIndex + 1) % modulo;
     }
 
     nextSlide() {
-        const modulo = this.slideImages.length;
+        const modulo = thisGlobal.slideImages.length;
 
-        this.setSlide();
-        this.slideIndex = (this.slideIndex + 1) % modulo;
+        thisGlobal.setSlide();
+        thisGlobal.slideIndex = (thisGlobal.slideIndex + 1) % modulo;
     }
 
     previousSlide() {
-        const modulo = this.slideImages.length;
+        const modulo = thisGlobal.slideImages.length;
 
-        this.slideIndex -= 2;
-        if (this.slideIndex < 0) this.slideIndex = modulo + this.slideIndex;
-        this.setSlide();
-        this.slideIndex = (this.slideIndex + 1) % modulo;
+        thisGlobal.slideIndex -= 2;
+        if (thisGlobal.slideIndex < 0) thisGlobal.slideIndex = modulo + thisGlobal.slideIndex;
+        thisGlobal.setSlide();
+        thisGlobal.slideIndex = (thisGlobal.slideIndex + 1) % modulo;
     }
 
     setSlide() {
         const header = document.querySelector(".header");
-        const modulo = this.slideImages.length;
+        const modulo = thisGlobal.slideImages.length;
         let filename, name, backdrop, nameDiv, link, href;
 
         let leftBackdrop = document.querySelector(".backdrop.left");
         if (leftBackdrop) {
             header.removeChild(leftBackdrop);
         }
-        filename = this.slideImages[this.slideIndex];
-        name = this.slideNames[this.slideIndex];
-        href = this.slideLinks[this.slideIndex];
+        filename = thisGlobal.slideImages[thisGlobal.slideIndex];
+        name = thisGlobal.slideNames[thisGlobal.slideIndex];
+        href = thisGlobal.slideLinks[thisGlobal.slideIndex];
         backdrop = header.querySelector(".backdrop");
         backdrop.setAttribute("style", "background-image: url('" + filename + "')");
         nameDiv = backdrop.querySelector(".name");
@@ -287,15 +292,15 @@ export class Series {
             link.setAttribute("href", href);
             header.insertBefore(link, header.querySelector(".left-arrow"));
         }
-        this.indicators(header, this.slideIndex + 1, modulo);
+        thisGlobal.indicators(header, thisGlobal.slideIndex + 1, modulo);
     }
 
     stopSlide() {
-        clearInterval(this.slideInterval);
+        clearInterval(thisGlobal.slideInterval);
     }
 
     startSlide() {
-        this.slideInterval = setInterval(this.slideFunc, this.slideDuration);
+        thisGlobal.slideInterval = setInterval(thisGlobal.slideFunc, thisGlobal.slideDuration);
     }
 
     indicators(header, idx, count) {
@@ -595,9 +600,9 @@ export class Series {
     switchLeaves(evt) {
         const check = evt.target;
         if (check.checked) {
-            this.startLeaves();
+            thisGlobal.startLeaves();
         } else {
-            this.stopLeaves();
+            thisGlobal.stopLeaves();
         }
     }
 
@@ -624,7 +629,7 @@ export class Series {
     }
 
     startLeaves() {
-        const leafValues = this.getLeafValues();
+        const leafValues = thisGlobal.getLeafValues();
         // const body = document.body;
         const html = document.documentElement;
         // const height = Math.max(body.getBoundingClientRect().height, html.getBoundingClientRect().height);
@@ -650,28 +655,28 @@ export class Series {
             particule.div = document.createElement("div");
             particule.div.classList.add("particule");
             particule.div.classList.add("b0");
-            this.initParticule(particule, leafValues);
+            thisGlobal.initParticule(particule, leafValues);
             particule.maxY = html.scrollHeight + 200;
 
             particule.div.setAttribute("style", "translate: " + particule.x + "px " + particule.y + "px; rotate: " + particule.initialAngle + "deg; scale: " + particule.scale);
 
-            particule.interval = setInterval(this.animateParticule, 1000, particule, leafValues);
-            this.leaf_particules[i] = particule;
+            particule.interval = setInterval(thisGlobal.animateParticule, 1000, particule, leafValues);
+            thisGlobal.leaf_particules[i] = particule;
 
             document.querySelector("body").appendChild(particule.div);
         }
     }
 
     stopLeaves() {
-        console.log(this.leaf_particules);
+        console.log(thisGlobal.leaf_particules);
 
-        for (let i = 0; i < this.leaf_particules.length; i++) {
-            if (this.leaf_particules[i].interval > -1) {
-                clearInterval(this.leaf_particules[i].interval);
-                this.leaf_particules[i].interval = -1;
+        for (let i = 0; i < thisGlobal.leaf_particules.length; i++) {
+            if (thisGlobal.leaf_particules[i].interval > -1) {
+                clearInterval(thisGlobal.leaf_particules[i].interval);
+                thisGlobal.leaf_particules[i].interval = -1;
             }
-            this.leaf_particules[i].div.remove();
-            this.leaf_particules[i] = {
+            thisGlobal.leaf_particules[i].div.remove();
+            thisGlobal.leaf_particules[i] = {
                 interval: 0,
                 loop: 1,
                 frame: 0,
@@ -712,10 +717,9 @@ export class Series {
 
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
-            // notifyMe(JSON.parse(this.response));
-            console.log(this.response);
+            console.log(thisGlobal.response);
         }
-        xhr.open("GET", this.app_serie_set_settings + "?data=" + JSON.stringify(settings));
+        xhr.open("GET", thisGlobal.app_serie_set_settings + "?data=" + JSON.stringify(settings));
         xhr.send();
     }
 
@@ -730,7 +734,7 @@ export class Series {
             p.interval = -1
             p.div.classList.add("reboot");
             p.loop++;
-            this.initParticule(p, values, true);
+            thisGlobal.initParticule(p, values, true);
             setTimeout(() => p.div.classList.remove("reboot"), 50);
         } else {
             if (p.frame > p.maxF) {
@@ -741,7 +745,7 @@ export class Series {
                     p.div.classList.add("reboot");
                     p.div.classList.toggle("new");
                     p.loop = 1;
-                    this.initParticule(p, values, true);
+                    thisGlobal.initParticule(p, values, true);
                     setTimeout(() => {
                         p.div.classList.remove("reboot");
                         p.div.classList.remove("re-new");
@@ -751,7 +755,7 @@ export class Series {
         }
     }
 
-    initParticule(p, values, animate= false) {
+    initParticule(p, values, animate = false) {
 
         p.frame = 0;
         p.maxF = values.lifeMin + (Math.random() * (values.lifeMax - values.lifeMin));
@@ -769,7 +773,7 @@ export class Series {
 
         if (animate) {
             p.div.setAttribute("style", "translate: " + p.x + "px " + p.y + "px; rotate: calc(" + p.initialAngle + "deg + " + (p.frame * p.turnPerSeconde) + "turn); scale: " + p.scale);
-            p.interval = setInterval(this.animateParticule, 1000, p, values);
+            p.interval = setInterval(thisGlobal.animateParticule, 1000, p, values);
         }
     }
 
@@ -833,12 +837,12 @@ export class Series {
             return;
         }
         document.querySelector("#new_serie").focus();
-        document.querySelector("#new_serie").addEventListener("paste", this.addSerie);
-        document.querySelector("#add_serie").addEventListener("click", this.addSerie);
+        document.querySelector("#new_serie").addEventListener("paste", thisGlobal.addSerie);
+        document.querySelector("#add_serie").addEventListener("click", thisGlobal.addSerie);
 
-        document.querySelector("#new_serie").addEventListener("keyup",  (event) => {
+        document.querySelector("#new_serie").addEventListener("keyup", (event) => {
             if (event.key === "Enter") {
-                this.addSerie(event);
+                thisGlobal.addSerie(event);
             }
         })
     }
@@ -890,7 +894,7 @@ export class Series {
                          * Si on est sur la première page avec le tri par "ordre d'ajout décroissant",
                          * alors, on insère la nouvelle série au début
                          */
-                        if (data.response === "New" && this.current_page === 1 && this.order_by === 'id' && this.order === 'desc') {
+                        if (data.response === "New" && thisGlobal.current_page === 1 && thisGlobal.order_by === 'id' && thisGlobal.order === 'desc') {
                             const wrapper = document.querySelector(".series").querySelector(".wrapper");
                             const first = wrapper.firstElementChild;
                             const last = wrapper.lastElementChild;
@@ -910,12 +914,12 @@ export class Series {
                     }
 
                     if (data.status === "Ko") {
-                        alert(this.trans["not found"][_locale] + " (ID: " + data.id + ")");
+                        alert(thisGlobal.trans["not found"][_locale] + " (ID: " + data.id + ")");
                     }
                 }
                 document.querySelector("#new_serie").value = "";
             }
-            xhr.open("GET", this.app_serie_new + '?value=' + value + "&p=" + this.current_page + "&pp=" + this.per_page + "&ob=" + this.order_by + "&o=" + this.order);
+            xhr.open("GET", thisGlobal.app_serie_new + '?value=' + value + "&p=" + thisGlobal.current_page + "&pp=" + thisGlobal.per_page + "&ob=" + thisGlobal.order_by + "&o=" + thisGlobal.order);
             xhr.send();
         }
     }
@@ -970,10 +974,10 @@ export class Series {
                     /*make the matching letters bold:*/
                     if (ok_name) {
                         b.innerHTML = "<strong>" + list[i].name.substr(0, val.length) + "</strong>";
-                        b.innerHTML += list[i].name.substring(val.length) + ' (' + list[i].firstDateAir.date + ')';
+                        b.innerHTML += list[i].name.substring(val.length) + ' (' + list[i].firstDateAir.date.slice(0, 4) + ')';
                     } else {
                         b.innerHTML = "<strong>" + list[i].original.substring(0, val.length) + "</strong>";
-                        b.innerHTML += list[i].original.substring(val.length) + ' (' + list[i].firstDateAir.date + ')';
+                        b.innerHTML += list[i].original.substring(val.length) + ' (' + list[i].firstDateAir.date.slice(0, 3) + ')';
                     }
                     /*insert an input field that will hold the current array item's value:*/
                     b.innerHTML += "<input id='item-" + i + "-id' type='hidden' value='" + list[i].id + "'>";
