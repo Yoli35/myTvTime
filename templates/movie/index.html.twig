@@ -6,7 +6,9 @@
 
         {{ include('blocks/_mainMenu.html.twig') }}
 
-        <div class="home-header bg{{ random(5) }}"></div>
+        <div class="home-header">
+            <div class="home-header-bg"></div>
+        </div>
 
         {{ include('blocks/_nav.html.twig', {thisPage: 'Movies', user: app.user}) }}
 

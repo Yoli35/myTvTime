@@ -936,7 +936,6 @@ nav.active {
         transition: background-position 1s;
         width: 100%;
 
-
         .posters {
             @include flex-row();
             background-color: var(--gradient-ardoise-10-alpha-50);
