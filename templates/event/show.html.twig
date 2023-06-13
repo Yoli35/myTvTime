@@ -16,10 +16,14 @@
             <main>
                 <div class="sub-header">
                     <div class="thumbnail">
-                        <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                        {% if event.thumbnail %}
+                            <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                        {% endif %}
                     </div>
                     <div class="banner">
-                        <img src="/images/events/banners/{{ event.banner }}" alt="{{ event.name }}">
+                        {% if event.banner %}
+                            <img src="/images/events/banners/{{ event.banner }}" alt="{{ event.name }}">
+                        {% endif %}
                     </div>
                 </div>
                 <h2>{{ event.name }}</h2>
@@ -51,26 +55,22 @@
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
+    <div id="countdown-values" style="display: none">
+        {
+            "route": "event_show",
+            "countdownValues": {{ countdownValues|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+        }
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/event.js"></script>
+    <script src="/js/eventIndex.js" type="module"></script>
     <script src="/js/diaporama.js"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {
 
-            initHeader();
-            initCountdowns(setCountdownValues());
-            document.querySelector(".header").setAttribute("style", "background: transparent;");
-
             const images = document.querySelector(".my-event").querySelector(".images").querySelectorAll("img");
             initDiaporama(images, "{{ app.request.locale }}");
         })
-
-        function setCountdownValues() {
-            countdownValues = [];
-            countdownValues[0] = {"id": {{ event.id }}, "date": "{{ event.date|format_datetime('short','short', locale='en-US') }}"};
-            return countdownValues;
-        }
     </script>
 {% endblock %}

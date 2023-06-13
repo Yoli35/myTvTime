@@ -141,6 +141,11 @@ class EventController extends AbstractController
     {
         return $this->render('event/show.html.twig', [
             'event' => $event,
+            'countdownValues' => [[
+                'id' => $event->getId(),
+                "interval" => -1,
+                'date' => $event->getDate()->format('Y-m-d H:i')
+            ]],
         ]);
     }
 }

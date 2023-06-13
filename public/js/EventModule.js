@@ -2,31 +2,35 @@ import {AverageColor} from "./averageColor.js";
 import {AnimatedHeader} from "./AnimatedHeader.js";
 
 let thisGlobal;
+
 export class EventModule {
 
     constructor(globs, locale) {
         this.letterRatios = [];
-        this.countdownValues = globs.countdownValues;
-        this.app_event_new = globs.app_event_new;
-        this.app_event_edit = globs.app_event_edit.slice(0, -1);
-        this.app_event_delete = globs.app_event_delete.slice(0, -1);
         this.start = Date.now();
         this.locale = locale;
 
         thisGlobal = this;
 
-        this.init();
+        this.countdownValues = globs.countdownValues;
+
+        if (globs.route === "event_index") {
+            this.app_event_new = globs.app_event_new;
+            this.app_event_edit = globs.app_event_edit.slice(0, -1);
+            this.app_event_delete = globs.app_event_delete.slice(0, -1);
+        }
+        this.init(globs.route);
     }
 
-init() {
-    new AnimatedHeader();
-
-    this.initCountdowns();
-    this.initTools();
-    this.setBackgrounds();
-
-    document.querySelector(".add-event").addEventListener("click", this.addNewEvent);
-}
+    init(route) {
+        new AnimatedHeader();
+        if (route === "event_index") {
+            this.initTools();
+            document.querySelector(".add-event").addEventListener("click", this.addNewEvent);
+        }
+        this.initCountdowns();
+        this.setBackgrounds(route);
+    }
 
     initCountdowns() {
         const countdowns = document.querySelectorAll(".countdown");
@@ -35,6 +39,8 @@ init() {
             countdown.classList.add("switch");
             setTimeout(this.createCountdown, 2000, countdown);
         });
+
+        return countdowns.length;
     }
 
     createCountdown(countdown) {
@@ -125,7 +131,7 @@ init() {
         countdownValue.interval = setInterval(thisGlobal.updateCountdown, 1000, countdown);
     }
 
-     showCountDownDate(evt) {
+    showCountDownDate(evt) {
         const countdown = evt.target;
         const div = countdown.querySelector(".date");
 
@@ -272,19 +278,38 @@ init() {
         openDialog(confirmDialog, id, evt.currentTarget);
     }
 
-    setBackgrounds() {
-        const events = document.querySelectorAll(".event");
+    setBackgrounds(route) {
+        let events, imageContainerSelector;
+
+        switch (route) {
+            case "event_index":
+                events = document.querySelectorAll(".event");
+                imageContainerSelector = ".poster";
+                break;
+            case "event_show":
+                events = document.querySelectorAll(".my-event");
+                imageContainerSelector = ".thumbnail";
+                break;
+            default:
+                return;
+        }
         events.forEach(event => {
-            const poster = event.querySelector(".poster");
+            const poster = event.querySelector(imageContainerSelector);
             const img = poster.querySelector("img");
-            const averageColor = new AverageColor();
-            const color = averageColor.getColor(img);
-            if (color.lightness > 150) {
-                event.classList.add("light");
-            } else {
-                event.classList.add("dark");
+            if (img) {
+                const averageColor = new AverageColor();
+                const color = averageColor.getColor(img);
+                let destination = event;
+                if (route === "event_show") {
+                    destination = event.querySelector("main");
+                }
+                if (color.lightness > 150) {
+                    destination.classList.add("light");
+                } else {
+                    destination.classList.add("dark");
+                }
+                destination.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
             }
-            event.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
         });
     }
 }

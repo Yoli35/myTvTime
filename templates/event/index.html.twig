@@ -67,6 +67,7 @@
     </dialog>
     <div id="countdown-values" style="display: none">
         {
+            "route": "event_index",
             "countdownValues": {{ countdownValues|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
             "app_event_new": "{{ path('app_event_new') }}",
             "app_event_edit": "{{ path('app_event_edit', {id: 0}) }}",

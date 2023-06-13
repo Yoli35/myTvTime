@@ -83,23 +83,22 @@ function launchCycle(div, posters, i, n) {
 function updateHeaderBackground(img, n)
 {
     const color = averageColor.getColor(img);
-    // const color = getAverageColor(img);
-    // console.log(color);
+
     if (color.lightness) {
         const homeHeader = document.querySelector(".home-header");
         const rgb = "rgb(" + color.r + "," + color.g + "," + color.b + ")";
         img.closest(".posters").setAttribute("style", "border-color: " + rgb);
         if (n===1) {
             linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 0%/, rgb + " 0%");
-            homeHeader.setAttribute("style", "background-image: " + linearGradient);
+            homeHeader.setAttribute("style", "background: " + linearGradient);
         }
         if (n===2 && postersCount===3) {
             linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 50%/, rgb + " 50%");
-            homeHeader.setAttribute("style", "background-image: " + linearGradient);
+            homeHeader.setAttribute("style", "background: " + linearGradient);
         }
         if ((n===2 && postersCount===2) || (n===3 && postersCount===3)) {
             linearGradient = linearGradient.replace(/rgb\(\d+,\d+,\d+\) 100%/, rgb + " 100%");
-            homeHeader.setAttribute("style", "background-image: " + linearGradient);
+            homeHeader.setAttribute("style", "background: " + linearGradient);
         }
     } else {
         img.closest(".posters").setAttribute("style", "border-color: rgb(255,255,255)");

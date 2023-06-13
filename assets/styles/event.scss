@@ -272,72 +272,97 @@
 }
 
 .my-event {
-    .sub-header {
-        @include flex-100();
+    main {
+        border-radius: 1rem;
+        padding: 1rem;
+        width: 100%;
 
-        .thumbnail, .banner {
-            img {
-                height: 100%;
-                object-fit: cover;
-                width: 100%;
+        &.light {
+            color: var(--gradient-ardoise-30);
+
+            h2 {
+                color: var(--gradient-ardoise-30);
+            }
+        }
+        &.dark {
+            color: var(--gradient-ardoise-90);
+
+            h2 {
+                color: var(--gradient-ardoise-90);
             }
         }
 
-        .thumbnail {
-            border: 4px solid var(--gradient-ardoise-90);
-            border-radius: 50%;
-            height: 8em;
-            width: 8em;
+        .sub-header {
+            @include flex-100();
 
-            img {
+            .thumbnail, .banner {
+                img {
+                    height: 100%;
+                    object-fit: cover;
+                    width: 100%;
+                }
+            }
+
+            .thumbnail {
+                border: 4px solid var(--gradient-ardoise-90);
                 border-radius: 50%;
+                height: 8em;
+                width: 8em;
+
+                img {
+                    border-radius: 50%;
+                }
             }
-        }
 
-        .banner {
-            border-radius: 1em;
-            height: 30em;
-            margin-left: auto;
-            width: calc(100% - 9em);
-
-            img {
+            .banner {
                 border-radius: 1em;
-            }
-        }
-    }
-
-    h3 {
-        font-weight: 100;
-    }
-
-    .dates {
-        @include flex-row(start, start);
-        font-size: .75em;
-
-        .date {
-            margin-right: 1em;
-        }
-    }
-
-    .description {
-        margin-top: 1em;
-    }
-
-    .images {
-        @include flex-100();
-        flex-wrap: wrap;
-        gap: 1em;
-
-        .image {
-            @include flex-row();
-
-            figure {
-                max-width: 100%;
+                height: 30em;
+                margin-left: auto;
+                width: calc(100% - 9em);
 
                 img {
                     border-radius: 1em;
-                    margin-inline: auto;
-                    max-width: 20em;
+                }
+            }
+        }
+
+        h3 {
+            font-weight: 100;
+        }
+
+        .dates {
+            @include flex-row(start, start);
+            font-size: .75em;
+
+            .date {
+                margin-right: 1em;
+            }
+        }
+
+        .countdown {
+            width: 100%;
+        }
+
+        .description {
+            margin-top: 1em;
+        }
+
+        .images {
+            @include flex-100();
+            flex-wrap: wrap;
+            gap: 1em;
+
+            .image {
+                @include flex-row();
+
+                figure {
+                    max-width: 100%;
+
+                    img {
+                        border-radius: 1em;
+                        margin-inline: auto;
+                        max-width: 20em;
+                    }
                 }
             }
         }

@@ -6,7 +6,7 @@ export class Series {
     constructor(globs) {
         this.app_serie_index = globs.app_serie_index;
         this.app_serie_new = globs.app_serie_new;
-        this.app_serie_show = globs.app_serie_show;
+        this.app_serie_show = globs.app_serie_show.slice(0, -1);
         this.app_serie_search = globs.app_serie_search;
         this.app_serie_set_settings = globs.app_serie_set_settings;
         this.locale = globs.locale;
@@ -943,9 +943,7 @@ export class Series {
             if (id === -1) {
                 return;
             }
-            let url = _app_serie_show;
-            url = url.substring(0, url.length - 1);
-            window.location = url + id + "?p=" + _current_page + "&from=" + _from;
+            window.location = thisGlobal.app_serie_show + id + "?p=" + thisGlobal.current_page + "&from=" + thisGlobal.from;
         })
 
         input.addEventListener("input", function (e) {
