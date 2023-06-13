@@ -19,6 +19,9 @@ export class EventModule {
             this.app_event_edit = globs.app_event_edit.slice(0, -1);
             this.app_event_delete = globs.app_event_delete.slice(0, -1);
         }
+        if (globs.route === "event_edit") {
+            this.save_button = globs.save_button;
+        }
         this.init(globs.route);
     }
 
@@ -28,8 +31,12 @@ export class EventModule {
             this.initTools();
             document.querySelector(".add-event").addEventListener("click", this.addNewEvent);
         }
-        this.initCountdowns();
-        this.setBackgrounds(route);
+        if (route === "event_edit") {
+            document.querySelector("#event_save").innerHTML = this.save_button;
+        } else {
+            this.initCountdowns();
+            this.setBackgrounds(route);
+        }
     }
 
     initCountdowns() {

@@ -22,15 +22,14 @@
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
+    <div id="countdown-values" style="display: none">
+        {
+        "route": "event_edit",
+        "save_button": "{{ "Update the event"|trans }}"
+        }
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/event.js"></script>
-    <script>
-        window.addEventListener("DOMContentLoaded", () => {
-            initHeader();
-            document.querySelector(".header").setAttribute("style", "background: transparent;");
-            document.querySelector("#event_save").innerHTML = "{{ "Update the event"|trans }}";
-        })
-    </script>
+    <script src="/js/eventIndex.js" type="module"></script>
 {% endblock %}
