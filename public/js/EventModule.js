@@ -1,75 +1,32 @@
 import {AverageColor} from "./averageColor.js";
+import {AnimatedHeader} from "./AnimatedHeader.js";
 
-export class Event {
+let thisGlobal;
+export class EventModule {
 
-    constructor(values, locale) {
+    constructor(globs, locale) {
         this.letterRatios = [];
-        this.countdownValues = values;
+        this.countdownValues = globs.countdownValues;
+        this.app_event_new = globs.app_event_new;
+        this.app_event_edit = globs.app_event_edit.slice(0, -1);
+        this.app_event_delete = globs.app_event_delete.slice(0, -1);
         this.start = Date.now();
         this.locale = locale;
-        this.initHeader();
-        this.initCountdowns();
-        this.setBackgrounds();
 
-        document.querySelector(".add-event").addEventListener("click", this.addNewEvent);
+        thisGlobal = this;
+
+        this.init();
     }
 
-    initHeader() {
-        let ticking = false,
-            letters, animatedH1, index = 0;
+init() {
+    new AnimatedHeader();
 
-        animatedH1 = document.createElement("div");
-        animatedH1.classList.add("animated-h1");
-        animatedH1 = document.querySelector(".header").insertBefore(animatedH1, document.querySelector(".backdrop"));
-        letters = document.querySelector("h1").innerText.split('');
+    this.initCountdowns();
+    this.initTools();
+    this.setBackgrounds();
 
-        document.querySelector("h1").innerText = "";
-
-        letters.forEach(letter => {
-            let part = document.createElement("div");
-            part.classList.add("part");
-            if (letter === " ") {
-                part.innerHTML = "&nbsp;"
-            } else {
-                part.innerText = letter;
-            }
-            animatedH1.appendChild(part);
-            this.letterRatios[index] = 2 * (Math.random() - .5);
-            index++;
-        })
-        setH1();
-        window.addEventListener('resize', setH1);
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(function () {
-                    setH1();
-                    ticking = false;
-                });
-            }
-            ticking = true;
-        });
-
-    }
-
-    setH1() {
-        const header = document.querySelector(".header");
-        const h1 = document.querySelector(".animated-h1");
-        const parts = h1.querySelectorAll(".part");
-        let left, ratio, top, n = 0;
-
-        ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
-        left = (header.clientWidth - h1.clientWidth) / 2;
-        top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
-
-        if (ratio < 0) ratio = 0;
-        if (ratio > 1) ratio = 1;
-
-        parts.forEach(part => {
-            part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * letterRatios[n++]) + "deg);");
-        })
-        h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
-    }
+    document.querySelector(".add-event").addEventListener("click", this.addNewEvent);
+}
 
     initCountdowns() {
         const countdowns = document.querySelectorAll(".countdown");
@@ -160,15 +117,15 @@ export class Event {
         countdown.appendChild(countdownDateDiv);
 
         countdown.classList.remove("switch");
-        countdown.addEventListener('mouseenter', this.showCountDownDate);
-        countdown.addEventListener('mouseleave', this.hideCountDownDate);
+        countdown.addEventListener('mouseenter', thisGlobal.showCountDownDate);
+        countdown.addEventListener('mouseleave', thisGlobal.hideCountDownDate);
 
-        const countdownValue = this.countdownValues.find(item => item.id === id);
-        this.updateCountdown(countdown);
-        countdownValue.interval = setInterval(this.updateCountdown, 1000, countdown);
+        const countdownValue = thisGlobal.countdownValues.find(countdownValue => countdownValue.id === id);
+        thisGlobal.updateCountdown(countdown);
+        countdownValue.interval = setInterval(thisGlobal.updateCountdown, 1000, countdown);
     }
 
-    showCountDownDate(evt) {
+     showCountDownDate(evt) {
         const countdown = evt.target;
         const div = countdown.querySelector(".date");
 
@@ -186,7 +143,7 @@ export class Event {
 
     updateCountdown(countdown) {
         const id = parseInt(countdown.id);
-        const countdownValue = countdownValues.find(item => item.id === id);
+        const countdownValue = thisGlobal.countdownValues.find(countdownValue => countdownValue.id === id);
         const date = new Date(countdownValue.date);
         let d, h, m, s;
         const now = Date.now();
@@ -273,7 +230,7 @@ export class Event {
                     events.removeChild(a);
                 }, 300);
             }
-            xhr.open("GET", "/" + locale + "/event/delete/" + deletedId);
+            xhr.open("GET", thisGlobal.app_event_delete + deletedId);
             xhr.send();
         }
     }
@@ -291,7 +248,7 @@ export class Event {
     addNewEvent(evt) {
         evt.currentTarget.classList.add("click");
         setTimeout(() => {
-            window.location.href = "{{ path('app_event_new') }}";
+            window.location.href = thisGlobal.app_event_new;
         }, 100);
     }
 
@@ -299,7 +256,7 @@ export class Event {
         const id = evt.currentTarget.parentElement.getAttribute("id");
         console.log('edit', {id});
         evt.preventDefault();
-        window.location.href = "/" + locale + "/event/edit/" + id;
+        window.location.href = thisGlobal.app_event_edit + id;
     }
 
 // function hideEvent(evt) {

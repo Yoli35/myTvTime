@@ -22,16 +22,18 @@
         line-height: 1.1em;
         opacity: 1;
         position: relative;
-        transition: opacity 2s ease-in-out, color 300ms ease-in-out;
+        transition: opacity 1s ease-in-out, color 300ms ease-in-out, color 1s ease-in-out, color 300ms ease-in-out;
         text-align: center;
         width: 50%;
 
-        &.switch {
-            opacity: 0;
-        }
+        &.fade, &.fade.past, &.switch {
+            .part {
+                opacity: 0;
+            }
 
-        &.fade {
-            color: var(--gradient-ardoise-90);
+            .separator {
+                display: none;
+            }
         }
 
         &.past {
@@ -41,6 +43,7 @@
         .part {
             @include flex-col(center, space-evenly);
             height: 6rem;
+            transition: opacity 1s ease-in-out, color 300ms ease-in-out;
             width: 2.5em;
 
             &:first-child {
@@ -69,11 +72,12 @@
             font-size: 2em;
             height: 4.5rem;
             //padding-top: .25em;
+            transition: opacity 1s ease-in-out, color 300ms ease-in-out
         }
 
         .date {
             @include flex-100();
-            color: var(--gradient-ardoise-20);
+            //color: var(--gradient-ardoise-20);
             inset: 0;
             line-height: 1.1em;
             opacity: 0;
@@ -133,12 +137,20 @@
                         h2 {
                             color: var(--gradient-ardoise-30);
                         }
+
+                        .countdown {
+                            color: var(--gradient-ardoise-30);
+                        }
                     }
 
                     &.dark {
                         color: var(--gradient-ardoise-90);
 
                         h2 {
+                            color: var(--gradient-ardoise-90);
+                        }
+
+                        .countdown {
                             color: var(--gradient-ardoise-90);
                         }
                     }
@@ -315,6 +327,7 @@
         @include flex-100();
         flex-wrap: wrap;
         gap: 1em;
+
         .image {
             @include flex-row();
 
@@ -338,7 +351,7 @@
         .header {
             background-color: var(--gradient-ardoise-20);
             border-radius: 1em;
-            color: var(--gradient-ardoise-70);
+            color: var(--gradient-ardoise-80);
 
             h1 {
                 color: var(--gradient-ardoise-70);
@@ -346,17 +359,6 @@
 
             .animated-h1 {
                 color: var(--gradient-ardoise-70);
-            }
-        }
-
-        .countdown {
-            &.fade {
-                color: transparent;
-                //color: var(--gradient-ardoise-30);
-            }
-
-            .date {
-                color: var(--gradient-ardoise-90);
             }
         }
     }

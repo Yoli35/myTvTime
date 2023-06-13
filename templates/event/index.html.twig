@@ -65,21 +65,16 @@
             </div>
         </div>
     </dialog>
+    <div id="countdown-values" style="display: none">
+        {
+            "countdownValues": {{ countdownValues|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+            "app_event_new": "{{ path('app_event_new') }}",
+            "app_event_edit": "{{ path('app_event_edit', {id: 0}) }}",
+            "app_event_delete": "{{ path('app_event_delete', {id: 0}) }}"
+        }
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/event.js" type="module"></script>
-    <script>
-        initEvents(setCountdownValues(), "{{ app.request.locale }}");
-
-        function setCountdownValues() {
-            countdownValues = [];
-            {% for e in events %}
-
-            countdownValues[{{ loop.index0 }}] = {"id": {{ e.id }}, "interval": -1, "date": "{{ e.date|format_datetime('short','short', locale='en-US') }}"};
-            {% endfor %}
-
-            return countdownValues;
-        }
-    </script>
+    <script src="/js/eventIndex.js" type="module"></script>
 {% endblock %}

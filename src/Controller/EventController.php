@@ -7,12 +7,10 @@ use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use App\Service\FileUploader;
-use App\Service\LogService;
-use DateTimeImmutable;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,23 +20,29 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/{_locale}/event', requirements: ['_locale' => 'fr|en|de|es'])]
 class EventController extends AbstractController
 {
-    public function __construct(private readonly LogService          $logService,
-                                private readonly TranslatorInterface $translator)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
     }
 
     #[Route('/', name: 'app_event', methods: ['GET'])]
-    public function index(Request $request, EventRepository $eventRepository): Response
+    public function index(EventRepository $eventRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
         $events = $eventRepository->findBy(['user' => $user, 'visible' => true], ['date' => 'DESC']);
+        $countdownValues = array_map(function ($event) {
+            return [
+                'id' => $event->getId(),
+                "interval" => -1,
+                'date' => $event->getDate()->format('Y-m-d H:i')
+            ];
+        }, $events);
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
+            'countdownValues' => $countdownValues,
             'user' => $user,
         ]);
     }
@@ -47,7 +51,6 @@ class EventController extends AbstractController
     public function new(Request $request, EventRepository $eventRepository, FileUploader $fileUploader, ValidatorInterface $validator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -73,7 +76,6 @@ class EventController extends AbstractController
     public function edit(Request $request, Event $event, EventRepository $eventRepository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
 
@@ -93,7 +95,7 @@ class EventController extends AbstractController
     function handleForm($form, Event $event, FileUploader $fileUploader, EventRepository $eventRepository): void
     {
         $event->setVisible(true);
-        $event->setUpdatedAt(new \DateTime());
+        $event->setUpdatedAt(new DateTime());
 
         /** @var UploadedFile $thumbnailFile */
         $thumbnailFile = $form->get('dropThumbnail')->getData();

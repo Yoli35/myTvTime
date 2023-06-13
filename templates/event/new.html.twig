@@ -25,11 +25,5 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/event.js"></script>
-    <script>
-        window.addEventListener("DOMContentLoaded", () => {
-            initHeader();
-            document.querySelector(".header").setAttribute("style", "background: transparent;");
-        })
-    </script>
+    <script src="/js/EventHeader.js" type="module"></script>
 {% endblock %}
