@@ -23,3 +23,5 @@ import './js/highlight.js';
 
 // start the Stimulus application
 import './bootstrap';
+
+// import './react/ActivityValues';

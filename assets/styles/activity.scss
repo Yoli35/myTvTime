@@ -650,6 +650,22 @@
                 }
             }
         }
+
+        .activity-values {
+            @include flex-col();
+            background-color: var(--gradient-ardoise-40-alpha-50);
+            inset: 0;
+            position: absolute;
+
+            .activity-values-title {
+                font-size: 1.5rem;
+            }
+
+            .activity-values-result {
+                background-color: var(--gradient-ardoise-20);
+                width: 20rem;
+            }
+        }
     }
 }
 

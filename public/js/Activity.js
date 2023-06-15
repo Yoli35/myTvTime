@@ -1,4 +1,5 @@
 import {AnimatedHeader} from "./AnimatedHeader.js";
+// import {ActivityValues} from "../../assets/react/ActivityValues";
 
 let thisGlobal;
 
@@ -24,6 +25,7 @@ export class Activity {
         this.initThreeRings();
         this.initStandUp();
         this.initInputs();
+        this.initWeeks();
         this.initToolTips();
     }
 
@@ -299,10 +301,12 @@ export class Activity {
     editDayValues(evt, day) {
         evt.preventDefault();
         evt.stopPropagation();
-        const inputs = day.querySelectorAll(".block-body > div > label > input");
-        inputs.forEach(input => {
+        const selector = "#day-" + day.querySelector(".rings-of-the-day").getAttribute("data-id") + "-values";
+        const values = day.querySelector(selector);
+        const data = JSON.parse(values.innerText);
 
-        });
+        // new ActivityValues(data, day.querySelector(".date").innerText);
+        console.log({data});
     }
 
     initToolTips() {
