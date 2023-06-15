@@ -556,6 +556,7 @@
 
                     .rings-of-the-day {
                         @include flex-col();
+                        cursor: pointer;
                         gap: .25em;
 
                         .drawn-rings {
