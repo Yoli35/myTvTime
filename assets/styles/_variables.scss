@@ -1141,3 +1141,60 @@ $fa-font-path: "../webfonts";
         }
     }
 }
+
+@mixin activity-hours {
+    .block-body {
+        .details {
+            .detail {
+                @include flex-row(flex-start, center);
+                gap: 1em;
+            }
+
+            .wrapper {
+                @include flex-col();
+
+                .hours {
+                    @include flex-row(flex-start, center);
+                    gap: 2px;
+
+                    .hour {
+                        border-radius: 4px;
+                        height: 32px;
+                        width: 8px;
+
+                        &.up {
+                            background-color: var(--activity-stand-up);
+
+                            &:hover {
+                                background-color: var(--activity-stand-up-hover);
+                            }
+                        }
+
+                        &.down {
+                            background-color: var(--activity-stand-down);
+
+                            &:hover {
+                                background-color: var(--activity-stand-down-hover);
+                            }
+                        }
+                    }
+                }
+
+                .graduations {
+                    @include flex-row(flex-start, flex-start);
+                    font-size: .5em;
+                    height: 2em;
+                    width: 100%;
+
+                    .quarter {
+                        border-left: 1px solid var(--gradient-ardoise-60);
+                        color: var(--gradient-ardoise-60);
+                        height: 2em;
+                        flex: 1;
+                        padding-left: .25em;
+                    }
+                }
+            }
+        }
+    }
+}

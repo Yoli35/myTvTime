@@ -13,6 +13,7 @@ export class Activity {
         this.initialDate = new Date();
         this.editing = false;
         this.PIx2 = Math.PI * 2;
+        this.dayValues = {"moveResult": 0, "exerciseResult": 0, "standUpResult": 0, "steps": 0, "distance": 0, "standUp": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]};
 
         this.init();
     }
@@ -23,7 +24,7 @@ export class Activity {
         this.setProgressAll(["stand-up", "move", "exercise"]);
         this.ringsOfTheDay();
         this.initThreeRings();
-        this.initStandUp();
+        this.initStandUp(document);
         this.initInputs();
         this.initWeeks();
         this.initToolTips();
@@ -86,7 +87,7 @@ export class Activity {
         }
     }
 
-     ringsOfTheDay() {
+    ringsOfTheDay() {
         const ringsOfTheDays = document.querySelectorAll(".rings-of-the-day");
 
         ringsOfTheDays.forEach(ringsOfTheDay => {
@@ -101,8 +102,8 @@ export class Activity {
         });
     }
 
-    initStandUp() {
-        const ups = document.querySelectorAll(".stand-up .hour");
+    initStandUp(element) {
+        const ups = element.querySelectorAll(".stand-up .hour");
         ups.forEach(up => {
             up.addEventListener("click", thisGlobal.toggleUp);
         });
@@ -126,9 +127,9 @@ export class Activity {
             if (!success) return;
 
             const resultDiv = standUpDiv.querySelector(".result");
-            const standUpRingCompleted = goal;
-
-            resultDiv.innerText = result;
+            if (resultDiv) {
+                resultDiv.innerText = result;
+            }
 
             const wrapper = standUpDiv.querySelector(".wrapper");
             const oldHoursDiv = up.parentNode;
@@ -139,30 +140,33 @@ export class Activity {
             hoursDiv.innerHTML = html.content;
             wrapper.insertBefore(hoursDiv, oldHoursDiv);
             wrapper.removeChild(oldHoursDiv);
-            thisGlobal.initStandUp();
+            thisGlobal.initStandUp(hoursDiv);
 
-            const progress = wrapper.closest(".activity-of-the-day").querySelector(".progress.stand-up");
-            progress.setAttribute("data-percent", percent);
-            progress.querySelector(".percentage").innerText = percent + '%';
-            thisGlobal.setProgress(dayDiv, ["stand-up"]);
+            const standUpRingCompleted = goal;
+            const progress = wrapper.closest(".activity-of-the-day")?.querySelector(".progress.stand-up");
+            if (progress) {
+                progress.setAttribute("data-percent", percent);
+                progress.querySelector(".percentage").innerText = percent + '%';
+                thisGlobal.setProgress(dayDiv, ["stand-up"]);
 
-            const canvasId = wrapper.closest(".day").querySelector("canvas").getAttribute("id");
-            thisGlobal.updateRings(canvasId, 2, "stand-up", percent);
+                const canvasId = wrapper.closest(".day").querySelector("canvas").getAttribute("id");
+                thisGlobal.updateRings(canvasId, 2, "stand-up", percent);
 
-            const standUpRing = standUpDiv.querySelector(".completed");
-            if (standUpRingCompleted) {
-                standUpRing.classList.add("visible");
-            } else {
-                standUpRing.classList.remove("visible");
-            }
-            const doubled = standUpDiv.querySelector(".doubled");
-            if (doubled) {
-                if (percent >= 200) {
-                    let times = Math.floor(percent / 100);
-                    doubled.querySelector("div").innerText = "x" + times;
-                    doubled.classList.add("visible");
+                const standUpRing = standUpDiv.querySelector(".completed");
+                if (standUpRingCompleted) {
+                    standUpRing.classList.add("visible");
                 } else {
-                    doubled.classList.remove("visible");
+                    standUpRing.classList.remove("visible");
+                }
+                const doubled = standUpDiv.querySelector(".doubled");
+                if (doubled) {
+                    if (percent >= 200) {
+                        let times = Math.floor(percent / 100);
+                        doubled.querySelector("div").innerText = "x" + times;
+                        doubled.classList.add("visible");
+                    } else {
+                        doubled.classList.remove("visible");
+                    }
                 }
             }
         }
@@ -296,17 +300,59 @@ export class Activity {
                 }
             });
         });
+        this.initDialog();
+    }
+
+    initDialog() {
+        const dialog = document.querySelector("#activity-dialog");
+        dialog.addEventListener("close", () => {
+            if (dialog.returnValue === "update") {
+                thisGlobal.dayValues.moveResult = dialog.querySelector("#moveResult").value;
+                thisGlobal.dayValues.exerciseResult = dialog.querySelector("#exerciseResult").value;
+                thisGlobal.dayValues.steps = dialog.querySelector("#steps").value;
+                thisGlobal.dayValues.distance = dialog.querySelector("#distance").value;
+                for (let i = 0; i < 24; i++) {
+                    const selector = '.hour[data-index="' + i + '"]';
+                    const standUpDiv = dialog.querySelector(selector);
+                    thisGlobal.dayValues.standUp[i] = standUpDiv.classList.contains("up") ? 1 : 0;
+                }
+                thisGlobal.updateDayValues();
+            }
+        });
     }
 
     editDayValues(evt, day) {
         evt.preventDefault();
         evt.stopPropagation();
-        const selector = "#day-" + day.querySelector(".rings-of-the-day").getAttribute("data-id") + "-values";
+        const dayId = day.querySelector(".rings-of-the-day").getAttribute("data-id");
+        const selector = "#day-" + dayId + "-values";
         const values = day.querySelector(selector);
         const data = JSON.parse(values.innerText);
-
-        // new ActivityValues(data, day.querySelector(".date").innerText);
+        const dialog = document.querySelector("#activity-dialog");
         console.log({data});
+        dialog.querySelector(".activity-dialog-title").innerText = day.querySelector(".date").innerText;
+        dialog.querySelector("#moveResult").value = data.moveResult;
+        dialog.querySelector("#exerciseResult").value = data.exerciseResult;
+        dialog.querySelector("#steps").value = data.steps;
+        dialog.querySelector("#distance").value = data.distance;
+        dialog.querySelector(".hours").setAttribute("data-day", dayId);
+        for (let i = 0; i < 24; i++) {
+            const standUp = data.standUp[i];
+            const selector = '.hour[data-index="' + i + '"]';
+            const standUpDiv = dialog.querySelector(selector);
+            if (standUp) {
+                standUpDiv.classList.add("up");
+                standUpDiv.classList.remove("down");
+            } else {
+                standUpDiv.classList.add("down");
+                standUpDiv.classList.remove("up");
+            }
+        }
+        dialog.showModal()
+    }
+
+    updateDayValues() {
+        console.log(thisGlobal.dayValues);
     }
 
     initToolTips() {
@@ -344,6 +390,7 @@ export class Activity {
 
         tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
     }
+
     drawRings(canvasId, progressMove, progressExercise, progressStandUp) {
         const canvas = document.getElementById(canvasId);
         const context = canvas.getContext('2d');
@@ -363,7 +410,7 @@ export class Activity {
         thisGlobal.drawRing(context, x, y, scale * 18, scale * thickness, scale * 2, '#00D6BD', progressStandUp);
     }
 
-     updateRings(canvasId, ringIndex, ringName, progressTo) {
+    updateRings(canvasId, ringIndex, ringName, progressTo) {
         const canvas = document.getElementById(canvasId);
         const canvasParent = canvas.parentElement;
         const progressFrom = parseInt(canvasParent.getAttribute("data-" + ringName));
@@ -379,7 +426,7 @@ export class Activity {
         thisGlobal.animeRing(context, x, y, radius[ringIndex], scale * thickness, scale * 2, colors[ringIndex], progressTo, progressFrom);
     }
 
-     drawBaseRings(canvas, context, x, y, thickness, scale) {
+    drawBaseRings(canvas, context, x, y, thickness, scale) {
 
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.beginPath();
@@ -406,7 +453,7 @@ export class Activity {
         context.stroke();
     }
 
-     animeRing(context, x, y, radius, thickness, stroke, color, progress, progressStart = 0) {
+    animeRing(context, x, y, radius, thickness, stroke, color, progress, progressStart = 0) {
         let inc = progressStart;
         let way = progressStart < progress ? 1 : -1;
         if (way === 1) {
@@ -432,7 +479,7 @@ export class Activity {
         }
     }
 
-     clearRing(context, x, y, radius, thickness) {
+    clearRing(context, x, y, radius, thickness) {
         context.beginPath();
         context.arc(x, y, radius, 0, thisGlobal.PIx2, false);
         context.lineWidth = thickness;
@@ -440,7 +487,7 @@ export class Activity {
         context.stroke();
     }
 
-     drawRing(context, x, y, radius, thickness, stroke, color, progress) {
+    drawRing(context, x, y, radius, thickness, stroke, color, progress) {
         const offset = thisGlobal.PIx2 / -4;
         const endAngle = (thisGlobal.PIx2 * progress / 100);
         const endX = x + (radius * Math.sin(endAngle));
