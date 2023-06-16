@@ -622,6 +622,11 @@
 }
 
 #activity-dialog {
+    backdrop-filter: blur(.25rem);
+    -webkit-backdrop-filter: blur(.25rem);
+    background-color: var(--gradient-grey-10-alpha-75);
+    border-radius: 1rem;
+    border: none;
     margin-block: auto;
     margin-inline: auto;
 
@@ -851,5 +856,9 @@
                 }
             }
         }
+    }
+
+    #activity-dialog {
+       background-color: var(--gradient-ardoise-90-alpha-80);
     }
 }

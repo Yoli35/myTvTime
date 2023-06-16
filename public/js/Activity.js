@@ -10,10 +10,11 @@ export class Activity {
 
         this.app_activity_stand_up_toggle = globs.app_activity_stand_up_toggle;
         this.app_activity_save_data = globs.app_activity_save_data;
+        this.app_activity_save_day = globs.app_activity_save_day;
         this.initialDate = new Date();
         this.editing = false;
         this.PIx2 = Math.PI * 2;
-        this.dayValues = {"moveResult": 0, "exerciseResult": 0, "standUpResult": 0, "steps": 0, "distance": 0, "standUp": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]};
+        this.dayValues = {"activityId": 0, "dayId": null, "moveResult": 0, "exerciseResult": 0, "standUpResult": 0, "steps": 0, "distance": 0, "standUp": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]};
 
         this.init();
     }
@@ -168,6 +169,8 @@ export class Activity {
                         doubled.classList.remove("visible");
                     }
                 }
+            } else {
+                thisGlobal.dayValues.standUpResult = result;
             }
         }
         xhr.open("GET", thisGlobal.app_activity_stand_up_toggle + "?day=" + day + "&up=" + index + "&val=" + (1 - value));
@@ -292,31 +295,51 @@ export class Activity {
         weeks.forEach(week => {
             const days = week.querySelectorAll(".day");
             days.forEach(day => {
-                const ringsOfTheDay = day.querySelector(".rings-of-the-day");
-                if (ringsOfTheDay) {
-                    ringsOfTheDay.addEventListener("click", (evt) => {
-                        thisGlobal.editDayValues(evt, day);
-                    });
-                }
+                this.initDayOfWeek(day);
             });
         });
         this.initDialog();
     }
 
+    initDayOfWeek(day) {
+        const ringsOfTheDay = day.querySelector(".rings-of-the-day");
+        if (ringsOfTheDay) {
+            ringsOfTheDay.addEventListener("click", (evt) => {
+                thisGlobal.editDayValues(evt, day);
+            });
+        }
+    }
+
     initDialog() {
         const dialog = document.querySelector("#activity-dialog");
         dialog.addEventListener("close", () => {
+            document.querySelector("body").classList.remove("frozen");
             if (dialog.returnValue === "update") {
                 thisGlobal.dayValues.moveResult = dialog.querySelector("#moveResult").value;
                 thisGlobal.dayValues.exerciseResult = dialog.querySelector("#exerciseResult").value;
                 thisGlobal.dayValues.steps = dialog.querySelector("#steps").value;
                 thisGlobal.dayValues.distance = dialog.querySelector("#distance").value;
+                thisGlobal.dayValues.standUpResult = parseInt(dialog.querySelector(".result").innerText);
                 for (let i = 0; i < 24; i++) {
                     const selector = '.hour[data-index="' + i + '"]';
                     const standUpDiv = dialog.querySelector(selector);
                     thisGlobal.dayValues.standUp[i] = standUpDiv.classList.contains("up") ? 1 : 0;
                 }
+                thisGlobal.dayValues.activityId = dialog.querySelector(".hours").getAttribute("data-id");
+                thisGlobal.dayValues.dayId = dialog.querySelector(".hours").getAttribute("data-day");
                 thisGlobal.updateDayValues();
+            }
+        });
+        dialog.addEventListener("keydown", (evt) => {
+            if (evt.key === "Enter") {
+                evt.preventDefault();
+                evt.stopPropagation();
+                dialog.close("update");
+            }
+            if (evt.key === "Escape") {
+                evt.preventDefault();
+                evt.stopPropagation();
+                dialog.close("cancel");
             }
         });
     }
@@ -329,30 +352,56 @@ export class Activity {
         const values = day.querySelector(selector);
         const data = JSON.parse(values.innerText);
         const dialog = document.querySelector("#activity-dialog");
-        console.log({data});
+        // console.log({data});
         dialog.querySelector(".activity-dialog-title").innerText = day.querySelector(".date").innerText;
         dialog.querySelector("#moveResult").value = data.moveResult;
         dialog.querySelector("#exerciseResult").value = data.exerciseResult;
         dialog.querySelector("#steps").value = data.steps;
         dialog.querySelector("#distance").value = data.distance;
+        dialog.querySelector(".result").innerText = data.standUpResult;
         dialog.querySelector(".hours").setAttribute("data-day", dayId);
         for (let i = 0; i < 24; i++) {
             const standUp = data.standUp[i];
             const selector = '.hour[data-index="' + i + '"]';
             const standUpDiv = dialog.querySelector(selector);
+            let count = 0;
             if (standUp) {
                 standUpDiv.classList.add("up");
                 standUpDiv.classList.remove("down");
+                count++;
             } else {
                 standUpDiv.classList.add("down");
                 standUpDiv.classList.remove("up");
             }
+            thisGlobal.dayValues.standUpResult = count;
         }
+        document.querySelector("body").classList.add("frozen");
         dialog.showModal()
     }
 
     updateDayValues() {
-        console.log(thisGlobal.dayValues);
+        // console.log(thisGlobal.dayValues);
+        const dayId = thisGlobal.dayValues.dayId;
+        const values = JSON.stringify(thisGlobal.dayValues);
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            let response = {"success": false, "dayBlock": "", "moveProgress": 0, "exerciseProgress": 0, "standUpProgress": 0};
+            if (this.status === 200) {
+                response = JSON.parse(this.response);
+                // console.log(response);
+                let day = document.querySelector("#day-" + dayId);
+                const newDay = document.createElement("div");
+                newDay.innerHTML = response.dayBlock;
+                day.replaceWith(newDay);
+                const canvasId = "rings-" + dayId;
+                thisGlobal.drawRings(canvasId, response.moveProgress, response.exerciseProgress, response.standUpProgress);
+                day = document.querySelector("#day-" + dayId);
+                thisGlobal.initDayOfWeek(day);
+            }
+        }
+        xhr.open("GET", thisGlobal.app_activity_save_day + "?values=" + values);
+        xhr.send();
     }
 
     initToolTips() {

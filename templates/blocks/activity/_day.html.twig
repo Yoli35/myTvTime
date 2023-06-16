@@ -1,0 +1,37 @@
+{% if day is not null %}
+    <div class="day" id="day-{{ day.id }}">
+        <div class="rings-of-the-day" data-id="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}">
+            {% set percentMove = (day.moveResult / activity.moveGoal * 100)|round %}
+            {% set percentExercise = (day.exerciseResult / activity.exerciseGoal * 100)|round %}
+            {% set percentStandUp = (day.standUpResult / activity.standUpGoal * 100)|round %}
+            <div class="drawn-rings" data-move="{{ percentMove }}"
+                 data-exercise="{{ percentExercise }}"
+                 data-stand-up="{{ percentStandUp }}">
+                <canvas id="rings-{{ day.id }}" width="512" height="512"
+                        style="scale: .25; translate: -37.5% -37.5%;"></canvas>
+            </div>
+            <div class="date">{{ day.day|format_date('short')|capitalize }}</div>
+            <div class="values">
+                <div class="value">{{ day.moveResult }}</div>
+                <div class="value">{{ day.exerciseResult }}</div>
+                <div class="value">{{ day.standUpResult }}</div>
+            </div>
+            <div id="day-{{ day.id }}-values" style="display: none">
+                {
+                "moveResult": {{ day.moveResult }},
+                "exerciseResult": {{ day.exerciseResult }},
+                "standUpResult": {{ day.standUpResult }},
+                "steps": {{ day.steps }},
+                "distance": {{ day.distance }},
+                "standUp": {{ day.standUp|json_encode|raw }}
+                }
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="day">
+        <div class="no-data">
+            <div class="date">{{ 'No activity'|trans }}</div>
+        </div>
+    </div>
+{% endif %}

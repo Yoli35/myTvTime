@@ -330,4 +330,52 @@ class ActivityController extends AbstractController
             'circleSelector' => $blockName,
         ]);
     }
+
+    #[Route('/{id}/save/day', name: 'app_activity_save_day', methods: ['GET'])]
+    public function saveDayActivity(Request $request, int $id): Response
+    {
+        $values = json_decode($request->query->get('values'), true);
+
+        $activity = $this->activityRepository->find($id);
+        $activityDay = $this->activityDayRepository->find($values['dayId']);
+
+        $moveResult = $values['moveResult'];
+        $exerciseResult = $values['exerciseResult'];
+        $standUpResult = $values['standUpResult'];
+        $distance = str_replace(",", ".", $values['distance']);
+        $steps = $values['steps'];
+
+        $activityDay->setMoveResult($moveResult);
+        $activityDay->setExerciseResult($exerciseResult);
+        $activityDay->setSteps($steps);
+        $activityDay->setDistance(floatval($distance));
+
+        $moveGoal = $activity->getMoveGoal();
+        $exerciseGoal = $activity->getExerciseGoal();
+        $standUpGoal = $activity->getStandUpGoal();
+
+        if ($moveResult >= $moveGoal) {
+            $activityDay->setMoveRingCompleted(true);
+        }
+        if ($exerciseResult >= $exerciseGoal) {
+            $activityDay->setExerciseRingCompleted(true);
+        }
+        if ($standUpResult >= $standUpGoal) {
+            $activityDay->setStandUpRingCompleted(true);
+        }
+        $this->activityDayRepository->save($activityDay, true);
+
+        $dayBlock = $this->render('blocks/activity/_day.html.twig', [
+            'activity' => $activity,
+            'day' => $activityDay,
+        ]);
+
+        return $this->json([
+            'success' => true,
+            'dayBlock' => $dayBlock->getContent(),
+            'moveProgress' => round($moveResult / $moveGoal * 100),
+            'exerciseProgress' => round($exerciseResult   / $exerciseGoal * 100),
+            'standUpProgress' => round($standUpResult / $standUpGoal * 100),
+        ]);
+    }
 }
