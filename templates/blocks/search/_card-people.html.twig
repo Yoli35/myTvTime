@@ -1,0 +1,29 @@
+<div class="home-discover" data-id="{{ people.id }}">
+    <div class="profile">
+        <a href="{{ path('app_people', {'id': people.id}) }}?from={{ from }}" title="{{ people.name }}">
+            {% if people.profile_path %}
+                <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.3 ~ people.profile_path }}" alt="{{ people.name ~ '\'s profile' }}">
+            {% else %}
+                <div class="no-image">{{ 'No image'|trans }}</div>
+            {% endif %}
+        </a>
+        <div class="type" title="{{ 'People'|trans }}"><i class="fa-regular fa-face-meh"></i></div>
+    </div>
+    <div class="title">
+        <div>{{ people.name }}</div>
+    </div>
+</div>
+{#
+0 => array:10 [▼
+        "adult" => false
+        "id" => 145121
+        "name" => "Pierre Niney"
+        "original_name" => "Pierre Niney"
+        "media_type" => "person"
+        "popularity" => 8.716
+        "gender" => 2
+        "known_for_department" => "Acting"
+        "profile_path" => "/aMsGsnRPet7pZ2ppAxaRdBz4yGU.jpg"
+        "known_for" => array:3 [▶]
+      ]
+#}

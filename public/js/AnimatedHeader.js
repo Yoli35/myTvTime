@@ -3,13 +3,13 @@ let thisGlobal;
 
 export class AnimatedHeader {
 
-    constructor() {
+    constructor(from = null) {
         this.letterRatios = [];
         thisGlobal = this;
-        this.initHeader();
+        this.initHeader(from);
     }
 
-    initHeader() {
+    initHeader(from) {
         let ticking = false,
             letters, animatedH1, index = 0;
 
@@ -46,6 +46,9 @@ export class AnimatedHeader {
             ticking = true;
         });
 
+        if (from === 'search') {
+
+        }
     }
 
     setH1() {

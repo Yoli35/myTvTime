@@ -1,0 +1,18 @@
+<div class="home-discover" data-id="{{ movie.id }}">
+    <div class="profile">
+        <a href="{{ path('app_movie', {id: movie.id}) }}">
+            {% if movie.poster_path %}
+                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ result.poster_path }}" alt="{{ movie.title }}">
+            {% else %}
+                <div class="no-image">{{ 'No image'|trans }}</div>
+            {% endif %}
+        </a>
+    </div>
+    <div class="type" title="{{ 'Movie'|trans }}"><i class="fa-solid fa-film"></i></div>
+    <div class="title">
+        {{ movie.title }}
+        {% if movie.release_date is defined and movie.release_date|length %}
+            ({{ movie.release_date|format_date('short') }})
+        {% endif %}
+    </div>
+</div>

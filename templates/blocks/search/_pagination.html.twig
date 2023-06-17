@@ -1,0 +1,63 @@
+{% set max = total_pages>1000?1000:total_pages %}
+
+{% if max > 0 and total_results > 20 %}
+    <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'Search Pagination' }}">
+        {% if page > 6 %}
+            <a class="btn btn-secondary" href="{{ path('app_search') }}?query={{ query }}&page=1"><i class="fa-solid fa-backward-step"></i></a>
+        {% endif %}
+        {% if page > 1 %}
+            <a class="btn btn-secondary" href="{{ path('app_search') }}?query={{ query }}&page={{ page-1 }}"><i class="fa-solid fa-chevron-left"></i></a>
+        {% endif %}
+
+        {% if max >= 10 %}
+            {% if page <= 5 %}
+                {% for p in 1..10 %}
+                    {% if p == page %}
+                        <a class="btn btn-outline-secondary" href="#">{{ p }}</a>
+                    {% else %}
+                        <a class="btn btn-secondary" href="{{ path('app_search') }}?query={{ query }}&page={{ p }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if page > 5 and page < max-5 %}
+                {% for p in page-5..page+4 %}
+                    {% if p == page %}
+                        <a class="btn btn-outline-secondary" href="#">{{ p }}</a>
+                    {% else %}
+                        <a class="btn btn-secondary" href="{{ path('app_search') }}?query={{ query }}&page={{ p }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if page >= max-5 %}
+                {% for p in max-10..max %}
+                    {% if p == page %}
+                        <a class="btn btn-outline-secondary" href="#">{{ p }}</a>
+                    {% else %}
+                        <a class="btn btn-secondary" href="{{ path('app_search') }}?query={{ query }}&page={{ p }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            {% for p in 1..max %}
+                {% if p == page %}
+                    <a class="btn btn-outline-secondary" href="#">{{ p }}</a>
+                {% else %}
+                    <a class="btn btn-secondary" href="{{ path('app_search') }}?query={{ query }}&page={{ p }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if page < max-1 %}
+            <a class="btn btn-secondary" href="{{ path('app_search') }}?query={{ query }}&page={{ page+1 }}"><i class="fa-solid fa-chevron-right"></i></a>
+        {% endif %}
+        {% if page < max-5 %}
+            <a class="btn btn-secondary" href="{{ path('app_search') }}?query={{ query }}&page={{ max }}"><i class="fa-solid fa-forward-step"></i></a>
+        {% endif %}
+
+    </div>
+{% endif %}
+<div class="footer-infos">
+    <div>{{ 'Page'|trans }} : {{ page }}</div>
+    <div>{{ 'Total Pages'|trans }} : {{ total_pages }}</div>
+    <div>{{ 'Total Results'|trans }} : {{ total_results }}</div>
+</div>

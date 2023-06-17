@@ -40,6 +40,7 @@ Welcome: Bienvenue
 Search by tag: Recherche par mot-clé
 Go to the search by tag page: Aller à la page de recherche par mot-clé
 Youtube video search: Recherche de vidéo Youtube
+Search for movies, TV shows and people: Recherche de films, séries et personnes
 
 # Activity
 Activity: Activité
@@ -60,6 +61,7 @@ Move: Bouger
 Exercise: Exercice
 Steps: Nombre de pas
 steps: pas
+km: km
 Distance: Distance
 goal: Objectif atteint
 Click me to edit: Cliquez ici pour modifier
@@ -1087,7 +1089,7 @@ or: ou
 Search among your Youtube videos: Rechercher parmi vos vidéos Youtube
 You have already added this video previously.: Vous avez déjà ajouté cette vidéo précédemment.
 Tags: Mots-clés
-Start taping…: Commencer à  taper…
+Start taping…: Commencer à taper…
 Selection: Sélection
 Delete this video: Supprimer cette vidéo
 Do you really want to delete this video?: Souhaitez-vous réellement supprimer cette vidéo ?

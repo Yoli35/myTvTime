@@ -217,6 +217,59 @@ main {
     //width: 100%;
 }
 
+#multi-search {
+    cursor: pointer;
+}
+
+#search-dialog {
+    backdrop-filter: blur(.25rem);
+    -webkit-backdrop-filter: blur(.25rem);
+    background-color: var(--gradient-grey-10-alpha-75);
+    border-radius: 1rem;
+    border: none;
+    margin-block: auto;
+    margin-inline: auto;
+
+    .content {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2rem;
+
+        .activity-dialog-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        form {
+            align-items: center;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+
+            label {
+                display: flex;
+                gap: .5rem;
+
+                input {
+                    width: 25rem;
+                }
+            }
+
+            menu {
+                display: flex;
+                gap: 1rem;
+                justify-content: flex-end;
+                width: 100%;
+
+                li {
+                    list-style: none;
+                }
+            }
+        }
+    }
+}
 #accept-cookies {
     background-color: var(--gradient-ardoise-10-alpha-90);
     height: 100vh;

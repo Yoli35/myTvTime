@@ -1,0 +1,18 @@
+<div class="home-discover" data-id="{{ serie.id }}">
+    <div class="profile">
+        <a href="{{ path('app_serie_tmdb', {'id': serie.id}) }}?from={{ from }}" title="{{ serie.name }}">
+            {% if serie.poster_path %}
+                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ 'Poster' }}">
+            {% else %}
+                <div class="no-image">{{ 'No image'|trans }}</div>
+            {% endif %}
+        </a>
+    </div>
+    <div class="type" title="{{ 'Tv show'|trans }}"><i class="fa-solid fa-tv"></i></div>
+    <div class="title">
+        {{ serie.name }}
+        {% if serie.first_air_date is defined and serie.first_air_date|length %}
+            ({{ serie.first_air_date|format_date('short') }})
+        {% endif %}
+    </div>
+</div>

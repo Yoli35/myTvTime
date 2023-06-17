@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Search'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+
+        {{ include('blocks/_mainMenu.html.twig') }}
+
+        <div class="search-page">
+            <div class="header">
+                <h1>{{ 'Search'|trans }}</h1>
+                <div class="backdrop"></div>
+                {{ include('blocks/_clock.html.twig') }}
+            </div>
+
+            {{ include('blocks/_nav.html.twig', {thisPage: 'Activity', user: app.user, from: 'home', style: 'width: 100%'}) }}
+
+            <main>
+
+                <form action="{{ path('app_search') }}" method="get">
+                    <label for="query">
+                        <input type="search" id="query" name="query" value="{{ query }}">
+                    </label>
+                    <input type="submit" class="btn btn-secondary" value="{{ 'Search'|trans }}">
+                </form>
+
+                {% if query %}
+                    <h2>Results for "{{ query }}"</h2>
+                    {% if results|length %}
+                        <div class="wrapper">
+                            {% for result in results %}
+                                {% if result.media_type=='person' %}
+                                    {{ include('blocks/search/_card-people.html.twig', {people: result}) }}
+                                {% endif %}
+                                {% if result.media_type=='movie' %}
+                                    {{ include('blocks/search/_card-movie.html.twig', {movie: result}) }}
+                                {% endif %}
+                                {% if result.media_type=='tv' %}
+                                    {{ include('blocks/search/_card-serie.html.twig', {serie: result}) }}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {{ include('blocks/search/_pagination.html.twig') }}
+                    {% else %}
+                        <p>No results found</p>
+                    {% endif %}
+                {% endif %}
+            </main>
+            {{ include('blocks/_pageFooter.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/searchIndex.js') }}" type="module"></script>
+{% endblock %}

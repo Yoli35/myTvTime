@@ -116,6 +116,26 @@ class TMDBService
         }
     }
 
+    public function multiSearch($page, $query, $locale): ?string
+    {
+        $url = 'https://api.themoviedb.org/3/search/multi?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . '&query=' . $query . '&include_adult=false';
+        dump(["url" => $url]);
+        try {
+            $response = $this->client->request(
+                'GET',
+                $url
+            );
+
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                return "";
+            }
+        } catch (Throwable $e) {
+            return "";
+        }
+    }
+
     public function getGenres($locale): ?string
     {
         try {
@@ -137,7 +157,7 @@ class TMDBService
     {
         $request = 'https://api.themoviedb.org/3/movie/' . $movieId . '?api_key=' . $this->api_key . '&language=' . $locale;
         if ($details) {
-            $request .= '&append_to_response='.implode(',', $details);
+            $request .= '&append_to_response=' . implode(',', $details);
         }
 
         try {
@@ -318,7 +338,7 @@ class TMDBService
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/tv/' . $kind . '?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . ($timezone?'&timezone='.$timezone:''),
+                'https://api.themoviedb.org/3/tv/' . $kind . '?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . ($timezone ? '&timezone=' . $timezone : ''),
             );
             try {
                 return $response->getContent();
@@ -372,7 +392,7 @@ class TMDBService
     {
         $request = 'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '/episode/' . $episodeNumber . '?api_key=' . $this->api_key . '&language=' . $locale;
         if ($details) {
-            $request .= '&append_to_response='.implode(',', $details);
+            $request .= '&append_to_response=' . implode(',', $details);
         }
         try {
             $response = $this->client->request(
