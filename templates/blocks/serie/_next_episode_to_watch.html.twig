@@ -1,6 +1,18 @@
 {% if nextEpisodeToWatch %}
+    {% if nextEpisodeToWatch.airDate %}  {# if there is an air date #}
+        {% if nextEpisodeToWatch.interval.invert == 0 and nextEpisodeToWatch.interval.days %}  {# in the futur, tomorrow or after #}
+            <div class="alert-next-episode{% if alert %} active{% endif %}" title="{% if alert and alert.activated %}{{ 'Alert activated'|trans }}{% else %}{{ 'Alert deactivated'|trans }}{% endif %}">
+                {% if alert %}
+                    <i class="fa-regular fa-bell"></i>
+                {% else %}
+                    <i class="fa-regular fa-bell-slash"></i>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endif %}
     <div class="next-episode-to-watch">
-        {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}&nbsp;{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp;{{ nextEpisodeToWatch.seasonNumber }}
+        {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}
+        &nbsp;{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp;{{ nextEpisodeToWatch.seasonNumber }}
         {% if nextEpisodeToWatch.airDate %}
             {% if nextEpisodeToWatch.interval.invert == 0 %}
                 <br>{{ nextEpisodeToWatch.airDate|format_date('full')|capitalize }},

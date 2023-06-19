@@ -507,12 +507,14 @@
             "{{ path('app_user_connected') }}",
             "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3}) }}",
             "{{ path('app_serie_duration') }}",
-            "{{ path('app_serie_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3}) }}"
+            "{{ path('app_serie_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3}) }}",
+            "{{ path('app_serie_alert', {serieId: 0, isActivated: 0})|slice(0, -3) }}",
         ];
         const serie = "{{ serieId }}";
         const _app_serie_viewing = paths[5];
         const _app_user_connected = paths[6];
         const _app_serie_duration = paths[8];
+        const _app_serie_alert = paths[10];
         let _app_serie_toggle_favorite = paths[7].substring(0, paths[7].length - 6);
         let _app_serie_toggle_time_shifted = paths[9].substring(0, paths[9].length - 6);
         const _locale = "{{ app.request.locale }}";
@@ -560,6 +562,29 @@
 
             const test = document.querySelector("#test");
             test.addEventListener("click", getViewedEpisodesDuration);
+
+            const alert = document.querySelector(".alert-next-episode");
+            alert?.addEventListener("click", toggleAlert);
+
+            function toggleAlert() {
+                const xhr = new XMLHttpRequest();
+                const serieId = window.location.href.match(/.+\/(\d+)\?.+/)[1];
+                let url = _app_serie_alert + serieId;
+                alert.classList.toggle("active");
+                if (alert.classList.contains("active")) {
+                   alert.innerHTML = '<i class="fa-regular fa-bell"></i>';
+                   url += "/1";
+                } else {
+                    alert.innerHTML = '<i class="fa-regular fa-bell-slash"></i>';
+                    url += "/0";
+                }
+                xhr.onload = function () {
+                    let data = JSON.parse(this.response);
+                    console.log({data});
+                }
+                xhr.open("GET", url);
+                xhr.send();
+            }
 
             function getViewedEpisodesDuration(evt) {
                 const button = evt.currentTarget;

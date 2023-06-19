@@ -1149,18 +1149,31 @@
                 }
 
                 .next-block {
+                    display: flex;
+                    gap: .25rem;
                     margin-left: auto;
 
+                    .alert-next-episode {
+                        background-color: var(--gradient-mars-40);
+                        cursor: pointer;
+                        width: 3.25rem;
+
+                        &.active {
+                            background-color: var(--gradient-green-30);
+                        }
+                    }
+
+                    .next-episode-to-watch {
+                        background-color: var(--gradient-green-30);
+                    }
+
+                    .alert-next-episode,
                     .next-episode-to-watch {
                         @include flex-row();
-                        background-color: var(--gradient-green-30);
                         border-radius: .25em;
-                        //font-size: 1.5em;
                         font-weight: 300;
-                        leading-trim: both;
                         line-height: 1.25em;
                         padding: .5em 1em;
-                        text-edge: cap alphabetic;
                     }
                 }
             }
@@ -1176,10 +1189,10 @@
                     border-radius: .25em;
                     color: var(--gradient-mars-90);
                     font-weight: 300;
-                    leading-trim: both;
+                    //leading-trim: both;
                     margin: 0 .5em;
                     padding: .25em 1em;
-                    text-edge: cap alphabetic;
+                    //text-edge: cap alphabetic;
                 }
             }
         }
@@ -2085,12 +2098,12 @@
                             color: var(--gradient-ardoise-90);
                             font-size: 1rem;
                             font-weight: 300;
-                            leading-trim: both;
+                            //leading-trim: both;
                             left: 50%;
                             line-height: 1.5rem;
                             padding: .5rem 1rem;
                             position: absolute;
-                            text-edge: cap alphabetic;
+                            //text-edge: cap alphabetic;
                             top: 1em;
                             transform: translate(-50%, 0);
                             white-space: nowrap;

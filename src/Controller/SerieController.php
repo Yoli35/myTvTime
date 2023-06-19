@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Alert;
 use App\Entity\Cast;
 use App\Entity\EpisodeViewing;
 use App\Entity\Favorite;
@@ -13,6 +14,7 @@ use App\Entity\SerieViewing;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\SerieSearchType;
+use App\Repository\AlertRepository;
 use App\Repository\CastRepository;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
@@ -52,7 +54,8 @@ class SerieController extends AbstractController
     const ON_THE_AIR = 'on_the_air';
     const SEARCH = 'search';
 
-    public function __construct(private readonly CastRepository           $castRepository,
+    public function __construct(private readonly AlertRepository          $alertRepository,
+                                private readonly CastRepository           $castRepository,
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FavoriteRepository       $favoriteRepository,
                                 private readonly ImageConfiguration       $imageConfiguration,
@@ -1247,6 +1250,7 @@ class SerieController extends AbstractController
             'viewedEpisodes' => $serieViewing?->getViewedEpisodes(),
             'isTimeShifted' => $serieViewing?->isTimeShifted(),
             'nextEpisodeToWatch' => $nextEpisodeToWatch ?? null,
+            'alert' => $serieViewing?->getAlert(),
             'ygg' => $ygg,
             'yggOriginal' => $yggOriginal,
             'imageConfig' => $imageConfiguration->getConfig(),
@@ -1349,6 +1353,45 @@ class SerieController extends AbstractController
         }
 
         return null;
+    }
+
+    #[Route('/alert/{serieId}/{isActivated}', name: 'app_serie_alert', methods: ['GET'])]
+    public function serieAlert(Request $request, int $serieId, bool $isActivated): Response
+    {
+        $serie = $this->serieRepository->findOneBy(['id' => $serieId]);
+        $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
+//        dump(['serie' => $serie, 'serieViewing' => $serieViewing, 'isActivated' => $isActivated]);
+
+        $alert = $serieViewing->getAlert();
+        $success = true;
+
+        if ($alert === null) {
+            $locale = $request->getLocale();
+            $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
+
+            if ($nextEpisodeToWatch) {
+                $airDate = $nextEpisodeToWatch['airDate'];
+                $message = sprintf("%s : S%02dE%02d\n", $serie->getName(), $nextEpisodeToWatch['seasonNumber'], $nextEpisodeToWatch['episodeNumber']);
+                $alert = new Alert($this->getUser(), $serieViewing, $airDate, $message);
+                $this->alertRepository->save($alert, true);
+                $alertMessage = $this->translator->trans("Alert created");
+            } else {
+                $success = false;
+                $alertMessage = $this->translator->trans("No upcoming episodes");
+            }
+        } else {
+            $alert->setActivated($isActivated);
+            $this->alertRepository->save($alert, true);
+            if ($alert->isActivated()) {
+                $alertMessage = $this->translator->trans("Alert activated");
+            } else {
+                $alertMessage = $this->translator->trans("Alert deactivated");
+            }
+        }
+        return $this->json([
+            'success' => $success,
+            'alertMessage' => $alertMessage,
+        ]);
     }
 
     public function getCast(SerieViewing $serieViewing): array
@@ -1696,11 +1739,6 @@ class SerieController extends AbstractController
         $firstEpisode = json_decode($standing, true);
         if ($firstEpisode && $firstEpisode['air_date']) {
             $createdAt = $this->newDateImmutable($firstEpisode['air_date'], 'Europe/Paris');
-//            try {
-//                $createdAt = new DateTimeImmutable($firstEpisode['air_date']);
-//            } catch (Exception) {
-//                $createdAt = new DateTimeImmutable();
-//            }
             $serieViewing->setCreatedAt($createdAt);
             return $createdAt;
         }
@@ -1709,11 +1747,6 @@ class SerieController extends AbstractController
         $tv = json_decode($standing, true);
         if ($tv && $tv['first_air_date']) {
             $createdAt = $this->newDateImmutable($tv['first_air_date'], 'Europe/Paris');
-//            try {
-//                $createdAt = new DateTimeImmutable($tv['first_air_date']);
-//            } catch (Exception $e) {
-//                $createdAt = new DateTimeImmutable();
-//            }
             $serieViewing->setCreatedAt($createdAt);
         }
         return $createdAt;

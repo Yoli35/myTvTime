@@ -127,6 +127,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $lastActivityAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Alert::class, orphanRemoval: true)]
+    private Collection $alerts;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -139,6 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->series = new ArrayCollection();
         $this->tiktoks = new ArrayCollection();
         $this->youtubeVideos = new ArrayCollection();
+        $this->alerts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -669,5 +673,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             }
             return $lastActivityAt >= $date->sub(new DateInterval('PT10M'));
         }
+    }
+
+    /**
+     * @return Collection<int, Alert>
+     */
+    public function getAlerts(): Collection
+    {
+        return $this->alerts;
     }
 }

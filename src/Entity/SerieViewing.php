@@ -52,6 +52,9 @@ class SerieViewing
     #[ORM\Column(nullable: true)]
     private ?DateTime $modifiedAt;
 
+    #[ORM\OneToOne(mappedBy: 'serieViewing', cascade: ['persist', 'remove'])]
+    private ?Alert $alert = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -238,6 +241,23 @@ class SerieViewing
     public function setTimeShifted(bool $timeShifted): self
     {
         $this->timeShifted = $timeShifted;
+
+        return $this;
+    }
+
+    public function getAlert(): ?Alert
+    {
+        return $this->alert;
+    }
+
+    public function setAlert(Alert $alert): static
+    {
+        // set the owning side of the relation if necessary
+        if ($alert->getSerieViewing() !== $this) {
+            $alert->setSerieViewing($this);
+        }
+
+        $this->alert = $alert;
 
         return $this;
     }
