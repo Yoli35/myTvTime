@@ -68,6 +68,19 @@ class MovieRepository extends ServiceEntityRepository
         return $result['count'];
     }
 
+    public function moviesByTitle($query, $limit, $offset): array
+    {
+        $sql = "SELECT t0.title as title, t0.poster_path as poster_path, t0.release_date as release_date, t0.original_title as original_title, t0.movie_db_id as id, 'movie' as media_type "
+            . "FROM `movie` t0 "
+            . "WHERE t0.`title` LIKE '%" . $query . "%' OR  t0.`original_title` LIKE '%" . $query . "%' "
+            . "ORDER BY t0.`release_date` DESC "
+            . "LIMIT " . $limit . " OFFSET " . $offset;
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAll();
+    }
+
 //    /**
 //     * @return Movie[] Returns an array of Movie objects
 //     */

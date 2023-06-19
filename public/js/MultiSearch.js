@@ -27,7 +27,8 @@ export class MultiSearch {
             if (dialog.returnValue === "search") {
                 // do the search and go to the result page
                 const query = document.querySelector("#search-query").value;
-                window.location.href = "/search?query=" + query;
+                const db = document.querySelector("#search-db").checked;
+                window.location.href = "/search?query=" + query + (db ? "&db=1" : "");
             }
         });
         dialog.addEventListener("keydown", (evt) => {

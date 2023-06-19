@@ -118,12 +118,10 @@ class TMDBService
 
     public function multiSearch($page, $query, $locale): ?string
     {
-        $url = 'https://api.themoviedb.org/3/search/multi?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . '&query=' . $query . '&include_adult=false';
-        dump(["url" => $url]);
         try {
             $response = $this->client->request(
                 'GET',
-                $url
+                'https://api.themoviedb.org/3/search/multi?api_key=' . $this->api_key . '&language=' . $locale . '&page=' . $page . '&query=' . $query . '&include_adult=false'
             );
 
             try {

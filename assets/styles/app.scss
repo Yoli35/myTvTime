@@ -252,7 +252,7 @@ main {
                 display: flex;
                 gap: .5rem;
 
-                input {
+                input[type=search] {
                     width: 25rem;
                 }
             }

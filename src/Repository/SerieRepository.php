@@ -195,4 +195,19 @@ class SerieRepository extends ServiceEntityRepository
         $result = $resultSet->fetchAssociative();
         return $result['count'];
     }
+
+    public function seriesByTitle($query, $limit, $offset): array
+    {
+        $sql = "SELECT t0.name as name, t0.poster_path as poster_path, t0.first_date_air as first_date_air, t0.original_name as original_name, t0.serie_id as id, 'tv' as media_type "
+            . "FROM `serie` t0 "
+            . "WHERE t0.`name` LIKE '%" . $query . "%' OR  t0.`original_name` LIKE '%" . $query . "%' "
+            . "ORDER BY t0.`first_date_air` DESC "
+            . "LIMIT " . $limit . " OFFSET " . $offset;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAll();
+    }
+
 }

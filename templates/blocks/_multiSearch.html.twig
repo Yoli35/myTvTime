@@ -2,8 +2,11 @@
     <div class="content">
         <div class="search-dialog-title"></div>
         <form method="dialog">
-            <label>
+            <label for="search-query">
                 <input type="search" id="search-query" name="search-query" placeholder="{{ 'Search for movies, TV shows and people'|trans }}"/>
+            </label>
+            <label for="search-db">
+                <input type="checkbox" id="search-db" name="search-db" title="{{ 'Among your films, series and their castings'|trans }}"/>
             </label>
             <menu>
                 <li><button class="btn btn-secondary" value="cancel">Annuler</button></li>

@@ -8,7 +8,18 @@
         @include animated-header("../images/search-header.jpg");
 
         .animated-h1 {
-            color: var(--gradient-green-40-alpha-50);
+            .part {
+                align-items: center;
+                background-color: var(--gradient-green-40-alpha-50);
+                border-radius: .25rem;
+                color: var(--gradient-green-90);
+                display: flex;
+                font-size: 4rem;
+                font-weight: bold;
+                height: 4rem;
+                margin-inline: .125rem;
+                padding-inline: .5rem;
+            }
         }
 
         .backdrop {
@@ -38,6 +49,7 @@
             @include flex-row(start, start);
             flex-wrap: wrap;
             gap: 1em;
+            margin-block: 1rem;
             margin-inline: auto;
             width: 216px;
 
@@ -67,6 +79,11 @@
                 line-height: 1.2rem;
                 text-align: center;
             }
+        }
+
+        .footer-infos {
+            margin-top: 1rem;
+            text-align: center;
         }
     }
 }

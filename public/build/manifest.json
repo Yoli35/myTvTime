@@ -3,6 +3,7 @@
   "build/app.js": "/build/app.js",
   "build/runtime.js": "/build/runtime.js",
   "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-3146f7.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-3146f7.js",
+  "build/images/search-header.jpg": "/build/images/search-header.fcab151a.jpg",
   "build/images/tiktok-header6.jpg": "/build/images/tiktok-header6.3dcdca83.jpg",
   "build/images/activity-header.jpeg": "/build/images/activity-header.2eed50c2.jpeg",
   "build/images/serie-header.jpg": "/build/images/serie-header.1c2fd2bf.jpg",
@@ -102,7 +103,5 @@
   "build/images/the-movie-db.svg": "/build/images/the-movie-db.da3f379f.svg",
   "build/images/arrow-up-circle-outline.png": "/build/images/arrow-up-circle-outline.137a27d1.png",
   "build/images/star-outline.png": "/build/images/star-outline.3e7dbff2.png",
-  "build/images/star.png": "/build/images/star.16ef0d59.png",
-  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-6190fb.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-6190fb.js",
-  "build/images/search-header.jpg": "/build/images/search-header.fcab151a.jpg"
+  "build/images/star.png": "/build/images/star.16ef0d59.png"
 }
