@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\CastRepository;
-use App\Repository\MovieRepository;
-use App\Repository\SerieRepository;
 use App\Service\ImageConfiguration;
 use App\Service\TMDBService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,8 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchController extends AbstractController
 {
     public function __construct(private readonly TMDBService        $TMDBService,
-                                private readonly MovieRepository    $movieRepository,
-                                private readonly SerieRepository    $serieRepository,
                                 private readonly CastRepository     $castRepository,
                                 private readonly ImageConfiguration $imageConfiguration,
     )
@@ -31,9 +27,6 @@ class SearchController extends AbstractController
         $fromDB = $request->query->get('db', 0);
 
         if ($fromDB) {
-//            $movies = $this->movieRepository->moviesByTitle($query, 20, ($page-1) * 20);
-//            $series = $this->serieRepository->seriesByTitle($query, 20, ($page-1) * 20);
-//            $casts = $this->castRepository->castByName($query, 20, ($page-1) * 20);
             $results = $this->castRepository->searchByName($query, 20, ($page - 1) * 20);
             $results = array_map(function ($result) {
                 switch ($result['media_type']) {
@@ -53,12 +46,11 @@ class SearchController extends AbstractController
                 }
                 return $result;
             }, $results);
-            $all = $this->castRepository->searchByNameCount($query);
-            dump($all);
+            $all = count($this->castRepository->searchByNameCount($query));
             $results = [
                 "page" => $page,
-                "total_pages" => 1,
-                "total_results" => count($all),
+                "total_pages" => (int)ceil($all / 20),
+                "total_results" => $all,
                 "results" => $results
             ];
 //            dump(["query" => $query, "movies" => $movies, "series" => $series, "casts" => $casts]);
@@ -71,6 +63,7 @@ class SearchController extends AbstractController
 
         return $this->render('search/index.html.twig', [
             'query' => $query,
+            'db' => $fromDB,
             'results' => $results['results'] ?? [],
             'page' => $results['page'] ?? 1,
             'total_pages' => $results['total_pages'] ?? 1,

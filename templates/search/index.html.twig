@@ -18,11 +18,15 @@
 
             <main>
 
-                <form action="{{ path('app_search') }}" method="get">
+                <form action="" method="get">
                     <label for="query">
-                        <input type="search" id="query" name="query" value="{{ query }}">
+                        <input type="search" id="query" name="query" value="{{ query }}"/>
                     </label>
-                    <input type="submit" class="btn btn-secondary" value="{{ 'Search'|trans }}">
+                    <label for="db">
+                        <input type="checkbox" id="db" name="db"{% if db %} checked{% endif %}/> {{ 'Among your films, series and their castings'|trans }}
+                    </label>
+                    <input type="submit" id="submit" class="btn btn-secondary" value="{{ 'Search'|trans }}">
+                    <input type="hidden" id="url" value="{{ path('app_search') }}">
                 </form>
 
                 {% if query %}
