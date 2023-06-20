@@ -1,5 +1,5 @@
 import {AnimatedHeader} from "./AnimatedHeader.js";
-// import {ActivityValues} from "../../assets/react/ActivityValues";
+import {ToolTips} from "./ToolTips.js";
 
 let thisGlobal;
 
@@ -28,7 +28,9 @@ export class Activity {
         this.initStandUp(document);
         this.initInputs();
         this.initWeeks();
-        this.initToolTips();
+
+        const toolTips = new ToolTips();
+        toolTips.init();
     }
 
     initDateChange() {
@@ -402,42 +404,6 @@ export class Activity {
         }
         xhr.open("GET", thisGlobal.app_activity_save_day + "?values=" + values);
         xhr.send();
-    }
-
-    initToolTips() {
-        const divs = document.querySelectorAll("div[data-title]");
-        divs.forEach(div => {
-
-            div.addEventListener('mousemove', thisGlobal.toolTipsMove);
-            div.addEventListener('mouseenter', thisGlobal.toolTipsShow);
-            div.addEventListener('mouseleave', thisGlobal.toolTipsHide);
-        });
-    }
-
-    toolTipsShow(evt) {
-        const tooltips = document.querySelector(".tool-tips");
-        const text = evt.currentTarget.getAttribute("data-title");
-        const body = tooltips.querySelector(".body");
-        body.innerHTML = text;
-
-        const width = body.offsetWidth;
-        tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
-
-        tooltips.classList.add("show");
-    }
-
-    toolTipsHide() {
-        const tooltips = document.querySelector(".tool-tips");
-        tooltips.classList.remove("show");
-        tooltips.setAttribute("style", "translate: 0px 0px;");
-    }
-
-    toolTipsMove(evt) {
-        const tooltips = document.querySelector(".tool-tips");
-        const body = tooltips.querySelector(".body");
-        const width = body.offsetWidth;
-
-        tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
     }
 
     drawRings(canvasId, progressMove, progressExercise, progressStandUp) {

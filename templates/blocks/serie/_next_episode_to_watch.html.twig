@@ -1,11 +1,24 @@
 {% if nextEpisodeToWatch %}
     {% if nextEpisodeToWatch.airDate %}  {# if there is an air date #}
         {% if nextEpisodeToWatch.interval.invert == 0 and nextEpisodeToWatch.interval.days %}  {# in the futur, tomorrow or after #}
-            <div class="alert-next-episode{% if alert %} active{% endif %}" title="{% if alert and alert.activated %}{{ 'Alert activated'|trans }}{% else %}{{ 'Alert deactivated'|trans }}{% endif %}">
-                {% if alert %}
-                    <i class="fa-regular fa-bell"></i>
+            {% if alert %}
+                {% if alert.activated %}
+                    {% set title = 'Alert activated'|trans %}
                 {% else %}
-                    <i class="fa-regular fa-bell-slash"></i>
+                    {% set title = 'Alert deactivated'|trans %}
+                {% endif %}
+            {% else %}
+                {% set title = 'Create an alert'|trans %}
+            {% endif %}
+            <div class="alert-next-episode{% if alert and alert.activated %} active{% endif %}" data-title="{{ title }}">
+                {% if alert %}
+                    {% if alert.activated %}
+                        <i class="fa-regular fa-bell"></i>
+                    {% else %}
+                        <i class="fa-regular fa-bell-slash"></i>
+                    {% endif %}
+                {% else %}
+                    <i class="fa-regular fa-bell"></i><sup><i class="fa-regular fa-plus"></i></sup>
                 {% endif %}
             </div>
         {% endif %}

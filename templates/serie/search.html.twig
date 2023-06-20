@@ -69,7 +69,7 @@
             "{{ path('app_serie_render_translation_select') }}",
             "{{ path('app_serie_render_translation_save') }}",
             "{{ path('app_serie_new') }}",
-            "{{ path('app_serie_show', {id:0}) }}",
+            "{{ path('app_serie_show', {id:0})|slice(0, -1) }}",
         ];
         let letterRatios = [];
 

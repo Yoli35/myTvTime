@@ -10,7 +10,7 @@ function initSerieStuff(paths, circles = undefined) {
     _app_serie_render_translation_select = paths[1];
     _app_serie_render_translation_save = paths[2];
     _app_serie_new = paths[3];
-    _app_serie_show = paths[4].substring(0, paths[4].length - 1);
+    _app_serie_show = paths[4];
 
     initAddSerie();
     if (circles !== undefined) setVote(circles);

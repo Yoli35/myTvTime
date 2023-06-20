@@ -6,7 +6,7 @@ export class Series {
     constructor(globs) {
         this.app_serie_index = globs.app_serie_index;
         this.app_serie_new = globs.app_serie_new;
-        this.app_serie_show = globs.app_serie_show.slice(0, -1);
+        this.app_serie_show = globs.app_serie_show;
         this.app_serie_search = globs.app_serie_search;
         this.app_serie_set_settings = globs.app_serie_set_settings;
         this.locale = globs.locale;

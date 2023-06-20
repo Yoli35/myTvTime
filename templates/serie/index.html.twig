@@ -218,7 +218,7 @@
         {
             "app_serie_index": "{{ path('app_serie_index') }}",
             "app_serie_new": "{{ path('app_serie_new') }}",
-            "app_serie_show": "{{ path('app_serie_show', {id:0}) }}",
+            "app_serie_show": "{{ path('app_serie_show', {id:0})|slice(0, -1) }}",
             "app_serie_search": "{{ path('app_serie_search') }}",
             "app_serie_set_settings": "{{ path('app_serie_set_settings') }}",
             "locale": "{{ app.request.locale }}",

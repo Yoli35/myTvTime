@@ -1355,12 +1355,16 @@ class SerieController extends AbstractController
         return null;
     }
 
-    #[Route('/alert/{serieId}/{isActivated}', name: 'app_serie_alert', methods: ['GET'])]
-    public function serieAlert(Request $request, int $serieId, bool $isActivated): Response
+    #[Route('/alert/{serieId}/{tmdb}/{isActivated}', name: 'app_serie_alert', methods: ['GET'])]
+    public function serieAlert(Request $request, int $serieId, string $tmdb, bool $isActivated): Response
     {
-        $serie = $this->serieRepository->findOneBy(['id' => $serieId]);
+        if ($tmdb == 'tmdb') {
+            $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
+        } else {
+            $serie = $this->serieRepository->findOneBy(['id' => $serieId]);
+        }
         $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
-//        dump(['serie' => $serie, 'serieViewing' => $serieViewing, 'isActivated' => $isActivated]);
+//      dump(['serie' => $serie, 'serieViewing' => $serieViewing, 'isActivated' => $isActivated]);
 
         $alert = $serieViewing->getAlert();
         $success = true;
@@ -1374,7 +1378,7 @@ class SerieController extends AbstractController
                 $message = sprintf("%s : S%02dE%02d\n", $serie->getName(), $nextEpisodeToWatch['seasonNumber'], $nextEpisodeToWatch['episodeNumber']);
                 $alert = new Alert($this->getUser(), $serieViewing, $airDate, $message);
                 $this->alertRepository->save($alert, true);
-                $alertMessage = $this->translator->trans("Alert created");
+                $alertMessage = $this->translator->trans("Alert created and activated");
             } else {
                 $success = false;
                 $alertMessage = $this->translator->trans("No upcoming episodes");
@@ -1693,6 +1697,7 @@ class SerieController extends AbstractController
         $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
         $blockNextEpisodeToWatch = $this->render('blocks/serie/_next_episode_to_watch.html.twig', [
             'nextEpisodeToWatch' => $nextEpisodeToWatch,
+            'alert' => $serieViewing->getAlert(),
         ]);
 
         return $this->json([
