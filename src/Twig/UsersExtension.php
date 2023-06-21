@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Entity\ChatDiscussion;
 use App\Entity\User;
 use App\Repository\ChatDiscussionRepository;
+use App\Repository\MovieCollectionRepository;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -17,9 +18,10 @@ use Twig\TwigFunction;
 class UsersExtension extends AbstractExtension
 {
     public function __construct(
-        private readonly UserRepository           $userRepository,
-        private readonly ChatDiscussionRepository $chatDiscussionRepository,
-        private readonly TranslatorInterface      $translator,
+        private readonly ChatDiscussionRepository  $chatDiscussionRepository,
+        private readonly MovieCollectionRepository $movieCollectionRepository,
+        private readonly TranslatorInterface       $translator,
+        private readonly UserRepository            $userRepository,
     )
     {
     }
@@ -31,6 +33,7 @@ class UsersExtension extends AbstractExtension
             new TwigFunction('userDiscussions', [$this, 'userDiscussions'], ['is_safe' => ['html']]),
             new TwigFunction('whoIsTyping', [$this, 'whoIsTyping'], ['is_safe' => ['html']]),
             new TwigFunction('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
+            new TwigFunction('userMovieCollections', [$this, 'userMovieCollections'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -97,8 +100,7 @@ class UsersExtension extends AbstractExtension
                 if ($discussion->isTypingRecipient()) {
                     $chatterBoxes[] = $discussion->getRecipient()->getId();
                 }
-            }
-            else {
+            } else {
                 if ($discussion->isTypingUser()) {
                     $chatterBoxes[] = $discussion->getUser()->getId();
                 }
@@ -147,5 +149,27 @@ class UsersExtension extends AbstractExtension
     public function getEmptyDiffMessage(string $locale = null): string
     {
         return $this->translator->trans('diff.empty', array(), 'time', $locale);
+    }
+
+    public function userMovieCollections(User $user): array
+    {
+        $movieCollections = $this->movieCollectionRepository->findBy(['user' => $user]);
+        $movieCollections = array_map(function ($movieCollection) {
+            return [
+                'id' => $movieCollection->getId(),
+                'name' => $movieCollection->getTitle(),
+                'image' => $movieCollection->getThumbnail(),
+            ];
+        }, $movieCollections);
+        usort($movieCollections, function ($a, $b) {
+            $nameA = htmlentities($a['name'], ENT_COMPAT, "UTF-8");
+            $nameB = htmlentities($b['name'], ENT_COMPAT, "UTF-8");
+            $nameA = preg_replace('/&([a-zA-Z])(uml|acute|grave|circ|tilde);/', '$1', $nameA);
+            $nameB = preg_replace('/&([a-zA-Z])(uml|acute|grave|circ|tilde);/', '$1', $nameB);
+//            dump(["a['name']"=>$a['name'], "nameA" => $nameA]);
+            return $nameA <=> $nameB;
+//            return $a['name'] <=> $b['name'];
+        });
+        return $movieCollections;
     }
 }

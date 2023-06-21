@@ -270,6 +270,7 @@ main {
         }
     }
 }
+
 #accept-cookies {
     background-color: var(--gradient-ardoise-10-alpha-90);
     height: 100vh;
@@ -321,8 +322,8 @@ main {
                 background-color: var(--gradient-ardoise-40);
                 border-color: var(--gradient-ardoise-80);
                 color: var(--gradient-ardoise-90);
-                leading-trim: both;
-                text-edge: cap alphabetic;
+                //leading-trim: both;
+                //text-edge: cap alphabetic;
 
                 &:hover {
                     background-color: var(--gradient-ardoise-50);
@@ -745,16 +746,16 @@ nav.active {
             width: 2em;
         }
 
-        .menu-items {
+        .menu-items, .sub-menu {
             background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-30);*/
             border-radius: .25em;
             box-shadow: 0 0 1em var(--gradient-ardoise-10-alpha-50);
             display: none;
             left: -6em;
-            overflow: hidden;
+            //overflow: hidden;
             position: absolute;
             top: 2em;
-            //width: 15em;
+            min-width: 17.25em;
             z-index: 53;
 
             .menu-item {
@@ -785,6 +786,43 @@ nav.active {
                     .icon:has(.fa-brands.fa-youtube),
                     .icon:has(.fa-solid.fa-magnifying-glass) {
                         color: var(--gradient-red-50);
+                    }
+
+                    .image-collection {
+                        img {
+                            border: 1px solid var(--gradient-ardoise-80);
+                            border-radius: 50%;
+                            height: 1.25em;
+                            object-fit: cover;
+                            width: 1.25em;
+                        }
+                    }
+                }
+            }
+        }
+
+        .menu-items {
+            .menu-item-collections {
+                .sub-menu {
+                    left: 16rem;
+                    overflow: hidden;
+                    position: absolute;
+                    top: 7rem;
+
+                    //&.show,
+                    &:hover {
+                        display: block;
+                    }
+
+                    .menu-item {
+                        display: flex;
+                        gap: .5rem;
+                    }
+                }
+
+                &:hover {
+                    .sub-menu {
+                        display: block;
                     }
                 }
             }
@@ -1176,9 +1214,9 @@ nav.active {
         color: var(--gradient-ardoise-20);
         font-family: unset;
         font-weight: 300;
-        leading-trim: both;
+        //leading-trim: both;
         padding: .25em .5em;
-        text-edge: cap alphabetic;
+        //text-edge: cap alphabetic;
         top: 16rem;
     }
 
@@ -1839,7 +1877,8 @@ nav.active {
 
         &:hover {
             background-color: hsl(206deg, 50%, 24%);
-        }}
+        }
+    }
 
     .genres {
         .genre {

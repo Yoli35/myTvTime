@@ -202,6 +202,10 @@ class MovieController extends AbstractController
             $collections = $this->movieCollectionRepository->findBy(['user' => $user]);
             $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
             if ($userMovie) {
+                // On hydrate le film avec les données de l'API (mise à jour des données)
+                $userMovie = $this->hydrateMovie($userMovie, $movieDetail);
+                $this->movieRepository->save($userMovie, true);
+
                 $hasBeenSeen = count($this->movieRepository->isInUserMovies($user->getId(), $userMovie->getId()));
 
                 $userMovieId = $userMovie->getId();
@@ -674,16 +678,22 @@ class MovieController extends AbstractController
             $movieDetail = json_decode($standing, true);
 
             $userMovie = new Movie();
-            $userMovie->setTitle($movieDetail['title']);
-            $userMovie->setOriginalTitle($movieDetail['original_title']);
-            $userMovie->setPosterPath($movieDetail['poster_path']);
-            $userMovie->setReleaseDate($movieDetail['release_date']);
-            $userMovie->setMovieDbId($movieDetail['id']);
-            $userMovie->setRuntime($movieDetail['runtime']);
+            $this->hydrateMovie($userMovie, $movieDetail);
         }
         $userMovie->addUser($user);
         $this->movieRepository->save($userMovie, true);
 
+        return $userMovie;
+    }
+
+    public function hydrateMovie($userMovie, $movieDetail)
+    {
+        $userMovie->setTitle($movieDetail['title']);
+        $userMovie->setOriginalTitle($movieDetail['original_title']);
+        $userMovie->setPosterPath($movieDetail['poster_path']);
+        $userMovie->setReleaseDate($movieDetail['release_date']);
+        $userMovie->setMovieDbId($movieDetail['id']);
+        $userMovie->setRuntime($movieDetail['runtime']);
         return $userMovie;
     }
 
