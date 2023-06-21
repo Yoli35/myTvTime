@@ -171,7 +171,7 @@ export class Shows {
                 loading.close()
             }, 300);
         }
-        thisGlobal.xhr.open("GET", _app_serie_duration /*+ "?id=" + serieId*/);
+        thisGlobal.xhr.open("GET", thisGlobal.app_serie_duration /*+ "?id=" + serieId*/);
         thisGlobal.xhr.send();
         loading.showModal();
         setTimeout(() => {
@@ -357,15 +357,18 @@ export class Shows {
     }
 
     toggleView(evt) {
-        const ep = evt.currentTarget;
-        episodeClicked.viewed = parseInt(ep.getAttribute("data-viewed")) === 0 ? 1 : 0;
-        episodeClicked.episodeNumber = parseInt(ep.getAttribute("data-number"));
-        episodeClicked.seasonNumber = parseInt(ep.parentElement.getAttribute("data-season-number"));
         evt.preventDefault();
+        evt.stopPropagation();
+
+        const ep = evt.currentTarget;
+        thisGlobal.episodeClicked.viewed = parseInt(ep.getAttribute("data-viewed")) === 0 ? 1 : 0;
+        thisGlobal.episodeClicked.episodeNumber = parseInt(ep.getAttribute("data-number"));
+        thisGlobal.episodeClicked.seasonNumber = parseInt(ep.parentElement.getAttribute("data-season-number"));
+
         thisGlobal.mouseX = evt.clientX / evt.view.innerWidth;
         thisGlobal.mouseY = evt.clientY / evt.view.innerHeight;
 
-        if (episodeClicked.viewed) {
+        if (thisGlobal.episodeClicked.viewed) {
             const checkThemAllDiv = thisGlobal.currentDialog.querySelector(".check-them-all");
             if (thisGlobal.areUnseenEpisodesBefore(parseInt(ep.getAttribute("data-global-index")))) {
                 checkThemAllDiv.classList.add("show");
@@ -406,9 +409,9 @@ export class Shows {
             live = liveWatch.checked;
         }
 
-        const e_viewed = episodeClicked.viewed;
-        const e_number = episodeClicked.episodeNumber;
-        const s_number = episodeClicked.seasonNumber;
+        const e_viewed = thisGlobal.episodeClicked.viewed;
+        const e_number = thisGlobal.episodeClicked.episodeNumber;
+        const s_number = thisGlobal.episodeClicked.seasonNumber;
         const update = document.querySelector(".viewed-update-db-world");
 
         thisGlobal.xhr.onload = function () {
@@ -460,7 +463,7 @@ export class Shows {
                 // setTimeout(celebrate, 300);
             }
         }
-        thisGlobal.xhr.open("GET", _app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : "") + (live ? "&live=1" : ""));
+        thisGlobal.xhr.open("GET", thisGlobal.app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : "") + (live ? "&live=1" : ""));
         thisGlobal.xhr.send();
         update.showModal();
         setTimeout(() => {
@@ -470,11 +473,19 @@ export class Shows {
     }
 
     updateViewCount(textSelector, graphSelector, viewedEpisodes, episodeText) {
-        let percent = Math.round(viewedEpisodes / number_of_episodes * 100);
+        let percent = Math.round(viewedEpisodes / thisGlobal.number_of_episodes * 100);
         if (percent > 100) percent = 100;
-        setVote([[graphSelector, percent]]);
+        thisGlobal.updateVote([graphSelector, percent]);
         document.querySelector(graphSelector).querySelector(".percentage").innerHTML = percent + "%";
         document.querySelector(textSelector).innerHTML = viewedEpisodes + " " + episodeText;
+    }
+
+    updateVote([selector, value]) {
+        const element = document.querySelector(selector);
+        if (element === null) return;
+        element.querySelector(".circle").setAttribute("style", "background: conic-gradient(var(--gradient-grey-60) 0%, var(--gradient-grey-60) " + value + "%, var(--gradient-grey-10) " + value + "%);");
+        element.querySelector(".circle-start").setAttribute("style", "translate: 0 -1.5em;");
+        element.querySelector(".circle-end").setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-1.5em)");
     }
 
     stillConnected() {
@@ -485,7 +496,7 @@ export class Shows {
                 window.location.reload();
             }
         }
-        thisGlobal.xhr.open("GET", _app_user_connected);
+        thisGlobal.xhr.open("GET", thisGlobal.app_user_connected);
         thisGlobal.xhr.send();
     }
 
