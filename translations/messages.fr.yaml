@@ -193,7 +193,7 @@ My Collections: Mes collections
 The movie « movie_name » has been added to your collection « collection_name ».: Le film « movie_name » a été ajouté à votre collection « collection_name ».
 The movie « movie_name » has been removed from your collection « collection_name ».: Le film « movie_name » a été retiré de votre collection « collection_name ».
 # new/edit collection
-Add collection: Ajouter une collection
+Add collection: Ajouter une collection ...
 New collection: Nouvelle collection
 Edit collection: Modifier la collection
 Update the collection: Mettre à jour la collection
@@ -745,6 +745,8 @@ Second Assistant Accountant.he: Second assistant comptable
 Second Assistant Accountant.she: Seconde assistante comptable
 Second Assistant Director.he: Second assistant réalisateur
 Second Assistant Director.she: Seconde assistante réalisateur
+Second Unit Director.he: Second réalisateur
+Second Unit Director.she: Seconde réalisatrice
 Set Costumer.he: Costumier de plateau
 Set Costumer.she: Costumière de plateau
 Set Decorating Coordinator.he: Coordinateur décoration de plateau
