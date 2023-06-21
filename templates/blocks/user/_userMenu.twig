@@ -36,7 +36,7 @@
                     {% for c in collections %}
                         <div class="menu-item"><a href="{{ path('app_collection_show', {id: c.id}) }}">
                                 <div class="image-collection"><img src="/images/collections/thumbnails/{{ c.image }}" alt="{{ c.name }}"></div>
-                                <div>{{ c.name }}</div>
+                                <div>{{ c.name }} ({{ c.count }})</div>
                             </a></div>
                     {% endfor %}
                     <div class="menu-item"><a href="{{ path('app_collection_new') }}">
@@ -75,11 +75,4 @@
                 </a></div>
         </div>
     </div>
-{#    <script>#}
-{#        const subMenu = document.querySelector('.sub-menu');#}
-{#        const menuItemCollections = document.querySelector('.menu-item-collections');#}
-{#        menuItemCollections.addEventListener('mouseover', () => {#}
-{#            subMenu.classList.add('show');#}
-{#        });#}
-{#    </script>#}
 {% endif %}

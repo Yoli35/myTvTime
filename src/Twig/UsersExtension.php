@@ -159,6 +159,7 @@ class UsersExtension extends AbstractExtension
                 'id' => $movieCollection->getId(),
                 'name' => $movieCollection->getTitle(),
                 'image' => $movieCollection->getThumbnail(),
+                'count' => count($movieCollection->getMovies()),
             ];
         }, $movieCollections);
         usort($movieCollections, function ($a, $b) {
