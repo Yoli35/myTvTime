@@ -26,21 +26,22 @@
                         {% endif %}
                     </div>
                 </div>
-                <h2>{{ event.name }}</h2>
-                <h3>{{ event.subheading }}</h3>
+                <div class="event">
+                    <h2>{{ event.name }}</h2>
+                    <h3>{{ event.subheading }}</h3>
 
-                <div class="dates">
-                    <div class="date">{{ 'Created At'|trans }} : {{ event.createdAt|format_datetime() }}</div>
-                    <div class="date">{{ 'Updated At'|trans }} : {{ event.updatedAt|format_datetime() }}</div>
+                    <div class="dates">
+                        <div class="date">{{ 'Created At'|trans }} : {{ event.createdAt|format_datetime() }}</div>
+                        <div class="date">{{ 'Updated At'|trans }} : {{ event.updatedAt|format_datetime() }}</div>
+                    </div>
+
+                    <div class="countdown" id="{{ event.id }}">
+                        {{ event.date|format_date('full') }}<br/>
+                        {{ event.date|format_time('medium') }}
+                    </div>
+
+                    <div class="description">{{ description|raw }}</div>
                 </div>
-
-                <div class="countdown" id="{{ event.id }}">
-                    {{ event.date|format_date('full') }}<br/>
-                    {{ event.date|format_time('medium') }}
-                </div>
-
-                <div class="description">{{ event.description|raw }}</div>
-
                 <div class="images">
                     {% for image in event.images %}
                         <div class="image">
@@ -57,8 +58,8 @@
     </div>
     <div id="countdown-values" style="display: none">
         {
-            "route": "event_show",
-            "countdownValues": {{ countdownValues|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+        "route": "event_show",
+        "countdownValues": {{ countdownValues|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
         }
     </div>
 {% endblock %}
@@ -69,7 +70,10 @@
     <script>
         window.addEventListener("DOMContentLoaded", () => {
 
-            const images = document.querySelector(".my-event").querySelector(".images").querySelectorAll("img");
+            // Ne fonctionne pas
+            // const images = document.querySelector(".my-event").querySelector(".sub-header,.images").querySelectorAll("img");
+            // Fonctionne
+            const images = document.querySelectorAll('.sub-header img, .images img');
             initDiaporama(images, "{{ app.request.locale }}");
         })
     </script>

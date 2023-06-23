@@ -139,8 +139,15 @@ class EventController extends AbstractController
     #[Route('/show/{id}', name: 'app_event_show', methods: ['GET'])]
     public function show(Event $event): Response
     {
+        $description = $event->getDescription();
+        $description = preg_replace(
+            ['/(https:\/\/\S+)/', '/\n/'],
+            ['<a href="$1" target="_blank">$1</a>', '<br>'],
+            $description);
+
         return $this->render('event/show.html.twig', [
             'event' => $event,
+            'description' => $description,
             'countdownValues' => [[
                 'id' => $event->getId(),
                 "interval" => -1,

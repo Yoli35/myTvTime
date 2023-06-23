@@ -20,22 +20,24 @@ class EventType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Name',
                 'attr' => ['class'=> "w100"],
-                'required' => true
+                'required' => true,
             ])
             ->add('subheading', TextType::class, [
                 'label' => 'Subheading',
                 'attr' => ['class'=> "w100"],
-                'required' => false
+                'required' => false,
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'attr' => ['class'=> "w100", 'rows' => 8],
-                'required' => false
+                'required' => false,
             ])
             ->add('date', DateTimeType::class, [
                 'label' => 'Date',
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
                 'attr' => ['class'=> "w100 d-flex-1"],
-                'required' => true
+                'required' => true,
             ])
             ->add('dropThumbnail', DropzoneType::class, [
                 'label' => 'Profile Image (JPG, PNG file)',

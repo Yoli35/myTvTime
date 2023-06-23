@@ -18,8 +18,8 @@ export class Shows {
         this.serieId = globs.serieId;
         this.number_of_episodes = globs.number_of_episodes;
         this.episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0};
-        this.mouseX = 0;
-        this.mouseY = 0;
+        // this.mouseX = 0;
+        // this.mouseY = 0;
         this.currentDialog = null;
 
         this.toolTips = new ToolTips();
