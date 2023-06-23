@@ -1186,7 +1186,7 @@ class SerieController extends AbstractController
             }
             if ($serie) {
                 $serieId = $serie->getId();
-                $whatsNew = $this->whatsNew($tv, $serie, $serieRepository);
+                $whatsNew = $this->whatsNew($tv, $serie);
 
                 /** @var SerieViewing $serieViewing */
                 $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
@@ -1530,7 +1530,7 @@ class SerieController extends AbstractController
         return $serieCast;
     }
 
-    public function whatsNew($tv, $serie, $serieRepository): array|null
+    public function whatsNew(array $tv, Serie $serie): array|null
     {
         $whatsNew = ['episode' => 0, 'season' => 0, 'status' => "", 'original_name' => ""];
         $modified = false;
@@ -1539,22 +1539,18 @@ class SerieController extends AbstractController
             $modified = true;
 
             $serie->setNumberOfSeasons($tv['number_of_seasons']);
-            $serie->setUpdatedAt(new DateTime());
-
         }
         if ($serie->getNumberOfEpisodes() !== $tv['number_of_episodes']) {
             $whatsNew['episode'] = $tv['number_of_episodes'] - $serie->getNumberOfEpisodes();
             $modified = true;
 
             $serie->setNumberOfEpisodes($tv['number_of_episodes']);
-            $serie->setUpdatedAt(new DateTime());
         }
         if ($serie->getStatus() !== $tv['status']) {
             $whatsNew['status'] = $tv['status'];
             $modified = true;
 
             $serie->setStatus($tv['status']);
-            $serie->setUpdatedAt(new DateTime());
         }
         if ($serie->getOriginalName() !== $tv['original_name']) {
             $whatsNew['original_name'] = $tv['original_name'];
@@ -1566,7 +1562,12 @@ class SerieController extends AbstractController
          * Si quelque chose a changé, l'enregistrement est mis à jour
          */
         if ($modified) {
-            $serieRepository->save($serie, true);
+            $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]);
+            $serieViewing->setModifiedAt(new DateTime());
+            $this->serieViewingRepository->save($serieViewing, true);
+
+            $serie->setUpdatedAt(new DateTime());
+            $this->serieRepository->save($serie, true);
             return $whatsNew;
         }
 
