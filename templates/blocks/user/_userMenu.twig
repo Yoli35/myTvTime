@@ -35,7 +35,8 @@
                 <div class="sub-menu">
                     {% for c in collections %}
                         <div class="menu-item"><a href="{{ path('app_collection_show', {id: c.id}) }}">
-                                <div class="image-collection"><img src="/images/collections/thumbnails/{{ c.image }}" alt="{{ c.name }}"></div>
+                                <div class="image-collection"><img src="/images/collections/thumbnails/{{ c.image }}"
+                                                                   alt="{{ c.name }}"></div>
                                 <div>{{ c.name }} ({{ c.count }})</div>
                             </a></div>
                     {% endfor %}
@@ -75,4 +76,24 @@
                 </a></div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const boundingRect = elementPosition(document.querySelector(".menu"));
+            const documentWith = document.documentElement.clientWidth;
+            if (boundingRect.viewportX + 414 > documentWith) {
+               const subMenu = document.querySelector(".sub-menu");
+               subMenu.classList.add("to-left");
+            }
+
+            function elementPosition (a) {
+                const b = a.getBoundingClientRect();
+                return {
+                    clientX: a.offsetLeft,
+                    clientY: a.offsetTop,
+                    viewportX: (b.x || b.left),
+                    viewportY: (b.y || b.top)
+                }
+            }
+        });
+    </script>
 {% endif %}

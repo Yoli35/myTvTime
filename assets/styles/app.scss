@@ -818,6 +818,10 @@ nav.active {
                         display: flex;
                         gap: .5rem;
                     }
+
+                    &.to-left {
+                        left: -17rem;
+                    }
                 }
 
                 &:hover {
