@@ -1,9 +1,11 @@
-<div class="home-discover{% if todayAiring.serieArray.seasonArray.episode_number == 1 %} new-season{% endif %}" data-id="{{ todayAiring.serie.id }}">
-    <a href="{{ path('app_serie_show', {'id': todayAiring.serie.id}) }}?from=today" title="{{ todayAiring.serie.name }}">
+<div class="home-discover{% if todayAiring.episodeNumbers.0 == 1 %} new-season{% endif %}"
+     data-id="{{ todayAiring.serieId }}">
+    <a href="{{ path('app_serie_show', {'id': todayAiring.serieId}) }}?from=today" title="{{ todayAiring.serieName }}">
         <div>
-            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ todayAiring.serie.posterPath }}" alt="{{ 'Poster' }}">
-            {% if todayAiring.serieArray.seasonArray.episode_number == 1 %}
-                {% if todayAiring.serieArray.season_number == 1 %}
+            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ todayAiring.seriePosterPath }}"
+                 alt="{{ 'Poster' }}">
+            {% if todayAiring.episodeNumbers.0 == 1 %}
+                {% if todayAiring.seasonNumber == 1 %}
                     <div class="new-season">{{ 'Premiere'|trans }}</div>
                 {% else %}
                     <div class="new-season">{{ 'New season'|trans }}</div>
@@ -11,31 +13,29 @@
             {% endif %}
         </div>
         <div class="title">
-            <div>{{ todayAiring.serie.name }}</div>
+            <div>{{ todayAiring.serieName }}</div>
         </div>
-        {% for seasonNumber, value in todayAiring.seasons %}
-            <div class="episode">
-                <div>
-                    {% if seasonNumber %}
-                        {{ 'Season'|trans }} {{ seasonNumber }}
+        <div class="episode">
+            <div>
+                {% if todayAiring.seasonNumber %}
+                    {{ 'Season'|trans }} {{ todayAiring.seasonNumber }}
+                {% else %}
+                    <span class="spe">{{ 'Specials'|trans }}</span>
+                {% endif %}
+                <br>
+                {% if todayAiring.episodeNumbers|length == 1 %}
+                    {{ 'Episode'|trans }} {{ todayAiring.episodeNumbers.0 }}
+                {% else %}
+                    {% if todayAiring.episodeNumbers|length == todayAiring.seasonEpisodeCount %}
+                        <span class="all">{{ 'All episodes'|trans }}</span>
                     {% else %}
-                        <span class="spe">{{ 'Specials'|trans }}</span>
+                        {{ 'Episodes'|trans }}
+                        {% for episode in todayAiring.episodeNumbers %}
+                            {% if loop.last %}& {% endif %}{{ episode }}{% if loop.index < loop.length - 1 %},{% endif %}
+                        {% endfor %}
                     {% endif %}
-                    <br>
-                    {% if value.episodes|length == 1 %}
-                        {{ 'Episode'|trans }} {{ value.episodes.0 }}
-                    {% else %}
-                        {% if value.episodes|length == todayAiring.serieArray.seasonArray.seasonViewing.episodeCount %}
-                            <span class="all">{{ 'All episodes'|trans }}</span>
-                        {% else %}
-                            {{ 'Episodes'|trans }}
-                            {% for episode in value.episodes %}
-                                {% if loop.last %}& {% endif %}{{ episode }}{% if loop.index < loop.length - 1 %},{% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                </div>
+                {% endif %}
             </div>
-        {% endfor %}
+        </div>
     </a>
 </div>

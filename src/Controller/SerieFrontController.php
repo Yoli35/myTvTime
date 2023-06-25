@@ -292,7 +292,7 @@ class SerieFrontController extends AbstractController
         return $this->json(['message' => $message, 'class' => $class]);
     }
 
-    #[Route('/timeShifted/{userId}/{serieId}/{shifted}', name: 'app_serie_toggle_time_shifted', methods: 'GET')]
+    #[Route('/time/shifted/{userId}/{serieId}/{shifted}', name: 'app_serie_toggle_time_shifted', methods: 'GET')]
     public function toggleTimeShifted(bool $shifted, int $userId, int $serieId): Response
     {
         $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $userId, 'serie' => $serieId]);

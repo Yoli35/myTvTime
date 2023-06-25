@@ -1,20 +1,25 @@
 export class ToolTips {
-    init() {
+    init(element = null) {
         // <div className="tool-tips">
         //     <div className="body"></div>
         //     <div className="tail"></div>
         // </div>
-        const tooltips = document.createElement("div");
-        tooltips.classList.add("tool-tips");
-        const body = document.createElement("div");
-        body.classList.add("body");
-        const tail = document.createElement("div");
-        tail.classList.add("tail");
-        tooltips.appendChild(body);
-        tooltips.appendChild(tail);
-        document.body.appendChild(tooltips);
+        let divs;
+        if (!element) {
+            const tooltips = document.createElement("div");
+            tooltips.classList.add("tool-tips");
+            const body = document.createElement("div");
+            body.classList.add("body");
+            const tail = document.createElement("div");
+            tail.classList.add("tail");
+            tooltips.appendChild(body);
+            tooltips.appendChild(tail);
+            document.body.appendChild(tooltips);
 
-        const divs = document.querySelectorAll("div[data-title]");
+            divs = document.querySelectorAll("div[data-title]");
+        } else {
+            divs = element.querySelectorAll("div[data-title]");
+        }
         divs.forEach(div => {
             div.addEventListener('mousemove', this.move);
             div.addEventListener('mouseenter', this.show);

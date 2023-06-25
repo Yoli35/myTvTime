@@ -6,18 +6,18 @@ export class Shows {
 
     constructor(globs) {
         thisGlobal = this;
+        this.app_serie_alert = globs.app_serie_alert;
+        this.app_serie_duration = globs.app_serie_duration;
+        this.app_serie_toggle_favorite = globs.app_serie_toggle_favorite;
+        this.app_serie_toggle_shifted = globs.app_serie_toggle_time_shifted;
         this.app_serie_viewing = globs.app_serie_viewing;
         this.app_user_connected = globs.app_user_connected;
-        this.app_serie_toggle_favorite = globs.app_serie_toggle_favorite;
-        this.app_serie_duration = globs.app_serie_duration;
-        this.app_serie_toggle_shifted = globs.app_serie_toggle_shifted;
-        this.app_serie_alert = globs.app_serie_alert;
-        this.still = globs.still;
-        this.xhr = new XMLHttpRequest();
-        this.userId = globs.userId;
-        this.serieId = globs.serieId;
-        this.number_of_episodes = globs.number_of_episodes;
         this.episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0};
+        this.number_of_episodes = globs.number_of_episodes;
+        this.serieId = globs.serieId;
+        this.still = globs.still;
+        this.userId = globs.userId;
+        this.xhr = new XMLHttpRequest();
         // this.mouseX = 0;
         // this.mouseY = 0;
         this.currentDialog = null;

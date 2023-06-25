@@ -2,7 +2,7 @@ import {AnimatedHeader} from "./AnimatedHeader.js";
 import {ToolTips} from "./ToolTips.js";
 
 let thisGlobal;
-
+let toolTips;
 export class Activity {
 
     constructor(globs) {
@@ -29,7 +29,7 @@ export class Activity {
         this.initInputs();
         this.initWeeks();
 
-        const toolTips = new ToolTips();
+        toolTips = new ToolTips();
         toolTips.init();
     }
 
@@ -144,6 +144,7 @@ export class Activity {
             wrapper.insertBefore(hoursDiv, oldHoursDiv);
             wrapper.removeChild(oldHoursDiv);
             thisGlobal.initStandUp(hoursDiv);
+            toolTips.init(wrapper);
 
             const standUpRingCompleted = goal;
             const progress = wrapper.closest(".activity-of-the-day")?.querySelector(".progress.stand-up");
