@@ -1,38 +1,15 @@
 import {AverageColor} from "/js/AverageColor.js";
+import {AnimatedHeader} from "./AnimatedHeader.js";
 
 window.addEventListener("DOMContentLoaded", () => {
-    initHeader();
+    const globsData = document.querySelector('#globs-data')?.textContent;
+    const globs = JSON.parse(globsData);
+    initHeader('start_or_end', globs);
     setBackgrounds(document.querySelectorAll(".serie"));
 })
 
-function initHeader() {
-    const header = document.querySelector(".header");
-    let ticking = false;
-    setH1();
-    window.addEventListener('resize', setH1);
-
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(function () {
-                setH1();
-                ticking = false;
-            });
-        }
-        ticking = true;
-    });
-
-    setTimeout(() => header.classList.add("fade-bg"), 3000);
-}
-
-function setH1() {
-    const header = document.querySelector(".header");
-    const h1 = document.querySelector("h1");
-    let left, ratio, top;
-    ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
-    left = (header.clientWidth - h1.clientWidth) / 2;
-    top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
-    if (ratio < 0) ratio = 0;
-    h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
+function initHeader(from, globs) {
+    new AnimatedHeader(from, globs);
 }
 
 function setBackgrounds(series) {

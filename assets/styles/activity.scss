@@ -621,6 +621,25 @@
     }
 }
 
+.header {
+    .posters {
+        inset: 0;
+        position: absolute;
+
+        .changing-poster {
+            aspect-ratio: 2 / 3;
+            height: 50%;
+            position: absolute;
+            width: auto;
+
+            img {
+                object-fit: cover;
+                width: 100%;
+            }
+        }
+    }
+}
+
 #activity-dialog {
     backdrop-filter: blur(.25rem);
     -webkit-backdrop-filter: blur(.25rem);
@@ -859,6 +878,6 @@
     }
 
     #activity-dialog {
-       background-color: var(--gradient-ardoise-90-alpha-80);
+        background-color: var(--gradient-ardoise-90-alpha-80);
     }
 }

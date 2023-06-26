@@ -9,16 +9,7 @@
 
         .animated-h1 {
             .part {
-                align-items: center;
-                background-color: var(--gradient-green-40-alpha-50);
-                border-radius: .25rem;
-                color: var(--gradient-green-90);
-                display: flex;
-                font-size: 4rem;
-                font-weight: bold;
-                height: 4rem;
-                margin-inline: .125rem;
-                padding-inline: .5rem;
+                @include animated-card;
             }
         }
 

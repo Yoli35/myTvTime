@@ -619,6 +619,19 @@ $fa-font-path: "../webfonts";
     }
 }
 
+@mixin animated-card($color: var(--gradient-green-90), $bg-color: var(--gradient-green-40-alpha-50)) {
+    align-items: center;
+    background-color: $bg-color;
+    border-radius: .25rem;
+    color: $color;
+    display: flex;
+    font-size: 4rem;
+    font-weight: bold;
+    height: 4rem;
+    margin-inline: .125rem;
+    padding-inline: .5rem;
+}
+
 @mixin switcher($checked, $unchecked) {
     border: 2px solid var(--gradient-ardoise-80);
     border-radius: calc(.5em + 2px);

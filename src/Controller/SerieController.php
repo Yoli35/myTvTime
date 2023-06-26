@@ -504,8 +504,6 @@ class SerieController extends AbstractController
 
         $totalResults = $this->serieViewingRepository->count(['user' => $user, 'viewedEpisodes' => 0]);
 
-//        $this->updateSerieViewingTable();
-
         return $this->render('serie/to_start.html.twig', [
             'series' => $seriesToBeStarted,
             'pages' => [
@@ -518,53 +516,11 @@ class SerieController extends AbstractController
                 'order_by' => $sort,
                 'order' => $order],
             'user' => $user,
+            'posters' => $this->getPosters(),
+            'posterPath' => '/images/series/posters/',
             'from' => self::MY_SERIES_TO_START,
             'imageConfig' => $imageConfig,
         ]);
-    }
-
-    function updateSerieViewingTable()
-    {
-//        $serieViewings = $this->serieViewingRepository->findAll();
-        // adjust number of seasons
-//        foreach ($serieViewings as $serieViewing) {
-//            $serieViewing->setNumberOfSeasons($serieViewing->getSerie()->getNumberOfSeasons());
-//            $this->serieViewingRepository->save($serieViewing);
-//        }
-        // adjust number of episodes
-//        foreach ($serieViewings as $serieViewing) {
-//            $numberOfEpisodes = 0;
-//            foreach ($serieViewing->getSeasons() as $seasonViewing) {
-//                if ($seasonViewing->getSeasonNumber() > 0) {
-//                    $numberOfEpisodes += $seasonViewing->getEpisodeCount();
-//                }
-//            }
-//            $serieViewing->setNumberOfEpisodes($numberOfEpisodes);
-//            $this->serieViewingRepository->save($serieViewing);
-//        }
-        // adjust viewed episodes
-//        foreach ($serieViewings as $serieViewing) {
-//            $viewedEpisodes = 0;
-//            foreach ($serieViewing->getSeasons() as $seasonViewing) {
-//                if ($seasonViewing->getSeasonNumber() > 0) {
-//                    foreach ($seasonViewing->getEpisodes() as $episodeViewing) {
-//                        if ($episodeViewing->getViewedAt()) {
-//                            $viewedEpisodes++;
-//                        }
-//                    }
-//                }
-//            }
-//            $serieViewing->setViewedEpisodes($viewedEpisodes);
-//            $this->serieViewingRepository->save($serieViewing);
-//        }
-//        $this->serieViewingRepository->flush();
-
-        // adjust serie_completed field
-//        foreach ($serieViewings as $serieViewing) {
-//            $serieViewing->setSerieCompleted($serieViewing->getNumberOfEpisodes() === $serieViewing->getViewedEpisodes());
-//            $this->serieViewingRepository->save($serieViewing);
-//        }
-//        $this->serieViewingRepository->flush();
     }
 
     #[Route('/to-end', name: 'app_serie_to_end', methods: ['GET'])]
@@ -600,9 +556,17 @@ class SerieController extends AbstractController
                 'order_by' => $sort,
                 'order' => $order],
             'user' => $user,
+            'posters' => $this->getPosters(),
+            'posterPath' => '/images/series/posters/',
             'from' => self::MY_SERIES_TO_END,
             'imageConfig' => $imageConfig,
         ]);
+    }
+
+    function getPosters(): array|false
+    {
+        $posterFiles = scandir($this->getParameter('kernel.project_dir') . '/public/images/series/posters');
+        return array_slice($posterFiles, 3);
     }
 
     public function seriesToBeToArray($user, $serieViewings, $imageConfig, $locale): array

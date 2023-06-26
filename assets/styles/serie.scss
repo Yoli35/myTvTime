@@ -16,6 +16,24 @@
         background-color: var(--gradient-ardoise-10);
         transition: background-color 3s ease-in-out;
 
+        .animated-h1 {
+            .part {
+                @include animated-card(var(--gradient-ardoise-90), var(--gradient-ardoise-30-alpha-90));
+            }
+
+            &.flat-color {
+                z-index: 1;
+            }
+        }
+
+        .backdrop {
+            &.flat-color {
+                background-color: var(--gradient-ardoise-10-alpha-90);
+                background-image: unset;
+                z-index: unset;
+            }
+        }
+
         .quote {
             @include flex-100(center, flex-end);
             font-size: 1.1em;
