@@ -109,7 +109,15 @@ export class AnimatedHeader {
         setInterval(() => {
             const poster = document.querySelector(".changing-poster[data-index='" + Math.floor(Math.random() * posterCount) + "']");
             const img = poster.querySelector("img");
-            img.setAttribute("src", this.posterPath + this.posters[Math.floor(Math.random() * this.posters.length)]);
+            setTimeout(()=> {
+                poster.classList.add("flap");
+            }, 0);
+            setTimeout(()=> {
+                img.setAttribute("src", this.posterPath + this.posters[Math.floor(Math.random() * this.posters.length)]);
+            }, 450);
+            setTimeout(()=> {
+                poster.classList.remove("flap");
+            }, 100);
         }, 1000);
     }
 }
