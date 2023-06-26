@@ -114,10 +114,10 @@ export class AnimatedHeader {
             }, 0);
             setTimeout(()=> {
                 img.setAttribute("src", this.posterPath + this.posters[Math.floor(Math.random() * this.posters.length)]);
+                setTimeout(()=> {
+                    poster.classList.remove("flap");
+                }, 100);
             }, 450);
-            setTimeout(()=> {
-                poster.classList.remove("flap");
-            }, 100);
         }, 1000);
     }
 }
