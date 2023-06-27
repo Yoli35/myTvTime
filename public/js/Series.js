@@ -34,9 +34,24 @@ export class Series {
         // this.slideIndex = 0;
 
         this.trans = {
-            "added": {"fr": "Nouvelle série ajoutée", "en": "New serie added", "de": "Neue Serie hinzugefügt", "es": "Nueva serie agregada"},
-            "updated": {"fr": "Série mise à jour", "en": "Serie updated", "de": "Serie aktualisiert", "es": "Serie actualizada"},
-            "not found": {"fr": "Série introuvable", "en": "Serie not found", "de": "Serie nicht gefunden", "es": "Serie no encontrada"},
+            "added": {
+                "fr": "Nouvelle série ajoutée",
+                "en": "New serie added",
+                "de": "Neue Serie hinzugefügt",
+                "es": "Nueva serie agregada"
+            },
+            "updated": {
+                "fr": "Série mise à jour",
+                "en": "Serie updated",
+                "de": "Serie aktualisiert",
+                "es": "Serie actualizada"
+            },
+            "not found": {
+                "fr": "Série introuvable",
+                "en": "Serie not found",
+                "de": "Serie nicht gefunden",
+                "es": "Serie no encontrada"
+            },
         }
 
         this.init();
@@ -54,9 +69,11 @@ export class Series {
             this.autocomplete(document.querySelector("#search-name"), this.series_list);
 
             document.querySelector("#search-tmdb-series").addEventListener("click", () => {
-                let query = document.querySelector("#search-tmdb-name").value;
-                if (query.length > 0) {
-                    window.location.href = this.app_serie_search + "?query=" + query;
+                this.searchSerie();
+            });
+            document.querySelector("#search-tmdb-name").addEventListener("keyup", (e) => {
+                if (e.key === "Enter") {
+                    this.searchSerie();
                 }
             });
         }
@@ -66,6 +83,13 @@ export class Series {
         setTimeout(this.backdropSlide, 4000);
         this.initAnimation();
         this.setBackgrounds(document.querySelectorAll(".serie"));
+    }
+
+    searchSerie() {
+        let query = document.querySelector("#search-tmdb-name").value;
+        if (query.length > 0) {
+            window.location.href = this.app_serie_search + "?query=" + query;
+        }
     }
 
     checkHeight() {
