@@ -2,6 +2,12 @@ let thisGlobal;
 
 export class AnimatedHeader {
 
+    /**
+     * @param {string} from
+     * @param {object} globs
+     * @param {string[]} globs.posters
+     * @param {string} globs.posterPath
+     */
     constructor(from = null, globs = null) {
         this.letterRatios = [];
         this.posters = globs?.posters;
@@ -10,6 +16,9 @@ export class AnimatedHeader {
         this.initHeader(from);
         if (this.posters) this.initPosters();
     }
+
+    headerWidth = 0;
+    intervalId = null;
 
     initHeader(from) {
         let ticking = false,
@@ -37,6 +46,7 @@ export class AnimatedHeader {
         })
         this.setH1();
         window.addEventListener('resize', this.setH1);
+        window.addEventListener('resize', this.generatePosters);
 
         window.addEventListener('scroll', () => {
             if (!ticking) {
@@ -67,7 +77,7 @@ export class AnimatedHeader {
         if (ratio < 0) ratio = 0;
 
         parts.forEach(part => {
-            part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * this.letterRatios[n++]) + "deg);");
+            part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * thisGlobal.letterRatios[n++]) + "deg);");
         })
         h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
     }
@@ -82,12 +92,23 @@ export class AnimatedHeader {
         animatedH1.classList.add("flat-color");
         backdrop.classList.add("flat-color");
 
-        console.log(this.posters);
-
         const h1 = document.querySelector("h1");
         const posters = document.createElement("div");
         posters.classList.add("posters");
         h1.replaceWith(posters);
+
+        this.generatePosters();
+    }
+
+    generatePosters() {
+        const header = document.querySelector(".header");
+
+        if (header.clientWidth === thisGlobal.headerWidth) return;
+
+        thisGlobal.headerWidth = header.clientWidth;
+        if (thisGlobal.intervalId) clearInterval(thisGlobal.intervalId);
+
+        const posters = header.querySelector(".posters");
         const headerWidth = header.clientWidth;
         const headerHeight = header.clientHeight;
         const posterHeight = headerHeight / 2;
@@ -96,26 +117,28 @@ export class AnimatedHeader {
         const rowWidth = rowCount * posterWidth;
         const offsetX = (headerWidth - rowWidth) / 2;
         const posterCount = rowCount * 2;
-        console.log(header);
+
+        posters.innerHTML = "";
+
         for (let i = 0; i < posterCount; i++) {
             const poster = document.createElement("div");
             poster.classList.add("changing-poster");
             poster.setAttribute("data-index", i);
             poster.setAttribute("style", "left: " + (offsetX + ((i % rowCount) * posterWidth)) + "px; top: " + ((i < rowCount) ? 0 : posterHeight) + "px;");
             const img = document.createElement("img");
-            img.setAttribute("src", this.posterPath + this.posters[Math.floor(Math.random() * this.posters.length)]);
+            img.setAttribute("src", thisGlobal.posterPath + thisGlobal.posters[Math.floor(Math.random() * thisGlobal.posters.length)]);
             poster.appendChild(img);
             posters.appendChild(poster);
         }
 
-        setInterval(() => {
+        thisGlobal.intervalId = setInterval(() => {
             const poster = document.querySelector(".changing-poster[data-index='" + Math.floor(Math.random() * posterCount) + "']");
             const img = poster.querySelector("img");
             setTimeout(()=> {
                 poster.classList.add("flap");
             }, 0);
             setTimeout(()=> {
-                img.setAttribute("src", this.posterPath + this.posters[Math.floor(Math.random() * this.posters.length)]);
+                img.setAttribute("src", thisGlobal.posterPath + thisGlobal.posters[Math.floor(Math.random() * thisGlobal.posters.length)]);
                 setTimeout(()=> {
                     poster.classList.remove("flap");
                 }, 100);
