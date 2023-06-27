@@ -93,13 +93,15 @@ export class AnimatedHeader {
         const posterHeight = headerHeight / 2;
         const posterWidth = posterHeight * 2 / 3;
         const rowCount = Math.ceil(headerWidth / posterWidth);
+        const rowWidth = rowCount * posterWidth;
+        const offsetX = (headerWidth - rowWidth) / 2;
         const posterCount = rowCount * 2;
         console.log(header);
         for (let i = 0; i < posterCount; i++) {
             const poster = document.createElement("div");
             poster.classList.add("changing-poster");
             poster.setAttribute("data-index", i);
-            poster.setAttribute("style", "left: " + ((i % rowCount) * posterWidth) + "px; top: " + ((i < rowCount) ? 0 : posterHeight) + "px;");
+            poster.setAttribute("style", "left: " + (offsetX + ((i % rowCount) * posterWidth)) + "px; top: " + ((i < rowCount) ? 0 : posterHeight) + "px;");
             const img = document.createElement("img");
             img.setAttribute("src", this.posterPath + this.posters[Math.floor(Math.random() * this.posters.length)]);
             poster.appendChild(img);

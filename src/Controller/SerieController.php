@@ -431,6 +431,10 @@ class SerieController extends AbstractController
             $episode = [];
             $episode['episodeNumbers'] = [];
             $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
+
+            if ($serieViewing->getUser()->getId() !== $user->getId())
+                continue;
+
             $serie = $serieViewing->getSerie();
             $broadcastTheNextDay = $serieViewing->isTimeShifted();
             $airDate = $episodeViewing->getAirDate();
