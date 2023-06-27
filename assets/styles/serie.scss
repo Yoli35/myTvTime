@@ -19,6 +19,12 @@
         .animated-h1 {
             .part {
                 @include animated-card(var(--gradient-ardoise-90), var(--gradient-ardoise-30-alpha-90));
+                border: 2px solid var(--gradient-ardoise-90);
+
+                &.space {
+                    background-color: transparent;
+                    border: none;
+                }
             }
 
             &.flat-color {

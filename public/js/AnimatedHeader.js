@@ -4,8 +4,8 @@ export class AnimatedHeader {
 
     constructor(from = null, globs = null) {
         this.letterRatios = [];
-        this.posters = globs.posters;
-        this.posterPath = globs.posterPath;
+        this.posters = globs?.posters;
+        this.posterPath = globs?.posterPath;
         thisGlobal = this;
         this.initHeader(from);
         if (this.posters) this.initPosters();
@@ -15,19 +15,19 @@ export class AnimatedHeader {
         let ticking = false,
             letters, animatedH1, index = 0;
 
+        letters = document.querySelector("h1").innerText.split('');
+        document.querySelector("h1").innerText = "";
+
         animatedH1 = document.createElement("div");
         animatedH1.classList.add("animated-h1");
-
         animatedH1 = document.querySelector(".header").insertBefore(animatedH1, document.querySelector(".backdrop"));
-        letters = document.querySelector("h1").innerText.split('');
-
-        document.querySelector("h1").innerText = "";
 
         letters.forEach(letter => {
             let part = document.createElement("div");
             part.classList.add("part");
             if (letter === " ") {
                 part.innerHTML = "&nbsp;"
+                part.classList.add("space");
             } else {
                 part.innerText = letter;
             }
