@@ -4,7 +4,7 @@
             <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
         {% endif %}
         <div class="poster">
-{#            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ 'Poster' }}">#}
+            {#            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ 'Poster' }}"> #}
             <img src="{{ "/images/series/posters" ~ serie.posterPath }}" alt="{{ 'Poster' }}">
         </div>
         <div class="infos">
@@ -56,15 +56,23 @@
                         {% else %}
                             {% set more = serie.numberOfEpisodes - serie.viewing.viewedEpisodes %}
                             {{ more }} {{ (more > 1 ? 'episodes more':'episode more')|trans }}
-{#                            {{ 'Watching in progress'|trans }}, {{ more }} {{ (more > 1 ? 'episodes more':'episode more')|trans }}#}
                         {% endif %}
                     {% else %}
-                        {{ 'Start watching the show'| trans }}, {{ serie.numberOfEpisodes }} {{ (serie.numberOfEpisodes>1?'episodes':'episode')|trans }}
+                        {% if serie.nextEpisodeDays is defined %}
+                            {% if serie.nextEpisodeDays == 0 %}
+                                {{ 'New episode today'|trans }}
+                            {% elseif serie.nextEpisodeDays == 1 %}
+                                {{ 'New episode tomorrow'|trans }}
+                            {% else %}
+                                {{ 'Be patient!'|trans }}
+                                {{ 'Next episode in'|trans }} {{ serie.nextEpisodeDays }} {{ 'days'|trans }}
+                            {% endif %}
+                        {% else %}
+                            {{ 'Start watching the show'| trans }}, {{ serie.numberOfEpisodes }} {{ (serie.numberOfEpisodes>1?'episodes':'episode')|trans }}
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </div>
-            {#            {% if is_favorite(user.id, serie.id, 'serie') %} #}
-            {#               Twig extention in src/Twig/FavoriteExtention.php #}
             {% if serie.favorite %}
                 <div class="favorite">{{ 'Favorite'|trans }}</div>
             {% endif %}

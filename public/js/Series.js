@@ -1,9 +1,13 @@
 import {AverageColor} from '/js/AverageColor.js';
+import {AnimatedHeader} from "./AnimatedHeader.js";
 
 let thisGlobal;
 
 export class Series {
     constructor(globs) {
+
+        thisGlobal = this;
+
         this.app_serie_index = globs.app_serie_index;
         this.app_serie_new = globs.app_serie_new;
         this.app_serie_show = globs.app_serie_show;
@@ -15,19 +19,19 @@ export class Series {
         this.order_by = globs.order_by;
         this.order = globs.order;
         this.from = globs.from;
-        this.seriesList = globs.seriesList;
-        this.leaf_settings = globs.leafSettings;
+        this.leaf_settings = globs.leaf_settings;
+        this.series_list = globs.series_list;
         this.leaf_particules = [];
 
         this.slideDuration = 6000;
         this.translateDuration = 3000;
         this.removeDelay = 100;
         this.actionDelay = 10;
-        this.slideInterval = -1;
-        this.slideImages = [];
-        this.slideNames = [];
-        this.slideLinks = [];
-        this.slideIndex = 0;
+        // this.slideInterval = -1;
+        // this.slideImages = [];
+        // this.slideNames = [];
+        // this.slideLinks = [];
+        // this.slideIndex = 0;
 
         this.trans = {
             "added": {"fr": "Nouvelle série ajoutée", "en": "New serie added", "de": "Neue Serie hinzugefügt", "es": "Nueva serie agregada"},
@@ -35,22 +39,19 @@ export class Series {
             "not found": {"fr": "Série introuvable", "en": "Serie not found", "de": "Serie nicht gefunden", "es": "Serie no encontrada"},
         }
 
-
         this.init();
     }
 
     init() {
-        const tools = document.querySelector(".series-tools");
-
-        thisGlobal = this;
-
         this.checkHeight();
+
+        const tools = document.querySelector(".series-tools");
         if (tools) {
             this.initSettings();
             this.initPreview();
             this.newSerie();
 
-            this.autocomplete(document.querySelector("#search-name"), this.seriesList);
+            this.autocomplete(document.querySelector("#search-name"), this.series_list);
 
             document.querySelector("#search-tmdb-series").addEventListener("click", () => {
                 let query = document.querySelector("#search-tmdb-name").value;
@@ -59,7 +60,10 @@ export class Series {
                 }
             });
         }
-        this.initHeader();
+        new AnimatedHeader();
+        setTimeout(() => document.querySelector('.header').classList.add("fade-bg"), 3000);
+        setTimeout(this.clearQuote, 3000);
+        setTimeout(this.backdropSlide, 4000);
         this.initAnimation();
         this.setBackgrounds(document.querySelectorAll(".serie"));
     }
@@ -69,38 +73,6 @@ export class Series {
         if (container.clientHeight === 496) {
             window.location.reload();
         }
-    }
-
-    initHeader() {
-        const header = document.querySelector(".header");
-        let ticking = false;
-        this.setH1();
-        window.addEventListener('resize', this.setH1);
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(function () {
-                    thisGlobal.setH1();
-                    ticking = false;
-                });
-            }
-            ticking = true;
-        });
-
-        setTimeout(() => header.classList.add("fade-bg"), 3000);
-        setTimeout(this.clearQuote, 3000);
-        setTimeout(this.backdropSlide, 4000);
-    }
-
-    setH1() {
-        const header = document.querySelector(".header");
-        const h1 = document.querySelector("h1");
-        let left, ratio, top;
-        left = (header.clientWidth - h1.clientWidth) / 2;
-        top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
-        ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
-        if (ratio < 0) ratio = 0;
-        h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + ratio + ")");
     }
 
     clearQuote() {
@@ -966,16 +938,17 @@ export class Series {
                 /*check if the item starts with the same letters as the text field value:*/
                 let ok_name = list[i].name.substring(0, val.length).toUpperCase() === val.toUpperCase();
                 let ok_original = list[i].original.substring(0, val.length).toUpperCase() === val.toUpperCase();
+                let year = ' (' + list[i].first_date_air.date.slice(0, 4) + ')';
                 if (ok_name || ok_original) {
                     /*create a DIV element for each matching element:*/
                     b = document.createElement("div");
                     /*make the matching letters bold:*/
                     if (ok_name) {
                         b.innerHTML = "<strong>" + list[i].name.substr(0, val.length) + "</strong>";
-                        b.innerHTML += list[i].name.substring(val.length) + ' (' + list[i].firstDateAir.date.slice(0, 4) + ')';
+                        b.innerHTML += list[i].name.substring(val.length) + year;
                     } else {
                         b.innerHTML = "<strong>" + list[i].original.substring(0, val.length) + "</strong>";
-                        b.innerHTML += list[i].original.substring(val.length) + ' (' + list[i].firstDateAir.date.slice(0, 3) + ')';
+                        b.innerHTML += list[i].original.substring(val.length) + year;
                     }
                     /*insert an input field that will hold the current array item's value:*/
                     b.innerHTML += "<input id='item-" + i + "-id' type='hidden' value='" + list[i].id + "'>";

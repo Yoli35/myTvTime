@@ -146,7 +146,7 @@ class SerieRepository extends ServiceEntityRepository
     public function listUserSeries($userId): array
     {
         return $this->createQueryBuilder('s')
-            ->select('s.id id, s.name name, s.originalName original, s.firstDateAir firstDateAir')
+            ->select('s.id id, s.name name, s.originalName original, s.firstDateAir first_date_air')
             ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
             ->orderBy('s.name')
             ->getQuery()
