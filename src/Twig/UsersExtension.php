@@ -153,24 +153,6 @@ class UsersExtension extends AbstractExtension
 
     public function userMovieCollections(User $user): array
     {
-        $movieCollections = $this->movieCollectionRepository->findBy(['user' => $user]);
-        $movieCollections = array_map(function ($movieCollection) {
-            return [
-                'id' => $movieCollection->getId(),
-                'name' => $movieCollection->getTitle(),
-                'image' => $movieCollection->getThumbnail(),
-                'count' => count($movieCollection->getMovies()),
-            ];
-        }, $movieCollections);
-        usort($movieCollections, function ($a, $b) {
-            $nameA = htmlentities($a['name'], ENT_COMPAT, "UTF-8");
-            $nameB = htmlentities($b['name'], ENT_COMPAT, "UTF-8");
-            $nameA = preg_replace('/&([a-zA-Z])(uml|acute|grave|circ|tilde);/', '$1', $nameA);
-            $nameB = preg_replace('/&([a-zA-Z])(uml|acute|grave|circ|tilde);/', '$1', $nameB);
-//            dump(["a['name']"=>$a['name'], "nameA" => $nameA]);
-            return $nameA <=> $nameB;
-//            return $a['name'] <=> $b['name'];
-        });
-        return $movieCollections;
+        return $this->movieCollectionRepository->getSummary($user->getId());
     }
 }
