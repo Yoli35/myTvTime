@@ -228,8 +228,9 @@
                         }
 
                         div:first-child {
-                            font-size: 1.5em;
-                            font-weight: 200;
+                            font-size: 2rem;
+                            font-weight: 100;
+                            line-height: 3rem;
                         }
 
                         div:last-child {
@@ -2599,7 +2600,7 @@
                             @include flex-col();
                             position: absolute;
                             right: -.5em;
-                            top: 2em;
+                            top: 0;
 
                             .network-item {
                                 @include flex-row();

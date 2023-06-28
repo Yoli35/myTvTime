@@ -122,28 +122,28 @@ export class AnimatedHeader {
 
         for (let i = 0; i < posterCount; i++) {
             const poster = document.createElement("div");
-            const counter = document.createElement("div");
+            // const counter = document.createElement("div");
             poster.classList.add("changing-poster");
             poster.setAttribute("data-index", i);
             poster.setAttribute("style", "left: " + (offsetX + ((i % rowCount) * posterWidth)) + "px; top: " + ((i < rowCount) ? 0 : posterHeight) + "px;");
             const img = document.createElement("img");
             img.setAttribute("src", thisGlobal.posterPath + thisGlobal.posters[Math.floor(Math.random() * thisGlobal.posters.length)]);
             poster.appendChild(img);
-            counter.classList.add("counter");
-            counter.innerText = "0";
-            poster.appendChild(counter);
+            // counter.classList.add("counter");
+            // counter.innerText = "0";
+            // poster.appendChild(counter);
             posters.appendChild(poster);
         }
 
         thisGlobal.intervalId = setInterval(() => {
             const poster = document.querySelector(".changing-poster[data-index='" + Math.floor(Math.random() * posterCount) + "']");
             const img = poster.querySelector("img");
-            const counter = poster.querySelector(".counter");
+            // const counter = poster.querySelector(".counter");
             setTimeout(()=> {
                 poster.classList.add("flap");
             }, 0);
             setTimeout(()=> {
-                counter.innerText = parseInt(counter.innerText) + 1;
+                // counter.innerText = parseInt(counter.innerText) + 1;
                 img.setAttribute("src", thisGlobal.posterPath + thisGlobal.posters[Math.floor(Math.random() * thisGlobal.posters.length)]);
                 setTimeout(()=> {
                     poster.classList.remove("flap");

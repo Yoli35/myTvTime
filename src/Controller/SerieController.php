@@ -595,7 +595,7 @@ class SerieController extends AbstractController
             }
             return null;
         }, $ids);
-        dump(['test' => $ids, 'results' => $results, 'serieViewings' => $serieViewings]);
+//        dump(['test' => $ids, 'results' => $results, 'serieViewings' => $serieViewings]);
 
 //        $results = array_map(function ($serieViewing) {
 //            return $serieViewing->getSerie();
@@ -1200,7 +1200,7 @@ class SerieController extends AbstractController
         }, $tv['seasons']);
 //        dump($tv);
 
-        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
+        $alert = $serieViewing ? $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]) : null;
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
@@ -1350,7 +1350,7 @@ class SerieController extends AbstractController
             if ($nextEpisodeToWatch) {
                 $airDate = $nextEpisodeToWatch['airDate'];
                 $message = sprintf("%s : S%02dE%02d\n", $serie->getName(), $nextEpisodeToWatch['seasonNumber'], $nextEpisodeToWatch['episodeNumber']);
-                $alert = new Alert($this->getUser(), $serieViewing, $airDate, $message);
+                $alert = new Alert($this->getUser(), $serieViewing->getId(), $airDate, $message);
                 $this->alertRepository->save($alert, true);
                 $alertMessage = $this->translator->trans("Alert created and activated");
             } else {
