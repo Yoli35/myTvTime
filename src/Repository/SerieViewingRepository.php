@@ -96,4 +96,23 @@ class SerieViewingRepository extends ServiceEntityRepository
 //
 //        return $resultSet->fetchOne();
     }
+
+    public function getSerieIds($serieViewingIds): array
+    {
+//        return $this->createQueryBuilder('s')
+//            ->select('s.serieId')
+//            ->andWhere('s.id in (:id)')
+//            ->setParameter('id', $serieViewingIds)
+//            ->getQuery()
+//            ->getResult();
+        $sql = "SELECT t0.`serie_id` as 'id' FROM `serie_viewing` t0 "
+            . "WHERE t0.`id` IN (" . implode(',', $serieViewingIds) . ") "
+            . "ORDER BY t0.`modified_at` DESC";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
 }

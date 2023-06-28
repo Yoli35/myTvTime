@@ -21,10 +21,6 @@ class Alert
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
 
-    #[ORM\OneToOne(inversedBy: 'alert', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?SerieViewing $serieViewing;
-
     #[ORM\Column(length: 255)]
     private ?string $message;
 
@@ -37,10 +33,13 @@ class Alert
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt;
 
-    public function __construct($user, $serieViewing, $date, $message)
+    #[ORM\Column(nullable: true)]
+    private ?int $serieViewingId = null;
+
+    public function __construct($user, $serieViewingId, $date, $message)
     {
         $this->user = $user;
-        $this->serieViewing = $serieViewing;
+        $this->serieViewingId = $serieViewingId;
         $this->message = $message;
         $this->activated = true;
         $this->date = $date;
@@ -60,18 +59,6 @@ class Alert
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getSerieViewing(): ?SerieViewing
-    {
-        return $this->serieViewing;
-    }
-
-    public function setSerieViewing(SerieViewing $serieViewing): static
-    {
-        $this->serieViewing = $serieViewing;
 
         return $this;
     }
@@ -120,6 +107,18 @@ class Alert
     public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getSerieViewingId(): ?int
+    {
+        return $this->serieViewingId;
+    }
+
+    public function setSerieViewingId(?int $serieViewingId): static
+    {
+        $this->serieViewingId = $serieViewingId;
 
         return $this;
     }

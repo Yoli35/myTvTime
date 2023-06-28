@@ -52,11 +52,12 @@ class SerieViewing
     #[ORM\Column(nullable: true)]
     private ?DateTime $modifiedAt;
 
-    #[ORM\OneToOne(mappedBy: 'serieViewing', cascade: ['persist', 'remove'])]
-    private ?Alert $alert = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $alertId;
 
-    public function __construct()
+    public function __construct($alertId = null)
     {
+        $this->alertId = $alertId;
         $this->createdAt = new DateTimeImmutable();
         $this->modifiedAt = new DateTime();
         $this->seasons = new ArrayCollection();
@@ -245,19 +246,14 @@ class SerieViewing
         return $this;
     }
 
-    public function getAlert(): ?Alert
+    public function getAlertId(): ?int
     {
-        return $this->alert;
+        return $this->alertId;
     }
 
-    public function setAlert(Alert $alert): static
+    public function setAlertId(?int $alertId): static
     {
-        // set the owning side of the relation if necessary
-        if ($alert->getSerieViewing() !== $this) {
-            $alert->setSerieViewing($this);
-        }
-
-        $this->alert = $alert;
+        $this->alertId = $alertId;
 
         return $this;
     }

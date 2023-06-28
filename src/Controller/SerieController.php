@@ -578,12 +578,31 @@ class SerieController extends AbstractController
 
     public function seriesToBeToArray($user, $serieViewings, $imageConfig, $locale): array
     {
-        $results = array_map(function ($serieViewing) {
-            return $serieViewing->getSerie();
+        $serieViewingIds = array_map(function ($serieViewing) {
+            return $serieViewing->getId();
         }, $serieViewings);
-        $ids = array_map(function ($result) {
-            return $result->getId();
-        }, $results);
+        $ids = $this->serieViewingRepository->getSerieIds($serieViewingIds);
+        $ids = array_map(function ($item) {
+            return $item['id'];
+        }, $ids);
+        $results = $this->serieRepository->findBy(['id' => $ids]);
+        // trier results par id selon ids
+        $results = array_map(function ($id) use ($results) {
+            foreach ($results as $result) {
+                if ($result->getId() === $id) {
+                    return $result;
+                }
+            }
+            return null;
+        }, $ids);
+        dump(['test' => $ids, 'results' => $results, 'serieViewings' => $serieViewings]);
+
+//        $results = array_map(function ($serieViewing) {
+//            return $serieViewing->getSerie();
+//        }, $serieViewings);
+//        $ids = array_map(function ($result) {
+//            return $result->getId();
+//        }, $results);
 
         $favorites = $this->favoriteRepository->findBy(['type' => 'serie', 'userId' => $user->getId(), 'mediaId' => $ids]);
         $networks = $this->serieRepository->networks($ids);
@@ -1181,6 +1200,8 @@ class SerieController extends AbstractController
         }, $tv['seasons']);
 //        dump($tv);
 
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
+
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serieId,
@@ -1203,7 +1224,7 @@ class SerieController extends AbstractController
             'viewedEpisodes' => $serieViewing?->getViewedEpisodes(),
             'isTimeShifted' => $serieViewing?->isTimeShifted(),
             'nextEpisodeToWatch' => $nextEpisodeToWatch ?? null,
-            'alert' => $serieViewing?->getAlert(),
+            'alert' => $alert,
             'ygg' => $ygg,
             'yggOriginal' => $yggOriginal,
             'imageConfig' => $imageConfiguration->getConfig(),
@@ -1319,7 +1340,7 @@ class SerieController extends AbstractController
         $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
 //      dump(['serie' => $serie, 'serieViewing' => $serieViewing, 'isActivated' => $isActivated]);
 
-        $alert = $serieViewing->getAlert();
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
         $success = true;
 
         if ($alert === null) {
@@ -1649,9 +1670,10 @@ class SerieController extends AbstractController
         }
 
         $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
         $blockNextEpisodeToWatch = $this->render('blocks/serie/_next_episode_to_watch.html.twig', [
             'nextEpisodeToWatch' => $nextEpisodeToWatch,
-            'alert' => $serieViewing->getAlert(),
+            'alert' => $alert,
         ]);
 
         return $this->json([
