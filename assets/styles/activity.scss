@@ -641,6 +641,19 @@
                 object-fit: cover;
                 width: 100%;
             }
+
+            .counter {
+                align-items: center;
+                background-color: var(--gradient-red-40);
+                border-radius: 999px;
+                bottom: 1rem;
+                color: var(--gradient-red-90);
+                display: flex;
+                justify-content: center;
+                padding: .25rem .5rem;
+                position: absolute;
+                right: 1rem;
+            }
         }
     }
 }

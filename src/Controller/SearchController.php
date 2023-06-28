@@ -54,7 +54,7 @@ class SearchController extends AbstractController
                 "results" => $results
             ];
 //            dump(["query" => $query, "movies" => $movies, "series" => $series, "casts" => $casts]);
-            dump(["query" => $query, "results" => $results]);
+//            dump(["query" => $query, "results" => $results]);
         } else {
             $standing = $this->TMDBService->multiSearch($page, $query, $request->getLocale());
             $results = strlen($standing) ? json_decode($standing, true) : [];

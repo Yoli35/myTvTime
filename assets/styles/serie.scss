@@ -220,7 +220,7 @@
                         @include flex-col(flex-start, flex-start);
                         height: var(--serie-lg-height);
                         padding: .5em;
-                        width: calc(100% - var(--serie-lg-poster-width));
+                        width: calc(100% - calc(2 * var(--serie-lg-poster-width)));
                         z-index: 0;
 
                         div {
@@ -322,16 +322,47 @@
                     }
 
                     .today, .tomorrow, .next, .passed {
-                        @include flex-row();
-                        border-radius: .5em;
+                        @include flex-col();
+                        border-radius: 0 .5rem .5rem 0;
                         color: var(--gradient-ardoise-100);
                         font-weight: 300;
-                        height: 2em;
-                        padding: 0 .5em;
-                        position: absolute;
-                        right: 1em;
-                        text-align: center;
-                        bottom: 1em;
+                        gap: 1rem;
+                        height: var(--serie-lg-height);
+                        width: var(--serie-lg-poster-width);
+
+                        div:nth-child(2) {
+                            font-size: 3rem;
+                            font-weight: 200;
+                            line-height: 3rem;
+                        }
+                        div:nth-child(4) {
+                            font-size: 1.5rem;
+                            font-weight: 200;
+                            line-height: 2rem;
+                            text-align: center;
+                        }
+                    }
+
+                    //.today, .tomorrow, .next, .passed {
+                    //    @include flex-row();
+                    //    border-radius: .5em;
+                    //    color: var(--gradient-ardoise-100);
+                    //    font-weight: 300;
+                    //    height: 2em;
+                    //    padding: 0 .5em;
+                    //    position: absolute;
+                    //    right: 1em;
+                    //    text-align: center;
+                    //    bottom: 1em;
+                    //}
+                    //
+
+                    .today, .tomorrow {
+                        div:nth-child(1) {
+                            font-size: 2rem;
+                            font-weight: 200;
+                            line-height: 2rem;
+                        }
                     }
 
                     .today {

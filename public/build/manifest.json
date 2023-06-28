@@ -1,8 +1,8 @@
 {
-  "build/app.css": "/build/app.css",
-  "build/app.js": "/build/app.js",
-  "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-3146f7.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_symfony_ux-dropzone_d-3146f7.js",
+  "build/app.css": "/build/app.59f4f478.css",
+  "build/app.js": "/build/app.bd862995.js",
+  "build/runtime.js": "/build/runtime.9a71ee5d.js",
+  "build/346.1c1c3e74.js": "/build/346.1c1c3e74.js",
   "build/images/search-header.jpg": "/build/images/search-header.fcab151a.jpg",
   "build/images/tiktok-header6.jpg": "/build/images/tiktok-header6.3dcdca83.jpg",
   "build/images/activity-header.jpeg": "/build/images/activity-header.2eed50c2.jpeg",

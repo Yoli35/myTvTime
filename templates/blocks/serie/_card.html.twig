@@ -1,7 +1,8 @@
 <a href="{{ path('app_serie_show', {'id': serie.id}) }}?p={{ pages.page }}&from={{ from }}" title="{{ serie.name }}">
     <div class="serie" id="{{ serie.id }}">
         {% if serie.backdropPath %}
-            <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
+            <div class="backdrop"
+                 style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
         {% endif %}
         <div class="poster">
             {#            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ 'Poster' }}"> #}
@@ -10,7 +11,8 @@
         <div class="infos">
             <div>{{ serie.name }}</div>
             <div>{{ 'First Air at'|trans }} : {{ serie.firstDateAir ? serie.firstDateAir|format_date() : '' }}</div>
-            <div>{{ 'Added at'|trans }} : {{ serie.createdAt ? serie.createdAt|format_date() : '' }} — {{ 'Updated at'|trans }} : {{ serie.updatedAt ? serie.updatedAt|format_datetime() : '' }}</div>
+            <div>{{ 'Added at'|trans }} : {{ serie.createdAt ? serie.createdAt|format_date() : '' }}
+                — {{ 'Updated at'|trans }} : {{ serie.updatedAt ? serie.updatedAt|format_datetime() : '' }}</div>
             <div>{{ serie.overview }}</div>
         </div>
         {% if serie.networks|length %}
@@ -18,7 +20,8 @@
                 {% for network in serie.networks %}
                     <div class="network-item">
                         {% if network.logoPath|length %}
-                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ network.logoPath }}" alt="{{ network.name }}">
+                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ network.logoPath }}"
+                                 alt="{{ network.name }}">
                         {% else %}
                             {{ network.name|slice(0,1)|capitalize }}
                         {% endif %}
@@ -77,16 +80,34 @@
                 <div class="favorite">{{ 'Favorite'|trans }}</div>
             {% endif %}
             {% if serie.today %}
-                <div class="today">{{ 'New episode today'|trans }}</div>
+                <div class="today">
+                    <div>{{ 'New episode today'|trans }}</div>
+                    <div>{{ serie.nextEpisode }}</div>
+                </div>
             {% endif %}
             {% if serie.tomorrow %}
-                <div class="tomorrow">{{ 'New episode tomorrow'|trans }}</div>
+                <div class="tomorrow">
+                    <div>{{ 'New episode tomorrow'|trans }}</div>
+                    <div>{{ serie.nextEpisode }}</div>
+                </div>
             {% endif %}
             {% if serie.next is defined %}
-                <div class="next">{{ 'Next episode'|trans }} {{ serie.nextEpisode }} : {{ serie.nextText }}, {{ serie.next|format_date('full') }}</div>
+                <div class="next">
+                    <div>{{ 'Next episode'|trans }}</div>
+                    <div>{{ serie.nextEpisode }}</div>
+                    <div>{{ serie.nextText }}</div>
+                    {% set future = serie.next|format_date('relative_full')|capitalize|split(' ', 2) %}
+                    <div>{{ future.0 }}{% if future|length > 1 %}<br>{{ future.1 }}{% endif %}</div>
+                </div>
             {% endif %}
             {% if serie.passed is defined %}
-                <div class="passed">{{ 'Next episode'|trans }} {{ serie.nextEpisode }} : {{ serie.passedText }} ({{ serie.passed }})</div>
+                <div class="passed">
+                    <div>{{ 'Next episode'|trans }}</div>
+                    <div>{{ serie.nextEpisode }}</div>
+                    <div>{{ serie.passedText }}</div>
+                    {% set past = serie.passed|format_date('relative_full')|capitalize|split(' ', 2) %}
+                    <div>{{ past.0 }}{% if past|length > 1 %}<br>{{ past.1 }}{% endif %}</div>
+                </div>
             {% endif %}
         {% endif %}
         <div class="front"></div>

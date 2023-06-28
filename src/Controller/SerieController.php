@@ -219,13 +219,14 @@ class SerieController extends AbstractController
                     if (!$findIt) {
                         if ($episodeDiff->days == 0) {
                             $serie['today'] = true;
+                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
                             $findIt = true;
                         }
                     }
                     if (!$findIt) {
                         if ($episodeDiff->days) {
                             if ($episodeDiff->invert) {
-                                $serie['passed'] = $episode->getAirDate()->format("d/m/Y");
+                                $serie['passed'] = $episode->getAirDate()->format("m/d/Y");
                                 if ($episodeDiff->y) {
                                     $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
                                 } else {
@@ -285,10 +286,12 @@ class SerieController extends AbstractController
             $serie['favorite'] = $this->isFavorite($serie, $favorites);
             $serie['networks'] = $this->getNetworks($serie, $networks);
 
-            $this->saveImageFromUrl(
-                $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie['posterPath'],
-                "../public/images/series/posters" . $serie['posterPath']
-            );
+            if ($serie['posterPath'] && !file_exists("../public/images/series/posters" . $serie['posterPath'])) {
+                $this->saveImageFromUrl(
+                    $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie['posterPath'],
+                    "../public/images/series/posters" . $serie['posterPath']
+                );
+            }
 
             $series[] = $serie;
         }
@@ -592,10 +595,12 @@ class SerieController extends AbstractController
             $serie['favorite'] = $this->isFavorite($serie, $favorites);
             $serie['networks'] = $this->getNetworks($serie, $networks);
 
-            $this->saveImageFromUrl(
-                $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie['posterPath'],
-                "../public/images/series/posters" . $serie['posterPath']
-            );
+            if (!file_exists("../public/images/series/posters" . $serie['posterPath'])) {
+                $this->saveImageFromUrl(
+                    $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie['posterPath'],
+                    "../public/images/series/posters" . $serie['posterPath']
+                );
+            }
             return $serie;
         }, $results);
 
