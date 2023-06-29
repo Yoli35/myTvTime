@@ -168,13 +168,13 @@ export class Series {
         header.addEventListener("mouseenter", thisGlobal.stopSlide);
         header.addEventListener("mouseleave", thisGlobal.startSlide);
 
-        document.addEventListener("visibilitychange", () => {
-            if (document.visibilityState === 'visible') {
-                thisGlobal.startSlide();
-            } else {
-                thisGlobal.stopSlide();
-            }
-        });
+        // document.addEventListener("visibilitychange", () => {
+        //     if (document.visibilityState === 'visible') {
+        //         thisGlobal.startSlide();
+        //     } else {
+        //         thisGlobal.stopSlide();
+        //     }
+        // });
 
         document.addEventListener("visibilitychange", () => (document.visibilityState === 'visible') ? thisGlobal.startSlide() : thisGlobal.stopSlide());
 
@@ -184,11 +184,12 @@ export class Series {
     slideFunc() {
         const header = document.querySelector(".header");
         const modulo = thisGlobal.slideImages.length;
+        const slideIndex = thisGlobal.slideIndex;
         let filename, nameDiv, name, backdrop, newBackdrop, link, newLink, href;
 
-        filename = thisGlobal.slideImages[thisGlobal.slideIndex];
-        name = thisGlobal.slideNames[thisGlobal.slideIndex];
-        href = thisGlobal.slideLinks[thisGlobal.slideIndex];
+        filename = thisGlobal.slideImages[slideIndex];
+        name = thisGlobal.slideNames[slideIndex];
+        href = thisGlobal.slideLinks[slideIndex];
         backdrop = header.querySelector(".backdrop");
         newBackdrop = document.createElement("div");
         newBackdrop.classList.add("backdrop", "right");
@@ -206,13 +207,15 @@ export class Series {
         header.insertBefore(newLink, header.querySelector(".left-arrow"));
 
         setTimeout(() => {
-            backdrop.classList.add("left");
-            newBackdrop.classList.remove("right");
-            link.classList.add("left");
+            const backdrop = header.querySelector(".backdrop");
+            const newBackdrop = header.querySelector(".backdrop.right");
+            backdrop.classList.add("left", "to-be-deleted");
+            newBackdrop?.classList.remove("right");
+            link.classList.add("left", "to-be-deleted");
             newLink.classList.remove("right");
-            thisGlobal.indicators(header, thisGlobal.slideIndex, modulo);
+            thisGlobal.indicators(header, slideIndex, modulo);
         }, thisGlobal.actionDelay);
-        thisGlobal.slideIndex = (thisGlobal.slideIndex + 1) % modulo;
+        thisGlobal.slideIndex = (slideIndex + 1) % modulo;
         setTimeout(() => {
             let leftBackdrop = header.querySelector(".backdrop.left");
             let leftLink = header.querySelector(".link.left");
@@ -223,8 +226,9 @@ export class Series {
                 header.removeChild(leftLink);
             }
             setTimeout(() => {
-                while (header.querySelectorAll(".backdrop").length > 1) {
-                    header.removeChild(header.lastChild); // Dernière div.backdrop
+                while (header.querySelectorAll(".to-be-deleted").length) {
+                    const node = header.querySelector(".to-be-deleted");
+                    header.removeChild(node);
                 }
             }, thisGlobal.removeDelay);
         }, thisGlobal.translateDuration + thisGlobal.removeDelay);
@@ -962,7 +966,7 @@ export class Series {
                 /*check if the item starts with the same letters as the text field value:*/
                 let ok_name = list[i].name.substring(0, val.length).toUpperCase() === val.toUpperCase();
                 let ok_original = list[i].original.substring(0, val.length).toUpperCase() === val.toUpperCase();
-                let year = ' (' + list[i].first_date_air.date.slice(0, 4) + ')';
+                let year = ' (' + list[i].date.slice(0, 4) + ')';
                 if (ok_name || ok_original) {
                     /*create a DIV element for each matching element:*/
                     b = document.createElement("div");
@@ -1015,13 +1019,13 @@ export class Series {
             if (currentFocus >= x.length) currentFocus = 0;
             if (currentFocus < 0) currentFocus = (x.length - 1);
             /*add class "autocomplete-active":*/
-            x[currentFocus].classList.add("autocomplete-active");
+            x[currentFocus].classList.add("active");
         }
 
         function removeActive(x) {
             /*a function to remove the "active" class from all autocomplete items:*/
             for (let i = 0; i < x.length; i++) {
-                x[i].classList.remove("autocomplete-active");
+                x[i].classList.remove("active");
             }
         }
 

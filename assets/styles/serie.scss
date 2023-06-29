@@ -637,37 +637,27 @@
                     }
 
                     .autocomplete-items {
-                        border: 1px solid var(--gradient-ardoise-80);
-                        border-bottom: none;
-                        border-top: none;
-                        left: 0;
-                        max-height: 32em;
-                        overflow: scroll;
-                        position: absolute;
-                        right: 0;
-                        top: 100%;
-                        width: 22em;
-                        z-index: 99;
+                        @include autocomplete-items;
                     }
-
-                    .autocomplete-items div {
-                        padding: .25em .5em calc(.25em - 1px);
-                        cursor: pointer;
-                        background-color: var(--gradient-ardoise-90);
-                        border-bottom: 1px solid var(--gradient-ardoise-70);
-                        color: var(--gradient-ardoise-30);
-                    }
-
-                    .autocomplete-items div:hover {
-                        /*when hovering an item:*/
-                        background-color: var(--gradient-ardoise-80);
-                    }
-
-                    .autocomplete-active {
-                        /*when navigating through the items using the arrow keys:*/
-                        background-color: var(--gradient-ardoise-40) !important;
-                        color: var(--gradient-ardoise-90) !important;
-                    }
+                    //
+                    //.autocomplete-items div {
+                    //    padding: .25em .5em calc(.25em - 1px);
+                    //    cursor: pointer;
+                    //    background-color: var(--gradient-ardoise-90);
+                    //    border-bottom: 1px solid var(--gradient-ardoise-70);
+                    //    color: var(--gradient-ardoise-30);
+                    //}
+                    //
+                    //.autocomplete-items div:hover {
+                    //    /*when hovering an item:*/
+                    //    background-color: var(--gradient-ardoise-80);
+                    //}
+                    //
+                    //.autocomplete-active {
+                    //    /*when navigating through the items using the arrow keys:*/
+                    //    background-color: var(--gradient-ardoise-40) !important;
+                    //    color: var(--gradient-ardoise-90) !important;
+                    //}
                 }
             }
 
@@ -1293,61 +1283,6 @@
                     }
                 }
             }
-
-            /*
-            .add {
-                @include seen(var(--serie-add), 2.5em, 2rem);
-            }
-
-            .seen {
-                @include seen(var(--serie-seen), 2.5em, 2rem);
-            }
-
-            .ygg {
-                @include seen(hsl(0, 0%, 0%), 1.5em, 6rem);
-                background-image: url("../images/yggland.png");
-                background-position: center;
-                background-size: cover;
-                bottom: 1.75rem;
-
-                a {
-                    div {
-                        height: 1em;
-                        width: 1em;
-                    }
-                }
-            }
-
-            .ygg-original {
-                @include seen(hsl(0, 0%, 0%), 1.5em, 9rem);
-                background-image: url("../images/yggland.png");
-                background-position: center;
-                background-size: cover;
-                bottom: 1.75rem;
-
-                a {
-                    div {
-                        height: 1em;
-                        width: 1em;
-                    }
-                }
-            }
-
-            .tmdb {
-                @include seen(hsl(0, 0%, 0%), 1.5em, 12rem);
-                background-image: url("../images/the-movie-database.png");
-                background-position: center;
-                background-size: cover;
-                bottom: 1.75rem;
-
-                a {
-                    div {
-                        height: 1em;
-                        width: 1em;
-                    }
-                }
-            }
-            */
         }
     }
 
@@ -2686,7 +2621,7 @@
             }
 
             .wrapper {
-                width: calc(70% - 1em);
+                width: calc(75% - 1em);
 
                 a {
                     .serie {
@@ -2701,7 +2636,7 @@
                 margin-left: 1em;
                 //position: sticky;
                 //top: 4em;
-                width: 30%;
+                width: 25%;
 
                 &.mobile {
                     display: none;

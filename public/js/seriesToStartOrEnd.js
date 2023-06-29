@@ -20,7 +20,7 @@ function setBackgrounds(series) {
         const backdropStyle = backdrop.getAttribute("style");
         const img = poster.querySelector("img");
         const color = averageColor.getColor(img);
-        if (color.lightness > 127) {
+        if (color.lightness > 110) {
             serie.classList.add("light");
         } else {
             serie.classList.add("dark");

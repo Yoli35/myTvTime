@@ -1214,3 +1214,34 @@ $fa-font-path: "../webfonts";
         }
     }
 }
+
+@mixin autocomplete-items {
+    border: 1px solid var(--gradient-ardoise-80);
+    border-bottom: none;
+    border-top: none;
+    left: 0;
+    max-height: 32em;
+    overflow: scroll;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 22em;
+    z-index: 50;
+
+    div {
+        padding: .25em .5em calc(.25em - 1px);
+        cursor: pointer;
+        background-color: var(--gradient-ardoise-90);
+        border-bottom: 1px solid var(--gradient-ardoise-70);
+        color: var(--gradient-ardoise-30);
+
+        &:hover {
+            background-color: var(--gradient-ardoise-80);
+        }
+
+        &.active {
+            background-color: var(--gradient-ardoise-40) !important;
+            color: var(--gradient-ardoise-90) !important;
+        }
+    }
+}

@@ -97,6 +97,14 @@ class SerieController extends AbstractController
 
         // Liste des séries ajoutées par l'utilisateur pour le menu de recherche
         $list = $serieRepository->listUserSeries($user->getId());
+        $list = array_map(function ($serie) {
+            $newSerie = [];
+            $newSerie['id'] = $serie['id'];
+            $newSerie['name'] = $serie['name'];
+            $newSerie['original'] = $serie['original'];
+            $newSerie['date'] = $serie['first_date_air'] ? $serie['first_date_air']->format('Y-m-d') : null;
+            return $newSerie;
+        }, $list);
         $totalResults = count($list);
 
         $imageConfig = $this->imageConfiguration->getConfig();
@@ -403,7 +411,7 @@ class SerieController extends AbstractController
         $delta = $diff->days;
 
         /** @var Serie[] $todayAirings */
-        $todayAirings = $this->todayAiringSeries($date, $request->getLocale());
+        $todayAirings = $this->todayAiringSeries($date);
 //        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
 
@@ -417,7 +425,7 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function todayAiringSeries(DateTimeImmutable $today, string $locale = 'fr'): array
+    public function todayAiringSeries(DateTimeImmutable $today): array
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -1232,31 +1240,31 @@ class SerieController extends AbstractController
 
     }
 
-    public function cleanCastTable(): void
-    {
-        // Suppression des casts non-utilisés
-        $castRepository = $this->castRepository;
-        $serieCastRepository = $this->serieCastRepository;
-        $serieCasts = $serieCastRepository->findAll();
-        $casts = $castRepository->findAll();
-
-        $serieCastCastIds = array_map(function ($serieCast) {
-            return $serieCast->getCastId();
-        }, $serieCasts);
-
-        $castIds = array_map(function ($cast) {
-            return $cast->getId();
-        }, $casts);
-
-        $castIds = array_diff($castIds, $serieCastCastIds);
-
-        $casts = $castRepository->findBy(['id' => $castIds]);
-
-        foreach ($casts as $cast) {
-            $castRepository->remove($cast);
-        }
-        $castRepository->flush();
-    }
+//    public function cleanCastTable(): void
+//    {
+//        // Suppression des casts non-utilisés
+//        $castRepository = $this->castRepository;
+//        $serieCastRepository = $this->serieCastRepository;
+//        $serieCasts = $serieCastRepository->findAll();
+//        $casts = $castRepository->findAll();
+//
+//        $serieCastCastIds = array_map(function ($serieCast) {
+//            return $serieCast->getCastId();
+//        }, $serieCasts);
+//
+//        $castIds = array_map(function ($cast) {
+//            return $cast->getId();
+//        }, $casts);
+//
+//        $castIds = array_diff($castIds, $serieCastCastIds);
+//
+//        $casts = $castRepository->findBy(['id' => $castIds]);
+//
+//        foreach ($casts as $cast) {
+//            $castRepository->remove($cast);
+//        }
+//        $castRepository->flush();
+//    }
 
     public function getNextEpisodeToWatch(SerieViewing $serieViewing, $locale): ?array
     {
@@ -1685,19 +1693,19 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function networks2Array($networks): array
-    {
-        $networksArray = [];
-        foreach ($networks as $network) {
-            $netWorkArray['id'] = $network->getNetworkId();
-            $networkArray['name'] = $network->getName();
-            $networkArray['logoPath'] = $network->getLogoPath();
-            $networkArray['originCountry'] = $network->getOriginCountry();
-            $networkArray['networkId'] = $network->getNetworkId();
-            $networksArray[] = $networkArray;
-        }
-        return $networksArray;
-    }
+//    public function networks2Array($networks): array
+//    {
+//        $networksArray = [];
+//        foreach ($networks as $network) {
+//            $netWorkArray['id'] = $network->getNetworkId();
+//            $networkArray['name'] = $network->getName();
+//            $networkArray['logoPath'] = $network->getLogoPath();
+//            $networkArray['originCountry'] = $network->getOriginCountry();
+//            $networkArray['networkId'] = $network->getNetworkId();
+//            $networksArray[] = $networkArray;
+//        }
+//        return $networksArray;
+//    }
 
     public function getSerieViewingCreatedAt($serieViewing, $request): DateTimeImmutable|null
     {
