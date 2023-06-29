@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
     {% block title %}myTvTime ▶ ︎
-        {% if from == 'top_rated' %}
-            {{ 'Top Rated Series'|trans }}
+        {% if from == 'popular' %}
+            {{ 'Popular Series'|trans }}
         {% elseif from == 'search' %}
             {{ 'Series search'|trans }}
         {% elseif from == 'my_series_to_start' %}
@@ -28,8 +28,8 @@
     </div>
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
-        {% if from == 'top_rated' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}
+        {% if from == 'popular' %}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_popular')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'search' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: page})~'?query='~query~'&year='~year~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif from == 'my_series_to_start' %}
