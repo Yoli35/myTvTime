@@ -185,12 +185,12 @@ export class Series {
         const header = document.querySelector(".header");
         const modulo = thisGlobal.slideImages.length;
         const slideIndex = thisGlobal.slideIndex;
-        let filename, nameDiv, name, backdrop, newBackdrop, link, newLink, href;
+        let filename, nameDiv, name, newBackdrop, newLink, href;
 
         filename = thisGlobal.slideImages[slideIndex];
         name = thisGlobal.slideNames[slideIndex];
         href = thisGlobal.slideLinks[slideIndex];
-        backdrop = header.querySelector(".backdrop");
+
         newBackdrop = document.createElement("div");
         newBackdrop.classList.add("backdrop", "right");
         newBackdrop.setAttribute("style", "background-image: url('" + filename + "')");
@@ -200,7 +200,6 @@ export class Series {
         newBackdrop.appendChild(nameDiv);
         header.appendChild(newBackdrop);
 
-        link = header.querySelector(".link");
         newLink = document.createElement("a");
         newLink.classList.add("link", "right");
         newLink.setAttribute("href", href);
@@ -209,13 +208,18 @@ export class Series {
         setTimeout(() => {
             const backdrop = header.querySelector(".backdrop");
             const newBackdrop = header.querySelector(".backdrop.right");
+            const link = header.querySelector(".link");
+            const newLink = header.querySelector(".link.right");
+
             backdrop.classList.add("left", "to-be-deleted");
             newBackdrop?.classList.remove("right");
             link.classList.add("left", "to-be-deleted");
             newLink.classList.remove("right");
             thisGlobal.indicators(header, slideIndex, modulo);
         }, thisGlobal.actionDelay);
+
         thisGlobal.slideIndex = (slideIndex + 1) % modulo;
+
         setTimeout(() => {
             let leftBackdrop = header.querySelector(".backdrop.left");
             let leftLink = header.querySelector(".link.left");

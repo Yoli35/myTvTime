@@ -336,6 +336,7 @@
                             font-weight: 200;
                             line-height: 3rem;
                         }
+
                         div:nth-child(4) {
                             font-size: 1.5rem;
                             font-weight: 200;
@@ -343,20 +344,6 @@
                             text-align: center;
                         }
                     }
-
-                    //.today, .tomorrow, .next, .passed {
-                    //    @include flex-row();
-                    //    border-radius: .5em;
-                    //    color: var(--gradient-ardoise-100);
-                    //    font-weight: 300;
-                    //    height: 2em;
-                    //    padding: 0 .5em;
-                    //    position: absolute;
-                    //    right: 1em;
-                    //    text-align: center;
-                    //    bottom: 1em;
-                    //}
-                    //
 
                     .today, .tomorrow {
                         div:nth-child(1) {
@@ -366,12 +353,10 @@
                         }
                     }
 
-                    .today {
-                        background-color: var(--gradient-mars-50);
-                    }
-
-                    .tomorrow {
+                    .today, .tomorrow {
                         background-color: var(--gradient-green-40);
+                        color: var(--gradient-green-100);
+                        isolation: isolate;
                     }
 
                     .next {
@@ -380,8 +365,8 @@
                     }
 
                     .passed {
-                        background-color: var(--gradient-mars-40);
-                        color: var(--gradient-mars-90);
+                        background-color: var(--gradient-green-30);
+                        color: var(--gradient-green-90);
                     }
 
                     .add {
@@ -639,6 +624,7 @@
                     .autocomplete-items {
                         @include autocomplete-items;
                     }
+
                     //
                     //.autocomplete-items div {
                     //    padding: .25em .5em calc(.25em - 1px);
@@ -2598,7 +2584,81 @@
 
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
+    .serie-page {
+        main {
+            flex-direction: row;
+            width: 100%;
+
+            article {
+                width: 70%;
+
+                &.full {
+                    width: 100%;
+                }
+
+                section {
+                    .seasons, .episodes {
+                        border-radius: .5em;
+                        padding: 1em;
+
+                        a {
+                            .season, .episode {
+                                border-radius: .5em;
+
+                                .poster {
+
+                                    img {
+                                        border-radius: .5em 0 0 .5em;
+                                        max-width: 20em;
+                                        object-fit: cover;
+                                    }
+                                }
+                            }
+                        }
+
+                        .episode {
+                            border-radius: 1em;
+
+                            .still {
+
+                                img {
+                                    border-bottom-left-radius: 1em;
+                                    border-top-left-radius: 1em;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .desktop {
+                display: flex;
+            }
+
+            .tablet {
+                display: none;
+            }
+
+            aside {
+                width: calc(30% - 1em);
+
+                .key-facts {
+                    .fact {
+                        .similar {
+                            flex-wrap: wrap;
+                            justify-content: center;
+                            overflow-x: unset;
+                            overflow-y: auto;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1280px) {
     .my-series, .series-search {
         //--serie-lg-height: 15em;
         .header {
@@ -2760,80 +2820,6 @@
                     margin-bottom: 0;
                     position: absolute;
                     right: 0;
-                }
-            }
-        }
-    }
-}
-
-@media (min-width: 1200px) {
-    .serie-page {
-        main {
-            flex-direction: row;
-            width: 100%;
-
-            article {
-                width: 70%;
-
-                &.full {
-                    width: 100%;
-                }
-
-                section {
-                    .seasons, .episodes {
-                        border-radius: .5em;
-                        padding: 1em;
-
-                        a {
-                            .season, .episode {
-                                border-radius: .5em;
-
-                                .poster {
-
-                                    img {
-                                        border-radius: .5em 0 0 .5em;
-                                        max-width: 20em;
-                                        object-fit: cover;
-                                    }
-                                }
-                            }
-                        }
-
-                        .episode {
-                            border-radius: 1em;
-
-                            .still {
-
-                                img {
-                                    border-bottom-left-radius: 1em;
-                                    border-top-left-radius: 1em;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            .desktop {
-                display: flex;
-            }
-
-            .tablet {
-                display: none;
-            }
-
-            aside {
-                width: calc(30% - 1em);
-
-                .key-facts {
-                    .fact {
-                        .similar {
-                            flex-wrap: wrap;
-                            justify-content: center;
-                            overflow-x: unset;
-                            overflow-y: auto;
-                        }
-                    }
                 }
             }
         }

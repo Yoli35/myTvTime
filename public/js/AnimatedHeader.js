@@ -16,9 +16,8 @@ export class AnimatedHeader {
         this.initHeader(from);
         if (this.posters) this.initPosters();
     }
-
-    headerWidth = 0;
-    intervalId = null;
+    // rowCount = 0;
+    // intervalId = null;
 
     initHeader(from) {
         let ticking = false,
@@ -98,25 +97,27 @@ export class AnimatedHeader {
         h1.replaceWith(posters);
 
         this.generatePosters();
+        window.addEventListener("resize", this.setOffset);
     }
 
     generatePosters() {
         const header = document.querySelector(".header");
-
-        if (header.clientWidth === thisGlobal.headerWidth) return;
-
-        thisGlobal.headerWidth = header.clientWidth;
-        if (thisGlobal.intervalId) clearInterval(thisGlobal.intervalId);
-
         const posters = header.querySelector(".posters");
         const headerWidth = header.clientWidth;
         const headerHeight = header.clientHeight;
         const posterHeight = headerHeight / 2;
         const posterWidth = posterHeight * 2 / 3;
         const rowCount = Math.ceil(headerWidth / posterWidth);
+
+        if (rowCount === thisGlobal.rowCount) return;
+        thisGlobal.rowCount = rowCount;
+
+        // la première fois, on ne veut pas clear interval
+        if (thisGlobal.intervalId) clearInterval(thisGlobal.intervalId);
+
         const rowWidth = rowCount * posterWidth;
-        const offsetX = (headerWidth - rowWidth) / 2;
         const posterCount = rowCount * 2;
+        const offsetX = (headerWidth - rowWidth) / 2;
 
         posters.innerHTML = "";
 
@@ -135,20 +136,41 @@ export class AnimatedHeader {
             posters.appendChild(poster);
         }
 
-        thisGlobal.intervalId = setInterval(() => {
-            const poster = document.querySelector(".changing-poster[data-index='" + Math.floor(Math.random() * posterCount) + "']");
-            const img = poster.querySelector("img");
-            // const counter = poster.querySelector(".counter");
+        thisGlobal.intervalId = setInterval(this.changePoster, 1000);
+    }
+
+    changePoster() {
+        const posterCount = thisGlobal.rowCount * 2;
+        const poster = document.querySelector(".changing-poster[data-index='" + Math.floor(Math.random() * posterCount) + "']");
+        const img = poster.querySelector("img");
+        // const counter = poster.querySelector(".counter");
+        setTimeout(()=> {
+            poster.classList.add("flap");
+        }, 0);
+        setTimeout(()=> {
+            // counter.innerText = parseInt(counter.innerText) + 1;
+            img.setAttribute("src", thisGlobal.posterPath + thisGlobal.posters[Math.floor(Math.random() * thisGlobal.posters.length)]);
             setTimeout(()=> {
-                poster.classList.add("flap");
-            }, 0);
-            setTimeout(()=> {
-                // counter.innerText = parseInt(counter.innerText) + 1;
-                img.setAttribute("src", thisGlobal.posterPath + thisGlobal.posters[Math.floor(Math.random() * thisGlobal.posters.length)]);
-                setTimeout(()=> {
-                    poster.classList.remove("flap");
-                }, 100);
-            }, 450);
-        }, 1000);
+                poster.classList.remove("flap");
+            }, 100);
+        }, 450);
+    }
+
+    setOffset() {
+        const header = document.querySelector(".header");
+        const posters = header.querySelectorAll(".changing-poster");
+        const headerWidth = header.clientWidth;
+        const headerHeight = header.clientHeight;
+        const posterHeight = headerHeight / 2;
+        const posterWidth = posterHeight * 2 / 3;
+        const rowCount = Math.ceil(headerWidth / posterWidth);
+        const rowWidth = rowCount * posterWidth;
+        const posterCount = rowCount * 2;
+        const offsetX = (headerWidth - rowWidth) / 2;
+
+        for (let i = 0; i < posterCount; i++) {
+            const poster = posters[i];
+            poster.setAttribute("style", "left: " + (offsetX + ((i % rowCount) * posterWidth)) + "px; top: " + ((i < rowCount) ? 0 : posterHeight) + "px;");
+        }
     }
 }
