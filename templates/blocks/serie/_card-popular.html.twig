@@ -4,7 +4,8 @@
             <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
         {% endif %}
         <div class="poster">
-            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ 'Poster' }}">
+{#            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ 'Poster' }}">#}
+            <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ 'Poster' }}">
         </div>
         <div class="infos">
             <div>{{ serie.name }}</div>
@@ -12,12 +13,12 @@
             <div>{{ serie.vote_average }} / 10 - {{ serie.vote_count }} {{ 'votes' }}</div>
             <div>{{ serie.overview }}</div>
         </div>
-        {% if serieIds|length %}
-            {% if serie.id in serieIds %}
-                <div class="seen"><i class="fa-solid fa-eye"></i></div>
-            {% else %}
-                <div class="add" data-id="{{ serie.id }}" data-from="{{ from }}"><i class="fa-solid fa-circle-plus"></i></div>
-            {% endif %}
-        {% endif %}
+{#        {% if serieIds|length %}#}
+{#            {% if serie.id in serieIds %}#}
+{#                <div class="seen"><i class="fa-solid fa-eye"></i></div>#}
+{#            {% else %}#}
+{#                <div class="add" data-id="{{ serie.id }}" data-from="{{ from }}"><i class="fa-solid fa-circle-plus"></i></div>#}
+{#            {% endif %}#}
+{#        {% endif %}#}
     </div>
 </a>

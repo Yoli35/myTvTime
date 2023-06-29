@@ -2,13 +2,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Home'|trans }}</a></li>
         <li class="breadcrumb-item"><a href="{{ path('app_movie_list') }}">{{ 'Movies'|trans }}</a></li>
-        {{ include('blocks/movie/_bracket.html.twig') }}
-        {% if from is defined %}
-            {% if from in ['home', 'my_series', 'my_series_to_start', 'my_series_to_end', 'search'] %}
-                <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}">{{ 'Series'|trans }}</a></li>
-                {{ include('blocks/serie/_bracket.html.twig') }}
-            {% endif %}
-        {% endif %}
+        <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}">{{ 'Series'|trans }}</a></li>
         <li>
             {{ include('blocks/user/_userMenu.twig') }}
         </li>

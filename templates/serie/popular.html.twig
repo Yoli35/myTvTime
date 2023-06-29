@@ -1,52 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}myTvTime ▶ ︎
-    {% if from == 'popular' %}
-        {{ 'Popular Series'|trans }}
-    {% elseif from == 'top_rated' %}
-        {{ 'Top rated Series'|trans }}
-    {% elseif from == 'airing_today' %}
-        {{ 'Series Airing Today'|trans }}
-    {% elseif from == 'on_the_air' %}
-        {{ 'Series On The Air'|trans }}
-    {% elseif from == 'latest' %}
-        {{ 'Latest Series'|trans }}
-    {% endif %}
+    {{ 'Popular Series'|trans }}
 {% endblock %}
 
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container">
+    <div class="container-fluid">
         <div class="my-series">
             <div class="header">
-                {% if from == 'popular' %}
-                    <h1>{{ 'Popular Series'|trans }}</h1>
-                {% elseif from == 'top_rated' %}
-                    <h1>{{ 'Top rated Series'|trans }}</h1>
-                {% elseif from == 'airing_today' %}
-                    <h1>{{ 'Series Airing Today'|trans }}</h1>
-                {% elseif from == 'on_the_air' %}
-                    <h1>{{ 'Series On The Air'|trans }}</h1>
-                {% elseif from == 'latest' %}
-                    <h1>{{ 'Latest Series'|trans }}</h1>
-                {% endif %}
+                <h1>{{ 'Popular Series'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
 
-            {% if from == 'popular' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Popular Series'|trans}) }}
-            {% elseif from == 'top_rated' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Top rated Series'|trans}) }}
-            {% elseif from == 'airing_today' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Series Airing Today'|trans}) }}
-            {% elseif from == 'on_the_air' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Series On The Air'|trans}) }}
-            {% elseif from == 'latest' %}
-                {{ include('blocks/_nav.html.twig', {thisPage: 'Latest Series'|trans}) }}
-            {% endif %}
+            {{ include('blocks/_nav.html.twig', {thisPage: 'Popular Series'|trans}) }}
 
             <main>
-                <div class="series">
+                <div class="series stretch">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
                             {{ include('blocks/serie/_pagination-popular.html.twig') }}
@@ -59,8 +29,8 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="series-tools">
-                        <div class="pages">
+                    <div class="series-tools desktop">
+                        <div class="pages desktop">
                             {{ include('blocks/serie/_pagination-popular.html.twig') }}
                         </div>
                     </div>
@@ -76,138 +46,14 @@
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
+    <div id="globs-data" style="display: none">
+        {
+        "posters": {{ posters|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+        "posterPath": "{{ posterPath }}"
+        }
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        const _app_serie_new = "{{ path('app_serie_new') }}";
-        const _current_page = {{ pages.page }};
-        const _per_page = {{ pages.per_page }};
-        const _from = "{{ from }}";
-
-        window.addEventListener("DOMContentLoaded", () => {
-
-            // initSettings();
-            initPreview();
-            newPopularSerie();
-            initHeader();
-            initPages();
-
-            setTimeout(()=> {
-                document.querySelector(".header").setAttribute("style", "background-color: hsla(0 0% 0% / .25);");
-            }, 0);
-
-
-        })
-
-        function initHeader() {
-            let ticking = false;
-            setH1();
-            window.addEventListener('resize', setH1);
-
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    window.requestAnimationFrame(function () {
-                        setH1();
-                        ticking = false;
-                    });
-                }
-                ticking = true;
-            });
-
-        }
-
-        function setH1() {
-            const header = document.querySelector(".header");
-            const h1 = document.querySelector("h1");
-            let left, ratio, top;
-            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
-            left = (header.clientWidth - h1.clientWidth) / 2;
-            top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
-            if (ratio < 0) ratio = 0;
-            if (ratio > 1) ratio = 1;
-            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
-        }
-
-        function initPages() {
-            const viewportWidth = document.body.clientWidth;
-            if (viewportWidth > 768) {
-                const seriesDiv = document.querySelector(".series");
-                const seriesToolsDiv = seriesDiv.querySelector(".series-tools:not(.mobile)");
-                seriesToolsDiv.classList.add("sticky");
-            }
-        }
-
-        function initPreview() {
-
-            const preview = document.querySelector(".new-serie-preview");
-            const close = preview.querySelector(".close");
-
-            preview.addEventListener("click", dismissPreview);
-            close.addEventListener("click", dismissPreview);
-        }
-
-        function dismissPreview() {
-            const preview = document.querySelector(".new-serie-preview");
-            const message = preview.querySelector(".message").querySelector(".content");
-            const wrapper = preview.querySelector(".wrapper");
-
-            setTimeout(() => {
-                preview.classList.remove("visible");
-            }, 0);
-            wrapper.innerHTML = "";
-            message.innerHTML = "";
-        }
-
-        function newPopularSerie() {
-            document.querySelectorAll(".add").forEach(add => {
-                add.addEventListener("click", addPopularSerie);
-            })
-        }
-
-        function addPopularSerie(evt) {
-            const addButton = evt.currentTarget;
-            let value = addButton.getAttribute("data-id");
-
-            evt.preventDefault();
-
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                let data = {'serie': '', 'status': '', 'response': '', 'id': '', 'card': {}, 'pagination': {}};
-                if (this.response.slice(0, 1) === '<') {
-                    data = this.response;
-                } else {
-                    data = JSON.parse(this.response);
-                    if (data.status === 'Ok') {
-                        const preview = document.querySelector(".new-serie-preview");
-                        const message = preview.querySelector(".message").querySelector(".content");
-                        const wrapper = preview.querySelector(".wrapper");
-
-                        wrapper.innerHTML = data.card.content;
-
-                        if (data.response === "New") {
-                            message.innerHTML = "{{ 'New serie added'|trans }}";
-                        }
-                        if (data.response === "Update") {
-                            message.innerHTML = "{{ 'Serie updated'|trans }}";
-                        }
-                        setTimeout(() => {
-                            preview.classList.add("visible");
-                        }, 0);
-
-                        addButton.classList.remove("add");
-                        addButton.classList.add("seen");
-                        addButton.innerHTML = "<i class=\"fa-solid fa-eye\"></i>"
-                    }
-
-                    if (data.status === "Ko") {
-                        alert("{{ 'Serie not found'|trans }} (ID: " + data.id + ")");
-                    }
-                }
-                console.log({data});
-            }
-            xhr.open("GET", _app_serie_new + '?value=' + value + "&p=" + _current_page + "&from=" + _from);
-            xhr.send();
-        }
-    </script>
+    <script src="/js/seriesToStartOrEnd.js" type="module"></script>
 {% endblock %}

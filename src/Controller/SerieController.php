@@ -49,9 +49,6 @@ class SerieController extends AbstractController
     const MY_SERIES_TO_START = 'my_series_to_start';
     const MY_SERIES_TO_END = 'my_series_to_end';
     const POPULAR = 'popular';
-    const TOP_RATED = 'top_rated';
-    const AIRING_TODAY = 'airing_today';
-    const ON_THE_AIR = 'on_the_air';
     const SEARCH = 'search';
 
     public function __construct(private readonly AlertRepository          $alertRepository,
@@ -622,12 +619,7 @@ class SerieController extends AbstractController
             $serie['favorite'] = $this->isFavorite($serie, $favorites);
             $serie['networks'] = $this->getNetworks($serie, $networks);
 
-            if (!file_exists("../public/images/series/posters" . $serie['posterPath'])) {
-                $this->saveImageFromUrl(
-                    $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie['posterPath'],
-                    "../public/images/series/posters" . $serie['posterPath']
-                );
-            }
+            $this->savePoster($serie['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
             return $serie;
         }, $results);
 
@@ -638,6 +630,16 @@ class SerieController extends AbstractController
         }
 
         return $seriesToBe;
+    }
+
+    public function savePoster($posterPath, $posterUrl): void
+    {
+        if (!file_exists("../public/images/series/posters" . $posterPath)) {
+            $this->saveImageFromUrl(
+                $posterUrl . $posterPath,
+                "../public/images/series/posters" . $posterPath
+            );
+        }
     }
 
     #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
@@ -686,47 +688,20 @@ class SerieController extends AbstractController
     #[Route('/popular', name: 'app_serie_popular', methods: ['GET'])]
     public function popular(Request $request): Response
     {
-//        $this->logService->log($request, $this->getUser());
-        return $this->series($request, self::POPULAR);
-    }
-
-    #[Route('/top/rated', name: 'app_serie_top_rated', methods: ['GET'])]
-    public function topRated(Request $request): Response
-    {
-//        $this->logService->log($request, $this->getUser());
-        return $this->series($request, self::TOP_RATED);
-    }
-
-    #[Route('/airing/today', name: 'app_serie_airing_today', methods: ['GET'])]
-    public function topAiringToday(Request $request): Response
-    {
-//        $this->logService->log($request, $this->getUser());
-        return $this->series($request, self::AIRING_TODAY);
-    }
-
-    #[Route('/on/the/air', name: 'app_serie_on_the_air', methods: ['GET'])]
-    public function topOnTheAir(Request $request): Response
-    {
-//        $this->logService->log($request, $this->getUser());
-        return $this->series($request, self::ON_THE_AIR);
-    }
-
-    public function series(Request $request, $kind): Response
-    {
+        /** @var User $user */
+        $user = $this->getUser();
         $page = $request->query->getInt('p', 1);
         $locale = $request->getLocale();
 
-        $standing = $this->TMDBService->getSeries($kind, $page, $locale);
+        $standing = $this->TMDBService->getSeries(self::POPULAR, $page, $locale);
         $series = json_decode($standing, true);
+        $imageConfig = $this->imageConfiguration->getConfig();
 
-        return $this->render('serie/popular.html.twig', $this->renderParams($kind, $page, $series));
-    }
+        foreach ($series['results'] as $serie) {
+            $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+        }
 
-    public function renderParams($from, $page, $series): array
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        return [
+        return $this->render('serie/popular.html.twig', [
             'series' => $series['results'],
             'serieIds' => $user ? $this->mySerieIds($user) : [],
             'pages' => [
@@ -736,10 +711,12 @@ class SerieController extends AbstractController
                 'link_count' => self::LINK_COUNT,
                 'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
             ],
-            'from' => $from,
+            'from' => self::POPULAR,
             'user' => $user,
+            'posters' => $this->getPosters(),
+            'posterPath' => '/images/series/posters/',
             'imageConfig' => $this->imageConfiguration->getConfig(),
-        ];
+        ]);
     }
 
     public function paginator($totalResults, $page = 1, $perPage = 20, $linkCount = 7): array
