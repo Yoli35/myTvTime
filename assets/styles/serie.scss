@@ -284,7 +284,8 @@
                         //border: 2px solid;
                         //right: 4em;
                         //top: -.75em;
-                        background-color: var(--gradient-green-30-alpha-50);
+                        //z-index: 10;
+                        background-color: var(--gradient-green-40-alpha-50);
                         bottom: 0;
                         color: var(--gradient-green-90);
                         font-weight: 300;
@@ -293,7 +294,6 @@
                         padding: 0 1em;
                         position: absolute;
                         right: var(--serie-lg-poster-width);
-                        z-index: 10;
 
                         &.start-watching {
                             background-color: var(--gradient-mars-50);

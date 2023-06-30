@@ -45,7 +45,6 @@ export class AnimatedHeader {
         })
         this.setH1();
         window.addEventListener('resize', this.setH1);
-        window.addEventListener('resize', this.generatePosters);
 
         window.addEventListener('scroll', () => {
             if (!ticking) {
@@ -97,6 +96,7 @@ export class AnimatedHeader {
         h1.replaceWith(posters);
 
         this.generatePosters();
+        window.addEventListener('resize', this.generatePosters);
         window.addEventListener("resize", this.setOffset);
     }
 
@@ -136,7 +136,7 @@ export class AnimatedHeader {
             posters.appendChild(poster);
         }
 
-        thisGlobal.intervalId = setInterval(this.changePoster, 1000);
+        thisGlobal.intervalId = setInterval(thisGlobal.changePoster, 1000);
     }
 
     changePoster() {
