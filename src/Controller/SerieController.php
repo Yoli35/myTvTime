@@ -236,7 +236,7 @@ class SerieController extends AbstractController
                                     $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
                                 } else {
                                     if ($episodeDiff->m) {
-                                        $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->m . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
+                                        $serie['passedText'] = $this->translator->trans("available since") . " " . ($episodeDiff->m+ + ($episodeDiff->d > 20 ? 1:0)) . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
                                     } else {
                                         if ($episodeDiff->d) {
                                             if ($episodeDiff->d == 1) {
