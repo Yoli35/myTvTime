@@ -27,11 +27,6 @@ export class Series {
         this.translateDuration = 3000;
         this.removeDelay = 100;
         this.actionDelay = 10;
-        // this.slideInterval = -1;
-        // this.slideImages = [];
-        // this.slideNames = [];
-        // this.slideLinks = [];
-        // this.slideIndex = 0;
 
         this.trans = {
             "added": {

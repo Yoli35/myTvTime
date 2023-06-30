@@ -8,11 +8,13 @@
         @include animated-header("../images/activity-header.jpeg");
 
         .animated-h1 {
-            color: var(--light-theme-text);
+            color: var(--gradient-ardoise-20);
         }
 
         .backdrop {
             background-position: center;
+            mix-blend-mode: luminosity;
+            z-index: unset;
         }
 
         .clock {
@@ -20,7 +22,7 @@
             right: 1em;
 
             .face {
-                background-color: var(--gradient-mars-40-alpha-50);
+                background-color: var(--gradient-ardoise-40-alpha-50);
 
                 .number {
                     color: var(--gradient-ardoise-100);
