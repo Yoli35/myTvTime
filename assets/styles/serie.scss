@@ -280,16 +280,19 @@
 
                     .status {
                         @include flex-row();
-                        background-color: var(--gradient-green-30);
-                        border: 2px solid;
-                        border-radius: .5em;
+                        //border-radius: .5em;
+                        //border: 2px solid;
+                        //right: 4em;
+                        //top: -.75em;
+                        background-color: var(--gradient-green-30-alpha-50);
+                        bottom: 0;
                         color: var(--gradient-green-90);
                         font-weight: 300;
                         height: 2em;
+                        left: var(--serie-lg-poster-width);
                         padding: 0 1em;
                         position: absolute;
-                        right: 4em;
-                        top: -.75em;
+                        right: var(--serie-lg-poster-width);
                         z-index: 10;
 
                         &.start-watching {
@@ -1593,6 +1596,11 @@
             }
 
             .key-facts {
+                align-items: center;
+                display: flex;
+                flex-wrap: wrap;
+                gap: .5rem;
+                justify-content: center;
                 width: 100%;
 
                 h4 {
@@ -1602,27 +1610,27 @@
                 .fact {
                     background-color: var(--gradient-ardoise-40-alpha-20);
                     border-radius: .5em;
-                    margin: .5em 0;
+                    //margin: .5em 0;
                     padding: .5em;
 
                     &:has(.similar) {
                         padding: .5em 0;
                         width: 100%;
 
-                        .label {
+                        .fact-label {
                             padding-bottom: .5em;
                             padding-left: .5em;
                         }
                     }
 
-                    .label {
+                    .fact-label {
                         font-weight: 400;
                     }
 
-                    .content {
+                    .fact-content {
                         font-weight: 100;
-                        margin-bottom: .25em;
-                        padding-left: .5em;
+                        //margin-bottom: .25em;
+                        //padding-left: .5em;
 
                         .frame {
                             background-color: var(--gradient-ardoise-90);

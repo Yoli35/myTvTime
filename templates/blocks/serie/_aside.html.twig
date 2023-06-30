@@ -22,28 +22,28 @@
     <div class="key-facts">
         <h4>{{ 'Key facts'|trans }}</h4>
         <div class="fact">
-            <div class="label">{{ 'Original name'|trans }}</div>
-            <div class="content">{{ serie.original_name }}</div>
+            <div class="fact-label">{{ 'Original name'|trans }}</div>
+            <div class="fact-content">{{ serie.original_name }}</div>
         </div>
         <div class="fact">
-            <div class="label">{{ 'Original language'|trans }}</div>
-            <div class="content">{{ serie.original_language|language_name(locale) }}</div>
+            <div class="fact-label">{{ 'Original language'|trans }}</div>
+            <div class="fact-content">{{ serie.original_language|language_name(locale) }}</div>
         </div>
         <div class="fact">
-            <div class="label">{{ 'Original Country'|trans }}</div>
+            <div class="fact-label">{{ 'Original Country'|trans }}</div>
             {% for country in serie.origin_country %}
-                <div class="content">{{ country|country_name(locale) }}</div>
+                <div class="fact-content">{{ country|country_name(locale) }}</div>
             {% endfor %}
         </div>
         <div class="fact">
-            <div class="label">{{ 'Status'|trans }}</div>
-            <div class="content">{{ serie.status|trans }}</div>
+            <div class="fact-label">{{ 'Status'|trans }}</div>
+            <div class="fact-content">{{ serie.status|trans }}</div>
         </div>
         <div class="fact">
             {% if serie.networks|length %}
-                <div class="label">{{ (serie.networks|length>1?'Networks':'Network')|trans }}</div>
+                <div class="fact-label">{{ (serie.networks|length>1?'Networks':'Network')|trans }}</div>
                 {% for network in serie.networks %}
-                    <div class="content">
+                    <div class="fact-content">
                         {% if network.logo_path %}
                             <div class="frame">
                                 <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
