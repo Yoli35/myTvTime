@@ -2135,12 +2135,13 @@
 
             .something-else {
                 img {
+                    aspect-ratio: 20 / 9;
                     border-radius: 1rem;
-                    height: 450px;
+                    height: auto;
                     object-fit: cover;
                     opacity: 0;
                     transition: opacity 300ms ease-in-out;
-                    width: 1000px;
+                    width: clamp(360px, 75vw, 1000px);
 
                     &.show {
                         opacity: 1;
