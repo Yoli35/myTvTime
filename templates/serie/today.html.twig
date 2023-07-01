@@ -3,6 +3,7 @@
 {% block title %}myTvTime ▶ ︎{{ 'My Series airing today'|trans }}{% endblock %}
 {% block description %}{{ 'List of the series I\'m watching, aired today'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
+
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
@@ -10,7 +11,8 @@
             <div class="header">
                 <div class="date"{% if backdrop %} style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop }}')"{% endif %}>{{ date|date("d/m/Y", "Europe/Paris") }}</div>
             </div>
-            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('New episodes'|trans ~ ' : ' ~ date|format_date('full', timezone="Europe/Paris"))}) }}
+            {% set date = date|format_date('full', timezone="Europe/Paris")|capitalize %}
+            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:'New episodes'|trans}) }}
             <main>
                 <div class="time-travel">
                     <div>
@@ -32,7 +34,7 @@
                         <a href="{{ path('app_serie_today', {d: prev-1}) }}">
                             <button class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i></button>
                         </a>
-                        {{ date|format_date('full', timezone="Europe/Paris") }}
+                        <div>{{ fixIfFirstDayOfTheMonth(date)|raw }}</div>
                         <a href="{{ path('app_serie_today', {d: next+1}) }}">
                             <button class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i></button>
                         </a>
