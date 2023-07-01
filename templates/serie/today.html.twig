@@ -55,8 +55,13 @@
                         {{ include('blocks/serie/_card-today.html.twig') }}
                     {% else %}
                         <div class="nothing">
-{#                            {{ 'Nothing to show here'|trans }}#}
+                            <div class="image-filenames" style="display: none">
+                                {
+                                    "filenames": {{ images|json_encode(constant('JSON_PRETTY_PRINT')) }}
+                                }
+                            </div>
                         </div>
+                        <div class="something-else"></div>
                     {% endfor %}
                 </div>
             </main>
@@ -70,10 +75,43 @@
     <script>
         let myCanvas, palettes;
         window.addEventListener("DOMContentLoaded", () => {
+            const nothing = document.querySelector('.nothing');
+            if (nothing) {
+                doSomethingElse();
+            }
+
             const newSeason = document.querySelector('.new-season');
 
             if (newSeason) {
                 setTimeout(celebrate, 300);
+            }
+
+            function doSomethingElse() {
+                const imageFilenames = document.querySelector('.image-filenames');
+                const images = JSON.parse(imageFilenames.textContent.replace(/".DS_Store",/g, ''));
+                const somethingElse = document.querySelector('.something-else');
+                const img = document.createElement('img');
+                let lastImageIndex =  Math.floor(Math.random() * images.filenames.length);
+                img.src = "/images/series/today/" + images.filenames[lastImageIndex];
+                somethingElse.appendChild(img);
+                img.onload = () => {
+                    somethingElse.querySelector("img").classList.add('show');
+                };
+                setInterval(()=> {
+                    somethingElse.querySelector("img").classList.remove('show');
+                    setTimeout(()=> {
+                        let imageIndex =  Math.floor(Math.random() * images.filenames.length);
+                        while (imageIndex === lastImageIndex) {
+                            imageIndex =  Math.floor(Math.random() * images.filenames.length);
+                        }
+                        lastImageIndex = imageIndex;
+                        let img = somethingElse.querySelector("img")
+                        img.src = "/images/series/today/" + images.filenames[imageIndex];
+                        img.onload = () => {
+                            img.classList.add('show');
+                        };
+                    }, 300);
+                }, 5000);
             }
 
             palettes = [

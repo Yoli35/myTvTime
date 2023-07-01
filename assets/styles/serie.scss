@@ -2070,7 +2070,6 @@
             @include flex-100(stretch, center);
             flex-wrap: wrap;
             gap: 1em;
-            min-height: 25em;
 
             .home-discover {
                 a {
@@ -2125,16 +2124,25 @@
                 aspect-ratio: 512 / 508;
                 background-image: url("../images/today-nothing.png");
                 background-size: cover;
-                border-radius: .5rem;
-                font-size: 2em;
-                font-weight: 500;
                 height: auto;
-                padding: 1rem 2rem;
-                width: clamp(64px, 16vw, 512px);
+                width: clamp(128px, 20vw, 512px);
             }
 
             &:has(.nothing) {
                 align-items: center;
+                flex-direction: column;
+            }
+
+            .something-else {
+                img {
+                    border-radius: 1rem;
+                    opacity: 0;
+                    transition: opacity 300ms ease-in-out;
+
+                    &.show {
+                        opacity: 1;
+                    }
+                }
             }
         }
     }

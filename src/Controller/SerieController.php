@@ -411,11 +411,13 @@ class SerieController extends AbstractController
         $todayAirings = $this->todayAiringSeries($date);
 //        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
+        $images = $this->getNothingImages();
 
         return $this->render('serie/today.html.twig', [
             'todayAirings' => $todayAirings,
             'date' => $date,
             'backdrop' => $backdrop,
+            'images' => $images,
             'prev' => $delta * ($diff->invert ? -1 : 1),
             'next' => $delta * ($diff->invert ? -1 : 1),
             'imageConfig' => $this->imageConfiguration->getConfig(),
@@ -493,6 +495,12 @@ class SerieController extends AbstractController
             }
         }
         return null;
+    }
+
+    public function getNothingImages(): array
+    {
+        $images = scandir($this->getParameter('kernel.project_dir') . '/public/images/series/today');
+        return array_slice($images, 2);
     }
 
     #[Route('/to-start', name: 'app_serie_to_start', methods: ['GET'])]
