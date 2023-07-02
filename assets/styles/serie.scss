@@ -1513,8 +1513,8 @@
                                 .view-value {
                                     align-items: center;
                                     border-radius: 50%;
-                                    border: 4px solid var(--gradient-ardoise-50);
-                                    color: var(--gradient-ardoise-50);
+                                    border: 4px solid var(--gradient-ardoise-30);
+                                    color: var(--gradient-ardoise-30);
                                     cursor: pointer;
                                     display: flex;
                                     font-size: 2rem;
@@ -1523,9 +1523,9 @@
                                     width: 3rem;
 
                                     &:has(i[class$="check"]) {
-                                        background-color: var(--gradient-ardoise-50);
-                                        border-color: var(--gradient-ardoise-60);
-                                        color: var(--gradient-ardoise-60);
+                                        background-color: var(--gradient-ardoise-40);
+                                        border-color: var(--gradient-ardoise-30);
+                                        color: var(--gradient-ardoise-70);
 
                                         &.completed {
                                             background-color: var(--gradient-green-30);
@@ -1549,7 +1549,7 @@
                                 }
 
                                 .vote-graduation {
-                                    border: 1px solid var(--gradient-ardoise-40);
+                                    border: 2px solid var(--gradient-ardoise-40);
                                     border-radius: .25rem;
                                     cursor: pointer;
                                     height: .75rem;
@@ -1568,6 +1568,8 @@
                                     }
 
                                     &.light-on {
+                                        background-color: var(--gradient-green-70);
+                                        border-color: var(--gradient-green-70);
                                         box-shadow: 0 0 10px var(--gradient-green-80);
                                     }
                                 }
@@ -3106,16 +3108,22 @@
                                         color: var(--gradient-ardoise-50);
 
                                         &:has(i[class$="check"]) {
-                                            background-color: var(--gradient-green-30);
-                                            border-color: var(--gradient-yellow-50);
-                                            color: var(--gradient-yellow-50);
+                                            background-color: var(--gradient-ardoise-50);
+                                            border-color: var(--gradient-ardoise-80);
+                                            color: var(--gradient-ardoise-80);
+
+                                            &.completed {
+                                                background-color: var(--gradient-green-30);
+                                                border-color: var(--gradient-yellow-50);
+                                                color: var(--gradient-yellow-50);
+                                            }
                                         }
                                     }
                                 }
 
                                 .vote {
                                     .vote-graduation {
-                                        border: 1px solid var(--gradient-ardoise-70);
+                                        border: 2px solid var(--gradient-ardoise-70);
 
                                         &:hover {
                                             background-color: var(--gradient-ardoise-60);

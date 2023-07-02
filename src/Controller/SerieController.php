@@ -1034,23 +1034,11 @@ class SerieController extends AbstractController
             }
             return $episode;
         }, $episodes);
-//        dump(['season' => $season, 'seasonViewing' => $seasonViewing, 'episodes' => $episodes]);
-
-//        dump([
-//            '$episodeViewings[0]' => $episodeViewings[0],
-//            '$episodeViewings[1]' => $episodeViewings[1],
-//            '$episodeViewings[2]' => $episodeViewings[2],
-//            '$episodeViewings[3]' => $episodeViewings[3],
-//            '$episodeViewings[4]' => $episodeViewings[4],
-//            '$episodeViewings[5]' => $episodeViewings[5],
-//            '$episodeViewings[6]' => $episodeViewings[6],
-//            ]);
 
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
             'seasonViewing' => $seasonViewing,
-//            'episodeViewings' => $episodeViewings,
             'episodes' => $episodes,
             'credits' => $credits,
             'parameters' => [
