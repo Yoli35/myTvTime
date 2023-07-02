@@ -16,6 +16,8 @@
                      data-air-date="{{ episodes[episodeViewing.episodeNumber-1].air_date|format_date('long') }}"
                      data-name="{{ name }}"
                      data-still-path="{{ episodes[episodeViewing.episodeNumber-1].still_path }}"
+                     data-vote="{{ episodeViewing.vote }}"
+                     data-locale="{{ locale }}"
                      data-global-index="{{ globalIndex }}">
                     {% if episodeViewing.viewedAt %}
                         <i class="fa-solid fa-circle-check"></i>

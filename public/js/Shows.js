@@ -250,7 +250,10 @@ export class Shows {
         const season = evt.currentTarget.parentElement.getAttribute("data-season-number");
         const name = evt.currentTarget.getAttribute("data-name");
         const airDate = evt.currentTarget.getAttribute("data-air-date");
+        const vote = evt.currentTarget.getAttribute("data-vote");
+        const locale = evt.currentTarget.getAttribute("data-locale");
         const stillPath = evt.currentTarget.getAttribute("data-still-path");
+        const voteText = {"fr": "Votre note : ", "en": "Your vote: ", "de": "Ihre Stimme : ", "es": "Su voto: "};
 
         if (stillPath) {
             const img = document.createElement("img");
@@ -258,7 +261,7 @@ export class Shows {
             img.setAttribute("alt", name);
             bubbleV2.querySelector(".still").appendChild(img);
         }
-        bubbleV2.querySelector(".infos").innerHTML = "<div>" + name + "</div><div>" + airDate + "</div>";
+        bubbleV2.querySelector(".infos").innerHTML = "<div>" + name + "</div><div>" + airDate + "</div>" + (vote>0 ? ("<div>" + voteText[locale] + vote + " / 10</div>") : "");
 
         bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
         bubbleV2.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
