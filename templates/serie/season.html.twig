@@ -138,8 +138,8 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                            {% if episodeViewing.viewedAt %}
-                                                <div class="vote" data-id="{{ episodeViewing.id }}">
+
+                                                <div class="vote{% if episodeViewing.viewedAt %} show{% endif %}" data-id="{{ episodeViewing.id }}">
                                                     <div class="vote-graduation{% if episodeViewing.vote == 10 %} active{% endif %}" data-title="10" data-value="10"></div>
                                                     <div class="vote-graduation{% if episodeViewing.vote >=9 %} active{% endif %}" data-title="9" data-value="9"></div>
                                                     <div class="vote-graduation{% if episodeViewing.vote >=8 %} active{% endif %}" data-title="8" data-value="8"></div>
@@ -152,7 +152,7 @@
                                                     <div class="vote-graduation{% if episodeViewing.vote >=1 %} active{% endif %}" data-title="1" data-value="1"></div>
                                                     <div class="vote-value">{% if episodeViewing.vote %}{{ episodeViewing.vote }}{% endif %}</div>
                                                 </div>
-                                            {% endif %}
+
                                         {% endif %}
                                     </div>
                                 </div>
@@ -172,6 +172,7 @@
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             initSubstituteName();
+            initView();
             initVote();
         });
 
@@ -207,6 +208,34 @@
             xhr.send();
         }
 
+        function initView() {
+            const views = document.querySelectorAll('.view');
+
+            views.forEach((view) => {
+                const viewValue = view.querySelector('.view-value');
+                const vote = view.parentElement.querySelector('.vote');
+                const id = view.getAttribute('data-id');
+                const url = '{{ path('app_episode_view', {id: 0, view: 0})|slice(0,-3) }}' + id + '/';
+                const episodeView = viewValue.querySelector('i').classList.contains('fa-check') ? "1" : "0";
+
+                viewValue.addEventListener('click', (e) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onload = function () {
+                        const data = JSON.parse(this.responseText);
+                        if (data.view) {
+                            viewValue.innerHTML = '<i class="fa-solid fa-check"></i>';
+                            vote.classList.add('show');
+                        } else {
+                            viewValue.innerHTML = '<i class="fa-solid fa-times"></i>';
+                            vote.classList.remove('show');
+                        }
+                    }
+                    xhr.open("GET", url + episodeView, true);
+                    xhr.send();
+                });
+            });
+        }
+
         function initVote() {
             const votes = document.querySelectorAll('.vote');
 
@@ -219,7 +248,8 @@
                 voteGraduations.forEach((graduation) => {
                     graduation.addEventListener('click', (e) => {
                         let value = e.currentTarget.getAttribute('data-value');
-                        const voteValue = e.currentTarget.parentElement.querySelector('.vote-value').innerText;
+                        const voteValueDiv = e.currentTarget.parentElement.querySelector('.vote-value');
+                        const voteValue = voteValueDiv.innerText;
 
                         if (value === "1" && voteValue === "1") {
                             value = "0";
@@ -228,8 +258,17 @@
                         const xhr = new XMLHttpRequest();
                         xhr.onload = function () {
                             const data = JSON.parse(xhr.responseText);
-                            console.log(data);
-                            // Todo: update voteValue & vote graduations
+                            const voteValue = data.vote;
+
+                            voteValueDiv.innerText = voteValue;
+                            voteGraduations.forEach((graduation) => {
+                                const voteGraduationValue = parseInt(graduation.getAttribute('data-value'));
+                                if (voteGraduationValue <= voteValue) {
+                                    graduation.classList.add('active');
+                                } else {
+                                    graduation.classList.remove('active');
+                                }
+                            });
                         }
                         xhr.open("GET", url + value, true);
                         xhr.send();

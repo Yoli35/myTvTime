@@ -1805,6 +1805,21 @@ class SerieController extends AbstractController
         return $this->json(['vote' => $vote]);
     }
 
+    #[Route('/episode/view/{id}/{view}', name: 'app_episode_view', methods: ['GET'])]
+    public function episodeView(EpisodeViewing $episodeViewing, int $view): Response
+    {
+        if ($view == 0) {
+            $date = new DateTimeImmutable();
+            $episodeViewing->setViewedAt($date);
+            $view = 1;
+        } else {
+            $episodeViewing->setViewedAt(null);
+            $view = 0;
+        }
+        $this->episodeViewingRepository->save($episodeViewing, true);
+        return $this->json(['view' => $view]);
+    }
+
     public function mySerieIds(User $user): array
     {
         return array_map(function ($mySerieId) {

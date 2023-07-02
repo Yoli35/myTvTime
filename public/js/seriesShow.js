@@ -4,6 +4,6 @@ let toolTips;
 window.addEventListener("DOMContentLoaded", () => {
     const globsData = document.querySelector('#globs-data')?.textContent;
     const globs = JSON.parse(globsData);
-    console.log({globs});
+    // console.log({globs});
     new Shows(globs);
 });

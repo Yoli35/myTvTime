@@ -1530,6 +1530,12 @@
                                 flex-direction: column;
                                 gap: .25rem;
                                 justify-content: center;
+                                opacity: 0;
+                                transition: all 125ms ease-in-out;
+
+                                &.show {
+                                    opacity: 1;
+                                }
 
                                 .vote-graduation {
                                     border: 1px solid var(--gradient-ardoise-40);
