@@ -284,7 +284,7 @@
                             const data = JSON.parse(xhr.responseText);
                             const voteValue = data.vote;
 
-                            voteValueDiv.innerText = voteValue;
+                            voteValueDiv.innerText = voteValue + " / 10";
                             voteGraduations.forEach((graduation) => {
                                 const voteGraduationValue = parseInt(graduation.getAttribute('data-value'));
                                 if (voteGraduationValue <= voteValue) {
