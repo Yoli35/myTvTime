@@ -7,8 +7,8 @@ export class Shows {
     constructor(globs) {
         thisGlobal = this;
         this.app_serie_alert = globs.app_serie_alert;
-        this.app_serie_duration = globs.app_serie_duration;
         this.app_serie_toggle_favorite = globs.app_serie_toggle_favorite;
+        this.app_serie_duration = globs.app_serie_duration;
         this.app_serie_toggle_shifted = globs.app_serie_toggle_time_shifted;
         this.app_serie_viewing = globs.app_serie_viewing;
         this.app_user_connected = globs.app_user_connected;
@@ -488,17 +488,17 @@ export class Shows {
         element.querySelector(".circle-end").setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-1.5em)");
     }
 
-    stillConnected() {
-        thisGlobal.xhr.onload = function () {
-            let data = JSON.parse(this.response);
-
-            if (!data.connected) {
-                window.location.reload();
-            }
-        }
-        thisGlobal.xhr.open("GET", thisGlobal.app_user_connected);
-        thisGlobal.xhr.send();
-    }
+    // stillConnected() {
+    //     thisGlobal.xhr.onload = function () {
+    //         let data = JSON.parse(this.response);
+    //
+    //         if (!data.connected) {
+    //             window.location.reload();
+    //         }
+    //     }
+    //     thisGlobal.xhr.open("GET", thisGlobal.app_user_connected);
+    //     thisGlobal.xhr.send();
+    // }
 
     toggleAlert(evt) {
         const alert = evt.currentTarget;

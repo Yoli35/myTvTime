@@ -40,6 +40,10 @@ class EpisodeViewing
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $substituteName = null;
 
+    // Entre 0 et 10
+    #[ORM\Column(nullable: true, options: ['default' => 0])]
+    private ?int $vote = 0;
+
     public function __construct($episodeNumber, $airDate)
     {
         $this->episodeNumber = $episodeNumber;
@@ -148,6 +152,18 @@ class EpisodeViewing
     public function setSubstituteName(?string $substituteName): self
     {
         $this->substituteName = $substituteName;
+
+        return $this;
+    }
+
+    public function getVote(): ?int
+    {
+        return $this->vote;
+    }
+
+    public function setVote(?int $vote): static
+    {
+        $this->vote = $vote;
 
         return $this;
     }

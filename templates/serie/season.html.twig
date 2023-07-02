@@ -127,6 +127,34 @@
                                             </div>
                                         {% endif %}
                                     </div>
+                                    <div class="episode-viewing">
+                                        {% if episodeViewings %}
+                                            <div class="view" data-id="{{ episodeViewing.id }}">
+                                                <div class="view-value">
+                                                    {% if episodeViewing.viewedAt %}
+                                                        <i class="fa-solid fa-check"></i>
+                                                    {% else %}
+                                                        <i class="fa-solid fa-times"></i>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            {% if episodeViewing.viewedAt %}
+                                                <div class="vote" data-id="{{ episodeViewing.id }}">
+                                                    <div class="vote-graduation{% if episodeViewing.vote == 10 %} active{% endif %}" data-title="10" data-value="10"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=9 %} active{% endif %}" data-title="9" data-value="9"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=8 %} active{% endif %}" data-title="8" data-value="8"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=7 %} active{% endif %}" data-title="7" data-value="7"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=6 %} active{% endif %}" data-title="6" data-value="6"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=5 %} active{% endif %}" data-title="5" data-value="5"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=4 %} active{% endif %}" data-title="4" data-value="4"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=3 %} active{% endif %}" data-title="3" data-value="3"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=2 %} active{% endif %}" data-title="2" data-value="2"></div>
+                                                    <div class="vote-graduation{% if episodeViewing.vote >=1 %} active{% endif %}" data-title="1" data-value="1"></div>
+                                                    <div class="vote-value">{% if episodeViewing.vote %}{{ episodeViewing.vote }}{% endif %}</div>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             {% endfor %}
                         </div>
@@ -143,38 +171,100 @@
     {{ parent() }}
     <script>
         window.addEventListener("DOMContentLoaded", () => {
-            const substituteNameApplies = document.querySelectorAll('.substituteName button');
-            const substituteNameInputs = document.querySelectorAll('.substituteName input');
-            const firstSubstituteNameInput = document.querySelector('.substituteName input');
-            substituteNameApplies?.forEach((substituteNameApply) => {
-                substituteNameApply.addEventListener('click', saveSubstituteName);
-            });
-            substituteNameInputs?.forEach((substituteNameInput) => {
-                substituteNameInput.addEventListener('keyup', (e) => {
-                    if (e.keyCode === 13) {
+            initSubstituteName();
+            initVote();
+        });
+
+        function initSubstituteName() {
+            const substituteNames = document.querySelectorAll('.substituteName');
+            document.querySelector('input')?.focus();
+
+            substituteNames?.forEach((substituteName) => {
+                const applyButton = substituteName.querySelector('button');
+                const input = substituteName.querySelector('input');
+                applyButton.addEventListener('click', saveSubstituteName);
+                input.addEventListener('keyup', (e) => {
+                    if (e.code === 'Enter') {
                         saveSubstituteName(e);
                     }
                 });
             });
-            if (firstSubstituteNameInput) {
-                firstSubstituteNameInput.focus();
-            }
+        }
 
-            function saveSubstituteName(e) {
-                const substituteName = e.target.parentElement.querySelector('input').value;
-                const id = e.target.dataset.id;
-                const url = '{{ path('app_episode_substitute_name') }}';
-                const data = JSON.stringify({
-                    id: id,
-                    substituteName: substituteName
-                });
-                const xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    window.location.reload();
-                }
-                xhr.open("GET", url + '?data=' + data, true);
-                xhr.send();
+        function saveSubstituteName(e) {
+            const substituteName = e.target.parentElement.querySelector('input').value;
+            const id = e.target.dataset.id;
+            const url = '{{ path('app_episode_substitute_name') }}';
+            const data = JSON.stringify({
+                id: id,
+                substituteName: substituteName
+            });
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                window.location.reload();
             }
-        });
+            xhr.open("GET", url + '?data=' + data, true);
+            xhr.send();
+        }
+
+        function initVote() {
+            const votes = document.querySelectorAll('.vote');
+
+            votes.forEach((vote) => {
+                // const voteValue = vote.querySelector('.vote-value');
+                const voteGraduations = vote.querySelectorAll('.vote-graduation');
+                const id = vote.getAttribute('data-id');
+                const url = '{{ path('app_episode_vote', {id: 0, vote: 0})|slice(0,-3) }}' + id + '/';
+
+                voteGraduations.forEach((graduation) => {
+                    graduation.addEventListener('click', (e) => {
+                        let value = e.currentTarget.getAttribute('data-value');
+                        const voteValue = e.currentTarget.parentElement.querySelector('.vote-value').innerText;
+
+                        if (value === "1" && voteValue === "1") {
+                            value = "0";
+                        }
+
+                        const xhr = new XMLHttpRequest();
+                        xhr.onload = function () {
+                            const data = JSON.parse(xhr.responseText);
+                            console.log(data);
+                            // Todo: update voteValue & vote graduations
+                        }
+                        xhr.open("GET", url + value, true);
+                        xhr.send();
+                    });
+                });
+
+                voteGraduations.forEach((voteGraduation) => {
+                    voteGraduation.addEventListener('mouseenter', (e) => {
+                        lightOn(e.currentTarget);
+                    });
+                    voteGraduation.addEventListener('mouseleave', (e) => {
+                        lightOff(e.currentTarget.parentElement);
+                    });
+                });
+            });
+        }
+
+        function lightOn(graduation) {
+            const vote = graduation.parentElement;
+            const voteGraduations = lightOff(vote);
+            const value = parseInt(graduation.getAttribute('data-value'));
+            voteGraduations.forEach((voteGraduation) => {
+                const voteGraduationValue = parseInt(voteGraduation.getAttribute('data-value'));
+                if (voteGraduationValue <= value) {
+                    voteGraduation.classList.add('light-on');
+                }
+            });
+        }
+
+        function lightOff(vote) {
+            const voteGraduations = vote.querySelectorAll('.vote-graduation');
+            voteGraduations.forEach((voteGraduation) => {
+                voteGraduation.classList.remove('light-on');
+            });
+            return voteGraduations;
+        }
     </script>
 {% endblock %}

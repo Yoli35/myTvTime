@@ -533,12 +533,12 @@
             {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
             {% if percent > 100 %} {% set percent = 100 %} {% endif %}
             initSerieStuff(paths, [
-                [".vote-average", 10 * parseFloat({{ serie.vote_average }})],
-                [".view-average", parseFloat({{ percent }})]
+                [".vote-average", 10 * parseFloat("{{ serie.vote_average }}")],
+                [".view-average", parseFloat("{{ percent }}")]
             ]);
             {% else %}
             initSerieStuff(paths, [
-                [".vote-average", 10 * parseFloat({{ serie.vote_average }})],
+                [".vote-average", 10 * parseFloat("{{ serie.vote_average }}")],
                 undefined
             ]);
             {% endif %}

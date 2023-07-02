@@ -236,7 +236,7 @@ class SerieController extends AbstractController
                                     $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
                                 } else {
                                     if ($episodeDiff->m) {
-                                        $serie['passedText'] = $this->translator->trans("available since") . " " . ($episodeDiff->m+ + ($episodeDiff->d > 20 ? 1:0)) . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
+                                        $serie['passedText'] = $this->translator->trans("available since") . " " . ($episodeDiff->m + +($episodeDiff->d > 20 ? 1 : 0)) . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
                                     } else {
                                         if ($episodeDiff->d) {
                                             if ($episodeDiff->d == 1) {
@@ -1022,6 +1022,16 @@ class SerieController extends AbstractController
             $episodeViewings = null;
         }
 
+//        dump([
+//            '$episodeViewings[0]' => $episodeViewings[0],
+//            '$episodeViewings[1]' => $episodeViewings[1],
+//            '$episodeViewings[2]' => $episodeViewings[2],
+//            '$episodeViewings[3]' => $episodeViewings[3],
+//            '$episodeViewings[4]' => $episodeViewings[4],
+//            '$episodeViewings[5]' => $episodeViewings[5],
+//            '$episodeViewings[6]' => $episodeViewings[6],
+//            ]);
+
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
@@ -1785,6 +1795,14 @@ class SerieController extends AbstractController
             $array[] = $serieViewing->getSeasonByNumber($seasonNumber)->getEpisodeByNumber($episodeNumber);
         }
         return $array;
+    }
+
+    #[Route('/episode/vote/{id}/{vote}', name: 'app_episode_vote', methods: ['GET'])]
+    public function episodeVote(EpisodeViewing $episodeViewing, int $vote): Response
+    {
+        $episodeViewing->setVote($vote);
+        $this->episodeViewingRepository->save($episodeViewing, true);
+        return $this->json(['vote' => $vote]);
     }
 
     public function mySerieIds(User $user): array
