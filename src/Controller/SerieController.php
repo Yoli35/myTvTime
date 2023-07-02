@@ -151,17 +151,17 @@ class SerieController extends AbstractController
         ]);
     }
 
-//    public function newDate($dateString, $timeZone, $allDay = false): DateTime
-//    {
-//        try {
-//            $date = new DateTime($dateString, new DateTimeZone($timeZone));
-//        } catch (Exception) {
-//            $date = new DateTime();
-//        }
-//        if (!$allDay)   $date->setTime(0, 0);
-//
-//        return $date;
-//    }
+    public function newDate($dateString, $timeZone, $allDay = false): DateTime
+    {
+        try {
+            $date = new DateTime($dateString, new DateTimeZone($timeZone));
+        } catch (Exception) {
+            $date = new DateTime();
+        }
+        if ($allDay) $date->setTime(0, 0);
+
+        return $date;
+    }
 
     public function newDateImmutable($dateString, $timeZone, $allDay = false): DateTimeImmutable
     {
@@ -1019,8 +1019,22 @@ class SerieController extends AbstractController
             $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
             $episodeViewings = $seasonViewing?->getEpisodes();
         } else {
+            $seasonViewing = null;
             $episodeViewings = null;
         }
+        $episodes = array_map(function ($episode) use ($episodeViewings) {
+            $episode['viewing'] = null;
+            if ($episodeViewings) {
+                foreach ($episodeViewings as $episodeViewing) {
+                    if ($episodeViewing->getEpisodeNumber() == $episode['episode_number']) {
+                        $episode['viewing'] = $episodeViewing;
+                        break;
+                    }
+                }
+            }
+            return $episode;
+        }, $episodes);
+//        dump(['season' => $season, 'seasonViewing' => $seasonViewing, 'episodes' => $episodes]);
 
 //        dump([
 //            '$episodeViewings[0]' => $episodeViewings[0],
@@ -1035,7 +1049,8 @@ class SerieController extends AbstractController
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
-            'episodeViewings' => $episodeViewings,
+            'seasonViewing' => $seasonViewing,
+//            'episodeViewings' => $episodeViewings,
             'episodes' => $episodes,
             'credits' => $credits,
             'parameters' => [
@@ -1588,8 +1603,12 @@ class SerieController extends AbstractController
                     $episode->setNetworkType($networkType != "" ? $networkType : null);
                     $episode->setDeviceType($deviceType != "" ? $deviceType : null);
                     if ($liveWatch) {
-                        if (!$episodeTmdb) {
-                            $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber(), $request->getLocale()), true);
+                        if ($episode->getAirDate()) {
+                            $episode->setViewedAt($episode->getAirDate());
+                        } else {
+                            if (!$episodeTmdb) {
+                                $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber(), $request->getLocale()), true);
+                            }
                             if ($episodeTmdb) {
                                 try {
                                     $episode->setViewedAt(new DateTimeImmutable($episodeTmdb['air_date']));
@@ -1736,7 +1755,7 @@ class SerieController extends AbstractController
         return $createdAt;
     }
 
-    public function viewingCompleted(SerieViewing $serieViewing): void
+    public function viewingCompleted(SerieViewing $serieViewing): bool
     {
         $seasonsCompleted = 0;
         foreach ($serieViewing->getSeasons() as $season) {
@@ -1758,10 +1777,12 @@ class SerieController extends AbstractController
         if ($serieViewing->getNumberOfSeasons() == $seasonsCompleted) {
             $serieViewing->setSerieCompleted(true);
             $this->serieViewingRepository->save($serieViewing, true);
+            return true;
         }
+        return false;
     }
 
-    public function setViewedEpisodeCount($serieViewing): void
+    public function setViewedEpisodeCount($serieViewing): int
     {
         $viewedEpisodeCount = 0;
         foreach ($serieViewing->getSeasons() as $season) {
@@ -1771,6 +1792,8 @@ class SerieController extends AbstractController
         }
         $serieViewing->setViewedEpisodes($viewedEpisodeCount);
         $this->serieViewingRepository->save($serieViewing, true);
+
+        return $viewedEpisodeCount;
     }
 
     public function getEpisodeViewings(SerieViewing $serieViewing, int $seasonNumber, int $episodeNumber, bool $allBefore = false): array
@@ -1809,7 +1832,7 @@ class SerieController extends AbstractController
     public function episodeView(EpisodeViewing $episodeViewing, int $view): Response
     {
         if ($view == 0) {
-            $date = new DateTimeImmutable();
+            $date = $this->newDateImmutable('now', 'Europe/Paris');
             $episodeViewing->setViewedAt($date);
             $view = 1;
         } else {
@@ -1817,7 +1840,21 @@ class SerieController extends AbstractController
             $view = 0;
         }
         $this->episodeViewingRepository->save($episodeViewing, true);
-        return $this->json(['view' => $view]);
+
+        $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
+        $modifiedAt = $this->newDate('now', 'Europe/Paris');
+
+        $serieViewing->setModifiedAt($modifiedAt);
+        $this->serieViewingRepository->save($serieViewing, true);
+
+        $seasonCompleted = $this->viewingCompleted($serieViewing);
+        $viewedEpisodeCount = $this->setViewedEpisodeCount($serieViewing);
+
+        return $this->json([
+            'episodeViewed' => $view,
+            'seasonCompleted' => $seasonCompleted,
+            'viewedEpisodeCount' => $viewedEpisodeCount
+        ]);
     }
 
     public function mySerieIds(User $user): array

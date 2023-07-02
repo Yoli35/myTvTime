@@ -22,6 +22,10 @@
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: parameters.page})~'?query='~parameters.query~'&year='~parameters.year~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'today' %}
             {{ include('blocks/_nav.html.twig', {thisPage: serie.name}) }}
+        {% elseif parameters.from == 'to_start' %}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to start', url: path('app_serie_to_start')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
+        {% elseif parameters.from == 'to_end' %}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to end', url: path('app_serie_to_end')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
         {% else %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
         {% endif %}
@@ -29,8 +33,7 @@
         <div class="serie-page">
             <div class="header">
                 {% if serie.backdropPath|length %}
-                    <div class="backdrop"
-                         style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
+                    <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
                 {% else %}
                     <div class="backdrop" style="background-image: url('/images/default/no_banner_dark.png')"></div>
                 {% endif %}
@@ -51,10 +54,12 @@
                     <h2>{{ season.name }}</h2>
                     <div class="info">
                         {% if season.overview|length %}
-                            {#                            <h5>{{ 'Synopsis'|trans }}</h5> #}
                             <div>{{ season.overview }}</div>
                         {% endif %}
                     </div>
+                    {% if seasonViewing %}
+                        <div class="viewing-progress">{{ 'Progress'|trans }} : <span></span> / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}</div>
+                    {% endif %}
                 </div>
             </div>
             <main>
@@ -66,9 +71,6 @@
                     <section>
                         <div class="episodes">
                             {% for episode in episodes %}
-                                {% if episodeViewings %}
-                                    {% set episodeViewing = episodeViewings[episode.episode_number-1] %}
-                                {% endif %}
                                 <div class="episode">
                                     <div class="still">
                                         {% if episode.still_path|length %}
@@ -86,25 +88,24 @@
                                     <div class="infos">
                                         <h4>
                                             {{ 'Episode'|trans }} {{ episode.episode_number }} :
-                                            {% if episodeViewings
+                                            {% if episode.viewing
                                                 and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
-                                                and episodeViewing.substituteName is not null %}
-                                                {{ episodeViewing.substituteName }}
+                                                and episode.viewing.substituteName is not null %}
+                                                {{ episode.viewing.substituteName }}
                                             {% else %}
                                                 {{ episode.name }}
                                             {% endif %}
                                         </h4>
 
-                                        {% if episodeViewings
+                                        {% if episode.viewing
                                             and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
-                                            and episodeViewing.substituteName is null %}
+                                            and episode.viewing.substituteName is null %}
                                             <div class="substituteName">
                                                 <label>
                                                     {{ 'Substitute name'|trans }} :
-                                                    <input type="text" data-id="{{ episodeViewing.id }}">
+                                                    <input type="text" data-id="{{ episode.viewing.id }}">
                                                 </label>
-                                                <button class="btn btn-primary btn-sm"
-                                                        data-id="{{ episodeViewing.id }}">{{ 'Apply'|trans }}</button>
+                                                <button class="btn btn-primary btn-sm" data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
                                             </div>
                                         {% endif %}
 
@@ -128,31 +129,29 @@
                                         {% endif %}
                                     </div>
                                     <div class="episode-viewing">
-                                        {% if episodeViewings %}
-                                            <div class="view" data-id="{{ episodeViewing.id }}">
+                                        {% if episode.viewing %}
+                                            <div class="view" data-id="{{ episode.viewing.id }}">
                                                 <div class="view-value">
-                                                    {% if episodeViewing.viewedAt %}
+                                                    {% if episode.viewing.viewedAt %}
                                                         <i class="fa-solid fa-check"></i>
                                                     {% else %}
                                                         <i class="fa-solid fa-times"></i>
                                                     {% endif %}
                                                 </div>
                                             </div>
-
-                                                <div class="vote{% if episodeViewing.viewedAt %} show{% endif %}" data-id="{{ episodeViewing.id }}">
-                                                    <div class="vote-graduation{% if episodeViewing.vote == 10 %} active{% endif %}" data-title="10" data-value="10"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=9 %} active{% endif %}" data-title="9" data-value="9"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=8 %} active{% endif %}" data-title="8" data-value="8"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=7 %} active{% endif %}" data-title="7" data-value="7"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=6 %} active{% endif %}" data-title="6" data-value="6"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=5 %} active{% endif %}" data-title="5" data-value="5"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=4 %} active{% endif %}" data-title="4" data-value="4"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=3 %} active{% endif %}" data-title="3" data-value="3"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=2 %} active{% endif %}" data-title="2" data-value="2"></div>
-                                                    <div class="vote-graduation{% if episodeViewing.vote >=1 %} active{% endif %}" data-title="1" data-value="1"></div>
-                                                    <div class="vote-value">{% if episodeViewing.vote %}{{ episodeViewing.vote }}{% endif %}</div>
-                                                </div>
-
+                                            <div class="vote{% if episode.viewing.viewedAt %} show{% endif %}" data-id="{{ episode.viewing.id }}">
+                                                <div class="vote-graduation{% if episode.viewing.vote == 10 %} active{% endif %}" data-title="10" data-value="10"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=9 %} active{% endif %}" data-title="9" data-value="9"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=8 %} active{% endif %}" data-title="8" data-value="8"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=7 %} active{% endif %}" data-title="7" data-value="7"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=6 %} active{% endif %}" data-title="6" data-value="6"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=5 %} active{% endif %}" data-title="5" data-value="5"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=4 %} active{% endif %}" data-title="4" data-value="4"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=3 %} active{% endif %}" data-title="3" data-value="3"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=2 %} active{% endif %}" data-title="2" data-value="2"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=1 %} active{% endif %}" data-title="1" data-value="1"></div>
+                                                <div class="vote-value">{% if episode.viewing.vote %}{{ episode.viewing.vote }} / 10{% endif %}</div>
+                                            </div>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -174,6 +173,7 @@
             initSubstituteName();
             initView();
             initVote();
+            setViewedEpisodeCount();
         });
 
         function initSubstituteName() {
@@ -216,24 +216,48 @@
                 const vote = view.parentElement.querySelector('.vote');
                 const id = view.getAttribute('data-id');
                 const url = '{{ path('app_episode_view', {id: 0, view: 0})|slice(0,-3) }}' + id + '/';
-                const episodeView = viewValue.querySelector('i').classList.contains('fa-check') ? "1" : "0";
 
                 viewValue.addEventListener('click', (e) => {
+                    const i = viewValue.querySelector('i');
+                    const episodeView = i.classList.contains('fa-check') ? "1" : "0";
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
-                        const data = JSON.parse(this.responseText);
-                        if (data.view) {
+                        let data = {"seasonCompleted": 0, "episodeViewed": 0, "viewedEpisodeCount": 0};
+                        data = JSON.parse(this.responseText);
+                        if (data.episodeViewed) {
                             viewValue.innerHTML = '<i class="fa-solid fa-check"></i>';
                             vote.classList.add('show');
                         } else {
                             viewValue.innerHTML = '<i class="fa-solid fa-times"></i>';
                             vote.classList.remove('show');
                         }
+                        if (data.seasonCompleted) {
+                            viewValue.classList.add('completed');
+                        } else {
+                            viewValue.classList.remove('completed');
+                        }
+                        const viewingProgress = document.querySelector('.viewing-progress');
+                        viewingProgress.querySelector("span").innerText = data.viewedEpisodeCount;
                     }
                     xhr.open("GET", url + episodeView, true);
                     xhr.send();
                 });
             });
+        }
+
+        function setViewedEpisodeCount() {
+            const viewingProgress = document.querySelector('.viewing-progress');
+            if (!viewingProgress) return;
+
+            const views = document.querySelectorAll('.view');
+            let count = 0;
+
+            views.forEach((view) => {
+                const viewValue = view.querySelector('.view-value');
+                const i = viewValue.querySelector('i');
+                count += i.classList.contains('fa-check') ? 1 : 0;
+            });
+            viewingProgress.querySelector("span").innerText = count;
         }
 
         function initVote() {

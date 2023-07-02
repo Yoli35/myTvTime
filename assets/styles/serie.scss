@@ -1232,6 +1232,11 @@
             }
         }
 
+        .viewing-progress {
+            font-size: 1.5rem;
+            font-weight: 100;
+        }
+
         .add-and-others {
             @include flex-row(center, revert);
             bottom: 1em;
@@ -1518,9 +1523,15 @@
                                     width: 3rem;
 
                                     &:has(i[class$="check"]) {
-                                        background-color: var(--gradient-green-30);
-                                        border-color: var(--gradient-yellow-50);
-                                        color: var(--gradient-yellow-50);
+                                        background-color: var(--gradient-ardoise-50);
+                                        border-color: var(--gradient-ardoise-60);
+                                        color: var(--gradient-ardoise-60);
+
+                                        &.completed {
+                                            background-color: var(--gradient-green-30);
+                                            border-color: var(--gradient-yellow-50);
+                                            color: var(--gradient-yellow-50);
+                                        }
                                     }
                                 }
                             }
