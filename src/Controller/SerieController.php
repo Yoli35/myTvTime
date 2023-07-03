@@ -1037,7 +1037,16 @@ class SerieController extends AbstractController
 
         $standing = $this->TMDBService->getTvWatchProviders($id);
         $watchProviders = json_decode($standing, true);
-//        dump($watchProviders);
+        $list = json_decode($this->TMDBService->getTvWatchProviderList("fr_FR", "FR"), true);
+        $list = $list['results'];
+        $watchProviderList = [];
+        foreach ($list as $provider) {
+            $item = [];
+            $item['logo_path'] = $provider['logo_path'];
+            $item['provider_name'] = $provider['provider_name'];
+            $watchProviderList[$provider['provider_id']] = $item;
+        }
+//        dump($watchProviderList);
 //        dump(array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null);
 
         return $this->render('serie/season.html.twig', [
@@ -1047,6 +1056,7 @@ class SerieController extends AbstractController
             'episodes' => $episodes,
             'credits' => $credits,
             'watchProviders' => array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null,
+            'watchProviderList' => $watchProviderList,
             'parameters' => [
                 'from' => $from,
                 'page' => $page,
@@ -1677,6 +1687,7 @@ class SerieController extends AbstractController
                     'episode_count' => $seasonViewing->getEpisodeCount(),
                     'view' => $this->render('blocks/serie/_season_viewing.html.twig', [
                         'season' => $s,
+                        'locale' => $locale,
                         'globalIndex' => $globalIndex,
                     ])
                 ];
@@ -1848,6 +1859,36 @@ class SerieController extends AbstractController
             'episodeViewed' => $view,
             'seasonCompleted' => $seasonCompleted,
             'viewedEpisodeCount' => $viewedEpisodeCount
+        ]);
+    }
+
+    #[Route('/episode/view/network/{id}/{networkId}', name: 'app_episode_view_network', methods: ['GET'])]
+    public function episodeViewNetwork(EpisodeViewing $episodeViewing, int $networkId): Response
+    {
+        if ($networkId == -1) {
+            $episodeViewing->setNetworkId(null);
+            $episodeViewing->setNetworkType('other');
+        } else {
+            $episodeViewing->setNetworkId($networkId);
+            $episodeViewing->setNetworkType('flatrate');
+        }
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        return $this->json([
+            'networkId' => $networkId,
+            'result' => 'ok'
+        ]);
+    }
+
+    #[Route('/episode/view/device/{id}/{device}', name: 'app_episode_view_device', methods: ['GET'])]
+    public function episodeViewDevice(EpisodeViewing $episodeViewing, string $device): Response
+    {
+        $episodeViewing->setDeviceType($device);
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        return $this->json([
+            'device' => $device,
+            'result' => 'ok'
         ]);
     }
 

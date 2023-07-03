@@ -141,35 +141,35 @@
                                                     {% endif %}
                                                 </div>
                                                 <div class="view-provider{% if viewed %} show{% endif %}">
-                                                    {% if watchProviders and watchProviders.flatrate %}
-                                                        <div class="provider">
-                                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.0 ~ watchProviders.flatrate.0.logo_path }}"
-                                                                 alt="{{ watchProviders.flatrate.0.provider_name }}"
-                                                                 title="{{ watchProviders.flatrate.0.provider_name }}">
+                                                    {% if episode.viewing.networkType == 'flatrate' and episode.viewing.networkId %}
+                                                        <div class="provider" data-id="{{ episode.viewing.networkId }}">
+                                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.0 ~ watchProviderList[episode.viewing.networkId].logo_path }}"
+                                                                 alt="{{ watchProviderList[episode.viewing.networkId].provider_name }}"
+                                                                 title="{{ watchProviderList[episode.viewing.networkId].provider_name }}">
                                                         </div>
                                                     {% else %}
-                                                        <div class="other"></div>
+                                                        <div class="provider other" data-id="-1"></div>
                                                     {% endif %}
                                                     <div class="view-providers">
                                                         {% if watchProviders and watchProviders.flatrate %}
                                                             {% for provider in watchProviders.flatrate %}
-                                                                <div class="provider">
+                                                                <div class="provider" data-id="{{ provider.provider_id }}">
                                                                     <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.0 ~ provider.logo_path }}"
                                                                          alt="{{ provider.provider_name }}"
                                                                          title="{{ provider.provider_name }}">
                                                                 </div>
                                                             {% endfor %}
                                                         {% endif %}
-                                                        <div class="other"></div>
+                                                        <div class="provider other" data-id="-1"></div>
                                                     </div>
                                                 </div>
-                                                <div class="view-device tv{% if viewed %} show{% endif %}">
+                                                <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if viewed %} show{% endif %}" data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
                                                     <div class="view-devices">
-                                                        <div class="device desktop"></div>
-                                                        <div class="device laptop"></div>
-                                                        <div class="device tablet"></div>
-                                                        <div class="device phone"></div>
-                                                        <div class="device tv"></div>
+                                                        <div class="device desktop" data-device="desktop"></div>
+                                                        <div class="device laptop" data-device="laptop"></div>
+                                                        <div class="device tablet" data-device="tablet"></div>
+                                                        <div class="device phone" data-device="phone"></div>
+                                                        <div class="device tv" data-device="tv"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,6 +198,11 @@
 
         {{ include('blocks/_pageFooter.html.twig') }}
 
+    </div>
+    <div class="provider-list-data" style="display: none">
+        {
+            "watchProviderList": {{ watchProviderList|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+        }
     </div>
 {% endblock %}
 {% block javascripts %}
@@ -243,15 +248,22 @@
         }
 
         function initView() {
+            const watchProviderList = JSON.parse(document.querySelector('.provider-list-data').innerText).watchProviderList;
             const views = document.querySelectorAll('.view');
 
             views.forEach((view) => {
                 const viewValue = view.querySelector('.view-value');
                 const viewProvider = view.querySelector('.view-provider');
+                const viewProviders = view.querySelector('.view-providers');
+                const providers = viewProviders.querySelectorAll('.provider');
                 const viewDevice = view.querySelector('.view-device');
+                const devices = viewDevice.querySelectorAll('.device');
                 const vote = view.parentElement.querySelector('.vote');
                 const id = view.getAttribute('data-id');
                 const url = '{{ path('app_episode_view', {id: 0, view: 0})|slice(0,-3) }}' + id + '/';
+                const urlNetwork = '{{ path('app_episode_view_network', {id: 0, networkId: 0})|slice(0,-3) }}' + id + '/';
+                const urlDevice = '{{ path('app_episode_view_device', {id: 0, device: 'tv'})|slice(0,-4) }}' + id + '/';
+                const logoUrl = "{{ imageConfig.url ~ imageConfig.logo_sizes.0 }}";
 
                 viewValue.addEventListener('click', () => {
                     const i = viewValue.querySelector('i');
@@ -285,6 +297,34 @@
                     xhr.send();
                 });
 
+                providers.forEach((provider) => {
+                    provider.addEventListener('click', () => {
+                        const providerId = provider.getAttribute('data-id');
+                        const xhr = new XMLHttpRequest();
+                        xhr.onload = function () {
+                            const data = JSON.parse(this.responseText);
+                            const networkId = data.networkId;
+                            const userProvider = viewProvider.querySelector('.provider');
+
+                            if (networkId !== -1) {
+                                const img = document.createElement('img');
+                                img.setAttribute('src', logoUrl + watchProviderList[networkId].logo_path);
+                                img.setAttribute('alt', watchProviderList[networkId].name);
+                                img.setAttribute('title', watchProviderList[networkId].name);
+
+                                userProvider.appendChild(img);
+                                userProvider.classList.remove('other');
+                                userProvider.setAttribute('data-id', networkId);
+                            } else {
+                                userProvider.querySelector('img').remove();
+                                userProvider.classList.add('other');
+                                userProvider.setAttribute('data-id', -1);
+                            }
+                        }
+                        xhr.open("GET", urlNetwork + providerId, true);
+                        xhr.send();
+                    });
+                });
                 viewProvider.addEventListener('mouseenter', () => {
                     const providers = view.querySelector('.view-providers');
                     providers.classList.add('visible');
@@ -300,6 +340,22 @@
                     }, 125);
                 });
 
+                devices.forEach((device) => {
+                    device.addEventListener('click', () => {
+                        let deviceName = device.getAttribute('data-device');
+                        let oldDeviceName = viewDevice.getAttribute('data-device');
+                        const xhr = new XMLHttpRequest();
+                        xhr.onload = function () {
+                            const data = JSON.parse(this.responseText);
+                            const newDeviceName = data.device;
+                            viewDevice.classList.remove(oldDeviceName);
+                            viewDevice.classList.add(newDeviceName);
+                            viewDevice.setAttribute('data-device', newDeviceName);
+                        }
+                        xhr.open("GET", urlDevice + deviceName, true);
+                        xhr.send();
+                    });
+                });
                 viewDevice.addEventListener('mouseenter', () => {
                     const devices = view.querySelector('.view-devices');
                     devices.classList.add('visible');
