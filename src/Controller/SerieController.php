@@ -895,7 +895,8 @@ class SerieController extends AbstractController
     {
         $standing = $this->TMDBService->getTvEpisode($tv['id'], $season->getSeasonNumber(), $episodeNumber, 'fr');
         $tmdbEpisode = json_decode($standing, true);
-        $episode = new EpisodeViewing($episodeNumber, $tmdbEpisode['air_date']);
+//        dump(['tv' => $tv, 'seasonViewing' => $season, 'tmdbEpisode' => $tmdbEpisode]);
+        $episode = new EpisodeViewing($episodeNumber, $tmdbEpisode ? $tmdbEpisode['air_date'] : null);
         $episode->setSeason($season);
         $this->episodeViewingRepository->save($episode, true);
         $season->addEpisode($episode);
