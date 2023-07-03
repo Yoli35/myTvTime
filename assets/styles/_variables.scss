@@ -1245,3 +1245,45 @@ $fa-font-path: "../webfonts";
         }
     }
 }
+
+@mixin devices($theme: "light") {
+     &.desktop {
+        background-image: url("../images/devices/device-desktop-#{$theme}.png");
+
+        &.active, &:hover {
+            background-image: url("../images/devices/device-desktop-#{$theme}-active.png");
+        }
+    }
+
+    &.laptop {
+        background-image: url("../images/devices/device-laptop-#{$theme}.png");
+
+        &.active, &:hover {
+            background-image: url("../images/devices/device-laptop-#{$theme}-active.png");
+        }
+    }
+
+    &.phone {
+        background-image: url("../images/devices/device-phone-#{$theme}.png");
+
+        &.active, &:hover {
+            background-image: url("../images/devices/device-phone-#{$theme}-active.png");
+        }
+    }
+
+    &.tablet {
+        background-image: url("../images/devices/device-tablet-#{$theme}.png");
+
+        &.active, &:hover {
+            background-image: url("../images/devices/device-tablet-#{$theme}-active.png");
+        }
+    }
+
+    &.tv {
+        background-image: url("../images/devices/device-tv-#{$theme}.png");
+
+        &.active, &:hover {
+            background-image: url("../images/devices/device-tv-#{$theme}-active.png");
+        }
+    }
+}

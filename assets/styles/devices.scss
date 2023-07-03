@@ -13,45 +13,46 @@
             height: 4em;
             width: 4em;
 
-            &.desktop {
-                background-image: url("../images/devices/device-desktop-light.png");
-
-                &.active, &:hover {
-                    background-image: url("../images/devices/device-desktop-light-active.png");
-                }
-            }
-
-            &.laptop {
-                background-image: url("../images/devices/device-laptop-light.png");
-
-                &.active, &:hover {
-                    background-image: url("../images/devices/device-laptop-light-active.png");
-                }
-            }
-
-            &.phone {
-                background-image: url("../images/devices/device-phone-light.png");
-
-                &.active, &:hover {
-                    background-image: url("../images/devices/device-phone-light-active.png");
-                }
-            }
-
-            &.tablet {
-                background-image: url("../images/devices/device-tablet-light.png");
-
-                &.active, &:hover {
-                    background-image: url("../images/devices/device-tablet-light-active.png");
-                }
-            }
-
-            &.tv {
-                background-image: url("../images/devices/device-tv-light.png");
-
-                &.active, &:hover {
-                    background-image: url("../images/devices/device-tv-light-active.png");
-                }
-            }
+            @include devices("light");
+            //&.desktop {
+            //    background-image: url("../images/devices/device-desktop-light.png");
+            //
+            //    &.active, &:hover {
+            //        background-image: url("../images/devices/device-desktop-light-active.png");
+            //    }
+            //}
+            //
+            //&.laptop {
+            //    background-image: url("../images/devices/device-laptop-light.png");
+            //
+            //    &.active, &:hover {
+            //        background-image: url("../images/devices/device-laptop-light-active.png");
+            //    }
+            //}
+            //
+            //&.phone {
+            //    background-image: url("../images/devices/device-phone-light.png");
+            //
+            //    &.active, &:hover {
+            //        background-image: url("../images/devices/device-phone-light-active.png");
+            //    }
+            //}
+            //
+            //&.tablet {
+            //    background-image: url("../images/devices/device-tablet-light.png");
+            //
+            //    &.active, &:hover {
+            //        background-image: url("../images/devices/device-tablet-light-active.png");
+            //    }
+            //}
+            //
+            //&.tv {
+            //    background-image: url("../images/devices/device-tv-light.png");
+            //
+            //    &.active, &:hover {
+            //        background-image: url("../images/devices/device-tv-light-active.png");
+            //    }
+            //}
         }
 
         .label {
@@ -69,45 +70,46 @@
             .device {
                 border: 2px solid var(--gradient-grey-80);
 
-                &.desktop {
-                    background-image: url("../images/devices/device-desktop-dark.png");
-
-                    &.active, &:hover {
-                        background-image: url("../images/devices/device-desktop-dark-active.png");
-                    }
-                }
-
-                &.laptop {
-                    background-image: url("../images/devices/device-laptop-dark.png");
-
-                    &.active, &:hover {
-                        background-image: url("../images/devices/device-laptop-dark-active.png");
-                    }
-                }
-
-                &.phone {
-                    background-image: url("../images/devices/device-phone-dark.png");
-
-                    &.active, &:hover {
-                        background-image: url("../images/devices/device-phone-dark-active.png");
-                    }
-                }
-
-                &.tablet {
-                    background-image: url("../images/devices/device-tablet-dark.png");
-
-                    &.active, &:hover {
-                        background-image: url("../images/devices/device-tablet-dark-active.png");
-                    }
-                }
-
-                &.tv {
-                    background-image: url("../images/devices/device-tv-dark.png");
-
-                    &.active, &:hover {
-                        background-image: url("../images/devices/device-tv-dark-active.png");
-                    }
-                }
+                @include devices("dark");
+                //&.desktop {
+                //    background-image: url("../images/devices/device-desktop-dark.png");
+                //
+                //    &.active, &:hover {
+                //        background-image: url("../images/devices/device-desktop-dark-active.png");
+                //    }
+                //}
+                //
+                //&.laptop {
+                //    background-image: url("../images/devices/device-laptop-dark.png");
+                //
+                //    &.active, &:hover {
+                //        background-image: url("../images/devices/device-laptop-dark-active.png");
+                //    }
+                //}
+                //
+                //&.phone {
+                //    background-image: url("../images/devices/device-phone-dark.png");
+                //
+                //    &.active, &:hover {
+                //        background-image: url("../images/devices/device-phone-dark-active.png");
+                //    }
+                //}
+                //
+                //&.tablet {
+                //    background-image: url("../images/devices/device-tablet-dark.png");
+                //
+                //    &.active, &:hover {
+                //        background-image: url("../images/devices/device-tablet-dark-active.png");
+                //    }
+                //}
+                //
+                //&.tv {
+                //    background-image: url("../images/devices/device-tv-dark.png");
+                //
+                //    &.active, &:hover {
+                //        background-image: url("../images/devices/device-tv-dark-active.png");
+                //    }
+                //}
             }
         }
     }

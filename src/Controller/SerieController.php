@@ -1037,7 +1037,8 @@ class SerieController extends AbstractController
 
         $standing = $this->TMDBService->getTvWatchProviders($id);
         $watchProviders = json_decode($standing, true);
-        dump($watchProviders);
+//        dump($watchProviders);
+//        dump(array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null);
 
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
@@ -1045,7 +1046,7 @@ class SerieController extends AbstractController
             'seasonViewing' => $seasonViewing,
             'episodes' => $episodes,
             'credits' => $credits,
-            'watchProviders' => array_key_exists("FR", $watchProviders) ? $watchProviders["FR"] : null,
+            'watchProviders' => array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null,
             'parameters' => [
                 'from' => $from,
                 'page' => $page,
