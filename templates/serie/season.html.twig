@@ -22,9 +22,9 @@
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: parameters.page})~'?query='~parameters.query~'&year='~parameters.year~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'today' %}
             {{ include('blocks/_nav.html.twig', {thisPage: serie.name}) }}
-        {% elseif parameters.from == 'to_start' %}
+        {% elseif parameters.from == 'my_series_to_start' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to start', url: path('app_serie_to_start')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
-        {% elseif parameters.from == 'to_end' %}
+        {% elseif parameters.from == 'my_series_to_end' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to end', url: path('app_serie_to_end')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
         {% else %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
@@ -58,7 +58,8 @@
                         {% endif %}
                     </div>
                     {% if seasonViewing %}
-                        <div class="viewing-progress">{{ 'Progress'|trans }} : <span></span> / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}</div>
+                        <div class="viewing-progress">{{ 'Progress'|trans }} : <span></span>
+                            / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -138,6 +139,8 @@
                                                         <i class="fa-solid fa-times"></i>
                                                     {% endif %}
                                                 </div>
+                                                <div class="view-provider"></div>
+                                                <div class="view-device"></div>
                                             </div>
                                             <div class="vote{% if episode.viewing.viewedAt %} show{% endif %}" data-id="{{ episode.viewing.id }}">
                                                 <div class="vote-graduation{% if episode.viewing.vote == 10 %} active{% endif %}" data-title="10" data-value="10"></div>
@@ -217,13 +220,12 @@
                 const id = view.getAttribute('data-id');
                 const url = '{{ path('app_episode_view', {id: 0, view: 0})|slice(0,-3) }}' + id + '/';
 
-                viewValue.addEventListener('click', (e) => {
+                viewValue.addEventListener('click', () => {
                     const i = viewValue.querySelector('i');
                     const episodeView = i.classList.contains('fa-check') ? "1" : "0";
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
-                        let data = {"seasonCompleted": 0, "episodeViewed": 0, "viewedEpisodeCount": 0};
-                        data = JSON.parse(this.responseText);
+                        const data: {seasonCompleted: boolean, episodeViewed: boolean, viewedEpisodeCount: number} = JSON.parse(this.responseText);
                         if (data.episodeViewed) {
                             viewValue.innerHTML = '<i class="fa-solid fa-check"></i>';
                             vote.classList.add('show');

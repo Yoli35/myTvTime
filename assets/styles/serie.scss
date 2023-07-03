@@ -1508,6 +1508,8 @@
 
                             .view {
                                 align-items: center;
+                                flex-direction: column;
+                                gap: 1rem;
                                 justify-content: center;
 
                                 .view-value {
@@ -1533,6 +1535,19 @@
                                             color: var(--gradient-yellow-50);
                                         }
                                     }
+                                }
+
+                                .view-provider, .view-device {
+                                    align-items: center;
+                                    border-radius: .25rem;
+                                    border: 2px dashed var(--gradient-ardoise-30);
+                                    color: var(--gradient-ardoise-40);
+                                    cursor: pointer;
+                                    display: flex;
+                                    font-size: 1rem;
+                                    height: 3rem;
+                                    justify-content: center;
+                                    width: 3rem;
                                 }
                             }
 
