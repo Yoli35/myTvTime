@@ -421,6 +421,7 @@ class SerieController extends AbstractController
             'images' => $images,
             'prev' => $delta * ($diff->invert ? -1 : 1),
             'next' => $delta * ($diff->invert ? -1 : 1),
+            'from' => 'today',
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
@@ -500,6 +501,7 @@ class SerieController extends AbstractController
             foreach ($episodesOfTheDayBySeries as &$ep) {
                 if (!$found && $ep['serieId'] === $episode['serie_id'] && $ep['seasonNumber'] === $episode['season_number']) {
                     $ep['episodeNumbers'][] = $episode['episode_number'];
+                    $ep['viewed'] = $episode['viewed'];
                     $found = true;
                 }
             }
@@ -510,7 +512,8 @@ class SerieController extends AbstractController
                     'seriePosterPath' => $episode['poster_path'],
                     'seasonNumber' => $episode['season_number'],
                     'seasonEpisodeCount' => $episode['episode_count'],
-                    'episodeNumbers' => [$episode['episode_number']]
+                    'episodeNumbers' => [$episode['episode_number']],
+                    'viewed' => $episode['viewed'],
                 ];
             }
         }

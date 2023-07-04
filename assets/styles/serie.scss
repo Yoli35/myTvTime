@@ -1670,6 +1670,14 @@
                                         height: calc(.75rem + 2px);
                                     }
 
+                                    @for $i from 1 through 10 {
+                                        &:nth-child(#{$i}) {
+                                            &.active {
+                                                background-color: var(--vote-#{$i});
+                                            }
+                                        }
+                                    }
+
                                     &:hover {
                                         background-color: var(--gradient-ardoise-60);
                                     }
@@ -2315,6 +2323,7 @@
                 color: var(--gradient-ardoise-90);
                 margin-top: .5em;
                 padding: .5em;
+                position: relative;
                 width: 100%;
 
                 &:has(div span.all) {
@@ -2325,9 +2334,23 @@
                     background-color: var(--gradient-mars-40);
                 }
 
-                div {
+                .episode-detail {
                     line-height: 1.25em;
                     text-align: center;
+                }
+
+                .episode-viewed {
+                    background-color: var(--gradient-green-30);
+                    border-radius: 50%;
+                    border: 2px solid var(--gradient-green-90);
+                    color: var(--gradient-green-90);
+                    height: 2.5em;
+                    line-height: 2.5em;
+                    position: absolute;
+                    right: 1rem;
+                    text-align: center;
+                    top: -1rem;
+                    width: 2.5em;
                 }
             }
 

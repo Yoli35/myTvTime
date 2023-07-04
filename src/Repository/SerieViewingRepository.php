@@ -77,7 +77,7 @@ class SerieViewingRepository extends ServiceEntityRepository
 
     public function getEpisodesOfTheDay($userId, $today, $yesterday, $page, $perPage): array
     {
-        $sql = "SELECT `serie_viewing`.`serie_id`, `serie`.`name`, `serie`.`poster_path`, `episode_viewing`.`episode_number`, `season_viewing`.`season_number`, `season_viewing`.`episode_count` "
+        $sql = "SELECT `serie_viewing`.`serie_id`, `serie`.`name`, `serie`.`poster_path`, `episode_viewing`.`episode_number`, `season_viewing`.`season_number`, `season_viewing`.`episode_count`, `episode_viewing`.`viewed_at` IS NOT NULL AS viewed "
             . "FROM `serie_viewing` "
             . "INNER JOIN `serie` ON `serie`.`id`=`serie_viewing`.`serie_id` "
             . "INNER JOIN `season_viewing` ON `season_viewing`.`serie_viewing_id` = `serie_viewing`.`id` "

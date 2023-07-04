@@ -321,6 +321,17 @@ $fa-font-path: "../webfonts";
     --form-bg: var(--gradient-ardoise-80);
     --form-border: var(--gradient-ardoise-20);
     --form-text: var(--gradient-ardoise-20);
+
+    --vote-1: hsl(127deg 54% 49%);
+    --vote-2: hsl(103deg 46% 50%);
+    --vote-3: hsl(88deg 44% 50%);
+    --vote-4: hsl(76deg 39% 50%);
+    --vote-5: hsl(61deg 39% 47%);
+    --vote-6: hsl(49deg 40% 48%);
+    --vote-7: hsl(40deg 39% 49%);
+    --vote-8: hsl(27deg 40% 49%);
+    --vote-9: hsl(15deg 37% 49%);
+    --vote-10: hsl(0deg 30% 48%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1247,7 +1258,7 @@ $fa-font-path: "../webfonts";
 }
 
 @mixin devices($theme: "light") {
-     &.desktop {
+    &.desktop {
         background-image: url("../images/devices/device-desktop-#{$theme}.png");
 
         &.active, &:hover {

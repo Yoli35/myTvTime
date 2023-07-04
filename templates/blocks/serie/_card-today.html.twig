@@ -16,7 +16,7 @@
             <div>{{ todayAiring.serieName }}</div>
         </div>
         <div class="episode">
-            <div>
+            <div class="episode-detail">
                 {% if todayAiring.seasonNumber %}
                     {{ 'Season'|trans }} {{ todayAiring.seasonNumber }}
                 {% else %}
@@ -36,6 +36,9 @@
                     {% endif %}
                 {% endif %}
             </div>
+            {% if todayAiring.viewed %}
+                <div class="episode-viewed"><i class="fa-solid fa-check"></i></div>
+            {% endif %}
         </div>
     </a>
 </div>

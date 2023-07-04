@@ -16,11 +16,6 @@
             <main>
                 <div class="time-travel">
                     <div>
-                        <a href="{{ path('app_serie_today') }}">
-                            <button class="btn btn-primary">{{ 'Today'|trans }}</i></button>
-                        </a>
-                    </div>
-                    <div>
                         <a href="{{ path('app_serie_today', {d: prev, m: -1}) }}">
                             <button class="btn btn-primary">{{ 'Previous month'|trans }}</i></button>
                         </a>
