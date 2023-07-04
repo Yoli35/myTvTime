@@ -41,7 +41,7 @@ class VisitorLog
 
     public function __construct($username, $url, $ip, $browser, $platform, $languages, $deviceName)
     {
-        $this->createdAt = new DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
         $this->username = $username;
         $this->url = $url;
         $this->ip = $ip;

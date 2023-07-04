@@ -38,6 +38,7 @@ class LogService
         $deviceName = $agent->isMobile() ? $agent->device() : null;
 
         $log = new VisitorLog($user ? $user->getUsername() : ($agent->isBot() ? $agent->robot() : 'Anonymous'), $url, $ip, $browser, $platform, $languages, $deviceName);
-        $this->repository->save($log, true);
+        // flush in calling registerCurrentController
+        $this->repository->save($log, false);
     }
 }

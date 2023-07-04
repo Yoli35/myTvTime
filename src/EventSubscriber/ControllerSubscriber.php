@@ -73,8 +73,9 @@ readonly class ControllerSubscriber implements EventSubscriberInterface
                 if ($user->getLastLogout()) {
                     $user->setLastLogout(null);
                 }
-                $this->userRepository->save($user, true);
+                $this->userRepository->save($user, false);
             }
+            $this->userRepository->flush();
         }
     }
 }

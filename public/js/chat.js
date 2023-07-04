@@ -31,7 +31,7 @@ function initChatWindow() {
         if (chatUsersList.classList.contains("minimized")) {
             chatHeader.innerHTML = '<i class="fa-solid fa-users"></i>';
             localStorage.setItem("mytvtime.chatWindowStatus", "minimized");
-            clearInterval(chatIntervalID);
+            if (chatIntervalID) clearInterval(chatIntervalID);
         } else {
             chatHeader.innerHTML = chatUsersListItems.length + " " + chatTitle[chatLocale];
             localStorage.setItem("mytvtime.chatWindowStatus", "expanded");
