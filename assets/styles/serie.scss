@@ -1621,7 +1621,10 @@
                                     background-repeat: no-repeat;
                                     background-size: contain;
                                     border-radius: .25em;
+                                    font-weight: 400;
                                     height: 3rem;
+                                    line-height: 3rem;
+                                    text-align: center;
                                     width: 3rem;
 
                                     @include devices("light");
@@ -3260,7 +3263,7 @@
                                     }
 
                                     .view-provider, .view-device {
-                                        color: var(--gradient-ardoise-60);
+                                        color: var(--gradient-ardoise-90);
 
                                         &.show {
                                             opacity: 1;

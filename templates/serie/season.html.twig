@@ -160,6 +160,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if viewed %} show{% endif %}" data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
+                                                    <span>
+                                                        {% if episode.viewing.deviceType is null %}?{% endif %}
+                                                        {% if episode.viewing.deviceType == 'tv' %}TV{% endif %}
+                                                    </span>
                                                     <div class="view-devices">
                                                         <div class="device desktop" data-device="desktop"></div>
                                                         <div class="device laptop" data-device="laptop"></div>
@@ -351,6 +355,11 @@
                             viewDevice.classList.remove(oldDeviceName);
                             viewDevice.classList.add(newDeviceName);
                             viewDevice.setAttribute('data-device', newDeviceName);
+                            if (newDeviceName === 'tv') {
+                                viewDevice.querySelector('span').innerText = 'TV';
+                            } else {
+                                viewDevice.querySelector('span').innerText = '';
+                            }
                         }
                         xhr.open("GET", urlDevice + deviceName, true);
                         xhr.send();
