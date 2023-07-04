@@ -408,7 +408,8 @@ class SerieController extends AbstractController
         $delta = $diff->days;
 
         /** @var Serie[] $todayAirings */
-        $todayAirings = $this->todayAiringSeries($date);
+//        $todayAirings = $this->todayAiringSeries($date);
+        $todayAirings = $this->todayAiringSeriesV2($date);
 //        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
         $images = $this->getNothingImages();
@@ -482,6 +483,38 @@ class SerieController extends AbstractController
         }
 
         return $episodesOfTheDay;
+    }
+
+    public function todayAiringSeriesV2($date): array
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $today = $date->format('Y-m-d');
+        $yesterday = $date->sub(new DateInterval('P1D'))->format('Y-m-d');
+
+        $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $yesterday, 1, 20);
+        $episodesOfTheDayBySeries = [];
+
+        foreach ($episodesOfTheDay as $episode) {
+            $found = false;
+            foreach ($episodesOfTheDayBySeries as &$ep) {
+                if (!$found && $ep['serieId'] === $episode['serie_id'] && $ep['seasonNumber'] === $episode['season_number']) {
+                    $ep['episodeNumbers'][] = $episode['episode_number'];
+                    $found = true;
+                }
+            }
+            if (!$found) {
+                $episodesOfTheDayBySeries[] = [
+                    'serieId' => $episode['serie_id'],
+                    'serieName' => $episode['name'],
+                    'seriePosterPath' => $episode['poster_path'],
+                    'seasonNumber' => $episode['season_number'],
+                    'seasonEpisodeCount' => $episode['episode_count'],
+                    'episodeNumbers' => [$episode['episode_number']]
+                ];
+            }
+        }
+        return $episodesOfTheDayBySeries;
     }
 
     public function getTodayAiringBackdrop($airings): ?string
@@ -563,6 +596,9 @@ class SerieController extends AbstractController
         $seriesToBeEnded = $this->seriesToBeToArray($user, $serieViewings, $imageConfig, $locale);
 
         $totalResults = $this->serieViewingRepository->countUserSeriesToEnd($user);
+
+//        $nextEpisodesToWatch = $this->serieViewingRepository->getNextEpisodesToWatch($user);
+//        dump($nextEpisodesToWatch);
 
         return $this->render('serie/to_end.html.twig', [
             'series' => $seriesToBeEnded,

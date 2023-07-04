@@ -75,6 +75,27 @@ class SerieViewingRepository extends ServiceEntityRepository
 //        return $resultSet->fetchAll();
     }
 
+    public function getEpisodesOfTheDay($userId, $today, $yesterday, $page, $perPage): array
+    {
+        $sql = "SELECT `serie_viewing`.`serie_id`, `serie`.`name`, `serie`.`poster_path`, `episode_viewing`.`episode_number`, `season_viewing`.`season_number`, `season_viewing`.`episode_count` "
+            . "FROM `serie_viewing` "
+            . "INNER JOIN `serie` ON `serie`.`id`=`serie_viewing`.`serie_id` "
+            . "INNER JOIN `season_viewing` ON `season_viewing`.`serie_viewing_id` = `serie_viewing`.`id` "
+            . "INNER JOIN `episode_viewing` ON `episode_viewing`.`season_id` = `season_viewing`.`id` "
+            . "WHERE `user_id`= " . $userId . " "
+            . "    AND `season_viewing`.`season_number`>0 "
+            . "    AND `season_viewing`.`season_completed`=0 "
+            . "    AND ((`episode_viewing`.`air_date` = '" . $today . "' AND `serie_viewing`.`time_shifted` = 0) OR (`episode_viewing`.`air_date` = '" . $yesterday . "' AND `serie_viewing`.`time_shifted` = 1)) "
+            . "ORDER BY `episode_viewing`.`air_date` DESC "
+            . "LIMIT " . $perPage . " OFFSET " . ($page - 1) * $perPage;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
     public function countUserSeriesToEnd(User $user)
     {
         return $this->createQueryBuilder('s')
