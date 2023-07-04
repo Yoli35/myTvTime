@@ -1290,6 +1290,7 @@
 
         article {
             @include flex-col(flex-start, flex-start);
+            gap: 1rem;
             min-height: 50vh;
             width: 100%;
 
@@ -1344,7 +1345,7 @@
                     @include flex-col();
                     background-color: var(--gradient-ardoise-80);
                     gap: 1em;
-                    margin: 1em 0;
+                    //margin: 1em 0;
                     width: 100%;
 
                     a {
@@ -1713,6 +1714,7 @@
 
                 .images {
                     @include images-tmdb;
+                    margin: 0;
                 }
 
                 .videos {
@@ -3213,7 +3215,7 @@
                             background-color: var(--gradient-ardoise-30);
 
                             .episode-viewing {
-                                background-color: var(--gradient-ardoise-10);
+                                background-color: var(--gradient-ardoise-25);
                                 border: 8px solid var(--gradient-ardoise-30);
 
                                 .view {

@@ -892,8 +892,13 @@ nav.active {
                 height: 100%;
                 max-width: 50%;
                 overflow: hidden;
+                //padding: 0 .5em;
                 text-overflow: ellipsis;
                 white-space: nowrap;
+
+                &:before {
+                    margin-right: .5rem;
+                }
             }
 
             &:before {

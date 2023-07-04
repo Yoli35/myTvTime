@@ -233,10 +233,6 @@
                     {{ include('blocks/serie/_aside.html.twig') }}
                 </aside>
                 <article>
-                    {% if credits %}
-                        {{ include('blocks/serie/_cast.html.twig') }}
-                        {{ include('blocks/serie/_crew.html.twig') }}
-                    {% endif %}
                     <section>
                         <div class="seasons">
                             {% set globalIndex = 1 %}
@@ -296,6 +292,10 @@
                             {% endfor %}
                         </div>
                     </section>
+                    {% if credits %}
+                        {{ include('blocks/serie/_cast.html.twig') }}
+                        {{ include('blocks/serie/_crew.html.twig') }}
+                    {% endif %}
                     {% if images.backdrops|length or images.logos|length or images.posters|length %}
                         <section>
                             <div class="images">
