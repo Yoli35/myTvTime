@@ -169,9 +169,8 @@ class SerieViewingRepository extends ServiceEntityRepository
 //            ->setParameter('id', $serieViewingIds)
 //            ->getQuery()
 //            ->getResult();
-        $sql = "SELECT t0.`serie_id` as 'id' FROM `serie_viewing` t0 "
-            . "WHERE t0.`id` IN (" . implode(',', $serieViewingIds) . ") "
-            . "ORDER BY t0.`modified_at` DESC";
+        $array = "(" . implode(',', $serieViewingIds) . ")";
+        $sql = "SELECT `serie_viewing`.`serie_id` as id FROM `serie_viewing` WHERE `serie_viewing`.id IN " . $array . " ORDER BY `serie_viewing`.modified_at DESC";
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

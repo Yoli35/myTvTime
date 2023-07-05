@@ -1914,8 +1914,9 @@ class SerieController extends AbstractController
         $serieViewing->setModifiedAt($modifiedAt);
         $this->serieViewingRepository->save($serieViewing, true);
 
+        $this->setViewedEpisodeCount($serieViewing);
         $seasonCompleted = $this->viewingCompleted($serieViewing);
-        $viewedEpisodeCount = $this->setViewedEpisodeCount($serieViewing);
+        $viewedEpisodeCount = $episodeViewing->getSeason()->getViewedEpisodeCount();
 
         return $this->json([
             'episodeViewed' => $view,
