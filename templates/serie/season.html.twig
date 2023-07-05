@@ -133,7 +133,7 @@
                                                     {% if episode.viewing.viewedAt %}
                                                         <i class="fa-solid fa-check"></i>
                                                     {% else %}
-                                                        <i class="fa-solid fa-times"></i>
+                                                        <i class="fa-solid fa-plus"></i>
                                                     {% endif %}
                                                 </div>
                                                 <div class="view-provider{% if viewed %} show{% endif %}">
@@ -284,7 +284,7 @@
                             provider.classList.add('show');
                             device.classList.add('show');
                         } else {
-                            viewValue.innerHTML = '<i class="fa-solid fa-times"></i>';
+                            viewValue.innerHTML = '<i class="fa-solid fa-plus"></i>';
                             vote.classList.remove('show');
                             provider.classList.remove('show');
                             device.classList.remove('show');

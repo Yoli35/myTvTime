@@ -127,7 +127,7 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "INNER JOIN `episode_viewing` ON `episode_viewing`.`season_id` = `season_viewing`.`id` "
             . "WHERE `user_id`= " . $userId . " "
             . "    AND `season_viewing`.`season_number`>0 "
-            . "    AND `season_viewing`.`season_completed`=0 "
+//            . "    AND `season_viewing`.`season_completed`=0 "
             . "    AND ((`episode_viewing`.`air_date` = '" . $today . "' AND `serie_viewing`.`time_shifted` = 0) OR (`episode_viewing`.`air_date` = '" . $yesterday . "' AND `serie_viewing`.`time_shifted` = 1)) "
             . "ORDER BY `episode_viewing`.`air_date` DESC "
             . "LIMIT " . $perPage . " OFFSET " . ($page - 1) * $perPage;
