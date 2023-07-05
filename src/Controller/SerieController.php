@@ -553,10 +553,11 @@ class SerieController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'viewedEpisodes' => 0], [$sort => $order], $perPage, ($page - 1) * $perPage);
+        $directResults = $this->serieViewingRepository->getSeriesToStartV2($user, $perPage, $page);
 
         $locale = $request->getLocale();
         $imageConfig = $this->imageConfiguration->getConfig();
-        $seriesToBeStarted = $this->seriesToBeToArray($user, $serieViewings, $imageConfig, $locale);
+        $seriesToBeStarted = $this->seriesToBeToArray($user, $serieViewings, $directResults, $imageConfig, $locale);
 
         $totalResults = $this->serieViewingRepository->count(['user' => $user, 'viewedEpisodes' => 0]);
 
@@ -583,7 +584,6 @@ class SerieController extends AbstractController
     public function seriesToEnd(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
 
         $page = $request->query->getInt('p', 1);
         $perPage = 10;
@@ -594,9 +594,11 @@ class SerieController extends AbstractController
         $user = $this->getUser();
         $serieViewings = $this->serieViewingRepository->getSeriesToEnd($user, $perPage, $page);
 
+        $directResults = $this->serieViewingRepository->getSeriesToEndV2($user, $perPage, $page);
+
         $locale = $request->getLocale();
         $imageConfig = $this->imageConfiguration->getConfig();
-        $seriesToBeEnded = $this->seriesToBeToArray($user, $serieViewings, $imageConfig, $locale);
+        $seriesToBeEnded = $this->seriesToBeToArray($user, $serieViewings, $directResults, $imageConfig, $locale);
 
         $totalResults = $this->serieViewingRepository->countUserSeriesToEnd($user);
 
@@ -628,7 +630,7 @@ class SerieController extends AbstractController
         return array_slice($posterFiles, 3);
     }
 
-    public function seriesToBeToArray($user, $serieViewings, $imageConfig, $locale): array
+    public function seriesToBeToArray($user, $serieViewings, $seriesV2, $imageConfig, $locale): array
     {
         $serieViewingIds = array_map(function ($serieViewing) {
             return $serieViewing->getId();
@@ -647,17 +649,18 @@ class SerieController extends AbstractController
             }
             return null;
         }, $ids);
-//        dump(['test' => $ids, 'results' => $results, 'serieViewings' => $serieViewings]);
-
-//        $results = array_map(function ($serieViewing) {
-//            return $serieViewing->getSerie();
-//        }, $serieViewings);
-//        $ids = array_map(function ($result) {
-//            return $result->getId();
-//        }, $results);
 
         $favorites = $this->favoriteRepository->findBy(['type' => 'serie', 'userId' => $user->getId(), 'mediaId' => $ids]);
         $networks = $this->serieRepository->networks($ids);
+
+        dump([
+            'test' => $ids,
+            'results' => $results,
+            'serieViewings' => $serieViewings,
+            'seriesV2' => $seriesV2,
+            'favorites' => $favorites,
+            'networks' => $networks,
+        ]);
 
         /** @var Serie $result */
         $seriesToBe = array_map(function ($result) use ($serieViewings, $imageConfig, $locale, $favorites, $networks) {
@@ -670,13 +673,96 @@ class SerieController extends AbstractController
             return $serie;
         }, $results);
 
+        $seriesToBeV2 = array_map(function ($result) use ($seriesV2, $imageConfig, $locale, $favorites, $networks) {
+            $serie = $this->serie2arrayV2($result, $locale);
+//            $serie['viewing'] = $this->getSerieViewsV2($result, $seriesV2);
+//            $serie['favorite'] = $this->isFavorite($serie, $favorites);
+//            $serie['networks'] = $this->getNetworks($serie, $networks);
+
+//            $this->savePoster($serie['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+            return $serie;
+        }, $seriesV2);
+
         $now = new DateTime();
         $now->setTime(0, 0);
         foreach ($seriesToBe as &$serie) {
             $serie = $this->isSerieAiringSoon($serie, $now);
         }
 
+// V2
+//      "id" => 717
+//      "viewed_episodes" => 4
+//      "number_of_episodes" => 5
+//      "number_of_seasons" => 1
+//      "serie_completed" => 0
+//      "time_shifted" => 1
+//      "modified_at" => "2023-07-01 15:56:10"
+//      "created_at" => "2023-06-19 16:16:47"
+//      "alert_id" => null
+//      "serie_id" => 647
+//      "name" => "The Idol"
+//      "poster_path" => "/boO6WKFJqNBY4RWPqxhattWXHbV.jpg"
+//      "first_date_air" => "2023-06-04 00:00:00"
+//      "original_name" => "The Idol"
+//      "overview" => "Suite à sa dernière tournée entachée par une dépression nerveuse, Jocelyn est déterminée à récupérer son titre de pop star la plus populaire et sexy d'Amérique. ▶"
+//      "backdrop_path" => "/boyxwftKk9NvsXBjmzJWrRveeYO.jpg"
+//      "tmdb_id" => 135251
+//      "favorite" => 0
+
+        dump([
+            'seriesToBe' => $seriesToBe,
+        ]);
+// serieToBe
+//      "id" => 647
+//   *  "name" => "The Idol"
+//   *  "posterPath" => "/boO6WKFJqNBY4RWPqxhattWXHbV.jpg"
+//   *  "backdropPath" => "/boyxwftKk9NvsXBjmzJWrRveeYO.jpg"
+//      "serieId" => 135251
+//   *  "firstDateAir" => DateTimeImmutable @1685836800 {#2411 ▶}
+//   *  "createdAt" => DateTimeImmutable @1687191407 {#2412 ▶}
+//   *  "updatedAt" => DateTime @1687937849 {#2413 ▶}
+//   *  "status" => "Returning Series"
+//      "tmdb_status" => "Returning Series"
+//      "overview" => "Suite à sa dernière tournée entachée par une dépression nerveuse, Jocelyn est déterminée à récupérer son titre de pop star la plus populaire et sexy d'Amérique. ▶"
+//      "networks" => array:1 [▶]
+//      "numberOfEpisodes" => 5
+//      "numberOfSeasons" => 1
+//      "originalName" => "The Idol"
+//      "tmdb_next_episode_to_air" => null
+//      "viewing" => App\Entity\SerieViewing {#2310 ▶}
+//      "favorite" => false
+//   i  "today" => false
+//   i  "tomorrow" => false
+//   i  "passed" => "07/02/2023"
+//   i  "passedText" => "disponible depuis 2 jours"
+//   i  "nextEpisode" => "S01E05"
+
         return $seriesToBe;
+    }
+
+    public function serie2arrayV2($result, $locale): array
+    {
+        $tv = json_decode($this->TMDBService->getTv($result['tmdb_id'], $locale), true);
+
+        $serie['id'] = $result['serie_id']; //getId();
+        $serie['name'] = $result['name']; //getName();
+        $serie['posterPath'] = $result['poster_path']; //getPosterPath();
+        $serie['backdropPath'] = $result['backdrop_path']; //getBackdropPath();
+        $serie['serieId'] = $result['tmdb_id']; //getSerieId();
+        $serie['firstDateAir'] = $result['first_date_air']; //getFirstDateAir();
+        $serie['createdAt'] = $result['serie_created_at']; //getCreatedAt();
+        $serie['updatedAt'] = $result['serie_updated_at']; //getUpdatedAt();
+        $serie['status'] = $result['serie_status']; //getStatus();
+        $serie['tmdb_status'] = $tv['status'];
+        $serie['overview'] = $result['overview']; //getOverview();
+        $serie['networks'] = []; //getNetworks();
+        $serie['numberOfEpisodes'] = $result['number_of_episodes']; //getNumberOfEpisodes();
+        $serie['numberOfSeasons'] = $result['number_of_seasons']; //getNumberOfSeasons();
+        $serie['originalName'] = $result['original_name']; //getOriginalName();
+
+        $serie['tmdb_next_episode_to_air'] = $tv['next_episode_to_air'];
+
+        return $serie;
     }
 
     public function savePoster($posterPath, $posterUrl): void
