@@ -1219,8 +1219,9 @@
                 right: 1em;
                 top: 1em;
 
-                .new-status, .new-episode, .new-season {
+                .new-status, .new-episode, .new-season, .finale {
                     background-color: var(--gradient-mars-50);
+                    border: 2px solid var(--gradient-mars-90);
                     border-radius: .25em;
                     color: var(--gradient-mars-90);
                     font-weight: 300;
@@ -2299,8 +2300,9 @@
                     div:has(img) {
                         position: relative;
 
-                        .new-season {
+                        .new-season, .finale {
                             background-color: var(--gradient-mars-50);
+                            border: 2px solid var(--gradient-mars-90);
                             border-radius: .25rem;
                             color: var(--gradient-ardoise-90);
                             font-size: 1rem;

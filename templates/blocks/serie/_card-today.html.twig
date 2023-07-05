@@ -11,6 +11,11 @@
                     <div class="new-season">{{ 'New season'|trans }}</div>
                 {% endif %}
             {% endif %}
+            {% if todayAiring.episodeNumbers|length == 1 %}
+                {% if todayAiring.episodeNumbers.0 == todayAiring.seasonEpisodeCount %}
+                    <div class="finale">{{ 'Finale'|trans }}</div>
+                {% endif %}
+            {% endif %}
         </div>
         <div class="title">
             <div>{{ todayAiring.serieName }}</div>

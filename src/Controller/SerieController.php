@@ -410,10 +410,19 @@ class SerieController extends AbstractController
         /** @var Serie[] $todayAirings */
 //        $todayAirings = $this->todayAiringSeries($date);
         $todayAirings = $this->todayAiringSeriesV2($date);
-//        dump($todayAirings);
+        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
         $images = $this->getNothingImages();
-
+/* "serieId" => 620
+    "serieName" => "Silo"
+    "seriePosterPath" => "/qcUzKCQX79LxbRLrk6Ssw2b5mjD.jpg"
+    "seasonNumber" => 1
+    "seasonEpisodeCount" => 10
+    "episodeNumbers" => array:1 [▼
+      0 => 10
+    ]
+    "viewed" => 1
+*/
         return $this->render('serie/today.html.twig', [
             'todayAirings' => $todayAirings,
             'date' => $date,
