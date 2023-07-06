@@ -2078,7 +2078,7 @@
                             background-position: center;
                             background-repeat: no-repeat;
                             background-size: contain;
-                            border: 2px solid var(--gradient-ardoise-20);
+                            border: 2px solid transparent;
                             border-radius: .5em;
                             cursor: pointer;
                             height: 4em;
@@ -3275,7 +3275,7 @@
                                     .view-provider {
                                         .other {
                                             background-image: url("../images/devices/network-other-dark.png");
-                                            border: 2px solid var(--gradient-ardoise-80);
+                                            border: 2px solid transparent;
                                         }
                                     }
 
