@@ -147,14 +147,25 @@
                                                         <div class="provider other" data-id="-1"></div>
                                                     {% endif %}
                                                     <div class="view-providers">
-                                                        {% if watchProviders and watchProviders.flatrate %}
-                                                            {% for provider in watchProviders.flatrate %}
-                                                                <div class="provider" data-id="{{ provider.provider_id }}">
-                                                                    <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.0 ~ provider.logo_path }}"
-                                                                         alt="{{ provider.provider_name }}"
-                                                                         title="{{ provider.provider_name }}">
-                                                                </div>
-                                                            {% endfor %}
+                                                        {% if watchProviders %}
+                                                            {% if watchProviders.flatrate is defined %}
+                                                                {% for provider in watchProviders.flatrate %}
+                                                                    <div class="provider" data-id="{{ provider.provider_id }}">
+                                                                        <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.0 ~ provider.logo_path }}"
+                                                                             alt="{{ provider.provider_name }}"
+                                                                             title="{{ provider.provider_name }}">
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                            {% if watchProviders.buy is defined %}
+                                                                {% for provider in watchProviders.buy %}
+                                                                    <div class="provider" data-id="{{ provider.provider_id }}">
+                                                                        <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.0 ~ provider.logo_path }}"
+                                                                             alt="{{ provider.provider_name }}"
+                                                                             title="{{ provider.provider_name }}">
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
                                                         {% endif %}
                                                         <div class="provider other" data-id="-1"></div>
                                                     </div>
@@ -205,7 +216,7 @@
     </div>
     <div class="provider-list-data" style="display: none">
         {
-            "watchProviderList": {{ watchProviderList|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+        "watchProviderList": {{ watchProviderList|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
         }
     </div>
 {% endblock %}
