@@ -13,7 +13,11 @@
                 <div class="ep{% if seasonViewing.seasonCompleted %} full{% endif %}"
                      data-number="{{ episodeViewing.episodeNumber }}"
                      data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
-                     data-air-date="{{ episodes[episodeViewing.episodeNumber-1].air_date|format_date('long') }}"
+                        {% if shift %}
+                            data-air-date="{{ episodes[episodeViewing.episodeNumber-1].air_date|date_modify("+1 day")|format_date('long') }}"
+                        {% else %}
+                            data-air-date="{{ episodes[episodeViewing.episodeNumber-1].air_date|format_date('long') }}"
+                        {% endif %}
                      data-name="{{ name }}"
                      data-still-path="{{ episodes[episodeViewing.episodeNumber-1].still_path }}"
                      data-vote="{{ episodeViewing.vote }}"

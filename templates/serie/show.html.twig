@@ -266,7 +266,7 @@
                                                     <div class="details"
                                                          data-season-number="{{ season.season_number }}">
                                                         <div>
-                                                            {{ include('blocks/serie/_season_viewing.html.twig') }}
+                                                            {{ include('blocks/serie/_season_viewing.html.twig', {shift: isTimeShifted}) }}
                                                         </div>
                                                     </div>
                                                 {% endif %}
