@@ -392,7 +392,6 @@ class SerieController extends AbstractController
     public function today(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
 
         $day = $request->query->getInt('d');
         $week = $request->query->getInt('w');
@@ -410,19 +409,10 @@ class SerieController extends AbstractController
         /** @var Serie[] $todayAirings */
 //        $todayAirings = $this->todayAiringSeries($date);
         $todayAirings = $this->todayAiringSeriesV2($date);
-        dump($todayAirings);
+//        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
         $images = $this->getNothingImages();
-/* "serieId" => 620
-    "serieName" => "Silo"
-    "seriePosterPath" => "/qcUzKCQX79LxbRLrk6Ssw2b5mjD.jpg"
-    "seasonNumber" => 1
-    "seasonEpisodeCount" => 10
-    "episodeNumbers" => array:1 [▼
-      0 => 10
-    ]
-    "viewed" => 1
-*/
+
         return $this->render('serie/today.html.twig', [
             'todayAirings' => $todayAirings,
             'date' => $date,
@@ -654,9 +644,9 @@ class SerieController extends AbstractController
         foreach ($seriesToBe as &$serie) {
             $serie = $this->isSerieAiringSoon($serie, $now);
         }
-        dump([
-            'seriesToBeV2' => $seriesToBe,
-        ]);
+//        dump([
+//            'seriesToBeV2' => $seriesToBe,
+//        ]);
 
         return $seriesToBe;
     }
@@ -923,7 +913,7 @@ class SerieController extends AbstractController
                             if ($episode->getAirDate() === null) {
                                 $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $episode->getEpisodeNumber(), 'fr');
                                 $tmdbEpisode = json_decode($standing, true);
-                                if ($tmdbEpisode['air_date']) {
+                                if ($tmdbEpisode && key_exists('air_date', $tmdbEpisode) && $tmdbEpisode['air_date']) {
                                     try {
                                         $episode->setAirDate(new DateTimeImmutable($tmdbEpisode['air_date']));
                                         $this->episodeViewingRepository->save($episode, true);
@@ -1758,6 +1748,7 @@ class SerieController extends AbstractController
                     'episode_count' => $seasonViewing->getEpisodeCount(),
                     'view' => $this->render('blocks/serie/_season_viewing.html.twig', [
                         'season' => $s,
+                        'shift' => $serieViewing->isTimeShifted(),
                         'locale' => $locale,
                         'globalIndex' => $globalIndex,
                     ])
