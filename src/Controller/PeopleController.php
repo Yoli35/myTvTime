@@ -13,7 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PeopleController extends AbstractController
 {
-    public function __construct(private readonly LogService $logService)
+    public function __construct(
+        private readonly SerieController $serieController
+    )
     {
     }
 
@@ -26,12 +28,67 @@ class PeopleController extends AbstractController
         $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);
         $credits = json_decode($standing, true);
 
-        $date = new DateTime($people['birthday']);
-        $now = $people['deathday'] ? new DateTime($people['deathday']) : new DateTime();
-        $interval = $now->diff($date);
-        $age = $interval->y;
-        $people['age'] = $age;
+//        dump([
+//                'people' => $people,
+//                'credits' => $credits
+//            ]);
 
+        // Si le tableau $people est vide, on affiche une page d'erreur
+        if (empty($people)) {
+            return $this->render('people/error.html.twig');
+        }
+
+        if (!key_exists('profile_path', $people)) {
+            $people['profile_path'] = "";
+        }
+        if (!key_exists('known_for_department', $people)) {
+            $people['known_for_department'] = "";
+        }
+        if (!key_exists('gender', $people)) {
+            $people['gender'] = "";
+        }
+        if (!key_exists('place_of_birth', $people)) {
+            $people['place_of_birth'] = null;
+        }
+        if (!key_exists('homepage', $people)) {
+            $people['homepage'] = null;
+        }
+        if (!key_exists('also_known_as', $people)) {
+            $people['also_known_as'] = "";
+        }
+        if (!key_exists('images', $people)) {
+            $people['images'] = [];
+        }
+
+        if (key_exists('birthday', $people)) {
+            $date = $this->serieController->newDate($people['birthday'], "Europe/Paris");
+            if (key_exists('deathday', $people)) {
+                $now = $this->serieController->newDate($people['deathday'], "Europe/Paris");
+            } else {
+                $people['deathday'] = null;
+                $now = $this->serieController->newDate('now', "Europe/Paris");
+            }
+            $interval = $now->diff($date);
+            $age = $interval->y;
+            $people['age'] = $age;
+        } else {
+            $people['birthday'] = null;
+        }
+        if (!key_exists('deathday', $people)) {
+            $people['deathday'] = null;
+        }
+
+        $count = 0;
+        if (key_exists('cast', $credits)) {
+            $count += count($credits['cast']);
+        } else {
+            $credits['cast'] = [];
+        }
+        if (key_exists('crew', $credits)) {
+            $count += count($credits['crew']);
+        } else {
+            $credits['crew'] = [];
+        }
         $count = count($credits['cast']) + count($credits['crew']);
         $castNoDates = [];
         $castDates = [];
@@ -42,10 +99,9 @@ class PeopleController extends AbstractController
 
         foreach ($credits['cast'] as $cast) {
             $role['id'] = $cast['id'];
-            if ($locale =='fr') {
+            if ($locale == 'fr') {
                 $role['character'] = key_exists('character', $cast) ? ($cast['character'] ? preg_replace($roles['en'], $roles['fr'], $cast['character'] . $people['gender']) : null) : null;
-            }
-            else {
+            } else {
                 $role['character'] = key_exists('character', $cast) ? ($cast['character'] ?: null) : null;
             }
             $role['media_type'] = key_exists('media_type', $cast) ? $cast['media_type'] : null;
@@ -105,6 +161,7 @@ class PeopleController extends AbstractController
         $knownFor = array_reverse($knownFor);
         $credits['known_for'] = $knownFor;
 
+//        dump($people);
         return $this->render('people/index.html.twig', [
             'people' => $people,
             'credits' => $credits,

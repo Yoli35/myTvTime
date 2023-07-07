@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container">
+        {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:('People'|trans)}) }}
+        <main>
+            <div class="person">
+                <div class="error">
+                    <h2>{{ 'No information available'|trans }}.</h2>
+                    <p>{{ 'The person you are looking for does not exist'|trans }}.</p>
+                    <button class="btn btn-primary" onclick="window.history.back()">{{ 'Back'|trans }}</button>
+                </div>
+            </div>
+        </main>
+        <footer>{{ include('blocks/_pageFooter.html.twig') }}</footer>
+    </div>
+
+{#    {{ show_source_code(_self) }}#}
+{% endblock %}

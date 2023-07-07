@@ -727,12 +727,16 @@ Prosthetic Supervisor.she: Superviseuse prothèses
 Recording Supervision.he: Supervision enregistrement
 Recording Supervision.she: Supervision enregistrement
 Recurring character: Personnage récurrent
+Researcher.he: Chercheur
+Researcher.she: Chercheuse
 Rigging Gaffer.he: Gaffeur de gréement
 Rigging Gaffer.she: Gaffeuse de gréement
 Rigging Grip.he: Rigging Grip
 Rigging Grip.she: Rigging Grip
 Scenario Writer.he: Scénariste
 Scenario Writer.she: Scénariste
+Scenic Artist.he: Artiste de scène
+Scenic Artist.she: Artiste de scène
 Scientific Consultant.he: Consultant scientifique
 Scientific Consultant.she: Consultante scientifique
 Scoring Mixer.he: Mixeur score
@@ -971,6 +975,9 @@ Editing: Editing
 Sound: Son
 Lighting: Lumière
 Visual Effects: Effets visuels
+No information available: Aucune information disponible
+The person you are looking for does not exist: La personne que vous recherchez n'existe pas dans la base de données
+Back: Retour
 job.Adaptation.he: Adaptation
 job.Animation.she: Animatrice
 job.Assistant Director.he: Assistant réalisateur

@@ -2396,6 +2396,13 @@
     @include flex-100(stretch, start);
     min-height: 50vh;
 
+    &:has(.error) {
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        min-height: unset;
+    }
+
     .left-column {
         @include flex-col(start, start);
         background-color: var(--gradient-ardoise-90-alpha-10);
@@ -2700,6 +2707,11 @@
             top: 1em;
             width: 1em;
         }
+    }
+
+    .error {
+        @include flex-col(flex-end, center);
+        margin-block: 5rem;
     }
 }
 
