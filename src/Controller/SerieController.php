@@ -1072,7 +1072,7 @@ class SerieController extends AbstractController
                     }
                 }
             }
-            $tmdbEpisode['still_path'] = $this->fullUrl('still', 1, $tmdbEpisode['still_path'], 'no_poster.png', $imgConfig);
+            $tmdbEpisode['still_path'] = $this->fullUrl('still', 3, $tmdbEpisode['still_path'], 'no_poster.png', $imgConfig);
 
             $episodes[] = $tmdbEpisode;
             if (key_exists('cast', $tmdbEpisode['credits'])) {
@@ -1108,18 +1108,21 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTvWatchProviders($id);
         $watchProviders = json_decode($standing, true);
         $watchProviders = array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null;
+
         if ($watchProviders) {
+            $providersBuy = [];
             if (key_exists('buy', $watchProviders)) {
                 foreach ($watchProviders['buy'] as &$provider) {
-                    $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
+                    $providersBuy = $this->getArr($provider, $imgConfig, $providersBuy);
                 }
             }
+            $providersFlatrate = [];
             if (key_exists('flatrate', $watchProviders)) {
                 foreach ($watchProviders['flatrate'] as &$provider) {
-                    $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
+                    $providersFlatrate = $this->getArr($provider, $imgConfig, $providersFlatrate);
                 }
             }
-            $watchProviders = array_merge($watchProviders['buy'] ?? [], $watchProviders['flatrate'] ?? []);
+            $watchProviders = array_merge($providersBuy, $providersFlatrate);
         }
 
         // Liste des fournisseurs de streaming de France
@@ -1150,6 +1153,22 @@ class SerieController extends AbstractController
             ],
             'imageConfig' => $imgConfig,
         ]);
+    }
+
+    /**
+     * @param mixed $provider
+     * @param array $imgConfig
+     * @param array $providersFlatrate
+     * @return array
+     */
+    public function getArr(mixed $provider, array $imgConfig, array $providersFlatrate): array
+    {
+        $flatrate['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
+        $flatrate['display_priority'] = $provider['display_priority'];
+        $flatrate['provider_id'] = $provider['provider_id'];
+        $flatrate['provider_name'] = $provider['provider_name'];
+        $providersFlatrate[] = $flatrate;
+        return $providersFlatrate;
     }
 
     public function fullUrl($type, $size, $filename, $default, $imgConfig): string
