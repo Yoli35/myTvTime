@@ -692,12 +692,12 @@ class SerieController extends AbstractController
      */
     public function getSerieViewing(int $serieViewingId, array $serieViewings): SerieViewing|null
     {
-       foreach ($serieViewings as $serieViewing) {
-           if ($serieViewing->getId() === $serieViewingId) {
-               return $serieViewing;
-           }
-       }
-         return null;
+        foreach ($serieViewings as $serieViewing) {
+            if ($serieViewing->getId() === $serieViewingId) {
+                return $serieViewing;
+            }
+        }
+        return null;
     }
 
     public function savePoster($posterPath, $posterUrl): void
@@ -1036,19 +1036,30 @@ class SerieController extends AbstractController
     #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
     public function season(Request $request, $id, $seasonNumber): Response
     {
+        $imgConfig = $this->imageConfiguration->getConfig();
+
+//        $params = $request->query->all();
+//        dump(implode("&", array_map(function ($key, $param) { return $key . "=" . $param; }, array_keys($params), array_values($params))));
         $from = $request->query->get('from');
         $page = $request->query->get('p');
         $query = $request->query->get('query');
         $year = $request->query->get('year');
         $backId = $request->query->get('back');
 
+        // La série (db ou the movie db) et sa bannière
         $serie = $this->serie($id, $request->getLocale());
+        $serie['backdropPath'] = $this->fullUrl('backdrop', 3, $serie['backdropPath'], 'no_banner_dark.png', $imgConfig);
+
+        // La saison (db ou the movie db) et son affiche (poster)
         $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale(), ['credits']);
         $season = json_decode($standing, true);
         $credits = $season['credits'];
         if (!key_exists('cast', $credits)) {
             $credits['cast'] = [];
         }
+        $season['poster_path'] = $this->fullUrl('poster', 3, $season['poster_path'], 'no_poster.png', $imgConfig);
+
+        // Les épisodes (the movie db), l'ajustement de la date (J+1 ?) et leurs affiches (still)
         $episodes = [];
         foreach ($season['episodes'] as $episode) {
             $standing = $this->TMDBService->getTvEpisode($id, $seasonNumber, $episode['episode_number'], $request->getLocale(), ['credits']);
@@ -1056,17 +1067,13 @@ class SerieController extends AbstractController
             if ($serie['userSerieViewing']) {
                 if ($serie['userSerieViewing']->isTimeShifted()) {
                     if ($tmdbEpisode['air_date']) {
-                        $dateString = $tmdbEpisode['air_date'] . 'T00:00:00';
-                        try {
-                            $airDate = new DateTime($dateString);
-                            $airDate->modify('+1 day');
-                            $tmdbEpisode['air_date'] = $airDate->format('Y-m-d');
-                        } catch (Exception) {
-
-                        }
+                        $airDate = $this->newDate($tmdbEpisode['air_date'], "Europe/Paris")?->modify('+1 day')->format('Y-m-d');
+                        $tmdbEpisode['air_date'] = $airDate;
                     }
                 }
             }
+            $tmdbEpisode['still_path'] = $this->fullUrl('still', 1, $tmdbEpisode['still_path'], 'no_poster.png', $imgConfig);
+
             $episodes[] = $tmdbEpisode;
             if (key_exists('cast', $tmdbEpisode['credits'])) {
                 foreach ($tmdbEpisode['credits']['cast'] as $cast) {
@@ -1076,6 +1083,7 @@ class SerieController extends AbstractController
                 }
             }
         }
+        // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
         if ($serie['userSerieViewing']) {
             $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
             $episodeViewings = $seasonViewing?->getEpisodes();
@@ -1096,19 +1104,34 @@ class SerieController extends AbstractController
             return $episode;
         }, $episodes);
 
+        // Les fournisseurs de streaming français de la série
         $standing = $this->TMDBService->getTvWatchProviders($id);
         $watchProviders = json_decode($standing, true);
+        $watchProviders = array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null;
+        if ($watchProviders) {
+            if (key_exists('buy', $watchProviders)) {
+                foreach ($watchProviders['buy'] as &$provider) {
+                    $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
+                }
+            }
+            if (key_exists('flatrate', $watchProviders)) {
+                foreach ($watchProviders['flatrate'] as &$provider) {
+                    $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
+                }
+            }
+            $watchProviders = array_merge($watchProviders['buy'] ?? [], $watchProviders['flatrate'] ?? []);
+        }
+
+        // Liste des fournisseurs de streaming de France
         $list = json_decode($this->TMDBService->getTvWatchProviderList("fr_FR", "FR"), true);
         $list = $list['results'];
         $watchProviderList = [];
         foreach ($list as $provider) {
             $item = [];
-            $item['logo_path'] = $provider['logo_path'];
+            $item['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
             $item['provider_name'] = $provider['provider_name'];
             $watchProviderList[$provider['provider_id']] = $item;
         }
-//        dump($watchProviderList);
-//        dump(array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null);
 
         return $this->render('serie/season.html.twig', [
             'serie' => $serie,
@@ -1116,7 +1139,7 @@ class SerieController extends AbstractController
             'seasonViewing' => $seasonViewing,
             'episodes' => $episodes,
             'credits' => $credits,
-            'watchProviders' => array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null,
+            'watchProviders' => $watchProviders,
             'watchProviderList' => $watchProviderList,
             'parameters' => [
                 'from' => $from,
@@ -1125,8 +1148,17 @@ class SerieController extends AbstractController
                 'year' => $year,
                 "backId" => $backId
             ],
-            'imageConfig' => $this->imageConfiguration->getConfig(),
+            'imageConfig' => $imgConfig,
         ]);
+    }
+
+    public function fullUrl($type, $size, $filename, $default, $imgConfig): string
+    {
+        if (strlen($filename)) {
+            return $imgConfig['url'] . $imgConfig[$type . '_sizes'][$size] . $filename;
+        } else {
+            return "/images/default/" . $default;
+        }
     }
 
     #[Route('/episode/substitute/name', name: 'app_episode_substitute_name', methods: ['GET'])]

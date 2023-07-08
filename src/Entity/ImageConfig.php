@@ -14,25 +14,25 @@ class ImageConfig
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $base_url;
+    private ?string $base_url;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $secure_base_url;
+    private ?string $secure_base_url;
 
     #[ORM\Column(type: 'array')]
-    private $backdrop_sizes = [];
+    private array $backdrop_sizes = [];
 
     #[ORM\Column(type: 'array')]
-    private $logo_sizes = [];
+    private array $logo_sizes = [];
 
     #[ORM\Column(type: 'array')]
-    private $poster_sizes = [];
+    private array $poster_sizes = [];
 
     #[ORM\Column(type: 'array')]
-    private $profile_sizes = [];
+    private array $profile_sizes = [];
 
     #[ORM\Column(type: 'array')]
-    private $still_sizes = [];
+    private array $still_sizes = [];
 
     public function getId(): ?int
     {

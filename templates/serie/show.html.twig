@@ -246,15 +246,12 @@
                                         <div class="season">
                                             <div class="poster">
                                                 {% if season.poster_path|length %}
-                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}"
-                                                         alt="{{ season.name }}">
+                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
                                                 {% else %}
                                                     {% if serie.poster_path %}
-                                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}"
-                                                             alt="{{ season.name }}">
+                                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ season.name }}">
                                                     {% else %}
-                                                        <img src="/images/default/no_poster.png"
-                                                             alt="{{ season.name }}">
+                                                        <img src="/images/default/no_poster.png" alt="{{ season.name }}">
                                                     {% endif %}
                                                 {% endif %}
                                             </div>
