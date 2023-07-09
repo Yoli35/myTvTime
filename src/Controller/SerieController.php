@@ -1016,6 +1016,7 @@ class SerieController extends AbstractController
         if ($standing == "") {
             return $this->render('serie/error.html.twig', [
                 'serie' => $serie,
+                'serieViewing' => $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]),
                 'imageConfig' => $this->imageConfiguration->getConfig(),
             ]);
         }

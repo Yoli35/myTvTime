@@ -51,6 +51,22 @@
                 </div>
             </div>
         </div>
+        <main>
+            <article>
+                <section>
+                    <div class="seasons">
+                        {% for season in serieViewing.seasons %}
+{#                            {{ dump(season) }}#}
+                            <div class="season">
+                                <h2>{{ 'Season'|trans }} {{ season.seasonNumber }}</h2>
+                                {% if season.airAt %}{{ season.airAt|date("Y") }} | {% endif %}
+                                {{ 'Episodes'|trans }} : {{ season.episodeCount }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            </article>
+        </main>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
 {% endblock %}
