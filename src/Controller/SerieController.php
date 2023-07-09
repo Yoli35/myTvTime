@@ -664,7 +664,6 @@ class SerieController extends AbstractController
         $serie['createdAt'] = $result['serie_created_at']; //getCreatedAt();
         $serie['updatedAt'] = $result['serie_updated_at']; //getUpdatedAt();
         $serie['status'] = $result['serie_status']; //getStatus();
-        $serie['tmdb_status'] = $tv['status'];
         $serie['overview'] = $result['overview']; //getOverview();
         $serie['numberOfEpisodes'] = $result['number_of_episodes']; //getNumberOfEpisodes();
         $serie['numberOfSeasons'] = $result['number_of_seasons']; //getNumberOfSeasons();
@@ -672,15 +671,21 @@ class SerieController extends AbstractController
 
         $serie['favorite'] = $result['favorite'];
 
-        $serie['networks'] = array_map(function ($network) use ($result) {
-            $network['networkId'] = $network['id'];
-            $network['logoPath'] = $network['logo_path'];
-            $network['serieId'] = $result['serie_id'];
-            return $network;
-        }, $tv['networks']);
+        if ($tv) {
+            $serie['networks'] = array_map(function ($network) use ($result) {
+                $network['networkId'] = $network['id'];
+                $network['logoPath'] = $network['logo_path'];
+                $network['serieId'] = $result['serie_id'];
+                return $network;
+            }, $tv['networks']);
 
-
-        $serie['tmdb_next_episode_to_air'] = $tv['next_episode_to_air'];
+            $serie['tmdb_status'] = $tv['status'];
+            $serie['tmdb_next_episode_to_air'] = $tv['next_episode_to_air'];
+        } else {
+            $serie['networks'] = [];
+            $serie['tmdb_status'] = 'Not found';
+            $serie['tmdb_next_episode_to_air'] = null;
+        }
 
         return $serie;
     }
@@ -1011,6 +1016,7 @@ class SerieController extends AbstractController
         if ($standing == "") {
             return $this->render('serie/error.html.twig', [
                 'serie' => $serie,
+                'imageConfig' => $this->imageConfiguration->getConfig(),
             ]);
         }
         $tv = json_decode($standing, true);

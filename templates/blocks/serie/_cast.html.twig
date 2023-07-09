@@ -9,7 +9,7 @@
                             <div class="people">
                                 <div class="profile">
                                     {% if people.profile_path %}
-                                        {% if imageCong is defined %}
+                                        {% if imageConfig is defined %}
                                             <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
                                         {% else %}
                                             <img src="{{ people.profile_path }}" alt="{{ people.name }}">

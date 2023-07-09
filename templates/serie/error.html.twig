@@ -6,10 +6,49 @@
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
-            {{ include('blocks/_nav.html.twig', {thisPage: serie.name, user: app.user}) }}
+        {{ include('blocks/_nav.html.twig', {thisPage: serie.name, user: app.user}) }}
 
         <div class="serie-page">
             <div class="header">
+                {% if serie.backdropPath|length %}
+                    <div class="backdrop"
+                         style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
+                {% else %}
+                    <div class="backdrop" style="background-image: url('/images/default/no_banner_dark.png')"></div>
+                {% endif %}
+                <div class="poster">
+                    {% if serie.posterPath|length %}
+                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}"
+                             alt="{{ serie.name }}">
+                    {% else %}
+                        <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
+                    {% endif %}
+                </div>
+                <div class="infos">
+                    <h1>
+                        {{ serie.name }}
+                        {% if serie.firstDateAir %}
+                            <span>({{ serie.firstDateAir|date("Y") }})</span>
+                        {% else %}
+                            — {{ 'No date yet'|trans }}
+                        {% endif %}
+                    </h1>
+                    <div class="info">
+                        {% if serie.overview|length %}
+                            <div>{{ serie.overview|e }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="info">
+                        <h2>{{ 'Series not found on https://www.themoviedb.org/'|trans }}</h2>
+                    </div>
+                </div>
+                <div class="add-and-others">
+                    <div class="tmdb">
+                        <a href="https://www.themoviedb.org/tv/{{ serie.serieId }}" target="_blank" rel="noopener">
+                            <div></div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
