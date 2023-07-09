@@ -1083,6 +1083,15 @@ class SerieController extends AbstractController
                 }
             }
         }
+        // Ajout de l'url des profils des acteurs et de l'équipe technique
+        foreach ($credits['cast'] as $key => $cast) {
+            $credits['cast'][$key]['profile_path'] = $this->fullUrl('profile', 2, $cast['profile_path'], 'no_profile.png', $imgConfig);
+        }
+        if (key_exists('crew', $credits)) {
+            foreach ($credits['crew'] as $key => $crew) {
+                $credits['crew'][$key]['profile_path'] = $this->fullUrl('profile', 2, $crew['profile_path'], 'no_profile.png', $imgConfig);
+            }
+        }
         // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
         if ($serie['userSerieViewing']) {
             $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
@@ -1151,7 +1160,6 @@ class SerieController extends AbstractController
                 'year' => $year,
                 "backId" => $backId
             ],
-            'imageConfig' => $imgConfig,
         ]);
     }
 

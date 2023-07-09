@@ -19,7 +19,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function setArticleImages(BeforeEntityPersistedEvent $event)
+    public function setArticleImages(BeforeEntityPersistedEvent $event): void
     {
         $entity = $event->getEntityInstance();
 
