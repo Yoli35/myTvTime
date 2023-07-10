@@ -24,7 +24,9 @@ class YoutubeController extends AbstractController
     //
 
     public function __construct(
-        private readonly SettingsRepository $settingsRepository,
+        private readonly SettingsRepository        $settingsRepository,
+        private readonly YoutubeVideoRepository    $youtubeVideoRepository,
+        private readonly YoutubeVideoTagRepository $youtubeVideoTagRepository,
     )
     {
     }
@@ -54,45 +56,52 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/youtube/more', name: 'app_youtube_more')]
-    public function moreVideos(Request $request, YoutubeVideoRepository $youtubeVideoRepository): Response
+    public function moreVideos(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var YoutubeVideo [] $vids */
-        $vids = $youtubeVideoRepository->findAllByDate($request->query->get('id'), $request->query->get('sort'), $request->query->get('order'), $request->query->get('offset'));
-        $videos = [];
-
-        foreach ($vids as $vid) {
-
-            $video = [];
-            $video['id'] = $vid->getId();
-            $video['thumbnailMediumPath'] = $vid->getThumbnailMediumPath();
-            $video['title'] = $vid->getTitle();
-            $video['contentDuration'] = $vid->getContentDuration();
-            $video['publishedAt'] = $vid->getPublishedAt();
-            $video['channel'] = [];
-            $video['channel']['title'] = $vid->getChannel()->getTitle();
-            $video['channel']['customUrl'] = $vid->getChannel()->getCustomUrl();
-            $video['channel']['youtubeId'] = $vid->getChannel()->getYoutubeId();
-            $video['channel']['thumbnailDefaultUrl'] = $vid->getChannel()->getThumbnailDefaultUrl();
-
-            $video['tags'] = [];
-            $tags = $vid->getTags();
-            foreach ($tags as $tag) {
-                $serializedTag = [];
-                $serializedTag['id'] = $tag->getId();
-                $serializedTag['label'] = $tag->getLabel();
-                $video['tags'][] = $serializedTag;
-            }
-
-            $videos[] = $video;
-        }
+        $vids = $this->youtubeVideoRepository->findAllWithChannelByDate($request->query->get('id'), $request->query->get('sort'), $request->query->get('order'), $request->query->get('offset'));
 
         return $this->json([
-            'results' => $videos,
+            'results' => $this->getVideos($vids),
         ]);
     }
 
+    public function getVideos($vids): array
+    {
+        $videos = [];
+
+        foreach ($vids as $vid) {
+            $video = [];
+            $video['id'] = $vid['id'];
+            $video['thumbnailMediumPath'] = $vid['thumbnailMediumPath'];
+            $video['title'] = $vid['title'];
+            $video['contentDuration'] = $vid['contentDuration'];
+            $video['publishedAt'] = $vid['publishedAt'];
+            $video['channel'] = [];
+            $video['channel']['title'] = $vid['channelTitle'];
+            $video['channel']['customUrl'] = $vid['channelCustomUrl'];
+            $video['channel']['youtubeId'] = $vid['channelYoutubeId'];
+            $video['channel']['thumbnailDefaultUrl'] = $vid['channelThumbnailDefaultUrl'];
+
+            $video['tags'] = [];
+
+            $videos[] = $video;
+        }
+        $videoIds = array_map(fn($v) => $v['id'], $videos);
+        $tags = $this->youtubeVideoTagRepository->findVideosTags($videoIds);
+
+        foreach ($videos as &$video) {
+            $video['tags'] = [];
+            foreach ($tags as $tag) {
+                if ($tag['videoId'] == $video['id']) {
+                    $video['tags'][] = $tag;
+                }
+            }
+        }
+        return $videos;
+    }
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
     public function video(Request $request, YoutubeVideoTagRepository $repository, YoutubeVideo $youtubeVideo): Response
     {

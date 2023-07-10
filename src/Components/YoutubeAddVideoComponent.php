@@ -3,12 +3,14 @@
 namespace App\Components;
 
 use App\Controller\UserController;
+use App\Controller\YoutubeController;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
 use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
+use App\Repository\YoutubeVideoTagRepository;
 use DateInterval;
 
 //use Google\ApiCore\ValidationException;
@@ -79,12 +81,14 @@ class YoutubeAddVideoComponent
      * @throws Exception
      */
     public function __construct(
-        private readonly YoutubeVideoRepository   $videoRepository,
-        private readonly YoutubeChannelRepository $channelRepository,
-        private readonly EntityManagerInterface   $entityManager,
-        private readonly UserController           $userController,
-        private readonly UserRepository           $userRepository,
-        private readonly SettingsRepository       $settingsRepository,
+        private readonly EntityManagerInterface    $entityManager,
+        private readonly SettingsRepository        $settingsRepository,
+        private readonly UserController            $userController,
+        private readonly UserRepository            $userRepository,
+        private readonly YoutubeChannelRepository  $channelRepository,
+        private readonly YoutubeController         $youtubeController,
+        private readonly YoutubeVideoRepository    $videoRepository,
+        private readonly YoutubeVideoTagRepository $videoTagRepository,
     )
     {
         $client = new Google_Client();
@@ -264,7 +268,8 @@ class YoutubeAddVideoComponent
 
     public function getVideos(): array
     {
-        return $this->videoRepository->findAllByDate($this->user_id, $this->sort, $this->order);
+        $vids = $this->videoRepository->findAllWithChannelByDate($this->user_id, $this->sort, $this->order);
+        return $this->youtubeController->getVideos($vids);
     }
 
     public function getTotalRuntime(): int

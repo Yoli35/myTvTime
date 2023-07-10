@@ -58,6 +58,22 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllWithChannelByDate($userId, $sort = 'publishedAt', $order = 'DESC', $offset = 0): array
+    {
+        if ($offset < 0) {
+            $offset = 0;
+        }
+        return $this->createQueryBuilder('y')
+            ->select('y.id as id, y.thumbnailMediumPath as thumbnailMediumPath, y.title as title, y.contentDuration as contentDuration, y.publishedAt as publishedAt,c.title as channelTitle, c.customUrl as channelCustomUrl, c.youtubeId as channelYoutubeId,c.thumbnailDefaultUrl as channelThumbnailDefaultUrl')
+            ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
+            ->leftJoin('y.channel', 'c', Expr\Join::WITH, 'c=y.channel')
+            ->orderBy('y.' . $sort, $order)
+            ->setFirstResult($offset)
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function getUserYTVideosRuntime($userId): int|null
     {
         $duration = -1;
