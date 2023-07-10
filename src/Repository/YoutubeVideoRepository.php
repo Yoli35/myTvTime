@@ -88,7 +88,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         return $duration;
     }
 
-    public function firstAddedYTVideo($userId): YoutubeVideo
+    public function firstAddedYTVideo($userId): YoutubeVideo|null
     {
         $result = $this->createQueryBuilder('y')
             ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
@@ -96,7 +96,10 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getResult();
-        return $result[0];
+        if (count($result) > 0) {
+            return $result[0];
+        }
+        return null;
     }
 
     public function videosByTag($userId, $list, $count, $method): array

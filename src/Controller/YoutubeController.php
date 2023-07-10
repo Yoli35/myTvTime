@@ -12,7 +12,9 @@ use App\Repository\UserRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
 use App\Repository\YoutubeVideoTagRepository;
+use DateInterval;
 use DateTimeImmutable;
+use DateTimeZone;
 use Google\Exception;
 use Google\Service\YouTube\ChannelListResponse;
 use Google\Service\YouTube\VideoListResponse;
@@ -23,6 +25,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Timezone;
 
 class YoutubeController extends AbstractController
 {
@@ -37,10 +40,9 @@ class YoutubeController extends AbstractController
      */
     public function __construct(
         private readonly SettingsRepository        $settingsRepository,
-        private readonly UserRepository            $userRepository,
         private readonly YoutubeChannelRepository  $channelRepository,
         private readonly YoutubeVideoRepository    $videoRepository,
-//        private readonly YoutubeVideoTagRepository $videoTagRepository,
+        private readonly YoutubeVideoTagRepository $videoTagRepository,
     )
     {
         $client = new Google_Client();
@@ -68,27 +70,33 @@ class YoutubeController extends AbstractController
             $settings->setData(['sort' => 'addedAt', 'order' => 'DESC', 'page' => true]);
             $this->settingsRepository->save($settings, true);
         }
-        $order = $settings->getData()['order'];
-        $sort = $settings->getData()['sort'];
-        $page = $settings->getData()['page'];
+        $settings = $settings->getData();
+        $order = $settings['order'];
+        $sort = $settings['sort'];
+        $page = $settings['page'];
         dump([
-            "data" => $settings->getData(),
+            "data" => $settings,
             "order" => $order,
-            "sort" => $sort
+            "sort" => $sort,
+            "page" => $page,
         ]);
 
         $vids = $this->videoRepository->findAllWithChannelByDate($user->getId(), $sort, $order);
-        $videoCount = $this->getVideosCount();
-        $totalRuntime = $this->getTotalRuntime();
-        $firstView = $this->getFirstView();
-        $time2Human = $this->getTime2human();
-        list($previewUrl, $previewTitle) = $this->get_preview();
+        $videoCount = $this->getVideosCount($user);
+        $totalRuntime = $this->getTotalRuntime($user);
+        $firstView = $this->getFirstView($user);
+        $time2Human = $this->getTime2human($totalRuntime, $request->getLocale());
+        $preview = $this->getPreview();
 
         return $this->render('youtube/index.html.twig', [
             'videos' => $this->getVideos($vids),
-            'previewUrl' => $previewUrl,
-            'previewTitle' => $previewTitle,
-            'settings' => $settings->getData(),
+            'videoCount' => $videoCount,
+            'totalRuntime' => $totalRuntime,
+            'firstView' => $firstView,
+            'time2Human' => $time2Human,
+            'settings' => $settings,
+            'justAdded' => false,
+            'preview' => $preview,
             'from' => 'youtube',
         ]);
     }
@@ -99,7 +107,7 @@ class YoutubeController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var YoutubeVideo [] $vids */
-        $vids = $this->youtubeVideoRepository->findAllWithChannelByDate($request->query->get('id'), $request->query->get('sort'), $request->query->get('order'), $request->query->get('offset'));
+        $vids = $this->videoRepository->findAllWithChannelByDate($request->query->get('id'), $request->query->get('sort'), $request->query->get('order'), $request->query->get('offset'));
 
         return $this->json([
             'results' => $this->getVideos($vids),
@@ -128,7 +136,7 @@ class YoutubeController extends AbstractController
             $videos[] = $video;
         }
         $videoIds = array_map(fn($v) => $v['id'], $videos);
-        $tags = $this->youtubeVideoTagRepository->findVideosTags($videoIds);
+        $tags = $this->videoTagRepository->findVideosTags($videoIds);
 
         foreach ($videos as &$video) {
             $video['tags'] = [];
@@ -142,14 +150,11 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function video(Request $request, YoutubeVideoTagRepository $repository, YoutubeVideo $youtubeVideo): Response
+    public function video(Request $request, YoutubeVideo $youtubeVideo): Response
     {
-//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser()?:null);
-
         $userAlreadyLinked = $request->query->get('user-already-linked');
 
-        $tags = $repository->findAllByLabel();
+        $tags = $this->videoTagRepository->findAllByLabel();
         $description = preg_replace(
             ['/(https:\/\/\S+)/',
                 '/(http:\/\/\S+)/',
@@ -289,45 +294,44 @@ class YoutubeController extends AbstractController
         return $this->json([$video->getTitle()]);
     }
 
-    public function newVideo(Request $request): array
+    #[Route('/{_locale}/youtube/add/video', name: 'app_youtube_add_video', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]
+    public function addVideo(Request $request): JsonResponse
     {
-        $thisLink = $request->query->get('link');
+        /** @var User $user */
+        $user = $this->getUser();
+        $providedLink = $request->query->get('link');
+        dump($providedLink);
         $justAdded = 0;
+        $userAlreadyLinked = false;
 
-        if ($this->oldSort !== $this->sort || $this->oldOrder !== $this->order) {
-            $this->saveSettings();
-        }
-
-        if (str_contains($thisLink, "shorts")) {
-            if (str_contains($thisLink, "www")) {
+        if (str_contains($providedLink, "shorts")) {
+            if (str_contains($providedLink, "www")) {
                 // https://www.youtube.com/shorts/7KFxzeyse2g
-                $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/shorts\/(.+)/", "$1", $thisLink);
+                $providedLink = preg_replace("/https:\/\/www\.youtube\.com\/shorts\/(.+)/", "$1", $providedLink);
             } else {
                 // https://youtube.com/shorts/XxpFBkm5XqI?feature=share
-                $thisLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $thisLink);
+                $providedLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $providedLink);
             }
-        } elseif (str_contains($thisLink, "youtu.be")) {
+        } elseif (str_contains($providedLink, "youtu.be")) {
             // https://youtu.be/at9h35V8rtQ
-            $thisLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $thisLink);
-        } elseif (str_contains($thisLink, 'watch')) {
+            $providedLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $providedLink);
+        } elseif (str_contains($providedLink, 'watch')) {
             // https://www.youtube.com/watch?v=at9h35V8rtQ
             // https://www.youtube.com/watch?v=IzHJ7Jnj2LU&pp=wgIGCgQQAhgB
-            $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?>&[a-z_-]+=.+)*/", "$1", $thisLink);
-        } elseif (str_contains($thisLink, 'live')) {
+            $providedLink = preg_replace("/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?>&[a-z_-]+=.+)*/", "$1", $providedLink);
+        } elseif (str_contains($providedLink, 'live')) {
             // https://www.youtube.com/live/vBWcWIim5Js?feature=share
-            $thisLink = preg_replace("/https:\/\/www\.youtube\.com\/live\/([a-zA-Z0-9_-]+)(?>\?[a-zA-Z]+=.+)*/", "$1", $thisLink);
+            $providedLink = preg_replace("/https:\/\/www\.youtube\.com\/live\/([a-zA-Z0-9_-]+)(?>\?[a-zA-Z]+=.+)*/", "$1", $providedLink);
         }
 
-        if (strlen($thisLink) == 11) {
-
-            $user = $this->userRepository->find($this->user_id);
-
-            $link = $this->videoRepository->findOneBy(['link' => $thisLink]);
+        if (strlen($providedLink) == 11) {
+            dump($providedLink);
+            $link = $this->videoRepository->findOneBy(['link' => $providedLink]);
 
             // Si le lien n'a pas déjà été ajouté 12345678912
             if ($link == null) {
 
-                $videoListResponse = $this->getVideoSnippet($thisLink);
+                $videoListResponse = $this->getVideoSnippet($providedLink);
                 $items = $videoListResponse->getItems();
                 $item = $items[0];
                 $snippet = $item['snippet'];
@@ -388,61 +392,89 @@ class YoutubeController extends AbstractController
                 $newVideo->setContentDimension($contentDetails['dimension']);
                 $newVideo->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
                 $newVideo->setContentProjection($contentDetails['projection']);
-                $addedAt = new DateTimeImmutable();
-                $newVideo->setAddedAt($addedAt->setTimezone((new DateTime())->getTimezone()));
+                $addedAt = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+                $newVideo->setAddedAt($addedAt);
                 $newVideo->addUser($user);
 
                 $this->videoRepository->add($newVideo, true);
 
-                $this->justAdded = $newVideo->getId();
-
-                $this->videos = $this->getVideos();
-                $this->videoCount = $this->getVideosCount();
-                $this->totalRuntime = $this->getTotalRuntime();
-                $this->time2Human = $this->getTime2human();
+                $justAdded = $newVideo->getId();
             } else {
                 // Si le lien a déjà été ajouté, on vérifie que l'utilisateur n'est pas déjà lié à la vidéo
                 $users = $link->getUsers();
-                $this->userAlreadyLinked = false;
                 foreach ($users as $u) {
                     if ($u->getId() == $user->getId()) {
-                        $this->userAlreadyLinked = true;
+                        $userAlreadyLinked = true;
                     }
                 }
                 // Si l'utilisateur n'est pas encore lié à la vidéo, on le lie
-                if (!$this->userAlreadyLinked) {
+                if (!$userAlreadyLinked) {
                     $link->addUser($user);
                     $this->videoRepository->add($link, true);
                 }
-                $this->justAdded = $link->getId();
+                $justAdded = $link->getId();
             }
         }
 
-        $firstVideo = count($this->videos) ? $this->videos[0] : [];
-        if (gettype($firstVideo) == 'array') {
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => "youtube"]);
+        $data = $settings->getData();
+        $sort = $data['sort'];
+        $order = $data['order'];
+        $gotoVideoPage = $data['page'];
 
-            $this->videos = $this->getVideos();
-            $this->videoCount = $this->getVideosCount();
-            $this->totalRuntime = $this->getTotalRuntime();
-            $this->time2Human = $this->getTime2human();
+        if ($gotoVideoPage) {
+            $videosBlock = "";
+            $videoCount = 0;
+            $totalRuntime = 0;
+            $time2Human = "";
+        } else {
+            $vids = $this->videoRepository->findAllWithChannelByDate($user->getId(), $sort, $order);
+            $videos = $this->getVideos($vids);
+            $videoCount = $this->getVideosCount($user);
+            $totalRuntime = $this->getTotalRuntime($user);
+            $time2Human = $this->getTime2human($totalRuntime, $request->getLocale());
+
+            $videosBlock = $this->renderView('blocks/youtube/videos.html.twig', [
+                'videos' => $videos,
+                'type' => 'array',
+            ]);
         }
-        return $this->videos;
+
+        dump([
+            'justAdded' => $justAdded,
+            'gotoVideoPage' => $gotoVideoPage,
+            'userAlreadyLinked' => $userAlreadyLinked,
+            'videosBlock' => $videosBlock,
+            'videoCount' => $videoCount,
+            'totalRuntime' => $totalRuntime,
+            'time2Human' => $time2Human,
+        ]);
+
+        return $this->json([
+            'justAdded' => $justAdded,
+            'gotoVideoPage' => $gotoVideoPage,
+            'userAlreadyLinked' => $userAlreadyLinked,
+            'videosBlock' => $videosBlock,
+            'videoCount' => $videoCount,
+            'totalRuntime' => $totalRuntime,
+            'time2Human' => $time2Human,
+        ]);
     }
 
-    public function getVideosCount(): int
+    public function getVideosCount(User $user): int
     {
-        return count($this->userRepository->find($this->user_id)->getYoutubeVideos());
+        return count($user->getYoutubeVideos());
     }
 
-    public function getTotalRuntime(): int
+    public function getTotalRuntime(User $user): int
     {
-        return $this->videoRepository->getUserYTVideosRuntime($this->user_id) ?: 0;
+        return $this->videoRepository->getUserYTVideosRuntime($user->getId()) ?? 0;
     }
 
-    public function getFirstView(): ?DateTimeImmutable
+    public function getFirstView($user): ?DateTimeImmutable
     {
-        if (count($this->videos)) {
-            $firstAddedVideo = $this->videoRepository->firstAddedYTVideo($this->user_id);
+        $firstAddedVideo = $this->videoRepository->firstAddedYTVideo($user->getId());
+        if ($firstAddedVideo) {
             $last = $firstAddedVideo->getAddedAt();
         } else {
             $last = new DateTimeImmutable("now");
@@ -450,7 +482,7 @@ class YoutubeController extends AbstractController
         return $last;
     }
 
-    public function get_preview(): array|null
+    public function getPreview(): array|null
     {
         $previews = ['FhNiY_n0rmc', 'UoRyxgdFJ5Y', 'NCHMT-nQ-8c', 'tBTZ96Iit2g', 'T94JsAgK1X8', 'W9b8ifsDons', 'qOVT9rYda2o', 'qOVT9rYda2o', 'esNfg_XbXMY', 'lqttiQMLTbI', '9sLiQ7DKJ2g', 'q5D55G7Ejs8', 'R4bkKkooa-A', 'ieDIpgso4no', 'n0GSZtPEQs0', 'sbriUP3Pp5s', 'kDsC-fHC0vE', '2k-I_8lhS0w', 'iHTntTTa2io', 'uhMKEd18m_s', 'pVoRFDjq8-g', 'P5UZgiENdx0', 'at9h35V8rtQ', 'Mf1TwEySpno', '2kqvfoUUhA4', 'MUxcCgx4VlI', '6qiK5oQ_Vwk', '85gW-XY3fSE', '1Z5SRVURcIA', 'u044iM9xsWU', 'dWtG6DFFb1E', 'gmKINSHqryc', 'l8e8-8K1G0Y', 'xD_5BsMDBHY'];
         $preview_index = array_rand($previews);
@@ -463,10 +495,10 @@ class YoutubeController extends AbstractController
 
         $thumbnails = (array)$snippet['thumbnails'];
         if (array_key_exists('medium', $thumbnails))
-            return [$thumbnails['medium']['url'], $snippet['title']];
+            return ['link' => $preview, 'url' => $thumbnails['medium']['url'], 'title' => $snippet['title']];
         if (array_key_exists('default', $thumbnails))
-            return [$thumbnails['default']['url'], $snippet['title']];
-        return ['', ''];
+            return ['link' => $preview, 'url' => $thumbnails['default']['url'], 'title' => $snippet['title']];
+        return ['link' => '', 'url' => '', 'title' => ''];
     }
 
     private function getVideoSnippet($videoId): VideoListResponse
@@ -479,23 +511,23 @@ class YoutubeController extends AbstractController
         return $this->service_YouTube->channels->listChannels('snippet', ['id' => $channelId]);
     }
 
-    /**
-     * @throws \Exception
-     */
     private function iso8601ToSeconds($input): int
     {
-        $duration = new DateInterval($input);
-        $hours_to_seconds = $duration->h * 60 * 60;
-        $minutes_to_seconds = $duration->i * 60;
-        $seconds = $duration->s;
-        return $hours_to_seconds + $minutes_to_seconds + $seconds;
+        try {
+            $duration = new DateInterval($input);
+            $hours_to_seconds = $duration->h * 60 * 60;
+            $minutes_to_seconds = $duration->i * 60;
+            $seconds = $duration->s;
+            return $hours_to_seconds + $minutes_to_seconds + $seconds;
+        } catch (\Exception) {
+            return 0;
+        }
     }
 
-    private function getTime2human(): string
+    private function getTime2human($ss, $locale): string
     {
-        $ss = $this->totalRuntime;
         if ($ss) {
-            $l = $this->locale;
+            $l = $locale;
             $words = ["timeSpent1" => ["en" => "Time spent watching Youtube", "fr" => "Temps passé devant youtube", "es" => "Tiempo dedicado a ver Youtube", "de" => "Zeit, die Sie mit Youtube verbracht haben"], "timeSpent2" => ["en" => "secondes i.e.", "fr" => "secondes c.à.d.", "es" => "segundos, es decir,", "de" => "Sekunden d.h."], "month" => ["en" => "month", "fr" => "mois", "es" => "mes", "de" => "Monat"], "months" => ["en" => "months", "fr" => "mois", "es" => "meses", "de" => "Monate"], "day" => ["en" => "day", "fr" => "jour", "es" => "día", "de" => "Tag"], "days" => ["en" => "days", "fr" => "jours", "es" => "días", "de" => "Tage"], "hour" => ["en" => "hour", "fr" => "heure", "es" => "hora", "de" => "Stunde"], "hours" => ["en" => "hours", "fr" => "heures", "es" => "horas", "de" => "Stunden"], "minute" => ["en" => "minute", "fr" => "minute", "es" => "minuto", "de" => "Minute"], "minutes" => ["en" => "minutes", "fr" => "minutes", "es" => "minutos", "de" => "Minuten"], "seconde" => ["en" => "seconde", "fr" => "seconde", "es" => "segundo", "de" => "Sekunde"], "secondes" => ["en" => "secondes", "fr" => "secondes", "es" => "segundos", "de" => "Sekunden"], "and" => ["en" => "and", "fr" => "et", "es" => "y", "de" => "und"],];
             $s = $ss % 60;
             $m = intval(floor(($ss % 3600) / 60));
@@ -536,15 +568,18 @@ class YoutubeController extends AbstractController
         return "";
     }
 
-    private function saveSettings(Request $request): void
+    #[Route('/youtube/settings/save', name: 'youtube_settings_save', methods: ['GET'])]
+    private function saveSettings(Request $request): Response
     {
         $sort = $request->query->get('sort');
+        $order = $request->query->get('order');
+        $page = $request->query->get('page');
         /** @var User $user */
         $user = $this->getUser();
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'youtube']);
-        $settings->setData(['sort' => $this->sort, 'order' => $this->order]);
+        $settings->setData(['sort' => $sort, 'order' => $order, 'page' => $page]);
         $this->settingsRepository->save($settings, true);
-        $this->oldSort = $this->sort;
-        $this->oldOrder = $this->order;
+
+        return $this->json(['status' => 'ok']);
     }
 }
