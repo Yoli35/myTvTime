@@ -7,7 +7,11 @@
             {% for medium in people.known_for %}
                 {% set url = medium.media_type == 'tv' ? path('app_serie_tmdb', {id: medium.id}) : path('app_movie', {id: medium.id}) %}
                 <a href="{{ url ~ '?from=home' }}">
-                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ medium.poster_path }}" alt="">
+                    {% if medium.poster_path is defined %}
+                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ medium.poster_path }}" alt="">
+                    {% else %}
+                        <div class="no-poster"><div>{{ medium.title }}</div></div>
+                    {% endif %}
                 </a>
             {% endfor %}
         </div>

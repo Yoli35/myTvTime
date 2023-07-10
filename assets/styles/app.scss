@@ -1398,7 +1398,7 @@ nav.active {
                     a {
                         justify-content: center;
 
-                        img {
+                        img, .no-poster {
                             border: 2px solid var(--gradient-ardoise-90);
                             border-radius: .25em;
                             height: 8em;
@@ -1408,6 +1408,16 @@ nav.active {
 
                             &:hover {
                                 scale: 1.1;
+                            }
+                        }
+
+                        .no-poster {
+                            @include flex-row(center, center);
+                            background-color: var(--gradient-ardoise-10-alpha-80);
+
+                            div {
+                                text-align: center;
+                                width: 100%;
                             }
                         }
                     }
