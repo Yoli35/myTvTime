@@ -26,7 +26,113 @@
 
         <div class="yt-videos">
             {{ include('blocks/_nav.html.twig', {thisPage: 'My Youtube Videos'|trans}) }}
-            {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'settings': settings, 'locale': locale}) }}
+{#            {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'settings': settings, 'locale': locale}) }}#}
+            <div class="getter">
+                {% if page and this.justAdded %}
+                    <div class="redirect" data-id="{{ this.justAdded }}" data-user-already-linked="{{ userAlreadyLinked }}"></div>
+                {% endif %}
+                <h1 id="h1" data-total-results="{{ count }}">
+                    {{ count ?: 'No'|trans }} {{ count > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ beginning|format_date('short') }}
+                </h1>
+                <h2>{{ time_2_human }}</h2>
+                <div class="parameters">
+                    <div class="title">{{ 'Add a Youtube video'|trans }}</div>
+                    <div class="content minimise">
+                        <div class="input">
+                            <form data-model="on(change)|*">
+                                <div class="link">
+                                    <div>{{ 'Link'|trans }} :</div>
+                                    <label for="link">
+                                        <input id="link" type="search" name="link" autofocus>
+                                    </label>
+                                </div>
+                                <div class="page">
+                                    <label for="page">
+                                        <input type="checkbox" id="page" name="page"{{ page ? " checked": "" }}>
+                                        {{ 'Go to the video page'|trans }}
+                                    </label>
+                                </div>
+                                <div class="sort">
+                                    <div>{{ 'sort'|trans }} :</div>
+                                    <label for="sort">
+                                        <select id="sort" type="search" name="sort">
+                                            <option value="addedAt"{% if sort == 'AddedAt' %} selected{% endif %}>{{ 'Date added'|trans }}</option>
+                                            <option value="publishedAt"{% if sort == 'publishedAt' %} selected{% endif %}>{{ 'Date of publication'|trans }}</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="order">
+                                    <div>{{ 'order'|trans }} :</div>
+                                    <label for="order">
+                                        <select id="order" type="search" name="order">
+                                            <option value="DESC"{% if order == 'DESC' %} selected{% endif %}>{{ 'Descendant'|trans }}</option>
+                                            <option value="ASC"{% if order == 'ASC' %} selected{% endif %}>{{ 'Ascendant'|trans }}</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="example">
+                            <b>{{ 'For example'|trans }} :</b>
+                            <div class="text-center">{{ preview_title }}</div>
+                            <a href="https://youtu.be/{{ preview }}" target="_blank" rel="noopener"><span><span>{{ preview }}</span></span></a>
+                            <a href="https://youtu.be/{{ preview }}" target="_blank" rel="noopener"><span>https://youtu.be/<span>{{ preview }}</span></span></a>
+                            <a href="https://youtu.be/{{ preview }}" target="_blank" rel="noopener"><span>https://www.youtube.com/watch?v=<span>{{ preview }}</span></span></a>
+                            <a href="https://youtu.be/7KFxzeyse2g" target="_blank" rel="noopener"><span>https://www.youtube.com/shorts/<span>7KFxzeyse2g</span></span></a>
+                        </div>
+                        <div class="thumbnail">
+                            <img src="{{ preview_url }}" alt="{{ preview_title }}">
+                        </div>
+                    </div>
+                    <div class="icon-minimise">
+                        <i class="fa-brands fa-youtube"></i>
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </div>
+                    <script>
+                        window.addEventListener("DOMContentLoaded", () => {
+                            const icon = document.querySelector(".icon-minimise");
+                            icon.addEventListener("click", () => {
+                                const content = document.querySelector(".content");
+                                content.classList.toggle("minimise");
+                                if (content.classList.contains("minimise")) {
+                                    icon.lastElementChild.classList.remove("fa-circle-minus");
+                                    icon.lastElementChild.classList.add("fa-circle-plus");
+                                } else {
+                                    icon.lastElementChild.classList.remove("fa-circle-plus");
+                                    icon.lastElementChild.classList.add("fa-circle-minus");
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+
+                {% if videos|length %}
+                    <div id="result" class="result">
+                        {% for video in videos %}
+                            {{ include('blocks/youtube/video.html.twig', {item: video}) }}
+                        {% endfor %}
+                        {% if count > (videos|length) %}
+                            <div id="see-more" class="see-more">
+                                <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
+                    <script>
+                        window.addEventListener("DOMContentLoaded", () => {
+                            const videoCount = {{ count }};
+                            if (!videoCount) {
+                                document.querySelector(".tag-button").style.display = "none";
+                                document.querySelector(".menu-item.youtube-video-search").style.display = "none";
+                            }
+                            document.querySelector(".icon").addEventListener("click", () => {
+                                document.querySelector(".content").classList.toggle("minimise");
+                            });
+                        });
+                    </script>
+                {% endif %}
+            </div>
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}

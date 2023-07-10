@@ -523,7 +523,7 @@
         "version": "v3.0.0"
     },
     "symfony/stimulus-bundle": {
-        "version": "2.9",
+        "version": "2.10",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -585,10 +585,16 @@
         "version": "v2.3.0"
     },
     "symfony/ux-live-component": {
-        "version": "v2.1.1"
-    },
-    "symfony/ux-react": {
-        "version": "v2.9.1"
+        "version": "2.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.6",
+            "ref": "73e69baf18f47740d6f58688c5464b10cdacae06"
+        },
+        "files": [
+            "config/routes/ux_live_component.yaml"
+        ]
     },
     "symfony/ux-twig-component": {
         "version": "v2.1.1"

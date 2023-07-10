@@ -1181,9 +1181,6 @@
   dependencies:
     morphdom "^2.6.1"
 
-"@symfony/ux-react@file:vendor/symfony/ux-react/assets":
-  version "1.0.0"
-
 "@symfony/ux-typed@file:vendor/symfony/ux-typed/assets":
   version "1.0.0"
 

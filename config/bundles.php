@@ -24,5 +24,4 @@ return [
     ApiPlatform\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
     Symfony\UX\Typed\TypedBundle::class => ['all' => true],
     Symfony\UX\StimulusBundle\StimulusBundle::class => ['all' => true],
-    Symfony\UX\React\ReactBundle::class => ['all' => true],
 ];

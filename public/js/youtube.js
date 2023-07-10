@@ -13,11 +13,11 @@ function initYoutube(id, locale, paths) {
     }
 
     const ytLink = document.getElementById('link');
-    ytLink.addEventListener("input", () => {
-        setTimeout(function () {
-            ytLink.value = "";
-        }, 2000);
-    });
+    // ytLink.addEventListener("input", () => {
+    //     setTimeout(function () {
+    //         ytLink.value = "";
+    //     }, 2000);
+    // });
     document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === 'visible') {
             ytLink.focus();

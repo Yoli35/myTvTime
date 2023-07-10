@@ -4,7 +4,7 @@ import { startStimulusApp } from '@symfony/stimulus-bridge';
 export const app = startStimulusApp(require.context(
     '@symfony/stimulus-bridge/lazy-controller-loader!./controllers',
     true,
-    /\.(j|t)sx?$/
+    /\.[j|t]sx?$/
 ));
 
 import LiveController from '@symfony/ux-live-component';

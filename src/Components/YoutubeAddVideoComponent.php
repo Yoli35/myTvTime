@@ -70,10 +70,6 @@ class YoutubeAddVideoComponent
     private string $oldSort = "";
     private string $oldOrder = "";
 
-//    private UserRepository $userRepository;
-//    private EntityManagerInterface $entityManager;
-//    private YoutubeVideoRepository $videoRepository;
-//    private YoutubeChannelRepository $channelRepository;
     private Google_Service_YouTube $service_YouTube;
 
 
@@ -130,6 +126,7 @@ class YoutubeAddVideoComponent
             $this->saveSettings();
         }
 
+        // https://www.youtube.com/watch?v=sXmwkTMDjkA
         if (str_contains($thisLink, "shorts")) {
             if (str_contains($thisLink, "www")) {
                 // https://www.youtube.com/shorts/7KFxzeyse2g
@@ -269,7 +266,12 @@ class YoutubeAddVideoComponent
     public function getVideos(): array
     {
         $vids = $this->videoRepository->findAllWithChannelByDate($this->user_id, $this->sort, $this->order);
-        return $this->youtubeController->getVideos($vids);
+        $vids = $this->youtubeController->getVideos($vids);
+
+        return array_map(function ($vid) {
+            $vid['publishedAt'] = $vid['publishedAt']->format('Y-m-d H:i:s');
+            return $vid;
+        }, $vids);
     }
 
     public function getTotalRuntime(): int

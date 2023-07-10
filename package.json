@@ -7,7 +7,6 @@
         "@symfony/stimulus-bridge": "^3.0.0",
         "@symfony/ux-dropzone": "file:vendor/symfony/ux-dropzone/assets",
         "@symfony/ux-live-component": "file:vendor/symfony/ux-live-component/assets",
-        "@symfony/ux-react": "file:vendor/symfony/ux-react/assets",
         "@symfony/ux-typed": "file:vendor/symfony/ux-typed/assets",
         "@symfony/webpack-encore": "^4.2.0",
         "bootstrap": "^5.2.3",

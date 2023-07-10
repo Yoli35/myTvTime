@@ -12,8 +12,8 @@ dashboard:
     prefix: '/{_locale}'
 
 live_component:
-    resource: '@LiveComponentBundle/Resources/config/routing/live_component.xml'
-    prefix: '/{_locale}'
+    resource: '@LiveComponentBundle/config/routes.php'
+    prefix: '/{_locale}/_components'
 
 # app/config/routing.yml
 _liip_imagine:

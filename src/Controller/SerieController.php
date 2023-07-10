@@ -623,7 +623,15 @@ class SerieController extends AbstractController
     function getPosters(): array|false
     {
         $posterFiles = scandir($this->getParameter('kernel.project_dir') . '/public/images/series/posters');
-        return array_slice($posterFiles, 3);
+        /*
+         * 0 => "."
+         * 1 => ".."
+         * 2 => ".DS_Store"
+         */
+        if (($posterFiles[2] === '.DS_Store') || ($posterFiles[2] === 'Thumbs.db'))
+            return array_slice($posterFiles, 3);
+        else
+            return array_slice($posterFiles, 2);
     }
 
     public function seriesToBeToArray($results, $imageConfig, $locale): array
