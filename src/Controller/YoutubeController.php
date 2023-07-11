@@ -419,9 +419,9 @@ class YoutubeController extends AbstractController
                         $userAlreadyLinked = true;
                         $status = "ok";
                         $message = $this->translator->trans("Video already added!");
-                        $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>";
+                        $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>🔗 ";
                         $subMessage .= $this->translator->trans("Go to the video page to see it");
-                        $subMessage .= "</a>";
+                        $subMessage .= " 🔗</a>";
                     }
                 }
                 // Si l'utilisateur n'est pas encore lié à la vidéo, on le lie
@@ -430,9 +430,9 @@ class YoutubeController extends AbstractController
                     $this->videoRepository->add($link, true);
                     $status = "ok";
                     $message = $this->translator->trans("Video added!");
-                    $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>";
+                    $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>🔗 ";
                     $subMessage .= $this->translator->trans("Go to the video page to see it");
-                    $subMessage .= "</a>";
+                    $subMessage .= " 🔗</a>";
                 }
                 $justAdded = $link->getId();
             }
