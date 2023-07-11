@@ -20,6 +20,7 @@ use Google\Service\YouTube\ChannelListResponse;
 use Google\Service\YouTube\VideoListResponse;
 use Google_Client;
 use Google_Service_YouTube;
+use IntlDateFormatter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -212,7 +213,7 @@ class YoutubeController extends AbstractController
             $videos = $videoRepository->findBy(['id' => $ids], ['publishedAt' => 'DESC']);
         }
 
-        return $this->render('blocks/youtube/videos.html.twig', [
+        return $this->render('blocks/youtube/_video_search.html.twig', [
             'videos' => $videos,
             'list' => $tagIds,
             'type' => '',
@@ -300,10 +301,14 @@ class YoutubeController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $locale = $request->getLocale();
         $providedLink = $request->query->get('link');
         dump($providedLink);
         $justAdded = 0;
         $userAlreadyLinked = false;
+        $status = "error";
+        $message = "An error occurred";
+        $subMessage = "";
 
         if (str_contains($providedLink, "shorts")) {
             if (str_contains($providedLink, "www")) {
@@ -400,18 +405,34 @@ class YoutubeController extends AbstractController
                 $this->videoRepository->add($newVideo, true);
 
                 $justAdded = $newVideo->getId();
+
+                $status = "ok";
+                $message = $this->translator->trans("Video added!");
+                $subMessage = "<a href='/" . $locale . "/youtube/video/" . $justAdded . "'>";
+                $subMessage .= $this->translator->trans("Go to the video page to see it");
+                $subMessage .= "</a>";
             } else {
                 // Si le lien a déjà été ajouté, on vérifie que l'utilisateur n'est pas déjà lié à la vidéo
                 $users = $link->getUsers();
                 foreach ($users as $u) {
                     if ($u->getId() == $user->getId()) {
                         $userAlreadyLinked = true;
+                        $status = "ok";
+                        $message = $this->translator->trans("Video already added!");
+                        $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>";
+                        $subMessage .= $this->translator->trans("Go to the video page to see it");
+                        $subMessage .= "</a>";
                     }
                 }
                 // Si l'utilisateur n'est pas encore lié à la vidéo, on le lie
                 if (!$userAlreadyLinked) {
                     $link->addUser($user);
                     $this->videoRepository->add($link, true);
+                    $status = "ok";
+                    $message = $this->translator->trans("Video added!");
+                    $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>";
+                    $subMessage .= $this->translator->trans("Go to the video page to see it");
+                    $subMessage .= "</a>";
                 }
                 $justAdded = $link->getId();
             }
@@ -419,44 +440,42 @@ class YoutubeController extends AbstractController
 
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => "youtube"]);
         $data = $settings->getData();
-        $sort = $data['sort'];
-        $order = $data['order'];
-        $gotoVideoPage = $data['page'];
+        $gotoVideoPage = intval($data['page']);
 
         if ($gotoVideoPage) {
             $videosBlock = "";
+            $h1innerText = "";
             $videoCount = 0;
             $totalRuntime = 0;
             $time2Human = "";
         } else {
+            $sort = $data['sort'];
+            $order = $data['order'];
             $vids = $this->videoRepository->findAllWithChannelByDate($user->getId(), $sort, $order);
             $videos = $this->getVideos($vids);
             $videoCount = $this->getVideosCount($user);
+            $firstView = $this->getFirstView($user);
+            $format = datefmt_create($request->getLocale(), IntlDateFormatter::SHORT, IntlDateFormatter::NONE, 'Europe/Paris', IntlDateFormatter::GREGORIAN);
+            $h1innerText = $videoCount . " " . $this->translator->trans('videos') . " " . $this->translator->trans('since') . " " . datefmt_format($format, $firstView);
             $totalRuntime = $this->getTotalRuntime($user);
             $time2Human = $this->getTime2human($totalRuntime, $request->getLocale());
 
-            $videosBlock = $this->renderView('blocks/youtube/videos.html.twig', [
+            $videosBlock = $this->render('blocks/youtube/_videos.html.twig', [
                 'videos' => $videos,
-                'type' => 'array',
+                'type' => '',
             ]);
         }
 
-        dump([
-            'justAdded' => $justAdded,
-            'gotoVideoPage' => $gotoVideoPage,
-            'userAlreadyLinked' => $userAlreadyLinked,
-            'videosBlock' => $videosBlock,
-            'videoCount' => $videoCount,
-            'totalRuntime' => $totalRuntime,
-            'time2Human' => $time2Human,
-        ]);
-
         return $this->json([
+            'status' => $status,
+            'message' => $message,
+            'subMessage' => $subMessage,
             'justAdded' => $justAdded,
             'gotoVideoPage' => $gotoVideoPage,
             'userAlreadyLinked' => $userAlreadyLinked,
             'videosBlock' => $videosBlock,
             'videoCount' => $videoCount,
+            'h1innerText' => $h1innerText,
             'totalRuntime' => $totalRuntime,
             'time2Human' => $time2Human,
         ]);

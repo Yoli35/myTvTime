@@ -160,6 +160,23 @@ function initYoutube(id, locale, paths) {
 
             ytLink.value = "";
             ytLink.focus();
+
+            const h1 = document.getElementById('h1');
+            const h2 = document.getElementById('time-spend');
+            const result = document.querySelector(".result");
+            const videosBlock = response['videosBlock'];
+            const videoCount = response['videoCount'];
+            const h1innerText = response['h1innerText'];
+            const time2Human = response['time2Human'];
+
+            h1.setAttribute("data-total-results", videoCount);
+            h1.innerHTML = h1innerText;
+            h2.innerText = time2Human;
+
+            showStatus(response);
+
+            result.innerHTML = "Wait...";
+            result.innerHTML = videosBlock.content;
         }
         xhr.open("GET", _yt_video_add + '?link=' + link);
         xhr.send();
@@ -221,7 +238,6 @@ function initYoutube(id, locale, paths) {
         }, 5250);
     }
 }
-
 function newTagElement(tag, list = false) {
 
     let newTagButton = document.createElement("div");

@@ -92,7 +92,7 @@
     {% if videos|length %}
         <div id="result" class="result">
             {% for video in videos %}
-                {{ include('blocks/youtube/video.html.twig', {item: video}) }}
+                {{ include('blocks/youtube/_video.html.twig', {item: video}) }}
             {% endfor %}
             {% if count > (videos|length) %}
                 <div id="see-more" class="see-more">

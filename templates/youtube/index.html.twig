@@ -31,7 +31,7 @@
                 <h1 id="h1" data-total-results="{{ videoCount }}">
                     {{ videoCount ?: 'No'|trans }} {{ videoCount > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ firstView|format_date('short') }}
                 </h1>
-                <h2>{{ time2Human }}</h2>
+                <h2 id="time-spend">{{ time2Human }}</h2>
                 <div class="parameters">
                     <div class="title">{{ 'Add a Youtube video'|trans }}</div>
                     <div class="content minimise">
@@ -107,7 +107,7 @@
                 <div id="result" class="result">
                     {% if videos|length %}
                         {% for video in videos %}
-                            {{ include('blocks/youtube/video.html.twig', {item: video}) }}
+                            {{ include('blocks/youtube/_video.html.twig', {item: video}) }}
                         {% endfor %}
                     {% if videoCount > (videos|length) %}
                         <div id="see-more" class="see-more">

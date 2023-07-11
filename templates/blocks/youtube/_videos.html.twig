@@ -1,0 +1,3 @@
+{% for video in videos %}
+    {{ include('blocks/youtube/_video' ~ type ~ '.html.twig', {item: video}) }}
+{% endfor %}
