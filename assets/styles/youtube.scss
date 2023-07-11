@@ -197,7 +197,7 @@
                     width: 100%;
                 }
 
-                .link, .page, .sort, .order {
+                .link, .sort, .order {
                     @include flex-row();
                     font-weight: 100;
                     text-transform: capitalize;
@@ -214,24 +214,7 @@
                         }
 
                         &:has(input[type=checkbox]) {
-                            align-items: center;
-                            display: flex;
-                            gap: .25em;
-                            text-transform: unset;
 
-                            input {
-                                @include flex-row();
-                                appearance: none;
-                                background-color: var(--gradient-ardoise-40);
-                                border: 1px solid var(--gradient-ardoise-80);
-                                border-radius: .25em;
-                                height: 1em;
-                                width: 1em;
-
-                                &:checked {
-                                    background-color: var(--gradient-ardoise-60);
-                                }
-                            }
                         }
 
                         &:has(select) {
@@ -249,8 +232,46 @@
                 }
 
                 .page {
-                    @include flex-row(center, center);
+                    align-items: center;
+                    display: flex;
                     height: 1.5em;
+                    justify-content: center;
+
+                    label {
+                        align-items: center;
+                        display: flex;
+                        gap: .5rem;
+                        position: relative;
+                        text-transform: unset;
+
+                        input {
+                            @include flex-row();
+                            appearance: none;
+                            background-color: var(--gradient-ardoise-30);
+                            border: 1px solid var(--gradient-ardoise-80);
+                            border-radius: .125em;
+                            margin: 0;
+                            height: 1.25em;
+                            width: 1.25em;
+
+                            &:checked {
+                                & + div {
+                                    opacity: 1;
+                                }
+                            }
+                        }
+
+                        div {
+                            height: 1.25rem;
+                            left: 0;
+                            opacity: 0;
+                            position: absolute;
+                            text-align: center;
+                            top: 0;
+                            transition: opacity .25s ease-in-out;
+                            width: 1.25rem;
+                        }
+                    }
                 }
             }
 
