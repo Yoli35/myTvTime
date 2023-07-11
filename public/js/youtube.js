@@ -5,6 +5,7 @@ function initYoutube(id, locale, paths) {
     const _yt_video_page = paths[0].slice(0, -1);
     const _yt_videos_more = paths[1];
     const _yt_video_add = paths[2];
+    const _youtube_settings_save = paths[3];
 
     const moreButton = document.getElementById('more');
     const seeMore = document.getElementById('see-more');
@@ -14,18 +15,18 @@ function initYoutube(id, locale, paths) {
     }
 
     const ytLink = document.getElementById('link');
-    // ytLink.addEventListener("input", () => {
-    //     setTimeout(function () {
-    //         ytLink.value = "";
-    //     }, 2000);
-    // });
+    const ytPage = document.getElementById('page');
+    const ytSort = document.getElementById('sort');
+    const ytOrder = document.getElementById('order');
+
     ytLink.addEventListener("paste", (e) => {
         const link = e.clipboardData.getData('text');
         addVideo(link);
-        // setTimeout(function () {
-        //     ytLink.value = "";
-        // }, 2000);
     });
+    ytPage.addEventListener("click", savePageState);
+    ytSort.addEventListener("change", saveSortState);
+    ytOrder.addEventListener("change", saveOrderState);
+
     document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === 'visible') {
             ytLink.focus();
@@ -145,6 +146,7 @@ function initYoutube(id, locale, paths) {
             xhr.send();
         });
     }
+
     function addVideo(link) {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -154,12 +156,69 @@ function initYoutube(id, locale, paths) {
 
             if (gotoVideoPage) {
                 window.location.href = _yt_video_page + response['justAdded'] + (userAlreadyLinked ? '?user-already-linked=1' : '');
-            } else {
-
             }
+
+            ytLink.value = "";
+            ytLink.focus();
         }
         xhr.open("GET", _yt_video_add + '?link=' + link);
         xhr.send();
+    }
+
+    function savePageState(e) {
+        const page = e.target.checked;
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            showStatus(response);
+        }
+        xhr.open("GET", _youtube_settings_save + '?page=' + (page ? 1 : 0));
+        xhr.send();
+    }
+
+    function saveSortState(e) {
+        const sort = e.target.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            showStatus(response);
+        }
+        xhr.open("GET", _youtube_settings_save + '?sort=' + encodeURIComponent(sort));
+        xhr.send();
+    }
+
+    function saveOrderState(e) {
+        const order = e.target.value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            showStatus(response);
+        }
+        xhr.open("GET", _youtube_settings_save + '?order=' + encodeURIComponent(order));
+        xhr.send();
+    }
+
+    function showStatus(response) {
+        const status = response['status'];
+        const message = '<strong>' + response['message'] + '</strong><br>' + response['subMessage'];
+
+        const statusDiv = document.getElementById('status');
+        statusDiv.innerHTML = message;
+        const width = statusDiv.getBoundingClientRect().width;
+        statusDiv.setAttribute("style", "left: calc(50% - " + (width / 2) + "px);");
+        statusDiv.classList.add(status);
+        ytLink.focus();
+
+        setTimeout(() => {
+            statusDiv.classList.remove(status);
+        }, 5000);
+        setTimeout(() => {
+            statusDiv.innerHTML = "";
+            statusDiv.removeAttribute("style");
+        }, 5250);
     }
 }
 

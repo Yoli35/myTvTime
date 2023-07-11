@@ -26,7 +26,7 @@
 
         <div class="yt-videos">
             {{ include('blocks/_nav.html.twig', {thisPage: 'My Youtube Videos'|trans}) }}
-{#            {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'settings': settings, 'locale': locale}) }}#}
+            {#            {{ component('youtube_add_video', {class: 'getter', 'id': user.id, 'preview': preview, 'settings': settings, 'locale': locale}) }} #}
             <div class="getter">
                 <h1 id="h1" data-total-results="{{ videoCount }}">
                     {{ videoCount ?: 'No'|trans }} {{ videoCount > 1 ? 'Videos'|trans : 'Video'|trans }} {{ 'since'|trans }} {{ firstView|format_date('short') }}
@@ -104,47 +104,49 @@
                     </script>
                 </div>
 
-                {% if videos|length %}
-                    <div id="result" class="result">
+                <div id="result" class="result">
+                    {% if videos|length %}
                         {% for video in videos %}
                             {{ include('blocks/youtube/video.html.twig', {item: video}) }}
                         {% endfor %}
-                        {% if videoCount > (videos|length) %}
-                            <div id="see-more" class="see-more">
-                                <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
-                            </div>
-                        {% endif %}
-                    </div>
-                {% else %}
-                    <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
-                    <script>
-                        window.addEventListener("DOMContentLoaded", () => {
-                            const videoCount = {{ count }};
-                            if (!videoCount) {
-                                document.querySelector(".tag-button").style.display = "none";
-                                document.querySelector(".menu-item.youtube-video-search").style.display = "none";
-                            }
-                            document.querySelector(".icon").addEventListener("click", () => {
-                                document.querySelector(".content").classList.toggle("minimise");
+                    {% if videoCount > (videos|length) %}
+                        <div id="see-more" class="see-more">
+                            <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
+                        </div>
+                    {% endif %}
+                    {% else %}
+                        <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
+                        <script>
+                            window.addEventListener("DOMContentLoaded", () => {
+                                const videoCount = {{ count }};
+                                if (!videoCount) {
+                                    document.querySelector(".tag-button").style.display = "none";
+                                    document.querySelector(".menu-item.youtube-video-search").style.display = "none";
+                                }
+                                document.querySelector(".icon").addEventListener("click", () => {
+                                    document.querySelector(".content").classList.toggle("minimise");
+                                });
                             });
-                        });
-                    </script>
-                {% endif %}
+                        </script>
+                    {% endif %}
+                </div>
             </div>
+
+            <div id="status" class="status"></div>
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}
-
     </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script src="/js/youtube.js"></script>
     <script>
-        const paths =[
+        const paths = [
             "{{ path('app_youtube_video', {id: 0}) }}",
             "{{ path('app_youtube_more') }}",
-            "{{ path('app_youtube_add_video') }}"
+            "{{ path('app_youtube_add_video') }}",
+            "{{ path('youtube_settings_save') }}"
         ];
         window.addEventListener("DOMContentLoaded", () => {
             initYoutube({{ app.user.id }}, "{{ locale }}", paths);

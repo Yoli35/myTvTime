@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Timezone;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class YoutubeController extends AbstractController
 {
@@ -40,6 +40,7 @@ class YoutubeController extends AbstractController
      */
     public function __construct(
         private readonly SettingsRepository        $settingsRepository,
+        private readonly TranslatorInterface       $translator,
         private readonly YoutubeChannelRepository  $channelRepository,
         private readonly YoutubeVideoRepository    $videoRepository,
         private readonly YoutubeVideoTagRepository $videoTagRepository,
@@ -67,7 +68,7 @@ class YoutubeController extends AbstractController
             $settings = new Settings();
             $settings->setUser($this->getUser());
             $settings->setName("youtube");
-            $settings->setData(['sort' => 'addedAt', 'order' => 'DESC', 'page' => true]);
+            $settings->setData(['sort' => 'addedAt', 'order' => 'DESC', 'page' => 1]);
             $this->settingsRepository->save($settings, true);
         }
         $settings = $settings->getData();
@@ -569,7 +570,7 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/youtube/settings/save', name: 'youtube_settings_save', methods: ['GET'])]
-    private function saveSettings(Request $request): Response
+    public function saveSettings(Request $request): Response
     {
         $sort = $request->query->get('sort');
         $order = $request->query->get('order');
@@ -577,9 +578,31 @@ class YoutubeController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'youtube']);
-        $settings->setData(['sort' => $sort, 'order' => $order, 'page' => $page]);
+        $data = $settings->getData();
+        $message = "Settings saved";
+        $subMessage = "";
+
+        if ($sort !== null) {
+            $data['sort'] = $sort;
+            $subMessage = "Sort by $sort";
+        }
+        if ($order !== null) {
+            $data['order'] = $order;
+            $subMessage = "Sort in $order order";
+        }
+
+        if ($page !== null) {
+            $page = intval($page);
+            $data['page'] = $page;
+            $subMessage = $page ? "Go to the video page after" : "Stay on current page";
+        }
+        $settings->setData($data);
         $this->settingsRepository->save($settings, true);
 
-        return $this->json(['status' => 'ok']);
+        return $this->json([
+            'status' => 'ok',
+            'message' => $this->translator->trans('Settings saved'),
+            'subMessage' => $this->translator->trans($subMessage),
+        ]);
     }
 }

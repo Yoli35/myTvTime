@@ -373,6 +373,32 @@
     .see-more {
         @include flex-100;
     }
+
+    .status {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        background-color: var(--gradient-ardoise-20-alpha-80);
+        border-radius: .5rem;
+        border: 2px solid var(--gradient-ardoise-90);
+        color: var(--gradient-ardoise-90);
+        left: 50%;
+        min-width: 15rem;
+        opacity: 0;
+        padding: 2rem 4rem;
+        position: absolute;
+        top: -10%;
+        transition: opacity .25s ease-in-out, top .25s ease-out;
+        z-index: 1000;
+
+        strong {
+            color: var(--gradient-green-50);
+        }
+
+        &.ok {
+            opacity: 1;
+            top: 20%;
+        }
+    }
 }
 
 

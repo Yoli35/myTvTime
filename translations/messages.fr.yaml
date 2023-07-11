@@ -386,6 +386,7 @@ Watching in progress: Visionnage en cours
 Start watching the show: Commencer à regarder
 Be patient!: Soyez patient !
 "Series not found on https://www.themoviedb.org/": "Série non trouvée sur https://www.themoviedb.org/"
+Settings saved: Paramètres enregistrés
 # Watch
 Available in streaming: Disponible en streaming
 Available to rent or buy: Location ou achat
@@ -1096,6 +1097,12 @@ No Videos at this Time: Aucune vidéo pour l'instant
 Youtube Link: Lien Youtube
 Link: Lien
 Go to the video page: Aller à la page de la video
+Go to the video page after: Aller à la page de la video après l'ajout
+Stay on current page: Rester sur la page actuelle
+Sort by publishedAt: Tri par date de publication
+Sort by addedAt: Tri par date d'ajout
+Sort in ASC order: Tri par ordre ascendant, plus ancien d'abord
+Sort in DESC order: Tri par ordre descendant, plus récent d'abord
 Published at: Publiée le
 sort: tri
 Date added: Date d'ajout
