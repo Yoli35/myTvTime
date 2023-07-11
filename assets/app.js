@@ -10,7 +10,6 @@ import './styles/form.scss';
 import './styles/movie.scss';
 import './styles/search.scss';
 import './styles/serie.scss';
-import './styles/tiktok.scss';
 import './styles/user.scss';
 import './styles/youtube.scss';
 

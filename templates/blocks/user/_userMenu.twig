@@ -6,26 +6,36 @@
             <img class="avatar" src="/images/default/no_avatar.png" alt="{{ user.username }}">
         {% endif %}
         <div class="menu-items">
-            <div class="menu-item"><a href="{{ path('app_personal_profile') }}">
+            <div class="menu-item">
+                <a href="{{ path('app_personal_profile') }}">
                     <div class="icon"><i class="fa-solid fa-user"></i></div>
                     <div>{{ 'My Account'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_personal_list') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_personal_list') }}">
                     <div class="icon"><i class="fa-solid fa-children"></i></div>
                     <div>{{ 'People search'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_event') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_event') }}">
                     <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
                     <div>{{ 'My Events'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_activity_index') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_activity_index') }}">
                     <div class="icon"><i class="fa-solid fa-person-walking"></i></div>
                     <div>{{ 'Activity'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_personal_movies') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_personal_movies') }}">
                     <div class="icon"><i class="fa-sharp fa-solid fa-film"></i></div>
                     <div>{{ 'My Movies'|trans }}</div>
-                </a></div>
+                </a>
+            </div>
             <div class="menu-item menu-item-collections">
                 <a href="{{ path('app_collection') }}">
                     <div class="icon"><i class="fa-solid fa-clapperboard"></i></div>
@@ -34,46 +44,58 @@
                 {% set collections = userMovieCollections(user) %}
                 <div class="sub-menu">
                     {% for c in collections %}
-                        <div class="menu-item"><a href="{{ path('app_collection_show', {id: c.id}) }}">
-                                <div class="image-collection"><img src="/images/collections/thumbnails/{{ c.image }}"
-                                                                   alt="{{ c.name }}"></div>
+                        <div class="menu-item">
+                            <a href="{{ path('app_collection_show', {id: c.id}) }}">
+                                <div class="image-collection">
+                                    <img src="/images/collections/thumbnails/{{ c.image }}" alt="{{ c.name }}"></div>
                                 <div>{{ c.name }} ({{ c.count }})</div>
-                            </a></div>
+                            </a>
+                        </div>
                     {% endfor %}
-                    <div class="menu-item"><a href="{{ path('app_collection_new') }}">
+                    <div class="menu-item">
+                        <a href="{{ path('app_collection_new') }}">
                             <div class="icon"><i class="fa-solid fa-plus"></i></div>
                             <div>{{ 'Add collection'|trans }}</div>
-                        </a></div>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="menu-item"><a href="{{ path('app_serie_index') }}">
+            <div class="menu-item">
+                <a href="{{ path('app_serie_index') }}">
                     <div class="icon"><i class="fa-solid fa-tv"></i></div>
                     <div>{{ 'My Series'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_serie_today') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_serie_today') }}">
                     <div class="icon"><i class="fa-solid fa-calendar-day"></i></div>
                     <div>{{ 'My Series airing today'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_serie_to_start') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_serie_to_start') }}">
                     <div class="icon"><i class="fa-solid fa-play"></i></div>
                     <div>{{ 'My Series to start'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_serie_to_end') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_serie_to_end') }}">
                     <div class="icon"><i class="fa-solid fa-forward-step"></i></div>
                     <div>{{ 'My Series to end'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_youtube') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_youtube') }}">
                     <div class="icon"><i class="fa-brands fa-youtube"></i></div>
                     <div>{{ 'My Youtube Videos'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_youtube_search') }}">
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="{{ path('app_youtube_search') }}">
                     <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                     <div>{{ 'Youtube video search'|trans }}</div>
-                </a></div>
-            <div class="menu-item"><a href="{{ path('app_tik_tok') }}">
-                    <div class="icon"><i class="fa-brands fa-tiktok"></i></div>
-                    <div>{{ 'My TikTok Videos'|trans }}</div>
-                </a></div>
+                </a>
+            </div>
         </div>
     </div>
     <script>
@@ -81,11 +103,11 @@
             const boundingRect = elementPosition(document.querySelector(".menu"));
             const documentWith = document.documentElement.clientWidth;
             if (boundingRect.viewportX + 414 > documentWith) {
-               const subMenu = document.querySelector(".sub-menu");
-               subMenu.classList.add("to-left");
+                const subMenu = document.querySelector(".sub-menu");
+                subMenu.classList.add("to-left");
             }
 
-            function elementPosition (a) {
+            function elementPosition(a) {
                 const b = a.getBoundingClientRect();
                 return {
                     clientX: a.offsetLeft,

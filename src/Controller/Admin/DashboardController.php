@@ -9,7 +9,6 @@ use App\Entity\EventImage;
 use App\Entity\Genre;
 use App\Entity\ImageConfig;
 use App\Entity\MovieCollection;
-use App\Entity\TikTokVideo;
 use App\Entity\User;
 use App\Entity\Movie;
 use App\Entity\YoutubeVideo;
@@ -69,8 +68,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Images', 'fa fa-image', EventImage::class);
         yield MenuItem::section('Youtube Videos');
         yield MenuItem::linkToCrud('Youtube', 'fa-brands fa-youtube', YoutubeVideo::class);
-        yield MenuItem::section('Tik Tok Videos');
-        yield MenuItem::linkToCrud('Tik Tok', 'fa-brands fa-tiktok', TikTokVideo::class);
         yield MenuItem::section('Entities');
         yield MenuItem::subMenu('Settings', 'fa fa-sliders')->setSubItems([
             MenuItem::linkToCrud('Image Configuration', 'fa fa-image', ImageConfig::class),

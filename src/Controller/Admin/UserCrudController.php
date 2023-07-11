@@ -43,7 +43,6 @@ class UserCrudController extends AbstractCrudController
         yield AssociationField::new('movies');
         yield AssociationField::new('series');
         yield AssociationField::new('youtubeVideos');
-        yield AssociationField::new('tiktoks');
         yield AssociationField::new('articles');
         yield AssociationField::new('events');
         yield AssociationField::new('friends');
