@@ -63,6 +63,24 @@ class Movie
         $this->movieCollections = new ArrayCollection();
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'originalTitle' => $this->getOriginalTitle(),
+            'posterPath' => $this->getPosterPath(),
+            'releaseDate' => $this->getReleaseDate(),
+            'movieDbId' => $this->getMovieDbId(),
+            'runtime' => $this->getRuntime(),
+            'createdAt' => $this->getCreatedAt(),
+            'overview_fr' => $this->getOverviewFr(),
+            'overview_en' => $this->getOverviewEn(),
+            'overview_de' => $this->getOverviewDe(),
+            'overview_es' => $this->getOverviewEs(),
+        ];
+    }
+
     public function getId(): ?int
     {
         return $this->id;

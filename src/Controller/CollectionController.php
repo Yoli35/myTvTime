@@ -50,16 +50,25 @@ class CollectionController extends AbstractController
 
         $imageConfig = $imageConfiguration->getConfig();
 
+        // Trier les films sur la date de sortie (releaseDate)
+        $movies = array_map(function ($movie) {
+            return $movie->toArray();
+        }, $movieCollection->getMovies()->toArray());
+        uksort($movies, function ($a, $b) use ($movies) {
+            return $movies[$b]['releaseDate'] <=> $movies[$a]['releaseDate'];
+        });
+
         return $this->render('collection/show.html.twig', [
             'collection' => $movieCollection,
-            'userMovies' => $movieController->getUserMovieIds($userMovieRepository),
+            'movies' => $movies,
+            'userMovies' => $movieController->getUserMovieIds(),
             'user' => $user,
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfig,
         ]);
     }
 
-    #[Route('/new', name: 'app_collection_new',methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_collection_new', methods: ['GET', 'POST'])]
     public function new(Request $request, MovieCollectionRepository $repository, FileUploader $fileUploader): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

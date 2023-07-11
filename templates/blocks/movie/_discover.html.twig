@@ -5,6 +5,10 @@
         {% if discover.release_date is defined and discover.release_date|length %}
             <div class="date">{{ 'Release Date'|trans }} : {{ discover.release_date|format_date('short') }}</div>
         {% endif %}
+        {% if discover.releaseDate is defined and discover.releaseDate|length %}
+            <div class="date">{{ 'Release Date'|trans }} : {{ discover.releaseDate|format_date('short') }}</div>
+{#            <div class="date">{{ discover.releaseDate|slice(0,4) }}</div>#}
+        {% endif %}
     </a>
     {% if app.user is not null and userMovies is defined %}
         {{ include('blocks/movie/_rating.html.twig', {scale: 0.75, seen: id in userMovies}) }}
