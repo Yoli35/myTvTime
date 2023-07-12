@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\DateService;
 use App\Service\ImageConfiguration;
 use App\Service\LogService;
 use App\Service\TMDBService;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PeopleController extends AbstractController
 {
     public function __construct(
+        private readonly DateService     $dateService,
         private readonly SerieController $serieController
     )
     {
@@ -61,12 +63,12 @@ class PeopleController extends AbstractController
         }
 
         if (key_exists('birthday', $people)) {
-            $date = $this->serieController->newDate($people['birthday'], "Europe/Paris");
+            $date = $this->dateService->newDate($people['birthday'], "Europe/Paris");
             if (key_exists('deathday', $people)) {
-                $now = $this->serieController->newDate($people['deathday'], "Europe/Paris");
+                $now = $this->dateService->newDate($people['deathday'], "Europe/Paris");
             } else {
                 $people['deathday'] = null;
-                $now = $this->serieController->newDate('now', "Europe/Paris");
+                $now = $this->dateService->newDate('now', "Europe/Paris");
             }
             $interval = $now->diff($date);
             $age = $interval->y;

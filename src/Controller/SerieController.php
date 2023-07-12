@@ -23,6 +23,7 @@ use App\Repository\SerieCastRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
+use App\Service\DateService;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
@@ -53,6 +54,7 @@ class SerieController extends AbstractController
 
     public function __construct(private readonly AlertRepository          $alertRepository,
                                 private readonly CastRepository           $castRepository,
+                                private readonly DateService              $dateService,
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FavoriteRepository       $favoriteRepository,
                                 private readonly ImageConfiguration       $imageConfiguration,
@@ -123,7 +125,7 @@ class SerieController extends AbstractController
         }
 
         if ($series) {
-            $now = $this->newDateImmutable('now', 'Europe/Paris');
+            $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
 
             foreach ($series as &$serie) {
                 $serie = $this->isSerieAiringSoon($serie, $now);
@@ -149,30 +151,6 @@ class SerieController extends AbstractController
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfig,
         ]);
-    }
-
-    public function newDate($dateString, $timeZone, $allDay = false): DateTime
-    {
-        try {
-            $date = new DateTime($dateString, new DateTimeZone($timeZone));
-        } catch (Exception) {
-            $date = new DateTime();
-        }
-        if ($allDay) $date->setTime(0, 0);
-
-        return $date;
-    }
-
-    public function newDateImmutable($dateString, $timeZone, $allDay = false): DateTimeImmutable
-    {
-        try {
-            $date = new DateTimeImmutable($dateString, new DateTimeZone($timeZone));
-        } catch (Exception) {
-            $date = new DateTimeImmutable();
-        }
-        if (!$allDay) $date->setTime(0, 0);
-
-        return $date;
     }
 
     public function cookies($request, $backFromDetail, $somethingChanged, $perPage, $sort, $order): array
@@ -398,9 +376,9 @@ class SerieController extends AbstractController
         $month = $request->query->getInt('m');
 
         $datetime = $day . ' day ' . $week . ' week ' . $month . ' month';
-        $date = $this->newDateImmutable($datetime, 'Europe/Paris');
+        $date = $this->dateService->newDateImmutable($datetime, 'Europe/Paris');
         $date = $date->setTime(0, 0);
-        $now = $this->newDateImmutable('now', 'Europe/Paris');
+        $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
         $now = $now->setTime(0, 0);
 
         $diff = date_diff($now, $date);
@@ -1082,7 +1060,7 @@ class SerieController extends AbstractController
             if ($serie['userSerieViewing']) {
                 if ($serie['userSerieViewing']->isTimeShifted()) {
                     if ($tmdbEpisode['air_date']) {
-                        $airDate = $this->newDate($tmdbEpisode['air_date'], "Europe/Paris")?->modify('+1 day')->format('Y-m-d');
+                        $airDate = $this->dateService->newDate($tmdbEpisode['air_date'], "Europe/Paris")?->modify('+1 day')->format('Y-m-d');
                         $tmdbEpisode['air_date'] = $airDate;
                     }
                 }
@@ -1882,7 +1860,7 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTvEpisode($serie->getSerieId(), 1, 1, $request->getLocale());
         $firstEpisode = json_decode($standing, true);
         if ($firstEpisode && $firstEpisode['air_date']) {
-            $createdAt = $this->newDateImmutable($firstEpisode['air_date'], 'Europe/Paris');
+            $createdAt = $this->dateService->newDateImmutable($firstEpisode['air_date'], 'Europe/Paris');
             $serieViewing->setCreatedAt($createdAt);
             return $createdAt;
         }
@@ -1890,7 +1868,7 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTv($serie->getSerieId(), $request->getLocale());
         $tv = json_decode($standing, true);
         if ($tv && $tv['first_air_date']) {
-            $createdAt = $this->newDateImmutable($tv['first_air_date'], 'Europe/Paris');
+            $createdAt = $this->dateService->newDateImmutable($tv['first_air_date'], 'Europe/Paris');
             $serieViewing->setCreatedAt($createdAt);
         }
         return $createdAt;
@@ -1973,7 +1951,7 @@ class SerieController extends AbstractController
     public function episodeView(EpisodeViewing $episodeViewing, int $view): Response
     {
         if ($view == 0) {
-            $date = $this->newDateImmutable('now', 'Europe/Paris');
+            $date = $this->dateService->newDateImmutable('now', 'Europe/Paris');
             $episodeViewing->setViewedAt($date);
             $view = 1;
         } else {
@@ -1983,7 +1961,7 @@ class SerieController extends AbstractController
         $this->episodeViewingRepository->save($episodeViewing, true);
 
         $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
-        $modifiedAt = $this->newDate('now', 'Europe/Paris');
+        $modifiedAt = $this->dateService->newDate('now', 'Europe/Paris');
 
         $serieViewing->setModifiedAt($modifiedAt);
         $this->serieViewingRepository->save($serieViewing, true);
