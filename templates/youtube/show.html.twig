@@ -260,6 +260,8 @@
 
             function removeTag(tag) {
                 const tagId = tag.getAttribute("data-id");
+                if (tagId === null) return;
+
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
                     const response = JSON.parse(this.response);

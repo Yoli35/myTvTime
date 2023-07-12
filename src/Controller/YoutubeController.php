@@ -12,15 +12,14 @@ use App\Repository\UserRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
 use App\Repository\YoutubeVideoTagRepository;
+use App\Service\DateService;
 use DateInterval;
 use DateTimeImmutable;
-use DateTimeZone;
 use Google\Exception;
 use Google\Service\YouTube\ChannelListResponse;
 use Google\Service\YouTube\VideoListResponse;
 use Google_Client;
 use Google_Service_YouTube;
-use IntlDateFormatter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +39,7 @@ class YoutubeController extends AbstractController
      * @throws Exception
      */
     public function __construct(
+        private readonly DateService               $dateService,
         private readonly SettingsRepository        $settingsRepository,
         private readonly TranslatorInterface       $translator,
         private readonly YoutubeChannelRepository  $channelRepository,
@@ -158,12 +158,16 @@ class YoutubeController extends AbstractController
 
         $tags = $this->videoTagRepository->findAllByLabel();
         $description = preg_replace(
-            ['/(https:\/\/\S+)/',
+            [
+                '/(https:\/\/\S+)/',
                 '/(http:\/\/\S+)/',
-                '#([A-Za-z_-][A-Za-z0-9_-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)#'],
-            ['<a href="$1" target="_blank" rel="noopener">$1</a>',
+                '/([A-Za-z_-][A-Za-z0-9_-]*@[a-z0-9_-]+(\.[a-z0-9_-]+)+)/'
+            ],
+            [
                 '<a href="$1" target="_blank" rel="noopener">$1</a>',
-                '<a href="mailto:$1">$1</a>'],
+                '<a href="$1" target="_blank" rel="noopener">$1</a>',
+                '<a href="mailto:$1">$1</a>'
+            ],
             $youtubeVideo->getDescription());
         $description = nl2br($description);
 
@@ -398,8 +402,7 @@ class YoutubeController extends AbstractController
                 $newVideo->setContentDimension($contentDetails['dimension']);
                 $newVideo->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
                 $newVideo->setContentProjection($contentDetails['projection']);
-                $addedAt = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-                $newVideo->setAddedAt($addedAt);
+                $newVideo->setAddedAt($this->dateService->newDateImmutable('now', 'Europe/Paris'));
                 $newVideo->addUser($user);
 
                 $this->videoRepository->add($newVideo, true);
@@ -408,9 +411,9 @@ class YoutubeController extends AbstractController
 
                 $status = "ok";
                 $message = $this->translator->trans("Video added!");
-                $subMessage = "<a href='/" . $locale . "/youtube/video/" . $justAdded . "'>";
+                $subMessage = "<a href='/" . $locale . "/youtube/video/" . $justAdded . "'>🔗 ";
                 $subMessage .= $this->translator->trans("Go to the video page to see it");
-                $subMessage .= "</a>";
+                $subMessage .= " 🔗</a>";
             } else {
                 // Si le lien a déjà été ajouté, on vérifie que l'utilisateur n'est pas déjà lié à la vidéo
                 $users = $link->getUsers();
@@ -455,8 +458,7 @@ class YoutubeController extends AbstractController
             $videos = $this->getVideos($vids);
             $videoCount = $this->getVideosCount($user);
             $firstView = $this->getFirstView($user);
-            $format = datefmt_create($request->getLocale(), IntlDateFormatter::SHORT, IntlDateFormatter::NONE, 'Europe/Paris', IntlDateFormatter::GREGORIAN);
-            $h1innerText = $videoCount . " " . $this->translator->trans('videos') . " " . $this->translator->trans('since') . " " . datefmt_format($format, $firstView);
+            $h1innerText = $videoCount . " " . $this->translator->trans('videos') . " " . $this->translator->trans('since') . " " . $this->dateService->formatDate($firstView, "Europe/Paris", $request->getLocale());
             $totalRuntime = $this->getTotalRuntime($user);
             $time2Human = $this->getTime2human($totalRuntime, $request->getLocale());
 
@@ -620,7 +622,7 @@ class YoutubeController extends AbstractController
 
         return $this->json([
             'status' => 'ok',
-            'message' => $this->translator->trans('Settings saved'),
+            'message' => $this->translator->trans($message),
             'subMessage' => $this->translator->trans($subMessage),
         ]);
     }

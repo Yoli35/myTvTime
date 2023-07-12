@@ -23,6 +23,14 @@ function initYoutube(id, locale, paths) {
         const link = e.clipboardData.getData('text');
         addVideo(link);
     });
+    ytLink.addEventListener("keypress", (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (ytLink.value.length >= 11) {
+                addVideo(ytLink.value);
+            }
+        }
+    });
     ytPage.addEventListener("click", savePageState);
     ytSort.addEventListener("change", saveSortState);
     ytOrder.addEventListener("change", saveOrderState);
