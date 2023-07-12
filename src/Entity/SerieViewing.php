@@ -7,6 +7,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SerieViewingRepository::class)]
@@ -54,6 +55,12 @@ class SerieViewing
 
     #[ORM\Column(nullable: true)]
     private ?int $alertId;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?EpisodeViewing $nextEpisodeToAir = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?EpisodeViewing $nextEpisodeToWatch = null;
 
     public function __construct($alertId = null)
     {
@@ -254,6 +261,30 @@ class SerieViewing
     public function setAlertId(?int $alertId): static
     {
         $this->alertId = $alertId;
+
+        return $this;
+    }
+
+    public function getNextEpisodeToAir(): ?EpisodeViewing
+    {
+        return $this->nextEpisodeToAir;
+    }
+
+    public function setNextEpisodeToAir(?EpisodeViewing $nextEpisodeToAir): static
+    {
+        $this->nextEpisodeToAir = $nextEpisodeToAir;
+
+        return $this;
+    }
+
+    public function getNextEpisodeToWatch(): ?EpisodeViewing
+    {
+        return $this->nextEpisodeToWatch;
+    }
+
+    public function setNextEpisodeToWatch(?EpisodeViewing $nextEpisodeToWatch): static
+    {
+        $this->nextEpisodeToWatch = $nextEpisodeToWatch;
 
         return $this;
     }
