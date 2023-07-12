@@ -75,13 +75,13 @@ class YoutubeController extends AbstractController
         $settings = $settings->getData();
         $order = $settings['order'];
         $sort = $settings['sort'];
-        $page = $settings['page'];
-        dump([
-            "data" => $settings,
-            "order" => $order,
-            "sort" => $sort,
-            "page" => $page,
-        ]);
+//        $page = $settings['page'];
+//        dump([
+//            "data" => $settings,
+//            "order" => $order,
+//            "sort" => $sort,
+//            "page" => $page,
+//        ]);
 
         $vids = $this->videoRepository->findAllWithChannelByDate($user->getId(), $sort, $order);
         $videoCount = $this->getVideosCount($user);
