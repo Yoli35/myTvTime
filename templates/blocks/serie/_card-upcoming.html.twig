@@ -1,0 +1,44 @@
+<a href="{{ path('app_serie_show', {'id': serie.id}) }}?p={{ pages.page }}&from={{ from }}" title="{{ serie.name }}">
+    <div class="serie" id="{{ serie.id }}">
+        {% if serie.backdrop_path %}
+            <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
+        {% endif %}
+        <div class="poster">
+            <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ 'Poster' }}">
+        </div>
+        <div class="infos">
+            <div>{{ serie.name }}</div>
+            <div>{{ 'First Air at'|trans }} : {{ serie.first_date_air ? serie.first_date_air|format_date() : '' }}</div>
+            <div>{{ 'Added at'|trans }} : {{ serie.created_at ? serie.created_at|format_date() : '' }}
+                — {{ 'Updated at'|trans }}
+                : {{ serie.serie_updated_at ? serie.serie_updated_at|format_datetime() : '' }}</div>
+            <div>{{ serie.overview }}</div>
+        </div>
+        {% if serie.networks|length %}
+            <div class="network-list">
+                {% for network in serie.networks %}
+                    <div class="network-item">
+                        {% if network.logo_path|length %}
+                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.1 ~ network.logo_path }}"
+                                 alt="{{ network.name }}">
+                        {% else %}
+                            {{ network.name|slice(0,1)|capitalize }}
+                        {% endif %}
+                        <div class="network-name">{{ network.name }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if serie.favorite %}
+            <div class="favorite">{{ 'Favorite'|trans }}</div>
+        {% endif %}
+        <div class="{{ serie.class }}">
+            <div>{{ serie.air_date|trans }}</div>
+            <div>{{ serie.episode }}</div>
+            {% if serie.event is defined %}
+                <div>{{ serie.event|trans }}</div>
+            {% endif %}
+        </div>
+        <div class="front"></div>
+    </div>
+</a>

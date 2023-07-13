@@ -325,7 +325,7 @@
                         width: 8em;
                     }
 
-                    .today, .tomorrow, .next, .passed {
+                    .today, .tomorrow, .after-tomorrow, .this-week, .later, .next, .passed {
                         @include flex-col();
                         border-radius: 0 .5rem .5rem 0;
                         color: var(--gradient-ardoise-100);
@@ -348,21 +348,33 @@
                         }
                     }
 
-                    .today, .tomorrow {
+                    .today, .tomorrow, .after-tomorrow, .this-week, .later {
+                        div {
+                            text-align: center;
+                        }
+
                         div:nth-child(1) {
                             font-size: 2rem;
                             font-weight: 200;
                             line-height: 2rem;
                         }
+                        div:nth-child(3) {
+                            background-color: var(--gradient-ardoise-90);
+                            border-radius: .5rem;
+                            color: var(--gradient-ardoise-30);
+                            font-size: 1.5rem;
+                            font-weight: 400;
+                            padding: .5rem;
+                        }
                     }
 
-                    .today, .tomorrow {
+                    .today, .tomorrow, .after-tomorrow {
                         background-color: var(--gradient-green-40);
                         color: var(--gradient-green-100);
                         isolation: isolate;
                     }
 
-                    .next {
+                    .next, .this-week, .later {
                         background-color: var(--gradient-ardoise-50);
                         color: var(--gradient-ardoise-80);
                     }

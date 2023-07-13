@@ -300,6 +300,8 @@ Hours: heures
 Minutes: minutes
 Premiere: Première
 Finale: Fin de saison
+Last episode of the season: Dernier épisode de la saison
+Last season: Dernière saison
 Theatrical (limited): Sortie en salle (limité)
 Theatrical: Sortie en salle
 Digital: Digitale
@@ -925,6 +927,7 @@ Done: Terminé
 Up to date!: À jour !
 New episode today: Aujourd'hui
 New episode tomorrow: Demain
+The day after tomorrow: Après-demain
 Next episode in: Prochain épisode dans
 Next episode: Prochain épisode
 No date for the moment: Pas de date pour le moment
@@ -959,12 +962,15 @@ See the details of a series: Voir les détails d'une série
 Add a series: Ajouter une série
 
 #Series to start
+List of my series to start: Liste de mes séries à commencer
 My Series to start: Mes séries à commencer
-My Series to end: Mes séries à terminer
 
 #Series to end
-List of my series to start: Liste de mes séries à commencer
 List of my series to end: Liste de mes séries à terminer
+My Series to end: Mes séries à terminer
+
+# Upcoming episodes
+Upcoming episodes: Prochains épisodes
 
 # People
 Known for: Célèbre pour

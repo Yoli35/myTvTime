@@ -19,7 +19,7 @@
                 <div class="series stretch">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
-                            {{ include('blocks/serie/_pagination-start.html.twig') }}
+                            {{ include('blocks/serie/_pagination-v2.html.twig', {route: 'app_serie_to_start'}) }}
                         </div>
                     </div>
                     <div class="wrapper">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="series-tools desktop">
                         <div class="pages desktop">
-                            {{ include('blocks/serie/_pagination-start.html.twig') }}
+                            {{ include('blocks/serie/_pagination-v2.html.twig', {route: 'app_serie_to_start'}) }}
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'My Series to end'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'Upcoming episodes'|trans }}{% endblock %}
 {% block description %}{{ 'List of my series to end'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
@@ -9,24 +9,24 @@
         <div class="my-series">
             <div class="header">
                 {{ include('blocks/serie/_quotes.html.twig') }}
-                <h1>{{ 'My Series to end'|trans }}</h1>
+                <h1>{{ 'Upcoming episodes'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
 
-            {{ include('blocks/_nav.html.twig', {thisPage:('My Series to end'|trans)}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage:('Upcoming episodes'|trans)}) }}
 
             <main>
                 <div class="series stretch">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
-                            {{ include('blocks/serie/_pagination-v2.html.twig', {route: 'app_serie_to_end'}) }}
+                            {{ include('blocks/serie/_pagination-v2.html.twig', {route: 'app_serie_upcoming_episodes'}) }}
                         </div>
                     </div>
                     <div class="wrapper">
                         {% if series|length %}
                             {% for serie in series %}
                                 <div data-id="{{ serie.id }}">
-                                    {{ include('blocks/serie/_card.html.twig') }}
+                                    {{ include('blocks/serie/_card-upcoming.html.twig') }}
                                 </div>
                             {% endfor %}
                         {% else %}
@@ -35,7 +35,7 @@
                     </div>
                     <div class="series-tools desktop">
                         <div class="pages desktop">
-                            {{ include('blocks/serie/_pagination-v2.html.twig', {route: 'app_serie_to_end'}) }}
+                            {{ include('blocks/serie/_pagination-v2.html.twig', {route: 'app_serie_upcoming_episodes'}) }}
                         </div>
                     </div>
                 </div>

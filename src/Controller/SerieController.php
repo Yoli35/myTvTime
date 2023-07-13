@@ -49,6 +49,7 @@ class SerieController extends AbstractController
     const MY_SERIES = 'my_series';
     const MY_SERIES_TO_START = 'my_series_to_start';
     const MY_SERIES_TO_END = 'my_series_to_end';
+    const UPCOMING_EPISODES = 'upcoming_episodes';
     const POPULAR = 'popular';
     const SEARCH = 'search';
 
@@ -563,12 +564,10 @@ class SerieController extends AbstractController
 
         $page = $request->query->getInt('p', 1);
         $perPage = 10;
-        $sort = 'createdAt';
-        $order = 'ASC';
 
         /** @var User $user */
         $user = $this->getUser();
-        $results = $this->serieViewingRepository->getSeriesToEndV2($user, $perPage, $page);
+        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $perPage, $page);
 
         $locale = $request->getLocale();
         $imageConfig = $this->imageConfiguration->getConfig();
@@ -587,13 +586,85 @@ class SerieController extends AbstractController
                 'per_page' => $perPage,
                 'link_count' => self::LINK_COUNT,
                 'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
-                'per_page_values' => self::PER_PAGE_ARRAY,
-                'order_by' => $sort,
-                'order' => $order],
+                'per_page_values' => self::PER_PAGE_ARRAY],
             'user' => $user,
             'posters' => $this->getPosters(),
             'posterPath' => '/images/series/posters/',
             'from' => self::MY_SERIES_TO_END,
+            'imageConfig' => $imageConfig,
+        ]);
+    }
+
+    #[Route('/upcoming-episodes', name: 'app_serie_upcoming_episodes', methods: ['GET'])]
+    public function upcomingEpisodes(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $page = $request->query->getInt('p', 1);
+        $perPage = 10;
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $results = $this->serieViewingRepository->getUpcomingEpisodes($user->getId(), $perPage, $page);
+        $totalResults = $this->serieViewingRepository->countUpcomingEpisodes($user->getId());
+
+        $results = array_map(function ($result) use ($request) {
+            // on rajoute les networks
+            $tv = json_decode($this->TMDBService->getTv($result['tmdb_id'], $request->getLocale()), true);
+            $result['networks'] = $tv ? $tv['networks']:[];
+
+            // Date et épisode. Ex: Demain /  S01E01
+            $now = $this->dateService->newDate('now', "Europe/Paris", true);
+            $air_date = $result['air_date'];
+            $date = $this->dateService->newDate($result['air_date'], "Europe/Paris");
+            if ($result['time_shifted']) $date->add(new DateInterval('P1D'));
+            $diff = $now->diff($date);
+            if ($now->getTimestamp() === $date->getTimestamp()) {
+                $result['air_date'] = 'Today';
+                $result['class'] = "today";
+            } elseif ($diff->days == 0) {
+                $result['air_date'] = 'Tomorrow';
+                $result['class'] = "tomorrow";
+            } elseif ($diff->days == 1) {
+                $result['air_date'] = 'The day after tomorrow';
+                $result['class'] = "after-tomorrow";
+            } elseif ($diff->days < 7) {
+                $result['air_date'] = $date->format('l');
+                $result['class'] = "this-week";
+            } else {
+                $result['air_date'] = $this->dateService->formatDate($date, "Europe/Paris", $request->getLocale());
+                $result['class'] = "later";
+            }
+            $result['episode'] = sprintf('S%02dE%02d', $result['season_number'], $result['episode_number']);
+
+            // Nouvelle saison, première, dernière, etc.
+            if ($result['season_number'] == 1 && $result['episode_number'] == 1) {
+                $result['event'] = 'Premiere';
+            } elseif ($result['season_number'] && $result['episode_number'] == 1) {
+                $result['event'] = 'New season';
+            } elseif ($result['season_number'] == $result['season_count'] && $result['episode_number'] == $result['episode_count']) {
+                $result['event'] = 'Finale';
+            } elseif ($result['episode_number'] == $result['episode_count']) {
+                $result['event'] = 'Last episode of the season';
+            }
+            return $result;
+        }, $results);
+
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        return $this->render('serie/upcoming.html.twig', [
+            'series' => $results,
+            'pages' => [
+                'total_results' => $totalResults,
+                'page' => $page,
+                'per_page' => $perPage,
+                'link_count' => self::LINK_COUNT,
+                'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
+                'per_page_values' => self::PER_PAGE_ARRAY],
+            'user' => $user,
+            'posters' => $this->getPosters(),
+            'posterPath' => '/images/series/posters/',
+            'from' => self::UPCOMING_EPISODES,
             'imageConfig' => $imageConfig,
         ]);
     }
