@@ -30,7 +30,6 @@ use App\Service\QuoteService;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
-use DateTimeZone;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -613,30 +612,43 @@ class SerieController extends AbstractController
             $tv = json_decode($this->TMDBService->getTv($result['tmdb_id'], $request->getLocale()), true);
             $result['networks'] = $tv ? $tv['networks']:[];
 
-            // Date et épisode. Ex: Demain /  S01E01
+            // Date et épisode. Ex : Demain /  S01E01
             $now = $this->dateService->newDate('now', "Europe/Paris", true);
-            $air_date = $result['air_date'];
             $date = $this->dateService->newDate($result['air_date'], "Europe/Paris");
             if ($result['time_shifted']) $date->add(new DateInterval('P1D'));
             $diff = $now->diff($date);
+//            dump([
+//                'now' => $now->format('Y-m-d'),
+//                'date' => $date->format('Y-m-d'),
+//                'diff' => $diff->days,
+//                'time_shifted' => $result['time_shifted'],
+//                'air_date' => $result['air_date'],
+//            ]);
             if ($now->getTimestamp() === $date->getTimestamp()) {
                 $result['air_date'] = 'Today';
                 $result['air_date_relative'] = true;
                 $result['class'] = "today";
-            } elseif ($diff->days == 0) {
+            } elseif ($diff->days == 1) {
                 $result['air_date'] = 'Tomorrow';
                 $result['air_date_relative'] = true;
                 $result['class'] = "tomorrow";
-            } elseif ($diff->days == 1) {
+            } elseif ($diff->days == 2) {
                 $result['air_date'] = 'The day after tomorrow';
                 $result['air_date_relative'] = true;
                 $result['class'] = "after-tomorrow";
             } elseif ($diff->days < 7) {
-                $result['air_date'] = $date->format('l');
-                $result['air_date_relative'] = true;
+                $result['air_date'] = $this->translator->trans($date->format('l'));
+                $result['air_date'] .= "<br><span>" . $this->translator->trans('in') . " " . $diff->d . " " . $this->translator->trans('days') . "</span>";
                 $result['class'] = "this-week";
             } else {
                 $result['air_date'] = $this->dateService->formatDate($date, "Europe/Paris", $request->getLocale());
+                if ($diff->y) {
+                    $result['air_date'] .= "<br><span>" . $this->translator->trans('in') . " " . $diff->y . " " . $this->translator->trans($diff->y > 1 ? 'years' : 'year') . "</span>";
+                } elseif ($diff->m) {
+                    $result['air_date'] .= "<br><span>" . $this->translator->trans('in') . " " . $diff->m . " " . $this->translator->trans($diff->m > 1 ? 'months' : 'month') . "</span>";
+                } elseif ($diff->d) {
+                    $result['air_date'] .= "<br><span>" . $this->translator->trans('in') . " " . $diff->d . " " . $this->translator->trans('days') . "</span>";
+                }
                 $result['class'] = "later";
             }
             $result['episode'] = sprintf('S%02dE%02d', $result['season_number'], $result['episode_number']);

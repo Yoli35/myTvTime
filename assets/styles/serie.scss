@@ -357,6 +357,11 @@
                             font-size: 2rem;
                             font-weight: 200;
                             line-height: 2rem;
+
+                            span {
+                                font-size: 1rem;
+                                line-height: 1.2rem;
+                            }
                         }
                         div:nth-child(3) {
                             background-color: var(--gradient-ardoise-90);
@@ -374,7 +379,12 @@
                         isolation: isolate;
                     }
 
-                    .next, .this-week, .later {
+                    .this-week {
+                        background-color: var(--gradient-emerald-40);
+                        color: var(--gradient-ardoise-90);
+                    }
+
+                    .next, .later {
                         background-color: var(--gradient-ardoise-50);
                         color: var(--gradient-ardoise-80);
                     }
