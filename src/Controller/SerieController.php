@@ -621,15 +621,19 @@ class SerieController extends AbstractController
             $diff = $now->diff($date);
             if ($now->getTimestamp() === $date->getTimestamp()) {
                 $result['air_date'] = 'Today';
+                $result['air_date_relative'] = true;
                 $result['class'] = "today";
             } elseif ($diff->days == 0) {
                 $result['air_date'] = 'Tomorrow';
+                $result['air_date_relative'] = true;
                 $result['class'] = "tomorrow";
             } elseif ($diff->days == 1) {
                 $result['air_date'] = 'The day after tomorrow';
+                $result['air_date_relative'] = true;
                 $result['class'] = "after-tomorrow";
             } elseif ($diff->days < 7) {
                 $result['air_date'] = $date->format('l');
+                $result['air_date_relative'] = true;
                 $result['class'] = "this-week";
             } else {
                 $result['air_date'] = $this->dateService->formatDate($date, "Europe/Paris", $request->getLocale());
