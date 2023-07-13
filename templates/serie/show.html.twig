@@ -9,6 +9,8 @@
             {{ 'My Series to start'|trans }}
         {% elseif from == 'my_series_to_end' %}
             {{ 'My Series to end'|trans }}
+        {% elseif from == 'upcoming_episodes' %}
+            {{ 'Upcoming episodes'|trans }}
         {% elseif from == 'today' %}
             {{ 'My Series airing today'|trans }}
         {% else %}
@@ -36,6 +38,8 @@
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to start', url: path('app_serie_to_start', {page: page})}, thisPage: serie.name}) }}
         {% elseif from == 'my_series_to_end' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to end', url: path('app_serie_to_end', {page: page})}, thisPage: serie.name}) }}
+        {% elseif from == 'upcoming_episodes' %}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'Upcoming episodes', url: path('app_serie_upcoming_episodes', {page: page})}, thisPage: serie.name}) }}
         {% elseif from == 'today' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series airing today', url: path('app_serie_today')}, thisPage: serie.name}) }}
         {% else %}

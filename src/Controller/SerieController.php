@@ -617,6 +617,7 @@ class SerieController extends AbstractController
             $date = $this->dateService->newDate($result['air_date'], "Europe/Paris");
             if ($result['time_shifted']) $date->add(new DateInterval('P1D'));
             $diff = $now->diff($date);
+            $result['date'] = $date->format('Y-m-d');
 //            dump([
 //                'now' => $now->format('Y-m-d'),
 //                'date' => $date->format('Y-m-d'),
@@ -665,6 +666,11 @@ class SerieController extends AbstractController
             }
             return $result;
         }, $results);
+
+        // L'option J+1 peut casser l'ordre chronologique, on le rétablit
+        uksort($results, function ($a, $b) use ($results) {
+            return $results[$a]['date'] <=> $results[$b]['date'];
+        });
 
         $imageConfig = $this->imageConfiguration->getConfig();
 
