@@ -2,8 +2,10 @@
 
 namespace App\Command;
 
+use App\Controller\SerieController;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieViewingRepository;
+use App\Service\DateService;
 use App\Service\TMDBService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -18,6 +20,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class NextEpisodeToAir extends Command
 {
     public function __construct(
+        private readonly DateService            $dateService,
+        private readonly SerieController        $serieController,
         private readonly SeasonViewingRepository $seasonViewingRepository,
         private readonly SerieViewingRepository  $serieViewingRepository,
         private readonly TMDBService             $tmdbService,
@@ -39,10 +43,38 @@ class NextEpisodeToAir extends Command
 
         foreach ($serieViewings as $serieViewing) {
             $serie = $serieViewing->getSerie();
+            $io->writeln($serie->getName() . ' (' . $serie->getId() . ') for user '.$serieViewing->getUser()->getUsername().' ('.$serieViewing->getUser()->getId().')');
+
+            // Si le dernier épisode de la série a été vu depuis plus de 2 ans, on ne fait rien, puisqu'il est probable que la série soit terminée
+            $lastSeasonViewing = $this->serieController->getSeasonViewing($serieViewing, $serieViewing->getNumberOfSeasons());
+            if ($lastSeasonViewing === null) {
+                $io->writeln([str_repeat("*•", 40), '    Last season viewing is null, skipping', str_repeat("*•", 40)]);
+                continue;
+            }
+            $lastEpisodeViewing = $lastSeasonViewing->getEpisodeByNumber($lastSeasonViewing->getEpisodeCount());
+            if ($lastEpisodeViewing) {
+                $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
+                $lastViewingDate = $lastEpisodeViewing->getViewedAt();
+                if ($lastViewingDate !== null) {
+                    $diff = $now->diff($lastViewingDate);
+                    if ($diff->y >= 2) {
+                        $io->writeln([str_repeat("*•", 40), '    Last episode viewed more than 2 years ago, skipping', str_repeat("*•", 40)]);
+                        continue;
+                    }
+                }
+                $airDate = $lastEpisodeViewing->getAirDate();
+                if ($airDate !== null) {
+                    $diff = $now->diff($airDate);
+                    if ($diff->y >= 2) {
+                        $io->writeln([str_repeat("*•", 40), '    Last episode aired more than 2 years ago, skipping', str_repeat("*•", 40)]);
+                        continue;
+                    }
+                }
+            }
+
             $tvSeries = json_decode($this->tmdbService->getTv($serie->getSerieId(), "fr_FR"), true);
 
             if ($tvSeries) {
-                $io->writeln($serie->getName() . ' (' . $serie->getId() . ')');
                 if ($tvSeries['next_episode_to_air'] === null) {
                     $serieViewing->setNextEpisodeToAir(null);
                     $this->serieViewingRepository->save($serieViewing);
@@ -88,6 +120,8 @@ class NextEpisodeToAir extends Command
                 }
                 $this->serieViewingRepository->flush();
                 $count++;
+            } else {
+                $io->error('    TV Series not found');
             }
         }
 
