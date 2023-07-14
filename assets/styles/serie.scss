@@ -334,13 +334,13 @@
                         height: var(--serie-lg-height);
                         width: var(--serie-lg-poster-width);
 
-                        div:nth-child(2) {
+                        > div:nth-child(2) {
                             font-size: 3rem;
                             font-weight: 200;
                             line-height: 3rem;
                         }
 
-                        div:nth-child(4) {
+                        > div:nth-child(4) {
                             font-size: 1.5rem;
                             font-weight: 200;
                             line-height: 2rem;
@@ -353,17 +353,27 @@
                             text-align: center;
                         }
 
-                        div:nth-child(1) {
+                        .upcoming-date {
+                            display: flex;
+                            flex-direction: column;
                             font-size: 2rem;
                             font-weight: 200;
+                            gap: .5rem;
                             line-height: 2rem;
 
-                            span {
+                            div {
                                 font-size: 1rem;
                                 line-height: 1.2rem;
                             }
                         }
-                        div:nth-child(3) {
+
+                        .upcoming-episode {
+                            font-size: 3rem;
+                            font-weight: 200;
+                            line-height: 3rem;
+                        }
+
+                        .upcoming-event {
                             background-color: var(--gradient-ardoise-90);
                             border-radius: .5rem;
                             color: var(--gradient-ardoise-30);

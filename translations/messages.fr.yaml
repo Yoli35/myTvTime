@@ -934,6 +934,7 @@ Next episode: Prochain épisode
 No date for the moment: Pas de date pour le moment
 of season: de la saison
 in: dans
+in-invert: depuis
 today: aujourd'hui
 tomorrow: demain
 available since: disponible depuis
@@ -1188,7 +1189,7 @@ days: jours
 day: jour
 hours: heures
 hour: heure
-and: and
+and: et
 Friends: Amis
 Friend requests: Demandes d'ami
 Reject: Refuser

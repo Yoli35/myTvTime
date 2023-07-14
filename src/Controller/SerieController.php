@@ -610,7 +610,7 @@ class SerieController extends AbstractController
         $results = array_map(function ($result) use ($request) {
             // on rajoute les networks
             $tv = json_decode($this->TMDBService->getTv($result['tmdb_id'], $request->getLocale()), true);
-            $result['networks'] = $tv ? $tv['networks']:[];
+            $result['networks'] = $tv ? $tv['networks'] : [];
 
             // Date et épisode. Ex : Demain /  S01E01
             $now = $this->dateService->newDate('now', "Europe/Paris", true);
@@ -629,26 +629,28 @@ class SerieController extends AbstractController
                 $result['air_date'] = 'Today';
                 $result['air_date_relative'] = true;
                 $result['class'] = "today";
-            } elseif ($diff->days == 1) {
+            } elseif ($diff->days == 1 && $diff->invert == 0) {
                 $result['air_date'] = 'Tomorrow';
                 $result['air_date_relative'] = true;
                 $result['class'] = "tomorrow";
-            } elseif ($diff->days == 2) {
+            } elseif ($diff->days == 2 && $diff->invert == 0) {
                 $result['air_date'] = 'The day after tomorrow';
                 $result['air_date_relative'] = true;
                 $result['class'] = "after-tomorrow";
-            } elseif ($diff->days < 7) {
+            } elseif ($diff->days < 7 && $diff->invert == 0) {
                 $result['air_date'] = $this->translator->trans($date->format('l'));
-                $result['air_date'] .= "<br><span>" . $this->translator->trans('in') . " " . $diff->d . " " . $this->translator->trans('days') . "</span>";
+                $result['air_date'] .= "<div>" . $this->translator->trans('in') . " " . $diff->d . " " . $this->translator->trans('days') . "</div>";
                 $result['class'] = "this-week";
             } else {
                 $result['air_date'] = $this->dateService->formatDate($date, "Europe/Paris", $request->getLocale());
                 if ($diff->y) {
-                    $result['air_date'] .= "<br><span>" . $this->translator->trans('in') . " " . $diff->y . " " . $this->translator->trans($diff->y > 1 ? 'years' : 'year') . "</span>";
+                    $result['air_date'] .= "<div>" . $this->translator->trans($diff->invert ? 'in-invert' : 'in') . " " . $diff->y . " " . $this->translator->trans($diff->y > 1 ? 'years' : 'year') . "</div>";
                 } elseif ($diff->m) {
-                    $result['air_date'] .= "<br><span>" . $this->translator->trans('in') . " " . $diff->m . " " . $this->translator->trans($diff->m > 1 ? 'months' : 'month') . "</span>";
+                    $result['air_date'] .= "<div>" . $this->translator->trans($diff->invert ? 'in-invert' : 'in') . " " . $diff->m . " " . $this->translator->trans($diff->m > 1 ? 'months' : 'month');
+                    if ($diff->d) $result['air_date'] .= " " . $this->translator->trans('and') . " " . $diff->d . " " . $this->translator->trans($diff->d > 1 ? 'days' : 'day');
+                    $result['air_date'] .= "</div>";
                 } elseif ($diff->d) {
-                    $result['air_date'] .= "<br><span>" . $this->translator->trans('in') . " " . $diff->d . " " . $this->translator->trans('days') . "</span>";
+                    $result['air_date'] .= "<div>" . $this->translator->trans($diff->invert ? 'in-invert' : 'in') . " " . $diff->d . " " . $this->translator->trans($diff->d > 1 ? 'days' : 'day') . "</div>";
                 }
                 $result['class'] = "later";
             }

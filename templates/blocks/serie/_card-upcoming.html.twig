@@ -34,13 +34,13 @@
         {% endif %}
         <div class="{{ serie.class }}">
             {% if serie.air_date_relative is defined %}
-                <div>{{ serie.air_date|trans }}</div>
+                <div class="upcoming-date">{{ serie.air_date|trans }}</div>
             {% else %}
-                <div>{{ serie.air_date|raw }}</div>
+                <div class="upcoming-date">{{ serie.air_date|raw }}</div>
             {% endif %}
-            <div>{{ serie.episode }}</div>
+            <div class="upcoming-episode">{{ serie.episode }}</div>
             {% if serie.event is defined %}
-                <div>{{ serie.event|trans }}</div>
+                <div class="upcoming-event">{{ serie.event|trans }}</div>
             {% endif %}
         </div>
         <div class="front"></div>
