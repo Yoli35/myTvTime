@@ -1070,6 +1070,10 @@ class SerieController extends AbstractController
                 break 2;
             }
         }
+        if ($serieViewing->getNextEpisodeToAir()?->isViewed()) {
+            $serieViewing->setNextEpisodeToAir($serieViewing->getNextEpisodeToWatch());
+            if ($verbose) $messages[] = '    Next episode to air is viewed, set to next episode to watch if any';
+        }
         $this->serieViewingRepository->save($serieViewing, true);
         if ($verbose) $this->messages = $messages;
     }
@@ -2087,7 +2091,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/episode/view/{id}/{view}', name: 'app_episode_view', methods: ['GET'])]
-    public function episodeView(EpisodeViewing $episodeViewing, int $view): Response
+    public function episodeView(Request $request, EpisodeViewing $episodeViewing, int $view): Response
     {
         if ($view == 0) {
             $date = $this->dateService->newDateImmutable('now', 'Europe/Paris');
@@ -2108,6 +2112,15 @@ class SerieController extends AbstractController
         $this->setViewedEpisodeCount($serieViewing);
         $seasonCompleted = $this->viewingCompleted($serieViewing);
         $viewedEpisodeCount = $episodeViewing->getSeason()->getViewedEpisodeCount();
+
+        // On met à jour les champs "nextEpisodeToAir" et "nextEpisodeToWatch" de la série
+        if ($serieViewing->isSerieCompleted()) {
+            $serieViewing->setNextEpisodeToAir(null);
+            $serieViewing->setNextEpisodeToWatch(null);
+        } else {
+            $tv = json_decode($this->TMDBService->getTv($serieViewing->getSerie()->getSerieId(), $request->getLocale()), true);
+            $this->setNextEpisode($tv, $serieViewing);
+        }
 
         return $this->json([
             'episodeViewed' => $view,
