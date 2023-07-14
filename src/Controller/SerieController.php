@@ -1861,15 +1861,11 @@ class SerieController extends AbstractController
                                 $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber(), $request->getLocale()), true);
                             }
                             if ($episodeTmdb) {
-                                try {
-                                    $episode->setViewedAt(new DateTimeImmutable($episodeTmdb['air_date']));
-                                } catch (Exception) {
-                                    $episode->setViewedAt(new DateTimeImmutable());
-                                }
+                                $episode->setViewedAt($this->dateService->newDateImmutable($episodeTmdb['air_date'], 'Europe/Paris'));
                             }
                         }
                     } else {
-                        $episode->setViewedAt(new DateTimeImmutable());
+                        $episode->setViewedAt($this->dateService->newDateImmutable('now', 'Europe/Paris'));
                     }
 
                     $this->episodeViewingRepository->save($episode, true);
@@ -1907,7 +1903,7 @@ class SerieController extends AbstractController
          * avec le tri "visionnage", ne pas mettre à jour le champ "modifiedAt"
          */
         if (!$liveWatch) {
-            $serieViewing->setModifiedAt(new DateTime());
+            $serieViewing->setModifiedAt($this->dateService->newDate('now', 'Europe/Paris'));
         } else {
             $createdAt = $this->getSerieViewingCreatedAt($serieViewing, $request);
             if ($createdAt) {
@@ -1950,6 +1946,15 @@ class SerieController extends AbstractController
             'nextEpisodeToWatch' => $nextEpisodeToWatch,
             'alert' => $alert,
         ]);
+
+        // On met à jour les champs "nextEpisodeToAir" et "nextEpisodeToWatch" de la série
+        if ($serieViewing->isSerieCompleted()) {
+            $serieViewing->setNextEpisodeToAir(null);
+            $serieViewing->setNextEpisodeToWatch(null);
+        } else {
+            $tv = json_decode($this->TMDBService->getTv($serie->getSerieId(), $locale), true);
+            $this->setNextEpisode($tv, $serieViewing);
+        }
 
         return $this->json([
             'blocks' => $blocks,
