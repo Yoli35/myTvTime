@@ -927,6 +927,19 @@ class SerieController extends AbstractController
                 }
             }
         }
+        $firstEpisodeViewing = $this->getSeasonViewing($viewing, 1)->getEpisodeByNumber(1);
+        $airDate = $firstEpisodeViewing->getAirDate();
+        if ($airDate) {
+            $now = $this->dateService->newDate('now', 'Europe/Paris', true);
+            $diff = $now->diff($airDate);
+        }
+        if (!$airDate || ($diff->invert == 1 && $diff->days > 7)) {
+            $viewing->setNextEpisodeToWatch(null);
+            $viewing->setNextEpisodeToAir(null);
+        } else {
+            $viewing->setNextEpisodeToWatch($firstEpisodeViewing);
+            $viewing->setNextEpisodeToAir($firstEpisodeViewing);
+        }
         return $viewing;
     }
 
@@ -1251,12 +1264,6 @@ class SerieController extends AbstractController
         ]);
     }
 
-    /**
-     * @param mixed $provider
-     * @param array $imgConfig
-     * @param array $providersFlatrate
-     * @return array
-     */
     public function getArr(mixed $provider, array $imgConfig, array $providersFlatrate): array
     {
         $flatrate['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);

@@ -4,7 +4,11 @@
             <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
         {% endif %}
         <div class="poster">
-            <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ 'Poster' }}">
+            {% if serie.poster_path %}
+                <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ 'Poster' }}">
+            {% else %}
+                <div class="no-image">{{ 'No image'|trans }}</div>
+            {% endif %}
         </div>
         <div class="infos">
             <div>{{ serie.name }}</div>

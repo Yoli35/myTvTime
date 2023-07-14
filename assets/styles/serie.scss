@@ -214,6 +214,15 @@
                             object-fit: cover;
                             width: var(--serie-lg-poster-width)
                         }
+
+                        .no-image {
+                            @include flex-col();
+                            aspect-ratio: 2 / 3;
+                            background-color: var(--gradient-green-40-alpha-50);
+                            border-radius: .5em;
+                            color: var(--gradient-green-90);
+                            width: 13.5rem;
+                        }
                     }
 
                     .infos {
@@ -659,26 +668,6 @@
                     .autocomplete-items {
                         @include autocomplete-items;
                     }
-
-                    //
-                    //.autocomplete-items div {
-                    //    padding: .25em .5em calc(.25em - 1px);
-                    //    cursor: pointer;
-                    //    background-color: var(--gradient-ardoise-90);
-                    //    border-bottom: 1px solid var(--gradient-ardoise-70);
-                    //    color: var(--gradient-ardoise-30);
-                    //}
-                    //
-                    //.autocomplete-items div:hover {
-                    //    /*when hovering an item:*/
-                    //    background-color: var(--gradient-ardoise-80);
-                    //}
-                    //
-                    //.autocomplete-active {
-                    //    /*when navigating through the items using the arrow keys:*/
-                    //    background-color: var(--gradient-ardoise-40) !important;
-                    //    color: var(--gradient-ardoise-90) !important;
-                    //}
                 }
             }
 

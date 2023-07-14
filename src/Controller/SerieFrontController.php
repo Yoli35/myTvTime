@@ -12,6 +12,7 @@ use App\Repository\NetworksRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
+use App\Service\DateService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
 use App\Service\TMDBService;
@@ -34,7 +35,8 @@ class SerieFrontController extends AbstractController
     const LATEST = 'latest';
     const SEARCH = 'search';
 
-    public function __construct(private readonly SerieController        $serieController,
+    public function __construct(private readonly DateService            $dateService,
+                                private readonly SerieController        $serieController,
                                 private readonly FavoriteRepository     $favoriteRepository,
                                 private readonly TranslatorInterface    $translator,
                                 private readonly TMDBService            $tmdbService,
@@ -97,7 +99,11 @@ class SerieFrontController extends AbstractController
 
                 $serie->setBackdropPath($tv['backdrop_path']);
                 $serie->setEpisodeDurations($this->collectEpisodeDurations($tv));
-                $serie->setFirstDateAir(new DateTimeImmutable($tv['first_air_date'] . 'T00:00:00'));
+                if ($tv['first_air_date'])
+                    $serie->setFirstDateAir($this->dateService->newDateImmutable($tv['first_air_date'], 'Europe/Paris', true));
+                else {
+                    $serie->setFirstDateAir(null);
+                }
                 $serie->setName($tv['name']);
                 $serie->setNumberOfEpisodes($tv['number_of_episodes']);
                 $serie->setNumberOfSeasons($tv['number_of_seasons']);

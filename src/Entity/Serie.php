@@ -30,7 +30,7 @@ class Serie
     #[ORM\Column]
     private ?int $serieId = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $firstDateAir = null;
 
     #[ORM\Column]
@@ -93,7 +93,7 @@ class Serie
         return $this->firstDateAir;
     }
 
-    public function setFirstDateAir(DateTimeImmutable $firstDateAir): self
+    public function setFirstDateAir(?DateTimeImmutable $firstDateAir): self
     {
         $this->firstDateAir = $firstDateAir;
 
