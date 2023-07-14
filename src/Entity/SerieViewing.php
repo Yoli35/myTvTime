@@ -56,10 +56,10 @@ class SerieViewing
     #[ORM\Column(nullable: true)]
     private ?int $alertId;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne]
     private ?EpisodeViewing $nextEpisodeToAir = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne]
     private ?EpisodeViewing $nextEpisodeToWatch = null;
 
     public function __construct($alertId = null)

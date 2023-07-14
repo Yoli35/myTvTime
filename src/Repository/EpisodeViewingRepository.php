@@ -30,6 +30,11 @@ class EpisodeViewingRepository extends ServiceEntityRepository
         }
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function remove(EpisodeViewing $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);

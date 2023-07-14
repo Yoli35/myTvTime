@@ -44,9 +44,10 @@ class EpisodeViewing
     #[ORM\Column(nullable: true, options: ['default' => 0])]
     private ?int $vote = 0;
 
-    public function __construct($episodeNumber, $airDate)
+    public function __construct($episodeNumber, $season, $airDate)
     {
         $this->episodeNumber = $episodeNumber;
+        $this->season = $season;
         if ($airDate) {
             try {
                 $this->airDate = new DateTimeImmutable($airDate);
@@ -130,6 +131,11 @@ class EpisodeViewing
         $this->viewedAt = $viewedAt;
 
         return $this;
+    }
+
+    public function isViewed(): bool
+    {
+        return $this->viewedAt !== null;
     }
 
     public function getAirDate(): ?DateTimeImmutable
