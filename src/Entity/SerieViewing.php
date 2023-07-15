@@ -62,6 +62,9 @@ class SerieViewing
     #[ORM\OneToOne]
     private ?EpisodeViewing $nextEpisodeToWatch = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?DateTime $nextEpisodeCheckDate = null;
+
     public function __construct($alertId = null)
     {
         $this->alertId = $alertId;
@@ -285,6 +288,18 @@ class SerieViewing
     public function setNextEpisodeToWatch(?EpisodeViewing $nextEpisodeToWatch): static
     {
         $this->nextEpisodeToWatch = $nextEpisodeToWatch;
+
+        return $this;
+    }
+
+    public function getNextEpisodeCheckDate(): ?DateTime
+    {
+        return $this->nextEpisodeCheckDate;
+    }
+
+    public function setNextEpisodeCheckDate(?DateTime $nextEpisodeCheckDate): static
+    {
+        $this->nextEpisodeCheckDate = $nextEpisodeCheckDate;
 
         return $this;
     }

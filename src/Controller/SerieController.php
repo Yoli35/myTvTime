@@ -1045,6 +1045,7 @@ class SerieController extends AbstractController
 
     public function setNextEpisode($tv, $serieViewing, $verbose = false): void
     {
+        $nextEpisodeCheck = false;
         if ($verbose) $messages = ['    Next episode to air: none'];
         if ($tv['next_episode_to_air'] === null) {
             $serieViewing->setNextEpisodeToAir(null);
@@ -1054,6 +1055,7 @@ class SerieController extends AbstractController
             $nextSeasonNumber = $nextEpisode['season_number'];
             $episode = $this->getSeasonViewing($serieViewing, $nextSeasonNumber)?->getEpisodeByNumber($nextEpisodeNumber);
             $serieViewing->setNextEpisodeToAir($episode);
+            $nextEpisodeCheck = true;
             if ($verbose) {
                 $messages[0] = sprintf('    Next episode to air: S%02dE%02d', $nextSeasonNumber, $nextEpisodeNumber);
                 if (!$episode) $messages[0] .= ' (not in database)';
@@ -1066,14 +1068,18 @@ class SerieController extends AbstractController
             foreach ($season->getEpisodes() as $episode) {
                 if ($episode->isViewed()) continue;
                 $serieViewing->setNextEpisodeToWatch($episode);
+                $nextEpisodeCheck = true;
                 if ($verbose) $messages[] = sprintf('    Next episode to watch: S%02dE%02d', $season->getSeasonNumber(), $episode->getEpisodeNumber());
                 break 2;
             }
         }
         if ($serieViewing->getNextEpisodeToAir()?->isViewed()) {
             $serieViewing->setNextEpisodeToAir($serieViewing->getNextEpisodeToWatch());
+            $nextEpisodeCheck = true;
             if ($verbose) $messages[] = '    Next episode to air is viewed, set to next episode to watch if any';
         }
+        if ($nextEpisodeCheck)
+            $serieViewing->setNextEpisodeCheckDate($this->dateService->newDate('now', 'Europe/Paris'));
         $this->serieViewingRepository->save($serieViewing, true);
         if ($verbose) $this->messages = $messages;
     }

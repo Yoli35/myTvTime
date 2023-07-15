@@ -55,11 +55,19 @@ class NextEpisodeToAir extends Command
             $serieViewings = $this->serieViewingRepository->findAll();
         }
         $count = 0;
+        $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
 
         foreach ($serieViewings as $serieViewing) {
+
             $serie = $serieViewing->getSerie();
             $io->writeln($serie->getName() . ' (' . $serie->getId() . ') for user ' . $serieViewing->getUser()->getUsername() . ' (' . $serieViewing->getUser()->getId() . ')');
 
+            // Si la dernière vérification de l'épisode suivant est récente, on ne fait rien
+            if ($serieViewing->getNextEpisodeCheckDate()) {
+                $diff = $now->diff($serieViewing->getNextEpisodeCheckDate());
+                $io->writeln([str_repeat("*•", 40), '    the last check is recent (< 2 days), skipping', str_repeat("*•", 40)]);
+                if ($diff->days < 2) continue;
+            }
             // Si le dernier épisode de la série a été vu depuis plus de 2 ans, on ne fait rien, puisqu'il est probable que la série soit terminée
             $lastSeasonViewing = $this->serieController->getSeasonViewing($serieViewing, $serieViewing->getNumberOfSeasons());
             if ($lastSeasonViewing === null) {
