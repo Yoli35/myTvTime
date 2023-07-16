@@ -44,7 +44,7 @@ class SerieViewing
     #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SerieCast::class)]
     private Collection $serieCasts;
 
-    #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class, cascade: ['persist', 'remove'])]
     private Collection $seasons;
 
     #[ORM\Column(nullable: true)]
@@ -56,10 +56,10 @@ class SerieViewing
     #[ORM\Column(nullable: true)]
     private ?int $alertId;
 
-    #[ORM\OneToOne]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?EpisodeViewing $nextEpisodeToAir = null;
 
-    #[ORM\OneToOne]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?EpisodeViewing $nextEpisodeToWatch = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
