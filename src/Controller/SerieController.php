@@ -1164,9 +1164,17 @@ class SerieController extends AbstractController
         $year = $request->query->get('year', "");
 
         $standing = $this->TMDBService->getTv($id, $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']);
+        if ($standing == "") {
+            $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
+            return $this->render('serie/error.html.twig', [
+                'serie' => $serie,
+                'serieViewing' => $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]),
+                'imageConfig' => $this->imageConfiguration->getConfig(),
+            ]);
+        }
         $tv = json_decode($standing, true);
 
-        return $this->getSerie($request, $tv, $page, $from, $id, null, $query, $year);
+        return $this->getSerie($request, $tv??[], $page, $from, $id, null, $query, $year);
     }
 
     #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
