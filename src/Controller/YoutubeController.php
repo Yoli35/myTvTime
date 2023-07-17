@@ -108,8 +108,13 @@ class YoutubeController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $userId = $request->query->get('id');
+        $sort = $request->query->get('sort');
+        $order = $request->query->get('order');
+        $offset = $request->query->get('offset', 0);
+        $limit = $request->query->get('limit', 20);
         /** @var YoutubeVideo [] $vids */
-        $vids = $this->videoRepository->findAllWithChannelByDate($request->query->get('id'), $request->query->get('sort'), $request->query->get('order'), $request->query->get('offset'));
+        $vids = $this->videoRepository->findAllWithChannelByDate($userId, $sort, $order, $offset, $limit);
 
         return $this->json([
             'results' => $this->getVideos($vids),

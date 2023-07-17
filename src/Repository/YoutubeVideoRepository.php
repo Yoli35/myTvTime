@@ -58,7 +58,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAllWithChannelByDate($userId, $sort = 'publishedAt', $order = 'DESC', $offset = 0): array
+    public function findAllWithChannelByDate($userId, $sort = 'publishedAt', $order = 'DESC', $offset = 0, $limit = 20): array
     {
         if ($offset < 0) {
             $offset = 0;
@@ -69,7 +69,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->leftJoin('y.channel', 'c', Expr\Join::WITH, 'c=y.channel')
             ->orderBy('y.' . $sort, $order)
             ->setFirstResult($offset)
-            ->setMaxResults(20)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

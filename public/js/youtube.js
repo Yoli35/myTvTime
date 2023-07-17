@@ -35,7 +35,8 @@ function initYoutube(id, locale, paths) {
     ytPage.addEventListener("click", savePageState);
     ytSort.addEventListener("change", saveSortState);
     ytOrder.addEventListener("change", saveOrderState);
-    ytReload.addEventListener("click", reloadPage);
+    ytReload.addEventListener("click", loadVideos);
+    moreButton?.addEventListener('click', loadVideos);
 
     document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === 'visible') {
@@ -54,109 +55,120 @@ function initYoutube(id, locale, paths) {
         }
     }, 1000);
 
-    if (moreButton) {
+    function loadVideos(e) {
+        const reload = document.querySelector('.reload');
+        const doReload = e.currentTarget.getAttribute('id') === 'reload';
 
-        moreButton.addEventListener('click', () => {
+        e.preventDefault();
+        e.stopPropagation();
 
-            const h1 = document.getElementById('h1');
-            const videos = document.getElementsByClassName('yt-video');
-            const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
-            const sort = document.querySelector("#sort").value;
-            const order = document.querySelector("#order").value;
+        const h1 = document.getElementById('h1');
+        const videos = document.querySelectorAll('.yt-video');
+        const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
+        const sort = document.querySelector("#sort").value;
+        const order = document.querySelector("#order").value;
 
-            total_results = parseInt(h1.getAttribute('data-total-results'));
-            let current_results = videos.length;
+        total_results = parseInt(h1.getAttribute('data-total-results'));
+        let current_results = videos.length;
 
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                const response = JSON.parse(this.response);
-                const results = response['results'];
-                const count = results.length;
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            const results = response['results'];
+            const count = results.length;
 
-                for (let i = 0; i < count; i++) {
-                    let result = results[i];
-                    let newResult = document.createElement("div");
-                    newResult.setAttribute("class", "yt-result");
-                    let aVideo = document.createElement("a");
-                    aVideo.setAttribute("href", _yt_video_page + result['id'].toString());
-                    let newVideo = document.createElement("div");
-                    newVideo.setAttribute("class", "yt-video");
-                    let thumbnail = document.createElement("div");
-                    thumbnail.setAttribute("class", "yt-thumbnail");
-                    let img = document.createElement("img");
-                    img.setAttribute("src", result['thumbnailMediumPath']);
-                    img.setAttribute("alt", result['title']);
-                    // Ajouter la durée
-                    let duration = document.createElement("div");
-                    duration.setAttribute("class", "duration");
-                    duration.appendChild(document.createTextNode(duration2Time(result['contentDuration'])));
-                    thumbnail.appendChild(img);
-                    thumbnail.appendChild(duration);
-                    if (result['tags'].length) {
-                        let tags = document.createElement("div");
-                        tags.classList.add("tags");
-                        result['tags'].forEach(tag => {
-                            let tagButton = newTagElement(tag);
-                            tags.appendChild(tagButton);
-                        })
-                        thumbnail.appendChild(tags);
-                    }
-                    let details = document.createElement("div");
-                    details.setAttribute("class", "details");
-                    let channel = document.createElement("div");
-                    channel.setAttribute("class", "channel");
-                    let aChannel = document.createElement("a");
-                    let href = 'https://www.youtube.com/' + (result['channel']['customUrl'] === null ? result['channel']['youtubeId'] : result['channel']['customUrl']);
-                    aChannel.setAttribute("href", href);
-                    aChannel.setAttribute("target", "_blank");
-                    let span = document.createElement("span");
-                    span.setAttribute("data-descr", result['channel']['title']);
-                    if (result['channel']['thumbnailDefaultUrl']) {
-                        let imgChannel = document.createElement("img");
-                        imgChannel.setAttribute("src", result['channel']['thumbnailDefaultUrl']);
-                        imgChannel.setAttribute("alt", result['channel']['title']);
-                        span.appendChild(imgChannel);
-                    } else {
-                        let fChannel = document.createTextNode(result['channel']['title'].charAt(0));
-                        span.appendChild(fChannel);
-                    }
-                    aChannel.appendChild(span);
-                    channel.appendChild(aChannel);
-                    let infos = document.createElement("div");
-                    infos.setAttribute("class", "infos");
-                    let info = document.createElement("div");
-                    info.setAttribute("class", "info");
-                    info.appendChild(document.createTextNode(result['title']));
-                    infos.appendChild(info);
-                    info = document.createElement("div");
-                    info.setAttribute("class", "info");
-                    let dateT = result['publishedAt'];
-                    let released = new Date(dateT);
-                    info.appendChild(document.createTextNode(txt.published_at[_locale] + ' : ' + released.toLocaleDateString(undefined, options)));
-                    infos.appendChild(info);
-                    details.appendChild(channel);
-                    details.appendChild(infos);
-
-                    newVideo.appendChild(thumbnail);
-                    newVideo.appendChild(details);
-                    aVideo.appendChild(newVideo);
-                    newResult.appendChild(aVideo);
-
-                    videoList.insertBefore(newResult, seeMore);
-                }
-                //
-                // If everything is displayed, we make the 'See more results' button disappear
-                //
-                if (current_results + count === total_results) {
-                    seeMore.setAttribute("style", "display: none;");
-                }
+            if (doReload) {
+                videos.forEach(video => {
+                    video.closest('.yt-result').remove();
+                });
+                reload.classList.remove('active');
             }
 
-            xhr.open("GET", _yt_videos_more + '?id=' + _user_id + '&sort=' + sort + '&order=' + order + '&offset=' + current_results);
-            xhr.send();
-        });
-    }
+            for (let i = 0; i < count; i++) {
+                let result = results[i];
+                let newResult = document.createElement("div");
+                newResult.setAttribute("class", "yt-result");
+                let aVideo = document.createElement("a");
+                aVideo.setAttribute("href", _yt_video_page + result['id'].toString());
+                let newVideo = document.createElement("div");
+                newVideo.setAttribute("class", "yt-video");
+                let thumbnail = document.createElement("div");
+                thumbnail.setAttribute("class", "yt-thumbnail");
+                let img = document.createElement("img");
+                img.setAttribute("src", result['thumbnailMediumPath']);
+                img.setAttribute("alt", result['title']);
+                // Ajouter la durée
+                let duration = document.createElement("div");
+                duration.setAttribute("class", "duration");
+                duration.appendChild(document.createTextNode(duration2Time(result['contentDuration'])));
+                thumbnail.appendChild(img);
+                thumbnail.appendChild(duration);
+                if (result['tags'].length) {
+                    let tags = document.createElement("div");
+                    tags.classList.add("tags");
+                    result['tags'].forEach(tag => {
+                        let tagButton = newTagElement(tag);
+                        tags.appendChild(tagButton);
+                    })
+                    thumbnail.appendChild(tags);
+                }
+                let details = document.createElement("div");
+                details.setAttribute("class", "details");
+                let channel = document.createElement("div");
+                channel.setAttribute("class", "channel");
+                let aChannel = document.createElement("a");
+                let href = 'https://www.youtube.com/' + (result['channel']['customUrl'] === null ? result['channel']['youtubeId'] : result['channel']['customUrl']);
+                aChannel.setAttribute("href", href);
+                aChannel.setAttribute("target", "_blank");
+                let span = document.createElement("span");
+                span.setAttribute("data-descr", result['channel']['title']);
+                if (result['channel']['thumbnailDefaultUrl']) {
+                    let imgChannel = document.createElement("img");
+                    imgChannel.setAttribute("src", result['channel']['thumbnailDefaultUrl']);
+                    imgChannel.setAttribute("alt", result['channel']['title']);
+                    span.appendChild(imgChannel);
+                } else {
+                    let fChannel = document.createTextNode(result['channel']['title'].charAt(0));
+                    span.appendChild(fChannel);
+                }
+                aChannel.appendChild(span);
+                channel.appendChild(aChannel);
+                let infos = document.createElement("div");
+                infos.setAttribute("class", "infos");
+                let info = document.createElement("div");
+                info.setAttribute("class", "info");
+                info.appendChild(document.createTextNode(result['title']));
+                infos.appendChild(info);
+                info = document.createElement("div");
+                info.setAttribute("class", "info");
+                let dateT = result['publishedAt'];
+                let released = new Date(dateT);
+                info.appendChild(document.createTextNode(txt.published_at[_locale] + ' : ' + released.toLocaleDateString(undefined, options)));
+                infos.appendChild(info);
+                details.appendChild(channel);
+                details.appendChild(infos);
 
+                newVideo.appendChild(thumbnail);
+                newVideo.appendChild(details);
+                aVideo.appendChild(newVideo);
+                newResult.appendChild(aVideo);
+
+                videoList.insertBefore(newResult, seeMore);
+            }
+            //
+            // If everything is displayed, we make the 'See more results' button disappear
+            //
+            if (current_results + count === total_results) {
+                seeMore.setAttribute("style", "display: none;");
+            }
+        }
+
+        if (doReload)
+            xhr.open("GET", _yt_videos_more + '?id=' + _user_id + '&sort=' + sort + '&order=' + order + '&limit=' + current_results);
+        else
+            xhr.open("GET", _yt_videos_more + '?id=' + _user_id + '&sort=' + sort + '&order=' + order + '&offset=' + current_results);
+        xhr.send();
+    }
     function addVideo(link) {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -234,10 +246,6 @@ function initYoutube(id, locale, paths) {
         xhr.send();
     }
 
-    function reloadPage() {
-        window.location.reload();
-    }
-
     function showStatus(response) {
         const status = response['status'];
         const message = '<strong>' + response['message'] + '</strong><br>' + response['subMessage'];
@@ -258,6 +266,7 @@ function initYoutube(id, locale, paths) {
         }, 5250);
     }
 }
+
 function newTagElement(tag, list = false) {
 
     let newTagButton = document.createElement("div");
