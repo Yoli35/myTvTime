@@ -18,6 +18,7 @@ function initYoutube(id, locale, paths) {
     const ytPage = document.getElementById('page');
     const ytSort = document.getElementById('sort');
     const ytOrder = document.getElementById('order');
+    const ytReload = document.getElementById('reload');
 
     ytLink.addEventListener("paste", (e) => {
         const link = e.clipboardData.getData('text');
@@ -34,6 +35,7 @@ function initYoutube(id, locale, paths) {
     ytPage.addEventListener("click", savePageState);
     ytSort.addEventListener("change", saveSortState);
     ytOrder.addEventListener("change", saveOrderState);
+    ytReload.addEventListener("click", reloadPage);
 
     document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === 'visible') {
@@ -209,6 +211,9 @@ function initYoutube(id, locale, paths) {
         xhr.onload = function () {
             const response = JSON.parse(this.response);
             showStatus(response);
+            setTimeout(function () {
+                ytReload.parentElement.classList.add("active");
+            }, 0);
         }
         xhr.open("GET", _youtube_settings_save + '?sort=' + encodeURIComponent(sort));
         xhr.send();
@@ -221,9 +226,16 @@ function initYoutube(id, locale, paths) {
         xhr.onload = function () {
             const response = JSON.parse(this.response);
             showStatus(response);
+            setTimeout(function () {
+                ytReload.parentElement.classList.add("active");
+            }, 0);
         }
         xhr.open("GET", _youtube_settings_save + '?order=' + encodeURIComponent(order));
         xhr.send();
+    }
+
+    function reloadPage() {
+        window.location.reload();
     }
 
     function showStatus(response) {

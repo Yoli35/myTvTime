@@ -1,0 +1,4 @@
+cron:
+  default:
+    command: 'app:next-episode-to'
+    schedule: '0 1 * * *'
