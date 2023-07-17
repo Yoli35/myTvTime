@@ -8,6 +8,7 @@ import './styles/diaporama.scss';
 import './styles/event.scss';
 import './styles/form.scss';
 import './styles/movie.scss';
+import './styles/logs.scss';
 import './styles/search.scss';
 import './styles/serie.scss';
 import './styles/user.scss';

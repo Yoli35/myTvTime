@@ -69,6 +69,7 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_admin_dashboard_index') }}">{{ 'Another action'|trans }}</a>
                     <a href="/api">{{ 'API Platform'|trans }}</a>
+                    <a href="{{ path('app_log_filter') }}">{{ 'Logs'|trans }}</a>
                     <a href="{{ path('app_php_info') }}">{{ 'Php Info'|trans }}</a>
                 {% endif %}
                 <a href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>

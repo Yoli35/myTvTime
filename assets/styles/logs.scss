@@ -1,0 +1,66 @@
+@import "variables";
+
+.logs {
+    @include flex-col(flex-start, center);
+    gap: .5rem;
+
+    .log {
+        @include flex-row(flex-start, flex-start);
+        font-weight: 300;
+        gap: 1rem;
+
+        .line {
+            text-align: right;
+            width: 3rem;
+        }
+
+        .date {
+            flex: 1 0;
+            font-family: "clock Font", monospace;
+            width: 6rem;
+        }
+
+        .time {
+            flex: 1 0;
+            font-family: "clock Font", monospace;
+            width: 4rem;
+        }
+
+        .channel {
+            flex: 1 0;
+            width: 6rem;
+        }
+
+        .level {
+            flex: 1 0;
+            width: 4rem;
+        }
+
+        .message {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+
+    .info {
+        color: var(--gradient-green-60);
+    }
+    .debug {
+        color: var(--gradient-ardoise-60);
+    }
+    .warning {
+        color: var(--gradient-mars-60);
+    }
+    .error {
+        color: var(--gradient-red-60);
+    }
+    .critical {
+        color: var(--gradient-red-60);
+    }
+    .alert {
+        color: var(--gradient-red-60);
+    }
+    .emergency {
+        color: var(--gradient-red-60);
+    }
+}

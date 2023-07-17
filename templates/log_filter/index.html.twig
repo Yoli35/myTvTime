@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime ▶︎ log{% endblock %}
+
+{% block body %}
+    <h1>myTvTime ▶︎ log</h1>
+    <div class="container">
+        <div class="logs">
+            <div class="log">
+                <div class="line"></div>
+                <div class="date">Date</div>
+                <div class="time">Time</div>
+                <div class="channel">Channel</div>
+                <div class="level">Level</div>
+                <div class="message">Message</div>
+            </div>
+            {% for log in logs %}
+                {% if log.date %}
+                    <div class="log">
+                        <div class="line">{{ loop.index }}</div>
+                        <div class="date">{{ log.date|date('d/m/Y', false) }}</div>
+                        <div class="time">{{ log.date|date('H:i:s', false) }}</div>
+                        <div class="channel">{{ log.channel }}</div>
+                        <div class="level {{ log.level|lower }}">{{ log.level }}</div>
+                        <div class="message">{{ log.message }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

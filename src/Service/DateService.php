@@ -22,6 +22,19 @@ class DateService
         return $date;
     }
 
+    public function newDateFromUTC($dateString, $timeZone, $allDay = false): DateTime
+    {
+        try {
+            $date = new DateTime($dateString, new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone($timeZone));
+        } catch (Exception) {
+            $date = new DateTime();
+        }
+        if ($allDay) $date->setTime(0, 0);
+
+        return $date;
+    }
+
     public function newDateImmutable($dateString, $timeZone, $allDay = false): DateTimeImmutable
     {
         try {
