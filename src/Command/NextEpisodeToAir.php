@@ -8,6 +8,7 @@ use App\Repository\SerieViewingRepository;
 use App\Repository\UserRepository;
 use App\Service\DateService;
 use App\Service\TMDBService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,12 +23,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class NextEpisodeToAir extends Command
 {
     public function __construct(
-        private readonly DateService             $dateService,
-        private readonly SerieController         $serieController,
-        private readonly SerieRepository         $serieRepository,
-        private readonly SerieViewingRepository  $serieViewingRepository,
-        private readonly UserRepository          $userRepository,
-        private readonly TMDBService             $tmdbService,
+        private readonly DateService            $dateService,
+        private readonly LoggerInterface        $logger,
+        private readonly SerieController        $serieController,
+        private readonly SerieRepository        $serieRepository,
+        private readonly SerieViewingRepository $serieViewingRepository,
+        private readonly UserRepository         $userRepository,
+        private readonly TMDBService            $tmdbService,
     )
     {
         parent::__construct();
@@ -55,23 +57,32 @@ class NextEpisodeToAir extends Command
             $serieViewings = $this->serieViewingRepository->findAll();
         }
         $count = 0;
+        $skipped = 0;
         $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
+        $this->logger->info('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
 
         foreach ($serieViewings as $serieViewing) {
 
             $serie = $serieViewing->getSerie();
             $io->writeln($serie->getName() . ' (' . $serie->getId() . ') for user ' . $serieViewing->getUser()->getUsername() . ' (' . $serieViewing->getUser()->getId() . ')');
+            $this->logs($serie->getName() . ' (' . $serie->getId() . ') for user ' . $serieViewing->getUser()->getUsername() . ' (' . $serieViewing->getUser()->getId() . ')');
 
             // Si la dernière vérification de l'épisode suivant est récente, on ne fait rien
             if ($serieViewing->getNextEpisodeCheckDate()) {
                 $diff = $now->diff($serieViewing->getNextEpisodeCheckDate());
-                $io->writeln([str_repeat("*•", 40), '    the last check is recent (< 2 days), skipping', str_repeat("*•", 40)]);
-                if ($diff->days < 2) continue;
+                if ($diff->days < 2) {
+                    $io->writeln([str_repeat("*•", 40), '    the last check is recent (< 2 days), skipping', str_repeat("*•", 40)]);
+                    $this->logs('    the last check is recent (< 2 days), skipping');
+                    $skipped++;
+                    continue;
+                }
             }
             // Si le dernier épisode de la série a été vu depuis plus de 2 ans, on ne fait rien, puisqu'il est probable que la série soit terminée
             $lastSeasonViewing = $this->serieController->getSeasonViewing($serieViewing, $serieViewing->getNumberOfSeasons());
             if ($lastSeasonViewing === null) {
                 $io->writeln([str_repeat("*•", 40), '    Last season viewing is null, skipping', str_repeat("*•", 40)]);
+                $this->logs('    Last season viewing is null, skipping');
+                $skipped++;
                 continue;
             }
             $lastEpisodeViewing = $lastSeasonViewing->getEpisodeByNumber($lastSeasonViewing->getEpisodeCount());
@@ -82,6 +93,8 @@ class NextEpisodeToAir extends Command
                     $diff = $now->diff($lastViewingDate);
                     if ($diff->y >= 2) {
                         $io->writeln([str_repeat("*•", 40), '    Last episode viewed more than 2 years ago, skipping', str_repeat("*•", 40)]);
+                        $this->logs('    Last episode viewed more than 2 years ago, skipping');
+                        $skipped++;
                         continue;
                     }
                 }
@@ -90,6 +103,8 @@ class NextEpisodeToAir extends Command
                     $diff = $now->diff($airDate);
                     if ($diff->y >= 2) {
                         $io->writeln([str_repeat("*•", 40), '    Last episode aired more than 2 years ago, skipping', str_repeat("*•", 40)]);
+                        $this->logs('    Last episode aired more than 2 years ago, skipping');
+                        $skipped++;
                         continue;
                     }
                 }
@@ -98,49 +113,31 @@ class NextEpisodeToAir extends Command
             $tvSeries = json_decode($this->tmdbService->getTv($serie->getSerieId(), "fr_FR"), true);
 
             if ($tvSeries) {
-//                if ($tvSeries['next_episode_to_air'] === null) {
-//                    $serieViewing->setNextEpisodeToAir(null);
-//                    $io->writeln('    Next episode to air: none');
-//                } else {
-//                    $nextEpisode = $tvSeries['next_episode_to_air'];
-//                    $nextEpisodeNumber = $nextEpisode['episode_number'];
-//                    $nextSeasonNumber = $nextEpisode['season_number'];
-//                    $episodeViewing = $this->serieController->getSeasonViewing($serieViewing, $nextSeasonNumber)?->getEpisodeByNumber($nextEpisodeNumber);
-//                    $serieViewing->setNextEpisodeToAir($episodeViewing);
-//                    $io->writeln('    Next episode to air: ' . $nextSeasonNumber . 'x' . $nextEpisodeNumber);
-//                }
-//
-//                $serieViewing->setNextEpisodeToWatch(null);
-//                foreach ($serieViewing->getSeasons() as $seasonViewing) {
-//                    $serieViewing->setNextEpisodeToWatch(null);
-//                    if ($seasonViewing->getSeasonNumber() > 0 && !$seasonViewing->isSeasonCompleted()) {
-//                        $episodeCount = $seasonViewing->getEpisodeCount();
-//                        foreach ($seasonViewing->getEpisodes() as $episodeViewing) {
-//                            if ($episodeViewing->getViewedAt() === null) {
-//                                $serieViewing->setNextEpisodeToWatch($episodeViewing);
-//                                $io->writeln('    Next episode to watch: ' . $seasonViewing->getSeasonNumber() . 'x' . $episodeViewing->getEpisodeNumber());
-//                                break 2;
-//                            } else {
-//                                if ($episodeViewing->getEpisodeNumber() === $episodeCount) {
-//                                    $seasonViewing->setSeasonCompleted(true);
-//                                    $io->writeln('    Season ' . $seasonViewing->getSeasonNumber() . ' completed');
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                $this->serieViewingRepository->save($serieViewing, true);
-//                $this->serieController->setNextEpisode($tvSeries, $serieViewing, true);
                 $this->serieController->updateSerieViewing($serieViewing, $tvSeries, $serie, true);
                 $io->writeln($this->serieController->messages);
+                $this->logs($this->serieController->messages);
                 $count++;
             } else {
                 $io->error('    TV Series not found');
             }
         }
 
-        $io->success('Done. ' . $count . ' series updated');
+        $io->success('Done. ' . $count . ' series updated, '. $skipped . ' skipped');
+        $this->logs('Done. ' . $count . ' series updated, '. $skipped . ' skipped');
+
+        $this->logger->info('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
 
         return Command::SUCCESS;
+    }
+
+    public function logs($messages): void
+    {
+        if (!is_iterable($messages)) {
+            $messages = [$messages];
+        }
+
+        foreach ($messages as $message) {
+            $this->logger->info($message);
+        }
     }
 }
