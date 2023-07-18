@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\DateService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -19,7 +20,7 @@ class LogFilterController extends AbstractController
     }
 
     #[Route('/log/filter', name: 'app_log_filter')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $logPath = $this->getParameter('kernel.logs_dir') . '/dev.log';
         $this->logs = file($logPath);
@@ -32,7 +33,7 @@ class LogFilterController extends AbstractController
         ]);
         $this->logs = array_reverse($this->logs);
 
-        $count = 100;
+        $count = $request->query->getInt('lines', 100);
         $logs = [];
         $channels = [];
         $levels = [];
