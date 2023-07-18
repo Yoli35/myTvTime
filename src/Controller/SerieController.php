@@ -1511,7 +1511,7 @@ class SerieController extends AbstractController
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
-            'serieId' => $serieId,
+            'serieId' => $serie?->getId(),
             'addThisSeries' => !$serieViewing,
             'credits' => $credits,
             'keywords' => $keywords,
