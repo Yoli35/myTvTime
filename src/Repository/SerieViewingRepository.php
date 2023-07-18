@@ -254,4 +254,52 @@ class SerieViewingRepository extends ServiceEntityRepository
 
         return $resultSet->fetchAll();
     }
+
+    // Séries à venir (avec pagination)
+    public function upcomingSeries($userId, $perPage, $page): array
+    {
+        $sql = "SELECT "
+            . "sv.`id` as id, sv.`viewed_episodes` as viewed_episodes, sv.`number_of_episodes` as number_of_episodes, "
+            . "sv.`number_of_seasons` as number_of_seasons, "
+            . "sv.`modified_at` as modified_at, sv.`created_at` as created_at, sv.`alert_id` as alert_id, "
+            . "s.`id` as serie_id, s.`name` as name, s.`poster_path` as poster_path, s.`first_date_air` as first_date_air, "
+            . "s.`original_name` as original_name, s.`overview` as overview, s.`backdrop_path` as backdrop_path, s.`serie_id` as tmdb_id, "
+            . "n.`name` as network_name, n.`network_id` as network_id, n.`logo_path` as network_logo_path,"
+            . "f.`id` IS NOT NULL as favorite "
+            . "FROM `serie_viewing` sv "
+            . "INNER JOIN `serie` s ON s.`id`=sv.`serie_id` "
+            . "INNER JOIN `serie_networks` sn ON s.`id`=sn.`serie_id` "
+            . "INNER JOIN `networks` n ON sn.`networks_id`=n.`id` "
+            . "LEFT JOIN `favorite` f ON f.`user_id`=2 AND f.`type`='serie' AND f.`media_id`=s.`id` "
+            . "WHERE sv.`user_id`=" .$userId . " "
+            . "AND s.`first_date_air` IS NULL "
+            . "ORDER BY s.`created_at` DESC "
+            . "LIMIT " . $perPage . " "
+            . "OFFSET " . ($page - 1) * $perPage;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAll();
+    }
+
+    // Séries à venir (avec pagination)
+    public function countUpcomingSeries($userId): int
+    {
+        $sql = "SELECT "
+            . "COUNT(sv.`id`) as number "
+            . "FROM `serie_viewing` sv "
+            . "INNER JOIN `serie` s ON s.`id`=sv.`serie_id` "
+            . "INNER JOIN `serie_networks` sn ON s.`id`=sn.`serie_id` "
+            . "INNER JOIN `networks` n ON sn.`networks_id`=n.`id` "
+            . "LEFT JOIN `favorite` f ON f.`user_id`=2 AND f.`type`='serie' AND f.`media_id`=s.`id` "
+            . "WHERE sv.`user_id`=" .$userId . " "
+            . "AND s.`first_date_air` IS NULL";
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchOne();
+    }
 }

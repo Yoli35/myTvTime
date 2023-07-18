@@ -13,9 +13,12 @@
         <div class="infos">
             <div>{{ serie.name }}</div>
             <div>{{ 'First Air at'|trans }} : {{ serie.first_date_air ? serie.first_date_air|format_date() : '' }}</div>
-            <div>{{ 'Added at'|trans }} : {{ serie.created_at ? serie.created_at|format_date() : '' }}
-                — {{ 'Updated at'|trans }}
-                : {{ serie.serie_updated_at ? serie.serie_updated_at|format_datetime() : '' }}</div>
+            <div>
+                {{ 'Added at'|trans }} : {{ serie.created_at ? serie.created_at|format_date() : '' }}
+                {% if serie.serie_updated_at is defined %}
+                    — {{ 'Updated at'|trans }} : {{ serie.serie_updated_at ? serie.serie_updated_at|format_datetime() : '' }}
+                {% endif %}
+            </div>
             <div>{{ serie.overview }}</div>
         </div>
         {% if serie.networks|length %}
@@ -36,17 +39,19 @@
         {% if serie.favorite %}
             <div class="favorite">{{ 'Favorite'|trans }}</div>
         {% endif %}
-        <div class="{{ serie.class }}">
-            {% if serie.air_date_relative is defined %}
-                <div class="upcoming-date">{{ serie.air_date|trans }}</div>
-            {% else %}
-                <div class="upcoming-date">{{ serie.air_date|raw }}</div>
-            {% endif %}
-            <div class="upcoming-episode">{{ serie.episode }}</div>
-            {% if serie.event is defined %}
-                <div class="upcoming-event">{{ serie.event|trans }}</div>
-            {% endif %}
-        </div>
+        {% if serie.class is defined %}
+            <div class="{{ serie.class }}">
+                {% if serie.air_date_relative is defined %}
+                    <div class="upcoming-date">{{ serie.air_date|trans }}</div>
+                {% else %}
+                    <div class="upcoming-date">{{ serie.air_date|raw }}</div>
+                {% endif %}
+                <div class="upcoming-episode">{{ serie.episode }}</div>
+                {% if serie.event is defined %}
+                    <div class="upcoming-event">{{ serie.event|trans }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
         <div class="front"></div>
     </div>
 </a>

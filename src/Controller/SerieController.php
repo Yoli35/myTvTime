@@ -49,6 +49,7 @@ class SerieController extends AbstractController
     const MY_SERIES_TO_START = 'my_series_to_start';
     const MY_SERIES_TO_END = 'my_series_to_end';
     const UPCOMING_EPISODES = 'upcoming_episodes';
+    const UPCOMING_SERIES = 'future_series';
     const POPULAR = 'popular';
     const SEARCH = 'search';
 
@@ -678,7 +679,7 @@ class SerieController extends AbstractController
 
         $imageConfig = $this->imageConfiguration->getConfig();
 
-        return $this->render('serie/upcoming.html.twig', [
+        return $this->render('serie/upcoming-episodes.html.twig', [
             'series' => $results,
             'pages' => [
                 'total_results' => $totalResults,
@@ -691,6 +692,53 @@ class SerieController extends AbstractController
             'posters' => $this->getPosters(),
             'posterPath' => '/images/series/posters/',
             'from' => self::UPCOMING_EPISODES,
+            'imageConfig' => $imageConfig,
+        ]);
+    }
+
+    #[Route('/upcoming-series', name: 'app_serie_upcoming_series', methods: ['GET'])]
+    public function futureSeries(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $page = $request->query->getInt('p', 1);
+        $perPage = 10;
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $results = $this->serieViewingRepository->upcomingSeries($user->getId(), $perPage, $page);
+        $totalResults = $this->serieViewingRepository->countUpcomingSeries($user->getId());
+
+        $lastResult = null;
+        $results = array_map(function ($result) use (&$lastResult) {
+            if (!key_exists('networks', $result)) {
+                $result['networks'][] = ['name'=> $result['network_name'], 'logo_path'=> $result['network_logo_path']];
+            }
+            // on factorise les networks
+            if ($lastResult && $lastResult['id'] == $result['id']) {
+                $lastResult['networks'] = array_merge($lastResult['networks'], $result['networks']);
+                return null;
+            }
+            $lastResult = $result;
+            return $result;
+        }, $results);
+
+        $imageConfig = $this->imageConfiguration->getConfig();
+        dump($results);
+
+        return $this->render('serie/upcoming-series.html.twig', [
+            'series' => $results,
+            'pages' => [
+                'total_results' => $totalResults,
+                'page' => $page,
+                'per_page' => $perPage,
+                'link_count' => self::LINK_COUNT,
+                'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
+                'per_page_values' => self::PER_PAGE_ARRAY],
+            'user' => $user,
+            'posters' => $this->getPosters(),
+            'posterPath' => '/images/series/posters/',
+            'from' => self::UPCOMING_SERIES,
             'imageConfig' => $imageConfig,
         ]);
     }
