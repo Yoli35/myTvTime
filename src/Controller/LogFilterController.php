@@ -47,12 +47,7 @@ class LogFilterController extends AbstractController
                 $level = substr($log, $offset, strpos($log, ':', $offset) - $offset);
                 $offset = $offset + strlen($level) + 1;
                 $message = substr($log, $offset);
-                if (!in_array($channel, $channels)) {
-                    $channels[] = $channel;
-                }
-                if (!in_array($level, $levels)) {
-                    $levels[] = $level;
-                }
+                $channels[] = $channel;
                 $logs[$i] = [
                     'date' => $date,
                     'channel' => $channel,
@@ -61,6 +56,8 @@ class LogFilterController extends AbstractController
                 ];
             }
         }
+        $levels = ['DEBUG', 'INFO', 'NOTICE', 'WARNING', 'ERROR', 'CRITICAL', 'ALERT', 'EMERGENCY'];
+        $channels = array_unique($channels);
         dump([
             'logs' => $logs,
             'channels' => $channels,
@@ -69,6 +66,9 @@ class LogFilterController extends AbstractController
 
         return $this->render('log_filter/index.html.twig', [
             'logs' => $logs,
+            'channels' => $channels,
+            'levels' => $levels,
+            'count' => $count,
             'timezone' => 'Europe/Paris',
         ]);
     }

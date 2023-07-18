@@ -4,12 +4,38 @@
     @include flex-col(flex-start, center);
     gap: .5rem;
 
-    .log {
+    .filters {
+        form {
+            @include flex-row(center, flex-start);
+            flex-wrap: wrap;
+            gap: 1rem;
+
+            .channel-filter, .level-filter {
+                border: 1px solid var(--gradient-ardoise-60);
+                border-radius: .5rem;
+                @include flex-row(center, flex-start);
+                flex-wrap: wrap;
+                gap: .5rem;
+                padding: .5rem;
+
+                label {
+                    align-items: center;
+                    display: flex;
+                    gap: .5rem;
+                    justify-content: flex-start;
+                }
+            }
+        }
+    }
+
+    .log, .log-titles {
         @include flex-row(flex-start, flex-start);
         font-weight: 300;
         gap: 1rem;
+        max-width: 100%;
 
         .line {
+            font-family: "clock Font", monospace;
             text-align: right;
             width: 3rem;
         }
@@ -38,6 +64,7 @@
 
         .message {
             overflow-x: auto;
+            width: calc(100% - 28rem);
             white-space: nowrap;
         }
     }
@@ -45,21 +72,27 @@
     .info {
         color: var(--gradient-green-60);
     }
+
     .debug {
         color: var(--gradient-ardoise-60);
     }
+
     .warning {
         color: var(--gradient-mars-60);
     }
+
     .error {
         color: var(--gradient-red-60);
     }
+
     .critical {
         color: var(--gradient-red-60);
     }
+
     .alert {
         color: var(--gradient-red-60);
     }
+
     .emergency {
         color: var(--gradient-red-60);
     }

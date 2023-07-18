@@ -4,9 +4,36 @@
 
 {% block body %}
     <h1>myTvTime ▶︎ log</h1>
-    <div class="container">
+    <div class="container-fluid">
         <div class="logs">
-            <div class="log">
+            <div class="filters">
+                <form action="{{ path('app_log_filter') }}?lines={{ count }}" method="get">
+                    {#                    <div class="filter"> #}
+                    {#                        <label for="date">Date</label> #}
+                    {#                        <input type="date" name="date" id="date" value="{{ date }}"> #}
+                    {#                    </div> #}
+                    <div class="channel-filter">
+                        <div>Channels :</div>
+                        {% for channel in channels %}
+                            <label for="{{ channel }}">
+                                <input type="checkbox" id="channel_{{ channel }}" value="{{ channel }}" checked>{{ channel }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <div class="level-filter">
+                        <div>Levels :</div>
+                        {% for level in levels %}
+                            <label for="{{ level }}">
+                                <input type="checkbox" id="level_{{ level }}" value="{{ level }}" checked>{{ level }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <div class="filter">
+                        <button type="submit" class="btn btn-secondary">Filter</button>
+                    </div>
+                </form>
+            </div>
+            <div class="log-titles">
                 <div class="line"></div>
                 <div class="date">Date</div>
                 <div class="time">Time</div>
@@ -20,7 +47,7 @@
                         <div class="line">{{ loop.index }}</div>
                         <div class="date">{{ log.date|date('d/m/Y', false) }}</div>
                         <div class="time">{{ log.date|date('H:i:s', false) }}</div>
-                        <div class="channel">{{ log.channel }}</div>
+                        <div class="channel {{ log.channel }}">{{ log.channel }}</div>
                         <div class="level {{ log.level|lower }}">{{ log.level }}</div>
                         <div class="message">{{ log.message }}</div>
                     </div>
@@ -28,4 +55,20 @@
             {% endfor %}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const inputs = document.querySelector(".channel-filter").querySelectorAll("input[type=checkbox]");
+            inputs.forEach(input => {
+                input.addEventListener("change", () => {
+                    const channel = input.value;
+                    const logs = document.querySelectorAll(`.log:has(>.channel.${channel})`);
+                    logs.forEach(log => {
+                        log.style.display = input.checked ? "flex" : "none";
+                    });
+                });
+            });
+        });
+    </script>
 {% endblock %}

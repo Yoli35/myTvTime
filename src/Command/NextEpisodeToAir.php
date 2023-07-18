@@ -48,11 +48,13 @@ class NextEpisodeToAir extends Command
 
         $userId = $input->getArgument('userid');
         $serieId = $input->getArgument('id');
+        $canSkip = true;
 
         if ($userId && $serieId) {
             $user = $this->userRepository->find($userId);
             $serie = $this->serieRepository->find($serieId);
             $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'serie' => $serie]);
+            $canSkip = false;
         } else {
             $serieViewings = $this->serieViewingRepository->findAll();
         }
@@ -67,45 +69,47 @@ class NextEpisodeToAir extends Command
             $io->writeln($serie->getName() . ' (' . $serie->getId() . ') for user ' . $serieViewing->getUser()->getUsername() . ' (' . $serieViewing->getUser()->getId() . ')');
             $this->logs($serie->getName() . ' (' . $serie->getId() . ') for user ' . $serieViewing->getUser()->getUsername() . ' (' . $serieViewing->getUser()->getId() . ')');
 
-            // Si la dernière vérification de l'épisode suivant est récente, on ne fait rien
-            if ($serieViewing->getNextEpisodeCheckDate()) {
-                $diff = $now->diff($serieViewing->getNextEpisodeCheckDate());
-                if ($diff->days < 2) {
-                    $io->writeln([str_repeat("*•", 40), '    the last check is recent (< 2 days), skipping', str_repeat("*•", 40)]);
-                    $this->logs('    the last check is recent (< 2 days), skipping');
-                    $skipped++;
-                    continue;
-                }
-            }
-            // Si le dernier épisode de la série a été vu depuis plus de 2 ans, on ne fait rien, puisqu'il est probable que la série soit terminée
-            $lastSeasonViewing = $this->serieController->getSeasonViewing($serieViewing, $serieViewing->getNumberOfSeasons());
-            if ($lastSeasonViewing === null) {
-                $io->writeln([str_repeat("*•", 40), '    Last season viewing is null, skipping', str_repeat("*•", 40)]);
-                $this->logs('    Last season viewing is null, skipping');
-                $skipped++;
-                continue;
-            }
-            $lastEpisodeViewing = $lastSeasonViewing->getEpisodeByNumber($lastSeasonViewing->getEpisodeCount());
-            if ($lastEpisodeViewing) {
-                $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
-                $lastViewingDate = $lastEpisodeViewing->getViewedAt();
-                if ($lastViewingDate !== null) {
-                    $diff = $now->diff($lastViewingDate);
-                    if ($diff->y >= 2) {
-                        $io->writeln([str_repeat("*•", 40), '    Last episode viewed more than 2 years ago, skipping', str_repeat("*•", 40)]);
-                        $this->logs('    Last episode viewed more than 2 years ago, skipping');
+            if ($canSkip) {
+                // Si la dernière vérification de l'épisode suivant est récente, on ne fait rien
+                if ($serieViewing->getNextEpisodeCheckDate()) {
+                    $diff = $now->diff($serieViewing->getNextEpisodeCheckDate());
+                    if ($diff->days < 2) {
+                        $io->writeln([str_repeat("*•", 40), '    the last check is recent (< 2 days), skipping', str_repeat("*•", 40)]);
+                        $this->logs('    the last check is recent (< 2 days), skipping');
                         $skipped++;
                         continue;
                     }
                 }
-                $airDate = $lastEpisodeViewing->getAirDate();
-                if ($airDate !== null) {
-                    $diff = $now->diff($airDate);
-                    if ($diff->y >= 2) {
-                        $io->writeln([str_repeat("*•", 40), '    Last episode aired more than 2 years ago, skipping', str_repeat("*•", 40)]);
-                        $this->logs('    Last episode aired more than 2 years ago, skipping');
-                        $skipped++;
-                        continue;
+                // Si le dernier épisode de la série a été vu depuis plus de 2 ans, on ne fait rien, puisqu'il est probable que la série soit terminée
+                $lastSeasonViewing = $this->serieController->getSeasonViewing($serieViewing, $serieViewing->getNumberOfSeasons());
+                if ($lastSeasonViewing === null) {
+                    $io->writeln([str_repeat("*•", 40), '    Last season viewing is null, skipping', str_repeat("*•", 40)]);
+                    $this->logs('    Last season viewing is null, skipping');
+                    $skipped++;
+                    continue;
+                }
+                $lastEpisodeViewing = $lastSeasonViewing->getEpisodeByNumber($lastSeasonViewing->getEpisodeCount());
+                if ($lastEpisodeViewing) {
+                    $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
+                    $lastViewingDate = $lastEpisodeViewing->getViewedAt();
+                    if ($lastViewingDate !== null) {
+                        $diff = $now->diff($lastViewingDate);
+                        if ($diff->y >= 2) {
+                            $io->writeln([str_repeat("*•", 40), '    Last episode viewed more than 2 years ago, skipping', str_repeat("*•", 40)]);
+                            $this->logs('    Last episode viewed more than 2 years ago, skipping');
+                            $skipped++;
+                            continue;
+                        }
+                    }
+                    $airDate = $lastEpisodeViewing->getAirDate();
+                    if ($airDate !== null) {
+                        $diff = $now->diff($airDate);
+                        if ($diff->y >= 2) {
+                            $io->writeln([str_repeat("*•", 40), '    Last episode aired more than 2 years ago, skipping', str_repeat("*•", 40)]);
+                            $this->logs('    Last episode aired more than 2 years ago, skipping');
+                            $skipped++;
+                            continue;
+                        }
                     }
                 }
             }
