@@ -175,6 +175,7 @@ class YoutubeController extends AbstractController
             ],
             $youtubeVideo->getDescription());
         $description = nl2br($description);
+        dump($youtubeVideo->getYoutubeVideoComments()->first());
 
         return $this->render('youtube/show.html.twig', [
                 'video' => $youtubeVideo,

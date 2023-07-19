@@ -443,6 +443,16 @@
         gap: 1em;
         position: relative;
 
+        &:has(.comments) {
+            .details {
+                width: 40%;
+            }
+
+            .qr-code {
+                width: calc(20% - 2em);
+            }
+        }
+
         .details {
             width: 80%;
 
@@ -571,6 +581,13 @@
                     @include author(var(--gradient-ardoise-60));
                 }
             }
+        }
+
+        .comments {
+            background-color: var(--gradient-ardoise-40);
+            border-radius: 1rem;
+            padding: 1rem;
+            width: 40%;
         }
 
         .qr-code {

@@ -127,6 +127,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Alert::class, orphanRemoval: true)]
     private Collection $alerts;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: YoutubeVideoComment::class, orphanRemoval: true)]
+    private Collection $youtubeVideoComments;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -139,6 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->series = new ArrayCollection();
         $this->youtubeVideos = new ArrayCollection();
         $this->alerts = new ArrayCollection();
+        $this->youtubeVideoComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -653,5 +657,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAlerts(): Collection
     {
         return $this->alerts;
+    }
+
+    /**
+     * @return Collection<int, YoutubeVideoComment>
+     */
+    public function getYoutubeVideoComments(): Collection
+    {
+        return $this->youtubeVideoComments;
+    }
+
+    public function addYoutubeVideoComment(YoutubeVideoComment $youtubeVideoComment): static
+    {
+        if (!$this->youtubeVideoComments->contains($youtubeVideoComment)) {
+            $this->youtubeVideoComments->add($youtubeVideoComment);
+            $youtubeVideoComment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeYoutubeVideoComment(YoutubeVideoComment $youtubeVideoComment): static
+    {
+        if ($this->youtubeVideoComments->removeElement($youtubeVideoComment)) {
+            // set the owning side to null (unless already changed)
+            if ($youtubeVideoComment->getUser() === $this) {
+                $youtubeVideoComment->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

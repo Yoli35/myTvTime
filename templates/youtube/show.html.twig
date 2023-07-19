@@ -73,6 +73,19 @@
                             <div class="title">{{ video.channel.title }}</div>
                         </div>
                     </div>
+                    {% if video.youtubeVideoComments|length %}
+                        <div class="comments">
+                            {% for comment in video.youtubeVideoComments %}
+                            <div class="comment">
+                                <div class="user"></div>
+                                <div class="date">{{ comment.createdAt|date('d/m/Y @ H:m:i') }}</div>
+                                <div class="content">
+                                    {{ comment.content|nl2br|raw }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="qr-code">
                         <img src="https://api.qrcode-monkey.com/qr/custom?data=https://www.youtube.com/watch?v={{ video.link }}">
                     </div>
