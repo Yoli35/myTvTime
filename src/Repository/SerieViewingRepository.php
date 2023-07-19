@@ -262,7 +262,7 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "sv.`id` as id, sv.`viewed_episodes` as viewed_episodes, sv.`number_of_episodes` as number_of_episodes, "
             . "sv.`number_of_seasons` as number_of_seasons, "
             . "sv.`modified_at` as modified_at, sv.`created_at` as created_at, sv.`alert_id` as alert_id, "
-            . "s.`id` as serie_id, s.`name` as name, s.`poster_path` as poster_path, s.`first_date_air` as first_date_air, "
+            . "s.`id` as serie_id, s.`name` as name, s.`poster_path` as poster_path, s.`first_date_air` as first_date_air, s.`status` as status, "
             . "s.`original_name` as original_name, s.`overview` as overview, s.`backdrop_path` as backdrop_path, s.`serie_id` as tmdb_id, "
             . "n.`name` as network_name, n.`network_id` as network_id, n.`logo_path` as network_logo_path,"
             . "f.`id` IS NOT NULL as favorite "

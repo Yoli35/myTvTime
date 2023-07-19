@@ -4,8 +4,12 @@
             <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdropPath }}')"></div>
         {% endif %}
         <div class="poster">
-            {#            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}" alt="{{ 'Poster' }}"> #}
-            <img src="{{ "/images/series/posters" ~ serie.posterPath }}" alt="{{ 'Poster' }}">
+            {% if serie.posterPath %}
+                <img src="{{ "/images/series/posters" ~ serie.posterPath }}" alt="{{ 'Poster' }}">
+            {% else %}
+                <div class="no-image">{{ 'No poster'|trans }}</div>
+            {% endif %}
+
         </div>
         <div class="infos">
             <div>{{ serie.name }}</div>
@@ -78,13 +82,13 @@
             {% if serie.favorite %}
                 <div class="favorite">{{ 'Favorite'|trans }}</div>
             {% endif %}
-            {% if serie.today %}
+            {% if serie.today is defined and serie.today %}
                 <div class="today">
                     <div>{{ 'New episode today'|trans }}</div>
                     <div>{{ serie.nextEpisode }}</div>
                 </div>
             {% endif %}
-            {% if serie.tomorrow %}
+            {% if serie.tomorrow is defined and serie.tomorrow%}
                 <div class="tomorrow">
                     <div>{{ 'New episode tomorrow'|trans }}</div>
                     <div>{{ serie.nextEpisode }}</div>
@@ -106,6 +110,11 @@
                     <div>{{ serie.passedText }}</div>
                     {% set past = serie.passed|format_date('relative_full')|capitalize|split(' ', 2) %}
                     <div>{{ past.0 }}{% if past|length > 1 %}<br>{{ past.1 }}{% endif %}</div>
+                </div>
+            {% endif %}
+            {% if serie.prodStatus is defined %}
+                <div class="{{ serie.prodClass }}">
+                    <div>{{ serie.prodStatus }}</div>
                 </div>
             {% endif %}
         {% endif %}

@@ -52,6 +52,11 @@
                 {% endif %}
             </div>
         {% endif %}
+        {% if serie.prodStatus is defined %}
+            <div class="{{ serie.prodClass }}">
+                <div>{{ serie.prodStatus }}</div>
+            </div>
+        {% endif %}
         <div class="front"></div>
     </div>
 </a>

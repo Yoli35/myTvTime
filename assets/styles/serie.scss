@@ -212,16 +212,16 @@
                             border-radius: 0;
                             height: var(--serie-lg-height);
                             object-fit: cover;
-                            width: var(--serie-lg-poster-width)
+                            width: var(--serie-lg-poster-width);
                         }
 
                         .no-image {
                             @include flex-col();
                             aspect-ratio: 2 / 3;
                             background-color: var(--gradient-green-40-alpha-50);
-                            border-radius: .5em;
+                            border-radius: .5em 0 0 .5em;
                             color: var(--gradient-green-90);
-                            width: 13.5rem;
+                            width: var(--serie-lg-poster-width);
                         }
                     }
 
@@ -334,7 +334,7 @@
                         width: 8em;
                     }
 
-                    .today, .tomorrow, .after-tomorrow, .this-week, .later, .next, .passed {
+                    .today, .tomorrow, .after-tomorrow, .this-week, .later, .next, .passed, .in-production, .planned {
                         @include flex-col();
                         border-radius: 0 .5rem .5rem 0;
                         color: var(--gradient-ardoise-100);
@@ -406,6 +406,16 @@
                     .next, .later {
                         background-color: var(--gradient-ardoise-50);
                         color: var(--gradient-ardoise-80);
+                    }
+
+                    .in-production, .planned {
+                        background-color: var(--gradient-mars-50);
+                        color: var(--gradient-mars-90);
+
+                        div {
+                            font-size: 2rem;
+                            font-weight: 300;
+                        }
                     }
 
                     .passed {

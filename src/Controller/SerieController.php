@@ -134,6 +134,7 @@ class SerieController extends AbstractController
                 $serie = $this->isSerieAiringSoon($serie, $now);
             }
         }
+        dump($series);
 
         return $this->render('serie/index.html.twig', [
             'series' => $series,
@@ -179,6 +180,11 @@ class SerieController extends AbstractController
 
     public function isSerieAiringSoon($serie, $now): array
     {
+        if ($serie['status'] =='In Production' || $serie['status'] =='Planned') {
+            $serie['prodStatus'] = $this->translator->trans($serie['status']);
+            $serie['prodClass'] = $serie['status'] == 'In Production' ? 'in-production' : 'planned';
+            return $serie;
+        }
         $serie['today'] = false;
         $serie['tomorrow'] = false;
         if ($serie['viewing']->isSerieCompleted()) {
@@ -720,6 +726,10 @@ class SerieController extends AbstractController
                 return null;
             }
             $lastResult = $result;
+            if ($result['status'] =='In Production' || $result['status'] =='Planned') {
+                $result['prodStatus'] = $this->translator->trans($result['status']);
+                $result['prodClass'] = $result['status'] == 'In Production' ? 'in-production' : 'planned';
+            }
             return $result;
         }, $results);
 
