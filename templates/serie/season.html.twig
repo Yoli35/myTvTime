@@ -15,7 +15,7 @@
 
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container">
+    <div class="container-fluid">
         {% if parameters.from == 'top_rated' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
         {% elseif parameters.from == 'search' %}
@@ -59,6 +59,9 @@
                     <section>
                         <div class="episodes">
                             {% for episode in episodes %}
+                                {% set now = 'now'|date("Y-m-d") %}
+                                {% set upcoming = episode.air_date > now %}
+                                {% set past = episode.air_date < now %}
                                 <div class="episode">
                                     <div class="still">
                                         <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
@@ -67,15 +70,18 @@
                                         <h4>
                                             {{ 'Episode'|trans }} {{ episode.episode_number }} :
                                             {% if episode.viewing
-                                                and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
-                                                and episode.viewing.substituteName is not null %}
-                                                {{ episode.viewing.substituteName }}
+                                                and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/' %}
+                                                {% if episode.viewing.substituteName is not null %}
+                                                    {{ episode.viewing.substituteName }}
+                                                {% else %}
+                                                    {{ episode.name }} ({{ 'TBA'|trans }})
+                                                {% endif %}
                                             {% else %}
                                                 {{ episode.name }}
                                             {% endif %}
                                         </h4>
-
                                         {% if episode.viewing
+                                            and past
                                             and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
                                             and episode.viewing.substituteName is null %}
                                             <div class="substituteName">
@@ -96,9 +102,9 @@
                                         {% endif %}
                                         {% if episode.air_date %}
                                             <div class="info">
-                                                {% if episode.air_date < 'now'|date("Y-m-d") %}
+                                                {% if past %}
                                                     {{ 'This episode aired from episode_air_date.'|trans({"episode_air_date": (episode.air_date|format_date('full'))}) }}
-                                                {% elseif episode.air_date > 'now'|date("Y-m-d") %}
+                                                {% elseif upcoming %}
                                                     {{ 'This episode will be aired from episode_air_date.'|trans({"episode_air_date": (episode.air_date|format_date('full'))}) }}
                                                 {% else %}
                                                     {{ 'This episode is aired from today.'|trans }}
