@@ -783,6 +783,38 @@ nav.active {
                         width: 2em;
                     }
 
+                    .icon:has(.fa-solid.fa-user) {
+                        color: var(--gradient-purple-80);
+                    }
+
+                    .icon:has(.fa-solid.fa-children) {
+                        color: var(--gradient-ardoise-80);
+                    }
+
+                    .icon:has(.fa-solid.fa-person-walking),
+                    .icon:has(.fa-solid.fa-calendar-days) {
+                        color: var(--gradient-purple-50);
+                    }
+
+                    .icon:has(.fa-solid.fa-film),
+                    .icon:has(.fa-solid.fa-clapperboard) {
+                        color: var(--gradient-ardoise-60);
+                    }
+
+                    .icon:has(.fa-solid.fa-tv),
+                    .icon:has(.fa-solid.fa-calendar-day) {
+                        color: var(--gradient-green-50);
+                    }
+
+                    .icon:has(.fa-solid.fa-play),
+                    .icon:has(.fa-solid.fa-forward-step) {
+                        color: var(--gradient-yellow-60);
+                    }
+
+                    .icon:has(.fa-solid.fa-hand-point-right) {
+                        color: var(--gradient-mars-60);
+                    }
+
                     .icon:has(.fa-brands.fa-youtube),
                     .icon:has(.fa-solid.fa-magnifying-glass) {
                         color: var(--gradient-red-50);

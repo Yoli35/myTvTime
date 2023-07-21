@@ -34,6 +34,7 @@ class LogFilterController extends AbstractController
         $this->logs = array_reverse($this->logs);
 
         $count = $request->query->getInt('lines', 100);
+        $count = min($count, count($this->logs));
         $logs = [];
         $channels = [];
         $levels = [];
