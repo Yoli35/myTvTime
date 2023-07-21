@@ -96,15 +96,15 @@
 
             .days {
                 @include flex-col(start, start);
-                gap: 1em;
+                gap: 1rem;
                 width: 100%;
 
                 .day {
                     @include flex-col(flex-start, center);
                     background-color: var(--gradient-ardoise-40-alpha-50);
                     border-radius: .25em;
-                    gap: .5em;
-                    padding: 1em;
+                    gap: .5rem;
+                    padding: .5rem;
                     transition: background-color 1s ease-in-out;
                     width: 100%;
 
@@ -167,7 +167,7 @@
 
                     .activity-of-the-day {
                         @include flex-row(stretch, center);
-                        gap: 1em;
+                        gap: .5rem;
                         width: 100%;
 
                         .rings-of-the-day {
