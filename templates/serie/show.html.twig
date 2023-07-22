@@ -116,8 +116,8 @@
                     <div class="info">
                         <div class="view-vote">
                             <div class="tagline">{{ serie.tagline }}</div>
-                            {% if index is defined %}
-                                {% if index %}
+                            {% if user %}
+                                {% if  not addThisSeries %}
                                     <div class="d-flex-1">
                                         <div class="duration-string"></div>
                                         <button id="test" data-id="{{ serieId }}"

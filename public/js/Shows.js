@@ -478,9 +478,11 @@ export class Shows {
     updateViewCount(textSelector, graphSelector, viewedEpisodes, episodeText) {
         let percent = Math.round(viewedEpisodes / thisGlobal.number_of_episodes * 100);
         if (percent > 100) percent = 100;
-        thisGlobal.updateVote([graphSelector, percent]);
-        document.querySelector(graphSelector).querySelector(".percentage").innerHTML = percent + "%";
-        document.querySelector(textSelector).innerHTML = viewedEpisodes + " " + episodeText;
+        const viewCount = thisGlobal.updateVote([graphSelector, percent]);
+        if (viewCount) {
+            viewCount.querySelector(".percentage").innerHTML = percent + "%";
+            document.querySelector(textSelector).innerHTML = viewedEpisodes + " " + episodeText;
+        }
     }
 
     updateVote([selector, value]) {
@@ -489,6 +491,7 @@ export class Shows {
         element.querySelector(".circle").setAttribute("style", "background: conic-gradient(var(--gradient-grey-60) 0%, var(--gradient-grey-60) " + value + "%, var(--gradient-grey-10) " + value + "%);");
         element.querySelector(".circle-start").setAttribute("style", "translate: 0 -1.5em;");
         element.querySelector(".circle-end").setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-1.5em)");
+        return element;
     }
 
     // stillConnected() {
