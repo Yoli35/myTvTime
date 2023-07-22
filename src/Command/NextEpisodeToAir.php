@@ -124,12 +124,12 @@ class NextEpisodeToAir extends Command
                 $count++;
             } else {
                 $io->error('    TV Series not found');
-                $this->logs('    TV Series not found');
+                $this->logs('    TV Series not found', 'error');
                 $error++;
             }
         }
 
-        $io->success('Done. ' . $count . ' series updated, '. $skipped . ' skipped');
+        $io->success('Done. ' . $count . ' series updated, '. $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
         $this->logs('Done. ' . $count . ' series updated, '. $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
 
         $this->logger->info('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
@@ -137,14 +137,14 @@ class NextEpisodeToAir extends Command
         return Command::SUCCESS;
     }
 
-    public function logs($messages): void
+    public function logs($messages, $level = 'info'): void
     {
         if (!is_iterable($messages)) {
             $messages = [$messages];
         }
 
         foreach ($messages as $message) {
-            $this->logger->info($message);
+            $this->logger->{$level}($message);
         }
     }
 }
