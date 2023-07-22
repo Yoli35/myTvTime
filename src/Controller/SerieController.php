@@ -1106,7 +1106,7 @@ class SerieController extends AbstractController
     public function setNextEpisode($tv, $serieViewing, $verbose = false): void
     {
         $nextEpisodeCheck = false;
-        if ($verbose) $messages = ['    Next episode to air: none'];
+        if ($verbose) $messages = ['    Next episode to air: none', '    Next episode to watch: none', ''];
         if ($tv['next_episode_to_air'] === null) {
             $serieViewing->setNextEpisodeToAir(null);
         } else {
@@ -1129,14 +1129,14 @@ class SerieController extends AbstractController
                 if ($episode->isViewed()) continue;
                 $serieViewing->setNextEpisodeToWatch($episode);
                 $nextEpisodeCheck = true;
-                if ($verbose) $messages[] = sprintf('    Next episode to watch: S%02dE%02d', $season->getSeasonNumber(), $episode->getEpisodeNumber());
+                if ($verbose) $messages[1] = sprintf('    Next episode to watch: S%02dE%02d', $season->getSeasonNumber(), $episode->getEpisodeNumber());
                 break 2;
             }
         }
         if ($serieViewing->getNextEpisodeToAir()?->isViewed()) {
             $serieViewing->setNextEpisodeToAir($serieViewing->getNextEpisodeToWatch());
             $nextEpisodeCheck = true;
-            if ($verbose) $messages[] = '    Next episode to air is viewed, set to next episode to watch if any';
+            if ($verbose) $messages[1] = '    Next episode to air is viewed, set to next episode to watch if any';
         }
         if ($nextEpisodeCheck)
             $serieViewing->setNextEpisodeCheckDate($this->dateService->newDate('now', 'Europe/Paris'));
@@ -1515,14 +1515,16 @@ class SerieController extends AbstractController
             $season['episodes'] = $seasonTMDB['episodes'];
             return $season;
         }, $tv['seasons']);
-//        dump($tv);
+
+        $addThisSeries = $serieViewing ? false : true;
+        dump($addThisSeries);
 
         $alert = $serieViewing ? $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]) : null;
 
         return $this->render('serie/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
-            'addThisSeries' => !$serieViewing,
+            'addThisSeries' => $addThisSeries,
             'credits' => $credits,
             'keywords' => $keywords,
             'missingTranslations' => $missingTranslations,

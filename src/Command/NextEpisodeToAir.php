@@ -60,6 +60,7 @@ class NextEpisodeToAir extends Command
         }
         $count = 0;
         $skipped = 0;
+        $error = 0;
         $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
         $this->logger->info('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
 
@@ -74,7 +75,7 @@ class NextEpisodeToAir extends Command
                 if ($serieViewing->getNextEpisodeCheckDate()) {
                     $diff = $now->diff($serieViewing->getNextEpisodeCheckDate());
                     if ($diff->days < 2) {
-                        $io->writeln([str_repeat("*•", 40), '    the last check is recent (< 2 days), skipping', str_repeat("*•", 40)]);
+                        $io->writeln([str_repeat("••", 40), '    the last check is recent (< 2 days), skipping', str_repeat("••", 40)]);
                         $this->logs('    the last check is recent (< 2 days), skipping');
                         $skipped++;
                         continue;
@@ -83,7 +84,7 @@ class NextEpisodeToAir extends Command
                 // Si le dernier épisode de la série a été vu depuis plus de 2 ans, on ne fait rien, puisqu'il est probable que la série soit terminée
                 $lastSeasonViewing = $this->serieController->getSeasonViewing($serieViewing, $serieViewing->getNumberOfSeasons());
                 if ($lastSeasonViewing === null) {
-                    $io->writeln([str_repeat("*•", 40), '    Last season viewing is null, skipping', str_repeat("*•", 40)]);
+                    $io->writeln([str_repeat("*+", 40), '    Last season viewing is null, skipping', str_repeat("+*", 40)]);
                     $this->logs('    Last season viewing is null, skipping');
                     $skipped++;
                     continue;
@@ -105,7 +106,7 @@ class NextEpisodeToAir extends Command
                     if ($airDate !== null) {
                         $diff = $now->diff($airDate);
                         if ($diff->y >= 2) {
-                            $io->writeln([str_repeat("*•", 40), '    Last episode aired more than 2 years ago, skipping', str_repeat("*•", 40)]);
+                            $io->writeln([str_repeat("•~", 40), '    Last episode aired more than 2 years ago, skipping', str_repeat("~•", 40)]);
                             $this->logs('    Last episode aired more than 2 years ago, skipping');
                             $skipped++;
                             continue;
@@ -123,11 +124,13 @@ class NextEpisodeToAir extends Command
                 $count++;
             } else {
                 $io->error('    TV Series not found');
+                $this->logs('    TV Series not found');
+                $error++;
             }
         }
 
         $io->success('Done. ' . $count . ' series updated, '. $skipped . ' skipped');
-        $this->logs('Done. ' . $count . ' series updated, '. $skipped . ' skipped');
+        $this->logs('Done. ' . $count . ' series updated, '. $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
 
         $this->logger->info('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
 
