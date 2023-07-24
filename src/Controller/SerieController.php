@@ -616,7 +616,9 @@ class SerieController extends AbstractController
         $results = $this->serieViewingRepository->getUpcomingEpisodes($user->getId(), $perPage, $page);
         $totalResults = $this->serieViewingRepository->countUpcomingEpisodes($user->getId());
 
-        $results = array_map(function ($result) use ($request) {
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        $results = array_map(function ($result) use ($request, $imageConfig) {
             // on rajoute les networks
             $tv = json_decode($this->TMDBService->getTv($result['tmdb_id'], $request->getLocale()), true);
             $result['networks'] = $tv ? $tv['networks'] : [];
@@ -675,6 +677,7 @@ class SerieController extends AbstractController
             } elseif ($result['episode_number'] == $result['episode_count']) {
                 $result['event'] = 'Last episode of the season';
             }
+            $this->savePoster($result['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
             return $result;
         }, $results);
 
@@ -682,8 +685,6 @@ class SerieController extends AbstractController
         uksort($results, function ($a, $b) use ($results) {
             return $results[$a]['date'] <=> $results[$b]['date'];
         });
-
-        $imageConfig = $this->imageConfiguration->getConfig();
 
         return $this->render('serie/upcoming-episodes.html.twig', [
             'series' => $results,
@@ -714,9 +715,10 @@ class SerieController extends AbstractController
         $user = $this->getUser();
         $results = $this->serieViewingRepository->upcomingSeries($user->getId(), $perPage, $page);
         $totalResults = $this->serieViewingRepository->countUpcomingSeries($user->getId());
+        $imageConfig = $this->imageConfiguration->getConfig();
 
         $lastResult = null;
-        $results = array_map(function ($result) use (&$lastResult) {
+        $results = array_map(function ($result) use ($imageConfig, &$lastResult) {
             if (!key_exists('networks', $result)) {
                 $result['networks'][] = ['name'=> $result['network_name'], 'logo_path'=> $result['network_logo_path']];
             }
@@ -730,10 +732,11 @@ class SerieController extends AbstractController
                 $result['prodStatus'] = $this->translator->trans($result['status']);
                 $result['prodClass'] = $result['status'] == 'In Production' ? 'in-production' : 'planned';
             }
+            $this->savePoster($result['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+
             return $result;
         }, $results);
 
-        $imageConfig = $this->imageConfiguration->getConfig();
         dump($results);
 
         return $this->render('serie/upcoming-series.html.twig', [
