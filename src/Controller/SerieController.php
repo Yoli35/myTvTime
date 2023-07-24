@@ -992,7 +992,7 @@ class SerieController extends AbstractController
             }
         }
         $firstEpisodeViewing = $this->getSeasonViewing($viewing, 1)->getEpisodeByNumber(1);
-        $airDate = $firstEpisodeViewing->getAirDate();
+        $airDate = $firstEpisodeViewing?->getAirDate();
         if ($airDate) {
             $now = $this->dateService->newDate('now', 'Europe/Paris', true);
             $diff = $now->diff($airDate);
@@ -1525,7 +1525,7 @@ class SerieController extends AbstractController
         }, $tv['seasons']);
 
         $addThisSeries = $serieViewing ? false : true;
-        dump($addThisSeries);
+        dump($tv);
 
         $alert = $serieViewing ? $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]) : null;
 

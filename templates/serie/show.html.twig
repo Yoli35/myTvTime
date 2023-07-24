@@ -107,7 +107,7 @@
                         {% else %}
                             <div class="no-date">
                                 <span>
-                                    {% if serie.upcoming_date_year %}
+                                    {% if serie.upcoming_date_year is defined and serie.upcoming_date_year %}
                                         ({% if serie.upcoming_date_month %}{{ serie.upcoming_date_month }}/{% endif %}{{ serie.upcoming_date_year }})
                                     {% else %}
                                         — {{ 'No date yet'|trans }}
@@ -145,24 +145,26 @@
                         <div class="view-vote">
                             <div class="tagline">{{ serie.tagline }}</div>
                             {% if user %}
-                                {% if  not addThisSeries %}
+                                {% if not addThisSeries %}
                                     <div class="d-flex-1">
                                         <div class="duration-string"></div>
                                         <button id="test" data-id="{{ serieId }}"
                                                 class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button>
                                     </div>
-                                    <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
-                                    <div class="view-average">
-                                        <div class="circle">
-                                            {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
-                                            {% if percent > 100 %}
-                                                {% set percent = 100 %}
-                                            {% endif %}
-                                            <div class="percentage">{{ percent }}%</div>
+                                    {% if serie.number_of_episodes > 0 %}
+                                        <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
+                                        <div class="view-average">
+                                            <div class="circle">
+                                                {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+                                                {% if percent > 100 %}
+                                                    {% set percent = 100 %}
+                                                {% endif %}
+                                                <div class="percentage">{{ percent }}%</div>
+                                            </div>
+                                            <div class="circle-start"></div>
+                                            <div class="circle-end"></div>
                                         </div>
-                                        <div class="circle-start"></div>
-                                        <div class="circle-end"></div>
-                                    </div>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                             {% if serie.vote_count %}
@@ -558,7 +560,7 @@
 
         window.addEventListener("DOMContentLoaded", () => {
             {% if user and serieId %}
-            {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+            {% set percent = serie.number_of_episodes > 0 ? ((viewedEpisodes / serie.number_of_episodes * 100)|round) : 0 %}
             {% if percent > 100 %} {% set percent = 100 %} {% endif %}
             initSerieStuff(paths, [
                 [".vote-average", 10 * parseFloat("{{ serie.vote_average }}")],
