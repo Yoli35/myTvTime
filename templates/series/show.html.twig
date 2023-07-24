@@ -212,7 +212,7 @@
                             </div>
                         {% endif %}
                         <div class="next-block">
-                            {{ include('blocks/serie/_next_episode_to_watch.html.twig') }}
+                            {{ include('blocks/series/_next_episode_to_watch.html.twig') }}
                         </div>
                     </div>
                     {% if whatsNew %}
@@ -260,7 +260,7 @@
 
             <main>
                 <aside class="tablet">
-                    {{ include('blocks/serie/_aside.html.twig') }}
+                    {{ include('blocks/series/_aside.html.twig') }}
                 </aside>
                 <article>
                     <section>
@@ -293,7 +293,7 @@
                                                     <div class="details"
                                                          data-season-number="{{ season.season_number }}">
                                                         <div>
-                                                            {{ include('blocks/serie/_season_viewing.html.twig', {shift: isTimeShifted}) }}
+                                                            {{ include('blocks/series/_season_viewing.html.twig', {shift: isTimeShifted}) }}
                                                         </div>
                                                     </div>
                                                 {% endif %}
@@ -320,8 +320,8 @@
                         </div>
                     </section>
                     {% if credits %}
-                        {{ include('blocks/serie/_cast.html.twig') }}
-                        {{ include('blocks/serie/_crew.html.twig') }}
+                        {{ include('blocks/series/_cast.html.twig') }}
+                        {{ include('blocks/series/_crew.html.twig') }}
                     {% endif %}
                     {% if images.backdrops|length or images.logos|length or images.posters|length %}
                         <section>
@@ -392,7 +392,7 @@
                     {% endif %}
                 </article>
                 <aside class="desktop">
-                    {{ include('blocks/serie/_aside.html.twig') }}
+                    {{ include('blocks/series/_aside.html.twig') }}
                 </aside>
             </main>
             <div class="translationModalBack">
@@ -573,7 +573,7 @@
             ]);
             {% endif %}
 
-            const images = document.querySelector(".serie-page").querySelector(".images")?.querySelectorAll("img");
+            const images = document.querySelector(".series-page").querySelector(".images")?.querySelectorAll("img");
             initDiaporama(images, document.querySelector("html").getAttribute("lang"));
         });
     </script>

@@ -1416,6 +1416,15 @@ nav.active {
         .home-discover {
             width: 10em;
 
+            .no-image {
+                @include flex-col();
+                aspect-ratio: 2 / 3;
+                background-color: var(--gradient-green-40-alpha-50);
+                border-radius: .5em;
+                color: var(--gradient-green-90);
+                width: 100%;
+            }
+
             .profile {
                 position: relative;
 

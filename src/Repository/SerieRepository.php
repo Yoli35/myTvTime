@@ -127,7 +127,7 @@ class SerieRepository extends ServiceEntityRepository
 
 //    /**
 //     * @param $userId
-//     * @return int Returns number of serie owned by a user
+//     * @return int Returns number of series owned by a user
 //     */
 //    public function countUserSeries($userId): int
 //    {
@@ -141,7 +141,7 @@ class SerieRepository extends ServiceEntityRepository
 
     /**
      * @param $userId
-     * @return array [id, name] Returns the list of serie owned by a user
+     * @return array [id, name] Returns the list of series owned by a user
      */
     public function listUserSeries($userId): array
     {

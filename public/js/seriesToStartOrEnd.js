@@ -17,15 +17,17 @@ function setBackgrounds(series) {
     series.forEach(serie => {
         const poster = serie.querySelector(".poster");
         const backdrop = serie.querySelector(".backdrop");
-        const backdropStyle = backdrop?.getAttribute("style");
-        const img = poster.querySelector("img");
-        const color = averageColor.getColor(img);
-        if (color.lightness > 110) {
-            serie.classList.add("light");
-        } else {
-            serie.classList.add("dark");
+        if (backdrop) {
+            const backdropStyle = backdrop?.getAttribute("style");
+            const img = poster.querySelector("img");
+            const color = averageColor.getColor(img);
+            if (color.lightness > 110) {
+                serie.classList.add("light");
+            } else {
+                serie.classList.add("dark");
+            }
+            serie.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ");");
+            backdrop?.setAttribute("style", backdropStyle + "; background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ");");
         }
-        serie.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ");");
-        backdrop?.setAttribute("style", backdropStyle + "; background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ");");
     });
 }

@@ -31,7 +31,7 @@ export class Series {
         this.trans = {
             "added": {
                 "fr": "Nouvelle série ajoutée",
-                "en": "New serie added",
+                "en": "New series added",
                 "de": "Neue Serie hinzugefügt",
                 "es": "Nueva serie agregada"
             },
@@ -107,16 +107,18 @@ export class Series {
         series.forEach(serie => {
             const poster = serie.querySelector(".poster");
             const backdrop = serie.querySelector(".backdrop");
-            const backdropStyle = backdrop.getAttribute("style");
-            const img = poster.querySelector("img");
-            const color = averageColor.getColor(img);
-            if (color.lightness > 150) {
-                serie.classList.add("light");
-            } else {
-                serie.classList.add("dark");
+            if (backdrop) {
+                const backdropStyle = backdrop.getAttribute("style");
+                const img = poster.querySelector("img");
+                const color = averageColor.getColor(img);
+                if (color.lightness > 150) {
+                    serie.classList.add("light");
+                } else {
+                    serie.classList.add("dark");
+                }
+                backdrop.setAttribute("style", backdropStyle + "; background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
+                serie.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
             }
-            backdrop.setAttribute("style", backdropStyle + "; background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
-            serie.setAttribute("style", "background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ")" + ";");
         });
         averageColor = null;
     }
@@ -811,7 +813,7 @@ export class Series {
 
     initPreview() {
 
-        const preview = document.querySelector(".new-serie-preview");
+        const preview = document.querySelector(".new-series-preview");
         const close = preview.querySelector(".close");
 
         preview.addEventListener("click", this.dismissPreview);
@@ -819,7 +821,7 @@ export class Series {
     }
 
     dismissPreview() {
-        const preview = document.querySelector(".new-serie-preview");
+        const preview = document.querySelector(".new-series-preview");
         const message = preview.querySelector(".message").querySelector(".content");
         const wrapper = preview.querySelector(".wrapper");
 
@@ -832,7 +834,7 @@ export class Series {
     }
 
     newSerie() {
-        if (document.querySelector("#new-serie") == null) {
+        if (document.querySelector("#new-series") == null) {
             return;
         }
         document.querySelector("#new_serie").focus();
@@ -873,7 +875,7 @@ export class Series {
                 } else {
                     data = JSON.parse(this.response);
                     if (data.status === 'Ok') {
-                        const preview = document.querySelector(".new-serie-preview");
+                        const preview = document.querySelector(".new-series-preview");
                         const message = preview.querySelector(".message").querySelector(".content");
                         const wrapper = preview.querySelector(".wrapper");
 

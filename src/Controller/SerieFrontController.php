@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
+#[Route('/{_locale}/series', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieFrontController extends AbstractController
 {
     const MY_SERIES = 'my_series';
@@ -132,7 +132,7 @@ class SerieFrontController extends AbstractController
                 /*
                  */
                 if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
-                    $card = $this->render('blocks/serie/_card-popular.html.twig', [
+                    $card = $this->render('blocks/series/_card-popular.html.twig', [
                         'serie' => $tv,
                         'pages' => [
                             'page' => $page
@@ -143,7 +143,7 @@ class SerieFrontController extends AbstractController
                 }
 
                 if ($from === self::SEARCH) {
-                    $card = $this->render('blocks/serie/_card-search.html.twig', [
+                    $card = $this->render('blocks/series/_card-search.html.twig', [
                         'serie' => $tv,
                         'query' => $query ?: "",
                         'year' => $year ?: "",
@@ -294,7 +294,6 @@ class SerieFrontController extends AbstractController
             $class = 'removed';
         }
 
-//        $serie = $this->serieRepository->findOneBy(['']);
         return $this->json(['message' => $message, 'class' => $class]);
     }
 
@@ -334,7 +333,7 @@ class SerieFrontController extends AbstractController
     {
         $keywords = json_decode($request->query->get('k'), true);
 
-        return $this->render('blocks/serie/_translationField.html.twig', [
+        return $this->render('blocks/series/_translationField.html.twig', [
             'keywords' => $keywords
         ]);
     }
@@ -342,7 +341,7 @@ class SerieFrontController extends AbstractController
     #[Route('/render/translation/select', name: 'app_serie_render_translation_select', methods: ['GET'])]
     public function renderTranslationSelect(Request $request): Response
     {
-        return $this->render('blocks/serie/_translationSelect.html.twig', [
+        return $this->render('blocks/series/_translationSelect.html.twig', [
             'locale' => $request->getLocale(),
         ]);
     }

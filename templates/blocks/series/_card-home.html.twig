@@ -1,0 +1,12 @@
+<div class="home-discover" data-id="{{ serie.id }}">
+    <a href="{{ path('app_serie_'~type, {'id': serie.id}) }}?from={{ from }}" title="{{ serie.name }}">
+        {% if poster_path %}
+            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster_path }}" alt="{{ 'Poster' }}">
+        {% else %}
+            <div class="no-image">{{ 'No image'|trans }}</div>
+        {% endif %}
+        <div class="title">
+            <div>{{ serie.name }} {% if serie.upcomingDateYear is defined and serie.upcomingDateYear %} ({{ serie.upcomingDateYear }}){% endif %}</div>
+        </div>
+    </a>
+</div>

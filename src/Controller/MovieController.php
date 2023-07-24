@@ -371,7 +371,6 @@ class MovieController extends AbstractController
             $class = 'removed';
         }
 
-//        $serie = $this->serieRepository->findOneBy(['']);
         return $this->json(['message' => $message, 'class' => $class]);
     }
 

@@ -1,45 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎
-    {{ 'Popular Series'|trans }}
-{% endblock %}
-
+{% block title %}myTvTime ▶ ︎{{ 'My Series to end'|trans }}{% endblock %}
+{% block description %}{{ 'List of my series to end'|trans }}{% endblock %}
+{% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
         <div class="my-series">
             <div class="header">
-                <h1>{{ 'Popular Series'|trans }}</h1>
+                {{ include('blocks/series/_quotes.html.twig') }}
+                <h1>{{ 'My Series to end'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
 
-            {{ include('blocks/_nav.html.twig', {thisPage: 'Popular Series'|trans}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage:('My Series to end'|trans)}) }}
 
             <main>
                 <div class="series stretch">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
-                            {{ include('blocks/serie/_pagination-popular.html.twig') }}
+                            {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_serie_to_end'}) }}
                         </div>
                     </div>
                     <div class="wrapper">
-                        {% for serie in series %}
-                            <div data-type="card">
-                                {{ include('blocks/serie/_card-popular.html.twig') }}
-                            </div>
-                        {% endfor %}
+                        {% if series|length %}
+                            {% for serie in series %}
+                                <div data-id="{{ serie.id }}">
+                                    {{ include('blocks/series/_card.html.twig') }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            Rien à afficher
+                        {% endif %}
                     </div>
                     <div class="series-tools desktop">
                         <div class="pages desktop">
-                            {{ include('blocks/serie/_pagination-popular.html.twig') }}
+                            {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_serie_to_end'}) }}
                         </div>
-                    </div>
-                    <div class="new-serie-preview">
-                        <div class="message">
-                            <div class="content"></div>
-                            <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
-                        </div>
-                        <div class="wrapper"></div>
                     </div>
                 </div>
             </main>

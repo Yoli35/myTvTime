@@ -3,7 +3,7 @@
             <div class="control">
                 {{ 'Add to favorites'|trans }}
                 <label class="switch">
-                    <input type="checkbox" {% if is_favorite(user.id, serieId, 'serie') %} checked{% endif %}/>
+                    <input type="checkbox" {% if is_favorite(user.id, serieId, 'series') %} checked{% endif %}/>
                     <span></span>
                 </label>
             </div>

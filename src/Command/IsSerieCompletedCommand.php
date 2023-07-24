@@ -14,8 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:is-serie-completed',
-    description: 'Check if every viewed serie is completed',
+    name: 'app:is-series-completed',
+    description: 'Check if every viewed series is completed',
 )]
 class IsSerieCompletedCommand extends Command
 {
@@ -80,7 +80,7 @@ class IsSerieCompletedCommand extends Command
             }
         }
 
-        $io->success('Done. ' . $count . ' serie' . ($count > 1 ? 's' : '') . ' updated');
+        $io->success('Done. ' . $count . ' series updated');
 
         return Command::SUCCESS;
     }

@@ -7,7 +7,7 @@
     <div class="container">
         <div class="series-search">
             <div class="header">
-                {{ include('blocks/serie/_quotes.html.twig') }}
+                {{ include('blocks/series/_quotes.html.twig') }}
 {#                <h1>{{ 'Series search'|trans }}</h1>#}
                 <h1 class="typed"><span {{ stimulus_controller('symfony/ux-typed', {
                         strings: [
@@ -38,19 +38,19 @@
                 <div class="series">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
-                            {{ include('blocks/serie/_pagination-search.html.twig') }}
+                            {{ include('blocks/series/_pagination-search.html.twig') }}
                         </div>
                     </div>
                     <div class="wrapper">
                         {% for serie in series %}
                             <div data-type="card">
-                                {{ include('blocks/serie/_card-search.html.twig') }}
+                                {{ include('blocks/series/_card-search.html.twig') }}
                             </div>
                         {% endfor %}
                     </div>
                     <div class="series-tools">
                         <div class="pages">
-                            {{ include('blocks/serie/_pagination-search.html.twig') }}
+                            {{ include('blocks/series/_pagination-search.html.twig') }}
                         </div>
                     </div>
                 </div>

@@ -37,7 +37,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/{_locale}/serie', requirements: ['_locale' => 'fr|en|de|es'])]
+#[Route('/{_locale}/series', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieController extends AbstractController
 {
     /*
@@ -136,7 +136,7 @@ class SerieController extends AbstractController
         }
         dump($series);
 
-        return $this->render('serie/index.html.twig', [
+        return $this->render('series/index.html.twig', [
             'series' => $series,
             'numbers' => $serieRepository->numbers($user->getId())[0],
             'seriesList' => $list,
@@ -400,7 +400,7 @@ class SerieController extends AbstractController
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
         $images = $this->getNothingImages();
 
-        return $this->render('serie/today.html.twig', [
+        return $this->render('series/today.html.twig', [
             'todayAirings' => $todayAirings,
             'date' => $date,
             'backdrop' => $backdrop,
@@ -546,7 +546,7 @@ class SerieController extends AbstractController
 
         $totalResults = $this->serieViewingRepository->count(['user' => $user, 'viewedEpisodes' => 0]);
 
-        return $this->render('serie/to_start.html.twig', [
+        return $this->render('series/to_start.html.twig', [
             'series' => $seriesToBeStarted,
             'pages' => [
                 'total_results' => $totalResults,
@@ -586,7 +586,7 @@ class SerieController extends AbstractController
 //        $nextEpisodesToWatch = $this->serieViewingRepository->getNextEpisodesToWatch($user);
 //        dump($nextEpisodesToWatch);
 
-        return $this->render('serie/to_end.html.twig', [
+        return $this->render('series/to_end.html.twig', [
             'series' => $seriesToBeEnded,
             'pages' => [
                 'total_results' => $totalResults,
@@ -686,7 +686,7 @@ class SerieController extends AbstractController
             return $results[$a]['date'] <=> $results[$b]['date'];
         });
 
-        return $this->render('serie/upcoming-episodes.html.twig', [
+        return $this->render('series/upcoming-episodes.html.twig', [
             'series' => $results,
             'pages' => [
                 'total_results' => $totalResults,
@@ -739,7 +739,7 @@ class SerieController extends AbstractController
 
         dump($results);
 
-        return $this->render('serie/upcoming-series.html.twig', [
+        return $this->render('series/upcoming-series.html.twig', [
             'series' => $results,
             'pages' => [
                 'total_results' => $totalResults,
@@ -883,7 +883,7 @@ class SerieController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        return $this->render('serie/search.html.twig', [
+        return $this->render('series/search.html.twig', [
             'form' => $form->createView(),
             'query' => $query,
             'year' => $year,
@@ -918,7 +918,7 @@ class SerieController extends AbstractController
             $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
         }
 
-        return $this->render('serie/popular.html.twig', [
+        return $this->render('series/popular.html.twig', [
             'series' => $series['results'],
             'serieIds' => $user ? $this->mySerieIds($user) : [],
             'pages' => [
@@ -1035,22 +1035,6 @@ class SerieController extends AbstractController
         if ($modified) {
             $this->serieViewingRepository->save($serieViewing, true);
         }
-// Déjà fait dans whatsNew()
-//        if ($serie !== null) {
-//            $modified = false;
-//            if ($serie->getNumberOfSeasons() != $tv['number_of_seasons']) {
-//                $serie->setNumberOfSeasons($tv['number_of_seasons']);
-//                $modified = true;
-//            }
-//            if ($serie->getNumberOfEpisodes() != $tv['number_of_episodes']) {
-//                $serie->setNumberOfEpisodes($tv['number_of_episodes']);
-//                $modified = true;
-//            }
-//            if ($modified) {
-//                $serie->setUpdatedAt(new DateTime());
-//                $this->serieRepository->save($serie, true);
-//            }
-//        }
 
         foreach ($tv['seasons'] as $s) {
             if ($s['season_number'] == 0) continue; // 21/12/2022 : plus d'épisodes spéciaux
@@ -1204,7 +1188,7 @@ class SerieController extends AbstractController
 
         $standing = $tmdbService->getTv($serie->getSerieId(), $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']);
         if ($standing == "") {
-            return $this->render('serie/error.html.twig', [
+            return $this->render('series/error.html.twig', [
                 'serie' => $serie,
                 'serieViewing' => $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]),
                 'imageConfig' => $this->imageConfiguration->getConfig(),
@@ -1227,7 +1211,7 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTv($id, $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']);
         if ($standing == "") {
             $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
-            return $this->render('serie/error.html.twig', [
+            return $this->render('series/error.html.twig', [
                 'serie' => $serie,
                 'serieViewing' => $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]),
                 'imageConfig' => $this->imageConfiguration->getConfig(),
@@ -1350,7 +1334,7 @@ class SerieController extends AbstractController
             $watchProviderList[$provider['provider_id']] = $item;
         }
 
-        return $this->render('serie/season.html.twig', [
+        return $this->render('series/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
             'seasonViewing' => $seasonViewing,
@@ -1478,7 +1462,6 @@ class SerieController extends AbstractController
         }
 
         if ($serie) {
-//            $id = $serie->getId();
             if ($tv['first_air_date'] == null) {
                 $tv['upcoming_date_month'] = $serie->getUpcomingDateMonth();
                 $tv['upcoming_date_year'] = $serie->getUpcomingDateYear();
@@ -1529,7 +1512,7 @@ class SerieController extends AbstractController
 
         $alert = $serieViewing ? $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]) : null;
 
-        return $this->render('serie/show.html.twig', [
+        return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
             'addThisSeries' => $addThisSeries,
@@ -1986,7 +1969,7 @@ class SerieController extends AbstractController
                 $blocks[] = [
                     'season' => $seasonViewing->getSeasonNumber(),
                     'episode_count' => $seasonViewing->getEpisodeCount(),
-                    'view' => $this->render('blocks/serie/_season_viewing.html.twig', [
+                    'view' => $this->render('blocks/series/_season_viewing.html.twig', [
                         'season' => $s,
                         'shift' => $serieViewing->isTimeShifted(),
                         'locale' => $locale,
@@ -2000,7 +1983,7 @@ class SerieController extends AbstractController
 
         $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
         $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
-        $blockNextEpisodeToWatch = $this->render('blocks/serie/_next_episode_to_watch.html.twig', [
+        $blockNextEpisodeToWatch = $this->render('blocks/series/_next_episode_to_watch.html.twig', [
             'nextEpisodeToWatch' => $nextEpisodeToWatch,
             'alert' => $alert,
         ]);

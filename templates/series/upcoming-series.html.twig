@@ -1,32 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'Upcoming episodes'|trans }}{% endblock %}
-{% block description %}{{ 'List of upcoming episodes'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'Upcoming series'|trans }}{% endblock %}
+{% block description %}{{ 'List of my series to come'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
         <div class="my-series">
             <div class="header">
-                {{ include('blocks/serie/_quotes.html.twig') }}
-                <h1>{{ 'Upcoming episodes'|trans }}</h1>
+                {{ include('blocks/series/_quotes.html.twig') }}
+                <h1>{{ 'Upcoming series'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
 
-            {{ include('blocks/_nav.html.twig', {thisPage:('Upcoming episodes'|trans)}) }}
+            {{ include('blocks/_nav.html.twig', {thisPage:('Upcoming series'|trans)}) }}
 
-            <main>
+            <main class="w100">
                 <div class="series stretch">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
-                            {{ include('blocks/serie/_pagination-v2.html.twig', {route: 'app_serie_upcoming_episodes'}) }}
+                            {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_serie_upcoming_series'}) }}
                         </div>
                     </div>
                     <div class="wrapper">
                         {% if series|length %}
                             {% for serie in series %}
                                 <div data-id="{{ serie.id }}">
-                                    {{ include('blocks/serie/_card-upcoming.html.twig') }}
+                                    {{ include('blocks/series/_card-upcoming.html.twig') }}
                                 </div>
                             {% endfor %}
                         {% else %}
@@ -35,7 +35,7 @@
                     </div>
                     <div class="series-tools desktop">
                         <div class="pages desktop">
-                            {{ include('blocks/serie/_pagination-v2.html.twig', {route: 'app_serie_upcoming_episodes'}) }}
+                            {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_serie_upcoming_series'}) }}
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,7 @@
     <div class="container-fluid">
         <div class="my-series">
             <div class="header">
-                {{ include('blocks/serie/_quotes.html.twig') }}
+                {{ include('blocks/series/_quotes.html.twig') }}
                 <h1>{{ 'My Series'|trans }}</h1>
                 <div class="backdrop"></div>
                 {{ include('blocks/_clock.html.twig') }}
@@ -21,24 +21,24 @@
                     {% if series|length %}
                         <div class="series-tools mobile">
                             <div class="pages mobile">
-                                {{ include('blocks/serie/_pagination.html.twig') }}
+                                {{ include('blocks/series/_pagination.html.twig') }}
                             </div>
                         </div>
                         <div class="wrapper">
                             {% for serie in series %}
                                 <div data-id="{{ serie.id }}">
-                                    {{ include('blocks/serie/_card.html.twig') }}
+                                    {{ include('blocks/series/_card.html.twig') }}
                                 </div>
                             {% endfor %}
                         </div>
                         <div class="series-tools bottom">
                             <div class="pages">
-                                {{ include('blocks/serie/_pagination.html.twig') }}
+                                {{ include('blocks/series/_pagination.html.twig') }}
                             </div>
                         </div>
                         <div class="series-tools">
                             <div class="pages">
-                                {{ include('blocks/serie/_pagination.html.twig') }}
+                                {{ include('blocks/series/_pagination.html.twig') }}
                             </div>
                             <div class="numbers">
                                 {{ numbers.episodes }} {{ 'episodes'|trans }}
@@ -46,7 +46,7 @@
                             </div>
                             <div class="search-serie">
                                 <h2>{{ 'Search my series'|trans }}</h2>
-                                <label class="label" for="search-name">{{ 'Name of the serie'|trans }}</label>
+                                <label class="label" for="search-name">{{ 'Name of the series'|trans }}</label>
                                 <div class="group">
                                     <div class="field">
                                         <input id="search-name" type="search" value=""
@@ -61,7 +61,7 @@
                             </div>
                             <div class="search-serie">
                                 <h2>{{ 'Search series'|trans }}</h2>
-                                <label class="label" for="search-tmdb-name">{{ 'Name of the serie'|trans }}</label>
+                                <label class="label" for="search-tmdb-name">{{ 'Name of the series'|trans }}</label>
                                 <div class="group">
                                     <div class="field">
                                         <input id="search-tmdb-name" type="search" value=""
@@ -72,6 +72,7 @@
                                     </div>
                                 </div>
                             </div>
+{#
                             <div class="add-serie">
                                 <h2>{{ 'Add'|trans }}</h2>
 
@@ -98,6 +99,7 @@
                                     </details>
                                 </div>
                             </div>
+#}
                             <div class="settings">
                                 <h2>{{ 'Settings'|trans }}</h2>
 
@@ -202,7 +204,7 @@
                     {% else %}
                         <div>Rien à afficher</div>
                     {% endif %}
-                    <div class="new-serie-preview">
+                    <div class="new-series-preview">
                         <div class="message">
                             <div class="content"></div>
                             <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>

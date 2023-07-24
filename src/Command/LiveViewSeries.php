@@ -49,14 +49,14 @@ class LiveViewSeries extends Command
         $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $user]);
 
         if (!$serieViewing) {
-            $io->error('No serie viewing found for this user and serie.');
+            $io->error('No series viewing found for this user and series.');
             return Command::FAILURE;
         }
         foreach ($serieViewing->getSeasons() as $seasonViewing) {
             foreach ($seasonViewing->getEpisodes() as $episodeViewing) {
                 $episodeViewing->setViewedAt($episodeViewing->getAirDate());
                 $this->episodeViewingRepository->save($episodeViewing);
-                $io->writeln('Episode ' . $episodeViewing->getEpisodeNumber() . ' of season ' . $episodeViewing->getSeason()->getSeasonNumber() . ' of serie ' . $serie->getName() . ' has been updated.');
+                $io->writeln('Episode ' . $episodeViewing->getEpisodeNumber() . ' of season ' . $episodeViewing->getSeason()->getSeasonNumber() . ' of series ' . $serie->getName() . ' has been updated.');
             }
             $this->episodeViewingRepository->flush();
 

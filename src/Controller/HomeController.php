@@ -69,7 +69,7 @@ class HomeController extends AbstractController
         $trendingOfTheDay = json_decode($standing, true);
         $standing = $this->TMDBService->trending('all', 'week', $locale);
         $trendingOfTheWeek = json_decode($standing, true);
-        /*dump([
+        dump([
             'last added movies' => $user ? $lastAddedMovies:null,
             'last added series' => $user ? $lastAddedSeries:null,
             'last updated series' => $user ? $lastUpdatedSeries:null,
@@ -82,7 +82,7 @@ class HomeController extends AbstractController
             'trending of the day' => $trendingOfTheDay,
             'trending of the week' => $trendingOfTheWeek,
             ]
-        );*/
+        );
 
         $imageConfig = $this->imageConfiguration->getConfig();
 
@@ -101,27 +101,27 @@ class HomeController extends AbstractController
                 [
                     'name' => 'last added series',
                     'data' => $user ? $lastAddedSeries : null,
-                    'type' => 'serie',
+                    'type' => 'series',
                 ],
                 [
                     'name' => 'last modified series',
                     'data' => $user ? $lastWatchedSeries : null,
-                    'type' => 'sql serie',
+                    'type' => 'sql series',
                 ],
 //                [
 //                    'name' => 'last modified series',
 //                    'data' => $user ? $lastModifiedSeries : null,
-//                    'type' => 'serie',
+//                    'type' => 'series',
 //                ],
                 [
                     'name' => 'last updated series',
                     'data' => $user ? $lastUpdatedSeries : null,
-                    'type' => 'serie',
+                    'type' => 'series',
                 ],
                 [
                     'name' => 'favorite series',
                     'data' => $user ? $favoriteSeries : null,
-                    'type' => 'serie',
+                    'type' => 'series',
                 ],
                 [
                     'name' => 'popular people',
@@ -136,7 +136,7 @@ class HomeController extends AbstractController
                 [
                     'name' => 'popular series',
                     'data' => $popularSeries['results'],
-                    'type' => 'tmdb serie',
+                    'type' => 'tmdb series',
                 ],
                 [
                     'name' => 'trending today',

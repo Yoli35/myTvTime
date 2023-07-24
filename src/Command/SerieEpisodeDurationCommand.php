@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:serie:episode:duration',
+    name: 'app:series:episode:duration',
     description: 'Add a short description for your command',
 )]
 class SerieEpisodeDurationCommand extends Command
@@ -42,10 +42,7 @@ class SerieEpisodeDurationCommand extends Command
         }
 
         foreach ($series as $serie) {
-//            if (count($serie->getEpisodeDurations())) {
-//                continue;
-//            }
-            $io->text('Collecting episode duration for serie: ' . $serie->getName());
+            $io->text('Collecting episode duration for series: ' . $serie->getName());
             $serie->setEpisodeDurations($this->serieFrontController->collectEpisodeDurations($serie));
             $this->serieRepository->save($serie);
         }

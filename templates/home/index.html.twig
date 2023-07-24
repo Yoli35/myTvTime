@@ -13,7 +13,6 @@
         </div>
 
         {{ include('blocks/_nav.html.twig', {thisPage: 'Home'|trans, user: app.user}) }}
-        {#        {{ include('blocks/source/_button.html.twig') }} #}
 
         <main>
             {% for list in lists %}
@@ -26,11 +25,11 @@
                                     {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.posterPath %}
                                     {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.movieDbId }) }}
                                 {% endif %}
-                                {% if list.type=='serie' %}
-                                    {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: item, poster_path: item.posterPath}) }}
+                                {% if list.type=='series' %}
+                                    {{ include('blocks/series/_card-home.html.twig', {type: 'show', serie: item, poster_path: item.posterPath}) }}
                                 {% endif %}
-                                {% if list.type=='sql serie' %}
-                                    {{ include('blocks/serie/_card-home.html.twig', {type: 'show', serie: item, poster_path: item.poster_path}) }}
+                                {% if list.type=='sql series' %}
+                                    {{ include('blocks/series/_card-home.html.twig', {type: 'show', serie: item, poster_path: item.poster_path}) }}
                                 {% endif %}
                                 {% if list.type=='people' %}
                                     {% if item.profile_path %}
@@ -41,8 +40,8 @@
                                     {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path %}
                                     {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.id }) }}
                                 {% endif %}
-                                {% if list.type=='tmdb serie' %}
-                                    {{ include('blocks/serie/_card-home.html.twig', {type: 'tmdb', serie: item, poster_path: item.poster_path}) }}
+                                {% if list.type=='tmdb series' %}
+                                    {{ include('blocks/series/_card-home.html.twig', {type: 'tmdb', serie: item, poster_path: item.poster_path}) }}
                                 {% endif %}
                                 {% if list.type=='tmdb mixte' %}
                                     {% if item.media_type == 'movie' %}
@@ -50,7 +49,7 @@
                                         {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.id }) }}
                                     {% endif %}
                                     {% if item.media_type == 'tv' %}
-                                        {{ include('blocks/serie/_card-home.html.twig', {type: 'tmdb', serie: item, poster_path: item.poster_path}) }}
+                                        {{ include('blocks/series/_card-home.html.twig', {type: 'tmdb', serie: item, poster_path: item.poster_path}) }}
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
