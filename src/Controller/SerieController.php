@@ -677,7 +677,7 @@ class SerieController extends AbstractController
             } elseif ($result['episode_number'] == $result['episode_count']) {
                 $result['event'] = 'Last episode of the season';
             }
-            $this->savePoster($result['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+            $this->savePoster($result['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
             return $result;
         }, $results);
 
@@ -732,7 +732,7 @@ class SerieController extends AbstractController
                 $result['prodStatus'] = $this->translator->trans($result['status']);
                 $result['prodClass'] = $result['status'] == 'In Production' ? 'in-production' : 'planned';
             }
-            $this->savePoster($result['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+            $this->savePoster($result['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
 
             return $result;
         }, $results);
