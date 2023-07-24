@@ -11,6 +11,7 @@ export class Shows {
         this.app_serie_duration = globs.app_serie_duration;
         this.app_serie_toggle_shifted = globs.app_serie_toggle_time_shifted;
         this.app_serie_viewing = globs.app_serie_viewing;
+        this.app_serie_upcoming_date = globs.app_serie_upcoming_date;
         this.app_user_connected = globs.app_user_connected;
         this.episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0};
         this.number_of_episodes = globs.number_of_episodes;
@@ -48,6 +49,9 @@ export class Shows {
 
             const alert = document.querySelector(".alert-next-episode");
             alert?.addEventListener("click", thisGlobal.toggleAlert);
+
+            const upcomingSave = document.querySelector("#upcoming_save");
+            upcomingSave?.addEventListener("click", thisGlobal.saveUpcomingDate);
         }
         this.toolTips.init();
     }
@@ -227,6 +231,37 @@ export class Shows {
             let data = JSON.parse(this.response);
             console.log(data);
             window.location.reload();
+        }
+        thisGlobal.xhr.open("GET", url);
+        thisGlobal.xhr.send();
+    }
+
+    saveUpcomingDate(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const month = document.querySelector("#upcoming_month").value;
+        const year = document.querySelector("#upcoming_year").value;
+        const span = document.querySelector(".no-date").querySelector("span");
+
+        let url = thisGlobal.app_serie_upcoming_date + '?id=' + thisGlobal.serieId;
+        if (month) url += '&month=' + month;
+        if (year) url += '&year=' + year;
+
+        thisGlobal.xhr.onload = function () {
+            let data = JSON.parse(this.response);
+            console.log(data);
+            if (data.year) {
+                span.innerHTML = "(" + (data.month ? data.month + "/" : "") + data.year + ")";
+            } else {
+                const locale = document.querySelector("html").getAttribute("lang");
+                const txt = {
+                    'fr': "Pas de date",
+                    'en': "No date",
+                    'de': "Kein Datum",
+                    'es': "Sin fecha",
+                }
+                span.innerHTML = "— " + txt[locale];
+            }
         }
         thisGlobal.xhr.open("GET", url);
         thisGlobal.xhr.send();

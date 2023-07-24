@@ -9,6 +9,8 @@
             {{ 'My Series to start'|trans }}
         {% elseif from == 'my_series_to_end' %}
             {{ 'My Series to end'|trans }}
+        {% elseif from == 'upcoming_series' %}
+            {{ 'Upcoming series'|trans }}
         {% elseif from == 'upcoming_episodes' %}
             {{ 'Upcoming episodes'|trans }}
         {% elseif from == 'today' %}
@@ -40,6 +42,8 @@
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to end', url: path('app_serie_to_end', {page: page})}, thisPage: serie.name}) }}
         {% elseif from == 'upcoming_episodes' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'Upcoming episodes', url: path('app_serie_upcoming_episodes', {page: page})}, thisPage: serie.name}) }}
+        {% elseif from == 'upcoming_series' %}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'Upcoming series', url: path('app_serie_upcoming_series', {page: page})}, thisPage: serie.name}) }}
         {% elseif from == 'today' %}
             {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series airing today', url: path('app_serie_today')}, thisPage: serie.name}) }}
         {% else %}
@@ -97,11 +101,35 @@
                 </div>
                 <div class="infos">
                     <h1>
-                        {{ serie.name }}
+                        <div>{{ serie.name }}</div>
                         {% if serie.first_air_date %}
                             <span>({{ serie.first_air_date|date("Y") }})</span>
                         {% else %}
-                            — {{ 'No date yet'|trans }}
+                            <div class="no-date">
+                                <span>
+                                    {% if serie.upcoming_date_year %}
+                                        ({% if serie.upcoming_date_month %}{{ serie.upcoming_date_month }}/{% endif %}{{ serie.upcoming_date_year }})
+                                    {% else %}
+                                        — {{ 'No date yet'|trans }}
+                                    {% endif %}
+                                </span>
+                                {% if not addThisSeries %}
+                                    <div class="no-date-form">
+                                        <div>{{ 'Found a date'|trans }}</div>
+                                        <form name="upcoming">
+                                            <label for="upcoming-month">{{ 'Month'|trans }} :
+                                                <input type="number" id="upcoming_month" name="upcoming[month]" value="{{ serie.upcoming_date_month }}" min="1" max="12" style="width: 3rem">
+                                            </label>
+                                            <label for="upcoming-year">{{ 'Year'|trans }} :
+                                                <input type="number" id="upcoming_year" name="upcoming[year]" value="{{ serie.upcoming_date_year }}" min="{{ currentYear }}" style="width: 5rem">
+                                            </label>
+                                            <button type="submit" id="upcoming_save" name="upcoming[save]" value="{{ serie.id }}" class="btn btn-primary">
+                                                {{ 'Save'|trans }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </div>
                         {% endif %}
                     </h1>
                     <div class="info">
@@ -497,6 +525,7 @@
         "app_serie_toggle_time_shifted":
         "{{ path('app_serie_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3})|slice(0, -6) }}",
         "app_serie_alert": "{{ path('app_serie_alert', {serieId: 0, tmdb: 'show', isActivated: 0})|slice(0, -7) }}",
+        "app_serie_upcoming_date": "{{ path('app_serie_upcoming_date') }}",
         "still": "{{ imageConfig.url ~ imageConfig.still_sizes.3 }}",
         "userId": "{{ user?user.id:0 }}",
         "serieId": "{{ serieId }}",

@@ -12,7 +12,7 @@
         </div>
         <div class="infos">
             <div>{{ serie.name }}</div>
-            <div>{{ 'First Air at'|trans }} : {{ serie.first_date_air ? serie.first_date_air|format_date() : '' }}</div>
+            <div>{{ 'First Air at'|trans }} : {{ serie.first_date_air ? serie.first_date_air|format_date() : (serie.upcoming_date_year ? (serie.upcoming_date_month ? serie.upcoming_date_month ~ '/' : '') ~ serie.upcoming_date_year : ('No date yet'|trans)) }}</div>
             <div>
                 {{ 'Added at'|trans }} : {{ serie.created_at ? serie.created_at|format_date() : '' }}
                 {% if serie.serie_updated_at is defined %}

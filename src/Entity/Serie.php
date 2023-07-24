@@ -63,6 +63,12 @@ class Serie
     #[ORM\Column(type: Types::JSON)]
     private array $episodeDurations = [];
 
+    #[ORM\Column(nullable: true)]
+    private ?int $upcomingDateYear = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $upcomingDateMonth = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -276,6 +282,30 @@ class Serie
     public function setEpisodeDurations(?array $episodeDurations): self
     {
         $this->episodeDurations = $episodeDurations;
+
+        return $this;
+    }
+
+    public function getUpcomingDateYear(): ?int
+    {
+        return $this->upcomingDateYear;
+    }
+
+    public function setUpcomingDateYear(?int $upcomingDateYear): static
+    {
+        $this->upcomingDateYear = $upcomingDateYear;
+
+        return $this;
+    }
+
+    public function getUpcomingDateMonth(): ?int
+    {
+        return $this->upcomingDateMonth;
+    }
+
+    public function setUpcomingDateMonth(?int $upcomingDateMonth): static
+    {
+        $this->upcomingDateMonth = $upcomingDateMonth;
 
         return $this;
     }

@@ -49,7 +49,7 @@ class SerieController extends AbstractController
     const MY_SERIES_TO_START = 'my_series_to_start';
     const MY_SERIES_TO_END = 'my_series_to_end';
     const UPCOMING_EPISODES = 'upcoming_episodes';
-    const UPCOMING_SERIES = 'future_series';
+    const UPCOMING_SERIES = 'upcoming_series';
     const POPULAR = 'popular';
     const SEARCH = 'search';
 
@@ -1479,6 +1479,11 @@ class SerieController extends AbstractController
 
         if ($serie) {
 //            $id = $serie->getId();
+            if ($tv['first_air_date'] == null) {
+                $tv['upcoming_date_month'] = $serie->getUpcomingDateMonth();
+                $tv['upcoming_date_year'] = $serie->getUpcomingDateYear();
+            }
+
             $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
 
             if ($serieViewing == null) {
@@ -1528,6 +1533,7 @@ class SerieController extends AbstractController
             'serie' => $tv,
             'serieId' => $serie?->getId(),
             'addThisSeries' => $addThisSeries,
+            'currentYear' => $this->dateService->newDate('now', 'Europe/Paris', true)->format('Y'),
             'credits' => $credits,
             'keywords' => $keywords,
             'missingTranslations' => $missingTranslations,
@@ -2127,6 +2133,20 @@ class SerieController extends AbstractController
             $array[] = $serieViewing->getSeasonByNumber($seasonNumber)->getEpisodeByNumber($episodeNumber);
         }
         return $array;
+    }
+
+    #[Route('/upcoming/date', name: 'app_serie_upcoming_date', methods: ['GET'])]
+    public function serieUpcomingDate(Request $request): Response
+    {
+        $id = $request->query->getInt('id');
+        $month = $request->query->get('month', null);
+        $year = $request->query->get('year', null);
+        dump(['id' => $id, 'month' => $month, 'year' => $year]);
+        $serie = $this->serieRepository->find($id);
+        $serie->setUpcomingDateMonth($month);
+        $serie->setUpcomingDateYear($year);
+        $this->serieRepository->save($serie, true);
+        return $this->json(['id' => $id, 'month' => $month, 'year' => $year]);
     }
 
     #[Route('/episode/vote/{id}/{vote}', name: 'app_episode_vote', methods: ['GET'])]
