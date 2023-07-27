@@ -1996,19 +1996,25 @@ class SerieController extends AbstractController
 
         $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
         $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
-        $blockNextEpisodeToWatch = $this->render('blocks/series/_next_episode_to_watch.html.twig', [
-            'nextEpisodeToWatch' => $nextEpisodeToWatch,
-            'alert' => $alert,
-        ]);
 
         // On met à jour les champs "nextEpisodeToAir" et "nextEpisodeToWatch" de la série
         if ($serieViewing->isSerieCompleted()) {
             $serieViewing->setNextEpisodeToAir(null);
             $serieViewing->setNextEpisodeToWatch(null);
+            if ($alert) {
+                $this->alertRepository->remove($alert);
+            }
         } else {
             $tv = json_decode($this->TMDBService->getTv($serie->getSerieId(), $locale), true);
             $this->setNextEpisode($tv, $serieViewing);
+            if ($alert) {
+                $this->updateAlert($alert, $serieViewing);
+            }
         }
+        $blockNextEpisodeToWatch = $this->render('blocks/series/_next_episode_to_watch.html.twig', [
+            'nextEpisodeToWatch' => $nextEpisodeToWatch,
+            'alert' => $alert,
+        ]);
 
         return $this->json([
             'blocks' => $blocks,
@@ -2168,10 +2174,10 @@ class SerieController extends AbstractController
         $this->episodeViewingRepository->save($episodeViewing, true);
 
         $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
-        $modifiedAt = $this->dateService->newDate('now', 'Europe/Paris');
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
 
+        $modifiedAt = $this->dateService->newDate('now', 'Europe/Paris');
         $serieViewing->setModifiedAt($modifiedAt);
-        $this->serieViewingRepository->save($serieViewing, true);
 
         $this->setViewedEpisodeCount($serieViewing);
         $seasonCompleted = $this->viewingCompleted($serieViewing);
@@ -2181,16 +2187,34 @@ class SerieController extends AbstractController
         if ($serieViewing->isSerieCompleted()) {
             $serieViewing->setNextEpisodeToAir(null);
             $serieViewing->setNextEpisodeToWatch(null);
+            if ($alert) {
+                $this->alertRepository->remove($alert);
+            }
         } else {
             $tv = json_decode($this->TMDBService->getTv($serieViewing->getSerie()->getSerieId(), $request->getLocale()), true);
             $this->setNextEpisode($tv, $serieViewing);
+            if ($alert) {
+                $this->updateAlert($alert, $serieViewing);
+            }
         }
+
+        $this->serieViewingRepository->save($serieViewing, true);
 
         return $this->json([
             'episodeViewed' => $view,
             'seasonCompleted' => $seasonCompleted,
-            'viewedEpisodeCount' => $viewedEpisodeCount
+            'viewedEpisodeCount' => $viewedEpisodeCount,
         ]);
+    }
+
+    public function updateAlert(Alert $alert, SerieViewing $serieViewing): void
+    {
+        $message = sprintf("%s : S%02dE%02d\n", $serieViewing->getSerie()->getName(), $serieViewing->getNextEpisodeToWatch()['seasonNumber'], $serieViewing->getNextEpisodeToWatch()['episodeNumber']);
+        $date = $serieViewing->getNextEpisodeToWatch()['airDate'];
+        $alert->setMessage($message);
+        $alert->setDate($date);
+        $alert->setActivated(true);
+        $this->alertRepository->save($alert, true);
     }
 
     #[Route('/episode/view/network/{id}/{networkId}', name: 'app_episode_view_network', methods: ['GET'])]
