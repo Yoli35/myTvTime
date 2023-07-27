@@ -134,7 +134,7 @@ class SerieController extends AbstractController
                 $serie = $this->isSerieAiringSoon($serie, $now);
             }
         }
-        dump($series);
+//        dump($series);
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
@@ -180,7 +180,7 @@ class SerieController extends AbstractController
 
     public function isSerieAiringSoon($serie, $now): array
     {
-        if ($serie['status'] =='In Production' || $serie['status'] =='Planned') {
+        if ($serie['status'] == 'In Production' || $serie['status'] == 'Planned') {
             $serie['prodStatus'] = $this->translator->trans($serie['status']);
             $serie['prodClass'] = $serie['status'] == 'In Production' ? 'in-production' : 'planned';
             return $serie;
@@ -720,7 +720,7 @@ class SerieController extends AbstractController
         $lastResult = null;
         $results = array_map(function ($result) use ($imageConfig, &$lastResult) {
             if (!key_exists('networks', $result)) {
-                $result['networks'][] = ['name'=> $result['network_name'], 'logo_path'=> $result['network_logo_path']];
+                $result['networks'][] = ['name' => $result['network_name'], 'logo_path' => $result['network_logo_path']];
             }
             // on factorise les networks
             if ($lastResult && $lastResult['id'] == $result['id']) {
@@ -728,7 +728,7 @@ class SerieController extends AbstractController
                 return null;
             }
             $lastResult = $result;
-            if ($result['status'] =='In Production' || $result['status'] =='Planned') {
+            if ($result['status'] == 'In Production' || $result['status'] == 'Planned') {
                 $result['prodStatus'] = $this->translator->trans($result['status']);
                 $result['prodClass'] = $result['status'] == 'In Production' ? 'in-production' : 'planned';
             }
@@ -737,7 +737,7 @@ class SerieController extends AbstractController
             return $result;
         }, $results);
 
-        dump($results);
+//        dump($results);
 
         return $this->render('series/upcoming-series.html.twig', [
             'series' => $results,
@@ -1219,7 +1219,7 @@ class SerieController extends AbstractController
         }
         $tv = json_decode($standing, true);
 
-        return $this->getSerie($request, $tv??[], $page, $from, $id, null, $query, $year);
+        return $this->getSerie($request, $tv ?? [], $page, $from, $id, null, $query, $year);
     }
 
     #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
@@ -1507,8 +1507,7 @@ class SerieController extends AbstractController
             return $season;
         }, $tv['seasons']);
 
-        $addThisSeries = $serieViewing ? false : true;
-        dump($tv);
+        $addThisSeries = !$serieViewing;
 
         $alert = $serieViewing ? $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]) : null;
 
@@ -1584,15 +1583,29 @@ class SerieController extends AbstractController
                     }
                 }
             }
-//            if ($lastNotViewedEpisode) {
-//                break;
-//            }
         }
 
         if ($lastNotViewedEpisode) {
-            $serieId = $serieViewing->getSerie()->getSerieId();
             $seasonNumber = $lastNotViewedEpisode->getSeason()->getSeasonNumber();
             $episodeNumber = $lastNotViewedEpisode->getEpisodeNumber();
+            $airDate = $lastNotViewedEpisode->getAirDate();
+
+            if ($airDate) {
+                if ($serieViewing->isTimeShifted()) {
+                    $airDate = $airDate->modify('+1 day');
+                }
+                $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
+                $interval = date_diff($now, $airDate);
+
+                return [
+                    'episodeNumber' => $episodeNumber,
+                    'seasonNumber' => $seasonNumber,
+                    'airDate' => $airDate,
+                    'interval' => $interval,
+                ];
+            }
+
+            $serieId = $serieViewing->getSerie()->getSerieId();
             $standing = $this->TMDBService->getTvEpisode($serieId, $seasonNumber, $episodeNumber, $locale);
             $tmdbEpisode = json_decode($standing, true);
 
@@ -2124,11 +2137,12 @@ class SerieController extends AbstractController
         $id = $request->query->getInt('id');
         $month = $request->query->get('month', null);
         $year = $request->query->get('year', null);
-        dump(['id' => $id, 'month' => $month, 'year' => $year]);
+
         $serie = $this->serieRepository->find($id);
         $serie->setUpcomingDateMonth($month);
         $serie->setUpcomingDateYear($year);
         $this->serieRepository->save($serie, true);
+
         return $this->json(['id' => $id, 'month' => $month, 'year' => $year]);
     }
 

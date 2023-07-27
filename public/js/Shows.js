@@ -156,16 +156,17 @@ export class Shows {
             console.log({data});
             let duration = data.duration;
             let convertedTime = thisGlobal.convertSeconds(duration * 60);
-            durationString.innerHTML = txt[_locale]['Total duration of episodes seen among'] + "&nbsp;: "
-                + data.serieCount + "&nbsp;" + (data.serieCount > 1 ? txt[_locale].series : txt[_locale].serie) + ", "
-                + data.seasonCount + "&nbsp;" + (data.seasonCount > 1 ? txt[_locale].seasons : txt[_locale].season) + " " + txt[_locale]['and'] + " "
-                + data.episodeCount + "&nbsp;" + (data.episodeCount > 1 ? txt[_locale].episodes : txt[_locale].episode)
+            let locale = document.querySelector("html").getAttribute("lang");
+            durationString.innerHTML = txt[locale]['Total duration of episodes seen among'] + "&nbsp;: "
+                + data.serieCount + "&nbsp;" + (data.serieCount > 1 ? txt[locale].series : txt[locale].serie) + ", "
+                + data.seasonCount + "&nbsp;" + (data.seasonCount > 1 ? txt[locale].seasons : txt[locale].season) + " " + txt[locale]['and'] + " "
+                + data.episodeCount + "&nbsp;" + (data.episodeCount > 1 ? txt[locale].episodes : txt[locale].episode)
                 + (data.nullDurationCount ? (" (" + data.nullDurationCount + ")") : "") + "&nbsp;: <b>"
-                + (convertedTime.years ? (convertedTime.years + "&nbsp;" + (convertedTime.years > 1 ? txt[_locale].years : txt[_locale].year)) : "") + " "
-                + (convertedTime.months ? (convertedTime.months + "&nbsp;" + (convertedTime.months > 1 ? txt[_locale].months : txt[_locale].month)) : "") + " "
-                + (convertedTime.days ? (convertedTime.days + "&nbsp;" + (convertedTime.days > 1 ? txt[_locale].days : txt[_locale].day)) : "") + " "
-                + (convertedTime.hours ? (convertedTime.hours + "&nbsp;" + (convertedTime.hours > 1 ? txt[_locale].hours : txt[_locale].hour)) : "") + " "
-                + (convertedTime.minutes ? (convertedTime.minutes + "&nbsp;" + (convertedTime.minutes > 1 ? txt[_locale].minutes : txt[_locale].minute)) : "")
+                + (convertedTime.years ? (convertedTime.years + "&nbsp;" + (convertedTime.years > 1 ? txt[locale].years : txt[locale].year)) : "") + " "
+                + (convertedTime.months ? (convertedTime.months + "&nbsp;" + (convertedTime.months > 1 ? txt[locale].months : txt[locale].month)) : "") + " "
+                + (convertedTime.days ? (convertedTime.days + "&nbsp;" + (convertedTime.days > 1 ? txt[locale].days : txt[locale].day)) : "") + " "
+                + (convertedTime.hours ? (convertedTime.hours + "&nbsp;" + (convertedTime.hours > 1 ? txt[locale].hours : txt[locale].hour)) : "") + " "
+                + (convertedTime.minutes ? (convertedTime.minutes + "&nbsp;" + (convertedTime.minutes > 1 ? txt[locale].minutes : txt[locale].minute)) : "")
                 + "</b>";
             // + "(" + data.time + "sec)";
             button.remove();

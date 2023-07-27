@@ -3,6 +3,7 @@ import {ToolTips} from "./ToolTips.js";
 
 let thisGlobal;
 let toolTips;
+
 export class Activity {
 
     constructor(globs) {
@@ -14,7 +15,16 @@ export class Activity {
         this.initialDate = new Date();
         this.editing = false;
         this.PIx2 = Math.PI * 2;
-        this.dayValues = {"activityId": 0, "dayId": null, "moveResult": 0, "exerciseResult": 0, "standUpResult": 0, "steps": 0, "distance": 0, "standUp": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]};
+        this.dayValues = {
+            "activityId": 0,
+            "dayId": null,
+            "moveResult": 0,
+            "exerciseResult": 0,
+            "standUpResult": 0,
+            "steps": 0,
+            "distance": 0,
+            "standUp": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        };
 
         this.init();
     }
@@ -41,9 +51,11 @@ export class Activity {
         const date = new Date();
 
         if (date.getDate() !== thisGlobal.initialDate.getDate()) {
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
+            if (date.getHours() === 0 && date.getMinutes() > 5) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            }
         }
     }
 
@@ -389,7 +401,13 @@ export class Activity {
 
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
-            let response = {"success": false, "dayBlock": "", "moveProgress": 0, "exerciseProgress": 0, "standUpProgress": 0};
+            let response = {
+                "success": false,
+                "dayBlock": "",
+                "moveProgress": 0,
+                "exerciseProgress": 0,
+                "standUpProgress": 0
+            };
             if (this.status === 200) {
                 response = JSON.parse(this.response);
                 // console.log(response);

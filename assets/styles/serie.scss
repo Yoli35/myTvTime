@@ -1605,6 +1605,10 @@
                                     justify-content: center;
                                     width: 3rem;
 
+                                    &:has(i[class$="plus"]) {
+                                        padding-left: 2px;
+                                    }
+
                                     &:has(i[class$="check"]) {
                                         background-color: var(--gradient-ardoise-40);
                                         border-color: var(--gradient-ardoise-30);
