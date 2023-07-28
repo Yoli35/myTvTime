@@ -1939,11 +1939,7 @@ class SerieController extends AbstractController
             if (!$episode->getAirDate()) {
                 $episodeTmdb = json_decode($this->TMDBService->getTvEpisode($serie->getSerieId(), $season, $episode, $locale), true);
                 if ($episodeTmdb) {
-                    try {
-                        $episode->setAirDate(new DateTimeImmutable($episodeTmdb['air_date']));
-                    } catch (Exception) {
-                        $episode->setAirDate(new DateTimeImmutable());
-                    }
+                    $this->dateService->newDateImmutable($episodeTmdb['air_date'], 'Europe/Paris');
                 }
             }
             $this->episodeViewingRepository->save($episode, true);
@@ -1961,7 +1957,7 @@ class SerieController extends AbstractController
         } else {
             $createdAt = $this->getSerieViewingCreatedAt($serieViewing, $request);
             if ($createdAt) {
-                $modifiedAt = new DateTime();
+                $modifiedAt = $this->dateService->getNow();
                 $serieViewing->setModifiedAt($modifiedAt->setTimestamp($createdAt->getTimestamp()));
             }
         }
@@ -1994,9 +1990,7 @@ class SerieController extends AbstractController
             }
         }
 
-        $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
         $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
-
         // On met à jour les champs "nextEpisodeToAir" et "nextEpisodeToWatch" de la série
         if ($serieViewing->isSerieCompleted()) {
             $serieViewing->setNextEpisodeToAir(null);
@@ -2005,6 +1999,8 @@ class SerieController extends AbstractController
                 $this->alertRepository->remove($alert);
             }
         } else {
+            $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
+
             $tv = json_decode($this->TMDBService->getTv($serie->getSerieId(), $locale), true);
             $this->setNextEpisode($tv, $serieViewing);
             if ($alert) {
@@ -2012,7 +2008,7 @@ class SerieController extends AbstractController
             }
         }
         $blockNextEpisodeToWatch = $this->render('blocks/series/_next_episode_to_watch.html.twig', [
-            'nextEpisodeToWatch' => $nextEpisodeToWatch,
+            'nextEpisodeToWatch' => $nextEpisodeToWatch ?? null,
             'alert' => $alert,
         ]);
 
@@ -2209,8 +2205,11 @@ class SerieController extends AbstractController
 
     public function updateAlert(Alert $alert, SerieViewing $serieViewing): void
     {
-        $message = sprintf("%s : S%02dE%02d\n", $serieViewing->getSerie()->getName(), $serieViewing->getNextEpisodeToWatch()['seasonNumber'], $serieViewing->getNextEpisodeToWatch()['episodeNumber']);
-        $date = $serieViewing->getNextEpisodeToWatch()['airDate'];
+        $message = sprintf("%s : S%02dE%02d\n",
+            $serieViewing->getSerie()->getName(),
+            $serieViewing->getNextEpisodeToWatch()->getSeason()->getSeasonNumber(),
+            $serieViewing->getNextEpisodeToWatch()->getEpisodeNumber());
+        $date = $serieViewing->getNextEpisodeToWatch()->getAirDate();
         $alert->setMessage($message);
         $alert->setDate($date);
         $alert->setActivated(true);
