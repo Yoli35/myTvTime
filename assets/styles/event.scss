@@ -115,7 +115,7 @@
             gap: 1em;
             width: 100%;
 
-            a {
+            a, > div:not(.add-event) {
                 transition: scale 300ms ease-in-out;
                 width: 100%;
 
@@ -141,6 +141,11 @@
                         .countdown {
                             color: var(--gradient-ardoise-30);
                         }
+
+                        .alert {
+                            border: .25rem solid var(--gradient-green-30);
+                            color: var(--gradient-green-30);
+                        }
                     }
 
                     &.dark {
@@ -152,6 +157,11 @@
 
                         .countdown {
                             color: var(--gradient-ardoise-90);
+                        }
+
+                        .alert {
+                            border: .25rem solid var(--gradient-green-90);
+                            color: var(--gradient-green-90);
                         }
                     }
 
@@ -175,6 +185,15 @@
 
                         .tools {
                             @include crud-tools(1rem, 1rem);
+                        }
+
+                        .alert {
+                            border-radius: 50%;
+                            font-size: 3rem;
+                            padding: .75rem 1rem;
+                            position: absolute;
+                            right: 1rem;
+                            top: 1rem;
                         }
                     }
                 }

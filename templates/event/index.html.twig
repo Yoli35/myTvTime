@@ -18,19 +18,38 @@
                 <div class="events">
                     <div class="add-event"><i class="fa-solid fa-circle-plus"></i> {{ 'Add event'|trans }}</div>
                     {% for event in events %}
-                        <a href="{{ path('app_event_show', {id: event.id}) }}">
-                            <div class="event" data-id="{{ event.id }}">
+                        <a
+                                {% if event.type == 'event' %}
+                                    href="{{ path('app_event_show', {id: event.id}) }}"
+                                {% endif %}
+                                {% if event.type == 'alert' %}
+                                    href="{{ path('app_serie_show', {id: event.id}) }}"
+                                {% endif %}
+                        >
+                            <div class="event" data-type="{{ event.type }}" data-id="{{ event.id }}">
                                 <div class="poster">
-                                    <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                    {% if event.type == 'event' %}
+                                        <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                    {% endif %}
+                                    {% if event.type == 'alert' %}
+                                        <img src="/images/series/posters/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                    {% endif %}
                                 </div>
                                 <div class="infos">
                                     <h2>{{ event.name }}</h2>
                                     <div>{{ event.subheading }}</div>
+                                    {% if event.type == 'event' %}
                                     <div id="{{ event.id }}" class="tools">
                                         <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
                                         {#                                                <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i> #}
                                         <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
                                     </div>
+                                    {% endif %}
+                                    {% if event.type == 'alert' %}
+                                        <div class="alert">
+                                            <i class="fa-solid fa-bell"></i>
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 <div class="countdown" id="{{ event.id }}">
                                     {{ event.date|format_date('full') }}<br/>
@@ -38,8 +57,6 @@
                                 </div>
                             </div>
                         </a>
-                    {% else %}
-                        <div class="no-event">{{ 'No event'|trans }}</div>
                     {% endfor %}
                 </div>
             </main>
@@ -67,11 +84,11 @@
     </dialog>
     <div id="countdown-values" style="display: none">
         {
-            "route": "event_index",
-            "countdownValues": {{ countdownValues|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
-            "app_event_new": "{{ path('app_event_new') }}",
-            "app_event_edit": "{{ path('app_event_edit', {id: 0}) }}",
-            "app_event_delete": "{{ path('app_event_delete', {id: 0}) }}"
+        "route": "event_index",
+        "countdownValues": {{ countdownValues|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+        "app_event_new": "{{ path('app_event_new') }}",
+        "app_event_edit": "{{ path('app_event_edit', {id: 0}) }}",
+        "app_event_delete": "{{ path('app_event_delete', {id: 0}) }}"
         }
     </div>
 {% endblock %}

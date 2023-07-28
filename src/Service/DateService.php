@@ -22,6 +22,18 @@ class DateService
         return $date;
     }
 
+    public function getNow($allDay = false): DateTime
+    {
+        try {
+            $date = new DateTime('now', new DateTimeZone('Europe/Paris'));
+        } catch (Exception) {
+            $date = new DateTime();
+        }
+        if ($allDay) $date->setTime(0, 0);
+
+        return $date;
+    }
+
     public function newDateFromUTC($dateString, $timeZone, $allDay = false): DateTime
     {
         try {

@@ -409,6 +409,8 @@ ADR Editor.he: Monteur ADR
 ADR Editor.she: Monteuse ADR
 ADR Mixer.he: Mixeur ADR
 ADR Mixer.she: Mixeuse ADR
+ADR Recordist.he: Enregistreur ADR
+ADR Recordist.she: Enregistreuse ADR
 ADR Supervisor.he: Superviseur ADR
 ADR Supervisor.she: Superviseuse ADR
 ADR Voice Casting.he: Casting de voix ADR
@@ -426,8 +428,6 @@ Additional Photography.he: Photographie additionnelle
 Additional Photography.she: Photographie additionnelle
 Additional Script Supervisor.he: Superviseur du scénario additionnel
 Additional Script Supervisor.she: Superviseuse du scénario additionnel
-ADR Recordist.he: Enregistreur ADR
-ADR Recordist.she: Enregistreuse ADR
 Animal Wrangler.he: Dresseur d'animaux
 Animal Wrangler.she: Dresseuse d'animaux
 Animation Supervisor.he: Superviseur animation
@@ -436,6 +436,8 @@ Animation.he: Animation
 Animation.she: Animation
 Armorer.he: Armurier
 Armorer.she: Armurière
+Art Department Assistant.he: Assistant du département artistique
+Art Department Assistant.she: Assistante du département artistique
 Art Department Coordinator.he: Coordinateur du département artistique
 Art Department Coordinator.she: Coordinatrice du département artistique
 Art Direction.he: Direction artistique
@@ -463,8 +465,12 @@ Assistant Set Decoration.he: Assistant Décorateur
 Assistant Set Decoration.she: Assistante Décoratrice
 Assistant Sound Editor.he: Assistant monteur son
 Assistant Sound Editor.she: Assistante monteuse son
+Associate Editor.he: Rédacteur associé
+Associate Editor.she: Rédactrice associée
 Associate Producer.he: Producteur associé
 Associate Producer.she: Productrice associée
+Best Boy Electric.he: Électricien en chef
+Best Boy Electric.she: Électricienne en chef
 Best Boy Grip.he: Assistant chef de département Key grip
 Book.he: Livre
 Book.she: Livre
@@ -491,6 +497,8 @@ Character Designer.he: Concepteur de personnages
 Character Designer.she: Conceptrice de personnages
 Characters.he: Personnages
 Characters.she: Personnages
+Chief Lighting Technician.he: Technicien en chef de l'éclairage
+Chief Lighting Technician.she: Technicienne en chef de l'éclairage
 Cinematography.he: Cinématographie
 Cinematography.she: Cinématographie
 Clearances Coordinator.he: Coordinateur des habilitations
@@ -579,6 +587,8 @@ Extras Casting.he: Casting de figurants
 Extras Casting.she: Casting de figurants
 Finishing Producer.he: Producteur de finition
 Finishing Producer.she: Productrice de finition
+First Assistant "A" Camera.he: Premier assistant "A" Camera.he
+First Assistant "B" Camera.he: Premier assistant "B" Camera.he
 First Assistant Director.he: Premier assistant réalisateur
 First Assistant Director.she: Première assistante réalisateur
 First Assistant Hairstylist.he: Premier assistant coiffeur
@@ -607,6 +617,8 @@ Graphic Designer.he: Concepteur graphique
 Graphic Designer.she: Conceptrice graphique
 Graphic Novel.he: Roman graphique
 Graphic Novel.she: Roman graphique
+Grip.he: Grip
+Grip.she: Grip
 Guest star: Invité vedette
 Hair Department Head.he: Chef du département de coiffure
 Hair Department Head.she: Cheffe du département de coiffure
@@ -616,12 +628,18 @@ Hairstylist.he: Coiffeur
 Hairstylist.she: Coiffeuse
 Head of Production.he: Chef de production
 Head of Production.she: Cheffe de production
+Key Carpenter.he: Key Carpenter.he
+Key Carpenter.she: Key Carpenter.she
+Key Construction Grip.he: Key Construction Grip.he
+Key Construction Grip.she: Key Construction Grip.she
 Key Grip.he: Key Grip
 Key Grip.she: Key Grip
 Key Hair Stylist.he: Styliste en chef
 Key Hair Stylist.she: Styliste en chef
 Key Makeup Artist.he: Maquilleur principal
 Key Makeup Artist.she: Maquilleuse principale
+Key Production Assistant.he: Assistant de production principal
+Key Production Assistant.she: Assistante de production principale
 Key Rigging Grip.he: Key Rigging Grip
 Key Rigging Grip.she: Key Rigging Grip
 Layout Supervisor.he: Superviseur agencement
@@ -638,6 +656,8 @@ Lighting Technician.he: Technicien lumière
 Lighting Technician.she: Technicienne lumière
 Line Producer.he: Producteur délégué
 Line Producer.she: Productrice déléguée
+Loader.he: Chargeur
+Loader.she: Chargeuse
 Local Casting.he: Casting local
 Local Casting.she: Casting local
 Location Coordinator.he: Coordinateur de site
@@ -690,12 +710,16 @@ Payroll Accountant.he: Comptable salaires
 Payroll Accountant.she: Comptable salaires
 Picture Car Coordinator.he: Coordinateur véhicule de tournage
 Picture Car Coordinator.she: Coordinatrice véhicule de tournage
+Playback Coordinator.he: Coordinateur de lecture
+Playback Coordinator.she: Coordinatrice de lecture
 Post Producer.he: Post-Producteur
 Post Producer.she: Post-Productrice
 Post Production Accountant.he: Comptable de post-production
 Post Production Accountant.she: Comptable de post-production
 Post Production Assistant.he: Assistant post-production
 Post Production Assistant.she: Assistante post-production
+Post Production Consulting.he: Post Production Consulting.he
+Post Production Consulting.she: Post Production Consulting.she
 Post Production Coordinator.he: Coordinateur post-production
 Post Production Coordinator.she: Coordinatrice post-production
 Post Production Supervisor.he: Superviseur post-production
@@ -708,10 +732,10 @@ Production Accountant.he: Comptable de production
 Production Accountant.she: Comptable de production
 Production Assistant.he: Assistant de production
 Production Assistant.she: Assistante de production
-Production Coordinator.he: Coordinateur de production
-Production Coordinator.she: Coordinatrice de production
 Production Consultant.he: Consultant de production
 Production Consultant.she: Consultante de production
+Production Coordinator.he: Coordinateur de production
+Production Coordinator.she: Coordinatrice de production
 Production Design.he: Design de production
 Production Design.she: Design de production
 Production Designer.he: Concepteur de production
@@ -764,10 +788,14 @@ Script Supervisor.he: Superviseur scénario
 Script Supervisor.she: Superviseuse scénario
 Sculptor.he: Sculpteur
 Sculptor.she: Sculptrice
+Second Assistant "A" Camera.he: Second Assistant "A" Camera.he
+Second Assistant "B" Camera.he: Second Assistant "B" Camera.he
 Second Assistant Accountant.he: Second assistant comptable
 Second Assistant Accountant.she: Seconde assistante comptable
 Second Assistant Director.he: Second assistant réalisateur
 Second Assistant Director.she: Seconde assistante réalisateur
+Second Second Assistant Director.he: Second assistant réalisateur
+Second Second Assistant Director.she: Seconde assistante réalisateur
 Second Unit Director.he: Second réalisateur
 Second Unit Director.she: Seconde réalisatrice
 Set Costumer.he: Costumier de plateau
@@ -782,6 +810,8 @@ Set Designer.he: Concepteur plateau
 Set Designer.she: Conceptrice plateau
 Set Dresser.he: Décors plateau
 Set Dresser.she: Décors plateau
+Set Dressing Production Assistant.he: Assistant de production de décoration
+Set Dressing Production Assistant.she: Assistante de production de décoration
 Set Supervisor.he: Superviseur plateau
 Set Supervisor.she: Superviseuse plateau
 Sound Assistant.he: Assistant son

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use App\Service\DateService;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -55,14 +56,14 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventImage::class)]
     private Collection $images;
 
-    public function __construct($user = null)
+    public function __construct(private readonly DateService $dateService)
     {
-        $this->date = new DateTime('now', new \DateTimeZone('+0100'));
+//        $this->date = new DateTime('now', new \DateTimeZone('+0100'));
+        $this->date = $this->dateService->getNow();
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTime();
         $this->visible = false;
         $this->images = new ArrayCollection();
-        $this->user = $user;
     }
 
     public function __toString()
@@ -223,5 +224,25 @@ class Event
         }
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'type' => 'event', // 'event' or 'alert'
+
+            'banner' => $this->getBanner(),
+            'createdAt' => $this->getCreatedAt(),
+            'date' => $this->getDate(),
+            'description' => $this->getDescription(),
+            'images' => $this->getImages(),
+            'name' => $this->getName(),
+            'subheading' => $this->getSubheading(),
+            'thumbnail' => $this->getThumbnail(),
+            'updatedAt' => $this->getUpdatedAt(),
+            'user' => $this->getUser(),
+            'visible' => $this->isVisible(),
+        ];
     }
 }
