@@ -237,6 +237,7 @@ Create an alert: Créer une alerte
 Alert created and activated: Alerte créée et activée
 Alert activated: Alerte activée
 Alert deactivated: Alerte désactivée
+Alert: Alerte
 
 #User series airing today
 My Series airing today: Épisodes du jour
@@ -1100,6 +1101,7 @@ event: événement
 events: événements
 My events: Mes événements
 Events: Événements
+Past event: Événement passé
 List of all my events: Liste de mes événements
 Visible: Visible
 Edit: Éditer

@@ -146,6 +146,11 @@
                             border: .25rem solid var(--gradient-green-30);
                             color: var(--gradient-green-30);
                         }
+
+                        .past-event {
+                            border: .25rem solid var(--gradient-ardoise-30);
+                            color: var(--gradient-ardoise-30);
+                        }
                     }
 
                     &.dark {
@@ -162,6 +167,11 @@
                         .alert {
                             border: .25rem solid var(--gradient-green-90);
                             color: var(--gradient-green-90);
+                        }
+
+                        .past-event {
+                            border: .25rem solid var(--gradient-ardoise-90);
+                            color: var(--gradient-ardoise-90);
                         }
                     }
 
@@ -187,13 +197,19 @@
                             @include crud-tools(1rem, 1rem);
                         }
 
-                        .alert {
+                        .alert, .past-event {
                             border-radius: 50%;
-                            font-size: 3rem;
-                            padding: .75rem 1rem;
+                            font-size: 2rem;
+                            padding: .375rem .5rem;
                             position: absolute;
                             right: 1rem;
                             top: 1rem;
+                        }
+
+                        .past-event {
+                            bottom: 1rem;
+                            padding: .5rem;
+                            top: unset;
                         }
                     }
                 }

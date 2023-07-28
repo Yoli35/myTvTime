@@ -45,16 +45,22 @@ class EventController extends AbstractController
         $locale = $request->getLocale();
 
         $events = $this->eventRepository->findBy(['user' => $user, 'visible' => true], ['date' => 'DESC']);
-        $events = array_map(function ($event) {
-            return $event->toArray();
+        $now = $this->dateService->getNow();
+        $events = array_map(function ($event) use ($now) {
+            $diff = date_diff($now, $event->getDate());
+            $e = $event->toArray();
+            $e['past'] = $diff->invert;
+            return $e;
         }, $events);
 
         $alerts = $this->alertRepository->findBy(['user' => $user, 'activated' => true], ['date' => 'DESC']);
-        $alerts = array_map(function ($alert) use ($locale) {
+        $alerts = array_map(function ($alert) use ($locale, $now) {
             $serieViewing = $this->serieViewingRepository->find($alert->getSerieViewingId());
+            $diff = date_diff($now, $alert->getDate());
             return [
                 'id' => $serieViewing->getSerie()->getId(),
                 'type' => 'alert',
+                'past' => $diff->invert,
 
                 'banner' => $serieViewing->getSerie()->getBackdropPath(),
                 'createdAt' => $alert->getCreatedAt(),
@@ -62,7 +68,8 @@ class EventController extends AbstractController
                 'description' => $alert->getMessage(),
                 'images' => [],
                 'name' => $serieViewing->getSerie()->getName(),
-                'subheading' => $this->translator->trans('Original Title') . (in_array($locale, ['de', 'es', 'fr'])? ' ':'') . ': ' .$serieViewing->getSerie()->getOriginalName(),
+//                'subheading' => $this->translator->trans('Original Title') . (in_array($locale, ['de', 'es', 'fr'])? ' ':'') . ': ' .$serieViewing->getSerie()->getOriginalName(),
+                'subheading' => $alert->getMessage(),
                 'thumbnail' => $serieViewing->getSerie()->getPosterPath(),
                 'updatedAt' => null,
                 'user' => $alert->getUser(),
