@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\AlertRepository;
+use App\Service\DateService;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,7 +28,7 @@ class Alert
     #[ORM\Column]
     private ?bool $activated;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column]
     private ?DateTimeImmutable $date;
 
     #[ORM\Column]
@@ -36,14 +37,17 @@ class Alert
     #[ORM\Column(nullable: true)]
     private ?int $serieViewingId = null;
 
-    public function __construct($user, $serieViewingId, $date, $message)
+    #[ORM\Column(nullable: true)]
+    private ?int $providerId = null;
+
+    public function __construct($user, $serieViewingId, $date, $message, DateService $dateService)
     {
         $this->user = $user;
         $this->serieViewingId = $serieViewingId;
         $this->message = $message;
         $this->activated = true;
         $this->date = $date;
-        $this->createdAt = new DateTimeImmutable();
+        $this->createdAt = $dateService->newDateImmutable('now', 'Europe/Paris');
     }
 
     public function getId(): ?int
@@ -119,6 +123,18 @@ class Alert
     public function setSerieViewingId(?int $serieViewingId): static
     {
         $this->serieViewingId = $serieViewingId;
+
+        return $this;
+    }
+
+    public function getProviderId(): ?int
+    {
+        return $this->providerId;
+    }
+
+    public function setProviderId(?int $providerId): static
+    {
+        $this->providerId = $providerId;
 
         return $this;
     }

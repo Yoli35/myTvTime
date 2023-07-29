@@ -194,7 +194,7 @@
                         width: calc(50% - 10em);
 
                         .tools {
-                            @include crud-tools(1rem, 1rem);
+                            @include crud-tools(-6rem, 1rem);
                         }
 
                         .alert, .past-event {

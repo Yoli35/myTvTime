@@ -395,7 +395,7 @@
                     .today, .tomorrow, .after-tomorrow {
                         background-color: var(--gradient-green-40);
                         color: var(--gradient-green-100);
-                        isolation: isolate;
+                        //isolation: isolate;
                     }
 
                     .this-week {
@@ -1270,7 +1270,7 @@
                     .alert-next-episode {
                         background-color: var(--gradient-mars-40);
                         cursor: pointer;
-                        width: 3.25rem;
+                        width: 3.5rem;
 
                         &.active {
                             background-color: var(--gradient-green-30);
@@ -1288,6 +1288,20 @@
                         font-weight: 300;
                         line-height: 1.25em;
                         padding: .5em 1em;
+                    }
+
+                    .next-episode-provider {
+                        border: 2px solid var(--gradient-green-30);
+                        border-radius: .25em;
+                        height: 3.5rem;
+                        width: 3.5rem;
+
+                        img {
+                            border-radius: .25em;
+                            object-fit: cover;
+                            height: 100%;
+                            width: 100%;
+                        }
                     }
                 }
             }

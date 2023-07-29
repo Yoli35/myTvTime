@@ -56,12 +56,12 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventImage::class)]
     private Collection $images;
 
-    public function __construct(private readonly DateService $dateService)
+    public function __construct(DateService $dateService)
     {
 //        $this->date = new DateTime('now', new \DateTimeZone('+0100'));
-        $this->date = $this->dateService->getNow();
-        $this->createdAt = new DateTimeImmutable();
-        $this->updatedAt = new DateTime();
+        $this->date = $dateService->getNow();
+        $this->createdAt = $dateService->newDateImmutable('now', 'Europe/Paris'); //new DateTimeImmutable();
+        $this->updatedAt = $dateService->getNow();
         $this->visible = false;
         $this->images = new ArrayCollection();
     }

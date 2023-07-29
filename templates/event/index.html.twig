@@ -39,6 +39,9 @@
                                     <h2>{{ event.name }}</h2>
                                     <div>{{ event.subheading }}</div>
                                     {% if event.type == 'event' %}
+                                        <div class="alert" title="{{ 'Event'|trans }}">
+                                            <i class="fa-solid fa-calendar-day"></i>
+                                        </div>
                                         <div id="{{ event.id }}" class="tools">
                                             <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
                                             {#                                                <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i> #}

@@ -52,11 +52,8 @@ export class Activity {
 
         if (date.getDate() !== thisGlobal.initialDate.getDate()) {
             if (date.getHours() === 0 && date.getMinutes() > 5) {
-                setTimeout(() => {
-                    const url = window.location.href;
-                    const date = new Date();
-                    window.location.url = url + '?t=' + date.getMilliseconds(); // force reload
-                }, 2000);
+                const url = window.location.href;
+                window.location.url = url + '?t=' + date.getMilliseconds(); // force reload
             }
         }
     }
