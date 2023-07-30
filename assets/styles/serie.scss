@@ -1326,7 +1326,7 @@
 
                         .next-episode-provider-list {
                             @include flex-row(center, center);
-                            background-color: var(--gradient-green-30);
+                            background-color: var(--gradient-green-50);
                             border-radius: .25em;
                             gap: .25rem;
                             left: 1.75rem;
@@ -1337,10 +1337,35 @@
                             transition: opacity 300ms ease-in-out;
                             translate: -50% 0;
 
+                            &:has(.no-watch-providers) {
+                                background-color: var(--gradient-green-20);
+                            }
+
                             .next-episode-provider-list-item {
                                 cursor: pointer;
                                 height: 3.5rem;
+                                position: relative;
                                 width: 3.5rem;
+
+                                .country {
+                                    background-color: var(--gradient-green-10);
+                                    border-radius: .25rem;
+                                    bottom: 0;
+                                    color: var(--gradient-green-90);
+                                    font-size: .75rem;
+                                    font-weight: 300;
+                                    line-height: .75rem;
+                                    padding: .125rem .25rem;
+                                    position: absolute;
+                                    right: 0;
+                                }
+                            }
+
+                            .no-watch-providers {
+                                color: var(--gradient-green-90);
+                                font-weight: 400;
+                                padding: .5rem 1rem;
+                                white-space: nowrap;
                             }
                         }
                     }
@@ -2150,14 +2175,15 @@
                         .translation {
                             @include flex-col(flex-start, flex-start);
                             margin: .5em 1em;
-                            width: calc(100% - 4em);
+                            //width: calc(100% - 4em);
 
                             label {
                                 font-weight: 100;
-                            }
-
-                            input {
                                 width: 100%;
+
+                                input {
+                                    width: 100%;
+                                }
                             }
                         }
                     }

@@ -155,28 +155,76 @@ function initFields() {
 
 function renderTranslationFields(content, keywords) {
 
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        let div = document.createElement("div");
-        div.classList.add("fields");
-        div.innerHTML = this.response;
-        content.appendChild(div);
-    }
-    xhr.open("GET", _app_serie_render_translation_fields + '?k=' + JSON.stringify(keywords));
-    xhr.send();
+    // const xhr = new XMLHttpRequest();
+    // xhr.onload = function () {
+    //     let div = document.createElement("div");
+    //     div.classList.add("fields");
+    //     div.innerHTML = this.response;
+    //     content.appendChild(div);
+    // }
+    // xhr.open("GET", _app_serie_render_translation_fields + '?k=' + JSON.stringify(keywords));
+    // xhr.send();
+
+    let index = 1;
+    let fields = '';
+    keywords.forEach(keyword => {
+        console.log(keyword);
+        const field = ' \
+            <div class="field">\n \
+                <div class="translation">\n \
+                    <label for="translated-' + index + '">' + keyword + '\n \
+                        <input id="translated-' + index + '" type="text" data-original="' + keyword + '" value="' + keyword + '">\n \
+                    </label>\n \
+                </div>\n \
+            </div>\n';
+        index++;
+        fields += field;
+    });
+    let div = document.createElement("div");
+    div.classList.add("fields");
+    div.innerHTML = fields;
+    content.appendChild(div);
 }
 
 function renderTranslationSelect(content) {
 
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        let div = document.createElement("div");
-        div.classList.add("language");
-        div.innerHTML = this.response;
-        content.appendChild(div);
-    }
-    xhr.open("GET", _app_serie_render_translation_select);
-    xhr.send();
+    // const xhr = new XMLHttpRequest();
+    // xhr.onload = function () {
+    //     let div = document.createElement("div");
+    //     div.classList.add("language");
+    //     div.innerHTML = this.response;
+    //     content.appendChild(div);
+    // }
+    // xhr.open("GET", _app_serie_render_translation_select);
+    // xhr.send();
+
+    const locale = document.querySelector("html").getAttribute("lang");
+    const languages = {
+        "en": [["fr", "French"], ["en", "English"], ["de", "German"], ["es", "Spanish"]],
+        "fr": [["fr", "Français"], ["en", "Anglais"], ["de", "Allemand"], ["es", "Espagnol"]],
+        "de": [["fr", "Französisch"], ["en", "Englisch"], ["de", "Deutsch"], ["es", "Spanisch"]],
+        "es": [["fr", "Francés"], ["en", "Inglés"], ["de", "Alemán"], ["es", "Español"]]
+    };
+    const label = {
+        "en": "Language:",
+        "fr": "Langue :",
+        "de": "Sprache :",
+        "es": "Idioma :"
+    };
+    let select = ' \
+            <label for="language">' + label[locale] + '&nbsp;\n \
+                <select id="language">\n';
+    languages[locale].forEach(language => {
+        select += ' \
+                    <option value="' + language[0] + '"' + (language[0] === locale ? ' selected' : '') + '>' + language[1] + '</option>\n';
+    });
+    select += '\
+                </select>\n \
+            </label>\n';
+    let div = document.createElement("div");
+    div.classList.add("language");
+    div.innerHTML = select;
+    content.appendChild(div);
 }
 
 function addSerie(evt) {

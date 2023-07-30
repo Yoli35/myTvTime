@@ -28,17 +28,22 @@
                              alt="{{ watchProviderList[alert.providerId].provider_name }}"
                              title="{{ watchProviderList[alert.providerId].provider_name }}">
                     {% else %}
-                        <div class="no-provider"><div>?</div></div>
+                        <div class="no-provider">
+                            <div>?</div>
+                        </div>
                     {% endif %}
                     <div class="next-episode-provider-list">
                         {% for provider in providersFlatrate %}
                             <div class="next-episode-provider-list-item"
                                  data-provider-id="{{ provider.provider_id }}"
-                                 data-provider-name="{{ provider.provider_name }}">
+                                 data-provider-region="{{ provider.region }}">
                                 <img src="{{ provider.logo_path }}"
                                      alt="{{ provider.provider_name }}"
                                      title="{{ provider.provider_name }}">
+                                <div class="country">{{ provider.region }}</div>
                             </div>
+                        {% else %}
+                            <div class="no-watch-providers">{{ 'No provider yet'|trans }}</div>
                         {% endfor %}
                     </div>
                 </div>

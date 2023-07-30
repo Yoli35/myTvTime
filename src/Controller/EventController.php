@@ -56,7 +56,7 @@ class EventController extends AbstractController
         }, $events);
 
         $imgConfig = $this->imageConfiguration->getConfig();
-        $watchProviderList = $this->serieController->getFrenchProviders($imgConfig, 3);
+        $watchProviderList = $this->serieController->getRegionProvider($imgConfig, 3, '', '');
         $alerts = $this->alertRepository->findBy(['user' => $user, 'activated' => true], ['date' => 'DESC']);
         $alerts = array_map(function ($alert) use ($watchProviderList, $now) {
             $serieViewing = $this->serieViewingRepository->find($alert->getSerieViewingId());

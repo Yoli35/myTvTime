@@ -587,9 +587,10 @@ export class Shows {
     toggleNextEpisodeProvider(evt) {
         const item = evt.currentTarget;
         const providerId = item.getAttribute("data-provider-id");
+        const region = item.getAttribute("data-provider-region");
         let data = {'success': false, 'block': '<div class="no-provider"><div>?</div></div>'};
         const serieId = window.location.href.match(/.+\/(\d+)\?.+/)[1];
-        let url = thisGlobal.app_serie_alert_provider + serieId + '/' + providerId;
+        let url = thisGlobal.app_serie_alert_provider + serieId + '/' + providerId + '?region=' + region;
 
         thisGlobal.xhr.onload = function () {
             data = JSON.parse(this.response);

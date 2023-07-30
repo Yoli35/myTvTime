@@ -1334,7 +1334,7 @@ class SerieController extends AbstractController
         }
 
         // Liste des fournisseurs de streaming de France
-        $watchProviderList = $this->getFrenchProviders($imgConfig);
+        $watchProviderList = $this->getRegionProvider($imgConfig);
 
         dump([
             'modifications' => $modifications,
@@ -1358,12 +1358,13 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function getArr(mixed $provider, array $imgConfig, array $providersFlatrate): array
+    public function getArr(mixed $provider, array $imgConfig, array $providersFlatrate, $region = "FR"): array
     {
         $flatrate['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
         $flatrate['display_priority'] = $provider['display_priority'];
         $flatrate['provider_id'] = $provider['provider_id'];
         $flatrate['provider_name'] = $provider['provider_name'];
+        $flatrate['region'] = $region;
         $providersFlatrate[] = $flatrate;
         return $providersFlatrate;
     }
@@ -1377,9 +1378,9 @@ class SerieController extends AbstractController
         }
     }
 
-    public function getFrenchProviders($imgConfig, $size = 1): array
+    public function getRegionProvider($imgConfig, $size = 1, $language = "fr_FR", $region = "FR"): array
     {
-        $list = json_decode($this->TMDBService->getTvWatchProviderList("fr_FR", "FR"), true);
+        $list = json_decode($this->TMDBService->getTvWatchProviderList($language, $region), true);
         $list = $list['results'];
         $watchProviderList = [];
         foreach ($list as $provider) {
@@ -1492,11 +1493,23 @@ class SerieController extends AbstractController
                     $providersFlatrate = $this->getArr($provider, $imgConfig, $providersFlatrate);
                 }
             }
-            $watchProviderList = $this->getFrenchProviders($imgConfig);
+            $watchProviderList = $this->getRegionProvider($imgConfig); // Tous les providers FR
         } else {
             $watchProviders = null;
-            $providersFlatrate = null;
-            $watchProviderList = null;
+            $providersFlatrate = [];
+            foreach ($temp['results'] as $country => $providers) {
+                if (array_key_exists('flatrate', $providers)) {
+                    foreach ($providers['flatrate'] as $provider) {
+                        $providersFlatrate = $this->getArr($provider, $imgConfig, $providersFlatrate, $country);
+                    }
+                }
+            }
+            if (!count($providersFlatrate)) {
+                $providersFlatrate = null;
+                $watchProviderList = null;
+            } else {
+                $watchProviderList = $this->getRegionProvider($imgConfig, 1, '', ''); // Tous les providers
+            }
         }
 
         $serieViewing = null;
@@ -2209,8 +2222,17 @@ class SerieController extends AbstractController
         $alert->setProviderId($providerId);
         $this->alertRepository->save($alert, true);
 
+        $region = $request->query->get('region', "FR");
+        $languages = ['FR' => 'fr-FR', 'US' => 'en-US', 'UK' => 'en-GB', 'DE' => 'de-DE', 'ES' => 'es-ES', 'IT' => 'it-IT', 'JP' => 'ja-JP', 'CA' => 'en-CA', 'AU' => 'en-AU', 'NZ' => 'en-NZ', 'IN' => 'en-IN', 'MX' => 'es-MX', 'BR' => 'pt-BR'];
+        if (key_exists($region, $languages)) {
+            $language = $languages[$region];
+        } else { // json de 7400+ lignes
+            $region = '';
+            $language = '';
+        }
+
         $imgConfig = $this->imageConfiguration->getConfig();
-        $list = $this->getFrenchProviders($imgConfig);
+        $list = $this->getRegionProvider($imgConfig, 1, $language, $region);
         $block = '<img src="' . $list[$providerId]['logo_path'] . '" alt="' . $list[$providerId]['provider_name'] . '" title="' . $list[$providerId]['provider_name'] . '">';
 
         return $this->json(['success' => true, 'block' => $block]);
