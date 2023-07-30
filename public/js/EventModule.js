@@ -250,12 +250,12 @@ export class EventModule {
 
     showTools(evt) {
         const tools = evt.currentTarget.querySelector(".tools");
-        tools.classList.add("visible");
+        tools?.classList.add("visible");
     }
 
     hideTools(evt) {
         const tools = evt.currentTarget.querySelector(".tools");
-        tools.classList.remove("visible");
+        tools?.classList.remove("visible");
     }
 
     addNewEvent(evt) {
