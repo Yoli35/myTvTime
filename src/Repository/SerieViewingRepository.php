@@ -171,7 +171,7 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "AND netw.`viewed_at` IS NULL "
             . "AND netw.`episode_number` <= neta.`episode_number` "
             . "AND nstw.`season_number` = nsta.`season_number` "
-            . "ORDER BY neta.`air_date` ASC "
+            . "ORDER BY netw.`air_date` ASC "
             . "LIMIT " . $perPage . " "
             . "OFFSET " . ($page - 1) * $perPage;
 
