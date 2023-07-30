@@ -4,22 +4,27 @@
     {% if seasonViewing.episodeCount > 0 %}
         <div class="viewing" data-season-number="{{ seasonViewing.seasonNumber }}">
             {% for episodeViewing in seasonViewing.episodes %}
-                {% if episodes[episodeViewing.episodeNumber-1].name matches '/[EÉ]pisod[eio]+\\s\\d+/'
+                {% set episode = episodes[episodeViewing.episodeNumber-1] %}
+                {% if episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
                     and episodeViewing.substituteName is not null %}
                     {% set name = episodeViewing.substituteName %}
                 {% else %}
-                    {% set name = episodes[episodeViewing.episodeNumber-1].name %}
+                    {% set name = episode.name %}
                 {% endif %}
                 <div class="ep{% if seasonViewing.seasonCompleted %} full{% endif %}"
                      data-number="{{ episodeViewing.episodeNumber }}"
                      data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
-                        {% if shift %}
-                            data-air-date="{{ episodes[episodeViewing.episodeNumber-1].air_date|date_modify("+1 day")|format_date('long') }}"
+                        {% if episode.air_date %}
+                            {% if shift %}
+                                data-air-date="{{ episode.air_date|date_modify("+1 day")|format_date('long') }}"
+                            {% else %}
+                                data-air-date="{{ episode.air_date|format_date('long') }}"
+                            {% endif %}
                         {% else %}
-                            data-air-date="{{ episodes[episodeViewing.episodeNumber-1].air_date|format_date('long') }}"
+                            data-air-date="{{ 'No date yet'|trans }}"
                         {% endif %}
                      data-name="{{ name }}"
-                     data-still-path="{{ episodes[episodeViewing.episodeNumber-1].still_path }}"
+                     data-still-path="{{ episode.still_path }}"
                      data-vote="{{ episodeViewing.vote }}"
                      data-locale="{{ locale }}"
                      data-global-index="{{ globalIndex }}">
