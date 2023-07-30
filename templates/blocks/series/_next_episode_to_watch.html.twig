@@ -21,18 +21,34 @@
                     <i class="fa-regular fa-bell"></i><sup><i class="fa-regular fa-plus"></i></sup>
                 {% endif %}
             </div>
-            {% if alert and alert.activated and alert.providerId %}
+            {% if alert and alert.activated %}
                 <div class="next-episode-provider">
-                    <img src="{{ watchProviderList[alert.providerId].logo_path }}"
-                         alt="{{ watchProviderList[alert.providerId].provider_name }}"
-                         title="{{ watchProviderList[alert.providerId].provider_name }}">
+                    {% if alert.providerId %}
+                        <img src="{{ watchProviderList[alert.providerId].logo_path }}"
+                             alt="{{ watchProviderList[alert.providerId].provider_name }}"
+                             title="{{ watchProviderList[alert.providerId].provider_name }}">
+                    {% else %}
+                        <div class="no-provider"><div>?</div></div>
+                    {% endif %}
+                    <div class="next-episode-provider-list">
+                        {% for provider in providersFlatrate %}
+                            <div class="next-episode-provider-list-item"
+                                 data-provider-id="{{ provider.provider_id }}"
+                                 data-provider-name="{{ provider.provider_name }}">
+                                <img src="{{ provider.logo_path }}"
+                                     alt="{{ provider.provider_name }}"
+                                     title="{{ provider.provider_name }}">
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endif %}
         {% endif %}
     {% endif %}
     <div class="next-episode-to-watch">
         {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}
-        &nbsp;{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp;{{ nextEpisodeToWatch.seasonNumber }}
+        &nbsp;{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}
+        &nbsp;{{ nextEpisodeToWatch.seasonNumber }}
         {% if nextEpisodeToWatch.airDate %}
             {% if nextEpisodeToWatch.interval.invert == 0 %}
                 <br>{{ nextEpisodeToWatch.airDate|format_date('full')|capitalize }},

@@ -1390,6 +1390,7 @@ class SerieController extends AbstractController
         }
         return $watchProviderList;
     }
+
     #[Route('/episode/substitute/name', name: 'app_episode_substitute_name', methods: ['GET'])]
     public function saveSubstituteName(Request $request): Response
     {
@@ -1699,51 +1700,6 @@ class SerieController extends AbstractController
             ];
         }
         return null;
-    }
-
-    #[Route('/alert/{serieId}/{tmdb}/{isActivated}', name: 'app_serie_alert', methods: ['GET'])]
-    public function serieAlert(Request $request, int $serieId, string $tmdb, bool $isActivated): Response
-    {
-        if ($tmdb == 'tmdb') {
-            $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
-        } else {
-            $serie = $this->serieRepository->findOneBy(['id' => $serieId]);
-        }
-        $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
-//      dump(['serie' => $serie, 'serieViewing' => $serieViewing, 'isActivated' => $isActivated]);
-
-        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
-        $success = true;
-
-        if ($alert === null) {
-            $locale = $request->getLocale();
-            $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
-
-            if ($nextEpisodeToWatch) {
-                /** @var DateTimeImmutable $airDate */
-                $airDate = $nextEpisodeToWatch['airDate'];
-                $airDate = $airDate->setTime(9, 0); // Netflix : 9h01, Apple TV+ : 9h00, Disney+ : 9h00, Prime Video : 9h00
-                $message = sprintf("%s : S%02dE%02d\n", $serie->getName(), $nextEpisodeToWatch['seasonNumber'], $nextEpisodeToWatch['episodeNumber']);
-                $alert = new Alert($this->getUser(), $serieViewing->getId(), $airDate, $message, $this->dateService);
-                $this->alertRepository->save($alert, true);
-                $alertMessage = $this->translator->trans("Alert created and activated");
-            } else {
-                $success = false;
-                $alertMessage = $this->translator->trans("No upcoming episodes");
-            }
-        } else {
-            $alert->setActivated($isActivated);
-            $this->alertRepository->save($alert, true);
-            if ($alert->isActivated()) {
-                $alertMessage = $this->translator->trans("Alert activated");
-            } else {
-                $alertMessage = $this->translator->trans("Alert deactivated");
-            }
-        }
-        return $this->json([
-            'success' => $success,
-            'alertMessage' => $alertMessage,
-        ]);
     }
 
     public function getCast(SerieViewing $serieViewing): array
@@ -2199,6 +2155,80 @@ class SerieController extends AbstractController
         return $this->json(['id' => $id, 'month' => $month, 'year' => $year]);
     }
 
+    #[Route('/alert/{serieId}/{tmdb}/{isActivated}', name: 'app_serie_alert', methods: ['GET'])]
+    public function serieAlert(Request $request, int $serieId, string $tmdb, bool $isActivated): Response
+    {
+        if ($tmdb == 'tmdb') {
+            $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
+        } else {
+            $serie = $this->serieRepository->findOneBy(['id' => $serieId]);
+        }
+        $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
+//      dump(['serie' => $serie, 'serieViewing' => $serieViewing, 'isActivated' => $isActivated]);
+
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
+        $success = true;
+
+        if ($alert === null) {
+            $locale = $request->getLocale();
+            $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
+
+            if ($nextEpisodeToWatch) {
+                /** @var DateTimeImmutable $airDate */
+                $airDate = $nextEpisodeToWatch['airDate'];
+                $airDate = $airDate->setTime(9, 0); // Netflix : 9h01, Apple TV+ : 9h00, Disney+ : 9h00, Prime Video : 9h00
+                $message = sprintf("%s : S%02dE%02d\n", $serie->getName(), $nextEpisodeToWatch['seasonNumber'], $nextEpisodeToWatch['episodeNumber']);
+                $alert = new Alert($this->getUser(), $serieViewing->getId(), $airDate, $message, $this->dateService);
+                $this->alertRepository->save($alert, true);
+                $alertMessage = $this->translator->trans("Alert created and activated");
+            } else {
+                $success = false;
+                $alertMessage = $this->translator->trans("No upcoming episodes");
+            }
+        } else {
+            $alert->setActivated($isActivated);
+            $this->alertRepository->save($alert, true);
+            if ($alert->isActivated()) {
+                $alertMessage = $this->translator->trans("Alert activated");
+            } else {
+                $alertMessage = $this->translator->trans("Alert deactivated");
+            }
+        }
+        return $this->json([
+            'success' => $success,
+            'alertMessage' => $alertMessage,
+        ]);
+    }
+
+    #[Route('/alert-provider/{id}/{providerId}', name: 'app_serie_alert_provider', methods: ['GET'])]
+    public function serieProvider(Request $request, int $id, int $providerId): Response
+    {
+        $serie = $this->serieRepository->find($id);
+        $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
+        $alert->setProviderId($providerId);
+        $this->alertRepository->save($alert, true);
+
+        $imgConfig = $this->imageConfiguration->getConfig();
+        $list = $this->getFrenchProviders($imgConfig);
+        $block = '<img src="' . $list[$providerId]['logo_path'] . '" alt="' . $list[$providerId]['provider_name'] . '" title="' . $list[$providerId]['provider_name'] . '">';
+
+        return $this->json(['success' => true, 'block' => $block]);
+    }
+
+    public function updateAlert(Alert $alert, SerieViewing $serieViewing): void
+    {
+        $message = sprintf("%s : S%02dE%02d\n",
+            $serieViewing->getSerie()->getName(),
+            $serieViewing->getNextEpisodeToWatch()->getSeason()->getSeasonNumber(),
+            $serieViewing->getNextEpisodeToWatch()->getEpisodeNumber());
+        $date = $serieViewing->getNextEpisodeToWatch()->getAirDate();
+        $alert->setMessage($message);
+        $alert->setDate($date);
+        $alert->setActivated(true);
+        $this->alertRepository->save($alert, true);
+    }
+
     #[Route('/episode/vote/{id}/{vote}', name: 'app_episode_vote', methods: ['GET'])]
     public function episodeVote(EpisodeViewing $episodeViewing, int $vote): Response
     {
@@ -2252,19 +2282,6 @@ class SerieController extends AbstractController
             'seasonCompleted' => $seasonCompleted,
             'viewedEpisodeCount' => $viewedEpisodeCount,
         ]);
-    }
-
-    public function updateAlert(Alert $alert, SerieViewing $serieViewing): void
-    {
-        $message = sprintf("%s : S%02dE%02d\n",
-            $serieViewing->getSerie()->getName(),
-            $serieViewing->getNextEpisodeToWatch()->getSeason()->getSeasonNumber(),
-            $serieViewing->getNextEpisodeToWatch()->getEpisodeNumber());
-        $date = $serieViewing->getNextEpisodeToWatch()->getAirDate();
-        $alert->setMessage($message);
-        $alert->setDate($date);
-        $alert->setActivated(true);
-        $this->alertRepository->save($alert, true);
     }
 
     #[Route('/episode/view/network/{id}/{networkId}', name: 'app_episode_view_network', methods: ['GET'])]

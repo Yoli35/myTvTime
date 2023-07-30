@@ -1292,15 +1292,56 @@
 
                     .next-episode-provider {
                         border: 2px solid var(--gradient-green-30);
-                        border-radius: .25em;
+                        border-radius: calc(.25em + 2px);
+                        cursor: pointer;
                         height: 3.5rem;
+                        position: relative;
                         width: 3.5rem;
+
+                        &:hover {
+                            .next-episode-provider-list {
+                                opacity: 1;
+                            }
+                        }
 
                         img {
                             border-radius: .25em;
                             object-fit: cover;
                             height: 100%;
                             width: 100%;
+                        }
+
+                        .no-provider {
+                            align-items: center;
+                            display: flex;
+                            height: 3.25rem;
+                            justify-content: center;
+                            width: 3.25rem;
+
+                            div {
+                                font-size: 2rem;
+                                font-weight: 300;
+                            }
+                        }
+
+                        .next-episode-provider-list {
+                            @include flex-row(center, center);
+                            background-color: var(--gradient-green-30);
+                            border-radius: .25em;
+                            gap: .25rem;
+                            left: 1.75rem;
+                            opacity: 0;
+                            padding: .25rem;
+                            position: absolute;
+                            top: 3rem;
+                            transition: opacity 300ms ease-in-out;
+                            translate: -50% 0;
+
+                            .next-episode-provider-list-item {
+                                cursor: pointer;
+                                height: 3.5rem;
+                                width: 3.5rem;
+                            }
                         }
                     }
                 }

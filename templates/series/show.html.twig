@@ -521,12 +521,11 @@
         "app_serie_show": "{{ path('app_serie_show', {id:0})|slice(0, -1) }}",
         "app_serie_viewing": "{{ path('app_serie_viewing') }}",
         "app_user_connected": "{{ path('app_user_connected') }}",
-        "app_serie_toggle_favorite":
-        "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3})|slice(0, -6) }}",
+        "app_serie_toggle_favorite": "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3})|slice(0, -6) }}",
         "app_serie_duration": "{{ path('app_serie_duration') }}",
-        "app_serie_toggle_time_shifted":
-        "{{ path('app_serie_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3})|slice(0, -6) }}",
-        "app_serie_alert": "{{ path('app_serie_alert', {serieId: 0, tmdb: 'show', isActivated: 0})|slice(0, -7) }}",
+        "app_serie_toggle_time_shifted": "{{ path('app_serie_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3})|slice(0, -6) }}",
+        "app_serie_alert": "{{ path('app_serie_alert', {serieId: 0, tmdb: 'show', isActivated: 0})|slice(0, -8) }}",
+        "app_serie_alert_provider": "{{ path('app_serie_alert_provider', {id: 0, providerId: 0})|slice(0, -3) }}",
         "app_serie_upcoming_date": "{{ path('app_serie_upcoming_date') }}",
         "still": "{{ imageConfig.url ~ imageConfig.still_sizes.3 }}",
         "userId": "{{ user?user.id:0 }}",

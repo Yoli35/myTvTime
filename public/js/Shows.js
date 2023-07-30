@@ -7,6 +7,7 @@ export class Shows {
     constructor(globs) {
         thisGlobal = this;
         this.app_serie_alert = globs.app_serie_alert;
+        this.app_serie_alert_provider = globs.app_serie_alert_provider;
         this.app_serie_toggle_favorite = globs.app_serie_toggle_favorite;
         this.app_serie_duration = globs.app_serie_duration;
         this.app_serie_toggle_shifted = globs.app_serie_toggle_time_shifted;
@@ -49,6 +50,14 @@ export class Shows {
 
             const alert = document.querySelector(".alert-next-episode");
             alert?.addEventListener("click", thisGlobal.toggleAlert);
+
+            const nextEpisodeProvider = document.querySelector(".next-episode-provider");
+            if (nextEpisodeProvider) {
+                const nextEpisodeProviderList = nextEpisodeProvider.querySelectorAll(".next-episode-provider-list-item");
+                nextEpisodeProviderList.forEach(nextEpisodeProviderListItem => {
+                    nextEpisodeProviderListItem.addEventListener("click", thisGlobal.toggleNextEpisodeProvider);
+                });
+            }
 
             const upcomingSave = document.querySelector("#upcoming_save");
             upcomingSave?.addEventListener("click", thisGlobal.saveUpcomingDate);
@@ -569,6 +578,26 @@ export class Shows {
                     tooltip.setAttribute("data-title", data.alertMessage);
                     tooltip.querySelector(".body").innerHTML = data.alertMessage;
                 }
+            }
+        }
+        thisGlobal.xhr.open("GET", url);
+        thisGlobal.xhr.send();
+    }
+
+    toggleNextEpisodeProvider(evt) {
+        const item = evt.currentTarget;
+        const providerId = item.getAttribute("data-provider-id");
+        let data = {'success': false, 'block': '<div class="no-provider"><div>?</div></div>'};
+        const serieId = window.location.href.match(/.+\/(\d+)\?.+/)[1];
+        let url = thisGlobal.app_serie_alert_provider + serieId + '/' + providerId;
+
+        thisGlobal.xhr.onload = function () {
+            data = JSON.parse(this.response);
+            console.log({data});
+            if (data.success) {
+                // modify the div to show the new provider
+                const nextEpisodeProvider = document.querySelector(".next-episode-provider");
+                nextEpisodeProvider.innerHTML = data.block;
             }
         }
         thisGlobal.xhr.open("GET", url);
