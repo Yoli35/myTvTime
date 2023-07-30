@@ -63,6 +63,7 @@ class NextEpisodeToAir extends Command
         $error = 0;
         $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
         $this->logger->info('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
+        $io->writeln('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
 
         foreach ($serieViewings as $serieViewing) {
 
@@ -133,6 +134,7 @@ class NextEpisodeToAir extends Command
         $this->logs('Done. ' . $count . ' series updated, '. $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
 
         $this->logger->info('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
+        $io->writeln('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
 
         return Command::SUCCESS;
     }
