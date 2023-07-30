@@ -1377,14 +1377,14 @@ class SerieController extends AbstractController
         }
     }
 
-    public function getFrenchProviders($imgConfig): array
+    public function getFrenchProviders($imgConfig, $size = 1): array
     {
         $list = json_decode($this->TMDBService->getTvWatchProviderList("fr_FR", "FR"), true);
         $list = $list['results'];
         $watchProviderList = [];
         foreach ($list as $provider) {
             $item = [];
-            $item['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
+            $item['logo_path'] = $this->fullUrl('logo', $size, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
             $item['provider_name'] = $provider['provider_name'];
             $watchProviderList[$provider['provider_id']] = $item;
         }

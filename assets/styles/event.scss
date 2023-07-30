@@ -151,6 +151,10 @@
                             border: .25rem solid var(--gradient-ardoise-30);
                             color: var(--gradient-ardoise-30);
                         }
+
+                        .watch-provider {
+                            border-color: var(--gradient-ardoise-30);
+                        }
                     }
 
                     &.dark {
@@ -172,6 +176,10 @@
                         .past-event {
                             border: .25rem solid var(--gradient-ardoise-90);
                             color: var(--gradient-ardoise-90);
+                        }
+
+                        .watch-provider {
+                            border-color: var(--gradient-ardoise-90);
                         }
                     }
 
@@ -204,6 +212,21 @@
                             position: absolute;
                             right: 1rem;
                             top: 1rem;
+                        }
+
+                        .watch-provider {
+                            border: 2px solid;
+                            border-radius: calc(.25rem + 2px);
+                            position: absolute;
+                            right: 1rem;
+                            top: 1rem;
+
+                            img {
+                                border-radius: .25rem;
+                                height: 3.25rem;
+                                object-fit: cover;
+                                width: 3.25rem;
+                            }
                         }
 
                         .past-event {

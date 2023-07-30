@@ -11,6 +11,7 @@ use App\Repository\EventRepository;
 use App\Repository\SerieViewingRepository;
 use App\Service\DateService;
 use App\Service\FileUploader;
+use App\Service\ImageConfiguration;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,13 +26,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class EventController extends AbstractController
 {
     public function __construct(
-        private readonly AlertRepository $alertRepository,
-        private readonly DateService $dateService,
-        private readonly EventRepository $eventRepository,
-        private readonly FileUploader $fileUploader,
+        private readonly AlertRepository        $alertRepository,
+        private readonly DateService            $dateService,
+        private readonly EventRepository        $eventRepository,
+        private readonly FileUploader           $fileUploader,
+        private readonly ImageConfiguration     $imageConfiguration,
+        private readonly SerieController        $serieController,
         private readonly SerieViewingRepository $serieViewingRepository,
-        private readonly TranslatorInterface $translator,
-        private readonly ValidatorInterface $validator,
+        private readonly TranslatorInterface    $translator,
+        private readonly ValidatorInterface     $validator,
     )
     {
     }
@@ -42,7 +45,6 @@ class EventController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
-        $locale = $request->getLocale();
 
         $events = $this->eventRepository->findBy(['user' => $user, 'visible' => true], ['date' => 'DESC']);
         $now = $this->dateService->getNow();
@@ -53,10 +55,20 @@ class EventController extends AbstractController
             return $e;
         }, $events);
 
+        $imgConfig = $this->imageConfiguration->getConfig();
+        $watchProviderList = $this->serieController->getFrenchProviders($imgConfig, 3);
         $alerts = $this->alertRepository->findBy(['user' => $user, 'activated' => true], ['date' => 'DESC']);
-        $alerts = array_map(function ($alert) use ($locale, $now) {
+        $alerts = array_map(function ($alert) use ($watchProviderList, $now) {
             $serieViewing = $this->serieViewingRepository->find($alert->getSerieViewingId());
             $diff = date_diff($now, $alert->getDate());
+
+            $provider = $alert->getProviderId() ? $watchProviderList[$alert->getProviderId()] : null;
+            if ($provider) {
+                $message = $alert->getMessage() . ' ' . $this->translator->trans('on') . ' ' . $provider['provider_name'] . '.';
+            } else {
+                $message = $alert->getMessage() . '.';
+            }
+
             return [
                 'id' => $serieViewing->getSerie()->getId(),
                 'type' => 'alert',
@@ -65,15 +77,15 @@ class EventController extends AbstractController
                 'banner' => $serieViewing->getSerie()->getBackdropPath(),
                 'createdAt' => $alert->getCreatedAt(),
                 'date' => $alert->getDate(),
-                'description' => $alert->getMessage(),
+                'description' => '',
                 'images' => [],
                 'name' => $serieViewing->getSerie()->getName(),
-//                'subheading' => $this->translator->trans('Original Title') . (in_array($locale, ['de', 'es', 'fr'])? ' ':'') . ': ' .$serieViewing->getSerie()->getOriginalName(),
-                'subheading' => $alert->getMessage(),
+                'subheading' => $message,
                 'thumbnail' => $serieViewing->getSerie()->getPosterPath(),
                 'updatedAt' => null,
                 'user' => $alert->getUser(),
                 'visible' => true,
+                'watchProvider' => $provider,
             ];
         }, $alerts);
         $events = array_merge($events, $alerts);
@@ -95,6 +107,7 @@ class EventController extends AbstractController
         return $this->render('event/index.html.twig', [
             'events' => $events,
             'countdownValues' => $countdownValues,
+            'watchProviderList' => $watchProviderList,
             'user' => $user,
         ]);
     }

@@ -49,9 +49,17 @@
                                         </div>
                                     {% endif %}
                                     {% if event.type == 'alert' %}
-                                        <div class="alert" title="{{ 'Alert'|trans }}">
-                                            <i class="fa-solid fa-bell"></i>
-                                        </div>
+                                        {% if event.watchProvider %}
+                                            <div class="watch-provider">
+                                                <img src="{{ event.watchProvider.logo_path }}"
+                                                     alt="{{ event.watchProvider.provider_name }}"
+                                                     title="{{ event.watchProvider.provider_name }}">
+                                            </div>
+                                        {% else %}
+                                            <div class="alert" title="{{ 'Alert'|trans }}">
+                                                <i class="fa-solid fa-bell"></i>
+                                            </div>
+                                        {% endif %}
                                     {% endif %}
                                     {% if event.past %}
                                         <div class="past-event" title="{{ 'Past event'|trans }}">
