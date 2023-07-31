@@ -1046,6 +1046,7 @@
                 left: 0;
                 overflow-x: scroll;
                 position: absolute;
+                scroll-snap-type: x mandatory;
                 width: 20em;
 
                 .watch-provider {
@@ -1054,7 +1055,7 @@
                     border-radius: 0 0 .5em .5em;
                     color: var(--gradient-ardoise-80);
                     height: 4em;
-                    //margin: 1px;
+                    scroll-snap-align: start;
                     width: 20em;
 
                     .logo {
@@ -1339,6 +1340,26 @@
 
                             &:has(.no-watch-providers) {
                                 background-color: var(--gradient-green-20);
+                            }
+
+                            &:has(div:nth-child(2n+4)) {
+                            flex-wrap: wrap;
+                                width: 7.75rem;
+                            }
+
+                            &:has(div:nth-child(3n+6)) {
+                            flex-wrap: wrap;
+                                width: 11.5rem;
+                            }
+
+                            &:has(div:nth-child(4n+8)) {
+                            flex-wrap: wrap;
+                                width: 15.25rem;
+                            }
+
+                            &:has(div:nth-child(5n+10)) {
+                            flex-wrap: wrap;
+                                width: 19rem;
                             }
 
                             .next-episode-provider-list-item {
