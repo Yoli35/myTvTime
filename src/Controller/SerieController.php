@@ -165,16 +165,11 @@ class SerieController extends AbstractController
         if ($request->query->count() == 0 || $backFromDetail) {
             if (isset($_COOKIE['series'])) {
                 $cookie = json_decode($_COOKIE['series'], true);
-                $perPage = $cookie['pp'];
-                $sort = $cookie['ob'];
-                $order = $cookie['o'];
+                return [$cookie['pp'], $cookie['ob'], $cookie['o']];
             } else {
-                $perPage = 20;
-                $sort = 'firstDateAir';
-                $order = 'desc';
+                return [20, 'firstDateAir', 'desc'];
             }
         }
-
         return [$perPage, $sort, $order];
     }
 
@@ -1235,6 +1230,9 @@ class SerieController extends AbstractController
         $year = $request->query->get('year');
         $backId = $request->query->get('back');
 
+        // Cookie pour le layout
+        $seasonsCookie = $this->seasonsCookie($request);
+
         // La série (db ou the movie db) et sa bannière
         $serie = $this->serie($id, $request->getLocale());
         $serie['backdropPath'] = $this->fullUrl('backdrop', 3, $serie['backdropPath'], 'no_banner_dark.png', $imgConfig);
@@ -1348,6 +1346,7 @@ class SerieController extends AbstractController
             'credits' => $credits,
             'watchProviders' => $watchProviders,
             'watchProviderList' => $watchProviderList,
+            'seasonsCookie' => $seasonsCookie,
             'parameters' => [
                 'from' => $from,
                 'page' => $page,
@@ -1356,6 +1355,27 @@ class SerieController extends AbstractController
                 "backId" => $backId
             ],
         ]);
+    }
+
+    public function seasonsCookie(Request $request): array
+    {
+        if (isset($_COOKIE['series_seasons'])) {
+            $seasonsCookie = json_decode($_COOKIE['series_seasons'], true);
+            dump(['$_COOKIE' => $_COOKIE, 'get seasonsCookie' => $seasonsCookie]);
+        } else {
+            $seasonsCookie = ['layout' => 'list'];
+            $arr_cookie_options = [
+                'expires' => strtotime('+1 year'),
+                'path' => '/',
+//                'domain' => '.example.com', // leading dot for compatibility or use subdomain
+//                'secure' => true,     // or false
+//                'httponly' => true,    // or false
+//                'samesite' => 'Lax' // None || Lax  || Strict
+            ];
+            setcookie('series_seasons', json_encode($seasonsCookie), $arr_cookie_options);
+            dump(['$_COOKIE' => $_COOKIE, 'set seasonsCookie' => $seasonsCookie]);
+        }
+        return $seasonsCookie;
     }
 
     public function getArr(mixed $provider, array $imgConfig, array $providersFlatrate, $region = "FR"): array

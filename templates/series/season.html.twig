@@ -57,7 +57,12 @@
             <main>
                 <article class="full">
                     <section>
-                        <div class="episodes">
+                        <div class="episodes-layout">
+                            <div data-type="roomy" class="episodes-layout-item{% if seasonsCookie.layout == 'roomy' %} active{% endif %}"><i class="fa-solid fa-table-cells-large"></i></div>
+                            <div data-type="compact" class="episodes-layout-item{% if seasonsCookie.layout == 'compact' %} active{% endif %}"><i class="fa-solid fa-table-cells"></i></div>
+                            <div data-type="list" class="episodes-layout-item{% if seasonsCookie.layout == 'list' %} active{% endif %}"><i class="fa-solid fa-table-list"></i></div>
+                        </div>
+                        <div class="episodes {{ seasonsCookie.layout }}">
                             {% for episode in episodes %}
                                 {% set now = 'now'|date("Y-m-d") %}
                                 {% set upcoming = episode.air_date > now %}
@@ -65,6 +70,8 @@
                                 <div class="episode">
                                     <div class="still">
                                         <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
+                                        <div class="episode-name">{{ episode.name }}</div>
+                                        <div class="episode-number">{{ episode.episode_number }}</div>
                                     </div>
                                     <div class="infos">
                                         <h4>
@@ -205,6 +212,7 @@
             initSubstituteName();
             initView();
             initVote();
+            initLayout();
             setViewedEpisodeCount();
         });
 
@@ -453,6 +461,27 @@
                 voteGraduation.classList.remove('light-on');
             });
             return voteGraduations;
+        }
+
+        function initLayout() {
+            const layouts = document.querySelectorAll('.episodes-layout-item');
+            layouts.forEach((layout) => {
+                layout.addEventListener('click', (e) => {
+                    layouts.forEach((layout) => {
+                        layout.classList.remove('active');
+                    });
+                    e.currentTarget.classList.add('active');
+                    const type = e.currentTarget.getAttribute('data-type');
+                    const episodes = document.querySelector('.episodes');
+                    const time = new Date();
+                    time.setFullYear(time.getFullYear() + 1);
+                    episodes.classList.remove('roomy', 'compact', 'list');
+                    episodes.classList.add(type);
+                    const cookie = "series_seasons=" + encodeURIComponent(JSON.stringify({layout: type})) + "; expires=" + time.toUTCString() + "; path=/";
+                    // console.log({cookie});
+                    document.cookie = cookie;
+                });
+            });
         }
     </script>
 {% endblock %}

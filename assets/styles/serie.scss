@@ -1343,22 +1343,22 @@
                             }
 
                             &:has(div:nth-child(2n+4)) {
-                            flex-wrap: wrap;
+                                flex-wrap: wrap;
                                 width: 7.75rem;
                             }
 
                             &:has(div:nth-child(3n+6)) {
-                            flex-wrap: wrap;
+                                flex-wrap: wrap;
                                 width: 11.5rem;
                             }
 
                             &:has(div:nth-child(4n+8)) {
-                            flex-wrap: wrap;
+                                flex-wrap: wrap;
                                 width: 15.25rem;
                             }
 
                             &:has(div:nth-child(5n+10)) {
-                            flex-wrap: wrap;
+                                flex-wrap: wrap;
                                 width: 19rem;
                             }
 
@@ -1640,6 +1640,7 @@
 
                         .still {
                             height: 100%;
+                            position: relative;
                             z-index: 0;
 
                             img {
@@ -1647,6 +1648,39 @@
                                 height: 100%;
                                 object-fit: cover;
                                 width: 15em;
+                            }
+
+                            .episode-number {
+                                align-items: center;
+                                background-color: var(--gradient-ardoise-30);
+                                border-radius: 50%;
+                                border: 2px solid var(--gradient-ardoise-90);
+                                bottom: .5rem;
+                                color: var(--gradient-ardoise-90);
+                                display: none;
+                                font-size: 2em;
+                                font-weight: bold;
+                                height: 3rem;
+                                justify-content: center;
+                                left: .5rem;
+                                position: absolute;
+                                width: 3rem;
+                            }
+
+                            .episode-name {
+                                align-items: center;
+                                background-color: var(--gradient-ardoise-10-alpha-80);
+                                border-top-left-radius: 1rem;
+                                color: var(--gradient-ardoise-90);
+                                display: none;
+                                font-size: 1em;
+                                font-weight: bold;
+                                justify-content: center;
+                                left: 0;
+                                padding: .5rem;
+                                position: absolute;
+                                top: 0;
+                                width: 100%;
                             }
                         }
 
@@ -1893,6 +1927,85 @@
                                     width: 100%;
                                 }
                             }
+                        }
+                    }
+                }
+
+                .episodes {
+                    &.roomy {
+                        flex-direction: row;
+                        flex-wrap: wrap;
+
+                        .episode {
+                            width: unset;
+
+                            .still {
+                                .episode-number, .episode-name {
+                                    display: flex;
+                                }
+                            }
+
+                            .infos {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    &.compact {
+                        flex-direction: row;
+                        flex-wrap: wrap;
+
+                        .episode {
+                            height: 10rem;
+                            width: unset;
+
+                            .still {
+                                img {
+                                    border-radius: 1rem;
+                                    height: 10rem;
+                                    width: 10rem;
+                                }
+
+                                .episode-number {
+                                    display: flex;
+                                }
+                            }
+
+                            .infos, .episode-viewing {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+
+                .episodes-layout {
+                    @include flex-row(center, flex-end);
+                    margin-left: auto;
+                    border-radius: .25rem;
+                    background-color: var(--gradient-ardoise-30);
+                    margin-bottom: 1rem;
+
+
+                    .episodes-layout-item {
+                        @include flex-row(center, center);
+                        font-size: 1.5rem;
+                        height: 2.5rem;
+                        width: 2.5rem;
+
+                        &:first-child {
+                            border-radius: .25rem 0 0 .25rem;
+                        }
+
+                        &:last-child {
+                            border-radius: 0 .25rem .25rem 0;
+                        }
+
+                        &.active {
+                            background-color: var(--gradient-ardoise-50);
+                        }
+
+                        &:hover {
+                            background-color: var(--gradient-ardoise-60);
                         }
                     }
                 }
