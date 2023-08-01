@@ -61,9 +61,9 @@ export class Activity {
         const date = new Date();
         // console.log(date.getTime());
         if (date.getDate() !== thisGlobal.initialDay) {
-            if (date.getHours() >= 0 && date.getMinutes() > 5) {
+            if (date.getHours() === 0 && date.getMinutes() === 5) {
                 const url = window.location.href;
-                window.location.url = url + '?time=' + date.getTime(); // force reload
+                window.location = url + '?time=' + date.getTime(); // force reload
             }
         }
         let message = document.querySelector(".message");
