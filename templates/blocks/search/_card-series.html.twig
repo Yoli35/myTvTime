@@ -1,6 +1,6 @@
 <div class="home-discover" data-id="{{ serie.id }}">
     <div class="profile">
-        <a href="{{ path('app_serie_tmdb', {'id': serie.id}) }}?from={{ from }}" title="{{ serie.name }}">
+        <a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?from={{ from }}" title="{{ serie.name }}">
             {% if serie.poster_path %}
                 <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ 'Poster' }}">
             {% else %}

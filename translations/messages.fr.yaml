@@ -17,14 +17,14 @@ My Account: Mon compte
 My Events: Mes événements
 My Movie Collections: Mes Collections de films
 My Movies: Mes films
-My Series: Mes séries
+My series: Mes séries
 Navigation: Navigation
 Php Info: Php Info
 Logs: Logs
 People search: Rechercher une personne
 Pin a collection: Épingler une collection
 Select a collection: Sélectionner une collection
-Popular Series: Séries populaires
+Popular series: Séries populaires
 Search Movies by: Recherche de film par
 Search by Date: Recherche par date
 Search by Genre: Recherche par genre
@@ -240,7 +240,7 @@ Alert deactivated: Alerte désactivée
 Alert: Alerte
 
 #User series airing today
-My Series airing today: Épisodes du jour
+My series airing today: Épisodes du jour
 List of the series I'm watching, aired today: Liste des séries que je regarde, diffusées aujourd'hui
 New episodes: Nouveaux épisodes
 Episodes: Épisodes
@@ -920,6 +920,24 @@ Writing.he: Auteur
 Writing.she: Autrice
 Writing: Écriture
 
+# Last jobs added
+Charge Scenic Artist.he: Chef peintre
+Charge Scenic Artist.she: Cheffe peintre
+Props.he: Accessoires
+Props.she: Accessoires
+'"B" Camera Operator.he': Opérateur caméra "B"
+'"B" Camera Operator.she': Opératrice caméra "B"
+Second Assistant Camera.he: Deuxième assistant caméra
+Second Assistant Camera.she: Deuxième assistante caméra
+Costume Assistant.he: Assistant costumier
+Costume Assistant.she: Assistante costumière
+Dailies Manager.he: Responsable des quotidiens
+Dailies Manager.she: Responsable des quotidiens
+Location Scout.he: Repéreur
+Location Scout.she: Repéreuse
+Transportation Co-Captain.he: Co-capitaine du transport
+Transportation Co-Captain.she: Co-capitaine du transport
+
 # key facts
 Favorite: Série favorite
 Add to favorites: Ajouter aux favoris
@@ -1007,11 +1025,11 @@ Add a series: Ajouter une série
 
 #Series to start
 List of my series to start: Liste de mes séries à commencer
-My Series to start: Mes séries à commencer
+My series to start: Mes séries à commencer
 
 #Series to end
 List of my series to end: Liste de mes séries à terminer
-My Series to end: Mes séries à terminer
+My series to end: Mes séries à terminer
 
 # Upcoming episodes
 Upcoming episodes: Prochains épisodes

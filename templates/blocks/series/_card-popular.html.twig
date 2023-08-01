@@ -1,4 +1,4 @@
-<a href="{{ path('app_serie_tmdb', {'id': serie.id}) }}?p={{ pages.page }}&from={{ from }}">
+<a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?p={{ pages.page }}&from={{ from }}">
     <div class="serie" id="{{ serie.id }}">
         {% if serie.backdrop_path %}
             <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>

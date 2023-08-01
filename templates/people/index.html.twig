@@ -86,7 +86,7 @@
                                             {% set url = path('app_movie', {id: media.id}) %}
                                         {% endif %}
                                         {% if media.media_type == "tv" %}
-                                            {% set url = path('app_serie_tmdb', {id: media.id}) %}
+                                            {% set url = path('app_series_tmdb', {id: media.id}) %}
                                         {% endif %}
                                         {% if url is defined %}
                                             <a href="{{ url }}">
@@ -129,7 +129,7 @@
                                                 {% set url = path('app_movie', {id: prod.id}) %}
                                             {% endif %}
                                             {% if prod.media_type == "tv" %}
-                                                {% set url = path('app_serie_tmdb', {id: prod.id}) %}
+                                                {% set url = path('app_series_tmdb', {id: prod.id}) %}
                                             {% endif %}
                                             {% if url is defined %}
                                             <a href="{{ url }}">
@@ -182,7 +182,7 @@
                                                     {% set url = path('app_movie', {id: sub_prod.id}) %}
                                                 {% endif %}
                                                 {% if sub_prod.media_type == "tv" %}
-                                                    {% set url = path('app_serie_tmdb', {id: sub_prod.id}) %}
+                                                    {% set url = path('app_series_tmdb', {id: sub_prod.id}) %}
                                                 {% endif %}
                                                 {% if url is defined %}
                                                 <a href="{{ url }}">
@@ -243,7 +243,7 @@
 {#    <script src="/js/source.js"></script>#}
     <script src="/js/diaporama.js"></script>
     <script>
-        const _app_serie_get_overview = "{{ path('app_serie_get_overview', {id: 0}) }}";
+        const _app_series_get_overview = "{{ path('app_series_get_overview', {id: 0}) }}";
         const imgUrl = "{{ imageConfig.url ~ imageConfig.profile_sizes.2 }}";
 
         window.addEventListener("DOMContentLoaded", () => {
@@ -311,7 +311,7 @@
                     popInfos.querySelector(".overview").appendChild(document.createTextNode(result.overview));
                     popInfos.querySelector(".spinner").setAttribute("style", "display: none;");
                 }
-                xhr.open("GET", _app_serie_get_overview.substring(0, _app_serie_get_overview.length - 1) + id + "?type=" + type);
+                xhr.open("GET", _app_series_get_overview.substring(0, _app_series_get_overview.length - 1) + id + "?type=" + type);
                 xhr.send();
             }, wasOpen ? 200 : 0);
         }

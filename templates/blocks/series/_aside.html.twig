@@ -77,7 +77,7 @@
                 <div class="label">{{ 'Similar Series'|trans }}</div>
                 <div class="similar">
                     {% for serie in similar.results %}
-                        <a href="{{ path('app_serie_tmdb', {'id': serie.id}) }}?p={{ page }}&from={{ from }}" title="{{ serie.name }}">
+                        <a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?p={{ page }}&from={{ from }}" title="{{ serie.name }}">
                             <div class="poster">
                                 {% if serie.poster_path|length %}
                                     <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">

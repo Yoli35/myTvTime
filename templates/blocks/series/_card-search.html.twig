@@ -1,4 +1,4 @@
-<a href="{{ path('app_serie_tmdb', {'id': serie.id}) }}?p={{ pages.page }}&from={{ from }}&query={{ query }}&year={{ year }}">
+<a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?p={{ pages.page }}&from={{ from }}&query={{ query }}&year={{ year }}">
     <div class="serie" id="{{ serie.id }}">
         {% if serieIds|length %}
             {% if serie.backdrop_path  and serie.id in serieIds %}

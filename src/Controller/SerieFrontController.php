@@ -50,7 +50,7 @@ class SerieFrontController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/new', name: 'app_serie_new', methods: ['GET'])]
+    #[Route('/new', name: 'app_series_new', methods: ['GET'])]
     public function new(Request $request): Response
     {
         $tmdbService = $this->tmdbService;
@@ -193,7 +193,7 @@ class SerieFrontController extends AbstractController
         return $durations;
     }
 
-    #[Route('/duration', name: 'app_serie_duration')]
+    #[Route('/duration', name: 'app_series_duration')]
     public function getViewedEpisodesDuration(Request $request): Response
     {
         $t0 = microtime(true);
@@ -279,7 +279,7 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_serie_toggle_favorite', methods: 'GET')]
+    #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_series_toggle_favorite', methods: 'GET')]
     public function toggleFavorite(bool $fav, int $userId, int $mediaId): Response
     {
         if ($fav) {
@@ -297,7 +297,7 @@ class SerieFrontController extends AbstractController
         return $this->json(['message' => $message, 'class' => $class]);
     }
 
-    #[Route('/time/shifted/{userId}/{serieId}/{shifted}', name: 'app_serie_toggle_time_shifted', methods: 'GET')]
+    #[Route('/time/shifted/{userId}/{serieId}/{shifted}', name: 'app_series_toggle_time_shifted', methods: 'GET')]
     public function toggleTimeShifted(bool $shifted, int $userId, int $serieId): Response
     {
         $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $userId, 'serie' => $serieId]);
@@ -307,7 +307,7 @@ class SerieFrontController extends AbstractController
         return $this->json(['status' => 'ok']);
     }
 
-    #[Route('/overview/{id}', name: 'app_serie_get_overview', methods: 'GET')]
+    #[Route('/overview/{id}', name: 'app_series_get_overview', methods: 'GET')]
     public function getOverview(Request $request, $id, TMDBService $service, TranslatorInterface $translator): Response
     {
         $type = $request->query->get("type");
@@ -328,7 +328,7 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/render/translation/fields', name: 'app_serie_render_translation_fields', methods: ['GET'])]
+    #[Route('/render/translation/fields', name: 'app_series_render_translation_fields', methods: ['GET'])]
     public function renderTranslationFields(Request $request): Response
     {
         $keywords = json_decode($request->query->get('k'), true);
@@ -338,7 +338,7 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/render/translation/select', name: 'app_serie_render_translation_select', methods: ['GET'])]
+    #[Route('/render/translation/select', name: 'app_series_render_translation_select', methods: ['GET'])]
     public function renderTranslationSelect(Request $request): Response
     {
         return $this->render('blocks/series/_translationSelect.html.twig', [
@@ -346,7 +346,7 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/render/translation/save', name: 'app_serie_render_translation_save', methods: ['GET'])]
+    #[Route('/render/translation/save', name: 'app_series_render_translation_save', methods: ['GET'])]
     public function translationSave(Request $request): Response
     {
         $translations = json_decode($request->query->get('t'), true);
@@ -364,7 +364,7 @@ class SerieFrontController extends AbstractController
         return $this->json(["result" => ($n - 1) . " ligne" . (($n - 1) > 1 ? "s" : "") . " ajoutée" . (($n - 1) > 1 ? "s" : "") . " au fichier « tags." . $translations[0][1] . ".yaml »."]);
     }
 
-    #[Route('/quote', name: 'app_serie_get_quote', methods: ['GET'])]
+    #[Route('/quote', name: 'app_series_get_quote', methods: ['GET'])]
     public function getQuote(): Response
     {
         return $this->json([
@@ -372,7 +372,7 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/settings/save', name: 'app_serie_set_settings', methods: ['GET'])]
+    #[Route('/settings/save', name: 'app_series_set_settings', methods: ['GET'])]
     public function setSettings(Request $request, SettingsRepository $settingsRepository, TranslatorInterface $translator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

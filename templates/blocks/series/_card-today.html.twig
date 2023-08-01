@@ -1,6 +1,6 @@
 <div class="home-discover{% if todayAiring.episodeNumbers.0 == 1 %} new-season{% endif %}"
      data-id="{{ todayAiring.serieId }}">
-    <a href="{{ path('app_serie_show', {'id': todayAiring.serieId}) }}?from=today" title="{{ todayAiring.serieName }}">
+    <a href="{{ path('app_series_show', {'id': todayAiring.serieId}) }}?from=today" title="{{ todayAiring.serieName }}">
         <div>
             <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ todayAiring.seriePosterPath }}"
                  alt="{{ 'Poster' }}">
