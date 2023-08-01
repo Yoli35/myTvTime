@@ -1667,12 +1667,12 @@
                                 position: absolute;
                                 width: 3rem;
 
-                                &.viewed {
-                                    background-color: var(--gradient-green-30);
-                                    border-color: var(--gradient-yellow-50);
-                                    border-width: 4px;
-                                    color: var(--gradient-yellow-50);
-                                }
+                                //&.viewed {
+                                //    background-color: var(--gradient-green-30);
+                                //    border-color: var(--gradient-yellow-50);
+                                //    border-width: 4px;
+                                //    color: var(--gradient-yellow-50);
+                                //}
                             }
 
                             .episode-name {
@@ -1689,6 +1689,17 @@
                                 position: absolute;
                                 top: 0;
                                 width: 100%;
+                            }
+                        }
+
+                        &:has(i[class$="check"]) {
+                            .still {
+                                .episode-number {
+                                    background-color: var(--gradient-green-30);
+                                    border-color: var(--gradient-yellow-50);
+                                    border-width: 4px;
+                                    color: var(--gradient-yellow-50);
+                                }
                             }
                         }
 
