@@ -64,9 +64,49 @@
             padding: 1em 2em;
         }
 
-        .activity-goals {
-            margin-left: auto;
-            padding: .25em 2em;
+        .activity-tools {
+            align-items: center;
+            display: flex;
+            gap: 1em;
+            justify-content: flex-end;
+            width: 100%;
+
+            .message {
+                background-color: var(--gradient-green-30);
+                border-radius: .25em;
+                color: var(--gradient-green-90);
+                font-size: 1.25em;
+                font-weight: 300;
+                margin: 0 auto;
+                padding: 1rem 2rem;
+                position: relative;
+
+                .close {
+                    align-items: center;
+                    border-radius: 50%;
+                    border: 1px solid var(--gradient-green-80);
+                    color: var(--gradient-green-80);
+                    cursor: pointer;
+                    display: flex;
+                    font-size: .75rem;
+                    height: 1rem;
+                    justify-content: center;
+                    padding-top: 1px;
+                    position: absolute;
+                    right: .25rem;
+                    top: .25rem;
+                    width: 1rem;
+
+                    &:hover {
+                        background-color: var(--gradient-green-80);
+                        color: var(--gradient-green-30);
+                    }
+                }
+            }
+
+            .activity-goals {
+                padding: .25em 2em;
+            }
         }
 
         .form {

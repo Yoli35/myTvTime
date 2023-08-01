@@ -21,8 +21,16 @@
                     <a href="{{ path('app_activity_new') }}"
                        class="no-activity btn btn-primary">{{ 'Activate'|trans }}</a>
                 {% else %}
-                    <a href="{{ path('app_activity_edit', {id: activity.id}) }}"
-                       class="activity-goals btn btn-primary">{{ 'Goals'|trans }}</a>
+                    <div class="activity-tools">
+                        {% if message %}
+                            <div class="message">
+                                {{ message }}
+                                <div class="close"><i class="fa-solid fa-xmark"></i></div>
+                            </div>
+                        {% endif %}
+                        <a href="{{ path('app_activity_edit', {id: activity.id}) }}"
+                           class="activity-goals btn btn-primary">{{ 'Goals'|trans }}</a>
+                    </div>
                     {% for year in years %}
                         {% for week in year %}
                             {% if week.0.week == currentWeek %}
@@ -347,8 +355,12 @@
                     </div>
                 </label>
                 <menu>
-                    <li><button class="btn btn-secondary" value="cancel">Annuler</button></li>
-                    <li><button class="btn btn-primary" value="update">{{ 'Update'|trans }}</button></li>
+                    <li>
+                        <button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button>
+                    </li>
+                    <li>
+                        <button class="btn btn-primary" value="update">{{ 'Update'|trans }}</button>
+                    </li>
                 </menu>
             </form>
         </div>

@@ -14,6 +14,7 @@ use App\Repository\ActivityExerciseGoalRepository;
 use App\Repository\ActivityMoveGoalRepository;
 use App\Repository\ActivityRepository;
 use App\Repository\ActivityStandUpGoalRepository;
+use App\Service\DateService;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -32,17 +33,29 @@ class ActivityController extends AbstractController
                                 private readonly ActivityDayRepository          $activityDayRepository,
                                 private readonly ActivityMoveGoalRepository     $activityMoveGoalRepository,
                                 private readonly ActivityExerciseGoalRepository $activityExerciseGoalRepository,
-                                private readonly ActivityStandUpGoalRepository  $activityStandUpGoalRepository)
+                                private readonly ActivityStandUpGoalRepository  $activityStandUpGoalRepository,
+                                private readonly DateService                    $dateService)
     {
 
     }
 
     #[Route('/', name: 'app_activity_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
+
+        $message = '';
+        $automaticReload = $request->query->getInt('time'); // 1690883017419
+        if ($automaticReload) {
+            $reloadDate = $this->dateService->newDateImmutable('now', 'Europe/Paris');
+            $reloadDate = $reloadDate->setTimestamp($automaticReload / 1000);
+            $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
+
+            $message = 'Automatic reload at ' . $reloadDate->format('Y-m-d H:i:s') . ' (client) from ' . $now->format('Y-m-d H:i:s') . ' (server)';
+            $this->loggerInterface->info($message);
+        }
 
         $activity = $user->getActivity();
 //        dump($activity);
@@ -98,6 +111,7 @@ class ActivityController extends AbstractController
             'days' => $days,
             'years' => $years,
             'currentWeek' => $currentWeek,
+            'message' => $message,
         ]);
     }
 
@@ -108,7 +122,7 @@ class ActivityController extends AbstractController
         } catch (Exception) {
             $today = new DateTimeImmutable();
         }
-        $today = $today->setTime(0, 0);
+//        $today = $today->setTime(0, 0);
 
         foreach ($days as $day) {
             if ($day->getDay()->format('Y-m-d') === $today->format('Y-m-d')) {
@@ -374,7 +388,7 @@ class ActivityController extends AbstractController
             'success' => true,
             'dayBlock' => $dayBlock->getContent(),
             'moveProgress' => round($moveResult / $moveGoal * 100),
-            'exerciseProgress' => round($exerciseResult   / $exerciseGoal * 100),
+            'exerciseProgress' => round($exerciseResult / $exerciseGoal * 100),
             'standUpProgress' => round($standUpResult / $standUpGoal * 100),
         ]);
     }

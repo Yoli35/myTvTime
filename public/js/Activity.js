@@ -12,7 +12,8 @@ export class Activity {
         this.app_activity_stand_up_toggle = globs.app_activity_stand_up_toggle;
         this.app_activity_save_data = globs.app_activity_save_data;
         this.app_activity_save_day = globs.app_activity_save_day;
-        this.initialDate = new Date();
+        this.initialDay = new Date().getDate();
+        this.checkCount = 0;
         this.editing = false;
         this.PIx2 = Math.PI * 2;
         this.dayValues = {
@@ -44,18 +45,44 @@ export class Activity {
     }
 
     initDateChange() {
-        setInterval(this.checkNewDate, 60000);
+        // check every minute if the date has changed
+        setInterval(thisGlobal.checkNewDate, 60000);
+
+        const message = document.querySelector(".message");
+        if (message) {
+            const close = message.querySelector(".close");
+            close.addEventListener("click", () => {
+                message.remove();
+            });
+        }
     }
 
     checkNewDate() {
         const date = new Date();
-
-        if (date.getDate() !== thisGlobal.initialDate.getDate()) {
-            if (date.getHours() === 0 && date.getMinutes() > 5) {
+        // console.log(date.getTime());
+        if (date.getDate() !== thisGlobal.initialDay) {
+            if (date.getHours() >= 0 && date.getMinutes() > 5) {
                 const url = window.location.href;
-                window.location.url = url + '?t=' + date.getMilliseconds(); // force reload
+                window.location.url = url + '?time=' + date.getTime(); // force reload
             }
         }
+        let message = document.querySelector(".message");
+        thisGlobal.checkCount++;
+        if (!message) {
+            const activityTools = document.querySelector(".activity-tools");
+            const button = activityTools.querySelector("a[class*='btn']");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message");
+            messageDiv.innerHTML = 'Last check (' + thisGlobal.checkCount + ') on ' + date.toLocaleDateString() + ' at ' + date.toLocaleTimeString() + '<div class="close"><i class="fa-solid fa-xmark"></i></div>';
+            message = activityTools.insertBefore(messageDiv, button);
+            // message = document.querySelector(".message");
+        } else {
+            message.innerHTML = 'Last check (' + thisGlobal.checkCount + ') on ' + date.toLocaleDateString() + ' at ' + date.toLocaleTimeString() + '<div class="close"><i class="fa-solid fa-xmark"></i></div>';
+        }
+        const close = message.querySelector(".close");
+        close.addEventListener("click", () => {
+            message.remove();
+        });
     }
 
     setProgressAll(circles) {
