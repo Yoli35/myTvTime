@@ -16,19 +16,8 @@
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
-        {% if parameters.from == 'top_rated' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_top_rated')~'?p='~parameters.page~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif parameters.from == 'search' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: parameters.page})~'?query='~parameters.query~'&year='~parameters.year~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif parameters.from == 'today' %}
-            {{ include('blocks/_nav.html.twig', {thisPage: serie.name}) }}
-        {% elseif parameters.from == 'my_series_to_start' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to start', url: path('app_serie_to_start')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
-        {% elseif parameters.from == 'my_series_to_end' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to end', url: path('app_serie_to_end')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
-        {% else %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~parameters.page~'&b=1#'~parameters.backId}, thisPage: serie.name}) }}
-        {% endif %}
+
+        {{ include('blocks/_nav.html.twig') }}
 
         <div class="serie-page">
             <div class="header">
@@ -71,7 +60,7 @@
                                     <div class="still">
                                         <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
                                         <div class="episode-name">{{ episode.name }}</div>
-                                        <div class="episode-number">{{ episode.episode_number }}</div>
+                                        <div class="episode-number{% if episode.viewing and episode.viewing.viewedAt %} viewed{% endif %}">{{ episode.episode_number }}</div>
                                     </div>
                                     <div class="infos">
                                         <h4>

@@ -1,46 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'My Series airing today'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'My series airing today'|trans }}{% endblock %}
 {% block description %}{{ 'List of the series I\'m watching, aired today'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
+
+        {{ include('blocks/_nav.html.twig', {user: app.user}) }}
+
         <div class="today-series">
             <div class="header">
                 <div class="date"{% if backdrop %} style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop }}')"{% endif %}>{{ date|date("d/m/Y", "Europe/Paris") }}</div>
             </div>
             {% set date = date|format_date('full', timezone="Europe/Paris")|capitalize %}
-            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:'New episodes'|trans}) }}
+{#            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:'New episodes'|trans}) }}#}
             <main>
                 <div class="time-travel">
                     <div>
-                        <a href="{{ path('app_serie_today', {d: prev, m: -1}) }}">
+                        <a href="{{ path('app_series_today', {d: prev, m: -1}) }}">
                             <button class="btn btn-primary">{{ 'Previous month'|trans }}</i></button>
                         </a>
                     </div>
                     <div>
-                        <a href="{{ path('app_serie_today', {d: prev, w: -1}) }}">
+                        <a href="{{ path('app_series_today', {d: prev, w: -1}) }}">
                             <button class="btn btn-primary">{{ 'Previous week'|trans }}</i></button>
                         </a>
                     </div>
                     <div class="prev-next">
-                        <a href="{{ path('app_serie_today', {d: prev-1}) }}">
+                        <a href="{{ path('app_series_today', {d: prev-1}) }}">
                             <button class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i></button>
                         </a>
                         <div>{{ fixIfFirstDayOfTheMonth(date)|raw }}</div>
-                        <a href="{{ path('app_serie_today', {d: next+1}) }}">
+                        <a href="{{ path('app_series_today', {d: next+1}) }}">
                             <button class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i></button>
                         </a>
                     </div>
                     <div>
-                        <a href="{{ path('app_serie_today', {d: next, w: 1}) }}">
+                        <a href="{{ path('app_series_today', {d: next, w: 1}) }}">
                             <button class="btn btn-primary">{{ 'Next week'|trans }}</i></button>
                         </a>
                     </div>
                     <div>
-                        <a href="{{ path('app_serie_today', {d: next, m: 1}) }}">
+                        <a href="{{ path('app_series_today', {d: next, m: 1}) }}">
                             <button class="btn btn-primary">{{ 'Next month'|trans }}</i></button>
                         </a>
                     </div>

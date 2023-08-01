@@ -5,6 +5,9 @@
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
+
+        {{ include('blocks/_nav.html.twig') }}
+
         <div class="series-search">
             <div class="header">
                 {{ include('blocks/series/_quotes.html.twig') }}
@@ -26,7 +29,6 @@
                     }) }}></span></h1>
                 <div class="backdrop"></div>
             </div>
-            {{ include('blocks/_nav.html.twig', {thisPage: 'Series search'|trans}) }}
             <div class="search">
                 {{ form_start(form) }}
                 {{ form_widget(form.query, {'attr': {'class': 'form-control', 'value': query, 'autofocus': 'autofocus'}}) }}
@@ -65,11 +67,11 @@
     <script src="/js/serie.js"></script>
     <script>
         const paths = [
-            "{{ path('app_serie_render_translation_fields') }}",
-            "{{ path('app_serie_render_translation_select') }}",
-            "{{ path('app_serie_render_translation_save') }}",
-            "{{ path('app_serie_new') }}",
-            "{{ path('app_serie_show', {id:0})|slice(0, -1) }}",
+            "{{ path('app_series_render_translation_fields') }}",
+            "{{ path('app_series_render_translation_select') }}",
+            "{{ path('app_series_render_translation_save') }}",
+            "{{ path('app_series_new') }}",
+            "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
         ];
         let letterRatios = [];
 

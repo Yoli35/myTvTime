@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}myTvTime ▶ ︎
-    {{ 'Popular Series'|trans }}
+    {{ 'Popular series'|trans }}
 {% endblock %}
 
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
+
+        {{ include('blocks/_nav.html.twig') }}
+
         <div class="my-series">
             <div class="header">
                 <h1>{{ 'Popular Series'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
-
-            {{ include('blocks/_nav.html.twig', {thisPage: 'Popular Series'|trans}) }}
-
             <main>
                 <div class="series stretch">
                     <div class="series-tools mobile">

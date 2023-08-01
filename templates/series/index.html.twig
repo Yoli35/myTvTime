@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'My Series'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'My series'|trans }}{% endblock %}
 {% block description %}{{ 'List of all the series I have watched in my life'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
+
+        {{ include('blocks/_nav.html.twig') }}
+
         <div class="my-series">
             <div class="header">
                 {{ include('blocks/series/_quotes.html.twig') }}
@@ -13,9 +16,6 @@
                 <div class="backdrop"></div>
                 {{ include('blocks/_clock.html.twig') }}
             </div>
-
-            {{ include('blocks/_nav.html.twig', {thisPage:('My Series'|trans)}) }}
-
             <main>
                 <div class="series">
                     {% if series|length %}
@@ -218,11 +218,11 @@
     </div>
     <div id="globs-data" style="display: none">
         {
-            "app_serie_index": "{{ path('app_serie_index') }}",
-            "app_serie_new": "{{ path('app_serie_new') }}",
-            "app_serie_show": "{{ path('app_serie_show', {id:0})|slice(0, -1) }}",
-            "app_serie_search": "{{ path('app_serie_search') }}",
-            "app_serie_set_settings": "{{ path('app_serie_set_settings') }}",
+            "app_series_index": "{{ path('app_series_index') }}",
+            "app_series_new": "{{ path('app_series_new') }}",
+            "app_series_show": "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
+            "app_series_search": "{{ path('app_series_search') }}",
+            "app_series_set_settings": "{{ path('app_series_set_settings') }}",
             "locale": "{{ app.request.locale }}",
             "current_page": {{ pages.page }},
             "per_page": {{ pages.per_page }},

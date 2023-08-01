@@ -1,25 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'My Series to start'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'My series to start'|trans }}{% endblock %}
 {% block description %}{{ 'List of my series to start'|trans }}{% endblock %}
 {% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
+
+        {{ include('blocks/_nav.html.twig') }}
+
         <div class="my-series">
             <div class="header">
                 {{ include('blocks/series/_quotes.html.twig') }}
                 <h1>{{ 'My Series to start'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
-
-            {{ include('blocks/_nav.html.twig', {thisPage:('My Series to start'|trans)}) }}
-
             <main>
                 <div class="series stretch">
                     <div class="series-tools mobile">
                         <div class="pages mobile">
-                            {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_serie_to_start'}) }}
+                            {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_series_to_start'}) }}
                         </div>
                     </div>
                     <div class="wrapper">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="series-tools desktop">
                         <div class="pages desktop">
-                            {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_serie_to_start'}) }}
+                            {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_series_to_start'}) }}
                         </div>
                     </div>
                 </div>

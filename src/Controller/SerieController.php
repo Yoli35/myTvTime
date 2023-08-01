@@ -48,10 +48,11 @@ class SerieController extends AbstractController
     const MY_SERIES = 'my_series';
     const MY_SERIES_TO_START = 'my_series_to_start';
     const MY_SERIES_TO_END = 'my_series_to_end';
+    const EPISODES_OF_THE_DAY = 'today';
     const UPCOMING_EPISODES = 'upcoming_episodes';
     const UPCOMING_SERIES = 'upcoming_series';
-    const POPULAR = 'popular';
-    const SEARCH = 'search';
+    const POPULAR_SERIES = 'popular';
+    const SEARCH_SERIES = 'search';
 
     public array $messages = [];
 
@@ -70,7 +71,7 @@ class SerieController extends AbstractController
     {
     }
 
-    #[Route('/', name: 'app_serie_index', methods: ['GET'])]
+    #[Route('/', name: 'app_series_index', methods: ['GET'])]
     public function index(Request $request, SettingsRepository $settingsRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -152,6 +153,7 @@ class SerieController extends AbstractController
             'user' => $user,
             'quotes' => (new QuoteService)->getRandomQuotes(),
             'leafSettings' => $leafSettings,
+            'breadcrumb' => $this->breadcrumb(self::MY_SERIES),
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfig,
         ]);
@@ -370,7 +372,7 @@ class SerieController extends AbstractController
         return true;
     }
 
-    #[Route('/today', name: 'app_serie_today', methods: ['GET'])]
+    #[Route('/today', name: 'app_series_today', methods: ['GET'])]
     public function today(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -402,7 +404,8 @@ class SerieController extends AbstractController
             'images' => $images,
             'prev' => $delta * ($diff->invert ? -1 : 1),
             'next' => $delta * ($diff->invert ? -1 : 1),
-            'from' => 'today',
+            'breadcrumb' => $this->breadcrumb(self::EPISODES_OF_THE_DAY),
+            'from' => self::EPISODES_OF_THE_DAY,
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
@@ -520,7 +523,7 @@ class SerieController extends AbstractController
         return array_slice($images, 2);
     }
 
-    #[Route('/to-start', name: 'app_serie_to_start', methods: ['GET'])]
+    #[Route('/to-start', name: 'app_series_to_start', methods: ['GET'])]
     public function seriesToStart(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -555,12 +558,13 @@ class SerieController extends AbstractController
             'user' => $user,
             'posters' => $this->getPosters(),
             'posterPath' => '/images/series/posters/',
+            'breadcrumb' => $this->breadcrumb(self::MY_SERIES_TO_START),
             'from' => self::MY_SERIES_TO_START,
             'imageConfig' => $imageConfig,
         ]);
     }
 
-    #[Route('/to-end', name: 'app_serie_to_end', methods: ['GET'])]
+    #[Route('/to-end', name: 'app_series_to_end', methods: ['GET'])]
     public function seriesToEnd(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -593,12 +597,13 @@ class SerieController extends AbstractController
             'user' => $user,
             'posters' => $this->getPosters(),
             'posterPath' => '/images/series/posters/',
+            'breadcrumb' => $this->breadcrumb(self::MY_SERIES_TO_END),
             'from' => self::MY_SERIES_TO_END,
             'imageConfig' => $imageConfig,
         ]);
     }
 
-    #[Route('/upcoming-episodes', name: 'app_serie_upcoming_episodes', methods: ['GET'])]
+    #[Route('/upcoming-episodes', name: 'app_series_upcoming_episodes', methods: ['GET'])]
     public function upcomingEpisodes(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -693,12 +698,13 @@ class SerieController extends AbstractController
             'user' => $user,
             'posters' => $this->getPosters(),
             'posterPath' => '/images/series/posters/',
+            'breadcrumb' => $this->breadcrumb(self::UPCOMING_EPISODES),
             'from' => self::UPCOMING_EPISODES,
             'imageConfig' => $imageConfig,
         ]);
     }
 
-    #[Route('/upcoming-series', name: 'app_serie_upcoming_series', methods: ['GET'])]
+    #[Route('/upcoming-series', name: 'app_series_upcoming_series', methods: ['GET'])]
     public function futureSeries(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -746,6 +752,7 @@ class SerieController extends AbstractController
             'user' => $user,
             'posters' => $this->getPosters(),
             'posterPath' => '/images/series/posters/',
+            'breadcrumb' => $this->breadcrumb(self::UPCOMING_SERIES),
             'from' => self::UPCOMING_SERIES,
             'imageConfig' => $imageConfig,
         ]);
@@ -854,7 +861,7 @@ class SerieController extends AbstractController
         }
     }
 
-    #[Route('/search/{page}', name: 'app_serie_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
+    #[Route('/search/{page}', name: 'app_series_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
     public function search(Request $request, int $page): Response
     {
 //        $this->logService->log($request, $this->getUser());
@@ -892,12 +899,13 @@ class SerieController extends AbstractController
             ],
             'quotes' => (new QuoteService)->getRandomQuotes(),
             'user' => $user,
-            'from' => self::SEARCH,
+            'breadcrumb' => $this->breadcrumb(self::SEARCH_SERIES),
+            'from' => self::SEARCH_SERIES,
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
 
-    #[Route('/popular', name: 'app_serie_popular', methods: ['GET'])]
+    #[Route('/popular', name: 'app_series_popular', methods: ['GET'])]
     public function popular(Request $request): Response
     {
         /** @var User $user */
@@ -905,13 +913,15 @@ class SerieController extends AbstractController
         $page = $request->query->getInt('p', 1);
         $locale = $request->getLocale();
 
-        $standing = $this->TMDBService->getSeries(self::POPULAR, $page, $locale);
+        $standing = $this->TMDBService->getSeries(self::POPULAR_SERIES, $page, $locale);
         $series = json_decode($standing, true);
         $imageConfig = $this->imageConfiguration->getConfig();
 
         foreach ($series['results'] as $serie) {
             $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
         }
+
+        $breadcrumb = $this->breadcrumb(self::POPULAR_SERIES);
 
         return $this->render('series/popular.html.twig', [
             'series' => $series['results'],
@@ -923,7 +933,8 @@ class SerieController extends AbstractController
                 'link_count' => self::LINK_COUNT,
                 'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
             ],
-            'from' => self::POPULAR,
+            'breadcrumb' => $breadcrumb,
+            'from' => self::POPULAR_SERIES,
             'user' => $user,
             'posters' => $this->getPosters(),
             'posterPath' => '/images/series/posters/',
@@ -1168,7 +1179,7 @@ class SerieController extends AbstractController
         return $ks;
     }
 
-    #[Route('/show/{id}', name: 'app_serie_show', methods: ['GET'])]
+    #[Route('/show/{id}', name: 'app_series_show', methods: ['GET'])]
     public function show(Request $request, Serie $serie): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -1194,12 +1205,12 @@ class SerieController extends AbstractController
         return $this->getSerie($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
     }
 
-    #[Route('/tmdb/{id}', name: 'app_serie_tmdb', methods: ['GET'])]
+    #[Route('/tmdb/{id}', name: 'app_series_tmdb', methods: ['GET'])]
     public function tmdb(Request $request, $id): Response
     {
 //        $this->logService->log($request, $this->getUser());
         $page = $request->query->getInt('p', 1);
-        $from = $request->query->get('from', self::POPULAR);
+        $from = $request->query->get('from', self::POPULAR_SERIES);
         $query = $request->query->get('query', "");
         $year = $request->query->get('year', "");
 
@@ -1217,13 +1228,11 @@ class SerieController extends AbstractController
         return $this->getSerie($request, $tv ?? [], $page, $from, $id, null, $query, $year);
     }
 
-    #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_serie_tmdb_season', methods: ['GET'])]
+    #[Route('/tmdb/{id}/season/{seasonNumber}', name: 'app_series_tmdb_season', methods: ['GET'])]
     public function season(Request $request, $id, $seasonNumber): Response
     {
         $imgConfig = $this->imageConfiguration->getConfig();
 
-//        $params = $request->query->all();
-//        dump(implode("&", array_map(function ($key, $param) { return $key . "=" . $param; }, array_keys($params), array_values($params))));
         $from = $request->query->get('from');
         $page = $request->query->get('p');
         $query = $request->query->get('query');
@@ -1334,7 +1343,11 @@ class SerieController extends AbstractController
         // Liste des fournisseurs de streaming de France
         $watchProviderList = $this->getRegionProvider($imgConfig);
 
+        // Breadcrumb
+        $breadcrumb = $this->breadcrumb($from, $serie, $season, null);
+
         dump([
+            'season' => $season,
             'modifications' => $modifications,
         ]);
 
@@ -1347,6 +1360,7 @@ class SerieController extends AbstractController
             'watchProviders' => $watchProviders,
             'watchProviderList' => $watchProviderList,
             'seasonsCookie' => $seasonsCookie,
+            'breadcrumb' => $breadcrumb,
             'parameters' => [
                 'from' => $from,
                 'page' => $page,
@@ -1355,6 +1369,71 @@ class SerieController extends AbstractController
                 "backId" => $backId
             ],
         ]);
+    }
+
+    public function breadcrumb($from, $serie = null, $season = null, $episode = null): array
+    {
+        switch ($from) {
+            case self::MY_SERIES:
+                $baseUrl = $this->generateUrl("app_series_index");
+                $baseName = $this->translator->trans("My series");
+                break;
+            case self::MY_SERIES_TO_START:
+                $baseUrl = $this->generateUrl("app_series_to_start");
+                $baseName = $this->translator->trans("My series to start");
+                break;
+            case self::MY_SERIES_TO_END:
+                $baseUrl = $this->generateUrl("app_series_to_end");
+                $baseName = $this->translator->trans("My series to end");
+                break;
+            case self::EPISODES_OF_THE_DAY:
+                $baseUrl = $this->generateUrl("app_series_today");
+                $baseName = $this->translator->trans("My series airing today");
+                break;
+            case self::UPCOMING_EPISODES:
+                $baseUrl = $this->generateUrl("app_series_upcoming_episodes");
+                $baseName = $this->translator->trans("Upcoming episodes");
+                break;
+            case self::UPCOMING_SERIES:
+                $baseUrl = $this->generateUrl("app_series_upcoming_series");
+                $baseName = $this->translator->trans("Upcoming series");
+                break;
+            case self::SEARCH_SERIES:
+                $baseUrl = $this->generateUrl("app_series_search");
+                $baseName = $this->translator->trans("Series search");
+                break;
+            case self::POPULAR_SERIES:
+            default:
+                $baseUrl = $this->generateUrl("app_series_popular");
+                $baseName = $this->translator->trans("Popular series");
+                break;
+        }
+
+        $breadcrumb = [
+            [
+                'name' => $baseName,
+                'url' => $baseUrl,
+            ]
+        ];
+        if ($serie) {
+            $breadcrumb[] = [
+                'name' => $serie['name'],
+                'url' => $this->generateUrl('app_series_tmdb', ['id' => $serie['id']]) . '?from=' . $from,
+            ];
+        }
+        if ($season) {
+            $breadcrumb[] = [
+                'name' => $this->translator->trans('Season') . ' ' . $season['season_number'],
+                'url' => $this->generateUrl('app_series_tmdb_season', ['id' => $serie['id'], 'seasonNumber' => $season['season_number']]) . '?from=' . $from,
+            ];
+        }
+        if ($episode) {
+            $breadcrumb[] = [
+                'name' => $this->translator->trans('Episode') . ' ' . $episode['episode_number'],
+                'url' => $this->generateUrl('series_episode', ['id' => $serie['id'], 'seasonNumber' => $season['season_number'], 'episodeNumber' => $episode['episode_number']]),
+            ];
+        }
+        return $breadcrumb;
     }
 
     public function seasonsCookie(Request $request): array
@@ -1588,6 +1667,9 @@ class SerieController extends AbstractController
 
         $alert = $serieViewing ? $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]) : null;
 
+        // Breadcrumb
+        $breadcrumb = $this->breadcrumb($from, $tv);
+
         dump([
             'tv' => $tv,
             'watchProviders' => $watchProviders,
@@ -1610,6 +1692,7 @@ class SerieController extends AbstractController
             'locale' => $locale,
             'page' => $page,
             'from' => $from,
+            'breadcrumb' => $breadcrumb,
             'backId' => $backId,
             'query' => $query,
             'year' => $year,
@@ -1905,7 +1988,7 @@ class SerieController extends AbstractController
         return null;
     }
 
-    #[Route(path: '/viewing', name: 'app_serie_viewing')]
+    #[Route(path: '/viewing', name: 'app_series_viewing')]
     public function setSerieViewing(Request $request, TranslatorInterface $translator): Response
     {
         $serieId = $request->query->getInt('id');
@@ -2173,7 +2256,7 @@ class SerieController extends AbstractController
         return $array;
     }
 
-    #[Route('/upcoming/date', name: 'app_serie_upcoming_date', methods: ['GET'])]
+    #[Route('/upcoming/date', name: 'app_series_upcoming_date', methods: ['GET'])]
     public function serieUpcomingDate(Request $request): Response
     {
         $id = $request->query->getInt('id');
@@ -2188,7 +2271,7 @@ class SerieController extends AbstractController
         return $this->json(['id' => $id, 'month' => $month, 'year' => $year]);
     }
 
-    #[Route('/alert/{serieId}/{tmdb}/{isActivated}', name: 'app_serie_alert', methods: ['GET'])]
+    #[Route('/alert/{serieId}/{tmdb}/{isActivated}', name: 'app_series_alert', methods: ['GET'])]
     public function serieAlert(Request $request, int $serieId, string $tmdb, bool $isActivated): Response
     {
         if ($tmdb == 'tmdb') {
@@ -2233,7 +2316,7 @@ class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/alert-provider/{id}/{providerId}', name: 'app_serie_alert_provider', methods: ['GET'])]
+    #[Route('/alert-provider/{id}/{providerId}', name: 'app_series_alert_provider', methods: ['GET'])]
     public function serieProvider(Request $request, int $id, int $providerId): Response
     {
         $serie = $this->serieRepository->find($id);

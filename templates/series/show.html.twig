@@ -32,23 +32,8 @@
     </div>
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
-        {% if from == 'popular' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Top rated Series', url: path('app_serie_popular')~'?p='~page~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif from == 'search' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Series search', url: path('app_serie_search', {page: page})~'?query='~query~'&year='~year~'#'~serie.id}, thisPage: serie.name}) }}
-        {% elseif from == 'my_series_to_start' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to start', url: path('app_serie_to_start', {page: page})}, thisPage: serie.name}) }}
-        {% elseif from == 'my_series_to_end' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series to end', url: path('app_serie_to_end', {page: page})}, thisPage: serie.name}) }}
-        {% elseif from == 'upcoming_episodes' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Upcoming episodes', url: path('app_serie_upcoming_episodes', {page: page})}, thisPage: serie.name}) }}
-        {% elseif from == 'upcoming_series' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'Upcoming series', url: path('app_serie_upcoming_series', {page: page})}, thisPage: serie.name}) }}
-        {% elseif from == 'today' %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series airing today', url: path('app_serie_today')}, thisPage: serie.name}) }}
-        {% else %}
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Series', url: path('app_serie_index')~'?p='~page~'&b=1#'~backId}, thisPage: serie.name}) }}
-        {% endif %}
+
+        {{ include('blocks/_nav.html.twig') }}
 
         <div class="serie-page">
             <div class="header">
@@ -268,7 +253,7 @@
                             {% set globalIndex = 1 %}
                             {% for season in serie.seasons %}
                                 {% if season.season_number %}
-                                    {% set url = path('app_serie_tmdb_season', {id: serie.id, seasonNumber: season.season_number})~'?from='~from~'&p='~page %}
+                                    {% set url = path('app_series_tmdb_season', {id: serie.id, seasonNumber: season.season_number})~'?from='~from~'&p='~page %}
                                     {% if query is defined %} {% set url = url ~ '&query=' ~ query %}{% endif %}
                                     {% if year is defined %} {% set url = url ~ '&year=' ~ year %}{% endif %}
                                     {% if backId is defined %} {% set url = url ~ '&back=' ~ backId %}{% endif %}
@@ -514,19 +499,19 @@
     </dialog>
     <div id="globs-data" style="display: none">
         {
-        "app_serie_render_translation_fields": "{{ path('app_serie_render_translation_fields') }}",
-        "app_serie_render_translation_select": "{{ path('app_serie_render_translation_select') }}",
-        "app_serie_render_translation_save": "{{ path('app_serie_render_translation_save') }}",
-        "app_serie_new": "{{ path('app_serie_new') }}",
-        "app_serie_show": "{{ path('app_serie_show', {id:0})|slice(0, -1) }}",
-        "app_serie_viewing": "{{ path('app_serie_viewing') }}",
+        "app_series_render_translation_fields": "{{ path('app_series_render_translation_fields') }}",
+        "app_series_render_translation_select": "{{ path('app_series_render_translation_select') }}",
+        "app_series_render_translation_save": "{{ path('app_series_render_translation_save') }}",
+        "app_series_new": "{{ path('app_series_new') }}",
+        "app_series_show": "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
+        "app_series_viewing": "{{ path('app_series_viewing') }}",
         "app_user_connected": "{{ path('app_user_connected') }}",
-        "app_serie_toggle_favorite": "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3})|slice(0, -6) }}",
-        "app_serie_duration": "{{ path('app_serie_duration') }}",
-        "app_serie_toggle_time_shifted": "{{ path('app_serie_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3})|slice(0, -6) }}",
-        "app_serie_alert": "{{ path('app_serie_alert', {serieId: 0, tmdb: 'show', isActivated: 0})|slice(0, -8) }}",
-        "app_serie_alert_provider": "{{ path('app_serie_alert_provider', {id: 0, providerId: 0})|slice(0, -3) }}",
-        "app_serie_upcoming_date": "{{ path('app_serie_upcoming_date') }}",
+        "app_series_toggle_favorite": "{{ path('app_series_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3})|slice(0, -6) }}",
+        "app_series_duration": "{{ path('app_series_duration') }}",
+        "app_series_toggle_time_shifted": "{{ path('app_series_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3})|slice(0, -6) }}",
+        "app_series_alert": "{{ path('app_series_alert', {serieId: 0, tmdb: 'show', isActivated: 0})|slice(0, -8) }}",
+        "app_series_alert_provider": "{{ path('app_series_alert_provider', {id: 0, providerId: 0})|slice(0, -3) }}",
+        "app_series_upcoming_date": "{{ path('app_series_upcoming_date') }}",
         "still": "{{ imageConfig.url ~ imageConfig.still_sizes.3 }}",
         "userId": "{{ user?user.id:0 }}",
         "serieId": "{{ serieId }}",
@@ -542,17 +527,17 @@
     <script src="/js/seriesShow.js" type="module"></script>
     <script>
         const paths = [
-            "{{ path('app_serie_render_translation_fields') }}",
-            "{{ path('app_serie_render_translation_select') }}",
-            "{{ path('app_serie_render_translation_save') }}",
-            "{{ path('app_serie_new') }}",
-            "{{ path('app_serie_show', {id:0})|slice(0, -1) }}",
-            "{{ path('app_serie_viewing') }}",
+            "{{ path('app_series_render_translation_fields') }}",
+            "{{ path('app_series_render_translation_select') }}",
+            "{{ path('app_series_render_translation_save') }}",
+            "{{ path('app_series_new') }}",
+            "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
+            "{{ path('app_series_viewing') }}",
             "{{ path('app_user_connected') }}",
-            "{{ path('app_serie_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3})|slice(0, -6) }}",
-            "{{ path('app_serie_duration') }}",
-            "{{ path('app_serie_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3})|slice(0, -6) }}",
-            "{{ path('app_serie_alert', {serieId: 0, tmdb: 'tmdb', isActivated: 0})|slice(0, -7) }}",
+            "{{ path('app_series_toggle_favorite', {'fav': 1, 'userId': 2, 'mediaId': 3})|slice(0, -6) }}",
+            "{{ path('app_series_duration') }}",
+            "{{ path('app_series_toggle_time_shifted', {'shifted': 0, 'userId': 2, 'serieId': 3})|slice(0, -6) }}",
+            "{{ path('app_series_alert', {serieId: 0, tmdb: 'tmdb', isActivated: 0})|slice(0, -7) }}",
         ];
         const serie = "{{ serieId }}";
         let myCanvas, palettes;

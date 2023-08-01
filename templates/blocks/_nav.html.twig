@@ -2,21 +2,32 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ path('app_home') }}">{{ 'Home'|trans }}</a></li>
         <li class="breadcrumb-item"><a href="{{ path('app_movie_list') }}">{{ 'Movies'|trans }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ path('app_serie_popular') }}">{{ 'Series'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('app_series_popular') }}">{{ 'Series'|trans }}</a></li>
         <li>
             {{ include('blocks/user/_userMenu.twig') }}
         </li>
-        {% if parent is defined %}
-            <li class="breadcrumb-item"><a href="{{ parent.url }}" accesskey="<">{{ parent.page|trans }}</a></li>
+        {% if breadcrumb is defined %}
+            <li class="breadcrumb-item">
+                {% for item in breadcrumb %}
+                    <div class="breadcrumb-part"><a href="{{ item.url }}">{{ item.name }}</a></div>
+                    {% if loop.index < loop.length %}
+                        <div class="separator">/</div>
+                    {% endif %}
+                {% endfor %}
+            </li>
+        {% else %}
+            {% if parent is defined %}
+                <li class="breadcrumb-item"><a href="{{ parent.url }}" accesskey="<">{{ parent.page|trans }}</a></li>
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
         {% endif %}
-        <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
     </ol>
     {% if from is defined %}
         {% if from == 'blog' %}
             {#                <div class="btn btn-secondary ml"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></div> #}
         {% endif %}
         {% if from == 'today' %}
-            <a href="{{ path('app_serie_today') }}" class="ml">
+            <a href="{{ path('app_series_today') }}" class="ml">
                 <button class="btn btn-primary">{{ 'Today'|trans }}</button>
             </a>
         {% endif %}
