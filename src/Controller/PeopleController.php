@@ -15,19 +15,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class PeopleController extends AbstractController
 {
     public function __construct(
-        private readonly DateService     $dateService,
-        private readonly SerieController $serieController
+        private readonly DateService        $dateService,
+        private readonly SerieController    $serieController,
+        private readonly TMDBService        $TMDBService,
+        private readonly ImageConfiguration $imageConfiguration
     )
     {
     }
 
     #[Route('{_locale}/people/{id}', name: 'app_people', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]
-    public function people(Request $request, $id, TMDBService $TMDBService, ImageConfiguration $imageConfiguration): Response
+    public function people(Request $request, $id): Response
     {
 //        $this->logService->log($request, $this->getUser());
-        $standing = $TMDBService->getPerson($id, $request->getLocale(), true);
+        $standing = $this->TMDBService->getPerson($id, $request->getLocale(), true);
         $people = json_decode($standing, true);
-        $standing = $TMDBService->getPersonCredits($id, $request->getLocale(), true);
+        $standing = $this->TMDBService->getPersonCredits($id, $request->getLocale(), true);
         $credits = json_decode($standing, true);
 
 //        dump([
@@ -80,15 +82,10 @@ class PeopleController extends AbstractController
             $people['deathday'] = null;
         }
 
-        $count = 0;
-        if (key_exists('cast', $credits)) {
-            $count += count($credits['cast']);
-        } else {
+        if (!key_exists('cast', $credits)) {
             $credits['cast'] = [];
         }
-        if (key_exists('crew', $credits)) {
-            $count += count($credits['crew']);
-        } else {
+        if (!key_exists('crew', $credits)) {
             $credits['crew'] = [];
         }
         $count = count($credits['cast']) + count($credits['crew']);
@@ -118,8 +115,7 @@ class PeopleController extends AbstractController
                 $castNoDates[$noDate++] = $role;
             }
         }
-        ksort($castDates);
-        $castDates = array_reverse($castDates);
+        krsort($castDates);
         $credits['cast'] = array_merge($castNoDates, $castDates);
         $knownFor = $this->getKnownFor($castDates);
 
@@ -153,23 +149,38 @@ class PeopleController extends AbstractController
                     $dates[$date['release_date']] = $date;
                 }
             }
-            ksort($dates);
-            $dates = array_reverse($dates);
+            krsort($dates);
             $sortedCrew[$department] = array_merge($noDates, $dates);
             $knownFor = array_merge($knownFor, $this->getKnownFor($dates));
         }
         $credits['crew'] = $sortedCrew;
-        ksort($knownFor);
-        $knownFor = array_reverse($knownFor);
+        krsort($knownFor);
         $credits['known_for'] = $knownFor;
+
+        // Breadcrumbs
+        $from = $request->query->get('from');
+        if ($from) {
+            $media = $request->query->get('media');
+            if ($media=="tv") {
+                $tvId = $request->query->get('id');
+                $tv = json_decode($this->TMDBService->getTv($tvId, $request->getLocale()), true);
+                $seasonNumber = $request->query->get('season');
+                $episodeNumber = $request->query->get('episode');
+                $season = $seasonNumber ? ['season_number' => $seasonNumber] : null;
+                $episode = $episodeNumber ? ['episode_number' => $episodeNumber] : null;
+                $breadcrumb = $this->serieController->breadcrumb($from, $tv, $season, $episode);
+                $breadcrumb[] = ['name' => $people['name'], 'url' => $request->getUri()];
+            }
+        }
 
 //        dump($people);
         return $this->render('people/index.html.twig', [
             'people' => $people,
             'credits' => $credits,
             'count' => $count,
+            'breadcrumb' => $breadcrumb ?? null,
             'user' => $this->getUser(),
-            'imageConfig' => $imageConfiguration->getConfig(),
+            'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
 

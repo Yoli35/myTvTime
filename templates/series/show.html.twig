@@ -305,8 +305,8 @@
                         </div>
                     </section>
                     {% if credits %}
-                        {{ include('blocks/series/_cast.html.twig') }}
-                        {{ include('blocks/series/_crew.html.twig') }}
+                        {{ include('blocks/series/_cast.html.twig', {from: from, media: "tv", id: serie.id}) }}
+                        {{ include('blocks/series/_crew.html.twig', {from: from, media: "tv", id: serie.id}) }}
                     {% endif %}
                     {% if images.backdrops|length or images.logos|length or images.posters|length %}
                         <section>

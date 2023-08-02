@@ -178,8 +178,8 @@
                         </div>
                     </section>
                     {% if credits %}
-                        {{ include('blocks/series/_cast.html.twig') }}
-                        {{ include('blocks/series/_crew.html.twig') }}
+                        {{ include('blocks/series/_cast.html.twig', {from: parameters.from, media: "tv", id: serie.id}) }}
+                        {{ include('blocks/series/_crew.html.twig', {from: parameters.from, media: "tv", id: serie.id}) }}
                     {% endif %}
                 </article>
             </main>

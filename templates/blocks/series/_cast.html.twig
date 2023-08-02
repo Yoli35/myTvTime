@@ -5,7 +5,7 @@
                 <h4>{{ 'Cast'|trans }} ({{ credits.cast|length }})</h4>
                 <div class="list">
                     {% for people in credits.cast %}
-                        <a href="{{ path('app_people', {id: people.id}) }}">
+                        <a href="{{ path('app_people', {id: people.id}) }}{% if from is defined and media is defined and id is defined %}{% if media=="tv" %}?from={{ from }}&media=tv&id={{ id }}{% if season is defined %}&season={{ season.season_number }}{% endif %}{% endif %}{% endif %}">
                             <div class="people">
                                 <div class="profile">
                                     {% if people.profile_path %}
