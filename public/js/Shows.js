@@ -6,13 +6,13 @@ export class Shows {
 
     constructor(globs) {
         thisGlobal = this;
-        this.app_serie_alert = globs.app_serie_alert;
-        this.app_serie_alert_provider = globs.app_serie_alert_provider;
-        this.app_serie_toggle_favorite = globs.app_serie_toggle_favorite;
-        this.app_serie_duration = globs.app_serie_duration;
-        this.app_serie_toggle_shifted = globs.app_serie_toggle_time_shifted;
-        this.app_serie_viewing = globs.app_serie_viewing;
-        this.app_serie_upcoming_date = globs.app_serie_upcoming_date;
+        this.app_series_alert = globs.app_series_alert;
+        this.app_series_alert_provider = globs.app_series_alert_provider;
+        this.app_series_toggle_favorite = globs.app_series_toggle_favorite;
+        this.app_series_duration = globs.app_series_duration;
+        this.app_series_toggle_shifted = globs.app_series_toggle_time_shifted;
+        this.app_series_viewing = globs.app_series_viewing;
+        this.app_series_upcoming_date = globs.app_series_upcoming_date;
         this.app_user_connected = globs.app_user_connected;
         this.episodeClicked = {viewed: 0, episodeNumber: 0, seasonNumber: 0};
         this.number_of_episodes = globs.number_of_episodes;
@@ -185,7 +185,7 @@ export class Shows {
                 loading.close()
             }, 300);
         }
-        thisGlobal.xhr.open("GET", thisGlobal.app_serie_duration /*+ "?id=" + serieId*/);
+        thisGlobal.xhr.open("GET", thisGlobal.app_series_duration /*+ "?id=" + serieId*/);
         thisGlobal.xhr.send();
         loading.showModal();
         setTimeout(() => {
@@ -218,7 +218,7 @@ export class Shows {
     toggleFavorite(evt) {
         const fav = evt.target.checked ? 1 : 0;
 
-        let url = thisGlobal.app_serie_toggle_favorite + '/' + thisGlobal.userId + '/' + thisGlobal.serieId + '/' + fav;
+        let url = thisGlobal.app_series_toggle_favorite + '/' + thisGlobal.userId + '/' + thisGlobal.serieId + '/' + fav;
 
         thisGlobal.xhr.onload = function () {
             let data = JSON.parse(this.response);
@@ -235,7 +235,7 @@ export class Shows {
     toggleTimeShifted(evt) {
         const shifted = evt.target.checked ? 1 : 0;
 
-        let url = thisGlobal.app_serie_toggle_shifted + '/' + thisGlobal.userId + '/' + thisGlobal.serieId + '/' + shifted;
+        let url = thisGlobal.app_series_toggle_shifted + '/' + thisGlobal.userId + '/' + thisGlobal.serieId + '/' + shifted;
 
         thisGlobal.xhr.onload = function () {
             let data = JSON.parse(this.response);
@@ -253,7 +253,7 @@ export class Shows {
         const year = document.querySelector("#upcoming_year").value;
         const span = document.querySelector(".no-date").querySelector("span");
 
-        let url = thisGlobal.app_serie_upcoming_date + '?id=' + thisGlobal.serieId;
+        let url = thisGlobal.app_series_upcoming_date + '?id=' + thisGlobal.serieId;
         if (month) url += '&month=' + month;
         if (year) url += '&year=' + year;
 
@@ -511,7 +511,7 @@ export class Shows {
                 // setTimeout(celebrate, 300);
             }
         }
-        thisGlobal.xhr.open("GET", thisGlobal.app_serie_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : "") + (live ? "&live=1" : ""));
+        thisGlobal.xhr.open("GET", thisGlobal.app_series_viewing + '?id=' + serie + "&s=" + s_number + "&e=" + e_number + "&v=" + e_viewed + (networkType ? "&network-type=" + networkType : "") + (networkId ? "&network-id=" + networkId : "") + (deviceType ? "&device-type=" + deviceType : "") + (all ? "&all=" + 1 : "") + (live ? "&live=1" : ""));
         thisGlobal.xhr.send();
         update.showModal();
         setTimeout(() => {
@@ -556,7 +556,7 @@ export class Shows {
         const actualUrl = window.location.href;
         const tmdb = actualUrl.includes("tmdb");
         const serieId = window.location.href.match(/.+\/(\d+)\?.+/)[1];
-        let url = thisGlobal.app_serie_alert + serieId;
+        let url = thisGlobal.app_series_alert + serieId;
         let data = {'success': false, 'alertMessage': ''};
         alert.classList.toggle("active");
         url += tmdb ? "/tmdb" : "/show";
@@ -590,7 +590,7 @@ export class Shows {
         const region = item.getAttribute("data-provider-region");
         let data = {'success': false, 'block': '<div class="no-provider"><div>?</div></div>'};
         const serieId = window.location.href.match(/.+\/(\d+)\?.+/)[1];
-        let url = thisGlobal.app_serie_alert_provider + serieId + '/' + providerId + '?region=' + region;
+        let url = thisGlobal.app_series_alert_provider + serieId + '/' + providerId + '?region=' + region;
 
         thisGlobal.xhr.onload = function () {
             data = JSON.parse(this.response);
