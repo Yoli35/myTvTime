@@ -1254,12 +1254,12 @@ class SerieController extends AbstractController
             $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, '', ['credits', 'watch/providers']);
             $internationalSeason = json_decode($standing, true);
             if ($this->isThereSomeOverviews($internationalSeason)) {
+                $internationalSeason['watch/providers'] = $season['watch/providers'];
                 $season = $internationalSeason;
                 $localized = false;
             }
         }
 
-//        dump(['season' => $season]);
         $credits = $season['credits'];
         if (!key_exists('cast', $credits)) {
             $credits['cast'] = [];
@@ -1336,6 +1336,14 @@ class SerieController extends AbstractController
         // Les fournisseurs de streaming français de la série
         $watchProviders = $season['watch/providers'];
         $watchProviders = array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null;
+
+        // if there is no data for the season, we try to get the data for the serie
+        // May occurs for a newly added season 2+ of a serie
+        if (!$watchProviders) {
+            $watchProviders = $this->TMDBService->getTvWatchProviders($id);
+            $watchProviders = json_decode($watchProviders, true);
+            $watchProviders = array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null;
+        }
 
         if ($watchProviders) {
             $array1 = $this->getProviders($watchProviders, 'buy', $imgConfig, []);
@@ -1474,10 +1482,17 @@ class SerieController extends AbstractController
         }
         return $episodeOverviewLength > 0;
     }
+
     public function getProviders($watchProviders, $type, $imgConfig, $providers, $country = 'FR', $indexed = true): array
     {
-        if (key_exists($type, $watchProviders)) {
-            foreach ($watchProviders[$type] as &$provider) {
+        if ($type) {
+            if (key_exists($type, $watchProviders)) {
+                foreach ($watchProviders[$type] as &$provider) {
+                    $providers = $this->getArr($provider, $providers, $imgConfig, $country, $indexed);
+                }
+            }
+        } else {
+            foreach ($providers as &$provider) {
                 $providers = $this->getArr($provider, $providers, $imgConfig, $country, $indexed);
             }
         }
