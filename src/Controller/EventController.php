@@ -109,6 +109,7 @@ class EventController extends AbstractController
             'countdownValues' => $countdownValues,
             'watchProviderList' => $watchProviderList,
             'user' => $user,
+            'from' => 'my_events'
         ]);
     }
 

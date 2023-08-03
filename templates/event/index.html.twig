@@ -23,7 +23,7 @@
                                     href="{{ path('app_event_show', {id: event.id}) }}"
                                 {% endif %}
                                 {% if event.type == 'alert' %}
-                                    href="{{ path('app_series_show', {id: event.id}) }}"
+                                    href="{{ path('app_series_show', {id: event.id}) }}?from={{ from }}"
                                 {% endif %}
                         >
                             <div class="event" data-type="{{ event.type }}" data-id="{{ event.id }}">
