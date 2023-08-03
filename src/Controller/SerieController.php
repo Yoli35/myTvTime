@@ -1243,8 +1243,22 @@ class SerieController extends AbstractController
         $serie['backdropPath'] = $this->fullUrl('backdrop', 3, $serie['backdropPath'], 'no_banner_dark.png', $imgConfig);
 
         // La saison (db ou the movie db) et son affiche (poster)
-        $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale(), ['credits', 'watch/providers']);
+        $locale = $request->getLocale();
+        $language = ['fr' => 'fr-FR', 'en' => 'en-US', 'es' => 'es-SP', 'de' => 'de-DE'][$locale];
+        $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $language, ['credits', 'watch/providers']);
         $season = json_decode($standing, true);
+
+        // Si les données de la saison ne sont pas disponibles dans la langue de l'utilisateur, on les prend en anglais
+        $localized = true;
+        if (!$this->isThereSomeOverviews($season)) {
+            $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, '', ['credits', 'watch/providers']);
+            $internationalSeason = json_decode($standing, true);
+            if ($this->isThereSomeOverviews($internationalSeason)) {
+                $season = $internationalSeason;
+                $localized = false;
+            }
+        }
+
 //        dump(['season' => $season]);
         $credits = $season['credits'];
         if (!key_exists('cast', $credits)) {
@@ -1347,6 +1361,8 @@ class SerieController extends AbstractController
             'credits' => $credits,
             'watchProviders' => $watchProviders,
             'seasonsCookie' => $seasonsCookie,
+            'modifications' => $modifications,
+            'localized' => $localized,
             'breadcrumb' => $breadcrumb,
             'parameters' => [
                 'from' => $from,
@@ -1448,6 +1464,16 @@ class SerieController extends AbstractController
         return $seasonsCookie;
     }
 
+    public function isThereSomeOverviews($season): bool
+    {
+        $episodeOverviewLength = 0;
+        if ($season['episodes']) {
+            foreach ($season['episodes'] as $episode) {
+                $episodeOverviewLength = max($episodeOverviewLength, strlen($episode['overview']));
+            }
+        }
+        return $episodeOverviewLength > 0;
+    }
     public function getProviders($watchProviders, $type, $imgConfig, $providers, $country = 'FR', $indexed = true): array
     {
         if (key_exists($type, $watchProviders)) {

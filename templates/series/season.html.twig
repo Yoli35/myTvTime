@@ -41,6 +41,12 @@
                         <div class="viewing-progress">{{ 'Progress'|trans }} : <span></span>
                             / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}</div>
                     {% endif %}
+                    {% if not localized %}
+                        <div class="info">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {{ 'Information about this season (episode titles and descriptions) is not available in your language'|trans }}.
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             <main>

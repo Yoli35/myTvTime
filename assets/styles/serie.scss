@@ -1244,6 +1244,18 @@
                     }
                 }
 
+                &:has(i[class$="exclamation"]) {
+                    background-color: var(--gradient-green-30-alpha-50);
+                    border-radius: .5rem;
+                    border: 2px solid;
+                    font-size: 1.5rem;
+                    padding: 1rem;
+                }
+
+                i[class$="exclamation"] {
+                    color: var(--gradient-red-80);
+                }
+
                 &:last-child {
                     gap: 2em;
                 }
