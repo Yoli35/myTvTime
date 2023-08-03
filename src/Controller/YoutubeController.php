@@ -175,7 +175,7 @@ class YoutubeController extends AbstractController
             ],
             $youtubeVideo->getDescription());
         $description = nl2br($description);
-        dump($youtubeVideo->getYoutubeVideoComments()->first());
+//        dump($youtubeVideo->getYoutubeVideoComments()->first());
 
         return $this->render('youtube/show.html.twig', [
                 'video' => $youtubeVideo,
@@ -313,7 +313,7 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $locale = $request->getLocale();
         $providedLink = $request->query->get('link');
-        dump($providedLink);
+//        dump($providedLink);
         $justAdded = 0;
         $userAlreadyLinked = false;
         $status = "error";
@@ -341,7 +341,7 @@ class YoutubeController extends AbstractController
         }
 
         if (strlen($providedLink) == 11) {
-            dump($providedLink);
+//            dump($providedLink);
             $link = $this->videoRepository->findOneBy(['link' => $providedLink]);
 
             // Si le lien n'a pas déjà été ajouté 12345678912

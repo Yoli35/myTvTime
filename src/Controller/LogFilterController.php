@@ -24,13 +24,13 @@ class LogFilterController extends AbstractController
     {
         $logPath = $this->getParameter('kernel.logs_dir') . '/dev.log';
         $this->logs = file($logPath);
-        dump([
-            'logPath' => $logPath,
-            'fileSize' => filesize($logPath),
-            'logs - line 1' => $this->logs[0],
-            'logs - line 2' => $this->logs[1],
-            'nombre de lignes' => count($this->logs),
-        ]);
+//        dump([
+//            'logPath' => $logPath,
+//            'fileSize' => filesize($logPath),
+//            'logs - line 1' => $this->logs[0],
+//            'logs - line 2' => $this->logs[1],
+//            'nombre de lignes' => count($this->logs),
+//        ]);
         $this->logs = array_reverse($this->logs);
 
         $count = $request->query->getInt('lines', 100);
@@ -59,11 +59,11 @@ class LogFilterController extends AbstractController
         }
         $levels = ['DEBUG', 'INFO', 'NOTICE', 'WARNING', 'ERROR', 'CRITICAL', 'ALERT', 'EMERGENCY'];
         $channels = array_unique($channels);
-        dump([
-            'logs' => $logs,
-            'channels' => $channels,
-            'levels' => $levels,
-        ]);
+//        dump([
+//            'logs' => $logs,
+//            'channels' => $channels,
+//            'levels' => $levels,
+//        ]);
 
         return $this->render('log_filter/index.html.twig', [
             'logs' => $logs,

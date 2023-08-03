@@ -69,20 +69,20 @@ class HomeController extends AbstractController
         $trendingOfTheDay = json_decode($standing, true);
         $standing = $this->TMDBService->trending('all', 'week', $locale);
         $trendingOfTheWeek = json_decode($standing, true);
-        dump([
-            'last added movies' => $user ? $lastAddedMovies:null,
-            'last added series' => $user ? $lastAddedSeries:null,
-            'last updated series' => $user ? $lastUpdatedSeries:null,
-            'last watched series' => $user ? $lastWatchedSeries:null,
-            'favorite series' => $user ? $favoriteSeries:null,
-            'favorite movies' => $user ? $favoriteMovies:null,
-            'popular movies' => $popularMovies,
-            'popular series' => $popularSeries,
-            'popular people' => $popularPeople,
-            'trending of the day' => $trendingOfTheDay,
-            'trending of the week' => $trendingOfTheWeek,
-            ]
-        );
+//        dump([
+//            'last added movies' => $user ? $lastAddedMovies:null,
+//            'last added series' => $user ? $lastAddedSeries:null,
+//            'last updated series' => $user ? $lastUpdatedSeries:null,
+//            'last watched series' => $user ? $lastWatchedSeries:null,
+//            'favorite series' => $user ? $favoriteSeries:null,
+//            'favorite movies' => $user ? $favoriteMovies:null,
+//            'popular movies' => $popularMovies,
+//            'popular series' => $popularSeries,
+//            'popular people' => $popularPeople,
+//            'trending of the day' => $trendingOfTheDay,
+//            'trending of the week' => $trendingOfTheWeek,
+//            ]
+//        );
 
         $imageConfig = $this->imageConfiguration->getConfig();
 
