@@ -39,7 +39,7 @@
                                  data-provider-region="{{ provider.region }}">
                                 <img src="{{ provider.logo_path }}"
                                      alt="{{ provider.provider_name }}"
-                                     title="{{ provider.provider_name }}">
+                                     title="{{ provider.provider_name }} ({{ country_names()[provider.region] }})">
                                 <div class="country">{{ provider.region }}</div>
                             </div>
                         {% else %}

@@ -1243,8 +1243,9 @@ class SerieController extends AbstractController
         $serie['backdropPath'] = $this->fullUrl('backdrop', 3, $serie['backdropPath'], 'no_banner_dark.png', $imgConfig);
 
         // La saison (db ou the movie db) et son affiche (poster)
-        $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale(), ['credits']);
+        $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $request->getLocale(), ['credits', 'watch/providers']);
         $season = json_decode($standing, true);
+//        dump(['season' => $season]);
         $credits = $season['credits'];
         if (!key_exists('cast', $credits)) {
             $credits['cast'] = [];
@@ -1319,36 +1320,24 @@ class SerieController extends AbstractController
         }
 
         // Les fournisseurs de streaming français de la série
-        $standing = $this->TMDBService->getTvWatchProviders($id);
-        $watchProviders = json_decode($standing, true);
+        $watchProviders = $season['watch/providers'];
         $watchProviders = array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null;
 
         if ($watchProviders) {
-            $providersBuy = [];
-            if (key_exists('buy', $watchProviders)) {
-                foreach ($watchProviders['buy'] as &$provider) {
-                    $providersBuy = $this->getArr($provider, $imgConfig, $providersBuy);
-                }
-            }
-            $providersFlatrate = [];
-            if (key_exists('flatrate', $watchProviders)) {
-                foreach ($watchProviders['flatrate'] as &$provider) {
-                    $providersFlatrate = $this->getArr($provider, $imgConfig, $providersFlatrate);
-                }
-            }
-            $watchProviders = array_merge($providersBuy, $providersFlatrate);
+            $array1 = $this->getProviders($watchProviders, 'buy', $imgConfig, []);
+            $array2 = $this->getProviders($watchProviders, 'flatrate', $imgConfig, $array1);
+            $array3 = $this->getProviders($watchProviders, 'free', $imgConfig, $array2);
+            $watchProviders = array_filter($array3);
         }
-
-        // Liste des fournisseurs de streaming de France
-        $watchProviderList = $this->getRegionProvider($imgConfig);
 
         // Breadcrumb
         $breadcrumb = $this->breadcrumb($from, $serie, $season, null);
 
-        dump([
-            'season' => $season,
-            'modifications' => $modifications,
-        ]);
+//        dump([
+//            'season' => $season,
+//            'modifications' => $modifications,
+//            'watchProviders' => $watchProviders,
+//        ]);
 
         return $this->render('series/season.html.twig', [
             'serie' => $serie,
@@ -1357,7 +1346,6 @@ class SerieController extends AbstractController
             'episodes' => $episodes,
             'credits' => $credits,
             'watchProviders' => $watchProviders,
-            'watchProviderList' => $watchProviderList,
             'seasonsCookie' => $seasonsCookie,
             'breadcrumb' => $breadcrumb,
             'parameters' => [
@@ -1443,7 +1431,7 @@ class SerieController extends AbstractController
     {
         if (isset($_COOKIE['series_seasons'])) {
             $seasonsCookie = json_decode($_COOKIE['series_seasons'], true);
-            dump(['$_COOKIE' => $_COOKIE, 'get seasonsCookie' => $seasonsCookie]);
+//            dump(['$_COOKIE' => $_COOKIE, 'get seasonsCookie' => $seasonsCookie]);
         } else {
             $seasonsCookie = ['layout' => 'list'];
             $arr_cookie_options = [
@@ -1455,20 +1443,33 @@ class SerieController extends AbstractController
 //                'samesite' => 'Lax' // None || Lax  || Strict
             ];
             setcookie('series_seasons', json_encode($seasonsCookie), $arr_cookie_options);
-            dump(['$_COOKIE' => $_COOKIE, 'set seasonsCookie' => $seasonsCookie]);
+//            dump(['$_COOKIE' => $_COOKIE, 'set seasonsCookie' => $seasonsCookie]);
         }
         return $seasonsCookie;
     }
 
-    public function getArr(mixed $provider, array $imgConfig, array $providersFlatrate, $region = "FR"): array
+    public function getProviders($watchProviders, $type, $imgConfig, $providers, $country = 'FR', $indexed = true): array
+    {
+        if (key_exists($type, $watchProviders)) {
+            foreach ($watchProviders[$type] as &$provider) {
+                $providers = $this->getArr($provider, $providers, $imgConfig, $country, $indexed);
+            }
+        }
+        return $providers;
+    }
+
+    public function getArr(mixed $provider, array $providers, array $imgConfig, $region = "FR", $indexed = true): array
     {
         $flatrate['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_provider_logo.png', $imgConfig);
         $flatrate['display_priority'] = $provider['display_priority'];
         $flatrate['provider_id'] = $provider['provider_id'];
         $flatrate['provider_name'] = $provider['provider_name'];
         $flatrate['region'] = $region;
-        $providersFlatrate[] = $flatrate;
-        return $providersFlatrate;
+        if ($indexed)
+            $providers[$provider['provider_id']] = $flatrate;
+        else
+            $providers[] = $flatrate;
+        return $providers;
     }
 
     public function fullUrl($type, $size, $filename, $default, $imgConfig): string
@@ -1491,6 +1492,7 @@ class SerieController extends AbstractController
             $item['provider_name'] = $provider['provider_name'];
             $watchProviderList[$provider['provider_id']] = $item;
         }
+//        dump(['watchProviderList' => $watchProviderList]);
         return $watchProviderList;
     }
 
@@ -1570,7 +1572,7 @@ class SerieController extends AbstractController
 
     public function getSerie(Request $request, array $tv, int $page, string $from, $backId, Serie|null $serie, $query = "", $year = ""): Response
     {
-        dump($tv);
+//        dump($tv);
         /** @var User $user */
         $user = $this->getUser();
         $locale = $request->getLocale();
@@ -1589,22 +1591,13 @@ class SerieController extends AbstractController
         $temp = $tv['watch/providers'];
         if ($temp && array_key_exists('FR', $temp['results'])) {
             $watchProviders = $temp['results']['FR'];
-            $providersFlatrate = [];
-            if (key_exists('flatrate', $watchProviders)) {
-                foreach ($watchProviders['flatrate'] as $provider) {
-                    $providersFlatrate = $this->getArr($provider, $imgConfig, $providersFlatrate);
-                }
-            }
+            $providersFlatrate = $this->getProviders($watchProviders, 'flatrate', $imgConfig, []); // Providers FR (streaming)
             $watchProviderList = $this->getRegionProvider($imgConfig); // Tous les providers FR
         } else {
             $watchProviders = null;
             $providersFlatrate = [];
             foreach ($temp['results'] as $country => $providers) {
-                if (array_key_exists('flatrate', $providers)) {
-                    foreach ($providers['flatrate'] as $provider) {
-                        $providersFlatrate = $this->getArr($provider, $imgConfig, $providersFlatrate, $country);
-                    }
-                }
+                $providersFlatrate = $this->getProviders($providers, 'flatrate', $imgConfig, $providersFlatrate, $country, false); // Providers (streaming)
             }
             if (!count($providersFlatrate)) {
                 $providersFlatrate = null;
@@ -1673,11 +1666,12 @@ class SerieController extends AbstractController
         // Breadcrumb
         $breadcrumb = $this->breadcrumb($from, $tv);
 
-        dump([
-            'tv' => $tv,
-            'watchProviders' => $watchProviders,
-            'providersFlatrate' => $providersFlatrate,
-        ]);
+//        dump([
+//            'tv' => $tv,
+//            'watchProviders' => $watchProviders,
+//            'providersFlatrate' => $providersFlatrate,
+//            'watchProviderList' => $watchProviderList,
+//        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),

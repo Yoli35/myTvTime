@@ -122,9 +122,9 @@
                                                 <div class="view-provider{% if viewed %} show{% endif %}">
                                                     {% if episode.viewing.networkType == 'flatrate' and episode.viewing.networkId %}
                                                         <div class="provider" data-id="{{ episode.viewing.networkId }}">
-                                                            <img src="{{ watchProviderList[episode.viewing.networkId].logo_path }}"
-                                                                 alt="{{ watchProviderList[episode.viewing.networkId].provider_name }}"
-                                                                 title="{{ watchProviderList[episode.viewing.networkId].provider_name }}">
+                                                            <img src="{{ watchProviders[episode.viewing.networkId].logo_path }}"
+                                                                 alt="{{ watchProviders[episode.viewing.networkId].provider_name }}"
+                                                                 title="{{ watchProviders[episode.viewing.networkId].provider_name }}">
                                                         </div>
                                                     {% else %}
                                                         <div class="provider other" data-id="-1"></div>
@@ -190,7 +190,7 @@
     </div>
     <div class="provider-list-data" style="display: none">
         {
-        "watchProviderList": {{ watchProviderList|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+        "watchProviders": {{ watchProviders|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
         }
     </div>
 {% endblock %}
@@ -238,7 +238,7 @@
         }
 
         function initView() {
-            const watchProviderList = JSON.parse(document.querySelector('.provider-list-data').textContent).watchProviderList;
+            const watchProviders = JSON.parse(document.querySelector('.provider-list-data').textContent).watchProviders;
             const views = document.querySelectorAll('.view');
 
             views.forEach((view) => {
@@ -296,10 +296,10 @@
                             const userProvider = viewProvider.querySelector('.provider');
 
                             if (networkId !== -1) {
-                                const img = document.createElement('img');
-                                img.setAttribute('src', watchProviderList[networkId].logo_path);
-                                img.setAttribute('alt', watchProviderList[networkId].name);
-                                img.setAttribute('title', watchProviderList[networkId].name);
+                                const img = userProvider.querySelector('img') || document.createElement('img');
+                                img.setAttribute('src', watchProviders[networkId].logo_path);
+                                img.setAttribute('alt', watchProviders[networkId].name);
+                                img.setAttribute('title', watchProviders[networkId].name);
 
                                 userProvider.appendChild(img);
                                 userProvider.classList.remove('other');

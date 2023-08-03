@@ -6,17 +6,19 @@
         {% elseif from == 'search' %}
             {{ 'Series search'|trans }}
         {% elseif from == 'my_series_to_start' %}
-            {{ 'My Series to start'|trans }}
+            {{ 'My series to start'|trans }}
         {% elseif from == 'my_series_to_end' %}
-            {{ 'My Series to end'|trans }}
+            {{ 'My series to end'|trans }}
         {% elseif from == 'upcoming_series' %}
             {{ 'Upcoming series'|trans }}
         {% elseif from == 'upcoming_episodes' %}
             {{ 'Upcoming episodes'|trans }}
         {% elseif from == 'today' %}
-            {{ 'My Series airing today'|trans }}
+            {{ 'My series airing today'|trans }}
+        {% elseif from == 'my-events' %}
+            {{ 'My events'|trans }}
         {% else %}
-            {{ 'My Series'|trans }}
+            {{ 'My series'|trans }}
         {% endif %}
         ▶ ︎{{ serie.name }}
     {% endblock %}
