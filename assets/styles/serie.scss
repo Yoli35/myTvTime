@@ -1705,6 +1705,8 @@
                         }
 
                         &:has(i[class$="check"]) {
+                            background-color: var(--gradient-green-80);
+
                             .still {
                                 .episode-number {
                                     background-color: var(--gradient-green-30);
@@ -1751,6 +1753,11 @@
                                 display: flex;
                                 flex: 1;
                                 height: 100%;
+                            }
+
+                            &:has(i[class$="check"]) {
+                                background-color: var(--gradient-green-70);
+                                border: 8px solid var(--gradient-green-80);
                             }
 
                             .view {
@@ -3583,9 +3590,18 @@
                             color: var(--gradient-ardoise-90);
                             background-color: var(--gradient-ardoise-30);
 
+                            &:has(i[class$="check"]) {
+                                background-color: var(--gradient-green-20);
+                            }
+
                             .episode-viewing {
                                 background-color: var(--gradient-ardoise-25);
                                 border: 8px solid var(--gradient-ardoise-30);
+
+                                &:has(i[class$="check"]) {
+                                    background-color: var(--gradient-green-15);
+                                    border: 8px solid var(--gradient-green-20);
+                                }
 
                                 .view {
                                     .view-value {
