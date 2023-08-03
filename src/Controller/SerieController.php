@@ -53,6 +53,7 @@ class SerieController extends AbstractController
     const UPCOMING_SERIES = 'upcoming_series';
     const POPULAR_SERIES = 'popular';
     const SEARCH_SERIES = 'search';
+    const MY_EVENTS = 'my_events';
 
     public array $messages = [];
 
@@ -836,15 +837,10 @@ class SerieController extends AbstractController
         return $serie;
     }
 
-    /**
-     * @param int $serieViewingId
-     * @param SerieViewing[] $serieViewings
-     * @return SerieViewing|null
-     */
-    public function getSerieViewing(int $serieViewingId, array $serieViewings): SerieViewing|null
+    public function getSerieViewing(int $id, array $serieViewings): SerieViewing|null
     {
         foreach ($serieViewings as $serieViewing) {
-            if ($serieViewing->getId() === $serieViewingId) {
+            if ($serieViewing->getId() === $id) {
                 return $serieViewing;
             }
         }
@@ -1300,23 +1296,26 @@ class SerieController extends AbstractController
             // les infos des épisodes
             $episodes = array_map(function ($episode) use ($seasonViewing, $isShifted) {
                 $episodeViewing = $this->getEpisodeViewing($seasonViewing, $episode['episode_number']);
-                // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
-                $airDate = $this->dateService->newDateImmutable($episode['air_date'], "Europe/Paris", true)->modify($isShifted ? "-1 day" : "0 day");
-                if ($episodeViewing->getAirDate() != $airDate) {
-                    $modifications[] = [
-                        'episode' => $episode['episode_number'],
-                        'episode air date' => $episode['air_date'],
-                        'airDate' => $airDate,
-                        'viewing air date' => $episodeViewing->getAirDate(),
-                    ];
-                    $episodeViewing->setAirDate($airDate);
-                    $this->episodeViewingRepository->save($episodeViewing, true);
-                }
                 $episode['viewing'] = $episodeViewing;
                 return $episode;
             }, $episodes);
         } else {
             $seasonViewing = null;
+        }
+        foreach ($episodes as $episode) {
+            $episodeViewing = $episode['viewing'];
+            // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
+            $airDate = $this->dateService->newDateImmutable($episode['air_date'], "Europe/Paris", true)->modify($isShifted ? "-1 day" : "0 day");
+            if ($episodeViewing->getAirDate()->format('Y-m-d') != $airDate->format('Y-m-d')) {
+                $modifications[] = [
+                    'episode' => $episode['episode_number'],
+                    'episode air date' => $episode['air_date'],
+                    'airDate' => $airDate,
+                    'viewing air date' => $episodeViewing->getAirDate(),
+                ];
+                $episodeViewing->setAirDate($airDate);
+                $this->episodeViewingRepository->save($episodeViewing, true);
+            }
         }
 
         // Les fournisseurs de streaming français de la série
@@ -1401,6 +1400,10 @@ class SerieController extends AbstractController
             case self::SEARCH_SERIES:
                 $baseUrl = $this->generateUrl("app_series_search");
                 $baseName = $this->translator->trans("Series search");
+                break;
+            case self::MY_EVENTS:
+                $baseUrl = $this->generateUrl("app_event");
+                $baseName = $this->translator->trans("My events");
                 break;
             case self::POPULAR_SERIES:
             default:
@@ -2347,7 +2350,7 @@ class SerieController extends AbstractController
             $serieViewing->getSerie()->getName(),
             $serieViewing->getNextEpisodeToWatch()->getSeason()->getSeasonNumber(),
             $serieViewing->getNextEpisodeToWatch()->getEpisodeNumber());
-        $date = $serieViewing->getNextEpisodeToWatch()->getAirDate();
+        $date = $serieViewing->getNextEpisodeToWatch()->getAirDate()->setTime(9, 0);
         $alert->setMessage($message);
         $alert->setDate($date);
         $alert->setActivated(true);
