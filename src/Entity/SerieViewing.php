@@ -134,6 +134,21 @@ class SerieViewing
         return null;
     }
 
+    // TODO: get average network id from seasons
+    public function getAverageNetworkId(): ?int
+    {
+        $networkIds = [];
+        /** @var SeasonViewing $season */
+        foreach ($this->seasons as $season) {
+            $networkIds[] = $season->getNetworkId();
+        }
+        $networkIds = array_unique($networkIds);
+        if (count($networkIds)==1) {
+            return $networkIds[0];
+        }
+        return null;
+    }
+
     public function addSeason(SeasonViewing $season): self
     {
         if (!$this->seasons->contains($season)) {

@@ -14,15 +14,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource(
-    operations: [
-        new Get(normalizationContext: ['groups' => ['article:item']]),
-        new GetCollection(normalizationContext: ['groups' => ['article:list']])
-    ],
-    order: ['createdAt' => 'DESC'],
-    paginationItemsPerPage: 4,
-)]
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[ApiResource]
 class Article
 {
     #[ORM\Id]

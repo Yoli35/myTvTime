@@ -20,14 +20,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource(
-    operations: [
-        new Get(normalizationContext: ['groups' => ['user:item']]),
-        new GetCollection(normalizationContext: ['groups' => ['user:list']])
-            ],
-            order: ['username' => 'ASC'],
-    paginationItemsPerPage: 10,
-)]
+#[ApiResource]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface

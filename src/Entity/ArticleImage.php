@@ -9,14 +9,8 @@ use App\Repository\ArticleImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource(
-    operations: [
-        new Get(normalizationContext: ['groups' => ['articleImage:item']]),
-        new GetCollection(normalizationContext: ['groups' => ['articleImage:list']])
-    ],
-    order: ['id' => 'DESC'],
-)]
 #[ORM\Entity(repositoryClass: ArticleImageRepository::class)]
+#[ApiResource]
 class ArticleImage
 {
     #[ORM\Id]

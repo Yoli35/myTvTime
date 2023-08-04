@@ -139,6 +139,13 @@ class SeasonViewing
         return null;
     }
 
+    // TODO: return average network id for all episodes
+    public function getNetworkId(): ?int
+    {
+        $episode = $this->getEpisodes()->first();
+        return $episode->getNetworkId();
+    }
+
     public function addEpisode(EpisodeViewing $episode): self
     {
         if (!$this->episodes->contains($episode)) {
