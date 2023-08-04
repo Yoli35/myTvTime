@@ -706,7 +706,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/upcoming-series', name: 'app_series_upcoming_series', methods: ['GET'])]
-    public function futureSeries(Request $request): Response
+    public function upcomingSeries(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -1317,19 +1317,25 @@ class SerieController extends AbstractController
         } else {
             $seasonViewing = null;
         }
+
+        $episodesVotes = [];
         foreach ($episodes as $episode) {
-            $episodeViewing = $episode['viewing'];
-            // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
-            $airDate = $this->dateService->newDateImmutable($episode['air_date'], "Europe/Paris", true)->modify($isShifted ? "-1 day" : "0 day");
-            if ($episodeViewing->getAirDate()->format('Y-m-d') != $airDate->format('Y-m-d')) {
-                $modifications[] = [
-                    'episode' => $episode['episode_number'],
-                    'episode air date' => $episode['air_date'],
-                    'airDate' => $airDate,
-                    'viewing air date' => $episodeViewing->getAirDate(),
-                ];
-                $episodeViewing->setAirDate($airDate);
-                $this->episodeViewingRepository->save($episodeViewing, true);
+            if (array_key_exists('viewing', $episode)) {
+                /** @var EpisodeViewing $episodeViewing */
+                $episodeViewing = $episode['viewing'];
+                // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
+                $airDate = $this->dateService->newDateImmutable($episode['air_date'], "Europe/Paris", true)->modify($isShifted ? "-1 day" : "0 day");
+                if ($episodeViewing->getAirDate()->format('Y-m-d') != $airDate->format('Y-m-d')) {
+                    $modifications[] = [
+                        'episode' => $episode['episode_number'],
+                        'episode air date' => $episode['air_date'],
+                        'airDate' => $airDate,
+                        'viewing air date' => $episodeViewing->getAirDate(),
+                    ];
+                    $episodeViewing->setAirDate($airDate);
+                    $this->episodeViewingRepository->save($episodeViewing, true);
+                }
+                $episodesVotes[] = ['number' => $episodeViewing->getEpisodeNumber(), 'vote' => $episodeViewing->getVote()];
             }
         }
 
@@ -1366,6 +1372,7 @@ class SerieController extends AbstractController
             'season' => $season,
             'seasonViewing' => $seasonViewing,
             'episodes' => $episodes,
+            'episodesVotes' => $episodesVotes,
             'credits' => $credits,
             'watchProviders' => $watchProviders,
             'seasonsCookie' => $seasonsCookie,
@@ -1515,7 +1522,7 @@ class SerieController extends AbstractController
 
     public function fullUrl($type, $size, $filename, $default, $imgConfig): string
     {
-        if (strlen($filename)) {
+        if ($filename && strlen($filename)) {
             return $imgConfig['url'] . $imgConfig[$type . '_sizes'][$size] . $filename;
         } else {
             return "/images/default/" . $default;
@@ -2357,8 +2364,13 @@ class SerieController extends AbstractController
     #[Route('/alert-provider/{id}/{providerId}', name: 'app_series_alert_provider', methods: ['GET'])]
     public function serieProvider(Request $request, int $id, int $providerId): Response
     {
-        $serie = $this->serieRepository->find($id);
+        $show = $request->query->get('show', false);
+        if ($show)
+            $serie = $this->serieRepository->find($id);
+        else
+            $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
         $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
+//        dump(['show' => $show, 'id' => $id, 'serie' => $serie, 'serieViewing' => $serieViewing, 'providerId' => $providerId]);
         $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
         $alert->setProviderId($providerId);
         $this->alertRepository->save($alert, true);
@@ -2381,15 +2393,22 @@ class SerieController extends AbstractController
 
     public function updateAlert(Alert $alert, SerieViewing $serieViewing): void
     {
-        $message = sprintf("%s : S%02dE%02d\n",
-            $serieViewing->getSerie()->getName(),
-            $serieViewing->getNextEpisodeToWatch()->getSeason()->getSeasonNumber(),
-            $serieViewing->getNextEpisodeToWatch()->getEpisodeNumber());
-        $date = $serieViewing->getNextEpisodeToWatch()->getAirDate()->setTime(9, 0);
-        $alert->setMessage($message);
-        $alert->setDate($date);
-        $alert->setActivated(true);
-        $this->alertRepository->save($alert, true);
+        $next = $serieViewing->getNextEpisodeToWatch();
+        $date = $serieViewing->getNextEpisodeToWatch()?->getAirDate();
+        if ($date) {
+            $message = sprintf("%s : S%02dE%02d\n",
+                $serieViewing->getSerie()->getName(),
+                $serieViewing->getNextEpisodeToWatch()->getSeason()->getSeasonNumber(),
+                $serieViewing->getNextEpisodeToWatch()->getEpisodeNumber());
+            $date = $date->setTime(9, 0);
+            $alert->setMessage($message);
+            $alert->setDate($date);
+            $alert->setActivated(true);
+            $this->alertRepository->save($alert, true);
+        } else {
+            $this->alertRepository->remove($alert, true);
+            $this->addFlash('info', $this->translator->trans($next ? 'No date yet for the upcoming episode' : 'No upcoming episodes for the moment'));
+        }
     }
 
     #[Route('/episode/vote/{id}/{vote}', name: 'app_episode_vote', methods: ['GET'])]
@@ -2397,7 +2416,7 @@ class SerieController extends AbstractController
     {
         $episodeViewing->setVote($vote);
         $this->episodeViewingRepository->save($episodeViewing, true);
-        return $this->json(['vote' => $vote]);
+        return $this->json(['vote' => $vote, 'episodeNumber' => $episodeViewing->getEpisodeNumber()]);
     }
 
     #[Route('/episode/view/{id}/{view}', name: 'app_episode_view', methods: ['GET'])]

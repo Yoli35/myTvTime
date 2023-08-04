@@ -116,8 +116,8 @@ Last Episode to air: Letzte Episode zum Ausstrahlen
 Air Date: Luftdatum
 Episode Count: Anzahl der Episoden
 Episode Number: Folge Nummer
-Season Number: Staffelnummer
-Season Name: Staffelname
+Season Number: Staffel nummer
+Season Name: Staffel name
 Last Episode Name: Name der letzten Folge
 See Details: Siehe Details
 Episode Name: Name der Folge
@@ -181,6 +181,7 @@ Similar Series: Ähnliche Serien
 episodes: Episoden
 seasons: Staffeln
 The season season_number of serie_name aired from season_air_date.: Die Staffel season_number von serie_name wurde ab dem season_air_date ausgestrahlt.
+
 # search
 Enter a Serie name: Geben Sie den Namen einer Serie ein.
 Enter a year: Geben Sie ein Jahr an
@@ -308,3 +309,24 @@ Movie Db Id: Movie Db Id
 # Others
 None: Keine
 
+
+My series airing today: Meine Serie wird heute ausgestrahlt
+Activity: Aktivität
+My series: Meine Serie
+My series to start: Meine Serie beginnt
+My series to end: Meine Serie endet
+Upcoming episodes: Kommende Episoden
+API Platform: API-Plattform
+Logs: Protokolle
+Add collection: Sammlung hinzufügen
+Upcoming series: Kommende Serie
+Information about this season (episode titles and descriptions) is not available in your language: Informationen zu dieser Staffel (Episodentitel und -beschreibungen) sind in Ihrer Sprache nicht verfügbar
+TBA: TBA
+Executive Producer.he: Executive Producer
+Executive Producer.she: Executive Producer
+Novel.he: Roman
+Novel.she: Roman
+Producer.he: Producer
+Producer.she: Producer
+Search for movies, TV shows and people: Suche nach Filmen, Fernsehsendungen und Personen
+Among your films, series and their castings: Unter Ihren Filmen, Serien und ihren Besetzungen

@@ -1121,7 +1121,7 @@
             min-height: 30em;
             padding: 1em;
             position: relative;
-            width: 100%;
+            width: calc(100% - 20rem);
             z-index: 0;
 
             h1 {
@@ -1249,6 +1249,8 @@
                     border-radius: .5rem;
                     border: 2px solid;
                     font-size: 1.5rem;
+                    gap: 1rem;
+                    justify-content: center;
                     padding: 1rem;
                 }
 
@@ -1422,6 +1424,32 @@
                     margin: 0 .5em;
                     padding: .25em 1em;
                     //text-edge: cap alphabetic;
+                }
+            }
+        }
+
+        .vote-graph {
+            align-items: center;
+            display: flex;
+            //border: 4px solid var(--gradient-mars-60);
+            border-radius: .5em;
+            flex-shrink: 0;
+            //isolation: isolate;
+            justify-content: center;
+            min-height: 30rem;
+            //width: 40rem;
+
+            > div {
+                align-items: center;
+                background-color: var(--gradient-ardoise-0);
+                border-radius: .5em;
+                display: flex;
+                height: 14rem;
+                justify-content: center;
+                width: 20rem;
+
+                .graph {
+                    transform: scale(50%);
                 }
             }
         }

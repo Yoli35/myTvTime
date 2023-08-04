@@ -306,7 +306,7 @@ export class Shows {
             img.setAttribute("alt", name);
             bubbleV2.querySelector(".still").appendChild(img);
         }
-        bubbleV2.querySelector(".infos").innerHTML = "<div>" + name + "</div><div>" + airDate + "</div>" + (vote>0 ? ("<div>" + voteText[locale] + vote + " / 10</div>") : "");
+        bubbleV2.querySelector(".infos").innerHTML = "<div>" + name + "</div><div>" + airDate + "</div>" + (vote > 0 ? ("<div>" + voteText[locale] + vote + " / 10</div>") : "");
 
         bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
         bubbleV2.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
@@ -589,8 +589,9 @@ export class Shows {
         const providerId = item.getAttribute("data-provider-id");
         const region = item.getAttribute("data-provider-region");
         let data = {'success': false, 'block': '<div class="no-provider"><div>?</div></div>'};
+        const show = window.location.href.includes("show");
         const serieId = window.location.href.match(/.+\/(\d+)\?.+/)[1];
-        let url = thisGlobal.app_series_alert_provider + serieId + '/' + providerId + '?region=' + region;
+        let url = thisGlobal.app_series_alert_provider + serieId + '/' + providerId + '?show=' + (show ? 1 : 0) + '&region=' + region;
 
         thisGlobal.xhr.onload = function () {
             data = JSON.parse(this.response);

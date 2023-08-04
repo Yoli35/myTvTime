@@ -44,18 +44,26 @@
                     {% if not localized %}
                         <div class="info">
                             <i class="fa-solid fa-triangle-exclamation"></i>
-                            {{ 'Information about this season (episode titles and descriptions) is not available in your language'|trans }}.
+                            {{ 'Information about this season (episode titles and descriptions) is not available in your language'|trans }}
+                            .
                         </div>
                     {% endif %}
                 </div>
+                <div class="vote-graph"></div>
             </div>
             <main>
                 <article class="full">
                     <section>
                         <div class="episodes-layout">
-                            <div data-type="roomy" class="episodes-layout-item{% if seasonsCookie.layout == 'roomy' %} active{% endif %}"><i class="fa-solid fa-table-cells-large"></i></div>
-                            <div data-type="compact" class="episodes-layout-item{% if seasonsCookie.layout == 'compact' %} active{% endif %}"><i class="fa-solid fa-table-cells"></i></div>
-                            <div data-type="list" class="episodes-layout-item{% if seasonsCookie.layout == 'list' %} active{% endif %}"><i class="fa-solid fa-table-list"></i></div>
+                            <div data-type="roomy"
+                                 class="episodes-layout-item{% if seasonsCookie.layout == 'roomy' %} active{% endif %}">
+                                <i class="fa-solid fa-table-cells-large"></i></div>
+                            <div data-type="compact"
+                                 class="episodes-layout-item{% if seasonsCookie.layout == 'compact' %} active{% endif %}">
+                                <i class="fa-solid fa-table-cells"></i></div>
+                            <div data-type="list"
+                                 class="episodes-layout-item{% if seasonsCookie.layout == 'list' %} active{% endif %}">
+                                <i class="fa-solid fa-table-list"></i></div>
                         </div>
                         <div class="episodes {{ seasonsCookie.layout }}">
                             {% for episode in episodes %}
@@ -91,7 +99,8 @@
                                                     {{ 'Substitute name'|trans }} :
                                                     <input type="text" data-id="{{ episode.viewing.id }}">
                                                 </label>
-                                                <button class="btn btn-primary btn-sm" data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
+                                                <button class="btn btn-primary btn-sm"
+                                                        data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
                                             </div>
                                         {% endif %}
 
@@ -139,7 +148,8 @@
                                                         {% if watchProviders %}
                                                             {% if watchProviders is defined %}
                                                                 {% for provider in watchProviders %}
-                                                                    <div class="provider" data-id="{{ provider.provider_id }}">
+                                                                    <div class="provider"
+                                                                         data-id="{{ provider.provider_id }}">
                                                                         <img src="{{ provider.logo_path }}"
                                                                              alt="{{ provider.provider_name }}"
                                                                              title="{{ provider.provider_name }}">
@@ -150,7 +160,8 @@
                                                         <div class="provider other" data-id="-1"></div>
                                                     </div>
                                                 </div>
-                                                <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if viewed %} show{% endif %}" data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
+                                                <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if viewed %} show{% endif %}"
+                                                     data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
                                                     <span>
                                                         {% if episode.viewing.deviceType is null %}?{% endif %}
                                                         {% if episode.viewing.deviceType == 'tv' %}TV{% endif %}
@@ -164,17 +175,29 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="vote{% if viewed %} show{% endif %}" data-id="{{ episode.viewing.id }}">
-                                                <div class="vote-graduation{% if episode.viewing.vote == 10 %} active{% endif %}" data-title="10" data-value="10"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=9 %} active{% endif %}" data-title="9" data-value="9"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=8 %} active{% endif %}" data-title="8" data-value="8"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=7 %} active{% endif %}" data-title="7" data-value="7"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=6 %} active{% endif %}" data-title="6" data-value="6"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=5 %} active{% endif %}" data-title="5" data-value="5"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=4 %} active{% endif %}" data-title="4" data-value="4"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=3 %} active{% endif %}" data-title="3" data-value="3"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=2 %} active{% endif %}" data-title="2" data-value="2"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=1 %} active{% endif %}" data-title="1" data-value="1"></div>
+                                            <div class="vote{% if viewed %} show{% endif %}"
+                                                 data-id="{{ episode.viewing.id }}"
+                                                 data-number="{{ episode.episode_number }}">
+                                                <div class="vote-graduation{% if episode.viewing.vote == 10 %} active{% endif %}"
+                                                     data-title="10" data-value="10"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=9 %} active{% endif %}"
+                                                     data-title="9" data-value="9"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=8 %} active{% endif %}"
+                                                     data-title="8" data-value="8"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=7 %} active{% endif %}"
+                                                     data-title="7" data-value="7"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=6 %} active{% endif %}"
+                                                     data-title="6" data-value="6"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=5 %} active{% endif %}"
+                                                     data-title="5" data-value="5"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=4 %} active{% endif %}"
+                                                     data-title="4" data-value="4"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=3 %} active{% endif %}"
+                                                     data-title="3" data-value="3"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=2 %} active{% endif %}"
+                                                     data-title="2" data-value="2"></div>
+                                                <div class="vote-graduation{% if episode.viewing.vote >=1 %} active{% endif %}"
+                                                     data-title="1" data-value="1"></div>
                                                 <div class="vote-value">{% if episode.viewing.vote %}{{ episode.viewing.vote }} / 10{% endif %}</div>
                                             </div>
                                         {% endif %}
@@ -194,7 +217,7 @@
         {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
-    <div class="provider-list-data" style="display: none">
+    <div class="season-data" style="display: none">
         {
         "watchProviders": {{ watchProviders|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
         }
@@ -209,6 +232,8 @@
             initVote();
             initLayout();
             setViewedEpisodeCount();
+
+            voteGraph();
         });
 
         function initSubstituteName() {
@@ -244,7 +269,7 @@
         }
 
         function initView() {
-            const watchProviders = JSON.parse(document.querySelector('.provider-list-data').textContent).watchProviders;
+            const watchProviders = JSON.parse(document.querySelector('.season-data').textContent).watchProviders;
             const views = document.querySelectorAll('.view');
 
             views.forEach((view) => {
@@ -411,6 +436,7 @@
                         xhr.onload = function () {
                             const data = JSON.parse(xhr.responseText);
                             const voteValue = data.vote;
+                            const episodeNumber = data.episodeNumber;
 
                             voteValueDiv.innerText = voteValue + " / 10";
                             voteGraduations.forEach((graduation) => {
@@ -421,6 +447,7 @@
                                     graduation.classList.remove('active');
                                 }
                             });
+                            voteBar(episodeNumber, voteValue);
                         }
                         xhr.open("GET", url + value, true);
                         xhr.send();
@@ -472,11 +499,95 @@
                     time.setFullYear(time.getFullYear() + 1);
                     episodes.classList.remove('roomy', 'compact', 'list');
                     episodes.classList.add(type);
-                    const cookie = "series_seasons=" + encodeURIComponent(JSON.stringify({layout: type})) + "; expires=" + time.toUTCString() + "; path=/";
-                    // console.log({cookie});
-                    document.cookie = cookie;
+                    document.cookie = "series_seasons=" + encodeURIComponent(JSON.stringify({layout: type})) + "; expires=" + time.toUTCString() + "; path=/";
                 });
             });
+        }
+
+        const colorVote = [
+            '#39C049',
+            '#66BA45',
+            '#83B847',
+            '#97B14E',
+            '#A5A749',
+            '#AB9949',
+            '#AE8D4C',
+            '#AF784B',
+            '#AB664F',
+            '#9F5656',
+            '#8B4A5F',
+        ];
+        const episodes = JSON.parse('{{ episodesVotes|json_encode()|raw }}');
+        const episodeCount = episodes.length;
+        let offsetX, offsetY, barWidth, barSpace, barOffset;
+        let voteGraphDiv;
+        const graphic = {width: 500, height: 300};
+
+        function voteGraph() {
+            const viewingProgress = document.querySelector('.viewing-progress');
+            if (!viewingProgress) return;
+
+            const div = document.createElement('div');
+            const graph = document.createElement('canvas');
+
+            graph.classList.add('graph');
+            graph.width = 600;
+            graph.height = 400;
+
+            const ctx = graph.getContext('2d');
+            ctx.fillStyle = "#0000001f";
+            ctx.fillRect(0, 0, graph.width, graph.height);
+            ctx.font = "24px sans-serif";
+            div.appendChild(graph);
+
+            voteGraphDiv = document.querySelector('.vote-graph');
+            voteGraphDiv.appendChild(div);
+
+            offsetX = (graph.width - graphic.width) / 2;
+            offsetY = graph.height - (graph.height - graphic.height) / 2;
+            barSpace = graphic.width / episodeCount;
+            barWidth = barSpace * .8;
+            barOffset = barSpace * .1;
+            episodes.forEach((episode) => {
+                episodeBar(episode, ctx);
+            });
+            console.log({episodes});
+        }
+
+        function voteBar(episodeNumber, vote) {
+            const graph = document.querySelector('.graph');
+            const ctx = graph.getContext('2d');
+            const episode = episodes[episodeNumber - 1];
+            episode.vote = vote;
+            episodeBar(episode, ctx);
+        }
+
+        function episodeBar(episode, ctx) {
+            const x = offsetX + (episode.number - 1) * barSpace + barOffset
+            const y = offsetY - (episode.vote * 30);
+            const w = barWidth;
+            const h = episode.vote * 30;
+            let textWidth;
+
+            ctx.fillStyle = "#3333331f";
+            ctx.strokeStyle = "#3333331f";
+            ctx.clearRect(x - barOffset, offsetY - 301, barSpace, 302);
+            ctx.fillRect(x, offsetY - 300, w, 300);
+            ctx.strokeRect(x, offsetY - 300, w, 300);
+
+            ctx.fillStyle = colorVote[10 - episode.vote];
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2;
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeRect(x, y, w, h);
+
+            ctx.fillStyle = "#ffffff";
+            textWidth = ctx.measureText(episode.number);
+            ctx.fillText(episode.number, x + (barSpace - textWidth.width) / 2, offsetY + 25);
+            if (episode.vote) {
+                textWidth = ctx.measureText(episode.vote);
+                ctx.fillText(episode.vote, x + (barSpace - textWidth.width) / 2, y - 10);
+            }
         }
     </script>
 {% endblock %}
