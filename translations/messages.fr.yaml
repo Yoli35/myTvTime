@@ -942,6 +942,10 @@ Location Scout.he: Repéreur
 Location Scout.she: Repéreuse
 Transportation Co-Captain.he: Co-capitaine du transport
 Transportation Co-Captain.she: Co-capitaine du transport
+Fight Choreographer.he: Chorégraphe de combat
+Fight Choreographer.she: Chorégraphe de combat
+Co-Director.he: Co-réalisateur
+Co-Director.she: Co-réalisatrice
 
 # key facts
 Favorite: Série favorite
@@ -1005,6 +1009,10 @@ tomorrow: demain
 available since: disponible depuis
 available yesterday: disponible hier
 New season: Nouvelle saison
+#vote graphics
+bar: graphe en barre
+plot: graphe en courbe
+Vote graph: Votes
 
 #search user's series
 Search my series: Rechercher parmi mes séries

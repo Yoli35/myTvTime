@@ -1464,7 +1464,7 @@ class SerieController extends AbstractController
             $seasonsCookie = json_decode($_COOKIE['series_seasons'], true);
 //            dump(['$_COOKIE' => $_COOKIE, 'get seasonsCookie' => $seasonsCookie]);
         } else {
-            $seasonsCookie = ['layout' => 'list'];
+            $seasonsCookie = ['layout' => 'list', 'graph' => 'plot'];
             $arr_cookie_options = [
                 'expires' => strtotime('+1 year'),
                 'path' => '/',
@@ -2420,7 +2420,7 @@ class SerieController extends AbstractController
     {
         $episodeViewing->setVote($vote);
         $this->episodeViewingRepository->save($episodeViewing, true);
-        return $this->json(['vote' => $vote, 'episodeNumber' => $episodeViewing->getEpisodeNumber()]);
+        return $this->json(['voteValue' => $vote, 'episodeNumber' => $episodeViewing->getEpisodeNumber()]);
     }
 
     #[Route('/episode/view/{id}/{view}', name: 'app_episode_view', methods: ['GET'])]
@@ -2483,8 +2483,8 @@ class SerieController extends AbstractController
         $this->episodeViewingRepository->save($episodeViewing, true);
 
         return $this->json([
-            'networkId' => $networkId,
-            'result' => 'ok'
+            'result' => 'success',
+            'networkId' => $networkId
         ]);
     }
 
@@ -2495,8 +2495,8 @@ class SerieController extends AbstractController
         $this->episodeViewingRepository->save($episodeViewing, true);
 
         return $this->json([
-            'device' => $device,
-            'result' => 'ok'
+            'result' => 'success',
+            'device' => $device
         ]);
     }
 

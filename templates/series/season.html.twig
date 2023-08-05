@@ -49,7 +49,15 @@
                         </div>
                     {% endif %}
                 </div>
-                <div class="vote-graph"></div>
+                <div class="vote-graph">
+                    <label for="select-graph">{{ 'Vote graph'|trans }}
+                        <select id="select-graph">
+                            {% for type in ['plot', 'bar'] %}
+                                <option value="{{ type }}"{% if seasonsCookie.graph == type %} selected{% endif %}>{{ type|trans }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
             </div>
             <main>
                 <article class="full">
@@ -233,7 +241,7 @@
             initLayout();
             setViewedEpisodeCount();
 
-            voteGraph();
+            initGraph();
         });
 
         function initSubstituteName() {
@@ -269,7 +277,10 @@
         }
 
         function initView() {
-            const watchProviders = JSON.parse(document.querySelector('.season-data').textContent).watchProviders;
+            /**
+             * @type {Array.<{id: number, name: string, logo_path: string}>}
+             */
+            const watchProviders = {{ watchProviders|json_encode(constant('JSON_PRETTY_PRINT'))|raw }};
             const views = document.querySelectorAll('.view');
 
             views.forEach((view) => {
@@ -290,11 +301,10 @@
                     const episodeView = i.classList.contains('fa-check') ? "1" : "0";
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
-                        let data = {seasonCompleted: false, episodeViewed: false, viewedEpisodeCount: 0};
-                        data = JSON.parse(this.responseText);
+                        let {episodeViewed, seasonCompleted, viewedEpisodeCount} = JSON.parse(this.responseText);
                         const provider = view.querySelector('.view-provider');
                         const device = view.querySelector('.view-device');
-                        if (data.episodeViewed) {
+                        if (episodeViewed) {
                             viewValue.innerHTML = '<i class="fa-solid fa-check"></i>';
                             vote.classList.add('show');
                             provider.classList.add('show');
@@ -305,13 +315,13 @@
                             provider.classList.remove('show');
                             device.classList.remove('show');
                         }
-                        if (data.seasonCompleted) {
+                        if (seasonCompleted) {
                             viewValue.classList.add('completed');
                         } else {
                             viewValue.classList.remove('completed');
                         }
                         const viewingProgress = document.querySelector('.viewing-progress');
-                        viewingProgress.querySelector("span").innerText = data.viewedEpisodeCount;
+                        viewingProgress.querySelector("span").innerText = viewedEpisodeCount;
                     }
                     xhr.open("GET", url + episodeView, true);
                     xhr.send();
@@ -322,23 +332,24 @@
                         const providerId = provider.getAttribute('data-id');
                         const xhr = new XMLHttpRequest();
                         xhr.onload = function () {
-                            const data = JSON.parse(this.responseText);
-                            const networkId = data.networkId;
+                            const {result, networkId} = JSON.parse(this.responseText);
                             const userProvider = viewProvider.querySelector('.provider');
 
-                            if (networkId !== -1) {
-                                const img = userProvider.querySelector('img') || document.createElement('img');
-                                img.setAttribute('src', watchProviders[networkId].logo_path);
-                                img.setAttribute('alt', watchProviders[networkId].name);
-                                img.setAttribute('title', watchProviders[networkId].name);
+                            if (result === 'success') {
+                                if (networkId !== -1) {
+                                    const img = userProvider.querySelector('img') || document.createElement('img');
+                                    img.setAttribute('src', watchProviders[networkId].logo_path);
+                                    img.setAttribute('alt', watchProviders[networkId].name);
+                                    img.setAttribute('title', watchProviders[networkId].name);
 
-                                userProvider.appendChild(img);
-                                userProvider.classList.remove('other');
-                                userProvider.setAttribute('data-id', networkId);
-                            } else {
-                                userProvider.querySelector('img').remove();
-                                userProvider.classList.add('other');
-                                userProvider.setAttribute('data-id', -1);
+                                    userProvider.appendChild(img);
+                                    userProvider.classList.remove('other');
+                                    userProvider.setAttribute('data-id', networkId);
+                                } else {
+                                    userProvider.querySelector('img').remove();
+                                    userProvider.classList.add('other');
+                                    userProvider.setAttribute('data-id', -1);
+                                }
                             }
                         }
                         xhr.open("GET", urlNetwork + providerId, true);
@@ -366,15 +377,17 @@
                         let oldDeviceName = viewDevice.getAttribute('data-device');
                         const xhr = new XMLHttpRequest();
                         xhr.onload = function () {
-                            const data = JSON.parse(this.responseText);
-                            const newDeviceName = data.device;
-                            viewDevice.classList.remove(oldDeviceName);
-                            viewDevice.classList.add(newDeviceName);
-                            viewDevice.setAttribute('data-device', newDeviceName);
-                            if (newDeviceName === 'tv') {
-                                viewDevice.querySelector('span').innerText = 'TV';
-                            } else {
-                                viewDevice.querySelector('span').innerText = '';
+                            const {result, device} = JSON.parse(this.responseText);
+                            if (result === 'success') {
+                                const newDeviceName = device;
+                                viewDevice.classList.remove(oldDeviceName);
+                                viewDevice.classList.add(newDeviceName);
+                                viewDevice.setAttribute('data-device', newDeviceName);
+                                if (newDeviceName === 'tv') {
+                                    viewDevice.querySelector('span').innerText = 'TV';
+                                } else {
+                                    viewDevice.querySelector('span').innerText = '';
+                                }
                             }
                         }
                         xhr.open("GET", urlDevice + deviceName, true);
@@ -434,9 +447,7 @@
 
                         const xhr = new XMLHttpRequest();
                         xhr.onload = function () {
-                            const data = JSON.parse(xhr.responseText);
-                            const voteValue = data.vote;
-                            const episodeNumber = data.episodeNumber;
+                            const {voteValue, episodeNumber} = JSON.parse(xhr.responseText);
 
                             voteValueDiv.innerText = voteValue + " / 10";
                             voteGraduations.forEach((graduation) => {
@@ -499,7 +510,7 @@
                     time.setFullYear(time.getFullYear() + 1);
                     episodes.classList.remove('roomy', 'compact', 'list');
                     episodes.classList.add(type);
-                    document.cookie = "series_seasons=" + encodeURIComponent(JSON.stringify({layout: type})) + "; expires=" + time.toUTCString() + "; path=/";
+                    setSeasonLayoutCookie(type);
                 });
             });
         }
@@ -524,12 +535,13 @@
         let voteGraphDiv;
         const graphic = {width: 500, height: 300};
 
-        function voteGraph() {
+        function initGraph() {
             const viewingProgress = document.querySelector('.viewing-progress');
             if (!viewingProgress) return;
 
+            graphicType = getSeasonGraphCookie();
+
             const div = document.createElement('div');
-            const select = document.createElement('select');
             const graph = document.createElement('canvas');
 
             graph.classList.add('graph');
@@ -537,26 +549,8 @@
             graph.height = 400;
 
             const ctx = graph.getContext('2d');
-            ctx.fillStyle = "#0000001f";
-            ctx.fillRect(0, 0, graph.width, graph.height);
             ctx.font = "24px sans-serif";
             div.appendChild(graph);
-
-            graphicTypes.forEach((type) => {
-                const option = document.createElement('option');
-                option.innerText = type;
-                option.value = type;
-                if (type === graphicType) option.setAttribute('selected', 'selected');
-                select.appendChild(option);
-            });
-            select.addEventListener('change', (e) => {
-                graphicType = e.currentTarget.value;
-                voteGraph();
-            });
-
-            voteGraphDiv = document.querySelector('.vote-graph');
-            voteGraphDiv.appendChild(div);
-            voteGraphDiv.appendChild(select);
 
             offsetX = (graph.width - graphic.width) / 2;
             offsetY = graph.height - (graph.height - graphic.height) / 2;
@@ -565,6 +559,64 @@
             barOffset = barSpace * .1;
             verticalInc = graphic.height * .1;
             plotSize = graphic.height * .05;
+
+            voteGraphDiv = document.querySelector('.vote-graph');
+            voteGraphDiv.appendChild(div);
+
+            const select = document.querySelector("#select-graph");
+            select.addEventListener('change', (e) => {
+                /** @type {HTMLSelectElement} */
+                const target = e.currentTarget;
+                graphicType = target.value;
+                setSeasonGraphCookie(graphicType);
+                voteGraph();
+            });
+            voteGraph();
+        }
+
+        function getSeasonCookie() {
+            return JSON.parse(decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('series_seasons=')).split('=')[1]));
+        }
+
+        function getSeasonLayoutCookie() {
+            return getSeasonCookie().layout;
+        }
+
+        function getSeasonGraphCookie() {
+            return getSeasonCookie().graph;
+        }
+
+        function setSeasonLayoutCookie(layout) {
+            const cookie = getSeasonCookie();
+            cookie.layout = layout;
+            setSeasonCookie(cookie);
+        }
+
+        function setSeasonGraphCookie(graph) {
+            const cookie = getSeasonCookie();
+            cookie.graph = graph;
+            setSeasonCookie(cookie);
+        }
+
+        function setSeasonCookie(cookie) {
+            const time = new Date();
+            time.setFullYear(time.getFullYear() + 1);
+            document.cookie = "series_seasons=" + encodeURIComponent(JSON.stringify(cookie)) + "; expires=" + time.toUTCString() + "; path=/";
+        }
+
+        function voteGraph() {
+            /**
+             * @type {HTMLCanvasElement}
+             */
+            const graph = document.querySelector('canvas[class=graph]');
+            /**
+             * @type {CanvasRenderingContext2D}
+             */
+            const ctx = graph.getContext('2d');
+
+            ctx.clearRect(0, 0, graph.width, graph.height);
+            ctx.fillStyle = "#0000001f";
+            ctx.fillRect(0, 0, graph.width, graph.height);
 
             if (graphicType === 'plot') {
                 let prevEpisode = null;
@@ -579,20 +631,21 @@
                     episodePlot(ctx, episode);
                 });
                 return;
-                ;
             }
             if (graphicType === 'bar') {
                 episodes.forEach((episode) => {
                     episodeBar(ctx, episode);
                 });
             }
-            console.log({episodes});
+            // console.log({episodes});
         }
 
         function adjustVote(episodeNumber, vote) {
             const episode = episodes[episodeNumber - 1];
             episode.vote = vote;
+            /** @type {HTMLCanvasElement} */
             const graph = document.querySelector('.graph');
+            /** @type {CanvasRenderingContext2D} */
             const ctx = graph.getContext('2d');
 
             if (graphicType === 'plot') {

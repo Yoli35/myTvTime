@@ -1438,6 +1438,14 @@
             justify-content: center;
             min-height: 30rem;
 
+            > label {
+                z-index: 1;
+
+                > select {
+                    z-index: 1;
+                }
+            }
+
             > div {
                 align-items: center;
                 background-color: var(--gradient-ardoise-0);
