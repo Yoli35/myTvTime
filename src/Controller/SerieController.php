@@ -2369,6 +2369,10 @@ class SerieController extends AbstractController
             $serie = $this->serieRepository->find($id);
         else
             $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
+        if (!$serie) {
+            return $this->json(['success' => false, 'message' => 'Serie not found']);
+        }
+
         $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
 //        dump(['show' => $show, 'id' => $id, 'serie' => $serie, 'serieViewing' => $serieViewing, 'providerId' => $providerId]);
         $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);

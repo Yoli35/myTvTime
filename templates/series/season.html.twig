@@ -447,7 +447,7 @@
                                     graduation.classList.remove('active');
                                 }
                             });
-                            voteBar(episodeNumber, voteValue);
+                            adjustVote(episodeNumber, voteValue);
                         }
                         xhr.open("GET", url + value, true);
                         xhr.send();
@@ -519,7 +519,8 @@
         ];
         const episodes = JSON.parse('{{ episodesVotes|json_encode()|raw }}');
         const episodeCount = episodes.length;
-        let offsetX, offsetY, barWidth, barSpace, barOffset;
+        const graphicTypes = ['plot', 'bar'];
+        let graphicType = 'plot', offsetX, offsetY, barWidth, barSpace, barOffset, verticalInc, plotSize;
         let voteGraphDiv;
         const graphic = {width: 500, height: 300};
 
@@ -528,6 +529,7 @@
             if (!viewingProgress) return;
 
             const div = document.createElement('div');
+            const select = document.createElement('select');
             const graph = document.createElement('canvas');
 
             graph.classList.add('graph');
@@ -540,40 +542,91 @@
             ctx.font = "24px sans-serif";
             div.appendChild(graph);
 
+            graphicTypes.forEach((type) => {
+                const option = document.createElement('option');
+                option.innerText = type;
+                option.value = type;
+                if (type === graphicType) option.setAttribute('selected', 'selected');
+                select.appendChild(option);
+            });
+            select.addEventListener('change', (e) => {
+                graphicType = e.currentTarget.value;
+                voteGraph();
+            });
+
             voteGraphDiv = document.querySelector('.vote-graph');
             voteGraphDiv.appendChild(div);
+            voteGraphDiv.appendChild(select);
 
             offsetX = (graph.width - graphic.width) / 2;
             offsetY = graph.height - (graph.height - graphic.height) / 2;
             barSpace = graphic.width / episodeCount;
             barWidth = barSpace * .8;
             barOffset = barSpace * .1;
-            episodes.forEach((episode) => {
-                episodeBar(episode, ctx);
-            });
+            verticalInc = graphic.height * .1;
+            plotSize = graphic.height * .05;
+
+            if (graphicType === 'plot') {
+                let prevEpisode = null;
+                episodes.forEach((episode) => {
+                    clearBar(ctx, offsetX + (episode.number - 1) * barSpace, barSpace);
+                });
+                episodes.forEach((episode) => {
+                    episodeLine(ctx, episode, prevEpisode);
+                    prevEpisode = episode;
+                });
+                episodes.forEach((episode) => {
+                    episodePlot(ctx, episode);
+                });
+                return;
+                ;
+            }
+            if (graphicType === 'bar') {
+                episodes.forEach((episode) => {
+                    episodeBar(ctx, episode);
+                });
+            }
             console.log({episodes});
         }
 
-        function voteBar(episodeNumber, vote) {
-            const graph = document.querySelector('.graph');
-            const ctx = graph.getContext('2d');
+        function adjustVote(episodeNumber, vote) {
             const episode = episodes[episodeNumber - 1];
             episode.vote = vote;
-            episodeBar(episode, ctx);
+            const graph = document.querySelector('.graph');
+            const ctx = graph.getContext('2d');
+
+            if (graphicType === 'plot') {
+                ctx.fillStyle = "#0000001f";
+                ctx.clearRect(0, 0, graph.width, graph.height);
+                ctx.fillRect(0, 0, graph.width, graph.height);
+                let prevEpisode = null;
+                episodes.forEach((episode) => {
+                    clearBar(ctx, offsetX + (episode.number - 1) * barSpace, barSpace);
+                });
+                episodes.forEach((episode) => {
+                    episodeLine(ctx, episode, prevEpisode);
+                    prevEpisode = episode;
+                });
+                episodes.forEach((episode) => {
+                    episodePlot(ctx, episode);
+                });
+                return;
+            }
+            if (graphicType === 'bar') {
+                episodeBar(ctx, episode);
+            }
         }
 
-        function episodeBar(episode, ctx) {
-            const x = offsetX + (episode.number - 1) * barSpace + barOffset
-            const y = offsetY - (episode.vote * 30);
-            const w = barWidth;
-            const h = episode.vote * 30;
+        function episodeBar(ctx, episode) {
+            let x = offsetX + (episode.number - 1) * barSpace;
+            let y = offsetY - (episode.vote * 30);
+            let w = barWidth;
+            let h = episode.vote * 30;
             let textWidth;
 
-            ctx.fillStyle = "#3333331f";
-            ctx.strokeStyle = "#3333331f";
-            ctx.clearRect(x - barOffset, offsetY - 301, barSpace, 302);
-            ctx.fillRect(x, offsetY - 300, w, 300);
-            ctx.strokeRect(x, offsetY - 300, w, 300);
+            clearBar(ctx, x, barSpace);
+
+            x += barOffset;
 
             ctx.fillStyle = colorVote[10 - episode.vote];
             ctx.strokeStyle = "#ffffff";
@@ -588,6 +641,64 @@
                 textWidth = ctx.measureText(episode.vote);
                 ctx.fillText(episode.vote, x + (barSpace - textWidth.width) / 2, y - 10);
             }
+        }
+
+        function episodePlot(ctx, episode) {
+            let x = offsetX + (episode.number - 1) * barSpace;
+            let y = offsetY - (episode.vote - .5) * verticalInc;
+            let textWidth;
+
+            if (!episode.vote) return;
+
+            x += barSpace / 2;
+            ctx.fillStyle = colorVote[10 - episode.vote];
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, y, plotSize / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#ffffff";
+            textWidth = ctx.measureText(episode.number);
+            ctx.fillText(episode.number, x - textWidth.width / 2, offsetY + 25);
+            if (episode.vote) {
+                textWidth = ctx.measureText(episode.vote);
+                if (episode.vote > 5)
+                    ctx.fillText(episode.vote, x - textWidth.width / 2, y - plotSize / 2 - 10);
+                else
+                    ctx.fillText(episode.vote, x - textWidth.width / 2, y + plotSize / 2 + 25);
+            }
+        }
+
+        function episodeLine(ctx, episode, prevEpisode) {
+            let x = offsetX + (episode.number - 1) * barSpace;
+            let y = offsetY - (episode.vote - .5) * verticalInc;
+
+            if (!episode.vote) return;
+
+            if (prevEpisode) {
+                let prevX = offsetX + (prevEpisode.number - 1) * barSpace;
+                let prevY = offsetY - (prevEpisode.vote - .5) * verticalInc;
+                // clearBar(ctx, x, barSpace);
+                // clearBar(ctx, prevX, barSpace);
+                x += barSpace / 2;
+                prevX += barSpace / 2;
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(prevX, prevY);
+                ctx.stroke();
+            }
+        }
+
+        function clearBar(ctx, x, w) {
+            ctx.fillStyle = "#3333331f";
+            ctx.strokeStyle = "#3333331f";
+            ctx.clearRect(x - barOffset, offsetY - 301, barSpace, 302);
+            ctx.fillRect(x, offsetY - 300, w, 300);
+            ctx.strokeRect(x, offsetY - 300, w, 300);
         }
     </script>
 {% endblock %}
