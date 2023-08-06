@@ -944,6 +944,8 @@ Transportation Co-Captain.he: Co-capitaine du transport
 Transportation Co-Captain.she: Co-capitaine du transport
 Fight Choreographer.he: Chorégraphe de combat
 Fight Choreographer.she: Chorégraphe de combat
+Martial Arts Choreographer.he: Chorégraphe d'arts martiaux
+Martial Arts Choreographer.she: Chorégraphe d'arts martiaux
 Co-Director.he: Co-réalisateur
 Co-Director.she: Co-réalisatrice
 
@@ -1013,6 +1015,8 @@ New season: Nouvelle saison
 bar: graphe en barre
 plot: graphe en courbe
 Vote graph: Votes
+Grid: Grille
+Colored grid: Grille colorée
 
 #search user's series
 Search my series: Rechercher parmi mes séries

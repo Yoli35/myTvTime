@@ -57,6 +57,16 @@
                             {% endfor %}
                         </select>
                     </label>
+                    <div class="options">
+                        <label>
+                            <input type="checkbox" id="option-graph-grid"
+                                   value="grid"{% if seasonsCookie.grid == 'grid' %} checked{% endif %}>
+                        </label>{{ 'Grid'|trans }}
+                        <label>
+                            <input type="checkbox" id="option-graph-colored-grid"
+                                   value="colored"{% if seasonsCookie.coloredGrid == 'color' %} checked{% endif %}>
+                        </label>{{ 'Colored grid'|trans }}
+                    </div>
                 </div>
             </div>
             <main>
@@ -242,6 +252,8 @@
             setViewedEpisodeCount();
 
             initGraph();
+
+            console.log(getSeasonCookie());
         });
 
         function initSubstituteName() {
@@ -510,7 +522,7 @@
                     time.setFullYear(time.getFullYear() + 1);
                     episodes.classList.remove('roomy', 'compact', 'list');
                     episodes.classList.add(type);
-                    setSeasonLayoutCookie(type);
+                    setLayoutSeasonCookie(type);
                 });
             });
         }
@@ -526,7 +538,7 @@
             '#AF784B',
             '#AB664F',
             '#9F5656',
-            '#8B4A5F',
+            '#FFFFFF',
         ];
         const episodes = JSON.parse('{{ episodesVotes|json_encode()|raw }}');
         const episodeCount = episodes.length;
@@ -539,11 +551,12 @@
             const viewingProgress = document.querySelector('.viewing-progress');
             if (!viewingProgress) return;
 
-            graphicType = getSeasonGraphCookie();
+            graphicType = getGraphSeasonCookie();
 
             const div = document.createElement('div');
             const graph = document.createElement('canvas');
 
+            div.classList.add('graph-container');
             graph.classList.add('graph');
             graph.width = 600;
             graph.height = 400;
@@ -568,40 +581,32 @@
                 /** @type {HTMLSelectElement} */
                 const target = e.currentTarget;
                 graphicType = target.value;
-                setSeasonGraphCookie(graphicType);
+                setGraphSeasonCookie(graphicType);
+                voteGraph();
+            });
+            const inputGrid = document.querySelector("#option-graph-grid");
+            inputGrid.addEventListener('change', (e) => {
+                /** @type {HTMLInputElement} */
+                const target = e.currentTarget;
+                if (target.checked) {
+                    setGraphGridSeasonCookie('grid');
+                } else {
+                    setGraphGridSeasonCookie('none');
+                }
+                voteGraph();
+            });
+            const inputColoredGrid = document.querySelector("#option-graph-colored-grid");
+            inputColoredGrid.addEventListener('change', (e) => {
+                /** @type {HTMLInputElement} */
+                const target = e.currentTarget;
+                if (target.checked) {
+                    setGraphColoredGridSeasonCookie('color');
+                } else {
+                    setGraphColoredGridSeasonCookie('none');
+                }
                 voteGraph();
             });
             voteGraph();
-        }
-
-        function getSeasonCookie() {
-            return JSON.parse(decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('series_seasons=')).split('=')[1]));
-        }
-
-        function getSeasonLayoutCookie() {
-            return getSeasonCookie().layout;
-        }
-
-        function getSeasonGraphCookie() {
-            return getSeasonCookie().graph;
-        }
-
-        function setSeasonLayoutCookie(layout) {
-            const cookie = getSeasonCookie();
-            cookie.layout = layout;
-            setSeasonCookie(cookie);
-        }
-
-        function setSeasonGraphCookie(graph) {
-            const cookie = getSeasonCookie();
-            cookie.graph = graph;
-            setSeasonCookie(cookie);
-        }
-
-        function setSeasonCookie(cookie) {
-            const time = new Date();
-            time.setFullYear(time.getFullYear() + 1);
-            document.cookie = "series_seasons=" + encodeURIComponent(JSON.stringify(cookie)) + "; expires=" + time.toUTCString() + "; path=/";
         }
 
         function voteGraph() {
@@ -614,9 +619,7 @@
              */
             const ctx = graph.getContext('2d');
 
-            ctx.clearRect(0, 0, graph.width, graph.height);
-            ctx.fillStyle = "#0000001f";
-            ctx.fillRect(0, 0, graph.width, graph.height);
+            clearGraph(graph, ctx);
 
             if (graphicType === 'plot') {
                 let prevEpisode = null;
@@ -649,20 +652,7 @@
             const ctx = graph.getContext('2d');
 
             if (graphicType === 'plot') {
-                ctx.fillStyle = "#0000001f";
-                ctx.clearRect(0, 0, graph.width, graph.height);
-                ctx.fillRect(0, 0, graph.width, graph.height);
-                let prevEpisode = null;
-                episodes.forEach((episode) => {
-                    clearBar(ctx, offsetX + (episode.number - 1) * barSpace, barSpace);
-                });
-                episodes.forEach((episode) => {
-                    episodeLine(ctx, episode, prevEpisode);
-                    prevEpisode = episode;
-                });
-                episodes.forEach((episode) => {
-                    episodePlot(ctx, episode);
-                });
+                voteGraph();
                 return;
             }
             if (graphicType === 'bar') {
@@ -681,43 +671,50 @@
 
             x += barOffset;
 
-            ctx.fillStyle = colorVote[10 - episode.vote];
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2;
-            ctx.fillRect(x, y, w, h);
-            ctx.strokeRect(x, y, w, h);
+            if (episode.vote) {
+                ctx.fillStyle = colorVote[10 - episode.vote];
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 2;
+                ctx.fillRect(x, y, w, h);
+                ctx.strokeRect(x, y, w, h);
 
-            ctx.fillStyle = "#ffffff";
+                ctx.fillStyle = "#ffffff";
+            } else {
+                ctx.fillStyle = "#888888";
+            }
             textWidth = ctx.measureText(episode.number);
-            ctx.fillText(episode.number, x + (barSpace - textWidth.width) / 2, offsetY + 25);
+            ctx.fillText(episode.number, x + (barWidth - textWidth.width) / 2, offsetY + 25);
             if (episode.vote) {
                 textWidth = ctx.measureText(episode.vote);
-                ctx.fillText(episode.vote, x + (barSpace - textWidth.width) / 2, y - 10);
+                ctx.fillText(episode.vote, x + (barWidth - textWidth.width) / 2, y - 10);
             }
         }
 
         function episodePlot(ctx, episode) {
             let x = offsetX + (episode.number - 1) * barSpace;
-            let y = offsetY - (episode.vote - .5) * verticalInc;
+            let y = offsetY - (episode.vote) * verticalInc;
             let textWidth;
 
-            if (!episode.vote) return;
-
             x += barSpace / 2;
-            ctx.fillStyle = colorVote[10 - episode.vote];
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(x, y, plotSize / 2, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.stroke();
 
-            ctx.fillStyle = "#ffffff";
+            if (episode.vote) {
+                ctx.fillStyle = colorVote[10 - episode.vote];
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(x, y, plotSize / 2, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = "#ffffff";
+            } else {
+                ctx.fillStyle = "#888888";
+            }
             textWidth = ctx.measureText(episode.number);
             ctx.fillText(episode.number, x - textWidth.width / 2, offsetY + 25);
             if (episode.vote) {
                 textWidth = ctx.measureText(episode.vote);
-                if (episode.vote > 5)
+                if (episode.vote > 5 && episode.vote < 10)
                     ctx.fillText(episode.vote, x - textWidth.width / 2, y - plotSize / 2 - 10);
                 else
                     ctx.fillText(episode.vote, x - textWidth.width / 2, y + plotSize / 2 + 25);
@@ -726,13 +723,13 @@
 
         function episodeLine(ctx, episode, prevEpisode) {
             let x = offsetX + (episode.number - 1) * barSpace;
-            let y = offsetY - (episode.vote - .5) * verticalInc;
+            let y = offsetY - (episode.vote) * verticalInc;
 
             if (!episode.vote) return;
 
             if (prevEpisode) {
                 let prevX = offsetX + (prevEpisode.number - 1) * barSpace;
-                let prevY = offsetY - (prevEpisode.vote - .5) * verticalInc;
+                let prevY = offsetY - (prevEpisode.vote) * verticalInc;
                 // clearBar(ctx, x, barSpace);
                 // clearBar(ctx, prevX, barSpace);
                 x += barSpace / 2;
@@ -746,12 +743,79 @@
             }
         }
 
+        function clearGraph(graph, ctx) {
+            ctx.clearRect(0, 0, graph.width, graph.height);
+            ctx.fillStyle = "#0000001f";
+            ctx.fillRect(0, 0, graph.width, graph.height);
+        }
+
         function clearBar(ctx, x, w) {
-            ctx.fillStyle = "#3333331f";
+            ctx.fillStyle = "#5555551f";
             ctx.strokeStyle = "#3333331f";
-            ctx.clearRect(x - barOffset, offsetY - 301, barSpace, 302);
+            // ctx.clearRect(x - barOffset, offsetY - 301, barSpace, 302);
             ctx.fillRect(x, offsetY - 300, w, 300);
             ctx.strokeRect(x, offsetY - 300, w, 300);
+
+            ctx.fillStyle = "#DDDDDD";
+            if (getGraphGridSeasonCookie() === 'grid') {
+                for (let i = 0; i <= 10; i++) {
+                    if (getGraphColoredGridSeasonCookie() === 'color') {
+                        ctx.fillStyle = colorVote[10 - i];
+                    }
+                    ctx.fillRect(x, offsetY - i * verticalInc, barSpace, 1);
+                }
+            }
+        }
+
+        function getSeasonCookie() {
+            return JSON.parse(decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('series_seasons=')).split('=')[1]));
+        }
+
+        function setSeasonCookie(cookie) {
+            const time = new Date();
+            time.setFullYear(time.getFullYear() + 1);
+            document.cookie = "series_seasons=" + encodeURIComponent(JSON.stringify(cookie)) + "; expires=" + time.toUTCString() + "; path=/";
+            console.log(getSeasonCookie());
+        }
+
+        function getLayoutSeasonCookie() {
+            return getSeasonCookie().layout;
+        }
+
+        function setLayoutSeasonCookie(layout) {
+            const cookie = getSeasonCookie();
+            cookie.layout = layout;
+            setSeasonCookie(cookie);
+        }
+
+        function getGraphSeasonCookie() {
+            return getSeasonCookie().graph;
+        }
+
+        function setGraphSeasonCookie(graph) {
+            const cookie = getSeasonCookie();
+            cookie.graph = graph;
+            setSeasonCookie(cookie);
+        }
+
+        function getGraphGridSeasonCookie() {
+            return getSeasonCookie().grid;
+        }
+
+        function setGraphGridSeasonCookie(grid) {
+            const cookie = getSeasonCookie();
+            cookie.grid = grid;
+            setSeasonCookie(cookie);
+        }
+
+        function getGraphColoredGridSeasonCookie() {
+            return getSeasonCookie().coloredGrid;
+        }
+
+        function setGraphColoredGridSeasonCookie(coloredGrid) {
+            const cookie = getSeasonCookie();
+            cookie.coloredGrid = coloredGrid;
+            setSeasonCookie(cookie);
         }
     </script>
 {% endblock %}

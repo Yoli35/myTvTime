@@ -1464,7 +1464,12 @@ class SerieController extends AbstractController
             $seasonsCookie = json_decode($_COOKIE['series_seasons'], true);
 //            dump(['$_COOKIE' => $_COOKIE, 'get seasonsCookie' => $seasonsCookie]);
         } else {
-            $seasonsCookie = ['layout' => 'list', 'graph' => 'plot'];
+            $seasonsCookie = [
+                'layout' => 'list',         // roomy, compact, list
+                'graph' => 'plot',          // plot, bar
+                'grid' => 'grid',           // grid, none
+                'coloredGrid' => 'color'    // color, none
+            ];
             $arr_cookie_options = [
                 'expires' => strtotime('+1 year'),
                 'path' => '/',
