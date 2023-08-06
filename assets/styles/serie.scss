@@ -1725,6 +1725,10 @@
                                 position: absolute;
                                 width: 3em;
 
+                                span {
+                                    font-size: 1.5em;
+                                }
+
                                 //&.viewed {
                                 //    background-color: var(--gradient-green-30);
                                 //    border-color: var(--gradient-yellow-50);
@@ -1823,10 +1827,13 @@
                                     color: var(--gradient-ardoise-30);
                                     cursor: pointer;
                                     display: flex;
-                                    //font-size: 2em;
                                     height: 3em;
                                     justify-content: center;
                                     width: 3em;
+
+                                    i {
+                                        font-size: 1.5em;
+                                    }
 
                                     &:has(i[class$="plus"]) {
                                         padding-left: 2px;
@@ -2021,9 +2028,10 @@
 
                 .episodes {
                     &.roomy {
+                        --episode-roomy-size: .75rem;
                         flex-direction: row;
                         flex-wrap: wrap;
-                        font-size: .75rem;
+                        font-size: var(--episode-roomy-size);
 
                         .episode {
                             width: unset;
@@ -2069,32 +2077,59 @@
 
                 .episodes-layout {
                     @include flex-row(center, flex-end);
+                    gap: 1rem;
                     margin-left: auto;
-                    border-radius: .25rem;
-                    background-color: var(--gradient-ardoise-30);
                     margin-bottom: 1rem;
 
+                    label {
+                        align-items: center;
+                        display: none;
+                        gap: 1rem;
+                        justify-content: center;
 
-                    .episodes-layout-item {
-                        @include flex-row(center, center);
-                        font-size: 1.5rem;
-                        height: 2.5rem;
-                        width: 2.5rem;
-
-                        &:first-child {
-                            border-radius: .25rem 0 0 .25rem;
-                        }
-
-                        &:last-child {
-                            border-radius: 0 .25rem .25rem 0;
-                        }
-
-                        &.active {
+                        .layout-size-value {
                             background-color: var(--gradient-ardoise-50);
+                            border-radius: .25rem;
+                            font-size: 1.5rem;
+                            font-weight: bold;
+                            padding: .25rem;
+                            text-align: center;
+                            width: 4rem;
                         }
+                    }
 
-                        &:hover {
-                            background-color: var(--gradient-ardoise-60);
+                    &:has(div[data-type="roomy"].episodes-layout-item.active) {
+                        label {
+                            display: flex;
+                        }
+                    }
+
+                    .episodes-layout-items {
+                        border-radius: .25rem;
+                        background-color: var(--gradient-ardoise-30);
+                        display: flex;
+
+                        .episodes-layout-item {
+                            @include flex-row(center, center);
+                            font-size: 1.5rem;
+                            height: 2.5rem;
+                            width: 2.5rem;
+
+                            &:first-child {
+                                border-radius: .25rem 0 0 .25rem;
+                            }
+
+                            &:last-child {
+                                border-radius: 0 .25rem .25rem 0;
+                            }
+
+                            &.active {
+                                background-color: var(--gradient-ardoise-50);
+                            }
+
+                            &:hover {
+                                background-color: var(--gradient-ardoise-60);
+                            }
                         }
                     }
                 }

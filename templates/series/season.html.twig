@@ -73,15 +73,22 @@
                 <article class="full">
                     <section>
                         <div class="episodes-layout">
-                            <div data-type="roomy"
-                                 class="episodes-layout-item{% if seasonsCookie.layout == 'roomy' %} active{% endif %}">
-                                <i class="fa-solid fa-table-cells-large"></i></div>
-                            <div data-type="compact"
-                                 class="episodes-layout-item{% if seasonsCookie.layout == 'compact' %} active{% endif %}">
-                                <i class="fa-solid fa-table-cells"></i></div>
-                            <div data-type="list"
-                                 class="episodes-layout-item{% if seasonsCookie.layout == 'list' %} active{% endif %}">
-                                <i class="fa-solid fa-table-list"></i></div>
+                            <label for="layout-size">
+                                <span>{{ 'Size for roomy mode'|trans }} :</span>
+                                <span class="layout-size-value">{{ seasonsCookie.roomySize }}</span>
+                                <input type="range" id="layout-size" min=".5" max="3" step=".25" value="{{ seasonsCookie.roomySize }}">
+                            </label>
+                            <div class="episodes-layout-items">
+                                <div data-type="roomy" title="{{ 'Roomy'|trans }}" class="episodes-layout-item{% if seasonsCookie.layout == 'roomy' %} active{% endif %}">
+                                    <i class="fa-solid fa-table-cells-large"></i>
+                                </div>
+                                <div data-type="compact" title="{{ 'Compact'|trans }}" class="episodes-layout-item{% if seasonsCookie.layout == 'compact' %} active{% endif %}">
+                                    <i class="fa-solid fa-table-cells"></i>
+                                </div>
+                                <div data-type="list" title="{{ 'List'|trans }}" class="episodes-layout-item{% if seasonsCookie.layout == 'list' %} active{% endif %}">
+                                    <i class="fa-solid fa-table-list"></i>
+                                </div>
+                            </div>
                         </div>
                         <div class="episodes {{ seasonsCookie.layout }}">
                             {% for episode in episodes %}
@@ -92,7 +99,8 @@
                                     <div class="still">
                                         <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
                                         <div class="episode-name">{{ episode.name }}</div>
-                                        <div class="episode-number{% if episode.viewing and episode.viewing.viewedAt %} viewed{% endif %}">{{ episode.episode_number }}</div>
+                                        <div class="episode-number{% if episode.viewing and episode.viewing.viewedAt %} viewed{% endif %}">
+                                            <span>{{ episode.episode_number }}</span></div>
                                     </div>
                                     <div class="infos">
                                         <h4>
@@ -525,6 +533,31 @@
                     setLayoutSeasonCookie(type);
                 });
             });
+            const layoutSize = document.querySelector('#layout-size');
+            layoutSize.addEventListener('click', (e) => {
+                /**
+                 * @type {HTMLInputElement}
+                 */
+                const target = e.currentTarget;
+                const newValue = target.value;
+                // const span = target.parentElement.querySelector('.layout-size-value');
+                // span.innerText = newValue;
+                setLayoutSizeSeasonCookie(newValue);
+            });
+            layoutSize.addEventListener('input', (e) => {
+                /**
+                 * @type {HTMLInputElement}
+                 */
+                const target = e.currentTarget;
+                const newValue = target.value;
+                const span = target.parentElement.querySelector('.layout-size-value');
+                span.innerText = newValue;
+                /**
+                 * @type {HTMLElement}
+                 */
+                const episodes = document.querySelector('.episodes.roomy');
+                episodes.style.setProperty('--episode-roomy-size', newValue + 'rem');
+            });
         }
 
         const colorVote = [
@@ -752,7 +785,7 @@
         function clearBar(ctx, x, w) {
             ctx.fillStyle = "#5555551f";
             ctx.strokeStyle = "#3333331f";
-            // ctx.clearRect(x - barOffset, offsetY - 301, barSpace, 302);
+            ctx.clearRect(x, offsetY - 300, barSpace, 300);
             ctx.fillRect(x, offsetY - 300, w, 300);
             ctx.strokeRect(x, offsetY - 300, w, 300);
 
@@ -785,6 +818,16 @@
         function setLayoutSeasonCookie(layout) {
             const cookie = getSeasonCookie();
             cookie.layout = layout;
+            setSeasonCookie(cookie);
+        }
+
+        function getLayoutSizeSeasonCookie() {
+            return getSeasonCookie().roomySize;
+        }
+
+        function setLayoutSizeSeasonCookie(roomySize) {
+            const cookie = getSeasonCookie();
+            cookie.roomySize = roomySize;
             setSeasonCookie(cookie);
         }
 

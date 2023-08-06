@@ -1466,6 +1466,7 @@ class SerieController extends AbstractController
         } else {
             $seasonsCookie = [
                 'layout' => 'list',         // roomy, compact, list
+                'roomySize' => .75,         // 0.5 -> 3
                 'graph' => 'plot',          // plot, bar
                 'grid' => 'grid',           // grid, none
                 'coloredGrid' => 'color'    // color, none
