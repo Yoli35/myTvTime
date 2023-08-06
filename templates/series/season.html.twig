@@ -1,14 +1,24 @@
 {% extends 'base.html.twig' %}
 {% set user = app.user %}
 {% block title %}myTvTime ▶ ︎
-    {% if parameters.from == 'top_rated' %}
-        {{ 'Top Rated Series'|trans }}::{{ serie.name }}
+    {% if parameters.from == 'popular' %}
+        {{ 'Popular Series'|trans }}
     {% elseif parameters.from == 'search' %}
         {{ 'Series search'|trans }}
+    {% elseif parameters.from == 'my_series_to_start' %}
+        {{ 'My series to start'|trans }}
+    {% elseif parameters.from == 'my_series_to_end' %}
+        {{ 'My series to end'|trans }}
+    {% elseif parameters.from == 'upcoming_series' %}
+        {{ 'Upcoming series'|trans }}
+    {% elseif parameters.from == 'upcoming_episodes' %}
+        {{ 'Upcoming episodes'|trans }}
     {% elseif parameters.from == 'today' %}
-        {{ 'Latest Serie'|trans }}
+        {{ 'My series airing today'|trans }}
+    {% elseif parameters.from == 'my-events' %}
+        {{ 'My events'|trans }}
     {% else %}
-        {{ 'My Series'|trans }}
+        {{ 'My series'|trans }}
     {% endif %}
     ▶ ︎{{ serie.name }}
 {% endblock %}
@@ -52,7 +62,7 @@
                 <div class="vote-graph">
                     <label for="select-graph">{{ 'Vote graph'|trans }}
                         <select id="select-graph">
-                            {% for type in ['plot', 'bar'] %}
+                            {% for type in ['plot', 'bar', 'radial'] %}
                                 <option value="{{ type }}"{% if seasonsCookie.graph == type %} selected{% endif %}>{{ type|trans }}</option>
                             {% endfor %}
                         </select>
@@ -558,6 +568,8 @@
                 const episodes = document.querySelector('.episodes.roomy');
                 episodes.style.setProperty('--episode-roomy-size', newValue + 'rem');
             });
+            const episodes = document.querySelector('.episodes.roomy');
+            episodes.style.setProperty('--episode-roomy-size', getLayoutSizeSeasonCookie() + 'rem');
         }
 
         const colorVote = [
@@ -576,7 +588,7 @@
         const episodes = JSON.parse('{{ episodesVotes|json_encode()|raw }}');
         const episodeCount = episodes.length;
         const graphicTypes = ['plot', 'bar'];
-        let graphicType = 'plot', offsetX, offsetY, barWidth, barSpace, barOffset, verticalInc, plotSize;
+        let graphicType = 'plot', offsetX, offsetY, centerX, centerY, barWidth, barSpace, barOffset, radialInc, radialOffset, verticalInc, plotSize;
         let voteGraphDiv;
         const graphic = {width: 500, height: 300};
 
@@ -598,12 +610,16 @@
             ctx.font = "24px sans-serif";
             div.appendChild(graph);
 
+            centerX = graph.width / 2;
+            centerY = graph.height / 2;
             offsetX = (graph.width - graphic.width) / 2;
             offsetY = graph.height - (graph.height - graphic.height) / 2;
             barSpace = graphic.width / episodeCount;
             barWidth = barSpace * .8;
             barOffset = barSpace * .1;
             verticalInc = graphic.height * .1;
+            radialInc = 1.15 * graphic.height * .5 * .1;
+            radialOffset = 1.15 * graphic.height * .5 * .5;
             plotSize = graphic.height * .05;
 
             voteGraphDiv = document.querySelector('.vote-graph');
@@ -672,6 +688,13 @@
                 episodes.forEach((episode) => {
                     episodeBar(ctx, episode);
                 });
+                return;
+            }
+            if (graphicType === 'radial') {
+                episodes.forEach((episode) => {
+                    episodeRadial(ctx, episode);
+                });
+                // return;
             }
             // console.log({episodes});
         }
@@ -684,7 +707,7 @@
             /** @type {CanvasRenderingContext2D} */
             const ctx = graph.getContext('2d');
 
-            if (graphicType === 'plot') {
+            if (graphicType === 'plot' || graphicType === 'radial') {
                 voteGraph();
                 return;
             }
@@ -774,6 +797,45 @@
                 ctx.lineTo(prevX, prevY);
                 ctx.stroke();
             }
+        }
+
+        function episodeRadial(ctx, episode) {
+            let x = centerX, textX, textY, radius, cos, sin
+            let y = centerY;
+            let angleOffset = -Math.PI / 2;
+            let start = angleOffset + ((episode.number - 1) / episodeCount) * 2 * Math.PI;
+            let end = angleOffset + (episode.number / episodeCount) * 2 * Math.PI;
+            let textWidth;
+
+            if (!episode.vote) return;
+
+            for (let i = 1; i <= episode.vote; i++) {
+                ctx.strokeStyle = colorVote[10 - i];
+                ctx.lineWidth = radialInc;
+                ctx.beginPath();
+                ctx.arc(x, y, i * radialInc, start, end);
+                ctx.stroke();
+            }
+
+            cos = Math.cos((start + end) / 2);
+            sin = Math.sin((start + end) / 2);
+            textWidth = ctx.measureText(episode.number);
+            textX = x - textWidth.width / 2;
+            textY = y + 8;
+            radius = radialOffset;
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(x + cos * radius, y + sin * radius, 20, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = "#000000";
+            ctx.fillText(episode.number, textX + (cos * radius), textY + (sin * radius));
+
+            textWidth = ctx.measureText(episode.vote);
+            textX = x - textWidth.width / 2;
+            textY = y + 8;
+            radius = (episode.vote + 2) * radialInc;
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(episode.vote, textX + (cos * radius), textY + (sin * radius));
         }
 
         function clearGraph(graph, ctx) {

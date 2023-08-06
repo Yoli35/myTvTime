@@ -153,8 +153,9 @@
         margin: 1em 0 1em auto;
     }
 
-    //main {
-    //width: 100%;
+    main {
+    width: 100%;
+    }
 
     .series {
         @include flex-col();
@@ -939,8 +940,6 @@
             }
         }
     }
-
-    //}
 }
 
 .bubble {
@@ -2028,7 +2027,7 @@
 
                 .episodes {
                     &.roomy {
-                        --episode-roomy-size: .75rem;
+                        --episode-roomy-size: 1rem;
                         flex-direction: row;
                         flex-wrap: wrap;
                         font-size: var(--episode-roomy-size);
@@ -2091,7 +2090,7 @@
                             background-color: var(--gradient-ardoise-50);
                             border-radius: .25rem;
                             font-size: 1.5rem;
-                            font-weight: bold;
+                            font-weight: 400;
                             padding: .25rem;
                             text-align: center;
                             width: 4rem;

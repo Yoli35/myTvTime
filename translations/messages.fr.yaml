@@ -948,6 +948,12 @@ Martial Arts Choreographer.he: Chorégraphe d'arts martiaux
 Martial Arts Choreographer.she: Chorégraphe d'arts martiaux
 Co-Director.he: Co-réalisateur
 Co-Director.she: Co-réalisatrice
+Series Director.he: Réalisateur de la série
+Series Director.she: Réalisatrice de la série
+Lighting Director.he: Directeur de l'éclairage
+Lighting Director.she: Directrice de l'éclairage
+Digital Intermediate.he: Étalonneur
+Digital Intermediate.she: Étalonneuse
 
 # key facts
 Favorite: Série favorite
@@ -1018,6 +1024,7 @@ New season: Nouvelle saison
 #vote graphics
 bar: graphe en barre
 plot: graphe en courbe
+radial: graphe radial
 Vote graph: Votes
 Grid: Grille
 Colored grid: Grille colorée
