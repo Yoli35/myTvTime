@@ -568,6 +568,9 @@
                 const episodes = document.querySelector('.episodes.roomy');
                 episodes.style.setProperty('--episode-roomy-size', newValue + 'rem');
             });
+            /**
+             * @type {HTMLElement}
+             */
             const episodes = document.querySelector('.episodes.roomy');
             episodes.style.setProperty('--episode-roomy-size', getLayoutSizeSeasonCookie() + 'rem');
         }
@@ -822,7 +825,7 @@
             textWidth = ctx.measureText(episode.number);
             textX = x - textWidth.width / 2;
             textY = y + 8;
-            radius = radialOffset;
+            radius = radialOffset + (episode.vote < 6 ? radialInc * (episode.vote) : 0);
             ctx.fillStyle = "#ffffff";
             ctx.beginPath();
             ctx.arc(x + cos * radius, y + sin * radius, 20, 0, 2 * Math.PI);
