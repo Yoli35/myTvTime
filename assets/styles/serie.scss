@@ -1415,13 +1415,14 @@
 
                 .new-status, .new-episode, .new-season, .finale {
                     background-color: var(--gradient-mars-50);
-                    border: 2px solid var(--gradient-mars-90);
-                    border-radius: .25em;
-                    color: var(--gradient-mars-90);
-                    font-weight: 300;
+                    border: 2px solid var(--gradient-mars-100);
+                    border-radius: .25rem;
+                    color: var(--gradient-mars-100);
+                    font-size: 1.25rem;
+                    font-weight: 400;
                     //leading-trim: both;
-                    margin: 0 .5em;
-                    padding: .25em 1em;
+                    margin: 0 .5rem;
+                    padding: .25rem 1rem;
                     //text-edge: cap alphabetic;
                 }
             }
@@ -2719,23 +2720,28 @@
             .home-discover {
                 a {
                     div:has(img) {
+                        border-radius: .5rem;
+                        overflow: hidden;
                         position: relative;
 
+                        img {
+                            border-radius: unset;
+                        }
+
                         .new-season, .finale {
-                            background-color: var(--gradient-mars-50);
-                            border: 2px solid var(--gradient-mars-90);
-                            border-radius: .25rem;
-                            color: var(--gradient-ardoise-90);
-                            font-size: 1rem;
-                            font-weight: 300;
-                            //leading-trim: both;
-                            left: 50%;
+                            background-color: var(--gradient-ardoise-10-alpha-80);
+                            //border: 2px solid var(--gradient-mars-100);
+                            //border-radius: .5rem .5rem 0 0;
+                            color: var(--gradient-ardoise-100);
+                            font-size: 1.25rem;
+                            font-weight: 400;
+                            left: 0;
                             line-height: 1.5rem;
-                            padding: .5rem 1rem;
+                            padding: .25rem 1rem;
                             position: absolute;
-                            //text-edge: cap alphabetic;
-                            top: 1em;
-                            transform: translate(-50%, 0);
+                            right: 0;
+                            text-align: center;
+                            top: 0;
                             white-space: nowrap;
                         }
                     }
@@ -2844,7 +2850,16 @@
 
                 .episodes {
                     @include flex-100();
+                    flex-wrap: wrap;
                     gap: 1em;
+
+                    .home-discover {
+                        transition: transform 300ms ease-in-out;
+
+                        &:hover {
+                            transform: scale(1.05);
+                        }
+                    }
                 }
             }
 
