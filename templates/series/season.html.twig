@@ -830,6 +830,9 @@
             ctx.beginPath();
             ctx.arc(x + cos * radius, y + sin * radius, 20, 0, 2 * Math.PI);
             ctx.fill();
+            ctx.strokeStyle = "#111111";
+            ctx.lineWidth = 2;
+            ctx.stroke();
             ctx.fillStyle = "#000000";
             ctx.fillText(episode.number, textX + (cos * radius), textY + (sin * radius));
 
@@ -837,8 +840,26 @@
             textX = x - textWidth.width / 2;
             textY = y + 8;
             radius = (episode.vote + 2) * radialInc;
-            ctx.fillStyle = "#ffffff";
-            ctx.fillText(episode.vote, textX + (cos * radius), textY + (sin * radius));
+            if (episode.vote === 10) {
+                let r = radius - 2 * radialInc;
+                ctx.translate(textX + (cos * r) + 16, textY + (sin * r) + 16);
+                ctx.rotate(Math.PI / 4);
+                ctx.translate(-(textX + (cos * r) + 16), -(textY + (sin * r) + 16));
+
+                ctx.fillStyle = "#ffeeff";
+                ctx.beginPath();
+                ctx.roundRect(textX + (cos * r) - 16, textY + (sin * r) -16, 32, 32, 7);
+                ctx.fill();
+                ctx.strokeStyle = "#110011";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.resetTransform();
+                ctx.fillStyle = "#110011";
+                ctx.fillText(episode.vote, textX +2+ (cos * r), textY +2+ (sin * r));
+            } else {
+                ctx.fillStyle = "#ffffff";
+                ctx.fillText(episode.vote, textX + (cos * radius), textY + (sin * radius));
+            }
         }
 
         function clearGraph(graph, ctx) {
