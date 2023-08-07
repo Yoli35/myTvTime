@@ -537,7 +537,9 @@ class SerieController extends AbstractController
         for ($i = 1; $i <= 7; $i++) {
             $day = $this->dateService->newDateImmutable(($i - $day_of_the_week) . 'day', 'Europe/Paris');
             $episodesOfTheDay = $this->todayAiringSeriesV2($day);
-            $episodesCount += count($episodesOfTheDay);
+            foreach ($episodesOfTheDay as &$episode) {
+                $episodesCount += count($episode['episodeNumbers']);
+            }
             $episodesOfTheWeek[] = [
                 'day' => $day,
                 'episodes' => $episodesOfTheDay,

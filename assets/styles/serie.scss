@@ -2827,23 +2827,23 @@
         width: 100%;
 
         .wrapper {
-            @include flex-col(center, start);
+            @include flex-row(center, center);
+            flex-wrap: wrap;
             gap: 2em;
 
             .day {
                 @include flex-col(start, start);
-                background-color: var(--gradient-ardoise-40-alpha-20);
+                background-color: var(--gradient-ardoise-40-alpha-50);
                 border-radius: .5em;
                 gap: 1em;
                 padding: 1em;
-                width: 100%;
 
                 .date {
                     font-size: 2rem;
                 }
 
                 .episodes {
-                    @include flex-100(start, start);
+                    @include flex-100();
                     gap: 1em;
                 }
             }
