@@ -255,7 +255,7 @@
                     <section>
                         <div class="seasons">
                             {% set globalIndex = 1 %}
-                            {% for season in serie.seasons %}
+                            {% for season in serie.seasons|reverse %}
                                 {% if season.season_number %}
                                     {% set url = path('app_series_tmdb_season', {id: serie.id, seasonNumber: season.season_number})~'?from='~from~'&p='~page %}
                                     {% if query is defined %} {% set url = url ~ '&query=' ~ query %}{% endif %}
