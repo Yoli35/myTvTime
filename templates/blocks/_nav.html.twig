@@ -9,7 +9,11 @@
         {% if breadcrumb is defined %}
             <li class="breadcrumb-item">
                 {% for item in breadcrumb %}
-                    <div class="breadcrumb-part"><a href="{{ item.url }}">{{ item.name }}</a></div>
+                    {% if item.url is defined %}
+                        <div class="breadcrumb-part"><a href="{{ item.url }}">{{ item.name }}</a></div>
+                    {% else %}
+                        <div class="breadcrumb-part">{{ item.name|capitalize }}</div>
+                    {% endif %}
                     {% if loop.index < loop.length %}
                         <div class="separator">/</div>
                     {% endif %}
@@ -19,7 +23,9 @@
             {% if parent is defined %}
                 <li class="breadcrumb-item"><a href="{{ parent.url }}" accesskey="<">{{ parent.page|trans }}</a></li>
             {% endif %}
-            <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
+            {% if thisPage is defined %}
+                <li class="breadcrumb-item active" aria-current="{{ thisPage }}">{{ thisPage }}</li>
+            {% endif %}
         {% endif %}
     </ol>
     {% if from is defined %}

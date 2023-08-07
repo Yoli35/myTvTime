@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime ▶ ︎{{ 'Episodes of the week'|trans }}{% endblock %}
+{% block description %}{{ 'List of the series I\'m watching, aired this week'|trans }}{% endblock %}
+{% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
+
+{% set date = date|format_date('full', timezone="Europe/Paris")|capitalize %}
+
+{% block body %}
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container">
+
+        {{ include('blocks/_nav.html.twig', {user: app.user}) }}
+
+        <div class="this-week-series">
+            <div class="header">
+                <h1> {{ 'Episodes of the week'|trans }}</h1>
+                <div class="week">{{ 'Week'|trans }} {{ week }}</div>
+            </div>
+            <main>
+                <div class="wrapper">
+                    {% for episodeOfTheday in episodesOfTheWeek %}
+                        <div class="day">
+                            <div class="date">{{ episodeOfTheday.day|format_date('full')|capitalize }}</div>
+                            <div class="episodes">
+                                {% for todayAiring in episodeOfTheday.episodes %}
+                                    {{ include('blocks/series/_card-today.html.twig', {extra: episodeOfTheday.day|format_datetime('full')|capitalize|split(' ')[0], today_offset: episodeOfTheday.today_offset}) }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="nothing">
+                            <div class="image-filenames" style="display: none">
+                                {
+                                "filenames": {{ images|json_encode(constant('JSON_PRETTY_PRINT')) }}
+                                }
+                            </div>
+                        </div>
+                        <div class="something-else"></div>
+                    {% endfor %}
+                </div>
+            </main>
+        </div>
+        {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const nothing = document.querySelector('.nothing');
+            if (nothing) {
+                doSomethingElse();
+            }
+
+            function doSomethingElse() {
+                const imageFilenames = document.querySelector('.image-filenames');
+                const images = JSON.parse(imageFilenames.textContent.replace(/".DS_Store",/g, ''));
+                const somethingElse = document.querySelector('.something-else');
+                const img = document.createElement('img');
+                let lastImageIndex = Math.floor(Math.random() * images.filenames.length);
+                img.src = "/images/series/today/" + images.filenames[lastImageIndex];
+                somethingElse.appendChild(img);
+                img.onload = () => {
+                    somethingElse.querySelector("img").classList.add('show');
+                };
+                setInterval(() => {
+                    somethingElse.querySelector("img").classList.remove('show');
+                    setTimeout(() => {
+                        let imageIndex = Math.floor(Math.random() * images.filenames.length);
+                        while (imageIndex === lastImageIndex) {
+                            imageIndex = Math.floor(Math.random() * images.filenames.length);
+                        }
+                        lastImageIndex = imageIndex;
+                        let img = somethingElse.querySelector("img")
+                        img.src = "/images/series/today/" + images.filenames[imageIndex];
+                        img.onload = () => {
+                            img.classList.add('show');
+                        };
+                    }, 300);
+                }, 5000);
+            }
+        });
+
+    </script>
+{% endblock %}

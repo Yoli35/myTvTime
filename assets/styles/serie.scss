@@ -154,7 +154,7 @@
     }
 
     main {
-    width: 100%;
+        width: 100%;
     }
 
     .series {
@@ -2677,12 +2677,12 @@
     }
 }
 
-.today-series {
+.today-series, .this-week-series {
     .header {
         @include flex-100();
         padding: 2em 0;
 
-        .date {
+        .date, .week {
             background-clip: text;
             background-image: linear-gradient(90deg, red, blue);
             background-position: center 25%;
@@ -2777,6 +2777,70 @@
                     text-align: center;
                     top: -1rem;
                     width: 2.5em;
+                }
+            }
+
+            .nothing {
+                @include flex-row();
+                aspect-ratio: 512 / 508;
+                background-image: url("../images/today-nothing.png");
+                background-size: cover;
+                height: auto;
+                width: clamp(128px, 20vw, 512px);
+            }
+
+            &:has(.nothing) {
+                align-items: center;
+                flex-direction: column;
+            }
+
+            .something-else {
+                img {
+                    aspect-ratio: 20 / 9;
+                    border-radius: 1rem;
+                    height: auto;
+                    object-fit: cover;
+                    opacity: 0;
+                    transition: opacity 300ms ease-in-out;
+                    width: clamp(360px, 75vw, 1000px);
+
+                    &.show {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.this-week-series {
+    .header {
+        @include flex-col();
+        gap: 1rem;
+    }
+
+    main {
+        width: 100%;
+
+        .wrapper {
+            @include flex-col(center, start);
+            gap: 2em;
+
+            .day {
+                @include flex-col(start, start);
+                background-color: var(--gradient-ardoise-40-alpha-20);
+                border-radius: .5em;
+                gap: 1em;
+                padding: 1em;
+                width: 100%;
+
+                .date {
+                    font-size: 2rem;
+                }
+
+                .episodes {
+                    @include flex-100(start, start);
+                    gap: 1em;
                 }
             }
 

@@ -939,10 +939,18 @@ nav.active {
             }
 
             .breadcrumb-part {
-                background-color: var(--gradient-ardoise-40);
+                background-color: var(--gradient-green-30);
                 border-radius: .25rem;
                 color: var(--gradient-ardoise-90);
                 display: inline-block;
+
+                &:has(a) {
+                    background-color: var(--gradient-ardoise-40);
+                }
+
+                &:not(:has(a)) {
+                    padding: .25rem .5rem;
+                }
 
                 &:hover {
                     background-color: var(--gradient-mars-50);

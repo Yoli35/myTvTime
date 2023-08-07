@@ -49,6 +49,7 @@ class SerieController extends AbstractController
     const MY_SERIES_TO_START = 'my_series_to_start';
     const MY_SERIES_TO_END = 'my_series_to_end';
     const EPISODES_OF_THE_DAY = 'today';
+    const EPISODES_OF_THE_WEEK = 'week';
     const UPCOMING_EPISODES = 'upcoming_episodes';
     const UPCOMING_SERIES = 'upcoming_series';
     const POPULAR_SERIES = 'popular';
@@ -522,6 +523,37 @@ class SerieController extends AbstractController
     {
         $images = scandir($this->getParameter('kernel.project_dir') . '/public/images/series/today');
         return array_slice($images, 2);
+    }
+
+    #[Route('/this-week', name: 'app_series_this_week', methods: ['GET'])]
+    public function episodesOfTheWeek(): Response
+    {
+        $now = $this->dateService->getNow(true);
+        $week = $now->format('W');
+
+        $day_of_the_week = date('w', strtotime($now->format('Y-m-d')));
+        $episodesOfTheWeek = [];
+        for ($i = 1; $i <= 7; $i++) {
+            $day = $this->dateService->newDateImmutable(($i - $day_of_the_week) . 'day', 'Europe/Paris');
+            $episodesOfTheDay = $this->todayAiringSeriesV2($day);
+            $episodesOfTheWeek[] = [
+                'day' => $day,
+                'episodes' => $episodesOfTheDay,
+                'today_offset' => $i - $day_of_the_week,
+            ];
+        }
+        $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_WEEK);
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        return $this->render('series/this_week.html.twig', [
+            'date' => $now,
+            'week' => $week,
+            'episodesOfTheWeek' => $episodesOfTheWeek,
+            'breadcrumb' => $breadcrumb,
+            'from' => self::EPISODES_OF_THE_WEEK,
+            'imageConfig' => $imageConfig,
+            'images' => $this->getNothingImages(),
+        ]);
     }
 
     #[Route('/to-start', name: 'app_series_to_start', methods: ['GET'])]
@@ -1013,6 +1045,14 @@ class SerieController extends AbstractController
     {
         $modified = false;
         if ($serieViewing->getNumberOfSeasons() != $tv['number_of_seasons']) {
+            if ($serieViewing->getNumberOfSeasons() > $tv['number_of_seasons']) {
+                dump('suppression des saisons');
+                for ($i=$tv['number_of_seasons']+1; $i <= $serieViewing->getNumberOfSeasons(); $i++) {
+                    $seasonViewing = $this->getSeasonViewing($serieViewing, $i);
+                    dump($seasonViewing);
+                    $this->seasonViewingRepository->remove($seasonViewing, true);
+                }
+            }
             $serieViewing->setNumberOfSeasons($tv['number_of_seasons']);
             $serieViewing->setSerieCompleted(false);
             $modified = true;
@@ -1408,6 +1448,10 @@ class SerieController extends AbstractController
                 $baseUrl = $this->generateUrl("app_series_today");
                 $baseName = $this->translator->trans("My series airing today");
                 break;
+            case self::EPISODES_OF_THE_WEEK:
+                $baseUrl = $this->generateUrl("app_series_this_week");
+                $baseName = $this->translator->trans("Episodes of the week");
+                break;
             case self::UPCOMING_EPISODES:
                 $baseUrl = $this->generateUrl("app_series_upcoming_episodes");
                 $baseName = $this->translator->trans("Upcoming episodes");
@@ -1719,6 +1763,13 @@ class SerieController extends AbstractController
 
         // Breadcrumb
         $breadcrumb = $this->breadcrumb($from, $tv);
+        $extra = $request->query->get('extra');
+        if ($extra) {
+            $breadcrumb[] = [
+                'url' => $this->generateUrl('app_series_today') . '?d=' . $request->query->get('d'),
+                'name' => $extra
+            ];
+        }
 
 //        dump([
 //            'tv' => $tv,
@@ -1999,27 +2050,26 @@ class SerieController extends AbstractController
     {
         $whatsNew = ['episode' => 0, 'season' => 0, 'status' => "", 'original_name' => ""];
         $modified = false;
+        $somethingChanged = false;
         if ($serie->getNumberOfSeasons() !== $tv['number_of_seasons']) {
             $whatsNew['season'] = $tv['number_of_seasons'] - $serie->getNumberOfSeasons();
-            $modified = true;
-
-            $serie->setNumberOfSeasons($tv['number_of_seasons']);
+            $somethingChanged = true;
         }
         if ($serie->getNumberOfEpisodes() !== $tv['number_of_episodes']) {
             $whatsNew['episode'] = $tv['number_of_episodes'] - $serie->getNumberOfEpisodes();
-            $modified = true;
-
-            $serie->setNumberOfEpisodes($tv['number_of_episodes']);
+            $somethingChanged = true;
         }
         if ($serie->getStatus() !== $tv['status']) {
             $whatsNew['status'] = $tv['status'];
             $modified = true;
+            $somethingChanged = true;
 
             $serie->setStatus($tv['status']);
         }
         if ($serie->getOriginalName() !== $tv['original_name']) {
             $whatsNew['original_name'] = $tv['original_name'];
             $modified = true;
+            $somethingChanged = true;
 
             $serie->setOriginalName($tv['original_name']);
         }
@@ -2033,6 +2083,8 @@ class SerieController extends AbstractController
 
             $serie->setUpdatedAt($now);
             $this->serieRepository->save($serie, true);
+        }
+        if ($somethingChanged) {
             return $whatsNew;
         }
 
