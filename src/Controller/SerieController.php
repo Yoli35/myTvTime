@@ -533,9 +533,11 @@ class SerieController extends AbstractController
 
         $day_of_the_week = date('w', strtotime($now->format('Y-m-d')));
         $episodesOfTheWeek = [];
+        $episodesCount = 0;
         for ($i = 1; $i <= 7; $i++) {
             $day = $this->dateService->newDateImmutable(($i - $day_of_the_week) . 'day', 'Europe/Paris');
             $episodesOfTheDay = $this->todayAiringSeriesV2($day);
+            $episodesCount += count($episodesOfTheDay);
             $episodesOfTheWeek[] = [
                 'day' => $day,
                 'episodes' => $episodesOfTheDay,
@@ -548,6 +550,7 @@ class SerieController extends AbstractController
         return $this->render('series/this_week.html.twig', [
             'date' => $now,
             'week' => $week,
+            'episodesCount' => $episodesCount,
             'episodesOfTheWeek' => $episodesOfTheWeek,
             'breadcrumb' => $breadcrumb,
             'from' => self::EPISODES_OF_THE_WEEK,

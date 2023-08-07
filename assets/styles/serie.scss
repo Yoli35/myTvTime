@@ -2682,7 +2682,7 @@
         @include flex-100();
         padding: 2em 0;
 
-        .date, .week {
+        .date {
             background-clip: text;
             background-image: linear-gradient(90deg, red, blue);
             background-position: center 25%;
@@ -2817,6 +2817,10 @@
     .header {
         @include flex-col();
         gap: 1rem;
+
+        .week {
+            font-size: 1.5rem;
+        }
     }
 
     main {
