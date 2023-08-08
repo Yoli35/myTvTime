@@ -1051,9 +1051,22 @@ class SerieController extends AbstractController
 
     public function updateSerieViewing(SerieViewing $serieViewing, array $tv, bool $verbose = false): SerieViewing
     {
+        dump($tv);
         $modified = false;
         if ($serieViewing->getNumberOfSeasons() != $tv['number_of_seasons']) {
             if ($serieViewing->getNumberOfSeasons() > $tv['number_of_seasons']) {
+                $haveToSaveSerieViewing = false;
+                if ($serieViewing->getNextEpisodeToWatch()) {
+                    $serieViewing->setNextEpisodeToWatch(null);
+                    $haveToSaveSerieViewing = true;
+                }
+                if ($serieViewing->getNextEpisodeToAir()) {
+                    $serieViewing->setNextEpisodeToAir(null);
+                    $haveToSaveSerieViewing = true;
+                }
+                if ($haveToSaveSerieViewing) {
+                    $this->serieViewingRepository->save($serieViewing, true);
+                }
                 for ($i = $tv['number_of_seasons'] + 1; $i <= $serieViewing->getNumberOfSeasons(); $i++) {
                     $seasonViewing = $this->getSeasonViewing($serieViewing, $i);
                     $this->seasonViewingRepository->remove($seasonViewing, true);
