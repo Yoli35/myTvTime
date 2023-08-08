@@ -7,7 +7,7 @@
     @include banner("../images/youtube.png");
     background-color: hsla(206deg, 50%, 24%, .2);
     border-radius: 1em;
-    height: clamp(22em, 22vw, 26em);
+    height: clamp(21em, 20vw, 26em);
     margin-top: 1em;
 
     &:hover {
