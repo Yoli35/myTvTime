@@ -2823,9 +2823,47 @@
     .header {
         @include flex-col();
         gap: 1rem;
+        height: 20rem;
+        overflow: hidden;
+        position: relative;
 
-        .week {
-            font-size: 1.5rem;
+        .textes {
+            @include flex-col();
+            gap: 1rem;
+            inset: 0;
+            position: absolute;
+            z-index: 1;
+
+            h1 {
+                color: var(--gradient-ardoise-90);
+                font-size: 4rem;
+                font-weight: 900;
+            }
+
+            .week, .range {
+                font-size: 2.5rem;
+            }
+        }
+
+        .day-names {
+            inset: 0;
+            position: absolute;
+            z-index: 0;
+
+            .day-name {
+                color: var(--gradient-ardoise-90);
+                font-size: 4rem;
+                font-weight: 900;
+                line-height: 1em;
+                opacity: 0;
+                position: absolute;
+                transition: opacity 300ms ease-in-out;
+                transform: translate(-50%, -50%);
+
+                &.show {
+                    opacity: .1;
+                }
+            }
         }
     }
 
@@ -2844,6 +2882,10 @@
                 gap: 1em;
                 padding: 1em;
 
+                &.today {
+                    background-color: var(--gradient-ardoise-40);
+                }
+
                 .date {
                     font-size: 2rem;
                 }
@@ -2854,10 +2896,15 @@
                     gap: 1em;
 
                     .home-discover {
-                        transition: transform 300ms ease-in-out;
+                        border: 2px solid transparent;
+                        transition: transform 300ms ease-in-out, border-color 300ms ease-in-out;
 
                         &:hover {
-                            transform: scale(1.05);
+                            transform: scale(1.15);
+                            border-color: var(--gradient-ardoise-90);
+                            border-radius: .5rem;
+                            outline: var(--gradient-ardoise-90);
+                            z-index: 1;
                         }
                     }
                 }

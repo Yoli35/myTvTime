@@ -14,17 +14,21 @@
 
         <div class="this-week-series">
             <div class="header">
-                <h1> {{ 'Episodes of the week'|trans }}</h1>
-                <div class="week">{{ 'Week'|trans }} {{ week }} : {{ episodesCount }} {{ (episodesCount>1 ? 'episodes':'episode')|trans }}</div>
+                <div class="textes">
+                    <h1> {{ 'Episodes of the week'|trans }}</h1>
+                    <div class="week">{{ 'Week'|trans }} {{ week.week_number }} : {{ episodesCount }} {{ (episodesCount>1 ? 'episodes':'episode')|trans }}</div>
+                    <div class="range">[ {{ week.start|format_date('short') }} — {{ week.end|format_date('short') }} ]</div>
+                </div>
+                <div class="day-names"></div>
             </div>
             <main>
                 <div class="wrapper">
-                    {% for episodeOfTheday in episodesOfTheWeek %}
-                        <div class="day">
-                            <div class="date">{{ episodeOfTheday.day|format_date('full')|capitalize }}</div>
+                    {% for episodeOfTheDay in episodesOfTheWeek %}
+                        <div class="day{% if not episodeOfTheDay.today_offset %} today{% endif %}">
+                            <div class="date">{{ episodeOfTheDay.day|format_date('relative_full')|capitalize }}</div>
                             <div class="episodes">
-                                {% for todayAiring in episodeOfTheday.episodes %}
-                                    {{ include('blocks/series/_card-today.html.twig', {extra: episodeOfTheday.day|format_datetime('full')|capitalize|split(' ')[0], today_offset: episodeOfTheday.today_offset}) }}
+                                {% for todayAiring in episodeOfTheDay.episodes %}
+                                    {{ include('blocks/series/_card-today.html.twig', {extra: episodeOfTheDay.day|format_datetime('full')|capitalize|split(' ')[0], today_offset: episodeOfTheDay.today_offset}) }}
                                 {% endfor %}
                             </div>
                         </div>
@@ -42,45 +46,169 @@
             </main>
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
+        <div class="day-names-data" style="display: none">
+            {
+            "names": {{ dayNames|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+            }
+        </div>
     </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script>
         window.addEventListener("DOMContentLoaded", () => {
-            const nothing = document.querySelector('.nothing');
-            if (nothing) {
-                doSomethingElse();
-            }
 
-            function doSomethingElse() {
-                const imageFilenames = document.querySelector('.image-filenames');
-                const images = JSON.parse(imageFilenames.textContent.replace(/".DS_Store",/g, ''));
-                const somethingElse = document.querySelector('.something-else');
-                const img = document.createElement('img');
-                let lastImageIndex = Math.floor(Math.random() * images.filenames.length);
-                img.src = "/images/series/today/" + images.filenames[lastImageIndex];
-                somethingElse.appendChild(img);
-                img.onload = () => {
-                    somethingElse.querySelector("img").classList.add('show');
-                };
-                setInterval(() => {
-                    somethingElse.querySelector("img").classList.remove('show');
-                    setTimeout(() => {
-                        let imageIndex = Math.floor(Math.random() * images.filenames.length);
-                        while (imageIndex === lastImageIndex) {
-                            imageIndex = Math.floor(Math.random() * images.filenames.length);
-                        }
-                        lastImageIndex = imageIndex;
-                        let img = somethingElse.querySelector("img")
-                        img.src = "/images/series/today/" + images.filenames[imageIndex];
-                        img.onload = () => {
-                            img.classList.add('show');
-                        };
-                    }, 300);
-                }, 5000);
-            }
+            if (document.querySelector('.nothing')) doSomethingElse();
+
+            initHeader();
         });
 
+        function initHeader() {
+            const header = document.querySelector('.this-week-series .header');
+            const dayNamesDiv = header.querySelector('.day-names');
+            const dayNamesWidth = dayNamesDiv.offsetWidth;
+            const dayNamesHeight = dayNamesDiv.offsetHeight;
+            const speed = 2.5;
+            const dayNames = getDayNames();
+            /**
+             * @type {Array.<x: number, y: number, w: number, h: number, size: number, color: string, dx: number, dy: number>}
+             */
+            const positions = [];
+            // const indexMax = dayNames.length - 1;
+            let ticking = false, interval;
+            let nameDivs = createNames();
+
+            showNames();
+            anime();
+            setInterval(() => {
+                hideNames();
+                setTimeout(() => {
+                    clearInterval(interval);
+                    removeNames();
+                    nameDivs = createNames();
+                    showNames();
+                    anime();
+                }, 300);
+            }, 1000 * 10);
+
+            function anime() {
+                interval = setInterval(() => {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function () {
+                            frame(nameDivs, positions);
+                            ticking = false;
+                        });
+                    }
+                    ticking = true;
+                }, 1000 / 30);
+            }
+
+            function showNames() {
+                nameDivs.forEach((nameDiv) => {
+                    nameDiv.classList.add('show');
+                });
+            }
+
+            function hideNames() {
+                nameDivs.forEach((nameDiv) => {
+                    nameDiv.classList.remove('show');
+                });
+            }
+
+            function createNames() {
+                let number = 25, index = 0, indexMax = dayNames.length - 1, indexName = 0;
+                for (index = 0; index < number; index++) {
+                    const div = document.createElement('div');
+                    div.classList.add('day-name');
+                    indexName = parseInt(indexMax * Math.random());
+                    div.textContent = dayNames[indexName];
+                    div.setAttribute('data-day', index);
+                    positions[index] = {
+                        x: parseInt(dayNamesWidth * Math.random()),
+                        y: parseInt(dayNamesHeight * Math.random()),
+                        w: 0,
+                        h: 0,
+                        size: parseInt(8 * Math.random()) + 1,
+                        color: 'hsl(' + parseInt(360 * Math.random()) + ', 100%, 50%)',
+                        dx: speed * (Math.random() - 0.5),
+                        dy: speed * (Math.random() - 0.5)
+                    };
+                    /**
+                     * @type {x: number, y: number, w: number, h: number, size: number, color: string, dx: number, dy: number}
+                     */
+                    let pos = positions[index];
+                    div.setAttribute("style", "color: " + pos.color + "; font-size: " + pos.size + "rem; top: " + pos.y + "px; left: " + pos.x + "px;");
+                    dayNamesDiv.appendChild(div);
+                }
+                return dayNamesDiv.querySelectorAll('.day-name');
+            }
+
+            function removeNames() {
+                nameDivs.forEach((nameDiv) => {
+                    nameDiv.remove();
+                });
+            }
+
+            function frame(divs, positions) {
+                divs.forEach((div) => {
+                    const index = div.getAttribute('data-day');
+                    const position = positions[index];
+                    if (position.w === 0) position.w = div.offsetWidth / 2;
+                    if (position.h === 0) position.h = div.offsetHeight / 2;
+                    position.x += position.dx;
+                    position.y += position.dy;
+                    if (position.x < position.w) {
+                        position.x = position.w;
+                        position.dx = -position.dx;
+                    }
+                    if (position.x > dayNamesWidth - position.w) {
+                        position.x = dayNamesWidth - position.w;
+                        position.dx = -position.dx;
+                    }
+                    if (position.y < position.h) {
+                        position.y = position.h;
+                        position.dy = -position.dy;
+                    }
+                    if (position.y > dayNamesHeight - position.h) {
+                        position.y = dayNamesHeight - position.h
+                        position.dy = -position.dy;
+                    }
+                    div.setAttribute("style", "color: " + position.color + "; font-size: " + position.size + "rem; top: " + position.y + "px; left: " + position.x + "px;");
+                });
+            }
+        }
+
+
+        function getDayNames() {
+            return JSON.parse(document.querySelector('.day-names-data').textContent).names;
+        }
+
+        function doSomethingElse() {
+            const imageFilenames = document.querySelector('.image-filenames');
+            const images = JSON.parse(imageFilenames.textContent.replace(/".DS_Store",/g, ''));
+            const somethingElse = document.querySelector('.something-else');
+            const img = document.createElement('img');
+            let lastImageIndex = Math.floor(Math.random() * images.filenames.length);
+            img.src = "/images/series/today/" + images.filenames[lastImageIndex];
+            somethingElse.appendChild(img);
+            img.onload = () => {
+                somethingElse.querySelector("img").classList.add('show');
+            };
+            setInterval(() => {
+                somethingElse.querySelector("img").classList.remove('show');
+                setTimeout(() => {
+                    let imageIndex = Math.floor(Math.random() * images.filenames.length);
+                    while (imageIndex === lastImageIndex) {
+                        imageIndex = Math.floor(Math.random() * images.filenames.length);
+                    }
+                    lastImageIndex = imageIndex;
+                    let img = somethingElse.querySelector("img")
+                    img.src = "/images/series/today/" + images.filenames[imageIndex];
+                    img.onload = () => {
+                        img.classList.add('show');
+                    };
+                }, 300);
+            }, 5000);
+        }
     </script>
 {% endblock %}

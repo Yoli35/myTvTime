@@ -532,12 +532,14 @@ class SerieController extends AbstractController
         $week = $now->format('W');
 
         $day_of_the_week = date('w', strtotime($now->format('Y-m-d')));
+        $start = $this->dateService->newDateImmutable((1 - $day_of_the_week) . 'day', 'Europe/Paris');
+        $end = $this->dateService->newDateImmutable((7 - $day_of_the_week) . 'day', 'Europe/Paris');
         $episodesOfTheWeek = [];
         $episodesCount = 0;
         for ($i = 1; $i <= 7; $i++) {
             $day = $this->dateService->newDateImmutable(($i - $day_of_the_week) . 'day', 'Europe/Paris');
             $episodesOfTheDay = $this->todayAiringSeriesV2($day);
-            foreach ($episodesOfTheDay as &$episode) {
+            foreach ($episodesOfTheDay as $episode) {
                 $episodesCount += count($episode['episodeNumbers']);
             }
             $episodesOfTheWeek[] = [
@@ -551,9 +553,10 @@ class SerieController extends AbstractController
 
         return $this->render('series/this_week.html.twig', [
             'date' => $now,
-            'week' => $week,
+            'week' => ['week_number' => $week, 'start' => $start, 'end' => $end],
             'episodesCount' => $episodesCount,
             'episodesOfTheWeek' => $episodesOfTheWeek,
+            'dayNames' => $this->dateService->getDayNames(100),
             'breadcrumb' => $breadcrumb,
             'from' => self::EPISODES_OF_THE_WEEK,
             'imageConfig' => $imageConfig,
@@ -1046,15 +1049,13 @@ class SerieController extends AbstractController
         return $viewing;
     }
 
-    public function updateSerieViewing(SerieViewing $serieViewing, array $tv, ?Serie $serie, bool $verbose = false): SerieViewing
+    public function updateSerieViewing(SerieViewing $serieViewing, array $tv, bool $verbose = false): SerieViewing
     {
         $modified = false;
         if ($serieViewing->getNumberOfSeasons() != $tv['number_of_seasons']) {
             if ($serieViewing->getNumberOfSeasons() > $tv['number_of_seasons']) {
-                dump('suppression des saisons');
-                for ($i=$tv['number_of_seasons']+1; $i <= $serieViewing->getNumberOfSeasons(); $i++) {
+                for ($i = $tv['number_of_seasons'] + 1; $i <= $serieViewing->getNumberOfSeasons(); $i++) {
                     $seasonViewing = $this->getSeasonViewing($serieViewing, $i);
-                    dump($seasonViewing);
                     $this->seasonViewingRepository->remove($seasonViewing, true);
                 }
             }
@@ -1281,7 +1282,7 @@ class SerieController extends AbstractController
         $backId = $request->query->get('back');
 
         // Cookie pour le layout
-        $seasonsCookie = $this->seasonsCookie($request);
+        $seasonsCookie = $this->seasonsCookie();
 
         // La série (db ou the movie db) et sa bannière
         $serie = $this->serie($id, $request->getLocale());
@@ -1404,7 +1405,7 @@ class SerieController extends AbstractController
         }
 
         // Breadcrumb
-        $breadcrumb = $this->breadcrumb($from, $serie, $season, null);
+        $breadcrumb = $this->breadcrumb($from, $serie, $season);
 
 //        dump([
 //            'season' => $season,
@@ -1507,7 +1508,7 @@ class SerieController extends AbstractController
         return $breadcrumb;
     }
 
-    public function seasonsCookie(Request $request): array
+    public function seasonsCookie(): array
     {
         if (isset($_COOKIE['series_seasons'])) {
             $seasonsCookie = json_decode($_COOKIE['series_seasons'], true);
@@ -1549,7 +1550,7 @@ class SerieController extends AbstractController
     {
         if ($type) {
             if (key_exists($type, $watchProviders)) {
-                foreach ($watchProviders[$type] as &$provider) {
+                foreach ($watchProviders[$type] as $provider) {
                     $providers = $this->getArr($provider, $providers, $imgConfig, $country, $indexed);
                 }
             }
@@ -1728,7 +1729,7 @@ class SerieController extends AbstractController
                 $serieViewing = $this->createSerieViewing($user, $tv, $serie);
             } else {
                 $whatsNew = $this->whatsNew($tv, $serie, $serieViewing);
-                $serieViewing = $this->updateSerieViewing($serieViewing, $tv, $serie);
+                $serieViewing = $this->updateSerieViewing($serieViewing, $tv);
             }
             $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
             if (!count($serieViewing->getSerieCasts())) {
@@ -2368,8 +2369,8 @@ class SerieController extends AbstractController
     public function serieUpcomingDate(Request $request): Response
     {
         $id = $request->query->getInt('id');
-        $month = $request->query->get('month', null);
-        $year = $request->query->get('year', null);
+        $month = $request->query->get('month');
+        $year = $request->query->get('year');
 
         $serie = $this->serieRepository->find($id);
         $serie->setUpcomingDateMonth($month);
