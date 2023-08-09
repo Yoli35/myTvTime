@@ -1051,7 +1051,7 @@ class SerieController extends AbstractController
 
     public function updateSerieViewing(SerieViewing $serieViewing, array $tv, bool $verbose = false): SerieViewing
     {
-        dump($tv);
+//        dump($tv);
         $modified = false;
         if ($serieViewing->getNumberOfSeasons() != $tv['number_of_seasons']) {
             if ($serieViewing->getNumberOfSeasons() > $tv['number_of_seasons']) {
@@ -1795,6 +1795,7 @@ class SerieController extends AbstractController
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
+//            'breadcrumb' => $breadcrumb,
 //        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,

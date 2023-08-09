@@ -2859,6 +2859,7 @@
                 position: absolute;
                 transition: opacity 300ms ease-in-out;
                 transform: translate(-50%, -50%);
+                width: max-content;
 
                 &.show {
                     opacity: .1;
