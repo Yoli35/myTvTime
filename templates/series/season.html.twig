@@ -589,6 +589,13 @@
                     episodes.classList.remove('roomy', 'compact', 'list');
                     episodes.classList.add(type);
                     setLayoutSeasonCookie(type);
+                    if (type === 'roomy') {
+                        /**
+                         * @type {HTMLElement}
+                         */
+                        const episodes = document.querySelector('.episodes.roomy');
+                        episodes?.style.setProperty('--episode-roomy-size', getLayoutSizeSeasonCookie() + 'rem');
+                    }
                 });
             });
             const layoutSize = document.querySelector('#layout-size');
@@ -620,7 +627,7 @@
              * @type {HTMLElement}
              */
             const episodes = document.querySelector('.episodes.roomy');
-            episodes.style.setProperty('--episode-roomy-size', getLayoutSizeSeasonCookie() + 'rem');
+            episodes?.style.setProperty('--episode-roomy-size', getLayoutSizeSeasonCookie() + 'rem');
         }
 
         const colorVote = [
