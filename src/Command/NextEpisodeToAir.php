@@ -119,7 +119,30 @@ class NextEpisodeToAir extends Command
             $tvSeries = json_decode($this->tmdbService->getTv($serie->getSerieId(), "fr_FR"), true);
 
             if ($tvSeries) {
-                $this->serieController->updateSerieViewing($serieViewing, $tvSeries, $serie, true);
+                $whatsNew = $this->serieController->whatsNew($tvSeries, $serie, $serieViewing);
+                if ($whatsNew) {
+                    if ($whatsNew['episode']) {
+                        $n = abs($whatsNew['episode']);
+                        $neg = $n < 0;
+                        $io->warning('    ' . $n . ' ' . ($n > 1 ? 'episodes' : 'episode') . ($neg ? 'less' : 'more') . '.');
+                        $this->logs('    ' . $n . ' ' . ($n > 1 ? 'episodes' : 'episode') . ($neg ? 'less' : 'more') . '.', 'warning');
+                    }
+                    if ($whatsNew['season']) {
+                        $n = abs($whatsNew['season']);
+                        $neg = $n < 0;
+                        $io->warning('    ' . $n . ' ' . ($n > 1 ? 'seasons' : 'season') . ($neg ? 'less' : 'more') . '.');
+                        $this->logs('    ' . $n . ' ' . ($n > 1 ? 'seasons' : 'season') . ($neg ? 'less' : 'more') . '.', 'warning');
+                    }
+                    if ($whatsNew['status']) {
+                        $io->warning('    New status:' . $whatsNew['status']);
+                        $this->logs('    New status:' . $whatsNew['status'], 'warning');
+                    }
+                    if ($whatsNew['original_name']) {
+                        $io->warning('    New original name:' . $whatsNew['original_name']);
+                        $this->logs('    New original name:' . $whatsNew['original_name'], 'warning');
+                    }
+                }
+                $this->serieController->updateSerieViewing($serieViewing, $tvSeries, true);
                 $io->writeln($this->serieController->messages);
                 $this->logs($this->serieController->messages);
                 $count++;
@@ -130,8 +153,8 @@ class NextEpisodeToAir extends Command
             }
         }
 
-        $io->success('Done. ' . $count . ' series updated, '. $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
-        $this->logs('Done. ' . $count . ' series updated, '. $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
+        $io->success('Done. ' . $count . ' series updated, ' . $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
+        $this->logs('Done. ' . $count . ' series updated, ' . $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
 
         $this->logger->info('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
         $io->writeln('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
