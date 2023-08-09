@@ -1628,6 +1628,35 @@ class SerieController extends AbstractController
         ]);
     }
 
+    #[Route('/episode/duration', name: 'app_episode_duration', methods: ['GET'])]
+    public function saveEpisodeDuration(Request $request): Response
+    {
+        $data = json_decode($request->query->get('data'), true);
+        $serieId = $data['serieId'];
+        $seasonNumber = $data['seasonNumber'];
+        $episodeNumber = $data['episodeNumber'];
+        $runtime = $data['runtime'];
+
+        $serie = $this->serieRepository->findOneBy(['serieId' => $data['serieId']]);
+        $episodeDurations = $serie->getEpisodeDurations();
+        $episodeDurations[$seasonNumber][$episodeNumber - 1] = [$episodeNumber => $runtime];
+        $serie->setEpisodeDurations($episodeDurations);
+        $this->serieRepository->save($serie, true);
+
+        dump([
+            'serieId' => $serieId,
+            'seasonNumber' => $seasonNumber,
+            'episodeNumber' => $episodeNumber,
+            'runtime' => $runtime,
+            'episodeDurations' => $episodeDurations,
+            ]);
+
+        return $this->json([
+            'result' => 'ok',
+            'runtime' => $runtime,
+        ]);
+    }
+
     public function getSeasonViewing(SerieViewing $serieViewing, int $seasonNumber): ?SeasonViewing
     {
         $seasonViewing = null;

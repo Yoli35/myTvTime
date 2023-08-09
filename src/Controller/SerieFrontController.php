@@ -198,6 +198,8 @@ class SerieFrontController extends AbstractController
     {
         $t0 = microtime(true);
         $duration = 0;
+        $durations = [];
+        $durationsUpdated = false;
         $serieCount = 0;
         $seasonCount = 0;
         $episodeCount = 0;
@@ -216,6 +218,7 @@ class SerieFrontController extends AbstractController
 
         foreach ($SerieViewings as $serieViewing) {
             $serie = $serieViewing->getSerie();
+            $log[] = $serie->getName();
             $id = $serie->getId();
             $durations = $serie->getEpisodeDurations();
             $last = 0;
@@ -242,7 +245,10 @@ class SerieFrontController extends AbstractController
                             if (key_exists($episodeNumber, $durations[$seasonNumber][$episodeNumber - 1])) {
                                 $minutes = $durations[$seasonNumber][$episodeNumber - 1][$episodeNumber];
                                 if ($minutes == null) {
-                                    $minutes = $last;
+                                    $minutes = $this->episodeDuration($serie->getSerieId(), $seasonNumber, $episodeNumber);
+                                    $durations[$seasonNumber][$episodeNumber - 1] = [$episodeNumber => $minutes];
+                                    $durationsUpdated = true;
+                                    $log[] = sprintf("%s : S%02dE%02d (%d) durée mise à jour (%d)\n", $serie->getName(), $seasonNumber, $episodeNumber, $id, $minutes);
                                     if (!$episodeRuntimeExists) {
                                         $nullDurationCount++;
                                         $log[] = sprintf("%s : S%02dE%02d (%d - null)\n", $serie->getName(), $seasonNumber, $episodeNumber, $id);
@@ -258,18 +264,27 @@ class SerieFrontController extends AbstractController
                                 $duration += $last;
                             }
                         } else {
-                            $log[] = sprintf("%s : S%02dE%02d (%d - episode-1)\n", $serie->getName(), $seasonNumber, $episodeNumber, $id);
+                            $minutes = $this->episodeDuration($serie->getSerieId(), $seasonNumber, $episodeNumber);
+                            $durations[$seasonNumber][$episodeNumber - 1] = [$episodeNumber => $minutes];
+                            $duration += $minutes;
+                            $durationsUpdated = true;
+                            $log[] = sprintf("%s : S%02dE%02d (%d): %d minutes\n", $serie->getName(), $seasonNumber, $episodeNumber, $id, $minutes);
                         }
                     } else {
                         $log[] = sprintf("%s : S%02dE%02d (%d - season)\n", $serie->getName(), $seasonNumber, $episodeNumber, $id);
                     }
                 }
             }
+            if ($durationsUpdated) {
+                $serie->setEpisodeDurations($durations);
+                $this->serieRepository->save($serie, true);
+            }
         }
         $t1 = microtime(true);
 
-        return $this->json([
+        return $this->render('blocks/series/_duration.html.twig', [
             'duration' => $duration,
+            'durations' => $durations,
             'time' => sprintf("%.02f", $t1 - $t0),
             'log' => $log,
             'serieCount' => $serieCount,
@@ -277,6 +292,12 @@ class SerieFrontController extends AbstractController
             'episodeCount' => $episodeCount,
             'nullDurationCount' => $nullDurationCount,
         ]);
+    }
+
+    public function episodeDuration($serieId, $seasonNumber, $episodeNumber):?int
+    {
+        $episode = json_decode($this->tmdbService->getTvEpisode($serieId, $seasonNumber, $episodeNumber, 'fr'), true);
+        return $episode['runtime'];
     }
 
     #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_series_toggle_favorite', methods: 'GET')]

@@ -46,7 +46,7 @@ export class Shows {
             });
 
             const test = document.querySelector("#test");
-            test.addEventListener("click", thisGlobal.getViewedEpisodesDuration);
+            test?.addEventListener("click", thisGlobal.getViewedEpisodesDuration);
 
             const alert = document.querySelector(".alert-next-episode");
             alert?.addEventListener("click", thisGlobal.toggleAlert);

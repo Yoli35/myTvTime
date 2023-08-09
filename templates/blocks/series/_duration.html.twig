@@ -1,0 +1,26 @@
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% for seasonNumber, episodeDurations in durations %}
+    {% for episode in episodeDurations %}
+        {% for episodeNumber, episodeDuration in episode %}
+            <div>{{ seasonNumber }}x{{ episodeNumber }} {{ episodeDuration }} minutes</div>
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
+
+<div class="duration">{{ duration }} minutes</div>
+<div class="time">{{ time }} secondes</div>
+<div class="log">
+    {% for line in log %}
+        <div class="line">{{ line }}</div>
+    {% endfor %}
+</div>
+<div class="result">{{ serieCount }} {{ serieCount > 1 ? 'séries':'série' }}</div>
+<div class="result">{{ seasonCount }} {{ seasonCount > 1 ? 'saisons':'saison' }}</div>
+<div class="result">{{ episodeCount }} {{ episodeCount > 1 ? 'épisodes vus':'épisode vu' }}</div>

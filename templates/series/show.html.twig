@@ -131,15 +131,17 @@
                         {% endif %}
                     </div>
                     <div class="info">
+                    </div>
+                    <div class="info">
+                        <div class="tagline">{{ serie.tagline }}</div>
                         <div class="view-vote">
-                            <div class="tagline">{{ serie.tagline }}</div>
                             {% if user %}
                                 {% if not addThisSeries %}
-                                    <div class="d-flex-1">
-                                        <div class="duration-string"></div>
-                                        <button id="test" data-id="{{ serieId }}"
-                                                class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button>
-                                    </div>
+{#                                    <div class="d-flex-1">#}
+{#                                        <div class="duration-string"></div>#}
+{#                                        <button id="test" data-id="{{ serieId }}"#}
+{#                                                class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button>#}
+{#                                    </div>#}
                                     {% if serie.number_of_episodes > 0 %}
                                         <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
                                         <div class="view-average">

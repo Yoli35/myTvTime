@@ -144,8 +144,18 @@
                                             <div class="info">{{ episode.overview }}</div>
                                         {% endif %}
                                         {% if episode.runtime %}
-                                            <div class="info">{{ 'Runtime'|trans }}
-                                                : {{ episode.runtime }} {{ episode.runtime>1 ? 'minutes':'minute' }}</div>
+                                            <div class="info">{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ episode.runtime>1 ? 'minutes':'minute' }}</div>
+                                        {% else %}
+                                            <div class="info">
+                                                <label for="input-duration-{{ episode.episode_number }}">{{ 'Runtime'|trans }} :
+                                                    <input type="number" id="input-duration-{{ episode.episode_number }}"
+                                                           data-show-id="{{ episode.show_id }}"
+                                                           data-episode-number="{{ episode.episode_number }}"
+                                                           data-season-number="{{ season.season_number }}"
+                                                           min="1" max="999" step="1" value="{{ episode.runtime }}">
+                                                    {{ 'minutes'|trans }}
+                                                </label>
+                                            </div>
                                         {% endif %}
                                         {% if episode.air_date %}
                                             <div class="info">
@@ -301,6 +311,44 @@
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 window.location.reload();
+            }
+            xhr.open("GET", url + '?data=' + data, true);
+            xhr.send();
+        }
+
+        function initEpisodeDuration() {
+            const episodeDurationInputs = document.querySelectorAll('input[id^=episode-duration]');
+            episodeDurationInputs.forEach((episodeDurationInput) => {
+                episodeDurationInput.addEventListener('keyup', (e) => {
+                    if (e.code === 'Enter') {
+                        saveEpisodeDuration(e);
+                    }
+                });
+            });
+        }
+
+        function saveEpisodeDuration(e) {
+            const input = e.currentTarget;
+            const runtime = input.value;
+            const showId = input.getAttribute("data-show-id");
+            const episodeNumber = input.getAttribute("data-episode-number");
+            const seasonNumber = input.getAttribute("data-season-number");
+            const url = '{{ path('app_episode_duration') }}';
+            const data = JSON.stringify({
+                showId: showId,
+                episodeNumber: episodeNumber,
+                seasonNumber: seasonNumber,
+                runtime: runtime
+            });
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                const {result, runtime} = JSON.parse(xhr.responseText);
+                if (result ==="ok") {
+                    const txt = {"fr": "minutes", "en": "minutes", "es": "minutos", "de": "Minuten"};
+                    const locale = document.querySelector('html').getAttribute('lang');
+                    const info = input.closest('.info');
+                    info.innerHTML = runtime + ' ' + txt[locale];
+                }
             }
             xhr.open("GET", url + '?data=' + data, true);
             xhr.send();
@@ -848,14 +896,14 @@
 
                 ctx.fillStyle = "#ffeeff";
                 ctx.beginPath();
-                ctx.roundRect(textX + (cos * r) - 16, textY + (sin * r) -16, 32, 32, 7);
+                ctx.roundRect(textX + (cos * r) - 16, textY + (sin * r) - 16, 32, 32, 7);
                 ctx.fill();
                 ctx.strokeStyle = "#110011";
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 ctx.resetTransform();
                 ctx.fillStyle = "#110011";
-                ctx.fillText(episode.vote, textX +2+ (cos * r), textY +2+ (sin * r));
+                ctx.fillText(episode.vote, textX + 2 + (cos * r), textY + 2 + (sin * r));
             } else {
                 ctx.fillStyle = "#ffffff";
                 ctx.fillText(episode.vote, textX + (cos * radius), textY + (sin * radius));

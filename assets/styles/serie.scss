@@ -1126,6 +1126,7 @@
             h1 {
                 align-items: center;
                 display: flex;
+                font-size: 3rem;
                 font-weight: 400;
                 gap: 1rem;
                 position: relative;
@@ -1181,6 +1182,7 @@
 
             .info {
                 @include flex-100(center, start);
+                font-size: 1.25rem;
                 font-weight: 100;
                 margin-top: .5em;
 
@@ -1263,9 +1265,9 @@
 
                 .creators {
                     @include flex-row(unset, flex-start);
-                    gap: 1em;
+                    gap: 1rem;
                     flex-wrap: wrap;
-                    margin-top: 1em;
+                    margin-top: 1rem;
 
                     .creator {
                         @include human-profile(var(--gradient-ardoise-20));
@@ -1279,6 +1281,7 @@
 
                 .next-block {
                     display: flex;
+                    font-size: 1rem;
                     gap: .25rem;
                     margin-left: auto;
 
@@ -1299,19 +1302,20 @@
                     .alert-next-episode,
                     .next-episode-to-watch {
                         @include flex-row();
-                        border-radius: .25em;
+                        border-radius: .25rem;
                         font-weight: 300;
-                        line-height: 1.25em;
-                        padding: .5em 1em;
+                        line-height: 1.25rem;
+                        padding: .5rem 1rem;
                     }
 
                     .next-episode-provider {
+                        aspect-ratio: 1;
                         border: 2px solid var(--gradient-green-30);
-                        border-radius: calc(.25em + 2px);
+                        border-radius: calc(.25rem + 2px);
                         cursor: pointer;
-                        height: 3.5rem;
+                        height: 100%;
                         position: relative;
-                        width: 3.5rem;
+                        //width: 3.5rem;
 
                         &:hover {
                             .next-episode-provider-list {
@@ -1322,8 +1326,8 @@
                         img {
                             border-radius: .25em;
                             object-fit: cover;
-                            height: 100%;
-                            width: 100%;
+                            height: 3.5rem;
+                            width: auto;
                         }
 
                         .no-provider {
