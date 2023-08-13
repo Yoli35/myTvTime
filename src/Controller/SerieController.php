@@ -532,6 +532,11 @@ class SerieController extends AbstractController
         $week = $now->format('W');
 
         $day_of_the_week = date('w', strtotime($now->format('Y-m-d')));
+        // date -> sunday = 0, monday = 1, ... saturday = 6
+        // but we want monday = 1, tuesday = 2, ... sunday = 7
+        if ($day_of_the_week == 0) {
+            $day_of_the_week = 7;
+        }
         $start = $this->dateService->newDateImmutable((1 - $day_of_the_week) . 'day', 'Europe/Paris');
         $end = $this->dateService->newDateImmutable((7 - $day_of_the_week) . 'day', 'Europe/Paris');
         $episodesOfTheWeek = [];
@@ -1643,13 +1648,13 @@ class SerieController extends AbstractController
         $serie->setEpisodeDurations($episodeDurations);
         $this->serieRepository->save($serie, true);
 
-        dump([
-            'serieId' => $serieId,
-            'seasonNumber' => $seasonNumber,
-            'episodeNumber' => $episodeNumber,
-            'runtime' => $runtime,
-            'episodeDurations' => $episodeDurations,
-            ]);
+//        dump([
+//            'serieId' => $serieId,
+//            'seasonNumber' => $seasonNumber,
+//            'episodeNumber' => $episodeNumber,
+//            'runtime' => $runtime,
+//            'episodeDurations' => $episodeDurations,
+//            ]);
 
         return $this->json([
             'result' => 'ok',

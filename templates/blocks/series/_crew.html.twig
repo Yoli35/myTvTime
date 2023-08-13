@@ -18,13 +18,15 @@
                                         <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
                                     {% endif %}
                                 </div>
-                                <div>{{ people.name }}</div>
-                                <div>
-                                    {% if people.gender is defined %}
-                                        {{ (people.job~(people.gender==1?'.she':'.he'))|trans }}
-                                    {% else %}
-                                        {{ people.job|trans }}
-                                    {% endif %}
+                                <div class="people-infos">
+                                    <div>{{ people.name }}</div>
+                                    <div>
+                                        {% if people.gender is defined %}
+                                            {{ (people.job~(people.gender==1?'.she':'.he'))|trans }}
+                                        {% else %}
+                                            {{ people.job|trans }}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </a>

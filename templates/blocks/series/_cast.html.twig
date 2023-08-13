@@ -27,20 +27,22 @@
                                             <i class="fa-solid fa-star" title="{{ 'Guest star'|trans }}"></i></div>
                                     {% endif %}
                                 </div>
-                                <div>{{ people.name }}</div>
-                                {% if people.character is defined %}
-                                    <div>{{ people.character }}</div>
-                                {% endif %}
-                                <div>
-                                    {% if people.gender is defined %}
-                                        {{ (people.known_for_department~(people.gender==1?'.she':'.he'))|trans }}
-                                    {% else %}
-                                        {{ people.known_for_department|trans }}
+                                <div class="people-infos">
+                                    <div>{{ people.name }}</div>
+                                    {% if people.character is defined %}
+                                        <div>{{ people.character }}</div>
+                                    {% endif %}
+{#                                <div> #}
+{#                                    {% if people.gender is defined %} #}
+{#                                        {{ (people.known_for_department~(people.gender==1?'.she':'.he'))|trans }} #}
+{#                                    {% else %} #}
+{#                                        {{ people.known_for_department|trans }} #}
+{#                                    {% endif %} #}
+{#                                </div> #}
+                                    {% if people.episodeString is defined %}
+                                        <div title="{{ people.episodesString }}">{{ people.episodes }}</div>
                                     {% endif %}
                                 </div>
-                                {% if people.episodeString is defined %}
-                                    <div title="{{ people.episodesString }}">{{ people.episodes }}</div>
-                                {% endif %}
                             </div>
                         </a>
                     {% endfor %}

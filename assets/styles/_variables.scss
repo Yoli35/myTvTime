@@ -535,23 +535,23 @@ $fa-font-path: "../webfonts";
         width: 8rem;
     }
 
-    div {
-        font-size: .75em;
-        font-weight: 100;
-        line-height: 1em;
-        padding: .125rem;
-        text-align: center;
-    }
+    //div {
+    //    font-size: .75em;
+    //    font-weight: 100;
+    //    line-height: 1em;
+    //    padding: .125rem;
+    //    text-align: center;
+    //}
 
-    div:first-child {
-        min-height: 0;
-        padding: 0;
-    }
+    //div:first-child {
+    //    min-height: 0;
+    //    padding: 0;
+    //}
 
-    div:last-child {
-        margin-top: auto;
-        padding-top: 0;
-    }
+    //div:last-child {
+    //    margin-top: auto;
+    //    padding-top: 0;
+    //}
 }
 
 @mixin animated-header($bg-image, $h1-color: var(--gradient-ardoise-50)) {

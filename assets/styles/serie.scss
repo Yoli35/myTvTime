@@ -1580,6 +1580,16 @@
                                         right: 0;
                                     }
                                 }
+
+                                .people-infos {
+                                    @include flex-col();
+                                    font-size: .875rem;
+
+                                    div {
+                                        text-align: center;
+                                        line-height: 1rem;
+                                    }
+                                }
                             }
                         }
                     }
@@ -1751,6 +1761,7 @@
                                 font-weight: bold;
                                 justify-content: center;
                                 left: 0;
+                                line-height: 1rem;
                                 padding: .5em;
                                 position: absolute;
                                 top: 0;
@@ -2859,10 +2870,11 @@
                 font-size: 4rem;
                 font-weight: 900;
                 line-height: 1em;
+                mix-blend-mode: screen;
                 opacity: 0;
                 position: absolute;
-                transition: opacity 300ms ease-in-out;
                 transform: translate(-50%, -50%);
+                transition: opacity 300ms ease-in-out;
                 width: max-content;
 
                 &.show {
@@ -2888,7 +2900,7 @@
                 padding: 1em;
 
                 &.today {
-                    background-color: var(--gradient-ardoise-40);
+                    background-color: var(--gradient-green-20);
                 }
 
                 .date {
