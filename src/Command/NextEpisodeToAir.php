@@ -128,7 +128,7 @@ class NextEpisodeToAir extends Command
                         $message = '    ' . $n . ' ' . ($n > 1 ? 'episodes' : 'episode') . ' ' . ($neg ? 'less' : 'more') . '.';
                         $io->warning($message);
                         $this->logs($message, 'warning');
-                        $report[] = sprintf("%s - %s", $serie->getName(), $message);
+                        $report[] = sprintf("%d: %s - %s", $serie->getId(), $serie->getName(), $message);
                     }
                     if ($whatsNew['season']) {
                         $n = abs($whatsNew['season']);
@@ -136,19 +136,19 @@ class NextEpisodeToAir extends Command
                         $message = '    ' . $n . ' ' . ($n > 1 ? 'seasons' : 'season') . ' ' . ($neg ? 'less' : 'more') . '.';
                         $io->warning($message);
                         $this->logs($message, 'warning');
-                        $report[] = sprintf("%s - %s", $serie->getName(), $message);
+                        $report[] = sprintf("%d: %s - %s",$serie->getId(),  $serie->getName(), $message);
                     }
                     if ($whatsNew['status']) {
                         $message = '    New status:' . $whatsNew['status'];
                         $io->warning($message);
                         $this->logs($message, 'warning');
-                        $report[] = sprintf("%s - %s", $serie->getName(), $message);
+                        $report[] = sprintf("%d: %s - %s", $serie->getId(), $serie->getName(), $message);
                     }
                     if ($whatsNew['original_name']) {
                         $message = '    New original name:' . $whatsNew['original_name'];
                         $io->warning($message);
                         $this->logs($message, 'warning');
-                        $report[] = sprintf("%s - %s", $serie->getName(), $message);
+                        $report[] = sprintf("%d: %s - %s", $serie->getId(), $serie->getName(), $message);
                     }
                 }
                 $this->serieController->updateSerieViewing($serieViewing, $tvSeries, true);
@@ -159,7 +159,7 @@ class NextEpisodeToAir extends Command
                 $message = '    TV Series not found';
                 $io->error($message);
                 $this->logs($message);
-                $report[] = sprintf("%s - %s", $serie->getName(), $message);
+                $report[] = sprintf("%d: %s - %s", $serie->getId(), $serie->getName(), $message);
                 $error++;
             }
         }
