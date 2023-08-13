@@ -61,6 +61,7 @@ class NextEpisodeToAir extends Command
         $count = 0;
         $skipped = 0;
         $error = 0;
+        $report = [];
         $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
         $this->logger->info('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
         $io->writeln('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
@@ -124,22 +125,30 @@ class NextEpisodeToAir extends Command
                     if ($whatsNew['episode']) {
                         $n = abs($whatsNew['episode']);
                         $neg = $n < 0;
-                        $io->warning('    ' . $n . ' ' . ($n > 1 ? 'episodes' : 'episode') . ($neg ? 'less' : 'more') . '.');
-                        $this->logs('    ' . $n . ' ' . ($n > 1 ? 'episodes' : 'episode') . ($neg ? 'less' : 'more') . '.', 'warning');
+                        $message = '    ' . $n . ' ' . ($n > 1 ? 'episodes' : 'episode') . ' ' . ($neg ? 'less' : 'more') . '.';
+                        $io->warning($message);
+                        $this->logs($message, 'warning');
+                        $report[] = sprintf("%s - %s", $serie->getName(), $message);
                     }
                     if ($whatsNew['season']) {
                         $n = abs($whatsNew['season']);
                         $neg = $n < 0;
-                        $io->warning('    ' . $n . ' ' . ($n > 1 ? 'seasons' : 'season') . ($neg ? 'less' : 'more') . '.');
-                        $this->logs('    ' . $n . ' ' . ($n > 1 ? 'seasons' : 'season') . ($neg ? 'less' : 'more') . '.', 'warning');
+                        $message = '    ' . $n . ' ' . ($n > 1 ? 'seasons' : 'season') . ' ' . ($neg ? 'less' : 'more') . '.';
+                        $io->warning($message);
+                        $this->logs($message, 'warning');
+                        $report[] = sprintf("%s - %s", $serie->getName(), $message);
                     }
                     if ($whatsNew['status']) {
-                        $io->warning('    New status:' . $whatsNew['status']);
-                        $this->logs('    New status:' . $whatsNew['status'], 'warning');
+                        $message = '    New status:' . $whatsNew['status'];
+                        $io->warning($message);
+                        $this->logs($message, 'warning');
+                        $report[] = sprintf("%s - %s", $serie->getName(), $message);
                     }
                     if ($whatsNew['original_name']) {
-                        $io->warning('    New original name:' . $whatsNew['original_name']);
-                        $this->logs('    New original name:' . $whatsNew['original_name'], 'warning');
+                        $message = '    New original name:' . $whatsNew['original_name'];
+                        $io->warning($message);
+                        $this->logs($message, 'warning');
+                        $report[] = sprintf("%s - %s", $serie->getName(), $message);
                     }
                 }
                 $this->serieController->updateSerieViewing($serieViewing, $tvSeries, true);
@@ -147,10 +156,20 @@ class NextEpisodeToAir extends Command
                 $this->logs($this->serieController->messages);
                 $count++;
             } else {
-                $io->error('    TV Series not found');
-                $this->logs('    TV Series not found', 'error');
+                $message = '    TV Series not found';
+                $io->error($message);
+                $this->logs($message);
+                $report[] = sprintf("%s - %s", $serie->getName(), $message);
                 $error++;
             }
+        }
+
+        if (count($report)) {
+            $io->writeln('Report:');
+            foreach ($report as $message) {
+                $io->writeln($message);
+            }
+            $io->writeln('End of report');
         }
 
         $io->success('Done. ' . $count . ' series updated, ' . $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
