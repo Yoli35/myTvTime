@@ -1824,13 +1824,13 @@ class SerieController extends AbstractController
             ];
         }
 
-//        dump([
-//            'tv' => $tv,
+        dump([
+            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
-//        ]);
+        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
