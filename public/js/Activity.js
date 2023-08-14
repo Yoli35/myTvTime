@@ -68,16 +68,17 @@ export class Activity {
         }
         let message = document.querySelector(".message");
         thisGlobal.checkCount++;
+        let innerMessage = 'Last check (' + thisGlobal.checkCount + ') on ' + date.toLocaleDateString() + ' at ' + date.toLocaleTimeString() + ' (different day: ' + (date.getDate() !== thisGlobal.initialDay) + ', hour: ' + (date.getHours()) + ', minutes: ' + (date.getMinutes()) + ', ' + ')<div class="close"><i class="fa-solid fa-xmark"></i></div>';
         if (!message) {
             const activityTools = document.querySelector(".activity-tools");
             const button = activityTools.querySelector("a[class*='btn']");
             const messageDiv = document.createElement("div");
             messageDiv.classList.add("message");
-            messageDiv.innerHTML = 'Last check (' + thisGlobal.checkCount + ') on ' + date.toLocaleDateString() + ' at ' + date.toLocaleTimeString() + '<div class="close"><i class="fa-solid fa-xmark"></i></div>';
+            messageDiv.innerHTML = innerMessage;
             message = activityTools.insertBefore(messageDiv, button);
             // message = document.querySelector(".message");
         } else {
-            message.innerHTML = 'Last check (' + thisGlobal.checkCount + ') on ' + date.toLocaleDateString() + ' at ' + date.toLocaleTimeString() + '<div class="close"><i class="fa-solid fa-xmark"></i></div>';
+            message.innerHTML = innerMessage;
         }
         const close = message.querySelector(".close");
         close.addEventListener("click", () => {

@@ -1,4 +1,5 @@
 import './styles/activity.scss';
+import './styles/alarm.scss';
 import './styles/app.scss';
 import './styles/article.scss';
 import './styles/chat.scss';

@@ -9,5 +9,8 @@
     <a href="{{ path('app_movie_list') }}" class="top-item">{{ 'Movies'|trans }}</a>
     <a href="{{ path('app_series_popular') }}" class="top-item">{{ 'Series'|trans }}</a>
     <a href="{{ path('app_contact', {from: route|slice(4), params: route_params|serialize(format = 'json', context = [])}) }}" class="top-item">{{ 'Contact'|trans }}</a>
-    <div id="multi-search"><i class="fa-solid fa-magnifying-glass"></i></div>
+    <div class="d-flex-1">
+        <div id="multi-search"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <div id="alarms"><i class="fa-solid fa-clock"></i></div>
+    </div>
 </nav>

@@ -9,6 +9,7 @@ use App\Repository\MovieCollectionRepository;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\Common\Collections\Collection;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
@@ -29,11 +30,12 @@ class UsersExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('userList', [$this, 'userList'], ['is_safe' => ['html']]),
-            new TwigFunction('userDiscussions', [$this, 'userDiscussions'], ['is_safe' => ['html']]),
-            new TwigFunction('whoIsTyping', [$this, 'whoIsTyping'], ['is_safe' => ['html']]),
             new TwigFunction('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
+            new TwigFunction('userAlarms', [$this, 'userAlarms'], ['is_safe' => ['html']]),
+            new TwigFunction('userDiscussions', [$this, 'userDiscussions'], ['is_safe' => ['html']]),
+            new TwigFunction('userList', [$this, 'userList'], ['is_safe' => ['html']]),
             new TwigFunction('userMovieCollections', [$this, 'userMovieCollections'], ['is_safe' => ['html']]),
+            new TwigFunction('whoIsTyping', [$this, 'whoIsTyping'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -154,5 +156,10 @@ class UsersExtension extends AbstractExtension
     public function userMovieCollections(User $user): array
     {
         return $this->movieCollectionRepository->getSummary($user->getId());
+    }
+
+    public function userAlarms(User $user): Collection
+    {
+        return $user->getAlarms();
     }
 }

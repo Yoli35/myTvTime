@@ -123,6 +123,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: YoutubeVideoComment::class, orphanRemoval: true)]
     private Collection $youtubeVideoComments;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Alarm::class, orphanRemoval: true)]
+    private Collection $alarms;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -136,6 +139,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->youtubeVideos = new ArrayCollection();
         $this->alerts = new ArrayCollection();
         $this->youtubeVideoComments = new ArrayCollection();
+        $this->alarms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -676,6 +680,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($youtubeVideoComment->getUser() === $this) {
                 $youtubeVideoComment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Alarm>
+     */
+    public function getAlarms(): Collection
+    {
+        return $this->alarms;
+    }
+
+    public function addAlarm(Alarm $alarm): static
+    {
+        if (!$this->alarms->contains($alarm)) {
+            $this->alarms->add($alarm);
+            $alarm->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlarm(Alarm $alarm): static
+    {
+        if ($this->alarms->removeElement($alarm)) {
+            // set the owning side to null (unless already changed)
+            if ($alarm->getOwner() === $this) {
+                $alarm->setOwner(null);
             }
         }
 

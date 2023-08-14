@@ -30,7 +30,9 @@
 {% block body %}{% endblock %}
 {% include "blocks/_flash-messages.html.twig" %}
 {% include "blocks/chat/_chatWrapper.html.twig" %}
+{% include "blocks/_alarms.html.twig" %}
 {% include "blocks/_multiSearch.html.twig" %}
+<script src="/js/alarm.js" type="module"></script>
 <script src="/js/search.js" type="module"></script>
 {% include "_accept.html.twig" %}
 </body>
