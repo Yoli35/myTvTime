@@ -28,6 +28,18 @@ export class AlarmSet {
                 // Save alarm settings
             }
         });
+        const alarmCancel = dialog.querySelector("#alarm-cancel");
+        alarmCancel.addEventListener("click", (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            dialog.close("cancel");
+        });
+        const alarmActivate = dialog.querySelector("#alarm-activate");
+        alarmActivate.addEventListener("click", (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            dialog.close("activate");
+        });
         dialog.addEventListener("keydown", (evt) => {
             if (evt.key === "Escape") {
                 evt.preventDefault();
@@ -39,6 +51,40 @@ export class AlarmSet {
                 evt.stopPropagation();
                 dialog.close("activate");
             }
+        });
+        const tabs = dialog.querySelectorAll(".alarm-tab-name");
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", (evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+                const tab = evt.target;
+                const tabName = tab.getAttribute("id");
+                const tabContents = dialog.querySelectorAll(".alarm-tab-content");
+                tabs.forEach((tab) => {
+                    tab.classList.remove("active");
+                });
+                tab.classList.add("active");
+                tabContents.forEach((tabContent) => {
+                    if (tabContent.getAttribute("data-id") === tabName) {
+                        tabContent.classList.add("active");
+                    } else {
+                        tabContent.classList.remove("active");
+                    }
+                });
+                if (tabName === "once") {
+                    const now = new Date();
+                    const alarmTime = dialog.querySelector("#alarm-time").value;
+                    console.log(alarmTime);
+                    const nowTime = now.getHours() + (now.getMinutes()<10?":0":":") + now.getMinutes();
+                    console.log(nowTime);
+                    const tabContent = dialog.querySelector(".alarm-tab-content[data-id='once']");
+                    if (alarmTime < nowTime) {
+                        tabContent.innerHTML = "Demain, à " + alarmTime + ".";
+                    } else {
+                        tabContent.innerHTML = "Aujourd'hui, à " + alarmTime + ".";
+                    }
+                }
+            });
         });
     }
 }

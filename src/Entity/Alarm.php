@@ -35,7 +35,7 @@ class Alarm
     #[ORM\Column(nullable: true)]
     private ?bool $recurrenceByDays;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['min' => 1, 'default' => 1])]
     private ?int $days;
 
     #[ORM\Column]

@@ -41,29 +41,30 @@
                 <input type="text" id="alarm-description" name="alarm-description" maxlength="255" placeholder="{{ 'Description'|trans }}..." value="{{ alarm.description }}"/>
             </label>
             <label for="alarm-time">{{ 'Time'|trans }}
-                <input type="time" id="alarm-time" name="alarm-time" maxlength="255" value="{{ alarm.time|format_time('short') }}"/>
+                <input type="time" id="alarm-time" name="alarm-time" value="{{ alarm.time|format_time('short') }}"/>
             </label>
             <div class="alarm-recurrence">
                 <div class="alarm-tab-bar">
                     <div class="alarm-tab-name{% if alarm.recurrenceByDays is null %} active{% endif %}" id="once">{{ 'Simple alarm'|trans }}</div>
                     <div class="alarm-tab-name{% if alarm.recurrenceByDays == 1 %} active{% endif %}" id="every">{{ 'Days'|trans }}</div>
-                    <div class="alarm-tab-name{% if alarm.recurrenceByDays == 0 %} active{% endif %}" id="week">{{ 'Week'|trans }}</div>
+                    <div class="alarm-tab-name{% if alarm.recurrenceByDays is not null and alarm.recurrenceByDays == 0 %} active{% endif %}" id="week">{{ 'Week'|trans }}</div>
                 </div>
                 <div class="alarm-tab-body">
-                    <div class="alarm-tab-content" data-id="once"{% if alarm.recurrenceByDays is null %} style="display: flex"{% endif %}>
-                        <label for="alarm-once">{{ 'Once'|trans }}
-                            <input type="checkbox" id="alarm-once" name="alarm-once" {% if alarm.recurrenceByDays is null %} checked{% endif %}/>
+                    <div class="alarm-tab-content{% if alarm.recurrenceByDays is null %} active{% endif %}" data-id="once">
+                        {% if alarm.time|format_time('short') > 'now'|date('H:m') %}
+                            {{ 'Today at'|trans }} {{ alarm.time|format_time('short') }}
+                        {% else %}
+                            {{ 'Tomorrow at' }} {{ alarm.time|format_time('short') }}
+                        {% endif %}
+                    </div>
+                    <div class="alarm-tab-content{% if alarm.recurrenceByDays == 1 %} active{% endif %}" data-id="every">
+                        <label for="alarm-days">
+                            {{ 'Every'|trans }}
+                            <input type="number" id="alarm-days" name="alarm-days" min="1" value="{{ alarm.days }}"/>
+                            {{ 'days'|trans }}
                         </label>
                     </div>
-                    <div class="alarm-tab-content" data-id="once"{% if alarm.recurrenceByDays == 1 %} style="display: flex"{% endif %}>
-                        <label for="alarm-every">{{ 'By days'|trans }}
-                            <input type="checkbox" id="alarm-every" name="alarm-every" {% if alarm.recurrenceByDays %} checked{% endif %}/>
-                        </label>
-                        <label for="alarm-days">{{ 'Every'|trans }}
-                            <input type="number" id="alarm-days" name="alarm-days" value="{{ alarm.days }}"/>{{ 'days'|trans }}
-                        </label>
-                    </div>
-                    <div class="alarm-tab-content" data-id="week"{% if alarm.recurrenceByDays == 0 %} style="display: flex"{% endif %}>
+                    <div class="alarm-tab-content{% if alarm.recurrenceByDays is not null and alarm.recurrenceByDays == 0 %} active{% endif %}" data-id="week">
                         <div class="days-of-week">
                             <label for="alarm-monday">
                                 <input type="checkbox" id="alarm-monday" name="alarm-monday"{% if alarm.getMonday %} checked{% endif %}/>{{ 'Monday'|trans }}
@@ -91,8 +92,8 @@
                 </div>
             </div>
             <div class="alarm-validation">
-                <button class="btn btn-secondary" value="cancel">Annuler</button>
-                <button class="btn btn-primary" value="activate">{{ 'Activate'|trans }}</button>
+                <button id="alarm-cancel" type="button" class="btn btn-secondary" value="cancel">Annuler</button>
+                <button id="alarm-activate" type="submit" class="btn btn-primary" value="activate">{{ 'Activate'|trans }}</button>
             </div>
         </form>
     </div>
