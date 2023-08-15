@@ -47,7 +47,7 @@ class Alarm
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?DateTimeInterface $time = null;
 
-    public function __construct(User $user, string $name, bool $recurrenceByDays, int $days = 0, string $description = null)
+    public function __construct(User $user, string $name, bool $recurrenceByDays, int $days = 1, string $description = null)
     {
         $this->owner = $user;
         $this->name = $name;
@@ -74,17 +74,17 @@ class Alarm
         return $this;
     }
 
-//    public function getRecurrence(): ?int
-//    {
-//        return $this->recurrence;
-//    }
-//
-//    public function setRecurrence(int $recurrence): static
-//    {
-//        $this->recurrence = $recurrence;
-//
-//        return $this;
-//    }
+    public function getRecurrence(): ?int
+    {
+        return $this->recurrence;
+    }
+
+    public function setRecurrence(int $recurrence): static
+    {
+        $this->recurrence = $recurrence;
+
+        return $this;
+    }
 
     public function getMonday(): bool
     {

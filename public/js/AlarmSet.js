@@ -1,8 +1,9 @@
 let thisGlobal;
+
 export class AlarmSet {
 
-    thisGlobal = this;
     constructor() {
+        thisGlobal = this;
         this.initSearch();
     }
 
@@ -27,6 +28,15 @@ export class AlarmSet {
             if (dialog.returnValue === "activate") {
                 // Save alarm settings
             }
+        });
+        const alarms = dialog.querySelectorAll(".alarm");
+        alarms.forEach((alarm) => {
+            alarm.addEventListener("click", (evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+                const alarm = evt.currentTarget;
+                thisGlobal.hydrateAlarmContent(alarm);
+            });
         });
         const alarmCancel = dialog.querySelector("#alarm-cancel");
         alarmCancel.addEventListener("click", (evt) => {
@@ -58,7 +68,7 @@ export class AlarmSet {
                 evt.preventDefault();
                 evt.stopPropagation();
                 const tab = evt.target;
-                const tabName = tab.getAttribute("id");
+                const tabName = tab.getAttribute("data-id");
                 const tabContents = dialog.querySelectorAll(".alarm-tab-content");
                 tabs.forEach((tab) => {
                     tab.classList.remove("active");
@@ -72,19 +82,73 @@ export class AlarmSet {
                     }
                 });
                 if (tabName === "once") {
-                    const now = new Date();
-                    const alarmTime = dialog.querySelector("#alarm-time").value;
-                    console.log(alarmTime);
-                    const nowTime = now.getHours() + (now.getMinutes()<10?":0":":") + now.getMinutes();
-                    console.log(nowTime);
-                    const tabContent = dialog.querySelector(".alarm-tab-content[data-id='once']");
-                    if (alarmTime < nowTime) {
-                        tabContent.innerHTML = "Demain, à " + alarmTime + ".";
-                    } else {
-                        tabContent.innerHTML = "Aujourd'hui, à " + alarmTime + ".";
-                    }
+                    thisGlobal.tabContentOnce(dialog);
                 }
             });
+        });
+    }
+
+    tabContentOnce(dialog) {
+        const now = new Date();
+        const alarmTime = dialog.querySelector("#alarm-time").value;
+        const nowTime = now.getHours() + (now.getMinutes() < 10 ? ":0" : ":") + now.getMinutes();
+        const tabContent = dialog.querySelector(".alarm-tab-content[data-id='once']");
+        if (alarmTime < nowTime) {
+            tabContent.innerHTML = "Demain, à " + alarmTime + ".";
+        } else {
+            tabContent.innerHTML = "Aujourd'hui, à " + alarmTime + ".";
+        }
+    }
+
+    hydrateAlarmContent(alarm) {
+        const alarms = alarm.closest(".alarms").querySelectorAll(".alarm");
+        const dialog = alarm.closest("dialog");
+        const content = dialog.querySelector(".content");
+        const alarmIdInput = content.querySelector("#alarm-id");
+        const alarmNameInput = content.querySelector("#alarm-name");
+        const alarmDescriptionInput = content.querySelector("#alarm-description");
+        const alarmTimeInput = content.querySelector("#alarm-time");
+        alarms.forEach((a) => {
+            a.classList.remove("active");
+        });
+        alarm.classList.add("active");
+        const alarmData = alarm.querySelector(".alarm-data");
+        alarmIdInput.value = alarmData.getAttribute("data-id");
+        alarmNameInput.value = alarm.querySelector(".alarm-name").textContent;
+        alarmDescriptionInput.value = alarmData.getAttribute("data-description");
+        alarmTimeInput.value = alarmData.getAttribute("data-time");
+        const byDays = alarmData.getAttribute("data-by-days");
+        const tabs = dialog.querySelectorAll(".alarm-tab-name");
+        const tabContents = dialog.querySelectorAll(".alarm-tab-content");
+        tabs.forEach((tab) => {
+            tab.classList.remove("active");
+        });
+        tabContents.forEach((tabContent) => {
+            tabContent.classList.remove("active");
+        });
+        let selector = ".alarm-tab-name[data-id='" + byDays + "']";
+        const activeTab = dialog.querySelector(selector);
+        activeTab.classList.add("active");
+        selector = ".alarm-tab-content[data-id='" + byDays + "']";
+        const activeTabContent = dialog.querySelector(selector);
+        activeTabContent.classList.add("active");
+        // Tab once
+        if (byDays === "once") {
+            thisGlobal.tabContentOnce(dialog);
+        }
+        // Tab days
+        const alarmDaysInput = content.querySelector("#alarm-days");
+        alarmDaysInput.value = alarmData.getAttribute("data-days");
+        // Tab days of week
+        const daysOfWeekTab = dialog.querySelector(".alarm-tab-content[data-id='week']");
+        const daysOfWeek = daysOfWeekTab.querySelectorAll("input[type=checkbox]");
+        const recurrence = parseInt(alarmData.getAttribute("data-recurrence"));
+        daysOfWeek.forEach((day) => {
+            if (recurrence & parseInt(day.getAttribute("data-shift"))) {
+                day.setAttribute("checked", "checked");
+            } else {
+                day.removeAttribute("checked");
+            }
         });
     }
 }

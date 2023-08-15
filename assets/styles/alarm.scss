@@ -29,6 +29,7 @@
             background-color: var(--gradient-ardoise-20);
             border: 2px solid transparent;
             border-radius: .25rem;
+            cursor: pointer;
             min-width: 20rem;
             padding-block: .25rem;
             padding-inline: 1rem;
@@ -56,6 +57,7 @@
                     font-size: .75rem;
                     font-weight: 300;
                     gap: .5rem;
+                    height: 1.125rem;
                     line-height: 1em;
 
                     .alarm-recurrence-days {

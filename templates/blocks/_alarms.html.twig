@@ -3,7 +3,9 @@
         {% set alarms = userAlarms(app.user) %}
         {% for alarm in alarms %}
             <div class="alarm{% if loop.index == loop.last %} active{% endif %}">
-                <div class="alarm-data">
+                <div class="alarm-data" data-id="{{ alarm.id }}" data-owner="{{ alarm.owner.id }}"
+                    data-recurrence="{{ alarm.recurrence }}" data-by-days="{{ alarm.recurrenceByDays is null ? "once" : alarm.recurrenceByDays == true ? "every" : "week" }}"
+                    data-description="{{ alarm.description }}" data-days="{{ alarm.days }}" data-time="{{ alarm.time|format_time('short') }}">
                     <div class="alarm-time">{{ alarm.time|format_time('short') }}</div>
                     <div class="alarm-recurrence">
                         {% if alarm.recurrenceByDays %}
@@ -34,6 +36,7 @@
     </div>
     <div class="content">
         <form method="dialog">
+            <input type="hidden" id="alarm-id" name="alarm-id" value="{{ alarm.id }}"/>
             <label for="alarm-name">{{ 'Name'|trans }}
                 <input type="text" id="alarm-name" name="alarm-name" maxlength="255" placeholder="{{ 'Name'|trans }}..." value="{{ alarm.name }}"/>
             </label>
@@ -45,9 +48,9 @@
             </label>
             <div class="alarm-recurrence">
                 <div class="alarm-tab-bar">
-                    <div class="alarm-tab-name{% if alarm.recurrenceByDays is null %} active{% endif %}" id="once">{{ 'Simple alarm'|trans }}</div>
-                    <div class="alarm-tab-name{% if alarm.recurrenceByDays == 1 %} active{% endif %}" id="every">{{ 'Days'|trans }}</div>
-                    <div class="alarm-tab-name{% if alarm.recurrenceByDays is not null and alarm.recurrenceByDays == 0 %} active{% endif %}" id="week">{{ 'Week'|trans }}</div>
+                    <div class="alarm-tab-name{% if alarm.recurrenceByDays is null %} active{% endif %}" data-id="once">{{ 'Simple alarm'|trans }}</div>
+                    <div class="alarm-tab-name{% if alarm.recurrenceByDays == 1 %} active{% endif %}" data-id="every">{{ 'Days'|trans }}</div>
+                    <div class="alarm-tab-name{% if alarm.recurrenceByDays is not null and alarm.recurrenceByDays == 0 %} active{% endif %}" data-id="week">{{ 'Week'|trans }}</div>
                 </div>
                 <div class="alarm-tab-body">
                     <div class="alarm-tab-content{% if alarm.recurrenceByDays is null %} active{% endif %}" data-id="once">
@@ -67,25 +70,25 @@
                     <div class="alarm-tab-content{% if alarm.recurrenceByDays is not null and alarm.recurrenceByDays == 0 %} active{% endif %}" data-id="week">
                         <div class="days-of-week">
                             <label for="alarm-monday">
-                                <input type="checkbox" id="alarm-monday" name="alarm-monday"{% if alarm.getMonday %} checked{% endif %}/>{{ 'Monday'|trans }}
+                                <input type="checkbox" id="alarm-monday" name="alarm-monday"{% if alarm.getMonday %} checked{% endif %} data-shift="1"/>{{ 'Monday'|trans }}
                             </label>
                             <label for="alarm-tuesday">
-                                <input type="checkbox" id="alarm-tuesday" name="alarm-tuesday"{% if alarm.getTuesday %} checked{% endif %}/>{{ 'Tuesday'|trans }}
+                                <input type="checkbox" id="alarm-tuesday" name="alarm-tuesday"{% if alarm.getTuesday %} checked{% endif %} data-shift="2"/>{{ 'Tuesday'|trans }}
                             </label>
                             <label for="alarm-wednesday">
-                                <input type="checkbox" id="alarm-wednesday" name="alarm-wednesday"{% if alarm.getWednesday %} checked{% endif %}/>{{ 'Wednesday'|trans }}
+                                <input type="checkbox" id="alarm-wednesday" name="alarm-wednesday"{% if alarm.getWednesday %} checked{% endif %} data-shift="4"/>{{ 'Wednesday'|trans }}
                             </label>
                             <label for="alarm-thursday">
-                                <input type="checkbox" id="alarm-thursday" name="alarm-thursday"{% if alarm.getThursday %} checked{% endif %}/>{{ 'Thursday'|trans }}
+                                <input type="checkbox" id="alarm-thursday" name="alarm-thursday"{% if alarm.getThursday %} checked{% endif %} data-shift="8"/>{{ 'Thursday'|trans }}
                             </label>
                             <label for="alarm-friday">
-                                <input type="checkbox" id="alarm-friday" name="alarm-friday"{% if alarm.getFriday %} checked{% endif %}/>{{ 'Friday'|trans }}
+                                <input type="checkbox" id="alarm-friday" name="alarm-friday"{% if alarm.getFriday %} checked{% endif %} data-shift="16"/>{{ 'Friday'|trans }}
                             </label>
                             <label for="alarm-saturday">
-                                <input type="checkbox" id="alarm-saturday" name="alarm-saturday"{% if alarm.getSaturday %} checked{% endif %}/>{{ 'Saturday'|trans }}
+                                <input type="checkbox" id="alarm-saturday" name="alarm-saturday"{% if alarm.getSaturday %} checked{% endif %} data-shift="32"/>{{ 'Saturday'|trans }}
                             </label>
                             <label for="alarm-sunday">
-                                <input type="checkbox" id="alarm-sunday" name="alarm-sunday"{% if alarm.getSunday %} checked{% endif %}/>{{ 'Sunday'|trans }}
+                                <input type="checkbox" id="alarm-sunday" name="alarm-sunday"{% if alarm.getSunday %} checked{% endif %} data-shift="64"/>{{ 'Sunday'|trans }}
                             </label>
                         </div>
                     </div>
