@@ -140,7 +140,6 @@
                 &:has(input[type="checkbox"]) {
                     flex-direction: row;
                     align-items: center;
-                    gap: .5rem;
                     justify-content: revert;
                     justify-items: revert;
                 }
@@ -182,7 +181,7 @@
 
                 .days-of-week {
                     @include flex-row(center, center);
-                    gap: .5rem;
+                    gap: .75rem;
                     margin-block: .5rem;
                 }
 
