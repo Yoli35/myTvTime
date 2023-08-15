@@ -46,7 +46,7 @@ export class Activity {
 
     initDateChange() {
         // check every minute if the date has changed
-        setInterval(thisGlobal.checkNewDate, 60000);
+        setInterval(thisGlobal.checkNewDate, 300000); // 5 minutes
 
         const message = document.querySelector(".message");
         if (message) {
@@ -68,7 +68,7 @@ export class Activity {
         }
         let message = document.querySelector(".message");
         thisGlobal.checkCount++;
-        let innerMessage = 'Last check (' + thisGlobal.checkCount + ') on ' + date.toLocaleDateString() + ' at ' + date.toLocaleTimeString() + ' (different day: ' + (date.getDate() !== thisGlobal.initialDay) + ', hour: ' + (date.getHours()) + ', minutes: ' + (date.getMinutes()) + ', ' + ')<div class="close"><i class="fa-solid fa-xmark"></i></div>';
+        let innerMessage = 'Last check (' + thisGlobal.checkCount + ') on ' + date.toLocaleDateString() + ' at ' + date.toLocaleTimeString() + ' (different day: ' + (date.getDate() !== thisGlobal.initialDay) + ', hours: ' + (date.getHours()) + ', minutes: ' + (date.getMinutes()) + ')<div class="close"><i class="fa-solid fa-xmark"></i></div>';
         if (!message) {
             const activityTools = document.querySelector(".activity-tools");
             const button = activityTools.querySelector("a[class*='btn']");
