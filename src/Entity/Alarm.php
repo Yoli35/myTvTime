@@ -47,19 +47,27 @@ class Alarm
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?DateTimeInterface $time = null;
 
-    public function __construct(User $user, string $name, bool $recurrenceByDays, int $days = 1, string $description = null)
+    public function __construct(User $user, string $name, int $recurrence, ?bool $recurrenceByDays, int $days, ?string $description, DateTimeImmutable $createAT)
     {
         $this->owner = $user;
         $this->name = $name;
+        $this->recurrence = $recurrence;
         $this->recurrenceByDays = $recurrenceByDays;
         $this->days = $days;
         $this->description = $description;
-        $this->createdAt = new DateTimeImmutable('now', 'Europe/Paris');
+        $this->createdAt = $createAT;
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string

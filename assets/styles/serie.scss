@@ -2105,8 +2105,8 @@
                         .layout-size-value {
                             background-color: var(--gradient-ardoise-50);
                             border-radius: .25rem;
-                            font-size: 1.5rem;
-                            font-weight: 400;
+                            font-size: 1rem;
+                            font-weight: 100;
                             padding: .25rem;
                             text-align: center;
                             width: 4rem;
@@ -2895,9 +2895,9 @@
             .day {
                 @include flex-col(start, start);
                 background-color: var(--gradient-ardoise-40-alpha-50);
-                border-radius: .5em;
-                gap: 1em;
-                padding: 1em;
+                border-radius: .5rem;
+                gap: .5rem;
+                padding: .5rem;
 
                 &.today {
                     background-color: var(--gradient-green-20);
@@ -2910,7 +2910,7 @@
                 .episodes {
                     @include flex-100();
                     flex-wrap: wrap;
-                    gap: 1em;
+                    gap: .5em;
 
                     .home-discover {
                         border: 2px solid transparent;

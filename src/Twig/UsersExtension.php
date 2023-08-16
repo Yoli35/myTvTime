@@ -2,12 +2,15 @@
 
 namespace App\Twig;
 
+use App\Entity\Alarm;
 use App\Entity\ChatDiscussion;
 use App\Entity\User;
 use App\Repository\ChatDiscussionRepository;
 use App\Repository\MovieCollectionRepository;
 use App\Repository\UserRepository;
+use App\Service\DateService;
 use DateTimeImmutable;
+use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\Common\Collections\Collection;
 use Exception;
@@ -20,6 +23,7 @@ class UsersExtension extends AbstractExtension
 {
     public function __construct(
         private readonly ChatDiscussionRepository  $chatDiscussionRepository,
+        private readonly DateService               $dateService,
         private readonly MovieCollectionRepository $movieCollectionRepository,
         private readonly TranslatorInterface       $translator,
         private readonly UserRepository            $userRepository,
@@ -30,7 +34,9 @@ class UsersExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
+            new TwigFunction('getTime', [$this, 'getTime'], ['is_safe' => ['html']]),
             new TwigFunction('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
+            new TwigFunction('newAlarm', [$this, 'newAlarm'], ['is_safe' => ['html']]),
             new TwigFunction('userAlarms', [$this, 'userAlarms'], ['is_safe' => ['html']]),
             new TwigFunction('userDiscussions', [$this, 'userDiscussions'], ['is_safe' => ['html']]),
             new TwigFunction('userList', [$this, 'userList'], ['is_safe' => ['html']]),
@@ -160,6 +166,23 @@ class UsersExtension extends AbstractExtension
 
     public function userAlarms(User $user): Collection
     {
-        return $user->getAlarms();
+        $alarms = $user->getAlarms();
+        $alarms->add($this->newAlarm($user));
+        return $alarms;
+    }
+
+    public function newAlarm(User $user): Alarm
+    {
+        $alarm = new Alarm($user, $this->translator->trans('New alarm'), 0, null, 1, null, $this->dateService->newDateImmutable('now', 'Europe/Paris'));
+        $alarm->setTime($this->getTime())->setId(0);
+        dump($alarm);
+        return $alarm;
+    }
+
+    public function getTime(): DateTimeInterface
+    {
+        $time = $this->dateService->getNow();
+        $time = $time->setTime(intval($time->format('H')), intval(intval($time->format('i')) / 5) * 5 + 5);
+        return $time->setDate(1970, 1, 1);
     }
 }
