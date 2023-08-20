@@ -73,6 +73,7 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "s.`id` as serie_id, s.`name` as name, s.`poster_path` as poster_path, s.`first_date_air` as first_date_air, "
             . "s.`original_name` as original_name, s.`overview` as overview, s.`backdrop_path` as backdrop_path, s.`serie_id` as tmdb_id, "
             . "s.`status` as serie_status, s.`created_at` as serie_created_at, s.`updated_at` as serie_updated_at, "
+            . "s.upcoming_date_year as upcoming_date_year, s.upcoming_date_month as upcoming_date_month, "
             . "f.`id` IS NOT NULL as favorite "
             . "FROM `serie_viewing` sv "
             . "INNER JOIN `serie` s ON s.`id`=sv.`serie_id` "

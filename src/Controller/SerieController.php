@@ -30,6 +30,7 @@ use App\Service\QuoteService;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
+use DateTimeZone;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -824,7 +825,13 @@ class SerieController extends AbstractController
             return $result['id'];
         }, $results);
         $serieViewings = $this->serieViewingRepository->findBy(['id' => $serieViewingIds]);
-        $seriesToBe = array_map(function ($result) use ($serieViewings, $serieViewingIds, $imageConfig, $locale) {
+        $series = $this->serieRepository->findBy(['id' => array_map(function ($result) {
+            return $result['serie_id'];
+        }, $results)]);
+        $seriesToBe = array_map(function ($result) use ($series, $serieViewings, $serieViewingIds, $imageConfig, $locale) {
+
+            $result = $this->updateSerieDB($result, $series, $locale);
+
             $serie = $this->serie2arrayV2($result, $locale);
             $serie['viewing'] = $this->getSerieViewing($result['id'], $serieViewings);
             $this->savePoster($serie['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
@@ -841,6 +848,109 @@ class SerieController extends AbstractController
 //        ]);
 
         return $seriesToBe;
+    }
+
+    public function updateSerieDB($result, $series, $locale): array
+    {
+        // result :
+        //    "id" => 741
+        //    "viewed_episodes" => 0
+        //    "number_of_episodes" => 7
+        //    "number_of_seasons" => 1
+        //    "serie_completed" => 0
+        //    "time_shifted" => 0
+        //    "modified_at" => "2023-07-14 12:00:05"
+        //    "created_at" => "2023-07-14 12:00:05"
+        //    "alert_id" => null
+        //    "serie_id" => 671
+        //    "name" => "A Murder at the End of the World"
+        // *  "poster_path" => null
+        // *  "first_date_air" => "2023-08-29 00:00:00"
+        //    "original_name" => "A Murder at the End of the World"
+        // *  "overview" => ""
+        // *  "backdrop_path" => "/eFt73bTmYZZirCYnDh946eBnBey.jpg"
+        //    "tmdb_id" => 134095
+        // *  "serie_status" => "In Production"
+        //    "serie_created_at" => "2023-07-14 12:00:05"
+        //    "serie_updated_at" => "2023-07-14 12:00:05"
+        //    "favorite" => 0
+
+        $serieDB = $this->getSerieFromDB($result['serie_id'], $series);
+
+        $missingPosterPath = false;
+        $missingBackdropPath = false;
+        $missingFirstDateAir = false;
+        $missingOverview = false;
+        $somethingMissing = false;
+        $somethingToSave = false;
+        $serieTMDB = null;
+
+        if (!$serieDB->getPosterPath()) {
+            $missingPosterPath = true;
+        }
+        if (!$serieDB->getBackdropPath()) {
+            $missingBackdropPath = true;
+        }
+        if (!$serieDB->getFirstDateAir()) {
+            $missingFirstDateAir = true;
+        }
+        if ($serieDB->getOverview() ==="") {
+            $missingOverview = true;
+        }
+        if ($missingBackdropPath || $missingFirstDateAir || $missingOverview || $missingPosterPath) { // Si quelque chose manque, vérifier si la série a été mise à jour sur TMDB
+            $serieTMDB = json_decode($this->TMDBService->getTv($serieDB->getSerieId(), $locale), true);
+            // vérifier le statut ici devrait suffire
+            if ($result['serie_status'] !== $serieTMDB['status']) {
+                $serieDB->setStatus($serieTMDB['status']);
+                $result['serie_status'] = $serieTMDB['status'];
+                $somethingToSave = true;
+                $this->addFlash('success', 'Status updated for ' . $serieDB->getName());
+            }
+            $somethingMissing = true;
+        }
+        if ($somethingMissing && $serieTMDB) {
+
+            $posterPath = $serieTMDB['poster_path'];
+            if ($posterPath != $serieDB->getPosterPath()) {
+                $serieDB->setPosterPath($posterPath);
+                $result['poster_path'] = $posterPath;
+                $somethingToSave = true;
+                $this->addFlash('success', 'Poster path updated for ' . $serieDB->getName());
+            }
+            $backdropPath = $serieTMDB['backdrop_path'];
+            if ($backdropPath != $serieDB->getBackdropPath()) {
+                $serieDB->setBackdropPath($backdropPath);
+                $result['backdrop_path'] = $backdropPath;
+                $somethingToSave = true;
+                $this->addFlash('success', 'Backdrop path updated for ' . $serieDB->getName());
+            }
+            $firstDateAir = $serieTMDB['first_air_date'];
+            if ($firstDateAir !== "") {
+                $firstDateAirTMDB = $this->dateService->newDateImmutable($firstDateAir, 'Europe/Paris', true);
+                $firstDateAirDB = $serieDB->getFirstDateAir()->setTimezone(new DateTimeZone('Europe/Paris'))->setTime(0, 0);
+//                dump($firstDateAir);
+//                dump($firstDateAirTMDB);
+//                dump($firstDateAirDB);
+                if ($firstDateAirTMDB != $firstDateAirDB) {
+                    $result['first_date_air'] = $firstDateAir;
+                    $serieDB->setFirstDateAir($firstDateAirTMDB);
+                    $somethingToSave = true;
+                    $this->addFlash('success', 'First date air updated for ' . $serieDB->getName());
+                }
+            }
+            $overview = $serieTMDB['overview'];
+            if ($overview != $serieDB->getOverview()) {
+                $serieDB->setOverview($overview);
+                $result['overview'] = $overview;
+                $somethingToSave = true;
+                $this->addFlash('success', 'Overview updated for ' . $serieDB->getName());
+            }
+
+            if ($somethingToSave) {
+                $this->serieRepository->save($serieDB, true);
+            }
+        }
+        return $result;
     }
 
     public function serie2arrayV2($result, $locale): array
@@ -860,6 +970,8 @@ class SerieController extends AbstractController
         $serie['numberOfEpisodes'] = $result['number_of_episodes']; //getNumberOfEpisodes();
         $serie['numberOfSeasons'] = $result['number_of_seasons']; //getNumberOfSeasons();
         $serie['originalName'] = $result['original_name']; //getOriginalName();
+        $serie['upcomingDateYear'] = $result['upcoming_date_year']; //getUpcomingDateYear();
+        $serie['upcomingDateMonth'] = $result['upcoming_date_month']; //getUpcomingDateMonth();
 
         $serie['favorite'] = $result['favorite'];
 
@@ -887,6 +999,16 @@ class SerieController extends AbstractController
         foreach ($serieViewings as $serieViewing) {
             if ($serieViewing->getId() === $id) {
                 return $serieViewing;
+            }
+        }
+        return null;
+    }
+
+    public function getSerieFromDB(int $id, array $series): Serie|null
+    {
+        foreach ($series as $serie) {
+            if ($serie->getId() === $id) {
+                return $serie;
             }
         }
         return null;
@@ -1824,13 +1946,13 @@ class SerieController extends AbstractController
             ];
         }
 
-        dump([
-            'tv' => $tv,
+//        dump([
+//            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
-        ]);
+//        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
@@ -2532,6 +2654,11 @@ class SerieController extends AbstractController
     {
         $episodeViewing->setVote($vote);
         $this->episodeViewingRepository->save($episodeViewing, true);
+
+        $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
+        $serieViewing->setModifiedAt($this->dateService->newDate('now', 'Europe/Paris'));
+        $this->serieViewingRepository->save($serieViewing, true);
+
         return $this->json(['voteValue' => $vote, 'episodeNumber' => $episodeViewing->getEpisodeNumber()]);
     }
 
@@ -2593,6 +2720,10 @@ class SerieController extends AbstractController
             $episodeViewing->setNetworkType('flatrate');
         }
         $this->episodeViewingRepository->save($episodeViewing, true);
+
+        $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
+        $serieViewing->setModifiedAt($this->dateService->newDate('now', 'Europe/Paris'));
+        $this->serieViewingRepository->save($serieViewing, true);
 
         return $this->json([
             'result' => 'success',
