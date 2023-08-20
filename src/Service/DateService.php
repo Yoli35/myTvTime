@@ -50,7 +50,7 @@ class DateService
         } catch (Exception) {
             $date = new DateTime();
         }
-        if ($allDay) $date->setTime(0, 0);
+        if ($allDay) $date = $date->setTime(0, 0);
 
         return $date;
     }
@@ -62,7 +62,7 @@ class DateService
         } catch (Exception) {
             $date = new DateTime();
         }
-        if ($allDay) $date->setTime(0, 0);
+        if ($allDay) $date = $date->setTime(0, 0);
 
         return $date;
     }
@@ -75,7 +75,7 @@ class DateService
         } catch (Exception) {
             $date = new DateTime();
         }
-        if ($allDay) $date->setTime(0, 0);
+        if ($allDay) $date = $date->setTime(0, 0);
 
         return $date;
     }
@@ -87,7 +87,7 @@ class DateService
         } catch (Exception) {
             $date = new DateTimeImmutable();
         }
-        if (!$allDay) $date->setTime(0, 0);
+        if ($allDay) $date = $date->setTime(0, 0);
 
         return $date;
     }
@@ -101,7 +101,7 @@ class DateService
         } catch (Exception) {
             $date = new DateTime();
         }
-        if ($allDay) $date->setTime(0, 0);
+        if ($allDay) $date = $date->setTime(0, 0);
 
         return $date;
     }
@@ -115,7 +115,7 @@ class DateService
         } catch (Exception) {
             $date = new DateTimeImmutable();
         }
-        if ($allDay) $date->setTime(0, 0);
+        if ($allDay) $date = $date->setTime(0, 0);
 
         return $date;
     }
