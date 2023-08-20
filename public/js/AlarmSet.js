@@ -149,6 +149,17 @@ export class AlarmSet {
             } else {
                 day.removeAttribute("checked");
             }
+            day.addEventListener("click", (evt) => {
+               const day = evt.currentTarget;
+                let recurrence = parseInt(alarmData.getAttribute("data-recurrence"));
+                if (day.checked) {
+                    recurrence |= parseInt(day.getAttribute("data-shift"));
+                } else {
+                    recurrence &= ~parseInt(day.getAttribute("data-shift"));
+                }
+                alarmData.setAttribute("data-recurrence", recurrence);
+                console.log(recurrence);
+            });
         });
     }
 }
