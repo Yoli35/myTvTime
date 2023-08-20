@@ -175,7 +175,6 @@ class UsersExtension extends AbstractExtension
     {
         $alarm = new Alarm($user, $this->translator->trans('New alarm'), 0, null, 1, null, $this->dateService->newDateImmutable('now', 'Europe/Paris'));
         $alarm->setTime($this->getTime())->setId(0);
-        dump($alarm);
         return $alarm;
     }
 
