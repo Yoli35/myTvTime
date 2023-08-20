@@ -66,8 +66,6 @@
         function initHeader() {
             const header = document.querySelector('.this-week-series .header');
             const dayNamesDiv = header.querySelector('.day-names');
-            const dayNamesWidth = dayNamesDiv.offsetWidth;
-            const dayNamesHeight = dayNamesDiv.offsetHeight;
             const speed = 2.5;
             const dayNames = getDayNames();
             /**
@@ -116,6 +114,8 @@
             }
 
             function createNames() {
+                const dayNamesWidth = dayNamesDiv.offsetWidth;
+                const dayNamesHeight = dayNamesDiv.offsetHeight;
                 let number = 25, index = 0, indexMax = dayNames.length - 1, indexName = 0;
                 for (index = 0; index < number; index++) {
                     const div = document.createElement('div');
@@ -150,6 +150,8 @@
             }
 
             function frame(divs, positions) {
+                const dayNamesWidth = dayNamesDiv.offsetWidth;
+                const dayNamesHeight = dayNamesDiv.offsetHeight;
                 divs.forEach((div) => {
                     const index = div.getAttribute('data-day');
                     const position = positions[index];
