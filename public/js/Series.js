@@ -8,11 +8,11 @@ export class Series {
 
         thisGlobal = this;
 
-        this.app_serie_index = globs.app_serie_index;
-        this.app_serie_new = globs.app_serie_new;
-        this.app_serie_show = globs.app_serie_show;
-        this.app_serie_search = globs.app_serie_search;
-        this.app_serie_set_settings = globs.app_serie_set_settings;
+        this.app_series_index = globs.app_series_index;
+        this.app_series_new = globs.app_series_new;
+        this.app_series_show = globs.app_series_show;
+        this.app_series_search = globs.app_series_search;
+        this.app_series_set_settings = globs.app_series_set_settings;
         this.locale = globs.locale;
         this.current_page = globs.current_page;
         this.per_page = globs.per_page;
@@ -83,7 +83,7 @@ export class Series {
     searchSerie() {
         let query = document.querySelector("#search-tmdb-name").value;
         if (query.length > 0) {
-            window.location.href = this.app_serie_search + "?query=" + query;
+            window.location.href = this.app_series_search + "?query=" + query;
         }
     }
 
@@ -720,7 +720,7 @@ export class Series {
         xhr.onload = function () {
             console.log(thisGlobal.response);
         }
-        xhr.open("GET", thisGlobal.app_serie_set_settings + "?data=" + JSON.stringify(settings));
+        xhr.open("GET", thisGlobal.app_series_set_settings + "?data=" + JSON.stringify(settings));
         xhr.send();
     }
 
@@ -807,7 +807,7 @@ export class Series {
             console.log(order.input.value)
         })
         apply.addEventListener("click", () => {
-            window.location.href = this.app_serie_index + "?p=1&pp=" + per_page.data[per_page.input.value - 1].toString() + "&ob=" + order_by.input.value + "&o=" + order.input.value + "&s=1";
+            window.location.href = this.app_series_index + "?p=1&pp=" + per_page.data[per_page.input.value - 1].toString() + "&ob=" + order_by.input.value + "&o=" + order.input.value + "&s=1";
         })
     }
 
@@ -920,7 +920,7 @@ export class Series {
                 }
                 document.querySelector("#new_serie").value = "";
             }
-            xhr.open("GET", thisGlobal.app_serie_new + '?value=' + value + "&p=" + thisGlobal.current_page + "&pp=" + thisGlobal.per_page + "&ob=" + thisGlobal.order_by + "&o=" + thisGlobal.order);
+            xhr.open("GET", thisGlobal.app_series_new + '?value=' + value + "&p=" + thisGlobal.current_page + "&pp=" + thisGlobal.per_page + "&ob=" + thisGlobal.order_by + "&o=" + thisGlobal.order);
             xhr.send();
         }
     }
@@ -944,7 +944,7 @@ export class Series {
             if (id === -1) {
                 return;
             }
-            window.location = thisGlobal.app_serie_show + id + "?p=" + thisGlobal.current_page + "&from=" + thisGlobal.from;
+            window.location = thisGlobal.app_series_show + id + "?p=" + thisGlobal.current_page + "&from=" + thisGlobal.from;
         })
 
         input.addEventListener("input", function (e) {
