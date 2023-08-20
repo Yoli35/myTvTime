@@ -24,6 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/activity')]
 class ActivityController extends AbstractController
@@ -34,7 +35,9 @@ class ActivityController extends AbstractController
                                 private readonly ActivityMoveGoalRepository     $activityMoveGoalRepository,
                                 private readonly ActivityExerciseGoalRepository $activityExerciseGoalRepository,
                                 private readonly ActivityStandUpGoalRepository  $activityStandUpGoalRepository,
-                                private readonly DateService                    $dateService)
+                                private readonly DateService                    $dateService,
+                                private readonly TranslatorInterface            $translator
+    )
     {
 
     }
@@ -105,6 +108,11 @@ class ActivityController extends AbstractController
         $goals['standUp'][count($goals['standUp']) - 1]->setEnd($now);
 //        dump($goals);
 
+        $breadcrumb = [
+            ['name' => $this->translator->trans('Home'), 'url' => $this->generateUrl('app_home')],
+            ['name' => $this->translator->trans('Activity'), 'url' => $this->generateUrl('app_activity_index')],
+        ];
+
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
             'goals' => $goals,
@@ -112,6 +120,7 @@ class ActivityController extends AbstractController
             'years' => $years,
             'currentWeek' => $currentWeek,
             'message' => $message,
+            'breadcrumb' => $breadcrumb,
         ]);
     }
 
