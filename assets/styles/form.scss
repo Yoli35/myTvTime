@@ -116,14 +116,14 @@
 }
 
 .btn-warning {
-    background-color: var(--gradient-mars-50);
+    background-color: var(--gradient-orange-50);
     //background-image: var(--btn-warning);
-    border-color: var(--gradient-mars-80);
-    color: var(--gradient-mars-90);
+    border-color: var(--gradient-orange-80);
+    color: var(--gradient-orange-90);
 
     &:hover {
-        background-color: var(--gradient-mars-60);
-        border-color: var(--gradient-mars-90);
+        background-color: var(--gradient-orange-60);
+        border-color: var(--gradient-orange-90);
     }
 }
 

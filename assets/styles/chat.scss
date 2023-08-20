@@ -197,7 +197,7 @@
         &.active {
             .header {
                 @include flex-row(center, flex-start);
-                background-color: var(--gradient-mars-70);
+                background-color: var(--gradient-orange-70);
             }
         }
 
@@ -362,7 +362,7 @@
             &.active {
                 .header {
                     @include flex-row(center, flex-start);
-                    background-color: var(--gradient-mars-40);
+                    background-color: var(--gradient-orange-40);
                 }
             }
 

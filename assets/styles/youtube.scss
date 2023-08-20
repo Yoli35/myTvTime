@@ -546,7 +546,7 @@
                         position: relative;
 
                         &.new {
-                            background-color: var(--gradient-mars-50);
+                            background-color: var(--gradient-orange-50);
                         }
 
                         .close {
@@ -777,7 +777,7 @@
 
                 &:hover {
                     background-color: var(--gradient-ardoise-50);
-                    color: var(--gradient-mars-80);
+                    color: var(--gradient-orange-80);
                 }
 
                 &.disabled {

@@ -97,7 +97,7 @@
                 }
 
                 em {
-                    color: var(--gradient-mars-70);
+                    color: var(--gradient-orange-70);
                 }
             }
         }
@@ -307,8 +307,8 @@
                         right: var(--serie-lg-poster-width);
 
                         &.start-watching {
-                            background-color: var(--gradient-mars-50);
-                            color: var(--gradient-mars-90);
+                            background-color: var(--gradient-orange-50);
+                            color: var(--gradient-orange-90);
                         }
 
                         &.more-to-come {
@@ -411,8 +411,8 @@
                     }
 
                     .in-production, .planned {
-                        background-color: var(--gradient-mars-50);
-                        color: var(--gradient-mars-90);
+                        background-color: var(--gradient-orange-50);
+                        color: var(--gradient-orange-90);
 
                         div {
                             font-size: 2rem;
@@ -640,7 +640,7 @@
             }
 
             h2 {
-                color: var(---gradient-mars-70);
+                color: var(---gradient-orange-70);
                 display: none;
                 font-size: 1.5em;
                 margin-top: 0;
@@ -841,8 +841,8 @@
                                             padding: .125em .25em;
 
                                             &.min {
-                                                background-color: var(--gradient-mars-90);
-                                                color: var(--gradient-mars-20);
+                                                background-color: var(--gradient-orange-90);
+                                                color: var(--gradient-orange-20);
                                             }
 
                                             &.max {
@@ -901,7 +901,7 @@
                                                 width: 1em;
 
                                                 &.min {
-                                                    background-color: var(--gradient-mars-80);
+                                                    background-color: var(--gradient-orange-80);
                                                     top: -12px;
                                                 }
 
@@ -1145,6 +1145,7 @@
                     &:hover {
                         .no-date-form {
                             opacity: 1;
+                            transform: translate(-50%, 0);
                         }
                     }
 
@@ -1161,8 +1162,10 @@
                         opacity: 0;
                         position: absolute;
                         top: 3rem;
-                        transition: opacity 300ms ease-in-out;
+                        transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+                        transform: translate(-50%, -100%);
                         width: 30rem;
+                        z-index: 1000;
 
                         form {
                             align-items: center;
@@ -1286,7 +1289,7 @@
                     margin-left: auto;
 
                     .alert-next-episode {
-                        background-color: var(--gradient-mars-40);
+                        background-color: var(--gradient-orange-40);
                         cursor: pointer;
                         width: 3.5rem;
 
@@ -1418,10 +1421,10 @@
                 top: 1em;
 
                 .new-status, .new-episode, .new-season, .finale {
-                    background-color: var(--gradient-mars-50);
-                    border: 2px solid var(--gradient-mars-100);
+                    background-color: var(--gradient-orange-50);
+                    border: 2px solid var(--gradient-orange-100);
                     border-radius: .25rem;
-                    color: var(--gradient-mars-100);
+                    color: var(--gradient-orange-100);
                     font-size: 1.25rem;
                     font-weight: 400;
                     //leading-trim: both;
@@ -1674,7 +1677,7 @@
                                                 }
 
                                                 &:hover {
-                                                    border-color: var(--gradient-mars-50);
+                                                    border-color: var(--gradient-orange-50);
                                                     border-radius: 50%;
                                                     //font-size: 1.5em;
                                                     margin: 0;
@@ -1902,7 +1905,7 @@
                                         }
 
                                         &:hover {
-                                            border-color: var(--gradient-mars-50);
+                                            border-color: var(--gradient-orange-50);
                                         }
                                     }
 
@@ -1917,7 +1920,7 @@
                                         width: 3em;
 
                                         &:hover {
-                                            border-color: var(--gradient-mars-50);
+                                            border-color: var(--gradient-orange-50);
                                         }
                                     }
                                 }
@@ -2246,7 +2249,7 @@
                     }
 
                     &.removed {
-                        background-color: var(--gradient-mars-30);
+                        background-color: var(--gradient-orange-30);
                     }
                 }
             }
@@ -2745,7 +2748,7 @@
 
                         .new-season, .finale {
                             background-color: var(--gradient-ardoise-10-alpha-80);
-                            //border: 2px solid var(--gradient-mars-100);
+                            //border: 2px solid var(--gradient-orange-100);
                             //border-radius: .5rem .5rem 0 0;
                             color: var(--gradient-ardoise-100);
                             font-size: 1.25rem;
@@ -2778,7 +2781,7 @@
                 }
 
                 &:has(div span.spe) {
-                    background-color: var(--gradient-mars-40);
+                    background-color: var(--gradient-orange-40);
                 }
 
                 .episode-detail {
@@ -3319,8 +3322,8 @@
     }
 
     &.new {
-        background-color: var(--gradient-mars-80);
-        color: var(--gradient-mars-30);
+        background-color: var(--gradient-orange-80);
+        color: var(--gradient-orange-30);
     }
 
     @for $i from 1 through 42 {

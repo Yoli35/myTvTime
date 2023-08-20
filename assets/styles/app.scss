@@ -27,8 +27,8 @@
 }
 
 ::selection {
-    background-color: var(--gradient-mars-50);
-    color: var(--gradient-mars-90);
+    background-color: var(--gradient-orange-50);
+    color: var(--gradient-orange-90);
 }
 
 html {
@@ -141,7 +141,7 @@ body {
 
 .flash-messages {
     left: 0;
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     z-index: 999;
@@ -180,9 +180,9 @@ body {
         }
 
         &.warning {
-            background-color: var(--gradient-mars-40-alpha-50);
-            border-color: var(--gradient-mars-90);
-            color: var(--gradient-mars-90);
+            background-color: var(--gradient-orange-40-alpha-50);
+            border-color: var(--gradient-orange-90);
+            color: var(--gradient-orange-90);
         }
 
         &.danger {
@@ -487,8 +487,8 @@ main {
             padding: .125em 1em;
 
             &:hover {
-                background-color: var(--gradient-mars-50);
-                color: var(--gradient-mars-90);
+                background-color: var(--gradient-orange-50);
+                color: var(--gradient-orange-90);
             }
         }
 
@@ -520,9 +520,9 @@ main {
         padding: .125em 1em;
 
         &:hover {
-            background-color: var(--gradient-mars-50);
+            background-color: var(--gradient-orange-50);
             border-radius: 9999px;
-            color: var(--gradient-mars-90);
+            color: var(--gradient-orange-90);
         }
     }
 
@@ -633,7 +633,7 @@ nav.active {
         border-bottom: 2px solid transparent;
 
         &:hover {
-            border-bottom-color: var(--gradient-mars-50);
+            border-bottom-color: var(--gradient-orange-50);
         }
     }
 }
@@ -776,8 +776,8 @@ nav.active {
                     white-space: nowrap;
 
                     &:hover {
-                        background-color: var(--gradient-mars-50);
-                        color: var(--gradient-mars-90);
+                        background-color: var(--gradient-orange-50);
+                        color: var(--gradient-orange-90);
                     }
 
                     div:first-child {
@@ -816,7 +816,7 @@ nav.active {
                     }
 
                     .icon:has(.fa-solid.fa-hand-point-right) {
-                        color: var(--gradient-mars-60);
+                        color: var(--gradient-orange-60);
                     }
 
                     .icon:has(.fa-brands.fa-youtube),
@@ -889,12 +889,12 @@ nav.active {
                 padding: 0 .5em;
 
                 &:hover, &:focus, &:active {
-                    background-color: var(--gradient-mars-50);
-                    color: var(--gradient-mars-90);
-                    outline-color: var(--gradient-mars-50);
+                    background-color: var(--gradient-orange-50);
+                    color: var(--gradient-orange-90);
+                    outline-color: var(--gradient-orange-50);
 
                     span {
-                        color: var(--gradient-mars-80);
+                        color: var(--gradient-orange-80);
                     }
                 }
             }
@@ -957,8 +957,8 @@ nav.active {
                 }
 
                 &:hover {
-                    background-color: var(--gradient-mars-50);
-                    color: var(--gradient-mars-90);
+                    background-color: var(--gradient-orange-50);
+                    color: var(--gradient-orange-90);
                 }
 
                 > a {
@@ -968,7 +968,7 @@ nav.active {
 
                     &:hover, &:focus, &:active {
                         background-color: transparent;
-                        color: var(--gradient-mars-90);
+                        color: var(--gradient-orange-90);
                         outline-color: unset;
                     }
                 }
@@ -1390,7 +1390,7 @@ nav.active {
         }
 
         &.false {
-            background-color: var(--gradient-mars-50);
+            background-color: var(--gradient-orange-50);
         }
     }
 
@@ -1404,10 +1404,10 @@ nav.active {
 .home-footer {
     @include flex-100(center, space-evenly);
     background-color: var(--light-theme-button);
-    border-radius: 1em;
+    border-radius: .5rem;
     color: var(--light-theme-text);
-    height: 3em;
-    margin: auto 0 1em 0;
+    height: 3rem;
+    margin: auto 0 1rem 0;
 
     .logo {
         @include flex-row(center, end);
@@ -1932,7 +1932,7 @@ nav.active {
         color: var(--gradient-ardoise-80);
 
         &:hover {
-            color: var(--gradient-mars-60);
+            color: var(--gradient-orange-60);
         }
 
         &:visited {
@@ -1940,7 +1940,7 @@ nav.active {
         }
 
         &:focus {
-            color: var(--gradient-mars-60);
+            color: var(--gradient-orange-60);
         }
     }
 

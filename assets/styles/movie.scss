@@ -91,13 +91,13 @@
     }
 
     .ygg {
-        @include seen(var(--gradient-mars-50), 2.5em, 7.5em);
+        @include seen(var(--gradient-orange-50), 2.5em, 7.5em);
         bottom: 32px;
         left: 32px;
         right: unset;
 
         a {
-            color: var(--gradient-mars-50);
+            color: var(--gradient-orange-50);
         }
     }
 }
@@ -428,7 +428,7 @@
                     }
 
                     &.removed {
-                        background-color: var(--gradient-mars-30);
+                        background-color: var(--gradient-orange-30);
                     }
                 }
             }
@@ -476,7 +476,7 @@
                             margin: .25em;
 
                             &.selected {
-                                background-color: var(--gradient-mars-50);
+                                background-color: var(--gradient-orange-50);
                             }
                         }
                     }

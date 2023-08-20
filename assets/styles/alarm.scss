@@ -6,7 +6,7 @@
 
 #alarm-set {
     background-color: var(--gradient-ardoise-25);
-    border-color: var(--gradient-green-30);
+    border-color: var(--gradient-orange-40);
     border-radius: 1rem;
     border-width: 4px;
     gap: 1rem;
@@ -36,7 +36,7 @@
             width: 100%;
 
             &.active {
-                border-color: var(--gradient-green-30);
+                border-color: var(--gradient-orange-40);
             }
 
             &:nth-child(odd) {
@@ -62,9 +62,9 @@
 
                     .alarm-recurrence-days {
                         @include flex-row(center, center);
-                        background-color: var(--gradient-green-40-alpha-50);
+                        background-color: var(--gradient-orange-40);
                         border-radius: .25em;
-                        color: var(--gradient-green-90);
+                        color: var(--gradient-orange-90);
                         padding: .25em .5em;
                     }
                 }
@@ -81,7 +81,7 @@
             }
 
             .alarm-switch {
-                @include switcher(var(--gradient-green-30), var(--gradient-green-90));
+                @include switcher(var(--gradient-orange-40), var(--gradient-orange-90));
             }
         }
 
@@ -148,7 +148,7 @@
             .alarm-recurrence {
                 .alarm-tab-bar {
                     @include flex-row(center, flex-start);
-                    border-bottom: 2px solid var(--gradient-green-30);
+                    border-bottom: 2px solid var(--gradient-orange-40);
                     gap: .5rem;
                     margin-block: .5rem;
 
@@ -157,9 +157,9 @@
                         padding: .25em .5em;
 
                         &.active {
-                            background-color: var(--gradient-green-30);
+                            background-color: var(--gradient-orange-40);
                             border-radius: .25em .25em 0 0;
-                            color: var(--gradient-green-90);
+                            color: var(--gradient-orange-90);
                         }
                     }
                 }
