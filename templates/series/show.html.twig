@@ -137,11 +137,11 @@
                         <div class="view-vote">
                             {% if user %}
                                 {% if not addThisSeries %}
-{#                                    <div class="d-flex-1">#}
-{#                                        <div class="duration-string"></div>#}
-{#                                        <button id="test" data-id="{{ serieId }}"#}
-{#                                                class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button>#}
-{#                                    </div>#}
+                                    {#                                    <div class="d-flex-1"> #}
+                                    {#                                        <div class="duration-string"></div> #}
+                                    {#                                        <button id="test" data-id="{{ serieId }}" #}
+                                    {#                                                class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button> #}
+                                    {#                                    </div> #}
                                     {% if serie.number_of_episodes > 0 %}
                                         <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
                                         <div class="view-average">
@@ -208,18 +208,9 @@
                     </div>
                     {% if whatsNew %}
                         <div class="what-s-new">
-                            {% if whatsNew.original_name|length %}
-                                <div class="new-status">{{ whatsNew.original_name }}</div>
-                            {% endif %}
-                            {% if whatsNew.status|length %}
-                                <div class="new-status">{{ whatsNew.status|trans }}</div>
-                            {% endif %}
-                            {% if whatsNew.episode %}
-                                <div class="new-episode">{{ whatsNew.episode }} {{ ((whatsNew.episode > 1)?'new episodes':'new episode')|trans }}</div>
-                            {% endif %}
-                            {% if whatsNew.season %}
-                                <div class="new-season">{{ whatsNew.season }} {{ ((whatsNew.season > 1)?'new seasons':'new season')|trans }}</div>
-                            {% endif %}
+                            {% for news in whatsNew %}
+                                <div class="news">{{ news }}</div>
+                            {% endfor %}
                         </div>
                     {% endif %}
                 </div>

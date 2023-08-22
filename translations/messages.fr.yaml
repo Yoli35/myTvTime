@@ -257,6 +257,15 @@ Alert activated: Alerte activée
 Alert deactivated: Alerte désactivée
 Alert: Alerte
 No poster: Pas d'affiche
+New poster: nouvelle affiche
+New backdrop: nouveau fond d'écran
+New date: Nouvelle date
+New overview: Nouveau résumé
+New status: Nouveau statut
+New name: Nouveau nom
+New original name: Nouveau nom original
+New season from TMDB: Une nouvelle saison|%count% nouvelles saisons
+New episode from TMDB: Un nouvel épisode|%count% nouveaux épisodes
 
 #User series airing today
 My series airing today: Épisodes du jour

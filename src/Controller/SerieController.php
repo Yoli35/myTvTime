@@ -904,7 +904,7 @@ class SerieController extends AbstractController
         if (!$serieDB->getFirstDateAir()) {
             $missingFirstDateAir = true;
         }
-        if ($serieDB->getOverview() ==="") {
+        if ($serieDB->getOverview() === "") {
             $missingOverview = true;
         }
         if ($missingBackdropPath || $missingFirstDateAir || $missingOverview || $missingPosterPath) { // Si quelque chose manque, vérifier si la série a été mise à jour sur TMDB
@@ -938,9 +938,6 @@ class SerieController extends AbstractController
             if ($firstDateAir !== "") {
                 $firstDateAirTMDB = $this->dateService->newDateImmutable($firstDateAir, 'Europe/Paris', true);
                 $firstDateAirDB = $serieDB->getFirstDateAir()->setTimezone(new DateTimeZone('Europe/Paris'))->setTime(0, 0);
-//                dump($firstDateAir);
-//                dump($firstDateAirTMDB);
-//                dump($firstDateAirDB);
                 if ($firstDateAirTMDB != $firstDateAirDB) {
                     $result['first_date_air'] = $firstDateAir;
                     $serieDB->setFirstDateAir($firstDateAirTMDB);
@@ -1026,10 +1023,11 @@ class SerieController extends AbstractController
 
     public function savePoster($posterPath, $posterUrl): void
     {
-        if (!file_exists("../public/images/series/posters" . $posterPath)) {
+        $root = $this->getParameter('kernel.project_dir');
+        if (!file_exists($root . "/public/images/series/posters" . $posterPath)) {
             $this->saveImageFromUrl(
                 $posterUrl . $posterPath,
-                "../public/images/series/posters" . $posterPath
+                $root . "/public/images/series/posters" . $posterPath
             );
         }
     }
@@ -1400,6 +1398,10 @@ class SerieController extends AbstractController
     #[Route('/tmdb/{id}', name: 'app_series_tmdb', methods: ['GET'])]
     public function tmdb(Request $request, $id): Response
     {
+        $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
+        if ($serie) {
+            return $this->redirectToRoute('app_series_show', ['id' => $serie->getId()]);
+        }
 //        $this->logService->log($request, $this->getUser());
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::POPULAR_SERIES);
@@ -1774,19 +1776,11 @@ class SerieController extends AbstractController
         $episodeNumber = $data['episodeNumber'];
         $runtime = $data['runtime'];
 
-        $serie = $this->serieRepository->findOneBy(['serieId' => $data['serieId']]);
+        $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
         $episodeDurations = $serie->getEpisodeDurations();
         $episodeDurations[$seasonNumber][$episodeNumber - 1] = [$episodeNumber => $runtime];
         $serie->setEpisodeDurations($episodeDurations);
         $this->serieRepository->save($serie, true);
-
-//        dump([
-//            'serieId' => $serieId,
-//            'seasonNumber' => $seasonNumber,
-//            'episodeNumber' => $episodeNumber,
-//            'runtime' => $runtime,
-//            'episodeDurations' => $episodeDurations,
-//            ]);
 
         return $this->json([
             'result' => 'ok',
@@ -1860,8 +1854,7 @@ class SerieController extends AbstractController
         $user = $this->getUser();
         $locale = $request->getLocale();
         $serieRepository = $this->serieRepository;
-        $imageConfiguration = $this->imageConfiguration;
-        $imgConfig = $imageConfiguration->getConfig();
+        $imgConfig = $this->imageConfiguration->getConfig();
 
         $serieId = $tv['id'];
         $credits = $tv['credits'];
@@ -2234,34 +2227,82 @@ class SerieController extends AbstractController
 
     public function whatsNew(array $tv, Serie $serie, SerieViewing $serieViewing): array|null
     {
-        $whatsNew = ['episode' => 0, 'season' => 0, 'status' => "", 'original_name' => ""];
+        $whatsNew = [];
+        $imgConfig = $this->imageConfiguration->getConfig();
         $modified = false;
-        $somethingChanged = false;
+        /*
+         *  -name: "Heartstopper"
+         *  -posterPath: "/zvyVRRfCB9qze9TTRp1lhG2TRud.jpg"
+         *  -backdropPath: "/p3cAHHwyTJJoQlCtgYwb31t6rOq.jpg"
+         *  -firstDateAir: DateTimeImmutable @1650585600 {#1457 ▶}
+         *  -status: "Returning Series"
+         *  -overview: ""
+            -networks: Doctrine\ORM\PersistentCollection {#1481 ▶}
+         *  -numberOfEpisodes: 16
+         *  -numberOfSeasons: 2
+         *  -originalName: "Heartstopper"
+         */
+        if ($serie->getPosterPath() !== $tv['poster_path']) {
+            $whatsNew['poster_path'] = $this->translator->trans('New poster');
+
+            $serie->setPosterPath($tv['poster_path']);
+            $modified = true;
+            $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+        }
+        if ($serie->getBackdropPath() !== $tv['backdrop_path']) {
+            $whatsNew['backdrop_path'] = $this->translator->trans('New backdrop');
+
+            $serie->setBackdropPath($tv['backdrop_path']);
+            $modified = true;
+        }
+        $firstDateAir = $tv['first_air_date'];
+        if ($firstDateAir !== "") {
+            $firstDateAirTMDB = $this->dateService->newDateImmutable($firstDateAir, 'Europe/Paris', true);
+            $firstDateAirDB = $serie->getFirstDateAir()->setTimezone(new DateTimeZone('Europe/Paris'))->setTime(0, 0);
+            if ($firstDateAirTMDB != $firstDateAirDB) {
+                $whatsNew['first_date_air'] = $this->translator->trans('New date') . ' (' . $firstDateAir . ')';
+                $serie->setFirstDateAir($firstDateAirTMDB);
+                $modified = true;
+            }
+        }
+        if ($serie->getOverview() !== $tv['overview']) {
+            $serie->setOverview($tv['overview']);
+            $whatsNew['overview'] = $this->translator->trans('New overview');
+            $modified = true;
+        }
         if ($serie->getNumberOfSeasons() !== $tv['number_of_seasons']) {
-            $whatsNew['season'] = $tv['number_of_seasons'] - $serie->getNumberOfSeasons();
-            $somethingChanged = true;
+            $delta = $tv['number_of_seasons'] - $serie->getNumberOfSeasons();
+            $whatsNew['season'] = $this->translator->trans('New season from TMDB', ['%count%' => $delta]);
+
+            $serie->setNumberOfSeasons($tv['number_of_seasons']);
+            $modified = true;
         }
         if ($serie->getNumberOfEpisodes() !== $tv['number_of_episodes']) {
-            $whatsNew['episode'] = $tv['number_of_episodes'] - $serie->getNumberOfEpisodes();
-            $somethingChanged = true;
+            $delta = $tv['number_of_episodes'] - $serie->getNumberOfEpisodes();
+            $whatsNew['episode'] = $this->translator->trans('New episode from TMDB', ['%count%' => $delta]);
+
+            $serie->setNumberOfEpisodes($tv['number_of_episodes']);
+            $modified = true;
         }
         if ($serie->getStatus() !== $tv['status']) {
-            $whatsNew['status'] = $tv['status'];
-            $modified = true;
-            $somethingChanged = true;
+            $whatsNew['status'] = $this->translator->trans('New status') . ' (' . $tv['status'] . ')';
 
             $serie->setStatus($tv['status']);
+            $modified = true;
+        }
+        if ($serie->getName() !== $tv['name']) {
+            $whatsNew['name'] = $this->translator->trans('New name') . ' (' . $tv['name'] . ')';
+
+            $serie->setName($tv['name']);
+            $modified = true;
         }
         if ($serie->getOriginalName() !== $tv['original_name']) {
-            $whatsNew['original_name'] = $tv['original_name'];
-            $modified = true;
-            $somethingChanged = true;
+            $whatsNew['original_name'] = $this->translator->trans('New original name') . ' (' . $tv['original_name'] . ')';
 
             $serie->setOriginalName($tv['original_name']);
+            $modified = true;
         }
-        /*
-         * Si quelque chose a changé, l'enregistrement est mis à jour
-         */
+
         if ($modified) {
             $now = $this->dateService->newDate('now', 'Europe/Paris');
             $serieViewing->setModifiedAt($now);
@@ -2269,11 +2310,8 @@ class SerieController extends AbstractController
 
             $serie->setUpdatedAt($now);
             $this->serieRepository->save($serie, true);
-        }
-        if ($somethingChanged) {
             return $whatsNew;
         }
-
         return null;
     }
 

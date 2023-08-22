@@ -117,38 +117,17 @@ class NextEpisodeToAir extends Command
                 }
             }
 
-            $tvSeries = json_decode($this->tmdbService->getTv($serie->getSerieId(), "fr_FR"), true);
+            $tvSeries = json_decode($this->tmdbService->getTv($serie->getSerieId(), "fr"), true);
 
             if ($tvSeries) {
                 $whatsNew = $this->serieController->whatsNew($tvSeries, $serie, $serieViewing);
                 if ($whatsNew) {
-                    if ($whatsNew['episode']) {
-                        $n = abs($whatsNew['episode']);
-                        $neg = $n < 0;
-                        $message = '    ' . $n . ' ' . ($n > 1 ? 'episodes' : 'episode') . ' ' . ($neg ? 'less' : 'more') . '.';
-                        $io->warning($message);
-                        $this->logs($message, 'warning');
-                        $report[] = sprintf("%d: %s - %s", $serie->getId(), $serie->getName(), $message);
-                    }
-                    if ($whatsNew['season']) {
-                        $n = abs($whatsNew['season']);
-                        $neg = $n < 0;
-                        $message = '    ' . $n . ' ' . ($n > 1 ? 'seasons' : 'season') . ' ' . ($neg ? 'less' : 'more') . '.';
-                        $io->warning($message);
-                        $this->logs($message, 'warning');
-                        $report[] = sprintf("%d: %s - %s",$serie->getId(),  $serie->getName(), $message);
-                    }
-                    if ($whatsNew['status']) {
-                        $message = '    New status:' . $whatsNew['status'];
-                        $io->warning($message);
-                        $this->logs($message, 'warning');
-                        $report[] = sprintf("%d: %s - %s", $serie->getId(), $serie->getName(), $message);
-                    }
-                    if ($whatsNew['original_name']) {
-                        $message = '    New original name:' . $whatsNew['original_name'];
-                        $io->warning($message);
-                        $this->logs($message, 'warning');
-                        $report[] = sprintf("%d: %s - %s", $serie->getId(), $serie->getName(), $message);
+                    foreach ($whatsNew as $new) {
+                        if ($new) {
+                            $io->writeln('new ' . $new);
+                            $this->logs('new ' . $new, 'warning');
+                            $report[] = sprintf("%d: %s - %s", $serie->getId(), $serie->getName(), $new);
+                        }
                     }
                 }
                 $this->serieController->updateSerieViewing($serieViewing, $tvSeries, true);
