@@ -396,9 +396,11 @@ class SerieController extends AbstractController
         /** @var Serie[] $todayAirings */
 //        $todayAirings = $this->todayAiringSeries($date);
         $todayAirings = $this->todayAiringSeriesV2($date);
-//        dump($todayAirings);
+        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
         $images = $this->getNothingImages();
+        $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_DAY);
+        $breadcrumb[] = ['name' => $this->translator->trans("Episodes of the week"), 'url' => $this->generateUrl("app_series_this_week")];
 
         return $this->render('series/today.html.twig', [
             'todayAirings' => $todayAirings,
@@ -407,7 +409,7 @@ class SerieController extends AbstractController
             'images' => $images,
             'prev' => $delta * ($diff->invert ? -1 : 1),
             'next' => $delta * ($diff->invert ? -1 : 1),
-            'breadcrumb' => $this->breadcrumb(self::EPISODES_OF_THE_DAY),
+            'breadcrumb' => $breadcrumb,
             'from' => self::EPISODES_OF_THE_DAY,
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
@@ -473,7 +475,7 @@ class SerieController extends AbstractController
         return $episodesOfTheDay;
     }
 
-    public function todayAiringSeriesV2($date): array
+    public function todayAiringSeriesV2(DateTimeImmutable $date): array
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -481,6 +483,11 @@ class SerieController extends AbstractController
         $yesterday = $date->sub(new DateInterval('P1D'))->format('Y-m-d');
 
         $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $yesterday, 1, 20);
+        dump([
+            'today' => $today,
+            'yesterday' => $yesterday,
+            'episodes of the day' => $episodesOfTheDay
+        ]);
         $episodesOfTheDayBySeries = [];
 
         foreach ($episodesOfTheDay as $episode) {
@@ -555,7 +562,10 @@ class SerieController extends AbstractController
             ];
         }
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_WEEK);
+        $breadcrumb[] = ['name' => $this->translator->trans("My series airing today"), 'url' => $this->generateUrl("app_series_today")];
         $imageConfig = $this->imageConfiguration->getConfig();
+
+        dump(['episodesOfTheWeek' => $episodesOfTheWeek,]);
 
         return $this->render('series/this_week.html.twig', [
             'date' => $now,
