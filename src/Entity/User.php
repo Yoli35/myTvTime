@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
 use DateInterval;
 use DateTimeImmutable;
@@ -19,6 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -77,6 +76,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:item'])]
     #[ORM\Column(length: 8, nullable: true)]
     private ?string $preferredLanguage = null;
+
+    #[Assert\Timezone]
+    #[ORM\Column(length: 255, nullable: true, options: ['default' => 'Europe/Paris'])]
+    private ?string $timezone = null;
 
     #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'users')]
     private Collection $movies;
@@ -712,6 +715,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $alarm->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone(?string $timezone): static
+    {
+        $this->timezone = $timezone;
 
         return $this;
     }

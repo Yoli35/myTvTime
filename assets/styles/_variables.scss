@@ -1068,18 +1068,22 @@ $fa-font-path: "../webfonts";
 
     label:has(select):has(.form-select) {
         font-weight: 100;
+        gap: unset;
         position: relative;
 
         &::after {
-            border-bottom: 2px solid var(--form-border);
-            border-right: 2px solid var(--form-border);
+            --arrow-size: .375rem;
+            border-bottom: var(--arrow-size) solid var(--form-border);
+            border-right: var(--arrow-size) solid var(--form-border);
+            border-left: var(--arrow-size) solid transparent;
+            border-top: var(--arrow-size) solid transparent;
             content: '';
-            height: .5em;
+            height: var(--arrow-size);
             position: absolute;
-            right: 1em;
-            top: 2em;
+            right: 1rem;
+            top: 1.75rem;
             transform: rotate(45deg);
-            width: .5em;
+            width: var(--arrow-size);
             z-index: 2;
         }
     }

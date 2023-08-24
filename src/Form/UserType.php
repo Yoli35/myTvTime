@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\UX\Dropzone\Form\DropzoneType;
@@ -57,6 +58,11 @@ class UserType extends AbstractType
                     'Spanish' => 'es'
                 ],
                 'expanded' => false,
+            ])
+            ->add('timezone', TimezoneType::class, [
+                'label' => 'Timezone',
+                'attr' => ['class' => 'form-select w100'],
+                'required' => false,
             ])
             ->add('dropThumbnail', DropzoneType::class, [
                 'label' => 'Profile Image (JPG, PNG file)',

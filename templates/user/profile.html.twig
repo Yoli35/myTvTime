@@ -56,6 +56,12 @@
                                 {{ form_widget(form.preferredLanguage) }}
                             </label>
                         </div>
+                        <div class="field">
+                            <label for="{{ form.timezone.vars.id }}" class="{{ form.timezone.vars.required ? 'required' }}">
+                                <div>{{ form.timezone.vars.label|trans }}</div>
+                                {{ form_widget(form.timezone) }}
+                            </label>
+                        </div>
                     </div>
                     <div class="form-row">
                         <div class="field">
@@ -76,6 +82,9 @@
                     </div>
                     {{ form_end(form) }}
                 </div>
+{#                <pre>#}
+{#                    {{ dump(user) }}#}
+{#                </pre>#}
                 <div class="collections">
                     <div class="collection">
                         <div class="count">{{ friends|length }}</div>
