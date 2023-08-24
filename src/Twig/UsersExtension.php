@@ -174,13 +174,13 @@ class UsersExtension extends AbstractExtension
     public function newAlarm(User $user): Alarm
     {
         $alarm = new Alarm($user, $this->translator->trans('New alarm'), 0, null, 1, null, $this->dateService->newDateImmutable('now', 'Europe/Paris'));
-        $alarm->setTime($this->getTime())->setId(0);
+        $alarm->setTime($this->getTime($user))->setId(0);
         return $alarm;
     }
 
-    public function getTime(): DateTimeInterface
+    public function getTime(User $user): DateTimeInterface
     {
-        $time = $this->dateService->getNow();
+        $time = $this->dateService->getNow($user->getTimeZone());
         $time = $time->setTime(intval($time->format('H')), intval(intval($time->format('i')) / 5) * 5 + 5);
         return $time->setDate(1970, 1, 1);
     }

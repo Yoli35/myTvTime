@@ -55,10 +55,10 @@ class DateService
         return $date;
     }
 
-    public function getNow($allDay = false): DateTime
+    public function getNow($timezone, $allDay = false): DateTime
     {
         try {
-            $date = new DateTime('now', new DateTimeZone('Europe/Paris'));
+            $date = new DateTime('now', new DateTimeZone($timezone));
         } catch (Exception) {
             $date = new DateTime();
         }
