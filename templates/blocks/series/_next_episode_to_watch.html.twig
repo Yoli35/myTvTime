@@ -1,6 +1,6 @@
 {% if nextEpisodeToWatch %}
     {% if nextEpisodeToWatch.airDate %}  {# if there is an air date #}
-        {% if nextEpisodeToWatch.interval.invert == 0 and nextEpisodeToWatch.interval.days %}  {# in the futur, tomorrow or after #}
+        {% if nextEpisodeToWatch.airDate|date("Y-m-d", "Europe/Paris") > "now"|date("Y-m-d", "Europe/Paris") %} {# in the futur, tomorrow or after #}
             {% if alert %}
                 {% if alert.activated %}
                     {% set title = 'Alert activated'|trans %}
@@ -51,24 +51,12 @@
         {% endif %}
     {% endif %}
     <div class="next-episode-to-watch">
-        {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}
-        &nbsp;{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}
-        &nbsp;{{ nextEpisodeToWatch.seasonNumber }}
+        {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}&nbsp{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp{{ nextEpisodeToWatch.seasonNumber }}<br>
         {% if nextEpisodeToWatch.airDate %}
-            {% if nextEpisodeToWatch.interval.invert == 0 %}
-                <br>{{ nextEpisodeToWatch.airDate|format_date('full')|capitalize }},
-            {% endif %}
+            {{ nextEpisodeToWatch.airDate|format_date('relative_full', timezone='Europe/Paris')|capitalize }}
         {% else %}
-            <br>{{ 'No date for the moment'|trans }}
-        {% endif %}
-        {% if nextEpisodeToWatch.interval %}
-            {% if nextEpisodeToWatch.interval.days == 0 %}
-                <br>{{ (nextEpisodeToWatch.interval.invert == 0 ? 'tomorrow' : 'today')|trans|capitalize }}.
-            {% else %}
-                {% if nextEpisodeToWatch.interval.invert == 0 %}
-                    {{ 'in'|trans }} {{ nextEpisodeToWatch.interval.days+1 }} {{ 'days'|trans }}.
-                {% endif %}
-            {% endif %}
+            {{ 'No date for the moment'|trans }}
         {% endif %}
     </div>
 {% endif %}
+{#<pre>{{ dump(nextEpisodeToWatch.airDate, nextEpisodeToWatch.airDate|date("Y-m-d", 'Europe/Paris'), "now"|date("Y-m-d", 'Europe/Paris')) }}</pre>#}

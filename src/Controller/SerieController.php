@@ -343,6 +343,8 @@ class SerieController extends AbstractController
         $serie['numberOfEpisodes'] = $result->getNumberOfEpisodes();
         $serie['numberOfSeasons'] = $result->getNumberOfSeasons();
         $serie['originalName'] = $result->getOriginalName();
+        $serie['upcomingDateYear'] = $result->getUpcomingDateYear();
+        $serie['upcomingDateMonth'] = $result->getUpcomingDateMonth();
 
         $serie['tmdb_next_episode_to_air'] = $tv['next_episode_to_air'];
 
@@ -2041,14 +2043,12 @@ class SerieController extends AbstractController
                 if ($serieViewing->isTimeShifted()) {
                     $airDate = $airDate->modify('+1 day');
                 }
-                $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
-                $interval = date_diff($now, $airDate);
+                $airDate = $this->dateService->newDateImmutable($airDate->format('Y-m-d'), 'Europe/Paris', true);
 
                 return [
                     'episodeNumber' => $episodeNumber,
                     'seasonNumber' => $seasonNumber,
                     'airDate' => $airDate,
-                    'interval' => $interval,
                 ];
             }
 
@@ -2057,14 +2057,12 @@ class SerieController extends AbstractController
             $tmdbEpisode = json_decode($standing, true);
 
             $airDate = null;
-            $interval = null;
 
             if ($tmdbEpisode == null) {
                 return [
                     'episodeNumber' => $episodeNumber,
                     'seasonNumber' => $seasonNumber,
                     'airDate' => $airDate,
-                    'interval' => $interval,
                 ];
             }
 
@@ -2073,7 +2071,6 @@ class SerieController extends AbstractController
                     'episodeNumber' => $tmdbEpisode['episode_number'],
                     'seasonNumber' => $tmdbEpisode['season_number'],
                     'airDate' => $airDate,
-                    'interval' => $interval,
                 ];
             }
 
@@ -2081,8 +2078,6 @@ class SerieController extends AbstractController
             if ($serieViewing->isTimeShifted()) {
                 $airDate = $airDate->modify('+1 day');
             }
-            $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
-            $interval = date_diff($now, $airDate);
 
             if ($lastNotViewedEpisode->getAirDate() == null) {
                 $lastNotViewedEpisode->setAirDate($airDate);
@@ -2093,7 +2088,6 @@ class SerieController extends AbstractController
                 'episodeNumber' => $tmdbEpisode['episode_number'],
                 'seasonNumber' => $tmdbEpisode['season_number'],
                 'airDate' => $airDate,
-                'interval' => $interval,
             ];
         }
         return null;

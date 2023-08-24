@@ -1255,7 +1255,9 @@
                     font-size: 1.5rem;
                     gap: 1rem;
                     justify-content: center;
+                    margin-inline: auto;
                     padding: 1rem;
+                    width: unset;
                 }
 
                 i[class$="exclamation"] {
