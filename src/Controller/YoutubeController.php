@@ -329,8 +329,13 @@ class YoutubeController extends AbstractController
                 $providedLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $providedLink);
             }
         } elseif (str_contains($providedLink, "youtu.be")) {
-            // https://youtu.be/at9h35V8rtQ
-            $providedLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $providedLink);
+            // https://youtu.be/7uhgBHGybEM?si=vpNycqOeAjk_sDck
+            if (str_contains($providedLink, "?si=")) {
+                $providedLink = preg_replace("/https:\/\/youtu\.be\/(.+)\?si=.+/", "$1", $providedLink);
+            } else {
+                // https://youtu.be/at9h35V8rtQ
+                $providedLink = preg_replace("/https:\/\/youtu\.be\/(.+)/", "$1", $providedLink);
+            }
         } elseif (str_contains($providedLink, 'watch')) {
             // https://www.youtube.com/watch?v=at9h35V8rtQ
             // https://www.youtube.com/watch?v=IzHJ7Jnj2LU&pp=wgIGCgQQAhgB
