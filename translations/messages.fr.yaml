@@ -258,7 +258,9 @@ Alert deactivated: Alerte désactivée
 Alert: Alerte
 No poster: Pas d'affiche
 New poster: nouvelle affiche
+New poster (previously added): Nouvelle affiche (précédemment ajoutée)
 New backdrop: nouveau fond d'écran
+New backdrop (previously added): nouveau fond d'écran (précédemment ajouté)
 New date: Nouvelle date
 New overview: Nouveau résumé
 New status: Nouveau statut
@@ -984,6 +986,10 @@ Digital Intermediate.he: Étalonneur
 Digital Intermediate.she: Étalonneuse
 Foley Recordist.he: Enregistreur de bruitage
 Foley Recordist.she: Enregistreuse de bruitage
+Hair Supervisor.he: Superviseur de coiffure
+Hair Supervisor.she: Superviseuse de coiffure
+Makeup Supervisor.he: Superviseur de maquillage
+Makeup Supervisor.she: Superviseuse de maquillage
 
 # key facts
 Favorite: Série favorite

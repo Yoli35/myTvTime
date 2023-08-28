@@ -45,7 +45,6 @@ export class Activity {
     }
 
     initDateChange() {
-        // check every minute if the date has changed
         setInterval(thisGlobal.checkNewDate, 300000); // 5 minutes
 
         const message = document.querySelector(".message");
@@ -59,9 +58,11 @@ export class Activity {
 
     checkNewDate() {
         const date = new Date();
-        // console.log(date.getTime());
+        const dst = thisGlobal.hasDST(date);
+        const hourCheckPoint = dst ? 1 : 2;
+
         if (date.getDate() !== thisGlobal.initialDay) {
-            if (date.getHours() === 0 && date.getMinutes() >= 5) {
+            if (date.getHours() === hourCheckPoint) { // date stored as UTC in db, 'Europe/Paris' timezone here (UTC+2)
                 const url = window.location.href;
                 window.location = url + '?time=' + date.getTime(); // force reload
             }
@@ -84,6 +85,13 @@ export class Activity {
         close.addEventListener("click", () => {
             message.remove();
         });
+    }
+
+    hasDST(date = new Date()) {
+        const january = new Date(date.getFullYear(),0,1).getTimezoneOffset();
+        const july = new Date(date.getFullYear(),6,1).getTimezoneOffset();
+
+        return Math.max(january, july) !== date.getTimezoneOffset();
     }
 
     setProgressAll(circles) {

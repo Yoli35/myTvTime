@@ -41,30 +41,30 @@ $fa-font-path: "../webfonts";
     //);
     --gradient-dark: linear-gradient(
                     45deg,
-                    hsl(212deg 50% 12%) 0%,
-                    hsl(211deg 50% 12%) 11%,
-                    hsl(210deg 50% 13%) 22%,
-                    hsl(210deg 50% 13%) 33%,
-                    hsl(209deg 50% 14%) 44%,
-                    hsl(208deg 50% 14%) 56%,
-                    hsl(207deg 50% 14%) 67%,
-                    hsl(207deg 50% 15%) 78%,
-                    hsl(206deg 50% 15%) 89%,
-                    hsl(206deg 50% 16%) 100%
+                    hsl(212deg 18% 12%) 0%,
+                    hsl(211deg 18% 12%) 11%,
+                    hsl(210deg 18% 13%) 22%,
+                    hsl(210deg 18% 13%) 33%,
+                    hsl(209deg 18% 14%) 44%,
+                    hsl(208deg 18% 14%) 56%,
+                    hsl(207deg 18% 14%) 67%,
+                    hsl(207deg 18% 15%) 78%,
+                    hsl(206deg 18% 15%) 89%,
+                    hsl(206deg 18% 16%) 100%
     );
 
     --gradient-light: linear-gradient(
                     45deg,
-                    hsl(20deg 51% 84%) 0%,
-                    hsl(20deg 51% 85%) 11%,
-                    hsl(20deg 51% 86%) 22%,
-                    hsl(20deg 51% 87%) 33%,
-                    hsl(20deg 51% 88%) 44%,
-                    hsl(20deg 51% 89%) 56%,
-                    hsl(20deg 51% 90%) 67%,
-                    hsl(20deg 51% 91%) 78%,
-                    hsl(20deg 50% 92%) 89%,
-                    hsl(20deg 50% 93%) 100%
+                    hsl(20deg 18% 84%) 0%,
+                    hsl(20deg 18% 85%) 11%,
+                    hsl(20deg 18% 86%) 22%,
+                    hsl(20deg 18% 87%) 33%,
+                    hsl(20deg 18% 88%) 44%,
+                    hsl(20deg 18% 89%) 56%,
+                    hsl(20deg 18% 90%) 67%,
+                    hsl(20deg 18% 91%) 78%,
+                    hsl(20deg 18% 92%) 89%,
+                    hsl(20deg 18% 93%) 100%
     );
 
     //--gradient-bg: var(--gradient-light);
@@ -212,32 +212,33 @@ $fa-font-path: "../webfonts";
                     hsl(50, 100%, 50%) 100%
     );
 
-    --gradient-ardoise-100: hsl(202, 43%, 100%);
-    --gradient-ardoise-90: hsl(202, 43%, 90%);
-    --gradient-ardoise-90-alpha-80: hsla(202, 43%, 90%, .8);
-    --gradient-ardoise-90-alpha-10: hsla(202, 43%, 90%, .1);
-    --gradient-ardoise-80: hsl(202, 43%, 80%);
-    --gradient-ardoise-80-alpha-50: hsla(202, 43%, 80%, .5);
-    --gradient-ardoise-70: hsl(202, 43%, 70%);
-    --gradient-ardoise-60: hsl(202, 43%, 60%);
-    --gradient-ardoise-50: hsl(202, 43%, 50%);
-    --gradient-ardoise-40: hsl(202, 43%, 40%);
-    --gradient-ardoise-40-alpha-50: hsla(202, 43%, 40%, .5);
-    --gradient-ardoise-40-alpha-20: hsla(202, 43%, 40%, .2);
-    --gradient-ardoise-30: hsl(202, 43%, 30%);
-    --gradient-ardoise-30-alpha-50: hsla(202, 43%, 30%, .5);
-    --gradient-ardoise-30-alpha-90: hsla(202, 43%, 30%, .9);
-    --gradient-ardoise-30-horizontal: linear-gradient(90deg, hsla(202, 43%, 30%, .2), hsla(202, 43%, 30%, 1));
-    --gradient-ardoise-25: hsl(202, 43%, 25%);
-    --gradient-ardoise-20: hsl(202, 43%, 20%);
-    --gradient-ardoise-20-alpha-50: hsla(202, 43%, 20%, .5);
-    --gradient-ardoise-20-alpha-80: hsla(202, 43%, 20%, .8);
-    --gradient-ardoise-10: hsl(202, 43%, 10%);
-    --gradient-ardoise-10-alpha-90: hsla(202, 43%, 10%, .9);
-    --gradient-ardoise-10-alpha-80: hsla(202, 43%, 10%, .8);
-    --gradient-ardoise-10-alpha-50: hsla(202, 43%, 10%, .5);
-    --gradient-ardoise-10-alpha-20: hsla(202, 43%, 10%, .2);
-    --gradient-ardoise-0: hsl(202, 43%, 0%);
+    --gradient-ref: hsl(202, 18%, 17%);
+    --gradient-ardoise-100: hsl(202, 18%, 100%);
+    --gradient-ardoise-90: hsl(202, 18%, 90%);
+    --gradient-ardoise-90-alpha-80: hsla(202, 18%, 90%, .8);
+    --gradient-ardoise-90-alpha-10: hsla(202, 18%, 90%, .1);
+    --gradient-ardoise-80: hsl(202, 18%, 80%);
+    --gradient-ardoise-80-alpha-50: hsla(202, 18%, 80%, .5);
+    --gradient-ardoise-70: hsl(202, 18%, 70%);
+    --gradient-ardoise-60: hsl(202, 18%, 60%);
+    --gradient-ardoise-50: hsl(202, 18%, 50%);
+    --gradient-ardoise-40: hsl(202, 18%, 40%);
+    --gradient-ardoise-40-alpha-50: hsla(202, 18%, 40%, .5);
+    --gradient-ardoise-40-alpha-20: hsla(202, 18%, 40%, .2);
+    --gradient-ardoise-30: hsl(202, 18%, 30%);
+    --gradient-ardoise-30-alpha-50: hsla(202, 18%, 30%, .5);
+    --gradient-ardoise-30-alpha-90: hsla(202, 18%, 30%, .9);
+    --gradient-ardoise-30-horizontal: linear-gradient(90deg, hsla(202, 18%, 30%, .2), hsla(202, 18%, 30%, 1));
+    --gradient-ardoise-25: hsl(202, 18%, 25%);
+    --gradient-ardoise-20: hsl(202, 18%, 20%);
+    --gradient-ardoise-20-alpha-50: hsla(202, 18%, 20%, .5);
+    --gradient-ardoise-20-alpha-80: hsla(202, 18%, 20%, .8);
+    --gradient-ardoise-10: hsl(202, 18%, 10%);
+    --gradient-ardoise-10-alpha-90: hsla(202, 18%, 10%, .9);
+    --gradient-ardoise-10-alpha-80: hsla(202, 18%, 10%, .8);
+    --gradient-ardoise-10-alpha-50: hsla(202, 18%, 10%, .5);
+    --gradient-ardoise-10-alpha-20: hsla(202, 18%, 10%, .2);
+    --gradient-ardoise-0: hsl(202, 18%, 0%);
 
     --gradient-grey-100: hsl(0, 0%, 100%);
     --gradient-grey-95: hsl(0, 0%, 95%);
@@ -841,7 +842,7 @@ $fa-font-path: "../webfonts";
 
 @mixin crud-tools($right: 1em, $top: 4em) {
     @include flex-row();
-    background-color: var(--gradient-ardoise-30-alpha-50);
+    background-color: var(--gradient-grey-20-alpha-50);
     border-radius: .5em;
     gap: 1em;
     height: 2em;

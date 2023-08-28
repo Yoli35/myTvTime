@@ -42,51 +42,61 @@
         <div class="serie-page">
             <div class="header">
                 {% if serie.backdrop_path|length %}
-                    <div class="backdrop"
-                         style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
+                    <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
                 {% else %}
                     <div class="backdrop" style="background-image: url('/images/default/no_banner_dark.png')"></div>
                 {% endif %}
-                <div class="poster">
-                    {% if serie.poster_path|length %}
-                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}"
-                             alt="{{ serie.name }}">
-                    {% else %}
-                        <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
-                    {% endif %}
-                    {% if watchProviders %}
-                        <div class="watch-providers">
-                            {% if watchProviders.flatrate is defined %}
-                                {% for flatrate in watchProviders.flatrate %}
-                                    <div class="watch-provider">
-                                        <div class="logo">
-                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}"
-                                                 alt="{{ flatrate.provider_name }}">
+                <div class="posters">
+                    <div class="poster">
+                        {% if serie.poster_path|length %}
+                            <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ serie.name }}">
+                            {#                            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}"> #}
+                        {% else %}
+                            <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
+                        {% endif %}
+                        {% if watchProviders %}
+                            <div class="watch-providers">
+                                {% if watchProviders.flatrate is defined %}
+                                    {% for flatrate in watchProviders.flatrate %}
+                                        <div class="watch-provider">
+                                            <div class="logo">
+                                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}"
+                                                     alt="{{ flatrate.provider_name }}">
+                                            </div>
+                                            <div class="watch">
+                                                <div>{{ 'Available in streaming'|trans }}</div>
+                                                <div><a href="{{ watchProviders.link }}">{{ 'Watch now'|trans }}</a></div>
+                                            </div>
                                         </div>
-                                        <div class="watch">
-                                            <div>{{ 'Available in streaming'|trans }}</div>
-                                            <div><a href="{{ watchProviders.link }}">{{ 'Watch now'|trans }}</a></div>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if watchProviders.buy is defined %}
+                                    {% for buy in watchProviders.buy %}
+                                        <div class="watch-provider">
+                                            <div class="logo">
+                                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}"
+                                                     alt="{{ buy.provider_name }}">
+                                            </div>
+                                            <div class="watch">
+                                                <div>{{ 'Available to rent or buy'|trans }}</div>
+                                                <div><a href="{{ watchProviders.link }}">{{ 'Watch now'|trans }}</a></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                            {% if watchProviders.buy is defined %}
-                                {% for buy in watchProviders.buy %}
-                                    <div class="watch-provider">
-                                        <div class="logo">
-                                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}"
-                                                 alt="{{ buy.provider_name }}">
-                                        </div>
-                                        <div class="watch">
-                                            <div>{{ 'Available to rent or buy'|trans }}</div>
-                                            <div><a href="{{ watchProviders.link }}">{{ 'Watch now'|trans }}</a></div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <div class="arrow"></div>
+                    </div>
+                    {% if serie.seriePosters|length > 1 %}
+                        <div class="poster-list">
+                            {% for seriePoster in serie.seriePosters %}
+                                <div class="poster-item">
+                                    <img src="{{ "/images/series/posters" ~ seriePoster.posterPath }}" alt="{{ serie.name }}">
+                                </div>
+                            {% endfor %}
                         </div>
                     {% endif %}
-                    <div class="arrow"></div>
                 </div>
                 <div class="infos">
                     <h1>
@@ -555,7 +565,11 @@
             {% endif %}
 
             const images = document.querySelector(".serie-page").querySelector(".images")?.querySelectorAll("img");
-            initDiaporama(images, document.querySelector("html").getAttribute("lang"));
+            const posters = document.querySelector(".serie-page").querySelector(".poster-list")?.querySelectorAll("img");
+            const locale = document.querySelector("html").getAttribute("lang");
+
+            initDiaporama(images, locale);
+            initDiaporama(posters, locale);
         });
     </script>
 {% endblock %}

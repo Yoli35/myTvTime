@@ -71,12 +71,20 @@ class Serie
     #[ORM\Column(nullable: true)]
     private ?int $upcomingDateMonth = null;
 
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: SeriePoster::class, orphanRemoval: true)]
+    private Collection $seriePosters;
+
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: SerieBackdrop::class, orphanRemoval: true)]
+    private Collection $serieBackdrops;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTime();
         $this->networks = new ArrayCollection();
+        $this->seriePosters = new ArrayCollection();
+        $this->serieBackdrops = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -308,6 +316,66 @@ class Serie
     public function setUpcomingDateMonth(?int $upcomingDateMonth): static
     {
         $this->upcomingDateMonth = $upcomingDateMonth;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SeriePoster>
+     */
+    public function getSeriePosters(): Collection
+    {
+        return $this->seriePosters;
+    }
+
+    public function addSeriePoster(SeriePoster $seriePoster): static
+    {
+        if (!$this->seriePosters->contains($seriePoster)) {
+            $this->seriePosters->add($seriePoster);
+            $seriePoster->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeriePoster(SeriePoster $seriePoster): static
+    {
+        if ($this->seriePosters->removeElement($seriePoster)) {
+            // set the owning side to null (unless already changed)
+            if ($seriePoster->getSerie() === $this) {
+                $seriePoster->setSerie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SerieBackdrop>
+     */
+    public function getSerieBackdrops(): Collection
+    {
+        return $this->serieBackdrops;
+    }
+
+    public function addSerieBackdrop(SerieBackdrop $serieBackdrop): static
+    {
+        if (!$this->serieBackdrops->contains($serieBackdrop)) {
+            $this->serieBackdrops->add($serieBackdrop);
+            $serieBackdrop->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSerieBackdrop(SerieBackdrop $serieBackdrop): static
+    {
+        if ($this->serieBackdrops->removeElement($serieBackdrop)) {
+            // set the owning side to null (unless already changed)
+            if ($serieBackdrop->getSerie() === $this) {
+                $serieBackdrop->setSerie(null);
+            }
+        }
 
         return $this;
     }

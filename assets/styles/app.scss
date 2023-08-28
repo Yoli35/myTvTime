@@ -427,7 +427,7 @@ main {
     position: fixed;
     right: 2em;
     top: 2em;
-    z-index: 121;
+    z-index: 1210;
 
     .toggler {
         button {
@@ -623,6 +623,7 @@ nav.active {
     position: sticky;
     top: 0;
     z-index: 998;
+    -webkit-backdrop-filter: blur(3px);
 
     &:hover {
         background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-20);*/
@@ -701,6 +702,7 @@ nav.active {
     position: sticky;
     top: 3rem;
     z-index: 50;
+    -webkit-backdrop-filter: blur(3px);
 
     &:hover {
         background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-20);*/

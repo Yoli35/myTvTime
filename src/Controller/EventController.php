@@ -47,7 +47,7 @@ class EventController extends AbstractController
         $user = $this->getUser();
 
         $events = $this->eventRepository->findBy(['user' => $user, 'visible' => true], ['date' => 'DESC']);
-        $now = $this->dateService->getNow();
+        $now = $this->dateService->getNow($user->getTimezone());
         $events = array_map(function ($event) use ($now) {
             $diff = date_diff($now, $event->getDate());
             $e = $event->toArray();

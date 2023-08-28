@@ -123,11 +123,11 @@
             ];
 
             function celebrate() {
-                const particuleCount = 10 + Math.floor(Math.random() * 10);
+                const particuleCount = 5 + Math.floor(Math.random() * 5);
                 const spread = 90 + Math.floor(Math.random() * 30);
                 const palette = palettes[Math.floor(Math.random() * palettes.length)];
                 const position = [{x: 0, y: .5}, {x: 1, y: .5}];
-                const duration = 3 * 1000;
+                const duration = 2 * 1000;
                 const end = Date.now() + duration;
                 console.log({particuleCount, spread, palette, position});
                 myCanvas = document.createElement('canvas');

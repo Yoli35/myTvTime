@@ -9,7 +9,9 @@ use App\Entity\Favorite;
 use App\Entity\Networks;
 use App\Entity\SeasonViewing;
 use App\Entity\Serie;
+use App\Entity\SerieBackdrop;
 use App\Entity\SerieCast;
+use App\Entity\SeriePoster;
 use App\Entity\SerieViewing;
 use App\Entity\Settings;
 use App\Entity\User;
@@ -19,7 +21,9 @@ use App\Repository\CastRepository;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
 use App\Repository\SeasonViewingRepository;
+use App\Repository\SerieBackdropRepository;
 use App\Repository\SerieCastRepository;
+use App\Repository\SeriePosterRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
@@ -31,7 +35,6 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,6 +70,8 @@ class SerieController extends AbstractController
                                 private readonly ImageConfiguration       $imageConfiguration,
                                 private readonly SeasonViewingRepository  $seasonViewingRepository,
                                 private readonly SerieCastRepository      $serieCastRepository,
+                                private readonly SerieBackdropRepository  $serieBackdropRepository,
+                                private readonly SeriePosterRepository    $seriePosterRepository,
                                 private readonly SerieRepository          $serieRepository,
                                 private readonly SerieViewingRepository   $serieViewingRepository,
                                 private readonly TMDBService              $TMDBService,
@@ -400,7 +405,7 @@ class SerieController extends AbstractController
         /** @var Serie[] $todayAirings */
 //        $todayAirings = $this->todayAiringSeries($date);
         $todayAirings = $this->todayAiringSeriesV2($date);
-        dump($todayAirings);
+//        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
         $images = $this->getNothingImages();
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_DAY);
@@ -487,11 +492,11 @@ class SerieController extends AbstractController
         $yesterday = $date->sub(new DateInterval('P1D'))->format('Y-m-d');
 
         $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $yesterday, 1, 20);
-        dump([
-            'today' => $today,
-            'yesterday' => $yesterday,
-            'episodes of the day' => $episodesOfTheDay
-        ]);
+        /*        dump([
+                    'today' => $today,
+                    'yesterday' => $yesterday,
+                    'episodes of the day' => $episodesOfTheDay
+                ]);*/
         $episodesOfTheDayBySeries = [];
 
         foreach ($episodesOfTheDay as $episode) {
@@ -573,7 +578,7 @@ class SerieController extends AbstractController
         $breadcrumb[] = ['name' => $this->translator->trans("My series airing today"), 'url' => $this->generateUrl("app_series_today")];
         $imageConfig = $this->imageConfiguration->getConfig();
 
-        dump(['episodesOfTheWeek' => $episodesOfTheWeek,]);
+//        dump(['episodesOfTheWeek' => $episodesOfTheWeek,]);
 
         return $this->render('series/this_week.html.twig', [
             'date' => $now,
@@ -1202,6 +1207,7 @@ class SerieController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $timezone = $user ? $user->getTimezone() : 'Europe/Paris';
 //        dump($tv);
         $modified = false;
         if ($serieViewing->getNumberOfSeasons() != $tv['number_of_seasons']) {
@@ -1237,11 +1243,11 @@ class SerieController extends AbstractController
             $modified = true;
         }
         if ($serieViewing->getCreatedAt() == null) {
-            $serieViewing->setCreatedAt($this->dateService->newDateImmutable($tv['first_air_date'], $user->getTimezone()));
+            $serieViewing->setCreatedAt($this->dateService->newDateImmutable($tv['first_air_date'], $timezone));
             $modified = true;
         }
         if ($serieViewing->getModifiedAt() == null) {
-            $serieViewing->setModifiedAt($this->dateService->newDate($tv['first_air_date'], $user->getTimezone()));
+            $serieViewing->setModifiedAt($this->dateService->newDate($tv['first_air_date'], $timezone));
             $modified = true;
         }
         if ($modified) {
@@ -1253,7 +1259,7 @@ class SerieController extends AbstractController
 
             $season = $serieViewing->getSeasonByNumber($s['season_number']);
             if ($season === null) {
-                $airDate = $s['air_date'] ? $this->dateService->newDateImmutable($s['air_date'], $user->getTimezone(), true) : null;
+                $airDate = $s['air_date'] ? $this->dateService->newDateImmutable($s['air_date'], $timezone, true) : null;
                 $season = new SeasonViewing($airDate, $s['season_number'], $s['episode_count'], false);
                 $this->seasonViewingRepository->save($season, true);
                 $serieViewing->addSeason($season);
@@ -1285,7 +1291,7 @@ class SerieController extends AbstractController
                     $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $episode->getEpisodeNumber(), 'fr');
                     $tmdbEpisode = json_decode($standing, true);
                     if ($tmdbEpisode && key_exists('air_date', $tmdbEpisode) && $tmdbEpisode['air_date']) {
-                        $episode->setAirDate($this->dateService->newDateImmutable($tmdbEpisode['air_date'], $user->getTimezone()));
+                        $episode->setAirDate($this->dateService->newDateImmutable($tmdbEpisode['air_date'], $timezone));
                         $this->episodeViewingRepository->save($episode, true);
                         if (!$verbose) $this->addFlash('success', 'Date mise à jour : ' . $tmdbEpisode['air_date']);
                     }
@@ -1306,6 +1312,7 @@ class SerieController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $timezone = $user ? $user->getTimezone() : 'Europe/Paris';
 
         $nextEpisodeCheck = false;
         if ($verbose) $messages = ['    Next episode to air: none', '    Next episode to watch: none', ''];
@@ -1341,7 +1348,7 @@ class SerieController extends AbstractController
             if ($verbose) $messages[1] = '    Next episode to air is viewed, set to next episode to watch if any';
         }
         if ($nextEpisodeCheck)
-            $serieViewing->setNextEpisodeCheckDate($this->dateService->newDate('now', $user->getTimezone()));
+            $serieViewing->setNextEpisodeCheckDate($this->dateService->newDate('now', $timezone));
         $this->serieViewingRepository->save($serieViewing, true);
         if ($verbose) $this->messages = $messages;
     }
@@ -1915,6 +1922,8 @@ class SerieController extends AbstractController
                 $tv['upcoming_date_month'] = $serie->getUpcomingDateMonth();
                 $tv['upcoming_date_year'] = $serie->getUpcomingDateYear();
             }
+            $tv['seriePosters'] = $serie->getSeriePosters();
+            $tv['serieBackdrops'] = $serie->getSerieBackdrops();
 
             $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
 
@@ -1943,6 +1952,9 @@ class SerieController extends AbstractController
                 $seasonsWithAView[] = $seasonWithAView;
             }
             $tv['seasons'] = $seasonsWithAView;
+        } else {
+            $tv['seriePosters'] = [];
+            $tv['serieBackdrops'] = [];
         }
 
         $ygg = str_replace(' ', '+', $tv['name']);
@@ -2245,6 +2257,7 @@ class SerieController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $timezone = $user ? $user->getTimezone() : 'Europe/Paris';
 
         $whatsNew = [];
         $imgConfig = $this->imageConfiguration->getConfig();
@@ -2262,22 +2275,43 @@ class SerieController extends AbstractController
          *  -originalName: "Heartstopper"
          */
         if ($serie->getPosterPath() !== $tv['poster_path']) {
-            $whatsNew['poster_path'] = $this->translator->trans('New poster');
+            $seriePosters = array_map(fn($poster) => $poster->getPosterPath(), $serie->getSeriePosters()->toArray());
+
+            if ($tv['poster_path'] && !in_array($tv['poster_path'], $seriePosters)) {
+                $seriePoster = new SeriePoster($serie, $tv['poster_path']);
+                $this->seriePosterRepository->save($seriePoster, true);
+                $serie->addSeriePoster($seriePoster);
+                $whatsNew['poster_path'] = $this->translator->trans('New poster');
+                $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+            } else {
+                $whatsNew['poster_path'] = $this->translator->trans('New poster (previously added)');
+            }
 
             $serie->setPosterPath($tv['poster_path']);
             $modified = true;
-            $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
         }
         if ($serie->getBackdropPath() !== $tv['backdrop_path']) {
-            $whatsNew['backdrop_path'] = $this->translator->trans('New backdrop');
+            $serieBackdrops = array_map(fn($backdrop) => $backdrop->getBackdropPath(), $serie->getSerieBackdrops()->toArray());
 
+            if ($tv['backdrop_path'] && !in_array($tv['backdrop_path'], $serieBackdrops)) {
+                $serieBackdrop = new SerieBackdrop($serie, $tv['backdrop_path']);
+                $this->serieBackdropRepository->save($serieBackdrop, true);
+                $serie->addSerieBackdrop($serieBackdrop);
+                $whatsNew['backdrop_path'] = $this->translator->trans('New backdrop');
+            } else {
+                $whatsNew['backdrop_path'] = $this->translator->trans('New backdrop (previously added)');
+            }
             $serie->setBackdropPath($tv['backdrop_path']);
             $modified = true;
         }
+
+        dump(['seriePosters' => array_map(fn($poster) => $poster->getPosterPath(), $serie->getSeriePosters()->toArray())]);
+        dump(['serieBackdrops' => array_map(fn($backdrop) => $backdrop->getBackdropPath(), $serie->getSerieBackdrops()->toArray())]);
+
         $firstDateAir = $tv['first_air_date'];
         if ($firstDateAir !== "") {
-            $firstDateAirTMDB = $this->dateService->newDateImmutable($firstDateAir, $user->getTimezone(), true);
-            $firstDateAirDB = $serie->getFirstDateAir()->setTimezone(new DateTimeZone($user->getTimezone()))->setTime(0, 0);
+            $firstDateAirTMDB = $this->dateService->newDateImmutable($firstDateAir, $timezone, true);
+            $firstDateAirDB = $serie->getFirstDateAir()->setTimezone(new DateTimeZone($timezone))->setTime(0, 0);
             if ($firstDateAirTMDB != $firstDateAirDB) {
                 $whatsNew['first_date_air'] = $this->translator->trans('New date') . ' (' . $firstDateAir . ')';
                 $serie->setFirstDateAir($firstDateAirTMDB);
@@ -2323,7 +2357,7 @@ class SerieController extends AbstractController
         }
 
         if ($modified) {
-            $now = $this->dateService->newDate('now', $user->getTimezone());
+            $now = $this->dateService->newDate('now', $timezone);
             $serieViewing->setModifiedAt($now);
             $this->serieViewingRepository->save($serieViewing);
 

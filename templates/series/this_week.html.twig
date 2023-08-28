@@ -25,7 +25,7 @@
                 <div class="wrapper">
                     {% for episodeOfTheDay in episodesOfTheWeek %}
                         <div class="day{% if not episodeOfTheDay.today_offset %} today{% endif %}">
-                            <div class="date">{{ episodeOfTheDay.day|format_date('relative_full')|capitalize }}{% if not episodeOfTheDay.today_offset %} (9:00){% endif %}</div>
+                            <div class="date">{{ fixIfFirstDayOfTheMonth(episodeOfTheDay.day|format_date('relative_full')|capitalize) }}{% if not episodeOfTheDay.today_offset %} (9:00){% endif %}</div>
                             <div class="episodes">
                                 {% for todayAiring in episodeOfTheDay.episodes %}
                                     {{ include('blocks/series/_card-today.html.twig', {extra: episodeOfTheDay.day|format_datetime('full')|capitalize|split(' ')[0], today_offset: episodeOfTheDay.today_offset}) }}

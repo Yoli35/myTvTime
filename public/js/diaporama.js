@@ -1,14 +1,23 @@
-let diaporamaImages, diaporamaIndex, diaporamaCount, diaporamaSrc, _diaporama_locale;
+let diaporamaImages = null, diaporamaIndex, diaporamaCount, diaporamaSrc, _diaporama_locale;
 
 function initDiaporama(images, locale) {
     if (!images) return;
-    diaporamaImages = images;
+    if (diaporamaImages === null) {
+        diaporamaImages = images;
+        images.forEach(image => {
+            image.classList.add("pointer");
+            image.addEventListener("click", openDiaporama);
+        });
+    } else {
+        images.forEach(image => {
+            image.classList.add("pointer");
+            image.addEventListener("click", openDiaporama);
+            diaporamaImages.push(image);
+        });
+    }
     _diaporama_locale = locale;
-    images.forEach(image => {
-        image.classList.add("pointer");
-        image.addEventListener("click", openDiaporama);
-    });
 }
+
 function openDiaporama(e) {
     const images = diaporamaImages;
     const count = images.length;
@@ -233,7 +242,7 @@ function maximiseHelp() {
 }
 
 function addKey(parent, name, txt) {
-    const key= document.createElement("div");
+    const key = document.createElement("div");
     key.classList.add("key")
     const img = document.createElement("img");
     img.setAttribute("src", "/images/interface/key-" + name + ".png");

@@ -39,6 +39,7 @@
                                     <div class="days">
                                         {% set tab = 1 %}
                                         {% for day in week %}
+{#                                            <pre>{{ dump(day) }}</pre>#}
                                             <div class="day">
                                                 {% set date = day.day|format_date('full')|capitalize %}
                                                 <div class="date">{{ fixIfFirstDayOfTheMonth(date) }}</div>
@@ -53,20 +54,18 @@
                                                         <div class="drawn-rings" data-move="{{ percentMove }}"
                                                              data-exercise="{{ percentExercise }}"
                                                              data-stand-up="{{ percentStandUp }}">
-                                                            <canvas id="rings-{{ day.id }}" width="512" height="512"
-                                                                    style="scale: .25; translate: -37.5% -37.5%;"></canvas>
+                                                            <canvas id="rings-{{ day.id }}" width="512" height="512" style="scale: .25; translate: -37.5% -37.5%;"></canvas>
                                                         </div>
                                                     </div>
                                                     <div class="move">
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Move'|trans }}</div>
-                                                            <div class="doubled{% if percentMove >= 200 %} visible{% endif %}"
-                                                                 title="{{ 'goal'|trans }}">
+                                                            <div class="doubled{% if percentMove >= 200 %} visible{% endif %}" title="{{ 'goal'|trans }}">
                                                                 <div>x{{ timesMove }}</div>
                                                             </div>
-                                                            <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}"
-                                                                 title="{{ 'goal'|trans }}"><i
-                                                                        class="fa-solid fa-circle-check"></i></div>
+                                                            <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}">
+                                                                <i class="fa-solid fa-circle-check"></i>
+                                                            </div>
                                                         </div>
                                                         <div class="block-body">
                                                             {% set goal = activity.moveGoal %}
@@ -90,35 +89,40 @@
                                                                     <div class="result" data-id="{{ activity.id }}"
                                                                          data-day="{{ day.id }}"
                                                                          data-title="{{ 'Click me to edit'|trans }}"
-                                                                         tabindex="{{ tab }}">{% set tab = tab + 1 %}
+                                                                         tabindex="{{ tab }}">
+                                                                        {% set tab = tab + 1 %}
                                                                         <span>{{ day.moveResult }}</span> KCal
-                                                                        <label><input type="number" name="moveResult"
-                                                                                      value="{{ day.moveResult }}"/></label>
+                                                                        <label>
+                                                                            <input type="number" name="moveResult" value="{{ day.moveResult }}"/>
+                                                                        </label>
                                                                     </div>
                                                                     /
                                                                     <div class="goal"
-                                                                         data-title="{{ 'Click the goals button to modify'|trans }}">{{ goal }}
-                                                                        KCal
+                                                                         data-title="{{ 'Click the goals button to modify'|trans }}">{{ goal }} KCal
                                                                     </div>
                                                                 </div>
                                                                 <div class="detail">
                                                                     <div class="steps" data-id="{{ activity.id }}"
                                                                          data-day="{{ day.id }}"
                                                                          data-title="{{ 'Click me to edit'|trans }}"
-                                                                         tabindex="{{ tab }}">{% set tab = tab + 1 %}
+                                                                         tabindex="{{ tab }}">
+                                                                        {% set tab = tab + 1 %}
                                                                         {{ 'Steps'|trans }}&nbsp;:
                                                                         <span>{{ day.steps }}</span>
-                                                                        <label><input type="number" name="steps"
-                                                                                      value="{{ day.steps }}"/></label>
+                                                                        <label>
+                                                                            <input type="number" name="steps" value="{{ day.steps }}"/>
+                                                                        </label>
                                                                     </div>
                                                                     <div class="distance" data-id="{{ activity.id }}"
                                                                          data-day="{{ day.id }}"
                                                                          data-title="{{ 'Click me to edit'|trans }}"
-                                                                         tabindex="{{ tab }}">{% set tab = tab + 1 %}
+                                                                         tabindex="{{ tab }}">
+                                                                        {% set tab = tab + 1 %}
                                                                         {{ 'Distance'|trans }}&nbsp;:
                                                                         <span>{{ day.distance }}</span>km
-                                                                        <label><input type="number" name="distance"
-                                                                                      value="{{ day.distance }}"/></label>
+                                                                        <label>
+                                                                            <input type="number" name="distance" value="{{ day.distance }}"/>
+                                                                        </label>
                                                                     </div>
                                                                 </div>
                                                             </div>

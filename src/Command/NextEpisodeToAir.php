@@ -62,7 +62,7 @@ class NextEpisodeToAir extends Command
         $skipped = 0;
         $error = 0;
         $report = [];
-        $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
+        $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
         $this->logger->info('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
         $io->writeln('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
 
@@ -93,7 +93,7 @@ class NextEpisodeToAir extends Command
                 }
                 $lastEpisodeViewing = $lastSeasonViewing->getEpisodeByNumber($lastSeasonViewing->getEpisodeCount());
                 if ($lastEpisodeViewing) {
-                    $now = $this->dateService->newDateImmutable('now', 'Europe/Paris', true);
+                    $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
                     $lastViewingDate = $lastEpisodeViewing->getViewedAt();
                     if ($lastViewingDate !== null) {
                         $diff = $now->diff($lastViewingDate);
@@ -154,6 +154,7 @@ class NextEpisodeToAir extends Command
         $io->success('Done. ' . $count . ' series updated, ' . $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
         $this->logs('Done. ' . $count . ' series updated, ' . $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
 
+        $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
         $this->logger->info('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
         $io->writeln('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
 

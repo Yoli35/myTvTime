@@ -1021,85 +1021,114 @@
     .header {
         @include flex-row(flex-start, flex-start);
         background-color: var(--mmt-body-bg);
-        border-radius: 1em;
-        margin: 1em 0;
-        padding: 2em;
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
         position: relative;
         width: 100%;
 
-        .poster {
-            height: 30em;
-            //min-width: 20em;
-            position: relative;
+        .posters {
+            @include flex-col(flex-start, flex-start);
+            position: unset;
+            width: 20rem;
             z-index: 0;
 
-            > img {
-                border-radius: .5em;
+            .poster {
                 height: 30em;
-                object-fit: cover;
-                min-width: 20em;
-            }
+                //min-width: 20em;
+                position: relative;
+                z-index: 0;
 
-            .watch-providers {
-                @include flex-row(flex-start, flex-start);
-                bottom: 0;
-                left: 0;
-                overflow-x: scroll;
-                position: absolute;
-                scroll-snap-type: x mandatory;
-                width: 20em;
+                > img {
+                    border-radius: .5em;
+                    height: 30em;
+                    object-fit: cover;
+                    min-width: 20em;
+                }
 
-                .watch-provider {
-                    @include flex-row();
-                    background-color: var(--gradient-ardoise-10);
-                    border-radius: 0 0 .5em .5em;
-                    color: var(--gradient-ardoise-80);
-                    height: 4em;
-                    scroll-snap-align: start;
+                .watch-providers {
+                    @include flex-row(flex-start, flex-start);
+                    bottom: 0;
+                    left: 0;
+                    overflow-x: scroll;
+                    position: absolute;
+                    scroll-snap-type: x mandatory;
                     width: 20em;
 
-                    .logo {
-                        border-radius: .25em;
-                        height: 3em;
-                        margin: .5em;
-                        width: 3em;
+                    .watch-provider {
+                        @include flex-row();
+                        background-color: var(--gradient-ardoise-10);
+                        border-radius: 0 0 .5em .5em;
+                        color: var(--gradient-ardoise-80);
+                        height: 4em;
+                        scroll-snap-align: start;
+                        width: 20em;
 
-                        > img {
+                        .logo {
                             border-radius: .25em;
                             height: 3em;
-                            object-fit: cover;
+                            margin: .5em;
                             width: 3em;
+
+                            > img {
+                                border-radius: .25em;
+                                height: 3em;
+                                object-fit: cover;
+                                width: 3em;
+                            }
+                        }
+
+                        .watch {
+                            @include flex-col();
+                            font-weight: 100;
+                            height: 4em;
+                            //margin-left: 1em;
+                            width: 16em;
+
+                            a {
+                                font-weight: bold;
+                            }
                         }
                     }
+                }
 
-                    .watch {
-                        @include flex-col();
-                        font-weight: 100;
-                        height: 4em;
-                        //margin-left: 1em;
-                        width: 16em;
+                .arrow {
+                    @include flex-row();
+                    background-color: var(--gradient-ardoise-20);
+                    border-radius: .25em;
+                    bottom: 1em;
+                    color: var(--gradient-ardoise-80);
+                    display: none;
+                    height: 2em;
+                    position: absolute;
+                    right: .25em;
+                    width: 2em;
 
-                        a {
-                            font-weight: bold;
-                        }
+                    &.d-flex {
+                        display: flex;
                     }
                 }
             }
 
-            .arrow {
+            .poster-list {
                 @include flex-row();
-                background-color: var(--gradient-ardoise-20);
-                border-radius: .25em;
-                bottom: 1em;
-                color: var(--gradient-ardoise-80);
-                display: none;
-                height: 2em;
-                position: absolute;
-                right: .25em;
-                width: 2em;
+                gap: 1rem;
+                height: 6rem;
+                width: 20rem;
 
-                &.d-flex {
-                    display: flex;
+                .poster-item {
+                    border: 1px solid var(--gradient-ardoise-80);
+                    border-radius: .25em;
+                    cursor: pointer;
+                    height: 4.5rem;
+                    width: 3rem;
+
+                    img {
+                        border-radius: .25em;
+                        height: 100%;
+                        object-fit: cover;
+                        width: 100%;
+                    }
                 }
             }
         }
@@ -1272,6 +1301,7 @@
                     @include flex-row(unset, flex-start);
                     gap: 1rem;
                     flex-wrap: wrap;
+                    font-size: 1rem;
                     margin-top: 1rem;
 
                     .creator {
@@ -2116,6 +2146,17 @@
                             text-align: center;
                             width: 4rem;
                         }
+
+                        input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb, input[type="range"]::-ms-thumb {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            background-color: var(--gradient-ardoise-50);
+                            border-radius: 50%;
+                            border: 2px solid var(--gradient-ardoise-90);
+                            cursor: pointer;
+                            height: 13px;
+                            width: 13px;
+                        }
                     }
 
                     &:has(div[data-type="roomy"].episodes-layout-item.active) {
@@ -2709,11 +2750,10 @@
             background-position: center 25%;
             color: transparent;
             font-size: 10vw;
-            font-weight: 900;
+            font-weight: 200;
+            letter-spacing: -1rem;
             line-height: 1.1em;
-            text-stroke: 2px var(--gradient-ardoise-90);
-            -webkit-text-stroke: 2px var(--gradient-ardoise-90);
-            //text-shadow: 0 0 2px var(--gradient-ardoise-90);
+            -webkit-text-stroke: 1px var(--gradient-ardoise-90);
         }
     }
 
@@ -2905,7 +2945,7 @@
                 padding: .5rem;
 
                 &.today {
-                    background-color: var(--gradient-green-20);
+                    background-color: var(--gradient-green-30);
                 }
 
                 .date {

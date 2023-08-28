@@ -321,12 +321,14 @@ class YoutubeController extends AbstractController
         $subMessage = "";
 
         if (str_contains($providedLink, "shorts")) {
-            if (str_contains($providedLink, "www")) {
-                // https://www.youtube.com/shorts/7KFxzeyse2g
-                $providedLink = preg_replace("/https:\/\/www\.youtube\.com\/shorts\/(.+)/", "$1", $providedLink);
+            // https://youtube.com/shorts/7qHLAXcEYUo?si=RduCPo0vSodq4syo
+            // https://www.youtube.com/shorts/7qHLAXcEYUo?si=RduCPo0vSodq4syo
+            if (str_contains($providedLink, "?si=")) {
+                $providedLink = preg_replace("/https:\/\/(?:www\.)?youtube\.com\/shorts\/(.+)\?si=.+/", "$1", $providedLink);
             } else {
-                // https://youtube.com/shorts/XxpFBkm5XqI?feature=share
-                $providedLink = preg_replace("/https:\/\/youtube\.com\/shorts\/(.+)\?feature=share/", "$1", $providedLink);
+                // https://www.youtube.com/shorts/7KFxzeyse2g
+                // https://youtube.com/shorts/7KFxzeyse2g
+                $providedLink = preg_replace("/https:\/\/(?:www\.)?youtube\.com\/shorts\/(.+)/", "$1", $providedLink);
             }
         } elseif (str_contains($providedLink, "youtu.be")) {
             // https://youtu.be/7uhgBHGybEM?si=vpNycqOeAjk_sDck
