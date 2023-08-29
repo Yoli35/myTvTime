@@ -3,7 +3,7 @@ let diaporamaImages = null, diaporamaIndex, diaporamaCount, diaporamaSrc, _diapo
 function initDiaporama(images, locale) {
     if (!images) return;
     if (diaporamaImages === null) {
-        diaporamaImages = images;
+        diaporamaImages = Array.from(images);
         images.forEach(image => {
             image.classList.add("pointer");
             image.addEventListener("click", openDiaporama);
