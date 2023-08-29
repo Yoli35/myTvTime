@@ -74,6 +74,7 @@ class SerieController extends AbstractController
                                 private readonly SeriePosterRepository    $seriePosterRepository,
                                 private readonly SerieRepository          $serieRepository,
                                 private readonly SerieViewingRepository   $serieViewingRepository,
+                                private readonly SettingsRepository       $settingsRepository,
                                 private readonly TMDBService              $TMDBService,
                                 private readonly TranslatorInterface      $translator)
     {
@@ -2305,8 +2306,8 @@ class SerieController extends AbstractController
             $modified = true;
         }
 
-        dump(['seriePosters' => array_map(fn($poster) => $poster->getPosterPath(), $serie->getSeriePosters()->toArray())]);
-        dump(['serieBackdrops' => array_map(fn($backdrop) => $backdrop->getBackdropPath(), $serie->getSerieBackdrops()->toArray())]);
+//        dump(['seriePosters' => array_map(fn($poster) => $poster->getPosterPath(), $serie->getSeriePosters()->toArray())]);
+//        dump(['serieBackdrops' => array_map(fn($backdrop) => $backdrop->getBackdropPath(), $serie->getSerieBackdrops()->toArray())]);
 
         $firstDateAir = $tv['first_air_date'];
         if ($firstDateAir !== "") {
@@ -2851,6 +2852,25 @@ class SerieController extends AbstractController
         return $this->json([
             'result' => 'success',
             'device' => $device
+        ]);
+    }
+
+    #[Route('/settings/set/{settings}', name: 'app_set_settings', methods: ['GET'])]
+    public function setSettings($settings): Response
+    {
+        $settings = json_decode($settings, true);
+        dump($settings);
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $settingsDB = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'settings']);
+        $settingsDB->setData($settings);
+        $this->settingsRepository->save($settingsDB, true);
+
+        return $this->json([
+            'result' => 'success',
+            'settingsDB' => $settingsDB,
+            'settings' => $settings
         ]);
     }
 

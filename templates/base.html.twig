@@ -30,10 +30,13 @@
 {% block body %}{% endblock %}
 {% include "blocks/_flash-messages.html.twig" %}
 {% include "blocks/chat/_chatWrapper.html.twig" %}
-{% include "blocks/_alarms.html.twig" %}
 {% include "blocks/_multiSearch.html.twig" %}
+{% include "blocks/_settings.html.twig" %}
+{% include "blocks/_alarms.html.twig" %}
+<div id="globs-settings" style="display: none">{ "app_set_settings": "{{ path('app_set_settings', {settings: 'foo'}) }}" }</div>
 <script src="/js/alarm.js" type="module"></script>
 <script src="/js/search.js" type="module"></script>
+<script src="/js/settings.js" type="module"></script>
 {% include "_accept.html.twig" %}
 </body>
 </html>

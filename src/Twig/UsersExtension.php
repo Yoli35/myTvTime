@@ -4,9 +4,11 @@ namespace App\Twig;
 
 use App\Entity\Alarm;
 use App\Entity\ChatDiscussion;
+use App\Entity\Settings;
 use App\Entity\User;
 use App\Repository\ChatDiscussionRepository;
 use App\Repository\MovieCollectionRepository;
+use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Service\DateService;
 use DateTimeImmutable;
@@ -25,6 +27,7 @@ class UsersExtension extends AbstractExtension
         private readonly ChatDiscussionRepository  $chatDiscussionRepository,
         private readonly DateService               $dateService,
         private readonly MovieCollectionRepository $movieCollectionRepository,
+        private readonly SettingsRepository        $settingsRepository,
         private readonly TranslatorInterface       $translator,
         private readonly UserRepository            $userRepository,
     )
@@ -34,6 +37,7 @@ class UsersExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
+            new TwigFunction('getSettings', [$this, 'getSettings'], ['is_safe' => ['html']]),
             new TwigFunction('getTime', [$this, 'getTime'], ['is_safe' => ['html']]),
             new TwigFunction('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
             new TwigFunction('newAlarm', [$this, 'newAlarm'], ['is_safe' => ['html']]),
@@ -50,6 +54,21 @@ class UsersExtension extends AbstractExtension
         return array(
             new TwigFilter('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
         );
+    }
+
+    public function getSettings(User $user): array
+    {
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'settings']);
+        dump($settings);
+        if ($settings === null) {
+            $settings = new Settings();
+            $settings->setUser($user)->setName('settings')->setData(['saturation' => 18]);
+            dump($settings);
+            $this->settingsRepository->save($settings, true);
+            dump($settings);
+        }
+
+        return $settings->getData();
     }
 
     public function userList(): array

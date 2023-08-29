@@ -1,0 +1,17 @@
+<dialog id="settings-dialog">
+    {% set settings = getSettings(user) %}
+    {% set saturation = settings.saturation %}
+    <div class="content">
+        <div class="dialog-title"></div>
+        <form method="dialog">
+            <label for="search-query">{{ 'Saturation'|trans }}
+                <input type="range" value="{{ saturation }}" min="0" max="100" step="1" id="settings-saturation" name="settings-saturation"/>
+                <span id="settings-saturation-value">{{ saturation }}</span>%
+            </label>
+            <menu>
+                <li><button class="btn btn-secondary" value="cancel">Annuler</button></li>
+                <li><button class="btn btn-primary" value="ok">{{ 'Ok'|trans }}</button></li>
+            </menu>
+        </form>
+    </div>
+</dialog>

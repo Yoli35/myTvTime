@@ -217,11 +217,11 @@ main {
     //width: 100%;
 }
 
-#multi-search {
+#multi-search, #settings {
     cursor: pointer;
 }
 
-#search-dialog {
+#search-dialog, #settings-dialog {
     backdrop-filter: blur(.25rem);
     -webkit-backdrop-filter: blur(.25rem);
     background-color: var(--gradient-grey-10-alpha-75);
@@ -241,7 +241,7 @@ main {
         justify-content: center;
         padding: 2rem;
 
-        .activity-dialog-title {
+        .dialog-title {
             font-size: 1.5rem;
             margin-bottom: 1rem;
         }
@@ -258,6 +258,10 @@ main {
 
                 input[type=search] {
                     width: 25rem;
+                }
+
+                input[type=range] {
+                    width: 200px;
                 }
             }
 
@@ -618,7 +622,7 @@ nav.active {
 
 .top-menu {
     @include flex-row(center, space-around);
-    background-color: hsla(206deg, 50%, 24%, .25);
+    background-color: hsla(206deg, var(--gradient-ardoise-saturation), 24%, .25);
     height: 3rem;
     position: sticky;
     top: 0;
@@ -626,7 +630,7 @@ nav.active {
     -webkit-backdrop-filter: blur(3px);
 
     &:hover {
-        background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-20);*/
+        background-color: hsl(206deg, var(--gradient-ardoise-saturation), 24%); /*var(--gradient-ardoise-20);*/
     }
 
     .top-item {
@@ -705,7 +709,7 @@ nav.active {
     -webkit-backdrop-filter: blur(3px);
 
     &:hover {
-        background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-20);*/
+        background-color: hsl(206deg, var(--gradient-ardoise-saturation), 24%); /*var(--gradient-ardoise-20);*/
     }
 
     a {
