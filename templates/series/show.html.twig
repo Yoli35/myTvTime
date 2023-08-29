@@ -49,8 +49,11 @@
                 <div class="posters">
                     <div class="poster">
                         {% if serie.poster_path|length %}
-                            <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ serie.name }}">
-                            {#                            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}"> #}
+                            {% if addThisSeries %}
+                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
+                            {% else %}
+                                <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ serie.name }}">
+                            {% endif %}
                         {% else %}
                             <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
                         {% endif %}
@@ -212,9 +215,23 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        <div class="next-block">
-                            {{ include('blocks/series/_next_episode_to_watch.html.twig') }}
-                        </div>
+                        {% if serie.serieBackdrops|length > 0 %}
+                            <div class="backdrop-list-wrapper">
+                                {{ 'Backdrops'|trans }}
+                                <div class="backdrop-list">
+                                    {% for serieBackdrop in serie.serieBackdrops %}
+                                        <div class="backdrop-item">
+                                            <img src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serieBackdrop.backdropPath }}" alt="{{ serie.name }}">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if nextEpisodeToWatch %}
+                            <div class="next-block">
+                                {{ include('blocks/series/_next_episode_to_watch.html.twig') }}
+                            </div>
+                        {% endif %}
                     </div>
                     {% if whatsNew %}
                         <div class="what-s-new">
@@ -566,10 +583,12 @@
 
             const images = document.querySelector(".serie-page").querySelector(".images")?.querySelectorAll("img");
             const posters = document.querySelector(".serie-page").querySelector(".poster-list")?.querySelectorAll("img");
+            const backdrops = document.querySelector(".serie-page").querySelector(".backdrop-list")?.querySelectorAll("img");
             const locale = document.querySelector("html").getAttribute("lang");
 
             initDiaporama(images, locale);
             initDiaporama(posters, locale);
+            initDiaporama(backdrops, locale);
         });
     </script>
 {% endblock %}

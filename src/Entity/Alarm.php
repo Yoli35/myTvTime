@@ -22,7 +22,7 @@ class Alarm
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'alarms')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'alarms')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner;
 
@@ -56,6 +56,11 @@ class Alarm
         $this->days = $days;
         $this->description = $description;
         $this->createdAt = $createAT;
+    }
+
+    public function __toString(): string
+    {
+        return "Alarm: " . $this->name;
     }
 
     public function getId(): ?int
