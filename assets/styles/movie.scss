@@ -20,18 +20,18 @@
         padding: 1em 2em;
 
         &.success {
-            background-color: hsla(111, 20%, 57%, 0.87);
-            border: 2px solid hsl(111, 40%, 57%);
+            background-color: var(--gradient-green-40-alpha-50);
+            border: 2px solid var(--gradient-green-40);
         }
 
         &.error {
-            background-color: hsla(0, 20%, 56%, 0.87);
-            border: 2px solid hsl(0, 40%, 56%);
+            background-color: var(--gradient-red-40-alpha-50);
+            border: 2px solid var(--gradient-red-60);
         }
 
         &.info {
-            background-color: hsla(0, 0%, 60%, 0.87);
-            border: 2px solid hsl(0, 0%, 80%);
+            background-color: var(--gradient-grey-60-alpha-90);
+            border: 2px solid var(--gradient-grey-80);
         }
 
         &.init {
@@ -395,8 +395,8 @@
             }
 
             .replacement {
-                background: rgb(131, 58, 180);
-                background: linear-gradient(225deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+                background: var(--gradient-purple-40);
+                background: linear-gradient(225deg, var(--gradient-purple-40) 0%, var(--gradient-red-50) 50%, var(--gradient-yellow-50) 100%);
                 border: 8px solid var(--gradient-ardoise-90);
                 height: 30vw;
                 width: 100%;

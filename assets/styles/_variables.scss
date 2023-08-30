@@ -44,6 +44,20 @@ $fa-font-path: "../webfonts";
 
     --gradient-dark: linear-gradient(
                     45deg,
+                    hsl(209deg var(--gradient-ardoise-saturation) 12%) 0%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 12%) 11%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 13%) 22%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 13%) 33%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 14%) 44%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 14%) 56%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 14%) 67%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 15%) 78%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 15%) 89%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 16%) 100%
+    );
+/*
+--gradient-dark: linear-gradient(
+                    45deg,
                     hsl(212deg var(--gradient-ardoise-saturation) 12%) 0%,
                     hsl(211deg var(--gradient-ardoise-saturation) 12%) 11%,
                     hsl(210deg var(--gradient-ardoise-saturation) 13%) 22%,
@@ -55,6 +69,7 @@ $fa-font-path: "../webfonts";
                     hsl(206deg var(--gradient-ardoise-saturation) 15%) 89%,
                     hsl(206deg var(--gradient-ardoise-saturation) 16%) 100%
     );
+*/
 
     --gradient-light: linear-gradient(
                     45deg,
@@ -233,6 +248,7 @@ $fa-font-path: "../webfonts";
     --gradient-ardoise-30-alpha-90: hsla(202, var(--gradient-ardoise-saturation), 30%, .9);
     --gradient-ardoise-30-horizontal: linear-gradient(90deg, hsla(202, var(--gradient-ardoise-saturation), 30%, .2), hsla(202, var(--gradient-ardoise-saturation), 30%, 1));
     --gradient-ardoise-25: hsl(202, var(--gradient-ardoise-saturation), 25%);
+    --gradient-ardoise-25-alpha-25: hsla(202, var(--gradient-ardoise-saturation), 25%, .25);
     --gradient-ardoise-20: hsl(202, var(--gradient-ardoise-saturation), 20%);
     --gradient-ardoise-20-alpha-50: hsla(202, var(--gradient-ardoise-saturation), 20%, .5);
     --gradient-ardoise-20-alpha-80: hsla(202, var(--gradient-ardoise-saturation), 20%, .8);
@@ -245,14 +261,17 @@ $fa-font-path: "../webfonts";
 
     --gradient-grey-100: hsl(0, 0%, 100%);
     --gradient-grey-95: hsl(0, 0%, 95%);
+    --gradient-grey-95-alpha-20: hsla(0, 0%, 95%, .2);
     --gradient-grey-90: hsl(0, 0%, 90%);
     --gradient-grey-90-alpha-10: hsla(0, 0%, 90%, .1);
     --gradient-grey-90-alpha-20: hsla(0, 0%, 90%, .2);
     --gradient-grey-90-alpha-90: hsla(0, 0%, 90%, .95);
     --gradient-grey-80: hsl(0, 0%, 80%);
     --gradient-grey-80-alpha-50: hsla(0, 0%, 80%, .5);
+    --gradient-grey-75-alpha-40: hsla(0, 0%, 75%, .4);
     --gradient-grey-70: hsl(0, 0%, 70%);
     --gradient-grey-60: hsl(0, 0%, 60%);
+    --gradient-grey-60-alpha-90: hsla(0, 0%, 60%, .9);
     --gradient-grey-50: hsl(0, 0%, 50%);
     --gradient-grey-40: hsl(0, 0%, 40%);
     --gradient-grey-40-alpha-50: hsla(0, 0%, 40%, .5);
@@ -325,12 +344,13 @@ $fa-font-path: "../webfonts";
     --gradient-red-50: hsl(0, 90%, 50%);
     --gradient-red-50-alpha-50: hsla(0, 90%, 50%, .5);
     --gradient-red-40: hsl(0, 90%, 40%);
-    --gradient-red-40-alpha: hsla(0, 90%, 40%, .5);
+    --gradient-red-40-alpha-50: hsla(0, 90%, 40%, .5);
     --gradient-red-20: hsl(0, 90%, 20%);
 
-    --gradient-yellow-50: hsl(45, 90%, 50%);
-    --gradient-yellow-60: hsl(45, 90%, 60%);
     --gradient-yellow-80: hsl(45, 90%, 80%);
+    --gradient-yellow-60: hsl(45, 90%, 60%);
+    --gradient-yellow-50: hsl(45, 90%, 50%);
+    --gradient-yellow-50-alpha-50: hsla(45, 90%, 50%, .5);
 
     --form-bg: var(--gradient-ardoise-80);
     --form-border: var(--gradient-ardoise-20);
@@ -405,8 +425,8 @@ $fa-font-path: "../webfonts";
 
 @mixin rating() {
     @include flex-row();
-    background-color: #11d08e7f;
-    border: .125em solid #11d08e;
+    background-color: var(--gradient-green-40-alpha-50);
+    border: .125em solid var(--gradient-green-40);
     border-radius: 1.5em;
     height: 3em;
     margin-right: 1em;

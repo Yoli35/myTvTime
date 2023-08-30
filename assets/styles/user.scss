@@ -20,7 +20,6 @@
                 .magnifying-glass {
                     @include flex-row();
                     background-color: var(--gradient-ardoise-50);
-                    //background-image: var(--btn-primary);
                     border: 2px solid var(--gradient-ardoise-90);
                     border-radius: 50%;
                     height: 3em;
@@ -43,7 +42,6 @@
 
                 &.myself {
                     background-color: var(--gradient-orange-50);
-                    //background-image: var(--btn-warning);
                     font-weight: bold;
                 }
 
@@ -71,7 +69,6 @@
                 .relation {
                     @include flex-row();
                     background-color: var(--gradient-ardoise-40);
-                    //background-image: var(--btn-primary);
                     border: 1px solid var(--gradient-ardoise-80);
                     border-radius: 999px;
                     margin-left: auto;
@@ -132,7 +129,7 @@
 }
 
 .nav-to-top {
-    background-color: #0d9488e6;
+    background-color: var(--gradient-green-40-alpha-50);
     background-image: url("../images/arrow-up-circle-outline.png");
     background-position: center center;
     border-radius: 50%;
@@ -613,9 +610,7 @@
 
 .export-movies {
     .content {
-
         .sample {
-            //background-color: #f0f0f0;
             background: #f6e2f6;
             background: linear-gradient(225deg, #f6e2f6 0%, #f0f0f0 100%);
             border-radius: .5em;

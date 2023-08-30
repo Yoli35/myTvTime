@@ -59,13 +59,11 @@ class UsersExtension extends AbstractExtension
     public function getSettings(User $user): array
     {
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'settings']);
-        dump($settings);
+
         if ($settings === null) {
             $settings = new Settings();
             $settings->setUser($user)->setName('settings')->setData(['saturation' => 18]);
-            dump($settings);
             $this->settingsRepository->save($settings, true);
-            dump($settings);
         }
 
         return $settings->getData();
@@ -82,12 +80,7 @@ class UsersExtension extends AbstractExtension
             return $lastB->getTimestamp() <=> $lastA->getTimestamp();
         });
 
-//        dump($users);
-        try {
-            $date = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-        } catch (Exception) {
-            $date = new DateTimeImmutable();
-        }
+        $date = $this->dateService->newDateImmutable('now', 'Europe/Paris');
         return array_map(function (User $user) use ($date) {
             return [
                 'id' => $user->getId(),

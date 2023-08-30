@@ -5,13 +5,13 @@
 
 .yt-header {
     @include banner("../images/youtube.png");
-    background-color: hsla(206deg, 50%, 24%, .2);
+    background-color: var(--gradient-ardoise-25-alpha-25);
     border-radius: 1em;
     height: clamp(21em, 20vw, 26em);
     margin-top: 1em;
 
     &:hover {
-        background-color: hsl(206deg, 50%, 24%);
+        background-color: var(--gradient-ardoise-25);
     }
 
     .banner {

@@ -86,7 +86,6 @@
             }
 
             div {
-                //background-color: var(--gradient-ardoise-40-alpha-50);
                 border-radius: .5em;
                 max-width: 48%;
                 padding: .5em 1em;
@@ -503,7 +502,7 @@
             z-index: 1000;
 
             &.visible {
-                background-color: #888888df;
+                background-color: var(--gradient-ardoise-50);
                 display: flex;
                 opacity: 1;
             }
@@ -1251,7 +1250,6 @@
 
                         .circle {
                             @include flex-row(center, center);
-                            //background: conic-gradient(var(--gradient-ardoise-60) 0%, var(--gradient-ardoise-60) 1%, #000 1%);
                             border-radius: 50%;
                             height: calc(3.5em - 4px);
                             width: calc(3.5em - 4px);
@@ -1802,13 +1800,6 @@
                                 span {
                                     font-size: 1.5em;
                                 }
-
-                                //&.viewed {
-                                //    background-color: var(--gradient-green-30);
-                                //    border-color: var(--gradient-yellow-50);
-                                //    border-width: 4px;
-                                //    color: var(--gradient-yellow-50);
-                                //}
                             }
 
                             .episode-name {
@@ -2609,11 +2600,11 @@
                         }
 
                         &.active {
-                            background-color: hsl(42, 100%, 47%);
+                            background-color: var(--gradient-orange-50);
                             color: var(--gradient-ardoise-20);
 
                             &:hover {
-                                background-color: hsl(42, 60%, 47%);
+                                background-color: var(--gradient-yellow-50);
                             }
                         }
                     }
@@ -2771,7 +2762,7 @@
 
         .date {
             background-clip: text;
-            background-image: linear-gradient(90deg, red, blue);
+            background-image: linear-gradient(90deg, var(--gradient-red-50), var(--gradient-purple-50));
             background-position: center 25%;
             color: transparent;
             font-size: 10vw;
@@ -3269,7 +3260,6 @@
 
                     .circle1 {
                         @include flex-row();
-                        //background-color: var(--gradient-ardoise-90);
                         animation: 1s infinite clockwise linear;
                         background: conic-gradient(
                                         var(--gradient-ardoise-10) 0deg,
@@ -3289,7 +3279,6 @@
 
                             .circle3 {
                                 @include flex-row();
-                                //background-color: var(--gradient-ardoise-90);
                                 animation: 1s infinite counter-clockwise ease-in-out;
                                 background: conic-gradient(
                                                 var(--gradient-ardoise-90) 0deg,
@@ -3826,15 +3815,8 @@
                     }
 
                     .autocomplete-items div:hover {
-                        /*when hovering an item:*/
                         background-color: var(--gradient-ardoise-60);
                     }
-
-                    //.autocomplete-active {
-                    //    /*when navigating through the items using the arrow keys:*/
-                    //    background-color: var(--gradient-ardoise-70) !important;
-                    //    color: var(--gradient-ardoise-90);
-                    //}
                 }
 
                 .add-serie {
@@ -4075,7 +4057,6 @@
                 .body {
                     .spinner {
                         .circle1 {
-                            //background-color: var(--gradient-ardoise-90);
                             animation: 1s infinite clockwise linear;
                             background: conic-gradient(
                                             var(--gradient-ardoise-90) 0deg,
@@ -4087,7 +4068,6 @@
                                 background-color: var(--gradient-ardoise-10);
 
                                 .circle3 {
-                                    //background-color: var(--gradient-ardoise-90);
                                     background: conic-gradient(
                                                     var(--gradient-ardoise-10) 0deg,
                                                     var(--gradient-ardoise-10) 90deg,

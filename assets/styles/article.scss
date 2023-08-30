@@ -524,7 +524,7 @@
 
     .show {
         @include flex-100(center, center);
-        background-color: #00000000;
+        background-color: transparent;
         display: none;
         inset: 0;
         opacity: 0;
@@ -747,7 +747,7 @@
 
         .show {
             &.visible {
-                background-color: var(--gradient-ardoise-20) 7 f;
+                background-color: var(--gradient-ardoise-20);
             }
         }
     }

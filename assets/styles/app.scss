@@ -230,10 +230,6 @@ main {
     margin-block: auto;
     margin-inline: auto;
 
-    &::backdrop {
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-
     .content {
         align-items: center;
         display: flex;
@@ -279,6 +275,14 @@ main {
     }
 }
 
+#search-dialog::backdrop {
+    background-color: #000000af//var(--gradient-grey-10-alpha-75);
+}
+
+#settings-dialog::backdrop {
+    background-color: transparent;
+}
+
 #accept-cookies {
     background-color: var(--gradient-ardoise-10-alpha-90);
     height: 100vh;
@@ -287,9 +291,7 @@ main {
     width: 100vw;
 
     .accept-overlay {
-        //background-color: hsl(346.84, 77.17%, 49.8%);
         background-color: var(--gradient-ardoise-30);
-        //border: 1px solid hsl(214.29, 31.82%, 91.37%);
         border: 1px solid var(--gradient-ardoise-50);
         border-radius: .5em;
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
@@ -445,7 +447,7 @@ main {
             width: 3em;
 
             .line {
-                background: #f1f1f1;
+                background-color: var(--gradient-ardoise-90);
                 display: block;
                 height: 4px;
                 position: absolute;
@@ -622,7 +624,7 @@ nav.active {
 
 .top-menu {
     @include flex-row(center, space-around);
-    background-color: hsla(206deg, var(--gradient-ardoise-saturation), 24%, .25);
+    background-color: var(--gradient-ardoise-25-alpha-25);
     height: 3rem;
     position: sticky;
     top: 0;
@@ -630,7 +632,7 @@ nav.active {
     -webkit-backdrop-filter: blur(3px);
 
     &:hover {
-        background-color: hsl(206deg, var(--gradient-ardoise-saturation), 24%); /*var(--gradient-ardoise-20);*/
+        background-color: var(--gradient-ardoise-25);
     }
 
     .top-item {
@@ -698,7 +700,7 @@ nav.active {
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '°';
     @include flex-row(center, start);
-    background-color: hsla(206deg, 50%, 24%, .25);
+    background-color: var(--gradient-ardoise-25-alpha-25);
     border-radius: .5em;
     height: 3em;
     margin: 1em 0;
@@ -709,7 +711,7 @@ nav.active {
     -webkit-backdrop-filter: blur(3px);
 
     &:hover {
-        background-color: hsl(206deg, var(--gradient-ardoise-saturation), 24%); /*var(--gradient-ardoise-20);*/
+        background-color: var(--gradient-ardoise-25);
     }
 
     a {
@@ -757,7 +759,7 @@ nav.active {
         }
 
         .menu-items, .sub-menu {
-            background-color: hsl(206deg, 50%, 24%); /*var(--gradient-ardoise-30);*/
+            background-color: var(--gradient-ardoise-25);
             border-radius: .25em;
             box-shadow: 0 0 1em var(--gradient-ardoise-10-alpha-50);
             display: none;
@@ -1018,13 +1020,11 @@ nav.active {
 @media (prefers-color-scheme: light) {
     .nav-breadcrumb {
         background-color: var(--light-theme-button);
-        //background-color: var(--gradient-ardoise-40-alpha-50);
         color: var(--gradient-ardoise-100);
         font-weight: bold;
 
         &:hover {
             background-color: var(--light-theme-hover);
-            //background-color: var(--gradient-ardoise-40);
         }
 
         a {
@@ -1110,7 +1110,7 @@ nav.active {
 }
 
 .home-header {
-    background-color: hsla(206deg, 50%, 95%, .2);
+    background-color: var(--gradient-grey-95-alpha-20);
     transition: background 500ms ease-in-out;
 
     .home-header-bg {
@@ -1163,7 +1163,7 @@ nav.active {
     }
 
     &:hover {
-        background-color: hsla(206deg, 50%, 75%, .4);
+        background-color: var(--gradient-grey-75-alpha-40);
     }
 }
 
@@ -1847,7 +1847,7 @@ nav.active {
     padding: .5em;
 
     .content {
-        background-color: hsla(50, 100%, 50%, .5);
+        background-color: var(--gradient-yellow-50-alpha-50);
         border-radius: 999px;
         color: var(--gradient-red-20);
         font-size: 1.5em;
@@ -1981,14 +1981,14 @@ nav.active {
     }
 
     .home-header {
-        background-color: hsla(206deg, 50%, 24%, .2);
+        background-color: var(--gradient-ardoise-25-alpha-25);
 
         .home-header-bg {
             background-image: url("../images/mytvtime-dark.png");
         }
 
         &:hover {
-            background-color: hsl(206deg, 50%, 24%);
+            background-color: var(--gradient-ardoise-25);
         }
     }
 
@@ -1999,7 +1999,7 @@ nav.active {
 
         .active {
             background-color: var(--gradient-ardoise-90);
-            border-color: #5e9ac5;
+            border-color: var(--gradient-ardoise-70);
             color: var(--gradient-ardoise-10);
         }
     }

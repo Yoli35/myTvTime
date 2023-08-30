@@ -425,7 +425,6 @@
 
                             .circle {
                                 @include flex-row(center, center);
-                                //background: conic-gradient(var(--gradient-ardoise-60) 0%, var(--gradient-ardoise-60) 1%, #000 1%);
                                 border-radius: 50%;
                                 flex-shrink: 0;
                                 height: 3.75em;
