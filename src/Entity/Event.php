@@ -61,9 +61,9 @@ class Event
     public function __construct(DateService $dateService)
     {
 //        $this->date = new DateTime('now', new \DateTimeZone('+0100'));
-        $this->date = $dateService->getNow();
+        $this->date = $dateService->getNow('Europe/Paris');
         $this->createdAt = $dateService->newDateImmutable('now', 'Europe/Paris'); //new DateTimeImmutable();
-        $this->updatedAt = $dateService->getNow();
+        $this->updatedAt = $dateService->getNow('Europe/Paris');
         $this->visible = false;
         $this->images = new ArrayCollection();
     }

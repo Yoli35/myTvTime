@@ -781,15 +781,17 @@ $fa-font-path: "../webfonts";
     position: relative;
 
     &::after {
-        border-bottom: 2px solid var(--gradient-ardoise-80);
-        border-right: 2px solid var(--gradient-ardoise-80);
+        border-bottom: .25rem solid var(--gradient-ardoise-80);
+        border-left: .25rem solid transparent;
+        border-right: .25rem solid var(--gradient-ardoise-80);
+        border-top: .25rem solid transparent;
         content: '';
-        height: .5em;
+        height: .25rem;
         position: absolute;
         right: 1.75em;
-        top: .625em;
+        top: .25rem;
         transform: rotate(45deg);
-        width: .5em;
+        width: .25rem;
         z-index: 2;
     }
 

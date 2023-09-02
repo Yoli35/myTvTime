@@ -1523,6 +1523,7 @@ class SerieController extends AbstractController
         }
         // Ajout de l'url des profils des acteurs et de l'équipe technique
         foreach ($credits['cast'] as $key => $cast) {
+//            dump($cast);
             $credits['cast'][$key]['profile_path'] = $this->fullUrl('profile', 2, $cast['profile_path'], 'no_profile.png', $imgConfig);
         }
         if (key_exists('crew', $credits)) {
@@ -2859,7 +2860,7 @@ class SerieController extends AbstractController
     public function setSettings($settings): Response
     {
         $settings = json_decode($settings, true);
-        dump($settings);
+//        dump($settings);
 
         /** @var User $user */
         $user = $this->getUser();
