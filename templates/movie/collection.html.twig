@@ -38,11 +38,23 @@
                         {% for part in collection.parts %}
                             <div class="part">
                                 <div class="movie-header">
-                                    {% if part.backdrop_path %}
-                                        <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ part.backdrop_path }}" class="d-block w-100" alt="{{ part.title }}">
-                                    {% else %}
-                                        <img src="/images/default/no_banner_dark.png" class="d-block w-100" alt="{{ collection.name }}">
-                                    {% endif %}
+                                    <div class="poster">
+                                        {% if part.poster_path %}
+                                            <a href="{{ path('app_movie', {id: part.id}) }}?from={{ from }}" class="w-100">
+                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ part.poster_path }}" alt="{{ part.title }}" class="w-100 h-auto">
+                                            </a>
+                                        {% else %}
+                                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ part.title }}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="backdrop">
+                                        {% if part.backdrop_path %}
+                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ part.backdrop_path }}" class="d-block w-100" alt="{{ part.title }}">
+                                        {% else %}
+                                            <div class="no-backdrop">{{ 'No banner'|trans }}</div>
+                                        {% endif %}
+                                    </div>
+
                                     {{ include('blocks/movie/_rating.html.twig', {id: part.id, seen: part.id in userMovies}) }}
                                 </div>
                                 <div class="sub-part">
@@ -64,15 +76,6 @@
                                             <div class="date">
                                                 {{ 'Release Date'|trans }} : {{ part.release_date|format_date('short') }}
                                             </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="movie-poster">
-                                        {% if part.poster_path %}
-                                            <a href="{{ path('app_movie', {id: part.id}) }}" class="w-100">
-                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ part.poster_path }}" alt="{{ part.title }}" class="w-100 h-auto">
-                                            </a>
-                                        {% else %}
-                                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ part.title }}">
                                         {% endif %}
                                     </div>
                                 </div>

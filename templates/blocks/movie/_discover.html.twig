@@ -1,5 +1,5 @@
 <div data-id="{{ id }}" class="home-discover">
-    <a href="{{ path('app_movie', {id: id}) }}">
+    <a href="{{ path('app_movie', {id: id}) }}{% if from is defined %}?from={{ from }}{% endif %}">
         <img src="{{ poster }}" alt="{{ title }}">
         <div class="title">{{ title }}</div>
         {% if discover.release_date is defined and discover.release_date|length %}

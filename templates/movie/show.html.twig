@@ -9,31 +9,31 @@
 
         {{ include('blocks/_mainMenu.html.twig') }}
 
-        {% if movie.backdrop_path %}
-            <div class="movie-header">
-                <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}"
-                     alt="{{ movie.title }}">
-                {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
-                <div class="ygg">
-                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date"
-                       target="_blank">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </a>
-                </div>
-            </div>
-        {% else %}
-            <div class="movie-header no-header">
-                {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
-                <div class="ygg">
-                    <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date"
-                       target="_blank">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </a>
-                </div>
-            </div>
-        {% endif %}
-
         {{ include('blocks/_nav.html.twig', {thisPage: movie.title}) }}
+
+        <div class="movie-header">
+            <div class="poster">
+                {% if movie.poster_path %}
+                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}"
+                         alt="{{ movie.title }}">
+                {% else %}
+                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
+                {% endif %}
+            </div>
+            <div class="backdrop">
+                {% if movie.backdrop_path %}
+                    <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" alt="{{ movie.title }}">
+                {% else %}
+                    <div class="no-backdrop">{{ 'No backdrop'|trans }}</div>
+                {% endif %}
+            </div>
+            {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
+            <div class="ygg">
+                <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </a>
+            </div>
+        </div>
 
         <div class="movie-info">
             <div class="top">
@@ -211,36 +211,32 @@
                         </div>
                         {% if movie.belongs_to_collection %}
                             <div class="part-2R">
-                                <h2>{{ 'Belongs to Collection'|trans }}</h2>
+{#                                <h2>{{ 'Belongs to Collection'|trans }}</h2>#}
                                 <div class="collection">
                                     {% if movie.belongs_to_collection.backdrop_path %}
                                         <div class="banner">
-                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}"
-                                                 class="card-img-top" alt="movie.belongs_to_collection.name">
+                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" alt="movie.belongs_to_collection.name">
                                         </div>
                                     {% endif %}
                                     <div class="content">
                                         <h2>{{ movie.belongs_to_collection.name }}</h2>
-                                        <div class="poster"><img
-                                                    src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}"
-                                                    alt=""></div>
+                                        {% if movie.belongs_to_collection.poster_path %}
+                                            <div class="poster">
+                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt="">
+                                            </div>
+                                        {% endif %}
                                         <div>
-                                            <a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}"
-                                               class="btn btn-secondary mt-3">{{ 'See the Collection'|trans }}</a></div>
+                                            <a href="{{ path('app_movie_collection', {mid: movie.id, id: movie.belongs_to_collection.id }) }}?from={{ from }}" class="btn btn-secondary mt-3">
+                                                {{ 'See the Collection'|trans }}
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
                 </div>
-                <div class="movie-poster">
-                    {% if movie.poster_path %}
-                        <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}"
-                             alt="{{ movie.title }}">
-                    {% else %}
-                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
-                    {% endif %}
-
+                <div class="movie-user">
                     {% if userMovieId > 0 %}
                         <div class="favorite" data-user="{{ user.id }}" data-media="{{ userMovieId }}">
                             <div class="control">
@@ -361,7 +357,7 @@
                             <h5>{{ 'Backdrops'|trans }}</h5>
                             <div>
                                 {% for backdrop in images.backdrops %}
-                                    <img class="backdrop"     {# 0: w300, 1: w780, 2: w1280, 3: original #}
+                                    <img class="backdrop" {# 0: w300, 1: w780, 2: w1280, 3: original #}
                                          src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop.file_path }}"
                                          alt="Some backdrop">
                                 {% endfor %}
@@ -371,7 +367,7 @@
                             <h5>{{ 'Logos'|trans }}</h5>
                             <div>
                                 {% for logo in images.logos %}
-                                    <img class="logo"     {# 0: w45, 1: w92, 2: w154, 3: w185, 4: w300, 5:"w500, 6: original #}
+                                    <img class="logo" {# 0: w45, 1: w92, 2: w154, 3: w185, 4: w300, 5:"w500, 6: original #}
                                          src="{{ imageConfig.url ~ imageConfig.logo_sizes.6 ~ logo.file_path }}"
                                          alt="Some logo">
                                 {% endfor %}
@@ -381,7 +377,7 @@
                             <h5>{{ 'Posters'|trans }}</h5>
                             <div>
                                 {% for poster in images.posters %}
-                                    <img class="poster"     {# 0: w92, 1: w154, 2: w185, 3: w342, 4: w500, 5: w780, 6: original #}
+                                    <img class="poster" {# 0: w92, 1: w154, 2: w185, 3: w342, 4: w500, 5: w780, 6: original #}
                                          src="{{ imageConfig.url ~ imageConfig.poster_sizes.6 ~ poster.file_path }}"
                                          alt="Some poster">
                                 {% endfor %}
@@ -427,7 +423,7 @@
             const images = document.querySelector(".movie-info")?.querySelector(".images")?.querySelectorAll("img");
             initDiaporama(images, "{{ app.request.locale }}");
 
-            const poster = document.querySelector(".movie-poster");
+            const poster = document.querySelector(".movie-header").querySelector(".poster");
             const image = poster.querySelector("img");
 
             image.addEventListener("onerror", (evt) => {

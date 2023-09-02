@@ -154,6 +154,7 @@ class MovieController extends AbstractController
             'pages' => $pages,
             'sorts' => $sorts,
             'locale' => $locale,
+            'from' => 'app_movie_list',
         ]);
     }
 
@@ -163,6 +164,8 @@ class MovieController extends AbstractController
 //        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
+
+        $from = $request->query->get('from');
 
         $locale = $request->getLocale();
         $standing = $this->tmdbService->getMovie($id, $locale, ['videos,images,credits,recommendations,watch/providers']);
@@ -177,6 +180,8 @@ class MovieController extends AbstractController
 
         $standing = $this->tmdbService->getCountries();
         $countries = json_decode($standing, true);
+
+        $breadcrumb = $this->breadcrumb($from, $movieDetail);
 
         if (key_exists('results', $watchProviders)) {
             $watchProviders = $watchProviders['results'];
@@ -256,6 +261,8 @@ class MovieController extends AbstractController
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
+            'from' => $from,
+            'breadcrumb' => $breadcrumb,
             'overviewWasEmpty' => $overviewWasEmpty,
             'recommendations' => $recommendations,
             'dates' => $releaseDates,
@@ -273,6 +280,191 @@ class MovieController extends AbstractController
             'imageConfig' => $imageConfig,
             'locale' => $locale,
         ]);
+    }
+
+    #[Route(['fr' => '/{_locale}/film/collection/{mid}/{id}', 'en' => '/{_locale}/movie/collection/{mid}/{id}', 'de' => '/{_locale}/filme/sammlung/{mid}/{id}', 'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function movieCollection(Request $request, $mid, $id): Response
+    {
+        $from = $request->query->get('from');
+        $locale = $request->getLocale();
+        $standing = $this->tmdbService->getMovieCollection($id, $locale);
+        $collection = json_decode($standing, true);
+        $standing = $this->tmdbService->getMovie($mid, $locale);
+        $movie = json_decode($standing, true);
+
+        $genresEntity = $this->genreRepository->findAll();
+        $genres = [];
+        foreach ($genresEntity as $genre) {
+            $genres[$genre->getGenreId()] = $genre->getName();
+        }
+        foreach ($collection['parts'] as &$part) {
+            $part['genres'] = [];
+            foreach ($part['genre_ids'] as $genre_id) {
+                $genre = ['id' => $genre_id, 'name' => $genres[$genre_id]];
+                $part['genres'][] = $genre;
+            }
+        }
+
+        $imageConfig = $this->imageConfiguration->getConfig();
+        $breadcrumb = $this->breadcrumb($from, $movie, $collection);
+
+        return $this->render('movie/collection.html.twig', [
+            'movie' => $movie,
+            'from' => $from,
+            'breadcrumb' => $breadcrumb,
+            'collection' => $collection,
+            'userMovies' => $this->getUserMovieIds(),
+            'genres' => $genres,
+            'user' => $this->getUser(),
+            'imageConfig' => $imageConfig,
+            'locale' => $request->getLocale(),
+        ]);
+
+    }
+
+    #[Route(['fr' => '/{_locale}/films/recherche/par/genre/{genres}/{page}', 'en' => '/{_locale}/movies/by/genre/{genres}/{page}', 'de' => '/{_locale}/filmen/nach/genre/{genres}/{page}', 'es' => '/{_locale}/peliculas/por/genero/{genres}/{page}'], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    public function moviesByGenres(Request $request, $page, $genres): Response
+    {
+        $locale = $request->getLocale();
+        $standing = $this->tmdbService->moviesByGenres($page, $genres, $locale);
+        $discovers = json_decode($standing, true);
+        $standing = $this->tmdbService->getGenres($locale);
+        $possibleGenres = json_decode($standing, true);
+
+        $currentGenres = explode(',', $genres); // "Action,Adventure" => ['Action', 'Adventure']
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        return $this->render('movie/genre.html.twig', [
+            'discovers' => $discovers,
+            'userMovies' => $this->getUserMovieIds(),
+            'genres' => $genres,
+            'possible_genres' => $possibleGenres,
+            'current_genres' => $currentGenres,
+            'imageConfig' => $imageConfig,
+            'dRoute' => 'app_movie',
+            'from' => 'movies_by_genre',
+            'user' => $this->getUser(),
+            'locale' => $locale,
+        ]);
+    }
+
+    #[Route(['fr' => '/{_locale}/films/recherche/par/date/{date}/{page}', 'en' => '/{_locale}/movies/by/date/{date}/{page}', 'de' => '/{_locale}/filmen/nach/datum/{date}/{page}', 'es' => '/{_locale}/peliculas/por/fecha/{date}/{page}'], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    public function moviesByDate(Request $request, $page, $date): Response
+    {
+        $locale = $request->getLocale();
+        $standing = $this->tmdbService->moviesByDate($page, $date, $locale);
+        $discovers = json_decode($standing, true);
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        $now = intval(date("Y"));
+        $years = [];
+        for ($i = $now; $i >= 1874; $i--) {
+            $years[] = $i;
+        }
+
+        return $this->render('movie/date.html.twig', [
+            'discovers' => $discovers,
+            'userMovies' => $this->getUserMovieIds(),
+            'date' => $date,
+            'years' => $years,
+            'imageConfig' => $imageConfig,
+            'user' => $this->getUser(),
+            'dRoute' => 'app_movie',
+            'from' => 'movies_by_date',
+            'locale' => $locale,
+        ]);
+    }
+
+    #[Route(['fr' => '/{_locale}/films/recherche/par/nom/{page}', 'en' => '/{_locale}/movies/search/{page}', 'de' => '/{_locale}/filmen/suche/{page}', 'es' => '/{_locale}/peliculas/buscar/{page}'], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    public function moviesSearch(Request $request, $page): Response
+    {
+        $locale = $request->getLocale();
+        $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
+        $query = $request->query->get('query');
+        $year = $request->query->get('year');
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        $form = $this->createForm(MovieByNameType::class, ['query' => $query, 'year' => $year]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $form->getData();
+            $query = $result['query'];
+            $year = $result['year'];
+            // Si une nouvelle recherche est lancée, on retourne à la première page
+            $page = 1;
+        }
+        if ($query && strlen($query)) {
+            $standing = $this->tmdbService->moviesSearch($page, $query, $year, $locale);
+            $discovers = json_decode($standing, true);
+        }
+
+        $action = $this->generateUrl('app_movies_search', ['query' => $query, 'year' => $year]);
+
+        return $this->render('movie/search.html.twig', [
+            'form' => $form->createView(),
+            'action' => $action,
+            'query' => $query,
+            'year' => $year,
+            'page' => $page,
+            'discovers' => $discovers,
+            'userMovies' => $this->getUserMovieIds(),
+            'imageConfig' => $imageConfig,
+            'user' => $this->getUser(),
+            'dRoute' => 'app_movie',
+            'from' => 'movies_search',
+            'locale' => $locale,
+        ]);
+    }
+
+    public function breadcrumb($from, $movie = null, $movieCollection = null, $movieCollectionItem = null): array
+    {
+//        dump(['from' => $from, 'movie' => $movie, 'movieCollection' => $movieCollection, 'movieCollectionItem' => $movieCollectionItem]);
+        $baseUrl = $this->generateUrl($from);
+        switch ($from) {
+            case 'app_personal_movies':
+                $baseName = $this->translator->trans("My Movies");
+                break;
+            case 'movies_by_genre':
+                $baseName = $this->translator->trans("Search by Genre");
+                break;
+            case 'app_movies_by_date':
+                $baseName = $this->translator->trans("Search by Date");
+                break;
+            case 'app_movies_search':
+                $baseName = $this->translator->trans("Search by Name");
+                break;
+            case 'app_movie_list':
+            default:
+                $baseName = $this->translator->trans("Movies");
+                break;
+        }
+        $breadcrumb = [
+            [
+                'name' => $baseName,
+                'url' => $baseUrl,
+            ]
+        ];
+
+        if ($movie) {
+            $breadcrumb[] = [
+                'name' => $movie['title'],
+                'url' => $this->generateUrl("app_movie", ['id' => $movie['id']]) . "?from=$from",
+            ];
+        }
+        if ($movieCollection) {
+            $breadcrumb[] = [
+                'name' => $movieCollection['name'],
+                'url' => $this->generateUrl("app_movie_collection", ['mid' => $movie['id'], 'id' => $movieCollection['id']]) . "?from=$from",
+            ];
+        }
+        if ($movieCollectionItem) {
+            $breadcrumb[] = [
+                'name' => $movieCollectionItem['title'],
+                'url' => $this->generateUrl("app_movie", ['id' => $movieCollectionItem['id']]) . "?from=$from",
+            ];
+        }
+
+        return $breadcrumb;
     }
 
     public function getLocaleDates($dates, $countries, $locale): array
@@ -427,133 +619,6 @@ class MovieController extends AbstractController
         $this->movieRepository->save($movie, true);
 
         return $this->json(['message' => 'ok']);
-    }
-
-    #[Route(['fr' => '/{_locale}/film/collection/{mid}/{id}', 'en' => '/{_locale}/movie/collection/{mid}/{id}', 'de' => '/{_locale}/filme/sammlung/{mid}/{id}', 'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function movieCollection(Request $request, $mid, $id): Response
-    {
-        $locale = $request->getLocale();
-        $standing = $this->tmdbService->getMovieCollection($id, $locale);
-        $collection = json_decode($standing, true);
-        $standing = $this->tmdbService->getMovie($mid, $locale);
-        $movie = json_decode($standing, true);
-
-        $genresEntity = $this->genreRepository->findAll();
-        $genres = [];
-        foreach ($genresEntity as $genre) {
-            $genres[$genre->getGenreId()] = $genre->getName();
-        }
-        foreach ($collection['parts'] as &$part) {
-            $part['genres'] = [];
-            foreach ($part['genre_ids'] as $genre_id) {
-                $genre = ['id' => $genre_id, 'name' => $genres[$genre_id]];
-                $part['genres'][] = $genre;
-            }
-        }
-
-        $imageConfig = $this->imageConfiguration->getConfig();
-
-        return $this->render('movie/collection.html.twig', [
-            'movie' => $movie,
-            'collection' => $collection,
-            'userMovies' => $this->getUserMovieIds(),
-            'genres' => $genres,
-            'user' => $this->getUser(),
-            'imageConfig' => $imageConfig,
-            'locale' => $request->getLocale(),
-        ]);
-
-    }
-
-    #[Route(['fr' => '/{_locale}/films/recherche/par/genre/{genres}/{page}', 'en' => '/{_locale}/movies/by/genre/{genres}/{page}', 'de' => '/{_locale}/filmen/nach/genre/{genres}/{page}', 'es' => '/{_locale}/peliculas/por/genero/{genres}/{page}'], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesByGenres(Request $request, $page, $genres): Response
-    {
-        $locale = $request->getLocale();
-        $standing = $this->tmdbService->moviesByGenres($page, $genres, $locale);
-        $discovers = json_decode($standing, true);
-        $standing = $this->tmdbService->getGenres($locale);
-        $possibleGenres = json_decode($standing, true);
-
-        $currentGenres = explode(',', $genres); // "Action,Adventure" => ['Action', 'Adventure']
-        $imageConfig = $this->imageConfiguration->getConfig();
-
-        return $this->render('movie/genre.html.twig', [
-            'discovers' => $discovers,
-            'userMovies' => $this->getUserMovieIds(),
-            'genres' => $genres,
-            'possible_genres' => $possibleGenres,
-            'current_genres' => $currentGenres,
-            'imageConfig' => $imageConfig,
-            'dRoute' => 'app_movie',
-            'user' => $this->getUser(),
-            'locale' => $locale,
-        ]);
-    }
-
-    #[Route(['fr' => '/{_locale}/films/recherche/par/date/{date}/{page}', 'en' => '/{_locale}/movies/by/date/{date}/{page}', 'de' => '/{_locale}/filmen/nach/datum/{date}/{page}', 'es' => '/{_locale}/peliculas/por/fecha/{date}/{page}'], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesByDate(Request $request, $page, $date): Response
-    {
-        $locale = $request->getLocale();
-        $standing = $this->tmdbService->moviesByDate($page, $date, $locale);
-        $discovers = json_decode($standing, true);
-        $imageConfig = $this->imageConfiguration->getConfig();
-
-        $now = intval(date("Y"));
-        $years = [];
-        for ($i = $now; $i >= 1874; $i--) {
-            $years[] = $i;
-        }
-
-        return $this->render('movie/date.html.twig', [
-            'discovers' => $discovers,
-            'userMovies' => $this->getUserMovieIds(),
-            'date' => $date,
-            'years' => $years,
-            'imageConfig' => $imageConfig,
-            'user' => $this->getUser(),
-            'dRoute' => 'app_movie',
-            'locale' => $locale,
-        ]);
-    }
-
-    #[Route(['fr' => '/{_locale}/films/recherche/par/nom/{page}', 'en' => '/{_locale}/movies/search/{page}', 'de' => '/{_locale}/filmen/suche/{page}', 'es' => '/{_locale}/peliculas/buscar/{page}'], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
-    public function moviesSearch(Request $request, $page): Response
-    {
-        $locale = $request->getLocale();
-        $discovers = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
-        $query = $request->query->get('query');
-        $year = $request->query->get('year');
-        $imageConfig = $this->imageConfiguration->getConfig();
-
-        $form = $this->createForm(MovieByNameType::class, ['query' => $query, 'year' => $year]);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $result = $form->getData();
-            $query = $result['query'];
-            $year = $result['year'];
-            // Si une nouvelle recherche est lancée, on retourne à la première page
-            $page = 1;
-        }
-        if ($query && strlen($query)) {
-            $standing = $this->tmdbService->moviesSearch($page, $query, $year, $locale);
-            $discovers = json_decode($standing, true);
-        }
-
-        $action = $this->generateUrl('app_movies_search', ['query' => $query, 'year' => $year]);
-
-        return $this->render('movie/search.html.twig', [
-            'form' => $form->createView(),
-            'action' => $action,
-            'query' => $query,
-            'year' => $year,
-            'page' => $page,
-            'discovers' => $discovers,
-            'userMovies' => $this->getUserMovieIds(),
-            'imageConfig' => $imageConfig,
-            'user' => $this->getUser(),
-            'dRoute' => 'app_movie',
-            'locale' => $locale,
-        ]);
     }
 
     public function getUserMovieIds(): array

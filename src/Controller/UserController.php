@@ -279,7 +279,7 @@ class UserController extends AbstractController
             'imageConfig' => $imageConfig,
             'user' => $user,
             'dRoute' => 'app_movie',
-            'from' => 'user movies',
+            'from' => 'app_personal_movies',
             'collections' => $collectionRepository->findBy(['user' => $user]),
             'settings' => $settings,
         ]);

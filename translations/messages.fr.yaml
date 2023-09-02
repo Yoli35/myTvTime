@@ -351,6 +351,7 @@ Films: Films
 Belongs to Collection: Collection
 Collection: Collection
 See the Collection: Voir la collection
+No banner: Pas de bannière
 
 # Tv Show Detail
 Name: Nom
@@ -904,6 +905,8 @@ Supervising Producer.he: Producteur délégué
 Supervising Producer.she: Productrice déléguée
 Supervising Sound Editor.he: Superviseur montage sonore
 Supervising Sound Editor.she: Superviseuse montage sonore
+Supervising Sound Effects Editor.he: Superviseur montage effets sonores
+Supervising Sound Effects Editor.she: Superviseuse montage effets sonores
 Thanks.he: Remerciements
 Thanks.she: Remerciements
 Theme Song Performance.he: Interprétation thème
