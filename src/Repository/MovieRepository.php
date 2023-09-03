@@ -109,7 +109,7 @@ class MovieRepository extends ServiceEntityRepository
     public function findAllUserMovies($userId): array
     {
         $sql = 'SELECT * FROM `movie` t0 '
-            . 'INNER JOIN `user_movie` t1 ON t1.`user_movie_id`=t0.`id` '
+            . 'INNER JOIN `user_movie` t1 ON t1.`movie_id`=t0.`id` '
             . 'WHERE t1.`user_id` = ' . $userId;
 
         $em = $this->registry->getManager();

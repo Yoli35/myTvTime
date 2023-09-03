@@ -39,7 +39,12 @@ class MovieController extends AbstractController
     {
     }
 
-    #[Route(['fr' => '/{_locale}/films/', 'en' => '/{_locale}/movies/', 'de' => '/{_locale}/filme/', 'es' => '/{_locale}/peliculas/'], name: 'app_movie_list', requirements: ['_locale' => 'fr|en|de|es', 'page' => 1, 'sort_by' => 'popularity.desc'])]
+    #[Route([
+        'fr' => '/{_locale}/films/',
+        'en' => '/{_locale}/movies/',
+        'de' => '/{_locale}/filme/',
+        'es' => '/{_locale}/peliculas/'
+    ], name: 'app_movie_list', requirements: ['_locale' => 'fr|en|de|es', 'page' => 1, 'sort_by' => 'popularity.desc'])]
     public function index(Request $request): Response
     {
         $imageConfiguration = $this->imageConfiguration;
@@ -158,7 +163,12 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route(['fr' => '/{_locale}/film/{id}', 'en' => '/{_locale}/movie/{id}', 'de' => '/{_locale}/filme/{id}', 'es' => '/{_locale}/pelicula/{id}'], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route([
+        'fr' => '/{_locale}/film/{id}',
+        'en' => '/{_locale}/movie/{id}',
+        'de' => '/{_locale}/filme/{id}',
+        'es' => '/{_locale}/pelicula/{id}'
+    ], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
     public function show(Request $request, $id): Response
     {
 //        $this->logService->log($request, $this->getUser());
@@ -282,7 +292,12 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route(['fr' => '/{_locale}/film/collection/{mid}/{id}', 'en' => '/{_locale}/movie/collection/{mid}/{id}', 'de' => '/{_locale}/filme/sammlung/{mid}/{id}', 'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
+    #[Route([
+        'fr' => '/{_locale}/film/collection/{mid}/{id}',
+        'en' => '/{_locale}/movie/collection/{mid}/{id}',
+        'de' => '/{_locale}/filme/sammlung/{mid}/{id}',
+        'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'
+    ], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
     public function movieCollection(Request $request, $mid, $id): Response
     {
         $from = $request->query->get('from');
@@ -322,7 +337,12 @@ class MovieController extends AbstractController
 
     }
 
-    #[Route(['fr' => '/{_locale}/films/recherche/par/genre/{genres}/{page}', 'en' => '/{_locale}/movies/by/genre/{genres}/{page}', 'de' => '/{_locale}/filmen/nach/genre/{genres}/{page}', 'es' => '/{_locale}/peliculas/por/genero/{genres}/{page}'], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    #[Route([
+        'fr' => '/{_locale}/films/recherche/par/genre/{genres}/{page}',
+        'en' => '/{_locale}/movies/by/genre/{genres}/{page}',
+        'de' => '/{_locale}/filmen/nach/genre/{genres}/{page}',
+        'es' => '/{_locale}/peliculas/por/genero/{genres}/{page}'
+    ], name: 'app_movies_by_genre', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByGenres(Request $request, $page, $genres): Response
     {
         $locale = $request->getLocale();
@@ -348,7 +368,12 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route(['fr' => '/{_locale}/films/recherche/par/date/{date}/{page}', 'en' => '/{_locale}/movies/by/date/{date}/{page}', 'de' => '/{_locale}/filmen/nach/datum/{date}/{page}', 'es' => '/{_locale}/peliculas/por/fecha/{date}/{page}'], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    #[Route([
+        'fr' => '/{_locale}/films/recherche/par/date/{date}/{page}',
+        'en' => '/{_locale}/movies/by/date/{date}/{page}',
+        'de' => '/{_locale}/filmen/nach/datum/{date}/{page}',
+        'es' => '/{_locale}/peliculas/por/fecha/{date}/{page}'
+    ], name: 'app_movies_by_date', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesByDate(Request $request, $page, $date): Response
     {
         $locale = $request->getLocale();
@@ -375,7 +400,12 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route(['fr' => '/{_locale}/films/recherche/par/nom/{page}', 'en' => '/{_locale}/movies/search/{page}', 'de' => '/{_locale}/filmen/suche/{page}', 'es' => '/{_locale}/peliculas/buscar/{page}'], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
+    #[Route([
+        'fr' => '/{_locale}/films/recherche/par/nom/{page}',
+        'en' => '/{_locale}/movies/search/{page}',
+        'de' => '/{_locale}/filmen/suche/{page}',
+        'es' => '/{_locale}/peliculas/buscar/{page}'
+    ], name: 'app_movies_search', requirements: ['_locale' => 'fr|en|de|es'], defaults: ['page' => 1])]
     public function moviesSearch(Request $request, $page): Response
     {
         $locale = $request->getLocale();
@@ -416,28 +446,191 @@ class MovieController extends AbstractController
         ]);
     }
 
+    #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_movie_toggle_favorite', methods: 'GET')]
+    public function toggleFavorite(bool $fav, int $userId, int $mediaId): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($fav) {
+            $favorite = new Favorite($userId, $mediaId, 'movie');
+            $this->favoriteRepository->save($favorite, true);
+            $message = $this->translator->trans("Successfully added to favorites", [], null, $user->getPreferredLanguage());
+            $class = 'added';
+        } else {
+            $favorite = $this->favoriteRepository->findOneBy(['userId' => $userId, 'mediaId' => $mediaId, 'type' => 'movie']);
+            $this->favoriteRepository->remove($favorite, true);
+            $message = $this->translator->trans("Successfully removed from favorites", [], null, $user->getPreferredLanguage());
+            $class = 'removed';
+        }
+
+        return $this->json(['message' => $message, 'class' => $class]);
+    }
+
+    #[Route('/overview/save', name: 'app_movie_overview_save', methods: 'GET')]
+    function saveOverview(Request $request): Response
+    {
+        $overview = $request->query->get('overview');
+        $id = $request->query->getInt('id');
+
+        $movie = $this->movieRepository->find($id);
+
+        switch ($request->getLocale()) {
+            case 'fr':
+                $movie->setOverviewFr($overview);
+                break;
+            case 'en':
+                $movie->setOverviewEn($overview);
+                break;
+            case 'de':
+                $movie->setOverviewDe($overview);
+                break;
+            case 'es':
+                $movie->setOverviewEs($overview);
+                break;
+        }
+
+        $this->movieRepository->save($movie, true);
+
+        return $this->json(['message' => 'ok', 'overview' => $overview]);
+    }
+
+    #[Route('/overview/delete', name: 'app_movie_overview_delete', methods: 'GET')]
+    function deleteOverview(Request $request): Response
+    {
+        $id = $request->query->getInt('id');
+
+        $movie = $this->movieRepository->find($id);
+
+        switch ($request->getLocale()) {
+            case 'fr':
+                $movie->setOverviewFr(null);
+                break;
+            case 'en':
+                $movie->setOverviewEn(null);
+                break;
+            case 'de':
+                $movie->setOverviewDe(null);
+                break;
+            case 'es':
+                $movie->setOverviewEs(null);
+                break;
+        }
+
+        $this->movieRepository->save($movie, true);
+
+        return $this->json(['message' => 'ok']);
+    }
+
+    #[Route('/movie/collection/toggle', name: 'app_movie_collection_toggle')]
+    public function toggleMovieToCollection(Request $request): Response
+    {
+        $collectionId = $request->query->getInt("c");
+        $action = $request->query->get("a");
+        $movieId = $request->query->getInt("m");
+
+        $collection = $this->movieCollectionRepository->find($collectionId);
+        $movie = $this->movieRepository->findOneBy(["movieDbId" => $movieId]);
+
+        if ($action == "a") $collection->addMovie($movie);
+        if ($action == "r") $collection->removeMovie($movie);
+        $this->movieCollectionRepository->add($collection, true);
+
+        $message = "The movie « movie_name » has been " . ($action == "a" ? "added to" : "removed from") . " your collection « collection_name ».";
+        $message = $this->translator->trans($message, ["movie_name" => $movie->getTitle(), "collection_name" => $collection->getTitle()], "messages");
+        return $this->json(["message" => $message]);
+    }
+
+    #[Route('/{_locale}/profile', name: 'profile_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
+    public function getPersonInfos(Request $request, TMDBService $callTmdbService): JsonResponse
+    {
+        $id = $request->query->get('id');
+        $locale = $request->query->get('locale');
+        $standing = $callTmdbService->getPerson($id, $locale);
+        $person = json_decode($standing, true);
+        $department = ['fr' => ['Acting' => ['Acteur', 'Actrice', 'Acteur'], 'ADR Mixer' => ['Mixeur ADR (post-synchro)', 'Mixer ADR (post-synchro)', 'Mixer ADR (post-synchro)'], 'Art Direction' => ['Direction artistique', 'Direction artistique', 'Direction artistique'], 'Assistant Director' => ['Assistant réalisateur', 'Assistante réalisatrice', 'Assistant réalisateur'], 'Casting' => ['Distribution', 'Distribution', 'Distribution'], 'Costume Design' => ['Créateur de costumes', 'Créatrice de costumes', 'Créateur de costumes'], 'Costume Supervisor' => ['Superviseur des costumes', 'Superviseuse des costumes', 'Superviseur des costumes'], 'Director of Photography' => ['Directeur de la photographie', 'Directrice de la photographie', 'Directeur de la photographie'], 'Editing' => ['Édition', 'Édition', 'Édition'], 'Editor' => ['Éditeur', 'Éditrice', 'Éditeur'], 'Executive Producer' => ['Producteur délégué', 'Productrice déléguée', 'Producteur délégué'], 'Foley Artist' => ['Bruiteur', 'Bruiteuse', 'Bruiteur'], 'Line producer' => ['Producteur exécutif', 'Productrice exécutive', 'Producteur exécutif'], 'Makeup Artist' => ['Maquilleur', 'Maquilleuse', 'Maquilleur'], 'Music Supervisor' => ['Superviseur musical', 'Superviseuse musical', 'Superviseur musical'], 'Original Music Composer' => ['Compositeur de musique originale', 'Compositrice de musique originale', 'Compositeur de musique originale'], 'Producer' => ['Producteur', 'Productrice', 'Producteur'], 'Production Design' => ['Conception de production', 'Conception de production', 'Conception de production'], 'Screenplay' => ['Scénario', 'Scénario', 'Scénario'], 'Screenstory' => ['Scénario', 'Scénario', 'Scénario'], 'Set Decoration' => ['Décorateur', 'Décoratrice', 'Décorateur'], 'Set Designer' => ['Scénographe', 'Scénographe', 'Scénographe'], 'Set Dresser' => ['Habilleur', 'Habilleuse', 'Habilleur'], 'Set Manager' => ['Régisseur', 'Régisseuse', 'Régisseur'], 'Sound' => ['Son', 'Son', 'Son'], 'Sound Effects Editor' => ['Éditeur d\'effets sonores', 'Éditeur d\'effets sonores', 'Éditeur d\'effets sonores'], 'Sound Mixer' => ['Ingénieur du son', 'Ingénieure du son', 'Ingénieur du son'], 'Sound Re-Recording Mixer' => ['Mixeur son', 'Mixeuse son', 'Mixeur son'], 'Still Photographer' => ['Photographe de plateau', 'Photographe de plateau', 'Photographe de plateau'], 'Stunt' => ['Cascadeur', 'Cascadeuse', 'Cascadeur'], 'Supervising Art Director' => ['Directeur artistique superviseur', 'Directrice artistique superviseure', 'Directeur artistique superviseur'], 'Supervising Sound Editor' => ['Supervision du montage son', 'Supervision du montage son', 'Supervision du montage son'], 'VFX Artist' => ['Artiste d\'effets visuels', 'Artiste d\'effets visuels', 'Artiste d\'effets visuels'], 'Visual Effects' => ['Effets visuels', 'Effets visuels', 'Effets visuels'], 'Visual Effects Producer' => ['Producteur Effets visuels', 'Producteur Effets visuels', 'Producteur Effets visuels'], 'Visual Effects Supervisor' => ['Superviseur Effets visuels', 'Superviseuse Effets visuels', 'Superviseur Effets visuels'], 'Writing' => ['Écriture', 'Écriture', 'Écriture']], 'de' => ['Acting' => ['Schauspieler', 'Schauspielerin', 'Schauspieler'], 'ADR Mixer' => ['ADR-Mix (post-synchro)', 'ADR-Mix (post-synchro)', 'ADR-Mix (post-synchro)'], 'Art Direction' => ['Künstlerische Leitung ', 'Künstlerische Leitung ', 'Künstlerische Leitung '], 'Assistant Director' => ['Regieassistent ', 'Regieassistentin ', 'Regieassistent '], 'Casting' => ['Casting', 'Casting', 'Casting'], 'Costume Design' => ['Kostümbildner', 'Kostümbildnerin', 'Kostümbildner'], 'Costume Supervisor' => ['Supervisor für Kostüme', 'Supervisorin für Kostüme', 'Supervisor für Kostüme'], 'Director of Photography' => ['Direktor für Fotografie', 'Direktorin für Fotografie', 'Direktor für Fotografie'], 'Editing' => ['', '', ''], 'Editor' => ['', '', ''], 'Executive Producer' => ['', '', ''], 'Foley Artist' => ['', '', ''], 'Makeup Artist' => ['', '', ''], 'Music Supervisor' => ['', '', ''], 'Original Music Composer' => ['', '', ''], 'Producer' => ['', '', ''], 'Production Design' => ['', '', ''], 'Screenplay' => ['', '', ''], 'Screenstory' => ['', '', ''], 'Set Decoration' => ['', '', ''], 'Set Designer' => ['', '', ''], 'Set Dresser' => ['', '', ''], 'Sound Effects Editor' => ['', '', ''], 'Sound Mixer' => ['', '', ''], 'Sound Re-Recording Mixer' => ['', '', ''], 'Still Photographer' => ['', '', ''], 'Supervising Art Director' => ['', '', ''], 'Supervising Sound Editor' => ['', '', ''], 'VFX Artist' => ['', '', ''], 'Visual Effects' => ['', '', ''], 'Visual Effects Producer' => ['', '', ''], 'Visual Effects Supervisor' => ['', '', ''],], 'es' => ['Acting' => ['Actor', 'Actress', 'Actor'], 'ADR Mixer' => ['Mezcla ADR (post-sincronización)', 'Mezcla ADR (post-sincronización)', 'Mezcla ADR (post-sincronización)'], 'Art Direction' => ['Dirección artística', 'Dirección artística', 'Dirección artística'], 'Assistant Director' => ['Asistente de dirección', 'Asistente de dirección', 'Asistente de dirección'], 'Casting' => ['Casting', 'Casting', 'Casting'], 'Costume Design' => ['Diseñador de vestuario', 'Diseñadora de vestuario', 'Diseñador de vestuario'], 'Costume Supervisor' => ['Supervisor de vestuario', 'Supervisora de vestuario', 'Supervisor de vestuario'], 'Director of Photography' => ['Director de fotografía', 'Director de fotografía', 'Director de fotografía'], 'Editing' => ['', '', ''], 'Editor' => ['', '', ''], 'Executive Producer' => ['', '', ''], 'Foley Artist' => ['', '', ''], 'Makeup Artist' => ['', '', ''], 'Music Supervisor' => ['', '', ''], 'Original Music Composer' => ['', '', ''], 'Producer' => ['', '', ''], 'Production Design' => ['', '', ''], 'Screenplay' => ['', '', ''], 'Screenstory' => ['', '', ''], 'Set Decoration' => ['', '', ''], 'Set Designer' => ['', '', ''], 'Set Dresser' => ['', '', ''], 'Sound Effects Editor' => ['', '', ''], 'Sound Mixer' => ['', '', ''], 'Sound Re-Recording Mixer' => ['', '', ''], 'Still Photographer' => ['', '', ''], 'Supervising Art Director' => ['', '', ''], 'Supervising Sound Editor' => ['', '', ''], 'VFX Artist' => ['', '', ''], 'Visual Effects' => ['', '', ''], 'Visual Effects Producer' => ['', '', ''], 'Visual Effects Supervisor' => ['', '', ''],],];
+
+        return $this->json(['success' => true, 'person' => $person, 'department' => $department, 'locale' => $locale,]);
+    }
+
+    #[Route('/movie/add', name: 'app_movie_add')]
+    public function addMovieToUser(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+        $locale = $request->getLocale();
+
+        $userMovie = $this->addMovie($user, $movieId, $locale);
+        return $this->json(['title' => $userMovie->getTitle()]);
+    }
+
+    #[Route('/movie/remove', name: 'app_movie_remove')]
+    public function removeMovieFromUser(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+
+        $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
+
+        if ($userMovie) {
+            $userMovie->removeUser($user);
+            $this->movieRepository->save($userMovie, true);
+        }
+
+        return $this->json(['/movie/remove' => 'success']);
+    }
+
+    #[Route('/movie/set/rating', name: 'app_movie_set_rating')]
+    public function setMovieRating(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+        $movie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
+        $vote = $request->query->get('rating');
+        $result = "update";
+
+        $rating = $this->ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
+
+        if (!$rating) {
+            $rating = new Rating();
+            $rating->setUser($user);
+            $rating->setMovie($movie);
+            $result = "create";
+        }
+        $rating->setValue($vote);
+        $this->ratingRepository->add($rating, true);
+
+        return $this->json(['result' => $result]);
+    }
+
+    #[Route('/movie/get/rating', name: 'app_movie_get_rating')]
+    public function getMovieRating(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $movieId = $request->query->get('movie_db_id');
+        $movie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
+        $rating = $this->ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
+
+        return $this->json(['rating' => $rating ? $rating->getValue() : 0]);
+    }
+
     public function breadcrumb($from, $movie = null, $movieCollection = null, $movieCollectionItem = null): array
     {
 //        dump(['from' => $from, 'movie' => $movie, 'movieCollection' => $movieCollection, 'movieCollectionItem' => $movieCollectionItem]);
+        /* TODO: User movies search field: from => app_personal_movies */
+        $from = $from ?? 'app_movie_list';
         $baseUrl = $this->generateUrl($from);
-        switch ($from) {
-            case 'app_personal_movies':
-                $baseName = $this->translator->trans("My Movies");
-                break;
-            case 'movies_by_genre':
-                $baseName = $this->translator->trans("Search by Genre");
-                break;
-            case 'app_movies_by_date':
-                $baseName = $this->translator->trans("Search by Date");
-                break;
-            case 'app_movies_search':
-                $baseName = $this->translator->trans("Search by Name");
-                break;
-            case 'app_movie_list':
-            default:
-                $baseName = $this->translator->trans("Movies");
-                break;
-        }
+        $baseName = match ($from) {
+            'app_personal_movies' => $this->translator->trans("My Movies"),
+            'movies_by_genre' => $this->translator->trans("Search by Genre"),
+            'app_movies_by_date' => $this->translator->trans("Search by Date"),
+            'app_movies_search' => $this->translator->trans("Search by Name"),
+            default => $this->translator->trans("Movies"),
+        };
         $breadcrumb = [
             [
                 'name' => $baseName,
@@ -545,82 +738,6 @@ class MovieController extends AbstractController
         return $sortedCrew;
     }
 
-    #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_movie_toggle_favorite', methods: 'GET')]
-    public function toggleFavorite(bool $fav, int $userId, int $mediaId): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-
-        if ($fav) {
-            $favorite = new Favorite($userId, $mediaId, 'movie');
-            $this->favoriteRepository->save($favorite, true);
-            $message = $this->translator->trans("Successfully added to favorites", [], null, $user->getPreferredLanguage());
-            $class = 'added';
-        } else {
-            $favorite = $this->favoriteRepository->findOneBy(['userId' => $userId, 'mediaId' => $mediaId, 'type' => 'movie']);
-            $this->favoriteRepository->remove($favorite, true);
-            $message = $this->translator->trans("Successfully removed from favorites", [], null, $user->getPreferredLanguage());
-            $class = 'removed';
-        }
-
-        return $this->json(['message' => $message, 'class' => $class]);
-    }
-
-    #[Route('/overview/save', name: 'app_movie_overview_save', methods: 'GET')]
-    function saveOverview(Request $request): Response
-    {
-        $overview = $request->query->get('overview');
-        $id = $request->query->getInt('id');
-
-        $movie = $this->movieRepository->find($id);
-
-        switch ($request->getLocale()) {
-            case 'fr':
-                $movie->setOverviewFr($overview);
-                break;
-            case 'en':
-                $movie->setOverviewEn($overview);
-                break;
-            case 'de':
-                $movie->setOverviewDe($overview);
-                break;
-            case 'es':
-                $movie->setOverviewEs($overview);
-                break;
-        }
-
-        $this->movieRepository->save($movie, true);
-
-        return $this->json(['message' => 'ok', 'overview' => $overview]);
-    }
-
-    #[Route('/overview/delete', name: 'app_movie_overview_delete', methods: 'GET')]
-    function deleteOverview(Request $request): Response
-    {
-        $id = $request->query->getInt('id');
-
-        $movie = $this->movieRepository->find($id);
-
-        switch ($request->getLocale()) {
-            case 'fr':
-                $movie->setOverviewFr(null);
-                break;
-            case 'en':
-                $movie->setOverviewEn(null);
-                break;
-            case 'de':
-                $movie->setOverviewDe(null);
-                break;
-            case 'es':
-                $movie->setOverviewEs(null);
-                break;
-        }
-
-        $this->movieRepository->save($movie, true);
-
-        return $this->json(['message' => 'ok']);
-    }
-
     public function getUserMovieIds(): array
     {
         /** @var User $user */
@@ -635,35 +752,32 @@ class MovieController extends AbstractController
         return $userMovieIds;
     }
 
-    #[Route('/movie/collection/toggle', name: 'app_movie_collection_toggle')]
-    public function toggleMovieToCollection(Request $request): Response
+    public function addMovie($user, $movieId, $locale): Movie
     {
-        $collectionId = $request->query->getInt("c");
-        $action = $request->query->get("a");
-        $movieId = $request->query->getInt("m");
+        $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
 
-        $collection = $this->movieCollectionRepository->find($collectionId);
-        $movie = $this->movieRepository->findOneBy(["movieDbId" => $movieId]);
+        if (!$userMovie) {
+            $standing = $this->tmdbService->getMovie($movieId, $locale);
+            $movieDetail = json_decode($standing, true);
 
-        if ($action == "a") $collection->addMovie($movie);
-        if ($action == "r") $collection->removeMovie($movie);
-        $this->movieCollectionRepository->add($collection, true);
+            $userMovie = new Movie();
+            $this->hydrateMovie($userMovie, $movieDetail);
+        }
+        $userMovie->addUser($user);
+        $this->movieRepository->save($userMovie, true);
 
-        $message = "The movie « movie_name » has been " . ($action == "a" ? "added to" : "removed from") . " your collection « collection_name ».";
-        $message = $this->translator->trans($message, ["movie_name" => $movie->getTitle(), "collection_name" => $collection->getTitle()], "messages");
-        return $this->json(["message" => $message]);
+        return $userMovie;
     }
 
-    #[Route('/{_locale}/profile', name: 'profile_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
-    public function getPersonInfos(Request $request, TMDBService $callTmdbService): JsonResponse
+    public function hydrateMovie($userMovie, $movieDetail)
     {
-        $id = $request->query->get('id');
-        $locale = $request->query->get('locale');
-        $standing = $callTmdbService->getPerson($id, $locale);
-        $person = json_decode($standing, true);
-        $department = ['fr' => ['Acting' => ['Acteur', 'Actrice', 'Acteur'], 'ADR Mixer' => ['Mixeur ADR (post-synchro)', 'Mixer ADR (post-synchro)', 'Mixer ADR (post-synchro)'], 'Art Direction' => ['Direction artistique', 'Direction artistique', 'Direction artistique'], 'Assistant Director' => ['Assistant réalisateur', 'Assistante réalisatrice', 'Assistant réalisateur'], 'Casting' => ['Distribution', 'Distribution', 'Distribution'], 'Costume Design' => ['Créateur de costumes', 'Créatrice de costumes', 'Créateur de costumes'], 'Costume Supervisor' => ['Superviseur des costumes', 'Superviseuse des costumes', 'Superviseur des costumes'], 'Director of Photography' => ['Directeur de la photographie', 'Directrice de la photographie', 'Directeur de la photographie'], 'Editing' => ['Édition', 'Édition', 'Édition'], 'Editor' => ['Éditeur', 'Éditrice', 'Éditeur'], 'Executive Producer' => ['Producteur délégué', 'Productrice déléguée', 'Producteur délégué'], 'Foley Artist' => ['Bruiteur', 'Bruiteuse', 'Bruiteur'], 'Line producer' => ['Producteur exécutif', 'Productrice exécutive', 'Producteur exécutif'], 'Makeup Artist' => ['Maquilleur', 'Maquilleuse', 'Maquilleur'], 'Music Supervisor' => ['Superviseur musical', 'Superviseuse musical', 'Superviseur musical'], 'Original Music Composer' => ['Compositeur de musique originale', 'Compositrice de musique originale', 'Compositeur de musique originale'], 'Producer' => ['Producteur', 'Productrice', 'Producteur'], 'Production Design' => ['Conception de production', 'Conception de production', 'Conception de production'], 'Screenplay' => ['Scénario', 'Scénario', 'Scénario'], 'Screenstory' => ['Scénario', 'Scénario', 'Scénario'], 'Set Decoration' => ['Décorateur', 'Décoratrice', 'Décorateur'], 'Set Designer' => ['Scénographe', 'Scénographe', 'Scénographe'], 'Set Dresser' => ['Habilleur', 'Habilleuse', 'Habilleur'], 'Set Manager' => ['Régisseur', 'Régisseuse', 'Régisseur'], 'Sound' => ['Son', 'Son', 'Son'], 'Sound Effects Editor' => ['Éditeur d\'effets sonores', 'Éditeur d\'effets sonores', 'Éditeur d\'effets sonores'], 'Sound Mixer' => ['Ingénieur du son', 'Ingénieure du son', 'Ingénieur du son'], 'Sound Re-Recording Mixer' => ['Mixeur son', 'Mixeuse son', 'Mixeur son'], 'Still Photographer' => ['Photographe de plateau', 'Photographe de plateau', 'Photographe de plateau'], 'Stunt' => ['Cascadeur', 'Cascadeuse', 'Cascadeur'], 'Supervising Art Director' => ['Directeur artistique superviseur', 'Directrice artistique superviseure', 'Directeur artistique superviseur'], 'Supervising Sound Editor' => ['Supervision du montage son', 'Supervision du montage son', 'Supervision du montage son'], 'VFX Artist' => ['Artiste d\'effets visuels', 'Artiste d\'effets visuels', 'Artiste d\'effets visuels'], 'Visual Effects' => ['Effets visuels', 'Effets visuels', 'Effets visuels'], 'Visual Effects Producer' => ['Producteur Effets visuels', 'Producteur Effets visuels', 'Producteur Effets visuels'], 'Visual Effects Supervisor' => ['Superviseur Effets visuels', 'Superviseuse Effets visuels', 'Superviseur Effets visuels'], 'Writing' => ['Écriture', 'Écriture', 'Écriture']], 'de' => ['Acting' => ['Schauspieler', 'Schauspielerin', 'Schauspieler'], 'ADR Mixer' => ['ADR-Mix (post-synchro)', 'ADR-Mix (post-synchro)', 'ADR-Mix (post-synchro)'], 'Art Direction' => ['Künstlerische Leitung ', 'Künstlerische Leitung ', 'Künstlerische Leitung '], 'Assistant Director' => ['Regieassistent ', 'Regieassistentin ', 'Regieassistent '], 'Casting' => ['Casting', 'Casting', 'Casting'], 'Costume Design' => ['Kostümbildner', 'Kostümbildnerin', 'Kostümbildner'], 'Costume Supervisor' => ['Supervisor für Kostüme', 'Supervisorin für Kostüme', 'Supervisor für Kostüme'], 'Director of Photography' => ['Direktor für Fotografie', 'Direktorin für Fotografie', 'Direktor für Fotografie'], 'Editing' => ['', '', ''], 'Editor' => ['', '', ''], 'Executive Producer' => ['', '', ''], 'Foley Artist' => ['', '', ''], 'Makeup Artist' => ['', '', ''], 'Music Supervisor' => ['', '', ''], 'Original Music Composer' => ['', '', ''], 'Producer' => ['', '', ''], 'Production Design' => ['', '', ''], 'Screenplay' => ['', '', ''], 'Screenstory' => ['', '', ''], 'Set Decoration' => ['', '', ''], 'Set Designer' => ['', '', ''], 'Set Dresser' => ['', '', ''], 'Sound Effects Editor' => ['', '', ''], 'Sound Mixer' => ['', '', ''], 'Sound Re-Recording Mixer' => ['', '', ''], 'Still Photographer' => ['', '', ''], 'Supervising Art Director' => ['', '', ''], 'Supervising Sound Editor' => ['', '', ''], 'VFX Artist' => ['', '', ''], 'Visual Effects' => ['', '', ''], 'Visual Effects Producer' => ['', '', ''], 'Visual Effects Supervisor' => ['', '', ''],], 'es' => ['Acting' => ['Actor', 'Actress', 'Actor'], 'ADR Mixer' => ['Mezcla ADR (post-sincronización)', 'Mezcla ADR (post-sincronización)', 'Mezcla ADR (post-sincronización)'], 'Art Direction' => ['Dirección artística', 'Dirección artística', 'Dirección artística'], 'Assistant Director' => ['Asistente de dirección', 'Asistente de dirección', 'Asistente de dirección'], 'Casting' => ['Casting', 'Casting', 'Casting'], 'Costume Design' => ['Diseñador de vestuario', 'Diseñadora de vestuario', 'Diseñador de vestuario'], 'Costume Supervisor' => ['Supervisor de vestuario', 'Supervisora de vestuario', 'Supervisor de vestuario'], 'Director of Photography' => ['Director de fotografía', 'Director de fotografía', 'Director de fotografía'], 'Editing' => ['', '', ''], 'Editor' => ['', '', ''], 'Executive Producer' => ['', '', ''], 'Foley Artist' => ['', '', ''], 'Makeup Artist' => ['', '', ''], 'Music Supervisor' => ['', '', ''], 'Original Music Composer' => ['', '', ''], 'Producer' => ['', '', ''], 'Production Design' => ['', '', ''], 'Screenplay' => ['', '', ''], 'Screenstory' => ['', '', ''], 'Set Decoration' => ['', '', ''], 'Set Designer' => ['', '', ''], 'Set Dresser' => ['', '', ''], 'Sound Effects Editor' => ['', '', ''], 'Sound Mixer' => ['', '', ''], 'Sound Re-Recording Mixer' => ['', '', ''], 'Still Photographer' => ['', '', ''], 'Supervising Art Director' => ['', '', ''], 'Supervising Sound Editor' => ['', '', ''], 'VFX Artist' => ['', '', ''], 'Visual Effects' => ['', '', ''], 'Visual Effects Producer' => ['', '', ''], 'Visual Effects Supervisor' => ['', '', ''],],];
-
-        return $this->json(['success' => true, 'person' => $person, 'department' => $department, 'locale' => $locale,]);
+        $userMovie->setTitle($movieDetail['title']);
+        $userMovie->setOriginalTitle($movieDetail['original_title']);
+        $userMovie->setPosterPath($movieDetail['poster_path']);
+        $userMovie->setReleaseDate($movieDetail['release_date']);
+        $userMovie->setMovieDbId($movieDetail['id']);
+        $userMovie->setRuntime($movieDetail['runtime']);
+        return $userMovie;
     }
 
 //    #[Route('/{_locale}/imdb', name: 'imdb_infos', requirements: ['_locale' => 'fr|en|de|es'], methods: "GET|POST")]
@@ -720,97 +834,4 @@ class MovieController extends AbstractController
 //
 //        return $this->json(['success' => $success, 'person' => $person,]);
 //    }
-
-    #[Route('/movie/add', name: 'app_movie_add')]
-    public function addMovieToUser(Request $request): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $movieId = $request->query->get('movie_db_id');
-        $locale = $request->getLocale();
-
-        $userMovie = $this->addMovie($user, $movieId, $locale);
-        return $this->json(['title' => $userMovie->getTitle()]);
-    }
-
-    public function addMovie($user, $movieId, $locale): Movie
-    {
-        $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
-
-        if (!$userMovie) {
-            $standing = $this->tmdbService->getMovie($movieId, $locale);
-            $movieDetail = json_decode($standing, true);
-
-            $userMovie = new Movie();
-            $this->hydrateMovie($userMovie, $movieDetail);
-        }
-        $userMovie->addUser($user);
-        $this->movieRepository->save($userMovie, true);
-
-        return $userMovie;
-    }
-
-    public function hydrateMovie($userMovie, $movieDetail)
-    {
-        $userMovie->setTitle($movieDetail['title']);
-        $userMovie->setOriginalTitle($movieDetail['original_title']);
-        $userMovie->setPosterPath($movieDetail['poster_path']);
-        $userMovie->setReleaseDate($movieDetail['release_date']);
-        $userMovie->setMovieDbId($movieDetail['id']);
-        $userMovie->setRuntime($movieDetail['runtime']);
-        return $userMovie;
-    }
-
-    #[Route('/movie/remove', name: 'app_movie_remove')]
-    public function removeMovieFromUser(Request $request): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $movieId = $request->query->get('movie_db_id');
-
-        $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
-
-        if ($userMovie) {
-            $userMovie->removeUser($user);
-            $this->movieRepository->save($userMovie, true);
-        }
-
-        return $this->json(['/movie/remove' => 'success']);
-    }
-
-    #[Route('/movie/set/rating', name: 'app_movie_set_rating')]
-    public function setMovieRating(Request $request): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $movieId = $request->query->get('movie_db_id');
-        $movie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
-        $vote = $request->query->get('rating');
-        $result = "update";
-
-        $rating = $this->ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
-
-        if (!$rating) {
-            $rating = new Rating();
-            $rating->setUser($user);
-            $rating->setMovie($movie);
-            $result = "create";
-        }
-        $rating->setValue($vote);
-        $this->ratingRepository->add($rating, true);
-
-        return $this->json(['result' => $result]);
-    }
-
-    #[Route('/movie/get/rating', name: 'app_movie_get_rating')]
-    public function getMovieRating(Request $request): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $movieId = $request->query->get('movie_db_id');
-        $movie = $this->movieRepository->findOneBy(['movieDbId' => $movieId]);
-        $rating = $this->ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
-
-        return $this->json(['rating' => $rating ? $rating->getValue() : 0]);
-    }
 }

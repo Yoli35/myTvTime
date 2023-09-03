@@ -37,21 +37,21 @@
                 <button class="btn btn-primary">{{ 'Today'|trans }}</button>
             </a>
         {% endif %}
-        {% if from == 'user movies' %}
+        {% if from == 'app_personal_movies' %}
             {% if collections|length %}
                 <div class="choose-collection">
                     <label>{{ 'Pin a collection'|trans }}
                         <select>
                             <option value="0">{{ 'Select a collection'|trans }}</option>
                             {% for c in collections %}
-                                <option value="{{ c.id }}"{% if settings %}{% if settings.data.0.collection_id == c.id %} selected{% endif %}{% endif %}>{{ c.title }}
+                                <option value="{{ c.id }}"{% if settings is defined %}{% if settings.data.0.collection_id == c.id %} selected{% endif %}{% endif %}>{{ c.title }}
                                     ({{ c.movies|length }})
                                 </option>
                             {% endfor %}
                         </select>
                     </label>
                     <label class="switch">
-                        <input type="checkbox"{% if settings %}{% if settings.data.0.pinned %} checked{% endif %}{% endif %}/>
+                        <input type="checkbox"{% if settings is defined %}{% if settings.data.0.pinned %} checked{% endif %}{% endif %}/>
                         <span></span>
                     </label>
                 </div>
