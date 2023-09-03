@@ -2478,6 +2478,8 @@ class SerieController extends AbstractController
                 $seasonTMDB = json_decode($standing, true);
                 $s['episodes'] = $seasonTMDB['episodes'];
                 $s['seasonViewing'] = $seasonViewing;
+                $s['episode_count'] = $seasonViewing->getEpisodeCount();
+
                 $blocks[] = [
                     'season' => $seasonViewing->getSeasonNumber(),
                     'episode_count' => $seasonViewing->getEpisodeCount(),
