@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Config\SearchHistoryType;
+use App\Entity\SearchHistory;
 use App\Repository\CastRepository;
+use App\Repository\SearchHistoryRepository;
 use App\Service\ImageConfiguration;
 use App\Service\TMDBService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,9 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
-    public function __construct(private readonly TMDBService        $TMDBService,
-                                private readonly CastRepository     $castRepository,
-                                private readonly ImageConfiguration $imageConfiguration,
+    public function __construct(private readonly TMDBService             $TMDBService,
+                                private readonly CastRepository          $castRepository,
+                                private readonly ImageConfiguration      $imageConfiguration,
+                                private readonly SearchHistoryRepository $searchHistoryRepository,
     )
     {
     }
@@ -153,5 +157,40 @@ class SearchController extends AbstractController
             'imageConfig' => $this->imageConfiguration->getConfig(),
             'from' => 'people',
         ]);
+    }
+
+    const SEARCH_TYPES = [
+        'movie' => 0, /*SearchHistoryType::MOVIE,*/
+        'tv' => 1, /*SearchHistoryType::TV,*/
+        'person' => 3, /*SearchHistoryType::PERSON,*/
+    ];
+
+    #[Route('/search-people/history', name: 'people_history')]
+    public function searchPeopleHistory(Request $request): Response
+    {
+        $name = $request->query->get('name');
+        $id = $request->query->get('id');
+        $type = self::SEARCH_TYPES['person'];
+
+        if (!$name || !$id)
+            return $this->json(['result'=> 'error', 'message' => 'Missing parameters']);
+
+        $history = new SearchHistory($name, $type, $id);
+        $this->searchHistoryRepository->save($history, true);
+
+        return $this->json(['result'=> 'success', 'message' => 'History saved']);
+    }
+
+    #[Route('/search-people/history/get', name: 'people_history_get')]
+    public function getSearchPeopleHistory(Request $request): Response
+    {
+        $limit = $request->query->get('limit', 20);
+        $type = self::SEARCH_TYPES['person'];
+
+        $history = $this->searchHistoryRepository->findBy(['type' => $type], ['id' => 'DESC'], $limit);
+        if (empty($history))
+            return $this->json(['result'=> 'warning', 'message' => 'History is empty']);
+
+        return $this->json(['result'=> 'success', 'message' => 'History found', 'history' => $history]);
     }
 }
