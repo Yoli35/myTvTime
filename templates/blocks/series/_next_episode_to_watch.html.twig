@@ -1,60 +1,62 @@
-{% if nextEpisodeToWatch.airDate %}  {# if there is an air date #}
-    {% if nextEpisodeToWatch.airDate|date("Y-m-d", "Europe/Paris") > "now"|date("Y-m-d", "Europe/Paris") %} {# in the futur, tomorrow or after #}
-        {% if alert %}
-            {% if alert.activated %}
-                {% set title = 'Alert activated'|trans %}
-            {% else %}
-                {% set title = 'Alert deactivated'|trans %}
-            {% endif %}
-        {% else %}
-            {% set title = 'Create an alert'|trans %}
-        {% endif %}
-        <div class="alert-next-episode{% if alert and alert.activated %} active{% endif %}" data-title="{{ title }}">
+{% if nextEpisodeToWatch %}
+    {% if nextEpisodeToWatch.airDate %}  {# if there is an air date #}
+        {% if nextEpisodeToWatch.airDate|date("Y-m-d", "Europe/Paris") > "now"|date("Y-m-d", "Europe/Paris") %} {# in the futur, tomorrow or after #}
             {% if alert %}
                 {% if alert.activated %}
-                    <i class="fa-regular fa-bell"></i>
+                    {% set title = 'Alert activated'|trans %}
                 {% else %}
-                    <i class="fa-regular fa-bell-slash"></i>
+                    {% set title = 'Alert deactivated'|trans %}
                 {% endif %}
             {% else %}
-                <i class="fa-regular fa-bell"></i><sup><i class="fa-regular fa-plus"></i></sup>
+                {% set title = 'Create an alert'|trans %}
             {% endif %}
-        </div>
-        {% if alert and alert.activated %}
-            <div class="next-episode-provider">
-                {% if alert.providerId %}
-                    <img src="{{ watchProviderList[alert.providerId].logo_path }}"
-                         alt="{{ watchProviderList[alert.providerId].provider_name }}"
-                         title="{{ watchProviderList[alert.providerId].provider_name }}">
-                {% else %}
-                    <div class="no-provider">
-                        <div>?</div>
-                    </div>
-                {% endif %}
-                <div class="next-episode-provider-list">
-                    {% for provider in providersFlatrate %}
-                        <div class="next-episode-provider-list-item"
-                             data-provider-id="{{ provider.provider_id }}"
-                             data-provider-region="{{ provider.region }}">
-                            <img src="{{ provider.logo_path }}"
-                                 alt="{{ provider.provider_name }}"
-                                 title="{{ provider.provider_name }} ({{ country_names()[provider.region] }})">
-                            <div class="country">{{ provider.region }}</div>
-                        </div>
+            <div class="alert-next-episode{% if alert and alert.activated %} active{% endif %}" data-title="{{ title }}">
+                {% if alert %}
+                    {% if alert.activated %}
+                        <i class="fa-regular fa-bell"></i>
                     {% else %}
-                        <div class="no-watch-providers">{{ 'No provider yet'|trans }}</div>
-                    {% endfor %}
-                </div>
+                        <i class="fa-regular fa-bell-slash"></i>
+                    {% endif %}
+                {% else %}
+                    <i class="fa-regular fa-bell"></i><sup><i class="fa-regular fa-plus"></i></sup>
+                {% endif %}
             </div>
+            {% if alert and alert.activated %}
+                <div class="next-episode-provider">
+                    {% if alert.providerId %}
+                        <img src="{{ watchProviderList[alert.providerId].logo_path }}"
+                             alt="{{ watchProviderList[alert.providerId].provider_name }}"
+                             title="{{ watchProviderList[alert.providerId].provider_name }}">
+                    {% else %}
+                        <div class="no-provider">
+                            <div>?</div>
+                        </div>
+                    {% endif %}
+                    <div class="next-episode-provider-list">
+                        {% for provider in providersFlatrate %}
+                            <div class="next-episode-provider-list-item"
+                                 data-provider-id="{{ provider.provider_id }}"
+                                 data-provider-region="{{ provider.region }}">
+                                <img src="{{ provider.logo_path }}"
+                                     alt="{{ provider.provider_name }}"
+                                     title="{{ provider.provider_name }} ({{ country_names()[provider.region] }})">
+                                <div class="country">{{ provider.region }}</div>
+                            </div>
+                        {% else %}
+                            <div class="no-watch-providers">{{ 'No provider yet'|trans }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
         {% endif %}
     {% endif %}
+    <div class="next-episode-to-watch">
+        {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}&nbsp{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp{{ nextEpisodeToWatch.seasonNumber }}<br>
+        {% if nextEpisodeToWatch.airDate %}
+            {{ nextEpisodeToWatch.airDate|format_date('relative_full', timezone='Europe/Paris')|capitalize }}
+        {% else %}
+            {{ 'No date for the moment'|trans }}
+        {% endif %}
+    </div>
 {% endif %}
-<div class="next-episode-to-watch">
-    {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}&nbsp{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp{{ nextEpisodeToWatch.seasonNumber }}<br>
-    {% if nextEpisodeToWatch.airDate %}
-        {{ nextEpisodeToWatch.airDate|format_date('relative_full', timezone='Europe/Paris')|capitalize }}
-    {% else %}
-        {{ 'No date for the moment'|trans }}
-    {% endif %}
-</div>
 {# <pre>{{ dump(nextEpisodeToWatch.airDate, nextEpisodeToWatch.airDate|date("Y-m-d", 'Europe/Paris'), "now"|date("Y-m-d", 'Europe/Paris')) }}</pre> #}

@@ -486,14 +486,27 @@ export class Shows {
             thisGlobal.updateViewCount(".view-count", ".view-average", viewedEpisodes, episodeText);
             thisGlobal.episodeAddEvent();
 
+            const oldNextEpisodeToWatch = document.querySelector(".next-episode-to-watch")?.parentElement;
             if (blockNextEpisodeToWatch) {
-                const oldNextEpisodeToWatch = document.querySelector(".next-episode-to-watch").parentElement;
                 const newNextEpisodeToWatch = document.createElement("div");
                 newNextEpisodeToWatch.classList.add("next-block");
                 newNextEpisodeToWatch.innerHTML = blockNextEpisodeToWatch.content;
-                const info = oldNextEpisodeToWatch.closest(".info");
-                info.insertBefore(newNextEpisodeToWatch, oldNextEpisodeToWatch);
-                info.removeChild(oldNextEpisodeToWatch);
+                if (oldNextEpisodeToWatch) {
+                    const info = oldNextEpisodeToWatch.closest(".info");
+                    info.insertBefore(newNextEpisodeToWatch, oldNextEpisodeToWatch);
+                    info.removeChild(oldNextEpisodeToWatch);
+                } else {
+                    const infos = document.querySelector(".infos");
+                    const lastInfo = infos.querySelector(".info:last-child");
+                    let nextBlock = lastInfo.querySelector(".next-block");
+                    if (!nextBlock) {
+                        nextBlock = document.createElement("div");
+                        nextBlock.classList.add("next-block");
+                        lastInfo.appendChild(nextBlock);
+                    }
+                    nextBlock.appendChild(newNextEpisodeToWatch);
+                }
+
 
                 const alert = document.querySelector(".alert-next-episode");
                 if (alert) {
