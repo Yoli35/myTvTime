@@ -32,8 +32,10 @@
         <div class="serie-page">
             <div class="header">
                 <div class="backdrop" style="background-image: url('{{ serie.backdropPath }}')"></div>
-                <div class="poster">
-                    <img src="{{ season.poster_path }}" alt="{{ season.name }}">
+                <div class="posters">
+                    <div class="poster">
+                        <img src="{{ season.poster_path }}" alt="{{ season.name }}">
+                    </div>
                 </div>
                 <div class="infos">
                     <h1>{{ serie.name }}
@@ -109,14 +111,13 @@
                                     <div class="still">
                                         <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
                                         <div class="episode-name">{{ episode.name }}</div>
-                                        <div class="episode-number{% if episode.viewing and episode.viewing.viewedAt %} viewed{% endif %}">
+                                        <div class="episode-number{% if episode.viewing is defined and episode.viewing.viewedAt %} viewed{% endif %}">
                                             <span>{{ episode.episode_number }}</span></div>
                                     </div>
                                     <div class="infos">
                                         <h4>
                                             {{ 'Episode'|trans }} {{ episode.episode_number }} :
-                                            {% if episode.viewing
-                                                and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/' %}
+                                            {% if episode.viewing is defined and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/' %}
                                                 {% if episode.viewing.substituteName is not null %}
                                                     {{ episode.viewing.substituteName }}
                                                 {% else %}
@@ -126,7 +127,7 @@
                                                 {{ episode.name }}
                                             {% endif %}
                                         </h4>
-                                        {% if episode.viewing
+                                        {% if episode.viewing is defined
                                             and past
                                             and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
                                             and episode.viewing.substituteName is null %}
@@ -170,7 +171,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="episode-viewing">
-                                        {% if episode.viewing %}
+                                        {% if episode.viewing is defined %}
                                             {% set viewed = episode.viewing.viewedAt %}
                                             <div class="view" data-id="{{ episode.viewing.id }}">
                                                 <div class="view-value">
@@ -343,7 +344,7 @@
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 const {result, runtime} = JSON.parse(xhr.responseText);
-                if (result ==="ok") {
+                if (result === "ok") {
                     const txt = {"fr": "minutes", "en": "minutes", "es": "minutos", "de": "Minuten"};
                     const locale = document.querySelector('html').getAttribute('lang');
                     const info = input.closest('.info');

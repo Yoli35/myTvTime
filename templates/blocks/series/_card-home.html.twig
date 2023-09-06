@@ -8,5 +8,10 @@
         <div class="title">
             <div>{{ serie.name }} {% if serie.upcomingDateYear is defined and serie.upcomingDateYear %} ({{ serie.upcomingDateYear }}){% endif %}</div>
         </div>
+        {% if from is defined and from == 'people' %}
+            {% if serie.first_air_date is defined and serie.first_air_date %}
+                <div class="date">{{ 'Release Date'|trans }} : {{ serie.first_air_date|format_date('short') }}</div>
+            {% endif %}
+        {% endif %}
     </a>
 </div>

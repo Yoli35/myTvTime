@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Search'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+
+        {{ include('blocks/_mainMenu.html.twig') }}
+
+        {{ include('blocks/_nav.html.twig', {thisPage: 'Activity', user: app.user, from: 'home', style: 'width: 100%'}) }}
+
+        <div class="search-page">
+            <div class="header">
+                <h1>{{ 'Search'|trans }}</h1>
+                <div class="backdrop"></div>
+                {{ include('blocks/_clock.html.twig') }}
+            </div>
+
+            <main>
+                <div class="wrapper {{ from }}">
+                    {% for person in people %}
+                        {% if person|length %}
+                            {{ include('blocks/search/_card-people.html.twig', {people: person}) }}
+                        {% endif %}
+                    {% else %}
+                        <p>No results found</p>
+                    {% endfor %}
+                </div>
+                <div class="wrapper media">
+                    {% for item in common %}
+                        <div class="item">
+                            {% if item.media.media_type == 'movie' %}
+                                {% if item.media.poster_path %}
+                                    {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.media.poster_path %}
+                                {% else %}
+                                    {% set poster = '/images/default/no_poster.png' %}
+                                {% endif %}
+                                {{ include('blocks/movie/_discover.html.twig', { title: item.media.title, poster: poster, id: item.media.id, discover: item.media }) }}
+                                <div class="type"><i class="fa-solid fa-film"></i></div>
+                            {% endif %}
+                            {% if item.media.media_type == 'tv' %}
+                                {{ include('blocks/series/_card-home.html.twig', {type: 'tmdb', serie: item.media, poster_path: item.media.poster_path}) }}
+                                <div class="type"><i class="fa-solid fa-tv"></i></div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </main>
+            {{ include('blocks/_pageFooter.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/peopleIndex.js') }}" type="module"></script>
+{% endblock %}

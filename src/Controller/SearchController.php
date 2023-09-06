@@ -23,6 +23,7 @@ class SearchController extends AbstractController
     public function index(Request $request): Response
     {
         $query = $request->query->get('query');
+        $multiPeople = strchr($query, '|');
         $page = $request->query->get('page', 1);
         $fromDB = $request->query->get('db', 0);
 
@@ -56,8 +57,17 @@ class SearchController extends AbstractController
 //            dump(["query" => $query, "movies" => $movies, "series" => $series, "casts" => $casts]);
 //            dump(["query" => $query, "results" => $results]);
         } else {
-            $standing = $this->TMDBService->multiSearch($page, $query, $request->getLocale());
-            $results = strlen($standing) ? json_decode($standing, true) : [];
+            if ($multiPeople) {
+                $queries = explode(',', $query);
+                $results = [];
+                foreach ($queries as $query) {
+                    $standing = $this->TMDBService->getPerson($query, $request->getLocale());
+                    $results = array_merge($results, strlen($standing) ? json_decode($standing, true) : []);
+                }
+            } else {
+                $standing = $this->TMDBService->multiSearch($page, $query, $request->getLocale());
+                $results = strlen($standing) ? json_decode($standing, true) : [];
+            }
         }
 //        dump(["query" => $query, "results" => $results]);
 
@@ -70,6 +80,78 @@ class SearchController extends AbstractController
             'total_results' => $results['total_results'] ?? 0,
             'imageConfig' => $this->imageConfiguration->getConfig(),
             'from' => 'search',
+        ]);
+    }
+
+    #[Route('/search-person/{name}', name: 'app_search_person')]
+    public function searchPerson(Request $request, $name): Response
+    {
+        return $this->json($this->TMDBService->searchPerson($name, $request->getLocale()));
+    }
+
+    #[Route('/search-people', name: 'people')]
+    public function searchPeople(Request $request): Response
+    {
+        $query = $request->query->get('query');
+        $ids = explode(',', $query);
+        $numberOfIds = count($ids);
+        $people = array_map(function ($id) use ($request) {
+            if ($id) {
+                $person = json_decode($this->TMDBService->getPerson($id, $request->getLocale()), true);
+                $credits = json_decode($this->TMDBService->getPersonCredits($id, $request->getLocale()), true);
+                if (!key_exists('cast', $credits))
+                    $credits['cast'] = [];
+                $person['cast'] = $credits['cast'];
+                return $person;
+            } else
+                return [];
+        }, $ids);
+//        dump($people);
+        // Trouver les films et séries en commun
+        $common = [];
+        foreach ($people as $person) {
+            foreach ($person['cast'] as $cast) {
+                $id = $cast['id'];
+                if (!key_exists($id, $common))
+                    $common[$id] = [[], $cast, 0];
+                if (!in_array($person, $common[$id][0])) {
+                    $common[$id][0][] = $person;
+                    $common[$id][2]++;
+                }
+            }
+        }
+//        dump($common);
+        if ($numberOfIds > 1) {
+            $common = array_filter($common, function ($value) {
+                return $value[2] > 1;
+            });
+//        dump($common);
+        }
+        $common = array_map(function ($value) {
+            return ['people' => $value[0], 'media' => $value[1], 'count' => $value[2]];
+        }, $common);
+        dump($common);
+        // Tri par date (media_type = movie) ou première date de diffusion (media_type = tv)
+        usort($common, function ($a, $b) {
+            if ($a['media']['media_type'] == 'movie' && $b['media']['media_type'] == 'movie') {
+                return $a['media']['release_date'] <=> $b['media']['release_date'];
+            } else if ($a['media']['media_type'] == 'tv' && $b['media']['media_type'] == 'tv') {
+                return $a['media']['first_air_date'] <=> $b['media']['first_air_date'];
+            } else if ($a['media']['media_type'] == 'movie' && $b['media']['media_type'] == 'tv') {
+                return $a['media']['release_date'] <=> $b['media']['first_air_date'];
+            } else if ($a['media']['media_type'] == 'tv' && $b['media']['media_type'] == 'movie') {
+                return $a['media']['first_air_date'] <=> $b['media']['release_date'];
+            } else {
+                return 0;
+            }
+        });
+        $common = array_reverse($common);
+
+        return $this->render('search/people.html.twig', [
+            'people' => $people,
+            'common' => $common,
+            'imageConfig' => $this->imageConfiguration->getConfig(),
+            'from' => 'people',
         ]);
     }
 }

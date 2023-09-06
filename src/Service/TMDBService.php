@@ -331,6 +331,23 @@ class TMDBService
         }
     }
 
+    public function searchPerson($name, $locale): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/search/person?api_key=' . $this->api_key . '&language=' . $locale . '&query=' . $name . '&include_adult=false',
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                return "";
+            }
+        } catch (Throwable $exception) {
+            return "";
+        }
+    }
+
     public function getLatest($locale): ?string
     {
         try {

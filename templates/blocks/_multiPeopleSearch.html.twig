@@ -1,0 +1,35 @@
+<dialog id="multi-people-dialog">
+    <div class="content">
+        <div class="dialog-title">{{ 'Search films or series by people'|trans }}</div>
+        <form method="dialog">
+            <input type="hidden" name="action" value="multiPeople"/>
+            <input type="hidden" name="imgUrl" value="{{ getPath("profile_sizes", 1) }}"/>
+            <div class="people-searches">
+                <div class="people-search">
+                    <label for="people-1">
+                        <input type="search" id="people-1" name="people-1" {# list="people-list-1" #} placeholder="{{ 'Enter a name…'|trans }}"/>
+                        {# <datalist id="people-list-1"></datalist> #}
+                    </label>
+                    <div class="people-list"></div>
+                </div>
+{#                <div class="people-search">#}
+{#                    <label for="people-2">#}
+{#                        <input type="search" id="people-2" name="people-2" placeholder="{{ 'Enter a name…'|trans }}"/>#}
+{#                    </label>#}
+{#                    <div class="people-list"></div>#}
+{#                </div>#}
+            </div>
+            <label for="add-people">
+                <button type="button" id="add-people" name="add-people" class="btn btn-outline-secondary">{{ 'Add people'|trans }}</button>
+            </label>
+            <menu>
+                <li>
+                    <button class="btn btn-secondary" value="cancel">Annuler</button>
+                </li>
+                <li>
+                    <button class="btn btn-primary" value="multiPeople">{{ 'Search'|trans }}</button>
+                </li>
+            </menu>
+        </form>
+    </div>
+</dialog>

@@ -32,6 +32,11 @@
         flex-direction: column;
         width: 100%;
 
+        &:has(.wrapper.people) {
+            gap: 1rem;
+            margin-block: 1rem;
+        }
+
         form {
             align-items: center;
             display: flex;
@@ -73,6 +78,49 @@
                 font-weight: 400;
                 line-height: 1.2rem;
                 text-align: center;
+            }
+
+            &.people {
+                background-color: var(--gradient-ardoise-20);
+                justify-content: center;
+            }
+
+            &.media {
+                background-color: var(--gradient-ardoise-20);
+                justify-content: center;
+
+                .item {
+                    position: relative;
+
+                    .home-discover {
+                        .no-image {
+                            @include flex-col();
+                            aspect-ratio: 2 / 3;
+                            background-color: var(--gradient-ardoise-40-alpha-50);
+                            border-radius: .5em;
+                            color: var(--gradient-ardoise-90);
+                            width: 13.5rem;
+                        }
+                    }
+
+                    .type {
+                        position: absolute;
+                        right: .5rem;
+                        text-shadow: 0 0 3px var(--gradient-ardoise-10);
+                        top: .5rem;
+                        z-index: 1;
+                    }
+                }
+            }
+        }
+
+        &:has(.wrapper.people) {
+            .wrapper {
+                border-radius: .5rem;
+                margin-block: unset;
+                margin-inline: auto;
+                padding: 1rem;
+                width: unset;
             }
         }
 

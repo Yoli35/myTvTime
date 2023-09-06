@@ -15,4 +15,6 @@ enum PathType
     const articleThumbnail = 'articleThumbnail';
     const articleBanner = 'articleBanner';
     const articleImages = 'articleImages';
+    const tmdb_base_url = 'tmdb_base_url';
+    const profile_sizes = 'profile_sizes';
 }

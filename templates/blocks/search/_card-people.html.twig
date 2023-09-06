@@ -7,7 +7,9 @@
                 <div class="no-image">{{ 'No image'|trans }}</div>
             {% endif %}
         </a>
-        <div class="type" title="{{ 'People'|trans }}"><i class="fa-regular fa-face-meh"></i></div>
+        {% if from != 'people' %}
+            <div class="type" title="{{ 'People'|trans }}"><i class="fa-regular fa-face-meh"></i></div>
+        {% endif %}
     </div>
     <div class="title">
         <div>{{ people.name }}</div>
