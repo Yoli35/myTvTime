@@ -4,35 +4,41 @@
 {% block description %}{{ 'List of all my events'|trans }}{% endblock %}
 {% block keywords %}{{ 'event'|trans }}{% endblock %}
 {% block body %}
-    {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container">
+    <div class="container-fluid">
+
+        {{ include('blocks/_mainMenu.html.twig') }}
+        {{ include('blocks/_nav.html.twig', {thisPage:('My events'|trans)}) }}
+
         <div class="my-events">
             <div class="header">
                 <h1>{{ 'My Events'|trans }}</h1>
                 <div class="backdrop"></div>
             </div>
-
-            {{ include('blocks/_nav.html.twig', {thisPage:('My events'|trans)}) }}
-
             <main>
                 <div class="events">
                     <div class="add-event"><i class="fa-solid fa-circle-plus"></i> {{ 'Add event'|trans }}</div>
                     {% for event in events %}
-                        <a
-                                {% if event.type == 'event' %}
-                                    href="{{ path('app_event_show', {id: event.id}) }}"
-                                {% endif %}
-                                {% if event.type == 'alert' %}
-                                    href="{{ path('app_series_show', {id: event.id}) }}?from={{ from }}"
-                                {% endif %}
-                        >
+                        {% if event.type == 'event' %}
+                            {% set href = path('app_event_show', {id: event.id}) %}
+                        {% else %}
+                            {% set href = path('app_series_show', {id: event.id})~"?from="~from %}
+                        {% endif %}
+                        <a href="{{ href }}">
                             <div class="event" data-type="{{ event.type }}" data-id="{{ event.id }}">
                                 <div class="poster">
                                     {% if event.type == 'event' %}
-                                        <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                        {% if event.thumbnail %}
+                                            <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                        {% else %}
+                                            <div class="no-poster"><i class="fa-solid fa-camera"></i><div>{{ 'No thumbnail'|trans }}</div></div>
+                                        {% endif %}
                                     {% endif %}
                                     {% if event.type == 'alert' %}
-                                        <img src="/images/series/posters/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                        {% if event.thumbnail %}
+                                            <img src="/images/series/posters/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                        {% else %}
+                                            <div class="no-poster"><i class="fa-solid fa-camera"></i><div>{{ 'No thumbnail'|trans }}</div></div>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                                 <div class="infos">

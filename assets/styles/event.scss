@@ -8,11 +8,12 @@
 
     .header {
         @include animated-header("../images/event-header.jpg");
+        margin-block: 0 1rem;
     }
 
-    .nav-breadcrumb {
-        margin: 1em 0 1em auto;
-    }
+    //.nav-breadcrumb {
+    //    margin: 1em 0 1em auto;
+    //}
 
     .countdown {
         @include flex-100();
@@ -190,6 +191,15 @@
                         img {
                             height: 100%;
                             object-fit: cover;
+                            width: 100%;
+                        }
+
+                        .no-poster {
+                            align-items: center;
+                            display: flex;
+                            flex-direction: column;
+                            height: 100%;
+                            justify-content: center;
                             width: 100%;
                         }
                     }
