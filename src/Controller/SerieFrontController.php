@@ -16,7 +16,6 @@ use App\Service\DateService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
 use App\Service\TMDBService;
-use DateTimeImmutable;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,15 +34,17 @@ class SerieFrontController extends AbstractController
     const LATEST = 'latest';
     const SEARCH = 'search';
 
-    public function __construct(private readonly DateService            $dateService,
-                                private readonly SerieController        $serieController,
-                                private readonly FavoriteRepository     $favoriteRepository,
-                                private readonly TranslatorInterface    $translator,
-                                private readonly TMDBService            $tmdbService,
-                                private readonly SerieRepository        $serieRepository,
-                                private readonly SerieViewingRepository $serieViewingRepository,
-                                private readonly NetworksRepository     $networkRepository,
-                                private readonly ImageConfiguration     $imageConfiguration)
+    public function __construct(
+        private readonly DateService            $dateService,
+        private readonly FavoriteRepository     $favoriteRepository,
+        private readonly ImageConfiguration     $imageConfiguration,
+        private readonly NetworksRepository     $networkRepository,
+        private readonly SerieController        $serieController,
+        private readonly SerieRepository        $serieRepository,
+        private readonly SerieViewingRepository $serieViewingRepository,
+        private readonly TMDBService            $tmdbService,
+        private readonly TranslatorInterface    $translator,
+    )
     {
     }
 
@@ -57,6 +58,7 @@ class SerieFrontController extends AbstractController
         $serieRepository = $this->serieRepository;
         $networkRepository = $this->networkRepository;
         $imageConfiguration = $this->imageConfiguration;
+        $imgConfig = $imageConfiguration->getConfig();
 
         /** @var User $user */
         $user = $this->getUser();
@@ -129,6 +131,11 @@ class SerieFrontController extends AbstractController
                 $serie->addUser($user);
                 $serieRepository->save($serie, true);
                 $this->serieController->createSerieViewing($user, $tv, $serie);
+
+                if ($tv['backdrop_path']) $this->serieController->addSerieBackdrop($serie, $tv['backdrop_path']);
+                if ($tv['poster_path']) $this->serieController->addSeriePoster($serie, $tv['poster_path'], $imgConfig);
+                if ($tv['backdrop_path'] || $tv['poster_path'])
+                    $serieRepository->save($serie, true);
                 /*
                  */
                 if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
@@ -139,7 +146,8 @@ class SerieFrontController extends AbstractController
                         ],
                         'from' => $from,
                         'serieIds' => $this->serieController->mySerieIds($user),
-                        'imageConfig' => $imageConfiguration->getConfig()]);
+                        'imageConfig' => $imgConfig,
+                    ]);
                 }
 
                 if ($from === self::SEARCH) {
@@ -152,7 +160,8 @@ class SerieFrontController extends AbstractController
                         ],
                         'from' => $from,
                         'serieIds' => $this->serieController->mySerieIds($user),
-                        'imageConfig' => $imageConfiguration->getConfig()]);
+                        'imageConfig' => $imgConfig,
+                    ]);
                 }
             }
         }
@@ -294,7 +303,7 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    public function episodeDuration($serieId, $seasonNumber, $episodeNumber):?int
+    public function episodeDuration($serieId, $seasonNumber, $episodeNumber): ?int
     {
         $episode = json_decode($this->tmdbService->getTvEpisode($serieId, $seasonNumber, $episodeNumber, 'fr'), true);
         return $episode['runtime'];
