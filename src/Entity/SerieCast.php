@@ -15,11 +15,10 @@ class SerieCast
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'serieCasts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?SerieViewing $serieViewing;
+    private ?Serie $serie = null;
 
-    #[ORM\Column(nullable: false)]
-    private int $castId;
+    #[ORM\ManyToOne]
+    private ?Cast $cast = null;
 
     #[ORM\Column]
     private ?bool $recurringCharacter = null;
@@ -36,10 +35,10 @@ class SerieCast
     #[ORM\Column]
     private ?bool $guestStar = null;
 
-    public function __construct(SerieViewing $serieViewing, int $castId)
+    public function __construct(Serie $serie, Cast $cast)
     {
-        $this->serieViewing = $serieViewing;
-        $this->castId = $castId;
+        $this->serie = $serie;
+        $this->cast = $cast;
     }
 
     public function getId(): ?int
@@ -47,26 +46,26 @@ class SerieCast
         return $this->id;
     }
 
-    public function getSerieViewing(): ?SerieViewing
+    public function getSerie(): ?Serie
     {
-        return $this->serieViewing;
+        return $this->serie;
     }
 
-    public function setSerieViewing(?SerieViewing $serieViewing): self
+    public function setSerie(?Serie $serie): static
     {
-        $this->serieViewing = $serieViewing;
+        $this->serie = $serie;
 
         return $this;
     }
 
-    public function getCastId(): int
+    public function getCast(): ?Cast
     {
-        return $this->castId;
+        return $this->cast;
     }
 
-    public function setCastId(int $castId): self
+    public function setCast(?Cast $cast): static
     {
-        $this->castId = $castId;
+        $this->cast = $cast;
 
         return $this;
     }
@@ -92,7 +91,7 @@ class SerieCast
     {
         $episodes = [];
         foreach ($this->episodes as $episode) {
-            $episodes[] = sprintf('S%02dE%02d', $episode['seasonNumber'], $episode['episodeNumber']);
+            $episodes[] = sprintf('S%02dE%02d', $episode[0], $episode[1]);
         }
 
         return implode(', ', $episodes);
@@ -112,9 +111,15 @@ class SerieCast
 
     public function addEpisode(int $seasonNumber, int $episodeNumber): self
     {
+        $castEpisode = array_filter($this->episodes, function ($episode) use ($seasonNumber, $episodeNumber) {
+            return $episode[0] === $seasonNumber && $episode[1] === $episodeNumber;
+        });
+        if (count($castEpisode) > 0) {
+            return $this;
+        }
         $this->episodes[] = [
-            'seasonNumber' => $seasonNumber,
-            'episodeNumber' => $episodeNumber,
+            $seasonNumber,
+            $episodeNumber
         ];
 
         return $this;

@@ -32,14 +32,7 @@
                                     {% if people.character is defined %}
                                         <div>{{ people.character }}</div>
                                     {% endif %}
-{#                                <div> #}
-{#                                    {% if people.gender is defined %} #}
-{#                                        {{ (people.known_for_department~(people.gender==1?'.she':'.he'))|trans }} #}
-{#                                    {% else %} #}
-{#                                        {{ people.known_for_department|trans }} #}
-{#                                    {% endif %} #}
-{#                                </div> #}
-                                    {% if people.episodeString is defined %}
+                                    {% if people.episodesString is defined %}
                                         <div title="{{ people.episodesString }}">{{ people.episodes }}</div>
                                     {% endif %}
                                 </div>

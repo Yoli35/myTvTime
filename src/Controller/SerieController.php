@@ -1936,10 +1936,10 @@ class SerieController extends AbstractController
                 $serieViewing = $this->updateSerieViewing($serieViewing, $tv);
             }
             $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
-            if (!count($serieViewing->getSerieCasts())) {
-                $this->updateTvCast($tv, $serieViewing);
+            if (!count($serie->getSerieCasts())) {
+                $this->updateTvCast($tv, $serie);
             }
-            $cast = $this->getCast($serieViewing);
+            $cast = $this->getCast($serie);
             $credits['cast'] = $cast;
 
             $seasonsWithAView = [];
@@ -1984,13 +1984,14 @@ class SerieController extends AbstractController
             ];
         }
 
-//        dump([
+        dump([
 //            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
-//        ]);
+            'credits' => $credits,
+        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
@@ -2023,32 +2024,6 @@ class SerieController extends AbstractController
             'imageConfig' => $imgConfig,
         ]);
     }
-
-//    public function cleanCastTable(): void
-//    {
-//        // Suppression des casts non-utilisés
-//        $castRepository = $this->castRepository;
-//        $serieCastRepository = $this->serieCastRepository;
-//        $serieCasts = $serieCastRepository->findAll();
-//        $casts = $castRepository->findAll();
-//
-//        $serieCastCastIds = array_map(function ($serieCast) {
-//            return $serieCast->getCastId();
-//        }, $serieCasts);
-//
-//        $castIds = array_map(function ($cast) {
-//            return $cast->getId();
-//        }, $casts);
-//
-//        $castIds = array_diff($castIds, $serieCastCastIds);
-//
-//        $casts = $castRepository->findBy(['id' => $castIds]);
-//
-//        foreach ($casts as $cast) {
-//            $castRepository->remove($cast);
-//        }
-//        $castRepository->flush();
-//    }
 
     public function getNextEpisodeToWatch(SerieViewing $serieViewing, $locale): ?array
     {
@@ -2129,19 +2104,18 @@ class SerieController extends AbstractController
         return null;
     }
 
-    public function getCast(SerieViewing $serieViewing): array
+    public function getCast(Serie $serie): array
     {
-        $ids = array_map(function ($serieCast) {
-            return $serieCast->getCastId();
-        }, $serieViewing->getSerieCasts()->toArray());
+        $castDbArray = array_map(function ($serieCast) {
+            return $serieCast->getCast();
+        }, $serie->getSerieCasts()->toArray());
 
-        $castDbArray = $this->castRepository->findBy(['id' => $ids]);
-        $serieCastArray = $serieViewing->getSerieCasts()->toArray();
+        $serieCastArray = $serie->getSerieCasts()->toArray();
 
         /** @var SerieCast[] $serieCasts */
         $cast = array_map(function ($castDb) use ($serieCastArray) {
             $serieCast = array_filter($serieCastArray, function ($serieCast) use ($castDb) {
-                return $serieCast->getCastId() == $castDb->getId();
+                return $serieCast->getCast()->getId() === $castDb->getId();
             });
             $serieCast = array_values($serieCast)[0];
             /** @var SerieCast $serieCast */
@@ -2166,8 +2140,10 @@ class SerieController extends AbstractController
         return $cast;
     }
 
-    public function updateTvCast($tv, $serieViewing): void
+    public function updateTvCast($tv, $serie, $verbose = false): void
     {
+        if ($verbose) $this->messages = [];
+
         $recurringCharacters = $tv['credits']['cast'];
 //        $tvCast = $tv['credits']['cast'];
 
@@ -2183,16 +2159,25 @@ class SerieController extends AbstractController
                     $credits = json_decode($standing, true);
 
                     if ($credits) {
+                        $casting = [];
                         if ($credits['cast']) {
-                            foreach ($credits['cast'] as $cast) {
-                                $recurringCharacter = $this->inTvCast($recurringCharacters, $cast['id']);
-                                $this->episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, false, $serieViewing);
-                            }
+                            $arr = array_map(function ($cast) use ($recurringCharacters) {
+                                $cast['recurring_character'] = $this->inTvCast($recurringCharacters, $cast['id']);
+                                $cast['guest_star'] = false;
+                                return $cast;
+                            }, $credits['cast']);
+                            $casting = array_merge($casting, $arr);
                         }
                         if ($credits['guest_stars']) {
-                            foreach ($credits['guest_stars'] as $guestStar) {
-                                $this->episodesCast($guestStar, $seasonNumber, $episodeNumber, false, true, $serieViewing);
-                            }
+                            $arr = array_map(function ($cast) {
+                                $cast['recurring_character'] = false;
+                                $cast['guest_star'] = true;
+                                return $cast;
+                            }, $credits['guest_stars']);
+                            $casting = array_merge($casting, $arr);
+                        }
+                        foreach ($casting as $cast) {
+                            $this->episodesCast($cast, $serie, $seasonNumber, $episodeNumber, $verbose);
                         }
                     }
                 }
@@ -2211,46 +2196,35 @@ class SerieController extends AbstractController
         return false;
     }
 
-    public function episodesCast($cast, $seasonNumber, $episodeNumber, $recurringCharacter, $guestStar, $serieViewing): void
+    public function episodesCast($cast, $serie, $seasonNumber, $episodeNumber, $verbose = false): void
     {
         $dbCast = $this->castRepository->findOneBy(['tmdbId' => $cast['id']]);
         $serieCast = null;
         if ($dbCast) {
-            $serieCast = $this->serieCastRepository->findOneBy(['serieViewing' => $serieViewing, 'castId' => $dbCast->getId()]);
+            $serieCast = $this->serieCastRepository->findOneBy(['serie' => $serie, 'cast' => $dbCast]);
         }
         if ($serieCast === null) {
-            $serieCast = $this->createSerieCast($cast, $dbCast, $recurringCharacter, $guestStar, $serieViewing);
+            $serieCast = $this->createSerieCast($cast, $dbCast, $serie);
         }
-        $episodes = $serieCast->getEpisodes();
-        if (!$this->episodeInSerieCastEpisodes($episodes, $seasonNumber, $episodeNumber)) {
-            $serieCast->addEpisode($seasonNumber, $episodeNumber);
-            $this->serieCastRepository->save($serieCast, true);
-        }
+        $serieCast->addEpisode($seasonNumber, $episodeNumber);
     }
 
-    public function episodeInSerieCastEpisodes($episodes, $seasonNumber, $episodeNumber): bool
-    {
-        foreach ($episodes as $season => $episode) {
-            if ($season == $seasonNumber && $episode == $episodeNumber) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function createSerieCast($cast, $dbCast, $recurringCharacter, $guestStar, $serieViewing): SerieCast
+    public function createSerieCast($cast, $dbCast, $serie): SerieCast
     {
         if ($dbCast === null) {
             $dbCast = new Cast($cast['id'], $cast['name'], $cast['profile_path']);
             $this->castRepository->save($dbCast, true);
+            $this->messages[] = "New cast " . $cast['name'];
         }
-        $serieCast = new SerieCast($serieViewing, $dbCast->getId());
+        $serieCast = new SerieCast($serie, $dbCast);
         $serieCast->setKnownForDepartment($cast['known_for_department']);
         $serieCast->setCharacterName($cast['character']);
-        $serieCast->setRecurringCharacter($recurringCharacter);
-        $serieCast->setGuestStar($guestStar);
+        $serieCast->setRecurringCharacter($cast['recurring_character']);
+        $serieCast->setGuestStar($cast['guest_star']);
         $this->serieCastRepository->save($serieCast, true);
-        $this->serieViewingRepository->save($serieViewing->addSerieCast($serieCast), true);
+        $this->serieRepository->save($serie->addSerieCast($serieCast), true);
+
+        $this->messages[] = "New character " . $cast['character'] . ' by ' . $cast['name'];
 
         return $serieCast;
     }
@@ -2280,15 +2254,11 @@ class SerieController extends AbstractController
             $seriePosters = array_map(fn($poster) => $poster->getPosterPath(), $serie->getSeriePosters()->toArray());
 
             if ($tv['poster_path'] && !in_array($tv['poster_path'], $seriePosters)) {
-                $seriePoster = new SeriePoster($serie, $tv['poster_path']);
-                $this->seriePosterRepository->save($seriePoster, true);
-                $serie->addSeriePoster($seriePoster);
+                $this->addSeriePoster($serie, $tv['poster_path'], $imgConfig);
                 $whatsNew['poster_path'] = $this->translator->trans('New poster');
-                $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
             } else {
                 $whatsNew['poster_path'] = $this->translator->trans('New poster (previously added)');
             }
-
             $serie->setPosterPath($tv['poster_path']);
             $modified = true;
         }
@@ -2296,9 +2266,7 @@ class SerieController extends AbstractController
             $serieBackdrops = array_map(fn($backdrop) => $backdrop->getBackdropPath(), $serie->getSerieBackdrops()->toArray());
 
             if ($tv['backdrop_path'] && !in_array($tv['backdrop_path'], $serieBackdrops)) {
-                $serieBackdrop = new SerieBackdrop($serie, $tv['backdrop_path']);
-                $this->serieBackdropRepository->save($serieBackdrop, true);
-                $serie->addSerieBackdrop($serieBackdrop);
+                $this->addSerieBackdrop($serie, $tv['backdrop_path']);
                 $whatsNew['backdrop_path'] = $this->translator->trans('New backdrop');
             } else {
                 $whatsNew['backdrop_path'] = $this->translator->trans('New backdrop (previously added)');
@@ -2368,6 +2336,21 @@ class SerieController extends AbstractController
             return $whatsNew;
         }
         return null;
+    }
+
+    public function addSeriePoster(Serie $serie, string $posterPath, array $imgConfig): void
+    {
+        $seriePoster = new SeriePoster($serie, $posterPath);
+        $this->seriePosterRepository->save($seriePoster, true);
+        $serie->addSeriePoster($seriePoster);
+        $this->savePoster($posterPath, $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+    }
+
+    public function addSerieBackdrop(Serie $serie, string $backdropPath): void
+    {
+        $serieBackdrop = new SerieBackdrop($serie, $backdropPath);
+        $this->serieBackdropRepository->save($serieBackdrop, true);
+        $serie->addSerieBackdrop($serieBackdrop);
     }
 
     #[Route(path: '/viewing', name: 'app_series_viewing')]

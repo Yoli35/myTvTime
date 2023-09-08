@@ -77,6 +77,9 @@ class Serie
     #[ORM\OneToMany(mappedBy: 'serie', targetEntity: SerieBackdrop::class, orphanRemoval: true)]
     private Collection $serieBackdrops;
 
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: SerieCast::class)]
+    private Collection $serieCasts;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -85,6 +88,7 @@ class Serie
         $this->networks = new ArrayCollection();
         $this->seriePosters = new ArrayCollection();
         $this->serieBackdrops = new ArrayCollection();
+        $this->serieCasts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -374,6 +378,36 @@ class Serie
             // set the owning side to null (unless already changed)
             if ($serieBackdrop->getSerie() === $this) {
                 $serieBackdrop->setSerie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SerieCast>
+     */
+    public function getSerieCasts(): Collection
+    {
+        return $this->serieCasts;
+    }
+
+    public function addSerieCast(SerieCast $serieCast): static
+    {
+        if (!$this->serieCasts->contains($serieCast)) {
+            $this->serieCasts->add($serieCast);
+            $serieCast->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSerieCast(SerieCast $serieCast): static
+    {
+        if ($this->serieCasts->removeElement($serieCast)) {
+            // set the owning side to null (unless already changed)
+            if ($serieCast->getSerie() === $this) {
+                $serieCast->setSerie(null);
             }
         }
 
