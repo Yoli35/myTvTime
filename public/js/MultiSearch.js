@@ -31,12 +31,12 @@ export class MultiSearch {
         });
         this.initDialog()
         this.getHistory(20).then(data => {
-            console.log({data});
+            // console.log({data});
             if (data.result === 'success') thisGlobal.history = data.history.map(h => {
                 /** @var {{"id": number, "text": string,"tmdbId": number}} h */
                 return {'name': h.text, 'id': h.tmdbId}
             });
-            console.log(thisGlobal.history);
+            // console.log(thisGlobal.history);
             if (thisGlobal.history.length) {
                 // Ajouter un menu history
                 const dialog2 = document.querySelector("#multi-people-dialog");
@@ -54,7 +54,7 @@ export class MultiSearch {
                     option.innerHTML = h.name;
                     select.appendChild(option);
                 });
-                select.addEventListener("change", () => {
+                select.addEventListener("change", (e) => {
                     if (select.selectedIndex === 0) return;
                     // select the person and hydrate the first empty input or create a new input to hydrate
                     const inputs = dialog2.querySelectorAll("input[id^=people-]");
@@ -63,7 +63,7 @@ export class MultiSearch {
                         empty.value = select.options[select.selectedIndex].innerHTML;
                         empty.setAttribute("data-id", select.value);
                     } else {
-                        thisGlobal.addPeople(select.options[select.selectedIndex].innerHTML, select.value);
+                        thisGlobal.addPeople(e, select.options[select.selectedIndex].innerHTML, select.value);
                     }
                     // Disable the option from the select
                     select.options[select.selectedIndex].setAttribute("disabled", "disabled");
@@ -135,8 +135,10 @@ export class MultiSearch {
     }
 
     addPeople(e, name = "", tmdbId = 0) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (e.type === "click") {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         const dialog2 = document.querySelector("#multi-people-dialog");
         const peopleSearches = dialog2.querySelector(".people-searches");
         const people = dialog2.querySelectorAll(".people-search");

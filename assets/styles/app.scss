@@ -1817,8 +1817,10 @@ nav.active {
 
 .home-discover {
     @include flex-col();
+    border-radius: .5rem;
     font-size: .75em;
     font-weight: 100;
+    overflow: hidden;
     position: relative;
     width: 100%;
 

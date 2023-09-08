@@ -1605,25 +1605,33 @@
                     @include flex-col(flex-start, flex-start);
                     background-color: var(--gradient-ardoise-80);
                     border-radius: .5em;
+                    overflow-x: auto;
                     padding: 0 1em 1em 1em;
                     width: 100%;
 
                     .list {
                         @include flex-row(stretch, flex-start);
+                        gap: .5rem;
+                        margin-inline: auto;
                         overflow-x: auto;
-                        width: 100%;
 
                         a {
                             @include flex-row(stretch);
 
                             .people {
-                                @include human-profile();
+                                @include human-profile(var(--gradient-ardoise-40-alpha-50), var(--gradient-ardoise-90));
+                                flex-direction: row;
+                                align-items: flex-start;
+                                margin: 0;
+                                transition: width 250ms ease-in-out;
 
                                 .profile {
+                                    flex-shrink: 0;
                                     font-size: unset;
                                     position: relative;
 
                                     img {
+                                        border-radius: .5rem 0 0 0;
                                         height: 12em;
                                     }
 
@@ -1643,11 +1651,18 @@
                                 .people-infos {
                                     @include flex-col();
                                     font-size: .875rem;
+                                    font-weight: 300;
+                                    height: 100%;
+                                    width: 100%;
 
                                     div {
                                         text-align: center;
                                         line-height: 1rem;
                                     }
+                                }
+
+                                &:hover {
+                                    width: 16rem;
                                 }
                             }
                         }

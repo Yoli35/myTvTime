@@ -98,6 +98,10 @@ class SearchController extends AbstractController
     {
         $query = $request->query->get('query');
         $ids = explode(',', $query);
+        // On supprime les éléments égaux à zéro
+        $ids = array_filter($ids, function ($id) {
+            return $id != 0;
+        });
         $numberOfIds = count($ids);
         $people = array_map(function ($id) use ($request) {
             if ($id) {
@@ -137,19 +141,11 @@ class SearchController extends AbstractController
         dump($common);
         // Tri par date (media_type = movie) ou première date de diffusion (media_type = tv)
         usort($common, function ($a, $b) {
-            if ($a['media']['media_type'] == 'movie' && $b['media']['media_type'] == 'movie') {
-                return $a['media']['release_date'] <=> $b['media']['release_date'];
-            } else if ($a['media']['media_type'] == 'tv' && $b['media']['media_type'] == 'tv') {
-                return $a['media']['first_air_date'] <=> $b['media']['first_air_date'];
-            } else if ($a['media']['media_type'] == 'movie' && $b['media']['media_type'] == 'tv') {
-                return $a['media']['release_date'] <=> $b['media']['first_air_date'];
-            } else if ($a['media']['media_type'] == 'tv' && $b['media']['media_type'] == 'movie') {
-                return $a['media']['first_air_date'] <=> $b['media']['release_date'];
-            } else {
-                return 0;
-            }
+            $aDate = $a['media']['media_type'] == 'movie' ? $a['media']['release_date'] : $a['media']['first_air_date'];
+            $bDate = $b['media']['media_type'] == 'movie' ? $b['media']['release_date'] : $b['media']['first_air_date'];
+
+            return $bDate <=> $aDate;
         });
-        $common = array_reverse($common);
 
         return $this->render('search/people.html.twig', [
             'people' => $people,

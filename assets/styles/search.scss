@@ -50,7 +50,6 @@
             gap: 1em;
             margin-block: 1rem;
             margin-inline: auto;
-            width: 216px;
 
             .home-discover {
                 .profile {
@@ -127,96 +126,6 @@
         .footer-infos {
             margin-top: 1rem;
             text-align: center;
-        }
-    }
-}
-
-@media (min-width: 480px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 448px;
-            }
-        }
-    }
-}
-
-@media (min-width: 712px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 680px;
-            }
-        }
-    }
-}
-
-@media (min-width: 944px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 912px;
-            }
-        }
-    }
-}
-
-@media (min-width: 1176px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 1144px;
-            }
-        }
-    }
-}
-
-@media (min-width: 1408px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 1376px;
-            }
-        }
-    }
-}
-
-@media (min-width: 1640px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 1608px;
-            }
-        }
-    }
-}
-
-@media (min-width: 1872px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 1840px;
-            }
-        }
-    }
-}
-
-@media (min-width: 2104px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 2072px;
-            }
-        }
-    }
-}
-
-@media (min-width: 2336px) {
-    .search-page {
-        main {
-            .wrapper {
-                width: 2304px;
-            }
         }
     }
 }
