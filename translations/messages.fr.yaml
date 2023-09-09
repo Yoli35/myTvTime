@@ -443,6 +443,8 @@ Watch now: Regarder maintenant
 # cast / crew
 '"A" Camera Operator.he': Opérateur de caméra "A"
 '"A" Camera Operator.she': Opératrice de caméra "A"
+'"B" Camera Operator.he': Opérateur caméra "B"
+'"B" Camera Operator.she': Opératrice caméra "B"
 24 Frame Playback.he: Lecture à 24 images
 24 Frame Playback.she: Lecture à 24 images
 3D Artist.he: Artiste 3D
@@ -482,6 +484,8 @@ Art Department Assistant.he: Assistant du département artistique
 Art Department Assistant.she: Assistante du département artistique
 Art Department Coordinator.he: Coordinateur du département artistique
 Art Department Coordinator.she: Coordinatrice du département artistique
+Art Department Manager.he: Directeur du département artistique
+Art Department Manager.she: Directrice du département artistique
 Art Direction.he: Direction artistique
 Art Direction.she: Directrice artistique
 Art.he: Directeur artistique
@@ -539,12 +543,16 @@ Character Designer.he: Concepteur de personnages
 Character Designer.she: Conceptrice de personnages
 Characters.he: Personnages
 Characters.she: Personnages
+Charge Scenic Artist.he: Chef peintre
+Charge Scenic Artist.she: Cheffe peintre
 Chief Lighting Technician.he: Technicien en chef de l'éclairage
 Chief Lighting Technician.she: Technicienne en chef de l'éclairage
 Cinematography.he: Cinématographie
 Cinematography.she: Cinématographie
 Clearances Coordinator.he: Coordinateur des habilitations
 Clearances Coordinator.she: Coordinatrice des habilitations
+Co-Director.he: Co-réalisateur
+Co-Director.she: Co-réalisatrice
 Co-Executive Producer.he: Co-producteur exécutif
 Co-Executive Producer.she: Co-productrice exécutive
 Co-Producer.he: Co-producteur
@@ -578,6 +586,8 @@ Controller.she: Contrôleuse
 Costume & Make-Up.he: Costume & maquillage
 Costume & Make-Up.she: Costume & maquillage
 Costume & Make-Up: Costume & maquillage
+Costume Assistant.he: Assistant costumier
+Costume Assistant.she: Assistante costumière
 Costume Coordinator.he: Coordinateur des costumes
 Costume Coordinator.she: Coordinatrice des costumes
 Costume Design.he: Conception des costumes
@@ -592,6 +602,8 @@ Creator.he: Créateur
 Creator.she: Créatrice
 Creator: Création
 Crew.he: Équipe technique
+Dailies Manager.he: Responsable des quotidiens
+Dailies Manager.she: Responsable des quotidiens
 Dailies Operator.he: Opérateur des rushes
 Dailies Operator.she: Opératrice des rushes
 Development Manager.he: Directeur du développement
@@ -604,6 +616,8 @@ Digital Compositor.he: Compositeur numérique
 Digital Compositor.she: Compositrice numérique
 Digital Imaging Technician.he: Technicien en imagerie numérique
 Digital Imaging Technician.she: Technicienne en imagerie numérique
+Digital Intermediate.he: Étalonneur
+Digital Intermediate.she: Étalonneuse
 Directing.he: Metteur en scène
 Directing.she: Metteuse en scène
 Directing: Mise en scène
@@ -627,6 +641,8 @@ Executive Story Editor.he: Rédacteur exécutif en chef
 Executive Story Editor.she: Rédactrice exécutive en chef
 Extras Casting.he: Casting de figurants
 Extras Casting.she: Casting de figurants
+Fight Choreographer.he: Chorégraphe de combat
+Fight Choreographer.she: Chorégraphe de combat
 Finishing Producer.he: Producteur de finition
 Finishing Producer.she: Productrice de finition
 First Assistant "A" Camera.he: Premier assistant "A" Camera.he
@@ -649,6 +665,8 @@ Foley Editor.he: Rédacteur bruitage
 Foley Editor.she: Rédactrice bruitage
 Foley Mixer.he: Mixeur bruitage
 Foley Mixer.she: Mixeuse bruitage
+Foley Recordist.he: Enregistreur de bruitage
+Foley Recordist.she: Enregistreuse de bruitage
 Foley Supervisor.he: Superviseur bruitage
 Foley Supervisor.she: Superviseuse bruitage
 Gaffer.he: Gaffeur
@@ -666,6 +684,8 @@ Hair Department Head.he: Chef du département de coiffure
 Hair Department Head.she: Cheffe du département de coiffure
 Hair Designer.he: Coiffeur
 Hair Designer.she: Coiffeuse
+Hair Supervisor.he: Superviseur de coiffure
+Hair Supervisor.she: Superviseuse de coiffure
 Hairstylist.he: Coiffeur
 Hairstylist.she: Coiffeuse
 Head of Production.he: Chef de production
@@ -694,6 +714,8 @@ Leadman.he: Chef d'équipe
 Leadman.she: Cheffe d'équipe
 Legal Services.he: Services juridiques
 Legal Services.she: Services juridiques
+Lighting Director.he: Directeur de l'éclairage
+Lighting Director.she: Directrice de l'éclairage
 Lighting Technician.he: Technicien lumière
 Lighting Technician.she: Technicienne lumière
 Line Producer.he: Producteur délégué
@@ -706,6 +728,8 @@ Location Coordinator.he: Coordinateur de site
 Location Coordinator.she: Coordinatrice de site
 Location Manager.he: Responsable de site
 Location Manager.she: Responsable de site
+Location Scout.he: Repéreur
+Location Scout.she: Repéreuse
 Main Title Theme Composer.he: Compositeur du thème principal
 Main Title Theme Composer.she: Compositrice du thème principal
 Makeup & Hair Assistant.he: Assistant maquillage et coiffure
@@ -718,8 +742,12 @@ Makeup Department Head.he: Chef du département maquillage
 Makeup Department Head.she: Cheffe du département maquillage
 Makeup Designer.he: Maquilleur
 Makeup Designer.she: Maquilleuse
+Makeup Supervisor.he: Superviseur de maquillage
+Makeup Supervisor.she: Superviseuse de maquillage
 Makeup Trainee.he: Stagiaire maquillage
 Makeup Trainee.she: Stagiaire maquillage
+Martial Arts Choreographer.he: Chorégraphe d'arts martiaux
+Martial Arts Choreographer.she: Chorégraphe d'arts martiaux
 Music Coordinator.he: Coordinateur musique
 Music Coordinator.she: Coordinatrice musique
 Music Editor.he: Éditeur de musique
@@ -766,6 +794,8 @@ Post Production Coordinator.he: Coordinateur post-production
 Post Production Coordinator.she: Coordinatrice post-production
 Post Production Supervisor.he: Superviseur post-production
 Post Production Supervisor.she: Superviseuse post-production
+Post-Production Manager.he: Directeur de post-production
+Post-Production Manager.she: Directrice de post-production
 Producer's Assistant.he: Assistant de production
 Producer's Assistant.she: Assistante de production
 Producer.he: Producteur
@@ -799,6 +829,8 @@ Property Buyer.he: Acheteur de biens immobiliers
 Property Buyer.she: Acheteuse de biens immobiliers
 Property Master.he: Maître d'œuvre
 Property Master.she: Maîtresse d'œuvre
+Props.he: Accessoires
+Props.she: Accessoires
 Prosthetic Designer.he: Concepteur de prothèses
 Prosthetic Designer.she: Conceptrice de prothèses
 Prosthetic Makeup Artist.he: Maquilleur prothésiste
@@ -834,12 +866,16 @@ Second Assistant "A" Camera.he: Second Assistant "A" Camera.he
 Second Assistant "B" Camera.he: Second Assistant "B" Camera.he
 Second Assistant Accountant.he: Second assistant comptable
 Second Assistant Accountant.she: Seconde assistante comptable
+Second Assistant Camera.he: Deuxième assistant caméra
+Second Assistant Camera.she: Deuxième assistante caméra
 Second Assistant Director.he: Second assistant réalisateur
 Second Assistant Director.she: Seconde assistante réalisateur
 Second Second Assistant Director.he: Second assistant réalisateur
 Second Second Assistant Director.she: Seconde assistante réalisateur
 Second Unit Director.he: Second réalisateur
 Second Unit Director.she: Seconde réalisatrice
+Series Director.he: Réalisateur de la série
+Series Director.she: Réalisatrice de la série
 Set Costumer.he: Costumier de plateau
 Set Costumer.she: Costumière de plateau
 Set Decorating Coordinator.he: Coordinateur décoration de plateau
@@ -917,6 +953,8 @@ Trainee Production Coordinator.he: Coordinateur de production stagiaire
 Trainee Production Coordinator.she: Coordinatrice de production stagiaire
 Transportation Captain.he: Capitaine du transport
 Transportation Captain.she: Capitaine du transport
+Transportation Co-Captain.he: Co-capitaine du transport
+Transportation Co-Captain.she: Co-capitaine du transport
 Transportation Coordinator.he: Coordinateur transport
 Transportation Coordinator.she: Coordinatrice transport
 Travel Coordinator.he: Coordinateur voyages
@@ -964,40 +1002,6 @@ Writing.she: Autrice
 Writing: Écriture
 
 # Last jobs added
-Charge Scenic Artist.he: Chef peintre
-Charge Scenic Artist.she: Cheffe peintre
-Props.he: Accessoires
-Props.she: Accessoires
-'"B" Camera Operator.he': Opérateur caméra "B"
-'"B" Camera Operator.she': Opératrice caméra "B"
-Second Assistant Camera.he: Deuxième assistant caméra
-Second Assistant Camera.she: Deuxième assistante caméra
-Costume Assistant.he: Assistant costumier
-Costume Assistant.she: Assistante costumière
-Dailies Manager.he: Responsable des quotidiens
-Dailies Manager.she: Responsable des quotidiens
-Location Scout.he: Repéreur
-Location Scout.she: Repéreuse
-Transportation Co-Captain.he: Co-capitaine du transport
-Transportation Co-Captain.she: Co-capitaine du transport
-Fight Choreographer.he: Chorégraphe de combat
-Fight Choreographer.she: Chorégraphe de combat
-Martial Arts Choreographer.he: Chorégraphe d'arts martiaux
-Martial Arts Choreographer.she: Chorégraphe d'arts martiaux
-Co-Director.he: Co-réalisateur
-Co-Director.she: Co-réalisatrice
-Series Director.he: Réalisateur de la série
-Series Director.she: Réalisatrice de la série
-Lighting Director.he: Directeur de l'éclairage
-Lighting Director.she: Directrice de l'éclairage
-Digital Intermediate.he: Étalonneur
-Digital Intermediate.she: Étalonneuse
-Foley Recordist.he: Enregistreur de bruitage
-Foley Recordist.she: Enregistreuse de bruitage
-Hair Supervisor.he: Superviseur de coiffure
-Hair Supervisor.she: Superviseuse de coiffure
-Makeup Supervisor.he: Superviseur de maquillage
-Makeup Supervisor.she: Superviseuse de maquillage
 
 # key facts
 Favorite: Série favorite

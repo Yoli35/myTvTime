@@ -1619,6 +1619,7 @@ class SerieController extends AbstractController
 
     public function breadcrumb($from, $serie = null, $season = null, $episode = null): array
     {
+        $kind = 'show';
         switch ($from) {
             case self::MY_SERIES:
                 $baseUrl = $this->generateUrl("app_series_index");
@@ -1660,7 +1661,15 @@ class SerieController extends AbstractController
             default:
                 $baseUrl = $this->generateUrl("app_series_popular");
                 $baseName = $this->translator->trans("Popular series");
+                $kind = 'tmdb';
                 break;
+        }
+        if ($serie) {
+            if ($kind === 'show') {
+                $id = $this->serieRepository->findOneBy(['serieId' => $serie['id']])->getId();
+            } else {
+                $id = $serie['id'];
+            }
         }
 
         $breadcrumb = [
@@ -1672,7 +1681,7 @@ class SerieController extends AbstractController
         if ($serie) {
             $breadcrumb[] = [
                 'name' => $serie['name'],
-                'url' => $this->generateUrl('app_series_tmdb', ['id' => $serie['id']]) . '?from=' . $from,
+                'url' => $this->generateUrl('app_series_' . $kind, ['id' => $id]) . '?from=' . $from,
             ];
         }
         if ($season) {
