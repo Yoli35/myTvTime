@@ -1936,7 +1936,7 @@ class SerieController extends AbstractController
                 $serieViewing = $this->updateSerieViewing($serieViewing, $tv);
             }
             $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
-            if (!count($serie->getSerieCasts())) {
+            if (!count($serie->getSerieCasts()) || ($whatsNew && (key_exists('season', $whatsNew) || key_exists('episode', $whatsNew)))) {
                 $this->updateTvCast($tv, $serie);
             }
             $cast = $this->getCast($serie);
@@ -2145,40 +2145,38 @@ class SerieController extends AbstractController
         if ($verbose) $this->messages = [];
 
         $recurringCharacters = $tv['credits']['cast'];
-//        $tvCast = $tv['credits']['cast'];
 
         foreach ($tv['seasons'] as $s) {
             $seasonNumber = $s['season_number'];
-            if ($seasonNumber) { // 21/12/2022 : plus d'épisodes spéciaux
-//                $season = $serieViewing->getSeasonByNumber($seasonNumber);
-//                $episodeCount = $season->getEpisodeCount();
-                $episodeCount = $s['episode_count'];
+            if ($seasonNumber == 0) { // 21/12/2022 : plus d'épisodes spéciaux
+                continue;
+            }
+            $episodeCount = $s['episode_count'];
 
-                for ($episodeNumber = 1; $episodeNumber <= $episodeCount; $episodeNumber++) {
-                    $standing = $this->TMDBService->getTvEpisodeCredits($tv['id'], $seasonNumber, $episodeNumber, 'fr');
-                    $credits = json_decode($standing, true);
+            for ($episodeNumber = 1; $episodeNumber <= $episodeCount; $episodeNumber++) {
+                $standing = $this->TMDBService->getTvEpisodeCredits($tv['id'], $seasonNumber, $episodeNumber, 'fr');
+                $credits = json_decode($standing, true);
 
-                    if ($credits) {
-                        $casting = [];
-                        if ($credits['cast']) {
-                            $arr = array_map(function ($cast) use ($recurringCharacters) {
-                                $cast['recurring_character'] = $this->inTvCast($recurringCharacters, $cast['id']);
-                                $cast['guest_star'] = false;
-                                return $cast;
-                            }, $credits['cast']);
-                            $casting = array_merge($casting, $arr);
-                        }
-                        if ($credits['guest_stars']) {
-                            $arr = array_map(function ($cast) {
-                                $cast['recurring_character'] = false;
-                                $cast['guest_star'] = true;
-                                return $cast;
-                            }, $credits['guest_stars']);
-                            $casting = array_merge($casting, $arr);
-                        }
-                        foreach ($casting as $cast) {
-                            $this->episodesCast($cast, $serie, $seasonNumber, $episodeNumber, $verbose);
-                        }
+                if ($credits) {
+                    $casting = [];
+                    if ($credits['cast']) {
+                        $arr = array_map(function ($cast) use ($recurringCharacters) {
+                            $cast['recurring_character'] = $this->inTvCast($recurringCharacters, $cast['id']);
+                            $cast['guest_star'] = false;
+                            return $cast;
+                        }, $credits['cast']);
+                        $casting = array_merge($casting, $arr);
+                    }
+                    if ($credits['guest_stars']) {
+                        $arr = array_map(function ($cast) {
+                            $cast['recurring_character'] = false;
+                            $cast['guest_star'] = true;
+                            return $cast;
+                        }, $credits['guest_stars']);
+                        $casting = array_merge($casting, $arr);
+                    }
+                    foreach ($casting as $cast) {
+                        $this->episodesCast($cast, $serie, $seasonNumber, $episodeNumber, $verbose);
                     }
                 }
             }
@@ -2204,17 +2202,24 @@ class SerieController extends AbstractController
             $serieCast = $this->serieCastRepository->findOneBy(['serie' => $serie, 'cast' => $dbCast]);
         }
         if ($serieCast === null) {
-            $serieCast = $this->createSerieCast($cast, $dbCast, $serie);
+            $serieCast = $this->createSerieCast($cast, $dbCast, $serie, $verbose);
         }
+//        if ($verbose) {
+//            $episodesArray = array_merge($serieCast->getEpisodes());
+//        }
         $serieCast->addEpisode($seasonNumber, $episodeNumber);
+//        if ($verbose) {
+//            $episodesArray = array_diff($serieCast->getEpisodes(), $episodesArray);
+//            $this->messages[] = "New episodes for " . $cast['name'] . ' : ' . implode(', ', $episodesArray);
+//        }
     }
 
-    public function createSerieCast($cast, $dbCast, $serie): SerieCast
+    public function createSerieCast($cast, $dbCast, $serie, $verbose): SerieCast
     {
         if ($dbCast === null) {
             $dbCast = new Cast($cast['id'], $cast['name'], $cast['profile_path']);
             $this->castRepository->save($dbCast, true);
-            $this->messages[] = "New cast " . $cast['name'];
+            if ($verbose) $this->messages[] = "New cast " . $cast['name'];
         }
         $serieCast = new SerieCast($serie, $dbCast);
         $serieCast->setKnownForDepartment($cast['known_for_department']);
@@ -2224,7 +2229,7 @@ class SerieController extends AbstractController
         $this->serieCastRepository->save($serieCast, true);
         $this->serieRepository->save($serie->addSerieCast($serieCast), true);
 
-        $this->messages[] = "New character " . $cast['character'] . ' by ' . $cast['name'];
+        if ($verbose) $this->messages[] = "New character " . $cast['character'] . ' by ' . $cast['name'];
 
         return $serieCast;
     }
@@ -2239,16 +2244,16 @@ class SerieController extends AbstractController
         $imgConfig = $this->imageConfiguration->getConfig();
         $modified = false;
         /*
-         *  -name: "Heartstopper"
-         *  -posterPath: "/zvyVRRfCB9qze9TTRp1lhG2TRud.jpg"
-         *  -backdropPath: "/p3cAHHwyTJJoQlCtgYwb31t6rOq.jpg"
-         *  -firstDateAir: DateTimeImmutable @1650585600 {#1457 ▶}
-         *  -status: "Returning Series"
-         *  -overview: ""
-            -networks: Doctrine\ORM\PersistentCollection {#1481 ▶}
-         *  -numberOfEpisodes: 16
-         *  -numberOfSeasons: 2
-         *  -originalName: "Heartstopper"
+         *  -name: string
+         *  -posterPath: string
+         *  -backdropPath: string
+         *  -firstDateAir: DateTimeImmutable
+         *  -status: string
+         *  -overview: string
+            -networks: Collection
+         *  -numberOfEpisodes: number
+         *  -numberOfSeasons: number
+         *  -originalName: string
          */
         if ($serie->getPosterPath() !== $tv['poster_path']) {
             $seriePosters = array_map(fn($poster) => $poster->getPosterPath(), $serie->getSeriePosters()->toArray());
@@ -2508,20 +2513,6 @@ class SerieController extends AbstractController
             'seasonCompleted' => $serieViewing->getSeasonByNumber($season)->isSeasonCompleted(),
         ]);
     }
-
-//    public function networks2Array($networks): array
-//    {
-//        $networksArray = [];
-//        foreach ($networks as $network) {
-//            $netWorkArray['id'] = $network->getNetworkId();
-//            $networkArray['name'] = $network->getName();
-//            $networkArray['logoPath'] = $network->getLogoPath();
-//            $networkArray['originCountry'] = $network->getOriginCountry();
-//            $networkArray['networkId'] = $network->getNetworkId();
-//            $networksArray[] = $networkArray;
-//        }
-//        return $networksArray;
-//    }
 
     public function getSerieViewingCreatedAt($serieViewing, $request): DateTimeImmutable|null
     {
