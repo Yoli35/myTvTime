@@ -138,6 +138,7 @@
             font-weight: 100;
             margin: 0 0 1em 0;
             text-align: center;
+            text-wrap: balance;
         }
 
         .result {
@@ -212,18 +213,6 @@
                         input {
                             margin-left: .5em;
                         }
-
-                        &:has(select) {
-                            @include customSelect;
-
-                            &::after {
-                                right: 0.75em;
-                            }
-
-                            select {
-                                margin: 0 0 0 .5em;
-                            }
-                        }
                     }
                 }
 
@@ -235,7 +224,7 @@
 
                     label {
                         input {
-                           background-color: var(--gradient-ardoise-30);
+                            background-color: var(--gradient-ardoise-30);
                             border: 1px solid var(--gradient-ardoise-80);
                         }
                     }
@@ -297,15 +286,6 @@
                         flex: 1;
                         flex-wrap: wrap;
                         gap: 1em;
-
-                       /* label {
-                            @include flex-row();
-                            gap: 1em;
-
-                            > div {
-                                flex-shrink: 0;
-                            }
-                        }*/
                     }
                 }
 
@@ -948,12 +928,10 @@
                 .input {
                     background-color: var(--gradient-ardoise-30);
 
-                    .sort, .order {
-                        label:has(select) {
-                            select {
-                                background-color: var(--gradient-ardoise-40);
-                                color: var(--gradient-ardoise-90);
-                            }
+                    .link {
+                        input {
+                            background-color: var(--gradient-ardoise-30);
+                            border: 1px solid var(--gradient-ardoise-80);
                         }
                     }
                 }

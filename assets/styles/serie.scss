@@ -1652,7 +1652,9 @@
                                     @include flex-col();
                                     font-size: .875rem;
                                     font-weight: 300;
+                                    gap: .75rem;
                                     height: 100%;
+                                    padding-inline: .25rem;
                                     width: 100%;
 
                                     div {
