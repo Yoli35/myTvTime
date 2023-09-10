@@ -1267,22 +1267,31 @@ class SerieController extends AbstractController
                 for ($i = 1; $i <= $s['episode_count']; $i++) {
                     $this->addNewEpisode($tv, $season, $i);
                 }
+                $seasonNumber = sprintf('S%02d', $s['season_number']);
+                $this->addFlash('success', $this->translator->trans('Serie "%serieName%", season %seasonNumber% (%episodeCount% ep.) added.',
+                    ['%serieName%' => $serieViewing->getSerie()->getName(), '%seasonNumber%' => $seasonNumber, '%episodeCount%' => $s['episode_count']]));
             } else {
                 if ($season->getEpisodeCount() < $s['episode_count']) {
                     for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
                         $this->addNewEpisode($tv, $season, $i);
+                        $episodeNumber = sprintf('S%02dE%02d', $season->getSeasonNumber(), $i);
+                        $this->addFlash('success', $this->translator->trans('Serie "%serieName%", episode %episodeNumber% added.',
+                            ['%serieName%' => $serieViewing->getSerie()->getName(), '%episodeNumber%' => $episodeNumber]));
+                    }
+                } else {
+                    $serieViewing->setNextEpisodeToAir(null);
+                    $serieViewing->setNextEpisodeToWatch(null);
+                    for ($i = $s['episode_count'] + 1; $i <= $season->getEpisodeCount(); $i++) {
+                        $episode = $season->getEpisodeByNumber($i);
+                        if ($episode !== null) {
+                            $season->removeEpisodeViewing($episode);
+                            $this->episodeViewingRepository->remove($episode, true);
+                        }
+                        $episodeNumber = sprintf('S%02dE%02d', $season->getSeasonNumber(), $i);
+                        $this->addFlash('success', $this->translator->trans('Serie "%serieName%", episode %episodeNumber% removed.',
+                            ['%serieName%' => $serieViewing->getSerie()->getName(), '%episodeNumber%' => $episodeNumber]));
                     }
                 }
-                // TODO : remove episodes
-//                else {
-//                    for ($i = $s['episode_count'] + 1; $i <= $season->getEpisodeCount(); $i++) {
-//                        $episode = $season->getEpisodeByNumber($i);
-//                        if ($episode !== null) {
-//                            $season->removeEpisodeViewing($episode);
-////                            $this->episodeViewingRepository->remove($episode, true);
-//                        }
-//                    }
-//                }
                 $season->setEpisodeCount($s['episode_count']);
             }
             $this->seasonViewingRepository->save($season, true);
