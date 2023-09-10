@@ -1204,7 +1204,7 @@ class SerieController extends AbstractController
         return $viewing;
     }
 
-    public function updateSerieViewing(SerieViewing $serieViewing, array $tv, bool $verbose = false): SerieViewing
+    public function updateSerieViewing(SerieViewing $serieViewing, array $tv, bool $verbose = false, bool $flashes = false): SerieViewing
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -1268,14 +1268,14 @@ class SerieController extends AbstractController
                     $this->addNewEpisode($tv, $season, $i);
                 }
                 $seasonNumber = sprintf('S%02d', $s['season_number']);
-                $this->addFlash('success', $this->translator->trans('Serie "%serieName%", season %seasonNumber% (%episodeCount% ep.) added.',
+                if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "%serieName%", season %seasonNumber% (%episodeCount% ep.) added.',
                     ['%serieName%' => $serieViewing->getSerie()->getName(), '%seasonNumber%' => $seasonNumber, '%episodeCount%' => $s['episode_count']]));
             } else {
                 if ($season->getEpisodeCount() < $s['episode_count']) {
                     for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
                         $this->addNewEpisode($tv, $season, $i);
                         $episodeNumber = sprintf('S%02dE%02d', $season->getSeasonNumber(), $i);
-                        $this->addFlash('success', $this->translator->trans('Serie "%serieName%", episode %episodeNumber% added.',
+                        if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "%serieName%", episode %episodeNumber% added.',
                             ['%serieName%' => $serieViewing->getSerie()->getName(), '%episodeNumber%' => $episodeNumber]));
                     }
                 } else {
@@ -1288,7 +1288,7 @@ class SerieController extends AbstractController
                             $this->episodeViewingRepository->remove($episode, true);
                         }
                         $episodeNumber = sprintf('S%02dE%02d', $season->getSeasonNumber(), $i);
-                        $this->addFlash('success', $this->translator->trans('Serie "%serieName%", episode %episodeNumber% removed.',
+                        if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "%serieName%", episode %episodeNumber% removed.',
                             ['%serieName%' => $serieViewing->getSerie()->getName(), '%episodeNumber%' => $episodeNumber]));
                     }
                 }
@@ -1661,6 +1661,7 @@ class SerieController extends AbstractController
             case self::SEARCH_SERIES:
                 $baseUrl = $this->generateUrl("app_series_search");
                 $baseName = $this->translator->trans("Series search");
+                $kind = 'tmdb';
                 break;
             case self::MY_EVENTS:
                 $baseUrl = $this->generateUrl("app_event");
@@ -1951,7 +1952,7 @@ class SerieController extends AbstractController
                 $serieViewing = $this->createSerieViewing($user, $tv, $serie);
             } else {
                 $whatsNew = $this->whatsNew($tv, $serie, $serieViewing);
-                $serieViewing = $this->updateSerieViewing($serieViewing, $tv);
+                $serieViewing = $this->updateSerieViewing($serieViewing, $tv, false, true);
             }
             $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
             if (!count($serie->getSerieCasts()) || ($whatsNew && (key_exists('season', $whatsNew) || key_exists('episode', $whatsNew)))) {
@@ -2304,7 +2305,7 @@ class SerieController extends AbstractController
         $firstDateAir = $tv['first_air_date'];
         if ($firstDateAir !== "") {
             $firstDateAirTMDB = $this->dateService->newDateImmutable($firstDateAir, $timezone, true);
-            $firstDateAirDB = $serie->getFirstDateAir()->setTimezone(new DateTimeZone($timezone))->setTime(0, 0);
+            $firstDateAirDB = $serie->getFirstDateAir()?->setTimezone(new DateTimeZone($timezone))->setTime(0, 0);
             if ($firstDateAirTMDB != $firstDateAirDB) {
                 $whatsNew['first_date_air'] = $this->translator->trans('New date') . ' (' . $firstDateAir . ')';
                 $serie->setFirstDateAir($firstDateAirTMDB);

@@ -13,6 +13,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -38,16 +39,18 @@ class NextEpisodeToAir extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('userid', InputArgument::OPTIONAL, 'User\'s Id')
-            ->addArgument('id', InputArgument::OPTIONAL, 'Serie\'s Id');
+//            ->addArgument('userid', InputArgument::OPTIONAL, 'User\'s Id')
+//            ->addArgument('id', InputArgument::OPTIONAL, 'Serie\'s Id')
+            ->addOption('user', 'u', InputOption::VALUE_REQUIRED, 'User\'s Id')
+            ->addOption('serie', 's', InputOption::VALUE_REQUIRED, 'Serie\'s Id');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $userId = $input->getArgument('userid');
-        $serieId = $input->getArgument('id');
+        $userId = $input->getOption('user');
+        $serieId = $input->getOption('serie');
         $canSkip = true;
 
         if ($userId && $serieId) {

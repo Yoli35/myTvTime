@@ -201,6 +201,7 @@
                 .link, .sort, .order {
                     @include flex-row();
                     font-weight: 100;
+                    gap: .5rem;
                     text-transform: capitalize;
 
                     > div {

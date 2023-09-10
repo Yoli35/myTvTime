@@ -1,101 +1,101 @@
-    {% if user and serieId %}
-        <div class="favorite" data-user="{{ user.id }}" data-media="{{ serieId }}">
-            <div class="control">
-                {{ 'Add to favorites'|trans }}
-                <label class="switch">
-                    <input type="checkbox" {% if is_favorite(user.id, serieId, 'series') %} checked{% endif %}/>
-                    <span></span>
-                </label>
-            </div>
-            <span class="message"></span>
+{% if user and serieId %}
+    <div class="favorite" data-user="{{ user.id }}" data-media="{{ serieId }}">
+        <div class="control">
+            {{ 'Add to favorites'|trans }}
+            <label class="switch">
+                <input type="checkbox" {% if is_favorite(user.id, serieId, 'series') %} checked{% endif %}/>
+                <span></span>
+            </label>
         </div>
-        <div class="timeShifted" data-user="{{ user.id }}" data-media="{{ serieId }}">
-            <div class="control">
-                {{ 'Airing D+1'|trans }}
-                <label class="switch">
-                    <input type="checkbox" {% if isTimeShifted %} checked{% endif %}/>
-                    <span></span>
-                </label>
-            </div>
+        <span class="message"></span>
+    </div>
+    <div class="timeShifted" data-user="{{ user.id }}" data-media="{{ serieId }}">
+        <div class="control">
+            {{ 'Airing D+1'|trans }}
+            <label class="switch">
+                <input type="checkbox" {% if isTimeShifted %} checked{% endif %}/>
+                <span></span>
+            </label>
         </div>
-    {% endif %}
-    <div class="key-facts">
-        <h4>{{ 'Key facts'|trans }}</h4>
+    </div>
+{% endif %}
+<div class="key-facts">
+    <h4>{{ 'Key facts'|trans }}</h4>
+    <div class="fact">
+        <div class="fact-label">{{ 'Original name'|trans }}</div>
+        <div class="fact-content">{{ serie.original_name }}</div>
+    </div>
+    <div class="fact">
+        <div class="fact-label">{{ 'Original language'|trans }}</div>
+        <div class="fact-content">{{ serie.original_language|language_name(locale) }}</div>
+    </div>
+    <div class="fact">
+        <div class="fact-label">{{ 'Original Country'|trans }}</div>
+        {% for country in serie.origin_country %}
+            <div class="fact-content">{{ country|country_name(locale) }}</div>
+        {% endfor %}
+    </div>
+    <div class="fact">
+        <div class="fact-label">{{ 'Status'|trans }}</div>
+        <div class="fact-content">{{ serie.status|trans }}</div>
+    </div>
+    {% if serie.networks|length %}
         <div class="fact">
-            <div class="fact-label">{{ 'Original name'|trans }}</div>
-            <div class="fact-content">{{ serie.original_name }}</div>
-        </div>
-        <div class="fact">
-            <div class="fact-label">{{ 'Original language'|trans }}</div>
-            <div class="fact-content">{{ serie.original_language|language_name(locale) }}</div>
-        </div>
-        <div class="fact">
-            <div class="fact-label">{{ 'Original Country'|trans }}</div>
-            {% for country in serie.origin_country %}
-                <div class="fact-content">{{ country|country_name(locale) }}</div>
+            <div class="fact-label">{{ (serie.networks|length>1?'Networks':'Network')|trans }}</div>
+            {% for network in serie.networks %}
+                <div class="fact-content">
+                    {% if network.logo_path %}
+                        <div class="frame">
+                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
+                        </div>
+                    {% else %}
+                        {{ network.name }}
+                    {% endif %}
+                </div>
             {% endfor %}
         </div>
+    {% endif %}
+
+    {% if keywords.results|length %}
         <div class="fact">
-            <div class="fact-label">{{ 'Status'|trans }}</div>
-            <div class="fact-content">{{ serie.status|trans }}</div>
-        </div>
-        <div class="fact">
-            {% if serie.networks|length %}
-                <div class="fact-label">{{ (serie.networks|length>1?'Networks':'Network')|trans }}</div>
-                {% for network in serie.networks %}
-                    <div class="fact-content">
-                        {% if network.logo_path %}
-                            <div class="frame">
-                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
-                            </div>
-                        {% else %}
-                            {{ network.name }}
+            <div class="label">{{ 'Keywords'|trans }}</div>
+            <div class="keywords">
+                {% for keyword in keywords.results %}
+                    <div class="keyword{% if keyword.name in missingTranslations %} new{% endif %}" data-original="{{ keyword.name|trim }}">
+                        <div class="original">{{ keyword.name|trim }}</div>
+                        {% if keyword.name not in missingTranslations %}
+                            <div class="translated">{{ keyword.name|trans({},'tags') }}</div>
                         {% endif %}
                     </div>
                 {% endfor %}
-            {% endif %}
+            </div>
         </div>
+    {% endif %}
 
-        {% if keywords.results|length %}
-            <div class="fact">
-                <div class="label">{{ 'Keywords'|trans }}</div>
-                <div class="keywords">
-                    {% for keyword in keywords.results %}
-                        <div class="keyword{% if keyword.name in missingTranslations %} new{% endif %}" data-original="{{ keyword.name|trim }}">
-                            <div class="original">{{ keyword.name|trim }}</div>
-                            {% if keyword.name not in missingTranslations %}
-                                <div class="translated">{{ keyword.name|trans({},'tags') }}</div>
+    {% if similar.results|length %}
+        <div class="fact">
+            <div class="label">{{ 'Similar Series'|trans }}</div>
+            <div class="similar">
+                {% for serie in similar.results %}
+                    <a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?p={{ page }}&from={{ from }}" title="{{ serie.name }}">
+                        <div class="poster">
+                            {% if serie.poster_path|length %}
+                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
+                            {% else %}
+                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
+                                <div class="name">{{ serie.name }}</div>
+                            {% endif %}
+                            {% if serieIds|length %}
+                                {% if serie.id in serieIds %}
+                                    <div class="seen"><i class="fa-solid fa-eye"></i></div>
+                                {% else %}
+                                    <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
+                                {% endif %}
                             {% endif %}
                         </div>
-                    {% endfor %}
-                </div>
+                    </a>
+                {% endfor %}
             </div>
-        {% endif %}
-
-        {% if similar.results|length %}
-            <div class="fact">
-                <div class="label">{{ 'Similar Series'|trans }}</div>
-                <div class="similar">
-                    {% for serie in similar.results %}
-                        <a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?p={{ page }}&from={{ from }}" title="{{ serie.name }}">
-                            <div class="poster">
-                                {% if serie.poster_path|length %}
-                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
-                                {% else %}
-                                    <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
-                                    <div class="name">{{ serie.name }}</div>
-                                {% endif %}
-                                {% if serieIds|length %}
-                                    {% if serie.id in serieIds %}
-                                        <div class="seen"><i class="fa-solid fa-eye"></i></div>
-                                    {% else %}
-                                        <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        </a>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+</div>
