@@ -11,7 +11,6 @@ use App\Service\TMDBService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -60,6 +59,15 @@ class NextEpisodeToAir extends Command
             $canSkip = false;
         } else {
             $serieViewings = $this->serieViewingRepository->findAll();
+            $confirm = $io->ask('Do you want to skip series with recent check and last episode viewed more than 2 years ago?', 'yes');
+            if ($confirm !== 'yes') {
+                $canSkip = false;
+            }
+            $confirm = $io->ask('Check all the series (' . count($serieViewings) . ' series)?', 'yes');
+            if ($confirm !== 'yes') {
+                $io->warning('Confirmation not given. Exiting.');
+                return Command::SUCCESS;
+            }
         }
         $count = 0;
         $skipped = 0;
@@ -72,16 +80,18 @@ class NextEpisodeToAir extends Command
         foreach ($serieViewings as $serieViewing) {
 
             $serie = $serieViewing->getSerie();
-            $io->writeln($serie->getName() . ' (' . $serie->getId() . ') for user ' . $serieViewing->getUser()->getUsername() . ' (' . $serieViewing->getUser()->getId() . ')');
-            $this->logs($serie->getName() . ' (' . $serie->getId() . ') for user ' . $serieViewing->getUser()->getUsername() . ' (' . $serieViewing->getUser()->getId() . ')');
+            $line = sprintf("%s (%d) for user %s (%d)", $serie->getName(), $serie->getId(), $serieViewing->getUser()->getUsername(), $serieViewing->getUser()->getId());
+            $io->writeln($line);
+            $this->logs($line);
 
             if ($canSkip) {
                 // Si la dernière vérification de l'épisode suivant est récente, on ne fait rien
                 if ($serieViewing->getNextEpisodeCheckDate()) {
                     $diff = $now->diff($serieViewing->getNextEpisodeCheckDate());
                     if ($diff->days < 2) {
-                        $io->writeln([str_repeat("••", 40), '    the last check is recent (< 2 days), skipping', str_repeat("••", 40)]);
-                        $this->logs('    the last check is recent (< 2 days), skipping');
+                        $line = "    the last check is recent (< 2 days), skipping";
+                        $io->writeln([$line, str_repeat("•", strlen($line))]);
+                        $this->logs($line);
                         $skipped++;
                         continue;
                     }
@@ -89,8 +99,9 @@ class NextEpisodeToAir extends Command
                 // Si le dernier épisode de la série a été vu depuis plus de 2 ans, on ne fait rien, puisqu'il est probable que la série soit terminée
                 $lastSeasonViewing = $this->serieController->getSeasonViewing($serieViewing, $serieViewing->getNumberOfSeasons());
                 if ($lastSeasonViewing === null) {
-                    $io->writeln([str_repeat("*+", 40), '    Last season viewing is null, skipping', str_repeat("+*", 40)]);
-                    $this->logs('    Last season viewing is null, skipping');
+                    $line = "    Last season viewing is null, skipping";
+                    $io->writeln([$line, str_repeat("+", strlen($line))]);
+                    $this->logs($line);
                     $skipped++;
                     continue;
                 }
@@ -101,8 +112,9 @@ class NextEpisodeToAir extends Command
                     if ($lastViewingDate !== null) {
                         $diff = $now->diff($lastViewingDate);
                         if ($diff->y >= 2) {
-                            $io->writeln([str_repeat("*•", 40), '    Last episode viewed more than 2 years ago, skipping', str_repeat("*•", 40)]);
-                            $this->logs('    Last episode viewed more than 2 years ago, skipping');
+                            $line = "    Last episode viewed more than 2 years ago, skipping";
+                            $io->writeln([$line, str_repeat("*", strlen($line))]);
+                            $this->logs($line);
                             $skipped++;
                             continue;
                         }
@@ -111,8 +123,9 @@ class NextEpisodeToAir extends Command
                     if ($airDate !== null) {
                         $diff = $now->diff($airDate);
                         if ($diff->y >= 2) {
-                            $io->writeln([str_repeat("•~", 40), '    Last episode aired more than 2 years ago, skipping', str_repeat("~•", 40)]);
-                            $this->logs('    Last episode aired more than 2 years ago, skipping');
+                            $line = "    Last episode aired more than 2 years ago, skipping";
+                            $io->writeln([$line, str_repeat("~", strlen($line))]);
+                            $this->logs($line);
                             $skipped++;
                             continue;
                         }
@@ -154,12 +167,14 @@ class NextEpisodeToAir extends Command
             $io->writeln('End of report');
         }
 
-        $io->success('Done. ' . $count . ' series updated, ' . $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
-        $this->logs('Done. ' . $count . ' series updated, ' . $skipped . ' skipped, ' . $error . ' error' . ($error > 1 ? 's' : ''));
+        $line = sprintf("Done. %d series updated, %d skipped, %d error%s", $count, $skipped, $error, $error > 1 ? 's' : '');
+        $io->success($line);
+        $this->logs($line);
 
         $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
-        $this->logger->info('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
-        $io->writeln('Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s'));
+        $line = 'Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s');
+        $this->logger->info($line);
+        $io->writeln($line);
 
         return Command::SUCCESS;
     }

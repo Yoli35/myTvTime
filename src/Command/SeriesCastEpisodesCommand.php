@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Controller\SerieController;
-use App\Repository\CastRepository;
+use App\Repository\SerieCastRepository;
 use App\Repository\SerieRepository;
 use App\Service\DateService;
 use App\Service\TMDBService;
@@ -22,11 +22,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class SeriesCastEpisodesCommand extends Command
 {
     public function __construct(
-        private readonly DateService     $dateService,
-        private readonly LoggerInterface $logger,
-        private readonly SerieController $serieController,
-        private readonly SerieRepository $serieRepository,
-        private readonly TMDBService     $tmdbService,
+        private readonly DateService         $dateService,
+        private readonly LoggerInterface     $logger,
+        private readonly SerieCastRepository $serieCastRepository,
+        private readonly SerieController     $serieController,
+        private readonly SerieRepository     $serieRepository,
+        private readonly TMDBService         $tmdbService,
     )
     {
         parent::__construct();
@@ -58,6 +59,12 @@ class SeriesCastEpisodesCommand extends Command
             $seriesArr = $this->serieRepository->findBy([], null, $limit, $offset);
         } else {
             $seriesArr = $this->serieRepository->findAll();
+            $serieCastCount = $this->serieCastRepository->countSerieCast();
+            $confirm = $io->ask('Update all the serie casts (' . count($seriesArr) . ' series, ' . $serieCastCount . ' roles/characters)?', 'yes');
+            if ($confirm !== 'yes') {
+                $io->warning('Confirmation not given. Exiting.');
+                return Command::SUCCESS;
+            }
         }
 
         $progressBar = $io->createProgressBar(count($seriesArr));

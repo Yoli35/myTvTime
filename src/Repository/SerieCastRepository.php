@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SerieCastRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, SerieCast::class);
     }
@@ -42,6 +42,18 @@ class SerieCastRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function countSerieCast()
+    {
+        $sql = "SELECT "
+            . "COUNT(sc.`id`) "
+            . "FROM `serie_cast`sc";
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchOne();
     }
 
 //    /**
