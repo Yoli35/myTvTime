@@ -113,6 +113,8 @@ class ActivityController extends AbstractController
             ['name' => $this->translator->trans('Activity'), 'url' => $this->generateUrl('app_activity_index')],
         ];
 
+//        dump(['days' => $days]);
+
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
             'goals' => $goals,

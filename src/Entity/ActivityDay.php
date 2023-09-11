@@ -21,7 +21,7 @@ class ActivityDay
     private ?int $id = null;
 
     #[ORM\ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'activityDays')]
-    private ?Activity $activity;
+    private ?Activity $activity = null;
 
     #[ORM\Column]
     private ?bool $standUpRingCompleted = false;
@@ -59,7 +59,8 @@ class ActivityDay
     public function __construct($activity)
     {
         try {
-            $today = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+            $today = new DateTimeImmutable('now', new DateTimeZone($activity->getUser()->getTimezone() ?? 'Europe/Paris'));
+//            $today = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
         } catch (Exception) {
             $today = new DateTimeImmutable();
         }
@@ -186,7 +187,12 @@ class ActivityDay
 
     public function getDay(): ?DateTimeInterface
     {
-        return $this->day;
+        try {
+            return $this->day->setTimezone(new DateTimeZone($this->activity->getUser()->getTimezone() ?? 'Europe/Paris'));
+        } catch (Exception) {
+            return $this->day;
+        }
+//        return $this->day->setTimezone(new DateTimeZone('Europe/Paris'));
     }
 
     public function setDay(DateTimeInterface $day): self
