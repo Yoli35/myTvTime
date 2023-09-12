@@ -717,7 +717,8 @@ nav.active {
     }
 
     .top-item {
-        font-weight: 600;
+        color: var(--gradient-ardoise-90);
+        font-weight: 300;
         border-bottom: 2px solid transparent;
 
         &:hover {
@@ -730,6 +731,7 @@ nav.active {
     .nav-toggler {
         .connexion {
             > a {
+                color: var(--gradient-ardoise-10);
                 background-color: var(--gradient-ardoise-100);
 
                 &:hover {
@@ -744,6 +746,7 @@ nav.active {
         background-color: var(--gradient-ardoise-80-alpha-50);
 
         a {
+            color: var(--gradient-ardoise-10);
             &:hover {
                 background-color: var(--gradient-ardoise-40);
                 color: var(--gradient-ardoise-90);
@@ -776,6 +779,22 @@ nav.active {
             }
         }
     }
+
+    .top-menu {
+        background-color: var(--gradient-ardoise-75-alpha-25);
+
+        &:hover {
+            background-color: var(--gradient-ardoise-75);
+        }
+
+        .top-item {
+            color: var(--gradient-ardoise-10);
+
+            &:hover {
+                border-bottom-color: var(--gradient-orange-50);
+            }
+        }
+    }
 }
 
 .nav-breadcrumb {
@@ -796,166 +815,8 @@ nav.active {
     }
 
     a {
-        text-decoration: none;
-    }
-
-    .menu {
         color: var(--gradient-ardoise-90);
-        cursor: pointer;
-        height: 2em;
-        margin: 0 2em 0 1em;
-        position: relative;
-        width: 2em;
-        z-index: 52;
-
-        &:before {
-            content: '°';
-            position: absolute;
-            left: -1em;
-            top: .5em;
-            width: 1em;
-        }
-
-        &:after {
-            content: '°';
-            position: absolute;
-            right: -1em;
-            text-align: right;
-            top: .5em;
-            width: 1em;
-        }
-
-        &:hover {
-            .menu-items {
-                display: block;
-            }
-        }
-
-        img {
-            border: 2px solid var(--gradient-ardoise-80);
-            border-radius: .5em;
-            height: 2em;
-            object-fit: cover;
-            width: 2em;
-        }
-
-        .menu-items, .sub-menu {
-            background-color: var(--gradient-ardoise-25);
-            border-radius: .25em;
-            box-shadow: 0 0 1em var(--gradient-ardoise-10-alpha-50);
-            display: none;
-            left: -6em;
-            //overflow: hidden;
-            position: absolute;
-            top: 2em;
-            min-width: 17.25em;
-            z-index: 53;
-
-            .menu-item {
-                white-space: nowrap;
-                width: 100%;
-
-                a {
-                    color: var(--gradient-ardoise-90);
-                    display: flex;
-                    font-weight: 100;
-                    gap: .5em;
-                    padding: 0 1em;
-                    width: 100%;
-                    white-space: nowrap;
-
-                    &:hover {
-                        background-color: var(--gradient-orange-50);
-                        color: var(--gradient-orange-90);
-                    }
-
-                    div:first-child {
-                        align-items: center;
-                        display: flex;
-                        justify-content: center;
-                        width: 2em;
-                    }
-
-                    .icon:has(.fa-solid.fa-user) {
-                        color: var(--gradient-purple-80);
-                    }
-
-                    .icon:has(.fa-solid.fa-children) {
-                        color: var(--gradient-ardoise-80);
-                    }
-
-                    .icon:has(.fa-solid.fa-person-walking),
-                    .icon:has(.fa-solid.fa-calendar-days) {
-                        color: var(--gradient-purple-50);
-                    }
-
-                    .icon:has(.fa-solid.fa-film),
-                    .icon:has(.fa-solid.fa-clapperboard) {
-                        color: var(--gradient-ardoise-60);
-                    }
-
-                    .icon:has(.fa-solid.fa-tv),
-                    .icon:has(.fa-solid.fa-calendar-day) {
-                        color: var(--gradient-green-50);
-                    }
-
-                    .icon:has(.fa-solid.fa-play),
-                    .icon:has(.fa-solid.fa-forward-step) {
-                        color: var(--gradient-yellow-60);
-                    }
-
-                    .icon:has(.fa-solid.fa-hand-point-right) {
-                        color: var(--gradient-orange-60);
-                    }
-
-                    .icon:has(.fa-brands.fa-youtube),
-                    .icon:has(.fa-solid.fa-magnifying-glass) {
-                        color: var(--gradient-red-50);
-                    }
-
-                    .image-collection {
-                        img {
-                            border: 1px solid var(--gradient-ardoise-80);
-                            border-radius: 50%;
-                            height: 1.25em;
-                            object-fit: cover;
-                            width: 1.25em;
-                        }
-                    }
-                }
-            }
-        }
-
-        .menu-items {
-            .menu-item-collections {
-                .sub-menu {
-                    left: 16rem;
-                    overflow: hidden;
-                    position: absolute;
-                    top: 7rem;
-
-                    //&.show,
-                    &:hover {
-                        display: block;
-                    }
-
-                    .menu-item {
-                        display: flex;
-                        gap: .5rem;
-                    }
-
-                    &.to-left {
-                        left: -17rem;
-                    }
-                }
-
-                &:hover {
-                    .sub-menu {
-                        display: block;
-                    }
-                }
-            }
-        }
+        text-decoration: none;
     }
 
     .breadcrumb {
@@ -970,6 +831,7 @@ nav.active {
 
         .breadcrumb-item {
             height: 100%;
+            font-weight: 300;
 
             a {
                 align-items: center;
@@ -1074,6 +936,132 @@ nav.active {
             }
         }
 
+        .menu {
+            color: var(--gradient-ardoise-90);
+            cursor: pointer;
+            height: 2em;
+            margin: 0 2em 0 1em;
+            position: relative;
+            width: 2em;
+            z-index: 52;
+
+            &:before {
+                content: '°';
+                position: absolute;
+                left: -1em;
+                top: .5em;
+                width: 1em;
+            }
+
+            &:after {
+                content: '°';
+                position: absolute;
+                right: -1em;
+                text-align: right;
+                top: .5em;
+                width: 1em;
+            }
+
+            &:hover {
+                .menu-items {
+                    display: block;
+                }
+            }
+
+            img {
+                border: 2px solid var(--gradient-ardoise-80);
+                border-radius: .5em;
+                height: 2em;
+                object-fit: cover;
+                width: 2em;
+            }
+
+            .menu-items, .sub-menu {
+                background-color: var(--gradient-ardoise-25);
+                border-radius: .25em;
+                box-shadow: 0 0 1em var(--gradient-ardoise-10-alpha-50);
+                display: none;
+                left: -6em;
+                //overflow: hidden;
+                position: absolute;
+                top: 2em;
+                min-width: 17.25em;
+                z-index: 53;
+
+                .menu-item {
+                    white-space: nowrap;
+                    width: 100%;
+
+                    a {
+                        color: var(--gradient-ardoise-90);
+                        display: flex;
+                        font-weight: 100;
+                        gap: .5em;
+                        padding: 0 1em;
+                        width: 100%;
+                        white-space: nowrap;
+
+                        &:hover {
+                            background-color: var(--gradient-orange-50);
+                            color: var(--gradient-orange-90);
+                        }
+
+                        div:first-child {
+                            align-items: center;
+                            display: flex;
+                            justify-content: center;
+                            width: 2em;
+                        }
+
+                        .icon:has(i) {
+                            color: var(--gradient-ardoise-80);
+                        }
+
+                        .image-collection {
+                            img {
+                                border: 1px solid var(--gradient-ardoise-80);
+                                border-radius: 50%;
+                                height: 1.25em;
+                                object-fit: cover;
+                                width: 1.25em;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .menu-items {
+                .menu-item-collections {
+                    .sub-menu {
+                        left: 16rem;
+                        overflow: hidden;
+                        position: absolute;
+                        top: 7rem;
+
+                        //&.show,
+                        &:hover {
+                            display: block;
+                        }
+
+                        .menu-item {
+                            display: flex;
+                            gap: .5rem;
+                        }
+
+                        &.to-left {
+                            left: -17rem;
+                        }
+                    }
+
+                    &:hover {
+                        .sub-menu {
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
+
         .bracket {
             align-items: center;
             color: var(--gradient-ardoise-30);
@@ -1100,12 +1088,12 @@ nav.active {
 
 @media (prefers-color-scheme: light) {
     .nav-breadcrumb {
-        background-color: var(--light-theme-button);
+        background-color: var(--gradient-ardoise-75-alpha-25);
         color: var(--gradient-ardoise-100);
-        font-weight: bold;
+        //font-weight: bold;
 
         &:hover {
-            background-color: var(--light-theme-hover);
+            background-color: var(--gradient-ardoise-75);
         }
 
         a {
@@ -1128,34 +1116,46 @@ nav.active {
                     color: var(--light-theme-text);
                 }
 
-            }
+                .breadcrumb-part {
+                    background-color: var(--gradient-green-70);
+                    color: var(--gradient-ardoise-10);
 
-            .bracket {
-                color: var(--light-theme-text);
+                    &:has(a) {
+                        background-color: var(--gradient-ardoise-60);
+                    }
+                }
             }
 
             .menu {
-                color: var(--light-theme-text);
+                color: var(--gradient-ardoise-10);
 
                 img {
-                    border: 2px solid var(--light-theme-bg);
+                    border: 2px solid var(--gradient-ardoise-20);
                 }
 
-                .menu-items {
-                    background-color: var(--light-theme-button);
+                .menu-items, .sub-menu {
+                    background-color: var(--gradient-ardoise-70);
 
                     .menu-item {
-
                         a {
-                            color: var(--light-theme-text);
+                            color: var(--gradient-ardoise-10);
 
-                            &:hover {
-                                background-color: var(--light-theme-hover);
-                                color: var(--light-theme-bg);
+                            .icon:has(i) {
+                                color: var(--gradient-ardoise-20);
+                            }
+
+                            .image-collection {
+                                img {
+                                    border: 1px solid var(--gradient-ardoise-20);
+                                }
                             }
                         }
                     }
                 }
+            }
+
+            .bracket {
+                color: var(--light-theme-text);
             }
 
             .tag-button {

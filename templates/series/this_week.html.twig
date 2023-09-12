@@ -29,6 +29,8 @@
                             <div class="episodes">
                                 {% for todayAiring in episodeOfTheDay.episodes %}
                                     {{ include('blocks/series/_card-today.html.twig', {extra: episodeOfTheDay.day|format_datetime('full')|capitalize|split(' ')[0], today_offset: episodeOfTheDay.today_offset}) }}
+                                    {% else %}
+                                    <div class="no-episode">{{ 'Nothing to watch!'|trans }}</div>
                                 {% endfor %}
                             </div>
                         </div>

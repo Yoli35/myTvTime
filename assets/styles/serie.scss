@@ -2786,6 +2786,7 @@
             font-weight: 200;
             letter-spacing: -1rem;
             line-height: 1.1em;
+            padding: 0 1rem;
             -webkit-text-stroke: 1px var(--gradient-ardoise-90);
         }
     }
@@ -2934,12 +2935,16 @@
             }
 
             .week, .range {
+                color: var(--gradient-ardoise-90);
                 font-size: 2.5rem;
             }
         }
 
         .day-names {
+            background-color: var(--gradient-ardoise-10-alpha-80);
+            border-radius: 1rem;
             inset: 0;
+            margin-block-end: 1rem;
             position: absolute;
             z-index: 0;
 
@@ -2990,7 +2995,7 @@
                     flex-wrap: wrap;
                     gap: .5em;
 
-                    .home-discover {
+                    .home-discover, .no-episode {
                         border: 2px solid transparent;
                         transition: transform 300ms ease-in-out, border-color 300ms ease-in-out;
 
@@ -3001,6 +3006,18 @@
                             outline: var(--gradient-ardoise-90);
                             z-index: 1;
                         }
+                    }
+
+                    .no-episode {
+                        align-items: center;
+                        background-color: var(--gradient-ardoise-40-alpha-50);
+                        border-radius: .5rem;
+                        display: flex;
+                        font-size: 1.5rem;
+                        font-weight: 200;
+                        height: 24rem;
+                        justify-content: center;
+                        width: 13.25rem;
                     }
                 }
             }
@@ -4103,6 +4120,262 @@
 
             .tail {
                 background-color: var(--gradient-ardoise-10);
+            }
+        }
+    }
+
+    .today-series, .this-week-series {
+        .header {
+            .date {
+                -webkit-text-stroke: 1px var(--gradient-ardoise-10);
+            }
+        }
+
+        main {
+            .time-travel {
+                align-items: center;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1em;
+                justify-content: center;
+                margin: 1em auto;
+
+                .prev-next {
+                    @include flex-row();
+                    gap: 1em;
+                }
+            }
+
+            .wrapper {
+                @include flex-100(stretch, center);
+                flex-wrap: wrap;
+                gap: 1em;
+
+                .home-discover {
+                    a {
+                        div:has(img) {
+                            border-radius: .5rem;
+                            overflow: hidden;
+                            position: relative;
+
+                            img {
+                                border-radius: unset;
+                            }
+
+                            .new-season, .finale {
+                                background-color: var(--gradient-ardoise-10-alpha-80);
+                                //border: 2px solid var(--gradient-orange-100);
+                                //border-radius: .5rem .5rem 0 0;
+                                color: var(--gradient-ardoise-100);
+                                font-size: 1.25rem;
+                                font-weight: 400;
+                                left: 0;
+                                line-height: 1.5rem;
+                                padding: .25rem 1rem;
+                                position: absolute;
+                                right: 0;
+                                text-align: center;
+                                top: 0;
+                                white-space: nowrap;
+                            }
+                        }
+                    }
+                }
+
+                .episode {
+                    @include flex-col();
+                    background-color: var(--gradient-ardoise-40);
+                    border-radius: .5em;
+                    color: var(--gradient-ardoise-90);
+                    margin-top: .5em;
+                    padding: .5em;
+                    position: relative;
+                    width: 100%;
+
+                    &:has(div span.all) {
+                        background-color: var(--gradient-green-30);
+                    }
+
+                    &:has(div span.spe) {
+                        background-color: var(--gradient-orange-40);
+                    }
+
+                    .episode-detail {
+                        line-height: 1.25em;
+                        text-align: center;
+                    }
+
+                    .episode-viewed {
+                        background-color: var(--gradient-green-30);
+                        border-radius: 50%;
+                        border: 2px solid var(--gradient-green-90);
+                        color: var(--gradient-green-90);
+                        height: 2.5em;
+                        line-height: 2.5em;
+                        position: absolute;
+                        right: 1rem;
+                        text-align: center;
+                        top: -1rem;
+                        width: 2.5em;
+                    }
+                }
+
+                .nothing {
+                    @include flex-row();
+                    aspect-ratio: 512 / 508;
+                    background-image: url("../images/today-nothing.png");
+                    background-size: cover;
+                    height: auto;
+                    width: clamp(128px, 20vw, 512px);
+                }
+
+                &:has(.nothing) {
+                    align-items: center;
+                    flex-direction: column;
+                }
+
+                .something-else {
+                    img {
+                        aspect-ratio: 20 / 9;
+                        border-radius: 1rem;
+                        height: auto;
+                        object-fit: cover;
+                        opacity: 0;
+                        transition: opacity 300ms ease-in-out;
+                        width: clamp(360px, 75vw, 1000px);
+
+                        &.show {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .this-week-series {
+        .header {
+            @include flex-col();
+            gap: 1rem;
+            height: 20rem;
+            overflow: hidden;
+            position: relative;
+
+            .textes {
+                @include flex-col();
+                gap: 1rem;
+                inset: 0;
+                position: absolute;
+                z-index: 1;
+
+                h1 {
+                    color: var(--gradient-ardoise-90);
+                    font-size: 4rem;
+                    font-weight: 900;
+                }
+
+                .week, .range {
+                    color: var(--gradient-ardoise-90);
+                    font-size: 2.5rem;
+                }
+            }
+
+            .day-names {
+                inset: 0;
+                position: absolute;
+                z-index: 0;
+
+                .day-name {
+                    color: var(--gradient-ardoise-90);
+                    font-size: 4rem;
+                    font-weight: 900;
+                    line-height: 1em;
+                    mix-blend-mode: screen;
+                    opacity: 0;
+                    position: absolute;
+                    transform: translate(-50%, -50%);
+                    transition: opacity 300ms ease-in-out;
+                    width: max-content;
+
+                    &.show {
+                        opacity: .1;
+                    }
+                }
+            }
+        }
+
+        main {
+            width: 100%;
+
+            .wrapper {
+                @include flex-row(center, center);
+                flex-wrap: wrap;
+                gap: 2em;
+
+                .day {
+                    @include flex-col(start, start);
+                    background-color: var(--gradient-ardoise-40-alpha-50);
+                    border-radius: .5rem;
+                    gap: .5rem;
+                    padding: .5rem;
+
+                    &.today {
+                        background-color: var(--gradient-green-30);
+                    }
+
+                    .date {
+                        font-size: 2rem;
+                    }
+
+                    .episodes {
+                        @include flex-100();
+                        flex-wrap: wrap;
+                        gap: .5em;
+
+                        .home-discover {
+                            border: 2px solid transparent;
+                            transition: transform 300ms ease-in-out, border-color 300ms ease-in-out;
+
+                            &:hover {
+                                transform: scale(1.15);
+                                border-color: var(--gradient-ardoise-90);
+                                border-radius: .5rem;
+                                outline: var(--gradient-ardoise-90);
+                                z-index: 1;
+                            }
+                        }
+                    }
+                }
+
+                .nothing {
+                    @include flex-row();
+                    aspect-ratio: 512 / 508;
+                    background-image: url("../images/today-nothing.png");
+                    background-size: cover;
+                    height: auto;
+                    width: clamp(128px, 20vw, 512px);
+                }
+
+                &:has(.nothing) {
+                    align-items: center;
+                    flex-direction: column;
+                }
+
+                .something-else {
+                    img {
+                        aspect-ratio: 20 / 9;
+                        border-radius: 1rem;
+                        height: auto;
+                        object-fit: cover;
+                        opacity: 0;
+                        transition: opacity 300ms ease-in-out;
+                        width: clamp(360px, 75vw, 1000px);
+
+                        &.show {
+                            opacity: 1;
+                        }
+                    }
+                }
             }
         }
     }

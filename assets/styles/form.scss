@@ -243,6 +243,17 @@ label:has(select) {
         }
     }
 
+    .btn-primary {
+        background-color: var(--gradient-ardoise-70);
+        border-color: var(--gradient-ardoise-30);
+        color: var(--gradient-ardoise-10);
+
+        &:hover {
+            background-color: var(--gradient-ardoise-80);
+            border-color: var(--gradient-ardoise-40);
+        }
+    }
+
     .btn-secondary {
         background-color: var(--gradient-ardoise-80);
         border-color: var(--gradient-ardoise-50);

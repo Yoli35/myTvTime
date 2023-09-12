@@ -2,15 +2,19 @@ $transition-delay: .5s;
 $fa-font-path: "../webfonts";
 
 :root {
-    --mtt-body-bg: #F6EAE4;
-    --mtt-body-bg-gradiant: var(--gradient-grey-40);
-    --mtt-body-color: hsl(17, 48%, 13%);
 
-    --light-theme-bg: hsl(20, 50%, 93%);
-    --light-theme-button: hsl(20, 51%, 84%);
-    --light-theme-button-hover: hsl(20, 51%, 64%);
-    --light-theme-hover: hsl(20, 76%, 33%);
-    --light-theme-text: #311A11;
+    --gradient-ardoise-saturation: 18%;
+    --saturation: calc(var(--gradient-ardoise-saturation) / 2);
+
+    --mtt-body-bg: hsl(202, var(--saturation), 95%);
+    --mtt-body-bg-gradiant: hsl(202, 0%, 93%);
+    --mtt-body-color: hsl(202, var(--saturation), 10%);
+
+    --light-theme-bg: hsl(202, var(--saturation), 95%);
+    --light-theme-button: hsl(202, var(--saturation), 80%);
+    --light-theme-button-hover: hsl(202, var(--saturation), 60%);
+    --light-theme-hover: hsl(202, var(--saturation), 70%);
+    --light-theme-text: hsl(202, var(--saturation), 10%);
 
     --button-border-radius: .25em;
 
@@ -39,8 +43,6 @@ $fa-font-path: "../webfonts";
                     hsl(168deg 36% 12%) 99%,
                     hsl(167deg 35% 13%) 100%
     );*/
-
-    --gradient-ardoise-saturation: 18%;
 
     --gradient-dark: linear-gradient(
                     45deg,
@@ -73,16 +75,16 @@ $fa-font-path: "../webfonts";
 
     --gradient-light: linear-gradient(
                     45deg,
-                    hsl(20deg var(--gradient-ardoise-saturation) 84%) 0%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 85%) 11%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 86%) 22%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 87%) 33%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 88%) 44%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 89%) 56%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 90%) 67%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 91%) 78%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 92%) 89%,
-                    hsl(20deg var(--gradient-ardoise-saturation) 93%) 100%
+                    hsl(212deg var(--gradient-ardoise-saturation) 84%) 0%,
+                    hsl(211deg var(--gradient-ardoise-saturation) 85%) 11%,
+                    hsl(210deg var(--gradient-ardoise-saturation) 86%) 22%,
+                    hsl(210deg var(--gradient-ardoise-saturation) 87%) 33%,
+                    hsl(209deg var(--gradient-ardoise-saturation) 88%) 44%,
+                    hsl(208deg var(--gradient-ardoise-saturation) 89%) 56%,
+                    hsl(207deg var(--gradient-ardoise-saturation) 90%) 67%,
+                    hsl(207deg var(--gradient-ardoise-saturation) 91%) 78%,
+                    hsl(206deg var(--gradient-ardoise-saturation) 92%) 89%,
+                    hsl(206deg var(--gradient-ardoise-saturation) 93%) 100%
     );
 
     //--gradient-bg: var(--gradient-light);
@@ -237,6 +239,8 @@ $fa-font-path: "../webfonts";
     --gradient-ardoise-90-alpha-10: hsla(202, var(--gradient-ardoise-saturation), 90%, .1);
     --gradient-ardoise-80: hsl(202, var(--gradient-ardoise-saturation), 80%);
     --gradient-ardoise-80-alpha-50: hsla(202, var(--gradient-ardoise-saturation), 80%, .5);
+    --gradient-ardoise-75: hsl(202, var(--gradient-ardoise-saturation), 75%);
+    --gradient-ardoise-75-alpha-25: hsla(202, var(--gradient-ardoise-saturation), 75%, .25);
     --gradient-ardoise-70: hsl(202, var(--gradient-ardoise-saturation), 70%);
     --gradient-ardoise-60: hsl(202, var(--gradient-ardoise-saturation), 60%);
     --gradient-ardoise-50: hsl(202, var(--gradient-ardoise-saturation), 50%);
