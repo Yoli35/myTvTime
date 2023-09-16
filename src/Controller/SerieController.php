@@ -1268,15 +1268,15 @@ class SerieController extends AbstractController
                     $this->addNewEpisode($tv, $season, $i);
                 }
                 $seasonNumber = sprintf('S%02d', $s['season_number']);
-                if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "%serieName%", season %seasonNumber% (%episodeCount% ep.) added.',
-                    ['%serieName%' => $serieViewing->getSerie()->getName(), '%seasonNumber%' => $seasonNumber, '%episodeCount%' => $s['episode_count']]));
+                if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "serieName", season seasonNumber (episodeCount ep.) added.',
+                    ['serieName' => $serieViewing->getSerie()->getName(), 'seasonNumber' => $seasonNumber, 'episodeCount' => $s['episode_count']]));
             } else {
                 if ($season->getEpisodeCount() < $s['episode_count']) {
                     for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
                         $this->addNewEpisode($tv, $season, $i);
                         $episodeNumber = sprintf('S%02dE%02d', $season->getSeasonNumber(), $i);
-                        if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "%serieName%", episode %episodeNumber% added.',
-                            ['%serieName%' => $serieViewing->getSerie()->getName(), '%episodeNumber%' => $episodeNumber]));
+                        if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "serieName", episode episodeNumber added.',
+                            ['serieName' => $serieViewing->getSerie()->getName(), 'episodeNumber' => $episodeNumber]));
                     }
                 } else {
                     $serieViewing->setNextEpisodeToAir(null);
@@ -1288,8 +1288,8 @@ class SerieController extends AbstractController
                             $this->episodeViewingRepository->remove($episode, true);
                         }
                         $episodeNumber = sprintf('S%02dE%02d', $season->getSeasonNumber(), $i);
-                        if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "%serieName%", episode %episodeNumber% removed.',
-                            ['%serieName%' => $serieViewing->getSerie()->getName(), '%episodeNumber%' => $episodeNumber]));
+                        if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "serieName", episode episodeNumber removed.',
+                            ['serieName' => $serieViewing->getSerie()->getName(), 'episodeNumber' => $episodeNumber]));
                     }
                 }
                 $season->setEpisodeCount($s['episode_count']);
@@ -1562,7 +1562,7 @@ class SerieController extends AbstractController
                 $episodeViewing = $episode['viewing'];
                 // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
                 $airDate = $this->dateService->newDateImmutable($episode['air_date'], $user->getTimezone(), true)->modify($isShifted ? "-1 day" : "0 day");
-                if ($episodeViewing->getAirDate()->format('Y-m-d') != $airDate->format('Y-m-d')) {
+                if ($episodeViewing->getAirDate()?->format('Y-m-d') != $airDate->format('Y-m-d')) {
                     $modifications[] = [
                         'episode' => $episode['episode_number'],
                         'episode air date' => $episode['air_date'],
@@ -2003,14 +2003,14 @@ class SerieController extends AbstractController
             ];
         }
 
-        dump([
+//        dump([
 //            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
-            'credits' => $credits,
-        ]);
+//            'credits' => $credits,
+//        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
@@ -2431,6 +2431,7 @@ class SerieController extends AbstractController
                     } else {
                         $episode->setViewedAt($this->dateService->newDateImmutable('now', $user->getTimezone()));
                     }
+                    $episode->setNumberOfView(1);
 
                     $this->episodeViewingRepository->save($episode, true);
                 }
@@ -2773,6 +2774,7 @@ class SerieController extends AbstractController
         if ($view == 0) {
             $date = $this->dateService->newDateImmutable('now', $user->getTimezone());
             $episodeViewing->setViewedAt($date);
+            $episodeViewing->setNumberOfView($episodeViewing->getNumberOfView() + 1);
             $view = 1;
         } else {
             $episodeViewing->setViewedAt(null);

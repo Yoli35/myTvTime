@@ -44,6 +44,9 @@ class EpisodeViewing
     #[ORM\Column(nullable: true, options: ['default' => 0])]
     private ?int $vote = 0;
 
+    #[ORM\Column(nullable: true, options: ['default' => 0])]
+    private ?int $numberOfView = null;
+
     public function __construct($episodeNumber, $season, $airDate)
     {
         $this->episodeNumber = $episodeNumber;
@@ -170,6 +173,18 @@ class EpisodeViewing
     public function setVote(?int $vote): static
     {
         $this->vote = $vote;
+
+        return $this;
+    }
+
+    public function getNumberOfView(): ?int
+    {
+        return $this->numberOfView;
+    }
+
+    public function setNumberOfView(?int $numberOfView): static
+    {
+        $this->numberOfView = $numberOfView;
 
         return $this;
     }
