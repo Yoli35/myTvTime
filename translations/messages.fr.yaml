@@ -466,6 +466,8 @@ Acting.she: Actrice
 Acting: Interprétation
 Actor's Assistant.he: Assistant d'acteur
 Actor's Assistant.she: Assistante d'acteur
+Adaptation.he: Adaptation
+Adaptation.she: Adaptation
 Additional Music.he: Musique additionnelle
 Additional Music.she: Musique additionnelle
 Additional Photography.he: Photographie additionnelle
@@ -629,6 +631,8 @@ Dolly Grip.he: Dolly Grip
 Dolly Grip.she: Dolly Grip
 Editor.he: Rédacteur en chef
 Editor.she: Rédactrice en chef
+Editorial Staff.he: Personnel éditorial
+Editorial Staff.she: Personnel éditorial
 Executive Assistant.he: Assistant de direction
 Executive Assistant.she: Assistante de direction
 Executive Consultant.he: Consultant exécutif
@@ -876,6 +880,8 @@ Second Unit Director.he: Second réalisateur
 Second Unit Director.she: Seconde réalisatrice
 Series Director.he: Réalisateur de la série
 Series Director.she: Réalisatrice de la série
+Series Writer.he: Scénariste de la série
+Series Writer.she: Scénariste de la série
 Set Costumer.he: Costumier de plateau
 Set Costumer.she: Costumière de plateau
 Set Decorating Coordinator.he: Coordinateur décoration de plateau
@@ -983,6 +989,8 @@ Visual Effects Assistant Editor.he: Assistant monteur effets visuels
 Visual Effects Assistant Editor.she: Assistante monteuse effets visuels
 Visual Effects Coordinator.he: Coordinateur effets visuels
 Visual Effects Coordinator.she: Coordinatrice effets visuels
+Visual Effets Editor.he: Monteur effets visuels
+Visual Effets Editor.she: Monteuse effets visuels
 Visual Effects Producer.he: Producteur effets visuels
 Visual Effects Producer.she: Productrice effets visuels
 Visual Effects Production Assistant.he: Assistant de production effets visuels
@@ -1026,18 +1034,18 @@ episodes: épisodes
 episode: épisode
 TBA: À venir
 seasons: saisons
-The season %season_number% of %serie_name% aired from %season_air_date%.: La saison %season_number% de %serie_name% a été diffusée à partir du %season_air_date%.
-The season %season_number% of %serie_name% will be aired from the %season_air_date%.: La saison %season_number% de %serie_name% sera diffusée à partir du %season_air_date%.
-The season %season_number% of %serie_name% is aired from today.: La saison %season_number% de %serie_name% est diffusée à partir d'aujourd'hui.
-The episode %episode_number%, season %season_number% of %serie_name% aired from %episode_air_date%.: L'épisode %episode_number%, saison %season_number% de %serie_name% a été diffusée à partir du %episode_air_date%.
-The episode %episode_number%, season %season_number% of %serie_name% will be aired from %episode_air_date%.: L'épisode %episode_number%, saison %season_number% de %serie_name% sera diffusée à partir du %episode_air_date%.
-The episode %episode_number%, season %season_number% of %serie_name% is aired from today.: L'épisode %episode_number%, saison %season_number% de %serie_name% est diffusée à partir d'aujourd'hui.
-This episode aired from %episode_air_date%.: Cet épisode a été diffusé à partir du %episode_air_date%.
-This episode will be aired from %episode_air_date%.: Cet épisode sera diffusé à partir du %episode_air_date%.
+The season season_number of serie_name aired from season_air_date.: La saison season_number de serie_name a été diffusée à partir du season_air_date.
+The season season_number of serie_name will be aired from the season_air_date.: La saison season_number de serie_name sera diffusée à partir du season_air_date.
+The season season_number of serie_name is aired from today.: La saison season_number de serie_name est diffusée à partir d'aujourd'hui.
+The episode episode_number, season season_number of serie_name aired from episode_air_date.: L'épisode episode_number, saison season_number de serie_name a été diffusée à partir du episode_air_date.
+The episode episode_number, season season_number of serie_name will be aired from episode_air_date.: L'épisode episode_number, saison season_number de serie_name sera diffusée à partir du episode_air_date.
+The episode episode_number, season season_number of serie_name is aired from today.: L'épisode episode_number, saison season_number de serie_name est diffusée à partir d'aujourd'hui.
+This episode aired from episode_air_date.: Cet épisode a été diffusé à partir du episode_air_date.
+This episode will be aired from episode_air_date.: Cet épisode sera diffusé à partir du episode_air_date.
 This episode is aired from today.: Cet épisode est diffusée à partir d'aujourd'hui.
-Serie "%serieName%", season %seasonNumber% (%episodeCount% ep.) added.: Série "%serieName%", saison %seasonNumber% (%episodeCount% ép.) ajoutée.
-Serie "%serieName%", episode %episodeNumber% added.: Série "%serieName%", épisode %episodeNumber% ajouté.
-Serie "%serieName%", episode %episodeNumber% removed.: Série "%serieName%", épisode %episodeNumber% retiré.
+Serie "serieName", season seasonNumber (episodeCount ep.) added.: Série "serieName", saison seasonNumber (episodeCount ép.) ajoutée.
+Serie "serieName", episode episodeNumber added.: Série "serieName", épisode episodeNumber ajouté.
+Serie "serieName", episode episodeNumber removed.: Série "serieName", épisode episodeNumber retiré.
 Substitute name: Nom de remplacement
 Roomy: Affichage des épisodes en mode spacieux
 Compact: Affichage des épisodes en mode compact

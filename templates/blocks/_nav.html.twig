@@ -37,7 +37,7 @@
                 <button class="btn btn-primary">{{ 'Today'|trans }}</button>
             </a>
         {% endif %}
-        {% if from == 'app_personal_movies' %}
+        {% if route == 'app_personal_movies' %}
             {% if collections|length %}
                 <div class="choose-collection">
                     <label>{{ 'Pin a collection'|trans }}
@@ -63,3 +63,4 @@
         {% endif %}
     {% endif %}
 </nav>
+{#<pre>{{ dump(route) }}</pre>#}
