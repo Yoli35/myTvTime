@@ -568,7 +568,7 @@ export class Shows {
         const alert = evt.currentTarget;
         const actualUrl = window.location.href;
         const tmdb = actualUrl.includes("tmdb");
-        const serieId = window.location.href.match(/.+\/(\d+)\?.+/)[1];
+        const serieId = window.location.href.match(/.+\/(\d+).*/)[1];
         let url = thisGlobal.app_series_alert + serieId;
         let data = {'success': false, 'alertMessage': ''};
         alert.classList.toggle("active");
@@ -603,7 +603,7 @@ export class Shows {
         const region = item.getAttribute("data-provider-region");
         let data = {'success': false, 'block': '<div class="no-provider"><div>?</div></div>'};
         const show = window.location.href.includes("show");
-        const serieId = window.location.href.match(/.+\/(\d+)\?.+/)[1];
+        const serieId = window.location.href.match(/.+\/(\d+).*/)[1];
         let url = thisGlobal.app_series_alert_provider + serieId + '/' + providerId + '?show=' + (show ? 1 : 0) + '&region=' + region;
 
         thisGlobal.xhr.onload = function () {
