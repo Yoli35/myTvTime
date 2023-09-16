@@ -39,7 +39,7 @@
     cursor: pointer;
     font-size: 1em;
     font-weight: 200;
-    padding: .25em 1em;
+    padding: .125em 1em;
     leading-trim: both;
     text-edge: cap alphabetic;
 
@@ -216,6 +216,21 @@ label:has(select) {
 }
 
 @media (prefers-color-scheme: light) {
+
+    label:has(select) {
+        select {
+            background-color: var(--gradient-ardoise-80);
+            border: 1px solid var(--gradient-ardoise-50);
+            color: var(--gradient-ardoise-10);
+        }
+
+        &::after {
+            border-bottom: 4px solid var(--gradient-ardoise-50);
+            border-left: 4px solid transparent;
+            border-right: 4px solid var(--gradient-ardoise-50);
+            border-top: 4px solid transparent;
+        }
+    }
 
     .form-select {
         background-color: var(--gradient-ardoise-80);

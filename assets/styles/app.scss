@@ -229,6 +229,7 @@ main {
     background-color: var(--gradient-grey-10-alpha-75);
     border-radius: 1rem;
     border: 8px solid #ffffff7f;
+    color: var(--gradient-ardoise-90);
     margin-block: auto;
     margin-inline: auto;
 
@@ -256,6 +257,8 @@ main {
                 gap: .5rem;
 
                 input[type=search] {
+                    background-color: var(--gradient-ardoise-20);
+                    color: var(--gradient-ardoise-90);
                     width: 25rem;
                 }
 
@@ -1074,11 +1077,12 @@ nav.active {
 
     .choose-collection {
         @include flex-row(center, start);
+        gap: .5rem;
         margin-left: auto;
 
-        label:has(select) {
-            @include customSelect;
-        }
+        //label:has(select) {
+        //    @include customSelect;
+        //}
 
         .switch {
             @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
@@ -1121,7 +1125,7 @@ nav.active {
                     color: var(--gradient-ardoise-10);
 
                     &:has(a) {
-                        background-color: var(--gradient-ardoise-60);
+                        background-color: var(--gradient-ardoise-70);
                     }
                 }
             }
@@ -1170,22 +1174,22 @@ nav.active {
                     background-color: var(--gradient-purple-60);
                 }
             }
+        }
 
-            .choose-collection {
+        .choose-collection {
+            color: var(--gradient-ardoise-20);
 
-                label:has(select) {
-
-                    &::after {
-                        border-bottom: 2px solid var(--gradient-ardoise-80);
-                        border-right: 2px solid var(--gradient-ardoise-80);
-                    }
-
-                    select {
-                        background: var(--gradient-ardoise-90);
-                        color: var(--gradient-ardoise-20);
-                    }
-                }
-            }
+            //label:has(select) {
+            //    &::after {
+            //        border-bottom: 2px solid var(--gradient-ardoise-80);
+            //        border-right: 2px solid var(--gradient-ardoise-80);
+            //    }
+            //
+            //    select {
+            //        background: var(--gradient-ardoise-90);
+            //        color: var(--gradient-ardoise-20);
+            //    }
+            //}
         }
     }
 }

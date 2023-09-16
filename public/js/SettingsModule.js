@@ -15,14 +15,14 @@ export class SettingsModule {
         search.addEventListener("click", () => {
             this.settings();
         });
-        document.querySelector(":root").style.setProperty('--gradient-ardoise-saturation', this.saturationValue + "%");
+        document.querySelector(":root").style.setProperty('--gradient-saturation', this.saturationValue + "%");
         this.initDialog()
     }
 
     settings() {
         const dialog = document.querySelector("#settings-dialog");
         document.querySelector("body").classList.add("frozen");
-        thisGlobal.satuationValue = document.querySelector(":root").style.getPropertyValue('--gradient-ardoise-saturation').slice(0, -1);
+        thisGlobal.satuationValue = document.querySelector(":root").style.getPropertyValue('--gradient-saturation').slice(0, -1);
         dialog.showModal();
     }
 
@@ -35,7 +35,7 @@ export class SettingsModule {
             const span = dialog.querySelector("#settings-saturation-value");
             const root = document.querySelector(":root");
             span.textContent = saturationValue;
-            root.style.setProperty('--gradient-ardoise-saturation', saturationValue + "%");
+            root.style.setProperty('--gradient-saturation', saturationValue + "%");
         });
 
         dialog.addEventListener("close", () => {
@@ -43,12 +43,12 @@ export class SettingsModule {
             if (dialog.returnValue === "cancel") {
                 // restaurer les valeurs
                 const root = document.querySelector(":root");
-                root.style.setProperty('--gradient-ardoise-saturation', thisGlobal.satuationValue);
+                root.style.setProperty('--gradient-saturation', thisGlobal.satuationValue + "%");
             }
             if (dialog.returnValue === "ok") {
                 // sauvegarder les valeurs dans la table settings de la base de données
                 const root = document.querySelector(":root");
-                const saturationValue = root.style.getPropertyValue('--gradient-ardoise-saturation').slice(0, -1);
+                const saturationValue = root.style.getPropertyValue('--gradient-saturation').slice(0, -1);
                 thisGlobal.satuationValue = saturationValue;
                 const settings = {
                     saturation: saturationValue

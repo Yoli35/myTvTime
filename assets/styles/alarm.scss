@@ -9,6 +9,7 @@
     border-color: var(--gradient-orange-40);
     border-radius: 1rem;
     border-width: 4px;
+    color: var(--gradient-ardoise-90);
     gap: 1rem;
     margin-block: auto;
     margin-inline: auto;
@@ -118,6 +119,7 @@
 
                 input[type="text"], input[type="time"], input[type="number"] {
                     background-color: var(--gradient-ardoise-20);
+                    color: var(--gradient-ardoise-90);
                 }
 
                 input[type="number"] {

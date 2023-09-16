@@ -3,8 +3,8 @@ $fa-font-path: "../webfonts";
 
 :root {
 
-    --gradient-ardoise-saturation: 18%;
-    --saturation: calc(var(--gradient-ardoise-saturation) / 2);
+    --gradient-saturation: 18%;
+    --saturation: calc(var(--gradient-saturation) / 2);
 
     --mtt-body-bg: hsl(202, var(--saturation), 95%);
     --mtt-body-bg-gradiant: hsl(202, 0%, 93%);
@@ -46,45 +46,45 @@ $fa-font-path: "../webfonts";
 
     --gradient-dark: linear-gradient(
                     45deg,
-                    hsl(209deg var(--gradient-ardoise-saturation) 12%) 0%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 12%) 11%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 13%) 22%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 13%) 33%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 14%) 44%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 14%) 56%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 14%) 67%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 15%) 78%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 15%) 89%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 16%) 100%
+                    hsl(209deg var(--gradient-saturation) 12%) 0%,
+                    hsl(209deg var(--gradient-saturation) 12%) 11%,
+                    hsl(209deg var(--gradient-saturation) 13%) 22%,
+                    hsl(209deg var(--gradient-saturation) 13%) 33%,
+                    hsl(209deg var(--gradient-saturation) 14%) 44%,
+                    hsl(209deg var(--gradient-saturation) 14%) 56%,
+                    hsl(209deg var(--gradient-saturation) 14%) 67%,
+                    hsl(209deg var(--gradient-saturation) 15%) 78%,
+                    hsl(209deg var(--gradient-saturation) 15%) 89%,
+                    hsl(209deg var(--gradient-saturation) 16%) 100%
     );
 /*
 --gradient-dark: linear-gradient(
                     45deg,
-                    hsl(212deg var(--gradient-ardoise-saturation) 12%) 0%,
-                    hsl(211deg var(--gradient-ardoise-saturation) 12%) 11%,
-                    hsl(210deg var(--gradient-ardoise-saturation) 13%) 22%,
-                    hsl(210deg var(--gradient-ardoise-saturation) 13%) 33%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 14%) 44%,
-                    hsl(208deg var(--gradient-ardoise-saturation) 14%) 56%,
-                    hsl(207deg var(--gradient-ardoise-saturation) 14%) 67%,
-                    hsl(207deg var(--gradient-ardoise-saturation) 15%) 78%,
-                    hsl(206deg var(--gradient-ardoise-saturation) 15%) 89%,
-                    hsl(206deg var(--gradient-ardoise-saturation) 16%) 100%
+                    hsl(212deg var(--gradient-saturation) 12%) 0%,
+                    hsl(211deg var(--gradient-saturation) 12%) 11%,
+                    hsl(210deg var(--gradient-saturation) 13%) 22%,
+                    hsl(210deg var(--gradient-saturation) 13%) 33%,
+                    hsl(209deg var(--gradient-saturation) 14%) 44%,
+                    hsl(208deg var(--gradient-saturation) 14%) 56%,
+                    hsl(207deg var(--gradient-saturation) 14%) 67%,
+                    hsl(207deg var(--gradient-saturation) 15%) 78%,
+                    hsl(206deg var(--gradient-saturation) 15%) 89%,
+                    hsl(206deg var(--gradient-saturation) 16%) 100%
     );
 */
 
     --gradient-light: linear-gradient(
                     45deg,
-                    hsl(212deg var(--gradient-ardoise-saturation) 84%) 0%,
-                    hsl(211deg var(--gradient-ardoise-saturation) 85%) 11%,
-                    hsl(210deg var(--gradient-ardoise-saturation) 86%) 22%,
-                    hsl(210deg var(--gradient-ardoise-saturation) 87%) 33%,
-                    hsl(209deg var(--gradient-ardoise-saturation) 88%) 44%,
-                    hsl(208deg var(--gradient-ardoise-saturation) 89%) 56%,
-                    hsl(207deg var(--gradient-ardoise-saturation) 90%) 67%,
-                    hsl(207deg var(--gradient-ardoise-saturation) 91%) 78%,
-                    hsl(206deg var(--gradient-ardoise-saturation) 92%) 89%,
-                    hsl(206deg var(--gradient-ardoise-saturation) 93%) 100%
+                    hsl(212deg var(--gradient-saturation) 84%) 0%,
+                    hsl(211deg var(--gradient-saturation) 85%) 11%,
+                    hsl(210deg var(--gradient-saturation) 86%) 22%,
+                    hsl(210deg var(--gradient-saturation) 87%) 33%,
+                    hsl(209deg var(--gradient-saturation) 88%) 44%,
+                    hsl(208deg var(--gradient-saturation) 89%) 56%,
+                    hsl(207deg var(--gradient-saturation) 90%) 67%,
+                    hsl(207deg var(--gradient-saturation) 91%) 78%,
+                    hsl(206deg var(--gradient-saturation) 92%) 89%,
+                    hsl(206deg var(--gradient-saturation) 93%) 100%
     );
 
     //--gradient-bg: var(--gradient-light);
@@ -232,36 +232,36 @@ $fa-font-path: "../webfonts";
                     hsl(50, 100%, 50%) 100%
     );
 
-    --gradient-ref: hsl(202, var(--gradient-ardoise-saturation), 17%);
-    --gradient-ardoise-100: hsl(202, var(--gradient-ardoise-saturation), 100%);
-    --gradient-ardoise-90: hsl(202, var(--gradient-ardoise-saturation), 90%);
-    --gradient-ardoise-90-alpha-80: hsla(202, var(--gradient-ardoise-saturation), 90%, .8);
-    --gradient-ardoise-90-alpha-10: hsla(202, var(--gradient-ardoise-saturation), 90%, .1);
-    --gradient-ardoise-80: hsl(202, var(--gradient-ardoise-saturation), 80%);
-    --gradient-ardoise-80-alpha-50: hsla(202, var(--gradient-ardoise-saturation), 80%, .5);
-    --gradient-ardoise-75: hsl(202, var(--gradient-ardoise-saturation), 75%);
-    --gradient-ardoise-75-alpha-25: hsla(202, var(--gradient-ardoise-saturation), 75%, .25);
-    --gradient-ardoise-70: hsl(202, var(--gradient-ardoise-saturation), 70%);
-    --gradient-ardoise-60: hsl(202, var(--gradient-ardoise-saturation), 60%);
-    --gradient-ardoise-50: hsl(202, var(--gradient-ardoise-saturation), 50%);
-    --gradient-ardoise-40: hsl(202, var(--gradient-ardoise-saturation), 40%);
-    --gradient-ardoise-40-alpha-50: hsla(202, var(--gradient-ardoise-saturation), 40%, .5);
-    --gradient-ardoise-40-alpha-20: hsla(202, var(--gradient-ardoise-saturation), 40%, .2);
-    --gradient-ardoise-30: hsl(202, var(--gradient-ardoise-saturation), 30%);
-    --gradient-ardoise-30-alpha-50: hsla(202, var(--gradient-ardoise-saturation), 30%, .5);
-    --gradient-ardoise-30-alpha-90: hsla(202, var(--gradient-ardoise-saturation), 30%, .9);
-    --gradient-ardoise-30-horizontal: linear-gradient(90deg, hsla(202, var(--gradient-ardoise-saturation), 30%, .2), hsla(202, var(--gradient-ardoise-saturation), 30%, 1));
-    --gradient-ardoise-25: hsl(202, var(--gradient-ardoise-saturation), 25%);
-    --gradient-ardoise-25-alpha-25: hsla(202, var(--gradient-ardoise-saturation), 25%, .25);
-    --gradient-ardoise-20: hsl(202, var(--gradient-ardoise-saturation), 20%);
-    --gradient-ardoise-20-alpha-50: hsla(202, var(--gradient-ardoise-saturation), 20%, .5);
-    --gradient-ardoise-20-alpha-80: hsla(202, var(--gradient-ardoise-saturation), 20%, .8);
-    --gradient-ardoise-10: hsl(202, var(--gradient-ardoise-saturation), 10%);
-    --gradient-ardoise-10-alpha-90: hsla(202, var(--gradient-ardoise-saturation), 10%, .9);
-    --gradient-ardoise-10-alpha-80: hsla(202, var(--gradient-ardoise-saturation), 10%, .8);
-    --gradient-ardoise-10-alpha-50: hsla(202, var(--gradient-ardoise-saturation), 10%, .5);
-    --gradient-ardoise-10-alpha-20: hsla(202, var(--gradient-ardoise-saturation), 10%, .2);
-    --gradient-ardoise-0: hsl(202, var(--gradient-ardoise-saturation), 0%);
+    --gradient-ref: hsl(202, var(--gradient-saturation), 17%);
+    --gradient-ardoise-100: hsl(202, var(--gradient-saturation), 100%);
+    --gradient-ardoise-90: hsl(202, var(--gradient-saturation), 90%);
+    --gradient-ardoise-90-alpha-80: hsla(202, var(--gradient-saturation), 90%, .8);
+    --gradient-ardoise-90-alpha-10: hsla(202, var(--gradient-saturation), 90%, .1);
+    --gradient-ardoise-80: hsl(202, var(--gradient-saturation), 80%);
+    --gradient-ardoise-80-alpha-50: hsla(202, var(--gradient-saturation), 80%, .5);
+    --gradient-ardoise-75: hsl(202, var(--gradient-saturation), 75%);
+    --gradient-ardoise-75-alpha-25: hsla(202, var(--gradient-saturation), 75%, .25);
+    --gradient-ardoise-70: hsl(202, var(--gradient-saturation), 70%);
+    --gradient-ardoise-60: hsl(202, var(--gradient-saturation), 60%);
+    --gradient-ardoise-50: hsl(202, var(--gradient-saturation), 50%);
+    --gradient-ardoise-40: hsl(202, var(--gradient-saturation), 40%);
+    --gradient-ardoise-40-alpha-50: hsla(202, var(--gradient-saturation), 40%, .5);
+    --gradient-ardoise-40-alpha-20: hsla(202, var(--gradient-saturation), 40%, .2);
+    --gradient-ardoise-30: hsl(202, var(--gradient-saturation), 30%);
+    --gradient-ardoise-30-alpha-50: hsla(202, var(--gradient-saturation), 30%, .5);
+    --gradient-ardoise-30-alpha-90: hsla(202, var(--gradient-saturation), 30%, .9);
+    --gradient-ardoise-30-horizontal: linear-gradient(90deg, hsla(202, var(--gradient-saturation), 30%, .2), hsla(202, var(--gradient-saturation), 30%, 1));
+    --gradient-ardoise-25: hsl(202, var(--gradient-saturation), 25%);
+    --gradient-ardoise-25-alpha-25: hsla(202, var(--gradient-saturation), 25%, .25);
+    --gradient-ardoise-20: hsl(202, var(--gradient-saturation), 20%);
+    --gradient-ardoise-20-alpha-50: hsla(202, var(--gradient-saturation), 20%, .5);
+    --gradient-ardoise-20-alpha-80: hsla(202, var(--gradient-saturation), 20%, .8);
+    --gradient-ardoise-10: hsl(202, var(--gradient-saturation), 10%);
+    --gradient-ardoise-10-alpha-90: hsla(202, var(--gradient-saturation), 10%, .9);
+    --gradient-ardoise-10-alpha-80: hsla(202, var(--gradient-saturation), 10%, .8);
+    --gradient-ardoise-10-alpha-50: hsla(202, var(--gradient-saturation), 10%, .5);
+    --gradient-ardoise-10-alpha-20: hsla(202, var(--gradient-saturation), 10%, .2);
+    --gradient-ardoise-0: hsl(202, var(--gradient-saturation), 0%);
 
     --gradient-grey-100: hsl(0, 0%, 100%);
     --gradient-grey-95: hsl(0, 0%, 95%);
@@ -325,36 +325,70 @@ $fa-font-path: "../webfonts";
 
     --gradient-emerald-40: hsl(186, 50%, 40%);
 
-    --gradient-green-100: hsl(166, 90%, 100%);
-    --gradient-green-90: hsl(166, 90%, 90%);
-    --gradient-green-80: hsl(166, 90%, 80%);
-    --gradient-green-70: hsl(166, 90%, 70%);
-    --gradient-green-60: hsl(166, 90%, 60%);
-    --gradient-green-50: hsl(166, 90%, 50%);
-    --gradient-green-40: hsl(166, 90%, 40%);
-    --gradient-green-40-alpha-50: hsla(166, 90%, 40%, .5);
-    --gradient-green-30: hsl(166, 90%, 30%);
-    --gradient-green-30-alpha-50: hsla(166, 90%, 30%, .5);
-    --gradient-green-20: hsl(166, 90%, 20%);
-    --gradient-green-20-alpha-50: hsla(166, 90%, 20%, .8);
-    --gradient-green-20-horizontal: linear-gradient(90deg, hsla(166, 90%, 20%, .2), hsla(166, 90%, 20%, 1));
-    --gradient-green-15: hsl(166, 90%, 15%);
-    --gradient-green-10: hsl(166, 90%, 10%);
-    --gradient-green-0: hsl(166, 90%, 0%);
+    //--gradient-green-100: hsl(166, 90%, 100%);
+    //--gradient-green-90: hsl(166, 90%, 90%);
+    //--gradient-green-80: hsl(166, 90%, 80%);
+    //--gradient-green-80-alpha-50: hsla(166, 90%, 80%, .5);
+    //--gradient-green-70: hsl(166, 90%, 70%);
+    //--gradient-green-70-alpha-50: hsla(166, 90%, 70%, .5);
+    //--gradient-green-60: hsl(166, 90%, 60%);
+    //--gradient-green-50: hsl(166, 90%, 50%);
+    //--gradient-green-40: hsl(166, 90%, 40%);
+    //--gradient-green-40-alpha-50: hsla(166, 90%, 40%, .5);
+    //--gradient-green-30: hsl(166, 90%, 30%);
+    //--gradient-green-30-alpha-50: hsla(166, 90%, 30%, .5);
+    //--gradient-green-20: hsl(166, 90%, 20%);
+    //--gradient-green-20-alpha-50: hsla(166, 90%, 20%, .8);
+    //--gradient-green-20-horizontal: linear-gradient(90deg, hsla(166, 90%, 20%, .2), hsla(166, 90%, 20%, 1));
+    //--gradient-green-15: hsl(166, 90%, 15%);
+    //--gradient-green-10: hsl(166, 90%, 10%);
+    //--gradient-green-0: hsl(166, 90%, 0%);
+    --gradient-green-100: hsl(166, var(--gradient-saturation), 100%);
+    --gradient-green-90: hsl(166, var(--gradient-saturation), 90%);
+    --gradient-green-80: hsl(166, var(--gradient-saturation), 80%);
+    --gradient-green-80-alpha-50: hsla(166, var(--gradient-saturation), 80%, .5);
+    --gradient-green-70: hsl(166, var(--gradient-saturation), 70%);
+    --gradient-green-70-alpha-50: hsla(166, var(--gradient-saturation), 70%, .5);
+    --gradient-green-60: hsl(166, var(--gradient-saturation), 60%);
+    --gradient-green-50: hsl(166, var(--gradient-saturation), 50%);
+    --gradient-green-40: hsl(166, var(--gradient-saturation), 40%);
+    --gradient-green-40-alpha-50: hsla(166, var(--gradient-saturation), 40%, .5);
+    --gradient-green-30: hsl(166, var(--gradient-saturation), 30%);
+    --gradient-green-30-alpha-50: hsla(166, var(--gradient-saturation), 30%, .5);
+    --gradient-green-20: hsl(166, var(--gradient-saturation), 20%);
+    --gradient-green-20-alpha-50: hsla(166, var(--gradient-saturation), 20%, .8);
+    --gradient-green-20-horizontal: linear-gradient(90deg, hsla(166, var(--gradient-saturation), 20%, .2), hsla(166, var(--gradient-saturation), 20%, 1));
+    --gradient-green-15: hsl(166, var(--gradient-saturation), 15%);
+    --gradient-green-10: hsl(166, var(--gradient-saturation), 10%);
+    --gradient-green-0: hsl(166, var(--gradient-saturation), 0%);
 
-    --gradient-red-90: hsl(0, 90%, 90%);
-    --gradient-red-80: hsl(0, 90%, 80%);
-    --gradient-red-60: hsl(0, 90%, 60%);
-    --gradient-red-50: hsl(0, 90%, 50%);
-    --gradient-red-50-alpha-50: hsla(0, 90%, 50%, .5);
-    --gradient-red-40: hsl(0, 90%, 40%);
-    --gradient-red-40-alpha-50: hsla(0, 90%, 40%, .5);
-    --gradient-red-20: hsl(0, 90%, 20%);
+    --gradient-red-90: hsl(0, var(--gradient-saturation), 90%);
+    --gradient-red-80: hsl(0, var(--gradient-saturation), 80%);
+    --gradient-red-60: hsl(0, var(--gradient-saturation), 60%);
+    --gradient-red-50: hsl(0, var(--gradient-saturation), 50%);
+    --gradient-red-50-alpha-50: hsla(0, var(--gradient-saturation), 50%, .5);
+    --gradient-red-40: hsl(0, var(--gradient-saturation), 40%);
+    --gradient-red-40-alpha-50: hsla(0, var(--gradient-saturation), 40%, .5);
+    --gradient-red-20: hsl(0, var(--gradient-saturation), 20%);
 
-    --gradient-yellow-80: hsl(45, 90%, 80%);
-    --gradient-yellow-60: hsl(45, 90%, 60%);
-    --gradient-yellow-50: hsl(45, 90%, 50%);
-    --gradient-yellow-50-alpha-50: hsla(45, 90%, 50%, .5);
+    --gradient-yellow-80: hsl(45, var(--gradient-saturation), 80%);
+    --gradient-yellow-60: hsl(45, var(--gradient-saturation), 60%);
+    --gradient-yellow-50: hsl(45, var(--gradient-saturation), 50%);
+    --gradient-yellow-50-alpha-50: hsla(45, var(--gradient-saturation), 50%, .5);
+    //
+    //--gradient-red-90: hsl(0, 90%, 90%);
+    //--gradient-red-80: hsl(0, 90%, 80%);
+    //--gradient-red-60: hsl(0, 90%, 60%);
+    //--gradient-red-50: hsl(0, 90%, 50%);
+    //--gradient-red-50-alpha-50: hsla(0, 90%, 50%, .5);
+    //--gradient-red-40: hsl(0, 90%, 40%);
+    //--gradient-red-40-alpha-50: hsla(0, 90%, 40%, .5);
+    //--gradient-red-20: hsl(0, 90%, 20%);
+    //
+    //--gradient-yellow-80: hsl(45, 90%, 80%);
+    //--gradient-yellow-60: hsl(45, 90%, 60%);
+    //--gradient-yellow-50: hsl(45, 90%, 50%);
+    //--gradient-yellow-50-alpha-50: hsla(45, 90%, 50%, .5);
 
     --form-bg: var(--gradient-ardoise-80);
     --form-border: var(--gradient-ardoise-20);

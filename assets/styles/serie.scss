@@ -1800,7 +1800,7 @@
 
                             .episode-number {
                                 align-items: center;
-                                background-color: var(--gradient-ardoise-30);
+                                background-color: var(--gradient-ardoise-30-alpha-50);
                                 border-radius: 50%;
                                 border: .125em solid var(--gradient-ardoise-90);
                                 bottom: .5em;
@@ -1821,9 +1821,9 @@
 
                             .episode-name {
                                 align-items: center;
-                                background-image: var(--gradient-ardoise-30-horizontal);
+                                background-color: var(--gradient-ardoise-90);
                                 border-top-left-radius: 1em;
-                                color: var(--gradient-ardoise-90);
+                                color: var(--gradient-ardoise-20);
                                 display: none;
                                 font-size: 1em;
                                 font-weight: bold;
@@ -1838,7 +1838,7 @@
                         }
 
                         &:has(i[class$="check"]) {
-                            background-color: var(--gradient-green-80);
+                            background-color: var(--gradient-green-90);
 
                             .still {
                                 .episode-number {
@@ -1849,7 +1849,8 @@
                                 }
 
                                 .episode-name {
-                                    background-image: var(--gradient-green-20-horizontal);
+                                    background-color: var(--gradient-green-90);
+                                    color: var(--gradient-green-30);
                                 }
                             }
                         }
@@ -1893,8 +1894,8 @@
                             }
 
                             &:has(i[class$="check"]) {
-                                background-color: var(--gradient-green-70);
-                                border: .5em solid var(--gradient-green-80);
+                                background-color: var(--gradient-green-80);
+                                border: .5em solid var(--gradient-green-90);
                             }
 
                             .view {
@@ -2171,7 +2172,7 @@
                         justify-content: center;
 
                         .layout-size-value {
-                            background-color: var(--gradient-ardoise-50);
+                            background-color: var(--gradient-ardoise-80);
                             border-radius: .25rem;
                             font-size: 1rem;
                             font-weight: 100;
@@ -2180,7 +2181,9 @@
                             width: 4rem;
                         }
 
-                        input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb, input[type="range"]::-ms-thumb {
+                        input[type="range"]::-webkit-slider-thumb,
+                        input[type="range"]::-moz-range-thumb,
+                        input[type="range"]::-ms-thumb {
                             -webkit-appearance: none;
                             appearance: none;
                             background-color: var(--gradient-ardoise-50);
@@ -2200,7 +2203,7 @@
 
                     .episodes-layout-items {
                         border-radius: .25rem;
-                        background-color: var(--gradient-ardoise-30);
+                        background-color: var(--gradient-ardoise-70);
                         display: flex;
 
                         .episodes-layout-item {
@@ -2218,11 +2221,11 @@
                             }
 
                             &.active {
-                                background-color: var(--gradient-ardoise-50);
+                                background-color: var(--gradient-ardoise-80);
                             }
 
                             &:hover {
-                                background-color: var(--gradient-ardoise-60);
+                                background-color: var(--gradient-ardoise-75);
                             }
                         }
                     }
@@ -3908,8 +3911,22 @@
                             color: var(--gradient-ardoise-90);
                             background-color: var(--gradient-ardoise-30);
 
+                            .still {
+                                .episode-name {
+                                    background-color: var(--gradient-ardoise-30);
+                                    color: var(--gradient-ardoise-80);
+                                }
+                            }
+
                             &:has(i[class$="check"]) {
                                 background-color: var(--gradient-green-20);
+
+                                .still {
+                                    .episode-name {
+                                        background-color: var(--gradient-green-20);
+                                        color: var(--gradient-green-80);
+                                    }
+                                }
                             }
 
                             .episode-viewing {
@@ -3975,6 +3992,33 @@
                                             }
                                         }
                                     }
+                                }
+                            }
+                        }
+                    }
+
+                    .episodes-layout {
+                        label {
+                            .layout-size-value {
+                                background-color: var(--gradient-ardoise-50);
+                            }
+
+                            input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb, input[type="range"]::-ms-thumb {
+                                background-color: var(--gradient-ardoise-50);
+                                border: 2px solid var(--gradient-ardoise-90);
+                            }
+                        }
+
+                        .episodes-layout-items {
+                            background-color: var(--gradient-ardoise-30);
+
+                            .episodes-layout-item {
+                                &.active {
+                                    background-color: var(--gradient-ardoise-50);
+                                }
+
+                                &:hover {
+                                    background-color: var(--gradient-ardoise-60);
                                 }
                             }
                         }
