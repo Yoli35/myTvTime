@@ -1378,7 +1378,6 @@ nav.active {
     .time, .date {
         color: var(--gradient-ardoise-90);
         font-family: 'red hat regular', monospace;
-        font-size: 1.5em;
         font-weight: 100;
         left: 50%;
         position: absolute;
@@ -1386,11 +1385,16 @@ nav.active {
         transform: translate(-50%, -50%);
     }
 
+    .time {
+        font-size: 1.5em;
+    }
+
     .date {
         background-color: var(--gradient-ardoise-90);
         border-radius: .125em;
         color: var(--gradient-ardoise-20);
         font-family: unset;
+        font-size: 1.25rem;
         font-weight: 300;
         //leading-trim: both;
         padding: .25em .5em;

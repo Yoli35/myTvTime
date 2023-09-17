@@ -19,6 +19,7 @@ use App\Repository\UserRepository;
 use App\Service\TMDBService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
+use DateInterval;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\TimeBundle\DateTimeFormatter;
@@ -237,6 +238,7 @@ class UserController extends AbstractController
      * @throws ServerExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
+     * @throws \Exception
      */
     #[Route('/{_locale}/user/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
     public function userMovies(Request $request, MovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
@@ -261,6 +263,27 @@ class UserController extends AbstractController
         $runtime['months'] = floor($total / 60 / 24 / 30.41666667) % 12;
         $runtime['years'] = floor($total / 60 / 24 / 365);
 
+        // convert total runtime ($total in minutes) in years, months, days, hours, minutes
+        $now = new DateTimeImmutable();
+        // past = now - total
+        $past = $now->sub(new DateInterval('PT' . $total . 'M'));
+
+        $diff = $now->diff($past);
+        // diff string with years, months, days, hours, minutes
+        $runtimeString = $diff->days ? $diff->days . ' ' . ($diff->days > 1 ? $this->translator->trans('days') : $this->translator->trans('day')) .', '.$this->translator->trans('or'). ' ' : '';
+        $runtimeString .= $diff->y ? ($diff->y . ' ' . ($diff->y > 1 ? $this->translator->trans('years') : $this->translator->trans('year')) . ', ') : '';
+        $runtimeString .= $diff->m ? ($diff->m . ' ' . ($diff->m > 1 ? $this->translator->trans('months') : $this->translator->trans('month')) . ', ') : '';
+        $runtimeString .= $diff->d ? ($diff->d . ' ' . ($diff->d > 1 ? $this->translator->trans('days') : $this->translator->trans('day')) . ', ') : '';
+        $runtimeString .= $diff->h ? ($diff->h . ' ' . ($diff->h > 1 ? $this->translator->trans('hours') : $this->translator->trans('hour')) . ', ') : '';
+        $runtimeString .= $diff->i ? ($diff->i . ' ' . ($diff->i > 1 ? $this->translator->trans('minutes') : $this->translator->trans('minute'))) : '';
+
+        dump([
+            'now' => $now,
+            'past' => $past,
+            'diff' => $diff,
+            'diff string' => $runtimeString,
+        ]);
+
         $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
         if (!$settings) {
             $settings = new Settings();
@@ -275,6 +298,7 @@ class UserController extends AbstractController
             'userMovies' => $movieController->getUserMovieIds(),
             'count' => count($items),
             'runtime' => $runtime,
+            'runtimeString' => $runtimeString,
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfig,
             'user' => $user,

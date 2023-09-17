@@ -625,6 +625,7 @@ class MovieController extends AbstractController
         $from = $from ?? 'app_movie_list';
         $baseUrl = $this->generateUrl($from);
         $baseName = match ($from) {
+            'app_home' => $this->translator->trans("Home"),
             'app_personal_movies' => $this->translator->trans("My Movies"),
             'movies_by_genre' => $this->translator->trans("Search by Genre"),
             'app_movies_by_date' => $this->translator->trans("Search by Date"),

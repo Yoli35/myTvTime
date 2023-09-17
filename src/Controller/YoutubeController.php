@@ -56,6 +56,9 @@ class YoutubeController extends AbstractController
         $this->service_YouTube = new Google_Service_YouTube($client);
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('/{_locale}/youtube', name: 'app_youtube', requirements: ['_locale' => 'fr|en|de|es'])]
     public function index(Request $request): Response
     {
@@ -87,7 +90,7 @@ class YoutubeController extends AbstractController
         $videoCount = $this->getVideosCount($user);
         $totalRuntime = $this->getTotalRuntime($user);
         $firstView = $this->getFirstView($user);
-        $time2Human = $this->getTime2human($totalRuntime, $request->getLocale());
+        $time2Human = $this->getTime2human($totalRuntime/*, $request->getLocale()*/);
         $preview = $this->getPreview();
 
         return $this->render('youtube/index.html.twig', [
@@ -559,48 +562,73 @@ class YoutubeController extends AbstractController
         }
     }
 
-    private function getTime2human($ss, $locale): string
+    /**
+     * @throws \Exception
+     */
+    private function getTime2human($ss/*, $locale*/): string
     {
+//        if ($ss) {
+//            $l = $locale;
+//            $words = ["timeSpent1" => ["en" => "Time spent watching Youtube", "fr" => "Temps passé devant youtube", "es" => "Tiempo dedicado a ver Youtube", "de" => "Zeit, die Sie mit Youtube verbracht haben"], "timeSpent2" => ["en" => "secondes i.e.", "fr" => "secondes c.à.d.", "es" => "segundos, es decir,", "de" => "Sekunden d.h."], "month" => ["en" => "month", "fr" => "mois", "es" => "mes", "de" => "Monat"], "months" => ["en" => "months", "fr" => "mois", "es" => "meses", "de" => "Monate"], "day" => ["en" => "day", "fr" => "jour", "es" => "día", "de" => "Tag"], "days" => ["en" => "days", "fr" => "jours", "es" => "días", "de" => "Tage"], "hour" => ["en" => "hour", "fr" => "heure", "es" => "hora", "de" => "Stunde"], "hours" => ["en" => "hours", "fr" => "heures", "es" => "horas", "de" => "Stunden"], "minute" => ["en" => "minute", "fr" => "minute", "es" => "minuto", "de" => "Minute"], "minutes" => ["en" => "minutes", "fr" => "minutes", "es" => "minutos", "de" => "Minuten"], "seconde" => ["en" => "seconde", "fr" => "seconde", "es" => "segundo", "de" => "Sekunde"], "secondes" => ["en" => "secondes", "fr" => "secondes", "es" => "segundos", "de" => "Sekunden"], "and" => ["en" => "and", "fr" => "et", "es" => "y", "de" => "und"],];
+//            $s = $ss % 60;
+//            $m = intval(floor(($ss % 3600) / 60));
+//            $h = intval(floor(($ss % 86400) / 3600));
+//            $d = intval(floor(($ss % 2592000) / 86400));
+//            $M = intval(floor($ss / 2592000));
+//
+//            $result = $words['timeSpent1'][$l] . " : " . $ss . " " . $words['timeSpent2'][$l] . " ";
+//            if ($M) {
+//                $result .= $M . " " . ($M > 1 ? $words['months'][$l] : $words['month'][$l]);
+//            }
+//            if ($d) {
+//                if ($M) {
+//                    $result .= ($s || $m || $h) ? ", " : " " . $words['and'][$l] . " ";
+//                }
+//                $result .= $d . " " . ($d > 1 ? $words['days'][$l] : $words['day'][$l]);
+//            }
+//            if ($h > 0) {
+//                if ($M || $d) {
+//                    $result .= ($s || $m) ? ", " : " " . $words['and'][$l] . " ";
+//                }
+//                $result .= $h . " " . ($h > 1 ? $words['hours'][$l] : $words['hour'][$l]);
+//            }
+//            if ($m) {
+//                if ($M || $d || $h) {
+//                    $result .= ($s) ? ", " : " " . $words['and'][$l] . " ";
+//                }
+//                $result .= $m . " " . ($m > 1 ? $words['minutes'][$l] : $words['minute'][$l]);
+//            }
+//            if ($s) {
+//                if ($M || $d || $h || $m) {
+//                    $result .= " " . $words['and'][$l] . " ";
+//                }
+//                $result .= $s . " " . ($s > 1 ? $words['secondes'][$l] : $words['seconde'][$l]);
+//            }
+//            return $result;
+//        }
         if ($ss) {
-            $l = $locale;
-            $words = ["timeSpent1" => ["en" => "Time spent watching Youtube", "fr" => "Temps passé devant youtube", "es" => "Tiempo dedicado a ver Youtube", "de" => "Zeit, die Sie mit Youtube verbracht haben"], "timeSpent2" => ["en" => "secondes i.e.", "fr" => "secondes c.à.d.", "es" => "segundos, es decir,", "de" => "Sekunden d.h."], "month" => ["en" => "month", "fr" => "mois", "es" => "mes", "de" => "Monat"], "months" => ["en" => "months", "fr" => "mois", "es" => "meses", "de" => "Monate"], "day" => ["en" => "day", "fr" => "jour", "es" => "día", "de" => "Tag"], "days" => ["en" => "days", "fr" => "jours", "es" => "días", "de" => "Tage"], "hour" => ["en" => "hour", "fr" => "heure", "es" => "hora", "de" => "Stunde"], "hours" => ["en" => "hours", "fr" => "heures", "es" => "horas", "de" => "Stunden"], "minute" => ["en" => "minute", "fr" => "minute", "es" => "minuto", "de" => "Minute"], "minutes" => ["en" => "minutes", "fr" => "minutes", "es" => "minutos", "de" => "Minuten"], "seconde" => ["en" => "seconde", "fr" => "seconde", "es" => "segundo", "de" => "Sekunde"], "secondes" => ["en" => "secondes", "fr" => "secondes", "es" => "segundos", "de" => "Sekunden"], "and" => ["en" => "and", "fr" => "et", "es" => "y", "de" => "und"],];
-            $s = $ss % 60;
-            $m = intval(floor(($ss % 3600) / 60));
-            $h = intval(floor(($ss % 86400) / 3600));
-            $d = intval(floor(($ss % 2592000) / 86400));
-            $M = intval(floor($ss / 2592000));
+            // convert total runtime ($total in secondes) in years, months, days, hours, minutes, secondes
+            $now = new DateTimeImmutable();
+            // past = now - total
+            $past = $now->sub(new DateInterval('PT' . $ss . 'S'));
 
-            $result = $words['timeSpent1'][$l] . " : " . $ss . " " . $words['timeSpent2'][$l] . " ";
-            if ($M) {
-                $result .= $M . " " . ($M > 1 ? $words['months'][$l] : $words['month'][$l]);
-            }
-            if ($d) {
-                if ($M) {
-                    $result .= ($s || $m || $h) ? ", " : " " . $words['and'][$l] . " ";
-                }
-                $result .= $d . " " . ($d > 1 ? $words['days'][$l] : $words['day'][$l]);
-            }
-            if ($h > 0) {
-                if ($M || $d) {
-                    $result .= ($s || $m) ? ", " : " " . $words['and'][$l] . " ";
-                }
-                $result .= $h . " " . ($h > 1 ? $words['hours'][$l] : $words['hour'][$l]);
-            }
-            if ($m) {
-                if ($M || $d || $h) {
-                    $result .= ($s) ? ", " : " " . $words['and'][$l] . " ";
-                }
-                $result .= $m . " " . ($m > 1 ? $words['minutes'][$l] : $words['minute'][$l]);
-            }
-            if ($s) {
-                if ($M || $d || $h || $m) {
-                    $result .= " " . $words['and'][$l] . " ";
-                }
-                $result .= $s . " " . ($s > 1 ? $words['secondes'][$l] : $words['seconde'][$l]);
-            }
-            return $result;
+            $diff = $now->diff($past);
+            // diff string with years, months, days, hours, minutes, seconds
+            $runtimeString = $this->translator->trans('Time spent watching Youtube') . " : ";
+            $runtimeString .= $ss . ' ' . $this->translator->trans('seconds i.e.') . " ";
+            $runtimeString .= $diff->days ? $diff->days . ' ' . ($diff->days > 1 ? $this->translator->trans('days') : $this->translator->trans('day')) . ($diff->y + $diff->m + $diff->d + $diff->h + $diff->i + $diff->s ? (', ' . $this->translator->trans('or') . ' ') : '') : '';
+            $runtimeString .= $diff->y ? ($diff->y . ' ' . ($diff->y > 1 ? $this->translator->trans('years') : $this->translator->trans('year')) . ($diff->m + $diff->d + $diff->h + $diff->i + $diff->s ? ', ' : '')) : '';
+            $runtimeString .= $diff->m ? ($diff->m . ' ' . ($diff->m > 1 ? $this->translator->trans('months') : $this->translator->trans('month')) . ($diff->d + $diff->h + $diff->i + $diff->s ? ', ' : '')) : '';
+            $runtimeString .= $diff->d ? ($diff->d . ' ' . ($diff->d > 1 ? $this->translator->trans('days') : $this->translator->trans('day')) . ($diff->h + $diff->i + $diff->s ? ', ' : '')) : '';
+            $runtimeString .= $diff->h ? ($diff->h . ' ' . ($diff->h > 1 ? $this->translator->trans('hours') : $this->translator->trans('hour')) . ($diff->i + $diff->s ? ', ' : '')) : '';
+            $runtimeString .= $diff->i ? ($diff->i . ' ' . ($diff->i > 1 ? $this->translator->trans('minutes') : $this->translator->trans('minute')) . ($diff->s ? ', ' : '')) : '';
+            $runtimeString .= $diff->s ? ($diff->s . ' ' . ($diff->s > 1 ? $this->translator->trans('seconds') : $this->translator->trans('second'))) : '';
+
+//            dump($runtimeString);
+        } else {
+            $runtimeString = "";
         }
-        return "";
+        return $runtimeString;
     }
 
     #[Route('/youtube/settings/save', name: 'youtube_settings_save', methods: ['GET'])]

@@ -22,17 +22,18 @@
                     {{ runtime.total }}
                     {{ 'minutes'|trans }}
                     {{ 'i.e.'|trans }}
-                    {% if runtime.years > 1 %}{{ runtime.years }} {{ 'years'|trans }}{% endif %}
-                    {% if runtime.years == 1 %}{{ runtime.years }} {{ 'year'|trans }}{% endif %}
-                    {% if runtime.months > 1 %}{{ runtime.months }} {{ 'months'|trans }}{% endif %}
-                    {% if runtime.months == 1 %}{{ runtime.months }} {{ 'month'|trans }}{% endif %}
-                    {% if runtime.days > 1 %}{{ runtime.days }} {{ 'days'|trans }}{% endif %}
-                    {% if runtime.days == 1 %}{{ runtime.days }} {{ 'day'|trans }}{% endif %}
-                    {% if runtime.hours > 1 %}{{ runtime.hours }} {{ 'hours'|trans }}{% endif %}
-                    {% if runtime.hours == 1 %}{{ runtime.hours }} {{ 'hour'|trans }}{% endif %}
-                    {{ 'and'|trans }}
-                    {% if runtime.minutes > 1 %}{{ runtime.minutes }} {{ 'minutes'|trans }}{% endif %}
-                    {% if runtime.minutes < 2 %}{{ runtime.minutes }} {{ 'minute'|trans }}{% endif %}
+{#                    {% if runtime.years > 1 %}{{ runtime.years }} {{ 'years'|trans }}{% endif %}#}
+{#                    {% if runtime.years == 1 %}{{ runtime.years }} {{ 'year'|trans }}{% endif %}#}
+{#                    {% if runtime.months > 1 %}{{ runtime.months }} {{ 'months'|trans }}{% endif %}#}
+{#                    {% if runtime.months == 1 %}{{ runtime.months }} {{ 'month'|trans }}{% endif %}#}
+{#                    {% if runtime.days > 1 %}{{ runtime.days }} {{ 'days'|trans }}{% endif %}#}
+{#                    {% if runtime.days == 1 %}{{ runtime.days }} {{ 'day'|trans }}{% endif %}#}
+{#                    {% if runtime.hours > 1 %}{{ runtime.hours }} {{ 'hours'|trans }}{% endif %}#}
+{#                    {% if runtime.hours == 1 %}{{ runtime.hours }} {{ 'hour'|trans }}{% endif %}#}
+{#                    {{ 'and'|trans }}#}
+{#                    {% if runtime.minutes > 1 %}{{ runtime.minutes }} {{ 'minutes'|trans }}{% endif %}#}
+{#                    {% if runtime.minutes < 2 %}{{ runtime.minutes }} {{ 'minute'|trans }}{% endif %}#}
+                    {{ runtimeString }}
                 </h4>
 
                 <div class="search-block">

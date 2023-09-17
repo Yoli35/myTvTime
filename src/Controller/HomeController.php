@@ -149,7 +149,7 @@ class HomeController extends AbstractController
                     'type' => 'tmdb mixte',
                 ],
             ],
-            'from' => 'home',
+            'from' => 'app_home',
             'imageConfig' => $imageConfig,
         ]);
     }

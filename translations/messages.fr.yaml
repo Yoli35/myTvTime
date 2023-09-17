@@ -541,6 +541,8 @@ Casting Director.he: Directeur de casting
 Casting Director.she: Directrice de casting
 Casting.he: Distribution
 Casting.she: Distribution
+Catering.he: Restauration
+Catering.she: Restauration
 Character Designer.he: Concepteur de personnages
 Character Designer.she: Conceptrice de personnages
 Characters.he: Personnages
@@ -643,6 +645,8 @@ Executive Producer.he: Producteur exécutif
 Executive Producer.she: Productrice exécutive
 Executive Story Editor.he: Rédacteur exécutif en chef
 Executive Story Editor.she: Rédactrice exécutive en chef
+Executive Visual Effects Producer.he: Producteur exécutif des effets visuels
+Executive Visual Effects Producer.she: Productrice exécutive des effets visuels
 Extras Casting.he: Casting de figurants
 Extras Casting.she: Casting de figurants
 Fight Choreographer.he: Chorégraphe de combat
@@ -800,6 +804,8 @@ Post Production Supervisor.he: Superviseur post-production
 Post Production Supervisor.she: Superviseuse post-production
 Post-Production Manager.he: Directeur de post-production
 Post-Production Manager.she: Directrice de post-production
+Petty Cash Buyer.he: Acheteur de petite caisse
+Petty Cash Buyer.she: Acheteuse de petite caisse
 Producer's Assistant.he: Assistant de production
 Producer's Assistant.she: Assistante de production
 Producer.he: Producteur
@@ -841,6 +847,8 @@ Prosthetic Makeup Artist.he: Maquilleur prothésiste
 Prosthetic Makeup Artist.she: Maquilleuse prothésiste
 Prosthetic Supervisor.he: Superviseur prothèses
 Prosthetic Supervisor.she: Superviseuse prothèses
+Publicist.he: Attaché de presse
+Publicist.she: Attachée de presse
 Recording Supervision.he: Supervision enregistrement
 Recording Supervision.she: Supervision enregistrement
 Recurring character: Personnage récurrent
@@ -923,6 +931,10 @@ Special Effects Supervisor.he: Superviseur effets spéciaux
 Special Effects Supervisor.she: Superviseuse effets spéciaux
 Staff Writer.he: Rédacteur
 Staff Writer.she: Rédactrice
+Standby Art Director.he: Directeur artistique suppléant
+Standby Art Director.she: Directrice artistique suppléante
+Standby Painter.he: Peintre suppléant
+Standby Painter.she: Peintre suppléante
 Stereoscopic Supervisor.he: Superviseur stéréoscopie
 Stereoscopic Supervisor.she: Superviseuse stéréoscopie
 Still Photographer.he: Photographe de plateau
@@ -989,8 +1001,8 @@ Visual Effects Assistant Editor.he: Assistant monteur effets visuels
 Visual Effects Assistant Editor.she: Assistante monteuse effets visuels
 Visual Effects Coordinator.he: Coordinateur effets visuels
 Visual Effects Coordinator.she: Coordinatrice effets visuels
-Visual Effets Editor.he: Monteur effets visuels
-Visual Effets Editor.she: Monteuse effets visuels
+Visual Effects Editor.he: Monteur effets visuels
+Visual Effects Editor.she: Monteuse effets visuels
 Visual Effects Producer.he: Producteur effets visuels
 Visual Effects Producer.she: Productrice effets visuels
 Visual Effects Production Assistant.he: Assistant de production effets visuels
@@ -1289,9 +1301,9 @@ Reload: Recharger
 Time spent watching Youtube: Temps passé à regarder Youtube
 since: depuis le
 Add a Youtube video: Ajouter une vidéo Youtube
-secondes i.e. : secondes c.à.d.
-seconde: seconde
-secondes: secondes
+seconds i.e. : secondes c.à.d.
+second: seconde
+seconds: secondes
 Add Youtube video: Ajouter une vidéo Youtube
 For example: Par exemple
 or: ou

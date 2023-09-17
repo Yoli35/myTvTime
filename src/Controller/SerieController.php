@@ -1674,6 +1674,11 @@ class SerieController extends AbstractController
                 $baseUrl = $this->generateUrl("app_event");
                 $baseName = $this->translator->trans("My events");
                 break;
+            case 'app_home':
+                $baseUrl = $this->generateUrl("app_home");
+                $baseName = $this->translator->trans("Home");
+                $kind = 'tmdb';
+                break;
             case self::POPULAR_SERIES:
             default:
                 $baseUrl = $this->generateUrl("app_series_popular");
