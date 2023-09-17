@@ -389,6 +389,7 @@ class SerieController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
+        $imgConfig = $this->imageConfiguration->getConfig();
 
         $day = $request->query->getInt('d');
         $week = $request->query->getInt('w');
@@ -406,6 +407,10 @@ class SerieController extends AbstractController
         /** @var Serie[] $todayAirings */
 //        $todayAirings = $this->todayAiringSeries($date);
         $todayAirings = $this->todayAiringSeriesV2($date);
+
+        foreach ($todayAirings as $todayAiring) {
+            $this->savePoster($todayAiring['seriePosterPath'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+        }
 //        dump($todayAirings);
         $backdrop = $this->getTodayAiringBackdrop($todayAirings);
         $images = $this->getNothingImages();
@@ -421,7 +426,7 @@ class SerieController extends AbstractController
             'next' => $delta * ($diff->invert ? -1 : 1),
             'breadcrumb' => $breadcrumb,
             'from' => self::EPISODES_OF_THE_DAY,
-            'imageConfig' => $this->imageConfiguration->getConfig(),
+            'imageConfig' => $imgConfig,
         ]);
     }
 
@@ -550,6 +555,7 @@ class SerieController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+        $imgConfig = $this->imageConfiguration->getConfig();
         $now = $this->dateService->getNow($user->getTimezone(), true);
         $week = $now->format('W');
 
@@ -568,6 +574,7 @@ class SerieController extends AbstractController
             $episodesOfTheDay = $this->todayAiringSeriesV2($day);
             foreach ($episodesOfTheDay as $episode) {
                 $episodesCount += count($episode['episodeNumbers']);
+                $this->savePoster($episode['seriePosterPath'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
             }
             $episodesOfTheWeek[] = [
                 'day' => $day,
@@ -1676,7 +1683,13 @@ class SerieController extends AbstractController
         }
         if ($serie) {
             if ($kind === 'show') {
-                $id = $this->serieRepository->findOneBy(['serieId' => $serie['id']])->getId();
+                $serieDb = $this->serieRepository->findOneBy(['serieId' => $serie['id']]);
+                if ($serieDb) {
+                    $id = $serieDb->getId();
+                } else {
+                    $id = $serie['id'];
+                    $kind = 'tmdb';
+                }
             } else {
                 $id = $serie['id'];
             }
@@ -2002,6 +2015,7 @@ class SerieController extends AbstractController
                 'name' => $extra
             ];
         }
+        $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
 
 //        dump([
 //            'tv' => $tv,
