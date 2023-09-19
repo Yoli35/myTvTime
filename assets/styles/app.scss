@@ -972,8 +972,10 @@ nav.active {
             }
 
             img {
-                border: 2px solid var(--gradient-ardoise-80);
+                -webkit-filter: saturate(var(--gradient-saturation));
                 border-radius: .5em;
+                border: 2px solid var(--gradient-ardoise-80);
+                filter: saturate(var(--gradient-saturation));
                 height: 2em;
                 object-fit: cover;
                 width: 2em;
