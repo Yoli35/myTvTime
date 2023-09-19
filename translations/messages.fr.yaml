@@ -15,15 +15,15 @@ Movie: film
 Movies: Films
 My Account: Mon compte
 My Events: Mes événements
-My Movie Collections: Mes Collections de films
+My Movie Collections: Mes listes de films
 My Movies: Mes films
 My series: Mes séries
 Navigation: Navigation
 Php Info: Php Info
 Logs: Logs
 People search: Rechercher une personne
-Pin a collection: Épingler une collection
-Select a collection: Sélectionner une collection
+Pin a collection: Épingler une liste
+Select a collection: Sélectionner une liste
 Popular series: Séries populaires
 Search Movies by: Recherche de film par
 Search by Date: Recherche par date
@@ -210,23 +210,23 @@ List of all my articles: Liste de tous mes articles
 Update the article: Mettre à jour l'article
 
 # Collections
-Collections: Collections
+Collections: Listes
 Description: Description
-My Collections: Mes collections
-The movie « movie_name » has been added to your collection « collection_name ».: Le film « movie_name » a été ajouté à votre collection « collection_name ».
-The movie « movie_name » has been removed from your collection « collection_name ».: Le film « movie_name » a été retiré de votre collection « collection_name ».
+My Collections: Mes listes
+The movie « movie_name » has been added to your collection « collection_name ».: Le film « movie_name » a été ajouté à votre liste « collection_name ».
+The movie « movie_name » has been removed from your collection « collection_name ».: Le film « movie_name » a été retiré de votre liste « collection_name ».
 # new/edit collection
-Add collection: Ajouter une collection ...
-New collection: Nouvelle collection
-Edit collection: Modifier la collection
-Update the collection: Mettre à jour la collection
+Add collection: Ajouter une liste ...
+New collection: Nouvelle liste
+Edit collection: Modifier la liste
+Update the collection: Mettre à jour la liste
 Color: Couleur
 Thumbnail Image (JPG, PNG file): Vignette (format JPG, PNG)
 Click here or drop a thumbnail image file: Cliquez ici ou déposez une image de la miniature
 Click here or drop a banner image file: Cliquez ici ou déposez une image de la bannière
 # delete collection
-Delete this collection?: Supprimer cette collection?
-Do you really want to delete this collection?: Voulez-vous vraiment supprimer cette collection?
+Delete this collection?: Supprimer cette liste ?
+Do you really want to delete this collection?: Voulez-vous vraiment supprimer cette liste ?
 
 # User Series
 First Air at: Première diffusion
@@ -348,9 +348,9 @@ Created by: Crée par
 
 # Collection
 Films: Films
-Belongs to Collection: Collection
-Collection: Collection
-See the Collection: Voir la collection
+Belongs to Collection: Liste
+Collection: Liste
+See the Collection: Voir la liste
 No banner: Pas de bannière
 
 # Tv Show Detail
@@ -1371,7 +1371,7 @@ Friends: Amis
 Friend requests: Demandes d'ami
 Reject: Refuser
 You have a friend request from: Vous avez une demande d'amitié en attente de la part de
-Movie collections: Collections de films
+Movie collections: Listes de films
 Serie viewings: Visionnages de séries renseignés
 Youtube videos: Vidéos Youtube
 Tiktok videos: Vidéos Tiktok

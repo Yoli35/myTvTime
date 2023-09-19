@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Breadcrumb\BreadcrumbBuilder;
 use App\Entity\Alert;
 use App\Entity\Cast;
 use App\Entity\EpisodeViewing;
@@ -63,6 +64,7 @@ class SerieController extends AbstractController
     public array $messages = [];
 
     public function __construct(private readonly AlertRepository          $alertRepository,
+//                                private readonly BreadcrumbBuilder        $breadcrumbBuilder,
                                 private readonly CastRepository           $castRepository,
                                 private readonly DateService              $dateService,
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
@@ -417,6 +419,14 @@ class SerieController extends AbstractController
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_DAY);
         $breadcrumb[] = ['name' => $this->translator->trans("Episodes of the week"), 'url' => $this->generateUrl("app_series_this_week")];
 
+        $bc = new BreadcrumbBuilder($this->translator);
+        $bc->rootBreadcrumb('Home', $this->generateUrl('app_home'))
+            ->addBreadcrumb('My series airing today', $this->generateUrl('app_series_today'));
+        dump($bc);
+//        $this->breadcrumbBuilder->rootBreadcrumb('Home', 'app_home');
+//        $this->breadcrumbBuilder->addBreadcrumb('My series airing today', 'app_series_today');
+//        dump($this->breadcrumbBuilder->getBreadcrumbs());
+
         return $this->render('series/today.html.twig', [
             'todayAirings' => $todayAirings,
             'date' => $date,
@@ -425,6 +435,7 @@ class SerieController extends AbstractController
             'prev' => $delta * ($diff->invert ? -1 : 1),
             'next' => $delta * ($diff->invert ? -1 : 1),
             'breadcrumb' => $breadcrumb,
+            'bc' => $bc->getBreadcrumbs(),
             'from' => self::EPISODES_OF_THE_DAY,
             'imageConfig' => $imgConfig,
         ]);
@@ -1413,11 +1424,11 @@ class SerieController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'app_series_show', methods: ['GET'])]
-    public function show(Request $request, Serie $serie): Response
+    public function show(Request $request, Serie $serie, BreadcrumbBuilder $bc): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
 
+        dump($bc);
         $tmdbService = $this->TMDBService;
 
         $page = $request->query->getInt('p', 1);
