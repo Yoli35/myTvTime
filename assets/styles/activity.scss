@@ -317,6 +317,31 @@
                             }
 
                             @include activity-hours();
+
+                            .block-body {
+                                .details {
+                                    align-items: center;
+                                    flex-direction: row;
+                                    flex-wrap: wrap;
+                                    justify-content: space-evenly;
+
+                                    .detail {
+                                        width: unset;
+                                    }
+
+                                    .wrapper {
+
+                                        .hours {
+                                            gap: 1px;
+
+                                            .hour {
+                                                border-radius: 2px;
+                                                height: 3rem;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         .move {
