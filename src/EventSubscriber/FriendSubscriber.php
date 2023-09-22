@@ -23,7 +23,7 @@ class FriendSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onKernelRequest(ControllerEvent $event)
+    public function onKernelRequest(ControllerEvent $event): void
     {
 //        $authorizedControllers = [
 //            'app_home', 'app_blog',
