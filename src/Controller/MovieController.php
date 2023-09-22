@@ -188,19 +188,45 @@ class MovieController extends AbstractController
         $images = $movieDetail['images'];
         $watchProviders = $movieDetail['watch/providers']['results'];
 
-        $standing = $this->tmdbService->getCountries();
+        $standing = $this->tmdbService->getCountries($locale, $user?->getCountry());
         $countries = json_decode($standing, true);
+        $countriesByCode = [];
+        foreach ($countries as $country) {
+            $countriesByCode[$country['iso_3166_1']] = $country['native_name'];
+        }
+        dump([
+            'watchProviders' => $watchProviders,
+            'countries' => $countries,
+            'countriesByCode' => $countriesByCode,
+            'from' => $from,
+        ]);
 
         $breadcrumb = $this->breadcrumb($from, $movieDetail);
 
-        if (key_exists('results', $watchProviders)) {
-            $watchProviders = $watchProviders['results'];
-            if (key_exists(strtoupper($locale), $watchProviders)) {
-                $watchProviders = $watchProviders[strtoupper($locale)];
+        if ($watchProviders) {
+            if ($user && $user->getCountry()) {
+                $country = $user->getCountry();
             } else {
-                $watchProviders = null;
+                $country = strtoupper($locale);
+            }
+            if (key_exists($country, $watchProviders)) {
+                $watchProvidersTemp[0] = $watchProviders[$country];
+                $watchProviders = $watchProvidersTemp;
+            } else {
+                if (count($watchProviders) <= 3) {
+                    $watchProvidersTemp = [];
+                    foreach ($watchProviders as $country => &$watchProvider) {
+                        $watchProvider['native_name'] = $countriesByCode[$country];
+                        $watchProvidersTemp[] = $watchProvider;
+                    }
+                    $watchProviders = $watchProvidersTemp;
+                } else
+                    $watchProviders = null;
             }
         }
+        dump([
+            'watchProviders' => $watchProviders,
+        ]);
 
         $standing = $this->tmdbService->getMovieReleaseDates($id);
         $releaseDates = json_decode($standing, true);
@@ -230,7 +256,6 @@ class MovieController extends AbstractController
                 }
             }
         }
-
 
         if (!array_key_exists('release_date', $movieDetail)) {
             $movieDetail['release_date'] = "";
@@ -362,7 +387,7 @@ class MovieController extends AbstractController
             'current_genres' => $currentGenres,
             'imageConfig' => $imageConfig,
             'dRoute' => 'app_movie',
-            'from' => 'movies_by_genre',
+            'from' => 'app_movies_by_genre',
             'user' => $this->getUser(),
             'locale' => $locale,
         ]);
@@ -627,7 +652,7 @@ class MovieController extends AbstractController
         $baseName = match ($from) {
             'app_home' => $this->translator->trans("Home"),
             'app_personal_movies' => $this->translator->trans("My Movies"),
-            'movies_by_genre' => $this->translator->trans("Search by Genre"),
+            'app_movies_by_genre' => $this->translator->trans("Search by Genre"),
             'app_movies_by_date' => $this->translator->trans("Search by Date"),
             'app_movies_search' => $this->translator->trans("Search by Name"),
             default => $this->translator->trans("Movies"),

@@ -41,12 +41,13 @@
                     <div class="part-1">
                         <h1 class="title">{{ movie.title }}</h1>
                         <div class="info">{{ 'Original Title'|trans }} : {{ movie.original_title }}</div>
-                        {% if watchProviders %}
+                        {% for watchProvider in watchProviders %}
                             <div class="watch-providers">
-                                {% if watchProviders.flatrate is defined %}
+                                {% if watchProvider.native_name is defined %}<h3>{{ watchProvider.native_name }}</h3>{% endif %}
+                                {% if watchProvider.flatrate is defined %}
                                     <div class="streaming">{{ 'Available in streaming'|trans }}</div>
                                     <div class="provider-list">
-                                        {% for provider in watchProviders.flatrate %}
+                                        {% for provider in watchProvider.flatrate %}
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
@@ -57,10 +58,10 @@
                                         {% endfor %}
                                     </div>
                                 {% endif %}
-                                {% if watchProviders.buy is defined %}
+                                {% if watchProvider.buy is defined %}
                                     <div class="buy">{{ 'Available to buy'|trans }}</div>
                                     <div class="provider-list">
-                                        {% for provider in watchProviders.buy %}
+                                        {% for provider in watchProvider.buy %}
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
@@ -71,12 +72,12 @@
                                         {% endfor %}
                                     </div>
                                 {% endif %}
-                                {% if watchProviders.rent is defined %}
+                                {% if watchProvider.rent is defined %}
                                     <div class="buy">{{ 'Available to rent'|trans }}</div>
                                     <div class="provider-list">
-                                        {% for provider in watchProviders.rent %}
+                                        {% for provider in watchProvider.rent %}
                                             <div class="provider">
-                                                <div class="name">{{ provider.provider_name }}</div>
+                                                <div class="name">{{ provider.provider_name }}{% if provider.native_name is defined %} ({{ provider.native_name }}){% endif %}</div>
                                                 <div class="logo">
                                                     <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}"
                                                          alt="{{ provider.provider_name }}">
@@ -86,7 +87,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                        {% endif %}
+                        {% endfor %}
                         <div class="genres">
                             {% for genre in movie.genres %}
                                 <div class="genre"><a
@@ -211,7 +212,7 @@
                         </div>
                         {% if movie.belongs_to_collection %}
                             <div class="part-2R">
-{#                                <h2>{{ 'Belongs to Collection'|trans }}</h2>#}
+                                {#                                <h2>{{ 'Belongs to Collection'|trans }}</h2> #}
                                 <div class="collection">
                                     {% if movie.belongs_to_collection.backdrop_path %}
                                         <div class="banner">

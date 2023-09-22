@@ -285,7 +285,7 @@ class TMDBService
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/watch/providers/tv?language='.$language.'&watch_region='.$region.'&api_key=' . $this->api_key,
+                'https://api.themoviedb.org/3/watch/providers/tv?language=' . $language . '&watch_region=' . $region . '&api_key=' . $this->api_key,
             );
             try {
                 return $response->getContent();
@@ -529,13 +529,13 @@ class TMDBService
         }
     }
 
-    public function getCountries(): ?string
+    public function getCountries($locale = 'fr', $country = 'FR'): ?string
     {
         $noCountries = json_encode([]);
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/configuration/countries?api_key=' . $this->api_key,
+                'https://api.themoviedb.org/3/configuration/countries?api_key=' . $this->api_key . '&language=' . $locale . ($country ? ('-' . $country) : ''),
             );
             try {
                 return $response->getContent();
