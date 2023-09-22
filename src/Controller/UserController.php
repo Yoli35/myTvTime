@@ -44,8 +44,10 @@ class UserController extends AbstractController
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FriendRepository         $friendRepository,
                                 private readonly LocaleSwitcher           $localeSwitcher,
+                                private readonly MovieRepository          $movieRepository,
                                 private readonly SeasonViewingRepository  $seasonViewingRepository,
                                 private readonly SerieViewingRepository   $serieViewingRepository,
+                                private readonly TMDBService              $TMDBService,
                                 private readonly TranslatorInterface      $translator,
                                 private readonly UserRepository           $userRepository,
     )
@@ -270,19 +272,19 @@ class UserController extends AbstractController
 
         $diff = $now->diff($past);
         // diff string with years, months, days, hours, minutes
-        $runtimeString = $diff->days ? $diff->days . ' ' . ($diff->days > 1 ? $this->translator->trans('days') : $this->translator->trans('day')) .', '.$this->translator->trans('or'). ' ' : '';
+        $runtimeString = $diff->days ? $diff->days . ' ' . ($diff->days > 1 ? $this->translator->trans('days') : $this->translator->trans('day')) . ', ' . $this->translator->trans('or') . ' ' : '';
         $runtimeString .= $diff->y ? ($diff->y . ' ' . ($diff->y > 1 ? $this->translator->trans('years') : $this->translator->trans('year')) . ', ') : '';
         $runtimeString .= $diff->m ? ($diff->m . ' ' . ($diff->m > 1 ? $this->translator->trans('months') : $this->translator->trans('month')) . ', ') : '';
         $runtimeString .= $diff->d ? ($diff->d . ' ' . ($diff->d > 1 ? $this->translator->trans('days') : $this->translator->trans('day')) . ', ') : '';
         $runtimeString .= $diff->h ? ($diff->h . ' ' . ($diff->h > 1 ? $this->translator->trans('hours') : $this->translator->trans('hour')) . ', ') : '';
         $runtimeString .= $diff->i ? ($diff->i . ' ' . ($diff->i > 1 ? $this->translator->trans('minutes') : $this->translator->trans('minute'))) : '';
 
-        dump([
-            'now' => $now,
-            'past' => $past,
-            'diff' => $diff,
-            'diff string' => $runtimeString,
-        ]);
+//        dump([
+//            'now' => $now,
+//            'past' => $past,
+//            'diff' => $diff,
+//            'diff string' => $runtimeString,
+//        ]);
 
         $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
         if (!$settings) {
@@ -321,14 +323,17 @@ class UserController extends AbstractController
     public function getUserMovies($userId, $offset, $userMovieRepository): array
     {
         $userMovies = $userMovieRepository->findUserMovies($userId, $offset);
-        $movies = [];
-        foreach ($userMovies as $userMovie) {
+//        foreach ($userMovies as $userMovie) {
+//            $movie = $userMovie;
+//            $collections = $userMovieRepository->userMovieGetCollections($userMovie['id'], $userId);
+//            $movie['my_collections'] = $collections;
+//            $movies[] = $movie;
+//        }
+        return array_map(function ($userMovie) use ($userMovieRepository, $userId) {
             $movie = $userMovie;
-            $collections = $userMovieRepository->userMovieGetCollections($userMovie['id'], $userId);
-            $movie['my_collections'] = $collections;
-            $movies[] = $movie;
-        }
-        return $movies;
+            $movie['my_collections'] = $userMovieRepository->userMovieGetCollections($userMovie['id'], $userId);
+            return $movie;
+        }, $userMovies);
     }
 
     #[Route('/{_locale}/user/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -338,7 +343,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
         /** @var MovieCollection $collection */
         $collection = $collectionRepository->find($id);
-        $movies = $this->moviesToArray($request, $collectionRepository->getMoviesByReleaseDate($id, 'DESC'), $TMDBService, $movieRepository);
+        $movies = $this->moviesToArray($collectionRepository->getMoviesByReleaseDate($id, 'DESC'), $request->getLocale());
 
         $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
         if (!$settings) {
@@ -376,18 +381,17 @@ class UserController extends AbstractController
         ]);
     }
 
-    private function moviesToArray($request, $movies, $TMDBService, $movieRepository): array
+    private function moviesToArray($movies, $locale): array
     {
         $tab = [];
-        $locale = $request->getLocale();
         foreach ($movies as $movie) {
             $overview = $movie['overview_' . $locale];
             if ($overview === null) {
-                $standing = $TMDBService->getMovie($movie['movie_db_id'], $locale);
+                $standing = $this->TMDBService->getMovie($movie['movie_db_id'], $locale);
                 $movieDetail = json_decode($standing, true);
                 $overview = $movieDetail['overview'];
 
-                $m = $movieRepository->findOneBy(['id' => $movie['id']]);
+                $m = $this->movieRepository->findOneBy(['id' => $movie['id']]);
                 switch ($locale) {
                     case 'fr':
                         $m->setOverviewFr($overview);
@@ -402,7 +406,7 @@ class UserController extends AbstractController
                         $m->setOverviewEs($overview);
                         break;
                 }
-                $movieRepository->save($m, true);
+                $this->movieRepository->save($m, true);
             }
             $movie['description'] = $overview;
             $tab[] = $movie;
@@ -659,10 +663,10 @@ class UserController extends AbstractController
         return $this->json(['connected' => ($user !== null)]);
     }
 
-    public function isFullyConnected(): void
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-    }
+//    public function isFullyConnected(): void
+//    {
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+//    }
 
     #[Route('/change-password', name: 'app_user_change_password', methods: ['GET', 'POST'])]
     public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
