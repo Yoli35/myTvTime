@@ -199,12 +199,12 @@ class MovieController extends AbstractController
         foreach ($countries as $country) {
             $countriesByCode[$country['iso_3166_1']] = $country['native_name'];
         }
-        dump([
-            'watchProviders' => $watchProviders,
-            'countries' => $countries,
-            'countriesByCode' => $countriesByCode,
-            'from' => $from,
-        ]);
+//        dump([
+//            'watchProviders' => $watchProviders,
+//            'countries' => $countries,
+//            'countriesByCode' => $countriesByCode,
+//            'from' => $from,
+//        ]);
 
         $breadcrumb = $this->breadcrumb($from, $movieDetail);
 
@@ -229,13 +229,13 @@ class MovieController extends AbstractController
                     $watchProviders = null;
             }
         }
-        dump([
-            'watchProviders' => $watchProviders,
-        ]);
+//        dump([
+//            'watchProviders' => $watchProviders,
+//        ]);
 
         $standing = $this->tmdbService->getMovieReleaseDates($id);
         $releaseDates = json_decode($standing, true);
-        $releaseDates = $this->getLocaleDates($releaseDates['results'], $countries, $locale);
+        $releaseDates = $this->getLocaleDates($user, $releaseDates['results'], $countries, $locale);
 
         $hasBeenSeen = false;//$this->hasBeenSeen($id, $userMovieRepository);
         $collections = [];
@@ -307,13 +307,13 @@ class MovieController extends AbstractController
             }
         } else {
             $movieDetail['backdrop_path'] = $imageConfig['url'] . $imageConfig['backdrop_sizes'][3] . $movieDetail['backdrop_path'];
-            $backdrops[] = $movieDetail['backdrop_path'];
+            $backdrops = array_merge([$movieDetail['backdrop_path']], $backdrops);
         }
         $backdropForm = $this->createForm(ContributionType::class, null, [
             'action' => $this->generateUrl('app_contribution_movie_backdrop', ['id' => $id]),
             'method' => 'POST',
         ]);
-        dump($movieDetail);
+//        dump($movieDetail);
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
@@ -736,14 +736,19 @@ class MovieController extends AbstractController
         return $breadcrumb;
     }
 
-    public function getLocaleDates($dates, $countries, $locale): array
+    public function getLocaleDates(?User $user, $dates, $countries, $locale): array
     {
-        $locales = [
-            'fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
-            'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'],
-            'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'],
-            'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']
-        ];
+        if ($user?->getCountry()) {
+            $locales = [$locale => [$user->getCountry()]];
+        } else {
+            $locales = [
+                'fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
+                'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'],
+                'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'],
+                'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']
+            ];
+        }
+        dump(['locales' => $locales, 'locale' => $locale, 'user' => $user, 'dates' => $dates, 'countries' => $countries]);
 
         $types = [1 => 'Premiere', 2 => 'Theatrical (limited)', 3 => 'Theatrical', 4 => 'Digital', 5 => 'Physical', 6 => 'TV'];
         $localeDates = [];

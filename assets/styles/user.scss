@@ -593,6 +593,7 @@
 
     .home-discover {
         @include flex-col();
+        overflow: unset;
         padding: 0;
         position: relative;
         transition: opacity .5s ease-out, transform .5s ease-out;

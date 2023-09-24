@@ -1452,11 +1452,12 @@ class SerieController extends AbstractController
     #[Route('/tmdb/{id}', name: 'app_series_tmdb', methods: ['GET'])]
     public function tmdb(Request $request, $id): Response
     {
-        $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
-        if ($serie) {
-            return $this->redirectToRoute('app_series_show', ['id' => $serie->getId()]);
+        if ($this->getUser()) {
+            $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
+            if ($serie) {
+                return $this->redirectToRoute('app_series_show', ['id' => $serie->getId()]);
+            }
         }
-//        $this->logService->log($request, $this->getUser());
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::POPULAR_SERIES);
         $query = $request->query->get('query', "");
@@ -1967,7 +1968,7 @@ class SerieController extends AbstractController
             $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
         }
 
-        if ($serie) {
+        if ($user && $serie) {
             if ($tv['first_air_date'] == null) {
                 $tv['upcoming_date_month'] = $serie->getUpcomingDateMonth();
                 $tv['upcoming_date_year'] = $serie->getUpcomingDateYear();
@@ -2045,7 +2046,7 @@ class SerieController extends AbstractController
             'serie' => $tv,
             'serieId' => $serie?->getId(),
             'addThisSeries' => $addThisSeries,
-            'currentYear' => $this->dateService->newDate('now', $user->getTimezone(), true)->format('Y'),
+            'currentYear' => $this->dateService->newDate('now', $user ? $user->getTimezone() : 'Europe/Paris', true)->format('Y'),
             'credits' => $credits,
             'keywords' => $keywords,
             'missingTranslations' => $missingTranslations,
@@ -2053,7 +2054,7 @@ class SerieController extends AbstractController
             'providersFlatrate' => $providersFlatrate,
             'watchProviderList' => $watchProviderList,
             'similar' => $similar,
-            'serieIds' => $this->mySerieIds($user),
+            'serieIds' => $user ? $this->mySerieIds($user) : [],
             'images' => $images,
             'locale' => $locale,
             'page' => $page,

@@ -560,8 +560,8 @@
 
             function toggleFavorite(evt) {
                 const fav = evt.target.checked ? 1 : 0;
-                const userId = "{{ user.id }}";
-                const mediaId = "{{ userMovieId }}";
+                const userId = fav.getAttribute("data-user");
+                const mediaId = fav.getAttribute("data-media");
 
                 // console.log({fav});
                 let url = _app_movie_toggle_favorite + '/' + userId + '/' + mediaId + '/' + fav;
