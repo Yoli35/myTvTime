@@ -2,16 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Contribution;
 use App\Entity\Favorite;
 use App\Entity\Rating;
 use App\Entity\User;
 use App\Entity\Movie;
+use App\Form\ContributionType;
 use App\Form\MovieByNameType;
+use App\Repository\ContributionRepository;
 use App\Repository\FavoriteRepository;
 use App\Repository\GenreRepository;
 use App\Repository\MovieCollectionRepository;
 use App\Repository\RatingRepository;
 use App\Repository\MovieRepository;
+use App\Service\FileUploader;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 
@@ -27,6 +31,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MovieController extends AbstractController
 {
     public function __construct(
+        private readonly ContributionRepository   $contributionRepository,
         private readonly FavoriteRepository        $favoriteRepository,
         private readonly GenreRepository           $genreRepository,
         private readonly ImageConfiguration        $imageConfiguration,
@@ -174,7 +179,7 @@ class MovieController extends AbstractController
 //        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
-
+        $imageConfig = $this->imageConfiguration->getConfig();
         $from = $request->query->get('from');
 
         $locale = $request->getLocale();
@@ -231,8 +236,6 @@ class MovieController extends AbstractController
         $standing = $this->tmdbService->getMovieReleaseDates($id);
         $releaseDates = json_decode($standing, true);
         $releaseDates = $this->getLocaleDates($releaseDates['results'], $countries, $locale);
-
-        $imageConfig = $this->imageConfiguration->getConfig();
 
         $hasBeenSeen = false;//$this->hasBeenSeen($id, $userMovieRepository);
         $collections = [];
@@ -292,10 +295,30 @@ class MovieController extends AbstractController
                     break;
             }
         }
-//        dump($movieDetail);
+
+        $backdropContributions = $this->contributionRepository->findBy(['mediaId' => $id, 'mediaType' => 'movie', 'type' => 'backdrop']);
+        $backdrops = array_map(function ($contribution) {
+            return '/images/movies/contributions/backdrops/' . $contribution->getPath();
+        }, $backdropContributions);
+        if (!$movieDetail['backdrop_path']) {
+           if (count($backdropContributions)) {
+                $backdropContribution = $backdropContributions[0];
+                $movieDetail['backdrop_path'] = '/images/movies/contributions/backdrops/' . $backdropContribution->getPath();
+            }
+        } else {
+            $movieDetail['backdrop_path'] = $imageConfig['url'] . $imageConfig['backdrop_sizes'][3] . $movieDetail['backdrop_path'];
+            $backdrops[] = $movieDetail['backdrop_path'];
+        }
+        $backdropForm = $this->createForm(ContributionType::class, null, [
+            'action' => $this->generateUrl('app_contribution_movie_backdrop', ['id' => $id]),
+            'method' => 'POST',
+        ]);
+        dump($movieDetail);
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
+            'backdropForm' => $backdropForm?->createView(),
+            'backdrops' => $backdrops,
             'from' => $from,
             'breadcrumb' => $breadcrumb,
             'overviewWasEmpty' => $overviewWasEmpty,
@@ -315,6 +338,33 @@ class MovieController extends AbstractController
             'imageConfig' => $imageConfig,
             'locale' => $locale,
         ]);
+    }
+
+    #[Route('/movie/{id}/backdrop', name: 'app_contribution_movie_backdrop', methods: ['POST'])]
+    public function movieBackdrop(Request $request, $id, FileUploader $fileUploader): Response
+    {
+        $form = $this->createForm(ContributionType::class, null, [
+            'action' => $this->generateUrl('app_contribution_movie_backdrop', ['id' => $id]),
+            'method' => 'POST',
+        ]);
+        $form->handleRequest($request);
+        $dropMedia = $form->get('dropMedia')->getData();
+        $caption = $form->get('caption')->getData();
+
+        if ($dropMedia) {
+            $avatarFileName = $fileUploader->upload($dropMedia, 'movie_backdrop');
+            $contribution = new Contribution();
+            $contribution->setUser($this->getUser());
+            $contribution->setType('backdrop');
+            $contribution->setMediaId($id);
+            $contribution->setMediaType('movie');
+            $contribution->setPath($avatarFileName);
+            $contribution->setCaption($caption);
+            $this->contributionRepository->save($contribution, true);
+
+            return $this->json(['success' => true, 'backdrop' => '/images/movies/contributions/backdrops/' . $avatarFileName]);
+        }
+        return $this->json(['success' => false, 'error' => 'no file']);
     }
 
     #[Route([
@@ -420,7 +470,7 @@ class MovieController extends AbstractController
             'imageConfig' => $imageConfig,
             'user' => $this->getUser(),
             'dRoute' => 'app_movie',
-            'from' => 'movies_by_date',
+            'from' => 'app_movies_by_date',
             'locale' => $locale,
         ]);
     }
@@ -466,7 +516,7 @@ class MovieController extends AbstractController
             'imageConfig' => $imageConfig,
             'user' => $this->getUser(),
             'dRoute' => 'app_movie',
-            'from' => 'movies_search',
+            'from' => 'app_movies_search',
             'locale' => $locale,
         ]);
     }

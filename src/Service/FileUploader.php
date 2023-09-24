@@ -58,6 +58,10 @@ class FileUploader
             'contact' => $this->targetDirectory[8],
             'article_thumbnail' => $this->targetDirectory[9],
             'article_banner' => $this->targetDirectory[10],
+            'movie_backdrop' => $this->targetDirectory[11],
+            'movie_poster' => $this->targetDirectory[12],
+            'series_backdrop' => $this->targetDirectory[13],
+            'series_poster' => $this->targetDirectory[14],
             default => '',
         };
     }

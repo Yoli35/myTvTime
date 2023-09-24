@@ -66,6 +66,7 @@ Exercise: Exercice
 Steps: Nombre de pas
 steps: pas
 km: km
+h: h
 Distance: Distance
 goal: Objectif atteint
 Click me to edit: Cliquez ici pour modifier
@@ -310,6 +311,11 @@ Year: Année
 Month: Mois
 
 # Movie Detail
+Add a new backdrop: Ajouter un nouveau fond d'écran
+No backdrop: Pas de fond d'écran
+Drop media: Glisser-déposer une image
+Upload: Télécharger
+Drag and drop a file or click to browse: Glisser-déposer un fichier ou cliquer pour parcourir
 Original Title: Titre original
 Overview: Résumé
 Add an overview: Ajouter un résumé

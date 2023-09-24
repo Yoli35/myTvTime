@@ -129,6 +129,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Alarm::class, orphanRemoval: true)]
     private Collection $alarms;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Contribution::class)]
+    private Collection $contributions;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -143,6 +146,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->alerts = new ArrayCollection();
         $this->youtubeVideoComments = new ArrayCollection();
         $this->alarms = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -727,6 +731,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTimezone(?string $timezone): static
     {
         $this->timezone = $timezone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Contribution>
+     */
+    public function getContributions(): Collection
+    {
+        return $this->contributions;
+    }
+
+    public function addContribution(Contribution $contribution): static
+    {
+        if (!$this->contributions->contains($contribution)) {
+            $this->contributions->add($contribution);
+            $contribution->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContribution(Contribution $contribution): static
+    {
+        if ($this->contributions->removeElement($contribution)) {
+            // set the owning side to null (unless already changed)
+            if ($contribution->getUser() === $this) {
+                $contribution->setUser(null);
+            }
+        }
 
         return $this;
     }

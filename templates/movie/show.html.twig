@@ -22,10 +22,26 @@
             </div>
             <div class="backdrop">
                 {% if movie.backdrop_path %}
-                    <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ movie.backdrop_path }}" alt="{{ movie.title }}">
+                    <img src="{{ movie.backdrop_path }}" alt="{{ movie.title }}">
                 {% else %}
-                    <div class="no-backdrop">{{ 'No backdrop'|trans }}</div>
+                    <div class="no-backdrop">
+                        <div class="label">{{ 'No backdrop'|trans }}</div>
+                    </div>
                 {% endif %}
+            </div>
+            {% if backdrops|length %}
+                <div class="backdrops">
+                    {% for b in backdrops %}
+                        <img src="{{ b }}" alt="">
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="contribution hide">
+                <h3>{{ 'Add a new backdrop'|trans }}</h3>
+                {{ form_start(backdropForm) }}
+                {{ form_widget(backdropForm) }}
+                {{ form_end(backdropForm) }}
+                <div class="dismiss"><i class="fa-solid fa-plus"></i></div>
             </div>
             {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
             <div class="ygg">
@@ -51,8 +67,7 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}"
-                                                         alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -65,8 +80,7 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}"
-                                                         alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -79,8 +93,7 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}{% if provider.native_name is defined %} ({{ provider.native_name }}){% endif %}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}"
-                                                         alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -90,8 +103,8 @@
                         {% endfor %}
                         <div class="genres">
                             {% for genre in movie.genres %}
-                                <div class="genre"><a
-                                            href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a>
+                                <div class="genre">
+                                    <a href="{{ path('app_movies_by_genre', {genres: genre.id}) }}">{{ genre.name }}</a>
                                 </div>
                             {% endfor %}
                         </div>
@@ -154,8 +167,7 @@
                             {% endif %}
                             {% if movie.imdb_id | length %}
                                 <div class="info">
-                                    <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank"
-                                       rel="noopener">
+                                    <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank" rel="noopener">
                                         <span data-descr="{{ 'Visit the Movie Page on IMDB'|trans }}">
                                             {{ 'IMDB Page'|trans }}&nbsp;<i class="bi bi-link-45deg"></i>
                                         </span>
@@ -257,8 +269,7 @@
                             <div class="field">
                                 <div class="list" data-movie="{{ movie.id }}">
                                     {% for collection in collections %}
-                                        <div class="item{% if collection.id in movieCollection %} selected{% endif %}"
-                                             data-id="{{ collection.id }}">{{ collection.title }}</div>
+                                        <div class="item{% if collection.id in movieCollection %} selected{% endif %}" data-id="{{ collection.id }}">{{ collection.title }}</div>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -274,12 +285,10 @@
                         <div class="recommendation">
                             <a href="{{ path('app_movie', {id: recommendation.id}) }}">
                                 {% if recommendation.poster_path %}
-                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}"
-                                         alt="{{ recommendation.original_title }}">
+                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
                                 {% else %}
                                     <div class="no-poster">
-                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100"
-                                             alt="{{ recommendation.original_title }}">
+                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
                                         <div class="title">{{ recommendation.title }}</div>
                                         <div class="original-title">{{ recommendation.original_title }}</div>
                                     </div>
@@ -298,9 +307,7 @@
                             {% if actor.profile_path|length %}
                                 <a href="{{ path('app_people', {id: actor.id}) }}">
                                     <div class="actor">
-                                        <div class="profile"
-                                             style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')"
-                                             data-id="{{ actor.id }}"></div>
+                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ actor.profile_path }}')" data-id="{{ actor.id }}"></div>
                                         <div>
                                             <div class="name">{{ actor.name }}</div>
                                             <div class="character">{{ actor.character }}</div>
@@ -334,9 +341,7 @@
                             <a href="{{ path('app_people', {id: data.id}) }}">
                                 <div class="member">
                                     {% if data.profile_path|length %}
-                                        <div class="profile"
-                                             style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ data.profile_path }}')"
-                                             data-id="{{ data.id }}"></div>
+                                        <div class="profile" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.profile_sizes.1 }}{{ data.profile_path }}')" data-id="{{ data.id }}"></div>
                                     {% else %}
                                         <div class="profile" data-id="{{ data.id }}"></div>
                                     {% endif %}
@@ -358,9 +363,7 @@
                             <h5>{{ 'Backdrops'|trans }}</h5>
                             <div>
                                 {% for backdrop in images.backdrops %}
-                                    <img class="backdrop" {# 0: w300, 1: w780, 2: w1280, 3: original #}
-                                         src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop.file_path }}"
-                                         alt="Some backdrop">
+                                    <img class="backdrop" src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop.file_path }}" alt="Some backdrop">
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -368,9 +371,7 @@
                             <h5>{{ 'Logos'|trans }}</h5>
                             <div>
                                 {% for logo in images.logos %}
-                                    <img class="logo" {# 0: w45, 1: w92, 2: w154, 3: w185, 4: w300, 5:"w500, 6: original #}
-                                         src="{{ imageConfig.url ~ imageConfig.logo_sizes.6 ~ logo.file_path }}"
-                                         alt="Some logo">
+                                    <img class="logo" src="{{ imageConfig.url ~ imageConfig.logo_sizes.6 ~ logo.file_path }}" alt="Some logo">
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -378,9 +379,7 @@
                             <h5>{{ 'Posters'|trans }}</h5>
                             <div>
                                 {% for poster in images.posters %}
-                                    <img class="poster" {# 0: w92, 1: w154, 2: w185, 3: w342, 4: w500, 5: w780, 6: original #}
-                                         src="{{ imageConfig.url ~ imageConfig.poster_sizes.6 ~ poster.file_path }}"
-                                         alt="Some poster">
+                                    <img class="poster" src="{{ imageConfig.url ~ imageConfig.poster_sizes.6 ~ poster.file_path }}" alt="Some poster">
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -455,7 +454,6 @@
                 xhr.send();
             });
             document.querySelector("#overview-cancel")?.addEventListener("click", () => {
-
                 toggleTextarea();
             });
             document.querySelector("#overview-delete")?.addEventListener("click", () => {
@@ -486,6 +484,76 @@
                     add.innerHTML = '<i class="fa-solid fa-plus"></i>';
                     add.setAttribute('title', txt['edit']);
                 }
+            }
+
+            const header = document.querySelector(".movie-header");
+            const contribution = header.querySelector(".contribution");
+            /**
+             * @type {HTMLDivElement} dismiss
+             */
+            const dismiss = contribution?.querySelector(".dismiss");
+            dismiss?.addEventListener("click", () => {
+                contribution.classList.toggle("hide");
+                if (contribution.classList.contains("hide")) {
+                    dismiss.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                } else {
+                    dismiss.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                }
+            });
+            if (contribution) {
+                const form = contribution.querySelector("form");
+                const input = form.querySelector("input[type=file]");
+                const submit = form.querySelector("button[type=submit]");
+                submit.disabled = true;
+                input.addEventListener("change", () => {
+                    submit.disabled = false;
+                });
+                form.addEventListener("submit", (evt) => {
+                    evt.preventDefault();
+                    const formData = new FormData(form);
+                    const xhr = new XMLHttpRequest();
+                    xhr.onload = function () {
+                        let data = JSON.parse(this.response);
+                        console.log({data});
+                        if (data.success) {
+                            const backdrop = header.querySelector(".backdrop");
+                            backdrop.innerHTML = '<img src="' + data.backdrop + '" alt="backdrop">';
+                            /**
+                             * @type {HTMLButtonElement} clearPreview
+                             */
+                            const clearPreview = form.querySelector('.dropzone-preview-button');
+                            clearPreview.click();
+                            // contribution.classList.add("hide");
+                            // dismiss.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                            dismiss.click();
+
+                            let backdrops = header.querySelector(".backdrops");
+                            if (!backdrops) {
+                                const div = document.createElement("div");
+                                div.classList.add("backdrops");
+                                header.appendChild(div);
+                                backdrops = header.querySelector(".backdrops");
+                            }
+                            const img = document.createElement("img");
+                            img.src = data.backdrop;
+                            img.addEventListener("click", changeBackdrop);
+                            backdrops.appendChild(img);
+                        }
+                    }
+                    xhr.open("POST", form.action);
+                    xhr.send(formData);
+                });
+            }
+            const backdrops = header.querySelector(".backdrops").querySelectorAll("img");
+            {#initDiaporama(backdrops, "{{ app.request.locale }}");#}
+            backdrops.forEach((backdrop) => {
+                backdrop.addEventListener("click", changeBackdrop);
+            });
+
+            function changeBackdrop(evt) {
+                const src = evt.target.src;
+                const img = header.querySelector(".backdrop").querySelector("img");
+                img.src = src;
             }
 
             document.querySelector(".favorite")?.querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
