@@ -16,19 +16,23 @@ export class MultiSearch {
         search.addEventListener("click", () => {
             this.search();
         });
-        search.addEventListener("mouseenter", () => {
-            thisGlobal.timer = 0;
-            thisGlobal.interval = setInterval(() => {
-                thisGlobal.timer++;
-                if (thisGlobal.timer > 20) {
-                    clearInterval(thisGlobal.interval);
-                    thisGlobal.multiPeople();
-                }
-            }, 100);
+        const people = document.querySelector('#multi-people');
+        people.addEventListener("click", () => {
+            this.multiPeople();
         });
-        search.addEventListener("mouseleave", () => {
-            clearInterval(thisGlobal.interval);
-        });
+        // search.addEventListener("mouseenter", () => {
+        //     thisGlobal.timer = 0;
+        //     thisGlobal.interval = setInterval(() => {
+        //         thisGlobal.timer++;
+        //         if (thisGlobal.timer > 20) {
+        //             clearInterval(thisGlobal.interval);
+        //             thisGlobal.multiPeople();
+        //         }
+        //     }, 100);
+        // });
+        // search.addEventListener("mouseleave", () => {
+        //     clearInterval(thisGlobal.interval);
+        // });
         this.initDialog()
         this.getHistory(20).then(data => {
             // console.log({data});

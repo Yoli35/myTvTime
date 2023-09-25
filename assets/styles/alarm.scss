@@ -17,7 +17,7 @@
     padding: 2rem;
 
     &::backdrop {
-        background-color: var(--gradient-ardoise-10-alpha-80);
+        background-color: #000000af; //var(--gradient-grey-10-alpha-75);
     }
 
     .alarms {

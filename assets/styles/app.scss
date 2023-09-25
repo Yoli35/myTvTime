@@ -217,7 +217,7 @@ main {
     //width: 100%;
 }
 
-#multi-search, #settings {
+#multi-search, #multi-people, #settings {
     cursor: pointer;
 }
 
@@ -280,7 +280,8 @@ main {
     }
 }
 
-#search-dialog::backdrop {
+#search-dialog::backdrop,
+#multi-people-dialog::backdrop {
     background-color: #000000af; //var(--gradient-grey-10-alpha-75);
 }
 

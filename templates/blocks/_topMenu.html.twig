@@ -11,9 +11,10 @@
     <a href="{{ path('app_contact', {from: route|slice(4), params: route_params|serialize(format = 'json', context = [])}) }}" class="top-item">{{ 'Contact'|trans }}</a>
     <div class="d-flex-1">
         <div id="multi-search"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <div id="multi-people"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+        <div id="settings"><i class="fa-solid fa-sliders"></i></div>
         {% if user %}
             <div id="alarms"><i class="fa-solid fa-clock"></i></div>
         {% endif %}
-        <div id="settings"><i class="fa-solid fa-sliders"></i></div>
     </div>
 </nav>
