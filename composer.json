@@ -9,6 +9,7 @@
     "ext-iconv": "*",
     "ext-intl": "*",
     "api-platform/core": "^3.1",
+    "deeplcom/deepl-php": "^1.5",
     "doctrine/annotations": "1.*",
     "doctrine/doctrine-bundle": "2.*",
     "doctrine/doctrine-migrations-bundle": "3.*",
@@ -72,7 +73,8 @@
     "allow-plugins": {
       "composer/package-versions-deprecated": true,
       "symfony/flex": true,
-      "symfony/runtime": true
+      "symfony/runtime": true,
+      "php-http/discovery": true
     },
     "optimize-autoloader": true,
     "preferred-install": {

@@ -1601,6 +1601,36 @@
                 @include flex-col(flex-start, flex-start);
                 width: 100%;
 
+                .deepl {
+                    background-color: var(--gradient-green-30);
+                    border-radius: .5rem;
+                    color: var(--gradient-green-80);
+                    padding: 1rem;
+
+                    .title {
+                        align-items: center;
+                        display: flex;
+                        font-size: 1.17rem;
+                        font-weight: 500;
+                        gap: 1rem;
+                        justify-content: flex-start;
+                        line-height: 1.2;
+                        margin-bottom: 0.5rem;
+
+                        .logo {
+                            background-color: var(--gradient-green-70);
+                            border-radius: .125rem;
+                            padding: .125rem .25rem;
+
+                            img {
+                                height: 1.5rem;
+                                object-fit: cover;
+                                width: auto;
+                            }
+                        }
+                    }
+                }
+
                 .cast {
                     @include flex-col(flex-start, flex-start);
                     background-color: var(--gradient-ardoise-80);

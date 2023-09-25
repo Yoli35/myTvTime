@@ -83,6 +83,14 @@
             </div>
             <main>
                 <article class="full">
+                    {% if localizedOverview|length %}
+                        <section>
+                            <div class="deepl">
+                                <div class="title">{{ 'Overview'|trans }} by <div class="logo"><img src="/images/default/deepl.png" alt="deepl"></div></div>
+                                <div class="info">{{ localizedOverview }}</div>
+                            </div>
+                        </section>
+                    {% endif %}
                     <section>
                         <div class="episodes-layout">
                             <label for="layout-size">

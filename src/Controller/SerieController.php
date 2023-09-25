@@ -29,6 +29,7 @@ use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
 use App\Service\DateService;
+use App\Service\DeeplTranslator;
 use App\Service\TMDBService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
@@ -36,6 +37,7 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use DeepL\DeepLException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,6 +69,7 @@ class SerieController extends AbstractController
 //                                private readonly BreadcrumbBuilder        $breadcrumbBuilder,
                                 private readonly CastRepository           $castRepository,
                                 private readonly DateService              $dateService,
+                                private readonly DeeplTranslator          $deeplTranslator,
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FavoriteRepository       $favoriteRepository,
                                 private readonly ImageConfiguration       $imageConfiguration,
@@ -1505,6 +1508,8 @@ class SerieController extends AbstractController
 
         // Si les données de la saison ne sont pas disponibles dans la langue de l'utilisateur, on les prend en anglais
         $localized = true;
+        $localizedOverview = '';
+        $localizedResult = 'No need to translate';
         if (!$this->isThereSomeOverviews($season)) {
             $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, '', ['credits', 'watch/providers']);
             $internationalSeason = json_decode($standing, true);
@@ -1512,6 +1517,25 @@ class SerieController extends AbstractController
                 $internationalSeason['watch/providers'] = $season['watch/providers'];
                 $season = $internationalSeason;
                 $localized = false;
+//                try {
+//                    $usage = $this->deeplTranslator->translator->getUsage();
+//                    if ($usage->character->count + strlen($internationalSeason['overview']) < $usage->character->limit) {
+//                        $localizedOverview = $this->deeplTranslator->translator->translateText($internationalSeason['overview'], null, $locale);
+//                        $localizedResult = 'Translated';
+//                    } else {
+//                        $localizedResult = 'Limit exceeded';
+//                    }
+//                    dump([
+//                        'usage' => $usage->character->count,
+//                        'limit' => $usage->character->limit,
+//                        'localizedResult' => $localizedResult,
+//                        'localizedOverview' => $localizedOverview
+//                    ]);
+//                } catch (DeepLException $e) {
+//                    $localizedResult = 'Error: code '.$e->getCode().', message: '.$e->getMessage();
+//                }
+                // for now, we don't use deepl translator
+                $localizedOverview = $internationalSeason['overview'];
             }
         }
 
@@ -1634,6 +1658,8 @@ class SerieController extends AbstractController
             'seasonsCookie' => $seasonsCookie,
             'modifications' => $modifications,
             'localized' => $localized,
+            'localizedOverview' => $localizedOverview,
+            'localizedResult' => $localizedResult,
             'breadcrumb' => $breadcrumb,
             'parameters' => [
                 'from' => $from,
