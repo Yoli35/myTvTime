@@ -1848,6 +1848,17 @@ nav.active {
             width: 100%;
         }
 
+        .no-poster {
+            align-items: center;
+            background-color: var(--gradient-green-20);
+            border-radius: .5rem;
+            color: var(--gradient-green-80);
+            display: flex;
+            height: 315px;
+            justify-content: center;
+            width: 210px;
+        }
+
         .title {
             color: var(--gradient-ardoise-30);
             line-height: 1em;
