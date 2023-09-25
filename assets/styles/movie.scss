@@ -115,12 +115,12 @@
 
     .contribution {
         background-color: var(--gradient-ardoise-10-alpha-50);
+        border: 2px solid var(--gradient-ardoise-80);
         border-radius: .5rem;
         max-height: calc(100% - 7rem);
         opacity: 0;
         padding: 1rem;
         position: absolute;
-        right: 1rem;
         top: 1rem;
         transition: opacity 300ms ease-in-out;
 
@@ -143,6 +143,15 @@
             width: 1rem;
         }
 
+        &.contribution-backdrop {
+            right: 1rem;
+        }
+
+        &.contribution-poster {
+            left: 1rem;
+            right: unset;
+        }
+
         &.hide {
             border-radius: 50%;
             padding: 0;
@@ -150,10 +159,12 @@
             width: 2rem;
 
             .dismiss {
+                border: none;
                 font-size: 1.5rem;
                 height: 2rem;
-                right: 0;
-                top: 0;
+                padding: 0;
+                right: -3px;
+                top: -2px;
                 width: 2rem;
             }
 
@@ -162,13 +173,13 @@
             }
         }
 
-        form[name="contribution"] {
-            #contribution {
+        form {
+            >div {
                 @include flex-col(flex-start, flex-start);
                 gap: 1rem;
 
                 .dropzone-container {
-                    background-color: var(--gradient-ardoise-30-alpha-50);
+                    background-color: var(--gradient-ardoise-30-alpha-90);
                     border: unset;
                     border-radius: .5rem;
 

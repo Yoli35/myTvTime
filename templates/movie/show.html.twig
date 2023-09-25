@@ -14,7 +14,7 @@
         <div class="movie-header">
             <div class="poster">
                 {% if movie.poster_path %}
-                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}">
                 {% else %}
                     <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
                 {% endif %}
@@ -38,11 +38,18 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            <div class="contribution hide">
+            <div class="contribution contribution-backdrop hide">
                 <h3>{{ 'Add a new backdrop'|trans }}</h3>
                 {{ form_start(backdropForm) }}
                 {{ form_widget(backdropForm) }}
                 {{ form_end(backdropForm) }}
+                <div class="dismiss"><i class="fa-solid fa-plus"></i></div>
+            </div>
+            <div class="contribution contribution-poster hide">
+                <h3>{{ 'Add a new poster'|trans }}</h3>
+                {{ form_start(posterForm) }}
+                {{ form_widget(posterForm) }}
+                {{ form_end(posterForm) }}
                 <div class="dismiss"><i class="fa-solid fa-plus"></i></div>
             </div>
             {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
@@ -442,14 +449,18 @@
                 toggleTextarea();
             });
             document.querySelector("#overview-save")?.addEventListener("click", () => {
-                const value = document.querySelector("#overview").value;
+                /**
+                 * @type {HTMLTextAreaElement} overview
+                 */
+                const overview = document.querySelector("#overview");
+                const value = overview.value;
                 const xhr = new XMLHttpRequest();
                 console.log({value})
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
                     console.log({data});
-                    const overview = document.querySelector(".the-overview");
-                    overview.innerHTML = data.overview;
+                    const theOverview = document.querySelector(".the-overview");
+                    theOverview.innerHTML = data.overview;
                     toggleTextarea();
                 }
                 xhr.open("GET", _app_movie_overview_save + "?id=" + movieId + "&overview=" + value);
@@ -463,8 +474,8 @@
                 xhr.onload = function () {
                     let data = JSON.parse(this.response);
                     console.log({data});
-                    const overview = document.querySelector(".the-overview");
-                    overview.innerHTML = data.overview;
+                    const theOverview = document.querySelector(".the-overview");
+                    theOverview.innerHTML = data.overview;
                     toggleTextarea();
                 }
                 xhr.open("GET", _app_movie_overview_delete + "?id=" + movieId);
@@ -474,38 +485,45 @@
 
             function toggleTextarea() {
                 const overviewTextarea = document.querySelector(".overview-textarea");
+                /**
+                 * @type {HTMLTextAreaElement} overview
+                 */
+                const overview = document.querySelector("#overview");
                 const add = document.querySelector(".overview-add");
                 overviewTextarea.classList.toggle("open");
                 if (overviewTextarea.classList.contains("open")) {
                     add.innerHTML = '<i class="fa-solid fa-minus"></i>';
                     add.setAttribute('title', txt['later']);
-                    document.querySelector("#overview").focus();
+                    overview.focus();
                 } else {
-                    const overview = document.querySelector(".the-overview");
-                    document.querySelector("#overview").value = overview.innerHTML;
+                    const theOverview = document.querySelector(".the-overview");
+                    overview.value = theOverview.innerHTML;
                     add.innerHTML = '<i class="fa-solid fa-plus"></i>';
                     add.setAttribute('title', txt['edit']);
                 }
             }
 
             const header = document.querySelector(".movie-header");
-            const contribution = header.querySelector(".contribution");
-            /**
-             * @type {HTMLDivElement} dismiss
-             */
-            const dismiss = contribution?.querySelector(".dismiss");
-            dismiss?.addEventListener("click", () => {
-                contribution.classList.toggle("hide");
-                if (contribution.classList.contains("hide")) {
-                    dismiss.innerHTML = '<i class="fa-solid fa-plus"></i>';
-                } else {
-                    dismiss.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                }
-            });
-            if (contribution) {
+            const contributions = header.querySelectorAll(".contribution");
+
+            contributions?.forEach((contribution) => {
+                /**
+                 * @type {HTMLDivElement} dismiss
+                 */
+                const dismiss = contribution.querySelector(".dismiss");
+                dismiss.addEventListener("click", () => {
+                    contribution.classList.toggle("hide");
+                    if (contribution.classList.contains("hide")) {
+                        dismiss.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                    } else {
+                        dismiss.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                    }
+                });
                 const form = contribution.querySelector("form");
                 const input = form.querySelector("input[type=file]");
                 const submit = form.querySelector("button[type=submit]");
+
+                // TODO: css for disabled submit
                 submit.disabled = true;
                 input.addEventListener("change", () => {
                     submit.disabled = false;
@@ -518,46 +536,57 @@
                         let data = JSON.parse(this.response);
                         console.log({data});
                         if (data.success) {
-                            const backdrop = header.querySelector(".backdrop");
-                            backdrop.innerHTML = '<img src="' + data.backdrop + '" alt="backdrop">';
-                            /**
-                             * @type {HTMLButtonElement} clearPreview
-                             */
-                            const clearPreview = form.querySelector('.dropzone-preview-button');
-                            clearPreview.click();
-                            // contribution.classList.add("hide");
-                            // dismiss.innerHTML = '<i class="fa-solid fa-plus"></i>';
-                            dismiss.click();
+                            if (data.type === 'backdrop') {
+                                const backdrop = header.querySelector(".backdrop");
+                                backdrop.innerHTML = '<img src="' + data.backdrop + '" alt="backdrop">';
+                                /**
+                                 * @type {HTMLButtonElement} clearPreview
+                                 */
+                                const clearPreview = form.querySelector('.dropzone-preview-button');
+                                clearPreview.click();
+                                dismiss.click();
 
-                            let backdrops = header.querySelector(".backdrops");
-                            if (!backdrops) {
-                                const div = document.createElement("div");
-                                div.classList.add("backdrops");
-                                header.appendChild(div);
-                                backdrops = header.querySelector(".backdrops");
+                                let backdrops = header.querySelector(".backdrops");
+                                if (!backdrops) {
+                                    const div = document.createElement("div");
+                                    div.classList.add("backdrops");
+                                    header.appendChild(div);
+                                    backdrops = header.querySelector(".backdrops");
+                                }
+                                const backdropsItem = document.createElement("div");
+                                backdropsItem.classList.add("backdrops-item");
+                                const img = document.createElement("img");
+                                img.src = data.backdrop;
+                                backdropsItem.appendChild(img);
+                                const setBackdrop = document.createElement("div");
+                                setBackdrop.classList.add("set-backdrop");
+                                setBackdrop.innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket"></i>';
+                                setBackdrop.addEventListener("click", changeBackdrop);
+                                backdropsItem.appendChild(setBackdrop);
+                                backdrops.appendChild(backdropsItem);
                             }
-                            const backdropsItem = document.createElement("div");
-                            backdropsItem.classList.add("backdrops-item");
-                            const img = document.createElement("img");
-                            img.src = data.backdrop;
-                            backdropsItem.appendChild(img);
-                            const setBackdrop = document.createElement("div");
-                            setBackdrop.classList.add("set-backdrop");
-                            setBackdrop.innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket"></i>';
-                            setBackdrop.addEventListener("click", changeBackdrop);
-                            backdropsItem.appendChild(setBackdrop);
-                            backdrops.appendChild(backdropsItem);
+                            if (data.type === 'poster') {
+                                const poster = header.querySelector(".poster");
+                                poster.innerHTML = '<img src="' + data.poster + '" alt="poster">';
+                                /**
+                                 * @type {HTMLButtonElement} clearPreview
+                                 */
+                                const clearPreview = form.querySelector('.dropzone-preview-button');
+                                clearPreview.click();
+                                dismiss.click();
+                            }
                         }
                     }
                     xhr.open("POST", form.action);
                     xhr.send(formData);
                 });
-            }
+            });
+
             const backdropImages = header.querySelector(".backdrops")?.querySelectorAll("img");
             initDiaporama(backdropImages, document.querySelector("html").getAttribute("lang"));
 
-            const setBackdrops = header.querySelector(".backdrops").querySelectorAll(".set-backdrop");
-            setBackdrops.forEach((setBackdrop) => {
+            const setBackdrops = header.querySelector(".backdrops")?.querySelectorAll(".set-backdrop");
+            setBackdrops?.forEach((setBackdrop) => {
                 setBackdrop.addEventListener("click", changeBackdrop);
             });
 

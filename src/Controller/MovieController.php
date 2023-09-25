@@ -22,6 +22,8 @@ use App\Service\ImageConfiguration;
 //use Google\ApiCore\ValidationException;
 //use Google\Cloud\Translate\V3\TranslationServiceClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,8 +33,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MovieController extends AbstractController
 {
     public function __construct(
-        private readonly ContributionRepository   $contributionRepository,
+        private readonly ContributionRepository    $contributionRepository,
         private readonly FavoriteRepository        $favoriteRepository,
+        private readonly FormFactoryInterface      $formFactory,
         private readonly GenreRepository           $genreRepository,
         private readonly ImageConfiguration        $imageConfiguration,
         private readonly MovieCollectionRepository $movieCollectionRepository,
@@ -296,29 +299,18 @@ class MovieController extends AbstractController
             }
         }
 
-        $backdropContributions = $this->contributionRepository->findBy(['mediaId' => $id, 'mediaType' => 'movie', 'type' => 'backdrop']);
-        $backdrops = array_map(function ($contribution) {
-            return '/images/movies/contributions/backdrops/' . $contribution->getPath();
-        }, $backdropContributions);
-        if (!$movieDetail['backdrop_path']) {
-           if (count($backdropContributions)) {
-                $backdropContribution = $backdropContributions[0];
-                $movieDetail['backdrop_path'] = '/images/movies/contributions/backdrops/' . $backdropContribution->getPath();
-            }
-        } else {
-            $movieDetail['backdrop_path'] = $imageConfig['url'] . $imageConfig['backdrop_sizes'][3] . $movieDetail['backdrop_path'];
-            $backdrops = array_merge([$movieDetail['backdrop_path']], $backdrops);
-        }
-        $backdropForm = $this->createForm(ContributionType::class, null, [
-            'action' => $this->generateUrl('app_contribution_movie_backdrop', ['id' => $id]),
-            'method' => 'POST',
-        ]);
-//        dump($movieDetail);
+        $backdrops = $this->getMediaContributions($id, 'movie', 'backdrop', $imageConfig, $movieDetail);
+        $backdropForm = $this->getNamedForm($id, 'backdropForm', 'app_contribution_movie_backdrop', 'POST');
+
+        $posters = $this->getMediaContributions($id, 'movie', 'poster', $imageConfig, $movieDetail);
+        $posterForm = $this->getNamedForm($id, 'posterForm', 'app_contribution_movie_poster', 'POST');
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
-            'backdropForm' => $backdropForm?->createView(),
+            'backdropForm' => $backdropForm->createView(),
             'backdrops' => $backdrops,
+            'posterForm' => $posterForm->createView(),
+            'posters' => $posters,
             'from' => $from,
             'breadcrumb' => $breadcrumb,
             'overviewWasEmpty' => $overviewWasEmpty,
@@ -343,28 +335,79 @@ class MovieController extends AbstractController
     #[Route('/movie/{id}/backdrop', name: 'app_contribution_movie_backdrop', methods: ['POST'])]
     public function movieBackdrop(Request $request, $id, FileUploader $fileUploader): Response
     {
-        $form = $this->createForm(ContributionType::class, null, [
-            'action' => $this->generateUrl('app_contribution_movie_backdrop', ['id' => $id]),
-            'method' => 'POST',
-        ]);
+        $form = $this->getNamedForm($id, 'backdropForm', 'app_contribution_movie_backdrop', 'POST');
         $form->handleRequest($request);
         $dropMedia = $form->get('dropMedia')->getData();
         $caption = $form->get('caption')->getData();
 
         if ($dropMedia) {
-            $avatarFileName = $fileUploader->upload($dropMedia, 'movie_backdrop');
+            $backdropFileName = $fileUploader->upload($dropMedia, 'movie_backdrop');
             $contribution = new Contribution();
             $contribution->setUser($this->getUser());
             $contribution->setType('backdrop');
             $contribution->setMediaId($id);
             $contribution->setMediaType('movie');
-            $contribution->setPath($avatarFileName);
+            $contribution->setPath($backdropFileName);
             $contribution->setCaption($caption);
             $this->contributionRepository->save($contribution, true);
 
-            return $this->json(['success' => true, 'backdrop' => '/images/movies/contributions/backdrops/' . $avatarFileName]);
+            return $this->json(['success' => true, 'type' => 'backdrop', 'backdrop' => '/images/movies/contributions/backdrops/' . $backdropFileName]);
         }
         return $this->json(['success' => false, 'error' => 'no file']);
+    }
+
+    #[Route('/movie/{id}/poster', name: 'app_contribution_movie_poster', methods: ['POST'])]
+    public function moviePoster(Request $request, $id, FileUploader $fileUploader): Response
+    {
+        $form = $this->getNamedForm($id, 'posterForm', 'app_contribution_movie_poster', 'POST');
+        $form->handleRequest($request);
+        $dropMedia = $form->get('dropMedia')->getData();
+        $caption = $form->get('caption')->getData();
+
+        if ($dropMedia) {
+            $posterFileName = $fileUploader->upload($dropMedia, 'movie_poster');
+            $contribution = new Contribution();
+            $contribution->setUser($this->getUser());
+            $contribution->setType('poster');
+            $contribution->setMediaId($id);
+            $contribution->setMediaType('movie');
+            $contribution->setPath($posterFileName);
+            $contribution->setCaption($caption);
+            $this->contributionRepository->save($contribution, true);
+
+            return $this->json(['success' => true, 'type' => 'poster', 'poster' => '/images/movies/contributions/posters/' . $posterFileName]);
+        }
+        return $this->json(['success' => false, 'error' => 'no file']);
+    }
+
+    public function getMediaContributions($id, $mediaType, $type, $imageConfig, &$movieDetail): array
+    {
+        $localUrl = '/images/' . $mediaType . 's/contributions/' . $type . 's/';
+        $url = $imageConfig['url'] . $imageConfig[$type . '_sizes'][3];
+        $arrayContributions = $this->contributionRepository->findBy(['mediaId' => $id, 'mediaType' => $mediaType, 'type' => $type]);
+
+        $array = array_map(function ($contribution) use ($localUrl) {
+            return $localUrl . $contribution->getPath();
+        }, $arrayContributions);
+
+        if (!$movieDetail[$type . '_path']) {
+            if (count($arrayContributions)) {
+                $itemContribution = $arrayContributions[0];
+                $movieDetail[$type . '_path'] = $localUrl . $itemContribution->getPath();
+            }
+        } else {
+            $movieDetail[$type . '_path'] = $url . $movieDetail[$type . '_path'];
+            $array = array_merge([$movieDetail[$type . '_path']], $array);
+        }
+        return $array;
+    }
+
+    public function getNamedForm($id, $name, $route, $method): FormInterface
+    {
+        return $this->formFactory->createNamed($name, ContributionType::class, null, [
+            'action' => $this->generateUrl($route, ['id' => $id]),
+            'method' => $method,
+        ]);
     }
 
     #[Route([
