@@ -748,7 +748,7 @@ class MovieController extends AbstractController
                 'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']
             ];
         }
-        dump(['locales' => $locales, 'locale' => $locale, 'user' => $user, 'dates' => $dates, 'countries' => $countries]);
+//        dump(['locales' => $locales, 'locale' => $locale, 'user' => $user, 'dates' => $dates, 'countries' => $countries]);
 
         $types = [1 => 'Premiere', 2 => 'Theatrical (limited)', 3 => 'Theatrical', 4 => 'Digital', 5 => 'Physical', 6 => 'TV'];
         $localeDates = [];

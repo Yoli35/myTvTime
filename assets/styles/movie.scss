@@ -168,7 +168,7 @@
                 gap: 1rem;
 
                 .dropzone-container {
-                    background-color: var(--gradient-ardoise-30);
+                    background-color: var(--gradient-ardoise-30-alpha-50);
                     border: unset;
                     border-radius: .5rem;
 
@@ -209,16 +209,43 @@
         top: 1rem;
         transition: opacity 300ms ease-in-out;
 
-        img {
-            border: 2px solid var(--gradient-ardoise-80-alpha-50);
-            border-radius: .5rem;
-            cursor: pointer;
-            height: 4rem;
-            object-fit: cover;
-            width: 6rem;
+        .backdrops-item {
+            position:relative;
+
+            img {
+                border: 2px solid var(--gradient-ardoise-80-alpha-50);
+                border-radius: .5rem;
+                cursor: pointer;
+                height: 4rem;
+                object-fit: cover;
+                width: 6rem;
+
+                &:hover {
+                    border: 2px solid var(--gradient-orange-50);
+                }
+            }
+
+            .set-backdrop {
+                align-items: center;
+                background-color: var(--gradient-ardoise-20);
+                border: 1px solid var(--gradient-ardoise-80);
+                border-radius: .25rem;
+                bottom: .25rem;
+                color: var(--gradient-ardoise-80);
+                cursor: grab;
+                display: none;
+                height: 2rem;
+                justify-content: center;
+                position: absolute;
+                right: .25rem;
+                width: 2rem;
+                z-index: 30;
+            }
 
             &:hover {
-                border: 2px solid var(--gradient-orange-50);
+                .set-backdrop {
+                    display: flex;
+                }
             }
         }
     }

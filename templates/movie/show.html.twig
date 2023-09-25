@@ -14,8 +14,7 @@
         <div class="movie-header">
             <div class="poster">
                 {% if movie.poster_path %}
-                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}"
-                         alt="{{ movie.title }}">
+                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.4 }}{{ movie.poster_path }}" alt="{{ movie.title }}">
                 {% else %}
                     <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
                 {% endif %}
@@ -32,7 +31,10 @@
             {% if backdrops|length %}
                 <div class="backdrops">
                     {% for b in backdrops %}
-                        <img src="{{ b }}" alt="">
+                        <div class="backdrops-item">
+                            <img src="{{ b }}" alt="{{ 'backdrop'|trans }} {{ loop.index }}">
+                            <div class="set-backdrop"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                        </div>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -534,24 +536,35 @@
                                 header.appendChild(div);
                                 backdrops = header.querySelector(".backdrops");
                             }
+                            const backdropsItem = document.createElement("div");
+                            backdropsItem.classList.add("backdrops-item");
                             const img = document.createElement("img");
                             img.src = data.backdrop;
-                            img.addEventListener("click", changeBackdrop);
-                            backdrops.appendChild(img);
+                            backdropsItem.appendChild(img);
+                            const setBackdrop = document.createElement("div");
+                            setBackdrop.classList.add("set-backdrop");
+                            setBackdrop.innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket"></i>';
+                            setBackdrop.addEventListener("click", changeBackdrop);
+                            backdropsItem.appendChild(setBackdrop);
+                            backdrops.appendChild(backdropsItem);
                         }
                     }
                     xhr.open("POST", form.action);
                     xhr.send(formData);
                 });
             }
-            const backdrops = header.querySelector(".backdrops").querySelectorAll("img");
-            {#initDiaporama(backdrops, "{{ app.request.locale }}");#}
-            backdrops.forEach((backdrop) => {
-                backdrop.addEventListener("click", changeBackdrop);
+            const backdropImages = header.querySelector(".backdrops")?.querySelectorAll("img");
+            initDiaporama(backdropImages, document.querySelector("html").getAttribute("lang"));
+
+            const setBackdrops = header.querySelector(".backdrops").querySelectorAll(".set-backdrop");
+            setBackdrops.forEach((setBackdrop) => {
+                setBackdrop.addEventListener("click", changeBackdrop);
             });
 
             function changeBackdrop(evt) {
-                const src = evt.target.src;
+                evt.stopPropagation();
+                evt.preventDefault();
+                const src = evt.currentTarget.parentElement.querySelector("img").src;
                 const img = header.querySelector(".backdrop").querySelector("img");
                 img.src = src;
             }
