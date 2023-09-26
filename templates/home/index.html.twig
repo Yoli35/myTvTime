@@ -37,7 +37,7 @@
                                     {% endif %}
                                 {% endif %}
                                 {% if list.type=='tmdb movie' %}
-                                    {% set poster = item.posterPath ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path : item.posterPath %}
+                                    {% set poster = item.poster_path ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path : item.poster_path %}
                                     {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.id }) }}
                                 {% endif %}
                                 {% if list.type=='tmdb series' %}
@@ -45,7 +45,7 @@
                                 {% endif %}
                                 {% if list.type=='tmdb mixte' %}
                                     {% if item.media_type == 'movie' %}
-                                        {% set poster = item.posterPath ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path : item.posterPath %}
+                                        {% set poster = item.poster_path ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path : item.poster_path %}
                                         {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.id }) }}
                                     {% endif %}
                                     {% if item.media_type == 'tv' %}

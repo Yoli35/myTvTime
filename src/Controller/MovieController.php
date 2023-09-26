@@ -305,6 +305,12 @@ class MovieController extends AbstractController
         $posters = $this->getMediaContributions($id, 'movie', 'poster', $imageConfig, $movieDetail);
         $posterForm = $this->getNamedForm($id, 'posterForm', 'app_contribution_movie_poster', 'POST');
 
+//        dump([
+//            'backdrops' => $backdrops,
+//            'posters' => $posters,
+//            'movieDetail' => $movieDetail,
+//        ]);
+
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
             'backdropForm' => $backdropForm->createView(),
@@ -351,7 +357,7 @@ class MovieController extends AbstractController
             $contribution->setCaption($caption);
             $this->contributionRepository->save($contribution, true);
 
-            return $this->json(['success' => true, 'type' => 'backdrop', 'backdrop' => '/images/movies/contributions/backdrops/' . $backdropFileName]);
+            return $this->json(['success' => true, 'type' => 'backdrop', 'path' => '/images/movies/contributions/backdrops/' . $backdropFileName, 'caption' => $caption, 'id' => $contribution->getId()]);
         }
         return $this->json(['success' => false, 'error' => 'no file']);
     }
@@ -375,7 +381,7 @@ class MovieController extends AbstractController
             $contribution->setCaption($caption);
             $this->contributionRepository->save($contribution, true);
 
-            return $this->json(['success' => true, 'type' => 'poster', 'poster' => '/images/movies/contributions/posters/' . $posterFileName]);
+            return $this->json(['success' => true, 'type' => 'poster', 'path' => '/images/movies/contributions/posters/' . $posterFileName, 'caption' => $caption, 'id' => $contribution->getId()]);
         }
         return $this->json(['success' => false, 'error' => 'no file']);
     }
@@ -387,17 +393,19 @@ class MovieController extends AbstractController
         $arrayContributions = $this->contributionRepository->findBy(['mediaId' => $id, 'mediaType' => $mediaType, 'type' => $type]);
 
         $array = array_map(function ($contribution) use ($localUrl) {
-            return $localUrl . $contribution->getPath();
+            return ['path' => $localUrl . $contribution->getPath(), 'caption' => $contribution->getCaption(), 'id' => $contribution->getId()];
         }, $arrayContributions);
 
+        $movieDetail[$type . '_caption'] = null;
         if (!$movieDetail[$type . '_path']) {
             if (count($arrayContributions)) {
                 $itemContribution = $arrayContributions[0];
                 $movieDetail[$type . '_path'] = $localUrl . $itemContribution->getPath();
+                $movieDetail[$type . '_caption'] = $itemContribution->getCaption();
             }
         } else {
             $movieDetail[$type . '_path'] = $url . $movieDetail[$type . '_path'];
-            $array = array_merge([$movieDetail[$type . '_path']], $array);
+            $array = array_merge(['path' => $movieDetail[$type . '_path'], 'caption' => null, 'id' => null], $array);
         }
         return $array;
     }

@@ -18,6 +18,7 @@
                 {% else %}
                     <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
                 {% endif %}
+                <div class="caption">{% if movie.poster_caption %}<span>{{ movie.poster_caption }}</span>{% endif %}</div>
             </div>
             <div class="backdrop">
                 {% if movie.backdrop_path %}
@@ -27,13 +28,24 @@
                         <div class="label">{{ 'No backdrop'|trans }}</div>
                     </div>
                 {% endif %}
+                <div class="caption">{% if movie.backdrop_caption %}<span>{{ movie.backdrop_caption }}</span>{% endif %}</div>
             </div>
             {% if backdrops|length %}
                 <div class="backdrops">
                     {% for b in backdrops %}
                         <div class="backdrops-item">
-                            <img src="{{ b }}" alt="{{ 'backdrop'|trans }} {{ loop.index }}">
+                            <img src="{{ b.path }}" alt="{{ b.caption ?? ('backdrop'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ b.caption }}" data-id="{{ b.id }}">
                             <div class="set-backdrop"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if posters|length %}
+                <div class="posters">
+                    {% for p in posters %}
+                        <div class="posters-item">
+                            <img src="{{ p.path }}" alt="{{ p.caption ?? ('backdrop'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ p.caption }}" data-id="{{ p.id }}">
+                            <div class="set-poster"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
                         </div>
                     {% endfor %}
                 </div>
@@ -538,7 +550,7 @@
                         if (data.success) {
                             if (data.type === 'backdrop') {
                                 const backdrop = header.querySelector(".backdrop");
-                                backdrop.innerHTML = '<img src="' + data.backdrop + '" alt="backdrop">';
+                                backdrop.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'backdrop') + '" data-caption="' + data.caption + '"><div class="caption">' + data.caption + '</div>';
                                 /**
                                  * @type {HTMLButtonElement} clearPreview
                                  */
@@ -556,7 +568,9 @@
                                 const backdropsItem = document.createElement("div");
                                 backdropsItem.classList.add("backdrops-item");
                                 const img = document.createElement("img");
-                                img.src = data.backdrop;
+                                img.src = data.path;
+                                img.setAttribute("alt", data.caption ?? 'backdrop');
+                                img.setAttribute("data-caption", data.caption);
                                 backdropsItem.appendChild(img);
                                 const setBackdrop = document.createElement("div");
                                 setBackdrop.classList.add("set-backdrop");
@@ -564,16 +578,39 @@
                                 setBackdrop.addEventListener("click", changeBackdrop);
                                 backdropsItem.appendChild(setBackdrop);
                                 backdrops.appendChild(backdropsItem);
+                                // backdropsItem.scrollIntoView();
                             }
                             if (data.type === 'poster') {
                                 const poster = header.querySelector(".poster");
-                                poster.innerHTML = '<img src="' + data.poster + '" alt="poster">';
+                                poster.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'poster') + '" data-caption="' + data.caption + '"><div class="caption">' + data.caption + '</div>';
                                 /**
                                  * @type {HTMLButtonElement} clearPreview
                                  */
                                 const clearPreview = form.querySelector('.dropzone-preview-button');
                                 clearPreview.click();
                                 dismiss.click();
+
+                                let posters = header.querySelector(".posters");
+                                if (!posters) {
+                                    const div = document.createElement("div");
+                                    div.classList.add("posters");
+                                    header.appendChild(div);
+                                    posters = header.querySelector(".posters");
+                                }
+                                const postersItem = document.createElement("div");
+                                postersItem.classList.add("posters-item");
+                                const img = document.createElement("img");
+                                img.src = data.path;
+                                img.setAttribute("alt", data.caption ?? 'poster');
+                                img.setAttribute("data-caption", data.caption);
+                                postersItem.appendChild(img);
+                                const setPoster = document.createElement("div");
+                                setPoster.classList.add("set-poster");
+                                setPoster.innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket"></i>';
+                                setPoster.addEventListener("click", changeBackdrop);
+                                postersItem.appendChild(setPoster);
+                                posters.appendChild(postersItem);
+                                // postersItem.scrollIntoView();
                             }
                         }
                     }
@@ -584,18 +621,42 @@
 
             const backdropImages = header.querySelector(".backdrops")?.querySelectorAll("img");
             initDiaporama(backdropImages, document.querySelector("html").getAttribute("lang"));
+            const posterImages = header.querySelector(".posters")?.querySelectorAll("img");
+            initDiaporama(posterImages, document.querySelector("html").getAttribute("lang"));
 
             const setBackdrops = header.querySelector(".backdrops")?.querySelectorAll(".set-backdrop");
             setBackdrops?.forEach((setBackdrop) => {
                 setBackdrop.addEventListener("click", changeBackdrop);
             });
+            const setPosters = header.querySelector(".posters")?.querySelectorAll(".set-poster");
+            setPosters?.forEach((setPoster) => {
+                setPoster.addEventListener("click", changePoster);
+            });
 
             function changeBackdrop(evt) {
                 evt.stopPropagation();
                 evt.preventDefault();
-                const src = evt.currentTarget.parentElement.querySelector("img").src;
-                const img = header.querySelector(".backdrop").querySelector("img");
-                img.src = src;
+                const img = evt.currentTarget.parentElement.querySelector("img");
+                const src = img.src;
+                const caption = img.getAttribute("data-caption");
+                const backdropImg = header.querySelector(".backdrop").querySelector("img");
+                const captionDiv = header.querySelector(".backdrop").querySelector(".caption");
+                backdropImg.src = src;
+                backdropImg.setAttribute("alt", caption ?? 'backdrop');
+                captionDiv.innerHTML = caption ? "<span>" + caption + "</span>" : "";
+            }
+
+            function changePoster(evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+                const img = evt.currentTarget.parentElement.querySelector("img");
+                const src = img.src;
+                const caption = img.getAttribute("data-caption");
+                const posterImg = header.querySelector(".poster").querySelector("img");
+                const captionDiv = header.querySelector(".poster").querySelector(".caption");
+                posterImg.src = src;
+                posterImg.setAttribute("alt", caption ?? 'poster');
+                captionDiv.innerHTML = caption ? "<span>" + caption + "</span>" : "";
             }
 
             document.querySelector(".favorite")?.querySelector("input[type='checkbox']").addEventListener("change", toggleFavorite);
