@@ -405,7 +405,7 @@ class MovieController extends AbstractController
             }
         } else {
             $movieDetail[$type . '_path'] = $url . $movieDetail[$type . '_path'];
-            $array = array_merge(['path' => $movieDetail[$type . '_path'], 'caption' => null, 'id' => null], $array);
+            $array = array_merge([['path' => $movieDetail[$type . '_path'], 'caption' => null, 'id' => null]], $array);
         }
         return $array;
     }
