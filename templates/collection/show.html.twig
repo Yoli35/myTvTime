@@ -24,19 +24,21 @@
 
             <main>
                 <h1>{{ collection.title }}</h1>
-                <aside>
-                    <details>
-                        <summary>{{ 'Description'|trans }}</summary>
-                        <div class="description">{{ collection.description|raw }}</div>
-                    </details>
-                </aside>
+                {% if collection.description|length %}
+                    <aside>
+                        <details>
+                            <summary>{{ 'Description'|trans }}</summary>
+                            <div class="description">{{ collection.description|raw }}</div>
+                        </details>
+                    </aside>
+                {% endif %}
                 <section>
                     <h2>{{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}</h2>
                     <div class="movies">
-{#                        {% for i in (collection.movies|length)-1..0 %}#}
-{#                            {% set movie = collection.movies[i] %}#}
+                        {#                        {% for i in (collection.movies|length)-1..0 %} #}
+                        {#                            {% set movie = collection.movies[i] %} #}
                         {% for movie in movies %}
-                            {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath %}
+                            {% set poster = movie.posterPath ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath : movie.posterPath %}
                             {{ include('blocks/movie/_discover.html.twig', { discover: movie, title: movie.title, poster: poster, id: movie.movieDbId }) }}
                         {% else %}
                             {{ 'Nothing to show'|trans }}
@@ -57,7 +59,7 @@
     <script>
         const paths = [
             "{{ path('profile_infos') }}",
-            "", {#{{ path('imdb_infos') }}",#}
+            "", {# {{ path('imdb_infos') }}", #}
             "{{ path('app_movie_add') }}",
             "{{ path('app_movie_remove') }}",
             "{{ path('app_movie_get_rating') }}",

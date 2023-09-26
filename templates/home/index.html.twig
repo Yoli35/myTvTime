@@ -22,7 +22,7 @@
                         <div class="wrapper">
                             {% for item in list.data %}
                                 {% if list.type=='movie' %}
-                                    {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.posterPath %}
+                                    {% set poster = item.posterPath ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.posterPath : item.posterPath %}
                                     {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.movieDbId }) }}
                                 {% endif %}
                                 {% if list.type=='series' %}
@@ -37,7 +37,7 @@
                                     {% endif %}
                                 {% endif %}
                                 {% if list.type=='tmdb movie' %}
-                                    {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path %}
+                                    {% set poster = item.posterPath ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path : item.posterPath %}
                                     {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.id }) }}
                                 {% endif %}
                                 {% if list.type=='tmdb series' %}
@@ -45,7 +45,7 @@
                                 {% endif %}
                                 {% if list.type=='tmdb mixte' %}
                                     {% if item.media_type == 'movie' %}
-                                        {% set poster = imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path %}
+                                        {% set poster = item.posterPath ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ item.poster_path : item.posterPath %}
                                         {{ include('blocks/movie/_discover.html.twig', { title: item.title, poster: poster, id: item.id }) }}
                                     {% endif %}
                                     {% if item.media_type == 'tv' %}
