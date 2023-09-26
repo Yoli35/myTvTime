@@ -37,23 +37,23 @@
                 </a>
             </div>
             <div class="menu-item menu-item-collections">
-                <a href="{{ path('app_collection') }}">
+                <a href="{{ path('app_movie_list_index') }}">
                     <div class="icon"><i class="fa-solid fa-clapperboard"></i></div>
                     <div>{{ 'My Movie Collections'|trans }}</div>
                 </a>
-                {% set collections = userMovieCollections(user) %}
+                {% set movieLists = userMovieLists(user) %}
                 <div class="sub-menu">
-                    {% for c in collections %}
+                    {% for ml in movieLists %}
                         <div class="menu-item">
-                            <a href="{{ path('app_collection_show', {id: c.id}) }}">
+                            <a href="{{ path('app_movie_list_show', {id: ml.id}) }}">
                                 <div class="image-collection">
-                                    <img src="/images/collections/thumbnails/{{ c.image }}" alt="{{ c.name }}"></div>
-                                <div>{{ c.name }} ({{ c.count }})</div>
+                                    <img src="/images/movie_lists/thumbnails/{{ ml.image }}" alt="{{ ml.name }}"></div>
+                                <div>{{ ml.name }} ({{ ml.count }})</div>
                             </a>
                         </div>
                     {% endfor %}
                     <div class="menu-item">
-                        <a href="{{ path('app_collection_new') }}">
+                        <a href="{{ path('app_movie_list_new') }}">
                             <div class="icon"><i class="fa-solid fa-plus"></i></div>
                             <div>{{ 'Add collection'|trans }}</div>
                         </a>

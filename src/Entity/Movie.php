@@ -43,8 +43,8 @@ class Movie
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToMany(targetEntity: MovieCollection::class, mappedBy: 'movies')]
-    private Collection $movieCollections;
+    #[ORM\ManyToMany(targetEntity: MovieList::class, mappedBy: 'movies')]
+    private Collection $movieLists;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $overview_fr = null;
@@ -62,7 +62,7 @@ class Movie
     {
         $this->users = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
-        $this->movieCollections = new ArrayCollection();
+        $this->movieLists = new ArrayCollection();
     }
 
     public function toArray(): array
@@ -200,27 +200,27 @@ class Movie
     }
 
     /**
-     * @return Collection<int, MovieCollection>
+     * @return Collection<int, MovieList>
      */
-    public function getMovieCollections(): Collection
+    public function getMovieLists(): Collection
     {
-        return $this->movieCollections;
+        return $this->movieLists;
     }
 
-    public function addMovieCollection(MovieCollection $movieCollection): self
+    public function addMovieList(MovieList $movieList): self
     {
-        if (!$this->movieCollections->contains($movieCollection)) {
-            $this->movieCollections->add($movieCollection);
-            $movieCollection->addMovie($this);
+        if (!$this->movieLists->contains($movieList)) {
+            $this->movieLists->add($movieList);
+            $movieList->addMovie($this);
         }
 
         return $this;
     }
 
-    public function removeMovieCollection(MovieCollection $movieCollection): self
+    public function removeMovieList(MovieList $movieList): self
     {
-        if ($this->movieCollections->removeElement($movieCollection)) {
-            $movieCollection->removeMovie($this);
+        if ($this->movieLists->removeElement($movieList)) {
+            $movieList->removeMovie($this);
         }
 
         return $this;

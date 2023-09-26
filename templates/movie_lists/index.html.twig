@@ -12,35 +12,35 @@
 {#            {{ include('blocks/source/_button.html.twig') }}#}
 
             <main>
-                <a href="{{ path('app_collection_new') }}">
+                <a href="{{ path('app_movie_list_new') }}">
                     <div class="add-collection"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>
                 </a>
                 <div class="wrapper">
-                    {% if collections is empty %}
-                        <div class="no-collection">
-                            Pas de collection pour le moment
-                        </div>
-                    {% else %}
-                        {% for collection in collections %}
-                            <div class="collection" data-id="{{ collection.id }}">
-                                <a href="{{ path('app_collection_show', {id: collection.id}) }}">
-                                    <div class="logo" style="background-image: url('/images/collections/thumbnails/{{ collection.thumbnail }}')"></div>
+                        {% for movieList in movieLists %}
+                            <div class="collection" data-id="{{ movieList.id }}">
+                                <a href="{{ path('app_movie_list_show', {id: movieList.id}) }}{% if from is defined %}?from={{ from }}{% endif %}">
+                                    <div class="logo" style="background-image: url('/images/movie_lists/thumbnails/{{ movieList.thumbnail }}')"></div>
                                     <div class="infos">
-                                        <div class="name">{{ collection.title }}</div>
+                                        <div class="name">{{ movieList.title }}</div>
                                         <div class="info">
-                                            {{ collection.movies|length ?: 'None'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}
+                                            {{ movieList.movies|length ?: 'None'|trans }} {{ ((movieList.movies|length) > 1 ? 'Movies':'Movie')|trans }}
                                         </div>
-                                        <div class="backdrop" style="background-image: url('/images/collections/banners/{{ collection.banner }}')"></div>
-                                        <div id="{{ collection.id }}" class="tools">
+                                        <div class="backdrop" style="background-image: url('/images/movie_lists/banners/{{ movieList.banner }}')"></div>
+                                        <div id="{{ movieList.id }}" class="tools">
                                             <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
-                                            {#                                        <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i> #}
+                                            {# <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i> #}
                                             <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
                                         </div>
                                     </div>
                                 </a>
                             </div>
+                        {% else %}
+                            <div class="no-collection">
+                                {{ 'No movie list yet'|trans }}<br>
+                                {{ 'Create one by clicking the button above'|trans }}
+
+                            </div>
                         {% endfor %}
-                    {% endif %}
                 </div>
             </main>
         </div>
@@ -163,7 +163,7 @@
         function addNewCollection(evt) {
             evt.currentTarget.classList.add("click");
             setTimeout(() => {
-                window.location.href = "{{ path('app_collection_new') }}";
+                window.location.href = "{{ path('app_movie_list_new') }}";
             }, 100);
         }
 

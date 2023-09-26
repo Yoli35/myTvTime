@@ -1,7 +1,6 @@
-let _profile_infos, _imdb_infos,
-    _add_movie, _remove_movie,
+let _add_movie, _remove_movie,
     _get_movie_rating, _set_movie_rating,
-    _app_movie_collection_toggle,
+    _app_movie_list_toggle,
     _profile_url;
 let _loc;
 let txt = {
@@ -164,13 +163,11 @@ function initMovieStuff(paths, profileUrl, locale) {
     const movie_headers = document.querySelectorAll(".movie-header");
 
     _loc = locale
-    _profile_infos = paths[0];
-    _imdb_infos = paths[1];
-    _add_movie = paths[2];
-    _remove_movie = paths[3];
-    _get_movie_rating = paths[4];
-    _set_movie_rating = paths[5];
-    _app_movie_collection_toggle = paths[6];
+    _add_movie = paths[0];
+    _remove_movie = paths[1];
+    _get_movie_rating = paths[2];
+    _set_movie_rating = paths[3];
+    _app_movie_list_toggle = paths[4];
     _profile_url = profileUrl;
 
     initNotifications();
@@ -391,7 +388,7 @@ function toggleCollection(e) {
 
         addNotification(message, "success");
     }
-    xhr.open("GET", _app_movie_collection_toggle + "?c=" + id + "&m=" + movie + "&a=" + (collection.classList.contains("selected") ? "a" : "r"));
+    xhr.open("GET", _app_movie_list_toggle + "?c=" + id + "&m=" + movie + "&a=" + (collection.classList.contains("selected") ? "a" : "r"));
     xhr.send();
 }
 

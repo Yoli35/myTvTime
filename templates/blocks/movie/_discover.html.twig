@@ -1,5 +1,5 @@
 <div data-id="{{ id }}" class="home-discover">
-    <a href="{{ path('app_movie', {id: id}) }}{% if from is defined %}?from={{ from }}{% endif %}">
+    <a href="{{ path('app_movie', {id: id}) }}{% if from is defined %}?from={{ from }}{% if mandatory is defined %}{% for k,v in mandatory %}&--{{ k }}={{ v }}{% endfor %}{% endif %}{% if before is defined %}&before={{ before }}{% endif %}{% endif %}">
         {% if poster %}
             <img src="{{ poster }}" alt="{{ title }}">
         {% else %}
@@ -22,7 +22,7 @@
             <div class="my-collections">
                 {% for collection in discover.my_collections %}
                     <div class="my-collection">
-                        <a href="{{ path("app_collection_show", {id: collection.id}) }}">
+                        <a href="{{ path("app_movie_list_show", {id: collection.id}) }}">
                             <img
                                     src="/images/collections/thumbnails/{{ collection.thumbnail }}"
                                     alt="{{ collection.title }}"

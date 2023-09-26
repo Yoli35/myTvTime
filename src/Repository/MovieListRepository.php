@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\MovieCollection;
+use App\Entity\MovieList;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<MovieCollection>
+ * @extends ServiceEntityRepository<MovieList>
  *
- * @method MovieCollection|null find($id, $lockMode = null, $lockVersion = null)
- * @method MovieCollection|null findOneBy(array $criteria, array $orderBy = null)
- * @method MovieCollection[]    findAll()
- * @method MovieCollection[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method MovieList|null find($id, $lockMode = null, $lockVersion = null)
+ * @method MovieList|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MovieList[]    findAll()
+ * @method MovieList[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MovieCollectionRepository extends ServiceEntityRepository
+class MovieListRepository extends ServiceEntityRepository
 {
     private ManagerRegistry $registry;
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, MovieCollection::class);
+        parent::__construct($registry, MovieList::class);
         $this->registry = $registry;
     }
 
-    public function add(MovieCollection $entity, bool $flush = false): void
+    public function add(MovieList $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -34,7 +34,7 @@ class MovieCollectionRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(MovieCollection $entity, bool $flush = false): void
+    public function remove(MovieList $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -58,7 +58,7 @@ class MovieCollectionRepository extends ServiceEntityRepository
             . "t0.`overview_de` AS `overview_de`, "
             . "t0.`overview_es` AS `overview_es` "
             . "FROM `movie` t0 "
-            . "INNER JOIN `movie_collection_movie` t1 ON t0.`id` = t1.`movie_id` and t1.`movie_collection_id` = " . $id . " "
+            . "INNER JOIN `movie_list_movie` t1 ON t0.`id` = t1.`movie_id` and t1.`movie_list_id` = " . $id . " "
             . "ORDER BY t0.`release_date` " . $order;
 
         $em = $this->registry->getManager();
@@ -76,8 +76,8 @@ class MovieCollectionRepository extends ServiceEntityRepository
             . "t0.`title` AS `name`, "
             . "t0.`thumbnail` AS `image`, "
             . "COUNT(t1.`movie_id`) AS `count` "
-            . "FROM `movie_collection` t0 "
-            . "INNER JOIN `movie_collection_movie` t1 ON t0.`id` = t1.`movie_collection_id` "
+            . "FROM `movie_list` t0 "
+            . "INNER JOIN `movie_list_movie` t1 ON t0.`id` = t1.`movie_list_id` "
             . "WHERE t0.`user_id` = " . $userId . " "
             . "GROUP BY t0.`id` "
             . "ORDER BY t0.`title` ASC";

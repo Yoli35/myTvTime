@@ -6,7 +6,7 @@
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
         <div class="my-collections-page">
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_collection')}, thisPage: 'New collection'|trans}) }}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_movie_list_index')}, thisPage: 'New collection'|trans}) }}
 
             <h1>{{ 'New collection'|trans }}</h1>
 

@@ -3,7 +3,7 @@ let _user_id;
 let _locale;
 let _personal_movies_export, _json_ids, _personal_movie_add, _json_cleanup, _json_sample, _movie_page, _movies_more;
 let _url;
-let _app_collection_show;
+let _app_movie_list_show;
 
 // more videos variables
 let userMovieList, total_videos, displayed_videos, more_video_controller, loading_more_videos, nav_to_top, nav_to_top_visible;
@@ -19,7 +19,7 @@ function initButtons(id, locale, paths, url) {
     _json_sample = paths[4];
     _movie_page = paths[5].substring(0, paths[5].length - 1);
     _movies_more = paths[6];
-    _app_collection_show = paths[7].substring(0, paths[7].length - 1);
+    _app_movie_list_show = paths[7].substring(0, paths[7].length - 1);
     _url = url;
 
     // const userMovieLink = document.querySelector('#query');
@@ -470,7 +470,7 @@ function moreVideos() {
                             collection.classList.add("my-collection");
 
                             let aCollection = document.createElement("a");
-                            aCollection.setAttribute("href", _app_collection_show + c['id'].toString());
+                            aCollection.setAttribute("href", _app_movie_list_show + c['id'].toString());
 
                             let thumbnail = document.createElement("img");
                             thumbnail.setAttribute("src", '/images/collections/thumbnails/' + c['thumbnail']);

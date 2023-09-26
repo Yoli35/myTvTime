@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Friend;
-use App\Entity\MovieCollection;
+use App\Entity\MovieList;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\Type\ChangePasswordType;
 use App\Form\UserType;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FriendRepository;
-use App\Repository\MovieCollectionRepository;
+use App\Repository\MovieListRepository;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
@@ -243,7 +243,7 @@ class UserController extends AbstractController
      * @throws \Exception
      */
     #[Route('/{_locale}/user/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function userMovies(Request $request, MovieRepository $userMovieRepository, MovieController $movieController, MovieCollectionRepository $collectionRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
+    public function userMovies(Request $request, MovieRepository $userMovieRepository, MovieController $movieController, MovieListRepository $movieListRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -306,7 +306,7 @@ class UserController extends AbstractController
             'user' => $user,
             'dRoute' => 'app_movie',
             'from' => 'app_personal_movies',
-            'collections' => $collectionRepository->findBy(['user' => $user]),
+            'collections' => $movieListRepository->findBy(['user' => $user]),
             'settings' => $settings,
         ]);
     }
@@ -336,14 +336,14 @@ class UserController extends AbstractController
         }, $userMovies);
     }
 
-    #[Route('/{_locale}/user/collection/{id}', name: 'app_personal_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function getCollection(Request $request, $id, MovieCollectionRepository $collectionRepository, TMDBService $TMDBService, MovieRepository $movieRepository, SettingsRepository $settingsRepository): Response
+    #[Route('/{_locale}/user/movie/list/{id}', name: 'app_personal_movie_list', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function getCollection(Request $request, $id, MovieListRepository $movieListRepository, SettingsRepository $settingsRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
-        /** @var MovieCollection $collection */
-        $collection = $collectionRepository->find($id);
-        $movies = $this->moviesToArray($collectionRepository->getMoviesByReleaseDate($id, 'DESC'), $request->getLocale());
+        /** @var MovieList $collection */
+        $collection = $movieListRepository->find($id);
+        $movies = $this->moviesToArray($movieListRepository->getMoviesByReleaseDate($id, 'DESC'), $request->getLocale());
 
         $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
         if (!$settings) {
@@ -360,7 +360,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/collection/pin/status', name: 'app_personal_movie_collection_pin_status', methods: ['GET'])]
+    #[Route('/user/collection/pin/status', name: 'app_personal_movie_list_pin_status', methods: ['GET'])]
     public function setCollectionPinStatus(Request $request, SettingsRepository $settingsRepository): Response
     {
         /** @var User $user */

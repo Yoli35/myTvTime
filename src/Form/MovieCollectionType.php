@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\MovieCollection;
+use App\Entity\MovieList;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -66,7 +66,7 @@ class MovieCollectionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => MovieCollection::class,
+            'data_class' => MovieList::class,
         ]);
     }
 }

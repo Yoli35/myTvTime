@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\MovieCollectionRepository;
+use App\Repository\MovieListRepository;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,18 +11,18 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MovieCollectionRepository::class)]
+#[ORM\Entity(repositoryClass: MovieListRepository::class)]
 #[ApiResource]
-class MovieCollection
+class MovieList
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'movieCollections')]
+    #[ORM\ManyToOne(inversedBy: 'movieLists')]
     #[ORM\JoinColumn(nullable: true)]
-    private ?User $user = null;
+    private ?User $user;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -39,7 +39,7 @@ class MovieCollection
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $banner = null;
 
-    #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'movieCollections', cascade: ['remove'])]
+    #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'movieLists', cascade: ['remove'])]
     private Collection $movies;
 
     #[ORM\Column]

@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\MovieCollection;
+use App\Entity\MovieList;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -18,7 +18,7 @@ class MovieCollectionCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return MovieCollection::class;
+        return MovieList::class;
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -54,11 +54,11 @@ class MovieCollectionCrudController extends AbstractCrudController
 //        }
     }
 
-    public function createEntity(string $entityFqcn): MovieCollection
+    public function createEntity(string $entityFqcn): MovieList
     {
         $datetime = (new DateTimeImmutable());
 
-        $collection = new MovieCollection;
+        $collection = new MovieList;
 
         $collection->setUser($this->getUser());
         $collection->setCreatedAt($datetime);
@@ -69,7 +69,7 @@ class MovieCollectionCrudController extends AbstractCrudController
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        /** @var MovieCollection $entityInstance */
+        /** @var MovieList $entityInstance */
         $entityInstance->setUpdatedAt(new DateTimeImmutable());
 
         $entityManager->persist($entityInstance);

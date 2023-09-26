@@ -11,8 +11,8 @@ parameters:
     banners_directory: '%kernel.project_dir%/public/images/users/banners'
     article_s_images_directory: '%kernel.project_dir%/public/images/articles/images'
     movie_list_directory: '%kernel.project_dir%/public/movielist'
-    collection_s_thumbnail_directory: '%kernel.project_dir%/public/images/collections/thumbnails'
-    collection_s_banner_directory: '%kernel.project_dir%/public/images/collections/banners'
+    movie_lists_thumbnail_directory: '%kernel.project_dir%/public/images/movie_lists/thumbnails'
+    movie_lists_banner_directory: '%kernel.project_dir%/public/images/movie_lists/banners'
     event_s_thumbnail_directory: '%kernel.project_dir%/public/images/events/thumbnails'
     event_s_banner_directory: '%kernel.project_dir%/public/images/events/banners'
     event_s_images_directory: '%kernel.project_dir%/public/images/events/images'
@@ -47,7 +47,7 @@ services:
             $targetDirectory: [
                 '%avatars_directory%', '%banners_directory%', '%article_s_images_directory%',
                 '%event_s_thumbnail_directory%', '%event_s_banner_directory%', '%event_s_images_directory%',
-                '%collection_s_thumbnail_directory%', '%collection_s_banner_directory%',
+                '%movie_lists_thumbnail_directory%', '%movie_lists_banner_directory%',
                 '%contact_images_directory%',
                 '%article_s_thumbnail_directory%', '%article_s_banner_directory%',
                 '%contribution_movie_backdrop_directory%', '%contribution_movie_poster_directory%',

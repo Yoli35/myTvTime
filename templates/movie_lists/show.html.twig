@@ -1,21 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'My Collections'|trans }} ▶ ︎{{ collection.title }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'My Collections'|trans }} ▶ ︎{{ movieList.title }}{% endblock %}
 
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
         <div class="my-collection-page">
 
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_collection')}, thisPage: collection.title}) }}
+            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_movie_list_index')}, thisPage: movieList.title}) }}
 
             <header>
                 <div class="banner">
-                    {% if collection.banner %}
-                        <img src="/images/collections/banners/{{ collection.banner }}" alt="{{ collection.title }}'s banner">
-                        <div class="thumbnail" style="background-color: {{ collection.color }}">
-                            {% if collection.thumbnail %}
-                                <img src="/images/collections/thumbnails/{{ collection.thumbnail }}" alt="{{ collection.title }}'s thumbnail">
+                    {% if movieList.banner %}
+                        <img src="/images/movie_lists/banners/{{ movieList.banner }}" alt="{{ movieList.title }}'s banner">
+                        <div class="thumbnail" style="background-color: {{ movieList.color }}">
+                            {% if movieList.thumbnail %}
+                                <img src="/images/movie_lists/thumbnails/{{ movieList.thumbnail }}" alt="{{ movieList.title }}'s thumbnail">
                             {% endif %}
                         </div>
                     {% endif %}
@@ -23,20 +23,18 @@
             </header>
 
             <main>
-                <h1>{{ collection.title }}</h1>
-                {% if collection.description|length %}
+                <h1>{{ movieList.title }}</h1>
+                {% if movieList.description|length %}
                     <aside>
                         <details>
                             <summary>{{ 'Description'|trans }}</summary>
-                            <div class="description">{{ collection.description|raw }}</div>
+                            <div class="description">{{ movieList.description|raw }}</div>
                         </details>
                     </aside>
                 {% endif %}
                 <section>
-                    <h2>{{ collection.movies|length ?: 'none'|trans }} {{ ((collection.movies|length) > 1 ? 'Movies':'Movie')|trans }}</h2>
+                    <h2>{{ movieList.movies|length ?: 'none'|trans }} {{ ((movieList.movies|length) > 1 ? 'Movies':'Movie')|trans }}</h2>
                     <div class="movies">
-                        {#                        {% for i in (collection.movies|length)-1..0 %} #}
-                        {#                            {% set movie = collection.movies[i] %} #}
                         {% for movie in movies %}
                             {% set poster = movie.posterPath ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ movie.posterPath : movie.posterPath %}
                             {{ include('blocks/movie/_discover.html.twig', { discover: movie, title: movie.title, poster: poster, id: movie.movieDbId }) }}
@@ -58,8 +56,6 @@
     <script src="/js/movie.js"></script>
     <script>
         const paths = [
-            "{{ path('profile_infos') }}",
-            "", {# {{ path('imdb_infos') }}", #}
             "{{ path('app_movie_add') }}",
             "{{ path('app_movie_remove') }}",
             "{{ path('app_movie_get_rating') }}",

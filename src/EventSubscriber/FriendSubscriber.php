@@ -30,7 +30,7 @@ class FriendSubscriber implements EventSubscriberInterface
 //            'app_movie_list', 'app_movies_search', 'app_movies_by_genre', 'app_movies_by_date',
 //            'app_series_top_rated', 'app_series_airing_today', 'app_series_on_the_air', 'app_series_search',
 //            'app_personal_profile', 'app_event', 'app_event_new', 'app_event_show',
-//            'app_personal_movies', 'app_movie', 'app_movie_collection', 'app_collection', 'app_collection_show',
+//            'app_personal_movies', 'app_movie', 'app_movie_collection', 'app_movie_list', 'app_movie_list_show',
 //            'app_people',
 //            'app_series_index', 'app_series_show', 'app_series_tmdb_season',
 //            'app_youtube', 'app_youtube_video', 'app_youtube_search',

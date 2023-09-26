@@ -7,7 +7,7 @@ use App\Entity\ChatDiscussion;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Repository\ChatDiscussionRepository;
-use App\Repository\MovieCollectionRepository;
+use App\Repository\MovieListRepository;
 use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Service\DateService;
@@ -24,12 +24,12 @@ use Twig\TwigFunction;
 class UsersExtension extends AbstractExtension
 {
     public function __construct(
-        private readonly ChatDiscussionRepository  $chatDiscussionRepository,
-        private readonly DateService               $dateService,
-        private readonly MovieCollectionRepository $movieCollectionRepository,
-        private readonly SettingsRepository        $settingsRepository,
-        private readonly TranslatorInterface       $translator,
-        private readonly UserRepository            $userRepository,
+        private readonly ChatDiscussionRepository $chatDiscussionRepository,
+        private readonly DateService              $dateService,
+        private readonly MovieListRepository      $movieListRepository,
+        private readonly SettingsRepository       $settingsRepository,
+        private readonly TranslatorInterface      $translator,
+        private readonly UserRepository           $userRepository,
     )
     {
     }
@@ -44,7 +44,7 @@ class UsersExtension extends AbstractExtension
             new TwigFunction('userAlarms', [$this, 'userAlarms'], ['is_safe' => ['html']]),
             new TwigFunction('userDiscussions', [$this, 'userDiscussions'], ['is_safe' => ['html']]),
             new TwigFunction('userList', [$this, 'userList'], ['is_safe' => ['html']]),
-            new TwigFunction('userMovieCollections', [$this, 'userMovieCollections'], ['is_safe' => ['html']]),
+            new TwigFunction('userMovieLists', [$this, 'userMovieLists'], ['is_safe' => ['html']]),
             new TwigFunction('whoIsTyping', [$this, 'whoIsTyping'], ['is_safe' => ['html']]),
         ];
     }
@@ -171,9 +171,9 @@ class UsersExtension extends AbstractExtension
         return $this->translator->trans('diff.empty', array(), 'time', $locale);
     }
 
-    public function userMovieCollections(User $user): array
+    public function userMovieLists(User $user): array
     {
-        return $this->movieCollectionRepository->getSummary($user->getId());
+        return $this->movieListRepository->getSummary($user->getId());
     }
 
     public function userAlarms(User $user): Collection
