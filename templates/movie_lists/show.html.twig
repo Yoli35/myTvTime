@@ -4,10 +4,10 @@
 
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container">
+    <div class="container-fluid">
         <div class="my-collection-page">
 
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_movie_list_index')}, thisPage: movieList.title}) }}
+            {{ include('blocks/_nav.html.twig') }}
 
             <header>
                 <div class="banner">

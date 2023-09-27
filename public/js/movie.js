@@ -375,11 +375,11 @@ function initCollections() {
 }
 
 function toggleCollection(e) {
-    const collection = e.target;
-    const id = collection.getAttribute("data-id").toString();
-    const movie = collection.parentElement.getAttribute("data-movie");
+    const list = e.target;
+    const id = list.getAttribute("data-id").toString();
+    const movie = list.parentElement.getAttribute("data-movie");
 
-    collection.classList.toggle("selected");
+    list.classList.toggle("selected");
 
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
@@ -388,7 +388,7 @@ function toggleCollection(e) {
 
         addNotification(message, "success");
     }
-    xhr.open("GET", _app_movie_list_toggle + "?c=" + id + "&m=" + movie + "&a=" + (collection.classList.contains("selected") ? "a" : "r"));
+    xhr.open("GET", _app_movie_list_toggle + "?c=" + id + "&m=" + movie + "&a=" + (list.classList.contains("selected") ? "a" : "r"));
     xhr.send();
 }
 

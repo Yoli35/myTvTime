@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\Dropzone\Form\DropzoneType;
 
-class MovieCollectionType extends AbstractType
+class MovieListType extends AbstractType
 {
     public function __construct(private readonly TranslatorInterface $translator) {
     }

@@ -5,42 +5,53 @@
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
 
-    <div class="container">
-        <div class="my-collections-page">
+    <div class="container-fluid">
+        <div class="movie-list-page">
 
-            {{ include('blocks/_nav.html.twig', {thisPage: 'My Collections'|trans}) }}
-{#            {{ include('blocks/source/_button.html.twig') }}#}
-
-            <main>
-                <a href="{{ path('app_movie_list_new') }}">
-                    <div class="add-collection"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>
-                </a>
-                <div class="wrapper">
-                        {% for movieList in movieLists %}
-                            <div class="collection" data-id="{{ movieList.id }}">
-                                <a href="{{ path('app_movie_list_show', {id: movieList.id}) }}{% if from is defined %}?from={{ from }}{% endif %}">
-                                    <div class="logo" style="background-image: url('/images/movie_lists/thumbnails/{{ movieList.thumbnail }}')"></div>
-                                    <div class="infos">
-                                        <div class="name">{{ movieList.title }}</div>
-                                        <div class="info">
-                                            {{ movieList.movies|length ?: 'None'|trans }} {{ ((movieList.movies|length) > 1 ? 'Movies':'Movie')|trans }}
-                                        </div>
-                                        <div class="backdrop" style="background-image: url('/images/movie_lists/banners/{{ movieList.banner }}')"></div>
-                                        <div id="{{ movieList.id }}" class="tools">
-                                            <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
-                                            {# <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i> #}
-                                            <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
-                                        </div>
+            <main class="w100">
+                <div class="movie-list-tools">
+                    {{ include('blocks/_nav.html.twig') }}
+                    <div class="d-flex-1">
+                        <a href="{{ path('app_movie_list_new') }}">
+                            <div class="add-list"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>
+                        </a>
+                        <div class="movie-list-layout-items">
+                            <div data-type="roomy" title="{{ 'Roomy movie list'|trans }}" class="movie-list-layout-item{% if movieListCookie.layout == 'roomy' %} active{% endif %}">
+                                <i class="fa-solid fa-table-cells-large"></i>
+                            </div>
+                            <div data-type="list" title="{{ 'List movie list'|trans }}" class="movie-list-layout-item{% if movieListCookie.layout == 'list' %} active{% endif %}">
+                                <i class="fa-solid fa-table-list"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper {{ movieListCookie.layout }}">
+                    {% for movieList in movieLists %}
+                        <div class="collection" data-id="{{ movieList.id }}">
+                            <a href="{{ path('app_movie_list_show', {id: movieList.id}) }}{% if from is defined %}?from={{ from }}{% endif %}">
+                                <div class="logo" style="background-image: url('/images/movie_lists/thumbnails/{{ movieList.thumbnail }}')"></div>
+                                <div class="infos">
+                                    <div class="name">{{ movieList.title }}</div>
+                                    <div class="info">
+                                        {{ movieList.movies|length ?: 'None'|trans }} {{ ((movieList.movies|length) > 1 ? 'Movies':'Movie')|trans }}
                                     </div>
-                                </a>
-                            </div>
-                        {% else %}
-                            <div class="no-collection">
-                                {{ 'No movie list yet'|trans }}<br>
-                                {{ 'Create one by clicking the button above'|trans }}
+                                    <div class="backdrop" style="background-image: url('/images/movie_lists/banners/{{ movieList.banner }}')"></div>
+                                    <div id="{{ movieList.id }}" class="tools">
+                                        <i class="fa-solid fa-pen-to-square" title="{{ 'Edit'|trans }}"></i>
+                                        {# <i class="fa-solid fa-eye-slash" title="{{ 'Hide'|trans }}"></i> #}
+                                        <i class="fa-solid fa-trash-can" title="{{ 'Delete'|trans }}"></i>
+                                    </div>
+                                </div>
+                                <div class="movie-list-anchor"><i class="fa-solid fa-sort"></i></div>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="no-list">
+                            {{ 'No movie list yet'|trans }}<br>
+                            {{ 'Create one by clicking the button above'|trans }}
 
-                            </div>
-                        {% endfor %}
+                        </div>
+                    {% endfor %}
                 </div>
             </main>
         </div>
@@ -66,11 +77,10 @@
         </div>
     </dialog>
 
-{#    {{ show_source_code(_self) }}#}
+    {#    {{ show_source_code(_self) }} #}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/source.js"></script>
     <script>
         const locale = "{{ app.request.locale }}";
         let confirmDialog;
@@ -81,6 +91,7 @@
             confirmDialog = document.querySelector(".confirm-deletion");
 
             initTools(confirmDialog);
+            initLayout();
         });
 
         function initTools(dialog) {
@@ -107,6 +118,25 @@
             })
             dialog.querySelector(".close").addEventListener('click', function () {
                 closeDialog(dialog, false);
+            });
+        }
+
+        function initLayout() {
+            const layouts = document.querySelectorAll('.movie-list-layout-item');
+            layouts.forEach((layout) => {
+                layout.addEventListener('click', (e) => {
+                    layouts.forEach((layout) => {
+                        layout.classList.remove('active');
+                    });
+                    e.currentTarget.classList.add('active');
+                    const type = e.currentTarget.getAttribute('data-type');
+                    const wrapper = document.querySelector('.wrapper');
+                    // const time = new Date();
+                    // time.setFullYear(time.getFullYear() + 1);
+                    wrapper.classList.remove('roomy', 'compact', 'list');
+                    wrapper.classList.add(type);
+                    setLayoutSeasonCookie(type);
+                });
             });
         }
 
@@ -185,6 +215,27 @@
             console.log('delete', {id});
             evt.preventDefault();
             openDialog(confirmDialog, id, evt.currentTarget);
+        }
+
+        function getSeasonCookie() {
+            return JSON.parse(decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('movie_list=')).split('=')[1]));
+        }
+
+        function setSeasonCookie(cookie) {
+            const time = new Date();
+            time.setFullYear(time.getFullYear() + 1);
+            document.cookie = "movie_list=" + encodeURIComponent(JSON.stringify(cookie)) + "; expires=" + time.toUTCString() + "; path=/";
+            console.log(getSeasonCookie());
+        }
+
+        function getLayoutSeasonCookie() {
+            return getSeasonCookie().layout;
+        }
+
+        function setLayoutSeasonCookie(layout) {
+            const cookie = getSeasonCookie();
+            cookie.layout = layout;
+            setSeasonCookie(cookie);
         }
     </script>
 {% endblock %}

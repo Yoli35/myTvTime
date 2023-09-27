@@ -1535,7 +1535,7 @@ class SerieController extends AbstractController
 //                    $localizedResult = 'Error: code '.$e->getCode().', message: '.$e->getMessage();
 //                }
                 // for now, we don't use deepl translator
-                $localizedOverview = $internationalSeason['overview'];
+                $localizedOverview = 'No translation in dev mode - ' . $internationalSeason['overview'];
             }
         }
 
