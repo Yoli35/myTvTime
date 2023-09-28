@@ -77,15 +77,22 @@
 
         &.list {
             flex-direction: column;
+            flex-wrap: unset;
             gap: .125rem;
             margin-inline: auto;
             max-width: 60rem;
 
+            &.dragover {
+                border: 2px solid var(--gradient-green-50);
+            }
+
             .collection {
                 border-radius: .25rem;
+                display: flex;
                 height: 3rem;
-                width: clamp(30rem, 50%, 60rem);
-                
+                width: clamp(30rem, 50%, 40rem);
+                transition: scale 100ms ease-in-out;
+
                 a {
                     justify-content: flex-start;
 
@@ -93,7 +100,7 @@
                         height: 3rem;
                         width: 3rem;
                     }
-                    
+
                     .infos {
                         align-items: center;
                         flex-direction: row;
@@ -103,7 +110,7 @@
                         justify-content: flex-start;
                         padding: 0 1rem;
                         width: unset;
-                        
+
                         .name {
                             font-size: 1.25rem;
                             font-weight: 300;
@@ -118,15 +125,29 @@
                         }
                     }
 
+
+                }
+
+                &:hover {
+                    scale: 1.1;
+
                     .movie-list-anchor {
                         display: flex;
                     }
+                }
+
+                &.dragging {
+                    border: 2px solid var(--gradient-orange-50);
+                }
+
+                &.dragover {
+                    border: 2px solid var(--gradient-green-50);
                 }
             }
         }
 
         .collection {
-            background-color: var(--gradient-ardoise-90);
+            background-color: var(--gradient-ardoise-80);
             border-radius: 1rem;
             height: 10rem;
             overflow: hidden;
@@ -177,16 +198,16 @@
                         @include crud-tools();
                     }
                 }
+            }
 
-                .movie-list-anchor {
-                    align-items: center;
-                    cursor: grab;
-                    display: none;
-                    font-size: 1rem;
-                    height: 3rem;
-                    justify-content: center;
-                    width: 3rem;
-                }
+            .movie-list-anchor {
+                align-items: center;
+                cursor: grab;
+                display: none;
+                font-size: 1rem;
+                height: 3rem;
+                justify-content: center;
+                width: 3rem;
             }
         }
     }
@@ -273,6 +294,7 @@
             margin-inline: auto;
             width: clamp(25rem, 100%, 101rem);
         }
+
         .wrapper {
             .collection {
                 width: clamp(25rem, calc(50% - 1rem), 50rem);
