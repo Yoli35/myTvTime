@@ -423,10 +423,9 @@
             "{{ path('app_movie_overview_save') }}",
             "{{ path('app_movie_overview_delete') }}",
         ];
-        const _app_movie_favorite_toggle = paths[7].substring(0, paths[7].length - 6);
-        console.log({_app_movie_favorite_toggle})
-        const _app_movie_overview_save = paths[8];
-        const _app_movie_overview_delete = paths[9];
+        const _app_movie_favorite_toggle = paths[5].slice(0, -6);
+        const _app_movie_overview_save = paths[6];
+        const _app_movie_overview_delete = paths[7];
         const movieId = {{ userMovieId }};
         txt['edit'] = "{{ 'Edit the overview'|trans }}";
         txt['later'] = "{{ 'Edit later'|trans }}";
