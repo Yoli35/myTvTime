@@ -152,7 +152,7 @@ class MovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAll();
     }
 
-    public function userMovieGetCollections($movie_id, $user_id, $short = true): array
+    public function userMovieGetMovieLists($movie_id, $user_id, $short = true): array
     {
         if ($short) {
             $sql = 'SELECT '
@@ -162,13 +162,14 @@ class MovieRepository extends ServiceEntityRepository
                 . '  * ';
         }
         $sql .= 'FROM '
-            . '  movie_collection t0 '
+            . '  movie_list t0 '
             . 'INNER JOIN '
-            . '  movie_collection_movie '
-            . '  ON t0.id = movie_collection_movie.movie_collection_id '
+            . '  movie_list_movie '
+            . '  ON t0.id = movie_list_movie.movie_list_id '
             . 'WHERE '
-            . '  movie_collection_movie.movie_id = ' . $movie_id
-            . ' AND t0.`user_id` = ' . $user_id;
+            . '  movie_list_movie.movie_id = ' . $movie_id . ' '
+            . 'AND '
+            . '  t0.`user_id` = ' . $user_id;
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

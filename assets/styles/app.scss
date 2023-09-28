@@ -1078,7 +1078,7 @@ nav.active {
         }
     }
 
-    .choose-collection {
+    .choose-movie-list {
         @include flex-row(center, start);
         gap: .5rem;
         margin-left: auto;
@@ -1672,7 +1672,7 @@ nav.active {
     }
 }
 
-.pinned-collection {
+.pinned-movie-list {
     background-color: var(--gradient-ardoise-30-50);
     border-radius: 1em;
     display: flex;
@@ -1715,6 +1715,15 @@ nav.active {
                     border-radius: .5em .5em 0 0;
                     height: 12em;
                     object-fit: cover;
+                    width: 8em;
+                }
+
+                .no-poster {
+                    @include flex-row(center, center);
+                    background-color: var(--gradient-green-20);
+                    border-radius: .5em .5em 0 0;
+                    color: var(--gradient-green-80);
+                    height: 12em;
                     width: 8em;
                 }
 

@@ -33,7 +33,7 @@
 
                 </div>
 
-                <div class="pinned-collection hide mini">
+                <div class="pinned-movie-list hide mini">
                     <h4></h4>
                     <div class="wrapper"></div>
                 </div>
@@ -130,7 +130,7 @@
             "{{ path('app_movie_list_show', {id: 0}) }}"
         ];
         const pinnedSwitch = {{ settings.data.0.pinned }};
-        const pinnedCollectionId = {{ settings.data.0.collection_id }};
+        const pinnedMovieListId = {{ settings.data.0.collection_id }};
 
         window.addEventListener("DOMContentLoaded", () => {
             initButtons({{ user.id }}, "{{ locale }}", paths2, "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}");
@@ -139,25 +139,32 @@
             let _app_personal_movie_list = "{{ path('app_personal_movie_list', {id: 1}) }}";
             let _app_movie = "{{ path('app_movie', {id:0}) }}";
             let url = "{{ imageConfig.url ~ imageConfig.poster_sizes.3 }}";
-            document.querySelector('.choose-collection').querySelector('select').addEventListener("change", getCollection);
-            document.querySelector('.choose-collection').querySelector('input').addEventListener("change", showHideCollection);
+            let locale = document.querySelector("html").getAttribute("lang");
+            document.querySelector('.choose-movie-list').querySelector('select').addEventListener("change", getMovieList);
+            document.querySelector('.choose-movie-list').querySelector('input').addEventListener("change", showHideMovieList);
 
-            getCollection(null);
+            getMovieList(null);
 
-            function getCollection(evt = null) {
-                let collectionId, pinned = document.querySelector(".pinned-collection");
+            function getMovieList(evt = null) {
+                let collectionId, pinned = document.querySelector(".pinned-movie-list");
 
                 if (evt) {
                     collectionId = evt.target.value;
                 } else {
-                    collectionId = pinnedCollectionId;
+                    collectionId = pinnedMovieListId;
                 }
 
                 if (collectionId > 0) {
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
                         const body = document.querySelector("body");
-                        const wrapper = document.querySelector(".pinned-collection").querySelector(".wrapper");
+                        const wrapper = document.querySelector(".pinned-movie-list").querySelector(".wrapper");
+                        const noPoster = {
+                            "en": "No poster",
+                            "fr": "Pas d'affiche",
+                            "de": "Kein Poster",
+                            "es": "Sin póster",
+                        };
                         wrapper.innerHTML = "";
                         let data = JSON.parse(this.response);
                         // console.log({data});
@@ -168,14 +175,21 @@
                             let movie = document.createElement("div");
                             movie.classList.add("movie");
                             movie.setAttribute("data-id", item.id.toString());
-                            let img = document.createElement("img");
-                            img.setAttribute("src", url + item.poster_path);
-                            img.setAttribute("alt", item.title);
+                            if (item.poster_path) {
+                                let img = document.createElement("img");
+                                img.setAttribute("src", url + item.poster_path);
+                                img.setAttribute("alt", item.title);
+                                movie.appendChild(img);
+                            } else {
+                                let noImg = document.createElement("div");
+                                noImg.classList.add("no-poster");
+                                noImg.appendChild(document.createTextNode(noPoster[locale]));
+                                movie.appendChild(noImg);
+                            }
                             let title = document.createElement("div");
                             title.classList.add("title");
                             title.appendChild(document.createTextNode(item.title));
 
-                            movie.appendChild(img);
                             movie.appendChild(title);
                             // movie.addEventListener("mouseover", showAbout);
                             // movie.addEventListener("mouseout", hideAbout);
@@ -234,7 +248,7 @@
                                 setTimeout(() => {
                                     pinned.classList.add("show");
                                 }, 0);
-                                document.querySelector('.choose-collection').querySelector('input').checked = true;
+                                document.querySelector('.choose-movie-list').querySelector('input').checked = true;
                             }
                         }
                     }
@@ -250,7 +264,7 @@
                             pinned.classList.add("hide");
                         }, 300);
                     }
-                    document.querySelector('.choose-collection').querySelector('input').checked = false;
+                    document.querySelector('.choose-movie-list').querySelector('input').checked = false;
                 }
             }
 
@@ -314,8 +328,8 @@
                 }, 300);
             }
 
-            function showHideCollection() {
-                const pinned = document.querySelector(".pinned-collection");
+            function showHideMovieList() {
+                const pinned = document.querySelector(".pinned-movie-list");
                 let _app_personal_movie_list_pin_status = "{{ path('app_personal_movie_list_pin_status') }}";
                 let status;
 

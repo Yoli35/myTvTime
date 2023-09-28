@@ -473,7 +473,7 @@ function moreVideos() {
                             aCollection.setAttribute("href", _app_movie_list_show + c['id'].toString());
 
                             let thumbnail = document.createElement("img");
-                            thumbnail.setAttribute("src", '/images/collections/thumbnails/' + c['thumbnail']);
+                            thumbnail.setAttribute("src", '/images/movie_lists/thumbnails/' + c['thumbnail']);
                             thumbnail.setAttribute("alt", c['title']);
                             thumbnail.setAttribute("style", "border: 2px solid " + c['color']);
 

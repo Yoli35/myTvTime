@@ -312,32 +312,32 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/movies/more', name: 'app_personal_movies_more')]
-    public function userMoviesMore(Request $request, MovieRepository $userMovieRepository): Response
+    public function userMoviesMore(Request $request, MovieRepository $movieRepository): Response
     {
         return $this->json([
 //            'results' => $userMovieRepository->findUserMovies($request->query->get('id'), $request->query->get('offset')),
-            'results' => $this->getUserMovies($request->query->get('id'), $request->query->get('offset'), $userMovieRepository),
+            'results' => $this->getUserMovies($request->query->get('id'), $request->query->get('offset'), $movieRepository),
         ]);
     }
 
-    public function getUserMovies($userId, $offset, $userMovieRepository): array
+    public function getUserMovies($userId, $offset, $movieRepository): array
     {
-        $userMovies = $userMovieRepository->findUserMovies($userId, $offset);
+        $userMovies = $movieRepository->findUserMovies($userId, $offset);
 //        foreach ($userMovies as $userMovie) {
 //            $movie = $userMovie;
 //            $collections = $userMovieRepository->userMovieGetCollections($userMovie['id'], $userId);
 //            $movie['my_collections'] = $collections;
 //            $movies[] = $movie;
 //        }
-        return array_map(function ($userMovie) use ($userMovieRepository, $userId) {
+        return array_map(function ($userMovie) use ($movieRepository, $userId) {
             $movie = $userMovie;
-            $movie['my_collections'] = $userMovieRepository->userMovieGetCollections($userMovie['id'], $userId);
+            $movie['my_collections'] = $movieRepository->userMovieGetMovieLists($userMovie['id'], $userId);
             return $movie;
         }, $userMovies);
     }
 
     #[Route('/{_locale}/user/movie/list/{id}', name: 'app_personal_movie_list', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function getCollection(Request $request, $id, MovieListRepository $movieListRepository, SettingsRepository $settingsRepository): Response
+    public function getMovieList(Request $request, $id, MovieListRepository $movieListRepository, SettingsRepository $settingsRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
