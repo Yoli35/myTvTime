@@ -73,25 +73,27 @@
         @include flex-row();
         flex-wrap: wrap;
         gap: 1rem;
-        width: 100%;
+        width: clamp(30rem, 50%, 40rem);
 
         &.list {
+            border: 2px solid transparent;
             flex-direction: column;
             flex-wrap: unset;
-            gap: .125rem;
+            gap: 0;
             margin-inline: auto;
             max-width: 60rem;
 
             &.dragover {
-                border: 2px solid var(--gradient-green-50);
+                border-color: var(--gradient-green-50);
             }
 
-            .collection {
+            .movie-list {
+                border: 2px solid transparent;
                 border-radius: .25rem;
                 display: flex;
                 height: 3rem;
-                width: clamp(30rem, 50%, 40rem);
                 transition: scale 100ms ease-in-out;
+                width: 100%;
 
                 a {
                     justify-content: flex-start;
@@ -129,7 +131,8 @@
                 }
 
                 &:hover {
-                    scale: 1.1;
+                    border-color: var(--gradient-ardoise-50);
+                    //scale: 1.1;
 
                     .movie-list-anchor {
                         display: flex;
@@ -137,16 +140,16 @@
                 }
 
                 &.dragging {
-                    border: 2px solid var(--gradient-orange-50);
+                    border-color: var(--gradient-orange-50);
                 }
 
                 &.dragover {
-                    border: 2px solid var(--gradient-green-50);
+                    border-color: var(--gradient-green-50);
                 }
             }
         }
 
-        .collection {
+        .movie-list {
             background-color: var(--gradient-ardoise-80);
             border-radius: 1rem;
             height: 10rem;
@@ -238,7 +241,7 @@
     }
 }
 
-.my-collection-page {
+.my-movie-list-page {
     .banner {
         min-height: 20rem;
         position: relative;
@@ -296,7 +299,7 @@
         }
 
         .wrapper {
-            .collection {
+            .movie-list {
                 width: clamp(25rem, calc(50% - 1rem), 50rem);
             }
         }
@@ -327,7 +330,7 @@
                 background-color: var(--gradient-ardoise-30);
             }
 
-            .collection {
+            .movie-list {
                 background-color: var(--gradient-ardoise-10);
 
                 a {
@@ -355,7 +358,7 @@
         }
     }
 
-    .my-collection-page {
+    .my-movie-list-page {
         .movies {
             background-color: var(--gradient-ardoise-20-alpha-50);
         }

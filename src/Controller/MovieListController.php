@@ -42,7 +42,6 @@ class MovieListController extends AbstractController
         $movieListCookie = $this->movieListCookie();
 
         $breadcrumb = [
-//            ['name' => 'Home', 'url' => $this->generateUrl('app_home')],
             ['name' => $this->translator->trans('Movie lists'), 'url' => $this->generateUrl('app_movie_list_index')],
         ];
 
@@ -107,7 +106,7 @@ class MovieListController extends AbstractController
         if ($action == "r") $list->removeMovie($movie);
         $this->movieListRepository->add($list, true);
 
-        $message = "The movie « movie_name » has been " . ($action == "a" ? "added to" : "removed from") . " your collection « list_name ».";
+        $message = "The movie « movie_name » has been " . ($action == "a" ? "added to" : "removed from") . " your list « list_name ».";
         $message = $this->translator->trans($message, ["movie_name" => $movie->getTitle(), "list_name" => $list->getTitle()], "messages");
         return $this->json(["message" => $message]);
     }
@@ -128,9 +127,14 @@ class MovieListController extends AbstractController
             return $this->redirectToRoute('$app_movie_list');
         }
 
+        $breadcrumb = [
+            ['name' => $this->translator->trans('Movie lists'), 'url' => $this->generateUrl('app_movie_list_index')],
+            ['name' => $this->translator->trans('New list')],
+        ];
         return $this->render('movie_lists/new.html.twig', [
             'form' => $form->createView(),
             'movieList' => $movieList,
+            'breadcrumb' => $breadcrumb,
             'user' => $user,
         ]);
     }
@@ -149,9 +153,14 @@ class MovieListController extends AbstractController
             return $this->redirectToRoute('$app_movie_list');
         }
 
+        $breadcrumb = [
+            ['name' => $this->translator->trans('Movie lists'), 'url' => $this->generateUrl('app_movie_list_index')],
+            ['name' => $this->translator->trans('Edit list') . " “ " . $movieList->getTitle() . " ”"],
+        ];
         return $this->render('movie_lists/edit.html.twig', [
             'form' => $form->createView(),
             'title' => $movieList->getTitle(),
+            'breadcrumb' => $breadcrumb,
             'user' => $user,
         ]);
     }

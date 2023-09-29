@@ -146,15 +146,15 @@
             getMovieList(null);
 
             function getMovieList(evt = null) {
-                let collectionId, pinned = document.querySelector(".pinned-movie-list");
+                let listId, pinned = document.querySelector(".pinned-movie-list");
 
                 if (evt) {
-                    collectionId = evt.target.value;
+                    listId = evt.target.value;
                 } else {
-                    collectionId = pinnedMovieListId;
+                    listId = pinnedMovieListId;
                 }
 
-                if (collectionId > 0) {
+                if (listId > 0) {
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
                         const body = document.querySelector("body");
@@ -252,7 +252,7 @@
                             }
                         }
                     }
-                    xhr.open("GET", _app_personal_movie_list.substring(0, _app_personal_movie_list.length - 1) + collectionId);
+                    xhr.open("GET", _app_personal_movie_list.substring(0, _app_personal_movie_list.length - 1) + listId);
                     xhr.send();
                 } else {
                     if (pinned.classList.contains("show")) {

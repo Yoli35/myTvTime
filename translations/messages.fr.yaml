@@ -15,15 +15,15 @@ Movie: film
 Movies: Films
 My Account: Mon compte
 My Events: Mes événements
-My Movie Collections: Mes listes de films
+My Movie lists: Mes listes de films
 My Movies: Mes films
 My series: Mes séries
 Navigation: Navigation
 Php Info: Php Info
 Logs: Logs
 People search: Rechercher une personne
-Pin a collection: Épingler une liste
-Select a collection: Sélectionner une liste
+Pin a list: Épingler une liste
+Select a list: Sélectionner une liste
 Popular series: Séries populaires
 Search Movies by: Recherche de film par
 Search by Date: Recherche par date
@@ -210,24 +210,24 @@ Edit Article: Éditer l'article
 List of all my articles: Liste de tous mes articles
 Update the article: Mettre à jour l'article
 
-# Collections
-Collections: Listes
+# Lists
+Lists: Listes
 Description: Description
-My Collections: Mes listes
-The movie « movie_name » has been added to your collection « collection_name ».: Le film « movie_name » a été ajouté à votre liste « collection_name ».
-The movie « movie_name » has been removed from your collection « collection_name ».: Le film « movie_name » a été retiré de votre liste « collection_name ».
-# new/edit collection
-Add collection: Ajouter une liste ...
-New collection: Nouvelle liste
-Edit collection: Modifier la liste
-Update the collection: Mettre à jour la liste
+My lists: Mes listes
+The movie « movie_name » has been added to your list « list_name ».: Le film « movie_name » a été ajouté à votre liste « list_name ».
+The movie « movie_name » has been removed from your list « list_name ».: Le film « movie_name » a été retiré de votre liste « list_name ».
+# new/edit list
+Add list: Ajouter une liste ...
+New list: Nouvelle liste
+Edit list: Modifier la liste
+Update the list: Mettre à jour la liste
 Color: Couleur
 Thumbnail Image (JPG, PNG file): Vignette (format JPG, PNG)
 Click here or drop a thumbnail image file: Cliquez ici ou déposez une image de la miniature
 Click here or drop a banner image file: Cliquez ici ou déposez une image de la bannière
-# delete collection
-Delete this collection?: Supprimer cette liste ?
-Do you really want to delete this collection?: Voulez-vous vraiment supprimer cette liste ?
+# delete list
+Delete this list?: Supprimer cette liste ?
+Do you really want to delete this list?: Voulez-vous vraiment supprimer cette liste ?
 
 # User Series
 First Air at: Première diffusion
@@ -362,9 +362,9 @@ Movie List: Liste de films
 No movie list yet: Aucune liste de films pour l'instant
 Create one by clicking the button above: Créez-en une en cliquant sur le bouton ci-dessus
 Films: Films
-Belongs to Collection: Liste
-Collection: Liste
-See the Collection: Voir la liste
+Belongs to list: Liste
+Liste: Liste
+See the list: Voir la liste
 No banner: Pas de bannière
 Roomy movie list: Affichage des listes de films en mode spacieux
 List movie list: Affichage des listes de films en mode liste
@@ -1389,7 +1389,6 @@ Friends: Amis
 Friend requests: Demandes d'ami
 Reject: Refuser
 You have a friend request from: Vous avez une demande d'amitié en attente de la part de
-Movie collections: Listes de films
 Serie viewings: Visionnages de séries renseignés
 Youtube videos: Vidéos Youtube
 Tiktok videos: Vidéos Tiktok

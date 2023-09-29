@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'My Collections'|trans }} ▶ ︎{{ 'Edit collection'|trans }} ▶ ︎{{ title }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'My lists'|trans }} ▶ ︎{{ 'Edit list'|trans }} ▶ ︎{{ title }}{% endblock %}
 
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
         <div class="movie-list-page">
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_movie_list_index')}, thisPage: 'Edit collection'|trans}) }}
+            {{ include('blocks/_nav.html.twig') }}
 
-            <h1>{{ 'Edit collection'|trans }}</h1>
+            <h1>{{ 'Edit list'|trans }}</h1>
 
             <main>
-                {{ include('blocks/collection/_form.html.twig') }}
+                {{ include('blocks/movie_list/_form.html.twig') }}
             </main>
 
         </div>
@@ -24,7 +24,7 @@
     {{ parent() }}
     <script>
         window.addEventListener("DOMContentLoaded", () => {
-            document.querySelector("#movie_collection_save").innerHTML = "{{ "Update the collection"|trans }}";
+            document.querySelector("#movie_list_save").innerHTML = "{{ "Update the list"|trans }}";
         })
     </script>
 {% endblock %}

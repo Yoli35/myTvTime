@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'My Collections'|trans }} ▶ ︎{{ 'New collection'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'My lists'|trans }} ▶ ︎{{ 'New list'|trans }}{% endblock %}
 
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container">
         <div class="movie-list-page">
-            {{ include('blocks/_nav.html.twig', {parent: {page: 'My Collections', url: path('app_movie_list_index')}, thisPage: 'New collection'|trans}) }}
+            {{ include('blocks/_nav.html.twig') }}
 
-            <h1>{{ 'New collection'|trans }}</h1>
+            <h1>{{ 'New list'|trans }}</h1>
 
             <main>
-                {{ include('blocks/collection/_form.html.twig') }}
+                {{ include('blocks/movie_list/_form.html.twig') }}
             </main>
 
         </div>

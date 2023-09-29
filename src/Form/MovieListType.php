@@ -57,7 +57,7 @@ class MovieListType extends AbstractType
                 ],
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Add collection',
+                'label' => 'Add list',
                 'attr' => ['class' => 'btn btn-secondary'],
             ])
         ;

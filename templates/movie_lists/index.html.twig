@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}myTvTime ▶ ︎{{ 'My Collections'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎{{ 'My lists'|trans }}{% endblock %}
 
 {% block body %}
     {% set layout = movieListCookie.layout %}
@@ -14,7 +14,7 @@
                     {{ include('blocks/_nav.html.twig') }}
                     <div class="d-flex-1">
                         <a href="{{ path('app_movie_list_new') }}">
-                            <div class="add-list"><i class="fa-solid fa-circle-plus"></i> {{ 'Add collection'|trans }}</div>
+                            <div class="add-list"><i class="fa-solid fa-circle-plus"></i> {{ 'Add list'|trans }}</div>
                         </a>
                         <div class="movie-list-layout-items">
                             <div data-type="roomy" title="{{ 'Roomy movie list'|trans }}" class="movie-list-layout-item{% if layout == 'roomy' %} active{% endif %}">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="wrapper {{ movieListCookie.layout }}">
                     {% for movieList in movieLists %}
-                        <div class="collection" data-id="{{ movieList.id }}">
+                        <div class="movie-list" data-id="{{ movieList.id }}">
                             <a href="{{ path('app_movie_list_show', {id: movieList.id}) }}{% if from is defined %}?from={{ from }}{% endif %}">
                                 <div class="logo" style="background-image: url('/images/movie_lists/thumbnails/{{ movieList.thumbnail }}')"></div>
                                 <div class="infos">
@@ -63,11 +63,11 @@
     <dialog class="confirm-deletion">
         <div class="overlay">
             <div class="header">
-                {{ 'Delete this collection?'|trans }}
+                {{ 'Delete this list?'|trans }}
                 <div class="close"><i class="fa-solid fa-xmark"></i></div>
             </div>
             <div class="content">
-                {{ 'Do you really want to delete this collection?'|trans }}
+                {{ 'Do you really want to delete this list?'|trans }}
                 <span></span>
                 {{ 'This operation is final and cannot be cancelled.'|trans }}
             </div>
@@ -82,262 +82,6 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        const locale = "{{ app.request.locale }}";
-        let confirmDialog;
-
-        window.addEventListener("DOMContentLoaded", () => {
-
-            // document.querySelector(".add-collection").addEventListener("click", addNewCollection);
-            confirmDialog = document.querySelector(".confirm-deletion");
-
-            initTools(confirmDialog);
-            initLayout();
-        });
-
-        function initTools(dialog) {
-            const tools = document.querySelectorAll(".tools");
-            const collections = document.querySelectorAll(".collection");
-
-            tools.forEach(tool => {
-                tool.querySelector(".fa-pen-to-square").addEventListener("click", editCollection);
-                // tool.querySelector(".fa-eye-slash").addEventListener("click", hideCollection);
-                tool.querySelector(".fa-trash-can").addEventListener("click", deleteCollection);
-            });
-
-            collections.forEach(collection => {
-                collection.addEventListener("mouseenter", showTools);
-                collection.addEventListener("mouseleave", hideTools);
-            });
-
-
-            dialog.querySelector(".delete-done").addEventListener("click", () => {
-                closeDialog(dialog, true);
-            })
-            dialog.querySelector(".delete-cancel").addEventListener("click", () => {
-                closeDialog(dialog, false);
-            })
-            dialog.querySelector(".close").addEventListener('click', function () {
-                closeDialog(dialog, false);
-            });
-        }
-
-        function initLayout() {
-            const layouts = document.querySelectorAll('.movie-list-layout-item');
-            layouts.forEach((layout) => {
-                layout.addEventListener('click', (e) => {
-                    layouts.forEach((layout) => {
-                        layout.classList.remove('active');
-                    });
-                    e.currentTarget.classList.add('active');
-                    const type = e.currentTarget.getAttribute('data-type');
-                    const wrapper = document.querySelector('.wrapper');
-                    wrapper.classList.remove('roomy', 'list');
-                    wrapper.classList.add(type);
-                    setLayoutSeasonCookie(type);
-
-                    initDragAndDrop(wrapper);
-                });
-            });
-            initDragAndDrop(document.querySelector('.wrapper'), true);
-        }
-
-        function initDragAndDrop(wrapper, initial = false) {
-            if (wrapper.classList.contains('list')) {
-                addDragAndDrop();
-            } else {
-                if (!initial) {
-                    removeDragAndDrop();
-                }
-            }
-        }
-
-        // Fonction pour initialiser le système de glisser-déposer
-        function addDragAndDrop() {
-            const collectionItems = document.querySelectorAll('.collection');
-            const wrapper = document.querySelector('.wrapper');
-
-            // Ajouter les gestionnaires d'événements pour chaque élément de la collection
-            collectionItems.forEach(item => {
-                item.setAttribute('draggable', 'true');
-                item.addEventListener('dragstart', dragStart);
-                item.addEventListener('dragover', dragOver);
-                item.addEventListener('dragenter', dragEnter);
-                item.addEventListener('dragleave', dragLeave);
-                item.addEventListener('drop', dragDrop);
-                item.addEventListener('dragend', dragEnd);
-            });
-
-            // Ajouter les gestionnaires d'événements pour la div wrapper
-            wrapper.addEventListener('dragover', dragOver);
-            wrapper.addEventListener('dragenter', dragEnter);
-            wrapper.addEventListener('dragleave', dragLeave);
-            wrapper.addEventListener('drop', dragDrop);
-        }
-
-        // Fonction pour retirer le système de glisser-déposer
-        function removeDragAndDrop() {
-            const collectionItems = document.querySelectorAll('.collection');
-            const wrapper = document.querySelector('.wrapper');
-
-            collectionItems.forEach(item => {
-                item.removeAttribute('draggable');
-                item.removeEventListener('dragstart', dragStart);
-                item.removeEventListener('dragover', dragOver);
-                item.removeEventListener('dragenter', dragEnter);
-                item.removeEventListener('dragleave', dragLeave);
-                item.removeEventListener('drop', dragDrop);
-                item.removeEventListener('dragend', dragEnd);
-            });
-
-            wrapper.removeEventListener('dragover', dragOver);
-            wrapper.removeEventListener('dragenter', dragEnter);
-            wrapper.removeEventListener('dragleave', dragLeave);
-            wrapper.removeEventListener('drop', dragDrop);
-        }
-
-        // Fonction appelée lorsque le glissement commence
-        function dragStart(e) {
-            e.dataTransfer.setData('text/plain', e.currentTarget.getAttribute('data-id'));
-            e.currentTarget.classList.add('dragging');
-        }
-
-        // Fonction appelée lorsque l'élément est survolé pendant le glissement
-        function dragOver(e) {
-            e.preventDefault();
-            e.currentTarget.classList.add('dragover');
-        }
-
-        // Fonction appelée lorsque l'élément est entré pendant le glissement
-        function dragEnter(e) {
-            e.preventDefault();
-            e.currentTarget.classList.add('dragover');
-        }
-
-        // Fonction appelée lorsque l'élément est quitté pendant le glissement
-        function dragLeave(e) {
-            e.currentTarget.classList.remove('dragover');
-        }
-
-        // Fonction appelée lorsque l'élément est déposé
-        function dragDrop(e) {
-            const wrapper = document.querySelector('.wrapper');
-            if (this === wrapper) {
-                wrapper.classList.remove('dragover');
-                return;
-            }
-            const draggedItemId = e.dataTransfer.getData('text/plain');
-            const selector = ".collection[data-id=\"" + draggedItemId + "\"]";
-            const draggedItem = wrapper.querySelector(selector);
-            const overItem = e.currentTarget;
-            if (draggedItem !== wrapper && draggedItem !== overItem) {
-                wrapper.insertBefore(draggedItem, overItem);
-            }
-            overItem.classList.remove('dragover');
-        }
-
-        // Fonction appelée lorsque le glissement se termine
-        function dragEnd(e) {
-            e.currentTarget.classList.remove('dragging');
-        }
-
-        function openDialog(dialog, id, elem) {
-            const infos = elem.closest(".infos");
-            dialog.querySelector("span").innerHTML = infos.querySelector(".name").innerHTML;
-            dialog.setAttribute("data-id", id);
-
-            if (typeof dialog.showModal === "function") {
-                dialog.showModal();
-                setTimeout(() => {
-                    dialog.classList.add("show")
-                }, 0);
-            } else {
-                console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
-            }
-        }
-
-        function closeDialog(dialog, deleteCollection) {
-            let deletedId = parseInt(dialog.getAttribute("data-id"));
-            dialog.removeAttribute("data-id");
-            dialog.classList.remove("show");
-            setTimeout(() => {
-                dialog.close()
-            }, 300);
-            if (deleteCollection) {
-                const xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    const selector = ".collection[data-id=\"" + deletedId + "\"]";
-                    const collection = document.querySelector(selector);
-                    setTimeout(() => {
-                        a.classList.add("deleted");
-                    }, 0);
-                    setTimeout(() => {
-                        const wrapper = collection.closest(".wrapper");
-                        wrapper.removeChild(collection);
-                    }, 300);
-                }
-                xhr.open("GET", "/" + locale + "/movie/list/delete/" + deletedId);
-                xhr.send();
-            }
-        }
-
-        function showTools(evt) {
-            const tools = evt.currentTarget.querySelector(".tools");
-            tools.classList.add("visible");
-        }
-
-        function hideTools(evt) {
-            const tools = evt.currentTarget.querySelector(".tools");
-            tools.classList.remove("visible");
-        }
-
-        function addNewCollection(evt) {
-            evt.currentTarget.classList.add("click");
-            setTimeout(() => {
-                window.location.href = "{{ path('app_movie_list_new') }}";
-            }, 100);
-        }
-
-        function editCollection(evt) {
-            const id = evt.currentTarget.parentElement.getAttribute("id");
-            console.log('edit', {id});
-            evt.preventDefault();
-            window.location.href = "/" + locale + "/movie/list/edit/" + id;
-        }
-
-        // function hideCollection(evt) {
-        //     const id = evt.currentTarget.parentElement.getAttribute("id");
-        //     console.log('hide', {id});
-        //     evt.preventDefault();
-        // }
-
-        function deleteCollection(evt) {
-            const id = evt.currentTarget.parentElement.getAttribute("id");
-            console.log('delete', {id});
-            evt.preventDefault();
-            openDialog(confirmDialog, id, evt.currentTarget);
-        }
-
-        function getSeasonCookie() {
-            return JSON.parse(decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('movie_list=')).split('=')[1]));
-        }
-
-        function setSeasonCookie(cookie) {
-            const time = new Date();
-            time.setFullYear(time.getFullYear() + 1);
-            document.cookie = "movie_list=" + encodeURIComponent(JSON.stringify(cookie)) + "; expires=" + time.toUTCString() + "; path=/";
-            console.log(getSeasonCookie());
-        }
-
-        function getLayoutSeasonCookie() {
-            return getSeasonCookie().layout;
-        }
-
-        function setLayoutSeasonCookie(layout) {
-            const cookie = getSeasonCookie();
-            cookie.layout = layout;
-            setSeasonCookie(cookie);
-        }
-    </script>
+    <script src="/js/movieList/index.js" type="module"></script>
 {% endblock %}
 

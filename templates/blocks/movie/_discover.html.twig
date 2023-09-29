@@ -20,13 +20,13 @@
     {% if discover.my_collections is defined %}
         {% if discover.my_collections is not empty %}
             <div class="my-collections">
-                {% for collection in discover.my_collections %}
+                {% for list in discover.my_collections %}
                     <div class="my-collection">
-                        <a href="{{ path("app_movie_list_show", {id: collection.id}) }}">
+                        <a href="{{ path("app_movie_list_show", {id: list.id}) }}">
                             <img
-                                    src="/images/movie_lists/thumbnails/{{ collection.thumbnail }}"
-                                    alt="{{ collection.title }}"
-                                    style="border: 2px solid {{ collection.color }}"
+                                    src="/images/movie_lists/thumbnails/{{ list.thumbnail }}"
+                                    alt="{{ list.title }}"
+                                    style="border: 2px solid {{ list.color }}"
                             >
                         </a>
                     </div>

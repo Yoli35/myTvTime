@@ -134,9 +134,9 @@ This operation is final and cannot be cancelled.: This operation is final and ca
 # Collections
 Collections: Collections
 Description: Description
-My Collections: My collections
-The movie « movie_name » has been added to your collection « collection_name ».: The movie « movie_name » has been added to your collection « collection_name ».
-The movie « movie_name » has been removed from your collection « collection_name ».: The movie « movie_name » has been removed from your collection « collection_name ».
+My lists: My lists
+The movie « movie_name » has been added to your list « list_name ».: The movie « movie_name » has been added to your list « list_name ».
+The movie « movie_name » has been removed from your list « list_name ».: The movie « movie_name » has been removed from your list « list_name ».
 
 # User Series
 First Air at: First Air at

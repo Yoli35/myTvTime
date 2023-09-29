@@ -39,7 +39,7 @@
             <div class="menu-item menu-item-collections">
                 <a href="{{ path('app_movie_list_index') }}">
                     <div class="icon"><i class="fa-solid fa-clapperboard"></i></div>
-                    <div>{{ 'My Movie Collections'|trans }}</div>
+                    <div>{{ 'My Movie lists'|trans }}</div>
                 </a>
                 {% set movieLists = userMovieLists(user) %}
                 <div class="sub-menu">
@@ -55,7 +55,7 @@
                     <div class="menu-item">
                         <a href="{{ path('app_movie_list_new') }}">
                             <div class="icon"><i class="fa-solid fa-plus"></i></div>
-                            <div>{{ 'Add collection'|trans }}</div>
+                            <div>{{ 'Add list'|trans }}</div>
                         </a>
                     </div>
                 </div>
