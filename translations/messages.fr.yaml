@@ -82,13 +82,13 @@ Time: Heure
 Today at: Aujourd'hui à
 Tomorrow at: Demain à
 New alarm: Nouvelle alarme
-Mon: Lun
-Tue: Mar
-Wed: Mer
-Thu: Jeu
-Fri: Ven
-Sat: Sam
-Sun: Dim
+Mon: L
+Tue: M
+Wed: M
+Thu: J
+Fri: V
+Sat: S
+Sun: D
 
 #settings
 Saturation: Saturation
@@ -939,6 +939,7 @@ Sound Mixer.she: Mixeuse son
 Sound Re-Recording Mixer.he: Mixeur réenregistrement sonore
 Sound Re-Recording Mixer.she: Mixeuse réenregistrement sonore
 Sound Supervisor.he: Superviseur son
+Sound Supervisor.she: Superviseuse son
 Sound.he: Son
 Sound.she: Son
 Special Effects Coordinator.he: Coordinateur effets spéciaux

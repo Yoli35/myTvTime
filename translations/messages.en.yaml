@@ -1,37 +1,98 @@
 # Home Header
-Another action: Easy Admin
+API Platform: API Platform
+Home:
+Another action: Another action
 Date: Date
 English: English
-First group: Search Tools Group
+First group: First group
 French: French
 Genre: Genre
 German: German
 Latest Serie: Latest Serie
+Login: Login
 Logout: Logout
+Movie: Movie
 Movies: Movies
 My Account: My Account
-My Movie Collections: My Movie Collections
+My Movie lists: My Movie lists
 My Movies: My Movies
-My Series: My Series
+My series: My series
 Navigation: Navigation
-People search: People search
 Php Info: Php Info
-Popular Series: Popular Series
+Logs: Logs
+My Events: My Events
+Youtube video search: Youtube video search
+People search: People search
+Pin a list: Pin a list
+Select a list: Select a list
+Popular series: Popular series
 Search Movies by: Search Movies by
 Search by Date: Search by Date
 Search by Genre: Search by Genre
 Search by Name: Search by Name
+search by: search by
 Series: Series
 Series Airing Today: Series Airing Today
 Series On The Air: Series On The Air
 Spanish: Spanish
-Toolbar with button groups: Movie Search Toolbar
+Toolbar with button groups: Toolbar with button groups
 Top rated Series: Top rated Series
 Tv Shows: Tv Shows
 Welcome: Welcome
-Home: Home
-search by: search by
-Contact: Contact
+Search by tag: Search by tag
+Go to the search by tag page: Go to the search by tag page
+Search for movies, TV shows and people: Search for movies, TV shows and people
+No image: No image
+People: People
+Among your films, series and their castings: Among your films, series and their castings
+
+# Activity
+Activity: Activity
+Activate: Activate
+Goals: Goals
+Activate Activity: Activate Activity
+Activity goals: Activity goals
+Stand Up Goal: Stand Up Goal
+Move Goal (KCal): Move Goal (KCal)
+Exercise Goal (minutes): Exercise Goal (minutes)
+back to activity: back to activity
+Recent activity: Recent activity
+Week: Week
+Activity of week: Activity of week
+No activity: No activity
+Stand up: Stand up
+Move: Move
+Exercise: Exercise
+Steps: Steps
+steps: steps
+km: km
+h: h
+Distance: Distance
+goal: goal
+Click me to edit: Click me to edit
+Click the goals button to modify: Click the goals button to modify
+
+#Alarm
+Simple alarm: Simple alarm
+Days: Days
+Every day: Every day
+Every %days% days: Every %days% days
+Every: Every
+Time: Time
+Today at: Today at
+Tomorrow at: Tomorrow at
+New alarm: New alarm
+Mon: M
+Tue: T
+Wed: W
+Thu: T
+Fri: F
+Sat: S
+Sun: S
+
+#settings
+Saturation: Saturation
+Ok: Ok
 
 # Home
 last added movies: Last added movies
@@ -386,8 +447,6 @@ Drop a profile file: Drop a profile file
 Drop a banner file: Drop a banner file
 My account: My account
 Series search: Series search
-My Events: My Events
-Youtube video search: Youtube video search
 Confidentiality policy: Confidentiality policy
 
 #weather

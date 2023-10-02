@@ -111,8 +111,10 @@
                 navigation.classList.toggle("active");
                 if (navigation.classList.contains("active")) {
                     hideConnexion();
+                    document.body.style.overflow = "hidden";
                 } else {
                     showConnexion();
+                    document.body.style.overflow = "auto";
                 }
             }
 

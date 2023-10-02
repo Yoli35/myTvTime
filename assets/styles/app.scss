@@ -259,7 +259,7 @@ main {
                 input[type=search] {
                     background-color: var(--gradient-ardoise-20);
                     color: var(--gradient-ardoise-90);
-                    width: 25rem;
+                    width: 21rem;
                 }
 
                 input[type=range] {
@@ -594,20 +594,24 @@ main {
 }
 
 .nav-new-menu {
-    @include flex-col();
+    @include flex-col(center, flex-start);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     background-color: var(--gradient-ardoise-10-alpha-50);
     gap: 1em;
     left: 0;
+    max-height: calc(100vh - 4.5rem);
+    overflow-y: auto;
     padding: 1em;
     position: fixed;
-    transform: translateY(calc(-100% - 72px));
+    top: 3rem;
+    transform: translateY(calc(-100% - 4.5rem));
     transition: transform .3s cubic-bezier(.73, .11, .67, .84);
     width: 100vw;
     z-index: 120;
 
     a {
+        font-size: 1.25rem;
         padding: .125em 1em;
 
         &:hover {
@@ -806,7 +810,7 @@ nav.active {
     @include flex-row(center, start);
     background-color: var(--gradient-ardoise-25-alpha-25);
     border-radius: .5em;
-    height: 3em;
+    //height: 3em;
     margin: 1em 0;
     padding: 0 1em;
     position: sticky;
@@ -834,7 +838,7 @@ nav.active {
         padding: 0 0;
 
         .breadcrumb-item {
-            height: 100%;
+            height: 3rem;
             font-weight: 300;
 
             a {
@@ -881,10 +885,10 @@ nav.active {
                 align-items: center;
                 color: var(--gradient-ardoise-90);
                 display: flex;
-                height: 100%;
-                max-width: 50%;
+                height: 3rem;
+                max-width: 60%;
                 overflow: hidden;
-                //padding: 0 .5em;
+                padding-inline: .5em;
                 text-overflow: ellipsis;
                 white-space: nowrap;
 
@@ -1055,7 +1059,7 @@ nav.active {
                         }
 
                         &.to-left {
-                            left: -17rem;
+                            left: -9rem;
                         }
                     }
 
@@ -1500,12 +1504,13 @@ nav.active {
 }
 
 .home-footer {
-    @include flex-100(center, space-evenly);
+    @include flex-col(center, space-evenly);
     background-color: var(--light-theme-button);
-    border-radius: .5rem;
     color: var(--light-theme-text);
-    height: 3rem;
+    gap: 1rem;
     margin: auto 0 1rem 0;
+    padding-block: 1rem;
+    width: 100%;
 
     .logo {
         @include flex-row(center, end);
@@ -1533,6 +1538,14 @@ nav.active {
             height: 100%;
             width: 100%;
         }
+    }
+}
+
+@media (min-width: 576px) {
+    .home-footer {
+        border-radius: .5rem;
+        flex-direction: row;
+        height: 3rem;
     }
 }
 
@@ -2004,6 +2017,7 @@ nav.active {
         align-items: start;
         flex-direction: row;
         font-size: 1.5em;
+        justify-content: center;
     }
 
     .home-header {
