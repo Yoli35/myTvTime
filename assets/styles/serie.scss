@@ -1018,7 +1018,7 @@
 
 .serie-page {
     .header {
-        @include flex-row(flex-start, flex-start);
+        @include flex-col();
         background-color: var(--mmt-body-bg);
         border-radius: 1rem;
         margin-bottom: 1rem;
@@ -1148,7 +1148,7 @@
             min-height: 30em;
             padding: 1em;
             position: relative;
-            width: calc(100% - 20rem);
+            width: 100%;
             z-index: 0;
 
             h1 {
@@ -2597,6 +2597,19 @@
     }
 }
 
+@media (min-width: 1100px) {
+    .serie-page {
+        .header {
+            align-items: flex-start;
+            flex-direction: row;
+
+            .infos {
+                width: calc(100% - 20rem);
+            }
+        }
+    }
+}
+
 .viewed-episode {
     @include dialog2(50em);
 
@@ -2817,7 +2830,7 @@
             color: transparent;
             font-size: 10vw;
             font-weight: 200;
-            letter-spacing: -1rem;
+            letter-spacing: -1vw;
             line-height: 1.1em;
             padding: 0 1rem;
             -webkit-text-stroke: 1px var(--gradient-ardoise-90);

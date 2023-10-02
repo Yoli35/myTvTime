@@ -29,14 +29,14 @@
         {% endif %}
     </ol>
     {% if from is defined %}
-        {% if from == 'blog' %}
-            {#                <div class="btn btn-secondary ml"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></div> #}
-        {% endif %}
-        {% if from == 'today' %}
-            <a href="{{ path('app_series_today') }}" class="ml">
-                <button class="btn btn-primary">{{ 'Today'|trans }}</button>
-            </a>
-        {% endif %}
+        {#        {% if from == 'blog' %} #}
+        {#                <div class="btn btn-secondary ml"><a href="{{ path('app_article_image_index') }}">{{ 'Images'|trans }}</a></div> #}
+        {#        {% endif %} #}
+        {#        {% if from == 'today' %} #}
+        {#            <a href="{{ path('app_series_today') }}" class="ml"> #}
+        {#                <button class="btn btn-primary">{{ 'Today'|trans }}</button> #}
+        {#            </a> #}
+        {#        {% endif %} #}
         {% if route == 'app_personal_movies' %}
             {% if collections|length %}
                 <div class="choose-movie-list">
@@ -63,4 +63,4 @@
         {% endif %}
     {% endif %}
 </nav>
-{#<pre>{{ dump(route) }}</pre>#}
+{# <pre>{{ dump(route) }}</pre> #}
