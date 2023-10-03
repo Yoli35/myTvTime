@@ -6,7 +6,7 @@ const averageColor = new AverageColor();
 
 window.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(".container");
-    if (container.clientWidth < 1200) {
+    if (container.clientWidth < 12000) {
         return;
     }
     const header = document.querySelector(".home-header-bg");

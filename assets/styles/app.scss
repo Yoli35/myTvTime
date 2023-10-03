@@ -34,7 +34,7 @@
 html {
     color-scheme: light dark;
     scroll-behavior: smooth;
-    scroll-padding: 10em;
+    scroll-padding: 10rem;
 }
 
 body {
@@ -48,7 +48,7 @@ body {
     font-size: 1rem;
     font-weight: 100;
     min-height: 100vh;
-    line-height: 1.5em;
+    line-height: 1.5rem;
     margin: 0;
 
     &.frozen {
@@ -66,7 +66,7 @@ body {
 
     input, textarea, select, button {
         font: inherit;
-        font-size: 1em;
+        font-size: 1rem;
         margin: 0;
     }
 
@@ -85,7 +85,7 @@ body {
     }
 
     h2 {
-        margin-top: .5em;
+        margin-top: .5rem;
     }
 
     h4 {
@@ -94,7 +94,7 @@ body {
 
     p {
         margin-top: 0;
-        margin-bottom: 1em;
+        margin-bottom: 1rem;
     }
 
     .d-none {
@@ -114,12 +114,12 @@ body {
     }
 
     .f-gap-1 {
-        gap: 1em;
+        gap: 1rem;
     }
 
     .d-flex-1 {
         display: flex;
-        gap: 1em;
+        gap: 1rem;
     }
 
     .p-relative {
@@ -151,13 +151,13 @@ body {
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         border: 1px solid;
-        border-radius: .5em;
+        border-radius: .5rem;
         display: flex;
-        gap: 1em;
-        //height: 3.5em;
-        margin: 1em 16em;
+        gap: 1rem;
+        //height: 3.5rem;
+        margin: 1rem 16rem;
         opacity: 1;
-        padding: 1em;
+        padding: 1rem;
         position: relative;
         transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, padding 500ms ease-in-out;
 
@@ -198,22 +198,22 @@ body {
         .close {
             cursor: pointer;
             position: absolute;
-            right: .5em;
-            top: .25em;
+            right: .5rem;
+            top: .25rem;
         }
 
         &.hide {
             height: 0;
             opacity: 0;
-            margin: 0 1em;
-            padding: 0 1em;
+            margin: 0 1rem;
+            padding: 0 1rem;
         }
     }
 }
 
 main {
     flex: 1;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
     //width: 100%;
 }
 
@@ -305,7 +305,7 @@ main {
                         max-height: 123px; // 3 * 41px
                         overflow-y: auto;
                         position: absolute;
-                        top: 2.5em;
+                        top: 2.5rem;
                         z-index: 3;
 
                         &.show {
@@ -317,7 +317,7 @@ main {
                             border-bottom: 1px solid var(--gradient-ardoise-30);
                             color: var(--gradient-ardoise-80);
                             display: flex;
-                            gap: 1em;
+                            gap: 1rem;
                             padding: .25rem 1rem;
                             width: 25rem;
 
@@ -326,8 +326,8 @@ main {
                                 border: 2px solid var(--gradient-ardoise-80);
                                 border-radius: 50%;
                                 color: var(--gradient-green-90);
-                                height: 2em;
-                                width: 2em;
+                                height: 2rem;
+                                width: 2rem;
 
                                 img {
                                     border-radius: 50%;
@@ -378,16 +378,16 @@ main {
     .accept-overlay {
         background-color: var(--gradient-ardoise-30);
         border: 1px solid var(--gradient-ardoise-50);
-        border-radius: .5em;
+        border-radius: .5rem;
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
         color: var(--gradient-ardoise-90);
-        margin: calc(50vh - 8em) auto;
-        padding: 2em;
-        width: 30em;
+        margin: calc(50vh - 8rem) auto;
+        padding: 2rem;
+        width: 30rem;
 
         .content {
             @include flex-col(flex-start, flex-start);
-            max-width: 26em;
+            max-width: 26rem;
             position: relative;
 
             .close {
@@ -395,23 +395,23 @@ main {
                 background-color: transparent;
                 border: none;
                 cursor: pointer;
-                font-size: 1em;
+                font-size: 1rem;
                 outline: none;
                 position: absolute;
-                right: -1.5em;
-                top: -1.5em;
+                right: -1.5rem;
+                top: -1.5rem;
             }
         }
 
         &.classic {
-            bottom: 1em;
+            bottom: 1rem;
             position: fixed;
-            right: 1em;
+            right: 1rem;
         }
 
         .footer {
             @include flex-col(flex-end, flex-end);
-            margin-top: 1em;
+            margin-top: 1rem;
 
             .btn-accept {
                 background-color: var(--gradient-ardoise-40);
@@ -439,10 +439,10 @@ main {
 .rgpd-header {
     background-image: url("../images/rgpd.jpg");
     background-size: cover;
-    border-radius: 1em;
-    height: 20em;
-    margin-bottom: 2em;
-    margin-top: 1em;
+    border-radius: 1rem;
+    height: 20rem;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
     width: 100%;
 }
 
@@ -459,7 +459,7 @@ main {
 }
 
 .container-fluid {
-    padding: 1em 0;
+    padding: 1rem 0;
 }
 
 @media (min-width: 576px) {
@@ -483,8 +483,8 @@ main {
         padding-right: unset;
     }
     .container-fluid {
-        padding-left: 1em;
-        padding-right: 1em;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 }
 
@@ -514,10 +514,10 @@ main {
 
 .nav-toggler {
     @include flex-row();
-    gap: 1em;
+    gap: 1rem;
     position: fixed;
-    right: 2em;
-    top: 2em;
+    right: 2rem;
+    top: 2rem;
     z-index: 1210;
 
     .toggler {
@@ -527,9 +527,9 @@ main {
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            height: 3em;
+            height: 3rem;
             outline: none;
-            width: 3em;
+            width: 3rem;
 
             .line {
                 background-color: var(--gradient-ardoise-90);
@@ -537,15 +537,15 @@ main {
                 height: 4px;
                 position: absolute;
                 transition: transform .3s ease-out, opacity .1s ease-out;
-                width: 3em;
+                width: 3rem;
             }
 
             .l1 {
-                transform: translateY(-.5em);
+                transform: translateY(-.5rem);
             }
 
             .l3 {
-                transform: translateY(.5em);
+                transform: translateY(.5rem);
             }
 
             &.active {
@@ -568,14 +568,14 @@ main {
     .connexion {
         @include flex-row();
         display: none;
-        gap: 1em;
+        gap: 1rem;
         opacity: 0;
         transition: opacity 300ms ease-in-out;
 
         > a {
             background-color: var(--gradient-ardoise-30);
             border-radius: 9999px;
-            padding: .125em 1em;
+            padding: .125rem 1rem;
 
             &:hover {
                 background-color: var(--gradient-orange-50);
@@ -598,11 +598,11 @@ main {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     background-color: var(--gradient-ardoise-10-alpha-50);
-    gap: 1em;
+    gap: 1rem;
     left: 0;
     max-height: calc(100vh - 4.5rem);
     overflow-y: auto;
-    padding: 1em;
+    padding: 1rem;
     position: fixed;
     top: 3rem;
     transform: translateY(calc(-100% - 4.5rem));
@@ -612,7 +612,7 @@ main {
 
     a {
         font-size: 1.25rem;
-        padding: .125em 1em;
+        padding: .125rem 1rem;
 
         &:hover {
             background-color: var(--gradient-orange-50);
@@ -624,51 +624,51 @@ main {
     .general {
         @include flex-col(start, start);
         background-color: var(--gradient-ardoise-20-alpha-50);
-        border-radius: .5em;
-        padding: 1em;
+        border-radius: .5rem;
+        padding: 1rem;
 
         .search-movie {
             @include flex-col(start);
-            margin-left: 1em;
+            margin-left: 1rem;
 
             .label {
-                margin: 0 0 .5em 1em;
+                margin: 0 0 .5rem 1rem;
             }
 
             .search-links {
                 @include flex-row();
-                margin: .25em 0 0 1em;
+                margin: .25rem 0 0 1rem;
             }
         }
 
         .series-label, .series-links {
             @include flex-col(start, start);
-            margin-left: 1em;
-            padding: .125em 0;
+            margin-left: 1rem;
+            padding: .125rem 0;
         }
     }
 
     .user-legal {
         @include flex-col(end, start);
-        gap: 1em;
+        gap: 1rem;
 
         .user-links {
             @include flex-col(end, start);
             background-color: var(--gradient-ardoise-20-alpha-50);
-            border-radius: .5em;
-            padding: 1em;
+            border-radius: .5rem;
+            padding: 1rem;
 
             .user {
                 @include flex-row();
-                gap: 1em;
-                margin-bottom: 1em;
-                margin-right: 1em;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                margin-right: 1rem;
 
                 .thumbnail {
                     border: 2px solid var(--gradient-ardoise-80);
                     border-radius: 50%;
-                    height: 2em;
-                    width: 2em;
+                    height: 2rem;
+                    width: 2rem;
 
                     img {
                         border-radius: 50%;
@@ -680,22 +680,22 @@ main {
         .legal {
             @include flex-col(end, start);
             background-color: var(--gradient-ardoise-20-alpha-50);
-            border-radius: .5em;
-            padding: 0 1em 1em 1em;
+            border-radius: .5rem;
+            padding: 0 1rem 1rem 1rem;
 
             .locales {
                 @include flex-row();
-                margin: 1em;
+                margin: 1rem;
 
                 a {
-                    padding: .25em;
+                    padding: .25rem;
                 }
 
                 img {
                     border: 2px solid var(--gradient-ardoise-80);
                     border-radius: 50%;
-                    height: 1em;
-                    width: 1em;
+                    height: 1rem;
+                    width: 1rem;
                 }
             }
         }
@@ -703,7 +703,7 @@ main {
 
     .main {
         text-transform: uppercase;
-        line-height: 1.5em;
+        line-height: 1.5rem;
     }
 }
 
@@ -809,10 +809,10 @@ nav.active {
     --bs-breadcrumb-divider: '°';
     @include flex-row(center, start);
     background-color: var(--gradient-ardoise-25-alpha-25);
-    border-radius: .5em;
-    //height: 3em;
-    margin: 1em 0;
-    padding: .5rem 1em;
+    border-radius: .5rem;
+    //height: 3rem;
+    margin: 1rem 0;
+    padding: .5rem 1rem;
     position: sticky;
     top: 3rem;
     z-index: 50;
@@ -846,7 +846,7 @@ nav.active {
                 border-radius: .25rem;
                 display: flex;
                 height: 3rem;
-                padding: 0 .5em;
+                padding: 0 .5rem;
 
                 &:hover, &:focus, &:active {
                     background-color: var(--gradient-orange-50);
@@ -866,7 +866,7 @@ nav.active {
 
             span {
                 //color: var(--gradient-ardoise-90);
-                //font-size: .875em;
+                //font-size: .875rem;
                 //font-variant: small-caps;
                 //font-weight: 100;
                 margin-inline: 1rem;
@@ -889,7 +889,7 @@ nav.active {
                 height: 3rem;
                 max-width: 60%;
                 overflow: hidden;
-                padding-inline: .5em;
+                padding-inline: .5rem;
                 text-overflow: ellipsis;
                 white-space: nowrap;
 
@@ -939,7 +939,7 @@ nav.active {
                 align-items: center;
                 display: flex;
                 flex-wrap: wrap;
-                gap: .5em;
+                gap: .5rem;
 
                 .separator {
                     color: var(--gradient-ardoise-60);
@@ -950,27 +950,27 @@ nav.active {
         .menu {
             color: var(--gradient-ardoise-90);
             cursor: pointer;
-            height: 2em;
-            margin: 0 2em 0 1em;
+            height: 2rem;
+            margin: 0 2rem 0 1rem;
             position: relative;
-            width: 2em;
+            width: 2rem;
             z-index: 52;
 
             //&:before {
             //    content: '°';
             //    position: absolute;
-            //    left: -1em;
-            //    top: .5em;
-            //    width: 1em;
+            //    left: -1rem;
+            //    top: .5rem;
+            //    width: 1rem;
             //}
             //
             //&:after {
             //    content: '°';
             //    position: absolute;
-            //    right: -1em;
+            //    right: -1rem;
             //    text-align: right;
-            //    top: .5em;
-            //    width: 1em;
+            //    top: .5rem;
+            //    width: 1rem;
             //}
 
             &:hover {
@@ -981,24 +981,24 @@ nav.active {
 
             img {
                 -webkit-filter: saturate(var(--gradient-saturation));
-                border-radius: .5em;
+                border-radius: .5rem;
                 border: 2px solid var(--gradient-ardoise-80);
                 filter: saturate(var(--gradient-saturation));
-                height: 2em;
+                height: 2rem;
                 object-fit: cover;
-                width: 2em;
+                width: 2rem;
             }
 
             .menu-items, .sub-menu {
                 background-color: var(--gradient-ardoise-25);
-                border-radius: .25em;
-                box-shadow: 0 0 1em var(--gradient-ardoise-10-alpha-50);
+                border-radius: .25rem;
+                box-shadow: 0 0 1rem var(--gradient-ardoise-10-alpha-50);
                 display: none;
-                left: -6em;
+                left: -6rem;
                 //overflow: hidden;
                 position: absolute;
-                top: 2em;
-                min-width: 17.25em;
+                top: 2rem;
+                min-width: 17.25rem;
                 z-index: 53;
 
                 .menu-item {
@@ -1009,8 +1009,8 @@ nav.active {
                         color: var(--gradient-ardoise-90);
                         display: flex;
                         font-weight: 100;
-                        gap: .5em;
-                        padding: 0 1em;
+                        gap: .5rem;
+                        padding: 0 1rem;
                         width: 100%;
                         white-space: nowrap;
 
@@ -1023,7 +1023,7 @@ nav.active {
                             align-items: center;
                             display: flex;
                             justify-content: center;
-                            width: 2em;
+                            width: 2rem;
                         }
 
                         .icon:has(i) {
@@ -1034,9 +1034,9 @@ nav.active {
                             img {
                                 border: 1px solid var(--gradient-ardoise-80);
                                 border-radius: 50%;
-                                height: 1.25em;
+                                height: 1.25rem;
                                 object-fit: cover;
-                                width: 1.25em;
+                                width: 1.25rem;
                             }
                         }
                     }
@@ -1079,9 +1079,9 @@ nav.active {
             align-items: center;
             color: var(--gradient-ardoise-30);
             display: flex;
-            gap: .5em;
+            gap: .5rem;
             height: 100%;
-            padding: 0 .5em;
+            padding: 0 .5rem;
         }
     }
 
@@ -1211,9 +1211,10 @@ nav.active {
     .home-header-bg {
         background-image: url("../images/mytvtime-light.png");
         background-position: center center;
-        background-size: cover;
-        height: clamp(18em, 20vw, 22em);
-        margin: 0 0 1em 0;
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: clamp(18rem, 20vw, 22rem);
+        margin: 0 0 1rem 0;
         opacity: .75;
         position: relative;
         transition: background-position 1s;
@@ -1223,21 +1224,21 @@ nav.active {
             @include flex-row();
             background-color: var(--gradient-ardoise-10-alpha-50);
             border: 2px solid;
-            height: 17.5em;
-            left: 14.5em;
+            height: 17.5rem;
+            left: 14.5rem;
             opacity: 0;
             overflow: clip;
             position: absolute;
-            top: 1em;
+            top: 1rem;
             transition: opacity 1s ease-in-out;
-            width: 12em;
+            width: 12rem;
 
             &.second {
-                left: 27.5em;
+                left: 27.5rem;
             }
 
             &.third {
-                left: 40.5em;
+                left: 40.5rem;
             }
 
             &.fade {
@@ -1265,10 +1266,10 @@ nav.active {
 .clock {
     @include flex-row();
     height: 200px;
-    left: 1em; //4em;
+    left: 1rem; //4rem;
     opacity: 0;
     position: absolute;
-    top: 1em; //clamp(1em, .25vw, 4em);
+    top: 1rem; //clamp(1rem, .25vw, 4rem);
     transition: opacity 1s ease-in-out;
     width: 200px;
 
@@ -1280,7 +1281,7 @@ nav.active {
         backdrop-filter: blur(6px);
         -webkit-backdrop-filter: blur(6px);
         background-color: var(--gradient-ardoise-10-alpha-50);
-        border-radius: 1em;
+        border-radius: 1rem;
         height: 200px;
         position: relative;
         width: 200px;
@@ -1320,7 +1321,7 @@ nav.active {
         .number {
             color: var(--gradient-ardoise-80);
             font-family: "red hat light", monospace;
-            font-size: 1em;
+            font-size: 1rem;
             font-weight: 300;
             left: 50%;
             position: absolute;
@@ -1377,7 +1378,7 @@ nav.active {
     }
 
     .username {
-        font-size: 0.875em;
+        font-size: 0.875rem;
         font-weight: 500;
         left: 50%;
         position: absolute;
@@ -1396,25 +1397,25 @@ nav.active {
     }
 
     .time {
-        font-size: 1.5em;
+        font-size: 1.5rem;
     }
 
     .date {
         background-color: var(--gradient-ardoise-90);
-        border-radius: .125em;
+        border-radius: .125rem;
         color: var(--gradient-ardoise-20);
         font-family: unset;
         font-size: 1.25rem;
         font-weight: 300;
         //leading-trim: both;
-        padding: .25em .5em;
+        padding: .25rem .5rem;
         //text-edge: cap alphabetic;
         top: 16rem;
     }
 
     .hands {
         border: 1px solid var(--gradient-ardoise-50);
-        border-radius: 1em;
+        border-radius: 1rem;
         height: 100%;
         inset: 0;
         position: absolute;
@@ -1471,24 +1472,24 @@ nav.active {
         cursor: pointer;
         display: flex;
         justify-content: center;
-        line-height: 2em;
+        line-height: 2rem;
         opacity: 0;
         position: absolute;
         transition: opacity 300ms ease-in-out;
-        top: .5em;
+        top: .5rem;
     }
 
     .close {
         background-color: var(--gradient-ardoise-30-alpha-50);
         color: var(--gradient-ardoise-80);
-        right: .5em;
+        right: .5rem;
     }
 
     .goal-achieved {
         background-color: var(--gradient-green-50);
         color: var(--gradient-ardoise-30-alpha-50);
-        left: .5em;
-        width: 1em;
+        left: .5rem;
+        width: 1rem;
 
         i {
             transform: scale(.75);
@@ -1520,9 +1521,9 @@ nav.active {
         background-image: url("../../public/apple-touch-icon.png");
         background-position: left;
         background-repeat: no-repeat;
-        background-size: 2em 2em;
-        height: 2em;
-        padding-left: 3em;
+        background-size: 2rem 2rem;
+        height: 2rem;
+        padding-left: 3rem;
     }
 
     a {
@@ -1533,8 +1534,8 @@ nav.active {
     .powered {
         background-image: url("../images/the-movie-db.svg");
         background-size: cover;
-        height: 1em;
-        width: 12em;
+        height: 1rem;
+        width: 12rem;
 
         a {
             display: block;
@@ -1571,16 +1572,16 @@ nav.active {
 
     .wrapper {
         @include flex-row(start, start);
-        gap: 1em;
+        gap: 1rem;
 
         .home-discover {
-            width: 10em;
+            width: 10rem;
 
             .no-image {
                 @include flex-col();
                 aspect-ratio: 2 / 3;
                 background-color: var(--gradient-green-40-alpha-50);
-                border-radius: .5em;
+                border-radius: .5rem;
                 color: var(--gradient-green-90);
                 width: 100%;
             }
@@ -1591,7 +1592,7 @@ nav.active {
                 .known-for {
                     @include flex-100(center, space-around);
                     bottom: 0;
-                    height: 9em;
+                    height: 9rem;
                     left: 0;
                     overflow-x: hidden;
                     position: absolute;
@@ -1601,11 +1602,11 @@ nav.active {
 
                         img, .no-poster {
                             border: 2px solid var(--gradient-ardoise-90);
-                            border-radius: .25em;
-                            height: 8em;
+                            border-radius: .25rem;
+                            height: 8rem;
                             object-fit: cover;
                             transition: scale 150ms ease-in-out;
-                            width: 5em;
+                            width: 5rem;
 
                             &:hover {
                                 scale: 1.1;
@@ -1650,15 +1651,15 @@ nav.active {
 .genres {
     @include flex-row(center, flex-start);
     flex-wrap: wrap;
-    margin-bottom: 2em;
-    padding-left: 1.25em;
+    margin-bottom: 2rem;
+    padding-left: 1.25rem;
 
     .genre {
-        border: .125em solid var(--gradient-ardoise-50);
-        border-radius: 1em;
+        border: .125rem solid var(--gradient-ardoise-50);
+        border-radius: 1rem;
         cursor: pointer;
-        margin: .25em;
-        padding: 0 .5em;
+        margin: .25rem;
+        padding: 0 .5rem;
     }
 
     .active {
@@ -1671,32 +1672,32 @@ nav.active {
 .search {
     @include flex-row();
     flex-wrap: wrap;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
 
     .search-label {
-        margin-right: 1em;
+        margin-right: 1rem;
     }
 
     .date_select,
     .sort_select {
         @include flex-row();
-        margin: 1em;
+        margin: 1rem;
 
         .label {
-            margin-right: 1em;
+            margin-right: 1rem;
         }
     }
 }
 
 .pinned-movie-list {
     background-color: var(--gradient-ardoise-30-50);
-    border-radius: 1em;
+    border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    height: 18em;
+    height: 18rem;
     opacity: 0;
     overflow-x: scroll;
-    padding: .5em;
+    padding: .5rem;
     transition: opacity .3s ease-in-out, height .3s ease-in-out;
     width: 100%;
 
@@ -1705,7 +1706,7 @@ nav.active {
     }
 
     &.mini {
-        height: 1em;
+        height: 1rem;
     }
 
     &.hide {
@@ -1714,43 +1715,43 @@ nav.active {
 
     .wrapper {
         @include flex-row(start, start);
-        gap: 1em;
+        gap: 1rem;
         margin: 0 auto;
 
         a {
             .movie {
                 @include flex-col(center, start);
                 background-color: var(--gradient-ardoise-40);
-                border-radius: .5em;
+                border-radius: .5rem;
                 color: var(--gradient-ardoise-80);
-                height: 14em;
+                height: 14rem;
                 isolation: isolate;
-                width: 8em;
+                width: 8rem;
 
                 img {
-                    border-radius: .5em .5em 0 0;
-                    height: 12em;
+                    border-radius: .5rem .5rem 0 0;
+                    height: 12rem;
                     object-fit: cover;
-                    width: 8em;
+                    width: 8rem;
                 }
 
                 .no-poster {
                     @include flex-row(center, center);
                     background-color: var(--gradient-green-20);
-                    border-radius: .5em .5em 0 0;
+                    border-radius: .5rem .5rem 0 0;
                     color: var(--gradient-green-80);
-                    height: 12em;
-                    width: 8em;
+                    height: 12rem;
+                    width: 8rem;
                 }
 
                 .title {
                     @include flex-100();
-                    font-size: .75em;
+                    font-size: .75rem;
                     font-weight: 100;
-                    height: 3em;
-                    line-height: 1em;
+                    height: 3rem;
+                    line-height: 1rem;
                     overflow: scroll;
-                    padding: 0 .25em;
+                    padding: 0 .25rem;
                     text-align: center;
                 }
             }
@@ -1761,10 +1762,10 @@ nav.active {
 .about-pinned-movie {
     @include flex-row(start, start);
     background-color: var(--gradient-ardoise-10);
-    border-radius: 1em;
+    border-radius: 1rem;
     color: var(--gradient-ardoise-80);
     font-weight: 100;
-    height: 24em;
+    height: 24rem;
     left: 0;
     opacity: 0;
     position: absolute;
@@ -1774,38 +1775,38 @@ nav.active {
 
     .content {
         @include flex-row(start, start);
-        height: 24em;
+        height: 24rem;
         position: relative;
 
         img {
-            border-radius: 1em 0 0 1em;
-            height: 24em;
+            border-radius: 1rem 0 0 1rem;
+            height: 24rem;
             object-fit: cover;
-            width: 16em;
+            width: 16rem;
         }
 
         .infos {
             @include flex-col(start, center);
             height: 100%;
-            min-width: 20em;
-            max-width: 30em;
-            padding: 1em;
+            min-width: 20rem;
+            max-width: 30rem;
+            padding: 1rem;
             position: relative;
 
             div:last-child {
-                margin-top: 1em;
-                max-height: 18em;
+                margin-top: 1rem;
+                max-height: 18rem;
                 overflow: scroll;
             }
         }
 
         .shade {
             background: linear-gradient(rgba(0, 0, 0, 0), var(--gradient-ardoise-10) 75%);
-            bottom: 0.5em;
-            height: 3em;
-            left: 16em;
+            bottom: 0.5rem;
+            height: 3rem;
+            left: 16rem;
             position: absolute;
-            width: calc(100% - 16em);
+            width: calc(100% - 16rem);
         }
     }
 
@@ -1829,10 +1830,10 @@ nav.active {
     width: 100%;
 
     .content {
-        @include flex-row(stretch, space-evenly);
+        @include flex-row(stretch, center);
         flex-wrap: wrap;
-        gap: 1em;
-        margin: 1em 0;
+        gap: 1rem .5rem;
+        margin: 1rem 0;
 
         .see-more {
             @include flex-100;
@@ -1841,11 +1842,11 @@ nav.active {
 
     .footer-infos {
         @include flex-col();
-        margin-top: 1em;
+        margin-top: 1rem;
 
         div {
             color: #142b34;
-            font-size: .8em;
+            font-size: .8rem;
             padding: 0;
         }
     }
@@ -1854,11 +1855,11 @@ nav.active {
 .home-discover {
     @include flex-col();
     border-radius: .5rem;
-    font-size: .75em;
+    font-size: .75rem;
     font-weight: 100;
     overflow: hidden;
     position: relative;
-    width: 100%;
+    width: 80%;
 
     a {
         @include flex-col(center, unset);
@@ -1868,7 +1869,7 @@ nav.active {
 
         img {
             aspect-ratio: 2 / 3;
-            border-radius: .5em;
+            border-radius: .5rem;
             object-fit: cover;
             width: 100%;
         }
@@ -1886,9 +1887,9 @@ nav.active {
 
         .title {
             color: var(--gradient-ardoise-30);
-            line-height: 1em;
+            line-height: 1rem;
             margin-top: auto;
-            padding-top: .5em;
+            padding-top: .5rem;
             text-align: center;
         }
 
@@ -1902,17 +1903,17 @@ nav.active {
             border-radius: 50%;
             height: auto;
             position: absolute;
-            right: -.5em;
-            top: -.5em;
-            width: 2em;
+            right: -.5rem;
+            top: -.5rem;
+            width: 2rem;
         }
     }
 
     .user {
         @include flex-row(center, center);
         position: absolute;
-        right: 1em;
-        top: 1em;
+        right: 1rem;
+        top: 1rem;
 
         .has-been-seen {
             @include flex-row();
@@ -1920,9 +1921,9 @@ nav.active {
             border-radius: 50%;
             color: var(--gradient-ardoise-80);
             cursor: pointer;
-            height: 1.35em;
-            padding: 0 .2em;
-            width: 1.35em;
+            height: 1.35rem;
+            padding: 0 .2rem;
+            width: 1.35rem;
 
             &.yes {
                 color: var(--gradient-green-60);
@@ -1937,16 +1938,16 @@ nav.active {
     .my-collections {
         @include flex-col();
         position: absolute;
-        right: -1.25em;
-        top: 4em;
+        right: -1.25rem;
+        top: 4rem;
 
         .my-collection {
-            margin-top: -1em;
+            margin-top: -1rem;
 
             a {
-                height: 3em;
+                height: 3rem;
                 transition: all .125s ease-out;
-                width: 3em;
+                width: 3rem;
 
                 img {
                     border: 2px solid #11d08e;
@@ -1974,16 +1975,16 @@ nav.active {
     background: var(--under-construction);
     background-position-x: 0;
     border-radius: 999px;
-    padding: .5em;
+    padding: .5rem;
 
     .content {
         background-color: var(--gradient-yellow-50-alpha-50);
         border-radius: 999px;
         color: var(--gradient-red-20);
-        font-size: 1.5em;
+        font-size: 1.5rem;
         font-weight: bold;
-        line-height: 1.2em;
-        padding: 1em 2em;
+        line-height: 1.2rem;
+        padding: 1rem 2rem;
         text-align: center;
         width: 336px;
     }
@@ -1997,12 +1998,12 @@ nav.active {
 
 @media (min-width: 576px) { /* 540 */
     .home-discover {
-        width: 18em;
+        width: 13.5rem;
     }
     .home-list {
         .wrapper {
             .home-discover {
-                width: 18em;
+                width: 13.5rem;
 
             }
         }
@@ -2012,29 +2013,29 @@ nav.active {
 @media (min-width: 768px) { /* 720 */
     .nav-menu {
         > a {
-            font-size: 1.5em;
+            font-size: 1.5rem;
         }
     }
 
     .nav-new-menu {
         align-items: start;
         flex-direction: row;
-        font-size: 1.5em;
+        font-size: 1.5rem;
         justify-content: center;
     }
 
     .home-header {
-        border-radius: 1em;
-        margin: 1em 0;
+        border-radius: 1rem;
+        margin: 1rem 0;
 
         .home-header-bg {
-            border-radius: 1em;
+            border-radius: 1rem;
         }
     }
 
     .home-discovers {
         .content {
-            margin: 2em 0;
+            margin: 2rem 0;
         }
 
         .footer-infos {
@@ -2125,7 +2126,7 @@ nav.active {
 
     .genres {
         .genre {
-            border: .125em solid var(--gradient-ardoise-50);
+            border: .125rem solid var(--gradient-ardoise-50);
         }
 
         .active {
@@ -2212,19 +2213,19 @@ nav.active {
             background-color: var(--gradient-ardoise-90);
             border-bottom: 1px solid var(--gradient-ardoise-60);
             border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
-            padding: .5em 1em;
+            padding: .5rem 1rem;
             margin-bottom: 0;
         }
 
         .body {
             border-bottom: 1px solid var(--gradient-ardoise-60);
-            padding: 1em;
+            padding: 1rem;
 
             .control {
                 > div {
                     @include flex-col(start, start);
-                    margin-bottom: 1em;
-                    width: 20em;
+                    margin-bottom: 1rem;
+                    width: 20rem;
 
                     .error {
                         color: darkred;
@@ -2232,7 +2233,7 @@ nav.active {
 
                     label {
                         font-weight: 200;
-                        margin-bottom: .25em;
+                        margin-bottom: .25rem;
                     }
 
                     input {
@@ -2252,19 +2253,19 @@ nav.active {
                     flex-direction: row-reverse;
 
                     label {
-                        padding-left: .5em;
+                        padding-left: .5rem;
                     }
                 }
             }
 
             .input {
                 @include flex-col(start, start);
-                margin-bottom: .5em;
-                width: 20em;
+                margin-bottom: .5rem;
+                width: 20rem;
 
                 label {
                     color: var(--gradient-ardoise-40);
-                    margin-bottom: .25em;
+                    margin-bottom: .25rem;
                     width: 100%;
                 }
 
@@ -2283,7 +2284,7 @@ nav.active {
             @include flex-100(end, end);
             background-color: var(--gradient-ardoise-90);
             border-radius: 0 0 calc(0.5rem - 1px) calc(0.5rem - 1px);
-            padding: .5em 1em;
+            padding: .5rem 1rem;
 
             .btn {
                 background-color: var(--gradient-ardoise-80);

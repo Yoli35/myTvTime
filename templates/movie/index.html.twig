@@ -2,7 +2,7 @@
 {% block title %}myTvTime ▶ ︎{{ 'Movies'|trans }} ▶ ︎{{ 'Page'|trans }} {{ pages.page }}{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container-fluid">
 
         {{ include('blocks/_mainMenu.html.twig') }}
 
@@ -12,26 +12,27 @@
 
         {{ include('blocks/_nav.html.twig', {thisPage: 'Movies', user: app.user}) }}
 
-            <div class="search">
-                <div class="search-label">{{ 'Search Movies by'|trans }}</div>
-                <div class="btn-toolbar" role="toolbar" aria-label="{{ 'Toolbar with button groups'|trans }}">
-                    <div class="btn-group btn-group-sm me-2" role="group" aria-label="{{ 'First group'|trans }}">
-                        <a href="{{ path('app_movies_search', {query: ''}) }}" class="btn btn-outline-secondary">{{ 'Name'|trans }}</a>
-                        <a href="{{ path('app_movies_by_genre', {genres: '1'}) }}" class="btn btn-outline-secondary">{{ 'Genre'|trans }}</a>
-                        <a href="{{ path('app_movies_by_date', {date: '2022'}) }}" class="btn btn-outline-secondary">{{ 'Date'|trans }}</a>
-                    </div>
+        <div class="search">
+            <div class="search-label">{{ 'Search Movies by'|trans }}</div>
+            <div class="btn-toolbar" role="toolbar" aria-label="{{ 'Toolbar with button groups'|trans }}">
+                <div class="btn-group btn-group-sm me-2" role="group" aria-label="{{ 'First group'|trans }}">
+                    <a href="{{ path('app_movies_search', {query: ''}) }}" class="btn btn-outline-secondary">{{ 'Name'|trans }}</a>
+                    <a href="{{ path('app_movies_by_genre', {genres: '1'}) }}" class="btn btn-outline-secondary">{{ 'Genre'|trans }}</a>
+                    <a href="{{ path('app_movies_by_date', {date: 'now'|date("Y")}) }}" class="btn btn-outline-secondary">{{ 'Date'|trans }}</a>
                 </div>
-                <form>
-                    <div class="sort_select">
-                        <div class="label">{{ 'Sort'|trans }}</div>
-                        <select id="sort" class="form-select form-select-sm" aria-label="{{ 'Sort selection'|trans }}">
+            </div>
+            <form>
+                <div class="sort_select">
+                    <label class="label">{{ 'Sort'|trans }}
+                        <select id="sort" aria-label="{{ 'Sort selection'|trans }}">
                             {% for key, sort in sorts.options %}
                                 <option value="{{ sort }}"{% if sort == sorts.sort_by %} selected{% endif %}>{{ key|raw }}</option>
                             {% endfor %}
                         </select>
-                    </div>
-                </form>
-            </div>
+                    </label>
+                </div>
+            </form>
+        </div>
 
         <div class="home-discovers">
             {{ include('blocks/movie/_discoverPaging.html.twig') }}
