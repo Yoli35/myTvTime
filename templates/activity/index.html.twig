@@ -168,9 +168,8 @@
                                                                                       name="exerciseResult"
                                                                                       value="{{ day.exerciseResult }}"/></label>
                                                                     </div>
-                                                                    /
-                                                                    <div class="goal"
-                                                                         data-title="{{ 'Click the goals button to modify'|trans }}">{{ goal }} {{ 'minutes'|trans }}</div>
+                                                                    <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">
+                                                                        /&nbsp;{{ goal }} {{ 'minutes'|trans }}</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -207,8 +206,9 @@
                                                                 <div class="detail">
                                                                     <div class="result">{{ day.standUpResult }}</div>
                                                                     /
-                                                                    <div class="goal"
-                                                                         data-title="{{ 'Click the goals button to modify'|trans }}">{{ goal }}</div>
+                                                                    <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">
+                                                                        {{ goal }}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="wrapper">
                                                                     <div class="hours" data-id="{{ activity.id }}"

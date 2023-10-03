@@ -152,7 +152,7 @@
                         background-color: var(--gradient-ardoise-40);
 
                         .activity-of-the-day {
-                            @include flex-row(stretch, center);
+                            //align-items: stretch;
 
                             .rings-of-the-day {
                                 background-color: var(--gradient-ardoise-10-alpha-50);
@@ -323,6 +323,7 @@
                                     align-items: center;
                                     flex-direction: row;
                                     flex-wrap: wrap;
+                                    gap: 0;
                                     justify-content: space-evenly;
 
                                     .detail {
@@ -413,27 +414,34 @@
                             }
 
                             .block-body {
-                                .result {
-                                    position: relative;
+                                .details {
+                                    .detail {
+                                        flex-wrap: wrap;
+                                        justify-content: center;
 
-                                    span {
-                                        cursor: pointer;
-                                    }
+                                        .result {
+                                            position: relative;
 
-                                    input {
-                                        background-color: var(--gradient-green-90);
-                                        border: 1px solid var(--activity-exercise);
-                                        border-radius: .25em;
-                                        color: var(--gradient-ardoise-10);
-                                        display: none;
-                                        font-size: 1em;
-                                        font-weight: 400;
-                                        inset: -.125em 0 -.125em -.5em;
-                                        padding: .5em;
-                                        position: absolute;
+                                            span {
+                                                cursor: pointer;
+                                            }
 
-                                        &.visible {
-                                            display: block;
+                                            input {
+                                                background-color: var(--gradient-green-90);
+                                                border: 1px solid var(--activity-exercise);
+                                                border-radius: .25em;
+                                                color: var(--gradient-ardoise-10);
+                                                display: none;
+                                                font-size: 1em;
+                                                font-weight: 400;
+                                                inset: -.125em 0 -.125em -.5em;
+                                                padding: .5em;
+                                                position: absolute;
+
+                                                &.visible {
+                                                    display: block;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -819,6 +827,69 @@
         translate: 0 -.55em;
         width: 1em;
         z-index: 1;
+    }
+}
+
+@media (max-width: 1140px) {
+    .activity {
+        .nav-breadcrumb {
+            display: none;
+        }
+
+        main {
+            margin-block-start: 1rem;
+
+            .recent-activity {
+                .days {
+                    align-items: center;
+
+                    .day {
+                        width: unset;
+
+                        .activity-of-the-day {
+                            align-items: center;
+                            flex-direction: column;
+
+                            .rings-of-the-day {
+                                border-radius: 50% 50% .25rem .25rem;
+                            }
+                        }
+
+                        .move, .exercise, .stand-up {
+                            width: unset;
+
+                            .block-body {
+                                .details {
+                                    gap: .5em;
+                                    min-width: 18rem;
+                                    width: unset;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .week {
+                .days {
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 1rem;
+                    justify-content: center;
+                    height: unset;
+                    overflow: unset;
+                    padding: 1em 0;
+                }
+            }
+
+            .form {
+                form {
+                    > div {
+                        flex-direction: column;
+                    }
+                }
+            }
+        }
     }
 }
 
