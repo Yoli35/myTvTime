@@ -144,7 +144,7 @@
         .result {
             @include flex-100(stretch, center);
             flex-wrap: wrap;
-            gap: 1em;
+            gap: .5em;
             margin-top: 2em;
         }
     }
