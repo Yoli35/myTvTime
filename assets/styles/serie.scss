@@ -1,20 +1,20 @@
 @import "variables";
 
 .my-series, .series-search {
-    --serie-lg-height: 15em;
-    --serie-lg-poster-width: 9.984375em;
-    --serie-md-height: 10em;
-    --serie-md-poster-width: 6.65625em;
+    --serie-lg-height: 15rem;
+    --serie-lg-poster-width: 9.984375rem;
+    --serie-md-height: 10rem;
+    --serie-md-poster-width: 6.65625rem;
 
     @include flex-col(flex-start, center);
-    //padding-top: 1em;
+    //padding-top: 1rem;
 
     .header {
         --quote-opacity: 1;
 
         @include animated-header("../images/serie-header.jpg");
         background-color: var(--gradient-ardoise-10);
-        margin-bottom: 1em;
+        margin-bottom: 1rem;
         transition: background-color 3s ease-in-out;
 
         .animated-h1 {
@@ -43,9 +43,9 @@
 
         .quote {
             @include flex-100(center, flex-end);
-            font-size: 1.1em;
+            font-size: 1.1rem;
             font-weight: 100;
-            //line-height: 1em;
+            //line-height: 1rem;
             opacity: var(--quote-opacity);
             position: absolute;
             text-align: right;
@@ -56,19 +56,19 @@
             }
 
             &.n1 {
-                right: 1em;
-                top: 1em;
+                right: 1rem;
+                top: 1rem;
             }
 
             &.n2 {
-                right: 1em;
-                bottom: 1em;
+                right: 1rem;
+                bottom: 1rem;
             }
 
             &.n3 {
-                bottom: 1em;
+                bottom: 1rem;
                 justify-content: flex-start;
-                left: 1em;
+                left: 1rem;
 
                 div {
                     text-align: left;
@@ -76,9 +76,9 @@
             }
 
             &.n4 {
-                left: 1em;
+                left: 1rem;
                 justify-content: flex-start;
-                top: 1em;
+                top: 1rem;
 
                 div {
                     text-align: left;
@@ -86,9 +86,9 @@
             }
 
             div {
-                border-radius: .5em;
+                border-radius: .5rem;
                 max-width: 48%;
-                padding: .5em 1em;
+                padding: .5rem 1rem;
                 text-align: right;
 
                 b {
@@ -103,22 +103,22 @@
 
         .indicators {
             @include flex-row();
-            bottom: 1em;
-            height: 1em;
+            bottom: 1rem;
+            height: 1rem;
             position: absolute;
 
             .indicator {
                 background-color: var(--gradient-ardoise-90);
-                border-radius: .125em;
+                border-radius: .125rem;
                 cursor: pointer;
-                height: .25em;
-                margin: 0 .125em;
+                height: .25rem;
+                margin: 0 .125rem;
                 opacity: .75;
                 transition: height 500ms ease-in-out;
-                width: 1em;
+                width: 1rem;
 
                 &.active {
-                    height: .75em;
+                    height: .75rem;
                 }
             }
         }
@@ -128,11 +128,11 @@
             background-color: transparent;
             cursor: pointer;
             height: 100%;
-            font-size: 2em;
+            font-size: 2rem;
             position: absolute;
             top: 0;
             transition: background-color .5s ease-in-out;
-            width: 1.5em;
+            width: 1.5rem;
 
             &:hover {
                 background-color: var(--gradient-ardoise-90-alpha-10);
@@ -149,7 +149,7 @@
     }
 
     .nav-breadcrumb {
-        margin: 1em 0 1em auto;
+        margin: 1rem 0 1rem auto;
     }
 
     main {
@@ -162,9 +162,9 @@
 
         .wrapper {
             @include flex-col(flex-start, flex-start);
-            //font-size: .75em;
+            //font-size: .75rem;
             font-weight: 100;
-            gap: 1em;
+            gap: 1rem;
 
             > div {
                 width: 100%;
@@ -172,11 +172,11 @@
 
             .nothing {
                 background-color: var(--gradient-ardoise-50);
-                border-radius: .25em;
-                font-size: 3em;
+                border-radius: .25rem;
+                font-size: 3rem;
                 font-weight: normal;
-                margin: 2em;
-                padding: 1em 2em;
+                margin: 2rem;
+                padding: 1rem 2rem;
                 text-align: center;
             }
 
@@ -187,7 +187,7 @@
                     background-color: var(--gradient-ardoise-90);
                     border-radius: 0;
                     height: var(--serie-lg-height);
-                    margin-bottom: 1em;
+                    margin-bottom: 1rem;
                     //overflow: hidden;
                     position: relative;
                     transition: scale 300ms ease-in-out;
@@ -197,7 +197,7 @@
                         background-color: var(--gradient-ardoise-90);
                         background-position: center center;
                         background-size: cover;
-                        border-radius: 0 .5em .5em 0;
+                        border-radius: 0 .5rem .5rem 0;
                         inset: 0 0 0 var(--serie-lg-poster-width);
                         mix-blend-mode: plus-lighter;
                         opacity: .2;
@@ -220,7 +220,7 @@
                             @include flex-col();
                             aspect-ratio: 2 / 3;
                             background-color: var(--gradient-green-40-alpha-50);
-                            border-radius: .5em 0 0 .5em;
+                            border-radius: .5rem 0 0 .5rem;
                             color: var(--gradient-green-90);
                             width: var(--serie-lg-poster-width);
                         }
@@ -229,7 +229,7 @@
                     .infos {
                         @include flex-col(flex-start, flex-start);
                         height: var(--serie-lg-height);
-                        padding: .5em;
+                        padding: .5rem;
                         width: calc(100% - calc(2 * var(--serie-lg-poster-width)));
                         z-index: 0;
 
@@ -244,7 +244,7 @@
                         }
 
                         div:last-child {
-                            max-height: calc(var(--serie-lg-height) - 8em);
+                            max-height: calc(var(--serie-lg-height) - 8rem);
                             overflow: hidden;
                             text-overflow: ellipsis;
                             width: 100%;
@@ -273,14 +273,14 @@
                         background-color: var(--gradient-ardoise-90);
                         border: 2px solid var(--gradient-ardoise-10);
                         border-radius: 50%;
-                        bottom: 1em;
-                        height: 4em;
-                        left: 1em;
+                        bottom: 1rem;
+                        height: 4rem;
+                        left: 1rem;
                         object-fit: cover;
                         overflow: hidden;
-                        padding: .25em;
+                        padding: .25rem;
                         position: absolute;
-                        width: 4em;
+                        width: 4rem;
                         z-index: 1;
 
                         img {
@@ -290,18 +290,18 @@
 
                     .status {
                         @include flex-row();
-                        //border-radius: .5em;
+                        //border-radius: .5rem;
                         //border: 2px solid;
-                        //right: 4em;
-                        //top: -.75em;
+                        //right: 4rem;
+                        //top: -.75rem;
                         //z-index: 10;
                         background-color: var(--gradient-green-40-alpha-50);
                         bottom: 0;
                         color: var(--gradient-green-90);
                         font-weight: 300;
-                        height: 2em;
+                        height: 2rem;
                         left: var(--serie-lg-poster-width);
-                        padding: 0 1em;
+                        padding: 0 1rem;
                         position: absolute;
                         right: var(--serie-lg-poster-width);
 
@@ -324,15 +324,15 @@
                     .favorite {
                         @include flex-row();
                         background-color: var(--gradient-green-30);
-                        border-radius: .5em;
+                        border-radius: .5rem;
                         color: var(--gradient-ardoise-100);
                         font-weight: 300;
-                        height: 2em;
+                        height: 2rem;
                         position: absolute;
-                        right: 15em;
+                        right: 15rem;
                         text-align: center;
-                        top: 2em;
-                        width: 8em;
+                        top: 2rem;
+                        width: 8rem;
                     }
 
                     .today, .tomorrow, .after-tomorrow, .this-week, .later, .next, .passed, .in-production, .planned {
@@ -425,11 +425,11 @@
                     }
 
                     .add {
-                        @include seen(var(--serie-add), 1.5em);
+                        @include seen(var(--serie-add), 1.5rem);
                     }
 
                     .seen {
-                        @include seen(var(--serie-seen), 1.5em);
+                        @include seen(var(--serie-seen), 1.5rem);
                     }
 
                     &.search {
@@ -447,15 +447,15 @@
                     }
 
                     .front {
-                        border: .25em solid transparent;
-                        border-radius: .5em;
+                        border: .25rem solid transparent;
+                        border-radius: .5rem;
                         inset: 0;
                         position: absolute;
                         transition: border 100ms ease-in-out;
 
                         &:hover {
-                            border: .25em solid var(--gradient-ardoise-90);
-                            //outline-offset: -.25em;
+                            border: .25rem solid var(--gradient-ardoise-90);
+                            //outline-offset: -.25rem;
                         }
                     }
 
@@ -509,46 +509,46 @@
 
             .message {
                 @include flex-row(center, flex-start);
-                margin-bottom: 2em;
+                margin-bottom: 2rem;
                 position: relative;
 
                 .content {
                     background-color: var(--gradient-ardoise-30);
-                    border-radius: .5em;
+                    border-radius: .5rem;
                     color: var(--gradient-ardoise-90);
-                    font-size: 2em;
+                    font-size: 2rem;
                     font-weight: bold;
-                    padding: 1em 2em;
+                    padding: 1rem 2rem;
                 }
 
                 .close {
                     border-radius: 50%;
                     cursor: pointer;
-                    font-size: 1.5em;
+                    font-size: 1.5rem;
                     margin-left: auto;
                     position: absolute;
-                    right: .25em;
+                    right: .25rem;
                     top: 0;
                 }
             }
         }
 
         .series-tools {
-            margin-bottom: 1em;
+            margin-bottom: 1rem;
             position: unset;
             top: unset;
             width: 100%;
 
             &.sticky {
                 position: sticky;
-                top: 4em;
+                top: 4rem;
             }
 
             .pages {
                 background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 0;
                 min-height: unset;
-                padding: .5em;
+                padding: .5rem;
 
                 &.mobile {
                     display: block;
@@ -564,29 +564,29 @@
 
                 .page-group {
                     @include flex-row();
-                    border-radius: .25em;
+                    border-radius: .25rem;
 
                     .page:nth-child(1n+0) {
                         border-bottom: 1px solid var(--gradient-ardoise-80);
                         border-left: 0;
                         border-right: 1px solid var(--gradient-ardoise-80);
                         border-top: 1px solid var(--gradient-ardoise-80);
-                        padding: .25em 0;
+                        padding: .25rem 0;
                     }
 
                     .page:first-child {
                         border-left: 1px solid var(--gradient-ardoise-80);
-                        border-radius: .25em 0 0 .25em;
+                        border-radius: .25rem 0 0 .25rem;
                     }
 
                     .page:last-child {
-                        border-radius: 0 .25em .25em 0;
+                        border-radius: 0 .25rem .25rem 0;
                     }
 
                     .page {
                         font-weight: 100;
-                        min-height: calc(2em + 2px);
-                        min-width: 2em;
+                        min-height: calc(2rem + 2px);
+                        min-width: 2rem;
                         transition: all .3s;
 
                         &.current {
@@ -603,7 +603,7 @@
                         a, div {
                             @include flex-row();
                             height: 100%;
-                            min-height: 2em;
+                            min-height: 2rem;
                             width: 100%;
                         }
                     }
@@ -619,7 +619,7 @@
                 color: var(--gradient-ardoise-80);
                 cursor: pointer;
                 font-weight: 100;
-                padding: .25em 1em;
+                padding: .25rem 1rem;
                 text-transform: uppercase;
                 width: 100%;
 
@@ -641,7 +641,7 @@
             h2 {
                 color: var(---gradient-orange-70);
                 display: none;
-                font-size: 1.5em;
+                font-size: 1.5rem;
                 margin-top: 0;
             }
 
@@ -649,7 +649,7 @@
                 background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 0;
                 min-height: unset;
-                padding: .5em;
+                padding: .5rem;
 
                 .group {
                     @include flex-100(center, space-between);
@@ -662,8 +662,8 @@
                     details {
                         div {
                             background-color: var(--gradient-ardoise-80);
-                            border-radius: .5em;
-                            padding: .5em;
+                            border-radius: .5rem;
+                            padding: .5rem;
                         }
                     }
                 }
@@ -686,8 +686,8 @@
                 @include flex-col(flex-start, flex-start);
                 background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 0;
-                margin-bottom: 1em;
-                padding: .5em;
+                margin-bottom: 1rem;
+                padding: .5rem;
 
                 .sort {
                     @include flex-100();
@@ -703,12 +703,12 @@
                                 border-bottom: 2px solid var(--gradient-ardoise-80);
                                 border-right: 2px solid var(--gradient-ardoise-80);
                                 content: '';
-                                height: .5em;
+                                height: .5rem;
                                 position: absolute;
-                                right: .5em;
-                                top: .75em;
+                                right: .5rem;
+                                top: .75rem;
                                 transform: rotate(45deg);
-                                width: .5em;
+                                width: .5rem;
                                 z-index: 2;
                             }
 
@@ -718,7 +718,7 @@
                                 border: 0 solid var(--gradient-ardoise-80);
                                 color: var(--gradient-ardoise-80);
                                 font-weight: 100;
-                                padding: .25em 1em .25em .25em;
+                                padding: .25rem 1rem .25rem .25rem;
                                 position: relative;
                                 width: 100%;
 
@@ -750,11 +750,11 @@
                         .value {
                             @include flex-col();
                             background-color: var(--gradient-ardoise-40);
-                            border-radius: .5em;
+                            border-radius: .5rem;
                             font-weight: 100;
-                            margin: .5em;
-                            padding: .5em 1em;
-                            width: calc(20% - 2em);
+                            margin: .5rem;
+                            padding: .5rem 1rem;
+                            width: calc(20% - 2rem);
                         }
                     }
                 }
@@ -799,10 +799,10 @@
                                 background-image: url("../images/settings.png");
                                 background-size: cover;
                                 cursor: pointer;
-                                height: 1.5em;
-                                margin-left: .5em;
+                                height: 1.5rem;
+                                margin-left: .5rem;
                                 transition: rotate .2s ease-in-out;
-                                width: 1.5em;
+                                width: 1.5rem;
 
                                 &:hover {
                                     rotate: 180deg;
@@ -812,32 +812,32 @@
 
                         .anim-settings {
                             @include flex-col(start, start);
-                            height: 32em;
+                            height: 32rem;
                             overflow: hidden;
                             transition: height 500ms ease-in-out;
                             width: 100%;
 
                             .slider {
                                 @include flex-col(start, start);
-                                margin-bottom: 1em;
+                                margin-bottom: 1rem;
                                 width: 100%;
 
                                 .label {
                                     @include flex-100(start, center);
                                     font-weight: 100;
                                     text-transform: uppercase;
-                                    margin-bottom: .5em;
+                                    margin-bottom: .5rem;
 
                                     .values {
                                         margin-left: auto;
 
                                         .value {
                                             border: none;
-                                            border-radius: .25em;
+                                            border-radius: .25rem;
                                             font-weight: 100;
-                                            margin: 0 .5em;
-                                            max-width: 6em;
-                                            padding: .125em .25em;
+                                            margin: 0 .5rem;
+                                            max-width: 6rem;
+                                            padding: .125rem .25rem;
 
                                             &.min {
                                                 background-color: var(--gradient-orange-90);
@@ -861,7 +861,7 @@
 
                                     .interval {
                                         @include flex-100();
-                                        height: 1em;
+                                        height: 1rem;
                                         //position: relative;
                                         //width: 100%;
 
@@ -873,7 +873,7 @@
                                             left: 0;
                                             position: relative;
                                             //position: absolute;
-                                            top: calc(.5em - 2px);
+                                            top: calc(.5rem - 2px);
                                             width: 100%;
 
                                             .between {
@@ -892,12 +892,12 @@
                                                 background-color: var(--gradient-ardoise-100);
                                                 border-radius: 50%;
                                                 cursor: pointer;
-                                                height: 1em;
+                                                height: 1rem;
                                                 left: 0;
                                                 position: relative;
                                                 //position: absolute;
                                                 transition: scale .2s ease-in-out;
-                                                width: 1em;
+                                                width: 1rem;
 
                                                 &.min {
                                                     background-color: var(--gradient-orange-80);
@@ -943,11 +943,11 @@
 
 .bubble {
     @include flex-col(center, revert);
-    height: 4em;
-    left: -5.25em;
+    height: 4rem;
+    left: -5.25rem;
     opacity: 0;
     position: absolute;
-    top: -5em;
+    top: -5rem;
     transition: opacity .25s;
     z-index: 1000;
 
@@ -958,20 +958,20 @@
     .body {
         @include flex-row();
         background-color: var(--gradient-ardoise-10);
-        border-radius: .25em;
+        border-radius: .25rem;
         color: var(--gradient-ardoise-80);
-        min-height: 2em;
-        width: 10em;
+        min-height: 2rem;
+        width: 10rem;
         z-index: 2;
     }
 
     .tail {
         background-color: var(--gradient-ardoise-10);
-        border-radius: .125em;
-        min-height: 1em;
+        border-radius: .125rem;
+        min-height: 1rem;
         rotate: 45deg;
-        translate: 0 -.55em;
-        width: 1em;
+        translate: 0 -.55rem;
+        width: 1rem;
         z-index: 1;
     }
 }
@@ -979,12 +979,12 @@
 .bubble-v2 {
     @include flex-row();
     background-color: var(--gradient-ardoise-10);
-    border-radius: .25em;
+    border-radius: .25rem;
     color: var(--gradient-ardoise-80);
     opacity: 0;
     position: absolute;
-    left: -10.5em;
-    top: -12em;
+    left: -10.5rem;
+    top: -12rem;
     transition: opacity .25s;
     z-index: 1000;
 
@@ -993,24 +993,24 @@
     }
 
     .still {
-        height: 10em;
-        width: 7em;
+        height: 10rem;
+        width: 7rem;
 
         img {
-            height: 10em;
+            height: 10rem;
             object-fit: cover;
-            width: 7em;
+            width: 7rem;
         }
     }
 
     .infos {
         @include flex-col(start, center);
-        height: 10em;
-        padding: 1em;
-        width: 14em;
+        height: 10rem;
+        padding: 1rem;
+        width: 14rem;
 
         div:first-child {
-            font-size: 1.5em;
+            font-size: 1.5rem;
             font-weight: 300;
         }
     }
@@ -1033,16 +1033,16 @@
             z-index: 0;
 
             .poster {
-                height: 30em;
-                //min-width: 20em;
+                height: 30rem;
+                //min-width: 20rem;
                 position: relative;
                 z-index: 0;
 
                 > img {
-                    border-radius: .5em;
-                    height: 30em;
+                    border-radius: .5rem;
+                    height: 30rem;
                     object-fit: cover;
-                    min-width: 20em;
+                    min-width: 20rem;
                 }
 
                 .watch-providers {
@@ -1052,37 +1052,37 @@
                     overflow-x: scroll;
                     position: absolute;
                     scroll-snap-type: x mandatory;
-                    width: 20em;
+                    width: 20rem;
 
                     .watch-provider {
                         @include flex-row();
                         background-color: var(--gradient-ardoise-10);
-                        border-radius: 0 0 .5em .5em;
+                        border-radius: 0 0 .5rem .5rem;
                         color: var(--gradient-ardoise-80);
-                        height: 4em;
+                        height: 4rem;
                         scroll-snap-align: start;
-                        width: 20em;
+                        width: 20rem;
 
                         .logo {
-                            border-radius: .25em;
-                            height: 3em;
-                            margin: .5em;
-                            width: 3em;
+                            border-radius: .25rem;
+                            height: 3rem;
+                            margin: .5rem;
+                            width: 3rem;
 
                             > img {
-                                border-radius: .25em;
-                                height: 3em;
+                                border-radius: .25rem;
+                                height: 3rem;
                                 object-fit: cover;
-                                width: 3em;
+                                width: 3rem;
                             }
                         }
 
                         .watch {
                             @include flex-col();
                             font-weight: 100;
-                            height: 4em;
-                            //margin-left: 1em;
-                            width: 16em;
+                            height: 4rem;
+                            //margin-left: 1rem;
+                            width: 16rem;
 
                             a {
                                 font-weight: bold;
@@ -1094,14 +1094,14 @@
                 .arrow {
                     @include flex-row();
                     background-color: var(--gradient-ardoise-20);
-                    border-radius: .25em;
-                    bottom: 1em;
+                    border-radius: .25rem;
+                    bottom: 1rem;
                     color: var(--gradient-ardoise-80);
                     display: none;
-                    height: 2em;
+                    height: 2rem;
                     position: absolute;
-                    right: .25em;
-                    width: 2em;
+                    right: .25rem;
+                    width: 2rem;
 
                     &.d-flex {
                         display: flex;
@@ -1117,13 +1117,13 @@
 
                 .poster-item {
                     border: 1px solid var(--gradient-ardoise-80);
-                    border-radius: .25em;
+                    border-radius: .25rem;
                     cursor: pointer;
                     height: 4.5rem;
                     width: 3rem;
 
                     img {
-                        border-radius: .25em;
+                        border-radius: .25rem;
                         height: 100%;
                         object-fit: cover;
                         width: 100%;
@@ -1135,7 +1135,7 @@
         .backdrop {
             background-position: center center;
             background-size: cover;
-            border-radius: 1em;
+            border-radius: 1rem;
             inset: 0;
             opacity: .25;
             position: absolute;
@@ -1145,8 +1145,8 @@
         .infos {
             @include flex-col(start, center);
             color: var(--mmt-body-color);
-            min-height: 30em;
-            padding: 1em;
+            min-height: 30rem;
+            padding: 1rem;
             position: relative;
             width: 100%;
             z-index: 0;
@@ -1215,12 +1215,12 @@
                 @include flex-100(center, start);
                 font-size: 1.25rem;
                 font-weight: 100;
-                margin-top: .5em;
+                margin-top: .5rem;
 
                 .tagline {
                     font-style: italic;
                     font-weight: 100;
-                    margin-right: 2em;
+                    margin-right: 2rem;
                 }
 
                 .view-vote {
@@ -1229,13 +1229,13 @@
 
                     .view-count {
                         color: var(--gradient-ardoise-80);
-                        margin-left: 2em;
+                        margin-left: 2rem;
                         flex-shrink: 0;
                     }
 
                     .vote-count {
                         color: var(--gradient-ardoise-80);
-                        margin-left: 2em;
+                        margin-left: 2rem;
                         flex-shrink: 0;
                     }
 
@@ -1243,16 +1243,16 @@
                         @include flex-row(center, center);
                         background-color: var(--gradient-ardoise-20);
                         border-radius: 50%;
-                        height: 3.5em;
-                        margin-left: 1em;
+                        height: 3.5rem;
+                        margin-left: 1rem;
                         position: relative;
-                        width: 3.5em;
+                        width: 3.5rem;
 
                         .circle {
                             @include flex-row(center, center);
                             border-radius: 50%;
-                            height: calc(3.5em - 4px);
-                            width: calc(3.5em - 4px);
+                            height: calc(3.5rem - 4px);
+                            width: calc(3.5rem - 4px);
                             transition: background 1s;
 
                             .percentage {
@@ -1260,8 +1260,9 @@
                                 background-color: var(--gradient-ardoise-20);
                                 border-radius: 50%;
                                 color: var(--gradient-ardoise-80);
-                                height: calc(3.5em - 12px);
-                                width: calc(3.5em - 12px);
+                                font-size: 1rem;
+                                height: calc(3.5rem - 12px);
+                                width: calc(3.5rem - 12px);
                             }
                         }
 
@@ -1292,7 +1293,7 @@
                 }
 
                 &:has(.creators), &:has(.backdrop-list-wrapper), &:has(.next-block) {
-                    gap: 2em;
+                    gap: 2rem;
                 }
 
                 .creators {
@@ -1307,7 +1308,7 @@
                         margin: 0;
 
                         img {
-                            height: 10em;
+                            height: 10rem;
                         }
                     }
                 }
@@ -1323,12 +1324,12 @@
 
                         .backdrop-item {
                             border: 1px solid var(--gradient-ardoise-80);
-                            border-radius: .25em;
+                            border-radius: .25rem;
                             cursor: pointer;
                             width: 6rem;
 
                             img {
-                                border-radius: .25em;
+                                border-radius: .25rem;
                                 height: auto;
                                 object-fit: cover;
                                 width: 100%;
@@ -1383,7 +1384,7 @@
                         }
 
                         img {
-                            border-radius: .25em;
+                            border-radius: .25rem;
                             object-fit: cover;
                             height: 3.5rem;
                             width: auto;
@@ -1405,7 +1406,7 @@
                         .next-episode-provider-list {
                             @include flex-row(center, center);
                             background-color: var(--gradient-green-50);
-                            border-radius: .25em;
+                            border-radius: .25rem;
                             gap: .25rem;
                             left: 1.75rem;
                             opacity: 0;
@@ -1473,8 +1474,8 @@
             .what-s-new {
                 @include flex-row(center, end);
                 position: absolute;
-                right: 1em;
-                top: 1em;
+                right: 1rem;
+                top: 1rem;
 
                 .news, .finale {
                     background-color: var(--gradient-orange-50);
@@ -1494,7 +1495,7 @@
         .vote-graph {
             align-items: center;
             display: flex;
-            border-radius: .5em;
+            border-radius: .5rem;
             flex-shrink: 0;
             flex-direction: column;
             gap: 1rem;
@@ -1511,7 +1512,7 @@
 
             .options {
                 display: flex;
-                gap: 1em;
+                gap: 1rem;
                 z-index: 1;
 
                 input {
@@ -1522,7 +1523,7 @@
             .graph-container {
                 align-items: center;
                 background-color: var(--gradient-ardoise-0);
-                border-radius: .5em;
+                border-radius: .5rem;
                 display: flex;
                 height: 14rem;
                 justify-content: center;
@@ -1542,11 +1543,11 @@
 
         .add-and-others {
             @include flex-row(center, revert);
-            bottom: 1em;
-            font-size: 1.5em;
-            gap: 1em;
+            bottom: 1rem;
+            font-size: 1.5rem;
+            gap: 1rem;
             position: absolute;
-            right: 1em;
+            right: 1rem;
 
             .add {
                 @include flat-button();
@@ -1570,13 +1571,13 @@
                 background-size: cover;
                 border-radius: 50%;
                 cursor: pointer;
-                height: 1.25em;
-                width: 1.25em;
+                height: 1.25rem;
+                width: 1.25rem;
 
                 a {
                     div {
-                        height: 1em;
-                        width: 1em;
+                        height: 1rem;
+                        width: 1rem;
                     }
                 }
             }
@@ -1585,10 +1586,10 @@
 
     main {
         @include flex-col(flex-start, flex-start);
-        gap: 1em;
+        gap: 1rem;
 
         h4 {
-            margin-top: .5em;
+            margin-top: .5rem;
         }
 
         article {
@@ -1634,9 +1635,9 @@
                 .cast {
                     @include flex-col(flex-start, flex-start);
                     background-color: var(--gradient-ardoise-80);
-                    border-radius: .5em;
+                    border-radius: .5rem;
                     overflow-x: auto;
-                    padding: 0 1em 1em 1em;
+                    padding: 0 1rem 1rem 1rem;
                     width: 100%;
 
                     .list {
@@ -1662,7 +1663,7 @@
 
                                     img {
                                         border-radius: .5rem 0 0 0;
-                                        height: 12em;
+                                        height: 12rem;
                                     }
 
                                     .status {
@@ -1671,8 +1672,8 @@
                                         bottom: 0;
                                         border-radius: 999px;
                                         color: var(--gradient-yellow-50);
-                                        font-size: 1em;
-                                        padding: .25em;
+                                        font-size: 1rem;
+                                        padding: .25rem;
                                         position: absolute;
                                         right: 0;
                                     }
@@ -1704,7 +1705,7 @@
                 .seasons, .episodes {
                     @include flex-col();
                     background-color: var(--gradient-ardoise-80);
-                    gap: 1em;
+                    gap: 1rem;
                     width: 100%;
 
                     a {
@@ -1714,34 +1715,34 @@
                             @include flex-row(center, flex-start);
                             background-color: var(--gradient-ardoise-90);
                             border-radius: 0;
-                            height: 15em;
+                            height: 15rem;
                             width: 100%;
 
                             .poster {
                                 flex-shrink: 0;
-                                height: 15em;
-                                width: 10em;
+                                height: 15rem;
+                                width: 10rem;
                                 z-index: 0;
 
                                 img {
                                     border-radius: 0;
-                                    height: 15em;
+                                    height: 15rem;
                                     object-fit: cover;
-                                    width: 10em;
+                                    width: 10rem;
                                 }
                             }
 
                             .infos {
                                 @include flex-col(flex-start, flex-start);
-                                height: 15em;
-                                padding: .5em;
-                                width: calc(100% - 10em);
+                                height: 15rem;
+                                padding: .5rem;
+                                width: calc(100% - 10rem);
 
                                 div {
                                     color: var(--mmt-body-color);
                                     font-weight: 100;
-                                    margin: .25em 0;
-                                    max-height: 6em;
+                                    margin: .25rem 0;
+                                    max-height: 6rem;
                                     overflow-y: scroll;
                                     width: 100%;
                                 }
@@ -1757,21 +1758,21 @@
                                         .viewing {
                                             @include flex-row(center, start);
                                             flex-wrap: wrap;
-                                            gap: .5em;
-                                            height: 3em;
+                                            gap: .5rem;
+                                            height: 3rem;
                                             overflow: auto;
                                             position: relative;
 
                                             .ep {
                                                 @include flex-row(center, center);
                                                 border: 2px solid var(--gradient-ardoise-20);
-                                                border-radius: .25em;
+                                                border-radius: .25rem;
                                                 color: var(--gradient-ardoise-20);
-                                                height: 2em;
-                                                //margin: 0 .5em;
+                                                height: 2rem;
+                                                //margin: 0 .5rem;
                                                 overflow: hidden;
                                                 transition: all 125ms ease-in-out;
-                                                width: 2em;
+                                                width: 2rem;
 
                                                 span {
                                                     color: var(--gradient-ardoise-20);
@@ -1781,7 +1782,7 @@
                                                 &:hover {
                                                     border-color: var(--gradient-orange-50);
                                                     border-radius: 50%;
-                                                    //font-size: 1.5em;
+                                                    //font-size: 1.5rem;
                                                     margin: 0;
                                                 }
 
@@ -1813,7 +1814,7 @@
                         background-color: var(--gradient-ardoise-90);
                         border-radius: 0;
                         color: var(--mmt-body-color);
-                        height: 15em;
+                        height: 15rem;
                         width: 100%;
 
                         .still {
@@ -1825,42 +1826,61 @@
                                 border-radius: 0;
                                 height: 100%;
                                 object-fit: cover;
-                                width: 15em;
+                                width: 15rem;
                             }
 
                             .episode-number {
                                 align-items: center;
                                 background-color: var(--gradient-ardoise-30-alpha-50);
                                 border-radius: 50%;
-                                border: .125em solid var(--gradient-ardoise-90);
-                                bottom: .5em;
+                                border: .125rem solid var(--gradient-ardoise-90);
+                                bottom: .5rem;
                                 color: var(--gradient-ardoise-90);
                                 display: none;
-                                //font-size: 2em;
+                                //font-size: 2rem;
                                 font-weight: bold;
-                                height: 3em;
+                                height: 3rem;
                                 justify-content: center;
-                                left: .5em;
+                                left: .5rem;
                                 position: absolute;
-                                width: 3em;
+                                width: 3rem;
 
                                 span {
-                                    font-size: 1.5em;
+                                    font-size: 1.5rem;
+                                }
+                            }
+
+                            .episode-air-date {
+                                align-items: center;
+                                background-color: var(--gradient-ardoise-30-alpha-75);
+                                border-radius: .25rem;
+                                bottom: 1rem;
+                                color: var(--gradient-ardoise-90);
+                                display: none;
+                                font-size: 1.1rem;
+                                height: 2rem;
+                                justify-content: center;
+                                left: 4rem;
+                                padding-inline: 1rem;
+                                position: absolute;
+
+                                span {
+                                    font-size: 1.5rem;
                                 }
                             }
 
                             .episode-name {
                                 align-items: center;
                                 background-color: var(--gradient-ardoise-90);
-                                border-top-left-radius: 1em;
+                                border-top-left-radius: 1rem;
                                 color: var(--gradient-ardoise-20);
                                 display: none;
-                                font-size: 1em;
+                                font-size: 1rem;
                                 font-weight: bold;
                                 justify-content: center;
                                 left: 0;
                                 line-height: 1rem;
-                                padding: .5em;
+                                padding: .5rem;
                                 position: absolute;
                                 top: 0;
                                 width: 100%;
@@ -1874,7 +1894,7 @@
                                 .episode-number {
                                     background-color: var(--gradient-green-30);
                                     border-color: var(--gradient-yellow-50);
-                                    border-width: .25em;
+                                    border-width: .25rem;
                                     color: var(--gradient-yellow-50);
                                 }
 
@@ -1887,19 +1907,19 @@
 
                         .infos {
                             @include flex-col(flex-start, flex-start);
-                            padding: .5em;
-                            width: calc(100% - 30em);
+                            padding: .5rem;
+                            width: calc(100% - 30rem);
 
                             .info {
                                 font-weight: 100;
-                                margin: .25em 0;
-                                max-height: 3em;
+                                margin: .25rem 0;
+                                max-height: 3rem;
                                 overflow-y: scroll;
                             }
 
                             .guests {
                                 @include flex-100(unset, flex-start);
-                                margin-top: 1em;
+                                margin-top: 1rem;
                                 overflow: scroll;
                                 width: 100%;
 
@@ -1911,11 +1931,11 @@
 
                         .episode-viewing {
                             background-color: var(--gradient-ardoise-70);
-                            border-radius: 0 1em 1em 0;
-                            border: .5em solid var(--gradient-ardoise-90);
+                            border-radius: 0 1rem 1rem 0;
+                            border: .5rem solid var(--gradient-ardoise-90);
                             display: flex;
                             height: 100%;
-                            width: 15em;
+                            width: 15rem;
 
                             .view, .vote {
                                 display: flex;
@@ -1925,13 +1945,13 @@
 
                             &:has(i[class$="check"]) {
                                 background-color: var(--gradient-green-80);
-                                border: .5em solid var(--gradient-green-90);
+                                border: .5rem solid var(--gradient-green-90);
                             }
 
                             .view {
                                 align-items: center;
                                 flex-direction: column;
-                                gap: 1em;
+                                gap: 1rem;
                                 justify-content: center;
 
                                 .view-value {
@@ -1941,12 +1961,12 @@
                                     color: var(--gradient-ardoise-30);
                                     cursor: pointer;
                                     display: flex;
-                                    height: 3em;
+                                    height: 3rem;
                                     justify-content: center;
-                                    width: 3em;
+                                    width: 3rem;
 
                                     i {
-                                        font-size: 1.5em;
+                                        font-size: 1.5rem;
                                     }
 
                                     &:has(i[class$="plus"]) {
@@ -1971,13 +1991,13 @@
                                     border-radius: .25rem;
                                     color: var(--gradient-ardoise-40);
                                     display: flex;
-                                    font-size: 1em;
-                                    height: 3em;
+                                    font-size: 1rem;
+                                    height: 3rem;
                                     justify-content: center;
                                     opacity: 0;
                                     position: relative;
                                     transition: all 125ms ease-in-out;
-                                    width: 3em;
+                                    width: 3rem;
 
                                     &.show {
                                         opacity: 1;
@@ -1987,17 +2007,17 @@
                                 .view-provider, .view-providers {
                                     .provider {
                                         border: 2px solid transparent;
-                                        border-radius: .25em;
+                                        border-radius: .25rem;
                                         cursor: pointer;
                                         flex-shrink: 0;
-                                        height: calc(3em + 4px);
-                                        width: calc(3em + 4px);
+                                        height: calc(3rem + 4px);
+                                        width: calc(3rem + 4px);
 
                                         img {
-                                            border-radius: .25em;
-                                            height: 3em;
+                                            border-radius: .25rem;
+                                            height: 3rem;
                                             object-fit: contain;
-                                            width: 3em;
+                                            width: 3rem;
                                         }
 
                                         &:hover {
@@ -2011,9 +2031,9 @@
                                         background-repeat: no-repeat;
                                         background-size: contain;
                                         border: 2px solid transparent;
-                                        border-radius: .25em;
-                                        height: 3em;
-                                        width: 3em;
+                                        border-radius: .25rem;
+                                        height: 3rem;
+                                        width: 3rem;
 
                                         &:hover {
                                             border-color: var(--gradient-orange-50);
@@ -2023,15 +2043,15 @@
 
                                 .view-providers, .view-devices {
                                     background-color: var(--gradient-ardoise-50);
-                                    border-radius: .5em;
+                                    border-radius: .5rem;
                                     border: 2px solid var(--gradient-ardoise-20);
                                     display: none;
-                                    gap: 1em;
-                                    padding: .5em;
+                                    gap: 1rem;
+                                    padding: .5rem;
                                     opacity: 0;
                                     position: absolute;
-                                    right: 3em;
-                                    top: calc(-.5em - 2px);
+                                    right: 3rem;
+                                    top: calc(-.5rem - 2px);
                                     transition: all 125ms ease-in-out;
                                     z-index: 2;
 
@@ -2048,12 +2068,12 @@
                                     background-position: center;
                                     background-repeat: no-repeat;
                                     background-size: contain;
-                                    border-radius: .25em;
+                                    border-radius: .25rem;
                                     font-weight: 400;
-                                    height: 3em;
-                                    line-height: 3em;
+                                    height: 3rem;
+                                    line-height: 3rem;
                                     text-align: center;
-                                    width: 3em;
+                                    width: 3rem;
 
                                     @include devices("light");
 
@@ -2062,9 +2082,9 @@
                                             background-position: center;
                                             background-repeat: no-repeat;
                                             background-size: contain;
-                                            border-radius: .25em;
-                                            height: 3em;
-                                            width: 3em;
+                                            border-radius: .25rem;
+                                            height: 3rem;
+                                            width: 3rem;
 
                                             @include devices("light");
                                         }
@@ -2087,18 +2107,18 @@
                                     border: 2px solid var(--gradient-ardoise-40);
                                     border-bottom: none;
                                     cursor: pointer;
-                                    height: .75em;
-                                    width: 2em;
+                                    height: .75rem;
+                                    width: 2rem;
 
                                     &:nth-child(1) {
-                                        border-radius: .375em .375em 0 0;
+                                        border-radius: .375rem .375rem 0 0;
                                     }
 
                                     &:nth-child(10) {
                                         border-style: solid;
                                         border-bottom-width: 2px;
-                                        border-radius: 0 0 .375em .375em;
-                                        height: calc(.75em + 2px);
+                                        border-radius: 0 0 .375rem .375rem;
+                                        height: calc(.75rem + 2px);
                                     }
 
                                     @for $i from 1 through 10 {
@@ -2129,9 +2149,9 @@
                                 }
 
                                 .vote-value {
-                                    font-size: 1.5em;
+                                    font-size: 1.5rem;
                                     font-weight: bold;
-                                    margin-block: 1em 0;
+                                    margin-block: 1rem 0;
                                     text-align: center;
                                     width: 100%;
                                 }
@@ -2151,7 +2171,7 @@
                             width: unset;
 
                             .still {
-                                .episode-number, .episode-name {
+                                .episode-number, .episode-name, .episode-air-date {
                                     display: flex;
                                 }
                             }
@@ -2287,15 +2307,15 @@
                     > div {
                         @include flex-100();
                         background-color: var(--gradient-ardoise-40-alpha-50);
-                        border-radius: .5em;
+                        border-radius: .5rem;
                         flex-wrap: wrap;
-                        gap: 1em;
-                        padding: 1em;
+                        gap: 1rem;
+                        padding: 1rem;
 
                         .video {
                             aspect-ratio: 16 / 9;
                             height: auto;
-                            width: 40em;
+                            width: 40rem;
 
                             iframe {
                                 height: 100%;
@@ -2318,7 +2338,7 @@
                 align-items: center;
                 display: flex;
                 flex-wrap: wrap;
-                gap: 1em;
+                gap: 1rem;
                 justify-content: space-around;
             }
         }
@@ -2326,14 +2346,14 @@
         aside {
             @include flex-col(flex-start, flex-start);
             background-color: var(--gradient-ardoise-80);
-            border-radius: .5em;
+            border-radius: .5rem;
             //min-height: 50vh;
-            padding: 0 1em;
+            padding: 0 1rem;
             width: 100%;
 
             .favorite, .timeShifted {
                 @include flex-col();
-                margin-top: 1em;
+                margin-top: 1rem;
                 width: 100%;
 
                 .control {
@@ -2346,12 +2366,12 @@
 
                 .message {
                     @include flex-100();
-                    border-radius: .5em;
+                    border-radius: .5rem;
                     color: var(--gradient-ardoise-100);
                     font-weight: 300;
-                    line-height: 2em;
-                    margin-top: 1em;
-                    //padding: .5em;
+                    line-height: 2rem;
+                    margin-top: 1rem;
+                    //padding: .5rem;
 
                     &.added {
                         background-color: var(--gradient-green-30);
@@ -2364,7 +2384,7 @@
             }
 
             .timeShifted {
-                margin-bottom: 1em;
+                margin-bottom: 1rem;
             }
 
             .key-facts {
@@ -2381,17 +2401,17 @@
 
                 .fact {
                     background-color: var(--gradient-ardoise-40-alpha-20);
-                    border-radius: .5em;
-                    //margin: .5em 0;
-                    padding: .5em;
+                    border-radius: .5rem;
+                    //margin: .5rem 0;
+                    padding: .5rem;
 
                     &:has(.similar) {
-                        padding: .5em 0;
+                        padding: .5rem 0;
                         width: 100%;
 
                         .label {
-                            padding-bottom: .5em;
-                            padding-left: .5em;
+                            padding-bottom: .5rem;
+                            padding-left: .5rem;
                         }
                     }
 
@@ -2401,22 +2421,22 @@
 
                     .fact-content {
                         font-weight: 100;
-                        //margin-bottom: .25em;
-                        //padding-left: .5em;
+                        //margin-bottom: .25rem;
+                        //padding-left: .5rem;
 
                         .frame {
                             background-color: var(--gradient-ardoise-90);
-                            border-radius: .25em;
+                            border-radius: .25rem;
                             display: inline-block;
-                            max-height: 4em;
-                            padding: .25em .5em;
+                            max-height: 4rem;
+                            padding: .25rem .5rem;
 
                             &:hover {
                                 background-color: var(--gradient-ardoise-10);
                             }
 
                             img {
-                                max-height: 3.5em;
+                                max-height: 3.5rem;
                             }
                         }
                     }
@@ -2428,10 +2448,10 @@
                         .keyword {
                             @include flex-col();
                             background-color: var(--gradient-ardoise-40);
-                            border-radius: .25em;
+                            border-radius: .25rem;
                             color: var(--gradient-ardoise-80);
-                            padding: .25em .5em;
-                            margin: .125em;
+                            padding: .25rem .5rem;
+                            margin: .125rem;
 
                             .original {
                                 font-weight: 100;
@@ -2453,18 +2473,18 @@
                     .similar {
                         @include flex-100(start, start);
                         //flex-wrap: wrap;
-                        gap: .5em;
-                        max-height: 50em;
+                        gap: .5rem;
+                        max-height: 50rem;
                         overflow-x: auto;
 
                         a {
                             .poster {
-                                height: 12em;
+                                height: 12rem;
                                 position: relative;
-                                width: 8em;
+                                width: 8rem;
 
                                 img {
-                                    border-radius: .125em;
+                                    border-radius: .125rem;
                                     height: 100%;
                                     object-fit: cover;
                                     width: 100%;
@@ -2473,7 +2493,7 @@
                                 .name {
                                     color: var(--gradient-ardoise-20);
                                     font-weight: 300;
-                                    padding: 0 .5em;
+                                    padding: 0 .5rem;
                                     position: absolute;
                                     text-align: center;
                                     top: 1rem;
@@ -2481,11 +2501,11 @@
                                 }
 
                                 .add {
-                                    @include seen(var(--serie-add), 1.25em);
+                                    @include seen(var(--serie-add), 1.25rem);
                                 }
 
                                 .seen {
-                                    @include seen(var(--serie-seen), 1.5em);
+                                    @include seen(var(--serie-seen), 1.5rem);
                                 }
                             }
                         }
@@ -2513,12 +2533,12 @@
 
         .translationModal {
             background-color: var(--gradient-ardoise-30);
-            border-radius: 1em;
+            border-radius: 1rem;
             display: none;
             color: var(--gradient-ardoise-80);
             opacity: 0;
             transition: opacity 500ms;
-            width: 50em;
+            width: 50rem;
 
             &.open {
                 @include flex-col(flex-start, flex-start);
@@ -2530,7 +2550,7 @@
 
             .trans-header {
                 border-bottom: 1px solid var(--gradient-ardoise-50);
-                padding: 1em;
+                padding: 1rem;
                 width: 100%;
             }
 
@@ -2539,19 +2559,19 @@
 
                 .language {
                     @include flex-100();
-                    margin-top: 1em;
+                    margin-top: 1rem;
                 }
 
                 .fields {
                     @include flex-col(flex-start, flex-start);
-                    max-height: 38em;
-                    margin: 1em 2em;
+                    max-height: 38rem;
+                    margin: 1rem 2rem;
                     overflow: scroll;
-                    width: calc(100% - 4em);
+                    width: calc(100% - 4rem);
 
                     .language {
                         @include flex-100();
-                        margin: 1em 0;
+                        margin: 1rem 0;
                     }
 
                     .field {
@@ -2559,8 +2579,8 @@
 
                         .translation {
                             @include flex-col(flex-start, flex-start);
-                            margin: .5em 1em;
-                            //width: calc(100% - 4em);
+                            margin: .5rem 1rem;
+                            //width: calc(100% - 4rem);
 
                             label {
                                 font-weight: 100;
@@ -2578,7 +2598,7 @@
             .trans-footer {
                 @include flex-100(center, flex-end);
                 border-top: 1px solid var(--gradient-ardoise-50);
-                padding: 1em;
+                padding: 1rem;
                 width: 100%;
 
                 button {
@@ -2589,8 +2609,8 @@
                     color: var(--gradient-ardoise-90);
                     cursor: pointer;
                     font-weight: 100;
-                    margin-left: 1em;
-                    padding: .25em 1em;
+                    margin-left: 1rem;
+                    padding: .25rem 1rem;
                 }
             }
         }
@@ -2611,10 +2631,10 @@
 }
 
 .viewed-episode {
-    @include dialog2(50em);
+    @include dialog2(50rem);
 
     .overlay {
-        margin: calc(50vh - 15em) auto;
+        margin: calc(50vh - 15rem) auto;
 
         .content {
 
@@ -2622,29 +2642,29 @@
                 @include flex-row(stretch, start);
                 border-bottom: 1px solid var(--gradient-ardoise-50);
                 overflow-x: scroll;
-                padding: 1em 0;
-                width: 46em;
+                padding: 1rem 0;
+                width: 46rem;
 
                 .wrapper {
                     @include flex-row(stretch, start);
-                    gap: 1em;
-                    min-width: 46em;
+                    gap: 1rem;
+                    min-width: 46rem;
 
                     .network {
                         @include flex-col(center, stretch);
-                        border-radius: .5em;
-                        padding: .25em;
-                        width: 6em;
+                        border-radius: .5rem;
+                        padding: .25rem;
+                        width: 6rem;
 
                         .logo {
                             background-position: center;
                             background-repeat: no-repeat;
                             background-size: contain;
                             border: 2px solid transparent;
-                            border-radius: .5em;
+                            border-radius: .5rem;
                             cursor: pointer;
-                            height: 4em;
-                            width: 4em;
+                            height: 4rem;
+                            width: 4rem;
 
                             &.other {
                                 background-image: url("../images/devices/network-other-light.png");
@@ -2654,7 +2674,7 @@
                         .label {
                             font-weight: 100;
                             text-align: center;
-                            width: 6em;
+                            width: 6rem;
                         }
 
                         &:hover {
@@ -2676,7 +2696,7 @@
 
             .devices {
                 @include flex-100(stretch, space-evenly);
-                padding: 1em 0;
+                padding: 1rem 0;
             }
 
             .check-them-all {
@@ -2694,14 +2714,14 @@
             }
 
             input[type=checkbox] {
-                margin-right: 1em;
+                margin-right: 1rem;
             }
         }
 
         &.classic {
-            bottom: 1em;
+            bottom: 1rem;
             position: fixed;
-            right: 1em;
+            right: 1rem;
         }
     }
 }
@@ -2714,18 +2734,18 @@
         background-color: var(--gradient-ardoise-100);
         border: 4px solid var(--gradient-ardoise-50);
         border-radius: 50%;
-        gap: 1em;
-        height: 12em;
-        margin: calc(50vh - 5em) auto;
-        width: 12em;
+        gap: 1rem;
+        height: 12rem;
+        margin: calc(50vh - 5rem) auto;
+        width: 12rem;
 
         .dot {
             background-color: var(--gradient-ardoise-60);
             border: 1px solid var(--gradient-ardoise-30);
             border-radius: 50%;
-            height: 1.5em;
-            translate: 0 -.75em;
-            width: 1.5em;
+            height: 1.5rem;
+            translate: 0 -.75rem;
+            width: 1.5rem;
             animation: bounce 300ms infinite ease-in-out alternate;
         }
 
@@ -2739,7 +2759,7 @@
 
         @keyframes bounce {
             to {
-                translate: 0 1.5em;
+                translate: 0 1.5rem;
             }
         }
     }
@@ -2753,14 +2773,14 @@
         background-color: var(--gradient-ardoise-100);
         border: 4px solid var(--gradient-ardoise-50);
         border-radius: 50%;
-        gap: 1em;
-        height: 12em;
-        margin: calc(50vh - 5em) auto;
-        width: 12em;
+        gap: 1rem;
+        height: 12rem;
+        margin: calc(50vh - 5rem) auto;
+        width: 12rem;
         animation: global-turn 3s infinite ease-in-out;
 
         .world, .arrows, .db {
-            font-size: 2em;
+            font-size: 2rem;
         }
 
         .world, .db {
@@ -2821,7 +2841,7 @@
 .today-series, .this-week-series {
     .header {
         @include flex-100();
-        padding: 2em 0;
+        padding: 2rem 0;
 
         .date {
             background-clip: text;
@@ -2831,31 +2851,65 @@
             font-size: 10vw;
             font-weight: 200;
             letter-spacing: -1vw;
-            line-height: 1.1em;
+            line-height: 11vw;
             padding: 0 1rem;
             -webkit-text-stroke: 1px var(--gradient-ardoise-90);
         }
     }
 
     main {
+        display: flex;
+        flex: unset;
+        flex-direction: column;
+        margin-block-end: 1rem;
+
         .time-travel {
             align-items: center;
             display: flex;
             flex-wrap: wrap;
-            gap: 1em;
             justify-content: center;
-            margin: 1em auto;
+            margin: 1rem auto;
 
-            .prev-next {
-                @include flex-row();
-                gap: 1em;
+            a {
+                border-bottom: 1px solid var(--gradient-ardoise-80);
+                border-left: 1px solid var(--gradient-ardoise-80);
+                border-top: 1px solid var(--gradient-ardoise-80);
+
+                .jump {
+                    background-color: var(--gradient-ardoise-40);
+                    color: var(--gradient-ardoise-90);
+                    font-size: 1em;
+                    font-weight: 200;
+                    padding: .125em .25em;
+
+                    &:hover {
+                        background-color: var(--gradient-ardoise-50);
+                    }
+                }
+
+                &:first-child {
+                    border-radius: .25rem 0 0 .25rem;
+                }
+
+                &:last-child {
+                    border-radius: 0 .25rem .25rem 0;
+                    border-right: 1px solid var(--gradient-ardoise-80);
+                }
+            }
+
+            .the-date {
+                background-color: var(--gradient-ardoise-50);
+                border-bottom: 1px solid var(--gradient-ardoise-80);
+                border-top: 1px solid var(--gradient-ardoise-80);
+                color: var(--gradient-ardoise-80);
+                padding: .125em 1em;
             }
         }
 
         .wrapper {
             @include flex-100(stretch, center);
             flex-wrap: wrap;
-            gap: 1em;
+            gap: 1rem;
 
             .home-discover {
                 a {
@@ -2891,10 +2945,10 @@
             .episode {
                 @include flex-col();
                 background-color: var(--gradient-ardoise-40);
-                border-radius: .5em;
+                border-radius: .5rem;
                 color: var(--gradient-ardoise-90);
-                margin-top: .5em;
-                padding: .5em;
+                margin-top: .5rem;
+                padding: .5rem;
                 position: relative;
                 width: 100%;
 
@@ -2907,7 +2961,7 @@
                 }
 
                 .episode-detail {
-                    line-height: 1.25em;
+                    line-height: 1.25rem;
                     text-align: center;
                 }
 
@@ -2916,13 +2970,13 @@
                     border-radius: 50%;
                     border: 2px solid var(--gradient-green-90);
                     color: var(--gradient-green-90);
-                    height: 2.5em;
-                    line-height: 2.5em;
+                    height: 2.5rem;
+                    line-height: 2.5rem;
                     position: absolute;
                     right: 1rem;
                     text-align: center;
                     top: -1rem;
-                    width: 2.5em;
+                    width: 2.5rem;
                 }
             }
 
@@ -2998,7 +3052,7 @@
                 color: var(--gradient-ardoise-90);
                 font-size: 4rem;
                 font-weight: 900;
-                line-height: 1em;
+                line-height: 1rem;
                 mix-blend-mode: screen;
                 opacity: 0;
                 position: absolute;
@@ -3019,7 +3073,7 @@
         .wrapper {
             @include flex-row(center, center);
             flex-wrap: wrap;
-            gap: 2em;
+            gap: 2rem;
 
             .day {
                 @include flex-col(start, start);
@@ -3039,7 +3093,7 @@
                 .episodes {
                     @include flex-100();
                     flex-wrap: wrap;
-                    gap: .5em;
+                    gap: .5rem;
 
                     .home-discover, .no-episode {
                         border: 2px solid transparent;
@@ -3115,15 +3169,15 @@
     .left-column {
         @include flex-col(start, start);
         background-color: var(--gradient-ardoise-90-alpha-10);
-        border-radius: 1em;
+        border-radius: 1rem;
         min-height: 80vh;
-        width: 18em;
+        width: 18rem;
 
         .profile {
-            border-radius: 1em 1em 0 0;
+            border-radius: 1rem 1rem 0 0;
 
             img {
-                border-radius: 1em 1em 0 0;
+                border-radius: 1rem 1rem 0 0;
                 height: auto;
                 object-fit: cover;
                 width: 100%;
@@ -3136,18 +3190,18 @@
 
         .infos {
             @include flex-col(start, start);
-            padding: 1em;
+            padding: 1rem;
 
             h4 {
                 color: var(--gradient-ardoise-20);
             }
 
             .info {
-                margin-bottom: .5em;
+                margin-bottom: .5rem;
 
                 div {
                     font-weight: 100;
-                    padding-left: 1em;
+                    padding-left: 1rem;
                 }
 
                 div:first-child {
@@ -3158,12 +3212,12 @@
         }
 
         .images {
-            padding: 1em;
+            padding: 1rem;
 
             img {
-                border-radius: .5em;
+                border-radius: .5rem;
                 height: auto;
-                margin-bottom: 1em;
+                margin-bottom: 1rem;
                 width: 100%;
             }
         }
@@ -3171,13 +3225,13 @@
 
     .right-column {
         @include flex-row(stretch, start);
-        padding-left: 1em;
-        width: calc(100% - 18em);
+        padding-left: 1rem;
+        width: calc(100% - 18rem);
 
         .content {
             background-color: var(--gradient-ardoise-90-alpha-10);
-            border-radius: 1em;
-            padding: 1em;
+            border-radius: 1rem;
+            padding: 1rem;
             width: 100%;
 
             h1 {
@@ -3191,38 +3245,38 @@
 
             .known-for {
                 background-color: var(--gradient-ardoise-90-alpha-10);
-                border-radius: .5em;
+                border-radius: .5rem;
                 overflow-x: scroll;
-                padding: 1em;
+                padding: 1rem;
 
                 .wrapper {
                     @include flex-row(start, start);
-                    gap: 1em;
+                    gap: 1rem;
 
                     a {
-                        height: 14em;
-                        width: 8em;
+                        height: 14rem;
+                        width: 8rem;
 
                         .media {
                             @include flex-col(stretch, center);
-                            border-radius: .5em;
-                            height: 14em;
-                            width: 8em;
+                            border-radius: .5rem;
+                            height: 14rem;
+                            width: 8rem;
 
                             img {
-                                border-top-left-radius: .5em;
-                                border-top-right-radius: .5em;
-                                height: 12em;
+                                border-top-left-radius: .5rem;
+                                border-top-right-radius: .5rem;
+                                height: 12rem;
                                 object-fit: cover;
-                                width: 8em;
+                                width: 8rem;
                             }
 
                             .title {
                                 @include flex-100();
-                                font-size: .75em;
+                                font-size: .75rem;
                                 font-weight: 100;
-                                line-height: 1em;
-                                height: 3em;
+                                line-height: 1rem;
+                                height: 3rem;
                                 text-align: center;
                             }
                         }
@@ -3234,9 +3288,9 @@
                 .acting, .sub-credits {
                     @include flex-col(start, start);
                     background-color: var(--gradient-ardoise-90-alpha-10);
-                    border-radius: 1em;
-                    gap: 1em;
-                    padding: 1em;
+                    border-radius: 1rem;
+                    gap: 1rem;
+                    padding: 1rem;
 
                     .date {
                         @include flex-100(center, start);
@@ -3246,12 +3300,12 @@
                         .year {
                             @include flex-row(start, center);
                             font-weight: 300;
-                            width: 4em;
+                            width: 4rem;
                         }
 
                         .info {
                             text-align: center;
-                            width: 2em;
+                            width: 2rem;
 
                             i {
                                 cursor: pointer;
@@ -3264,7 +3318,7 @@
 
                         .character, .job {
                             font-weight: 100;
-                            padding-left: .5em;
+                            padding-left: .5rem;
                         }
                     }
 
@@ -3296,30 +3350,30 @@
         .content {
             @include flex-row(start, start);
             background-color: var(--gradient-ardoise-90);
-            border-radius: 1em;
+            border-radius: 1rem;
             color: var(--gradient-ardoise-10);
             font-weight: 100;
-            height: 10em;
-            width: 32em;
+            height: 10rem;
+            width: 32rem;
             z-index: 22;
 
 
             .poster {
                 img {
-                    border-bottom-left-radius: 1em;
-                    border-top-left-radius: 1em;
-                    height: 10em;
+                    border-bottom-left-radius: 1rem;
+                    border-top-left-radius: 1rem;
+                    height: 10rem;
                     object-fit: cover;
-                    width: 6.8125em;
+                    width: 6.8125rem;
                 }
             }
 
             .body {
                 @include flex-col(start, start);
-                height: 10em;
-                padding: 1em;
+                height: 10rem;
+                padding: 1rem;
                 position: relative;
-                width: 25.1875em;
+                width: 25.1875rem;
 
                 .title {
                     font-weight: 200;
@@ -3327,7 +3381,7 @@
 
                 .overview {
                     font-weight: 100;
-                    height: 6em;
+                    height: 6rem;
                     overflow: scroll;
                 }
 
@@ -3347,15 +3401,15 @@
                                         var(--gradient-ardoise-90) 270deg,
                                         var(--gradient-ardoise-90) 360deg);
                         border-radius: 50%;
-                        height: 4em;
-                        width: 4em;
+                        height: 4rem;
+                        width: 4rem;
 
                         .circle2 {
                             @include flex-row();
                             background-color: var(--gradient-ardoise-90);
                             border-radius: 50%;
-                            height: 3.8em;
-                            width: 3.8em;
+                            height: 3.8rem;
+                            width: 3.8rem;
 
                             .circle3 {
                                 @include flex-row();
@@ -3366,15 +3420,15 @@
                                                 var(--gradient-ardoise-20) 90deg,
                                                 var(--gradient-ardoise-20) 360deg);
                                 border-radius: 50%;
-                                height: 3em;
-                                width: 3em;
+                                height: 3rem;
+                                width: 3rem;
 
                                 .circle4 {
                                     @include flex-row();
                                     background-color: var(--gradient-ardoise-90);
                                     border-radius: 50%;
-                                    height: 2.8em;
-                                    width: 2.8em;
+                                    height: 2.8rem;
+                                    width: 2.8rem;
                                 }
                             }
                         }
@@ -3397,22 +3451,22 @@
 
         .tail {
             background-color: var(--gradient-ardoise-90);
-            border-radius: .25em;
-            height: 2em;
+            border-radius: .25rem;
+            height: 2rem;
             rotate: 45deg;
-            translate: 0 -1.15em;
-            width: 2em;
+            translate: 0 -1.15rem;
+            width: 2rem;
             z-index: 21;
         }
 
         .close {
             @include flex-row();
             cursor: pointer;
-            height: 1em;
+            height: 1rem;
             position: absolute;
-            right: 1em;
-            top: 1em;
-            width: 1em;
+            right: 1rem;
+            top: 1rem;
+            width: 1rem;
         }
     }
 
@@ -3427,13 +3481,13 @@
     .search {
         @include flex-100();
         background-color: var(--gradient-ardoise-20);
-        margin: 1em 0;
-        padding: .5em;
+        margin: 1rem 0;
+        padding: .5rem;
         //
         //input {
         //    appearance: unset;
         //    border: 1px solid var(--gradient-ardoise-40);
-        //    padding: .5em;
+        //    padding: .5rem;
         //}
     }
 }
@@ -3441,12 +3495,12 @@
 .particule {
     @include flex-100();
     background-color: var(--gradient-purple-90);
-    border-radius: .5em;
+    border-radius: .5rem;
     color: var(--gradient-purple-30);
-    height: 4em;
+    height: 4rem;
     position: absolute;
     transition: opacity 800ms ease-in-out, translate 1s linear, rotate 1s linear;
-    width: 4em;
+    width: 4rem;
     z-index: 1000;
 
     &.reboot {
@@ -3472,34 +3526,34 @@
 
 @media (min-width: 576px) { /* 540 */
     .my-series, .series-search {
-        --serie-lg-height: 20em;
-        --serie-lg-poster-width: 13.3125em;
+        --serie-lg-height: 20rem;
+        --serie-lg-poster-width: 13.3125rem;
 
         .series {
             .wrapper {
                 a {
                     .serie {
-                        border-radius: .5em;
+                        border-radius: .5rem;
 
                         .poster {
                             img {
-                                border-radius: .5em 0 0 .5em;
+                                border-radius: .5rem 0 0 .5rem;
                             }
                         }
 
                         .backdrop {
-                            border-radius: 0 .5em .5em 0;
+                            border-radius: 0 .5rem .5rem 0;
                         }
 
                         .infos {
-                            border-radius: 0 .5em .5em 0;
+                            border-radius: 0 .5rem .5rem 0;
                             justify-content: center;
                         }
 
                         .network-list {
                             @include flex-col();
                             position: absolute;
-                            right: -.5em;
+                            right: -.5rem;
                             top: 0;
 
                             .network-item {
@@ -3508,7 +3562,7 @@
                                 border: 2px solid var(--gradient-ardoise-10);
                                 border-radius: 50%;
                                 color: var(--gradient-ardoise-30);
-                                font-size: 2em;
+                                font-size: 2rem;
                                 font-weight: bold;
                                 height: 4rem;
                                 object-fit: cover;
@@ -3527,14 +3581,14 @@
                                     align-items: center;
                                     background-color: var(--gradient-ardoise-30);
                                     border: 2px solid var(--gradient-ardoise-70);
-                                    border-radius: .25em;
+                                    border-radius: .25rem;
                                     color: var(--gradient-ardoise-70);
                                     display: none;
                                     font-size: 1rem;
                                     font-weight: normal;
                                     height: 2rem;
                                     justify-content: center;
-                                    padding: 0 1em;
+                                    padding: 0 1rem;
                                     position: absolute;
                                     right: 0;
                                     top: -2.5rem;
@@ -3557,7 +3611,7 @@
 
     .series-search {
         .search {
-            border-radius: .5em;
+            border-radius: .5rem;
         }
     }
 
@@ -3578,18 +3632,18 @@
 
                 section {
                     .seasons, .episodes {
-                        border-radius: .5em;
-                        padding: 1em;
+                        border-radius: .5rem;
+                        padding: 1rem;
 
                         a {
                             .season, .episode {
-                                border-radius: .5em;
+                                border-radius: .5rem;
 
                                 .poster {
 
                                     img {
-                                        border-radius: .5em 0 0 .5em;
-                                        max-width: 20em;
+                                        border-radius: .5rem 0 0 .5rem;
+                                        max-width: 20rem;
                                         object-fit: cover;
                                     }
                                 }
@@ -3597,13 +3651,13 @@
                         }
 
                         .episode {
-                            border-radius: 1em;
+                            border-radius: 1rem;
 
                             .still {
 
                                 img {
-                                    border-bottom-left-radius: 1em;
-                                    border-top-left-radius: 1em;
+                                    border-bottom-left-radius: 1rem;
+                                    border-top-left-radius: 1rem;
                                 }
                             }
                         }
@@ -3620,7 +3674,7 @@
             }
 
             aside {
-                width: calc(30% - 1em);
+                width: calc(30% - 1rem);
 
                 .key-facts {
                     .fact {
@@ -3639,12 +3693,12 @@
 
 @media (min-width: 1280px) {
     .my-series, .series-search {
-        //--serie-lg-height: 15em;
+        //--serie-lg-height: 15rem;
         .header {
-            height: 25em;
+            height: 25rem;
 
             h1 {
-                font-size: 6em;
+                font-size: 6rem;
             }
         }
 
@@ -3660,21 +3714,21 @@
             }
 
             .wrapper {
-                width: calc(75% - 1em);
+                width: calc(75% - 1rem);
 
                 a {
                     .serie {
                         .infos {
-                            padding: 1em;
+                            padding: 1rem;
                         }
                     }
                 }
             }
 
             .series-tools {
-                margin-left: 1em;
+                margin-left: 1rem;
                 //position: sticky;
-                //top: 4em;
+                //top: 4rem;
                 width: 25%;
 
                 &.mobile {
@@ -3697,7 +3751,7 @@
 
                     &.desktop {
                         position: sticky;
-                        top: 6em;
+                        top: 6rem;
                     }
                 }
 
@@ -3714,45 +3768,45 @@
                 }
 
                 .pages, .numbers, .search-serie, .add-serie {
-                    border: 1em;
-                    border-radius: .5em;
-                    margin-bottom: 1em;
-                    //min-height: 4em;
-                    padding: 1em;
+                    border: 1rem;
+                    border-radius: .5rem;
+                    margin-bottom: 1rem;
+                    //min-height: 4rem;
+                    padding: 1rem;
                 }
 
                 .search-serie, .add-serie {
                     .group {
                         .field {
-                            width: calc(100% - 7em);
+                            width: calc(100% - 7rem);
 
                             > input {
-                                padding: .5em;
+                                padding: .5rem;
                                 width: 100%;
                             }
                         }
 
                         button {
-                            height: 2em;
+                            height: 2rem;
                             padding: 0;
-                            width: 6.75em;
+                            width: 6.75rem;
                         }
                     }
                 }
 
                 .settings {
-                    border: 1em;
-                    border-radius: .5em;
-                    padding: 1em;
+                    border: 1rem;
+                    border-radius: .5rem;
+                    padding: 1rem;
 
                     .field {
                         select {
-                            border-radius: .25em;
+                            border-radius: .25rem;
                         }
                     }
 
                     .per-page {
-                        padding: 1em 0;
+                        padding: 1rem 0;
                     }
 
                     .sort {
@@ -4070,7 +4124,7 @@
                     .images {
                         > div {
                             background-color: var(--gradient-ardoise-20-alpha-50);
-                            border-radius: .5em;
+                            border-radius: .5rem;
                         }
                     }
                 }
@@ -4219,24 +4273,10 @@
         }
 
         main {
-            .time-travel {
-                align-items: center;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 1em;
-                justify-content: center;
-                margin: 1em auto;
-
-                .prev-next {
-                    @include flex-row();
-                    gap: 1em;
-                }
-            }
-
             .wrapper {
                 @include flex-100(stretch, center);
                 flex-wrap: wrap;
-                gap: 1em;
+                gap: 1rem;
 
                 .home-discover {
                     a {
@@ -4272,10 +4312,10 @@
                 .episode {
                     @include flex-col();
                     background-color: var(--gradient-ardoise-40);
-                    border-radius: .5em;
+                    border-radius: .5rem;
                     color: var(--gradient-ardoise-90);
-                    margin-top: .5em;
-                    padding: .5em;
+                    margin-top: .5rem;
+                    padding: .5rem;
                     position: relative;
                     width: 100%;
 
@@ -4288,7 +4328,7 @@
                     }
 
                     .episode-detail {
-                        line-height: 1.25em;
+                        line-height: 1.25rem;
                         text-align: center;
                     }
 
@@ -4297,13 +4337,13 @@
                         border-radius: 50%;
                         border: 2px solid var(--gradient-green-90);
                         color: var(--gradient-green-90);
-                        height: 2.5em;
-                        line-height: 2.5em;
+                        height: 2.5rem;
+                        line-height: 2.5rem;
                         position: absolute;
                         right: 1rem;
                         text-align: center;
                         top: -1rem;
-                        width: 2.5em;
+                        width: 2.5rem;
                     }
                 }
 
@@ -4376,7 +4416,7 @@
                     color: var(--gradient-ardoise-90);
                     font-size: 4rem;
                     font-weight: 900;
-                    line-height: 1em;
+                    line-height: 1rem;
                     mix-blend-mode: screen;
                     opacity: 0;
                     position: absolute;
@@ -4397,7 +4437,7 @@
             .wrapper {
                 @include flex-row(center, center);
                 flex-wrap: wrap;
-                gap: 2em;
+                gap: 2rem;
 
                 .day {
                     @include flex-col(start, start);
@@ -4417,7 +4457,7 @@
                     .episodes {
                         @include flex-100();
                         flex-wrap: wrap;
-                        gap: .5em;
+                        gap: .5rem;
 
                         .home-discover {
                             border: 2px solid transparent;

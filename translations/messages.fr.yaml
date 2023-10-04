@@ -230,49 +230,49 @@ Delete this list?: Supprimer cette liste ?
 Do you really want to delete this list?: Voulez-vous vraiment supprimer cette liste ?
 
 # User Series
-First Air at: Première diffusion
-Pagination: Pagination
-Results per page: Resultats par page
 Add order: Ajout
-Last modified by user: Date de visionnage
-Last modified by TMDB: Modification (the Movie Database)
-Order by: Tri
-Order: Sens
-Descending: Décroissant
-Ascending: Croissant
-Apply: Appliquer
-New Serie Help: Trouvez votre série sur %link1% et copiez l'@ de la page de la série, comme " %link2% " ou l'ID de la série, ici " %id% ", dans la barre d'adresse et collez-le dans le champ juste au-dessus.
-New Serie Id: Adresse ou identifiant de la série
-Help: Aide
-Serie not found: Série introuvable
-New serie added: Nouvelle série ajoutée
-Serie updated: Série mise à jour
-creator.she: Créatrice
-creator.he: Créateur
-creation: Création
-Cancel: Annuler
-Cancel and close the dialog: Annuler et fermer la boîte de dialogue
-Translate: Traduire
 Add translated keywords, close the dialog and reload the page: Ajouter les mots-clés traduits, fermer la boîte de dialogue et recharger la page.
-Translate new keywords: Traduire les nouveaux mots-clés
-Favorite serie: Série favorite
-Create an alert: Créer une alerte
-Alert created and activated: Alerte créée et activée
 Alert activated: Alerte activée
+Alert created and activated: Alerte créée et activée
 Alert deactivated: Alerte désactivée
 Alert: Alerte
-No poster: Pas d'affiche
-New poster: nouvelle affiche
-New poster (previously added): Nouvelle affiche (précédemment ajoutée)
-New backdrop: nouveau fond d'écran
+Apply: Appliquer
+Ascending: Croissant
+Cancel and close the dialog: Annuler et fermer la boîte de dialogue
+Cancel: Annuler
+Create an alert: Créer une alerte
+Descending: Décroissant
+Favorite serie: Série favorite
+First Air at: Première diffusion
+Help: Aide
+Last modified by TMDB: Modification (the Movie Database)
+Last modified by user: Date de visionnage
+New Serie Help: Trouvez votre série sur %link1% et copiez l'@ de la page de la série, comme " %link2% " ou l'ID de la série, ici " %id% ", dans la barre d'adresse et collez-le dans le champ juste au-dessus.
+New Serie Id: Adresse ou identifiant de la série
 New backdrop (previously added): nouveau fond d'écran (précédemment ajouté)
+New backdrop: nouveau fond d'écran
 New date: Nouvelle date
-New overview: Nouveau résumé
-New status: Nouveau statut
+New episode from TMDB: Un nouvel épisode|%count% nouveaux épisodes
 New name: Nouveau nom
 New original name: Nouveau nom original
+New overview: Nouveau résumé
+New poster (previously added): Nouvelle affiche (précédemment ajoutée)
+New poster: nouvelle affiche
 New season from TMDB: Une nouvelle saison|%count% nouvelles saisons
-New episode from TMDB: Un nouvel épisode|%count% nouveaux épisodes
+New serie added: Nouvelle série ajoutée
+New status: Nouveau statut
+No poster: Pas d'affiche
+Order by: Tri
+Order: Sens
+Pagination: Pagination
+Results per page: Resultats par page
+Serie not found: Série introuvable
+Serie updated: Série mise à jour
+Translate new keywords: Traduire les nouveaux mots-clés
+Translate: Traduire
+creation: Création
+creator.he: Créateur
+creator.she: Créatrice
 
 #User series airing today
 My series airing today: Épisodes du jour
@@ -282,10 +282,18 @@ Episodes: Épisodes
 Viewed episodes: Épisodes vus
 All episodes: Tous les épisodes
 Specials: Épisodes spéciaux
-Previous month: ← Mois
-Previous week: ← Semaine
-Next month: Mois →
-Next week: Semaine →
+Previous month: Mois précédent
+Previous week: Semaine précédente
+Previous day: Jour précédent
+Next month: Mois suivant
+Next week: Semaine suivante
+Next day: Jour suivant
+time.previous.month: ←M
+time.previous.week: ←S
+time.previous.day: ←J
+time.next.month: M→
+time.next.week: S→
+time.next.day: J→
 Nothing to show here: Rien à montrer ici 🥺
 
 # Movies

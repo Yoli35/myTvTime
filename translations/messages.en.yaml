@@ -200,29 +200,71 @@ The movie « movie_name » has been added to your list « list_name ».: The mov
 The movie « movie_name » has been removed from your list « list_name ».: The movie « movie_name » has been removed from your list « list_name ».
 
 # User Series
-First Air at: First Air at
-Pagination: Pagination
-Results per page: Results per page
 Add order: Add order
-Order by: Order by
-Order: Order
-Descending: Descending
-Ascending: Ascending
+Add translated keywords, close the dialog and reload the page: Add translated keywords, close the dialog and reload the page.
+Alert activated: Alert activated
+Alert created and activated: Alert created and activated
+Alert deactivated: Alert deactivated
+Alert: Alert
 Apply: Apply
+Ascending: Ascending
+Cancel and close the dialog: Cancel and close the dialog
+Cancel: Cancel
+Create an alert: Create an alert
+Descending: Descending
+Favorite serie: Favorite serie
+First Air at: First Air at
+Help: Help
+Last modified by TMDB: Last modified by TMDB
+Last modified by user: Last modified by user
 New Serie Help: Find your series on %link1% and copy the @ of the series page, such as "%link2%" or the series ID, in this case "%id%", from the address bar and paste it into the field just above.
 New Serie Id: Address or ID of the series
-Help: Help
+New backdrop (previously added): New backdrop (previously added)
+New backdrop: New backdrop
+New date: New date
+New episode from TMDB: New episode from TMDB
+New name: New name
+New original name: New original name
+New overview: New overview
+New poster (previously added): New poster (previously added)
+New poster: New poster
+New season from TMDB: New season from TMDB
+New serie added: New serie added
+New status: New status
+No poster: No poster
+Order by: Order by
+Order: Order
+Pagination: Pagination
+Results per page: Results per page
 Serie not found: Series not found
-New serie added: New series added
 Serie updated: Series updated
-creator.she: Creator
-creator.he: Creator
-creation: Creation
-Cancel: Cancel
-Cancel and close the dialog: Cancel and close the dialog
-Translate: Translate
-Add translated keywords, close the dialog and reload the page: Add translated keywords, close the dialog and reload the page.
 Translate new keywords: Translate new keywords
+Translate: Translate
+creation: Creation
+creator.he: Creator
+creator.she: Creator
+
+#User series airing today
+My series airing today: My series airing today
+List of the series I'm watching, aired today: List of the series I'm watching, aired today
+New episodes: New episodes
+Episodes: Episodes
+Viewed episodes: Viewed episodes
+All episodes: All episodes
+Specials: Specials
+Previous month: Previous month
+Previous week: Previous week
+Previous day: Previous day
+Next month: Next month
+Next week: Next week
+Next day: Next day
+time.previous.month: ←M
+time.previous.week: ←W
+time.previous.day: ←D
+time.next.month: M→
+time.next.week: W→
+time.next.day: D→
+Nothing to show here: Nothing to show here 🥺
 
 # Movies
 Sort: Sort

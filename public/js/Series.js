@@ -89,7 +89,7 @@ export class Series {
 
     checkHeight() {
         const container = document.querySelector(".my-series");
-        if (container.clientHeight === 496) {
+        if (container.clientHeight < 500) {
             window.location.reload();
         }
     }

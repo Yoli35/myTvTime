@@ -15,38 +15,30 @@
                 <div class="date"{% if backdrop %} style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop }}')"{% endif %}>{{ date|date("d/m/Y", "Europe/Paris") }}</div>
             </div>
             {% set date = date|format_date('full', timezone="Europe/Paris")|capitalize %}
-{#            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:'New episodes'|trans}) }}#}
+            {#            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:'New episodes'|trans}) }} #}
             <main>
                 <div class="time-travel">
-                    <div>
-                        <a href="{{ path('app_series_today', {d: prev, m: -1}) }}">
-                            <button class="btn btn-primary">{{ 'Previous month'|trans }}</i></button>
-                        </a>
-                    </div>
-                    <div>
-                        <a href="{{ path('app_series_today', {d: prev, w: -1}) }}">
-                            <button class="btn btn-primary">{{ 'Previous week'|trans }}</i></button>
-                        </a>
-                    </div>
-                    <div class="prev-next">
-                        <a href="{{ path('app_series_today', {d: prev-1}) }}">
-                            <button class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i></button>
-                        </a>
-                        <div>{{ fixIfFirstDayOfTheMonth(date)|raw }}</div>
-                        <a href="{{ path('app_series_today', {d: next+1}) }}">
-                            <button class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i></button>
-                        </a>
-                    </div>
-                    <div>
-                        <a href="{{ path('app_series_today', {d: next, w: 1}) }}">
-                            <button class="btn btn-primary">{{ 'Next week'|trans }}</i></button>
-                        </a>
-                    </div>
-                    <div>
-                        <a href="{{ path('app_series_today', {d: next, m: 1}) }}">
-                            <button class="btn btn-primary">{{ 'Next month'|trans }}</i></button>
-                        </a>
-                    </div>
+                    <a href="{{ path('app_series_today', {d: prev, m: -1}) }}">
+                        <div class="jump" title="{{ 'Previous month'|trans }}">{{ 'time.previous.month'|trans }}</div>
+                    </a>
+                    <a href="{{ path('app_series_today', {d: prev, w: -1}) }}">
+                        <div class="jump" title="{{ 'Previous week'|trans }}">{{ 'time.previous.week'|trans }}</div>
+                    </a>
+                    <a href="{{ path('app_series_today', {d: prev-1}) }}">
+                        <div class="jump" title="{{ 'Previous day'|trans }}">{{ 'time.previous.day'|trans }}</div>
+                    </a>
+
+                    <div class="the-date">{{ fixIfFirstDayOfTheMonth(date)|raw }}</div>
+
+                    <a href="{{ path('app_series_today', {d: next+1}) }}">
+                        <div class="jump" title="{{ 'Next day'|trans }}">{{ 'time.next.day'|trans }}</div>
+                    </a>
+                    <a href="{{ path('app_series_today', {d: next, w: 1}) }}">
+                        <div class="jump" title="{{ 'Next week'|trans }}">{{ 'time.next.week'|trans }}</div>
+                    </a>
+                    <a href="{{ path('app_series_today', {d: next, m: 1}) }}">
+                        <div class="jump" title="{{ 'Next month'|trans }}">{{ 'time.next.month'|trans }}</div>
+                    </a>
                 </div>
                 <div class="wrapper">
                     {% for todayAiring in todayAirings %}
@@ -55,7 +47,7 @@
                         <div class="nothing">
                             <div class="image-filenames" style="display: none">
                                 {
-                                    "filenames": {{ images|json_encode(constant('JSON_PRETTY_PRINT')) }}
+                                "filenames": {{ images|json_encode(constant('JSON_PRETTY_PRINT')) }}
                                 }
                             </div>
                         </div>
@@ -89,18 +81,18 @@
                 const images = JSON.parse(imageFilenames.textContent.replace(/".DS_Store",/g, ''));
                 const somethingElse = document.querySelector('.something-else');
                 const img = document.createElement('img');
-                let lastImageIndex =  Math.floor(Math.random() * images.filenames.length);
+                let lastImageIndex = Math.floor(Math.random() * images.filenames.length);
                 img.src = "/images/series/today/" + images.filenames[lastImageIndex];
                 somethingElse.appendChild(img);
                 img.onload = () => {
                     somethingElse.querySelector("img").classList.add('show');
                 };
-                setInterval(()=> {
+                setInterval(() => {
                     somethingElse.querySelector("img").classList.remove('show');
-                    setTimeout(()=> {
-                        let imageIndex =  Math.floor(Math.random() * images.filenames.length);
+                    setTimeout(() => {
+                        let imageIndex = Math.floor(Math.random() * images.filenames.length);
                         while (imageIndex === lastImageIndex) {
-                            imageIndex =  Math.floor(Math.random() * images.filenames.length);
+                            imageIndex = Math.floor(Math.random() * images.filenames.length);
                         }
                         lastImageIndex = imageIndex;
                         let img = somethingElse.querySelector("img")

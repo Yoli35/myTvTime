@@ -24,6 +24,8 @@ class FirstDayOfTheMonthExtension extends AbstractExtension
 
     public function fixIfFirstDayOfTheMonth($date): string
     {
+        // retrait de l'année, des 5 derniers caractères
+        $date = substr($date, 0, -5);
         return preg_replace(
             '/ 1 /',
             ' 1<sup>er</sup> ',

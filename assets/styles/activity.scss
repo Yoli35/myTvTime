@@ -293,7 +293,7 @@
 
                                     .detail {
                                         @include flex-row(center, flex-start);
-                                        gap: .75em;
+                                        gap: .125em;
                                         width: 100%;
 
                                         .result, .goal {

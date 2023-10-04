@@ -60,32 +60,36 @@
                         </div>
                     {% endif %}
                 </div>
-                <div class="vote-graph">
-                    <label for="select-graph">{{ 'Vote graph'|trans }}
-                        <select id="select-graph">
-                            {% for type in ['plot', 'bar', 'radial'] %}
-                                <option value="{{ type }}"{% if seasonsCookie.graph == type %} selected{% endif %}>{{ type|trans }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <div class="options">
-                        <label>
-                            <input type="checkbox" id="option-graph-grid" value="grid"{% if seasonsCookie.grid == 'grid' %} checked{% endif %}>
-                            {{ 'Grid'|trans }}
+                {% if seasonViewing %}
+                    <div class="vote-graph">
+                        <label for="select-graph">{{ 'Vote graph'|trans }}
+                            <select id="select-graph">
+                                {% for type in ['plot', 'bar', 'radial'] %}
+                                    <option value="{{ type }}"{% if seasonsCookie.graph == type %} selected{% endif %}>{{ type|trans }}</option>
+                                {% endfor %}
+                            </select>
                         </label>
-                        <label>
-                            <input type="checkbox" id="option-graph-colored-grid" value="colored"{% if seasonsCookie.coloredGrid == 'color' %} checked{% endif %}>
-                            {{ 'Colored grid'|trans }}
-                        </label>
+                        <div class="options">
+                            <label>
+                                <input type="checkbox" id="option-graph-grid" value="grid"{% if seasonsCookie.grid == 'grid' %} checked{% endif %}>
+                                {{ 'Grid'|trans }}
+                            </label>
+                            <label>
+                                <input type="checkbox" id="option-graph-colored-grid" value="colored"{% if seasonsCookie.coloredGrid == 'color' %} checked{% endif %}>
+                                {{ 'Colored grid'|trans }}
+                            </label>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
             <main>
                 <article class="full">
                     {% if localizedOverview|length %}
                         <section>
                             <div class="deepl">
-                                <div class="title">{{ 'Overview'|trans }} by <div class="logo"><img src="/images/default/deepl.png" alt="deepl"></div></div>
+                                <div class="title">{{ 'Overview'|trans }} by
+                                    <div class="logo"><img src="/images/default/deepl.png" alt="deepl"></div>
+                                </div>
                                 <div class="info">{{ localizedOverview }}</div>
                             </div>
                         </section>
@@ -119,7 +123,13 @@
                                         <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
                                         <div class="episode-name">{{ episode.name }}</div>
                                         <div class="episode-number{% if episode.viewing is defined and episode.viewing.viewedAt %} viewed{% endif %}">
-                                            <span>{{ episode.episode_number }}</span></div>
+                                            <span>{{ episode.episode_number }}</span>
+                                        </div>
+                                        {% if episode.air_date %}
+                                            <div class="episode-air-date">
+                                                {{ episode.air_date|format_date('short') }}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="infos">
                                         <h4>
