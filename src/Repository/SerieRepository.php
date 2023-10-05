@@ -115,7 +115,7 @@ class SerieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
 //        return $this->createQueryBuilder('s')
 //            ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
 //            ->join('App\Entity\SerieViewing', 'sv', Expr\Join::WITH, 's=sv and sv.viewedEpisodes>0')
@@ -207,7 +207,7 @@ class SerieRepository extends ServiceEntityRepository
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
 }

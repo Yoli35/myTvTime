@@ -126,6 +126,6 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 }

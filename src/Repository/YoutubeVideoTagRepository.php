@@ -78,16 +78,16 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
 
     public function findVideosTags($videoIds): array
     {
-        $sql = "SELECT yt.id, yt.label, yv.id as videoId FROM youtube_video_tag yt
-                INNER JOIN youtube_video_tag_youtube_video ytyv ON ytyv.youtube_video_tag_id = yt.id
-                INNER JOIN youtube_video yv ON yv.id = ytyv.youtube_video_id
-                WHERE yv.id IN (" . implode(',', $videoIds) . ")";
+        $sql = "SELECT yt.id, yt.label, yv.id as videoId FROM youtube_video_tag yt "
+            . "INNER JOIN youtube_video_tag_youtube_video ytyv ON ytyv.youtube_video_tag_id = yt.id "
+            . "INNER JOIN youtube_video yv ON yv.id = ytyv.youtube_video_id  "
+            . "WHERE yv.id IN (" . implode(',', $videoIds) . ")";
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 //    public function findOneBySomeField($value): ?YoutubeVideoTag
 //    {

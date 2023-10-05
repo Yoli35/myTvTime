@@ -1176,11 +1176,6 @@
 "@symfony/ux-dropzone@file:vendor/symfony/ux-dropzone/assets":
   version "1.1.0"
 
-"@symfony/ux-live-component@file:vendor/symfony/ux-live-component/assets":
-  version "1.0.0"
-  dependencies:
-    morphdom "^2.6.1"
-
 "@symfony/ux-typed@file:vendor/symfony/ux-typed/assets":
   version "1.0.0"
 
@@ -3770,11 +3765,6 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
-
-morphdom@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.npmjs.org/morphdom/-/morphdom-2.6.1.tgz"
-  integrity sha512-Y8YRbAEP3eKykroIBWrjcfMw7mmwJfjhqdpSvoqinu8Y702nAwikpXcNFDiIkyvfCLxLM9Wu95RZqo4a9jFBaA==
 
 ms@2.0.0:
   version "2.0.0"

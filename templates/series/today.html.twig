@@ -14,7 +14,7 @@
             <div class="header">
                 <div class="date"{% if backdrop %} style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop }}')"{% endif %}>{{ date|date("d/m/Y", "Europe/Paris") }}</div>
             </div>
-            {% set date = date|format_date('full', timezone="Europe/Paris")|capitalize %}
+            {% set date = date|format_date('full', timezone="Europe/Paris")|capitalize|slice(0,-5) %}
             {#            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:'New episodes'|trans}) }} #}
             <main>
                 <div class="time-travel">

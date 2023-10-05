@@ -88,7 +88,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function getSeriesToEndV2($userId, $perPage, $page): array
@@ -119,7 +119,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function getEpisodesOfTheDay($userId, $today, $yesterday, $page, $perPage): array
@@ -140,7 +140,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     // Épisodes à venir paginés
@@ -181,10 +181,10 @@ class SerieViewingRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
-    // Épisodes à venir paginés
+    // Épisodes à venir
     public function countUpcomingEpisodes($userId): int
     {
         $sql = "SELECT "
@@ -255,7 +255,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     // Séries à venir (avec pagination)
@@ -285,7 +285,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     // Séries à venir (avec pagination)

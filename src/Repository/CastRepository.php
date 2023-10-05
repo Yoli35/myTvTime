@@ -54,7 +54,7 @@ class CastRepository extends ServiceEntityRepository
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function searchByName($query, $limit = 20, $offset = 0): array
@@ -70,7 +70,7 @@ class CastRepository extends ServiceEntityRepository
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function searchByNameCount($query): array
@@ -84,7 +84,7 @@ class CastRepository extends ServiceEntityRepository
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 //    /**
 //     * @return Cast[] Returns an array of Cast objects

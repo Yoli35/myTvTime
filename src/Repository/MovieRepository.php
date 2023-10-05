@@ -78,7 +78,7 @@ class MovieRepository extends ServiceEntityRepository
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
 //    /**
@@ -116,7 +116,7 @@ class MovieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function isInUserMovies($userId, $movieId): array
@@ -127,7 +127,7 @@ class MovieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function findUserMovies($userId, $offset = 0): array
@@ -149,7 +149,7 @@ class MovieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function userMovieGetMovieLists($movie_id, $user_id, $short = true): array
@@ -175,7 +175,7 @@ class MovieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function findUserMoviesByAdd($userId, $offset = 0): array
@@ -191,7 +191,7 @@ class MovieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function countUserMovies($userId): array
@@ -202,7 +202,7 @@ class MovieRepository extends ServiceEntityRepository
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
-            ->executeQuery()->fetchAll();
+            ->executeQuery()->fetchAllAssociative();
     }
 
     public function getUserMoviesRuntime($userId): array
@@ -213,7 +213,7 @@ class MovieRepository extends ServiceEntityRepository
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
-            ->executeQuery()->fetchAll();
+            ->executeQuery()->fetchAllAssociative();
     }
 
     public function findUserMovieIds($userId): array
@@ -224,7 +224,7 @@ class MovieRepository extends ServiceEntityRepository
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
-            ->executeQuery()->fetchAll();
+            ->executeQuery()->fetchAllAssociative();
     }
 
     public function getUserMovieFromIdList($userId, $list): array
@@ -242,7 +242,7 @@ class MovieRepository extends ServiceEntityRepository
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
-            ->executeQuery()->fetchAll();
+            ->executeQuery()->fetchAllAssociative();
     }
 
     public function searchUserMovies($userId, $query): array
@@ -257,6 +257,6 @@ class MovieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAll();
+        return $resultSet->fetchAllAssociative();
     }
 }

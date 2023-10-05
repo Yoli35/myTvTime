@@ -66,7 +66,7 @@ class ArticleImageRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        $results = $resultSet->fetchAll();
+        $results = $resultSet->fetchAllAssociative();
         return $results[0];
 //        return $this->createQueryBuilder('a')
 //            ->andWhere('a.id = :val')

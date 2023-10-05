@@ -56,6 +56,23 @@ class SerieCastRepository extends ServiceEntityRepository
         return $resultSet->fetchOne();
     }
 
+    public function getSerieCast($serieId): array
+    {
+        $sql = "SELECT "
+            . "     c.`tmdb_id` as id, c.`profile_path` as profile_path, c.`name` as name, "
+            . "     sc.`known_for_department` as known_for_department, sc.`character_name` as character_name, "
+            . "     sc.`recurring_character` as recurring_character, sc.`guest_star` as guest_star, "
+            . "     sc.`episodes` as episodes "
+            . "FROM `serie_cast` sc "
+            . "LEFT JOIN `cast` c ON sc.`cast_id` = c.`id` "
+            . "WHERE sc.`serie_id`=".$serieId;
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return SerieCast[] Returns an array of SerieCast objects
 //     */
