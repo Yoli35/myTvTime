@@ -425,7 +425,7 @@ class SerieController extends AbstractController
         $bc = new BreadcrumbBuilder($this->translator);
         $bc->rootBreadcrumb('Home', $this->generateUrl('app_home'))
             ->addBreadcrumb('My series airing today', $this->generateUrl('app_series_today'));
-        dump($bc);
+//        dump($bc);
 //        $this->breadcrumbBuilder->rootBreadcrumb('Home', 'app_home');
 //        $this->breadcrumbBuilder->addBreadcrumb('My series airing today', 'app_series_today');
 //        dump($this->breadcrumbBuilder->getBreadcrumbs());
@@ -1230,7 +1230,7 @@ class SerieController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $timezone = $user ? $user->getTimezone() : 'Europe/Paris';
-//        dump($tv);
+
         $modified = false;
         if ($serieViewing->getNumberOfSeasons() != $tv['number_of_seasons']) {
             if ($serieViewing->getNumberOfSeasons() > $tv['number_of_seasons']) {
@@ -1292,6 +1292,9 @@ class SerieController extends AbstractController
                 if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "serieName", season seasonNumber (episodeCount ep.) added.',
                     ['serieName' => $serieViewing->getSerie()->getName(), 'seasonNumber' => $seasonNumber, 'episodeCount' => $s['episode_count']]));
             } else {
+
+                if ($season->getEpisodeCount() == $s['episode_count']) continue;
+
                 if ($season->getEpisodeCount() < $s['episode_count']) {
                     for ($i = $season->getEpisodeCount() + 1; $i <= $s['episode_count']; $i++) {
                         $this->addNewEpisode($tv, $season, $i);
@@ -1431,7 +1434,7 @@ class SerieController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        dump($bc);
+//        dump($bc);
         $tmdbService = $this->TMDBService;
 
         $page = $request->query->getInt('p', 1);
@@ -2018,9 +2021,17 @@ class SerieController extends AbstractController
             $credits['cast'] = $cast;
 
             $seasonsWithAView = [];
+            $seasonViewings = $serieViewing->getSeasons()->toArray();
+            dump($seasonViewings);
             foreach ($tv['seasons'] as $season) {
+                if ($season['season_number'] == 0) {
+                    continue;
+                }
                 $seasonWithAView = $season;
-                $seasonWithAView['seasonViewing'] = $serieViewing->getSeasonByNumber($season['season_number']);
+                $seasonViewing = array_filter($seasonViewings, function($seasonViewing) use ($season) {
+                    return $seasonViewing->getSeasonNumber() == $season['season_number'];
+                });
+                $seasonWithAView['seasonViewing'] = array_shift($seasonViewing);
                 if ($serieViewing->isTimeShifted()) {
                     $airDate = $this->dateService->newDate($season['air_date'], $user->getTimezone(), true);
                     $airDate = $airDate->modify('+1 day');
@@ -2034,16 +2045,16 @@ class SerieController extends AbstractController
             $tv['serieBackdrops'] = [];
         }
 
-        $ygg = str_replace(' ', '+', $tv['name']);
-        $yggOriginal = str_replace(' ', '+', $tv['original_name']);
-
-//        $this->cleanCastTable();
         $tv['seasons'] = array_map(function ($season) use ($tv, $locale) {
             $standing = $this->TMDBService->getTvSeason($tv['id'], $season['season_number'], $locale);
             $seasonTMDB = json_decode($standing, true);
             $season['episodes'] = $seasonTMDB['episodes'];
+//            $episodeCast =
             return $season;
         }, $tv['seasons']);
+
+        $ygg = str_replace(' ', '+', $tv['name']);
+        $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
         $addThisSeries = !$serieViewing;
 
@@ -2060,14 +2071,14 @@ class SerieController extends AbstractController
         }
         $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
 
-//        dump([
-//            'tv' => $tv,
+        dump([
+            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
 //            'credits' => $credits,
-//        ]);
+        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
@@ -2182,31 +2193,21 @@ class SerieController extends AbstractController
 
     public function getCast(Serie $serie): array
     {
-        $castDbArray = array_map(function ($serieCast) {
-            return $serieCast->getCast();
-        }, $serie->getSerieCasts()->toArray());
+        $serieCastArray = $this->serieCastRepository->getSerieCast($serie->getId());
 
-        $serieCastArray = $serie->getSerieCasts()->toArray();
-
-        /** @var SerieCast[] $serieCasts */
-        $cast = array_map(function ($castDb) use ($serieCastArray) {
-            $serieCast = array_filter($serieCastArray, function ($serieCast) use ($castDb) {
-                return $serieCast->getCast()->getId() === $castDb->getId();
-            });
-            $serieCast = array_values($serieCast)[0];
-            /** @var SerieCast $serieCast */
-            $c['id'] = $castDb->getTmdbId();
-            $c['profile_path'] = $castDb->getProfilePath();
-            $c['name'] = $castDb->getName();
-            $c['known_for_department'] = $serieCast->getKnownForDepartment();
-            $c['character'] = $serieCast->getCharacterName();
-            $c['recurring_character'] = $serieCast->isRecurringCharacter();
-            $c['guest_star'] = $serieCast->isGuestStar();
-            $count = $serieCast->getEpisodesCount();
+        $cast = array_map(function ($serieCast) {
+            $c = $serieCast;
+            // $serieCast['episodes'] = "[[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8]]";
+            $episodesArray = json_decode($serieCast['episodes']);
+            $count = $episodesArray ? count($episodesArray) : 0;
             $c['episodes'] = $count . ' ' . $this->translator->trans($count > 1 ? 'episodes' : 'episode');
-            $c['episodesString'] = $serieCast->getEpisodesString();
+            $episodes = [];
+            foreach ($episodesArray as $episode) {
+                $episodes[] = sprintf('S%02dE%02d', $episode[0], $episode[1]);
+            }
+            $c['episodesString'] = implode(', ', $episodes);
             return $c;
-        }, $castDbArray);
+        }, $serieCastArray);
 
         // on replace les personnages récurrents en tête de liste
         usort($cast, function ($a, $b) {
