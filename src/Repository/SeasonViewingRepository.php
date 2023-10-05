@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SeasonViewingRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, SeasonViewing::class);
     }
@@ -37,6 +37,24 @@ class SeasonViewingRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getSeasonViewings($serieViewing): array
+    {
+        $sql = "SELECT "
+            . "sv.`id`, "
+            . "sv.`air_at` AS airAt, "
+            . "sv.`season_number` AS seasonNumber, "
+            . "sv.`episode_count` AS episodeCount, "
+            . "sv.`season_completed` AS seasonCompleted "
+            . "FROM `season_viewing`sv "
+            . "WHERE sv.`serie_viewing_id` = " . $serieViewing->getId() . " AND sv.`season_number` > 0 "
+            . "ORDER BY sv.`season_number` ASC";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
     }
 
 //    /**

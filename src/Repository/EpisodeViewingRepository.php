@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EpisodeViewingRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, EpisodeViewing::class);
     }
@@ -42,6 +42,32 @@ class EpisodeViewingRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getEpisodeViewings($serieViewing): array
+    {
+        $sql = "SELECT "
+            . "ev.`id`, "
+            . "ev.`viewed_at` AS viewedAt, "
+            . "sv.`season_number` AS seasonNumber,"
+            . "ev.`episode_number` AS episodeNumber, "
+            . "ev.`network_id` AS networkId, "
+            . "ev.`network_type` AS networkType, "
+            . "ev.`device_type` AS deviceType, "
+            . "ev.`air_date` AS airDate, "
+            . "ev.`substitute_name` AS substituteName, "
+            . "ev.`vote` AS vote, "
+            . "ev.`number_of_view` AS numberOfView "
+            . "FROM `season_viewing` sv "
+            . "INNER JOIN `episode_viewing` ev ON ev.`season_id` = sv.id "
+            . "WHERE sv.`serie_viewing_id` = " . $serieViewing->getId() . " "
+            . "AND sv.`season_number` > 0 "
+            . "ORDER BY sv.`season_number` ASC, ev.`episode_number` ASC";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
     }
 
 //    /**

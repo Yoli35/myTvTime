@@ -65,6 +65,11 @@ class SerieController extends AbstractController
 
     public array $messages = [];
 
+    private array $seasonViewings = [];
+    private array $episodeViewings = [];
+    private array $episodeViewingBySeason = [];
+
+
     public function __construct(private readonly AlertRepository          $alertRepository,
 //                                private readonly BreadcrumbBuilder        $breadcrumbBuilder,
                                 private readonly CastRepository           $castRepository,
@@ -1288,9 +1293,11 @@ class SerieController extends AbstractController
                 for ($i = 1; $i <= $s['episode_count']; $i++) {
                     $this->addNewEpisode($tv, $season, $i);
                 }
-                $seasonNumber = sprintf('S%02d', $s['season_number']);
-                if ($flashes) $this->addFlash('success', $this->translator->trans('Serie "serieName", season seasonNumber (episodeCount ep.) added.',
-                    ['serieName' => $serieViewing->getSerie()->getName(), 'seasonNumber' => $seasonNumber, 'episodeCount' => $s['episode_count']]));
+                if ($flashes) {
+                    $seasonNumber = sprintf('S%02d', $s['season_number']);
+                    $this->addFlash('success', $this->translator->trans('Serie "serieName", season seasonNumber (episodeCount ep.) added.',
+                        ['serieName' => $serieViewing->getSerie()->getName(), 'seasonNumber' => $seasonNumber, 'episodeCount' => $s['episode_count']]));
+                }
             } else {
 
                 if ($season->getEpisodeCount() == $s['episode_count']) continue;
@@ -1320,14 +1327,18 @@ class SerieController extends AbstractController
             }
             $this->seasonViewingRepository->save($season, true);
 
-            foreach ($season->getEpisodes() as $episode) {
-                if ($episode->getAirDate() === null) {
-                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $episode->getEpisodeNumber(), 'fr');
-                    $tmdbEpisode = json_decode($standing, true);
-                    if ($tmdbEpisode && key_exists('air_date', $tmdbEpisode) && $tmdbEpisode['air_date']) {
-                        $episode->setAirDate($this->dateService->newDateImmutable($tmdbEpisode['air_date'], $timezone));
-                        $this->episodeViewingRepository->save($episode, true);
-                        if (!$verbose) $this->addFlash('success', 'Date mise à jour : ' . $tmdbEpisode['air_date']);
+            if (!$season->isSeasonCompleted()) {
+                $episodes = $season->getEpisodes();
+//                dump($episodes);
+                foreach ($episodes as $episode) {
+                    if ($episode->getAirDate() === null) {
+                        $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $episode->getEpisodeNumber(), 'fr');
+                        $tmdbEpisode = json_decode($standing, true);
+                        if ($tmdbEpisode && key_exists('air_date', $tmdbEpisode) && $tmdbEpisode['air_date']) {
+                            $episode->setAirDate($this->dateService->newDateImmutable($tmdbEpisode['air_date'], $timezone));
+                            $this->episodeViewingRepository->save($episode, true);
+                            if (!$verbose) $this->addFlash('success', 'Date mise à jour : ' . $tmdbEpisode['air_date']);
+                        }
                     }
                 }
             }
@@ -2009,7 +2020,9 @@ class SerieController extends AbstractController
 
             if ($serieViewing == null) {
                 $serieViewing = $this->createSerieViewing($user, $tv, $serie);
+                $this->getEpisodeViewingBySeason($serieViewing);
             } else {
+                $this->getEpisodeViewingBySeason($serieViewing);
                 $whatsNew = $this->whatsNew($tv, $serie, $serieViewing);
                 $serieViewing = $this->updateSerieViewing($serieViewing, $tv, false, true);
             }
@@ -2021,17 +2034,16 @@ class SerieController extends AbstractController
             $credits['cast'] = $cast;
 
             $seasonsWithAView = [];
-            $seasonViewings = $serieViewing->getSeasons()->toArray();
-            dump($seasonViewings);
+
             foreach ($tv['seasons'] as $season) {
                 if ($season['season_number'] == 0) {
                     continue;
                 }
                 $seasonWithAView = $season;
-                $seasonViewing = array_filter($seasonViewings, function($seasonViewing) use ($season) {
-                    return $seasonViewing->getSeasonNumber() == $season['season_number'];
-                });
-                $seasonWithAView['seasonViewing'] = array_shift($seasonViewing);
+//                $seasonViewing = $serieViewing->getSeasonByNumber($season['season_number']);
+                $seasonViewing = $this->seasonViewings[$season['season_number'] - 1] ?? null;
+                $seasonViewing['episodes'] = $this->episodeViewingBySeason[$season['season_number']] ?? [];
+                $seasonWithAView['seasonViewing'] = $seasonViewing;
                 if ($serieViewing->isTimeShifted()) {
                     $airDate = $this->dateService->newDate($season['air_date'], $user->getTimezone(), true);
                     $airDate = $airDate->modify('+1 day');
@@ -2071,14 +2083,14 @@ class SerieController extends AbstractController
         }
         $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
 
-        dump([
-            'tv' => $tv,
+//        dump([
+//            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
 //            'credits' => $credits,
-        ]);
+//        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
@@ -2110,6 +2122,25 @@ class SerieController extends AbstractController
             'yggOriginal' => $yggOriginal,
             'imageConfig' => $imgConfig,
         ]);
+    }
+
+    public function getEpisodeViewingBySeason($serieViewing): void
+    {
+        if (empty($this->episodeViewingBySeason)) {
+            $seasonViewings = $this->seasonViewingRepository->getSeasonViewings($serieViewing);
+            $episodeViewings = $this->episodeViewingRepository->getEpisodeViewings($serieViewing);
+
+            $episodeViewingBySeason = [];
+            foreach ($seasonViewings as $seasonViewing) {
+                $episodeViewingBySeason[$seasonViewing['seasonNumber']] = [];
+            }
+            foreach ($episodeViewings as $episodeViewing) {
+                $episodeViewingBySeason[$episodeViewing['seasonNumber']][] = $episodeViewing;
+            }
+            $this->episodeViewings = $episodeViewings;
+            $this->seasonViewings = $seasonViewings;
+            $this->episodeViewingBySeason = $episodeViewingBySeason;
+        }
     }
 
     public function getNextEpisodeToWatch(SerieViewing $serieViewing, $locale): ?array
@@ -2630,26 +2661,52 @@ class SerieController extends AbstractController
 
     public function viewingCompleted(SerieViewing $serieViewing): bool
     {
+        $this->getEpisodeViewingBySeason($serieViewing);
         $seasonsCompleted = 0;
-        foreach ($serieViewing->getSeasons() as $season) {
-            if ($season->getSeasonNumber()) {
-                if ($season->getEpisodeCount()) { //une saison peut être annoncée/ajoutée avec zéro épisode
-                    $completed = $season->getViewedEpisodeCount() == $season->getEpisodeCount();
-                    if ($completed && !$season->isSeasonCompleted()) {
+        foreach ($this->episodeViewingBySeason as $seasonNumber => $episodeViewings) {
+            $viewedEpisodes = 0;
+            if (count($episodeViewings)) {
+                foreach ($episodeViewings as $episodeViewing) {
+                    if ($episodeViewing['viewedAt']) {
+                        $viewedEpisodes++;
+                    }
+                }
+                if (count($episodeViewings) == $viewedEpisodes) {
+                    $season = $serieViewing->getSeasonByNumber($seasonNumber);
+                    if (!$season->isSeasonCompleted()) {
                         $season->setSeasonCompleted(true);
                         $this->seasonViewingRepository->save($season, true);
                     }
-                    if ($completed) $seasonsCompleted++;
+                    $seasonsCompleted++;
                 }
+//                dump([
+//                    'seasonNumber' => $seasonNumber,
+//                    'episodeCount' => count($episodeViewings),
+//                    'viewedEpisodes' => $viewedEpisodes
+//                ]);
             }
         }
-        if ($serieViewing->getNumberOfSeasons() == 0) {
-            $serieViewing->setNumberOfSeasons(count($serieViewing->getSeasons()));
-            $this->serieViewingRepository->save($serieViewing, true);
-        }
+//        foreach ($serieViewing->getSeasons() as $season) {
+//            if ($season->getSeasonNumber()) {
+//                if ($season->getEpisodeCount()) { //une saison peut être annoncée/ajoutée avec zéro épisode
+//                    $completed = $season->getViewedEpisodeCount() == $season->getEpisodeCount();
+//                    if ($completed && !$season->isSeasonCompleted()) {
+//                        $season->setSeasonCompleted(true);
+//                        $this->seasonViewingRepository->save($season, true);
+//                    }
+//                    if ($completed) $seasonsCompleted++;
+//                }
+//            }
+//        }
+//        if ($serieViewing->getNumberOfSeasons() == 0) {
+//            $serieViewing->setNumberOfSeasons(count($serieViewing->getSeasons()));
+//            $this->serieViewingRepository->save($serieViewing, true);
+//        }
         if ($serieViewing->getNumberOfSeasons() == $seasonsCompleted) {
-            $serieViewing->setSerieCompleted(true);
-            $this->serieViewingRepository->save($serieViewing, true);
+            if (!$serieViewing->isSerieCompleted()) {
+                $serieViewing->setSerieCompleted(true);
+                $this->serieViewingRepository->save($serieViewing, true);
+            }
             return true;
         }
         return false;
@@ -2657,14 +2714,22 @@ class SerieController extends AbstractController
 
     public function setViewedEpisodeCount($serieViewing): int
     {
+        $this->getEpisodeViewingBySeason($serieViewing);
         $viewedEpisodeCount = 0;
-        foreach ($serieViewing->getSeasons() as $season) {
-            if ($season->getSeasonNumber()) { // 21/12/2022 : finito les épisodes spéciaux
-                $viewedEpisodeCount += $season->getViewedEpisodeCount();
+        foreach ($this->episodeViewings as $episodeViewing) {
+            if ($episodeViewing['viewedAt']) {
+                $viewedEpisodeCount++;
             }
         }
-        $serieViewing->setViewedEpisodes($viewedEpisodeCount);
-        $this->serieViewingRepository->save($serieViewing, true);
+//        foreach ($serieViewing->getSeasons() as $season) {
+//            if ($season->getSeasonNumber()) { // 21/12/2022 : finito les épisodes spéciaux
+//                $viewedEpisodeCount += $season->getViewedEpisodeCount();
+//            }
+//        }
+        if ($serieViewing->getViewedEpisodes() != $viewedEpisodeCount) {
+            $serieViewing->setViewedEpisodes($viewedEpisodeCount);
+            $this->serieViewingRepository->save($serieViewing, true);
+        }
 
         return $viewedEpisodeCount;
     }
