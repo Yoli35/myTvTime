@@ -11,10 +11,6 @@ dashboard:
     controller: App\Controller\Admin\DashboardController::index
     prefix: '/{_locale}'
 
-live_component:
-    resource: '@LiveComponentBundle/config/routes.php'
-    prefix: '/{_locale}/_components'
-
 # app/config/routing.yml
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.yaml"

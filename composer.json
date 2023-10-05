@@ -55,8 +55,6 @@
     "symfony/translation": "6.3.*",
     "symfony/twig-bundle": "6.3.*",
     "symfony/ux-dropzone": "2.8.*",
-    "symfony/ux-live-component": "*",
-    "symfony/ux-twig-component": "^2.4",
     "symfony/ux-typed": "^2.6",
     "symfony/validator": "6.3.*",
     "symfony/web-link": "6.3.*",

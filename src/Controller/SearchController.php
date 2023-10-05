@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Config\SearchHistoryType;
+//use App\Config\SearchHistoryType;
 use App\Entity\SearchHistory;
 use App\Repository\CastRepository;
 use App\Repository\SearchHistoryRepository;
@@ -138,7 +138,7 @@ class SearchController extends AbstractController
         $common = array_map(function ($value) {
             return ['people' => $value[0], 'media' => $value[1], 'count' => $value[2]];
         }, $common);
-        dump($common);
+//        dump($common);
         // Tri par date (media_type = movie) ou première date de diffusion (media_type = tv)
         usort($common, function ($a, $b) {
             $aDate = $a['media']['media_type'] == 'movie' ? $a['media']['release_date'] : $a['media']['first_air_date'];
