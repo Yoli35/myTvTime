@@ -1346,7 +1346,7 @@ class SerieController extends AbstractController
         $this->setViewedEpisodeCount($serieViewing);
         // Ajuste les champs seasonCount, seasonCompleted, serieCompleted
         // Et si la série n'est pas terminée, on met à jour le prochain épisode à regarder
-        if (!$this->viewingCompleted($serieViewing)) {
+        if (!$this->viewingCompleted($serieViewing, $verbose)) {
             $this->setNextEpisode($tv, $serieViewing, $verbose);
         }
 
@@ -1531,25 +1531,31 @@ class SerieController extends AbstractController
                 $internationalSeason['watch/providers'] = $season['watch/providers'];
                 $season = $internationalSeason;
                 $localized = false;
-//                try {
-//                    $usage = $this->deeplTranslator->translator->getUsage();
-//                    if ($usage->character->count + strlen($internationalSeason['overview']) < $usage->character->limit) {
+                try {
+                    $usage = $this->deeplTranslator->translator->getUsage();
+                    if ($usage->character->count + strlen($internationalSeason['overview']) < $usage->character->limit) {
 //                        $localizedOverview = $this->deeplTranslator->translator->translateText($internationalSeason['overview'], null, $locale);
-//                        $localizedResult = 'Translated';
-//                    } else {
-//                        $localizedResult = 'Limit exceeded';
-//                    }
+                        $localizedResult = 'Translated';
+                    } else {
+                        $localizedResult = 'Limit exceeded';
+                    }
 //                    dump([
 //                        'usage' => $usage->character->count,
 //                        'limit' => $usage->character->limit,
 //                        'localizedResult' => $localizedResult,
 //                        'localizedOverview' => $localizedOverview
 //                    ]);
-//                } catch (DeepLException $e) {
-//                    $localizedResult = 'Error: code '.$e->getCode().', message: '.$e->getMessage();
-//                }
+                } catch (DeepLException $e) {
+                    $localizedResult = 'Error: code ' . $e->getCode() . ', message: ' . $e->getMessage();
+                    $usage = [
+                        'character' => [
+                            'count' => 0,
+                            'limit' => 500000
+                        ]
+                    ];
+                }
                 // for now, we don't use deepl translator
-                $localizedOverview = 'No translation in dev mode - ' . $internationalSeason['overview'];
+                $localizedOverview = sprintf('No translation in dev mode (%d / %d -> %d%%) - %s - %s', $usage->character->count, $usage->character->limit, intval(100 * $usage->character->count / $usage->character->limit), $localizedResult, $internationalSeason['overview']);
             }
         }
 
@@ -2140,6 +2146,11 @@ class SerieController extends AbstractController
             $this->episodeViewings = $episodeViewings;
             $this->seasonViewings = $seasonViewings;
             $this->episodeViewingBySeason = $episodeViewingBySeason;
+//            dump([
+//                'episodeViewings' => $this->episodeViewings,
+//                'seasonViewings' => $this->seasonViewings,
+//                'episodeViewingBySeason' => $this->episodeViewingBySeason
+//            ]);
         }
     }
 
@@ -2659,8 +2670,11 @@ class SerieController extends AbstractController
         return $createdAt;
     }
 
-    public function viewingCompleted(SerieViewing $serieViewing): bool
+    public function viewingCompleted(SerieViewing $serieViewing, bool $verbose = false): bool
     {
+        if ($verbose) // On vient de la commande NextEpisodeToAir, il faut réinitialiser le tableau episodeViewingBySeason
+            $this->episodeViewingBySeason = [];
+
         $this->getEpisodeViewingBySeason($serieViewing);
         $seasonsCompleted = 0;
         foreach ($this->episodeViewingBySeason as $seasonNumber => $episodeViewings) {
@@ -2672,6 +2686,13 @@ class SerieController extends AbstractController
                     }
                 }
                 if (count($episodeViewings) == $viewedEpisodes) {
+//                    dump([
+//                        'serie name' => $serieViewing->getSerie()->getName(),
+//                        'serie id' => $serieViewing->getSerie()->getId(),
+//                        'serieViewing'=>$serieViewing,
+//                        'seasonNumber'=>$seasonNumber,
+//                        'episodeViewings'=>$episodeViewings
+//                    ]);
                     $season = $serieViewing->getSeasonByNumber($seasonNumber);
                     if (!$season->isSeasonCompleted()) {
                         $season->setSeasonCompleted(true);
