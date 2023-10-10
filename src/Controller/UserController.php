@@ -43,13 +43,17 @@ class UserController extends AbstractController
     public function __construct(private readonly DateTimeFormatter        $dateTimeFormatter,
                                 private readonly EpisodeViewingRepository $episodeViewingRepository,
                                 private readonly FriendRepository         $friendRepository,
+                                private readonly ImageConfiguration       $imageConfiguration,
                                 private readonly LocaleSwitcher           $localeSwitcher,
+                                private readonly MovieController          $movieController,
+                                private readonly MovieListRepository      $movieListRepository,
                                 private readonly MovieRepository          $movieRepository,
                                 private readonly SeasonViewingRepository  $seasonViewingRepository,
                                 private readonly SerieViewingRepository   $serieViewingRepository,
+                                private readonly SettingsRepository       $settingsRepository,
                                 private readonly TMDBService              $TMDBService,
                                 private readonly TranslatorInterface      $translator,
-                                private readonly UserRepository           $userRepository,
+                                private readonly UserRepository           $userRepository
     )
     {
     }
@@ -243,27 +247,21 @@ class UserController extends AbstractController
      * @throws \Exception
      */
     #[Route('/{_locale}/user/movies', name: 'app_personal_movies', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function userMovies(Request $request, MovieRepository $userMovieRepository, MovieController $movieController, MovieListRepository $movieListRepository, SettingsRepository $settingsRepository, ImageConfiguration $imageConfiguration): Response
+    public function userMovies(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var User $user */
         $user = $this->getUser();
 
-        $movies = $this->getUserMovies($user->getId(), 0, $userMovieRepository);
-        $imageConfig = $imageConfiguration->getConfig();
+        $movies = $this->getUserMovies($user->getId(), 0);
 
-        $items = $userMovieRepository->getUserMoviesRuntime($user->getId());
-        $total = 0;
-        foreach ($items as $item) {
-            $total += $item['runtime'];
-        }
-        $runtime['total'] = $total;
-        $runtime['minutes'] = $total % 60;
-        $runtime['hours'] = floor($total / 60) % 24;
-        $runtime['days'] = floor($total / 60 / 24) % 30;
-        $runtime['months'] = floor($total / 60 / 24 / 30.41666667) % 12;
-        $runtime['years'] = floor($total / 60 / 24 / 365);
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        $items = $this->movieRepository->getUserMoviesRuntime($user->getId());
+        $total = array_reduce($items, function ($carry, $item) {
+            return $carry + $item['runtime'];
+        });
 
         // convert total runtime ($total in minutes) in years, months, days, hours, minutes
         $now = new DateTimeImmutable();
@@ -279,34 +277,27 @@ class UserController extends AbstractController
         $runtimeString .= $diff->h ? ($diff->h . ' ' . ($diff->h > 1 ? $this->translator->trans('hours') : $this->translator->trans('hour')) . ', ') : '';
         $runtimeString .= $diff->i ? ($diff->i . ' ' . ($diff->i > 1 ? $this->translator->trans('minutes') : $this->translator->trans('minute'))) : '';
 
-//        dump([
-//            'now' => $now,
-//            'past' => $past,
-//            'diff' => $diff,
-//            'diff string' => $runtimeString,
-//        ]);
-
-        $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
         if (!$settings) {
             $settings = new Settings();
             $settings->setUser($user);
             $settings->setName('pinned collection');
             $settings->setData([["pinned" => 0, "collection_id" => 0]]);
-            $settingsRepository->save($settings, true);
+            $this->settingsRepository->save($settings, true);
         }
 
         return $this->render('user/movies.html.twig', [
             'discovers' => $movies,
-            'userMovies' => $movieController->getUserMovieIds(),
+            'userMovies' => $this->movieController->getUserMovieIds(),
             'count' => count($items),
-            'runtime' => $runtime,
+            'runtimeTotal' => $total,
             'runtimeString' => $runtimeString,
             'locale' => $request->getLocale(),
             'imageConfig' => $imageConfig,
             'user' => $user,
             'dRoute' => 'app_movie',
             'from' => 'app_personal_movies',
-            'collections' => $movieListRepository->findBy(['user' => $user]),
+            'collections' => $this->movieListRepository->findBy(['user' => $user]),
             'settings' => $settings,
         ]);
     }
@@ -314,24 +305,40 @@ class UserController extends AbstractController
     #[Route('/user/movies/more', name: 'app_personal_movies_more')]
     public function userMoviesMore(Request $request, MovieRepository $movieRepository): Response
     {
+        $imageConfig = $this->imageConfiguration->getConfig();
+        $userMovieIds = $this->movieController->getUserMovieIds();
+        $movies = $this->getUserMovies($request->query->get('id'), $request->query->get('offset'));
+        $blocks = array_map(function ($movie) use ($imageConfig, $userMovieIds) {
+            return $this->renderView('blocks/movie/_discover.html.twig', [
+                'discover' => $movie,
+                'title' => $movie['title'],
+                'poster' => $movie['poster_path'] ? $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $movie['poster_path'] : null,
+                'id'=> $movie['movie_db_id'],
+                'userMovies' => $userMovieIds,
+                'from' => 'app_personal_movies',
+                'more' => true,
+            ]);
+        }, $movies);
         return $this->json([
-//            'results' => $userMovieRepository->findUserMovies($request->query->get('id'), $request->query->get('offset')),
-            'results' => $this->getUserMovies($request->query->get('id'), $request->query->get('offset'), $movieRepository),
+            'blocks' => $blocks,
         ]);
     }
 
-    public function getUserMovies($userId, $offset, $movieRepository): array
+    public function getUserMovies($userId, $offset): array
     {
+        $movieRepository = $this->movieRepository;
         $userMovies = $movieRepository->findUserMovies($userId, $offset);
-//        foreach ($userMovies as $userMovie) {
-//            $movie = $userMovie;
-//            $collections = $userMovieRepository->userMovieGetCollections($userMovie['id'], $userId);
-//            $movie['my_collections'] = $collections;
-//            $movies[] = $movie;
-//        }
-        return array_map(function ($userMovie) use ($movieRepository, $userId) {
+
+        $ids = array_map(function ($userMovie) {
+            return $userMovie['id'];
+        }, $userMovies);
+        $movieLists =$this->movieRepository->userMovieGetMovieListsAll($ids, $userId);
+
+        return array_map(function ($userMovie) use ($movieLists) {
             $movie = $userMovie;
-            $movie['my_collections'] = $movieRepository->userMovieGetMovieLists($userMovie['id'], $userId);
+            $movie['movie_lists'] = array_filter($movieLists, function ($movieList) use ($userMovie) {
+                return ($userMovie['id'] === $movieList['movie_id']);
+            });
             return $movie;
         }, $userMovies);
     }

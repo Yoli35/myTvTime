@@ -1785,6 +1785,15 @@ nav.active {
             width: 16rem;
         }
 
+        .no-poster {
+            @include flex-col();
+            background-color: var(--gradient-green-40);
+            border-radius: 1rem 0 0 1rem;
+            color: var(--gradient-green-80);
+            height: 24rem;
+            width: 16rem;
+        }
+
         .infos {
             @include flex-col(start, center);
             height: 100%;
@@ -1935,22 +1944,22 @@ nav.active {
         }
     }
 
-    .my-collections {
+    .movie-lists {
         @include flex-col();
         position: absolute;
-        right: -1.25rem;
-        top: 4rem;
+        right: -.4rem;
+        top: 3rem;
 
-        .my-collection {
+        .movie-list {
             margin-top: -1rem;
 
             a {
-                height: 3rem;
+                height: 2.25rem;
                 transition: all .125s ease-out;
-                width: 3rem;
+                width: 2.25rem;
 
                 img {
-                    border: 2px solid #11d08e;
+                    border: 2px solid transparent;
                     border-radius: 50%;
                     height: 100%;
                     object-fit: cover;

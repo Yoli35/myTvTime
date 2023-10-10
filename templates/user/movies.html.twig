@@ -19,11 +19,11 @@
                 </h1>
 
                 <h4>{{ 'Time spent watching TV:'|trans }}
-                    {{ runtime.total }} {{ 'minutes'|trans }}, {{ 'i.e.'|trans }} {{ runtimeString }}
+                    {{ runtimeTotal }} {{ 'minutes'|trans }}, {{ 'i.e.'|trans }} {{ runtimeString }}
                 </h4>
 
                 <div class="search-block">
-{#                    {{ component('user_movie_search', {class: 'search', id: user.id, poster_url: imageConfig.url, poster_size: imageConfig.poster_sizes.3}) }}#}
+                    {#                    {{ component('user_movie_search', {class: 'search', id: user.id, poster_url: imageConfig.url, poster_size: imageConfig.poster_sizes.3}) }} #}
                     <div class="export">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" id="export-button" class="btn btn-secondary">{{ 'Export'|trans }}</button>
@@ -171,7 +171,7 @@
                         pinned.querySelector("h4").innerHTML = data.title;
                         data.movies.forEach((item = {id: 0, title: "", original_title: "", poster_path: "", movie_db_id: 0, release_date: "", runtime: 0, description: ""}) => {
                             let a = document.createElement("a");
-                            a.setAttribute("href", _app_movie.substring(0, _app_movie.length - 1) + item.movie_db_id);
+                            a.setAttribute("href", _app_movie.slice(0, -1) + item.movie_db_id); //substring(0, _app_movie.length - 1) + item.movie_db_id);
                             let movie = document.createElement("div");
                             movie.classList.add("movie");
                             movie.setAttribute("data-id", item.id.toString());
@@ -189,18 +189,22 @@
                             let title = document.createElement("div");
                             title.classList.add("title");
                             title.appendChild(document.createTextNode(item.title));
-
                             movie.appendChild(title);
-                            // movie.addEventListener("mouseover", showAbout);
-                            // movie.addEventListener("mouseout", hideAbout);
                             movie.addEventListener("mouseenter", showAbout);
                             movie.addEventListener("mouseleave", hideAbout);
                             a.appendChild(movie);
                             wrapper.appendChild(a);
 
-                            img = document.createElement("img");
-                            img.setAttribute("src", url + item.poster_path);
-                            img.setAttribute("alt", item.title);
+                            let img;
+                            if (item.poster_path) {
+                                img = document.createElement("img");
+                                img.setAttribute("src", url + item.poster_path);
+                                img.setAttribute("alt", item.title);
+                            } else {
+                                img = document.createElement("div");
+                                img.classList.add("no-poster");
+                                img.appendChild(document.createTextNode(noPoster[locale]));
+                            }
 
                             let about = document.createElement("div");
                             about.classList.add("about-pinned-movie", "hide");
@@ -222,11 +226,11 @@
                             info = document.createElement("div");
                             info.appendChild(document.createTextNode(txt.movie.original_title[_locale] + ' : ' + item.original_title));
                             infos.appendChild(info);
-                            info = document.createElement("div");
-                            info.appendChild(document.createTextNode(item.runtime + ' ' + txt.movie.minutes[_locale]));
-                            infos.appendChild(info);
-                            info = document.createElement("div");
-                            info.appendChild(document.createTextNode(txt.movie.runtime[_locale] + ' : ' + item.runtime + ' ' + txt.movie.minutes[_locale]));
+                            if (item.runtime > 0) {
+                                info = document.createElement("div");
+                                info.appendChild(document.createTextNode(item.runtime + ' ' + txt.movie.minutes[_locale]));
+                                infos.appendChild(info);
+                            }
                             info = document.createElement("div");
                             info.appendChild(document.createTextNode(item.description));
                             infos.appendChild(info);
@@ -252,7 +256,7 @@
                             }
                         }
                     }
-                    xhr.open("GET", _app_personal_movie_list.substring(0, _app_personal_movie_list.length - 1) + listId);
+                    xhr.open("GET", _app_personal_movie_list.slice(0, -1) + listId);// substring(0, _app_personal_movie_list.length - 1) + listId);
                     xhr.send();
                 } else {
                     if (pinned.classList.contains("show")) {

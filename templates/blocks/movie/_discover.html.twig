@@ -1,4 +1,4 @@
-<div data-id="{{ id }}" class="home-discover">
+<div data-id="{{ id }}" class="home-discover"{% if more is defined %} style="opacity: 0; transform: scale({{ random(100)/100 }}) rotate({{ random(-360, 360) }}deg)"{% endif %}>
     <a href="{{ path('app_movie', {id: id}) }}{% if from is defined %}?from={{ from }}{% if mandatory is defined %}{% for k,v in mandatory %}&--{{ k }}={{ v }}{% endfor %}{% endif %}{% if before is defined %}&before={{ before }}{% endif %}{% endif %}">
         {% if poster %}
             <img src="{{ poster }}" alt="{{ title }}">
@@ -17,16 +17,16 @@
     {% if app.user is not null and userMovies is defined %}
         {{ include('blocks/movie/_rating.html.twig', {scale: 0.75, seen: id in userMovies}) }}
     {% endif %}
-    {% if discover.my_collections is defined %}
-        {% if discover.my_collections is not empty %}
-            <div class="my-collections">
-                {% for list in discover.my_collections %}
-                    <div class="my-collection">
+    {% if discover.movie_lists is defined %}
+        {% if discover.movie_lists is not empty %}
+            <div class="movie-lists">
+                {% for list in discover.movie_lists %}
+                    <div class="movie-list">
                         <a href="{{ path("app_movie_list_show", {id: list.id}) }}">
                             <img
                                     src="/images/movie_lists/thumbnails/{{ list.thumbnail }}"
                                     alt="{{ list.title }}"
-                                    style="border: 2px solid {{ list.color }}"
+                                    style="border-color: {{ list.color }}"
                             >
                         </a>
                     </div>

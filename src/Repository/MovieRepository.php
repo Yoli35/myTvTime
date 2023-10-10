@@ -178,6 +178,32 @@ class MovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function userMovieGetMovieListsAll($ids, $user_id, $short = true): array
+    {
+        if ($short) {
+            $sql = 'SELECT '
+                . '  t0.id,t0.title,t0.thumbnail,t0.color, t1.movie_id ';
+        } else {
+            $sql = 'SELECT '
+                . '  * ';
+        }
+        $sql .= 'FROM '
+            . '  movie_list t0 '
+            . 'INNER JOIN '
+            . '  movie_list_movie t1 '
+            . '  ON t0.id = t1.movie_list_id '
+            . 'WHERE '
+            . '  t1.movie_id IN (' . implode(',', $ids) . ') '
+            . 'AND '
+            . '  t0.`user_id` = ' . $user_id;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
     public function findUserMoviesByAdd($userId, $offset = 0): array
     {
         $sql = 'SELECT * FROM `movie` t0 '

@@ -393,8 +393,6 @@ function updateSample(items) {
 }
 
 function moreVideos() {
-    const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
-
     if (!loading_more_videos) {
 
         if (is_visible(userMovieList.lastElementChild)) {
@@ -404,90 +402,15 @@ function moreVideos() {
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
                 const data = JSON.parse(this.response);
-                let results = data['results'];
-                let count = results.length;
+                let blocks = data['blocks'];
+                let count = blocks.length;
+                // console.log(data);
 
                 for (let i = 0; i < count; i++) {
-                    let result = results[i];
-                    let newVideo = document.createElement("div");
-                    newVideo.setAttribute("id", result['movie_db_id']);
-                    newVideo.classList.add("home-discover");
-                    newVideo.setAttribute("style", "opacity: 0; transform: scale(" + Math.random() + ") rotate(" + (((Math.random() * 720).toFixed()) - 360) + "deg)");
-                    // newVideo.setAttribute("data-title", result['title']);
-                    let aVideo = document.createElement("a");
-                    aVideo.setAttribute("href", _movie_page + result['movie_db_id'].toString());
-                    let img = document.createElement("img");
-                    img.setAttribute("src", _url + result['poster_path']);
-                    img.setAttribute("alt", result['title']);
-                    let title = document.createElement("div");
-                    title.setAttribute("class", "title");
-                    title.appendChild(document.createTextNode(result['title']));
-                    let date = document.createElement("div");
-                    date.setAttribute("class", "date");
-                    let dateT = result['release_date'] + 'T00:00:00';
-                    let released = new Date(dateT);
-                    date.appendChild(document.createTextNode(txt.movie.release_date[_locale] + ' :\n' + released.toLocaleDateString(undefined, options)));
-                    aVideo.appendChild(img);
-                    aVideo.appendChild(title);
-                    aVideo.appendChild(date);
-
-                    let user = document.createElement("div");
-                    user.classList.add("user");
-                    user.setAttribute("style", "transform: scale(.75)");
-                    let rating = document.createElement("div");
-                    rating.classList.add("rating", "visible");
-                    rating.setAttribute("id", result['movie_db_id']);
-                    let trash = document.createElement("div");
-                    trash.classList.add("trash");
-                    trash.setAttribute("data-rate", "0");
-                    rating.appendChild(trash);
-                    for (let j = 1; j <= 5; j++) {
-                        let star = document.createElement("div");
-                        star.classList.add("star");
-                        star.setAttribute("data-rate", j.toString());
-                        rating.appendChild(star);
-                    }
-                    let seen = document.createElement("div");
-                    seen.classList.add("has-been-seen", "yes");
-                    seen.setAttribute("id", result['movie_db_id']);
-                    let check = document.createElement("i");
-                    check.classList.add("fa-solid", "fa-circle-check");
-                    seen.appendChild(check);
-
-                    user.appendChild(rating);
-                    user.appendChild(seen);
-
-                    newVideo.appendChild(aVideo);
-                    newVideo.appendChild(user);
-
-                    if (result['my_collections'].length) {
-                        let collections = document.createElement("div");
-                        collections.classList.add("my-collections");
-                        for (let i = 0; i < result['my_collections'].length; i++) {
-                            let c = result['my_collections'][i];
-
-                            let collection = document.createElement("div");
-                            collection.classList.add("my-collection");
-
-                            let aCollection = document.createElement("a");
-                            aCollection.setAttribute("href", _app_movie_list_show + c['id'].toString());
-
-                            let thumbnail = document.createElement("img");
-                            thumbnail.setAttribute("src", '/images/movie_lists/thumbnails/' + c['thumbnail']);
-                            thumbnail.setAttribute("alt", c['title']);
-                            thumbnail.setAttribute("style", "border: 2px solid " + c['color']);
-
-                            aCollection.appendChild(thumbnail);
-                            collection.appendChild(aCollection);
-                            collections.appendChild(collection);
-                        }
-                        newVideo.appendChild(collections);
-                    }
-
-                    userMovieList.appendChild(newVideo);
+                    userMovieList.innerHTML += blocks[i];
 
                     let lastAdded = userMovieList.lastElementChild;
-                    seen = lastAdded.querySelector(".yes");
+                    let seen = lastAdded.querySelector(".yes");
                     seen.addEventListener("click", toggleSeenStatus);
                     getMovieRating(seen);
                 }
