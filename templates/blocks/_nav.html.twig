@@ -40,9 +40,9 @@
         {% if route == 'app_personal_movies' %}
             {% if collections|length %}
                 <div class="choose-movie-list">
-                    <label>{{ 'Pin a collection'|trans }}
+                    <label>{{ 'Pin a list'|trans }}
                         <select>
-                            <option value="0">{{ 'Select a collection'|trans }}</option>
+                            <option value="0">{{ 'Select a list'|trans }}</option>
                             {% for c in collections %}
                                 <option value="{{ c.id }}"{% if settings is defined %}{% if settings.data.0.collection_id == c.id %} selected{% endif %}{% endif %}>{{ c.title }}
                                     ({{ c.movies|length }})
