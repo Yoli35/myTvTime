@@ -407,12 +407,11 @@ function moreVideos() {
                 // console.log(data);
 
                 for (let i = 0; i < count; i++) {
-                    userMovieList.innerHTML += blocks[i];
-
-                    let lastAdded = userMovieList.lastElementChild;
-                    let seen = lastAdded.querySelector(".yes");
-                    seen.addEventListener("click", toggleSeenStatus);
-                    getMovieRating(seen);
+                //    userMovieList.innerHTML += blocks[i];
+                    const div = document.createElement("div");
+                    div.innerHTML = blocks[i];
+                    const home_discover = div.querySelector(".home-discover");
+                    userMovieList.appendChild(home_discover);
                 }
                 displayed_videos += count;
                 setTimeout(() => {

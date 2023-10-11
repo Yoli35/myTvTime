@@ -1,20 +1,22 @@
 <dialog id="multi-people-dialog">
-    /*
-     * The "search" element automatically provides the correct accessibility semantics for the search section of a website or web app.
-     * This aligns with the principles of HTML, making the default accessible, instead of requiring you to remember to take an action
-     * to add accessibility. The "search" element also supplies the semantic markup for communicating the inherent meaning of a search
-     * form to a wide range of computing contexts, from translation algorithms to machine learning.
-     *
-     * We are excited to be the first browser to ship this new "search" element, now supported in Safari 17.0.
-     *
-     * Browsers without support for the search element will recognize there is an element present, and they will recognize any attributes
-     * it has — including roles, IDs, and classes. It will simply behave like a generic element, as if it were a "div". Because of this,
-     * we recommend you include an ARIA search role on the "search" element for now. By using "search" with role="search", you will ensure
-     * every user has the intended experience. And in the future, when all browsers have support, you can drop the ARIA search role.
-     *
-     * In the meantime, you can start using "search" today with confidence, long before a significant percent of your audience use browsers
-     * with support.
-     */
+
+      {#
+      The "search" element automatically provides the correct accessibility semantics for the search section of a website or web app.
+      This aligns with the principles of HTML, making the default accessible, instead of requiring you to remember to take an action
+      to add accessibility. The "search" element also supplies the semantic markup for communicating the inherent meaning of a search
+      form to a wide range of computing contexts, from translation algorithms to machine learning.
+
+      We are excited to be the first browser to ship this new "search" element, now supported in Safari 17.0.
+
+      Browsers without support for the search element will recognize there is an element present, and they will recognize any attributes
+      it has — including roles, IDs, and classes. It will simply behave like a generic element, as if it were a "div". Because of this,
+      we recommend you include an ARIA search role on the "search" element for now. By using "search" with role="search", you will ensure
+      every user has the intended experience. And in the future, when all browsers have support, you can drop the ARIA search role.
+
+      In the meantime, you can start using "search" today with confidence, long before a significant percent of your audience use browsers
+      with support.
+      #}
+
     <search class="content" role="search">
         <div class="dialog-title">{{ 'Search films or series by people'|trans }}</div>
         <form method="dialog">

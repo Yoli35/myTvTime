@@ -14,9 +14,9 @@
 {#            <div class="date">{{ discover.releaseDate|slice(0,4) }}</div>#}
         {% endif %}
     </a>
-    {% if app.user is not null and userMovies is defined %}
-        {{ include('blocks/movie/_rating.html.twig', {scale: 0.75, seen: id in userMovies}) }}
-    {% endif %}
+{#    {% if app.user is not null and userMovies is defined %}#}
+{#        {{ include('blocks/movie/_rating.html.twig', {scale: 0.75, seen: id in userMovies}) }}#}
+{#    {% endif %}#}
     {% if discover.movie_lists is defined %}
         {% if discover.movie_lists is not empty %}
             <div class="movie-lists">
