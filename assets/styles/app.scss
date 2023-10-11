@@ -1690,13 +1690,13 @@ nav.active {
 }
 
 .pinned-movie-list {
+    align-items: flex-start;
     background-color: var(--gradient-ardoise-30-50);
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
     height: 18rem;
     opacity: 0;
-    overflow-x: scroll;
     padding: .5rem;
     transition: opacity .3s ease-in-out, height .3s ease-in-out;
     width: 100%;
@@ -1714,9 +1714,11 @@ nav.active {
     }
 
     .wrapper {
-        @include flex-row(start, start);
-        gap: 1rem;
+        @include flex-row(flex-start, flex-start);
+        gap: .5rem;
+        overflow-x: auto;
         margin: 0 auto;
+        width: 100%;
 
         a {
             .movie {
