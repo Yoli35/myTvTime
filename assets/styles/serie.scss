@@ -2886,23 +2886,45 @@
                     &:hover {
                         background-color: var(--gradient-ardoise-50);
                     }
+
+                    &:has(i[class$="left"]) {
+                        i:not(:last-child) {
+                            margin-right: -.25em;
+                        }
+                    }
+
+                    &:has(i[class$="right"]) {
+                        i:not(:first-child) {
+                            margin-left: -.25em;
+                        }
+                    }
                 }
 
                 &:first-child {
                     border-radius: .25rem 0 0 .25rem;
+
+                    .jump {
+                        border-radius: calc(.25rem - 1px) 0 0 calc(.25rem - 1px);
+                    }
                 }
 
                 &:last-child {
                     border-radius: 0 .25rem .25rem 0;
                     border-right: 1px solid var(--gradient-ardoise-80);
+
+                    .jump {
+                        border-radius: 0 calc(.25rem - 1px) calc(.25rem - 1px) 0;
+                    }
                 }
             }
 
             .the-date {
-                background-color: var(--gradient-ardoise-50);
+                background-color: var(--gradient-ardoise-40);
                 border-bottom: 1px solid var(--gradient-ardoise-80);
+                border-left: 1px solid var(--gradient-ardoise-80);
                 border-top: 1px solid var(--gradient-ardoise-80);
                 color: var(--gradient-ardoise-80);
+                font-weight: 300;
                 padding: .125em 1em;
             }
         }

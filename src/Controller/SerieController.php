@@ -1528,31 +1528,38 @@ class SerieController extends AbstractController
                 $internationalSeason['watch/providers'] = $season['watch/providers'];
                 $season = $internationalSeason;
                 $localized = false;
-                try {
-                    $usage = $this->deeplTranslator->translator->getUsage();
-                    if ($usage->character->count + strlen($internationalSeason['overview']) < $usage->character->limit) {
-//                        $localizedOverview = $this->deeplTranslator->translator->translateText($internationalSeason['overview'], null, $locale);
-                        $localizedResult = 'Translated';
-                    } else {
-                        $localizedResult = 'Limit exceeded';
-                    }
+                if (strlen($season['overview'])) {
+                    // Récupérer APP_ENV depuis le fichier .env
+                    $env = $_ENV['APP_ENV'];
+                    try {
+                        $usage = $this->deeplTranslator->translator->getUsage();
+                        if ($usage->character->count + strlen($season['overview']) < $usage->character->limit) {
+                            if ($env === 'prod')
+                                $localizedOverview = $this->deeplTranslator->translator->translateText($internationalSeason['overview'], null, $locale);
+                            else
+                                $localizedOverview = $season['overview'];
+                            $localizedResult = 'Translated';
+                        } else {
+                            $localizedResult = 'Limit exceeded';
+                        }
 //                    dump([
 //                        'usage' => $usage->character->count,
 //                        'limit' => $usage->character->limit,
 //                        'localizedResult' => $localizedResult,
 //                        'localizedOverview' => $localizedOverview
 //                    ]);
-                } catch (DeepLException $e) {
-                    $localizedResult = 'Error: code ' . $e->getCode() . ', message: ' . $e->getMessage();
-                    $usage = [
-                        'character' => [
-                            'count' => 0,
-                            'limit' => 500000
-                        ]
-                    ];
+                    } catch (DeepLException $e) {
+                        $localizedResult = 'Error: code ' . $e->getCode() . ', message: ' . $e->getMessage();
+                        $usage = [
+                            'character' => [
+                                'count' => 0,
+                                'limit' => 500000
+                            ]
+                        ];
+                    }
+                    // for now, we don't use deepl translator
+                    // $localizedOverview = sprintf('No translation in %s mode (%d / %d -> %d%%) - %s - %s', $env, $usage->character->count, $usage->character->limit, intval(100 * $usage->character->count / $usage->character->limit), $localizedResult, $internationalSeason['overview']);
                 }
-                // for now, we don't use deepl translator
-                $localizedOverview = sprintf('No translation in dev mode (%d / %d -> %d%%) - %s - %s', $usage->character->count, $usage->character->limit, intval(100 * $usage->character->count / $usage->character->limit), $localizedResult, $internationalSeason['overview']);
             }
         }
 
@@ -1659,6 +1666,7 @@ class SerieController extends AbstractController
         $breadcrumb = $this->breadcrumb($from, $serie, $season);
 
 //        dump([
+//            'env' => $_ENV['APP_ENV'],
 //            'season' => $season,
 //            'modifications' => $modifications,
 //            'watchProviders' => $watchProviders,

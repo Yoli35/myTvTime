@@ -752,6 +752,9 @@ class MovieController extends AbstractController
     {
 //        dump(['from' => $from, 'movie' => $movie, 'movieCollection' => $movieCollection, 'movieCollectionItem' => $movieCollectionItem]);
         /* TODO: User movies search field: from => app_personal_movies */
+        if ($from === "") {
+            $from = 'app_home';
+        }
         $from = $from ?? 'app_movie_list';
         $baseUrl = $this->generateUrl($from, $fromParams);
         $baseName = match ($from) {

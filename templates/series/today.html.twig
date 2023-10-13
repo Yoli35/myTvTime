@@ -19,25 +19,29 @@
             <main>
                 <div class="time-travel">
                     <a href="{{ path('app_series_today', {d: prev, m: -1}) }}">
-                        <div class="jump" title="{{ 'Previous month'|trans }}">{{ 'time.previous.month'|trans }}</div>
+                        <div class="jump" title="{{ 'Previous month'|trans }}"><i class="fa-solid fa-chevron-left"></i><i class="fa-solid fa-chevron-left"></i><i class="fa-solid fa-chevron-left"></i></div>
+{#                        <div class="jump" title="{{ 'Previous month'|trans }}">{{ 'time.previous.month'|trans }}</div>#}
                     </a>
                     <a href="{{ path('app_series_today', {d: prev, w: -1}) }}">
-                        <div class="jump" title="{{ 'Previous week'|trans }}">{{ 'time.previous.week'|trans }}</div>
+                        <div class="jump" title="{{ 'Previous week'|trans }}"><i class="fa-solid fa-chevron-left"></i><i class="fa-solid fa-chevron-left"></i></div>
                     </a>
                     <a href="{{ path('app_series_today', {d: prev-1}) }}">
-                        <div class="jump" title="{{ 'Previous day'|trans }}">{{ 'time.previous.day'|trans }}</div>
+                        <div class="jump" title="{{ 'Previous day'|trans }}"><i class="fa-solid fa-chevron-left"></i></div>
                     </a>
 
                     <div class="the-date">{{ fixIfFirstDayOfTheMonth(date)|raw }}</div>
 
                     <a href="{{ path('app_series_today', {d: next+1}) }}">
-                        <div class="jump" title="{{ 'Next day'|trans }}">{{ 'time.next.day'|trans }}</div>
+                        <div class="jump" title="{{ 'Next day'|trans }}"><i class="fa-solid fa-chevron-right"></i></div>
+{#                        <div class="jump" title="{{ 'Next day'|trans }}">{{ 'time.next.day'|trans }}</div>#}
                     </a>
                     <a href="{{ path('app_series_today', {d: next, w: 1}) }}">
-                        <div class="jump" title="{{ 'Next week'|trans }}">{{ 'time.next.week'|trans }}</div>
+                        <div class="jump" title="{{ 'Next week'|trans }}"><i class="fa-solid fa-chevron-right"></i><i class="fa-solid fa-chevron-right"></i></div>
+{#                        <div class="jump" title="{{ 'Next week'|trans }}">{{ 'time.next.week'|trans }}</div>#}
                     </a>
                     <a href="{{ path('app_series_today', {d: next, m: 1}) }}">
-                        <div class="jump" title="{{ 'Next month'|trans }}">{{ 'time.next.month'|trans }}</div>
+                        <div class="jump" title="{{ 'Next month'|trans }}"><i class="fa-solid fa-chevron-right"></i><i class="fa-solid fa-chevron-right"></i><i class="fa-solid fa-chevron-right"></i></div>
+{#                        <div class="jump" title="{{ 'Next month'|trans }}">{{ 'time.next.month'|trans }}</div>#}
                     </a>
                 </div>
                 <div class="wrapper">
