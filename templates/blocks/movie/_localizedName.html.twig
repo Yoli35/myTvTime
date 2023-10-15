@@ -1,0 +1,15 @@
+<dialog id="localize-dialog">
+    <search class="content" role="search">
+        <div class="dialog-title"></div>
+        <form method="dialog">
+            <input type="hidden" name="action" value="localize"/>
+            <label for="localized-name">
+                <input type="text" id="localized-name" name="localized-name" placeholder="{{ 'Suggest a title'|trans }}"/>
+            </label>
+            <menu>
+                <li><button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button></li>
+                <li><button class="btn btn-primary" value="localize">{{ 'Suggest'|trans }}</button></li>
+            </menu>
+        </form>
+    </search>
+</dialog>

@@ -103,7 +103,20 @@
                 </div>
                 <div class="infos">
                     <h1>
-                        <div>{{ serie.name }}</div>
+                        {% if serieId %}
+                            <div id="localized-name">
+                                <span>
+                                    {% if serie.localized_name is defined %}
+                                        {{ serie.localized_name }} ({{ serie.name }})
+                                    {% else %}
+                                        {{ serie.name }}
+                                    {% endif %}
+                                </span>
+                                <div id="edit-localized-name" data-id="{{ serieId }}"><i class="fa-solid fa-pen"></i></div>
+                            </div>
+                        {% else %}
+                            {{ serie.name }}
+                        {% endif %}
                         {% if serie.first_air_date %}
                             <span>({{ serie.first_air_date|date("Y") }})</span>
                         {% else %}
@@ -115,7 +128,7 @@
                                         — {{ 'No date yet'|trans }}
                                     {% endif %}
                                 </span>
-                                {% if not addThisSeries %}
+                                {% if serieId %}
                                     <div class="no-date-form">
                                         <div>{{ 'Found a date'|trans }}</div>
                                         <form name="upcoming">
@@ -421,6 +434,9 @@
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
+    {% if serieId %}
+        {{ include('blocks/movie/_localizedName.html.twig') }}
+    {% endif %}
     <dialog class="viewed-update">
         <div class="loading">
             <div class="dot"></div>
@@ -545,6 +561,9 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    {% if serieId %}
+        <script src="/js/localize.js" type="module"></script>
+    {% endif %}
     <script src="/js/serie.js"></script>
     <script src="/js/diaporama.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>

@@ -12,6 +12,7 @@ use App\Entity\SeasonViewing;
 use App\Entity\Serie;
 use App\Entity\SerieBackdrop;
 use App\Entity\SerieCast;
+use App\Entity\SerieLocalizedName;
 use App\Entity\SeriePoster;
 use App\Entity\SerieViewing;
 use App\Entity\Settings;
@@ -24,6 +25,7 @@ use App\Repository\FavoriteRepository;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieBackdropRepository;
 use App\Repository\SerieCastRepository;
+use App\Repository\SerieLocalizedNameRepository;
 use App\Repository\SeriePosterRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
@@ -65,23 +67,24 @@ class SerieController extends AbstractController
 
     public array $messages = [];
 
-    public function __construct(private readonly AlertRepository          $alertRepository,
+    public function __construct(private readonly AlertRepository              $alertRepository,
 //                                private readonly BreadcrumbBuilder        $breadcrumbBuilder,
-                                private readonly CastRepository           $castRepository,
-                                private readonly DateService              $dateService,
-                                private readonly DeeplTranslator          $deeplTranslator,
-                                private readonly EpisodeViewingRepository $episodeViewingRepository,
-                                private readonly FavoriteRepository       $favoriteRepository,
-                                private readonly ImageConfiguration       $imageConfiguration,
-                                private readonly SeasonViewingRepository  $seasonViewingRepository,
-                                private readonly SerieCastRepository      $serieCastRepository,
-                                private readonly SerieBackdropRepository  $serieBackdropRepository,
-                                private readonly SeriePosterRepository    $seriePosterRepository,
-                                private readonly SerieRepository          $serieRepository,
-                                private readonly SerieViewingRepository   $serieViewingRepository,
-                                private readonly SettingsRepository       $settingsRepository,
-                                private readonly TMDBService              $TMDBService,
-                                private readonly TranslatorInterface      $translator)
+                                private readonly CastRepository               $castRepository,
+                                private readonly DateService                  $dateService,
+                                private readonly DeeplTranslator              $deeplTranslator,
+                                private readonly EpisodeViewingRepository     $episodeViewingRepository,
+                                private readonly FavoriteRepository           $favoriteRepository,
+                                private readonly ImageConfiguration           $imageConfiguration,
+                                private readonly SeasonViewingRepository      $seasonViewingRepository,
+                                private readonly SerieCastRepository          $serieCastRepository,
+                                private readonly SerieBackdropRepository      $serieBackdropRepository,
+                                private readonly SerieLocalizedNameRepository $serieLocalizedNameRepository,
+                                private readonly SeriePosterRepository        $seriePosterRepository,
+                                private readonly SerieRepository              $serieRepository,
+                                private readonly SerieViewingRepository       $serieViewingRepository,
+                                private readonly SettingsRepository           $settingsRepository,
+                                private readonly TMDBService                  $TMDBService,
+                                private readonly TranslatorInterface          $translator)
     {
     }
 
@@ -2019,6 +2022,13 @@ class SerieController extends AbstractController
             $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
         }
 
+        if ($serie) {
+//            dump(['tv' => $tv, 'serie' => $serie]);
+            if ($serie->getSerieLocalizedName() && $tv['name'] !== $serie->getSerieLocalizedName()->getName()) {
+                $tv['localized_name'] = $serie->getSerieLocalizedName()->getName();
+            }
+        }
+
         if ($user && $serie) {
             if ($tv['first_air_date'] == null) {
                 $tv['upcoming_date_month'] = $serie->getUpcomingDateMonth();
@@ -2129,6 +2139,32 @@ class SerieController extends AbstractController
             'ygg' => $ygg,
             'yggOriginal' => $yggOriginal,
             'imageConfig' => $imgConfig,
+        ]);
+    }
+
+    #[Route('/set/localized/name', name: 'app_series_set_localized_name', methods: ['POST'])]
+    public function setLocalizedName(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'];
+        $id = $data['id'];
+        $locale = $request->getLocale();
+        dump(['name' => $name, 'id' => $id, 'locale' => $locale]);
+
+        $serie = $this->serieRepository->find($id);
+        $localizedName = $this->serieLocalizedNameRepository->findOneBy(['serie' => $serie, 'locale' => $locale]);
+        if ($localizedName == null) {
+            $localizedName = new SerieLocalizedName();
+            $localizedName->setSerie($serie);
+            $localizedName->setLocale($locale);
+        }
+        $localizedName->setName($name);
+        $this->serieLocalizedNameRepository->save($localizedName, true);
+
+        return $this->json([
+            'name' => $serie->getName(),
+            'localized' => $localizedName->getName(),
+            'result' => true,
         ]);
     }
 

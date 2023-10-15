@@ -20,19 +20,6 @@ export class MultiSearch {
         people.addEventListener("click", () => {
             this.multiPeople();
         });
-        // search.addEventListener("mouseenter", () => {
-        //     thisGlobal.timer = 0;
-        //     thisGlobal.interval = setInterval(() => {
-        //         thisGlobal.timer++;
-        //         if (thisGlobal.timer > 20) {
-        //             clearInterval(thisGlobal.interval);
-        //             thisGlobal.multiPeople();
-        //         }
-        //     }, 100);
-        // });
-        // search.addEventListener("mouseleave", () => {
-        //     clearInterval(thisGlobal.interval);
-        // });
         this.initDialog()
         this.getHistory(20).then(data => {
             // console.log({data});

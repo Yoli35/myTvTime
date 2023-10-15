@@ -223,7 +223,8 @@ main {
 
 #search-dialog,
 #settings-dialog,
-#multi-people-dialog {
+#multi-people-dialog,
+#localize-dialog {
     backdrop-filter: blur(.25rem);
     -webkit-backdrop-filter: blur(.25rem);
     background-color: var(--gradient-grey-10-alpha-75);
@@ -256,7 +257,7 @@ main {
                 display: flex;
                 gap: .5rem;
 
-                input[type=search] {
+                input[type=search], input[type=text] {
                     background-color: var(--gradient-ardoise-20);
                     color: var(--gradient-ardoise-90);
                     width: 21rem;
@@ -281,7 +282,8 @@ main {
 }
 
 #search-dialog::backdrop,
-#multi-people-dialog::backdrop {
+#multi-people-dialog::backdrop,
+#localize-dialog::backdrop {
     background-color: #000000af; //var(--gradient-grey-10-alpha-75);
 }
 

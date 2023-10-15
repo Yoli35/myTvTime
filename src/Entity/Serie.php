@@ -80,6 +80,9 @@ class Serie
     #[ORM\OneToMany(mappedBy: 'serie', targetEntity: SerieCast::class)]
     private Collection $serieCasts;
 
+    #[ORM\OneToOne(mappedBy: 'serie', cascade: ['persist', 'remove'])]
+    private ?SerieLocalizedName $serieLocalizedName = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -410,6 +413,23 @@ class Serie
                 $serieCast->setSerie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSerieLocalizedName(): ?SerieLocalizedName
+    {
+        return $this->serieLocalizedName;
+    }
+
+    public function setSerieLocalizedName(SerieLocalizedName $serieLocalizedName): static
+    {
+        // set the owning side of the relation if necessary
+        if ($serieLocalizedName->getSerie() !== $this) {
+            $serieLocalizedName->setSerie($this);
+        }
+
+        $this->serieLocalizedName = $serieLocalizedName;
 
         return $this;
     }
