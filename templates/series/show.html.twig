@@ -22,7 +22,7 @@
         {% else %}
             {{ 'My series'|trans }}
         {% endif %}
-        ▶ ︎{{ serie.name }}
+        ▶ ︎{{ serie.localized_name ?? serie.name }}
     {% endblock %}
 
 {% block body %}
