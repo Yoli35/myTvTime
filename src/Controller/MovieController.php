@@ -235,7 +235,8 @@ class MovieController extends AbstractController
             if ($user && $user->getCountry()) {
                 $country = $user->getCountry();
             } else {
-                $country = strtoupper($locale);
+                $arr = ['fr' => 'FR', 'en' => 'US', 'de' => 'DE', 'es' => 'ES'];
+                $country = $arr[$locale];
             }
             if (key_exists($country, $watchProviders)) {
                 $watchProvidersTemp[0] = $watchProviders[$country];
