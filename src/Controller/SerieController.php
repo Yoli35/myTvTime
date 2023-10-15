@@ -1774,7 +1774,7 @@ class SerieController extends AbstractController
         ];
         if ($serie) {
             $breadcrumb[] = [
-                'name' => $serie['name'],
+                'name' => $serie['localized_name'] ?? $serie['name'],
                 'url' => $this->generateUrl('app_series_' . $kind, ['id' => $id]) . '?from=' . $from,
             ];
         }
@@ -1961,6 +1961,7 @@ class SerieController extends AbstractController
             $serie['backdropPath'] = $tmdbSerie['backdrop_path'];
             $serie['firstDateAir'] = $tmdbSerie['last_air_date'];
             $serie['posterPath'] = $tmdbSerie['poster_path'];
+            $serie['localized_name'] = null;
             $serie['userSerie'] = null;
             $serie['userSerieViewing'] = null;
         } else {
@@ -1969,6 +1970,7 @@ class SerieController extends AbstractController
             $serie['backdropPath'] = $userSerie->getBackdropPath();
             $serie['firstDateAir'] = $userSerie->getFirstDateAir();
             $serie['posterPath'] = $userSerie->getPosterPath();
+            $serie['localized_name'] = $userSerie->getSerieLocalizedName()?->getName();
             $serie['userSerie'] = $userSerie;
             if ($user != null) {
                 $serie['userSerieViewing'] = $this->serieViewingRepository->findOneBy(['serie' => $userSerie, 'user' => $user]);

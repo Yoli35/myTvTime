@@ -38,7 +38,13 @@
                     </div>
                 </div>
                 <div class="infos">
-                    <h1>{{ serie.name }}
+                    <h1>
+                        {% if serie.localized_name %}
+                            {{ serie.localized_name }} ({{ serie.name }})
+                        {% else %}
+                            {{ serie.name }}
+                        {% endif %}
+
                         {% if serie.firstDateAir %}
                             <span>({{ serie.firstDateAir|date("Y") }})</span>
                         {% endif %}
