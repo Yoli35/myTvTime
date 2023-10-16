@@ -12,7 +12,7 @@
 
         </div>
         <div class="infos">
-            <div>{{ serie.name }}</div>
+            <div>{{ serie.localized_name ?? serie.name }}</div>
             <div>{{ 'First Air at'|trans }} : {{ serie.firstDateAir ? serie.firstDateAir|format_date() : (serie.upcomingDateYear ? ((serie.upcomingDateMonth ? (serie.upcomingDateMonth ~ '/'):'') ~ serie.upcomingDateYear):'') }}</div>
             <div>{{ 'Added at'|trans }} : {{ serie.createdAt ? serie.createdAt|format_date() : '' }}
                 — {{ 'Updated at'|trans }} : {{ serie.updatedAt ? serie.updatedAt|format_datetime() : '' }}</div>

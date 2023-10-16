@@ -631,7 +631,7 @@ class SerieController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $results = $this->serieViewingRepository->getSeriesToStartV2($user, $perPage, $page);
+        $results = $this->serieViewingRepository->getSeriesToStartV2($user, $request->getLocale(), $perPage, $page);
 
         $locale = $request->getLocale();
         $imageConfig = $this->imageConfiguration->getConfig();
@@ -669,7 +669,7 @@ class SerieController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $perPage, $page);
+        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $request->getLocale(), $perPage, $page);
 
         $locale = $request->getLocale();
         $imageConfig = $this->imageConfiguration->getConfig();
@@ -1007,6 +1007,7 @@ class SerieController extends AbstractController
 
         $serie['id'] = $result['serie_id']; //getId();
         $serie['name'] = $result['name']; //getName();
+        $serie['localized_name'] = $result['localized_name']; //getLocalizedName()->getName();
         $serie['posterPath'] = $result['poster_path']; //getPosterPath();
         $serie['backdropPath'] = $result['backdrop_path']; //getBackdropPath();
         $serie['serieId'] = $result['tmdb_id']; //getSerieId();

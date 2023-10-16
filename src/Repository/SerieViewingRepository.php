@@ -64,7 +64,7 @@ class SerieViewingRepository extends ServiceEntityRepository
 //            ->getResult();
 //    }
 
-    public function getSeriesToStartV2(User $user, $perPage, $page): array
+    public function getSeriesToStartV2(User $user, $locale, $perPage, $page): array
     {
         $sql = "SELECT "
             . "sv.`id` as id, sv.`viewed_episodes` as viewed_episodes, sv.`number_of_episodes` as number_of_episodes, "
@@ -74,10 +74,12 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "s.`original_name` as original_name, s.`overview` as overview, s.`backdrop_path` as backdrop_path, s.`serie_id` as tmdb_id, "
             . "s.`status` as serie_status, s.`created_at` as serie_created_at, s.`updated_at` as serie_updated_at, "
             . "s.upcoming_date_year as upcoming_date_year, s.upcoming_date_month as upcoming_date_month, "
-            . "f.`id` IS NOT NULL as favorite "
+            . "f.`id` IS NOT NULL as favorite, "
+            . "sln.`name` as localized_name "
             . "FROM `serie_viewing` sv "
             . "INNER JOIN `serie` s ON s.`id`=sv.`serie_id` "
             . "LEFT JOIN `favorite` f ON f.`user_id`=2 AND f.`type`='serie' AND f.`media_id`=s.`id` "
+            . "LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='" . $locale . "' "
             . "WHERE sv.`user_id`=" . $user->getId() . " "
             . "AND sv.`viewed_episodes` = 0 "
             . "ORDER BY sv.`modified_at` DESC "
@@ -91,7 +93,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getSeriesToEndV2($userId, $perPage, $page): array
+    public function getSeriesToEndV2($userId, $locale, $perPage, $page): array
     {
         $sql = "SELECT "
             . "sv.`id` as id, sv.`viewed_episodes` as viewed_episodes, sv.`number_of_episodes` as number_of_episodes, "
@@ -102,12 +104,14 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "s.`status` as serie_status, s.`created_at` as serie_created_at, s.`updated_at` as serie_updated_at, "
             . "s.upcoming_date_year as upcoming_date_year, s.upcoming_date_month as upcoming_date_month, "
 //            . "n.`name` as network_name, n.`network_id` as network_id, n.`logo_path` as network_logo_path, "
-            . "f.`id` IS NOT NULL as favorite "
+            . "f.`id` IS NOT NULL as favorite, "
+            . "sln.`name` as localized_name "
             . "FROM `serie_viewing` sv "
             . "INNER JOIN `serie` s ON s.`id`=sv.`serie_id` "
 //            . "INNER JOIN `serie_networks` sn ON s.`id`=sn.`serie_id` "
 //            . "INNER JOIN `networks` n ON sn.`networks_id`=n.`id` "
             . "LEFT JOIN `favorite` f ON f.`user_id`=2 AND f.`type`='serie' AND f.`media_id`=s.`id` "
+            . "LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='" . $locale . "' "
             . "WHERE sv.`user_id`=" . $userId . " "
             . "AND sv.`viewed_episodes` > 0 "
             . "AND sv.`viewed_episodes` < s.`number_of_episodes` "
