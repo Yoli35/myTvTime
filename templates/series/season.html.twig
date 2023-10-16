@@ -207,9 +207,9 @@
                                                 <div class="view-provider{% if viewed %} show{% endif %}">
                                                     {% if episode.viewing.networkType == 'flatrate' and episode.viewing.networkId %}
                                                         <div class="provider" data-id="{{ episode.viewing.networkId }}">
-                                                            <img src="{{ watchProviders[episode.viewing.networkId].logo_path }}"
-                                                                 alt="{{ watchProviders[episode.viewing.networkId].provider_name }}"
-                                                                 title="{{ watchProviders[episode.viewing.networkId].provider_name }}">
+                                                            <img src="{{ allWatchProviders[episode.viewing.networkId].logo_path }}"
+                                                                 alt="{{ allWatchProviders[episode.viewing.networkId].provider_name }}"
+                                                                 title="{{ allWatchProviders[episode.viewing.networkId].provider_name }}">
                                                         </div>
                                                     {% else %}
                                                         <div class="provider other" data-id="-1"></div>
@@ -218,11 +218,8 @@
                                                         {% if watchProviders %}
                                                             {% if watchProviders is defined %}
                                                                 {% for provider in watchProviders %}
-                                                                    <div class="provider"
-                                                                         data-id="{{ provider.provider_id }}">
-                                                                        <img src="{{ provider.logo_path }}"
-                                                                             alt="{{ provider.provider_name }}"
-                                                                             title="{{ provider.provider_name }}">
+                                                                    <div class="provider" data-id="{{ provider.provider_id }}">
+                                                                        <img src="{{ provider.logo_path }}" alt="{{ provider.provider_name }}" title="{{ provider.provider_name }}">
                                                                     </div>
                                                                 {% endfor %}
                                                             {% endif %}
@@ -282,6 +279,7 @@
                     {% endif %}
                 </article>
             </main>
+            {{ include('blocks/series/_watchProviders.html.twig') }}
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}
@@ -295,6 +293,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script src="/js/watch-providers.js" type="module"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             initSubstituteName();
@@ -448,7 +447,7 @@
                                     userProvider.classList.remove('other');
                                     userProvider.setAttribute('data-id', networkId);
                                 } else {
-                                    userProvider.querySelector('img').remove();
+                                    userProvider.querySelector('img')?.remove();
                                     userProvider.classList.add('other');
                                     userProvider.setAttribute('data-id', -1);
                                 }

@@ -2644,6 +2644,58 @@
             }
         }
     }
+
+    #watch-provider-dialog {
+        form {
+            align-items: flex-start;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            gap: .25rem;
+
+            .watch-provider {
+                width: 100%;
+
+                label {
+                    align-items: center;
+                    display: flex;
+                    justify-content: flex-start;
+                    width: 100%;
+
+                    input[type=radio] {
+                        appearance: none;
+                        border: 2px solid var(--gradient-ardoise-80);
+                        border-radius: 1rem;
+                        height: 1.5rem;
+                        width: 1.5rem;
+
+                        &:checked {
+                            background-color: var(--gradient-ardoise-20);
+                            border-color: var(--gradient-orange-50);
+                            border-width: .25rem;
+                        }
+                    }
+                }
+
+                &:hover {
+                    background-color: var(--gradient-ardoise-30-alpha-50);
+                }
+
+                .logo {
+                    img {
+                        border-radius: .25rem;
+                        height: 2rem;
+                        object-fit: contain;
+                        width: 2rem;
+                    }
+                }
+            }
+
+            menu {
+                margin-block-start: 1rem;
+                width: 100%;
+            }
+        }
+    }
 }
 
 @media (min-width: 1100px) {

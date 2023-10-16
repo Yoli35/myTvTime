@@ -1665,6 +1665,25 @@ class SerieController extends AbstractController
             $array3 = $this->getProviders($watchProviders, 'free', $imgConfig, $array2);
             $watchProviders = array_filter($array3);
         }
+        // user preferred language-country, country
+        $countries = ['fr'=>'FR', 'en'=>'US', 'es'=>'ES', 'de'=>'DE'];
+        $country = $user->getCountry() ?? $countries[$request->getLocale()];
+        $language = ($user->getPreferredLanguage() ?? $request->getLocale()) . '-' . $country;
+        $allWatchProviders = json_decode($this->TMDBService->getTvWatchProviderList($language, $country), true);
+        $allWatchProviders = $allWatchProviders['results'];
+        $allWatchProviders = array_map(function ($provider) use ($imgConfig) {
+            $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_logo.png', $imgConfig);
+            return $provider;
+        }, $allWatchProviders);
+        usort($allWatchProviders, function ($a, $b) {
+            return strcmp($a['provider_name'], $b['provider_name']);
+        });
+        $temp = [];
+        foreach ($allWatchProviders as $provider) {
+            $temp[$provider['provider_id']] = $provider;
+        }
+        $allWatchProviders = $temp;
+//        dump($allWatchProviders);
 
         // Breadcrumb
         $breadcrumb = $this->breadcrumb($from, $serie, $season);
@@ -1684,6 +1703,7 @@ class SerieController extends AbstractController
             'episodesVotes' => $episodesVotes,
             'credits' => $credits,
             'watchProviders' => $watchProviders,
+            'allWatchProviders' => $allWatchProviders,
             'seasonsCookie' => $seasonsCookie,
             'modifications' => $modifications,
             'localized' => $localized,

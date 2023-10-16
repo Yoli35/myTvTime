@@ -224,7 +224,8 @@ main {
 #search-dialog,
 #settings-dialog,
 #multi-people-dialog,
-#localize-dialog {
+#localize-dialog,
+#watch-provider-dialog {
     backdrop-filter: blur(.25rem);
     -webkit-backdrop-filter: blur(.25rem);
     background-color: var(--gradient-grey-10-alpha-75);
@@ -283,7 +284,8 @@ main {
 
 #search-dialog::backdrop,
 #multi-people-dialog::backdrop,
-#localize-dialog::backdrop {
+#localize-dialog::backdrop,
+#watch-provider-dialog {
     background-color: #000000af; //var(--gradient-grey-10-alpha-75);
 }
 
