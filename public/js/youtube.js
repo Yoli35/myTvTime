@@ -45,15 +45,15 @@ function initYoutube(id, locale, paths) {
         }
     });
 
-    setInterval(() => {
-        const redirect = document.querySelector(".redirect");
-        if (redirect) {
-            const video = redirect.getAttribute("data-id");
-            const userAlreadyLinked = redirect.getAttribute("data-user-already-linked");
-            redirect.remove();
-            window.location.href = _yt_video_page + video + (userAlreadyLinked ? '?user-already-linked=1' : '');
-        }
-    }, 1000);
+    // setInterval(() => {
+    //     const redirect = document.querySelector(".redirect");
+    //     if (redirect) {
+    //         const video = redirect.getAttribute("data-id");
+    //         const userAlreadyLinked = redirect.getAttribute("data-user-already-linked");
+    //         redirect.remove();
+    //         window.location.href = _yt_video_page + video + (userAlreadyLinked ? '?user-already-linked=1' : '');
+    //     }
+    // }, 1000);
 
     function loadVideos(e) {
         const reload = document.querySelector('.reload');
@@ -178,6 +178,7 @@ function initYoutube(id, locale, paths) {
 
             if (gotoVideoPage) {
                 window.location.href = _yt_video_page + response['justAdded'] + (userAlreadyLinked ? '?user-already-linked=1' : '');
+                return; // On slow machines / connections, the page is rebuild before the user is redirected
             }
 
             ytLink.value = "";
