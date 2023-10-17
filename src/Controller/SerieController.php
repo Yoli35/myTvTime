@@ -1508,6 +1508,12 @@ class SerieController extends AbstractController
         $year = $request->query->get('year');
         $backId = $request->query->get('back');
 
+        // user preferred language-country, country
+        $locale = $request->getLocale();
+        $countries = ['fr' => 'FR', 'en' => 'US', 'es' => 'ES', 'de' => 'DE'];
+        $country = $user?->getCountry() ?? $countries[$locale];
+        $language = ($user?->getPreferredLanguage() ?? $locale) . '-' . $country;
+
         // Cookie pour le layout
         $seasonsCookie = $this->seasonsCookie();
 
@@ -1516,8 +1522,6 @@ class SerieController extends AbstractController
         $serie['backdropPath'] = $this->fullUrl('backdrop', 3, $serie['backdropPath'], 'no_banner_dark.png', $imgConfig);
 
         // La saison (db ou the movie db) et son affiche (poster)
-        $locale = $request->getLocale();
-        $language = ['fr' => 'fr-FR', 'en' => 'en-US', 'es' => 'es-SP', 'de' => 'de-DE'][$locale];
         $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $language, ['credits', 'watch/providers']);
         $season = json_decode($standing, true);
 
@@ -1665,10 +1669,6 @@ class SerieController extends AbstractController
             $array3 = $this->getProviders($watchProviders, 'free', $imgConfig, $array2);
             $watchProviders = array_filter($array3);
         }
-        // user preferred language-country, country
-        $countries = ['fr'=>'FR', 'en'=>'US', 'es'=>'ES', 'de'=>'DE'];
-        $country = $user->getCountry() ?? $countries[$request->getLocale()];
-        $language = ($user->getPreferredLanguage() ?? $request->getLocale()) . '-' . $country;
         $allWatchProviders = json_decode($this->TMDBService->getTvWatchProviderList($language, $country), true);
         $allWatchProviders = $allWatchProviders['results'];
         $allWatchProviders = array_map(function ($provider) use ($imgConfig) {
