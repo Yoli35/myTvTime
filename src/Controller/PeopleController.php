@@ -27,9 +27,9 @@ class PeopleController extends AbstractController
     public function people(Request $request, $id): Response
     {
 //        $this->logService->log($request, $this->getUser());
-        $standing = $this->TMDBService->getPerson($id, $request->getLocale(), true);
+        $standing = $this->TMDBService->getPerson($id, $request->getLocale(), "images");
         $people = json_decode($standing, true);
-        $standing = $this->TMDBService->getPersonCredits($id, $request->getLocale(), true);
+        $standing = $this->TMDBService->getPersonCredits($id, $request->getLocale());
         $credits = json_decode($standing, true);
 
 //        dump([

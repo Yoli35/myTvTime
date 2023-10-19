@@ -583,14 +583,14 @@ class TMDBService
         }
     }
 
-    public function getPerson($id, $locale, $images = false): ?string
+    public function getPerson($id, $locale, $append = ""): ?string
     {
         $noOne = json_encode([]);
         try {
-            if ($images) {
+            if (strlen($append)) {
                 $response = $this->client->request(
                     'GET',
-                    'https://api.themoviedb.org/3/person/' . $id . '?api_key=' . $this->api_key . '&language=' . $locale . '&append_to_response=images'
+                    'https://api.themoviedb.org/3/person/' . $id . '?api_key=' . $this->api_key . '&language=' . $locale . '&append_to_response=' . $append
                 );
             } else {
                 $response = $this->client->request(

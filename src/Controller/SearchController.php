@@ -107,6 +107,7 @@ class SearchController extends AbstractController
             if ($id) {
                 $person = json_decode($this->TMDBService->getPerson($id, $request->getLocale()), true);
                 $credits = json_decode($this->TMDBService->getPersonCredits($id, $request->getLocale()), true);
+//                dump(['credits' => $credits, 'locale' => $request->getLocale()]);
                 if (!key_exists('cast', $credits))
                     $credits['cast'] = [];
                 $person['cast'] = $credits['cast'];
@@ -114,7 +115,7 @@ class SearchController extends AbstractController
             } else
                 return [];
         }, $ids);
-//        dump($people);
+//        dump(['people' => $people]);
         // Trouver les films et séries en commun
         $common = [];
         foreach ($people as $person) {
@@ -169,12 +170,12 @@ class SearchController extends AbstractController
         $type = self::SEARCH_TYPES['person'];
 
         if (!$name || !$id)
-            return $this->json(['result'=> 'error', 'message' => 'Missing parameters']);
+            return $this->json(['result' => 'error', 'message' => 'Missing parameters']);
 
         $history = new SearchHistory($name, $type, $id);
         $this->searchHistoryRepository->save($history, true);
 
-        return $this->json(['result'=> 'success', 'message' => 'History saved']);
+        return $this->json(['result' => 'success', 'message' => 'History saved']);
     }
 
     #[Route('/search-people/history/get', name: 'people_history_get')]
@@ -185,8 +186,8 @@ class SearchController extends AbstractController
 
         $history = $this->searchHistoryRepository->findBy(['type' => $type], ['id' => 'DESC'], $limit);
         if (empty($history))
-            return $this->json(['result'=> 'warning', 'message' => 'History is empty']);
+            return $this->json(['result' => 'warning', 'message' => 'History is empty']);
 
-        return $this->json(['result'=> 'success', 'message' => 'History found', 'history' => $history]);
+        return $this->json(['result' => 'success', 'message' => 'History found', 'history' => $history]);
     }
 }
