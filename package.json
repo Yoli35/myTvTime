@@ -34,6 +34,7 @@
         "@babel/preset-env": "^7.16.0",
         "bs-modal": "^1.0.5",
         "highlight.js": "^11.7.0",
+        "ol": "^8.1.0",
         "react-hook-form": "^7.44.3",
         "webpack": "^5.72",
         "webpack-cli": "^5.0.1"

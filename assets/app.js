@@ -7,6 +7,7 @@ import './styles/devices.scss';
 import './styles/diaporama.scss';
 import './styles/event.scss';
 import './styles/form.scss';
+import './styles/localisation.scss'
 import './styles/logs.scss';
 import './styles/movie-list.scss';
 import './styles/movie.scss';
@@ -25,5 +26,3 @@ import './js/highlight.js';
 
 // start the Stimulus application
 import './bootstrap';
-
-// import './react/ActivityValues';

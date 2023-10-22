@@ -71,6 +71,11 @@ class SeriesCastEpisodesCommand extends Command
         $progressBar->start();
 
         foreach ($seriesArr as $series) {
+            $status = $series->getStatus();
+            if ($status === 'Ended' || $status === 'Canceled') {
+                $progressBar->advance();
+                continue;
+            }
             $io->text('Collecting episodes for series: ' . $series->getName());
             $tv = json_decode($this->tmdbService->getTv($series->getSerieId(), 'fr-FR', ['credits']), true);
             if (!$tv) {

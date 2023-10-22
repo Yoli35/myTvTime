@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime ▶ ︎{{ 'Localisation'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+
+        {{ include('blocks/_mainMenu.html.twig') }}
+        <div class="localisation-header">
+            <h1>{{ 'Localisation'|trans }}</h1>
+        </div>
+        {{ include('blocks/_nav.html.twig') }}
+
+        <main class="localisation">
+            <div class="infos">{{ 'Remaining requests'|trans }} : {{ remaining }} / {{ limit }}</div>
+            <div id="map" class="map"></div>
+        </main>
+
+        {{ include('blocks/_pageFooter.html.twig') }}
+        <div class="global-data" style="display: none">
+            {
+                "routes": {{ routes|json_encode() }}
+            }
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.1.0/ol.css">
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/ol@v8.1.0/dist/ol.js"></script>
+    <script src="/js/localisation.js" type="module"></script>
+    <script>
+    </script>
+{% endblock %}

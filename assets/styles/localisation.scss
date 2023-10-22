@@ -1,0 +1,22 @@
+@import "variables";
+
+.localisation-header {
+    @include flex-row(flex-start, center);
+    gap: 1rem;
+    margin-block-end: 1rem;
+}
+
+.localisation {
+    .infos {
+        font-size: 1.5rem;
+        font-weight: 300;
+        margin-block-end: 1rem;
+    }
+
+    .map {
+        border: 4px dashed var(--gradient-ardoise-40);
+        border-radius: .25rem;
+        height: 50vh;
+        width: 100%;
+    }
+}
