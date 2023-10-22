@@ -45,7 +45,6 @@ class SeriesCastEpisodesCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-
         $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
         $this->logger->info('SeriesCastEpisodes Command started at ' . $now->format('Y-m-d H:i:s'));
         $io->writeln('SeriesCastEpisodes Command started at ' . $now->format('Y-m-d H:i:s'));
