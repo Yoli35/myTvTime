@@ -12,13 +12,13 @@ export class WatchProvidersModule {
         viewProviders.forEach((viewProvider) => {
             const otherProviders = viewProvider.querySelector(".provider.other");
             otherProviders.addEventListener("click", (e) => {
-                this.viewProviders(e);
+                this.watchProviders(e);
             });
         });
         this.initDialog();
     }
 
-    viewProviders(e) {
+    watchProviders(e) {
         const target = e.target;
         const view = target.closest(".view");
         this.viewingId = view.getAttribute("data-id");
@@ -30,6 +30,12 @@ export class WatchProvidersModule {
 
     initDialog() {
         const dialog = document.querySelector("#watch-provider-dialog");
+
+        /** @type {HTMLInputElement} */
+        const watchProviderSearch = dialog.querySelector("#watch-provider-search");
+        watchProviderSearch.addEventListener("input", (e) => {
+            this.filterWatchProviders(e);
+        });
 
         dialog.addEventListener("close", () => {
             document.querySelector("body").classList.remove("frozen");
@@ -82,6 +88,21 @@ export class WatchProvidersModule {
                 evt.preventDefault();
                 evt.stopPropagation();
                 dialog.close("select");
+            }
+        });
+    }
+
+    filterWatchProviders(e) {
+        const target = e.target;
+        const value = target.value.toLowerCase();
+        const dialog = document.querySelector("#watch-provider-dialog");
+        const watchProviders = dialog.querySelectorAll('.watch-provider');
+        watchProviders.forEach((watchProvider) => {
+            const name = watchProvider.getAttribute("data-name").toLowerCase();
+            if (name.indexOf(value) > -1) {
+                watchProvider.classList.remove("hidden");
+            } else {
+                watchProvider.classList.add("hidden");
             }
         });
     }

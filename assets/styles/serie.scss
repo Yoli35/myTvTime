@@ -2653,8 +2653,29 @@
             flex-wrap: nowrap;
             gap: .25rem;
 
+            .watch-provider-search {
+                margin-block-end: 1rem;
+                width: 100%;
+
+                label {
+                    align-items: center;
+                    display: flex;
+                    justify-content: stretch;
+                    gap: 1rem;
+
+                    input {
+                        flex-grow: 1;
+                    }
+                }
+
+            }
+
             .watch-provider {
                 width: 100%;
+
+                &.hidden {
+                    display: none;
+                }
 
                 label {
                     align-items: center;

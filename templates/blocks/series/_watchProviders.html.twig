@@ -1,10 +1,15 @@
 <dialog id="watch-provider-dialog">
-    <div class="content">
+    <div class="content" role="search">
         <div class="dialog-title">{{ 'Where did you watch the series?'|trans }}</div>
         <form method="dialog">
             <input type="hidden" name="action" value="select"/>
+            <div class="watch-provider-search">
+                <label for="watch-provider-search"><i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="watch-provider-search" name="watch-provider-search" placeholder="{{ 'Start taping ...'|trans }}" autofocus/>
+                </label>
+            </div>
             {% for wp in allWatchProviders %}
-                <div class="watch-provider">
+                <div class="watch-provider" data-name="{{ wp.provider_name }}">
                     <label for="watch-provider-{{ wp.provider_id }}">
                         <input type="radio" id="watch-provider-{{ wp.provider_id }}" name="watch-provider" value="{{ wp.provider_id }}"/>
                         <div class="logo"><img src="{{ wp.logo_path }}" alt="{{ wp.provider_name }}"></div>
@@ -12,7 +17,7 @@
                     </label>
                 </div>
             {% endfor %}
-            <div class="watch-provider">
+            <div class="watch-provider" data-name="other">
                 <label for="watch-provider--1">
                     <input type="radio" id="watch-provider--1" name="watch-provider" value="{{ 'Other'|trans }}"/>
                     {{ 'Other'|trans }}
