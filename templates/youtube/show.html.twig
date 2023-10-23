@@ -149,6 +149,7 @@
             });
 
             copy.addEventListener("click", (evt) => {
+                /** @type {MouseEvent} evt */
                 const mouseX = evt.pageX, mouseY = evt.pageY;
                 const copied = document.querySelector(".copied-text");
                 navigator.clipboard.writeText("https://youtu.be/{{ video.link }}");

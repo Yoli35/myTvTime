@@ -46,16 +46,16 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
     /**
      * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
      */
-    public function findByLabel($query): array
-    {
-        return $this->createQueryBuilder('y')
-            ->andWhere('y.label like :val')
-            ->setParameter('val', '%' . $query . '%')
-            ->orderBy('y.label', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
-    }
+//    public function findByLabel($query): array
+//    {
+//        return $this->createQueryBuilder('y')
+//            ->andWhere('y.label like :val')
+//            ->setParameter('val', '%' . $query . '%')
+//            ->orderBy('y.label', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult();
+//    }
 
     /**
      * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
@@ -68,6 +68,18 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getTags(): array{
+        $sql = "SELECT `id`, `label` "
+            . "FROM `youtube_video_tag` "
+            . "ORDER BY `label`";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
     public function findAllByVideoId($videoId): array
     {
         return $this->createQueryBuilder('yt')
@@ -78,7 +90,8 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
 
     public function findVideosTags($videoIds): array
     {
-        $sql = "SELECT yt.id, yt.label, yv.id as videoId FROM youtube_video_tag yt "
+        $sql = "SELECT yt.id, yt.label, yv.id as videoId "
+            . "FROM youtube_video_tag yt "
             . "INNER JOIN youtube_video_tag_youtube_video ytyv ON ytyv.youtube_video_tag_id = yt.id "
             . "INNER JOIN youtube_video yv ON yv.id = ytyv.youtube_video_id  "
             . "WHERE yv.id IN (" . implode(',', $videoIds) . ")";

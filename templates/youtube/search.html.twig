@@ -26,7 +26,9 @@
                         </div>
                         <div class="tags"></div>
                         <div class="method">
-                            <label for="method">{{ 'Selection'|trans }}&nbsp;<select id="method">
+                            <label for="method">
+                                {{ 'Selection'|trans }}>
+                                <select id="method">
                                     <option value="and">Tous le mots-clés</option>
                                     <option value="or" selected>Au moins un mot-clé</option>
                                 </select>
@@ -38,6 +40,11 @@
                 </div>
                 <div class="results"></div>
             </main>
+            <div class="global-data" style="display: none">
+                {
+                    "tags": {{ tagArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                }
+            </div>
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
@@ -54,13 +61,14 @@
         let tagList;
 
         window.addEventListener("DOMContentLoaded", () => {
-
+            /** @type {HTMLInputElement} */
+            const searchTag = document.querySelector("#search-tag");
             initHeader();
             tagList = createList();
-            autocomplete(document.querySelector("#search-tag"), tagList);
+            autocomplete(searchTag, tagList);
             document.querySelector(".apply").addEventListener("click", applyTags);
-            document.querySelector("#search-tag").focus();
-        })
+            searchTag.focus();
+        });
 
         function initHeader() {
             const header = document.querySelector(".header");
@@ -237,7 +245,9 @@
 
         function applyTags() {
             const tags = document.querySelector(".tags").querySelectorAll(".tag");
-            let method = document.querySelector("#method").value;
+            /** @type {HTMLSelectElement} */
+            const methodSelect = document.querySelector("#method");
+            let method = methodSelect.value;
             let list = "";
             if (tags.length === 0) return;
             tags.forEach(tag => {
@@ -257,13 +267,10 @@
         }
 
         function createList() {
-            let list = [{id: 0, label: ''}];
-
-            {% for tag in allTags %}
-            list[{{ loop.index0 }}] = {'id': {{ tag.id }}, 'label': "{{ tag.label|raw }}", 'selected': false};
-            {% endfor %}
-
-            return list;
+            /** @type {HTMLDivElement} globs */
+            const globs = document.querySelector(".global-data");
+            const listARR = JSON.parse(globs.textContent);
+            return listARR.tags;
         }
 
         function findOccurences(item, val) {
