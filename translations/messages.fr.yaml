@@ -357,9 +357,6 @@ Minute: minute
 Hours: heures
 Minutes: minutes
 Premiere: Première
-Finale: Fin de saison
-Last episode of the season: Dernier épisode de la saison
-Last season: Dernière saison
 Theatrical (limited): Sortie en salle (limité)
 Theatrical: Sortie en salle
 Digital: Digitale
@@ -402,6 +399,9 @@ Seasons: Saisons
 Episode: Épisode
 Guests: Invités
 Found a date: Vous avez trouvé une date
+Finale: Fin de saison
+Last episode of the season: Dernier épisode de la saison
+Last season: Dernière saison
 
 # Person
 Also known as: Aussi connu•e comme
@@ -424,6 +424,8 @@ On the air: à l'antenne
 votes: votes
 No date yet: Pas encore de date
 No provider yet: Pas encore de fournisseur en streaming annoncé
+Start typing...: Commencez à taper...
+
 # descriptions
 Time spent watching my series: Temps passé à regarder mes séries
 Added at: Ajoutée le
