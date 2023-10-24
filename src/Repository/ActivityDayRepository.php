@@ -44,6 +44,19 @@ class ActivityDayRepository extends ServiceEntityRepository
         }
     }
 
+    public function getActivityDays(int $activityId, int $offset, int $limit): array
+    {
+        $qb = $this->createQueryBuilder('ad');
+        $qb->select('ad')
+            ->where('ad.activity = :activityId')
+            ->setParameter('activityId', $activityId)
+            ->orderBy('ad.day', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Activity[] Returns an array of Activity objects
 //     */

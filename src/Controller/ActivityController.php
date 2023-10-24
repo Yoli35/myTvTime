@@ -49,31 +49,49 @@ class ActivityController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $message = '';
-        $automaticReload = $request->query->getInt('time'); // 1690883017419
-        if ($automaticReload) {
-            $reloadDate = $this->dateService->newDateImmutable('now', 'Europe/Paris');
-            $reloadDate = $reloadDate->setTimestamp($automaticReload / 1000);
-            $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
-
-            $message = 'Automatic reload at ' . $reloadDate->format('Y-m-d H:i:s') . ' (client) from ' . $now->format('Y-m-d H:i:s') . ' (server)';
-            $this->loggerInterface->info($message);
-        }
+//        $message = '';
+//        $automaticReload = $request->query->getInt('time'); // 1690883017419
+//        if ($automaticReload) {
+//            $reloadDate = $this->dateService->newDateImmutable('now', 'Europe/Paris');
+//            $reloadDate = $reloadDate->setTimestamp($automaticReload / 1000);
+//            $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
+//
+//            $message = 'Automatic reload at ' . $reloadDate->format('Y-m-d H:i:s') . ' (client) from ' . $now->format('Y-m-d H:i:s') . ' (server)';
+//            $this->loggerInterface->info($message);
+//        }
+        $now = $this->dateService->getNow($user->getTimezone(), true);
+        $dayOfTheWeek = $now->format('N');
 
         $activity = $user->getActivity();
-//        dump($activity);
 
-        if ($activity) {
-            $days = $activity->getActivityDays();
-            if (!$days->count() || !$this->todayActivityExist($days)) {
-                $today = new ActivityDay($activity);
-                $activity->addActivityDay($today);
-                $this->activityDayRepository->save($today, true);
-            }
+        if (!$activity) {
+            return $this->render('activity/index.html.twig', [
+                'activity' => $activity,
+            ]);
         }
 
-        $days = array_reverse($activity->getActivityDays()->toArray());
+        $days = $this->activityDayRepository->getActivityDays($activity->getId(), 0, intval($dayOfTheWeek) + 10 * 7);
+        dump([
+            'activity' => $activity,
+            'day of week' => $dayOfTheWeek,
+            'limited days' => $days,
+        ]);
+//            $days = $activity->getActivityDays();
+        if (!count($days)) {
+            $today = new ActivityDay($activity, $now);
+            $activity->addActivityDay($today);
+            $this->activityDayRepository->save($today, true);
+            $days[0] = $today;
+        }
 
+        // S'il manque des jours, on les ajoute et on recharge le tableau
+        $missingDayCount = $this->checkForMissingDays($activity, $days, $now);
+        if ($missingDayCount) {
+            $days = $this->activityDayRepository->getActivityDays($activity->getId(), 0, intval($dayOfTheWeek) + 10 * 7);
+            $this->addFlash("success", $missingDayCount > 1 ? $this->translator->trans("count missing days added", ['count' => $missingDayCount]) : $this->translator->trans("One missing day added"));
+        }
+
+//        $days = array_reverse($activity->getActivityDays()->toArray());
 //        usort($days, function (ActivityDay $a, ActivityDay $b) {
 //            return $b->getDay() <=> $a->getDay();
 //        });
@@ -121,22 +139,37 @@ class ActivityController extends AbstractController
             'days' => $days,
             'years' => $years,
             'currentWeek' => $currentWeek,
-            'message' => $message,
+//            'message' => $message,
             'breadcrumb' => $breadcrumb,
         ]);
     }
 
-    public function todayActivityExist($days): bool
+    public function checkForMissingDays(Activity $activity, array $days, $now): int
     {
-        try {
-            $today = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-        } catch (Exception) {
-            $today = new DateTimeImmutable();
-        }
-//        $today = $today->setTime(0, 0);
+        $whileDay = $activity->getCreatedAt();
+        $whileDayFormat = $whileDay->format('Y-m-d');
+        $nowFormat = $now->format('Y-m-d');
+        $missingDays = 0;
 
+        while ($whileDayFormat <= $nowFormat) {
+
+            if (!$this->missingDay($whileDay, $days)) {
+                $day = new ActivityDay($activity, $whileDay);
+                $activity->addActivityDay($day);
+                $this->activityDayRepository->save($day, true);
+                $missingDays++;
+            }
+
+            $whileDay = $whileDay->add(new DateInterval('P1D'));
+            $whileDayFormat = $whileDay->format('Y-m-d');
+        }
+        return $missingDays;
+    }
+
+    public function missingDay($date, $days): bool
+    {
         foreach ($days as $day) {
-            if ($day->getDay()->format('Y-m-d') === $today->format('Y-m-d')) {
+            if ($day->getDay()->format('Y-m-d') === $date->format('Y-m-d')) {
                 return true;
             }
         }

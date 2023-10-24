@@ -56,14 +56,8 @@ class ActivityDay
     #[ORM\Column(nullable: true)]
     private ?int $week = null;
 
-    public function __construct($activity)
+    public function __construct($activity, $today)
     {
-        try {
-            $today = new DateTimeImmutable('now', new DateTimeZone($activity->getUser()->getTimezone() ?? 'Europe/Paris'));
-//            $today = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-        } catch (Exception) {
-            $today = new DateTimeImmutable();
-        }
         $today = $today->setTime(0, 0);
 
         $this->activity = $activity;

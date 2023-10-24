@@ -44,56 +44,6 @@ export class Activity {
         toolTips.init();
     }
 
-    // initDateChange() {
-    //     setInterval(thisGlobal.checkNewDate, 300000); // 5 minutes
-    //
-    //     const message = document.querySelector(".message");
-    //     if (message) {
-    //         const close = message.querySelector(".close");
-    //         close.addEventListener("click", () => {
-    //             message.remove();
-    //         });
-    //     }
-    // }
-
-    // checkNewDate() {
-    //     const date = new Date();
-    //     const dst = thisGlobal.hasDST(date);
-    //     const hourCheckPoint = dst ? 1 : 2;
-    //
-    //     if (date.getDate() !== thisGlobal.initialDay) {
-    //         if (date.getHours() === hourCheckPoint) { // date stored as UTC in db, 'Europe/Paris' timezone here (UTC+2)
-    //             const url = window.location.href;
-    //             window.location = url + '?time=' + date.getTime(); // force reload
-    //         }
-    //     }
-    //     let message = document.querySelector(".message");
-    //     thisGlobal.checkCount++;
-    //     let innerMessage = 'Last check (' + thisGlobal.checkCount + ') on ' + date.toLocaleDateString() + ' at ' + date.toLocaleTimeString() + ' (different day: ' + (date.getDate() !== thisGlobal.initialDay) + ', hours: ' + (date.getHours()) + ', minutes: ' + (date.getMinutes()) + ')<div class="close"><i class="fa-solid fa-xmark"></i></div>';
-    //     if (!message) {
-    //         const activityTools = document.querySelector(".activity-tools");
-    //         const button = activityTools.querySelector("a[class*='btn']");
-    //         const messageDiv = document.createElement("div");
-    //         messageDiv.classList.add("message");
-    //         messageDiv.innerHTML = innerMessage;
-    //         message = activityTools.insertBefore(messageDiv, button);
-    //         // message = document.querySelector(".message");
-    //     } else {
-    //         message.innerHTML = innerMessage;
-    //     }
-    //     const close = message.querySelector(".close");
-    //     close.addEventListener("click", () => {
-    //         message.remove();
-    //     });
-    // }
-
-    // hasDST(date = new Date()) {
-    //     const january = new Date(date.getFullYear(),0,1).getTimezoneOffset();
-    //     const july = new Date(date.getFullYear(),6,1).getTimezoneOffset();
-    //
-    //     return Math.max(january, july) !== date.getTimezoneOffset();
-    // }
-
     setProgressAll(circles) {
         circles.forEach(circle => {
             const elements = document.querySelectorAll(".progress." + circle);

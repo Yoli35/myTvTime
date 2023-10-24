@@ -22,12 +22,12 @@
                        class="no-activity btn btn-primary">{{ 'Activate'|trans }}</a>
                 {% else %}
                     <div class="activity-tools">
-                        {% if message %}
-                            <div class="message">
-                                {{ message }}
-                                <div class="close"><i class="fa-solid fa-xmark"></i></div>
-                            </div>
-                        {% endif %}
+                        {#                        {% if message %} #}
+                        {#                            <div class="message"> #}
+                        {#                                {{ message }} #}
+                        {#                                <div class="close"><i class="fa-solid fa-xmark"></i></div> #}
+                        {#                            </div> #}
+                        {#                        {% endif %} #}
                         <a href="{{ path('app_activity_edit', {id: activity.id}) }}"
                            class="activity-goals btn btn-primary">{{ 'Goals'|trans }}</a>
                     </div>
@@ -39,7 +39,7 @@
                                     <div class="days">
                                         {% set tab = 1 %}
                                         {% for day in week %}
-{#                                            <pre>{{ dump(day) }}</pre>#}
+                                            {#                                            <pre>{{ dump(day) }}</pre> #}
                                             <div class="day">
                                                 {% set date = day.day|format_date('full')|capitalize %}
                                                 <div class="date">{{ fixIfFirstDayOfTheMonth(date) }}</div>
@@ -313,64 +313,68 @@
     </div>
     <div id="activity-values" style="display: none">
         {
-        "app_activity_stand_up_toggle": "{{ path('app_activity_stand_up_toggle', {id: activity.id}) }}",
-        "app_activity_save_data": "{{ path('app_activity_save_data', {id: activity.id}) }}",
-        "app_activity_save_day": "{{ path('app_activity_save_day', {id: activity.id}) }}"
+        "app_activity_stand_up_toggle": "{{ path('app_activity_stand_up_toggle', {id: activity?activity.id:0}) }}",
+        "app_activity_save_data": "{{ path('app_activity_save_data', {id: activity?activity.id:0}) }}",
+        "app_activity_save_day": "{{ path('app_activity_save_day', {id: activity?activity.id:0}) }}"
         }
     </div>
-    <dialog id="activity-dialog">
-        <div class="content">
-            <div class="activity-dialog-title"></div>
-            <form method="dialog">
-                <label>{{ 'Move'|trans }} :
-                    <input type="number" id="moveResult" name="moveResult"/> KCal
-                </label>
-                <label>{{ 'Steps'|trans }} :
-                    <input type="number" id="steps" name="steps"/> {{ 'steps'|trans }}
-                </label>
-                <label>{{ 'Distance'|trans }} :
-                    <input id="distance" name="distance"/> {{ 'km'|trans }}
-                </label>
-                <label>{{ 'Exercise'|trans }} :
-                    <input type="number" id="exerciseResult" name="exerciseResult"/> {{ 'minutes'|trans }}
-                </label>
-                <label>{{ 'Stand up'|trans }}
-                    <div class="stand-up">
-                        <div class="block-body">
-                            <div class="details">
-                                <div class="detail">
-                                    <div class="result">18</div>
-                                    /
-                                    <div class="goal">{{ activity.standUpGoal }}</div>
-                                </div>
-                                <div class="wrapper">
-                                    <div class="hours" data-id="{{ activity.id }}" data-day="0">
-                                        {{ include('blocks/activity/_standUp.html.twig', {ups: [0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}) }}
+    {% if activity %}
+        <dialog id="activity-dialog">
+            <div class="content">
+                <div class="activity-dialog-title"></div>
+                <form method="dialog">
+                    <label>{{ 'Move'|trans }} :
+                        <input type="number" id="moveResult" name="moveResult"/> KCal
+                    </label>
+                    <label>{{ 'Steps'|trans }} :
+                        <input type="number" id="steps" name="steps"/> {{ 'steps'|trans }}
+                    </label>
+                    <label>{{ 'Distance'|trans }} :
+                        <input id="distance" name="distance"/> {{ 'km'|trans }}
+                    </label>
+                    <label>{{ 'Exercise'|trans }} :
+                        <input type="number" id="exerciseResult" name="exerciseResult"/> {{ 'minutes'|trans }}
+                    </label>
+                    <label>{{ 'Stand up'|trans }}
+                        <div class="stand-up">
+                            <div class="block-body">
+                                <div class="details">
+                                    <div class="detail">
+                                        <div class="result">18</div>
+                                        /
+                                        <div class="goal">{{ activity.standUpGoal }}</div>
                                     </div>
-                                    <div class="graduations">
-                                        <div class="quarter">0</div>
-                                        <div class="quarter">6</div>
-                                        <div class="quarter">12</div>
-                                        <div class="quarter">18</div>
+                                    <div class="wrapper">
+                                        <div class="hours" data-id="{{ activity.id }}" data-day="0">
+                                            {{ include('blocks/activity/_standUp.html.twig', {ups: [0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}) }}
+                                        </div>
+                                        <div class="graduations">
+                                            <div class="quarter">0</div>
+                                            <div class="quarter">6</div>
+                                            <div class="quarter">12</div>
+                                            <div class="quarter">18</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </label>
-                <menu>
-                    <li>
-                        <button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button>
-                    </li>
-                    <li>
-                        <button class="btn btn-primary" value="update">{{ 'Update'|trans }}</button>
-                    </li>
-                </menu>
-            </form>
-        </div>
-    </dialog>
+                    </label>
+                    <menu>
+                        <li>
+                            <button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button>
+                        </li>
+                        <li>
+                            <button class="btn btn-primary" value="update">{{ 'Update'|trans }}</button>
+                        </li>
+                    </menu>
+                </form>
+            </div>
+        </dialog>
+    {% endif %}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/activityIndex.js" type="module"></script>
+    {% if activity %}
+        <script src="/js/activityIndex.js" type="module"></script>
+    {% endif %}
 {% endblock %}
