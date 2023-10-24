@@ -181,12 +181,7 @@ class ActivityDay
 
     public function getDay(): ?DateTimeInterface
     {
-        try {
-            return $this->day->setTimezone(new DateTimeZone($this->activity->getUser()->getTimezone() ?? 'Europe/Paris'));
-        } catch (Exception) {
-            return $this->day;
-        }
-//        return $this->day->setTimezone(new DateTimeZone('Europe/Paris'));
+        return $this->day;
     }
 
     public function setDay(DateTimeInterface $day): self

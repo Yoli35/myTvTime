@@ -767,6 +767,12 @@
                 }
             }
 
+            menu {
+                li {
+                    list-style: none;
+                }
+            }
+
             .stand-up {
                 @include activity-hours();
 
@@ -800,7 +806,7 @@
     position: absolute;
     top: -5em;
     transition: opacity .125s;
-    z-index: 1000;
+    z-index: 10000;
 
     &.show {
         opacity: 1;

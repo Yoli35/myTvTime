@@ -16,10 +16,6 @@ use App\Repository\ActivityRepository;
 use App\Repository\ActivityStandUpGoalRepository;
 use App\Service\DateService;
 use DateInterval;
-use DateTimeImmutable;
-use DateTimeZone;
-use Exception;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,37 +25,27 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/activity')]
 class ActivityController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface                $loggerInterface,
-                                private readonly ActivityRepository             $activityRepository,
-                                private readonly ActivityDayRepository          $activityDayRepository,
-                                private readonly ActivityMoveGoalRepository     $activityMoveGoalRepository,
-                                private readonly ActivityExerciseGoalRepository $activityExerciseGoalRepository,
-                                private readonly ActivityStandUpGoalRepository  $activityStandUpGoalRepository,
-                                private readonly DateService                    $dateService,
-                                private readonly TranslatorInterface            $translator
+    public function __construct(
+        private readonly ActivityDayRepository          $activityDayRepository,
+        private readonly ActivityExerciseGoalRepository $activityExerciseGoalRepository,
+        private readonly ActivityMoveGoalRepository     $activityMoveGoalRepository,
+        private readonly ActivityRepository             $activityRepository,
+        private readonly ActivityStandUpGoalRepository  $activityStandUpGoalRepository,
+        private readonly DateService                    $dateService,
+        private readonly TranslatorInterface            $translator,
     )
     {
 
     }
 
     #[Route('/', name: 'app_activity_index', methods: ['GET'])]
-    public function index(Request $request): Response
+    public function index(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
 
-//        $message = '';
-//        $automaticReload = $request->query->getInt('time'); // 1690883017419
-//        if ($automaticReload) {
-//            $reloadDate = $this->dateService->newDateImmutable('now', 'Europe/Paris');
-//            $reloadDate = $reloadDate->setTimestamp($automaticReload / 1000);
-//            $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
-//
-//            $message = 'Automatic reload at ' . $reloadDate->format('Y-m-d H:i:s') . ' (client) from ' . $now->format('Y-m-d H:i:s') . ' (server)';
-//            $this->loggerInterface->info($message);
-//        }
-        $now = $this->dateService->getNow($user->getTimezone(), true);
+        $now = $this->dateService->getNow("UTC", true);
         $dayOfTheWeek = $now->format('N');
 
         $activity = $user->getActivity();
@@ -70,13 +56,8 @@ class ActivityController extends AbstractController
             ]);
         }
 
-        $days = $this->activityDayRepository->getActivityDays($activity->getId(), 0, intval($dayOfTheWeek) + 10 * 7);
-        dump([
-            'activity' => $activity,
-            'day of week' => $dayOfTheWeek,
-            'limited days' => $days,
-        ]);
-//            $days = $activity->getActivityDays();
+        $days = $this->activityDayRepository->getActivityDays($activity->getId());
+
         if (!count($days)) {
             $today = new ActivityDay($activity, $now);
             $activity->addActivityDay($today);
@@ -90,11 +71,6 @@ class ActivityController extends AbstractController
             $days = $this->activityDayRepository->getActivityDays($activity->getId(), 0, intval($dayOfTheWeek) + 10 * 7);
             $this->addFlash("success", $missingDayCount > 1 ? $this->translator->trans("count missing days added", ['count' => $missingDayCount]) : $this->translator->trans("One missing day added"));
         }
-
-//        $days = array_reverse($activity->getActivityDays()->toArray());
-//        usort($days, function (ActivityDay $a, ActivityDay $b) {
-//            return $b->getDay() <=> $a->getDay();
-//        });
 
         $currentWeek = $days[0]->getWeek();
         $currentYear = $days[0]->getDay()->format('Y');
@@ -117,14 +93,12 @@ class ActivityController extends AbstractController
         }
 
         $goals = [];
-        $now = $this->now();
         $goals['move'] = $activity->getMoveGoals()->toArray();
         $goals['move'][count($goals['move']) - 1]->setEnd($now);
         $goals['exercise'] = $activity->getExerciseGoals()->toArray();
         $goals['exercise'][count($goals['exercise']) - 1]->setEnd($now);
         $goals['standUp'] = $activity->getStandUpGoals()->toArray();
         $goals['standUp'][count($goals['standUp']) - 1]->setEnd($now);
-//        dump($goals);
 
         $breadcrumb = [
             ['name' => $this->translator->trans('Home'), 'url' => $this->generateUrl('app_home')],
@@ -139,7 +113,6 @@ class ActivityController extends AbstractController
             'days' => $days,
             'years' => $years,
             'currentWeek' => $currentWeek,
-//            'message' => $message,
             'breadcrumb' => $breadcrumb,
         ]);
     }
@@ -153,7 +126,8 @@ class ActivityController extends AbstractController
 
         while ($whileDayFormat <= $nowFormat) {
 
-            if (!$this->missingDay($whileDay, $days)) {
+            if ($this->missingDay($whileDayFormat, $days)) {
+                dump(['missing day' => $whileDayFormat, 'missing days (datetime)' => $whileDay]);
                 $day = new ActivityDay($activity, $whileDay);
                 $activity->addActivityDay($day);
                 $this->activityDayRepository->save($day, true);
@@ -166,21 +140,21 @@ class ActivityController extends AbstractController
         return $missingDays;
     }
 
-    public function missingDay($date, $days): bool
+    public function missingDay($dateFormat, $days): bool
     {
         foreach ($days as $day) {
-            if ($day->getDay()->format('Y-m-d') === $date->format('Y-m-d')) {
-                return true;
+            if ($day->getDay()->format('Y-m-d') === $dateFormat) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     #[Route('/new', name: 'app_activity_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
+
         /** @var User $user */
         $user = $this->getUser();
 
@@ -190,7 +164,7 @@ class ActivityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->activityRepository->save($activity);
-            $start = $this->now();
+            $start = $this->dateService->getNow("UTC", true);
             $start = $start->setTime(0, 0);
             $moveGoal = new ActivityMoveGoal($activity, $activity->getMoveGoal(), $start);
             $this->activityMoveGoalRepository->save($moveGoal);
@@ -242,7 +216,7 @@ class ActivityController extends AbstractController
             $newExerciseGoal = $activity->getExerciseGoal();
             $newStandUpGoal = $activity->getStandUpGoal();
 
-            $now = $this->now();
+            $now = $this->dateService->getNow("UTC", true);
             $yesterday = $now->sub(new DateInterval('P1D'));
 
             if ($lastMoveGoal === null || $lastMoveGoal->getAmount() !== $newMoveGoal) {
@@ -296,17 +270,6 @@ class ActivityController extends AbstractController
             'activity' => $activity,
             'form' => $form->createView(),
         ]);
-    }
-
-    public function now(): ?DateTimeImmutable
-    {
-        try {
-            $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-        } catch (Exception $e) {
-            $this->loggerInterface->error('New date with "Europe/Paris" time zone : ' . $e->getFile() . ' (line ' . $e->getLine() . ') : ' . $e->getMessage() . ' ' . $e->getTraceAsString());
-            $now = new DateTimeImmutable();
-        }
-        return $now->setTime(0, 0);
     }
 
     #[Route('/{id}/stand-up', name: 'app_activity_stand_up_toggle', methods: ['GET'])]

@@ -44,7 +44,7 @@ class ActivityDayRepository extends ServiceEntityRepository
         }
     }
 
-    public function getActivityDays(int $activityId, int $offset, int $limit): array
+    public function getActivityDays(int $activityId, int $offset = 0, int $limit = 999999): array
     {
         $qb = $this->createQueryBuilder('ad');
         $qb->select('ad')

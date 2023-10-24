@@ -162,13 +162,13 @@ body {
         transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, padding 500ms ease-in-out;
 
         &.success {
-            background-color: var(--gradient-green-40-alpha-50);
+            background-color: var(--gradient-green-40);
             border-color: var(--gradient-green-90);
             color: var(--gradient-green-90);
         }
 
         &.friendship {
-            background-color: var(--gradient-ardoise-40-alpha-50);
+            background-color: var(--gradient-ardoise-40);
             border-color: var(--gradient-ardoise-90);
             color: var(--gradient-ardoise-90);
 
@@ -180,7 +180,7 @@ body {
         }
 
         &.warning {
-            background-color: var(--gradient-orange-40-alpha-50);
+            background-color: var(--gradient-orange-50);
             border-color: var(--gradient-orange-90);
             color: var(--gradient-orange-90);
         }
