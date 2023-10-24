@@ -447,66 +447,6 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function todayAiringSeries(DateTimeImmutable $today): array
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-
-        $yesterday = $today->sub(new DateInterval('P1D'));
-
-        $episodeViewingsDay = $this->episodeViewingRepository->findBy(['airDate' => $today]);
-        $episodeViewingsDayBefore = $this->episodeViewingRepository->findBy(['airDate' => $yesterday]);
-//        dump(["day" => $episodeViewingsDay], ["day before" => $episodeViewingsDayBefore]);
-        $episodeViewings = array_merge($episodeViewingsDay, $episodeViewingsDayBefore);
-
-        $episodesOfTheDay = [];
-        foreach ($episodeViewings as $episodeViewing) {
-            $episode = [];
-            $episode['episodeNumbers'] = [];
-            $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
-
-            if ($serieViewing->getUser()->getId() !== $user->getId())
-                continue;
-
-            $serie = $serieViewing->getSerie();
-            $broadcastTheNextDay = $serieViewing->isTimeShifted();
-            $airDate = $episodeViewing->getAirDate();
-            $episodeNumber = $episodeViewing->getEpisodeNumber();
-            $seasonNumber = $episodeViewing->getSeason()->getSeasonNumber();
-
-            $episodesOfTheDayCount = count($episodesOfTheDay);
-            for ($i = 0; $i < $episodesOfTheDayCount; $i++) {
-                if ($episodesOfTheDay[$i]['serieId'] == $serie->getId() &&
-                    $episodesOfTheDay[$i]['seasonNumber'] == $seasonNumber) {
-                    $episodesOfTheDay[$i]['episodeNumbers'][] = $episodeNumber;
-                    continue 2;
-                }
-            }
-//            dump([
-//                "broadcastTheNextDay" => $broadcastTheNextDay,
-//                "episodeNumber" => $episodeNumber,
-//                "seasonNumber" => $seasonNumber,
-//                "airDate" => $airDate->format("d/m/Y"),
-//                "yesterday" => $yesterday->format("d/m/Y"),
-//                "today" => $today->format("d/m/Y")
-//            ]);
-
-            if (($broadcastTheNextDay && $airDate->format("d/m/Y") === $yesterday->format("d/m/Y")) ||
-                (!$broadcastTheNextDay && $airDate->format("d/m/Y") === $today->format("d/m/Y"))) {
-                $episode['airDate'] = $airDate;
-                $episode['episodeNumbers'][] = $episodeNumber;
-                $episode['seasonNumber'] = $seasonNumber;
-                $episode['seasonEpisodeCount'] = $episodeViewing->getSeason()->getEpisodeCount();
-                $episode['serieId'] = $serie->getId();
-                $episode['serieName'] = $serie->getName();
-                $episode['seriePosterPath'] = $serie->getPosterPath();
-                $episodesOfTheDay[] = $episode;
-            }
-        }
-
-        return $episodesOfTheDay;
-    }
-
     public function todayAiringSeriesV2(DateTimeImmutable $date): array
     {
         /** @var User $user */
@@ -575,13 +515,8 @@ class SerieController extends AbstractController
         $imgConfig = $this->imageConfiguration->getConfig();
         $now = $this->dateService->getNow($user->getTimezone(), true);
         $week = $now->format('W');
+        $day_of_the_week = $now->format('N');
 
-        $day_of_the_week = date('w', strtotime($now->format('Y-m-d')));
-        // date -> sunday = 0, monday = 1, ... saturday = 6
-        // but we want monday = 1, tuesday = 2, ... sunday = 7
-        if ($day_of_the_week == 0) {
-            $day_of_the_week = 7;
-        }
         $start = $this->dateService->newDateImmutable((1 - $day_of_the_week) . 'day', $user->getTimezone());
         $end = $this->dateService->newDateImmutable((7 - $day_of_the_week) . 'day', $user->getTimezone());
         $episodesOfTheWeek = [];
@@ -2172,7 +2107,7 @@ class SerieController extends AbstractController
         $name = $data['name'];
         $id = $data['id'];
         $locale = $request->getLocale();
-        dump(['name' => $name, 'id' => $id, 'locale' => $locale]);
+//        dump(['name' => $name, 'id' => $id, 'locale' => $locale]);
 
         $serie = $this->serieRepository->find($id);
         $localizedName = $this->serieLocalizedNameRepository->findOneBy(['serie' => $serie, 'locale' => $locale]);
