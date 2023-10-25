@@ -66,10 +66,17 @@ class ActivityController extends AbstractController
         }
 
         // S'il manque des jours, on les ajoute et on recharge le tableau
-        $missingDayCount = $this->checkForMissingDays($activity, $days, $now);
+        $results = $this->checkForMissingDays($activity, $days, $now);
+        $missingDayCount = $results['missing days count'];
+        $missingDayIsToday = $results['missing day is today'];
+
         if ($missingDayCount) {
             $days = $this->activityDayRepository->getActivityDays($activity->getId(), 0, intval($dayOfTheWeek) + 10 * 7);
-            $this->addFlash("success", $missingDayCount > 1 ? $this->translator->trans("count missing days added", ['count' => $missingDayCount]) : $this->translator->trans("One missing day added"));
+            if ($missingDayIsToday) {
+                $this->addFlash("success", $this->translator->trans("Hello, today is added to your activity"));
+            } else {
+                $this->addFlash("success", $missingDayCount > 1 ? $this->translator->trans("count missing days added", ['count' => $missingDayCount]) : $this->translator->trans("One missing day added"));
+            }
         }
 
         $currentWeek = $days[0]->getWeek();
@@ -117,27 +124,31 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    public function checkForMissingDays(Activity $activity, array $days, $now): int
+    public function checkForMissingDays(Activity $activity, array $days, $now): array
     {
         $whileDay = $activity->getCreatedAt();
         $whileDayFormat = $whileDay->format('Y-m-d');
         $nowFormat = $now->format('Y-m-d');
         $missingDays = 0;
+        $missingDayIsToday = false;
 
         while ($whileDayFormat <= $nowFormat) {
 
             if ($this->missingDay($whileDayFormat, $days)) {
-                dump(['missing day' => $whileDayFormat, 'missing days (datetime)' => $whileDay]);
+//                dump(['missing day' => $whileDayFormat, 'missing days (datetime)' => $whileDay]);
                 $day = new ActivityDay($activity, $whileDay);
                 $activity->addActivityDay($day);
                 $this->activityDayRepository->save($day, true);
                 $missingDays++;
+                if ($whileDayFormat === $nowFormat) {
+                    $missingDayIsToday = true;
+                }
             }
 
             $whileDay = $whileDay->add(new DateInterval('P1D'));
             $whileDayFormat = $whileDay->format('Y-m-d');
         }
-        return $missingDays;
+        return ['missing days count' => $missingDays, 'missing day is today' => $missingDayIsToday];
     }
 
     public function missingDay($dateFormat, $days): bool
