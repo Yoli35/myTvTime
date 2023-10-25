@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\ActivityChallenge;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+class ActivityChallengeType extends AbstractType
+{
+    public function __construct(private readonly TranslatorInterface $translator)
+    {
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('name', TextType::class, [
+                'label' => $this->translator->trans('Name'),
+                'attr' => ['class', "w100"],
+                'required' => true,
+            ])
+            ->add('challenge', ChoiceType::class, [
+                'label' => $this->translator->trans('Challenge'),
+                'attr' => ['class', "w100"],
+                'choices' => [
+                    'Distance' => 'distance',
+                    'Duration' => 'duration',
+                    'Elevation' => 'elevation',
+                    'Frequency' => 'frequency',
+                    'Intensity' => 'intensity',
+                    'Speed' => 'speed',
+                    'Steps' => 'steps',
+                    'Time' => 'time',
+                ],
+                'placeholder' => 'Choose a challenge',
+                'required' => true,
+            ])
+            ->add('value', NumberType::class, [
+                'label' => $this->translator->trans('Quantity'),
+                'attr' => ['class', "w100"],
+                'required' => true,
+            ])
+            ->add('goal', NumberType::class, [
+                'label' => $this->translator->trans('Goal'),
+                'attr' => ['class', "w100"],
+                'required' => true,
+            ])
+            ->add('startAt', DateType::class, [
+                'widget' => 'choice',
+                'input'  => 'datetime_immutable'
+            ])
+            ->add('endAt', DateType::class, [
+                'widget' => 'choice',
+                'input'  => 'datetime_immutable'
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Add list',
+                'attr' => ['class' => 'btn btn-secondary'],
+            ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => ActivityChallenge::class,
+        ]);
+    }
+}

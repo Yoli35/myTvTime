@@ -46,6 +46,9 @@ class Activity
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ActivityDay::class)]
     private Collection $activityDays;
 
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ActivityChallenge::class, orphanRemoval: true)]
+    private Collection $activityChallenges;
+
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -58,6 +61,12 @@ class Activity
         $this->moveGoals = new ArrayCollection();
         $this->exerciseGoals = new ArrayCollection();
         $this->standUpGoals = new ArrayCollection();
+        $this->activityChallenges = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return 'Activity for ' . $this->user->getUsername();
     }
 
     public function getId(): ?int
@@ -236,6 +245,36 @@ class Activity
         if ($this->standUpGoals->removeElement($standUpGoal)) {
             if ($standUpGoal->getActivity() === $this) {
                 $standUpGoal->setActivity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActivityChallenge>
+     */
+    public function getActivityChallenges(): Collection
+    {
+        return $this->activityChallenges;
+    }
+
+    public function addActivityChallenge(ActivityChallenge $activityChallenge): static
+    {
+        if (!$this->activityChallenges->contains($activityChallenge)) {
+            $this->activityChallenges->add($activityChallenge);
+            $activityChallenge->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivityChallenge(ActivityChallenge $activityChallenge): static
+    {
+        if ($this->activityChallenges->removeElement($activityChallenge)) {
+            // set the owning side to null (unless already changed)
+            if ($activityChallenge->getActivity() === $this) {
+                $activityChallenge->setActivity(null);
             }
         }
 

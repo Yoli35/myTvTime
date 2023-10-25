@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ActivityChallenge index{% endblock %}
+
+{% block body %}
+    <h1>ActivityChallenge index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Completed</th>
+                <th>Challenge</th>
+                <th>Goal</th>
+                <th>Value</th>
+                <th>StartAt</th>
+                <th>EndAt</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for activity_challenge in activity_challenges %}
+            <tr>
+                <td>{{ activity_challenge.id }}</td>
+                <td>{{ activity_challenge.name }}</td>
+                <td>{{ activity_challenge.completed ? 'Yes' : 'No' }}</td>
+                <td>{{ activity_challenge.challenge }}</td>
+                <td>{{ activity_challenge.goal }}</td>
+                <td>{{ activity_challenge.value }}</td>
+                <td>{{ activity_challenge.startAt ? activity_challenge.startAt|date('Y-m-d') : '' }}</td>
+                <td>{{ activity_challenge.endAt ? activity_challenge.endAt|date('Y-m-d') : '' }}</td>
+                <td>{{ activity_challenge.createdAt ? activity_challenge.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_activity_challenge_show', {'id': activity_challenge.id}) }}">show</a>
+                    <a href="{{ path('app_activity_challenge_edit', {'id': activity_challenge.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_activity_challenge_new') }}">Create new</a>
+{% endblock %}
