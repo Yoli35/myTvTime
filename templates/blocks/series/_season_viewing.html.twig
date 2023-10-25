@@ -1,34 +1,29 @@
 {% set seasonViewing = season.seasonViewing %}
 {% set episodes = season.episodes %}
+{% set TMDBUpdateInProgress = episodes|length < seasonViewing.episodes|length %}
 {% if seasonViewing %}
     {% if seasonViewing.episodeCount > 0 %}
         <div class="viewing" data-season-number="{{ seasonViewing.seasonNumber }}">
-            {% for episodeViewing in seasonViewing.episodes %}
-                {% if episodeViewing.episodeNumber <= season.episode_count %}
-                    {% set episode = episodes[episodeViewing.episodeNumber-1] %}
-                    {% if episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
-                        and episodeViewing.substituteName is not null %}
-                        {% set name = episodeViewing.substituteName %}
-                    {% else %}
-                        {% set name = episode.name %}
-                    {% endif %}
-                    <div class="ep{% if seasonViewing.seasonCompleted %} full{% endif %}"
-                         data-number="{{ episodeViewing.episodeNumber }}"
-                         data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
-                            {% if episode.air_date %}
-                                {% if shift %}
-                                    data-air-date="{{ episode.air_date|date_modify("+1 day")|format_date('long') }}"
-                                {% else %}
-                                    data-air-date="{{ episode.air_date|format_date('long') }}"
-                                {% endif %}
+            {% if TMDBUpdateInProgress %}
+                {% for episodeViewing in seasonViewing.episodes %}
+                    {% set name = "Episode"|trans ~ " " ~ episodeViewing.episodeNumber %}
+                    <div class="ep"
+                        data-number="{{ episodeViewing.episodeNumber }}"
+                        data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
+                        {% if episodeViewing.airDate %}
+                            {% if shift %}
+                                data-air-date="{{ episodeViewing.airDate|date_modify("+1 day")|format_date('long') }}"
                             {% else %}
-                                data-air-date="{{ 'No date yet'|trans }}"
+                                data-air-date="{{ episodeViewing.airDate|format_date('long') }}"
                             {% endif %}
-                         data-name="{{ name }}"
-                         data-still-path="{{ episode.still_path }}"
-                         data-vote="{{ episodeViewing.vote }}"
-                         data-locale="{{ locale }}"
-                         data-global-index="{{ globalIndex }}">
+                        {% else %}
+                            data-air-date="{{ 'No date yet'|trans }}"
+                        {% endif %}
+                        data-name="{{ name }}"
+                        data-still-path=""
+                        data-vote="{{ episodeViewing.vote }}"
+                        data-locale="{{ locale }}"
+                        data-global-index="{{ globalIndex }}">
                         {% if episodeViewing.viewedAt %}
                             <i class="fa-solid fa-circle-check"></i>
                         {% else %}
@@ -36,8 +31,44 @@
                         {% endif %}
                         {% set globalIndex = globalIndex + 1 %}
                     </div>
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                {% for episodeViewing in seasonViewing.episodes %}
+                    {% if episodeViewing.episodeNumber <= season.episode_count %}
+                        {% set episode = episodes[episodeViewing.episodeNumber-1] %}
+                        {% if episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
+                            and episodeViewing.substituteName is not null %}
+                            {% set name = episodeViewing.substituteName %}
+                        {% else %}
+                            {% set name = episode.name %}
+                        {% endif %}
+                        <div class="ep{% if seasonViewing.seasonCompleted %} full{% endif %}"
+                             data-number="{{ episodeViewing.episodeNumber }}"
+                             data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
+                                {% if episode.air_date %}
+                                    {% if shift %}
+                                        data-air-date="{{ episode.air_date|date_modify("+1 day")|format_date('long') }}"
+                                    {% else %}
+                                        data-air-date="{{ episode.air_date|format_date('long') }}"
+                                    {% endif %}
+                                {% else %}
+                                    data-air-date="{{ 'No date yet'|trans }}"
+                                {% endif %}
+                             data-name="{{ name }}"
+                             data-still-path="{{ episode.still_path }}"
+                             data-vote="{{ episodeViewing.vote }}"
+                             data-locale="{{ locale }}"
+                             data-global-index="{{ globalIndex }}">
+                            {% if episodeViewing.viewedAt %}
+                                <i class="fa-solid fa-circle-check"></i>
+                            {% else %}
+                                <span>{{ episodeViewing.episodeNumber }}</span>
+                            {% endif %}
+                            {% set globalIndex = globalIndex + 1 %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
     {% endif %}
 {% endif %}

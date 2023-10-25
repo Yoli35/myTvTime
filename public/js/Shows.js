@@ -288,11 +288,7 @@ export class Shows {
     }
 
     bubbleItShow(evt) {
-        const bubble = document.querySelector(".bubble");
         const bubbleV2 = document.querySelector(".bubble-v2");
-        const viewed = parseInt(evt.currentTarget.getAttribute("data-viewed"));
-        const episode = evt.currentTarget.getAttribute("data-number");
-        const season = evt.currentTarget.parentElement.getAttribute("data-season-number");
         const name = evt.currentTarget.getAttribute("data-name");
         const airDate = evt.currentTarget.getAttribute("data-air-date");
         const vote = evt.currentTarget.getAttribute("data-vote");
@@ -308,27 +304,19 @@ export class Shows {
         }
         bubbleV2.querySelector(".infos").innerHTML = "<div>" + name + "</div><div>" + airDate + "</div>" + (vote > 0 ? ("<div>" + voteText[locale] + vote + " / 10</div>") : "");
 
-        bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
         bubbleV2.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
-        bubble.querySelector(".body").innerHTML = "{{ 'Season'|trans }}&nbsp;" + season.toString() + "<br>{{ 'Episode'|trans }}&nbsp;" + episode.toString() + (viewed ? (" 🤓") : (" 🥺"));
-        bubble.classList.add("show");
         bubbleV2.classList.add("show");
     }
 
     bubbleItHide() {
-        const bubble = document.querySelector(".bubble");
         const bubbleV2 = document.querySelector(".bubble-v2");
-        bubble.classList.remove("show");
         bubbleV2.classList.remove("show");
-        bubble.querySelector(".body").innerHTML = "";
         bubbleV2.querySelector(".still").innerHTML = "";
         bubbleV2.querySelector(".infos").innerHTML = "";
     }
 
     bubbleIt(evt) {
-        const bubble = document.querySelector(".bubble");
         const bubbleV2 = document.querySelector(".bubble-v2");
-        bubble.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
         bubbleV2.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
     }
 

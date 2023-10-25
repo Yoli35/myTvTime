@@ -26,13 +26,14 @@
     {% endblock %}
 
 {% block body %}
-    <div class="bubble">
-        <div class="body"></div>
-        <div class="tail"></div>
-    </div>
+{#    <div class="bubble">#}
+{#        <div class="body"></div>#}
+{#        <div class="tail"></div>#}
+{#    </div>#}
     <div class="bubble-v2">
         <div class="still"></div>
         <div class="infos"></div>
+        <div class="tail"></div>
     </div>
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
@@ -312,8 +313,7 @@
                                                 {% if season.air_date %}{{ season.air_date|slice(0,4) }} | {% endif %}
                                                 {{ season.episode_count }} {{ ((season.episode_count>1) ? 'episodes' : 'episode')|trans }}
                                                 {% if season.seasonViewing is defined %}
-                                                    <div class="details"
-                                                         data-season-number="{{ season.season_number }}">
+                                                    <div class="details" data-season-number="{{ season.season_number }}">
                                                         <div>
                                                             {{ include('blocks/series/_season_viewing.html.twig', {shift: isTimeShifted}) }}
                                                         </div>

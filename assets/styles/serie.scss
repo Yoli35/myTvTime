@@ -1014,6 +1014,17 @@
             font-weight: 300;
         }
     }
+
+    .tail {
+        background-color: var(--gradient-ardoise-10);
+        border-radius: .125rem;
+        min-height: 1rem;
+        position: absolute;
+        rotate: 45deg;
+        translate: 0 4.95rem;
+        width: 1rem;
+        z-index: 999;
+    }
 }
 
 .serie-page {

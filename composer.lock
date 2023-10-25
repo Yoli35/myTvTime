@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d00e2535298090618f57b0ea95825384",
+    "content-hash": "52a2d149b040b14a785b70140e1c1f12",
     "packages": [
         {
             "name": "api-platform/core",
@@ -2055,16 +2055,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.320.0",
+            "version": "v0.321.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "6b0ea59d53b301cf1a8f7e0456ff1bd8f5613fdf"
+                "reference": "bf0aa8b1cb272f45c1f73270ad113047625c5937"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/6b0ea59d53b301cf1a8f7e0456ff1bd8f5613fdf",
-                "reference": "6b0ea59d53b301cf1a8f7e0456ff1bd8f5613fdf",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/bf0aa8b1cb272f45c1f73270ad113047625c5937",
+                "reference": "bf0aa8b1cb272f45c1f73270ad113047625c5937",
                 "shasum": ""
             },
             "require": {
@@ -2093,9 +2093,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.320.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.321.0"
             },
-            "time": "2023-10-15T01:06:13+00:00"
+            "time": "2023-10-23T01:08:38+00:00"
         },
         {
             "name": "google/auth",
@@ -6040,16 +6040,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.3.3",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "9c402af768c6c9f8126a9ffa192ecf7c16581e35"
+                "reference": "46bebc3d097d1bb1dce04c5ba83658afd79988f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/9c402af768c6c9f8126a9ffa192ecf7c16581e35",
-                "reference": "9c402af768c6c9f8126a9ffa192ecf7c16581e35",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/46bebc3d097d1bb1dce04c5ba83658afd79988f9",
+                "reference": "46bebc3d097d1bb1dce04c5ba83658afd79988f9",
                 "shasum": ""
             },
             "require": {
@@ -6085,7 +6085,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.3.3"
+                "source": "https://github.com/symfony/flex/tree/v2.4.0"
             },
             "funding": [
                 {
@@ -6101,7 +6101,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-04T09:02:35+00:00"
+            "time": "2023-10-22T18:05:25+00:00"
         },
         {
             "name": "symfony/form",
