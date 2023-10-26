@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ActivityDayRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, ActivityDay::class);
     }
@@ -55,6 +55,32 @@ class ActivityDayRepository extends ServiceEntityRepository
             ->setMaxResults($limit);
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function checkChallenge($activityId, $discipline, $value, $month, $start, $end): array
+    {
+        if ($month) {
+            $sql = "SELECT * "
+                . "FROM `activity_day` "
+                . "WHERE `activity_id`=" . $activityId . " "
+                . "AND `" . $discipline . "` > " . $value . " "
+                . "AND MONTH(`day`) = " . $month . " "
+                . "ORDER BY day";
+        } else {
+            $sql = "SELECT * "
+                . "FROM `activity_day` "
+                . "WHERE `activity_id`=" . $activityId . " "
+                . "AND `" . $discipline . "` > " . $value . " "
+                . "AND `day` >= '" . $start . "' "
+                . "AND `day` <= '" . $end . "' "
+                . "ORDER BY day";
+        }
+//        dump($sql);
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
     }
 
 //    /**

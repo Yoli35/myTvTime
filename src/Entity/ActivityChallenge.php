@@ -43,11 +43,15 @@ class ActivityChallenge
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?DateTimeImmutable $endAt = null;
 
+    #[ORM\Column]
+    private ?int $progress;
+
     public function __construct(Activity $activity)
     {
         $this->activity = $activity;
         $this->createdAt = new DateTimeImmutable();
         $this->completed = false;
+        $this->progress = 0;
     }
 
     public function __toString(): string
@@ -120,12 +124,12 @@ class ActivityChallenge
         return $this;
     }
 
-    public function getValue(): ?int
+    public function getValue(): ?float
     {
         return $this->value;
     }
 
-    public function setValue(int $value): static
+    public function setValue(float $value): static
     {
         $this->value = $value;
 
@@ -154,5 +158,21 @@ class ActivityChallenge
         $this->endAt = $endAt;
 
         return $this;
+    }
+
+    public function inProgress(): bool
+    {
+        $now = new DateTimeImmutable();
+        return $this->endAt > $now && $this->startAt < $now;
+    }
+
+    public function getProgress(): ?int
+    {
+        return $this->progress;
+    }
+
+    public function setProgress(?int $progress): void
+    {
+        $this->progress = $progress;
     }
 }

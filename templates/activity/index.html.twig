@@ -22,14 +22,33 @@
                        class="no-activity btn btn-primary">{{ 'Activate'|trans }}</a>
                 {% else %}
                     <div class="activity-tools">
-                        {#                        {% if message %} #}
-                        {#                            <div class="message"> #}
-                        {#                                {{ message }} #}
-                        {#                                <div class="close"><i class="fa-solid fa-xmark"></i></div> #}
-                        {#                            </div> #}
-                        {#                        {% endif %} #}
-                        <a href="{{ path('app_activity_edit', {id: activity.id}) }}"
-                           class="activity-goals btn btn-primary">{{ 'Goals'|trans }}</a>
+                        <div class="challenges">
+                            {% if challenges.inProgress|length %}
+                                <div class="in-progress">
+                                    {{ 'Challenges in progress'|trans }} :
+                                    {% for challenge in challenges.inProgress %}
+                                        <a href="{{ path('app_activity_challenge_show', {id: challenge.id}) }}">
+                                            <div class="challenge">
+                                                {% if challenge.completed %}<i class="fa-solid fa-crown"></i> {% endif %}{{ challenge.name }} ({{ challenge.progress }} / {{ challenge.goal }})
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if challenges.completed|length %}
+                                <div class="completed">
+                                    {{ 'Challenges completed'|trans }} :
+                                    {% for challenge in challenges.completed %}
+                                        <a href="{{ path('app_activity_challenge_show', {id: challenge.id}) }}">
+                                            <div class="challenge">
+                                                {% if challenge.completed %}<i class="fa-solid fa-crown"></i> {% endif %}{{ challenge.name }} ({{ challenge.progress }} / {{ challenge.goal }})
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <a href="{{ path('app_activity_edit', {id: activity.id}) }}" class="activity-goals btn btn-primary">{{ 'Goals'|trans }}</a>
                     </div>
                     {% for year in years %}
                         {% for week in year %}

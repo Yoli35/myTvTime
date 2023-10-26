@@ -68,43 +68,38 @@
             align-items: center;
             display: flex;
             gap: 1em;
-            justify-content: flex-end;
+            justify-content: space-between;
             width: 100%;
 
-            .message {
-                background-color: var(--gradient-green-30);
-                border-radius: .25em;
-                color: var(--gradient-green-90);
-                font-size: 1.25em;
-                font-weight: 300;
-                margin: 0 auto;
-                padding: 1rem 2rem;
-                position: relative;
+            .challenges {
+                align-items: center;
+                display: flex;
+                gap: 1rem;
+                justify-content: flex-start;
+                margin-inline-end: auto;
 
-                .close {
+                .in-progress, .completed {
                     align-items: center;
-                    border-radius: 50%;
-                    border: 1px solid var(--gradient-green-80);
-                    color: var(--gradient-green-80);
-                    cursor: pointer;
+                    background-color: var(--gradient-ardoise-40-alpha-50);
+                    border-radius: .25rem;
                     display: flex;
-                    font-size: .75rem;
-                    height: 1rem;
-                    justify-content: center;
-                    padding-top: 1px;
-                    position: absolute;
-                    right: .25rem;
-                    top: .25rem;
-                    width: 1rem;
+                    gap: .5rem;
+                    padding: .25rem 1rem;
 
-                    &:hover {
-                        background-color: var(--gradient-green-80);
-                        color: var(--gradient-green-30);
+                    .challenge {
+                        background-color: var(--gradient-ardoise-40);
+                        border-radius: .25rem;
+                        padding: .25rem 1rem;
+
+                        i {
+                            color: var(--gradient-yellow-50);
+                        }
                     }
                 }
             }
 
             .activity-goals {
+                margin-inline-start: auto;
                 padding: .25em 2em;
             }
         }

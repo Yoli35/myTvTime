@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
+use App\Entity\ActivityChallenge;
 use App\Entity\ActivityDay;
 use App\Entity\ActivityExerciseGoal;
 use App\Entity\ActivityMoveGoal;
 use App\Entity\ActivityStandUpGoal;
 use App\Entity\User;
 use App\Form\ActivityType;
+use App\Repository\ActivityChallengeRepository;
 use App\Repository\ActivityDayRepository;
 use App\Repository\ActivityExerciseGoalRepository;
 use App\Repository\ActivityMoveGoalRepository;
@@ -26,6 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ActivityController extends AbstractController
 {
     public function __construct(
+        private readonly ActivityChallengeRepository    $activityChallengeRepository,
         private readonly ActivityDayRepository          $activityDayRepository,
         private readonly ActivityExerciseGoalRepository $activityExerciseGoalRepository,
         private readonly ActivityMoveGoalRepository     $activityMoveGoalRepository,
@@ -55,6 +58,7 @@ class ActivityController extends AbstractController
                 'activity' => $activity,
             ]);
         }
+        $challenges = $this->getChallenges($activity, $now);
 
         $days = $this->activityDayRepository->getActivityDays($activity->getId());
 
@@ -116,6 +120,7 @@ class ActivityController extends AbstractController
 
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
+            'challenges' => $challenges,
             'goals' => $goals,
             'days' => $days,
             'years' => $years,
@@ -159,6 +164,56 @@ class ActivityController extends AbstractController
             }
         }
         return true;
+    }
+
+    public function getChallenges($activity, $now): array
+    {
+        $challenges = array_map(function ($challenge) use ($activity) {
+            /** @var ActivityChallenge $challenge */
+            if ($challenge->inProgress()) {
+                $discipline = $challenge->getChallenge();
+                $value = $challenge->getValue();
+                $goal = $challenge->getGoal();
+                $startAt = $challenge->getStartAt();
+                $endAt = $challenge->getEndAt();
+                $month = 0;
+
+                $startMonth = $startAt->format('m');
+                $endMonth = $endAt->format('m');
+                if ($startMonth === $endMonth) {
+                    $startDay = $startAt->format('d');
+                    $endAtDay = $endAt->format('d');
+                    $theoreticalEndAtDay = $startAt->format('t');
+                    if ($startDay == '1' && $endAtDay == $theoreticalEndAtDay) {
+                        $month = $startMonth;
+                    }
+                }
+                $daysChallengeMet = $this->activityDayRepository->checkChallenge($activity->getId(), $discipline, $value, $month, $startAt->format('Y-m-d'), $endAt->format('Y-m-d'));
+                $challenge->setProgress(count($daysChallengeMet));
+                $challenge->setCompleted($challenge->getProgress() >= $goal);
+                $this->activityChallengeRepository->save($challenge, true);
+//                dump([
+//                        'discipline' => $discipline,
+//                        'value' => $value,
+//                        'goal' => $goal,
+//                        'startAt' => $startAt->format('Y-m-d'),
+//                        'endAt' => $endAt->format('Y-m-d'),
+//                        'month' => $month,
+//                        'Days when the challenge is completed' => $daysChallengeMet]
+//                );
+            }
+            return $challenge;
+        }, $activity->getActivityChallenges()->toArray());
+//        dump($challenges);
+
+        return [
+            'inProgress' => array_filter($challenges, function ($challenge) {
+                return $challenge->inProgress();
+            }),
+            'completed' => array_filter($challenges, function ($challenge) {
+                return !$challenge->inProgress();
+            }),
+        ];
     }
 
     #[Route('/new', name: 'app_activity_new', methods: ['GET', 'POST'])]

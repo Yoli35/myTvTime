@@ -21,6 +21,20 @@ class ActivityChallengeRepository extends ServiceEntityRepository
         parent::__construct($registry, ActivityChallenge::class);
     }
 
+    public function save(ActivityChallenge $challenge, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($challenge);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
 //    /**
 //     * @return ActivityChallenge[] Returns an array of ActivityChallenge objects
 //     */
