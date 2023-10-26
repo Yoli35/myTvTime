@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/activity')]
+#[Route('/{_locale}/activity', name: 'app_activity_', requirements: ['_locale' => 'fr|en|de|es'], options: ['utf8' => true])]
 class ActivityController extends AbstractController
 {
     public function __construct(
@@ -41,7 +41,7 @@ class ActivityController extends AbstractController
 
     }
 
-    #[Route('/', name: 'app_activity_index', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -216,7 +216,7 @@ class ActivityController extends AbstractController
         ];
     }
 
-    #[Route('/new', name: 'app_activity_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -252,7 +252,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_activity_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id): Response
     {
         $activity = $this->activityRepository->find($id);
@@ -338,7 +338,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/stand-up', name: 'app_activity_stand_up_toggle', methods: ['GET'])]
+    #[Route('/{id}/stand-up', name: 'stand_up_toggle', methods: ['GET'])]
     public function standUpToggle(Request $request, int $id): Response
     {
 //        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -374,7 +374,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/save/data', name: 'app_activity_save_data', methods: ['GET'])]
+    #[Route('/{id}/save/data', name: 'save_data', methods: ['GET'])]
     public function saveDataActivity(Request $request, int $id): Response
     {
 //        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -418,7 +418,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/save/day', name: 'app_activity_save_day', methods: ['GET'])]
+    #[Route('/{id}/save/day', name: 'save_day', methods: ['GET'])]
     public function saveDayActivity(Request $request, int $id): Response
     {
         $values = json_decode($request->query->get('values'), true);

@@ -80,6 +80,15 @@ Distance covered: Distance parcourue
 Exercise duration: Durée de l'exercice
 Move challenge: Défi de mouvement
 Number of steps: Nombre de pas
+Challenge: Défi
+Back to challenges: Retour aux défis
+Edit challenge: Modifier le défi
+Delete challenge: Supprimer le défi
+exercise_result: Faire de l'exercice pendant %value% minutes
+distance: Parcourir %value% km
+Goal: Objectif
+Challenge start: Début du défi
+Challenge end: Fin du défi
 
 #Alarm
 Simple alarm: Alarme simple

@@ -11,10 +11,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/{_locale}/activity/challenge', name: 'app_activity_challenge_', requirements: ['_locale' => 'fr|en|de|es'])]
 class ActivityChallengeController extends AbstractController
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    )
+    {
+    }
+
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(ActivityChallengeRepository $activityChallengeRepository): Response
     {
@@ -47,10 +54,15 @@ class ActivityChallengeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(ActivityChallenge $activityChallenge): Response
+    public function show(ActivityChallenge $challenge): Response
     {
+        $breadcrumb = [
+            ['name' => $this->translator->trans('Activity'), 'url' => $this->generateUrl('app_activity_index')],
+            ['name' => $this->translator->trans('Challenge'), 'url' => $this->generateUrl('app_activity_challenge_index')],
+        ];
         return $this->render('activity_challenge/show.html.twig', [
-            'activity_challenge' => $activityChallenge,
+            'challenge' => $challenge,
+            'breadcrumb' => $breadcrumb,
         ]);
     }
 
@@ -72,7 +84,7 @@ class ActivityChallengeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, ActivityChallenge $activityChallenge, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$activityChallenge->getId(), $request->request->get('_token'))) {
