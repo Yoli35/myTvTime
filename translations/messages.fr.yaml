@@ -81,14 +81,26 @@ Exercise duration: Durée de l'exercice
 Move challenge: Défi de mouvement
 Number of steps: Nombre de pas
 Challenge: Défi
+Choose a challenge: Choisissez un défi
+Challenge list: Liste des défis
 Back to challenges: Retour aux défis
 Edit challenge: Modifier le défi
+Show challenge: Voir le défi
 Delete challenge: Supprimer le défi
+New: Nouveau
+New challenge: Nouveau défi
 exercise_result: Faire de l'exercice pendant %value% minutes
 distance: Parcourir %value% km
 Goal: Objectif
+Quantity: Quantité
+Start date: Date de début
+End date: Date de fin
 Challenge start: Début du défi
 Challenge end: Fin du défi
+Completed: Terminé
+Yes: Oui
+Value: Valeur
+Actions: Actions
 
 #Alarm
 Simple alarm: Alarme simple
@@ -1073,6 +1085,27 @@ Writing.she: Autrice
 Writing: Écriture
 
 # Last jobs added
+Finance.he: Finance
+Finance.she: Finance
+Aerial Director of Photography.he: Directeur de la photographie aérienne
+Aerial Director of Photography.she: Directrice de la photographie aérienne
+Additional Director of Photography.he: Directeur de la photographie supplémentaire
+Additional Director of Photography.she: Directrice de la photographie supplémentaire
+Assistant Camera.he: Assistant caméra
+Assistant Camera.she: Assistante caméra
+Camera Technician.he: Technicien caméra
+Camera Technician.she: Technicienne caméra
+Development Producer.he: Producteur de développement
+Development Producer.she: Productrice de développement
+Music Producer.he: Producteur de musique
+Music Producer.she: Productrice de musique
+CG Supervisor.he: Superviseur image de synthèse
+CG Supervisor.she: Superviseuse image de synthèse
+VFX Production Coordinator.he: Coordinateur de production effets spéciaux
+VFX Production Coordinator.she: Coordinatrice de production effets spéciaux
+Title Designer.he: Concepteur de titres
+Production Executive.he: Directeur de production
+Production Executive.she: Directrice de production
 
 # key facts
 Favorite: Série favorite

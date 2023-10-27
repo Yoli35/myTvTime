@@ -21,8 +21,11 @@
                     <a href="{{ path('app_activity_challenge_index') }}">
                         <div class="challenge-tool" data-title="{{ 'Back to challenges'|trans }}"><i class="fa-solid fa-list"></i></div>
                     </a>
-                    <a href="{{ path('app_activity_challenge_edit', {'id': challenge.id}) }}">
+                    <a href="{{ path('app_activity_challenge_edit', {'id': challenge.id}) }}?from=show">
                         <div class="challenge-tool" data-title="{{ 'Edit challenge'|trans }}"><i class="fa-solid fa-edit"></i></div>
+                    </a>
+                    <a href="{{ path('app_activity_challenge_new') }}?from=show&id={{ challenge.id }}">
+                        <div class="challenge-tool" data-title="{{ 'New challenge'|trans }}"><i class="fa-solid fa-plus"></i></div>
                     </a>
                     <a href="{{ path('app_activity_challenge_delete', {'id': challenge.id}) }}">
                         <div class="challenge-tool" data-title="{{ 'Delete challenge'|trans }}"><i class="fa-solid fa-trash"></i></div>

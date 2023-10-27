@@ -1,49 +1,76 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}ActivityChallenge index{% endblock %}
+{% set user = app.user %}
+{% block title %}myTvTime ▶ ︎{{ 'Activity'|trans }} ▶ ︎{{ 'Challenge list'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>ActivityChallenge index</h1>
+    <div class="container-fluid">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Completed</th>
-                <th>Challenge</th>
-                <th>Goal</th>
-                <th>Value</th>
-                <th>StartAt</th>
-                <th>EndAt</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for activity_challenge in activity_challenges %}
-            <tr>
-                <td>{{ activity_challenge.id }}</td>
-                <td>{{ activity_challenge.name }}</td>
-                <td>{{ activity_challenge.completed ? 'Yes' : 'No' }}</td>
-                <td>{{ activity_challenge.challenge }}</td>
-                <td>{{ activity_challenge.goal }}</td>
-                <td>{{ activity_challenge.value }}</td>
-                <td>{{ activity_challenge.startAt ? activity_challenge.startAt|date('Y-m-d') : '' }}</td>
-                <td>{{ activity_challenge.endAt ? activity_challenge.endAt|date('Y-m-d') : '' }}</td>
-                <td>{{ activity_challenge.createdAt ? activity_challenge.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_activity_challenge_show', {'id': activity_challenge.id}) }}">show</a>
-                    <a href="{{ path('app_activity_challenge_edit', {'id': activity_challenge.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        {{ include('blocks/_mainMenu.html.twig') }}
 
-    <a href="{{ path('app_activity_challenge_new') }}">Create new</a>
+        <div class="activity">
+            <div class="header">
+                <h1>{{ 'Challenge list'|trans }}</h1>
+                <div class="backdrop"></div>
+                {{ include('blocks/_clock.html.twig') }}
+            </div>
+        </div>
+        <div class="activity-challenge">
+            {{ include('blocks/_nav.html.twig') }}
+            <main>
+                <div class="challenge-tools">
+                    <a href="{{ path('app_activity_challenge_new') }}?from=index">
+                        <div class="challenge-tool" data-title="{{ 'New challenge'|trans }}"><i class="fa-solid fa-plus"></i></div>
+                    </a>
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>{{ 'Name'|trans }}</th>
+                        <th>{{ 'Completed'|trans }}</th>
+                        <th>{{ 'Challenge'|trans }}</th>
+                        <th>{{ 'Goal'|trans }}</th>
+                        <th>{{ 'Value'|trans }}</th>
+                        <th>{{ 'Start date'|trans }}</th>
+                        <th>{{ 'End date'|trans }}</th>
+                        <th>{{ 'Created at'|trans }}</th>
+                        <th>{{ 'actions'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for challenge in challenges %}
+                        <tr>
+                            <td>{{ challenge.name }}</td>
+                            <td>{{ challenge.completed ? 'Yes'|trans : 'No'|trans }}</td>
+                            <td>{% if challenge.challenge == 'exercise_result' %}{{ 'Exercise'|trans }}{% else %}{{ challenge.challenge|capitalize }}{% endif %}</td>
+                            <td>{{ challenge.goal }} {{ 'days'|trans }}</td>
+                            <td>{{ challenge.value }} {% if challenge.challenge == 'exercise_result' %}{{ 'minutes'|trans }}{% endif %}{% if challenge.challenge == 'distance' %}{{ 'km'|trans }}{% endif %}</td>
+                            <td>{{ challenge.startAt ? challenge.startAt|format_date('relative_full') : '' }}</td>
+                            <td>{{ challenge.endAt ? challenge.endAt|format_date('relative_full') : '' }}</td>
+                            <td>{{ challenge.createdAt ? challenge.createdAt|format_datetime('relative_full', 'short') : '' }}</td>
+                            <td>
+                                <div class="challenge-tools">
+                                    <a href="{{ path('app_activity_challenge_show', {'id': challenge.id}) }}">
+                                        <div class="challenge-tool" data-title="{{ 'Show challenge'|trans }}"><i class="fa-solid fa-eye"></i></div>
+                                    </a>
+                                    <a href="{{ path('app_activity_challenge_edit', {'id': challenge.id}) }}?from=index">
+                                        <div class="challenge-tool" data-title="{{ 'Edit challenge'|trans }}"><i class="fa-solid fa-edit"></i></div>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="10">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/activityChallengeIndex.js" type="module"></script>
 {% endblock %}

@@ -1,11 +1,37 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}New ActivityChallenge{% endblock %}
+{% set user = app.user %}
+{% block title %}myTvTime ▶ ︎{{ 'Activity'|trans }} ▶ ︎{{ 'Challenge'|trans }} ▶ ︎{{ 'New'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new ActivityChallenge</h1>
+    <div class="container-fluid">
 
-    {{ include('activity_challenge/_form.html.twig') }}
+        {{ include('blocks/_mainMenu.html.twig') }}
 
-    <a href="{{ path('app_activity_challenge_index') }}">back to list</a>
+        <div class="activity">
+            <div class="header">
+                <h1>{{ 'Challenge'|trans }} ▶ ︎{{ 'New'|trans }}</h1>
+                <div class="backdrop"></div>
+                {{ include('blocks/_clock.html.twig') }}
+            </div>
+        </div>
+        <div class="activity-challenge">
+            {{ include('blocks/_nav.html.twig') }}
+            <main>
+                <div class="challenge-tools">
+                    <a href="{{ path('app_activity_challenge_index') }}">
+                        <div class="challenge-tool" data-title="{{ 'Back to challenges'|trans }}"><i class="fa-solid fa-list"></i></div>
+                    </a>
+                </div>
+                <div class="challenge-show new">
+                    <div class="challenge-action"><i class="fa-solid fa-plus"></i></div>
+                    {{ include('activity_challenge/_form.html.twig', {'button_label': 'New'}) }}
+                </div>
+            </main>
+            {{ include('blocks/_pageFooter.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/activityChallengeIndex.js" type="module"></script>
 {% endblock %}

@@ -134,9 +134,10 @@
     }
 }
 
-input[type="text"],
+input[type="email"],
+input[type="number"],
 input[type="search"],
-input[type="email"] {
+input[type="text"] {
     appearance: unset;
     border: none;
     border-radius: .25em;

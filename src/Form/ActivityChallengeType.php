@@ -6,6 +6,7 @@ use App\Entity\ActivityChallenge;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,12 +24,12 @@ class ActivityChallengeType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => $this->translator->trans('Name'),
+                'label' => 'Name',
                 'attr' => ['class', "w100"],
                 'required' => true,
             ])
             ->add('challenge', ChoiceType::class, [
-                'label' => $this->translator->trans('Challenge'),
+                'label' => 'Challenge',
                 'attr' => ['class', "w100"],
                 'choices' => [
                     'Distance covered' => 'distance',
@@ -40,25 +41,26 @@ class ActivityChallengeType extends AbstractType
                 'required' => true,
             ])
             ->add('value', NumberType::class, [
-                'label' => $this->translator->trans('Quantity'),
+                'label' => 'Quantity',
                 'attr' => ['class', "w100"],
                 'required' => true,
             ])
-            ->add('goal', NumberType::class, [
-                'label' => $this->translator->trans('Goal'),
+            ->add('goal', IntegerType::class, [
+                'label' => 'Goal',
                 'attr' => ['class', "w100"],
                 'required' => true,
             ])
             ->add('startAt', DateType::class, [
+                'label' => 'Start date',
                 'widget' => 'choice',
                 'input'  => 'datetime_immutable'
             ])
             ->add('endAt', DateType::class, [
+                'label' => 'End date',
                 'widget' => 'choice',
                 'input'  => 'datetime_immutable'
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Add list',
                 'attr' => ['class' => 'btn btn-secondary'],
             ]);
     }

@@ -1,3 +1,41 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+<div class="field">
+    <label for="{{ form.name.vars.id }}" class="{{ form.name.vars.required ? 'required' }}">
+        <div>{{ form.name.vars.label|trans }}</div>
+        {{ form_widget(form.name) }}
+    </label>
+</div>
+<div class="field">
+    <label for="{{ form.challenge.vars.id }}" class="{{ form.challenge.vars.required ? 'required' }}">
+        <div>{{ form.challenge.vars.label|trans }}</div>
+        {{ form_widget(form.challenge) }}
+    </label>
+</div>
+<div class="field">
+    <label for="{{ form.value.vars.id }}" class="{{ form.value.vars.required ? 'required' }}">
+        <div>{{ form.value.vars.label|trans }}</div>
+        {{ form_widget(form.value) }}
+    </label>
+</div>
+<div class="field">
+    <label for="{{ form.goal.vars.id }}" class="{{ form.goal.vars.required ? 'required' }}">
+        <div>{{ form.goal.vars.label|trans }}</div>
+        {{ form_widget(form.goal) }}
+    </label>
+</div>
+<div class="field">
+    <label for="{{ form.startAt.vars.id }}" class="{{ form.startAt.vars.required ? 'required' }}">
+        <div>{{ form.startAt.vars.label|trans }}</div>
+        {{ form_widget(form.startAt) }}
+    </label>
+</div>
+<div class="field">
+    <label for="{{ form.endAt.vars.id }}" class="{{ form.endAt.vars.required ? 'required' }}">
+        <div>{{ form.endAt.vars.label|trans }}</div>
+        {{ form_widget(form.endAt) }}
+    </label>
+</div>
+<div class="field right">
+    {{ form_widget(form.save) }}
+</div>
 {{ form_end(form) }}
