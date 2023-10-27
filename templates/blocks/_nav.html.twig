@@ -12,7 +12,7 @@
                     {% if item.url is defined %}
                         <div class="breadcrumb-part"><a href="{{ item.url }}">{{ item.name }}</a></div>
                     {% else %}
-                        <div class="breadcrumb-part">{{ item.name|capitalize }}</div>
+                        <div class="breadcrumb-part"{% if item.color is defined %} style="background-color: {{ item.color }};"{% endif %}>{{ item.name|capitalize }}</div>
                     {% endif %}
                     {% if loop.index < loop.length %}
                         <div class="separator">▶︎</div>

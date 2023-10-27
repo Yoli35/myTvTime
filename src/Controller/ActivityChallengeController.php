@@ -51,6 +51,7 @@ class ActivityChallengeController extends AbstractController
             $challenge = $this->activityChallengeRepository->find($id);
             $breadcrumb[] = ['name' => $this->translator->trans('Challenge') . " “ " . $challenge->getName() . " ”", 'url' => $this->generateUrl('app_activity_challenge_show', ['id' => $id])];
         }
+        $breadcrumb[] = ['name' => $this->translator->trans('New'), 'color' => 'var(--gradient-orange-40-alpha-50)'];
         /** @var User $user */
         $user = $this->getUser();
 
@@ -88,14 +89,13 @@ class ActivityChallengeController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, ActivityChallenge $challenge): Response
     {
-        $from = $request->query->get('from');
         $breadcrumb = [
             ['name' => $this->translator->trans('Activity'), 'url' => $this->generateUrl('app_activity_index')],
             ['name' => $this->translator->trans('Challenge list'), 'url' => $this->generateUrl('app_activity_challenge_index')],
+            ['name' => $this->translator->trans('Challenge') . " “ " . $challenge->getName() . " ”", 'url' => $this->generateUrl('app_activity_challenge_show', ['id' => $challenge->getId()])],
+            ['name' => $this->translator->trans('Edit')]
         ];
-        if ($from == 'show') {
-            $breadcrumb[] = ['name' => $this->translator->trans('Challenge') . " “ " . $challenge->getName() . " ”", 'url' => $this->generateUrl('app_activity_challenge_show', ['id' => $challenge->getId()])];
-        }
+
         $form = $this->createForm(ActivityChallengeType::class, $challenge);
         $form->handleRequest($request);
 
