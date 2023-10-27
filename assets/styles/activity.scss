@@ -768,20 +768,20 @@
                 border-radius: 50%;
                 color: var(--gradient-yellow-50);
                 display: flex;
-                font-size: 3rem;
-                height: 5rem;
+                font-size: clamp(2rem, 3vw, 3rem);
+                height: clamp(3rem, 6vw, 8rem);
                 justify-content: center;
                 position: absolute;
-                right: -2.5rem;
+                right: clamp(-1.5rem, -4vw, -4rem);
                 rotate: 30deg;
-                top: -2.5rem;
-                width: 5rem;
+                top: clamp(-1.5rem, -4vw, -4rem);
+                width: clamp(3rem, 6vw, 8rem);
             }
 
             .challenge-show-info {
                 background-color: var(--gradient-ardoise-40);
                 border-radius: .5rem;
-                font-size: 2rem;
+                font-size: clamp(1rem, 4vw, 3rem);
                 font-weight: 100;
                 line-height: 1em;
                 padding: .5rem 1rem;
@@ -846,7 +846,7 @@
             background-color: var(--gradient-ardoise-40-alpha-50);
             border-radius: .5rem;
             color: var(--gradient-ardoise-90);
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 100;
             margin-inline: auto;
             padding: 1rem;
