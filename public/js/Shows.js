@@ -486,13 +486,14 @@ export class Shows {
                 } else {
                     const infos = document.querySelector(".infos");
                     const lastInfo = infos.querySelector(".info:last-child");
-                    let nextBlock = lastInfo.querySelector(".next-block");
+                    let nextBlock = lastInfo?.querySelector(".next-block");
                     if (!nextBlock) {
                         nextBlock = document.createElement("div");
                         nextBlock.classList.add("next-block");
                         lastInfo.appendChild(nextBlock);
                     }
-                    nextBlock.appendChild(newNextEpisodeToWatch);
+                    if (!nextBlock)
+                        nextBlock.appendChild(newNextEpisodeToWatch);
                 }
 
 

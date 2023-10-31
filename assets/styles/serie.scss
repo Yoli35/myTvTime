@@ -2698,13 +2698,15 @@
                         appearance: none;
                         border: 2px solid var(--gradient-ardoise-80);
                         border-radius: 1rem;
-                        height: 1.5rem;
-                        width: 1.5rem;
+                        height: 1.25rem;
+                        margin-inline-end: .5rem;
+                        width: 1.25rem;
 
                         &:checked {
-                            background-color: var(--gradient-ardoise-20);
-                            border-color: var(--gradient-orange-50);
+                            background-color: var(--gradient-orange-50);
+                            border-color: var(--gradient-ardoise-10);
                             border-width: .25rem;
+                            outline: .25rem solid var(--gradient-orange-50);
                         }
                     }
                 }
