@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Alert;
+use App\Entity\EpisodeViewing;
 use App\Entity\Favorite;
 use App\Entity\Networks;
 use App\Entity\Serie;
 use App\Entity\Settings;
 use App\Entity\User;
+use App\Repository\AlertRepository;
+use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
 use App\Repository\NetworksRepository;
 use App\Repository\SerieRepository;
@@ -16,6 +20,7 @@ use App\Service\DateService;
 use App\Service\ImageConfiguration;
 use App\Service\QuoteService;
 use App\Service\TMDBService;
+use DateTimeImmutable;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,15 +40,18 @@ class SerieFrontController extends AbstractController
     const SEARCH = 'search';
 
     public function __construct(
-        private readonly DateService            $dateService,
-        private readonly FavoriteRepository     $favoriteRepository,
-        private readonly ImageConfiguration     $imageConfiguration,
-        private readonly NetworksRepository     $networkRepository,
-        private readonly SerieController        $serieController,
-        private readonly SerieRepository        $serieRepository,
-        private readonly SerieViewingRepository $serieViewingRepository,
-        private readonly TMDBService            $tmdbService,
-        private readonly TranslatorInterface    $translator,
+        private readonly AlertRepository          $alertRepository,
+        private readonly DateService              $dateService,
+        private readonly EpisodeViewingRepository $episodeViewingRepository,
+        private readonly FavoriteRepository       $favoriteRepository,
+        private readonly ImageConfiguration       $imageConfiguration,
+        private readonly NetworksRepository       $networkRepository,
+        private readonly SerieController          $serieController,
+        private readonly SerieRepository          $serieRepository,
+        private readonly SettingsRepository       $settingsRepository,
+        private readonly SerieViewingRepository   $serieViewingRepository,
+        private readonly TMDBService              $TMDBService,
+        private readonly TranslatorInterface      $translator,
     )
     {
     }
@@ -54,7 +62,7 @@ class SerieFrontController extends AbstractController
     #[Route('/new', name: 'app_series_new', methods: ['GET'])]
     public function new(Request $request): Response
     {
-        $tmdbService = $this->tmdbService;
+        $TMDBService = $this->TMDBService;
         $serieRepository = $this->serieRepository;
         $networkRepository = $this->networkRepository;
         $imageConfiguration = $this->imageConfiguration;
@@ -84,7 +92,7 @@ class SerieFrontController extends AbstractController
             }
         }
         if (strlen($serieId)) {
-            $standing = $tmdbService->getTv($serieId, $request->getLocale());
+            $standing = $TMDBService->getTv($serieId, $request->getLocale());
 
             if (strlen($standing)) {
                 $status = "Ok";
@@ -114,6 +122,8 @@ class SerieFrontController extends AbstractController
                 $serie->setPosterPath($tv['poster_path']);
                 $serie->setSerieId($tv['id']);
                 $serie->setStatus($tv['status']);
+                $serie->setOriginCountry($tv['origin_country'] ?? []);
+                $serie->setProductionCountries($tv['production_countries'] ?? []);
 
                 foreach ($tv['networks'] as $network) {
                     $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);
@@ -179,7 +189,7 @@ class SerieFrontController extends AbstractController
 
     public function collectEpisodeDurations($tv): array
     {
-        $tmdb = $this->tmdbService;
+        $tmdb = $this->TMDBService;
         $id = $tv['id'];
         $durations = [];
         $durations['episode_run_time'] = $tv['episode_run_time'];
@@ -305,7 +315,7 @@ class SerieFrontController extends AbstractController
 
     public function episodeDuration($serieId, $seasonNumber, $episodeNumber): ?int
     {
-        $episode = json_decode($this->tmdbService->getTvEpisode($serieId, $seasonNumber, $episodeNumber, 'fr'), true);
+        $episode = json_decode($this->TMDBService->getTvEpisode($serieId, $seasonNumber, $episodeNumber, 'fr'), true);
         return $episode['runtime'];
     }
 
@@ -403,14 +413,14 @@ class SerieFrontController extends AbstractController
     }
 
     #[Route('/settings/save', name: 'app_series_set_settings', methods: ['GET'])]
-    public function setSettings(Request $request, SettingsRepository $settingsRepository, TranslatorInterface $translator): Response
+    public function setSeriesSettings(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
         $content = json_decode($request->query->get("data"), true);
 
-        $settings = $settingsRepository->findOneBy(["user" => $user, "name" => $content["name"]]);
+        $settings = $this->settingsRepository->findOneBy(["user" => $user, "name" => $content["name"]]);
 
         if ($settings == null) {
             $settings = new Settings();
@@ -418,8 +428,225 @@ class SerieFrontController extends AbstractController
             $settings->setName($content["name"]);
         }
         $settings->setData($content["data"]);
-        $settingsRepository->save($settings, true);
+        $this->settingsRepository->save($settings, true);
 
-        return $this->json($translator->trans("The settings have been saved"));
+        return $this->json($this->translator->trans("The settings have been saved"));
+    }
+
+    #[Route('/episode/vote/{id}/{vote}', name: 'app_episode_vote', methods: ['GET'])]
+    public function episodeVote(EpisodeViewing $episodeViewing, int $vote): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $episodeViewing->setVote($vote);
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
+        $serieViewing->setModifiedAt($this->dateService->newDate('now', $user->getTimezone()));
+        $this->serieViewingRepository->save($serieViewing, true);
+
+        return $this->json(['voteValue' => $vote, 'episodeNumber' => $episodeViewing->getEpisodeNumber()]);
+    }
+
+    #[Route('/episode/view/{id}/{view}', name: 'app_episode_view', methods: ['GET'])]
+    public function episodeView(Request $request, EpisodeViewing $episodeViewing, int $view): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($view == 0) {
+            $date = $this->dateService->newDateImmutable('now', $user->getTimezone());
+            $episodeViewing->setViewedAt($date);
+            $episodeViewing->setNumberOfView($episodeViewing->getNumberOfView() + 1);
+            $view = 1;
+        } else {
+            $episodeViewing->setViewedAt(null);
+            $view = 0;
+        }
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
+
+        $modifiedAt = $this->dateService->newDate('now', $user->getTimezone());
+        $serieViewing->setModifiedAt($modifiedAt);
+
+        $this->serieController->setViewedEpisodeCount($serieViewing);
+        $seasonCompleted = $this->serieController->viewingCompleted($serieViewing);
+        $viewedEpisodeCount = $episodeViewing->getSeason()->getViewedEpisodeCount();
+
+        // On met à jour les champs "nextEpisodeToAir" et "nextEpisodeToWatch" de la série
+        if ($serieViewing->isSerieCompleted()) {
+            $serieViewing->setNextEpisodeToAir(null);
+            $serieViewing->setNextEpisodeToWatch(null);
+            if ($alert) {
+                $this->alertRepository->remove($alert);
+            }
+        } else {
+            $tv = json_decode($this->TMDBService->getTv($serieViewing->getSerie()->getSerieId(), $request->getLocale()), true);
+            $this->serieController->setNextEpisode($tv, $serieViewing);
+            if ($alert) {
+                $this->serieController->updateAlert($alert, $serieViewing);
+            }
+        }
+
+        $this->serieViewingRepository->save($serieViewing, true);
+
+        return $this->json([
+            'episodeViewed' => $view,
+            'seasonCompleted' => $seasonCompleted,
+            'viewedEpisodeCount' => $viewedEpisodeCount,
+        ]);
+    }
+
+    #[Route('/episode/view/network/{id}/{networkId}', name: 'app_episode_view_network', methods: ['GET'])]
+    public function episodeViewNetwork(EpisodeViewing $episodeViewing, int $networkId): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($networkId == -1) {
+            $episodeViewing->setNetworkId(null);
+            $episodeViewing->setNetworkType('other');
+        } else {
+            $episodeViewing->setNetworkId($networkId);
+            $episodeViewing->setNetworkType('flatrate');
+        }
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        $serieViewing = $episodeViewing->getSeason()->getSerieViewing();
+        $serieViewing->setModifiedAt($this->dateService->newDate('now', $user->getTimezone()));
+        $this->serieViewingRepository->save($serieViewing, true);
+
+        return $this->json([
+            'result' => 'success',
+            'networkId' => $networkId
+        ]);
+    }
+
+    #[Route('/episode/view/device/{id}/{device}', name: 'app_episode_view_device', methods: ['GET'])]
+    public function episodeViewDevice(EpisodeViewing $episodeViewing, string $device): Response
+    {
+        $episodeViewing->setDeviceType($device);
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        return $this->json([
+            'result' => 'success',
+            'device' => $device
+        ]);
+    }
+
+    #[Route('/settings/set/{settings}', name: 'app_set_settings', methods: ['GET'])]
+    public function setSettings($settings): Response
+    {
+        $settings = json_decode($settings, true);
+//        dump($settings);
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $settingsDB = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'settings']);
+        $settingsDB->setData($settings);
+        $this->settingsRepository->save($settingsDB, true);
+
+        return $this->json([
+            'result' => 'success',
+            'settingsDB' => $settingsDB,
+            'settings' => $settings
+        ]);
+    }
+
+    #[Route('/upcoming/date', name: 'app_series_upcoming_date', methods: ['GET'])]
+    public function serieUpcomingDate(Request $request): Response
+    {
+        $id = $request->query->getInt('id');
+        $month = $request->query->get('month');
+        $year = $request->query->get('year');
+
+        $serie = $this->serieRepository->find($id);
+        $serie->setUpcomingDateMonth($month);
+        $serie->setUpcomingDateYear($year);
+        $this->serieRepository->save($serie, true);
+
+        return $this->json(['id' => $id, 'month' => $month, 'year' => $year]);
+    }
+
+    #[Route('/alert/{serieId}/{tmdb}/{isActivated}', name: 'app_series_alert', methods: ['GET'])]
+    public function serieAlert(Request $request, int $serieId, string $tmdb, bool $isActivated): Response
+    {
+        if ($tmdb == 'tmdb') {
+            $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
+        } else {
+            $serie = $this->serieRepository->findOneBy(['id' => $serieId]);
+        }
+        $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
+//      dump(['serie' => $serie, 'serieViewing' => $serieViewing, 'isActivated' => $isActivated]);
+
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
+        $success = true;
+
+        if ($alert === null) {
+            $locale = $request->getLocale();
+            $nextEpisodeToWatch = $this->serieController->getNextEpisodeToWatch($serieViewing, $locale);
+
+            if ($nextEpisodeToWatch) {
+                /** @var DateTimeImmutable $airDate */
+                $airDate = $nextEpisodeToWatch['airDate'];
+                $airDate = $airDate->setTime(9, 0); // Netflix : 9h01, Apple TV+ : 9h00, Disney+ : 9h00, Prime Video : 9h00
+                $message = sprintf("%s : S%02dE%02d\n", $serie->getName(), $nextEpisodeToWatch['seasonNumber'], $nextEpisodeToWatch['episodeNumber']);
+                $alert = new Alert($this->getUser(), $serieViewing->getId(), $airDate, $message, $this->dateService);
+                $this->alertRepository->save($alert, true);
+                $alertMessage = $this->translator->trans("Alert created and activated");
+            } else {
+                $success = false;
+                $alertMessage = $this->translator->trans("No upcoming episodes");
+            }
+        } else {
+            $alert->setActivated($isActivated);
+            $this->alertRepository->save($alert, true);
+            if ($alert->isActivated()) {
+                $alertMessage = $this->translator->trans("Alert activated");
+            } else {
+                $alertMessage = $this->translator->trans("Alert deactivated");
+            }
+        }
+        return $this->json([
+            'success' => $success,
+            'alertMessage' => $alertMessage,
+        ]);
+    }
+
+    #[Route('/alert-provider/{id}/{providerId}', name: 'app_series_alert_provider', methods: ['GET'])]
+    public function serieProvider(Request $request, int $id, int $providerId): Response
+    {
+        $show = $request->query->get('show', false);
+        if ($show)
+            $serie = $this->serieRepository->find($id);
+        else
+            $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
+        if (!$serie) {
+            return $this->json(['success' => false, 'message' => 'Serie not found']);
+        }
+
+        $serieViewing = $this->serieViewingRepository->findOneBy(['serie' => $serie, 'user' => $this->getUser()]);
+//        dump(['show' => $show, 'id' => $id, 'serie' => $serie, 'serieViewing' => $serieViewing, 'providerId' => $providerId]);
+        $alert = $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]);
+        $alert->setProviderId($providerId);
+        $this->alertRepository->save($alert, true);
+
+        $region = $request->query->get('region', "FR");
+        $languages = ['FR' => 'fr-FR', 'US' => 'en-US', 'UK' => 'en-GB', 'DE' => 'de-DE', 'ES' => 'es-ES', 'IT' => 'it-IT', 'JP' => 'ja-JP', 'CA' => 'en-CA', 'AU' => 'en-AU', 'NZ' => 'en-NZ', 'IN' => 'en-IN', 'MX' => 'es-MX', 'BR' => 'pt-BR'];
+        if (key_exists($region, $languages)) {
+            $language = $languages[$region];
+        } else { // json de 7400+ lignes
+            $region = '';
+            $language = '';
+        }
+
+        $imgConfig = $this->imageConfiguration->getConfig();
+        $list = $this->serieController->getRegionProvider($imgConfig, 1, $language, $region);
+        $block = '<img src="' . $list[$providerId]['logo_path'] . '" alt="' . $list[$providerId]['provider_name'] . '" title="' . $list[$providerId]['provider_name'] . '">';
+
+        return $this->json(['success' => true, 'block' => $block]);
     }
 }

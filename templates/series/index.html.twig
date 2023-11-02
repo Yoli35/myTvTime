@@ -44,18 +44,26 @@
                                 {{ numbers.episodes }} {{ 'episodes'|trans }}
                                 / {{ numbers.seasons }} {{ 'seasons'|trans }}
                             </div>
+                            <div class="choose-origin-country">
+                                <label for="choose-origin-country">
+                                    {{ 'Series by country of origin'|trans }}
+                                    <select name="choose-origin-country" id="choose-origin-country">
+                                        {% for countryCode, countryName in countries %}
+                                            <option value="{{ countryCode }}">{{ countryName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
                             <div class="search-serie">
                                 <h2>{{ 'Search my series'|trans }}</h2>
                                 <label class="label" for="search-name">{{ 'Name of the series'|trans }}</label>
                                 <div class="group">
                                     <div class="field">
-                                        <input id="search-name" type="search" value=""
-                                               placeholder="{{ 'Start taping the name'|trans }}">
+                                        <input id="search-name" type="search" value="" placeholder="{{ 'Start taping the name'|trans }}">
                                         <input id="search-id" type="hidden" value="-1">
                                     </div>
                                     <div>
-                                        <button id="search_serie" class="disabled"
-                                                type="submit">{{ 'Show'|trans }}</button>
+                                        <button id="search_serie" class="disabled" type="submit">{{ 'Show'|trans }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -64,15 +72,14 @@
                                 <label class="label" for="search-tmdb-name">{{ 'Name of the series'|trans }}</label>
                                 <div class="group">
                                     <div class="field">
-                                        <input id="search-tmdb-name" type="search" value=""
-                                               placeholder="{{ 'Enter the name'|trans }}">
+                                        <input id="search-tmdb-name" type="search" value="" placeholder="{{ 'Enter the name'|trans }}">
                                     </div>
                                     <div>
                                         <button id="search-tmdb-series" type="submit">{{ 'Search'|trans }}</button>
                                     </div>
                                 </div>
                             </div>
-{#
+                            {#
                             <div class="add-serie">
                                 <h2>{{ 'Add'|trans }}</h2>
 
@@ -99,7 +106,7 @@
                                     </details>
                                 </div>
                             </div>
-#}
+                            #}
                             <div class="settings">
                                 <h2>{{ 'Settings'|trans }}</h2>
 
@@ -218,19 +225,20 @@
     </div>
     <div id="globs-data" style="display: none">
         {
-            "app_series_index": "{{ path('app_series_index') }}",
-            "app_series_new": "{{ path('app_series_new') }}",
-            "app_series_show": "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
-            "app_series_search": "{{ path('app_series_search') }}",
-            "app_series_set_settings": "{{ path('app_series_set_settings') }}",
-            "locale": "{{ app.request.locale }}",
-            "current_page": {{ pages.page }},
-            "per_page": {{ pages.per_page }},
-            "order_by": "{{ pages.order_by }}",
-            "order": "{{ pages.order }}",
-            "from": "{{ from }}",
-            "leaf_settings": {{ leafSettings.data|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
-            "series_list": {{ seriesList|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+        "app_series_index": "{{ path('app_series_index') }}",
+        "app_series_new": "{{ path('app_series_new') }}",
+        "app_series_show": "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
+        "app_series_search": "{{ path('app_series_search') }}",
+        "app_series_set_settings": "{{ path('app_series_set_settings') }}",
+        "app_series_from_country": "{{ path('app_series_from_country', {countryCode:'FR'}) }}",
+        "locale": "{{ app.request.locale }}",
+        "current_page": {{ pages.page }},
+        "per_page": {{ pages.per_page }},
+        "order_by": "{{ pages.order_by }}",
+        "order": "{{ pages.order }}",
+        "from": "{{ from }}",
+        "leaf_settings": {{ leafSettings.data|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+        "series_list": {{ seriesList|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
         }
     </div>
 {% endblock %}

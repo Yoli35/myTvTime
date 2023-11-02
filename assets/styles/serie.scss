@@ -611,6 +611,25 @@
 
             }
 
+            .choose-origin-country {
+                @include flex-col(flex-start, flex-start);
+                background-color: var(--gradient-ardoise-80-alpha-50);
+                border-radius: 0;
+                margin-bottom: 1rem;
+                padding: 1rem;
+
+                label {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: .5rem;
+                    width: 100%;
+
+                    select {
+                        flex-grow: 1;
+                    }
+                }
+            }
+
             button {
                 appearance: unset;
                 background-color: var(--gradient-ardoise-20);
@@ -2980,7 +2999,7 @@
         margin-block-end: 1rem;
 
         .time-travel {
-            align-items: center;
+            align-items: stretch;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -2992,10 +3011,13 @@
                 border-top: 1px solid var(--gradient-ardoise-80);
 
                 .jump {
+                    align-items: center;
                     background-color: var(--gradient-ardoise-40);
                     color: var(--gradient-ardoise-90);
+                    display: flex;
                     font-size: 1em;
                     font-weight: 200;
+                    height: 100%;
                     padding: .125em .25em;
 
                     &:hover {
@@ -3899,14 +3921,17 @@
                     text-transform: uppercase;
                 }
 
+                .choose-origin-country {
+                    text-transform: uppercase;
+                }
+
                 .add-serie {
                     .help {
                         display: block;
                     }
                 }
 
-                .pages, .numbers, .search-serie, .add-serie {
-                    border: 1rem;
+                .pages, .numbers, .choose-origin-country, .search-serie, .add-serie {
                     border-radius: .5rem;
                     margin-bottom: 1rem;
                     //min-height: 4rem;
@@ -4039,7 +4064,7 @@
             }
 
             .series-tools {
-                .search-serie, .add-serie, .numbers, .settings {
+                .search-serie, .choose-origin-country, .add-serie, .numbers, .settings {
                     background-color: var(--gradient-ardoise-30);
                 }
 

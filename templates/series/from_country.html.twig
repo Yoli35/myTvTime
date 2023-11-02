@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime ▶ ︎{{ 'Series by country of origin'|trans }}{% endblock %}
+{% block description %}{{ 'List of the series I\'m watching, aired today'|trans }}{% endblock %}
+{% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
+
+{% block body %}
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container-fluid">
+
+        {{ include('blocks/_nav.html.twig', {user: app.user}) }}
+
+        <div class="today-series">
+{#            <div class="header">#}
+{#                <div class="country">{{ countryCode }}</div>#}
+{#            </div>#}
+            <main>
+                <div class="wrapper">
+                    {#
+                    "id" => 763
+                    "name" => "The Winter King"
+                    "poster_path" => "https://image.tmdb.org/t/p/w342/fYx5q9hPAmbDrWzsYUDhxZJnigC.jpg"
+                    "serie_id" => 689
+                    "first_date_air" => "2023-12-21 00:00:00"
+                    "created_at" => "2023-07-24 09:07:45"
+                    "overview" => "Au cinquième siècle, bien avant que l'unification de la Grande-Bretagne, les vies sont souvent éphémères dans ce pays sauvage constitué de factions et de tribus ▶"
+                    "backdrop_path" => "/1dj1BYNBt4bictaUJPbszPiDCnc.jpg"
+                    "number_of_episodes" => 10
+                    "number_of_seasons" => 1
+                    "original_name" => "The Winter King"
+                    "updated_at" => "2023-10-18 18:15:54"
+                    "status" => "Returning Series"
+                    "episode_durations" => "{"1": [{"1": null}, {"2": null}, {"3": null}, {"4": null}, {"5": null}, {"6": null}, {"7": null}, {"8": null}], "episode_run_time": []}"
+                    "upcoming_date_year" => 2023
+                    "upcoming_date_month" => 8
+                    "origin_country" => "["GB"]"
+                    "user_id" => 2
+                    "viewed_episodes" => 1
+                    "serie_completed" => 0
+                    "time_shifted" => 1
+                    "modified_at" => "2023-10-18 18:15:54"
+                    "alert_id" => null
+                    "next_episode_to_watch_id" => 32377
+                    "next_episode_to_air_id" => 32377
+                    "next_episode_check_date" => "2023-10-28 20:34:21" #}
+                    {% for s in series %}
+                        <div class="home-discover" data-id="{{ s.serie_id }}">
+                            <a href="{{ path('app_series_show', {'id': s.serie_id}) }}?from={{ from }}" title="{{ s.name }}">
+                                <img src="{{ s.poster_path }}" alt="{{ 'Poster' }}">
+                                <span class="title">{{ s.name }}{% if s.original_name != s.name %} - {{ s.original_name }}{% endif %}{% if s.localized_name %} - {{ s.localized_name }}{% endif %}</span>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </main>
+        </div>
+        {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let myCanvas, palettes;
+        window.addEventListener("DOMContentLoaded", () => {
+            const nothing = document.querySelector('.nothing');
+            if (nothing) {
+                doSomethingElse();
+            }
+
+            function doSomethingElse() {
+                const imageFilenames = document.querySelector('.image-filenames');
+                const images = JSON.parse(imageFilenames.textContent.replace(/".DS_Store",/g, ''));
+                const somethingElse = document.querySelector('.something-else');
+                const img = document.createElement('img');
+                let lastImageIndex = Math.floor(Math.random() * images.filenames.length);
+                img.src = "/images/series/today/" + images.filenames[lastImageIndex];
+                somethingElse.appendChild(img);
+                img.onload = () => {
+                    somethingElse.querySelector("img").classList.add('show');
+                };
+                setInterval(() => {
+                    somethingElse.querySelector("img").classList.remove('show');
+                    setTimeout(() => {
+                        let imageIndex = Math.floor(Math.random() * images.filenames.length);
+                        while (imageIndex === lastImageIndex) {
+                            imageIndex = Math.floor(Math.random() * images.filenames.length);
+                        }
+                        lastImageIndex = imageIndex;
+                        let img = somethingElse.querySelector("img")
+                        img.src = "/images/series/today/" + images.filenames[imageIndex];
+                        img.onload = () => {
+                            img.classList.add('show');
+                        };
+                    }, 300);
+                }, 5000);
+            }
+        });
+
+    </script>
+{% endblock %}

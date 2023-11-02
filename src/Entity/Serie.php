@@ -83,6 +83,9 @@ class Serie
     #[ORM\OneToOne(mappedBy: 'serie', cascade: ['persist', 'remove'])]
     private ?SerieLocalizedName $serieLocalizedName = null;
 
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private array $originCountry = [];
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -430,6 +433,18 @@ class Serie
         }
 
         $this->serieLocalizedName = $serieLocalizedName;
+
+        return $this;
+    }
+
+    public function getOriginCountry(): array
+    {
+        return $this->originCountry;
+    }
+
+    public function setOriginCountry(array $originCountry): static
+    {
+        $this->originCountry = $originCountry;
 
         return $this;
     }

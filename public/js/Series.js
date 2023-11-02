@@ -13,6 +13,7 @@ export class Series {
         this.app_series_show = globs.app_series_show;
         this.app_series_search = globs.app_series_search;
         this.app_series_set_settings = globs.app_series_set_settings;
+        this.app_series_from_country = globs.app_series_from_country;
         this.locale = globs.locale;
         this.current_page = globs.current_page;
         this.per_page = globs.per_page;
@@ -70,6 +71,12 @@ export class Series {
                 if (e.key === "Enter") {
                     this.searchSerie();
                 }
+            });
+            /** @type HTMLSelectElement chooseOriginCountry */
+            const chooseOriginCountry = document.querySelector("#choose-origin-country");
+            chooseOriginCountry.addEventListener("change", () => {
+                const choice = chooseOriginCountry.value;
+                window.location.href = thisGlobal.app_series_from_country + '/' + choice;
             });
         }
         new AnimatedHeader();

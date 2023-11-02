@@ -188,7 +188,8 @@ class SerieRepository extends ServiceEntityRepository
 
     public function seriesCount(): int
     {
-        $sql = "SELECT count(*) as count FROM `serie`";
+        $sql = "SELECT count(*) as count "
+            . "FROM `serie`";
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
@@ -210,4 +211,29 @@ class SerieRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function getCountries(): array
+    {
+        $sql = "SELECT t0.`origin_country` AS `origin_country` "
+            . "FROM `serie` t0 ";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getSeriesFromCountry($userId, $countryCode): array
+    {
+        $sql = 'SELECT s.*, sv.*, sn.name as localized_name '
+            . 'FROM `serie` s '
+            . 'INNER JOIN `serie_viewing` sv ON sv.`serie_id`=s.`id` AND sv.`user_id`=' . $userId . ' '
+            . 'LEFT JOIN `serie_localized_name` sn ON sn.`serie_id`=s.`id` '
+            . 'WHERE s.`origin_country` LIKE "%' . $countryCode . '%" '
+            . 'ORDER BY s.`first_date_air` DESC ';
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
 }
