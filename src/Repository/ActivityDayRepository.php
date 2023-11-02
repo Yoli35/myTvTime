@@ -83,6 +83,42 @@ class ActivityDayRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function getMonthRingCount($activityId, $month): array
+    {
+        $sql = "SELECT "
+            . "COUNT(CASE `move_ring_completed`>0 WHEN 1 THEN 1 ELSE NULL END) as move_count, "
+            . "COUNT(CASE `exercise_ring_completed`>0 WHEN 1 THEN 1 ELSE NULL END) as exercise_count, "
+            . "COUNT(CASE `stand_up_ring_completed`>0 WHEN 1 THEN 1 ELSE NULL END) as stand_up_count "
+            . "FROM "
+            . "    activity_day "
+            . "WHERE "
+            . "   `activity_id`=" . $activityId . " "
+            . "AND "
+            . "    MONTH(`day`) = " . $month;
+//        dump($sql);
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getWeekCount($activityId, $discipline, $week): array
+    {
+        $sql = "SELECT COUNT(*) AS count "
+            . "FROM `activity_day` "
+            . "WHERE `activity_id`=" . $activityId . " "
+            . "AND `" . $discipline . "` > 0 "
+            . "AND WEEK(`day`) = " . $week . " "
+            . "ORDER BY day";
+//        dump($sql);
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return Activity[] Returns an array of Activity objects
 //     */

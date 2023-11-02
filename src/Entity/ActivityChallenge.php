@@ -162,8 +162,8 @@ class ActivityChallenge
 
     public function inProgress(): bool
     {
-        $now = new DateTimeImmutable();
-        return $this->endAt > $now && $this->startAt < $now;
+        $now = (new DateTimeImmutable())->format("Y-m-d");
+        return $this->endAt->format("Y-m-d") >= $now && $this->startAt->format("Y-m-d") <= $now;
     }
 
     public function getProgress(): ?int
