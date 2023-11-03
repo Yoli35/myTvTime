@@ -37,30 +37,47 @@
         {#                <button class="btn btn-primary">{{ 'Today'|trans }}</button> #}
         {#            </a> #}
         {#        {% endif %} #}
-        {% if route == 'app_personal_movies' %}
-            {% if collections|length %}
-                <div class="choose-movie-list">
-                    <label>{{ 'Pin a list'|trans }}
-                        <select>
-                            <option value="0">{{ 'Select a list'|trans }}</option>
-                            {% for c in collections %}
-                                <option value="{{ c.id }}"{% if settings is defined %}{% if settings.data.0.collection_id == c.id %} selected{% endif %}{% endif %}>{{ c.title }}
-                                    ({{ c.movies|length }})
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <label class="switch">
-                        <input type="checkbox"{% if settings is defined %}{% if settings.data.0.pinned %} checked{% endif %}{% endif %}/>
-                        <span></span>
-                    </label>
-                </div>
-            {% endif %}
-        {% endif %}
         {% if from == 'profile' %}
             <div class="btn btn-secondary ml">
                 <a href="{{ path('app_user_change_password') }}">{{ 'Change password'|trans }}</a></div>
         {% endif %}
+    {% endif %}
+    {% if route == 'app_personal_movies' %}
+        {% if collections|length %}
+            <div class="choose-movie-list">
+                <label>{{ 'Pin a list'|trans }}
+                    <select>
+                        <option value="0">{{ 'Select a list'|trans }}</option>
+                        {% for c in collections %}
+                            <option value="{{ c.id }}"{% if settings is defined %}{% if settings.data.0.collection_id == c.id %} selected{% endif %}{% endif %}>{{ c.title }}
+                                ({{ c.movies|length }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label class="switch">
+                    <input type="checkbox"{% if settings is defined %}{% if settings.data.0.pinned %} checked{% endif %}{% endif %}/>
+                    <span></span>
+                </label>
+            </div>
+        {% endif %}
+    {% endif %}
+    {% if route == 'app_series_from_country' %}
+        <div class="choose-origin-country ml-auto mb-0">
+            <label for="choose-origin-country">
+                {{ 'Series by country of origin'|trans }}
+                <select name="choose-origin-country" id="choose-origin-country">
+                    {% for code, name in countries %}
+                        <option value="{{ code }}"{% if code == countryCode %} selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <script>
+            document.querySelector("#choose-origin-country").addEventListener("change", function () {
+                window.location.href = "{{ path('app_series_from_country') }}/" + this.value;
+            });
+        </script>
     {% endif %}
 </nav>
 {# <pre>{{ dump(route) }}</pre> #}

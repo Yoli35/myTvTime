@@ -152,6 +152,9 @@
                                                     <div class="character">{{ prod.character }}</div>
                                                 {% endif %}
                                             {% endif %}
+                                            {% if prod.media_type=='movie' and app.user|viewedMovie(prod.id) %}
+                                                <i class="fa-solid fa-eye ml-auto" title="{{ 'Viewed'|trans }}"></i>
+                                            {% endif %}
                                         </div>
                                         {% set lastDate = date|slice(0,4) %}
                                     {% endfor %}
@@ -201,6 +204,9 @@
                                                 {% endif %}
                                                 {% if sub_prod.job|length %}
                                                     <div class="job">{{ 'as.job'|trans }} {{ ('job.' ~ sub_prod.job ~ (people.gender == 1 ? '.she':'.he'))|trans }}</div>
+                                                {% endif %}
+                                                {% if sub_prod.media_type=='movie' and app.user|viewedMovie(sub_prod.id) %}
+                                                    <i class="fa-solid fa-eye ml-auto" title="{{ 'Viewed'|trans }}"></i>
                                                 {% endif %}
                                             </div>
                                             {% set lastDate = date|slice(0,4) %}

@@ -156,6 +156,25 @@
         width: 100%;
     }
 
+    .choose-origin-country {
+        @include flex-col(flex-start, flex-start);
+        background-color: var(--gradient-ardoise-80-alpha-50);
+        border-radius: 0;
+        margin-bottom: 1rem;
+        padding: 1rem;
+
+        label {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            width: 100%;
+
+            select {
+                flex-grow: 1;
+            }
+        }
+    }
+
     .series {
         @include flex-col();
         flex-direction: column-reverse;
@@ -181,7 +200,6 @@
             }
 
             a {
-
                 .serie {
                     @include flex-row(flex-start, flex-start);
                     background-color: var(--gradient-ardoise-90);
@@ -199,6 +217,7 @@
                         background-size: cover;
                         border-radius: 0 .5rem .5rem 0;
                         inset: 0 0 0 var(--serie-lg-poster-width);
+                        //noinspection CssInvalidPropertyValue
                         mix-blend-mode: plus-lighter;
                         opacity: .2;
                         position: absolute;
@@ -609,25 +628,6 @@
                     }
                 }
 
-            }
-
-            .choose-origin-country {
-                @include flex-col(flex-start, flex-start);
-                background-color: var(--gradient-ardoise-80-alpha-50);
-                border-radius: 0;
-                margin-bottom: 1rem;
-                padding: 1rem;
-
-                label {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: .5rem;
-                    width: 100%;
-
-                    select {
-                        flex-grow: 1;
-                    }
-                }
             }
 
             button {
@@ -1713,7 +1713,7 @@
                                 flex-direction: row;
                                 align-items: flex-start;
                                 margin: 0;
-                                transition: width 250ms ease-in-out;
+                                position: relative;
 
                                 .profile {
                                     flex-shrink: 0;
@@ -1740,13 +1740,18 @@
 
                                 .people-infos {
                                     @include flex-col();
+                                    background-color: var(--gradient-ardoise-10-alpha-80);
                                     font-size: .875rem;
                                     font-weight: 300;
                                     gap: .75rem;
                                     height: 100%;
+                                    inset: 0;
+                                    opacity: 0;
                                     overflow: hidden;
                                     padding-inline: .25rem;
-                                    width: 100%;
+                                    position: absolute;
+                                    transition: opacity 300ms ease-in-out;
+                                    //width: 100%;
 
                                     div {
                                         text-align: center;
@@ -1755,7 +1760,9 @@
                                 }
 
                                 &:hover {
-                                    width: 16rem;
+                                    .people-infos {
+                                        opacity: 1;
+                                    }
                                 }
                             }
                         }
@@ -2752,6 +2759,30 @@
     }
 }
 
+@media(hover: hover) and (pointer: fine) {
+    .serie-page {
+        main {
+            article {
+                section {
+                    .cast {
+                        .list {
+                            a {
+                                .people {
+                                    &:hover {
+                                        .people-infos {
+                                            opacity: 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media (min-width: 1100px) {
     .serie-page {
         .header {
@@ -3082,7 +3113,7 @@
                             border-radius: unset;
                         }
 
-                        .new-season, .finale {
+                        .new-season, .finale, .status {
                             background-color: var(--gradient-ardoise-10-alpha-80);
                             //border: 2px solid var(--gradient-orange-100);
                             //border-radius: .5rem .5rem 0 0;
@@ -3097,6 +3128,38 @@
                             text-align: center;
                             top: 0;
                             white-space: nowrap;
+                        }
+
+                        .view {
+                            align-items: center;
+                            background-color: var(--gradient-orange-30);
+                            border: 2px solid var(--gradient-orange-40);
+                            border-radius: .5rem;
+                            bottom: .5rem;
+                            color: var(--gradient-orange-90);
+                            display: flex;
+                            justify-content: center;
+                            padding: .125rem .5rem;
+                            position: absolute;
+                            right: .5rem;
+
+                            span {
+                                font-size: 1rem;
+                                font-weight: 100;
+                                line-height: 1rem;
+                            }
+
+                            &.in-progress {
+                                background-color: var(--gradient-ardoise-30);
+                                border: 2px solid var(--gradient-ardoise-40);
+                                color: var(--gradient-ardoise-90);
+                            }
+
+                            &.completed {
+                                background-color: var(--gradient-green-30);
+                                border: 2px solid var(--gradient-green-40);
+                                color: var(--gradient-green-90);
+                            }
                         }
                     }
                 }
@@ -3852,6 +3915,13 @@
 }
 
 @media (min-width: 1280px) {
+    .choose-origin-country {
+        border-radius: .5rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        text-transform: uppercase;
+    }
+
     .my-series, .series-search {
         //--serie-lg-height: 15rem;
         .header {
@@ -3921,17 +3991,13 @@
                     text-transform: uppercase;
                 }
 
-                .choose-origin-country {
-                    text-transform: uppercase;
-                }
-
                 .add-serie {
                     .help {
                         display: block;
                     }
                 }
 
-                .pages, .numbers, .choose-origin-country, .search-serie, .add-serie {
+                .pages, .numbers, .search-serie, .add-serie {
                     border-radius: .5rem;
                     margin-bottom: 1rem;
                     //min-height: 4rem;
@@ -4023,6 +4089,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
+    .choose-origin-country {
+        background-color: var(--gradient-ardoise-30);
+    }
 
     .my-series, .series-search {
         color: var(--gradient-ardoise-80);
@@ -4064,7 +4133,7 @@
             }
 
             .series-tools {
-                .search-serie, .choose-origin-country, .add-serie, .numbers, .settings {
+                .search-serie, .add-serie, .numbers, .settings {
                     background-color: var(--gradient-ardoise-30);
                 }
 

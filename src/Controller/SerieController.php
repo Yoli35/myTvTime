@@ -823,19 +823,25 @@ class SerieController extends AbstractController
             $serie['poster_path'] = $this->fullUrl("poster", 3, $serie['poster_path'], "no_poster_dark.png", $imageConfig);
             return $serie;
         }, $series);
-        dump($series);
+        $countryName = Countries::getName($countryCode, $request->getLocale());
+        $count = count($series);
 
         return $this->render('series/from_country.html.twig', [
             'series' => $series,
             'countryCode' => $countryCode,
+            'countryName' => $countryName,
+            'countries' => $this->getCountries(),
             'breadcrumb' => [
                 [
                     'name' => $this->translator->trans('My series'),
                     'url' => $this->generateUrl('app_series_index')
                 ],
                 [
-                    'name' => $this->translator->trans('Series') . " " . $countryCode,
+                    'name' => $this->translator->trans('Series') . " - " . $countryName,
                     'url' => $this->generateUrl('app_series_from_country', ['countryCode' => $countryCode])
+                ],
+                [
+                    'name' => $count . ' ' . $this->translator->trans($count > 1 ? 'series' : 'serie'),
                 ],
             ],
             'from' => self::SERIES_FROM_COUNTRY,
@@ -1440,7 +1446,11 @@ class SerieController extends AbstractController
 
         $page = $request->query->getInt('p', 1);
         $from = $request->query->get('from', self::MY_SERIES);
-        $query = $request->query->get('query', "");
+        if ($from === self::SERIES_FROM_COUNTRY) {
+            $query = $request->query->get('c', "");
+        } else {
+            $query = $request->query->get('query', "");
+        }
         $year = $request->query->get('year', "");
 
         $tv = json_decode($tmdbService->getTv($serie->getSerieId(), $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']), true);
@@ -1598,8 +1608,8 @@ class SerieController extends AbstractController
 
         $alert = $serieViewing ? $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]) : null;
 
-        // Breadcrumb
-        $breadcrumb = $this->breadcrumb($from, $tv);
+        // Breadcrumb - if $from == self::SERIES_FROM_COUNTRY, $query = country
+        $breadcrumb = $this->breadcrumb($from, $tv, null, null, $query);
         $extra = $request->query->get('extra');
         if ($extra) {
             $breadcrumb[] = [
@@ -1875,7 +1885,7 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function breadcrumb($from, $serie = null, $season = null, $episode = null): array
+    public function breadcrumb($from, $serie = null, $season = null, $episode = null, $country = 'FR'): array
     {
         $kind = 'show';
         switch ($from) {
@@ -1890,6 +1900,10 @@ class SerieController extends AbstractController
             case self::MY_SERIES_TO_END:
                 $baseUrl = $this->generateUrl("app_series_to_end");
                 $baseName = $this->translator->trans("My series to end");
+                break;
+            case self::SERIES_FROM_COUNTRY:
+                $baseUrl = $this->generateUrl("app_series_from_country", ['countryCode' => $country]);
+                $baseName = $this->translator->trans("Series") . " - " . Countries::getName($country);
                 break;
             case self::EPISODES_OF_THE_DAY:
                 $baseUrl = $this->generateUrl("app_series_today");
@@ -1951,7 +1965,7 @@ class SerieController extends AbstractController
         if ($serie) {
             $breadcrumb[] = [
                 'name' => $serie['localized_name'] ?? $serie['name'],
-                'url' => $this->generateUrl('app_series_' . $kind, ['id' => $id]) . '?from=' . $from,
+                'url' => $this->generateUrl('app_series_' . $kind, ['id' => $id]) . '?from=' . $from . ($from=== self::SERIES_FROM_COUNTRY ? '&c=' . $country : ''),
             ];
         }
         if ($season) {

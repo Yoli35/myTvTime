@@ -168,7 +168,7 @@ class PeopleController extends AbstractController
                 $episodeNumber = $request->query->get('episode');
                 $season = $seasonNumber ? ['season_number' => $seasonNumber] : null;
                 $episode = $episodeNumber ? ['episode_number' => $episodeNumber] : null;
-                $breadcrumb = $this->serieController->breadcrumb($from, $tv, $season, $episode);
+                $breadcrumb = $this->serieController->breadcrumb($from, $tv, $season, $episode, $request->query->get('c'));
                 $breadcrumb[] = ['name' => $people['name'], 'url' => $request->getUri()];
             }
         }
