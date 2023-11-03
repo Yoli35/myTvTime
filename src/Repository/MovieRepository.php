@@ -81,6 +81,18 @@ class MovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function viewedMovie($userId, $movieId): array
+    {
+        $sql = "SELECT m.`title` "
+            . "FROM `movie` m "
+            . "INNER JOIN `user_movie` um ON (m.id=um.`movie_id` AND um.`user_id`=".$userId.") "
+            . "WHERE m.`movie_db_id` = ".$movieId;
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return Movie[] Returns an array of Movie objects
 //     */
