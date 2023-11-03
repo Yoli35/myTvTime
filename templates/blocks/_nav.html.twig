@@ -63,12 +63,12 @@
         {% endif %}
     {% endif %}
     {% if route == 'app_series_from_country' %}
-        <div class="choose-origin-country ml-auto mb-0">
+        <div class="choose-origin-country">
             <label for="choose-origin-country">
                 {{ 'Series by country of origin'|trans }}
                 <select name="choose-origin-country" id="choose-origin-country">
                     {% for code, name in countries %}
-                        <option value="{{ code }}"{% if code == countryCode %} selected{% endif %}>{{ name }}</option>
+                        <option value="{{ code }}"{% if code == countryCode %} selected{% endif %}>{{ getEmojiFlag(code) }}&nbsp;{{ name }}</option>
                     {% endfor %}
                 </select>
             </label>

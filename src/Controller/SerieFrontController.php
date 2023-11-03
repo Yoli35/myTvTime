@@ -123,7 +123,6 @@ class SerieFrontController extends AbstractController
                 $serie->setSerieId($tv['id']);
                 $serie->setStatus($tv['status']);
                 $serie->setOriginCountry($tv['origin_country'] ?? []);
-                $serie->setProductionCountries($tv['production_countries'] ?? []);
 
                 foreach ($tv['networks'] as $network) {
                     $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);

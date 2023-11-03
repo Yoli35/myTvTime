@@ -49,7 +49,7 @@
                                     {{ 'Series by country of origin'|trans }}
                                     <select name="choose-origin-country" id="choose-origin-country">
                                         {% for countryCode, countryName in countries %}
-                                            <option value="{{ countryCode }}">{{ countryName }}</option>
+                                            <option value="{{ countryCode }}">{{ getEmojiFlag(countryCode) }}&nbsp;{{ countryName }}</option>
                                         {% endfor %}
                                     </select>
                                 </label>

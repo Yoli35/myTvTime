@@ -141,6 +141,10 @@ body {
     .mb-0 {
         margin-bottom: 0;
     }
+
+    .p-0 {
+        padding: 0;
+    }
 }
 
 .flash-messages {
@@ -1105,6 +1109,13 @@ nav.active {
         .switch {
             @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
         }
+    }
+
+    .choose-origin-country {
+        background-color: transparent;
+        margin-inline-start: auto;
+        margin-block-end: 0;
+        padding: 0;
     }
 }
 
