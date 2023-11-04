@@ -1851,7 +1851,7 @@ class SerieController extends AbstractController
 //        dump($allWatchProviders);
 
         // Breadcrumb
-        $breadcrumb = $this->breadcrumb($from, $serie, $season);
+        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from==self::SERIES_FROM_COUNTRY?$query:null);
 
 //        dump([
 //            'env' => $_ENV['APP_ENV'],
