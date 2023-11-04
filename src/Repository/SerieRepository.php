@@ -224,10 +224,17 @@ class SerieRepository extends ServiceEntityRepository
 
     public function getSeriesFromCountry($userId, $countryCode): array
     {
-        $sql = 'SELECT s.*, sv.*, sn.name as localized_name '
+        $sql = 'SELECT s.name as name, s.poster_path as poster_path, s.serie_id as serie_id, '
+            . 's.first_date_air as first_date_air, s.number_of_episodes as number_of_episodes, '
+            . 's.original_name as original_name, s.status as status, s.origin_country as origin_country, '
+            . 'sv.viewed_episodes as viewed_episodes, sv.serie_completed as serie_completed, '
+            . 'sn.name as localized_name, '
+            . 'epv.viewed_at as started_at '
             . 'FROM `serie` s '
             . 'INNER JOIN `serie_viewing` sv ON sv.`serie_id`=s.`id` AND sv.`user_id`=' . $userId . ' '
             . 'LEFT JOIN `serie_localized_name` sn ON sn.`serie_id`=s.`id` '
+            . 'LEFT JOIN `season_viewing` sev ON sev.`serie_viewing_id`=sv.id AND sev.`season_number`=1 '
+            . 'LEFT JOIN `episode_viewing` epv ON epv.`season_id`=sev.id AND epv.`episode_number`=1 '
             . 'WHERE s.`origin_country` LIKE "%' . $countryCode . '%" '
             . 'ORDER BY s.`first_date_air` DESC ';
 

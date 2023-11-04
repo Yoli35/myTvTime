@@ -267,7 +267,6 @@ Alert created and activated: Alerte créée et activée
 Alert deactivated: Alerte désactivée
 Alert: Alerte
 All countries: Tous les pays
-Series by country of origin: Séries par pays d'origine
 Apply: Appliquer
 Ascending: Croissant
 Cancel and close the dialog: Annuler et fermer la boîte de dialogue
@@ -298,19 +297,21 @@ Order by: Tri
 Order: Sens
 Pagination: Pagination
 Results per page: Resultats par page
+Select: Sélectionner
 Serie not found: Série introuvable
 Serie updated: Série mise à jour
+Series by country of origin: Séries par pays d'origine
+Suggest a title: Suggérer un titre
+Suggest: Suggérer
 Translate new keywords: Traduire les nouveaux mots-clés
 Translate: Traduire
+Where did you watch the series?: Où avez-vous regardé la série ?
 creation: Création
 creator.he: Créateur
 creator.she: Créatrice
-Suggest a title: Suggérer un titre
-Suggest: Suggérer
-Select: Sélectionner
-Where did you watch the series?: Où avez-vous regardé la série ?
-series: Séries
 serie: Série
+series: Séries
+Start to watch: Commencer à regarder
 
 #User series airing today
 My series airing today: Épisodes du jour

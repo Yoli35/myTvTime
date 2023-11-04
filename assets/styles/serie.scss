@@ -3130,6 +3130,20 @@
                             white-space: nowrap;
                         }
 
+                        .started {
+                            align-items: center;
+                            background-color: var(--gradient-ardoise-30);
+                            border: 2px solid var(--gradient-ardoise-40);
+                            border-radius: .5rem;
+                            bottom: .5rem;
+                            color: var(--gradient-ardoise-90);
+                            left: .5rem;
+                            position: absolute;
+                            display: flex;
+                            justify-content: center;
+                            padding: .125rem .5rem;
+                        }
+
                         .view {
                             align-items: center;
                             background-color: var(--gradient-orange-30);

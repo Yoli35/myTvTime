@@ -165,9 +165,10 @@ body {
         //height: 3.5rem;
         margin: 1rem auto;
         opacity: 1;
-        padding: 1rem;
+        padding-block: 1rem;
+        padding-inline: 1rem 2rem;
         position: relative;
-        transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, padding 500ms ease-in-out;
+        transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, width 500ms ease-in-out;
         width: fit-content;
 
         &.success {
@@ -214,8 +215,8 @@ body {
         &.hide {
             height: 0;
             opacity: 0;
-            margin: 0 1rem;
-            padding: 0 1rem;
+            margin: 0 auto;
+            width: 100%;
         }
     }
 }
