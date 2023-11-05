@@ -213,7 +213,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchOne();
     }
 
-    public function countUserSeriesToEnd(User $user)
+    public function countUserSeriesToEnd(User $user): float|bool|int|string|null
     {
         try {
             $count = $this->createQueryBuilder('s')
@@ -279,7 +279,7 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "INNER JOIN `serie_networks` sn ON s.`id`=sn.`serie_id` "
             . "INNER JOIN `networks` n ON sn.`networks_id`=n.`id` "
             . "LEFT JOIN `favorite` f ON f.`user_id`=2 AND f.`type`='serie' AND f.`media_id`=s.`id` "
-            . "WHERE sv.`user_id`=" .$userId . " "
+            . "WHERE sv.`user_id`=" . $userId . " "
             . "AND s.`first_date_air` IS NULL "
             . "ORDER BY s.`created_at` DESC "
             . "LIMIT " . $perPage . " "
@@ -302,12 +302,33 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "INNER JOIN `serie_networks` sn ON s.`id`=sn.`serie_id` "
             . "INNER JOIN `networks` n ON sn.`networks_id`=n.`id` "
             . "LEFT JOIN `favorite` f ON f.`user_id`=2 AND f.`type`='serie' AND f.`media_id`=s.`id` "
-            . "WHERE sv.`user_id`=" .$userId . " "
+            . "WHERE sv.`user_id`=" . $userId . " "
             . "AND s.`first_date_air` IS NULL";
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
             ->executeQuery()
             ->fetchOne();
+    }
+
+    public function getSeriesToWatch($userId, $locale, $perPage, $page): array
+    {
+        $sql = "SELECT sv.`id` as id, s.`id` as serie_id, s.`name` as name, s.`original_name` as original_name, s.`poster_path`, sln.`name` as localized_name, sev.`season_number` as season_number, ev.`episode_number` as episode_number, ev.`air_date` as air_date "
+            . "FROM `serie_viewing` sv "
+            . "INNER JOIN `user` u ON u.`id`=sv.`user_id` "
+            . "INNER JOIN `episode_viewing` ev ON ev.`id`=sv.`next_episode_to_watch_id` AND ev.`air_date`<=NOW() "
+            . "INNER JOIN `season_viewing` sev ON sev.`id`=ev.`season_id` "
+            . "LEFT JOIN `serie` s ON s.`id`=sv.`serie_id` "
+            . "LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='" . $locale . "' "
+            . "WHERE u.id=" . $userId . " "
+            . "ORDER BY ev.`air_date` DESC "
+            . "LIMIT " . $perPage . " "
+            . "OFFSET " . ($page - 1) * $perPage;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
     }
 }

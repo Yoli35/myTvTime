@@ -30,6 +30,7 @@ use App\Repository\SeriePosterRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
+use App\Repository\UserTvPreferenceRepository;
 use App\Service\DateService;
 use App\Service\DeeplTranslator;
 use App\Service\TMDBService;
@@ -86,7 +87,9 @@ class SerieController extends AbstractController
         private readonly SerieRepository              $serieRepository,
         private readonly SerieViewingRepository       $serieViewingRepository,
         private readonly TMDBService                  $TMDBService,
-        private readonly TranslatorInterface          $translator)
+        private readonly TranslatorInterface          $translator,
+        private readonly UserTvPreferenceRepository   $userTvPreferenceRepository,
+    )
     {
     }
 
@@ -437,15 +440,30 @@ class SerieController extends AbstractController
         $delta = $diff->days;
 
         /** @var Serie[] $todayAirings */
-//        $todayAirings = $this->todayAiringSeries($date);
         $todayAirings = $this->todayAiringSeriesV2($date);
+        $seriesToWatch = [];
 
-        foreach ($todayAirings as $todayAiring) {
-            $this->savePoster($todayAiring['seriePosterPath'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
-        }
+        if (count($todayAirings)) {
+            foreach ($todayAirings as $todayAiring) {
+                $this->savePoster($todayAiring['seriePosterPath'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+            }
 //        dump($todayAirings);
-        $backdrop = $this->getTodayAiringBackdrop($todayAirings);
-        $images = $this->getNothingImages();
+            $backdrop = $this->getTodayAiringBackdrop($todayAirings);
+            $images = [];
+        } else {
+            $backdrop = null;
+            $images = $this->getNothingImages();
+            $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage()??$request->getLocale(), 20,1);
+            $seriesToWatch = array_map(function ($series) use ($imgConfig) {
+                $this->savePoster($series['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+                $series['poster_path'] = $this->fullUrl("poster", 3, $series['poster_path'], "no_poster_dark.png", $imgConfig);
+                return $series;
+            }, $seriesToWatch);
+//            dump(['series to watch' => $seriesToWatch]);
+//            dump(['user Tv Preferences (findBy)' => $this->userTvPreferenceRepository->findBy(['user' => $user->getId()], ['vitality' => 'DESC'])]);
+//            dump(['user Tv Preferences (queryBuilder)' => $this->userTvPreferenceRepository->getUserTvPreferences($user)]);
+//            dump(['user Tv Preferences (SQL)' => $this->userTvPreferenceRepository->getUserTvPreferencesSQL($user->getId())]);
+        }
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_DAY);
         $breadcrumb[] = ['name' => $this->translator->trans("Episodes of the week"), 'url' => $this->generateUrl("app_series_this_week")];
 
@@ -453,12 +471,10 @@ class SerieController extends AbstractController
         $bc->rootBreadcrumb('Home', $this->generateUrl('app_home'))
             ->addBreadcrumb('My series airing today', $this->generateUrl('app_series_today'));
 //        dump($bc);
-//        $this->breadcrumbBuilder->rootBreadcrumb('Home', 'app_home');
-//        $this->breadcrumbBuilder->addBreadcrumb('My series airing today', 'app_series_today');
-//        dump($this->breadcrumbBuilder->getBreadcrumbs());
 
         return $this->render('series/today.html.twig', [
             'todayAirings' => $todayAirings,
+            'seriesToWatch' => $seriesToWatch,
             'date' => $date,
             'backdrop' => $backdrop,
             'images' => $images,
@@ -830,10 +846,10 @@ class SerieController extends AbstractController
             return !$serie['first_date_air'];
         });
         $series = array_merge($seriesWithoutFirstDateAir, $seriesWithFirstDateAir);
-        dump([
-            'seriesWithFirstDateAir' => $seriesWithFirstDateAir,
-            'seriesWithoutFirstDateAir' => $seriesWithoutFirstDateAir,
-        ]);
+//        dump([
+//            'seriesWithFirstDateAir' => $seriesWithFirstDateAir,
+//            'seriesWithoutFirstDateAir' => $seriesWithoutFirstDateAir,
+//        ]);
         $countryName = Countries::getName($countryCode, $request->getLocale());
         $count = count($series);
 

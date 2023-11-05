@@ -168,7 +168,7 @@ class UsersExtension extends AbstractExtension
             return false;
         }
         $result = $this->movieRepository->viewedMovie($user->getId(), $movieId);
-        dump(['result' => $result, 'movieId' => $movieId, 'userId' => $user->getId()]);
+//        dump(['result' => $result, 'movieId' => $movieId, 'userId' => $user->getId()]);
 
         return (bool)count($result);
     }

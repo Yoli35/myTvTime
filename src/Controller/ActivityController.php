@@ -61,7 +61,7 @@ class ActivityController extends AbstractController
         $challenges = $this->getChallenges($activity, $now);
         $arr = $this->activityDayRepository->getMonthRingCount($activity->getId(), $now->format('m'));
         $monthCount = $arr[0];
-        dump($monthCount);
+//        dump($monthCount);
 
         $days = $this->activityDayRepository->getActivityDays($activity->getId());
 
