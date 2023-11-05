@@ -147,6 +147,38 @@ body {
     }
 }
 
+.todos {
+    @include flex-col(flex-start, flex-start);
+    background-color: var(--gradient-ardoise-10-alpha-90);
+    border-radius: .5rem;
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+
+    .todo {
+        @include flex-row(center, center);
+        background-color: var(--gradient-yellow-50);
+        border-radius: .25rem;
+        color: var(--gradient-ardoise-90);
+        font-weight: 300;
+        gap: 1rem;
+        padding: .5rem 1rem;
+        position: relative;
+        width: 100%;
+
+        .todo-text {
+            flex: 1;
+        }
+
+        .todo-close {
+            cursor: pointer;
+            position: absolute;
+            right: .25rem;
+            top: 0;
+        }
+    }
+}
+
 .flash-messages {
     left: 0;
     position: fixed;
@@ -240,7 +272,7 @@ main {
     -webkit-backdrop-filter: blur(.25rem);
     background-color: var(--gradient-grey-10-alpha-75);
     border-radius: 1rem;
-    border: 8px solid #ffffff7f;
+    border: 4px solid #ffffff7f;
     color: var(--gradient-ardoise-90);
     margin-block: auto;
     margin-inline: auto;
@@ -292,6 +324,21 @@ main {
     }
 }
 
+#search-dialog {
+    .content {
+        padding: 1rem;
+
+        form {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: .5rem;
+
+            menu {
+                width: 100%;
+            }
+        }
+    }
+}
 #search-dialog::backdrop,
 #multi-people-dialog::backdrop,
 #localize-dialog::backdrop,
