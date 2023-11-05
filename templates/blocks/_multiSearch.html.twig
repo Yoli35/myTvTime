@@ -7,7 +7,10 @@
                 <input type="search" id="search-query" name="search-query" placeholder="{{ 'Search for movies, TV shows and people'|trans }}"/>
             </label>
             <label for="search-db">
-                <input type="checkbox" id="search-db" name="search-db" title="{{ 'Among your films, series and their castings'|trans }}"/>
+                <input type="checkbox" id="search-db" name="search-db"/>{{ 'Among your films, series and their castings'|trans }}
+            </label>
+            <label for="search-in-new-window">
+                <input type="checkbox" id="search-in-new-window" name="search-in-new-window" checked/>{{ 'Results in new window'|trans }}
             </label>
             <menu>
                 <li><button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button></li>

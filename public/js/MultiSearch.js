@@ -2,7 +2,6 @@ let thisGlobal;
 
 export class MultiSearch {
 
-
     constructor() {
         thisGlobal = this;
         this.timer = 0;
@@ -20,7 +19,7 @@ export class MultiSearch {
         people.addEventListener("click", () => {
             this.multiPeople();
         });
-        this.initDialog()
+        this.initDialog();
         this.getHistory(20).then(data => {
             // console.log({data});
             if (data.result === 'success') thisGlobal.history = data.history.map(h => {
@@ -89,10 +88,18 @@ export class MultiSearch {
             dialog.addEventListener("close", () => {
                 document.querySelector("body").classList.remove("frozen");
                 if (dialog.returnValue === "search") {
-                    // do the search and go to the result page
                     const query = document.querySelector("#search-query").value;
                     const db = document.querySelector("#search-db").checked;
-                    window.location.href = "/search?query=" + query + (db ? "&db=1" : "");
+                    const openInNewWindow = document.querySelector("#search-in-new-window").checked;
+                    const url = "/search?query=" + query + (db ? "&db=1" : "");
+                    if (!openInNewWindow)
+                        window.location.href = url;
+                    else {
+                        const newContext = window.open(url, "_blank");
+                        console.log({newContext});
+                        // TODO: if newContext is null, display a dialog to allow pop-ups
+                    }
+                    return;
                 }
                 if (dialog.returnValue === "multiPeople") {
                     // do the search and go to the result page
