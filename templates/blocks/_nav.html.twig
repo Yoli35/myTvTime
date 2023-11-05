@@ -75,6 +75,10 @@
         </div>
         <script>
             document.querySelector("#choose-origin-country").addEventListener("change", function () {
+                if (this.value === "all") {
+                    window.location.href = "{{ path('app_series_index') }}";
+                    return;
+                }
                 window.location.href = "{{ path('app_series_from_country') }}/" + this.value;
             });
         </script>

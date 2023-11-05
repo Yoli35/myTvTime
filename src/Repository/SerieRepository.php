@@ -224,7 +224,7 @@ class SerieRepository extends ServiceEntityRepository
 
     public function getSeriesFromCountry($userId, $countryCode): array
     {
-        $sql = 'SELECT s.name as name, s.poster_path as poster_path, s.serie_id as serie_id, '
+        $sql = 'SELECT s.id as id, s.name as name, s.poster_path as poster_path, s.serie_id as serie_id, '
             . 's.first_date_air as first_date_air, s.number_of_episodes as number_of_episodes, '
             . 's.original_name as original_name, s.status as status, s.origin_country as origin_country, '
             . 'sv.viewed_episodes as viewed_episodes, sv.serie_completed as serie_completed, '

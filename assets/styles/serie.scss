@@ -960,6 +960,14 @@
     }
 }
 
+.series-search {
+    .header {
+        &.fade-bg {
+            background-color: var(--gradient-ardoise-10-alpha-80);
+        }
+    }
+}
+
 .bubble {
     @include flex-col(center, revert);
     height: 4rem;
@@ -3175,6 +3183,10 @@
                                 color: var(--gradient-green-90);
                             }
                         }
+                    }
+
+                    span.title {
+                        margin-top: unset;
                     }
                 }
             }

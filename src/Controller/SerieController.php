@@ -823,6 +823,17 @@ class SerieController extends AbstractController
             $serie['poster_path'] = $this->fullUrl("poster", 3, $serie['poster_path'], "no_poster_dark.png", $imageConfig);
             return $serie;
         }, $series);
+        $seriesWithFirstDateAir = array_filter($series, function ($serie) {
+            return $serie['first_date_air'];
+        });
+        $seriesWithoutFirstDateAir = array_filter($series, function ($serie) {
+            return !$serie['first_date_air'];
+        });
+        $series = array_merge($seriesWithoutFirstDateAir, $seriesWithFirstDateAir);
+        dump([
+            'seriesWithFirstDateAir' => $seriesWithFirstDateAir,
+            'seriesWithoutFirstDateAir' => $seriesWithoutFirstDateAir,
+        ]);
         $countryName = Countries::getName($countryCode, $request->getLocale());
         $count = count($series);
 

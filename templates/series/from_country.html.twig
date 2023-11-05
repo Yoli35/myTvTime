@@ -45,7 +45,7 @@
                     "next_episode_check_date" => "2023-10-28 20:34:21" #}
                     {% for s in series %}
                         <div class="home-discover" data-id="{{ s.serie_id }}">
-                            <a href="{{ path('app_series_show', {'id': s.serie_id}) }}?from={{ from }}&c={{ countryCode }}" title="{{ s.name }}">
+                            <a href="{{ path('app_series_show', {'id': s.id}) }}?from={{ from }}&c={{ countryCode }}" title="{{ s.name }}">
                                 <div>
                                     <img src="{{ s.poster_path }}" alt="{{ 'Poster' }}">
                                     <span class="status">{{ s.status|trans }}</span>
@@ -54,14 +54,28 @@
                                     </div>
                                     <div class="started">
                                         {% if s.started_at %}
-                                            {{ s.started_at|format_datetime('short', 'short') }}
+                                            {% if s.started_at|date("H:i")=="00:00" %}
+                                                {{ s.started_at|format_date('short') }}
+                                            {% else %}
+                                                {{ s.started_at|format_datetime('short', 'short') }}
+                                            {% endif %}
                                         {% else %}
-                                            {{ 'Start to watch'|trans }}
+                                            {% if s.first_date_air %}
+                                                {% if 'now'|date("Y-m-d") >= s.first_date_air|date("Y-m-d") %}
+                                                    {{ 'Start to watch'|trans }}
+                                                {% else %}
+                                                    {{ 'Coming soon'|trans }}
+                                                {% endif %}
+                                            {% else %}
+                                                {{ 'No date'|trans }}
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                 </div>
                                 <span class="title">{{ s.name }}{% if s.original_name != s.name %} - {{ s.original_name }}{% endif %}{% if s.localized_name %} - {{ s.localized_name }}{% endif %}</span>
-                                <span class="date">{{ s.first_date_air|format_date('short') }}</span>
+                                {% if s.first_date_air %}
+                                    <span class="date">{{ s.first_date_air|format_date('short') }}</span>
+                                {% endif %}
                             </a>
                         </div>
                     {% endfor %}
