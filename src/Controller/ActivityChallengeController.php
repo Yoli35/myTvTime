@@ -31,7 +31,7 @@ class ActivityChallengeController extends AbstractController
             ['name' => $this->translator->trans('Activity'), 'url' => $this->generateUrl('app_activity_index')],
         ];
         $challenges = $this->activityChallengeRepository->findAll();
-        dump($challenges);
+//        dump($challenges);
         return $this->render('activity_challenge/index.html.twig', [
             'challenges' => $challenges,
             'breadcrumb' => $breadcrumb,

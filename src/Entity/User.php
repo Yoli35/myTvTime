@@ -132,6 +132,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Contribution::class)]
     private Collection $contributions;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserTvPreference::class, orphanRemoval: true)]
+    private Collection $userTvPreferences;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -147,6 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->youtubeVideoComments = new ArrayCollection();
         $this->alarms = new ArrayCollection();
         $this->contributions = new ArrayCollection();
+        $this->userTvPreferences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -759,6 +763,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($contribution->getUser() === $this) {
                 $contribution->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TvGenre>
+     */
+    public function getTvGenres(): Collection
+    {
+        return $this->tvGenres;
+    }
+
+    public function addTvGenre(TvGenre $tvGenre): static
+    {
+        if (!$this->tvGenres->contains($tvGenre)) {
+            $this->tvGenres->add($tvGenre);
+            $tvGenre->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTvGenre(TvGenre $tvGenre): static
+    {
+        if ($this->tvGenres->removeElement($tvGenre)) {
+            $tvGenre->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserTvPreference>
+     */
+    public function getUserTvPreferences(): Collection
+    {
+        return $this->userTvPreferences;
+    }
+
+    public function addUserTvPreference(UserTvPreference $userTvPreference): static
+    {
+        if (!$this->userTvPreferences->contains($userTvPreference)) {
+            $this->userTvPreferences->add($userTvPreference);
+            $userTvPreference->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserTvPreference(UserTvPreference $userTvPreference): static
+    {
+        if ($this->userTvPreferences->removeElement($userTvPreference)) {
+            // set the owning side to null (unless already changed)
+            if ($userTvPreference->getUser() === $this) {
+                $userTvPreference->setUser(null);
             }
         }
 
