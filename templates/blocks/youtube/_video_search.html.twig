@@ -1,8 +1,12 @@
 {% if videos|length %}
-    <h2>{{ videos|length }} {{ (videos|length > 1 ? 'videos':'video')|trans }}</h2>
-    {% for video in videos %}
-        {{ include('blocks/youtube/_video' ~ type ~ '.html.twig', {item: video}) }}
-    {% endfor %}
+    <div class="result-header">
+        <div class="title">{{ videos|length }} {{ (videos|length > 1 ? 'videos':'video')|trans }}</div>
+    </div>
+    <div class="wrapper">
+        {% for video in videos %}
+            {{ include('blocks/youtube/_video' ~ type ~ '.html.twig', {item: video}) }}
+        {% endfor %}
+    </div>
 {% else %}
     <div class="no-result">No videos</div>
 {% endif %}

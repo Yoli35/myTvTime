@@ -202,6 +202,17 @@ class YoutubeController extends AbstractController
 
         return $this->render('youtube/search.html.twig', [
             'tagArr' => $tagArr,
+            'textArr' => [
+                "modify" => $this->translator->trans("Modify"),
+                "cancel" => $this->translator->trans("Cancel"),
+                "apply" => $this->translator->trans("Apply"),
+                "select_all" => $this->translator->trans("Select all"),
+                "deselect_all" => $this->translator->trans("Deselect all"),
+            ],
+            'breadcrumb' => [
+                ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube')],
+                ['name' => $this->translator->trans('Youtube video search'), 'url' => $this->generateUrl('app_youtube_search')],
+            ],
             'user' => $user,
         ]);
     }
@@ -229,17 +240,21 @@ class YoutubeController extends AbstractController
             $videos = $videoRepository->findBy(['id' => $ids], ['publishedAt' => 'DESC']);
         }
 
-        return $this->render('blocks/youtube/_video_search.html.twig', [
-            'videos' => $videos,
-            'list' => $tagIds,
-            'type' => '',
-        ]);
+        return $this->json(
+            [
+                'block' => $this->render('blocks/youtube/_video_search.html.twig', [
+                    'videos' => $videos,
+                    'list' => $tagIds,
+                    'type' => '',
+                ]),
+                'videoCount' => count($videos),
+            ]);
     }
 
     #[Route('/{_locale}/youtube/video/add/tag/{id}/{tag}', name: 'app_youtube_video_add_tag', requirements: ['_locale' => 'fr|en|de|es'])]
     public function addTag($tag, YoutubeVideo $youtubeVideo, YoutubeVideoTagRepository $tagRepository, YoutubeVideoRepository $videoRepository): Response
     {
-    //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $existingTags = $tagRepository->findAll();
         $newTagId = -1;
@@ -280,7 +295,7 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/remove/tag/{id}/{tag}', name: 'app_youtube_video_remove_tag', requirements: ['_locale' => 'fr|en|de|es'])]
     public function removeTag($tag, YoutubeVideo $youtubeVideo, YoutubeVideoRepository $videoRepository, YoutubeVideoTagRepository $tagRepository): Response
     {
-    //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $videoTag = $tagRepository->find($tag);
         $youtubeVideo->removeTag($videoTag);
@@ -301,7 +316,7 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/delete/{id}', name: 'app_youtube_video_delete', requirements: ['_locale' => 'fr|en|de|es'])]
     public function removeVideo($id, UserRepository $userRepository, YoutubeVideoRepository $youtubeVideoRepository): JsonResponse
     {
-    //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
 

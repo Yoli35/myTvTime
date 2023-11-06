@@ -27,22 +27,24 @@
                         <div class="tags"></div>
                         <div class="method">
                             <label for="method">
-                                {{ 'Selection'|trans }}>
+                                {{ 'Selection'|trans }}
                                 <select id="method">
                                     <option value="and">Tous le mots-clés</option>
                                     <option value="or" selected>Au moins un mot-clé</option>
                                 </select>
                             </label>
-                            <div class="arrow"><i class="fa-solid fa-caret-down"></i></div>
+                            {#                            <div class="arrow"><i class="fa-solid fa-caret-down"></i></div> #}
                         </div>
                         <button class="apply" type="submit">{{ 'Apply'|trans }}</button>
                     </div>
                 </div>
                 <div class="results"></div>
             </main>
-            <div class="global-data" style="display: none">
+            <div id="global-data" style="display: none">
                 {
-                    "tags": {{ tagArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+                "tags": {{ tagArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                "app_youtube_video_by_tag": "{{ path('app_youtube_video_by_tag') }}",
+                "button_text": {"modify": "{{ 'Modify'|trans }}","cancel": "{{ 'Cancel'|trans }}","apply": "{{ 'Apply'|trans }}","select_all": "{{ 'Select all'|trans }}","deselect_all": "{{ 'Deselect all'|trans }}"}
                 }
             </div>
         </div>
@@ -51,275 +53,5 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        const paths = [
-            "{{ path('app_youtube_video_by_tag') }}",
-        ];
-
-        const _app_youtube_video_by_tag = paths[0];
-        let letterRatios = [];
-        let tagList;
-
-        window.addEventListener("DOMContentLoaded", () => {
-            /** @type {HTMLInputElement} */
-            const searchTag = document.querySelector("#search-tag");
-            initHeader();
-            tagList = createList();
-            autocomplete(searchTag, tagList);
-            document.querySelector(".apply").addEventListener("click", applyTags);
-            searchTag.focus();
-        });
-
-        function initHeader() {
-            const header = document.querySelector(".header");
-            let ticking = false;
-            let letters, animatedH1, index = 0;
-
-            animatedH1 = document.createElement("div");
-            animatedH1.classList.add("animated-h1");
-            animatedH1 = header.insertBefore(animatedH1, document.querySelector(".backdrop"));
-            letters = document.querySelector("h1").innerText.split('');
-
-            document.querySelector("h1").innerText = "";
-
-            letters.forEach(letter => {
-                let part = document.createElement("div");
-                part.classList.add("part");
-                if (letter === " ") {
-                    part.innerHTML = "&nbsp;"
-                } else {
-                    part.innerText = letter;
-                }
-                animatedH1.appendChild(part);
-                letterRatios[index] = 2 * (Math.random() - .5);
-                index++;
-            })
-            setH1();
-            window.addEventListener('resize', setH1);
-
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    window.requestAnimationFrame(function () {
-                        setH1();
-                        ticking = false;
-                    });
-                }
-                ticking = true;
-            });
-            header.setAttribute("style", "background-color: transparent;");
-        }
-
-        function setH1() {
-            const header = document.querySelector(".header");
-            const h1 = document.querySelector(".animated-h1");
-            const parts = h1.querySelectorAll(".part");
-            let left, ratio, top, n = 0;
-            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
-            left = (header.clientWidth - h1.clientWidth) / 2;
-            top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
-            if (ratio < 0) ratio = 0;
-            if (ratio > 1) ratio = 1;
-            parts.forEach(part => {
-                part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * letterRatios[n++]) + "deg);");
-            })
-            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
-        }
-
-        function autocomplete(input, list) {
-            let currentFocus = -1;
-
-            input.addEventListener("input", function (e) {
-                let a, b, i, val;
-                val = e.target.value;
-                closeAllLists();
-                if (!val) {
-                    return false;
-                }
-                currentFocus = -1;
-                a = document.createElement("div");
-                a.setAttribute("id", e.target.id + "-autocomplete-list");
-                a.classList.add("autocomplete-items");
-                this.parentNode.appendChild(a);
-
-                for (i = 0; i < list.length; i++) {
-                    if (list[i].selected === false) {
-                        let parts = findOccurences(list[i], val);
-                        if (parts.length > 2) {
-                            b = createItemDiv(list[i], val, parts);
-                            b.setAttribute("data-id", list[i].id);
-                            b.setAttribute("data-label", list[i].label);
-                            b.setAttribute("data-index", i);
-
-                            b.addEventListener("click", function () {
-                                /* add the tag to the list */
-                                let id = this.getAttribute("data-id");
-                                let label = this.getAttribute("data-label");
-                                let index = this.getAttribute("data-index");
-
-                                tagList[index].selected = true;
-
-                                let newTag = document.createElement("div");
-                                newTag.classList.add("tag");
-                                newTag.appendChild(document.createTextNode(label));
-                                newTag.setAttribute("data-id", id);
-                                newTag.setAttribute("data-index", index);
-                                let deleteButton = document.createElement("div");
-                                deleteButton.classList.add("delete");
-                                let xmark = document.createElement("i")
-                                xmark.classList.add("fa-solid", "fa-square-xmark");
-                                deleteButton.appendChild(xmark);
-                                deleteButton.addEventListener("click", removeTag);
-                                newTag.appendChild(deleteButton);
-                                document.querySelector(".tags").appendChild(newTag);
-
-                                input.value = "";
-                                input.focus();
-                                closeAllLists();
-                                currentFocus = -1;
-                            });
-                            a.appendChild(b);
-                        }
-                    }
-                }
-            });
-
-            input.addEventListener("keydown", function (e) {
-                let x = document.getElementById(this.id + "-autocomplete-list");
-                if (x) x = x.getElementsByTagName("div");
-                if (e.keyCode === 40) { /* arrow DOWN key */
-                    currentFocus++;
-                    addActive(x);
-                } else if (e.keyCode === 38) { /* arrow UP key */
-                    currentFocus--;
-                    addActive(x);
-                } else if (e.keyCode === 13) { /* the ENTER key */
-                    e.preventDefault();
-                    if (currentFocus > -1) {
-                        if (x) x[currentFocus].click();
-                    } else {
-                        let tags = document.querySelector(".tags").querySelectorAll(".tag");
-                        if (tags.length) applyTags();
-                    }
-                }
-            });
-
-            function removeTag() {
-                let tag = this.parentElement;
-                let index = tag.getAttribute("data-index");
-                tagList[index].selected = false;
-                document.querySelector(".tags").removeChild(tag);
-            }
-
-            function addActive(x) {
-                if (!x) return false;
-                /*start by removing the "active" class on all items:*/
-                removeActive(x);
-                if (currentFocus >= x.length) currentFocus = 0;
-                if (currentFocus < 0) currentFocus = (x.length - 1);
-                /*add class "autocomplete-active":*/
-                x[currentFocus].classList.add("active");
-            }
-
-            function removeActive(x) {
-                /*a function to remove the "active" class from all autocomplete items:*/
-                for (let i = 0; i < x.length; i++) {
-                    x[i].classList.remove("active");
-                }
-            }
-
-            function closeAllLists(element) {
-                /*close all autocomplete lists in the document,
-                except the one passed as an argument:*/
-                let x = document.getElementsByClassName("autocomplete-items");
-                for (let i = 0; i < x.length; i++) {
-                    if (element !== x[i] && element !== input) {
-                        x[i].parentNode.removeChild(x[i]);
-                    }
-                }
-            }
-
-            document.addEventListener("click", (e) => {
-                closeAllLists(e.target);
-            });
-        }
-
-        function applyTags() {
-            const tags = document.querySelector(".tags").querySelectorAll(".tag");
-            /** @type {HTMLSelectElement} */
-            const methodSelect = document.querySelector("#method");
-            let method = methodSelect.value;
-            let list = "";
-            if (tags.length === 0) return;
-            tags.forEach(tag => {
-                if (list.length) list += ",";
-                list += tag.getAttribute("data-id");
-            });
-            console.log(list);
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                let data = this.response;
-                console.log({data});
-                document.querySelector(".results").innerHTML = data;
-            }
-            xhr.open("GET", _app_youtube_video_by_tag + '?tags=' + list + '&m=' + method);
-            xhr.send();
-
-        }
-
-        function createList() {
-            /** @type {HTMLDivElement} globs */
-            const globs = document.querySelector(".global-data");
-            const listARR = JSON.parse(globs.textContent);
-            return listARR.tags;
-        }
-
-        function findOccurences(item, val) {
-            val = removeAccent(val);
-            let label = removeAccent(item.label), parts = [item.label + ' / ' + label, val],
-                index = 0, nextIndex = 0;
-            do {
-                index = label.indexOf(val, nextIndex);
-                if (index !== -1) {
-                    parts.push(index);
-                }
-                nextIndex = index + val.length;
-            } while (index !== -1);
-
-            return parts;
-        }
-
-        function createItemDiv(item, val, parts) {
-            let div, strong, j, k = 0, str, index, lastIndex = 0;
-            div = document.createElement("div");
-            for (j = 2; j < parts.length; j++) {
-                index = parts[j];
-
-                for (k = lastIndex, str = ""; k < index; k++) {
-                    str += item.label[k];
-                }
-                if (str.length) {
-                    div.appendChild(document.createTextNode(str));
-                }
-                strong = document.createElement("strong");
-                strong.appendChild(document.createTextNode(item.label.substr(index, val.length)));
-                div.appendChild(strong);
-                lastIndex = index + val.length;
-            }
-            div.appendChild(document.createTextNode(item.label.substr(lastIndex)));
-
-            return div;
-        }
-
-        function removeAccent(str) {
-            str = str.toLowerCase();
-
-            let from = "àáäâèéëêìíïîòóöôùúüûñç";
-            let to = "aaaaeeeeiiiioooouuuunc";
-            for (let i = 0, l = from.length; i < l; i++) {
-                str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-            }
-
-            return str;
-        }
-    </script>
+    <script src="/js/youtubeSearch.js" type="module"></script>
 {% endblock %}

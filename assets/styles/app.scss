@@ -98,7 +98,7 @@ body {
     }
 
     .d-none {
-        display: none;
+        display: none !important;
     }
 
     .d-block {
@@ -204,7 +204,7 @@ body {
         padding-block: 1rem;
         padding-inline: 1rem 2rem;
         position: relative;
-        transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, width 500ms ease-in-out;
+        transition: height 500ms ease-in-out, opacity 500ms ease-in-out, margin 500ms ease-in-out, width 1500ms ease-in-out;
         width: fit-content;
 
         &.success {
