@@ -1,3 +1,4 @@
+import {ToolTips} from "./ToolTips.js";
 let gThis;
 
 export class YoutubeSearch {
@@ -5,8 +6,9 @@ export class YoutubeSearch {
         gThis = this;
         this.tags = globs.tags;
         this.app_youtube_video_by_tag = globs.app_youtube_video_by_tag;
-        this.button_text = globs.button_text;
+        this.text = globs.text;
         this.letterRatios = [];
+        this.toolTips = new ToolTips();
 
         this.init();
     }
@@ -14,6 +16,7 @@ export class YoutubeSearch {
     init() {
         this.initHeader();
         this.autocomplete();
+        this.toolTips.init();
 
         document.querySelector(".apply").addEventListener("click", this.applyTags);
     }
@@ -218,7 +221,7 @@ export class YoutubeSearch {
                 modifyTools.classList.add("modify-tools");
                 const modifyButton = document.createElement("button");
                 modifyButton.setAttribute("id", "modify-tool")
-                modifyButton.innerText = gThis.button_text.modify;
+                modifyButton.innerText = gThis.text.modify;
                 modifyButton.addEventListener("click", gThis.prepareSelection);
                 modifyTools.appendChild(modifyButton);
                 resultTitle.appendChild(modifyTools);
@@ -234,39 +237,45 @@ export class YoutubeSearch {
         const resultTitle = document.querySelector(".results").querySelector(".result-header");
         const modifyTools = resultTitle.querySelector(".modify-tools");
         const modifyButton = modifyTools.querySelector("#modify-tool");
-        modifyButton.innerText = gThis.button_text.cancel;
+        modifyButton.innerText = gThis.text.cancel;
         modifyButton.removeEventListener("click", gThis.prepareSelection)
         modifyButton.addEventListener("click", gThis.cancelSelection);
 
         const selectAllButton = document.createElement("button");
         selectAllButton.setAttribute("id", "select-all-tool");
-        selectAllButton.innerText = gThis.button_text.select_all;
+        selectAllButton.innerText = gThis.text.select_all;
         selectAllButton.addEventListener("click", gThis.selectAllVideo);
         modifyTools.insertBefore(selectAllButton, modifyButton);
 
         const deselectAllButton = document.createElement("button");
         deselectAllButton.setAttribute("id", "deselect-all-tool");
-        deselectAllButton.innerText = gThis.button_text.deselect_all;
+        deselectAllButton.innerText = gThis.text.deselect_all;
         deselectAllButton.addEventListener("click", gThis.deselectAllVideo);
         modifyTools.insertBefore(deselectAllButton, selectAllButton);
 
         const deleteSelection = document.createElement("button");
         deleteSelection.setAttribute("id", "delete-tag-tool");
         deleteSelection.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+        deleteSelection.setAttribute("data-title", gThis.text.delete);
         deleteSelection.addEventListener("click", gThis.deleteTagSelection);
         modifyTools.insertBefore(deleteSelection, deselectAllButton);
+        gThis.toolTips.initElement(deleteSelection);
 
         const addTagSelection = document.createElement("button");
         addTagSelection.setAttribute("id", "add-tag-tool");
         addTagSelection.innerHTML = '<i class="fa-solid fa-plus"></i>';
+        addTagSelection.setAttribute("data-title", gThis.text.add_video_to_tags);
         addTagSelection.addEventListener("click", gThis.addTagSelection);
         modifyTools.insertBefore(addTagSelection, deleteSelection);
+        gThis.toolTips.initElement(addTagSelection);
 
         const modifyTagSelection = document.createElement("button");
         modifyTagSelection.setAttribute("id", "modify-tag-tool");
         modifyTagSelection.innerHTML = '<i class="fa-solid fa-pen"></i>';
+        modifyTagSelection.setAttribute("data-title", gThis.text.modify_tag_list);
         modifyTagSelection.addEventListener("click", gThis.modifyTagSelection);
         modifyTools.insertBefore(modifyTagSelection, addTagSelection);
+        gThis.toolTips.initElement(modifyTagSelection);
 
         gThis.hideTagTools();
 
@@ -357,7 +366,7 @@ export class YoutubeSearch {
         const deleteTagButton = modifyTools.querySelector('#delete-tag-tool');
         const addTagButton = modifyTools.querySelector('#add-tag-tool');
         const modifyTagButton = modifyTools.querySelector('#modify-tag-tool');
-        modifyButton.innerText = gThis.button_text.modify;
+        modifyButton.innerText = gThis.text.modify;
         modifyButton.removeEventListener("click", gThis.cancelSelection);
         modifyButton.addEventListener("click", gThis.prepareSelection);
         modifyTools.removeChild(selectAllButton);

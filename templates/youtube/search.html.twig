@@ -42,9 +42,9 @@
             </main>
             <div id="global-data" style="display: none">
                 {
-                "tags": {{ tagArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
-                "app_youtube_video_by_tag": "{{ path('app_youtube_video_by_tag') }}",
-                "button_text": {"modify": "{{ 'Modify'|trans }}","cancel": "{{ 'Cancel'|trans }}","apply": "{{ 'Apply'|trans }}","select_all": "{{ 'Select all'|trans }}","deselect_all": "{{ 'Deselect all'|trans }}"}
+                    "app_youtube_video_by_tag": "{{ path('app_youtube_video_by_tag') }}",
+                    "tags": {{ tagArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+                    "text": {{ textArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
                 }
             </div>
         </div>

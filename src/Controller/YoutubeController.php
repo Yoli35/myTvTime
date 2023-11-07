@@ -208,6 +208,10 @@ class YoutubeController extends AbstractController
                 "apply" => $this->translator->trans("Apply"),
                 "select_all" => $this->translator->trans("Select all"),
                 "deselect_all" => $this->translator->trans("Deselect all"),
+                "modify_tag_list" => $this->translator->trans("Modify tag list"),
+                "add_video_to_tag" => $this->translator->trans("Add video to tag"),
+                "add_video_to_tags" => $this->translator->trans("Add video to tags"),
+                "delete" => $this->translator->trans("Delete selected videos"),
             ],
             'breadcrumb' => [
                 ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube')],
