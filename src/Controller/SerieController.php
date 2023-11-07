@@ -455,6 +455,16 @@ class SerieController extends AbstractController
             $images = $this->getNothingImages();
             $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage()??$request->getLocale(), 20,1);
             $seriesToWatch = array_map(function ($series) use ($imgConfig) {
+                if ($series['time_shifted']) {
+                    $airDate = $series['air_date'];
+                    $date = $this->dateService->newDate($series['air_date'], 'Europe/Paris', true);
+                    $series['air_date'] = $date->modify('+1 day')->format('Y-m-d');
+//                    dump([
+//                        'series' => $series['name'],
+//                        'air date' => $airDate,
+//                        'new date' => $date->format('Y-m-d')
+//                    ]);
+                }
                 $this->savePoster($series['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
                 $series['poster_path'] = $this->fullUrl("poster", 3, $series['poster_path'], "no_poster_dark.png", $imgConfig);
                 return $series;

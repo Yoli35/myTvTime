@@ -313,10 +313,10 @@ class SerieViewingRepository extends ServiceEntityRepository
 
     public function getSeriesToWatch($userId, $locale, $perPage, $page): array
     {
-        $sql = "SELECT sv.`id` as id, s.`id` as serie_id, s.`name` as name, s.`original_name` as original_name, s.`poster_path`, sln.`name` as localized_name, sev.`season_number` as season_number, ev.`episode_number` as episode_number, ev.`air_date` as air_date "
+        $sql = "SELECT sv.`id` as id, s.`id` as serie_id, s.`name` as name, s.`original_name` as original_name, s.`poster_path`, sln.`name` as localized_name, sev.`season_number` as season_number, ev.`episode_number` as episode_number, ev.`air_date` as air_date, sv.`time_shifted` as time_shifted "
             . "FROM `serie_viewing` sv "
             . "INNER JOIN `user` u ON u.`id`=sv.`user_id` "
-            . "INNER JOIN `episode_viewing` ev ON ev.`id`=sv.`next_episode_to_watch_id` AND ev.`air_date`<=NOW() "
+            . "INNER JOIN `episode_viewing` ev ON ev.`id`=sv.`next_episode_to_watch_id` AND ((ev.`air_date`<=NOW() AND sv.`time_shifted`=0) OR (ev.`air_date`<=DATE_SUB(NOW(), INTERVAL 1 DAY) AND sv.`time_shifted`=1)) "
             . "INNER JOIN `season_viewing` sev ON sev.`id`=ev.`season_id` "
             . "LEFT JOIN `serie` s ON s.`id`=sv.`serie_id` "
             . "LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='" . $locale . "' "
