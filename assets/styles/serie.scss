@@ -2490,28 +2490,40 @@
                         }
                     }
 
+                    &:has(.networks) {
+                        width: 100%;
+                    }
+
                     .fact-label {
                         font-weight: 400;
                     }
 
-                    .fact-content {
-                        font-weight: 100;
-                        //margin-bottom: .25rem;
-                        //padding-left: .5rem;
+                    > .networks {
+                        align-items: center;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: .25rem;
+                        justify-content: center;
 
-                        .frame {
-                            background-color: var(--gradient-ardoise-90);
-                            border-radius: .25rem;
-                            display: inline-block;
-                            max-height: 4rem;
-                            padding: .25rem .5rem;
+                        .network-detail {
+                            font-weight: 100;
+                            //margin-bottom: .25rem;
+                            //padding-left: .5rem;
 
-                            &:hover {
-                                background-color: var(--gradient-ardoise-10);
-                            }
+                            .frame {
+                                background-color: var(--gradient-ardoise-90);
+                                border-radius: .25rem;
+                                display: inline-block;
+                                max-height: 4rem;
+                                padding: .25rem .5rem;
 
-                            img {
-                                max-height: 3.5rem;
+                                &:hover {
+                                    background-color: var(--gradient-ardoise-10);
+                                }
+
+                                img {
+                                    max-height: 3.5rem;
+                                }
                             }
                         }
                     }

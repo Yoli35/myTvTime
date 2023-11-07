@@ -49,17 +49,19 @@
     {% if serie.networks|length %}
         <div class="fact">
             <div class="fact-label">{{ (serie.networks|length>1?'Networks':'Network')|trans }}</div>
-            {% for network in serie.networks %}
-                <div class="fact-content">
-                    {% if network.logo_path %}
+            <div class="networks">
+                {% for network in serie.networks %}
+                    <div class="network-detail">
                         <div class="frame">
-                            <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
+                            {% if network.logo_path %}
+                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
+                            {% else %}
+                                {{ network.name }}
+                            {% endif %}
                         </div>
-                    {% else %}
-                        {{ network.name }}
-                    {% endif %}
-                </div>
-            {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
 

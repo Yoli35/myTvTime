@@ -198,9 +198,7 @@ class SerieController extends AbstractController
             $countries[$country] = Countries::getName($country);
         }
         asort($countries, SORT_LOCALE_STRING);
-        $countries = array_merge(["all" => $this->translator->trans("All countries")], $countries);
-
-        return $countries;
+        return array_merge(["all" => $this->translator->trans("All countries")], $countries);
     }
 
     public function cookies($request, $backFromDetail, $somethingChanged, $perPage, $sort, $order): array
@@ -453,7 +451,7 @@ class SerieController extends AbstractController
         } else {
             $backdrop = null;
             $images = $this->getNothingImages();
-            $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage()??$request->getLocale(), 20,1);
+            $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale(), 20, 1);
             $seriesToWatch = array_map(function ($series) use ($imgConfig) {
                 if ($series['time_shifted']) {
                     $airDate = $series['air_date'];
@@ -1885,10 +1883,17 @@ class SerieController extends AbstractController
             $temp[$provider['provider_id']] = $provider;
         }
         $allWatchProviders = $temp;
-//        dump($allWatchProviders);
+        $allWatchProviders[99999] = [
+            "display_priorities" => [],
+            "display_priority" => 61,
+            "logo_path" => "/images/series/yggland.png",
+            "provider_name" => "yggtorrent",
+            "provider_id" => 99999,
+        ];
+        dump($allWatchProviders);
 
         // Breadcrumb
-        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from==self::SERIES_FROM_COUNTRY?$query:null);
+        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
 
 //        dump([
 //            'env' => $_ENV['APP_ENV'],
@@ -2002,7 +2007,7 @@ class SerieController extends AbstractController
         if ($serie) {
             $breadcrumb[] = [
                 'name' => $serie['localized_name'] ?? $serie['name'],
-                'url' => $this->generateUrl('app_series_' . $kind, ['id' => $id]) . '?from=' . $from . ($from=== self::SERIES_FROM_COUNTRY ? '&c=' . $country : ''),
+                'url' => $this->generateUrl('app_series_' . $kind, ['id' => $id]) . '?from=' . $from . ($from === self::SERIES_FROM_COUNTRY ? '&c=' . $country : ''),
             ];
         }
         if ($season) {
