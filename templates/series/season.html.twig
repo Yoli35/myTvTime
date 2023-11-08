@@ -127,7 +127,13 @@
                                 <div class="episode">
                                     <div class="still">
                                         <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
-                                        <div class="episode-name">{{ episode.name }}</div>
+                                        <div class="episode-name">
+                                            {% if episode.viewing is defined and episode.viewing.substituteName is not null %}
+                                                {{ episode.viewing.substituteName }}
+                                            {% else %}
+                                                {{ episode.name }}
+                                            {% endif %}
+                                        </div>
                                         <div class="episode-number{% if episode.viewing is defined and episode.viewing.viewedAt %} viewed{% endif %}">
                                             <span>{{ episode.episode_number }}</span>
                                         </div>

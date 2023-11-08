@@ -2013,7 +2013,7 @@ class SerieController extends AbstractController
         if ($season) {
             $breadcrumb[] = [
                 'name' => $this->translator->trans('Season') . ' ' . $season['season_number'],
-                'url' => $this->generateUrl('app_series_tmdb_season', ['id' => $serie['id'], 'seasonNumber' => $season['season_number']]) . '?from=' . $from,
+                'url' => $this->generateUrl('app_series_tmdb_season', ['id' => $serie['id'], 'seasonNumber' => $season['season_number']]) . '?from=' . $from . ($from === self::SERIES_FROM_COUNTRY ? '&c=' . $country : ''),
             ];
         }
         if ($episode) {
