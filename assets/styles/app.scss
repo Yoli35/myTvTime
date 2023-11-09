@@ -252,6 +252,8 @@ body {
             height: 0;
             opacity: 0;
             margin: 0 auto;
+            padding-block: 0;
+            padding-inline: 0;
             width: 100%;
         }
     }
@@ -271,7 +273,9 @@ main {
 #settings-dialog,
 #multi-people-dialog,
 #localize-dialog,
-#watch-provider-dialog {
+#watch-provider-dialog,
+#modify-tags-dialog,
+#delete-video-dialog {
     backdrop-filter: blur(.25rem);
     -webkit-backdrop-filter: blur(.25rem);
     background-color: var(--gradient-grey-10-alpha-75);
@@ -343,10 +347,13 @@ main {
         }
     }
 }
+
 #search-dialog::backdrop,
 #multi-people-dialog::backdrop,
 #localize-dialog::backdrop,
-#watch-provider-dialog {
+#watch-provider-dialog::backdrop,
+#modify-tags-dialog::backdrop,
+#delete-video-dialog::backdrop {
     background-color: #000000af; //var(--gradient-grey-10-alpha-75);
 }
 
@@ -820,6 +827,7 @@ nav.active {
 
         a {
             color: var(--gradient-ardoise-10);
+
             &:hover {
                 background-color: var(--gradient-ardoise-40);
                 color: var(--gradient-ardoise-90);

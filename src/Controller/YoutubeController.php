@@ -42,6 +42,7 @@ class YoutubeController extends AbstractController
         private readonly DateService               $dateService,
         private readonly SettingsRepository        $settingsRepository,
         private readonly TranslatorInterface       $translator,
+        private readonly UserRepository            $userRepository,
         private readonly YoutubeChannelRepository  $channelRepository,
         private readonly YoutubeVideoRepository    $videoRepository,
         private readonly YoutubeVideoTagRepository $videoTagRepository,
@@ -212,6 +213,8 @@ class YoutubeController extends AbstractController
                 "add_video_to_tag" => $this->translator->trans("Add video to tag"),
                 "add_video_to_tags" => $this->translator->trans("Add video to tags"),
                 "delete" => $this->translator->trans("Delete selected videos"),
+                "video" => $this->translator->trans("video"),
+                "videos" => $this->translator->trans("videos"),
             ],
             'breadcrumb' => [
                 ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube')],
@@ -329,6 +332,28 @@ class YoutubeController extends AbstractController
         $userRepository->save($user, true);
 
         return $this->json([$video->getTitle()]);
+    }
+
+    #[Route('/{_locale}/youtube/video/list/delete/', name: 'app_youtube_video_list_delete', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function removeVideoList(Request $request): JsonResponse
+    {
+        //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $list = explode(',', $request->query->get('list'));
+        $count = count($list);
+
+        foreach ($list as $id) {
+            $video = $this->videoRepository->find($id);
+            $user->removeYoutubeVideo($video);
+        }
+        $this->userRepository->save($user, true);
+
+        return $this->json([
+            'success' => true,
+            'message' => $count . " " . $this->translator->trans($count>1 ?'videos deleted!':'video deleted!'),
+        ]);
     }
 
     #[Route('/{_locale}/youtube/add/video', name: 'app_youtube_add_video', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]

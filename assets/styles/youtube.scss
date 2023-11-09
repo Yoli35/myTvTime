@@ -673,16 +673,19 @@
                 }
 
                 .tag-list {
+                    border-radius: .25em;
+                    box-shadow: 0 .5rem 1em var(--gradient-ardoise-10-alpha-50);
                     display: none;
-                    left: 0;
+                    left: 6.125rem;
                     max-height: 10em;
                     opacity: 0;
                     overflow-y: auto;
                     position: absolute;
                     right: 0;
                     top: 100%;
-                    transition: opacity 100ms ease-in-out;
-                    width: 20rem;
+                    transition: opacity 50ms ease-in-out;
+                    width: 14rem;
+                    z-index: 1;
 
                     &.visible {
                         display: block;
@@ -693,13 +696,16 @@
                     }
 
                     .tag-item {
-                        background-color: var(--gradient-ardoise-30);
+                        background-color: var(--gradient-ardoise-40);
                         color: var(--gradient-ardoise-70);
                         cursor: pointer;
+                        overflow: hidden;
                         padding: .125rem 1rem;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
 
                         &:hover {
-                            background-color: var(--gradient-ardoise-40);
+                            background-color: var(--gradient-ardoise-50);
                             color: var(--gradient-ardoise-80);
                         }
 
@@ -839,6 +845,63 @@
             @include flex-100(stretch, center);
             gap: 1em;
             flex-wrap: wrap;
+
+            .yt-result {
+                transition: scale 500ms ease-in-out;
+
+                &.deleted {
+                    scale: 0;
+                }
+            }
+        }
+    }
+}
+
+#delete-video-dialog {
+    border-radius: .5rem;
+    margin-block: auto;
+    margin-inline: auto;
+    padding-block: 1rem;
+    padding-inline: 2rem;
+
+    .content {
+        padding: 0;
+
+        .dialog-title {
+            font-size: 1.5rem;
+            padding-block-end: 1rem;
+        }
+
+        form {
+            flex-direction: column;
+
+            .video-list {
+                display: flex;
+                flex-direction: column;
+                gap: .125rem;
+
+                .video-item {
+                    border-radius: .125rem;
+                    color: var(--gradient-ardoise-90);
+                    padding-inline: 1rem;
+
+                    &:nth-child(even) {
+                    background-color: var(--gradient-ardoise-40);
+                }
+
+                    &:nth-child(odd) {
+                    background-color: var(--gradient-ardoise-30);
+                }
+                }
+            }
+
+            menu {
+                display: flex;
+                gap: 1rem;
+                justify-content: end;
+                list-style: none;
+                width: 100%;
+            }
         }
     }
 }

@@ -2,41 +2,83 @@ import {ToolTips} from "./ToolTips.js";
 let gThis;
 
 export class YoutubeSearch {
+
+    /**
+     * @typedef Tag
+     * @type {Object}
+     * @property {number} id
+     * @property {string} label
+     * @property {boolean} selected
+     */
+
+    /**
+     * @typedef Translation
+     * @type {Object}
+     * @property {string} modify
+     * @property {string} cancel
+     * @property {string} apply
+     * @property {string} select_all
+     * @property {string} deselect_all
+     * @property {string} modify_tag_list
+     * @property {string} add_video_to_tag
+     * @property {string} add_video_to_tags
+     * @property {string} delete
+     * @property {string} video
+     * @property {string} videos
+     */
+
+    /**
+     * @typedef Globs
+     * @type {Object}
+     * @property {string} app_youtube_video_by_tag
+     * @property {string} app_youtube_video_list_delete
+     * @property {Array.<Tag>} tags
+     * @property {Translation} text
+     */
+
+    /**
+     * @param {Globs} globs
+     */
     constructor(globs) {
         gThis = this;
         this.tags = globs.tags;
         this.app_youtube_video_by_tag = globs.app_youtube_video_by_tag;
+        this.app_youtube_video_list_delete = globs.app_youtube_video_list_delete;
         this.text = globs.text;
         this.letterRatios = [];
         this.toolTips = new ToolTips();
+        this.xhr = new XMLHttpRequest();
 
         this.init();
     }
 
     init() {
         this.initHeader();
-        this.autocomplete();
+        this.initDialogs();
+        this.autocomplete("#search-tag");
         this.toolTips.init();
 
         document.querySelector(".apply").addEventListener("click", this.applyTags);
     }
 
-    autocomplete() {
+    autocomplete(inputTag) {
         /** @type {HTMLInputElement} */
-        const searchTag = document.querySelector("#search-tag");
+        const searchTag = document.querySelector(inputTag);
+        const field = searchTag.closest(".field");
+        // const selector = "input[id=" + inputTag + "]";
         searchTag.focus();
 
-        this.createTagList();
+        this.createTagList(inputTag);
 
         searchTag.addEventListener("input", () => {
-            const tagList = document.querySelector(".tag-list");
+            const tagList = field.querySelector(".tag-list");
             let value = gThis.removeAccent(searchTag.value);
             if (!value.length) {
-                gThis.hideList();
+                gThis.hideList(tagList);
                 return;
             }
             if (!tagList.classList.contains("visible")) {
-                gThis.showList();
+                gThis.showList(tagList);
             }
             const tagItems = tagList.querySelectorAll(".tag-item");
             const activeTag = tagList.querySelector(".tag-item.active");
@@ -52,17 +94,17 @@ export class YoutubeSearch {
         });
 
         searchTag.addEventListener("keydown", function (e) {
-            const tagList = document.querySelector(".tag-list");
+            const tagList = field.querySelector(".tag-list");
             if (e.keyCode === 40) { // arrow DOWN key
                 e.preventDefault();
                 if (!tagList.classList.contains("visible")) {
-                    gThis.showList();
+                    gThis.showList(tagList);
                 }
                 gThis.setActiveTagItem('next');
             } else if (e.keyCode === 38) { // arrow UP key
                 e.preventDefault();
                 if (!tagList.classList.contains("visible")) {
-                    gThis.showList();
+                    gThis.showList(tagList);
                 }
                 gThis.setActiveTagItem('previous');
             } else if (e.keyCode === 13) { // the ENTER key
@@ -71,20 +113,20 @@ export class YoutubeSearch {
                 if (activeTag) {
                     activeTag.click();
                 } else {
-                    let tags = document.querySelector(".tags").querySelectorAll(".tag");
+                    let tags = field.parentElement.querySelector(".tags").querySelectorAll(".tag");
                     if (tags.length) gThis.applyTags();
                 }
             }
         });
 
         document.addEventListener("click", (e) => {
-            const tagList = document.querySelector(".tag-list");
-            if (e.target !== tagList) this.hideList();
+            const tagList = field.querySelector(".tag-list");
+            if (e.target !== tagList) this.hideList(tagList);
         });
     }
 
-    createTagList() {
-        const searchTag = document.querySelector("input[id=search-tag]");
+    createTagList(inputElement) {
+        const searchTag = document.querySelector(inputElement);
         const field = searchTag.closest(".field");
         const tagList = document.createElement("div");
         tagList.classList.add("tag-list");
@@ -101,8 +143,7 @@ export class YoutubeSearch {
         });
     }
 
-    showList() {
-        const tagList = document.querySelector(".tag-list");
+    showList(tagList) {
         const tagItems = tagList.querySelectorAll(".tag-item");
         tagItems.forEach((tagItem) => {
             const id = parseInt(tagItem.getAttribute("data-id"));
@@ -120,8 +161,7 @@ export class YoutubeSearch {
         }, 0);
     }
 
-    hideList() {
-        const tagList = document.querySelector(".tag-list");
+    hideList(tagList) {
         tagList.classList.remove("show");
         setTimeout(() => {
             tagList.classList.remove("visible");
@@ -208,7 +248,7 @@ export class YoutubeSearch {
             list += tag.getAttribute("data-id");
         });
         // console.log(list);
-        const xhr = new XMLHttpRequest();
+        const xhr = gThis.xhr;
         xhr.onload = function () {
             /** @var {{"block": string, "videoCount": number}} data */
             const data = JSON.parse(this.response);
@@ -257,7 +297,7 @@ export class YoutubeSearch {
         deleteSelection.setAttribute("id", "delete-tag-tool");
         deleteSelection.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
         deleteSelection.setAttribute("data-title", gThis.text.delete);
-        deleteSelection.addEventListener("click", gThis.deleteTagSelection);
+        deleteSelection.addEventListener("click", gThis.openDeleteDialog);
         modifyTools.insertBefore(deleteSelection, deselectAllButton);
         gThis.toolTips.initElement(deleteSelection);
 
@@ -265,7 +305,7 @@ export class YoutubeSearch {
         addTagSelection.setAttribute("id", "add-tag-tool");
         addTagSelection.innerHTML = '<i class="fa-solid fa-plus"></i>';
         addTagSelection.setAttribute("data-title", gThis.text.add_video_to_tags);
-        addTagSelection.addEventListener("click", gThis.addTagSelection);
+        addTagSelection.addEventListener("click", gThis.addVideoSelection);
         modifyTools.insertBefore(addTagSelection, deleteSelection);
         gThis.toolTips.initElement(addTagSelection);
 
@@ -273,7 +313,7 @@ export class YoutubeSearch {
         modifyTagSelection.setAttribute("id", "modify-tag-tool");
         modifyTagSelection.innerHTML = '<i class="fa-solid fa-pen"></i>';
         modifyTagSelection.setAttribute("data-title", gThis.text.modify_tag_list);
-        modifyTagSelection.addEventListener("click", gThis.modifyTagSelection);
+        modifyTagSelection.addEventListener("click", gThis.openModifyTagsDialog);
         modifyTools.insertBefore(modifyTagSelection, addTagSelection);
         gThis.toolTips.initElement(modifyTagSelection);
 
@@ -303,7 +343,6 @@ export class YoutubeSearch {
     selectAllVideo() {
         const results = document.querySelectorAll(".yt-result");
         results.forEach((result) => {
-            const details = result.querySelector(".details");
             const selectVideoDiv = result.querySelector(".select-video");
             selectVideoDiv.classList.add("selected");
         });
@@ -313,7 +352,6 @@ export class YoutubeSearch {
     deselectAllVideo() {
         const results = document.querySelectorAll(".yt-result");
         results.forEach((result) => {
-            const details = result.querySelector(".details");
             const selectVideoDiv = result.querySelector(".select-video");
             selectVideoDiv.classList.remove("selected");
         });
@@ -344,16 +382,99 @@ export class YoutubeSearch {
         });
     }
 
-    deleteTagSelection() {
+    initDialogs() {
+        this.initModifyTagsDialog();
+        this.initDeleteDialog();
+    }
+
+    initDeleteDialog() {
+        const dialog = document.querySelector('#delete-video-dialog');
+
+        dialog.addEventListener('close', () => {
+            document.querySelector("body").classList.remove("frozen");
+            if (dialog.returnValue === "delete") {
+                const videoSelectionButton = document.querySelectorAll(".select-video.selected");
+                let ids = "";
+
+                videoSelectionButton.forEach((button)=>{
+                    const ytResult = button.closest(".yt-result");
+                    if (ids.length) ids += ',';
+                    ids += ytResult.getAttribute("data-id");
+                });
+
+                const xhr = gThis.xhr;
+                xhr.onload = function () {
+                    const result = JSON.parse(this.response);
+                    if (result.success) {
+                        const flashes = document.querySelector(".flash-messages");
+                        const flashMessage = document.createElement('div');
+                        flashMessage.classList.add("flash-message", "success");
+                        flashMessage.innerText = result.message;
+                        const close = document.createElement("div");
+                        close.classList.add("close");
+                        const i = document.createElement("i");
+                        i.classList.add("fa-solid", "fa-circle-xmark");
+                        close.appendChild(i);
+                        close.addEventListener("click", () => {flashes.removeChild(flashMessage)});
+                        flashMessage.appendChild(close);
+                        flashes.appendChild(flashMessage);
+
+                        const wrapper = document.querySelector(".wrapper");
+                        videoSelectionButton.forEach((button)=>{
+                            const ytResult = button.closest(".yt-result");
+                            ytResult.classList.add("deleted");
+                            setTimeout(()=>{ wrapper.removeChild(ytResult);}, 500);
+                        });
+                    }
+                }
+                xhr.open("GET", gThis.app_youtube_video_list_delete + '?list=' + ids);
+                xhr.send();
+            }
+        });
+    }
+
+    openDeleteDialog() {
+        const dialog = document.querySelector('#delete-video-dialog');
+        const videoList = dialog.querySelector(".video-list");
+        videoList.innerHTML = "";
+        const videoSelectionButton = document.querySelectorAll(".select-video.selected");
+
+        dialog.querySelector(".dialog-title").innerText = videoSelectionButton.length + " video" + (videoSelectionButton.length>1 ? "s":"");
+        videoSelectionButton.forEach((button)=>{
+            const result = button.closest(".yt-result");
+            const channel = result.querySelector(".channel").querySelector("img").getAttribute("alt");
+            const title = result.querySelector(".infos").querySelector(".info").innerText;
+            const item = document.createElement("div");
+            item.classList.add("video-item");
+            item.appendChild(document.createTextNode(channel + " — " + title));
+            videoList.appendChild(item);
+        });
+
+        document.querySelector("body").classList.add("frozen");
+        dialog.showModal();
+    }
+
+    addVideoSelection() {
 
     }
 
-    addTagSelection() {
+    initModifyTagsDialog() {
+        const dialog = document.querySelector('#modify-tags-dialog');
 
+        dialog.addEventListener('close', () => {
+            document.querySelector("body").classList.remove("frozen");
+            if (dialog.returnValue === "deleteVideo") {
+
+            }
+        });
     }
 
-    modifyTagSelection() {
+    openModifyTagsDialog() {
+        const dialog = document.querySelector('#modify-tags-dialog');
 
+        gThis.autocomplete("#search-tag-to-modify-list");
+        document.querySelector("body").classList.add("frozen");
+        dialog.showModal();
     }
 
     cancelSelection(e) {

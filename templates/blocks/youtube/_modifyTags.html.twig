@@ -1,0 +1,21 @@
+<dialog id="modify-tags-dialog">
+    <div class="content" role="search">
+        <div class="dialog-title">{{ 'Modify tag list'|trans }}</div>
+        <form method="dialog">
+            <input type="hidden" name="action" value="applyModifications"/>
+            <div class="field">
+                <label class="label" for="search-tag-to-modify-list">{{ 'Tags'|trans }}&nbsp;:</label>
+                <input id="search-tag-to-modify-list" type="search" value="" placeholder="{{ 'Start taping…'|trans }}">
+            </div>
+            <div class="tags"></div>
+            <menu>
+                <li>
+                    <button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button>
+                </li>
+                <li>
+                    <button class="btn btn-primary" value="select">{{ 'Apply'|trans }}</button>
+                </li>
+            </menu>
+        </form>
+    </div>
+</dialog>

@@ -1,0 +1,18 @@
+<dialog id="delete-video-dialog">
+    <div class="content">
+        <div class="dialog-title"></div>
+        <form method="dialog">
+            <input type="hidden" name="action" value="deleteVideo"/>
+            <div class="video-list">
+            </div>
+            <menu>
+                <li>
+                    <button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button>
+                </li>
+                <li>
+                    <button class="btn btn-primary" value="delete">{{ 'Delete'|trans }}</button>
+                </li>
+            </menu>
+        </form>
+    </div>
+</dialog>
