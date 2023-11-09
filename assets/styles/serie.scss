@@ -1813,6 +1813,11 @@
                                 padding: .5rem;
                                 width: calc(100% - 10rem);
 
+                                h4 {
+                                    color: var(--gradient-ardoise-60);
+                                    font-size: 3rem;
+                                }
+
                                 div {
                                     color: var(--mmt-body-color);
                                     font-weight: 100;

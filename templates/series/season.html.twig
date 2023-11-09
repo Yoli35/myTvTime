@@ -124,158 +124,160 @@
                                 {% set now = 'now'|date("Y-m-d") %}
                                 {% set upcoming = episode.air_date > now %}
                                 {% set past = episode.air_date < now %}
-                                <div class="episode">
-                                    <div class="still">
-                                        <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
-                                        <div class="episode-name">
-                                            {% if episode.viewing is defined and episode.viewing.substituteName is not null %}
-                                                {{ episode.viewing.substituteName }}
-                                            {% else %}
-                                                {{ episode.name }}
-                                            {% endif %}
-                                        </div>
-                                        <div class="episode-number{% if episode.viewing is defined and episode.viewing.viewedAt %} viewed{% endif %}">
-                                            <span>{{ episode.episode_number }}</span>
-                                        </div>
-                                        {% if episode.air_date %}
-                                            <div class="episode-air-date">
-                                                {{ episode.air_date|format_date('short') }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="infos">
-                                        <h4>
-                                            {{ 'Episode'|trans }} {{ episode.episode_number }} :
-                                            {% if episode.viewing is defined and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/' %}
-                                                {% if episode.viewing.substituteName is not null %}
+                                {% if not upcoming %}
+                                    <div class="episode">
+                                        <div class="still">
+                                            <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
+                                            <div class="episode-name">
+                                                {% if episode.viewing is defined and episode.viewing.substituteName is not null %}
                                                     {{ episode.viewing.substituteName }}
                                                 {% else %}
-                                                    {{ episode.name }} ({{ 'TBA'|trans }})
+                                                    {{ episode.name }}
                                                 {% endif %}
-                                            {% else %}
-                                                {{ episode.name }}
+                                            </div>
+                                            <div class="episode-number{% if episode.viewing is defined and episode.viewing.viewedAt %} viewed{% endif %}">
+                                                <span>{{ episode.episode_number }}</span>
+                                            </div>
+                                            {% if episode.air_date %}
+                                                <div class="episode-air-date">
+                                                    {{ episode.air_date|format_date('short') }}
+                                                </div>
                                             {% endif %}
-                                        </h4>
-                                        {% if episode.viewing is defined
-                                            and past
-                                            and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
-                                            and episode.viewing.substituteName is null %}
-                                            <div class="substituteName">
-                                                <label>
-                                                    {{ 'Substitute name'|trans }} :
-                                                    <input type="text" data-id="{{ episode.viewing.id }}">
-                                                </label>
-                                                <button class="btn btn-primary btn-sm"
-                                                        data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
-                                            </div>
-                                        {% endif %}
-
-                                        {% if episode.overview|length %}
-                                            <div class="info">{{ episode.overview }}</div>
-                                        {% endif %}
-                                        {% if episode.runtime %}
-                                            <div class="info">{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ episode.runtime>1 ? 'minutes':'minute' }}</div>
-                                        {% else %}
-                                            <div class="info">
-                                                <label for="input-duration-{{ episode.episode_number }}">{{ 'Runtime'|trans }} :
-                                                    <input type="number" id="input-duration-{{ episode.episode_number }}"
-                                                           data-show-id="{{ episode.show_id }}"
-                                                           data-episode-number="{{ episode.episode_number }}"
-                                                           data-season-number="{{ season.season_number }}"
-                                                           min="1" max="999" step="1" value="{{ episode.runtime }}">
-                                                    {{ 'minutes'|trans }}
-                                                </label>
-                                            </div>
-                                        {% endif %}
-                                        {% if episode.air_date %}
-                                            <div class="info">
-                                                {% if past %}
-                                                    {{ 'This episode aired from episode_air_date.'|trans({"episode_air_date": (episode.air_date|format_date('full'))}) }}
-                                                {% elseif upcoming %}
-                                                    {{ 'This episode will be aired from episode_air_date.'|trans({"episode_air_date": (episode.air_date|format_date('full'))}) }}
+                                        </div>
+                                        <div class="infos">
+                                            <h4>
+                                                {{ 'Episode'|trans }} {{ episode.episode_number }} :
+                                                {% if episode.viewing is defined and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/' %}
+                                                    {% if episode.viewing.substituteName is not null %}
+                                                        {{ episode.viewing.substituteName }}
+                                                    {% else %}
+                                                        {{ episode.name }} ({{ 'TBA'|trans }})
+                                                    {% endif %}
                                                 {% else %}
-                                                    {{ 'This episode is aired from today.'|trans }}
+                                                    {{ episode.name }}
                                                 {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="episode-viewing">
-                                        {% if episode.viewing is defined %}
-                                            {% set viewed = episode.viewing.viewedAt %}
-                                            <div class="view" data-id="{{ episode.viewing.id }}">
-                                                <div class="view-value">
-                                                    {% if episode.viewing.viewedAt %}
-                                                        <i class="fa-solid fa-check"></i>
+                                            </h4>
+                                            {% if episode.viewing is defined
+                                                and past
+                                                and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
+                                                and episode.viewing.substituteName is null %}
+                                                <div class="substituteName">
+                                                    <label>
+                                                        {{ 'Substitute name'|trans }} :
+                                                        <input type="text" data-id="{{ episode.viewing.id }}">
+                                                    </label>
+                                                    <button class="btn btn-primary btn-sm"
+                                                            data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
+                                                </div>
+                                            {% endif %}
+
+                                            {% if episode.overview|length %}
+                                                <div class="info">{{ episode.overview }}</div>
+                                            {% endif %}
+                                            {% if episode.runtime %}
+                                                <div class="info">{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ episode.runtime>1 ? 'minutes':'minute' }}</div>
+                                            {% else %}
+                                                <div class="info">
+                                                    <label for="input-duration-{{ episode.episode_number }}">{{ 'Runtime'|trans }} :
+                                                        <input type="number" id="input-duration-{{ episode.episode_number }}"
+                                                               data-show-id="{{ episode.show_id }}"
+                                                               data-episode-number="{{ episode.episode_number }}"
+                                                               data-season-number="{{ season.season_number }}"
+                                                               min="1" max="999" step="1" value="{{ episode.runtime }}">
+                                                        {{ 'minutes'|trans }}
+                                                    </label>
+                                                </div>
+                                            {% endif %}
+                                            {% if episode.air_date %}
+                                                <div class="info">
+                                                    {% if past %}
+                                                        {{ 'This episode aired from episode_air_date.'|trans({"episode_air_date": (episode.air_date|format_date('full'))}) }}
+                                                    {% elseif upcoming %}
+                                                        {{ 'This episode will be aired from episode_air_date.'|trans({"episode_air_date": (episode.air_date|format_date('full'))}) }}
                                                     {% else %}
-                                                        <i class="fa-solid fa-plus"></i>
+                                                        {{ 'This episode is aired from today.'|trans }}
                                                     {% endif %}
                                                 </div>
-                                                <div class="view-provider{% if viewed %} show{% endif %}">
-                                                    {% if episode.viewing.networkType == 'flatrate' and episode.viewing.networkId %}
-                                                        <div class="provider" data-id="{{ episode.viewing.networkId }}">
-                                                            <img src="{{ allWatchProviders[episode.viewing.networkId].logo_path }}"
-                                                                 alt="{{ allWatchProviders[episode.viewing.networkId].provider_name }}"
-                                                                 title="{{ allWatchProviders[episode.viewing.networkId].provider_name }}">
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="provider other" data-id="-1"></div>
-                                                    {% endif %}
-                                                    <div class="view-providers">
-                                                        {% if watchProviders %}
-                                                            {% if watchProviders is defined %}
-                                                                {% for provider in watchProviders %}
-                                                                    <div class="provider" data-id="{{ provider.provider_id }}">
-                                                                        <img src="{{ provider.logo_path }}" alt="{{ provider.provider_name }}" title="{{ provider.provider_name }}">
-                                                                    </div>
-                                                                {% endfor %}
-                                                            {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="episode-viewing">
+                                            {% if episode.viewing is defined %}
+                                                {% set viewed = episode.viewing.viewedAt %}
+                                                <div class="view" data-id="{{ episode.viewing.id }}">
+                                                    <div class="view-value">
+                                                        {% if episode.viewing.viewedAt %}
+                                                            <i class="fa-solid fa-check"></i>
+                                                        {% else %}
+                                                            <i class="fa-solid fa-plus"></i>
                                                         {% endif %}
-                                                        <div class="provider other" data-id="-1"></div>
                                                     </div>
-                                                </div>
-                                                <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if viewed %} show{% endif %}"
-                                                     data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
+                                                    <div class="view-provider{% if viewed %} show{% endif %}">
+                                                        {% if episode.viewing.networkType == 'flatrate' and episode.viewing.networkId %}
+                                                            <div class="provider" data-id="{{ episode.viewing.networkId }}">
+                                                                <img src="{{ allWatchProviders[episode.viewing.networkId].logo_path }}"
+                                                                     alt="{{ allWatchProviders[episode.viewing.networkId].provider_name }}"
+                                                                     title="{{ allWatchProviders[episode.viewing.networkId].provider_name }}">
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="provider other" data-id="-1"></div>
+                                                        {% endif %}
+                                                        <div class="view-providers">
+                                                            {% if watchProviders %}
+                                                                {% if watchProviders is defined %}
+                                                                    {% for provider in watchProviders %}
+                                                                        <div class="provider" data-id="{{ provider.provider_id }}">
+                                                                            <img src="{{ provider.logo_path }}" alt="{{ provider.provider_name }}" title="{{ provider.provider_name }}">
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                            <div class="provider other" data-id="-1"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if viewed %} show{% endif %}"
+                                                         data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
                                                     <span>
                                                         {% if episode.viewing.deviceType is null %}?{% endif %}
                                                         {% if episode.viewing.deviceType == 'tv' %}TV{% endif %}
                                                     </span>
-                                                    <div class="view-devices">
-                                                        <div class="device desktop" data-device="desktop"></div>
-                                                        <div class="device laptop" data-device="laptop"></div>
-                                                        <div class="device tablet" data-device="tablet"></div>
-                                                        <div class="device phone" data-device="phone"></div>
-                                                        <div class="device tv" data-device="tv"></div>
+                                                        <div class="view-devices">
+                                                            <div class="device desktop" data-device="desktop"></div>
+                                                            <div class="device laptop" data-device="laptop"></div>
+                                                            <div class="device tablet" data-device="tablet"></div>
+                                                            <div class="device phone" data-device="phone"></div>
+                                                            <div class="device tv" data-device="tv"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="vote{% if viewed %} show{% endif %}"
-                                                 data-id="{{ episode.viewing.id }}"
-                                                 data-number="{{ episode.episode_number }}">
-                                                <div class="vote-graduation{% if episode.viewing.vote == 10 %} active{% endif %}"
-                                                     data-title="10" data-value="10"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=9 %} active{% endif %}"
-                                                     data-title="9" data-value="9"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=8 %} active{% endif %}"
-                                                     data-title="8" data-value="8"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=7 %} active{% endif %}"
-                                                     data-title="7" data-value="7"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=6 %} active{% endif %}"
-                                                     data-title="6" data-value="6"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=5 %} active{% endif %}"
-                                                     data-title="5" data-value="5"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=4 %} active{% endif %}"
-                                                     data-title="4" data-value="4"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=3 %} active{% endif %}"
-                                                     data-title="3" data-value="3"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=2 %} active{% endif %}"
-                                                     data-title="2" data-value="2"></div>
-                                                <div class="vote-graduation{% if episode.viewing.vote >=1 %} active{% endif %}"
-                                                     data-title="1" data-value="1"></div>
-                                                <div class="vote-value">{% if episode.viewing.vote %}{{ episode.viewing.vote }} / 10{% endif %}</div>
-                                            </div>
-                                        {% endif %}
+                                                <div class="vote{% if viewed %} show{% endif %}"
+                                                     data-id="{{ episode.viewing.id }}"
+                                                     data-number="{{ episode.episode_number }}">
+                                                    <div class="vote-graduation{% if episode.viewing.vote == 10 %} active{% endif %}"
+                                                         data-title="10" data-value="10"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=9 %} active{% endif %}"
+                                                         data-title="9" data-value="9"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=8 %} active{% endif %}"
+                                                         data-title="8" data-value="8"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=7 %} active{% endif %}"
+                                                         data-title="7" data-value="7"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=6 %} active{% endif %}"
+                                                         data-title="6" data-value="6"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=5 %} active{% endif %}"
+                                                         data-title="5" data-value="5"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=4 %} active{% endif %}"
+                                                         data-title="4" data-value="4"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=3 %} active{% endif %}"
+                                                         data-title="3" data-value="3"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=2 %} active{% endif %}"
+                                                         data-title="2" data-value="2"></div>
+                                                    <div class="vote-graduation{% if episode.viewing.vote >=1 %} active{% endif %}"
+                                                         data-title="1" data-value="1"></div>
+                                                    <div class="vote-value">{% if episode.viewing.vote %}{{ episode.viewing.vote }} / 10{% endif %}</div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </section>

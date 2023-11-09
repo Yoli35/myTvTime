@@ -46,7 +46,13 @@ class SeriesCountry extends Command
             $tmdbId = $series->getSerieId();
             $tv = json_decode($this->tmdbService->getTv($tmdbId, 'fr'), true);
             if ($tv) {
-                $series->setOriginCountry($tv['origin_country'] ?? []);
+                $countries = $tv['origin_country'] ?? [];
+                foreach ($tv['production_companies'] as $company) {
+                    if (!in_array($company['origin_country'], $countries)) {
+                        $countries[] = $company['origin_country'];
+                    }
+                }
+                $series->setOriginCountry($countries);
                 $this->serieRepository->save($series);
                 if (++$index % 50 === 0) {
                     $this->serieRepository->flush();

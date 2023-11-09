@@ -193,11 +193,13 @@ class SerieController extends AbstractController
         }
         $arr = array_unique($arr);
         $arr = array_values($arr);
+        dump($arr);
         $countries = [];
         foreach ($arr as $country) {
-            $countries[$country] = Countries::getName($country);
+            if (strlen($country) == 2)
+                $countries[$country] = Countries::getName($country);
         }
-        asort($countries, SORT_LOCALE_STRING);
+        asort($countries, SORT_FLAG_CASE | SORT_STRING);
         return array_merge(["all" => $this->translator->trans("All countries")], $countries);
     }
 
