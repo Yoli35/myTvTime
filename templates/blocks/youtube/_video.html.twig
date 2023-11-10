@@ -3,20 +3,21 @@
 {#    <a href="{{ path('app_youtube_video', {id: item.id}) }}" title="{{ item.title }}">#}
         <div class="yt-video">
             <div class="yt-thumbnail">
-                <img src="{{ item.thumbnailMediumPath }}" alt="{{ item.title }}">
-                {% if item.contentDuration < 36000 %} {# < 10:00:00 => 0:00:00 #}
-                    {% if item.contentDuration < 3600 %} {# < 01:00:00 => 00:00 #}
-                        {% if item.contentDuration < 600 %} {# < 00:10:00 => 0:00 #}
-                            <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[4:] }}</div>
-                        {% else %}
-                            <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[3:] }}</div>
-                        {% endif %}
-                    {% else %}
-                        <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[1:] }}</div>
-                    {% endif %}
-                {% else %}
-                    <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium') }}</div>
-                {% endif %}
+                <img src="{{ item.thumbnailPath }}" alt="{{ item.title }}">
+{#                {% if item.contentDuration < 36000 %} #}{# < 10:00:00 => 0:00:00 #}
+{#                    {% if item.contentDuration < 3600 %} #}{# < 01:00:00 => 00:00 #}
+{#                        {% if item.contentDuration < 600 %} #}{# < 00:10:00 => 0:00 #}
+{#                            <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[4:] }}</div>#}
+{#                        {% else %}#}
+{#                            <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[3:] }}</div>#}
+{#                        {% endif %}#}
+{#                    {% else %}#}
+{#                        <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium')[1:] }}</div>#}
+{#                    {% endif %}#}
+{#                {% else %}#}
+{#                    <div class="duration">{{ item.contentDuration|format_datetime('none', 'medium') }}</div>#}
+{#                {% endif %}#}
+                <div class="duration">{{ item.contentDuration }}</div>
                 <div class="tags">
                     {% for tag in item.tags %}
                         {% if list is defined %}

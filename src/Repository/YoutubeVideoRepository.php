@@ -64,7 +64,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             $offset = 0;
         }
         return $this->createQueryBuilder('y')
-            ->select('y.id as id, y.thumbnailMediumPath as thumbnailMediumPath, y.title as title, y.contentDuration as contentDuration, y.publishedAt as publishedAt,c.title as channelTitle, c.customUrl as channelCustomUrl, c.youtubeId as channelYoutubeId,c.thumbnailDefaultUrl as channelThumbnailDefaultUrl')
+            ->select('y.id as id, y.thumbnailHighPath as thumbnailHighPath, y.title as title, y.contentDuration as contentDuration, y.publishedAt as publishedAt, c.title as channelTitle, c.customUrl as channelCustomUrl, c.youtubeId as channelYoutubeId, c.thumbnailDefaultUrl as channelThumbnailDefaultUrl')
             ->innerJoin('y.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
             ->leftJoin('y.channel', 'c', Expr\Join::WITH, 'c=y.channel')
             ->orderBy('y.' . $sort, $order)
@@ -72,6 +72,31 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findAllWithChannelByDateSQL($userId, $sort = 'publishedAt', $order = 'DESC', $offset = 0, $limit = 20): array
+    {
+        if ($sort == 'publishedAt') {
+            $sort = 'published_at';
+        }
+        if ($sort == 'addedAt') {
+            $sort = 'added_at';
+        }
+        if ($sort == 'contentDuration') {
+            $sort = 'content_duration';
+        }
+        $sql = "SELECT y.`id` as id, y.`thumbnail_high_path` as thumbnailHighPath, y.`title` as title, y.`content_duration` as contentDuration, y.`published_at` as publishedAt, yc.`title` as channelTitle, yc.`custom_url` as channelCustomUrl, yc.`youtube_id` as channelYoutubeId, yc.`thumbnail_default_url` as channelThumbnailDefaultUrl "
+            . "FROM `youtube_video` y "
+            . "INNER JOIN `user_youtube_video` u ON u.`user_id`=".$userId." AND u.`youtube_video_id`=y.`id` "
+            . "LEFT JOIN `youtube_channel` yc ON yc.`id`=y.`channel_id` "
+            . "ORDER BY y.`" . $sort . "` " . $order . " "
+            . "LIMIT " . $limit . " OFFSET " . $offset;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
     }
 
     public function getUserYTVideosRuntime($userId): int|null

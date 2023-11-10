@@ -87,7 +87,8 @@ class YoutubeController extends AbstractController
 //            "page" => $page,
 //        ]);
 
-        $vids = $this->videoRepository->findAllWithChannelByDate($user->getId(), $sort, $order);
+//        $vids = $this->videoRepository->findAllWithChannelByDate($user->getId(), $sort, $order);
+        $vids = $this->videoRepository->findAllWithChannelByDateSQL($user->getId(), $sort, $order);
         $videoCount = $this->getVideosCount($user);
         $totalRuntime = $this->getTotalRuntime($user);
         $firstView = $this->getFirstView($user);
@@ -136,9 +137,9 @@ class YoutubeController extends AbstractController
         foreach ($vids as $vid) {
             $video = [];
             $video['id'] = $vid['id'];
-            $video['thumbnailMediumPath'] = $vid['thumbnailMediumPath'];
+            $video['thumbnailPath'] = $vid['thumbnailHighPath'];
             $video['title'] = $vid['title'];
-            $video['contentDuration'] = $vid['contentDuration'];
+            $video['contentDuration'] = $this->formatDuration($vid['contentDuration']);
             $video['publishedAt'] = $vid['publishedAt'];
             $video['channel'] = [];
             $video['channel']['title'] = $vid['channelTitle'];
@@ -162,6 +163,29 @@ class YoutubeController extends AbstractController
             }
         }
         return $videos;
+    }
+
+     public function formatDuration(int $durationInSecond): string
+    {
+        $h = floor($durationInSecond / 3600);
+        $m = floor(($durationInSecond % 3600) / 60);
+        $s = $durationInSecond % 60;
+        $duration = "";
+        if ($h > 0) {
+            $duration .= $h . ":";
+        }
+        if ($m < 10) {
+            $m = "0" . $m;
+        }
+        $duration .= $m . ":";
+        if ($s < 10) {
+            $s = "0" . $s;
+        }
+        $duration .= $s;
+
+        //dump(['durationInSecond' => $durationInSecond, 'h' => $h, 'm' => $m, 's' => $s, 'duration' => $duration]);
+
+        return $duration;
     }
 
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
