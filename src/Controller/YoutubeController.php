@@ -104,6 +104,10 @@ class YoutubeController extends AbstractController
             'justAdded' => false,
             'preview' => $preview,
             'from' => 'youtube',
+            'breadcrumb' => [
+                ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube'), 'separator' => '●'],
+                ['name' => $this->translator->trans('Youtube video search'), 'url' => $this->generateUrl('app_youtube_search')],
+            ],
         ]);
     }
 
@@ -217,7 +221,7 @@ class YoutubeController extends AbstractController
                 "videos" => $this->translator->trans("videos"),
             ],
             'breadcrumb' => [
-                ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube')],
+                ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube'), 'separator' => '●'],
                 ['name' => $this->translator->trans('Youtube video search'), 'url' => $this->generateUrl('app_youtube_search')],
             ],
             'user' => $user,

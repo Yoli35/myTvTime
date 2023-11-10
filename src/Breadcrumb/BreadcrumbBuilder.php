@@ -17,21 +17,30 @@ class BreadcrumbBuilder extends BreadcrumbBuilderInterface
     private int $id = 0;
     private array $breadcrumbs;
 
-    public function rootBreadcrumb(string $name, string $url): self
+    public function rootBreadcrumb(string $name, string $url, string|null $separator = null): self
     {
         $this->id = $this->getNewId();
         $this->breadcrumbs[$this->id] = [];
-        $this->addBreadcrumb($name, $url);
+        dump($name, $url, $separator);
+        $this->addBreadcrumb($name, $url, $separator);
 
         return $this;
     }
 
-    public function addBreadcrumb(string $name, string $url): self
+    public function addBreadcrumb(string $name, string $url, string|null $separator = null): self
     {
-        $this->breadcrumbs[$this->id][] = [
-            'name' => $this->translator->trans($name),
-            'url' => $url,
-        ];
+        if ($separator) {
+            $this->breadcrumbs[$this->id][] = [
+                'name' => $this->translator->trans($name),
+                'url' => $url,
+                'separator' => $separator,
+            ];
+        } else {
+            $this->breadcrumbs[$this->id][] = [
+                'name' => $this->translator->trans($name),
+                'url' => $url,
+            ];
+        }
         return $this;
     }
 

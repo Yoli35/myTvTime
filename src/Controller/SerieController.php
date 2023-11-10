@@ -475,10 +475,11 @@ class SerieController extends AbstractController
 //            dump(['user Tv Preferences (SQL)' => $this->userTvPreferenceRepository->getUserTvPreferencesSQL($user->getId())]);
         }
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_DAY);
+        $breadcrumb[0]['separator'] = '●';
         $breadcrumb[] = ['name' => $this->translator->trans("Episodes of the week"), 'url' => $this->generateUrl("app_series_this_week")];
 
         $bc = new BreadcrumbBuilder($this->translator);
-        $bc->rootBreadcrumb('Home', $this->generateUrl('app_home'))
+        $bc->rootBreadcrumb('Home', $this->generateUrl('app_home'), '●')
             ->addBreadcrumb('My series airing today', $this->generateUrl('app_series_today'));
 //        dump($bc);
 
@@ -585,6 +586,7 @@ class SerieController extends AbstractController
             ];
         }
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_WEEK);
+        $breadcrumb[0]['separator'] = '●';
         $breadcrumb[] = ['name' => $this->translator->trans("My series airing today"), 'url' => $this->generateUrl("app_series_today")];
         $imageConfig = $this->imageConfiguration->getConfig();
 
