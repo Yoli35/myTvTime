@@ -146,12 +146,12 @@
                                         </div>
                                         <div class="infos">
                                             <h4>
-                                                {{ 'Episode'|trans }} {{ episode.episode_number }} :
+                                                {{ 'Episode'|trans }} {{ episode.episode_number }}
                                                 {% if episode.viewing is defined and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/' %}
                                                     {% if episode.viewing.substituteName is not null %}
                                                         {{ episode.viewing.substituteName }}
-                                                    {% else %}
-                                                        {{ episode.name }} ({{ 'TBA'|trans }})
+                                                        {#                                                    {% else %} #}
+                                                        {#                                                        {{ episode.name }} ({{ 'TBA'|trans }}) #}
                                                     {% endif %}
                                                 {% else %}
                                                     {{ episode.name }}
@@ -895,6 +895,26 @@
             let start = angleOffset + ((episode.number - 1) / episodeCount) * 2 * Math.PI;
             let end = angleOffset + (episode.number / episodeCount) * 2 * Math.PI;
             let textWidth;
+
+            ctx.strokeStyle = "#DDDDDD";
+            if (getGraphGridSeasonCookie() === 'grid') {
+                ctx.lineWidth = 1;
+                for (let i = 1; i <= 10; i++) {
+                    if (getGraphColoredGridSeasonCookie() === 'color') {
+                        ctx.strokeStyle = colorVote[10 - i];
+                    }
+                    ctx.beginPath();
+                    ctx.arc(x, y, (i + .5) * radialInc, start, end);
+                    ctx.stroke();
+                    cos = Math.cos(start);
+                    sin = Math.sin(start);
+                    radius = (i - .5) * radialInc;
+                    ctx.beginPath();
+                    ctx.moveTo(x + radius * cos, y + radius * sin);
+                    ctx.lineTo(x + (radius + radialInc) * cos, y + (radius + radialInc) * sin);
+                    ctx.stroke();
+                }
+            }
 
             if (!episode.vote) return;
 
