@@ -21,7 +21,7 @@ class BreadcrumbBuilder extends BreadcrumbBuilderInterface
     {
         $this->id = $this->getNewId();
         $this->breadcrumbs[$this->id] = [];
-        dump($name, $url, $separator);
+
         $this->addBreadcrumb($name, $url, $separator);
 
         return $this;

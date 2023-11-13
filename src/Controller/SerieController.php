@@ -1641,7 +1641,7 @@ class SerieController extends AbstractController
         }, $tv['seasons']);
 
         $ygg = str_replace(' ', '+', $tv['name']);
-        $yggOriginal = str_replace(' ', '+', $tv['original_name']);
+        $yggOriginal = str_replace(' ', '+', $tv['localized_name'] ? $tv['localized_name'] : $tv['original_name']);
 
         $addThisSeries = !$serieViewing;
 
@@ -1894,9 +1894,12 @@ class SerieController extends AbstractController
             "provider_name" => "yggtorrent",
             "provider_id" => 99999,
         ];
-        dump($allWatchProviders);
+//        dump($allWatchProviders);
 
         // Breadcrumb
+        if ($from === self::SERIES_FROM_COUNTRY) {
+            $query = $request->query->get('c', "FR");
+        }
         $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
 
 //        dump([
