@@ -274,6 +274,27 @@ class YoutubeController extends AbstractController
             }
             $videos = $videoRepository->findBy(['id' => $ids], ['publishedAt' => 'DESC']);
         }
+        $videos = array_map(function ($video) {
+            return [
+                'id' => $video->getId(),
+                'title' => $video->getTitle(),
+                'thumbnailPath' => $video->getThumbnailHighPath(),
+                'publishedAt' => $video->getPublishedAt(),
+                'tags' => array_map(function ($tag) {
+                    return [
+                        'id' => $tag->getId(),
+                        'label' => $tag->getLabel(),
+                    ];
+                }, $video->getTags()->toArray()),
+                'contentDuration' => $this->formatDuration($video->getContentDuration()),
+                'channel' => [
+                    'title' => $video->getChannel()->getTitle(),
+                    'customUrl' => $video->getChannel()->getCustomUrl(),
+                    'youtubeId' => $video->getChannel()->getYoutubeId(),
+                    'thumbnailDefaultUrl' => $video->getChannel()->getThumbnailDefaultUrl(),
+                ],
+            ];
+        }, $videos);
 
         return $this->json(
             [

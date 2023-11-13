@@ -26,6 +26,11 @@ class YoutubeVideoTag
         $this->ytVideos = new ArrayCollection();
     }
 
+    public function toString(): string
+    {
+        return $this->label;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

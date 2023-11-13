@@ -95,7 +95,7 @@ function initYoutube(id, locale, paths) {
                 let thumbnail = document.createElement("div");
                 thumbnail.setAttribute("class", "yt-thumbnail");
                 let img = document.createElement("img");
-                img.setAttribute("src", result['thumbnailMediumPath']);
+                img.setAttribute("src", result['thumbnailPath']);
                 img.setAttribute("alt", result['title']);
                 // Ajouter la durée
                 let duration = document.createElement("div");

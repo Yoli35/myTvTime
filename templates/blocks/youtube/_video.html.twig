@@ -22,9 +22,9 @@
                     {% for tag in item.tags %}
                         {% if list is defined %}
                             {% if tag.id in list %}
-                                <div class="tag highlight">{{ tag }}</div>
+                                <div class="tag highlight">{{ tag.label }}</div>
                             {% else %}
-                                <div class="tag">{{ tag }}</div>
+                                <div class="tag">{{ tag.label }}</div>
                             {% endif %}
                         {% else %}
                             <div class="tag">{{ tag.label }}</div>
