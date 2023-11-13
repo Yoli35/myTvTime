@@ -15,7 +15,7 @@
     }
 
     .banner {
-        .history {
+        .history, .youtube {
             @include flex-row();
             border: 2px solid var(--gradient-ardoise-90);
             border-radius: 50%;
@@ -23,6 +23,10 @@
             position: absolute;
             right: 1rem;
             width: calc(1.5rem + 4px);
+        }
+
+        .youtube {
+            bottom: 3.5rem;
         }
     }
 }
@@ -39,20 +43,20 @@
     .yt-video {
         @include flex-col(center, start);
         background-color: var(--gradient-ardoise-80-alpha-50);
-        border-radius: .5em;
-        box-shadow: 0 0 1em rgba(0, 0, 0, .25);
-        line-height: 1em;
-        width: 20em;
+        border-radius: .5rem;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, .25);
+        line-height: 1rem;
+        width: 20rem;
 
         .yt-thumbnail {
             font-weight: 100;
-            height: 12em;
+            height: 11rem;
             position: relative;
             width: 100%;
 
             img {
-                border-top-left-radius: .5em;
-                border-top-right-radius: .5em;
+                border-top-left-radius: .5rem;
+                border-top-right-radius: .5rem;
                 height: 100%;
                 object-fit: cover;
                 width: 100%;
@@ -60,32 +64,32 @@
 
             .duration {
                 background-color: var(--gradient-ardoise-10);
-                border-radius: .125em;
-                bottom: .5em;
-                font-size: .75em;
+                border-radius: .25rem;
+                bottom: .5rem;
+                font-size: .75rem;
                 font-weight: 400;
-                padding: .25em;
+                padding: .25rem;
                 position: absolute;
-                right: .5em;
+                right: .5rem;
             }
 
             .tags {
                 @include flex-row(center, flex-start);
                 flex-wrap: wrap;
-                left: .5em;
-                gap: .25em;
+                left: .5rem;
+                gap: .25rem;
                 position: absolute;
-                top: .5em;
-                width: calc(100% - 1em);
+                top: .5rem;
+                width: calc(100% - 1rem);
 
                 .tag {
                     background-color: var(--gradient-ardoise-40);
                     border: 1px solid var(--gradient-ardoise-90);
-                    border-radius: .5em;
+                    border-radius: .25rem;
                     color: var(--gradient-ardoise-90);
-                    font-size: .75em;
+                    font-size: .75rem;
                     font-weight: 400;
-                    padding: 0 .5em;
+                    padding: 0 .5rem;
 
                     &.highlight {
                         background-color: var(--gradient-purple-40);
@@ -98,7 +102,7 @@
 
         .details {
             @include flex-100(center, start);
-            padding: .5em;
+            padding: .5rem;
             position: relative;
 
             .channel {
@@ -108,12 +112,12 @@
             .infos {
                 display: flex;
                 flex-direction: column;
-                padding-left: 1em;
+                padding-left: 1rem;
 
                 .info {
                     font-size: .75em;
                     font-weight: 400;
-                    max-height: 4em;
+                    max-height: 3rem;
                     overflow: hidden;
                 }
             }
@@ -123,11 +127,11 @@
                 border: 4px solid var(--gradient-ardoise-10);
                 border-radius: 50%;
                 cursor: pointer;
-                bottom: .5em;
-                height: 2em;
+                bottom: .5rem;
+                height: 2rem;
                 outline: 4px solid var(--gradient-ardoise-90);
                 position: absolute;
-                right: .5em;
+                right: .5rem;
                 width: 2rem;
 
                 &.selected {

@@ -3125,7 +3125,7 @@
         .wrapper {
             @include flex-100(stretch, center);
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: .5rem;
 
             .home-discover {
                 a {
@@ -3202,8 +3202,9 @@
                         }
                     }
 
-                    span.title {
+                    .title {
                         margin-top: unset;
+                        padding-top: .25rem;
                     }
                 }
             }
@@ -3213,8 +3214,8 @@
                 background-color: var(--gradient-ardoise-40);
                 border-radius: .5rem;
                 color: var(--gradient-ardoise-90);
-                margin-top: .5rem;
-                padding: .5rem;
+                margin-top: .25rem;
+                padding: .25rem;
                 position: relative;
                 width: 100%;
 
