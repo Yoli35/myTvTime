@@ -71,6 +71,22 @@ class SearchController extends AbstractController
             } else {
                 $standing = $this->TMDBService->multiSearch($page, $query, $request->getLocale());
                 $results = strlen($standing) ? json_decode($standing, true) : [];
+                dump($results);
+                if (count($results['results']) == 1) {
+                    $result = $results['results'][0];
+                    $type = $result['media_type'];
+                    $id = $result['id'];
+
+                    $url = match ($type) {
+                        'movie' => $this->generateUrl('app_movie', ['id' => $id]),
+                        'tv' => $this->generateUrl('app_series_tmdb', ['id' => $id]),
+                        'person' => $this->generateUrl('app_people', ['id' => $id]),
+                        default => null
+                    };
+                    if ($url) {
+                        return $this->redirect($url);
+                    }
+                }
             }
         }
 //        dump(["query" => $query, "results" => $results]);
