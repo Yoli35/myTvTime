@@ -4,16 +4,20 @@
         <form method="dialog">
             <input type="hidden" name="action" value="applyModifications"/>
             <div class="field">
-                <label class="label" for="search-tag-to-modify-list">{{ 'Tags'|trans }}&nbsp;:</label>
+                <label class="label" for="search-tag-to-modify-list"></label>
                 <input id="search-tag-to-modify-list" type="search" value="" placeholder="{{ 'Start taping…'|trans }}">
             </div>
-            <div class="tags"></div>
+            <div class="tag-lists">
+                <div class="available-tags"></div>
+                <div class="selected-tags"></div>
+            </div>
+
             <menu>
                 <li>
                     <button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button>
                 </li>
                 <li>
-                    <button class="btn btn-primary" value="select">{{ 'Apply'|trans }}</button>
+                    <button class="btn btn-primary" value="apply-tags">{{ 'Apply'|trans }}</button>
                 </li>
             </menu>
         </form>

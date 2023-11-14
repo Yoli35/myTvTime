@@ -750,7 +750,6 @@
             }
 
             .method {
-
                 color: var(--gradient-ardoise-70);
                 margin-left: auto;
                 position: relative;
@@ -896,6 +895,107 @@
                     &:nth-child(odd) {
                     background-color: var(--gradient-ardoise-30);
                 }
+                }
+            }
+
+            menu {
+                display: flex;
+                gap: 1rem;
+                justify-content: end;
+                list-style: none;
+                width: 100%;
+            }
+        }
+    }
+}
+
+#modify-tags-dialog {
+    border-radius: .5rem;
+    margin-block: auto;
+    margin-inline: auto;
+    padding-block: 1rem;
+    padding-inline: 2rem;
+
+    .content {
+        padding: 0;
+
+        .dialog-title {
+            font-size: 1.5rem;
+            padding-block-end: 1rem;
+        }
+
+        form {
+            align-items: flex-start;
+            flex-direction: column;
+
+            .field {
+                display: flex;
+
+                label {
+                    margin-right: 0;
+                }
+
+                input {
+                    width: 15rem;
+                }
+            }
+
+            .tag-lists {
+                display: flex;
+                gap: 1rem;
+
+                .available-tags, .selected-tags {
+                    border: 1px solid var(--gradient-ardoise-90);
+                    border-radius: .25rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: .125rem;
+                    height: 15rem;
+                    overflow-y: auto;
+                    padding: .25rem;
+                    width: 15rem;
+
+                    .tag-item {
+                        border-radius: .25rem;
+                        cursor: grab;
+                        padding-block: .25rem;
+                        padding-inline: 1rem;
+                        width: 100%;
+                    }
+                }
+
+                .available-tags {
+                    .tag-item {
+                        background-color: var(--gradient-ardoise-40);
+                        color: var(--gradient-ardoise-90);
+
+                        &.selected {
+                            display: none;
+                        }
+                    }
+                }
+
+                .selected-tags {
+
+                    .tag-item {
+                        color: var(--gradient-purple-90);
+                        position: relative;
+
+                        &:nth-child(even) {
+                            background-color: var(--gradient-purple-40);
+                        }
+
+                        &:nth-child(odd) {
+                            background-color: var(--gradient-purple-30);
+                        }
+
+                        .delete {
+                            cursor: pointer;
+                            position: absolute;
+                            right: .375rem;
+                            top: 0;
+                        }
+                    }
                 }
             }
 

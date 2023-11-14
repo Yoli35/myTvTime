@@ -1,4 +1,5 @@
 import {ToolTips} from "./ToolTips.js";
+
 let gThis;
 
 export class YoutubeSearch {
@@ -9,6 +10,14 @@ export class YoutubeSearch {
      * @property {number} id
      * @property {string} label
      * @property {boolean} selected
+     */
+
+    /**
+     * @typedef SelectedTag
+     * @type {Object}
+     * @property {number} id
+     * @property {string} label
+     * @property {number} count
      */
 
     /**
@@ -368,7 +377,7 @@ export class YoutubeSearch {
         const resultTitle = document.querySelector(".results").querySelector(".result-header");
         const modifyTools = resultTitle.querySelector(".modify-tools");
         const tagTools = modifyTools.querySelectorAll("button:has(i)");
-        tagTools.forEach((tool)=>{
+        tagTools.forEach((tool) => {
             tool.classList.remove("d-none");
         });
     }
@@ -377,7 +386,7 @@ export class YoutubeSearch {
         const resultTitle = document.querySelector(".results").querySelector(".result-header");
         const modifyTools = resultTitle.querySelector(".modify-tools");
         const tagTools = modifyTools.querySelectorAll("button:has(i)");
-        tagTools.forEach((tool)=>{
+        tagTools.forEach((tool) => {
             tool.classList.add("d-none");
         });
     }
@@ -396,7 +405,7 @@ export class YoutubeSearch {
                 const videoSelectionButton = document.querySelectorAll(".select-video.selected");
                 let ids = "";
 
-                videoSelectionButton.forEach((button)=>{
+                videoSelectionButton.forEach((button) => {
                     const ytResult = button.closest(".yt-result");
                     if (ids.length) ids += ',';
                     ids += ytResult.getAttribute("data-id");
@@ -415,15 +424,19 @@ export class YoutubeSearch {
                         const i = document.createElement("i");
                         i.classList.add("fa-solid", "fa-circle-xmark");
                         close.appendChild(i);
-                        close.addEventListener("click", () => {flashes.removeChild(flashMessage)});
+                        close.addEventListener("click", () => {
+                            flashes.removeChild(flashMessage)
+                        });
                         flashMessage.appendChild(close);
                         flashes.appendChild(flashMessage);
 
                         const wrapper = document.querySelector(".wrapper");
-                        videoSelectionButton.forEach((button)=>{
+                        videoSelectionButton.forEach((button) => {
                             const ytResult = button.closest(".yt-result");
                             ytResult.classList.add("deleted");
-                            setTimeout(()=>{ wrapper.removeChild(ytResult);}, 500);
+                            setTimeout(() => {
+                                wrapper.removeChild(ytResult);
+                            }, 500);
                         });
                     }
                 }
@@ -439,8 +452,8 @@ export class YoutubeSearch {
         videoList.innerHTML = "";
         const videoSelectionButton = document.querySelectorAll(".select-video.selected");
 
-        dialog.querySelector(".dialog-title").innerText = videoSelectionButton.length + " video" + (videoSelectionButton.length>1 ? "s":"");
-        videoSelectionButton.forEach((button)=>{
+        dialog.querySelector(".dialog-title").innerText = videoSelectionButton.length + " video" + (videoSelectionButton.length > 1 ? "s" : "");
+        videoSelectionButton.forEach((button) => {
             const result = button.closest(".yt-result");
             const channel = result.querySelector(".channel").querySelector("img").getAttribute("alt");
             const title = result.querySelector(".infos").querySelector(".info").innerText;
@@ -460,21 +473,83 @@ export class YoutubeSearch {
 
     initModifyTagsDialog() {
         const dialog = document.querySelector('#modify-tags-dialog');
+        const selectedTagList = dialog.querySelector(".selected-tags");
 
         dialog.addEventListener('close', () => {
             document.querySelector("body").classList.remove("frozen");
-            if (dialog.returnValue === "deleteVideo") {
+            if (dialog.returnValue === "apply-tags") {
 
             }
         });
+        selectedTagList.addEventListener("dragover", gThis.allowDrop);
     }
 
     openModifyTagsDialog() {
         const dialog = document.querySelector('#modify-tags-dialog');
+        const availableTagList = dialog.querySelector(".available-tags");
+        const selectedTagList = dialog.querySelector(".selected-tags");
+        const wrapper = document.querySelector(".youtube-search").querySelector(".wrapper");
+        const videos = wrapper.querySelectorAll(".yt-result:has(.select-video.selected)");
+        const videoCount = videos.length;
+        /** @var {Array.<SelectedTag>} selectedTags */
+        let selectedTags = [];
 
-        gThis.autocomplete("#search-tag-to-modify-list");
+        videos.forEach((video) => {
+            const tags = video.querySelectorAll(".tag");
+            tags.forEach((tag) => {
+                const id = parseInt(tag.getAttribute("data-id"));
+                const label = tag.innerText;
+                let found = false;
+                for (let i = 0; i < selectedTags.length; i++) {
+                    if (selectedTags[i].id === id) {
+                        selectedTags[i].count++;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    selectedTags.push({id: id, label: label, count: 1});
+                }
+            });
+        });
+        selectedTags = selectedTags.filter((tag) => {
+            return tag.count === videoCount
+        });
+        selectedTags.forEach((tag) => {
+            const tagItem = document.createElement("div");
+            tagItem.classList.add("tag-item");
+            tagItem.setAttribute("data-id", tag.id);
+            tagItem.innerText = tag.label;
+            const deleteButton = document.createElement("div");
+            deleteButton.classList.add("delete");
+            const xmark = document.createElement("i");
+            xmark.classList.add("fa-solid", "fa-square-xmark");
+            deleteButton.appendChild(xmark);
+            // deleteButton.addEventListener("click", gThis.removeTag);
+            tagItem.appendChild(deleteButton);
+            selectedTagList.appendChild(tagItem);
+        });
+
+        gThis.tags.forEach((tag) => {
+            const tagItem = document.createElement("div");
+            tagItem.classList.add("tag-item");
+            tagItem.setAttribute("data-id", tag.id);
+            tagItem.setAttribute("draggable", "true");
+            tagItem.innerText = tag.label;
+            tagItem.addEventListener("drag", gThis.dragTag);
+            availableTagList.appendChild(tagItem);
+        });
+
         document.querySelector("body").classList.add("frozen");
         dialog.showModal();
+    }
+
+    allowDrop(e) {
+        e.preventDefault();
+    }
+
+    dragTag(e) {
+        e.dataTransfer.setData("text/plain", e.target.getAttribute("data-id"));
     }
 
     cancelSelection(e) {
