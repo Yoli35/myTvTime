@@ -71,7 +71,7 @@ class SerieController extends AbstractController
     public array $messages = [];
 
     public function __construct(
-//                                private readonly BreadcrumbBuilder        $breadcrumbBuilder,
+//        private readonly BreadcrumbBuilder            $breadcrumbBuilder,
         private readonly AlertRepository              $alertRepository,
         private readonly CastRepository               $castRepository,
         private readonly DateService                  $dateService,
@@ -88,7 +88,7 @@ class SerieController extends AbstractController
         private readonly SerieViewingRepository       $serieViewingRepository,
         private readonly TMDBService                  $TMDBService,
         private readonly TranslatorInterface          $translator,
-        private readonly UserTvPreferenceRepository   $userTvPreferenceRepository,
+//        private readonly UserTvPreferenceRepository   $userTvPreferenceRepository,
     )
     {
     }
@@ -1480,7 +1480,6 @@ class SerieController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-//        dump($bc);
         $tmdbService = $this->TMDBService;
 
         $page = $request->query->getInt('p', 1);
@@ -1641,7 +1640,10 @@ class SerieController extends AbstractController
         }, $tv['seasons']);
 
         $ygg = str_replace(' ', '+', $tv['name']);
-        $yggOriginal = str_replace(' ', '+', $tv['localized_name'] ? $tv['localized_name'] : $tv['original_name']);
+        if (key_exists('localized_name', $tv) && $tv['localized_name'])
+            $yggOriginal = str_replace(' ', '+', $tv['localized_name']);
+        else
+            $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
         $addThisSeries = !$serieViewing;
 
@@ -1903,6 +1905,7 @@ class SerieController extends AbstractController
         $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
 
 //        dump([
+//            'serie' => $serie,
 //            'env' => $_ENV['APP_ENV'],
 //            'season' => $season,
 //            'modifications' => $modifications,
