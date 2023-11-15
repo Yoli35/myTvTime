@@ -181,11 +181,18 @@ export class YoutubeSearch {
         });
     }
 
-    tagFromList(id) {
+    /** @param {number} id
+     * @param {boolean|null} selected
+     * @return {Tag|null}
+     */
+    tagFromList(id, selected = null) {
         for (let i = 0; i < gThis.tags.length; i++) {
-            /** var {{'id': number, 'label': string, 'selected': boolean}} tag */
+            /** @var {Tag} tag */
             let tag = gThis.tags[i];
-            if (id === tag.id) return tag;
+            if (id === tag.id) {
+                if (selected !== null) tag.selected = selected;
+                return tag;
+            }
         }
         return null;
     }
@@ -473,7 +480,9 @@ export class YoutubeSearch {
 
     initModifyTagsDialog() {
         const dialog = document.querySelector('#modify-tags-dialog');
+        const availableTagList = dialog.querySelector(".available-tags");
         const selectedTagList = dialog.querySelector(".selected-tags");
+        const input = dialog.querySelector("#search-tag-to-modify-list");
 
         dialog.addEventListener('close', () => {
             document.querySelector("body").classList.remove("frozen");
@@ -481,7 +490,24 @@ export class YoutubeSearch {
 
             }
         });
-        selectedTagList.addEventListener("dragover", gThis.allowDrop);
+
+        selectedTagList.addEventListener("dragover", gThis.dropoverTagList);
+        selectedTagList.addEventListener("dragenter", gThis.dragenterTagList);
+        selectedTagList.addEventListener("dragleave", gThis.dragleaveTagList);
+        selectedTagList.addEventListener("drop", gThis.dropTag);
+
+        input.addEventListener("input", () => {
+            const value = gThis.removeAccent(input.value);
+            const tagItems = availableTagList.querySelectorAll(".tag-item");
+            tagItems.forEach((tagItem) => {
+                const label = gThis.removeAccent(tagItem.innerText);
+                if (label.indexOf(value) === -1) {
+                    tagItem.classList.add("other");
+                } else {
+                    tagItem.classList.remove("other");
+                }
+            });
+        });
     }
 
     openModifyTagsDialog() {
@@ -493,6 +519,9 @@ export class YoutubeSearch {
         const videoCount = videos.length;
         /** @var {Array.<SelectedTag>} selectedTags */
         let selectedTags = [];
+
+        availableTagList.innerHTML = "";
+        selectedTagList.innerHTML = "";
 
         videos.forEach((video) => {
             const tags = video.querySelectorAll(".tag");
@@ -525,7 +554,7 @@ export class YoutubeSearch {
             const xmark = document.createElement("i");
             xmark.classList.add("fa-solid", "fa-square-xmark");
             deleteButton.appendChild(xmark);
-            // deleteButton.addEventListener("click", gThis.removeTag);
+            deleteButton.addEventListener("click", gThis.removeTagFromSelected);
             tagItem.appendChild(deleteButton);
             selectedTagList.appendChild(tagItem);
         });
@@ -533,10 +562,19 @@ export class YoutubeSearch {
         gThis.tags.forEach((tag) => {
             const tagItem = document.createElement("div");
             tagItem.classList.add("tag-item");
+            if (tag.selected) tagItem.classList.add("selected");
             tagItem.setAttribute("data-id", tag.id);
             tagItem.setAttribute("draggable", "true");
             tagItem.innerText = tag.label;
-            tagItem.addEventListener("drag", gThis.dragTag);
+            tagItem.addEventListener("dragstart", gThis.dragstartTag);
+            tagItem.addEventListener("dragend", gThis.dragendTag);
+            const addButton = document.createElement("div");
+            addButton.classList.add("add");
+            const plus = document.createElement("i");
+            plus.classList.add("fa-solid", "fa-square-plus");
+            addButton.appendChild(plus);
+            // addButton.addEventListener("click", gThis.addTagToSelected);
+            tagItem.appendChild(addButton);
             availableTagList.appendChild(tagItem);
         });
 
@@ -544,12 +582,65 @@ export class YoutubeSearch {
         dialog.showModal();
     }
 
-    allowDrop(e) {
+    dropoverTagList(e) {
         e.preventDefault();
+        console.log("allowDrop");
     }
 
-    dragTag(e) {
+    dragenterTagList(e) {
+        e.preventDefault();
+        console.log("dragenter");
+        e.target.classList.add("dragover");
+    }
+
+    dragleaveTagList(e) {
+        e.preventDefault();
+        console.log("dragleave");
+        e.target.classList.remove("dragover");
+    }
+
+    dragstartTag(e) {
+        e.currentTarget.classList.add("dragging");
+        e.dataTransfer.clearData();
         e.dataTransfer.setData("text/plain", e.target.getAttribute("data-id"));
+    }
+
+    dragendTag(e) {
+        e.currentTarget.classList.remove("dragging");
+    }
+
+    dropTag(e) {
+        e.preventDefault();
+        const id = parseInt(e.dataTransfer.getData("text/plain"));
+        const tag = gThis.tagFromList(id, true);
+        const tagItem = document.createElement("div");
+        tagItem.classList.add("tag-item");
+        tagItem.setAttribute("data-id", tag.id);
+        tagItem.innerText = tag.label;
+        const removeButton = document.createElement("div");
+        removeButton.classList.add("add");
+        const xmark = document.createElement("i");
+        xmark.classList.add("fa-solid", "fa-square-xmark");
+        removeButton.appendChild(xmark);
+        removeButton.addEventListener("click", gThis.removeTagFromSelected);
+        tagItem.appendChild(removeButton);
+        e.target.appendChild(tagItem);
+
+        const availableTag = document.querySelector(".available-tags").querySelector(".tag-item[data-id='" + id + "']");
+        availableTag.classList.add("selected");
+
+        const selectedTagList = document.querySelector(".selected-tags");
+        selectedTagList.classList.remove("dragover");
+    }
+
+    removeTagFromSelected(e) {
+        e.stopImmediatePropagation();
+        const tagItem = e.currentTarget.closest(".tag-item");
+        const id = parseInt(tagItem.getAttribute("data-id"));
+        const tag = gThis.tagFromList(id, false);
+        const availableTag = document.querySelector(".available-tags").querySelector(".tag-item[data-id='" + id + "']");
+        availableTag.classList.remove("selected");
+        tagItem.parentElement.removeChild(tagItem);
     }
 
     cancelSelection(e) {
