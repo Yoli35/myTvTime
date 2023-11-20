@@ -1900,6 +1900,7 @@
                         .still {
                             height: 100%;
                             position: relative;
+                            width: 15em;
                             z-index: 0;
 
                             img {
@@ -1987,8 +1988,9 @@
 
                         .infos {
                             @include flex-col(flex-start, flex-start);
+                            flex: 1;
                             padding: .5em;
-                            width: calc(100% - 30em);
+                            //width: calc(100% - 30em);
 
                             .info {
                                 font-weight: 100;
@@ -2007,6 +2009,19 @@
                                     @include human-profile(var(--gradient-ardoise-40));
                                 }
                             }
+                        }
+
+                        .abstract {
+                            align-items: flex-start;
+                            display: none;
+                            flex: 1;
+                            font-size: 1.1em;
+                            font-weight: 300;
+                            gap: 1em;
+                            height: 100%;
+                            justify-content: flex-start;
+                            overflow-y: auto;
+                            padding: 1em;
                         }
 
                         .episode-viewing {
@@ -2256,7 +2271,7 @@
                                 }
                             }
 
-                            .infos {
+                            .infos, .abstract {
                                 display: none;
                             }
                         }
@@ -3926,6 +3941,10 @@
                                     border-bottom-left-radius: 1rem;
                                     border-top-left-radius: 1rem;
                                 }
+                            }
+
+                            .abstract {
+                                display: flex;
                             }
                         }
                     }

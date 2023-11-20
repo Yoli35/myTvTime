@@ -1003,9 +1003,9 @@
                         }
                     }
 
-                    .dragover {
+                    &.dragover {
                         background-color: var(--gradient-purple-30-alpha-50);
-                        outline: 2px dashed var(--gradient-purple-60);
+                        border-color: var(--gradient-purple-60);
                     }
                 }
             }

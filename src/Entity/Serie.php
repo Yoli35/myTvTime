@@ -86,6 +86,12 @@ class Serie
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private array $originCountry = [];
 
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Episode::class, orphanRemoval: true)]
+    private Collection $episodes;
+
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class, orphanRemoval: true)]
+    private Collection $seasons;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -95,6 +101,8 @@ class Serie
         $this->seriePosters = new ArrayCollection();
         $this->serieBackdrops = new ArrayCollection();
         $this->serieCasts = new ArrayCollection();
+        $this->episodes = new ArrayCollection();
+        $this->seasons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -445,6 +453,66 @@ class Serie
     public function setOriginCountry(array $originCountry): static
     {
         $this->originCountry = $originCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Episode>
+     */
+    public function getEpisodes(): Collection
+    {
+        return $this->episodes;
+    }
+
+    public function addEpisode(Episode $episode): static
+    {
+        if (!$this->episodes->contains($episode)) {
+            $this->episodes->add($episode);
+            $episode->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEpisode(Episode $episode): static
+    {
+        if ($this->episodes->removeElement($episode)) {
+            // set the owning side to null (unless already changed)
+            if ($episode->getSerie() === $this) {
+                $episode->setSerie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Season>
+     */
+    public function getSeasons(): Collection
+    {
+        return $this->seasons;
+    }
+
+    public function addSeason(Season $season): static
+    {
+        if (!$this->seasons->contains($season)) {
+            $this->seasons->add($season);
+            $season->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeason(Season $season): static
+    {
+        if ($this->seasons->removeElement($season)) {
+            // set the owning side to null (unless already changed)
+            if ($season->getSerie() === $this) {
+                $season->setSerie(null);
+            }
+        }
 
         return $this;
     }

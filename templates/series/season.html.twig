@@ -171,9 +171,6 @@
                                                 </div>
                                             {% endif %}
 
-                                            {% if episode.overview|length %}
-                                                <div class="info">{{ episode.overview }}</div>
-                                            {% endif %}
                                             {% if episode.runtime %}
                                                 <div class="info">{{ 'Runtime'|trans }} : {{ episode.runtime }} {{ episode.runtime>1 ? 'minutes':'minute' }}</div>
                                             {% else %}
@@ -198,6 +195,11 @@
                                                         {{ 'This episode is aired from today.'|trans }}
                                                     {% endif %}
                                                 </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="abstract">
+                                            {% if episode.overview|length %}
+                                                <div class="info">{{ episode.overview }}</div>
                                             {% endif %}
                                         </div>
                                         <div class="episode-viewing">
