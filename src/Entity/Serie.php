@@ -86,11 +86,14 @@ class Serie
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private array $originCountry = [];
 
-    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Episode::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'series', targetEntity: Episode::class, orphanRemoval: true)]
     private Collection $episodes;
 
-    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'series', targetEntity: Season::class, orphanRemoval: true)]
     private Collection $seasons;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $directLink = null;
 
     public function __construct()
     {
@@ -513,6 +516,18 @@ class Serie
                 $season->setSerie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDirectLink(): ?string
+    {
+        return $this->directLink;
+    }
+
+    public function setDirectLink(?string $directLink): static
+    {
+        $this->directLink = $directLink;
 
         return $this;
     }

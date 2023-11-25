@@ -48,6 +48,9 @@ class Episode
     #[ORM\JoinColumn(nullable: false)]
     private ?Season $season = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $directLink = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -169,6 +172,18 @@ class Episode
     public function setSeason(?Season $season): static
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    public function getDirectLink(): ?string
+    {
+        return $this->directLink;
+    }
+
+    public function setDirectLink(?string $directLink): static
+    {
+        $this->directLink = $directLink;
 
         return $this;
     }

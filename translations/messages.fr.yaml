@@ -294,7 +294,7 @@ New poster: nouvelle affiche
 New season from TMDB: Une nouvelle saison|%count% nouvelles saisons
 New serie added: Nouvelle série ajoutée
 New status: Nouveau statut
-No airing series date, considere watching those: Aucune série en cours de diffusion date, considérez regarder celles-ci
+No airing series date, considere watching those: Pas de nouvel épisode parmi les séries que vous suivez le date, considérez regarder celles-ci
 No date: Pas de date
 No poster: Pas d'affiche
 Order by: Tri
@@ -316,6 +316,8 @@ creator.she: Créatrice
 serie: Série
 series: Séries
 Start to watch: Commencer à regarder
+Direct link: Lien direct
+Add a link: Ajouter un lien
 
 #User series airing today
 My series airing today: Épisodes du jour

@@ -107,7 +107,7 @@
                         {% if serieId %}
                             <div id="localized-name">
                                 <span>
-                                    {% if serie.localized_name is defined %}
+                                    {% if serie.localized_name is defined and serie.localized_name|length %}
                                         {{ serie.localized_name }} ({{ serie.name }})
                                     {% else %}
                                         {{ serie.name }}
@@ -436,6 +436,7 @@
     </div>
     {% if serieId %}
         {{ include('blocks/movie/_localizedName.html.twig') }}
+        {{ include('blocks/series/_addDirectLink.html.twig') }}
     {% endif %}
     <dialog class="viewed-update">
         <div class="loading">

@@ -27,6 +27,19 @@
     </div>
 {% endif %}
 <div class="key-facts">
+    {% if user and serieId %}
+        <h4>{{ 'Direct link'|trans }}</h4>
+        <div class="direct-link">
+            {% if serie.direct_link|length %}
+                <div class="label">{{ 'Watch now'|trans }}</div>
+                <div class="link" id="edit-direct-link" data-id="{{ serie.id }}"><i class="fa-solid fa-pen"></i></div>
+                <a href="{{ serie.direct_link }}" target="_blank" class="link"><i class="fa-solid fa-circle-arrow-right"></i></a>
+            {% else %}
+                <div class="label">{{ 'Add a link'|trans }}</div>
+                <div class="link" id="add-direct-link" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
+            {% endif %}
+        </div>
+    {% endif %}
     <h4>{{ 'Key facts'|trans }}</h4>
     <div class="fact">
         <div class="fact-label">{{ 'Original name'|trans }}</div>

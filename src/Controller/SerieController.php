@@ -1592,6 +1592,7 @@ class SerieController extends AbstractController
             }
             $tv['seriePosters'] = $serie->getSeriePosters();
             $tv['serieBackdrops'] = $serie->getSerieBackdrops();
+            $tv['direct_link'] = $serie->getDirectLink();
 
             $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
 
@@ -2016,7 +2017,7 @@ class SerieController extends AbstractController
         ];
         if ($serie) {
             $breadcrumb[] = [
-                'name' => $serie['localized_name'] ?? $serie['name'],
+                'name' => $serie['localized_name'] ? (strlen($serie['localized_name']) ? $serie['localized_name'] : $serie['name']) : $serie['name'],
                 'url' => $this->generateUrl('app_series_' . $kind, ['id' => $id]) . '?from=' . $from . ($from === self::SERIES_FROM_COUNTRY ? '&c=' . $country : ''),
             ];
         }
