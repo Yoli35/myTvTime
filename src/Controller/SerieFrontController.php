@@ -3,16 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\Alert;
+use App\Entity\Episode;
 use App\Entity\EpisodeViewing;
 use App\Entity\Favorite;
 use App\Entity\Networks;
+use App\Entity\Season;
 use App\Entity\Serie;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Repository\AlertRepository;
+use App\Repository\EpisodeRepository;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
 use App\Repository\NetworksRepository;
+use App\Repository\SeasonRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
@@ -42,14 +46,16 @@ class SerieFrontController extends AbstractController
     public function __construct(
         private readonly AlertRepository          $alertRepository,
         private readonly DateService              $dateService,
+        private readonly EpisodeRepository $episodeRepository,
         private readonly EpisodeViewingRepository $episodeViewingRepository,
         private readonly FavoriteRepository       $favoriteRepository,
         private readonly ImageConfiguration       $imageConfiguration,
         private readonly NetworksRepository       $networkRepository,
+        private readonly SeasonRepository  $seasonRepository,
         private readonly SerieController          $serieController,
         private readonly SerieRepository          $serieRepository,
-        private readonly SettingsRepository       $settingsRepository,
         private readonly SerieViewingRepository   $serieViewingRepository,
+        private readonly SettingsRepository       $settingsRepository,
         private readonly TMDBService              $TMDBService,
         private readonly TranslatorInterface      $translator,
     )
@@ -139,6 +145,9 @@ class SerieFrontController extends AbstractController
                 }
                 $serie->addUser($user);
                 $serieRepository->save($serie, true);
+
+                $this->getSeasonsAndEpisodes($tv, $serie);
+
                 $this->serieController->createSerieViewing($user, $tv, $serie);
 
                 if ($tv['backdrop_path']) $this->serieController->addSerieBackdrop($serie, $tv['backdrop_path']);
@@ -184,6 +193,51 @@ class SerieFrontController extends AbstractController
             'userSerieId' => $serie?->getId(),
             'pagination' => $pagination,
         ]);
+    }
+
+    public function getSeasonsAndEpisodes($tvSeries, $series): void
+    {
+        $numberOfSeasons = $tvSeries['number_of_seasons'];
+
+        for ($seasonNumber = 1; $seasonNumber <= $numberOfSeasons; $seasonNumber++) {
+            $tvSeason = json_decode($this->TMDBService->getTvSeason($series->getSerieId(), $seasonNumber, "fr"), true);
+
+            $season = $this->seasonRepository->findOneBy(['series' => $series, 'seasonNumber' => $seasonNumber]);
+
+            if (!$season) {
+                $season = new Season();
+            }
+            $season->set_Id($tvSeason['_id']);
+            $season->setAirDate($this->dateService->newDateImmutable($tvSeason['air_date'], 'Europe/Paris'));
+            $season->setName($tvSeason['name']);
+            $season->setOverview($tvSeason['overview']);
+            $season->setPosterPath($tvSeason['poster_path']);
+            $season->setSeasonNumber($seasonNumber);
+            $season->setSeries($series);
+            $season->setTmdbId($tvSeason['id']);
+            $this->seasonRepository->save($season, true);
+
+            $tvEpisodes = $tvSeason['episodes'];
+            $episodeCount = count($tvEpisodes);
+            for ($i = 1; $i <= $episodeCount; $i++) {
+                $tvEpisode = $tvEpisodes[$i - 1];
+                $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $i]);
+                if (!$episode) {
+                    $episode = new Episode();
+                }
+                $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
+                $episode->setEpisodeNumber($tvEpisode['episode_number']);
+                $episode->setName($tvEpisode['name']);
+                $episode->setOverview($tvEpisode['overview']);
+                $episode->setRuntime($tvEpisode['runtime']);
+                $episode->setSeason($season);
+                $episode->setSeasonNumber($tvEpisode['season_number']);
+                $episode->setSeries($series);
+                $episode->setStillPath($tvEpisode['still_path']);
+                $episode->setTmdbId($tvEpisode['id']);
+                $this->episodeRepository->save($episode, $i === $episodeCount);
+            }
+        }
     }
 
     public function collectEpisodeDurations($tv): array

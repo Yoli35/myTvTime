@@ -285,11 +285,10 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "LIMIT " . $perPage . " "
             . "OFFSET " . ($page - 1) * $perPage;
 
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-
-        return $resultSet->fetchAllAssociative();
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 
     // Séries à venir (avec pagination)
@@ -325,10 +324,9 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "LIMIT " . $perPage . " "
             . "OFFSET " . ($page - 1) * $perPage;
 
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-
-        return $resultSet->fetchAllAssociative();
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 }
