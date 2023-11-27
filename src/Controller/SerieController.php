@@ -22,6 +22,7 @@ use App\Repository\AlertRepository;
 use App\Repository\CastRepository;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
+use App\Repository\NetworksRepository;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieBackdropRepository;
 use App\Repository\SerieCastRepository;
@@ -79,6 +80,7 @@ class SerieController extends AbstractController
         private readonly EpisodeViewingRepository     $episodeViewingRepository,
         private readonly FavoriteRepository           $favoriteRepository,
         private readonly ImageConfiguration           $imageConfiguration,
+        private readonly NetworksRepository           $networksRepository,
         private readonly SeasonViewingRepository      $seasonViewingRepository,
         private readonly SerieCastRepository          $serieCastRepository,
         private readonly SerieBackdropRepository      $serieBackdropRepository,
@@ -1571,6 +1573,7 @@ class SerieController extends AbstractController
                 $watchProviderList = $this->getRegionProvider($imgConfig, 1, '', ''); // Tous les providers
             }
         }
+        dump(['providersFlatrate' => $providersFlatrate, 'watchProviderList' => $watchProviderList]);
 
         $serieViewing = null;
         $whatsNew = null;
@@ -1592,7 +1595,108 @@ class SerieController extends AbstractController
             }
             $tv['seriePosters'] = $serie->getSeriePosters();
             $tv['serieBackdrops'] = $serie->getSerieBackdrops();
-            $tv['direct_link'] = $serie->getDirectLink();
+            $tv['directLink'] = [];
+            if ($serie->getDirectLink()) {
+                $tv['directLink'][0]['url'] = $serie->getDirectLink();
+                $dl = $serie->getDirectLink();
+                // si le lien contient 'youtube', on récupère le 'logo_path' dans la table 'networks'
+                $networkId = 0;
+                if (str_contains($dl, 'youtube')) {
+                    $networkId = 83;
+                }
+                // https://www.netflix.com/title/81716080&uct_country=fr
+                // https://www.net
+                if ($networkId) {
+                    $network = $this->networksRepository->find($networkId);
+                    if ($network) {
+                        $tv['directLink'][0]['logoPath'] = $this->fullUrl('logo', 2, $network->getLogoPath(), '', $imgConfig);
+                        $tv['directLink'][0]['name'] = $network->getName();
+                    }
+                }
+            }
+            $providersMatches = [
+                'disney' => 337, // Disney Plus
+                'netflix' => 8, // Netflix
+                'prime' => 119, // Amazon Prime Video
+                'canal' => 381, // Canal+
+                'ocs' => 56, // OCS Go
+                'apple' => 350, // Apple TV Plus
+//                    '' => 3, // Google Play Movies
+//                    '' => 193, // SFR Play
+//                    '' => 147, // Sixplay
+//                    '' => 61, // Orange VOD
+//                    '' => 236, // France TV
+//                    '' => 234, // Arte
+//                    '' => 223, // Hayu
+//                    '' => 68, // Microsoft Store
+//                    '' => 188, // YouTube Premium
+//                    '' => 58, // Canal VOD
+//                    '' => 59, // Bbox VOD
+//                    '' => 177, // Pantaflix
+//                    '' => 35, // Rakuten TV
+//                    '' => 415, // Anime Digital Networks
+//                    '' => 190, // Curiosity Stream
+//                    '' => 475, // DOCSVILLE
+//                    '' => 538, // Plex
+//                    '' => 546, // WOW Presents Plus
+//                    '' => 551, // Magellan TV
+//                    '' => 444, // Dekkoo
+//                    '' => 315, // Hoichoi
+//                    '' => 10, // Amazon Video
+//                    '' => 300, // Pluto TV
+//                    '' => 685, // OCS Amazon Channel
+//                    '' => 588, // MGM Amazon Channel
+//                    '' => 262, // Noggin Amazon Channel
+//                    '' => 296, // Hayu Amazon Channel
+//                    '' => 692, // Cultpix
+//                    '' => 701, // FilmBox+
+//                    '' => 1733, // Action Max Amazon Channel
+//                    '' => 1735, // Insomnia Amazon Channel
+//                    '' => 1737, // INA madelen Amazon Channel
+//                    '' => 1738, // Benshi Amazon Channel
+//                    '' => 309, // Sun Nxt
+//                    '' => 445, // Classix
+//                    '' => 1796, // Netflix basic with Ads
+//                    '' => 531, // Paramount Plus
+//                    '' => 582, // Paramount+ Amazon Channel
+//                    '' => 1853, // Paramount Plus Apple TV Channel
+//                    '' => 1870, // Pass Warner Amazon Channel
+//                    '' => 283, // Crunchyroll
+//                    '' => 1887, // BrutX Amazon Channel
+//                    '' => 1888, // Animation Digital Network Amazon Channel
+//                    '' => 1889, // Universal+ Amazon Channel
+//                    '' => 1715, // Shahid VIP
+//                    '' => 1967, // Molotov TV
+//                    '' => 542 // filmfriend
+            ];
+            if (count($providersFlatrate ?? []) && count($watchProviderList ?? [])) {
+                $justWatchPage = $this->TMDBService->justWatchPage($tv['id']);
+                preg_match_all('/https:\/\/click.+r=(http.+uct_country=fr)/', $justWatchPage, $matches);
+                $justWatchPage = "";
+                $matches = array_map(function ($match) {
+                    return urldecode($match);
+                }, array_unique($matches[1]));
+
+                if (count($matches)) {
+                    foreach ($matches as $match) {
+                        $url = $match;
+                        if (str_contains($url, "netflix")) {
+                            $url = preg_replace('/&.*$/', '', $url);
+                        }
+                        $logoPath = null;
+                        $name = null;
+                        foreach ($providersMatches as $providerMatch => $providerId) {
+                            if (str_contains($match, $providerMatch)) {
+                                $logoPath = $watchProviderList[$providerId]['logo_path'];
+                                $name = $watchProviderList[$providerId]['provider_name'];
+                                break;
+                            }
+                        }
+                        $tv['directLink'][] = ['url' => $url, 'logoPath' => $logoPath, 'name' => $name];
+                    }
+                }
+            }
+            dump($tv['directLink']);
 
             $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
 
@@ -1601,6 +1705,10 @@ class SerieController extends AbstractController
             } else {
                 $whatsNew = $this->whatsNew($tv, $serie, $serieViewing);
                 $serieViewing = $this->updateSerieViewing($serieViewing, $tv, false, true);
+            }
+            $serieOverview = $serie->getOverview();
+            if (strlen($tv['overview']) == 0) {
+                $tv['overview'] = $serieOverview;
             }
 
             $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
@@ -2016,8 +2124,9 @@ class SerieController extends AbstractController
             ]
         ];
         if ($serie) {
+            $localizedName = $serie['localized_name'] ?? null;
             $breadcrumb[] = [
-                'name' => $serie['localized_name'] ? (strlen($serie['localized_name']) ? $serie['localized_name'] : $serie['name']) : $serie['name'],
+                'name' => $localizedName ? (strlen($localizedName) ? $localizedName : $serie['name']) : $serie['name'],
                 'url' => $this->generateUrl('app_series_' . $kind, ['id' => $id]) . '?from=' . $from . ($from === self::SERIES_FROM_COUNTRY ? '&c=' . $country : ''),
             ];
         }
@@ -2247,6 +2356,20 @@ class SerieController extends AbstractController
         return $this->json([
             'name' => $serie->getName(),
             'localized' => $localizedName->getName(),
+            'result' => true,
+        ]);
+    }
+
+    #[Route('/set/direct/link/{id}', name: 'app_series_set_direct_link', methods: ['POST'])]
+    public function setDirectLink(Request $request, Serie $serie): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $link = $data['link'];
+
+        $serie->setDirectLink($link);
+        $this->serieRepository->save($serie, true);
+
+        return $this->json([
             'result' => true,
         ]);
     }
@@ -2506,10 +2629,13 @@ class SerieController extends AbstractController
                 $modified = true;
             }
         }
-        if ($serie->getOverview() !== $tv['overview']) {
-            $serie->setOverview($tv['overview']);
-            $whatsNew['overview'] = $this->translator->trans('New overview');
-            $modified = true;
+        $serieOverview = $serie->getOverview();
+        if ($serieOverview !== $tv['overview']) {
+            if (strlen($tv['overview']) > 0 && strlen($serieOverview) == 0) {
+                $serie->setOverview($tv['overview']);
+                $whatsNew['overview'] = $this->translator->trans('New overview');
+                $modified = true;
+            }
         }
         if ($serie->getNumberOfSeasons() !== $tv['number_of_seasons']) {
             $delta = $tv['number_of_seasons'] - $serie->getNumberOfSeasons();

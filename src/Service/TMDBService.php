@@ -24,6 +24,23 @@ class TMDBService
         $this->client = $client;
     }
 
+    public function justWatchPage($tvId): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://www.themoviedb.org/tv/'.$tvId.'/watch'
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                return "";
+            }
+        } catch (Throwable $e) {
+            return "";
+        }
+    }
+
     public function trending($mediaType, $timeWindow, $locale): ?string
     {
         try {
