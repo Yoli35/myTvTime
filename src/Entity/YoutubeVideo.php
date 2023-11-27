@@ -64,7 +64,7 @@ class YoutubeVideo
     private ?string $contentDimension;
 
     #[ORM\Column(type: 'integer')]
-    private ?string $contentDuration;
+    private ?int $contentDuration;
 
     #[ORM\Column(type: 'string', length: 16)]
     private ?string $contentProjection;
@@ -281,14 +281,14 @@ class YoutubeVideo
         return $this->contentDuration;
     }
 
-    public function setContentDuration(string $contentDuration): self
+    public function setContentDuration(int $contentDuration): self
     {
         $this->contentDuration = $contentDuration;
 
         return $this;
     }
 
-    public function getContentProjection(): ?string
+    public function getContentProjection(): ?int
     {
         return $this->contentProjection;
     }
