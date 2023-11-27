@@ -38,6 +38,7 @@ html {
 }
 
 body {
+    align-items: center;
     background: var(--mtt-body-bg);
     background-image: var(--gradient-light);
     background-attachment: fixed;
@@ -184,9 +185,10 @@ body {
 }
 
 .flash-messages {
-    left: 0;
+    //left: 0;
+    margin-inline: auto;
     position: fixed;
-    right: 0;
+    //right: 0;
     top: 0;
     z-index: 999;
 
@@ -789,6 +791,7 @@ nav.active {
     height: 3rem;
     position: sticky;
     top: 0;
+    width: 100%;
     z-index: 998;
     -webkit-backdrop-filter: blur(3px);
 
