@@ -319,9 +319,27 @@ Start to watch: Commencer à regarder
 Direct link: Lien direct
 Add a link: Ajouter un lien
 Watch on: Regarder sur
+Watch now via the movie DB website: Regarder maintenant via le site The movie DB
 Click here to watch your series: Cliquez ici pour regarder votre série
 New url: Proposez une nouvelle url
 Edit url: Modifier l'url
+
+# Series filters
+Filter: Filtre
+After: Après (date)
+Before: Avant (date)
+Air date year: Année de diffusion
+Adult: Adulte
+No air date: Pas de date de diffusion
+Language: Langue
+Screened theatrically: Diffusé en salle
+Sort by: Trié par
+Vote average greater than: Moyenne des votes supérieure à
+Vote average less than: Moyenne des votes inférieure à
+Vote count greater than: Nombre de votes supérieur à
+Vote count less than: Nombre de votes inférieur à
+Watch region: Région de visionnage
+Original country: Pays d'origine
 
 #User series airing today
 My series airing today: Épisodes du jour

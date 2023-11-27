@@ -314,6 +314,23 @@ class TMDBService
         }
     }
 
+    public function getTvGenreList($language): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/genre/tv/list?language=' . $language . '&api_key=' . $this->api_key,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                return "";
+            }
+        } catch (Throwable $exception) {
+            return "";
+        }
+    }
+
     public function getTvSimilar($tvId): ?string
     {
         try {
@@ -640,6 +657,24 @@ class TMDBService
             }
         } catch (Throwable $e) {
             return $noCredits;
+        }
+    }
+
+    public function availableRegions(): ?string
+    {
+        $noRegions = json_encode([]);
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/watch/providers/regions?api_key=' . $this->api_key
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $e) {
+                return $noRegions;
+            }
+        } catch (Throwable $e) {
+            return $noRegions;
         }
     }
 }

@@ -18,6 +18,7 @@ use App\Entity\SerieViewing;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\SerieSearchType;
+use App\Form\TvFilterType;
 use App\Repository\AlertRepository;
 use App\Repository\CastRepository;
 use App\Repository\EpisodeViewingRepository;
@@ -66,6 +67,8 @@ class SerieController extends AbstractController
     const UPCOMING_EPISODES = 'upcoming_episodes';
     const UPCOMING_SERIES = 'upcoming_series';
     const POPULAR_SERIES = 'popular';
+    const SERIES = 'filter';
+    const TOP_RATED = 'top_rated';
     const SEARCH_SERIES = 'search';
     const MY_EVENTS = 'my_events';
 
@@ -1139,7 +1142,7 @@ class SerieController extends AbstractController
             'query' => $query,
             'year' => $year,
             'series' => $series['results'],
-            'serieIds' => $user ? $this->mySerieIds($user) : [],
+            'serieIds' => $this->mySerieIds($user),
             'pages' => [
                 'page' => $page,
                 'total_pages' => $series['total_pages'],
@@ -1162,7 +1165,7 @@ class SerieController extends AbstractController
         $page = $request->query->getInt('p', 1);
         $locale = $request->getLocale();
 
-        $standing = $this->TMDBService->getSeries(self::POPULAR_SERIES, $page, $locale);
+        $standing = $this->TMDBService->getSeries(self::TOP_RATED, $page, $locale, $user->getTimezone());
         $series = json_decode($standing, true);
         $imageConfig = $this->imageConfiguration->getConfig();
 
@@ -1174,7 +1177,7 @@ class SerieController extends AbstractController
 
         return $this->render('series/popular.html.twig', [
             'series' => $series['results'],
-            'serieIds' => $user ? $this->mySerieIds($user) : [],
+            'serieIds' => $this->mySerieIds($user),
             'pages' => [
                 'total_results' => $series['total_results'],
                 'page' => $page,
@@ -1189,6 +1192,74 @@ class SerieController extends AbstractController
             'posterPath' => '/images/series/posters/',
             'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
+    }
+
+    #[Route('/filter/{page}', name: 'app_series_filter', methods: ['GET'])]
+    public function filter(Request $request, $page): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $locale = $request->getLocale();
+
+        $form = $this->createForm(TvFilterType::class, null, [
+            'data' => [
+                'watch_providers' => $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US'),
+                'genres' => $this->getTvGenres($user->getPreferredLanguage() ?? 'en-US'),
+            ]
+        ]);
+
+        $standing = $this->TMDBService->getSeries(self::TOP_RATED, $page, $locale, $user->getTimezone());
+        $series = json_decode($standing, true);
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        foreach ($series['results'] as $serie) {
+            $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+        }
+
+        $breadcrumb = $this->breadcrumb(self::SERIES);
+
+        return $this->render('series/filter.html.twig', [
+            'series' => $series['results'],
+            'serieIds' => $this->mySerieIds($user),
+            'form' => $form->createView(),
+            'pages' => [
+                'total_results' => $series['total_results'],
+                'page' => $page,
+                'per_page' => 20,
+                'link_count' => self::LINK_COUNT,
+                'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
+            ],
+            'breadcrumb' => $breadcrumb,
+            'from' => self::SERIES,
+            'user' => $user,
+            'posters' => $this->getPosters(),
+            'posterPath' => '/images/series/posters/',
+            'imageConfig' => $this->imageConfiguration->getConfig(),
+        ]);
+    }
+
+    public function getWatchProviders($language, $watchRegion): array
+    {
+        $providers = json_decode($this->TMDBService->getTvWatchProviderList($language, $watchRegion), true);
+        $providers = $providers['results'];
+        $watchProviders = [];
+        foreach ($providers as $provider) {
+            $watchProviders[$provider['provider_name']] = $provider['provider_id'];
+        }
+        ksort($watchProviders);
+        return $watchProviders;
+    }
+
+    public function getTvGenres($language): array
+    {
+        $genres = json_decode($this->TMDBService->getTvGenreList($language), true);
+        $genres = $genres['genres'];
+        $tvGenres = [];
+        foreach ($genres as $genre) {
+            $tvGenres[$genre['name']] = $genre['id'];
+        }
+        ksort($tvGenres);
+        return $tvGenres;
     }
 
     public function paginator($totalResults, $page = 1, $perPage = 20, $linkCount = 7): array
@@ -1789,7 +1860,7 @@ class SerieController extends AbstractController
             'providersFlatrate' => $providersFlatrate,
             'watchProviderList' => $watchProviderList,
             'similar' => $similar,
-            'serieIds' => $user ? $this->mySerieIds($user) : [],
+            'serieIds' => $this->mySerieIds($user),
             'images' => $images,
             'locale' => $locale,
             'page' => $page,
@@ -2094,6 +2165,11 @@ class SerieController extends AbstractController
             case 'app_home':
                 $baseUrl = $this->generateUrl("app_home");
                 $baseName = $this->translator->trans("Home");
+                $kind = 'tmdb';
+                break;
+            case self::SERIES:
+                $baseUrl = $this->generateUrl("app_series_filter", ['page' => 1]);
+                $baseName = $this->translator->trans("Filter");
                 $kind = 'tmdb';
                 break;
             case self::POPULAR_SERIES:
@@ -2976,6 +3052,9 @@ class SerieController extends AbstractController
 
     public function mySerieIds(User $user): array
     {
+        if ($user == null) {
+            return [];
+        }
         return array_map(function ($mySerieId) {
             return $mySerieId['serieId'];
         }, $this->serieRepository->findMySerieIds($user->getId()));

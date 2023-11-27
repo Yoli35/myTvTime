@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime ▶ ︎
+    {{ 'Filter'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container-fluid">
+
+        {{ include('blocks/_nav.html.twig') }}
+
+        <div class="my-series">
+            <div class="header">
+                <h1>{{ 'Filter'|trans }}</h1>
+                <div class="backdrop"></div>
+            </div>
+            <main>
+                <div class="series stretch">
+                    <div class="series-tools mobile">
+                        <div class="pages mobile">
+                            {{ include('blocks/series/_pagination-filter.html.twig') }}
+                        </div>
+{#                        {{ include('blocks/series/_filter.html.twig') }}#}
+                    </div>
+                    <div class="wrapper">
+                        {% for serie in series %}
+                            <div data-type="card">
+                                {{ include('blocks/series/_card-popular.html.twig') }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="series-tools desktop">
+                        <div class="pages desktop">
+                            {{ include('blocks/series/_pagination-filter.html.twig') }}
+                        </div>
+                        {{ include('blocks/series/_filter.html.twig') }}
+                    </div>
+                    <div class="new-serie-preview">
+                        <div class="message">
+                            <div class="content"></div>
+                            <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
+                        </div>
+                        <div class="wrapper"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+    <div id="globs-data" style="display: none">
+        {
+        "posters": {{ posters|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+        "posterPath": "{{ posterPath }}"
+        }
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/seriesToStartOrEnd.js" type="module"></script>
+{% endblock %}
