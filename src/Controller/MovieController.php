@@ -63,10 +63,13 @@ class MovieController extends AbstractController
         $user = $this->getUser();
         $userMovieIds = [];
         if ($user) {
-            $userMovies = $movieRepository->findUserMovieIds($user->getId());
-            foreach ($userMovies as $userMovie) {
-                $userMovieIds[] = $userMovie['movie_db_id'];
-            }
+//            $userMovies = $movieRepository->findUserMovieIds($user->getId());
+//            foreach ($userMovies as $userMovie) {
+//                $userMovieIds[] = $userMovie['movie_db_id'];
+//            }
+            $userMovieIds = array_map(function ($userMovie) {
+                return $userMovie['movie_db_id'];
+            }, $movieRepository->findUserMovieIds($user->getId()));
         }
 
         $options = [
