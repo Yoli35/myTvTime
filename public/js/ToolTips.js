@@ -16,9 +16,9 @@ export class ToolTips {
             tooltips.appendChild(tail);
             document.body.appendChild(tooltips);
 
-            divs = document.querySelectorAll("div[data-title]");
+            divs = document.querySelectorAll("*[data-title]");
         } else {
-            divs = element.querySelectorAll("div[data-title]");
+            divs = element.querySelectorAll("*[data-title]");
         }
         divs.forEach(div => {
             div.addEventListener('mousemove', this.move);
