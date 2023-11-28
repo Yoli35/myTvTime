@@ -4,6 +4,45 @@
     margin-left: auto;
 }
 
+.form-row {
+    @include flex-row(flex-start, flex-start);
+    border-radius: .25em;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-block-end: .5rem;
+    padding-block: .5rem;
+    padding-inline: 1rem;
+
+    &:nth-child(odd) {
+        background-color: var(--gradient-ardoise-25);
+    }
+
+    &:nth-child(even) {
+        background-color: var(--gradient-ardoise-20);
+    }
+
+    .form-group {
+        @include flex-row();
+        background-color: var(--gradient-ardoise-10-alpha-50);
+        border-radius: .25em;
+        gap: .5rem;
+        padding: .5rem;
+    }
+
+    .form-switch {
+        @include switcher(var(--gradient-orange-50), var(--gradient-ardoise-60));
+        flex-shrink: 0;
+        margin-inline: unset;
+    }
+
+    .form-field {
+        flex-shrink: 0;
+
+        label {
+        }
+    }
+}
+
 .form-select {
     appearance: none;
     background-color: var(--gradient-ardoise-90);

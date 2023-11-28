@@ -1,4 +1,115 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Create" />
+<div class="form-row">
+    {#    Sort by and order by   #}
+    <div class="form-group">
+        <div class="form-field">
+            <label for="{{ form.sort_by.vars.id }}">
+                <div>{{ form.sort_by.vars.label|trans }}</div>
+                {{ form_widget(form.sort_by) }}
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ form.order_by.vars.id }}">
+                <div>{{ form.order_by.vars.label }}</div>
+                {{ form_widget(form.order_by) }}
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    {#    Watch region   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_watch_region) }}">
+                <input type="checkbox" {{ field_value(form.switch_watch_region) ? 'checked':'' }} name="{{ field_name(form.switch_watch_region) }}" id="{{ field_name(form.switch_watch_region) }}" class="form-control"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ field_name(form.watch_region) }}">
+                <div>{{ field_label(form.watch_region) }}</div>
+                <select name="{{ field_name(form.watch_region) }}" id="{{ field_name(form.watch_region) }}" class="form-control">
+                    <option value="">{{ field_label(form.watch_region) }}</option>
+                    {% for label, value in field_choices(form.watch_region) %}
+                        <option value="{{ value }}" {{ field_value(form.watch_region)==value ? 'selected':'' }}>{{ label }}{{ getEmojiFlag(value) }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+    </div>
+    {#    With watch monetization types   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_watch_monetization_types) }}">
+                <input type="checkbox" {{ field_value(form.switch_with_watch_monetization_types) ? 'checked':'' }} name="{{ field_name(form.switch_with_watch_monetization_types) }}" id="{{ field_name(form.switch_with_watch_monetization_types) }}" class="form-control"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ form.with_watch_monetization_types.vars.id }}">
+                <div>{{ form.with_watch_monetization_types.vars.label|trans }}</div>
+                {{ form_widget(form.with_watch_monetization_types) }}
+            </label>
+        </div>
+    </div>
+    {#    With watch providers   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_watch_providers) }}">
+                <input type="checkbox" {{ field_value(form.switch_with_watch_providers)?'checked':'' }} name="{{ field_name(form.switch_with_watch_providers) }}" id="{{ field_name(form.switch_with_watch_providers) }}" class="form-control"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ form.with_watch_providers.vars.id }}">
+                <div>{{ form.with_watch_providers.vars.label|trans }}</div>
+                {{ form_widget(form.with_watch_providers) }}
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    {#    With origin country   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_origin_country) }}">
+                <input type="checkbox" {{ field_value(form.switch_with_origin_country)?'checked':'' }} name="{{ field_name(form.switch_with_origin_country) }}" id="{{ field_name(form.switch_with_origin_country) }}" class="form-control"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ field_name(form.with_origin_country) }}">
+                <div>{{ field_label(form.with_origin_country) }}</div>
+                <select name="{{ field_name(form.with_origin_country) }}" id="{{ field_name(form.with_origin_country) }}" class="form-control">
+                    <option value="">{{ field_label(form.with_origin_country) }}</option>
+                    {% for label, value in field_choices(form.with_origin_country) %}
+                        <option value="{{ value }}" {{ field_value(form.with_origin_country)==value?'selected':'' }}>{{ label }}{{ getEmojiFlag(value) }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+    </div>
+    {#    With original language   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_original_language) }}">
+                <input type="checkbox" {{ field_value(form.switch_with_original_language)?'checked':'' }} name="{{ field_name(form.switch_with_original_language) }}" id="{{ field_name(form.switch_with_original_language) }}" class="form-control"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ field_name(form.with_original_language) }}">
+                <div>{{ field_label(form.with_original_language) }}</div>
+                <select name="{{ field_name(form.with_original_language) }}" id="{{ field_name(form.with_original_language) }}" class="form-control">
+                    <option value="">{{ field_label(form.with_original_language) }}</option>
+                    {% for label, value in field_choices(form.with_original_language) %}
+                        <option value="{{ value }}" {{ field_value(form.with_original_language)==value?'selected':'' }}>{{ label }}{{ getEmojiFlag(value) }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    <input type="submit" class="btn btn-primary" value="Create"/>
+</div>
 {{ form_end(form) }}

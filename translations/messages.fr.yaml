@@ -326,6 +326,17 @@ Edit url: Modifier l'url
 
 # Series filters
 Filter: Filtre
+Series displayed by: Séries affichées par
+Popularity: Popularité
+Revenus: Revenus
+Primary release date: Date de sortie
+Vote average: Moyenne des votes
+Vote count: Nombre de votes
+Flatrate: Abonnement
+Buy: Achat
+Rent: Location
+Free: Gratuit
+Ads: Publicité
 After: Après (date)
 Before: Avant (date)
 Air date year: Année de diffusion
@@ -339,7 +350,7 @@ Vote average less than: Moyenne des votes inférieure à
 Vote count greater than: Nombre de votes supérieur à
 Vote count less than: Nombre de votes inférieur à
 Watch region: Région de visionnage
-Original country: Pays d'origine
+Origin country: Pays d'origine
 
 #User series airing today
 My series airing today: Épisodes du jour

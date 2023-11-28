@@ -222,8 +222,9 @@ class SerieRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getSeriesFromCountry($userId, $countryCode): array
+    public function getSeriesFromCountry($userId, $countryCode, $offset, $limit): array
     {
+        if ($countryCode == 'all') $countryCode = '';
         $sql = 'SELECT s.id as id, s.name as name, s.poster_path as poster_path, s.serie_id as serie_id, '
             . 's.first_date_air as first_date_air, s.number_of_episodes as number_of_episodes, '
             . 's.original_name as original_name, s.status as status, s.origin_country as origin_country, '
@@ -236,11 +237,27 @@ class SerieRepository extends ServiceEntityRepository
             . 'LEFT JOIN `season_viewing` sev ON sev.`serie_viewing_id`=sv.id AND sev.`season_number`=1 '
             . 'LEFT JOIN `episode_viewing` epv ON epv.`season_id`=sev.id AND epv.`episode_number`=1 '
             . 'WHERE s.`origin_country` LIKE "%' . $countryCode . '%" '
-            . 'ORDER BY s.`first_date_air` DESC ';
+            . 'ORDER BY s.`first_date_air` DESC '
+            . 'LIMIT ' . $limit . ' OFFSET ' . $offset;
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
         return $resultSet->fetchAllAssociative();
+    }
+
+    public function seriesFromCountryCount($userId, $countryCode): int
+    {
+        if ($countryCode == 'all') $countryCode = '';
+        $sql = "SELECT count(*) as count "
+            . "FROM `serie` s "
+            . 'INNER JOIN `serie_viewing` sv ON sv.`serie_id`=s.`id` AND sv.`user_id`=' . $userId . ' '
+            . 'WHERE s.`origin_country` LIKE "%' . $countryCode . '%" ';
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        $result = $resultSet->fetchAssociative();
+        return $result['count'];
     }
 }

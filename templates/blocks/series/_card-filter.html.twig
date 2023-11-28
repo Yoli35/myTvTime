@@ -1,0 +1,8 @@
+<div class="home-discover" data-id="{{ serie.id }}">
+    <a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?from={{ from }}" title="{{ serie.name }}">
+            <img src="{{ serie.poster_path }}" alt="{{ 'Poster' }}">
+        <div class="title">
+            <div>{{ serie.name }}</div>
+        </div>
+    </a>
+</div>

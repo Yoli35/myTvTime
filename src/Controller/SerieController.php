@@ -845,13 +845,14 @@ class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/country/{countryCode}', name: 'app_series_from_country', defaults: ['countryCode' => 'FR'], methods: ['GET'])]
+    #[Route('/country/{countryCode}', name: 'app_series_from_country', methods: ['GET'])]
     public function seriesFromCountry(Request $request, string $countryCode): Response
     {
         /** @var User $user */
         $user = $this->getUser();
         $imageConfig = $this->imageConfiguration->getConfig();
-        $series = $this->serieRepository->getSeriesFromCountry($user->getId(), $countryCode);
+
+        $series = $this->serieRepository->getSeriesFromCountry($user->getId(), $countryCode, 0, 50);
         $series = array_map(function ($serie) use ($imageConfig) {
             $serie['poster_path'] = $this->fullUrl("poster", 3, $serie['poster_path'], "no_poster_dark.png", $imageConfig);
             return $serie;
@@ -863,12 +864,17 @@ class SerieController extends AbstractController
             return !$serie['first_date_air'];
         });
         $series = array_merge($seriesWithoutFirstDateAir, $seriesWithFirstDateAir);
-//        dump([
+        dump([
+            'user' => $user,
 //            'seriesWithFirstDateAir' => $seriesWithFirstDateAir,
 //            'seriesWithoutFirstDateAir' => $seriesWithoutFirstDateAir,
-//        ]);
-        $countryName = Countries::getName($countryCode, $request->getLocale());
+        ]);
+        if ($countryCode == 'all')
+            $countryName = $this->translator->trans('All countries');
+        else
+            $countryName = Countries::getName($countryCode, $request->getLocale());
         $count = count($series);
+        $totalResults = $this->serieRepository->seriesFromCountryCount($user->getId(), $countryCode);
 
         return $this->render('series/from_country.html.twig', [
             'series' => $series,
@@ -885,7 +891,7 @@ class SerieController extends AbstractController
                     'url' => $this->generateUrl('app_series_from_country', ['countryCode' => $countryCode])
                 ],
                 [
-                    'name' => $count . ' ' . $this->translator->trans($count > 1 ? 'series' : 'serie'),
+                    'name' => $count . ' / ' . $totalResults . ' ' . $this->translator->trans($count > 1 ? 'series' : 'serie'),
                 ],
             ],
             'from' => self::SERIES_FROM_COUNTRY,
@@ -1194,8 +1200,8 @@ class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/filter/{page}', name: 'app_series_filter', methods: ['GET'])]
-    public function filter(Request $request, $page): Response
+    #[Route('/filter/{page}', name: 'app_series_filter', methods: ['POST'])]
+    public function filter(Request $request, int $page): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -1203,38 +1209,115 @@ class SerieController extends AbstractController
 
         $form = $this->createForm(TvFilterType::class, null, [
             'data' => [
-                'watch_providers' => $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US'),
                 'genres' => $this->getTvGenres($user->getPreferredLanguage() ?? 'en-US'),
+                'watch_providers' => $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US'),
+                'watch_regions' => $this->getAvailableRegions(),
+
+                "sort_by" => "primary_release_date",
+                "order_by" => "desc",
+
+                "switch_watch_region" => true,
+                "watch_region" => "FR",
+                "switch_with_watch_monetization_types" => true,
+                "with_watch_monetization_types" => "flatrate",
+                "switch_with_watch_providers" => true,
+                "with_watch_providers" => 8,
+
+                "switch_with_origin_country" => true,
+                "with_origin_country" => "TH",
+                "switch_with_original_language" => false,
+                "with_original_language" => null,
+
+                "switch_with_genres" => false,
+                "with_genres" => [],
+
+                "switch_first_air_date_year" => false,
+                "first_air_date_year" => null,
+                "switch_first_air_date_gte" => false,
+                "first_air_date_gte" => null,
+                "switch_first_air_date_lte" => false,
+                "first_air_date_lte" => null,
+                "switch_include_null_first_air_date" => false,
+                "include_null_first_air_date" => false,
+
+                "switch_language" => true,
+                "language" => $user->getPreferredLanguage() ?? $locale,
+                "switch_timezone" => true,
+                "timezone" => $user->getTimezone() ?? 'Europe/Paris',
+
+                "switch_vote_average_gte" => false,
+                "vote_average_gte" => null,
+                "switch_vote_average_lte" => false,
+                "vote_average_lte" => null,
+                "switch_vote_count_gte" => false,
+                "vote_count_gte" => null,
+                "switch_vote_count_lte" => false,
+                "vote_count_lte" => null,
+
+                "switch_with_runtime_gte" => false,
+                "with_runtime_gte" => null,
+                "switch_with_runtime_lte" => false,
+                "with_runtime_lte" => null,
+
+                "switch_with_status" => false,
+                "with_status" => null,
+
+                "switch_screened_theatrically" => false,
+                "screened_theatrically" => false,
+
+                "switch_include_adult" => true,
+                "include_adult" => false,
             ]
         ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $form->getData();
+            $page = 1;
+            dump($result);
+        }
 
-        $standing = $this->TMDBService->getSeries(self::TOP_RATED, $page, $locale, $user->getTimezone());
+        $filters = [
+            'page' => $page,
+            'language' => $locale,
+            'timezone' => $user->getTimezone() ?? 'Europe/Paris',
+            'watch_region' => $user->getCountry() ?? 'FR',
+            'first_air_date.gte' => '2023-11-01',
+            'first_air_date.lte' => 'now',
+            'sort_by' => 'primary_release_date.desc',
+//            'with_watch_providers' => $form->get('watch_providers')->getData(),
+            'with_watch_providers' => 8,
+//            'with_genres' => $form->get('genres')->getData(),
+        ];
+        $standing = $this->TMDBService->getFilterTv($filters);
         $series = json_decode($standing, true);
+        $totalResults = $series['total_results'];
+        $page = $series['page'];
+        $totalPages = $series['total_pages'];
         $imageConfig = $this->imageConfiguration->getConfig();
 
-        foreach ($series['results'] as $serie) {
+        $series = array_map(function ($serie) use ($imageConfig) {
             $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
-        }
+            $serie['poster_path'] = $this->fullUrl("poster", 3, $serie['poster_path'], "no_poster_dark.png", $imageConfig);
+            return $serie;
+        }, $series['results']);
 
         $breadcrumb = $this->breadcrumb(self::SERIES);
 
         return $this->render('series/filter.html.twig', [
-            'series' => $series['results'],
+            'series' => $series,
             'serieIds' => $this->mySerieIds($user),
             'form' => $form->createView(),
             'pages' => [
-                'total_results' => $series['total_results'],
+                'total_results' => $totalResults,
+                'total_pages' => $totalPages,
                 'page' => $page,
                 'per_page' => 20,
                 'link_count' => self::LINK_COUNT,
-                'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
+                'paginator' => $this->paginator($totalResults, $page, 20, self::LINK_COUNT),
             ],
             'breadcrumb' => $breadcrumb,
             'from' => self::SERIES,
             'user' => $user,
-            'posters' => $this->getPosters(),
-            'posterPath' => '/images/series/posters/',
-            'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
 
@@ -1260,6 +1343,18 @@ class SerieController extends AbstractController
         }
         ksort($tvGenres);
         return $tvGenres;
+    }
+
+    public function getAvailableRegions(): array
+    {
+        $regions = json_decode($this->TMDBService->availableRegions(), true);
+        $regions = $regions['results'];
+        $availableRegions = [];
+        foreach ($regions as $region) {
+            $availableRegions[$region['english_name']] = $region['iso_3166_1'];
+        }
+        ksort($availableRegions);
+        return $availableRegions;
     }
 
     public function paginator($totalResults, $page = 1, $perPage = 20, $linkCount = 7): array
@@ -1572,7 +1667,7 @@ class SerieController extends AbstractController
                 'imageConfig' => $this->imageConfiguration->getConfig(),
             ]);
         }
-        return $this->getSerie($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
+        return $this->displaySeriesPage($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
     }
 
     #[Route('/tmdb/{id}', name: 'app_series_tmdb', methods: ['GET'])]
@@ -1599,10 +1694,10 @@ class SerieController extends AbstractController
             ]);
         }
 
-        return $this->getSerie($request, $tv, $page, $from, $id, null, $query, $year);
+        return $this->displaySeriesPage($request, $tv, $page, $from, $id, null, $query, $year);
     }
 
-    public function getSerie(Request $request, array $tv, int $page, string $from, $backId, Serie|null $serie, $query = "", $year = ""): Response
+    public function displaySeriesPage(Request $request, array $tv, int $page, string $from, $backId, Serie|null $serie, $query = "", $year = ""): Response
     {
 //        dump($tv);
         /** @var User $user */

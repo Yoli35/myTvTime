@@ -29,7 +29,7 @@ class TMDBService
         try {
             $response = $this->client->request(
                 'GET',
-                'https://www.themoviedb.org/tv/'.$tvId.'/watch'
+                'https://www.themoviedb.org/tv/' . $tvId . '/watch'
             );
             try {
                 return $response->getContent();
@@ -243,6 +243,33 @@ class TMDBService
             }
         } catch (Throwable $exception) {
             return "";
+        }
+    }
+
+    /**
+     * @param array $filters
+     * @return string|null
+     */
+    public function getFilterTv(array $filters): ?string
+    {
+        // $filters = [param => value]
+        $filterString = '';
+        foreach ($filters as $param => $value) {
+            $filterString .= '&' . $param . '=' . $value;
+        }
+        dump(['filterString' => $filterString]);
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/discover/tv/?api_key=' . $this->api_key . $filterString,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable $exception) {
+                return 'Response : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
+            }
+        } catch (Throwable $exception) {
+            return 'Request : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
         }
     }
 
