@@ -1,3 +1,4 @@
+{# {{ dump(form.with_genres) }} #}
 {{ form_start(form) }}
 <div class="form-row">
     {#    Sort by and order by   #}
@@ -17,18 +18,35 @@
     </div>
 </div>
 <div class="form-row">
+    {#    With status   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_status) }}">
+                <input type="checkbox" {{ form.switch_with_status.vars.checked ? 'checked':'' }} name="{{ field_name(form.switch_with_status) }}" id="{{ field_name(form.switch_with_status) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ form.with_status.vars.id }}">
+                <div>{{ form.with_status.vars.label|trans }}</div>
+                {{ form_widget(form.with_status) }}
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-row">
     {#    Watch region   #}
     <div class="form-group">
         <div class="form-switch">
             <label for="{{ field_name(form.switch_watch_region) }}">
-                <input type="checkbox" {{ field_value(form.switch_watch_region) ? 'checked':'' }} name="{{ field_name(form.switch_watch_region) }}" id="{{ field_name(form.switch_watch_region) }}" class="form-control"/>
+                <input type="checkbox" {{ form.switch_watch_region.vars.checked ? 'checked':'' }} name="{{ field_name(form.switch_watch_region) }}" id="{{ field_name(form.switch_watch_region) }}"/>
                 <span></span>
             </label>
         </div>
         <div class="form-field">
             <label for="{{ field_name(form.watch_region) }}">
                 <div>{{ field_label(form.watch_region) }}</div>
-                <select name="{{ field_name(form.watch_region) }}" id="{{ field_name(form.watch_region) }}" class="form-control">
+                <select name="{{ field_name(form.watch_region) }}" id="{{ field_name(form.watch_region) }}">
                     <option value="">{{ field_label(form.watch_region) }}</option>
                     {% for label, value in field_choices(form.watch_region) %}
                         <option value="{{ value }}" {{ field_value(form.watch_region)==value ? 'selected':'' }}>{{ label }}{{ getEmojiFlag(value) }}</option>
@@ -41,7 +59,7 @@
     <div class="form-group">
         <div class="form-switch">
             <label for="{{ field_name(form.switch_with_watch_monetization_types) }}">
-                <input type="checkbox" {{ field_value(form.switch_with_watch_monetization_types) ? 'checked':'' }} name="{{ field_name(form.switch_with_watch_monetization_types) }}" id="{{ field_name(form.switch_with_watch_monetization_types) }}" class="form-control"/>
+                <input type="checkbox" {{ form.switch_with_watch_monetization_types.vars.checked ? 'checked':'' }} name="{{ field_name(form.switch_with_watch_monetization_types) }}" id="{{ field_name(form.switch_with_watch_monetization_types) }}"/>
                 <span></span>
             </label>
         </div>
@@ -56,7 +74,7 @@
     <div class="form-group">
         <div class="form-switch">
             <label for="{{ field_name(form.switch_with_watch_providers) }}">
-                <input type="checkbox" {{ field_value(form.switch_with_watch_providers)?'checked':'' }} name="{{ field_name(form.switch_with_watch_providers) }}" id="{{ field_name(form.switch_with_watch_providers) }}" class="form-control"/>
+                <input type="checkbox" {{ form.switch_with_watch_providers.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_watch_providers) }}" id="{{ field_name(form.switch_with_watch_providers) }}"/>
                 <span></span>
             </label>
         </div>
@@ -72,14 +90,14 @@
     <div class="form-group">
         <div class="form-switch">
             <label for="{{ field_name(form.switch_with_origin_country) }}">
-                <input type="checkbox" {{ field_value(form.switch_with_origin_country)?'checked':'' }} name="{{ field_name(form.switch_with_origin_country) }}" id="{{ field_name(form.switch_with_origin_country) }}" class="form-control"/>
+                <input type="checkbox" {{ form.switch_with_origin_country.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_origin_country) }}" id="{{ field_name(form.switch_with_origin_country) }}"/>
                 <span></span>
             </label>
         </div>
         <div class="form-field">
             <label for="{{ field_name(form.with_origin_country) }}">
                 <div>{{ field_label(form.with_origin_country) }}</div>
-                <select name="{{ field_name(form.with_origin_country) }}" id="{{ field_name(form.with_origin_country) }}" class="form-control">
+                <select name="{{ field_name(form.with_origin_country) }}" id="{{ field_name(form.with_origin_country) }}">
                     <option value="">{{ field_label(form.with_origin_country) }}</option>
                     {% for label, value in field_choices(form.with_origin_country) %}
                         <option value="{{ value }}" {{ field_value(form.with_origin_country)==value?'selected':'' }}>{{ label }}{{ getEmojiFlag(value) }}</option>
@@ -92,20 +110,213 @@
     <div class="form-group">
         <div class="form-switch">
             <label for="{{ field_name(form.switch_with_original_language) }}">
-                <input type="checkbox" {{ field_value(form.switch_with_original_language)?'checked':'' }} name="{{ field_name(form.switch_with_original_language) }}" id="{{ field_name(form.switch_with_original_language) }}" class="form-control"/>
+                <input type="checkbox" {{ form.switch_with_original_language.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_original_language) }}" id="{{ field_name(form.switch_with_original_language) }}"/>
                 <span></span>
             </label>
         </div>
         <div class="form-field">
             <label for="{{ field_name(form.with_original_language) }}">
                 <div>{{ field_label(form.with_original_language) }}</div>
-                <select name="{{ field_name(form.with_original_language) }}" id="{{ field_name(form.with_original_language) }}" class="form-control">
+                <select name="{{ field_name(form.with_original_language) }}" id="{{ field_name(form.with_original_language) }}">
                     <option value="">{{ field_label(form.with_original_language) }}</option>
                     {% for label, value in field_choices(form.with_original_language) %}
-                        <option value="{{ value }}" {{ field_value(form.with_original_language)==value?'selected':'' }}>{{ label }}{{ getEmojiFlag(value) }}</option>
+                        <option value="{{ value }}" {{ field_value(form.with_original_language)==value?'selected':'' }}>{{ label }}</option>
                     {% endfor %}
                 </select>
             </label>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    {#    With genres   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_genres) }}">
+                <input type="checkbox" {{ form.switch_with_genres.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_genres) }}" id="{{ field_name(form.switch_with_genres) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.with_genres) }}
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    {# First air date year #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_first_air_date_year) }}">
+                <input type="checkbox" {{ form.switch_first_air_date_year.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_first_air_date_year) }}" id="{{ field_name(form.switch_first_air_date_year) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.first_air_date_year, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    {# First air date (greater than or equal) #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_first_air_date_gte) }}">
+                <input type="checkbox" {{ form.switch_first_air_date_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_first_air_date_gte) }}" id="{{ field_name(form.switch_first_air_date_gte) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.first_air_date_gte, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    {# First air date (less than or equal) #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_first_air_date_lte) }}">
+                <input type="checkbox" {{ form.switch_first_air_date_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_first_air_date_lte) }}" id="{{ field_name(form.switch_first_air_date_lte) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.first_air_date_lte, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    {# No date #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_include_null_first_air_date) }}">
+                <input type="checkbox" {{ form.switch_include_null_first_air_date.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_include_null_first_air_date) }}" id="{{ field_name(form.switch_include_null_first_air_date) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <div class="checkbox">
+                <label for="{{ field_name(form.include_null_first_air_date) }}">
+                    <div class="form-switch">
+                        <input type="checkbox" {{ form.include_null_first_air_date.vars.checked ? 'checked':'' }}
+                               id="{{ field_name(form.include_null_first_air_date) }}"
+                               value="{{ field_value(form.include_null_first_air_date) }}"
+                               name="{{ field_name(form.include_null_first_air_date) }}"/>
+                        <span></span>
+                    </div>
+                    {{ form_label(form.include_null_first_air_date) }}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    {#    Language   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_language) }}">
+                <input type="checkbox" {{ form.switch_language.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_language) }}" id="{{ field_name(form.switch_language) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ field_name(form.language) }}">
+                <div>{{ field_label(form.language) }}</div>
+                <select name="{{ field_name(form.language) }}" id="{{ field_name(form.language) }}">
+                    <option value="">{{ field_label(form.language) }}</option>
+                    {% for label, value in field_choices(form.language) %}
+                        <option value="{{ value }}" {{ field_value(form.language)==value?'selected':'' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+    </div>
+    {#    Timezone   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_timezone) }}">
+                <input type="checkbox" {{ form.switch_timezone.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_timezone) }}" id="{{ field_name(form.switch_timezone) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ field_name(form.timezone) }}">
+                <div>{{ field_label(form.timezone) }}</div>
+                <select name="{{ field_name(form.timezone) }}" id="{{ field_name(form.timezone) }}">
+                    <option value="">{{ field_label(form.timezone) }}</option>
+                    {% for label, value in field_choices(form.timezone) %}
+                        <option value="{{ value }}" {{ field_value(form.timezone)==value?'selected':'' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    {# Average vote (greater than or equal) #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_vote_average_gte) }}">
+                <input type="checkbox" {{ form.switch_vote_average_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_vote_average_gte) }}" id="{{ field_name(form.switch_vote_average_gte) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.vote_average_gte, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    {# Average vote (less than or equal) #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_vote_average_lte) }}">
+                <input type="checkbox" {{ form.switch_vote_average_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_vote_average_lte) }}" id="{{ field_name(form.switch_vote_average_lte) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.vote_average_lte, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    {# Count vote (greater than or equal) #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_vote_count_gte) }}">
+                <input type="checkbox" {{ form.switch_vote_count_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_vote_count_gte) }}" id="{{ field_name(form.switch_vote_count_gte) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.vote_count_gte, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    {# Count vote (less than or equal) #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_vote_count_lte) }}">
+                <input type="checkbox" {{ form.switch_vote_count_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_vote_count_lte) }}" id="{{ field_name(form.switch_vote_count_lte) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.vote_count_lte, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    {# Runtime (greater than or equal) #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_runtime_gte) }}">
+                <input type="checkbox" {{ form.switch_with_runtime_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_runtime_gte) }}" id="{{ field_name(form.switch_with_runtime_gte) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.with_runtime_gte, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    {# Runtime (less than or equal) #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_runtime_lte) }}">
+                <input type="checkbox" {{ form.switch_with_runtime_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_runtime_lte) }}" id="{{ field_name(form.switch_with_runtime_lte) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.with_runtime_lte, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
 </div>

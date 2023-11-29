@@ -5,7 +5,7 @@
 }
 
 .form-row {
-    @include flex-row(flex-start, flex-start);
+    @include flex-row(stretch, flex-start);
     border-radius: .25em;
     flex-wrap: wrap;
     gap: 1rem;
@@ -35,10 +35,55 @@
         margin-inline: unset;
     }
 
+    .checkboxes {
+        align-items: center;
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-start;
+
+        .label {
+            flex-shrink: 0;
+        }
+
+        .group {
+            background-color: var(--gradient-ardoise-10-alpha-50);
+            border-radius: .25em;
+            display: flex;
+            flex-shrink: 1;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: flex-start;
+            padding: .5rem;
+
+            .checkbox {
+                .form-switch {
+                    margin-inline-end: .5rem;
+
+                    input:checked + span {
+                        background: var(--gradient-orange-50);
+                    }
+
+                    input:checked + span:before {
+                        background: var(--gradient-orange-20);
+                    }
+                }
+            }
+        }
+    }
+
+    .checkbox {
+        .form-switch {
+            margin-inline-end: .5rem;
+        }
+    }
+
     .form-field {
         flex-shrink: 0;
 
-        label {
+        > div:not(.checkboxes) {
+            align-items: center;
+            display: flex;
+            gap: .5rem;
         }
     }
 }

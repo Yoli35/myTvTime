@@ -1200,7 +1200,7 @@ class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/filter/{page}', name: 'app_series_filter', methods: ['POST'])]
+    #[Route('/filter/{page}', name: 'app_series_filter', methods: ['GET', 'POST'])]
     public function filter(Request $request, int $page): Response
     {
         /** @var User $user */
@@ -1225,11 +1225,11 @@ class SerieController extends AbstractController
 
                 "switch_with_origin_country" => true,
                 "with_origin_country" => "TH",
-                "switch_with_original_language" => false,
-                "with_original_language" => null,
+                "switch_with_original_language" => true,
+                "with_original_language" => "th",
 
                 "switch_with_genres" => false,
-                "with_genres" => [],
+                "with_genres" => [10759,35],
 
                 "switch_first_air_date_year" => false,
                 "first_air_date_year" => null,

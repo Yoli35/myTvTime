@@ -351,6 +351,18 @@ Vote count greater than: Nombre de votes supérieur à
 Vote count less than: Nombre de votes inférieur à
 Watch region: Région de visionnage
 Origin country: Pays d'origine
+with_genres: Avec le ou les genres
+Action & Adventure: Action & Aventure
+Crime: Crime
+Drame: Drame
+Familial: Familial
+Kids: Enfants
+News: Actualités
+Reality: Réalité
+Soap: Feuilleton
+Talk: Émission
+War & Politics: Guerre & Politique
+Western: Western
 
 #User series airing today
 My series airing today: Épisodes du jour
@@ -530,6 +542,7 @@ Ended: Série terminée
 In Production: En Production
 Planned: Planifié
 Returning Series: Série renouvelée
+Pilot: Pilote3
 Status: Statut
 That's all: C'est tout !
 More episodes to come: Plus d'épisodes à venir !

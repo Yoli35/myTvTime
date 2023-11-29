@@ -177,7 +177,6 @@ class TvFilterType extends AbstractType
             ->add('include_null_first_air_date', CheckboxType::class, [
                 'label' => $this->translator->trans('No date'),
                 'required' => false,
-                'value' => false,
             ])
 
             ->add('switch_language', CheckboxType::class, [

@@ -4,6 +4,31 @@
     {{ 'Filter'|trans }}
 {% endblock %}
 
+{% form_theme form _self %}
+
+{% block _tv_filter_with_genres_row %}
+{#        {{ dump() }}#}
+    <div class="checkboxes">
+        <div class="label">{{ name|trans }}</div>
+        <div id="tv_filter_with_genres" class="group">
+            {% for choice in choices %}
+                <div class="checkbox">
+                    <label for="tv_filter_with_genres_{{ loop.index0 }}">
+                        <div class="form-switch">
+                            <input type="checkbox" {{ choice.value in data ? 'checked':'' }}
+                                   value="{{ choice.value }}"
+                                   id="tv_filter_with_genres_{{ loop.index0 }}"
+                                   name="tv_filter[with_genres][]"/>
+                            <span></span>
+                        </div>
+                        {{ choice.label|trans }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
