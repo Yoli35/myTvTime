@@ -27,6 +27,20 @@
         border-radius: .25em;
         gap: .5rem;
         padding: .5rem;
+
+        &:has(i) {
+            gap: 1rem
+        }
+
+        i {
+            color: var(--gradient-ardoise-50);
+            cursor: pointer;
+            font-size: 1.5rem;
+
+            &:hover {
+                color: var(--gradient-ardoise-90);
+            }
+        }
     }
 
     .form-switch {
@@ -46,16 +60,19 @@
         }
 
         .group {
+            align-items: center;
             background-color: var(--gradient-ardoise-10-alpha-50);
+            border: 1px solid var(--gradient-ardoise-50);
             border-radius: .25em;
             display: flex;
-            flex-shrink: 1;
             flex-wrap: wrap;
             gap: 1rem;
             justify-content: flex-start;
             padding: .5rem;
 
             .checkbox {
+                display: flex;
+
                 .form-switch {
                     margin-inline-end: .5rem;
 
@@ -78,7 +95,7 @@
     }
 
     .form-field {
-        flex-shrink: 0;
+        flex-shrink: 1;
 
         > div:not(.checkboxes) {
             align-items: center;

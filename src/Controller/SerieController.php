@@ -91,6 +91,7 @@ class SerieController extends AbstractController
         private readonly SeriePosterRepository        $seriePosterRepository,
         private readonly SerieRepository              $serieRepository,
         private readonly SerieViewingRepository       $serieViewingRepository,
+        private readonly SettingsRepository           $settingsRepository,
         private readonly TMDBService                  $TMDBService,
         private readonly TranslatorInterface          $translator,
 //        private readonly UserTvPreferenceRepository   $userTvPreferenceRepository,
@@ -1205,90 +1206,36 @@ class SerieController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $locale = $request->getLocale();
+
+        $tvFilterSettings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
+        if ($tvFilterSettings)
+            $data = $tvFilterSettings->getData();
+        else
+            $data = $this->createTvFilterSettings($user);
+
+        $data['genres'] = $this->getTvGenres($user->getPreferredLanguage() ?? 'en-US');
+        $data['watch_providers'] = $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US');
+        $data['watch_regions'] = $this->getAvailableRegions();
 
         $form = $this->createForm(TvFilterType::class, null, [
-            'data' => [
-                'genres' => $this->getTvGenres($user->getPreferredLanguage() ?? 'en-US'),
-                'watch_providers' => $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US'),
-                'watch_regions' => $this->getAvailableRegions(),
-
-                "sort_by" => "primary_release_date",
-                "order_by" => "desc",
-
-                "switch_watch_region" => true,
-                "watch_region" => "FR",
-                "switch_with_watch_monetization_types" => true,
-                "with_watch_monetization_types" => "flatrate",
-                "switch_with_watch_providers" => true,
-                "with_watch_providers" => 8,
-
-                "switch_with_origin_country" => true,
-                "with_origin_country" => "TH",
-                "switch_with_original_language" => true,
-                "with_original_language" => "th",
-
-                "switch_with_genres" => false,
-                "with_genres" => [10759,35],
-
-                "switch_first_air_date_year" => false,
-                "first_air_date_year" => null,
-                "switch_first_air_date_gte" => false,
-                "first_air_date_gte" => null,
-                "switch_first_air_date_lte" => false,
-                "first_air_date_lte" => null,
-                "switch_include_null_first_air_date" => false,
-                "include_null_first_air_date" => false,
-
-                "switch_language" => true,
-                "language" => $user->getPreferredLanguage() ?? $locale,
-                "switch_timezone" => true,
-                "timezone" => $user->getTimezone() ?? 'Europe/Paris',
-
-                "switch_vote_average_gte" => false,
-                "vote_average_gte" => null,
-                "switch_vote_average_lte" => false,
-                "vote_average_lte" => null,
-                "switch_vote_count_gte" => false,
-                "vote_count_gte" => null,
-                "switch_vote_count_lte" => false,
-                "vote_count_lte" => null,
-
-                "switch_with_runtime_gte" => false,
-                "with_runtime_gte" => null,
-                "switch_with_runtime_lte" => false,
-                "with_runtime_lte" => null,
-
-                "switch_with_status" => false,
-                "with_status" => null,
-
-                "switch_screened_theatrically" => false,
-                "screened_theatrically" => false,
-
-                "switch_include_adult" => true,
-                "include_adult" => false,
-            ]
+            'data' => $data,
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $result = $form->getData();
+            $data = $form->getData();
             $page = 1;
-            dump($result);
         }
 
-        $filters = [
-            'page' => $page,
-            'language' => $locale,
-            'timezone' => $user->getTimezone() ?? 'Europe/Paris',
-            'watch_region' => $user->getCountry() ?? 'FR',
-            'first_air_date.gte' => '2023-11-01',
-            'first_air_date.lte' => 'now',
-            'sort_by' => 'primary_release_date.desc',
-//            'with_watch_providers' => $form->get('watch_providers')->getData(),
-            'with_watch_providers' => 8,
-//            'with_genres' => $form->get('genres')->getData(),
-        ];
-        $standing = $this->TMDBService->getFilterTv($filters);
+        $filters = $this->getTvFilters($data);
+        $filterString = "&page=".$page."&sort_by=".$data['sort_by'].".".$data['order_by'];
+        foreach ($filters as $key => $value) {
+            $filterString .= "&$key=$value";
+        }
+        dump([
+            '$filters' => $filters,
+            '$filterString' => $filterString,
+        ]);
+        $standing = $this->TMDBService->getFilterTv($filterString);
         $series = json_decode($standing, true);
         $totalResults = $series['total_results'];
         $page = $series['page'];
@@ -1319,6 +1266,115 @@ class SerieController extends AbstractController
             'from' => self::SERIES,
             'user' => $user,
         ]);
+    }
+
+    public function getTvFilters(array $data): array
+    {
+        $data['switch_sort_by'] = false;
+        $data['switch_order_by'] = false;
+
+        $switches = array_filter($data, function ($key) {
+            return str_contains($key, 'switch_');
+        }, ARRAY_FILTER_USE_KEY);
+        $fields = array_filter($data, function ($key) {
+            return !str_contains($key, 'switch_');
+        }, ARRAY_FILTER_USE_KEY);
+//        dump([
+//            '$data' => $data,
+//            '$switches' => $switches,
+//            '$fields' => $fields,
+//        ]);
+        $filters = [];
+        foreach ($fields as $key => $value) {
+            $switchKey = 'switch_' . $key;
+            if (array_key_exists($switchKey, $switches)) {
+                $switch = $switches['switch_' . $key];
+                if ($switch) {
+                    if ($key == 'with_genres') {
+                        $value = implode(',', $value);
+                    }
+                    if ($key == 'first_air_date_gte' || $key == 'first_air_date_lte') {
+                        if (!$value) $value = $this->dateService->getNow('UTC', true);
+                        $value = $value->format('Y-m-d');
+                    }
+                    if ($key == 'include_adult' || $key == 'include_null_first_air_date') {
+                        $value = $value ? 'true' : 'false';
+                    }
+                    // Replace '_gte' and '_lte' by '.gte' and '.lte' in keys
+                    $key = str_replace('_gte', '.gte', $key);
+                    $key = str_replace('_lte', '.lte', $key);
+                    $filters[$key] = $value;
+                }
+            }
+        }
+        return $filters;
+    }
+
+    public function createTvFilterSettings(User $user): array
+    {
+        $data = [
+            "sort_by" => "primary_release_date",
+            "order_by" => "desc",
+
+            "switch_with_status" => false,
+            "with_status" => null,
+
+            "switch_watch_region" => true,
+            "watch_region" => "FR",
+            "switch_with_watch_monetization_types" => true,
+            "with_watch_monetization_types" => "flatrate",
+            "switch_with_watch_providers" => true,
+            "with_watch_providers" => 8,
+
+            "switch_with_origin_country" => true,
+            "with_origin_country" => "FR",
+            "switch_with_original_language" => true,
+            "with_original_language" => "fr",
+
+            "switch_with_genres" => false,
+            "with_genres" => [],
+
+            "switch_first_air_date_year" => false,
+            "first_air_date_year" => null,
+            "switch_first_air_date_gte" => false,
+            "first_air_date_gte" => null,
+            "switch_first_air_date_lte" => false,
+            "first_air_date_lte" => null,
+            "switch_include_null_first_air_date" => false,
+            "include_null_first_air_date" => false,
+
+            "switch_language" => true,
+            "language" => 'fr',
+            "switch_timezone" => true,
+            "timezone" => 'Europe/Paris',
+
+            "switch_vote_average_gte" => false,
+            "vote_average_gte" => null,
+            "switch_vote_average_lte" => false,
+            "vote_average_lte" => null,
+            "switch_vote_count_gte" => false,
+            "vote_count_gte" => null,
+            "switch_vote_count_lte" => false,
+            "vote_count_lte" => null,
+
+            "switch_with_runtime_gte" => false,
+            "with_runtime_gte" => null,
+            "switch_with_runtime_lte" => false,
+            "with_runtime_lte" => null,
+
+            "switch_screened_theatrically" => false,
+            "screened_theatrically" => false,
+
+            "switch_include_adult" => true,
+            "include_adult" => false,
+        ];
+        $settings = new Settings();
+        $settings->setName('tv_filter');
+        $settings->setUser($user);
+        $settings->setData($data);
+        $this->settingsRepository->save($settings, true);
+
+        return $data;
     }
 
     public function getWatchProviders($language, $watchRegion): array

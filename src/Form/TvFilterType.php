@@ -23,7 +23,7 @@ class TvFilterType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        dump($options['data']);
+//        dump($options['data']);
         // - air_date.gte                      //date
         // - air_date.lte                      //date
         // * first_air_date_year               //int32
@@ -78,6 +78,23 @@ class TvFilterType extends AbstractType
                 'required' => true,
             ])
 
+            ->add('switch_with_status', CheckboxType::class, [
+                'label' => '',
+                'required' => false,
+            ])
+            ->add('with_status', ChoiceType::class, [
+                'label' => $this->translator->trans('Status'),
+                'choices' => [
+                    $this->translator->trans('Returning Series') => '0',
+                    $this->translator->trans('Planned') => '1',
+                    $this->translator->trans('In Production') => '2',
+                    $this->translator->trans('Ended') => '3',
+                    $this->translator->trans('Canceled') => '4',
+                    $this->translator->trans('Pilot') => '5',
+                ],
+                'required' => false,
+            ])
+
             ->add('switch_watch_region', CheckboxType::class, [
                 'label' => '',
                 'required' => false,
@@ -93,7 +110,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('with_watch_monetization_types', ChoiceType::class, [
-                'label' => $this->translator->trans('Status'),
+                'label' => 'Type of monetization',
                 'choices' => [
                     'Flatrate' => 'flatrate',
                     'Free' => 'free',
@@ -108,6 +125,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('with_watch_providers', ChoiceType::class, [
+                'label' => 'Watch provider',
                 'choices' => $options['data']['watch_providers'],
                 'expanded' => false,
                 'multiple' => false,
@@ -243,23 +261,6 @@ class TvFilterType extends AbstractType
             ])
             ->add('with_runtime_lte', NumberType::class, [
                 'label' => $this->translator->trans('Runtime less than'),
-                'required' => false,
-            ])
-
-            ->add('switch_with_status', CheckboxType::class, [
-                'label' => '',
-                'required' => false,
-            ])
-            ->add('with_status', ChoiceType::class, [
-                'label' => $this->translator->trans('Status'),
-                'choices' => [
-                    $this->translator->trans('Returning Series') => '0',
-                    $this->translator->trans('Planned') => '1',
-                    $this->translator->trans('In Production') => '2',
-                    $this->translator->trans('Ended') => '3',
-                    $this->translator->trans('Canceled') => '4',
-                    $this->translator->trans('Pilot') => '5',
-                ],
                 'required' => false,
             ])
 

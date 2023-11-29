@@ -247,17 +247,11 @@ class TMDBService
     }
 
     /**
-     * @param array $filters
+     * @param string $filterString
      * @return string|null
      */
-    public function getFilterTv(array $filters): ?string
+    public function getFilterTv(string $filterString): ?string
     {
-        // $filters = [param => value]
-        $filterString = '';
-        foreach ($filters as $param => $value) {
-            $filterString .= '&' . $param . '=' . $value;
-        }
-        dump(['filterString' => $filterString]);
         try {
             $response = $this->client->request(
                 'GET',

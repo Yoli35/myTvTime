@@ -16,6 +16,11 @@
             </label>
         </div>
     </div>
+    <div class="form-group ml-auto">
+        <i class="fa-solid fa-upload" id="reset-form"></i>
+        <i class="fa-solid fa-download" id="save-form"></i>
+        <i class="fa-solid fa-circle-arrow-up" id="toggle-view"></i>
+    </div>
 </div>
 <div class="form-row">
     {#    With status   #}
@@ -321,6 +326,53 @@
     </div>
 </div>
 <div class="form-row">
-    <input type="submit" class="btn btn-primary" value="Create"/>
+    {# Miscellaneous #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_screened_theatrically) }}">
+                <input type="checkbox" {{ form.switch_screened_theatrically.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_screened_theatrically) }}" id="{{ field_name(form.switch_screened_theatrically) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <div class="checkbox">
+                <label for="{{ field_name(form.screened_theatrically) }}">
+                    <div class="form-switch">
+                        <input type="checkbox" {{ form.screened_theatrically.vars.checked ? 'checked':'' }}
+                               id="{{ field_name(form.screened_theatrically) }}"
+                               value="{{ field_value(form.screened_theatrically) }}"
+                               name="{{ field_name(form.screened_theatrically) }}"/>
+                        <span></span>
+                    </div>
+                    {{ form_label(form.screened_theatrically) }}
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_include_adult) }}">
+                <input type="checkbox" {{ form.switch_include_adult.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_include_adult) }}" id="{{ field_name(form.switch_include_adult) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <div class="checkbox">
+                <label for="{{ field_name(form.include_adult) }}">
+                    <div class="form-switch">
+                        <input type="checkbox" {{ form.include_adult.vars.checked ? 'checked':'' }}
+                               id="{{ field_name(form.include_adult) }}"
+                               value="{{ field_value(form.include_adult) }}"
+                               name="{{ field_name(form.include_adult) }}"/>
+                        <span></span>
+                    </div>
+                    {{ form_label(form.include_adult) }}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    <input type="submit" class="btn btn-primary ml-auto" value="{{ 'Search'|trans }}"/>
 </div>
 {{ form_end(form) }}
