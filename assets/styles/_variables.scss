@@ -738,6 +738,7 @@ $fa-font-path: "../webfonts";
         + span {
             background: $unchecked;
             border-radius: .5em;
+            cursor: pointer;
             inset: 0;
             position: absolute;
 
@@ -745,6 +746,7 @@ $fa-font-path: "../webfonts";
                 background: white;
                 border-radius: 50%;
                 content: "";
+                cursor: pointer;
                 display: inline-block;
                 height: 1em;
                 left: 0;

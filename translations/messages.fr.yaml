@@ -337,6 +337,10 @@ Buy: Achat
 Rent: Location
 Free: Gratuit
 Ads: Publicité
+Documentary: Documentaire
+Miniseries: Mini-série
+Scripted: Scripté
+Talk Show: Émission
 After: Après (date)
 Before: Avant (date)
 Air date year: Année de diffusion
@@ -367,6 +371,13 @@ Soap: Feuilleton
 Talk: Émission
 War & Politics: Guerre & Politique
 Western: Western
+
+# Series filters tooltips
+Load last form settings: Charger les derniers paramètres du formulaire
+Save form settings: Enregistrer les paramètres du formulaire
+Toggle form settings: Afficher/masquer les paramètres du formulaire
+Before this date. Enabling this field without filling it in is equivalent to "Before now".: Avant cette date. Activer ce champ sans le remplir équivaut à "Avant maintenant".
+After this date. Enabling this field without filling it in is equivalent to "After now".: Après cette date. Activer ce champ sans le remplir équivaut à "Après maintenant".
 
 #User series airing today
 My series airing today: Épisodes du jour
@@ -546,7 +557,7 @@ Ended: Série terminée
 In Production: En Production
 Planned: Planifié
 Returning Series: Série renouvelée
-Pilot: Pilote3
+Pilot: Pilote
 Status: Statut
 That's all: C'est tout !
 More episodes to come: Plus d'épisodes à venir !
@@ -1428,7 +1439,7 @@ No thumbnail: Pas de vignette
 My Youtube Videos: Mes vidéos Youtube
 No: Aucune
 Videos: vidéos
-Video: vidéo
+Video: Vidéo
 No Videos at this Time: Aucune vidéo pour l'instant
 Youtube Link: Lien Youtube
 Link: Lien

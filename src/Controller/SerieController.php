@@ -44,6 +44,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use DeepL\DeepLException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
@@ -1213,9 +1214,11 @@ class SerieController extends AbstractController
         else
             $data = $this->createTvFilterSettings($user);
 
-        $data['genres'] = $this->getTvGenres($user->getPreferredLanguage() ?? 'en-US');
-        $data['watch_providers'] = $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US');
-        $data['watch_regions'] = $this->getAvailableRegions();
+        $watchProviders = $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US');
+
+        $data['watchProviderSelect'] = $watchProviders['watchProviderSelect'];
+        $data['genreSelect'] = $this->getTvGenres($user->getPreferredLanguage() ?? 'en-US');
+        $data['watchRegionSelect'] = $this->getAvailableRegions();
 
         $form = $this->createForm(TvFilterType::class, null, [
             'data' => $data,
@@ -1227,7 +1230,7 @@ class SerieController extends AbstractController
         }
 
         $filters = $this->getTvFilters($data);
-        $filterString = "&page=".$page."&sort_by=".$data['sort_by'].".".$data['order_by'];
+        $filterString = "&page=" . $page . "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
         foreach ($filters as $key => $value) {
             $filterString .= "&$key=$value";
         }
@@ -1254,6 +1257,7 @@ class SerieController extends AbstractController
             'series' => $series,
             'serieIds' => $this->mySerieIds($user),
             'form' => $form->createView(),
+            'logos' => $watchProviders['watchProviderLogos'],
             'pages' => [
                 'total_results' => $totalResults,
                 'total_pages' => $totalPages,
@@ -1377,6 +1381,29 @@ class SerieController extends AbstractController
         return $data;
     }
 
+    #[Route('/filter/save/settings', name: 'app_series_filter_save_settings', methods: ['POST'])]
+    public function saveTvFilterSettings(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
+        $settings->setData($data);
+        $this->settingsRepository->save($settings, true);
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/filter/load/settings', name: 'app_series_filter_load_settings', methods: ['POST'])]
+    public function loadTvFilterSettings(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
+
+        return $this->json($settings->getData());
+    }
+
     public function getWatchProviders($language, $watchRegion): array
     {
         $providers = json_decode($this->TMDBService->getTvWatchProviderList($language, $watchRegion), true);
@@ -1385,8 +1412,12 @@ class SerieController extends AbstractController
         foreach ($providers as $provider) {
             $watchProviders[$provider['provider_name']] = $provider['provider_id'];
         }
+        $watchProviderLogos = [];
+        foreach ($providers as $provider) {
+            $watchProviderLogos[$provider['provider_id']] = $this->fullUrl('logo', 2, $provider['logo_path'], '', $this->imageConfiguration->getConfig());
+        }
         ksort($watchProviders);
-        return $watchProviders;
+        return ['watchProviderSelect' => $watchProviders, 'watchProviderLogos' => $watchProviderLogos];
     }
 
     public function getTvGenres($language): array

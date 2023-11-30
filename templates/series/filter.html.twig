@@ -7,7 +7,7 @@
 {% form_theme form _self %}
 
 {% block _tv_filter_with_genres_row %}
-{#        {{ dump() }}#}
+    {#        {{ dump() }} #}
     <div class="checkboxes">
         <div class="label">{{ name|trans }}</div>
         <div id="tv_filter_with_genres" class="group">
@@ -35,7 +35,7 @@
 
         {{ include('blocks/_nav.html.twig') }}
 
-        <div class="today-series">
+        <div class="filter-series">
             {#            <div class="header"> #}
             {#                <h1>{{ 'Filter'|trans }}</h1> #}
             {#                <div class="backdrop"></div> #}
@@ -44,10 +44,8 @@
                 {{ include('blocks/series/_filter.html.twig') }}
             </header>
             <main>
-                <div class="series-tools">
-                    <div class="pages">
-                        {{ include('blocks/series/_pagination-filter.html.twig') }}
-                    </div>
+                <div class="pages">
+                    {{ include('blocks/series/_pagination-filter.html.twig') }}
                 </div>
                 <div class="wrapper">
                     {% for serie in series %}
@@ -62,13 +60,22 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="series-tools">
-                    <div class="pages">
-                        {{ include('blocks/series/_pagination-filter.html.twig') }}
-                    </div>
+                <div class="pages">
+                    {{ include('blocks/series/_pagination-filter.html.twig') }}
                 </div>
             </main>
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
+    <div class="global-data" style="display: none">
+        {
+        "app_series_filter_save_settings": "{{ path('app_series_filter_save_settings') }}",
+        "app_series_filter_load_settings": "{{ path('app_series_filter_load_settings') }}",
+        "logos": {{ logos|json_encode|raw }}
+        }
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/tv-filter.js') }}" type="module"></script>
 {% endblock %}

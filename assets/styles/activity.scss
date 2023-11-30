@@ -991,7 +991,7 @@
     left: 0;
     opacity: 0;
     position: absolute;
-    top: -5em;
+    top: -4em;
     transition: opacity .125s;
     z-index: 10000;
 
@@ -1001,6 +1001,14 @@
 
     &.masked {
         display: none;
+    }
+
+    &.orange {
+        .body, .tail {
+            background-color: var(--gradient-orange-40);
+            color: var(--gradient-orange-90);
+            font-weight: 400;
+        }
     }
 
     .body {

@@ -17,9 +17,9 @@
         </div>
     </div>
     <div class="form-group ml-auto">
-        <i class="fa-solid fa-upload" id="reset-form"></i>
-        <i class="fa-solid fa-download" id="save-form"></i>
-        <i class="fa-solid fa-circle-arrow-up" id="toggle-view"></i>
+        <i class="fa-solid fa-upload" id="reset-form" data-title="{{ 'Load last form settings'|trans }}"></i>
+        <i class="fa-solid fa-download" id="save-form" data-title="{{ 'Save form settings'|trans }}"></i>
+        <i class="fa-solid fa-circle-arrow-up" id="toggle-view" data-title="{{ 'Toggle form settings'|trans}}"></i>
     </div>
 </div>
 <div class="form-row">
@@ -35,6 +35,21 @@
             <label for="{{ form.with_status.vars.id }}">
                 <div>{{ form.with_status.vars.label|trans }}</div>
                 {{ form_widget(form.with_status) }}
+            </label>
+        </div>
+    </div>
+    {#    With type   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_with_type) }}">
+                <input type="checkbox" {{ form.switch_with_type.vars.checked ? 'checked':'' }} name="{{ field_name(form.switch_with_type) }}" id="{{ field_name(form.switch_with_type) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ form.with_type.vars.id }}">
+                <div>{{ form.with_type.vars.label|trans }}</div>
+                {{ form_widget(form.with_type) }}
             </label>
         </div>
     </div>
@@ -87,6 +102,13 @@
             <label for="{{ form.with_watch_providers.vars.id }}">
                 <div>{{ form.with_watch_providers.vars.label|trans }}</div>
                 {{ form_widget(form.with_watch_providers) }}
+        </div>
+        <div class="form-field">
+            <div class="logo">
+                {% if form.with_watch_providers.vars.value %}
+                    <img src="{{ logos[form.with_watch_providers.vars.value] }}" alt="{{ form.with_watch_providers.vars.value }}"/>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
@@ -160,7 +182,7 @@
         </div>
     </div>
     {# First air date (greater than or equal) #}
-    <div class="form-group">
+    <div class="form-group" data-title="{{ 'After this date. Enabling this field without filling it in is equivalent to "After now".'|trans }}">
         <div class="form-switch">
             <label for="{{ field_name(form.switch_first_air_date_gte) }}">
                 <input type="checkbox" {{ form.switch_first_air_date_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_first_air_date_gte) }}" id="{{ field_name(form.switch_first_air_date_gte) }}"/>
@@ -172,7 +194,7 @@
         </div>
     </div>
     {# First air date (less than or equal) #}
-    <div class="form-group">
+    <div class="form-group" data-title="{{ 'Before this date. Enabling this field without filling it in is equivalent to "Before now".'|trans }}">
         <div class="form-switch">
             <label for="{{ field_name(form.switch_first_air_date_lte) }}">
                 <input type="checkbox" {{ form.switch_first_air_date_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_first_air_date_lte) }}" id="{{ field_name(form.switch_first_air_date_lte) }}"/>

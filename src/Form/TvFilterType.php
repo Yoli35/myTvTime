@@ -15,12 +15,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TvFilterType extends AbstractType
 {
-    public function __construct(
-        private readonly TranslatorInterface $translator
-    )
-    {
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 //        dump($options['data']);
@@ -56,7 +50,7 @@ class TvFilterType extends AbstractType
         //without_genres                    //string
         //without_keywords                  //string
         //without_watch_providers           //string
-        //with_type                         //string        //possible values are: [0, 1, 2, 3, 4, 5, 6], can be a comma (AND) or pipe (OR) separated query
+        //with_type                         //string        //possible values are: [0 Documentary, 1 News, 2 Miniseries, 3 Reality, 4 Scripted, 5 Talk Show, 6 Video], can be a comma (AND) or pipe (OR) separated query
         $builder
             ->add('sort_by', ChoiceType::class, [
                 'label' => 'Series displayed by',
@@ -83,14 +77,40 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('with_status', ChoiceType::class, [
-                'label' => $this->translator->trans('Status'),
+                'label' => 'Status',
                 'choices' => [
-                    $this->translator->trans('Returning Series') => '0',
-                    $this->translator->trans('Planned') => '1',
-                    $this->translator->trans('In Production') => '2',
-                    $this->translator->trans('Ended') => '3',
-                    $this->translator->trans('Canceled') => '4',
-                    $this->translator->trans('Pilot') => '5',
+                    'Returning Series' => '0',
+                    'Planned' => '1',
+                    'In Production' => '2',
+                    'Ended' => '3',
+                    'Canceled' => '4',
+                    'Pilot' => '5',
+                ],
+                'required' => false,
+            ])
+            ->add('switch_with_type', CheckboxType::class, [
+                'label' => '',
+                'required' => false,
+            ])
+            ->add('with_type', ChoiceType::class, [
+                'label' => 'Type',
+                'choices' => [
+                    'Documentary' => '0',
+                    'News' => '1',
+                    'Miniseries' => '2',
+                    'Reality' => '3',
+                    'Scripted' => '4',
+                    'Talk Show' => '5',
+                    'Video' => '6',
+                ],
+                'choice_attr' => [
+                    'Documentary' => ['data-title' => 'e.g. wildlife documentary'],
+                    'News' => ['data-title' => 'e.g. news, political programmes'],
+                    'Miniseries' => ['data-title' => 'miniseries'],
+                    'Reality' => ['data-title' => 'reality'],
+                    'Scripted' => ['data-title' => 'scripted'],
+                    'Talk Show' => ['data-title' => 'talk-show'],
+                    'Video' => ['data-title' => 'video'],
                 ],
                 'required' => false,
             ])
@@ -101,7 +121,7 @@ class TvFilterType extends AbstractType
             ])
             ->add('watch_region', ChoiceType::class, [
                 'label' => 'Watch region',
-                'choices' => $options['data']['watch_regions'],
+                'choices' => $options['data']['watchRegionSelect'],
                 'expanded' => false,
                 'multiple' => false,
             ])
@@ -126,7 +146,7 @@ class TvFilterType extends AbstractType
             ])
             ->add('with_watch_providers', ChoiceType::class, [
                 'label' => 'Watch provider',
-                'choices' => $options['data']['watch_providers'],
+                'choices' => $options['data']['watchProviderSelect'],
                 'expanded' => false,
                 'multiple' => false,
             ])
@@ -136,7 +156,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('with_origin_country', CountryType::class, [
-                'label' => $this->translator->trans('Origin country'),
+                'label' => 'Origin country',
                 'required' => false,
             ])
             ->add('switch_with_original_language', CheckboxType::class, [
@@ -144,7 +164,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('with_original_language', LanguageType::class, [
-                'label' => $this->translator->trans('Original language'),
+                'label' => 'Original language',
                 'required' => false,
             ])
 
@@ -153,7 +173,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('with_genres', ChoiceType::class, [
-                'choices' => $options['data']['genres'],
+                'choices' => $options['data']['genreSelect'],
                 'expanded' => true,
                 'multiple' => true,
             ])
@@ -163,7 +183,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('first_air_date_year', NumberType::class, [
-                'label' => $this->translator->trans('Air date year'),
+                'label' => 'Air date year',
                 'required' => false,
             ])
             ->add('switch_first_air_date_gte', CheckboxType::class, [
@@ -171,7 +191,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('first_air_date_gte', DateType::class, [
-                'label' => $this->translator->trans('After'),
+                'label' => 'After',
                 'required' => false,
                 'widget' => 'single_text',
                 'attr' => [
@@ -182,7 +202,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('first_air_date_lte', DateType::class, [
-                'label' => $this->translator->trans('Before'),
+                'label' => 'Before',
                 'required' => false,
                 'widget' => 'single_text',
                 'attr' => [
@@ -193,7 +213,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('include_null_first_air_date', CheckboxType::class, [
-                'label' => $this->translator->trans('No date'),
+                'label' => 'No date',
                 'required' => false,
             ])
 
@@ -202,7 +222,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('language', LanguageType::class, [
-                'label' => $this->translator->trans('Language'),
+                'label' => 'Language',
                 'required' => false,
             ])
             ->add('switch_timezone', CheckboxType::class, [
@@ -210,7 +230,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('timezone', TimezoneType::class, [
-                'label' => $this->translator->trans('Timezone'),
+                'label' => 'Timezone',
                 'required' => false,
             ])
 
@@ -219,7 +239,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('vote_average_gte', NumberType::class, [
-                'label' => $this->translator->trans('Vote average greater than'),
+                'label' => 'Vote average greater than',
                 'required' => false,
             ])
             ->add('switch_vote_average_lte', CheckboxType::class, [
@@ -227,7 +247,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('vote_average_lte', NumberType::class, [
-                'label' => $this->translator->trans('Vote average less than'),
+                'label' => 'Vote average less than',
                 'required' => false,
             ])
             ->add('switch_vote_count_gte', CheckboxType::class, [
@@ -235,7 +255,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('vote_count_gte', NumberType::class, [
-                'label' => $this->translator->trans('Vote count greater than'),
+                'label' => 'Vote count greater than',
                 'required' => false,
             ])
             ->add('switch_vote_count_lte', CheckboxType::class, [
@@ -243,7 +263,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('vote_count_lte', NumberType::class, [
-                'label' => $this->translator->trans('Vote count less than'),
+                'label' => 'Vote count less than',
                 'required' => false,
             ])
 
@@ -252,7 +272,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('with_runtime_gte', NumberType::class, [
-                'label' => $this->translator->trans('Runtime greater than'),
+                'label' => 'Runtime greater than',
                 'required' => false,
             ])
             ->add('switch_with_runtime_lte', CheckboxType::class, [
@@ -260,7 +280,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('with_runtime_lte', NumberType::class, [
-                'label' => $this->translator->trans('Runtime less than'),
+                'label' => 'Runtime less than',
                 'required' => false,
             ])
 
@@ -269,7 +289,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('screened_theatrically', CheckboxType::class, [
-                'label' => $this->translator->trans('Screened theatrically'),
+                'label' => 'Screened theatrically',
                 'required' => false,
                 'value' => false,
             ])
@@ -279,7 +299,7 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('include_adult', CheckboxType::class, [
-                'label' => $this->translator->trans('Adult'),
+                'label' => 'Adult',
                 'required' => false,
                 'value' => false,
             ])
