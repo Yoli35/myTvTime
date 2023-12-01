@@ -52,12 +52,12 @@ class ActivityChallengeType extends AbstractType
             ])
             ->add('startAt', DateType::class, [
                 'label' => 'Start date',
-                'widget' => 'choice',
+                'widget' => 'single_text',
                 'input'  => 'datetime_immutable'
             ])
             ->add('endAt', DateType::class, [
                 'label' => 'End date',
-                'widget' => 'choice',
+                'widget' => 'single_text',
                 'input'  => 'datetime_immutable'
             ])
             ->add('save', SubmitType::class, [

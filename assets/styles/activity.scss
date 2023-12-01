@@ -69,11 +69,13 @@
             display: flex;
             gap: 1em;
             justify-content: space-between;
+            max-width: 100%;
             width: 100%;
 
             .challenges {
                 align-items: center;
                 display: flex;
+                flex-shrink: 1;
                 gap: 1rem;
                 justify-content: flex-start;
                 margin-inline-end: auto;
@@ -86,21 +88,62 @@
                     gap: .5rem;
                     padding: .25rem 1rem;
 
-                    .challenge {
-                        background-color: var(--gradient-ardoise-40);
-                        border-radius: .25rem;
-                        padding: .25rem 1rem;
+                    .title {
+                        flex-grow: 1;
+                        margin-inline-end: .5rem;
+                        white-space: nowrap;
+                    }
 
-                        i {
-                            color: var(--gradient-yellow-50);
+                    .wrapper {
+                        flex-shrink: 0;
+
+                        .content {
+                            display: flex;
+                            flex-shrink: 0;
+                            gap: .5rem;
+
+                            .challenge {
+                                background-color: var(--gradient-ardoise-40);
+                                border-radius: .25rem;
+                                flex-shrink: 0;
+                                padding: 0;
+                                white-space: nowrap;
+
+                                i {
+                                    color: var(--gradient-yellow-50);
+                                }
+
+                                a {
+                                    display: block;
+                                    height: 100%;
+                                    padding: .25rem 1rem;
+                                    width: 100%;
+                                }
+                            }
                         }
+                    }
+                }
+
+                .completed {
+                    flex-shrink: 1;
+                    overflow-x: auto;
+
+                    .wrapper {
+                        flex-shrink: 1;
+                        overflow-x: auto;
                     }
                 }
             }
 
             .activity-goals {
                 margin-inline-start: auto;
-                padding: .25em 2em;
+
+                a {
+                    display: block;
+                    height: 100%;
+                    padding: .25rem 1rem;
+                    width: 100%;
+                }
             }
         }
 
@@ -688,6 +731,7 @@
             }
         }
     }
+
 }
 
 .activity-challenge {

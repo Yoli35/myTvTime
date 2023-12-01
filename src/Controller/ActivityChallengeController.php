@@ -63,7 +63,11 @@ class ActivityChallengeController extends AbstractController
             $this->entityManager->persist($challenge);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_activity_challenge_' . $request->query->get('from', 'index'), [], Response::HTTP_SEE_OTHER);
+            $from = $request->query->get('from', 'index');
+            if ($from == 'show')
+                return $this->redirectToRoute('app_activity_challenge_show', ['id' => $challenge->getId()], Response::HTTP_SEE_OTHER);
+
+            return $this->redirectToRoute('app_activity_challenge_' . $from, [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('activity_challenge/new.html.twig', [
@@ -102,9 +106,12 @@ class ActivityChallengeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_activity_challenge_' . $request->query->get('from', 'index'), [], Response::HTTP_SEE_OTHER);
-        }
+            $from = $request->query->get('from', 'index');
+            if ($from == 'show')
+                return $this->redirectToRoute('app_activity_challenge_show', ['id' => $challenge->getId()], Response::HTTP_SEE_OTHER);
 
+            return $this->redirectToRoute('app_activity_challenge_' . $from, [], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('activity_challenge/edit.html.twig', [
             'challenge' => $challenge,
             'breadcrumb' => $breadcrumb,
