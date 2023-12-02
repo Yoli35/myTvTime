@@ -16,6 +16,26 @@
             </label>
         </div>
     </div>
+    {#    Page   #}
+    <div class="form-group">
+        <div class="form-switch {{ form.switch_page.vars.attr.class }}">
+            <label for="{{ field_name(form.switch_page) }}">
+                <input type="checkbox" {{ form.switch_page.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_page) }}" id="{{ field_name(form.switch_page) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.page, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-field">
+            {{ total_results }} {{ (total_results>1 ?'results':'result')|trans }}
+        </div>
+        /
+        <div class="form-field">
+            {{ total_pages }} {{ (total_pages>1 ?'pages':'page')|trans }}
+        </div>
+    </div>
+    {#    Tools   #}
     <div class="form-group ml-auto">
         <i class="fa-solid fa-upload" id="reset-form" data-title="{{ 'Load last form settings'|trans }}"></i>
         <i class="fa-solid fa-download" id="save-form" data-title="{{ 'Save form settings'|trans }}"></i>

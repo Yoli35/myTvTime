@@ -3137,11 +3137,12 @@
         margin-block-end: 1rem;
 
         .pages {
+            align-items: center;
+            display: flex;
+            gap: 1rem;
             margin-block-end: 1rem;
 
             .position {
-                margin-block-end: .5rem;
-                text-align: center;
             }
 
             .page-group {

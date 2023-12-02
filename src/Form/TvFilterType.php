@@ -183,6 +183,9 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('first_air_date_year', NumberType::class, [
+                'attr' =>[
+                    'size' => '3',
+                ],
                 'label' => 'Air date year',
                 'required' => false,
             ])
@@ -239,6 +242,9 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('vote_average_gte', NumberType::class, [
+                'attr' =>[
+                    'size' => '3',
+                ],
                 'label' => 'Vote average greater than',
                 'required' => false,
             ])
@@ -247,6 +253,9 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('vote_average_lte', NumberType::class, [
+                'attr' =>[
+                    'size' => '3',
+                ],
                 'label' => 'Vote average less than',
                 'required' => false,
             ])
@@ -255,6 +264,9 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('vote_count_gte', NumberType::class, [
+                'attr' =>[
+                    'size' => '3',
+                ],
                 'label' => 'Vote count greater than',
                 'required' => false,
             ])
@@ -263,6 +275,9 @@ class TvFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('vote_count_lte', NumberType::class, [
+                'attr' =>[
+                    'size' => '3',
+                ],
                 'label' => 'Vote count less than',
                 'required' => false,
             ])
@@ -302,6 +317,22 @@ class TvFilterType extends AbstractType
                 'label' => 'Adult',
                 'required' => false,
                 'value' => false,
+            ])
+
+            ->add('switch_page', CheckboxType::class, [
+                'attr' => [
+                    'class' => 'd-none',
+                ],
+                'label' => '',
+                'required' => false,
+                'value' => true,
+            ])
+            ->add('page', NumberType::class, [
+                'attr' =>[
+                    'size' => '3',
+                ],
+                'label' => 'Page',
+                'required' => false,
             ])
             ;
     }

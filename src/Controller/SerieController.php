@@ -68,7 +68,7 @@ class SerieController extends AbstractController
     const UPCOMING_EPISODES = 'upcoming_episodes';
     const UPCOMING_SERIES = 'upcoming_series';
     const POPULAR_SERIES = 'popular';
-    const SERIES = 'filter';
+    const SERIES_FILTER = 'filter';
     const TOP_RATED = 'top_rated';
     const SEARCH_SERIES = 'search';
     const MY_EVENTS = 'my_events';
@@ -1202,8 +1202,8 @@ class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/filter/{page}', name: 'app_series_filter', methods: ['GET', 'POST'])]
-    public function filter(Request $request, int $page): Response
+    #[Route('/filter', name: 'app_series_filter', methods: ['GET', 'POST'])]
+    public function filter(Request $request): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -1226,11 +1226,10 @@ class SerieController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $page = 1;
         }
 
         $filters = $this->getTvFilters($data);
-        $filterString = "&page=" . $page . "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
+        $filterString = "&page=" . $data['page'] . "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
         foreach ($filters as $key => $value) {
             $filterString .= "&$key=$value";
         }
@@ -1241,7 +1240,6 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getFilterTv($filterString);
         $series = json_decode($standing, true);
         $totalResults = $series['total_results'];
-        $page = $series['page'];
         $totalPages = $series['total_pages'];
         $imageConfig = $this->imageConfiguration->getConfig();
 
@@ -1251,23 +1249,17 @@ class SerieController extends AbstractController
             return $serie;
         }, $series['results']);
 
-        $breadcrumb = $this->breadcrumb(self::SERIES);
+        $breadcrumb = $this->breadcrumb(self::SERIES_FILTER);
 
         return $this->render('series/filter.html.twig', [
             'series' => $series,
             'serieIds' => $this->mySerieIds($user),
             'form' => $form->createView(),
             'logos' => $watchProviders['watchProviderLogos'],
-            'pages' => [
-                'total_results' => $totalResults,
-                'total_pages' => $totalPages,
-                'page' => $page,
-                'per_page' => 20,
-                'link_count' => self::LINK_COUNT,
-                'paginator' => $this->paginator($totalResults, $page, 20, self::LINK_COUNT),
-            ],
+            'total_results' => $totalResults,
+            'total_pages' => $totalPages,
             'breadcrumb' => $breadcrumb,
-            'from' => self::SERIES,
+            'from' => self::SERIES_FILTER,
             'user' => $user,
         ]);
     }
@@ -1371,6 +1363,9 @@ class SerieController extends AbstractController
 
             "switch_include_adult" => true,
             "include_adult" => false,
+
+            "switch_page" => true,
+            "page" => 1,
         ];
         $settings = new Settings();
         $settings->setName('tv_filter');
@@ -2349,8 +2344,8 @@ class SerieController extends AbstractController
                 $baseName = $this->translator->trans("Home");
                 $kind = 'tmdb';
                 break;
-            case self::SERIES:
-                $baseUrl = $this->generateUrl("app_series_filter", ['page' => 1]);
+            case self::SERIES_FILTER:
+                $baseUrl = $this->generateUrl("app_series_filter");
                 $baseName = $this->translator->trans("Filter");
                 $kind = 'tmdb';
                 break;

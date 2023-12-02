@@ -36,17 +36,10 @@
         {{ include('blocks/_nav.html.twig') }}
 
         <div class="filter-series">
-            {#            <div class="header"> #}
-            {#                <h1>{{ 'Filter'|trans }}</h1> #}
-            {#                <div class="backdrop"></div> #}
-            {#            </div> #}
             <header>
                 {{ include('blocks/series/_filter.html.twig') }}
             </header>
             <main>
-                <div class="pages">
-                    {{ include('blocks/series/_pagination-filter.html.twig') }}
-                </div>
                 <div class="wrapper">
                     {% for serie in series %}
                         <div data-type="card">
@@ -60,12 +53,11 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="pages">
-                    {{ include('blocks/series/_pagination-filter.html.twig') }}
-                </div>
             </main>
+            <footer>
+                {{ include('blocks/_pageFooter.html.twig') }}
+            </footer>
         </div>
-        {{ include('blocks/_pageFooter.html.twig') }}
     </div>
     <div class="global-data" style="display: none">
         {
