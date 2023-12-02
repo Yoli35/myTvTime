@@ -25,19 +25,22 @@ export class ToolTips {
         }
         divs.forEach(div => {
             div.addEventListener('mousemove', this.move);
-            div.addEventListener('mouseenter', this.show);
-            div.addEventListener('mouseleave', this.hide);
+            div.addEventListener('mouseover', this.show);
+            div.addEventListener('mouseout', this.hide);
         });
     }
 
     initElement(element) {
         element.addEventListener('mousemove', this.move);
-        element.addEventListener('mouseenter', this.show);
-        element.addEventListener('mouseleave', this.hide);
+        element.addEventListener('mouseover', this.show);
+        element.addEventListener('mouseout', this.hide);
     }
 
     show(evt) {
         const tooltips = document.querySelector(".tool-tips");
+        if (tooltips.classList.contains("show")) {
+            return;
+        }
         const text = evt.currentTarget.getAttribute("data-title");
         const body = tooltips.querySelector(".body");
         body.innerHTML = text;
