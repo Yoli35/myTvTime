@@ -564,23 +564,59 @@ class SerieController extends AbstractController
     }
 
     #[Route('/this-week', name: 'app_series_this_week', methods: ['GET'])]
-    public function episodesOfTheWeek(): Response
+    public function episodesOfTheWeek(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         /** @var User $user */
         $user = $this->getUser();
         $imgConfig = $this->imageConfiguration->getConfig();
-        $now = $this->dateService->getNow($user->getTimezone(), true);
+        $now = $this->dateService->getNowImmutable($user->getTimezone(), false);
+        $start = $this->dateService->getNowImmutable($user->getTimezone(), false);
+        $end = $this->dateService->getNowImmutable($user->getTimezone(), false);
         $week = $now->format('W');
+        dump(['now' => $now, 'week' => $week]);
+        $requestedWeek = $request->query->getInt('w');
+        if ($requestedWeek) {
+            $weekInterval = $requestedWeek - $week;
+            if ($weekInterval < 0) {
+                $now = $now->sub(new DateInterval('P' . abs($weekInterval) . 'W'));
+                $start = $start->sub(new DateInterval('P' . abs($weekInterval) . 'W'));
+                $end = $end->sub(new DateInterval('P' . abs($weekInterval) . 'W'));
+            }
+            else {
+                $now = $now->add(new DateInterval('P' . $weekInterval . 'W'));
+                $start = $start->add(new DateInterval('P' . $weekInterval . 'W'));
+                $end = $end->add(new DateInterval('P' . $weekInterval . 'W'));
+            }
+            $week = $now->format('W');
+            dump(['requested week' => $requestedWeek, 'now' => $now, 'week' => $week]);
+        }
         $day_of_the_week = $now->format('N');
+        $startInterval = 1 - $day_of_the_week;
+        if ($startInterval < 0)
+            $start = $start->sub(new DateInterval('P' . abs($startInterval) . 'D'));
+        else
+            $start = $start->add(new DateInterval('P' . $startInterval . 'D'));
 
-        $start = $this->dateService->newDateImmutable((1 - $day_of_the_week) . 'day', $user->getTimezone());
-        $end = $this->dateService->newDateImmutable((7 - $day_of_the_week) . 'day', $user->getTimezone());
+        $endInterval = 7 - $day_of_the_week;
+        if ($endInterval < 0)
+            $end = $end->sub(new DateInterval('P' . abs($endInterval) . 'D'));
+        else
+            $end = $end->add(new DateInterval('P' . $endInterval . 'D'));
+        dump(['day of the week' => $day_of_the_week, 'start' => $start, 'end' => $end]);
+        $previousWeek = $this->dateService->getNowImmutable($user->getTimezone(), false)->sub(new DateInterval('P1W'))->format('W');
+        $nextWeek = $this->dateService->getNowImmutable($user->getTimezone(), false)->add(new DateInterval('P1W'))->format('W');
+        $monday = $now->sub(new DateInterval('P' . ($day_of_the_week - 1) . 'D'));
+        dump(['monday' => $monday, 'day of the week' => $day_of_the_week, 'previous week' => $previousWeek, 'next week' => $nextWeek]);
+
+//        $start = $this->dateService->newDateImmutable((1 - $day_of_the_week) . 'day', $user->getTimezone());
+//        $end = $this->dateService->newDateImmutable((7 - $day_of_the_week) . 'day', $user->getTimezone());
         $episodesOfTheWeek = [];
         $episodesCount = 0;
         for ($i = 1; $i <= 7; $i++) {
-            $day = $this->dateService->newDateImmutable(($i - $day_of_the_week) . 'day', $user->getTimezone());
+//            $day = $this->dateService->newDateImmutable(($i - $day_of_the_week) . 'day', $user->getTimezone());
+            $day = $monday->add(new DateInterval('P' . ($i - 1) . 'D'));
             $episodesOfTheDay = $this->todayAiringSeriesV2($day);
             foreach ($episodesOfTheDay as $episode) {
                 $episodesCount += count($episode['episodeNumbers']);
@@ -592,6 +628,7 @@ class SerieController extends AbstractController
                 'today_offset' => $i - $day_of_the_week,
             ];
         }
+        dump(['episodes of the week' => $episodesOfTheWeek]);
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_WEEK);
         $breadcrumb[0]['separator'] = '●';
         $breadcrumb[] = ['name' => $this->translator->trans("My series airing today"), 'url' => $this->generateUrl("app_series_today")];
@@ -599,9 +636,9 @@ class SerieController extends AbstractController
 
 //        dump(['episodesOfTheWeek' => $episodesOfTheWeek,]);
 
-        return $this->render('series/this_week.html.twig', [
+        return $this->render('series/week.html.twig', [
             'date' => $now,
-            'week' => ['week_number' => $week, 'start' => $start, 'end' => $end],
+            'week' => ['week_number' => $week, 'start' => $start, 'end' => $end, 'previous' => $previousWeek, 'next' => $nextWeek],
             'episodesCount' => $episodesCount,
             'episodesOfTheWeek' => $episodesOfTheWeek,
             'dayNames' => $this->dateService->getDayNames(100),
@@ -1844,7 +1881,8 @@ class SerieController extends AbstractController
             $tv['seriePosters'] = $serie->getSeriePosters();
             $tv['serieBackdrops'] = $serie->getSerieBackdrops();
             $tv['directLink'] = [];
-            if ($serie->getDirectLink()) {
+            $dl = $serie->getDirectLink();
+            if ($dl && strlen($dl) > 0) {
                 $tv['directLink'][0]['url'] = $serie->getDirectLink();
                 $dl = $serie->getDirectLink();
                 // si le lien contient 'youtube', on récupère le 'logo_path' dans la table 'networks'
@@ -1853,7 +1891,6 @@ class SerieController extends AbstractController
                     $networkId = 83;
                 }
                 // https://www.netflix.com/title/81716080&uct_country=fr
-                // https://www.net
                 if ($networkId) {
                     $network = $this->networksRepository->find($networkId);
                     if ($network) {

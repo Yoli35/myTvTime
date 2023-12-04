@@ -67,6 +67,18 @@ class DateService
         return $date;
     }
 
+    public function getNowImmutable($timezone, $allDay = false): DateTimeImmutable
+    {
+        try {
+            $date = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        } catch (Exception) {
+            $date = new DateTimeImmutable();
+        }
+        if ($allDay) $date = $date->setTime(0, 0);
+
+        return $date;
+    }
+
     public function newDateFromUTC($dateString, $timeZone, $allDay = false): DateTime
     {
         try {

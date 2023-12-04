@@ -16,7 +16,11 @@
             <div class="header">
                 <div class="textes">
                     <h1> {{ 'Episodes of the week'|trans }}</h1>
-                    <div class="week">{{ 'Week'|trans }} {{ week.week_number }} : {{ episodesCount }} {{ (episodesCount>1 ? 'episodes':'episode')|trans }}</div>
+                    <div class="week">
+                        <a href="{{ path('app_series_this_week') }}?w={{ week.previous }}"><i class="fa-solid fa-arrow-circle-left"></i></a>
+                        {{ 'Week'|trans }} {{ week.week_number }} : {{ episodesCount }} {{ (episodesCount>1 ? 'episodes':'episode')|trans }}
+                        <a href="{{ path('app_series_this_week') }}?w={{ week.next }}"><i class="fa-solid fa-arrow-circle-right"></i></a>
+                    </div>
                     <div class="range">[ {{ week.start|format_date('short') }} — {{ week.end|format_date('short') }} ]</div>
                 </div>
                 <div class="day-names"></div>
