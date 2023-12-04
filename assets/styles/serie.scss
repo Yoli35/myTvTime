@@ -2648,6 +2648,7 @@
                 .link-pass {
                     @include flex-row(center, center);
                     background-color: var(--gradient-ardoise-90);
+                    border: 2px solid transparent;
                     border-radius: .25rem;
                     color: var(--gradient-ardoise-20);
                     height: 3rem;
@@ -2657,12 +2658,17 @@
                     transition: all 125ms ease-in-out;
 
                     &:has(i) {
+                        a {
+                            height: 100%;
+                            width: 100%;
+                        }
+
                         font-size: 1.5rem;
                         width: 3rem;
                     }
 
                     &:hover {
-                        background-color: var(--gradient-ardoise-70);
+                        border: 2px solid var(--gradient-orange-50);
 
                         .link-tool {
                             opacity: 1;
@@ -2677,9 +2683,8 @@
 
                     .link-tool {
                         @include flex-row(center, center);
-                        appearance: none;
                         background-color: var(--gradient-ardoise-90);
-                        border: none;
+                        border: 2px solid transparent;
                         border-radius: .125rem;
                         color: var(--gradient-ardoise-20);
                         cursor: pointer;
@@ -2692,7 +2697,7 @@
                         width: 2rem;
 
                         &:hover {
-                            background-color: var(--gradient-ardoise-70);
+                            border: 2px solid var(--gradient-orange-50);
                         }
                     }
                 }

@@ -283,7 +283,7 @@
 
             <main>
                 <aside class="tablet">
-                    {{ include('blocks/series/_aside.html.twig') }}
+                    {{ include('blocks/series/_aside.html.twig', {block: 'tablet'}) }}
                 </aside>
                 <article>
                     <section>
@@ -414,7 +414,7 @@
                     {% endif %}
                 </article>
                 <aside class="desktop">
-                    {{ include('blocks/series/_aside.html.twig') }}
+                    {{ include('blocks/series/_aside.html.twig', {block: 'desktop'}) }}
                 </aside>
             </main>
             <div class="translationModalBack">

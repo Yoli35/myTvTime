@@ -271,13 +271,15 @@ main {
     cursor: pointer;
 }
 
+#delete-video-dialog,
+#direct-link-dialog,
+#localize-dialog,
+#modify-tags-dialog,
+#multi-people-dialog,
 #search-dialog,
 #settings-dialog,
-#multi-people-dialog,
-#localize-dialog,
-#watch-provider-dialog,
-#modify-tags-dialog,
-#delete-video-dialog {
+#watch-provider-dialog
+{
     backdrop-filter: blur(.25rem);
     -webkit-backdrop-filter: blur(.25rem);
     background-color: var(--gradient-grey-10-alpha-75);
@@ -350,12 +352,14 @@ main {
     }
 }
 
-#search-dialog::backdrop,
-#multi-people-dialog::backdrop,
+#delete-video-dialog::backdrop,
+#direct-link-dialog::backdrop,
 #localize-dialog::backdrop,
-#watch-provider-dialog::backdrop,
 #modify-tags-dialog::backdrop,
-#delete-video-dialog::backdrop {
+#multi-people-dialog::backdrop,
+#search-dialog::backdrop,
+#watch-provider-dialog::backdrop
+{
     background-color: #000000af; //var(--gradient-grey-10-alpha-75);
 }
 
@@ -435,6 +439,12 @@ main {
                 width: 100%;
             }
         }
+    }
+}
+
+#direct-link-dialog {
+    input[type=text] {
+        width: clamp(50vw, 40rem, 80vw);
     }
 }
 

@@ -1,10 +1,10 @@
-<dialog id="direct-link-dialog">
+<dialog id="direct-link-dialog" data-id="{{ serieId }}">
     <search class="content" role="search">
         <div class="dialog-title"></div>
         <form method="dialog">
             <input type="hidden" name="action" value="addDirectLink"/>
             <label for="direct-link-url">
-                <input type="text" id="direct-link-url" name="direct-link-url" placeholder="{{ 'Add a link'|trans }}"/>
+                <input type="text" id="direct-link-url" name="direct-link-url" autofocus placeholder="{{ 'Add a link'|trans }}"/>
             </label>
             <menu>
                 <li><button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button></li>

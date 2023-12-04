@@ -15,10 +15,19 @@ export class DirectLinkModule {
         dialog.showModal();
     }
 
+    prepareDialog(e){
+        const dialog = document.querySelector("#direct-link-dialog");
+        const href = e.currentTarget.parentElement.querySelector("a").getAttribute("href");
+        const input = dialog.querySelector("#direct-link-url");
+        input.value = href;
+        input.focus();
+        this.openDialog();
+    }
+
     initDialog() {
         const dialog = document.querySelector("#direct-link-dialog");
-        const editDirectLinkButton = document.querySelector('button[id=edit-direct-link]');
-        const newDirectLinkButton = document.querySelector('button[id=new-direct-link]');
+        const editDirectLinkButtons = document.querySelectorAll('div[id^=edit-direct-link]');
+        const newDirectLinkButtons = document.querySelectorAll('div[id^=new-direct-link]');
         const locale = document.querySelector("html").getAttribute("lang");
         const txt = {
             "en": {
@@ -35,18 +44,16 @@ export class DirectLinkModule {
             },
         };
 
-        if (editDirectLinkButton) {
-            this.serieId = editDirectLinkButton.getAttribute("data-id");
-            editDirectLinkButton.addEventListener("click", () => {
-                const href = editDirectLinkButton.parentElement.querySelector("a").getAttribute("href");
-                const input = dialog.querySelector("#direct-link-url");
-                input.value = href;
-                this.openDialog();
+        this.serieId = dialog.getAttribute("data-id");
+
+        if (editDirectLinkButtons.length > 0) {
+            editDirectLinkButtons.forEach((editDirectLinkButton) => {
+                editDirectLinkButton.addEventListener("click", this.prepareDialog.bind(this));
             });
-        }
-        else {
-            this.serieId = newDirectLinkButton.getAttribute("data-id");
-            newDirectLinkButton.addEventListener("click", this.openDialog);
+        } else {
+            newDirectLinkButtons.forEach((newDirectLinkButton) => {
+                newDirectLinkButton.addEventListener("click", this.openDialog);
+            });
         }
 
         dialog.addEventListener("close", () => {
@@ -57,32 +64,33 @@ export class DirectLinkModule {
                 /** @var {{"result": boolean}} r */
                 thisGlobal.saveDirectLink(link).then(r => {
                     if (r.result) {
-                        const directLinkDiv = document.querySelector(".direct-link");
-                        const a = directLinkDiv.querySelector("a");
-                        if (a) {
-                            a.setAttribute("href", link);
-                        } else {
-                            // <div class="label">{{ 'Watch now'|trans }}</div>
-                            const label = directLinkDiv.querySelector(".label");
-                            label.innerHTML = txt[locale]["Watch now"];
-                            // <div class="link" id="edit-direct-link" data-id="{{ serie.id }}"><i class="fa-solid fa-pen"></i></div>
-                            const editLinkDiv = directLinkDiv.querySelector("#new-direct-link");
-                            editLinkDiv.setAttribute("id", "edit-direct-link");
-                            editLinkDiv.innerHTML = '<i class="fa-solid fa-pen"></i>';
-                            editLinkDiv.removeEventListener("click", thisGlobal.openDialog);
-                            editLinkDiv.addEventListener("click", () => {
-                                const href = editLinkDiv.parentElement.querySelector("a").getAttribute("href");
-                                const input = dialog.querySelector("#direct-link-url");
-                                input.value = href;
-                                this.openDialog();
-                            });
-                            // <a href="{{ serie.direct_link }}" target="_blank" className="link"><i className="fa-solid fa-circle-arrow-right"></i></a>
-                            const link = document.createElement("a");
-                            link.setAttribute("href", link);
-                            link.setAttribute("target", "_blank");
-                            link.innerHTML = '<i class="fa-solid fa-circle-arrow-right"></i>';
-                            directLinkDiv.appendChild(link);
-                        }
+                        const directLinkDivs = document.querySelectorAll(".direct-link");
+                        directLinkDivs.forEach((directLinkDiv) => {
+                            const a = directLinkDiv.querySelector("a");
+                            if (a) {
+                                a.setAttribute("href", link);
+                            } else {
+                                // <div class="label">{{ 'Watch now'|trans }}</div>
+                                const label = directLinkDiv.querySelector(".label");
+                                label.innerHTML = txt[locale]["Watch now"];
+                                // <div class="link" id="edit-direct-link" data-id="{{ serie.id }}"><i class="fa-solid fa-pen"></i></div>
+                                const editLinkDiv = directLinkDiv.querySelector("div[id^=new-direct-link]");
+                                editLinkDiv.setAttribute("id", "edit-direct-link");
+                                editLinkDiv.innerHTML = '<i class="fa-solid fa-pen"></i>';
+                                editLinkDiv.removeEventListener("click", thisGlobal.openDialog);
+                                editLinkDiv.addEventListener("click", this.prepareDialog.bind(this));
+                                // <a href="{{ serie.direct_link }}" target="_blank" className="link"><i class="fa-solid fa-circle-arrow-right"></i></a>
+                                const link = document.createElement("a");
+                                link.classList.add("link");
+                                link.setAttribute("href", link);
+                                link.setAttribute("target", "_blank");
+                                // link.innerHTML = '<i class="fa-solid fa-circle-arrow-right"></i>';
+                                const icon = document.createElement("i");
+                                icon.classList.add("fa-solid", "fa-circle-arrow-right");
+                                link.appendChild(icon);
+                                directLinkDiv.appendChild(link);
+                            }
+                        });
                     }
                 });
             }
