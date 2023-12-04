@@ -15,7 +15,7 @@
     }
 
     .banner {
-        .history, .youtube {
+        .history, .search-on-yt, .youtube {
             @include flex-row();
             border: 2px solid var(--gradient-ardoise-90);
             border-radius: 50%;
@@ -25,8 +25,12 @@
             width: calc(1.5rem + 4px);
         }
 
-        .youtube {
+        .search-on-yt {
             bottom: 3.5rem;
+        }
+
+        .youtube {
+            bottom: 6rem;
         }
     }
 }
