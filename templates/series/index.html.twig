@@ -230,7 +230,7 @@
         "app_series_show": "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
         "app_series_search": "{{ path('app_series_search') }}",
         "app_series_set_settings": "{{ path('app_series_set_settings') }}",
-        "app_series_from_country": "{{ path('app_series_from_country', {countryCode:'FR'}) }}",
+        "app_series_from_country": "{{ path('app_series_from_country', {countryCode:'FR'})|slice(0, -3) }}",
         "locale": "{{ app.request.locale }}",
         "current_page": {{ pages.page }},
         "per_page": {{ pages.per_page }},

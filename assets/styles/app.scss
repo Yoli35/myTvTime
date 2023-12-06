@@ -335,6 +335,13 @@ main {
                 input[type=range] {
                     width: 200px;
                 }
+
+                &:has(input[type=range]) {
+                    span {
+                        text-align: right;
+                        width: 3rem;
+                    }
+                }
             }
 
             menu {

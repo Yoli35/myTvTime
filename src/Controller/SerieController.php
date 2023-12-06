@@ -200,7 +200,7 @@ class SerieController extends AbstractController
         }
         $arr = array_unique($arr);
         $arr = array_values($arr);
-        dump($arr);
+//        dump($arr);
         $countries = [];
         foreach ($arr as $country) {
             if (strlen($country) == 2)
@@ -575,7 +575,7 @@ class SerieController extends AbstractController
         $start = $this->dateService->getNowImmutable($user->getTimezone(), false);
         $end = $this->dateService->getNowImmutable($user->getTimezone(), false);
         $week = $now->format('W');
-        dump(['now' => $now, 'week' => $week]);
+//        dump(['now' => $now, 'week' => $week]);
         $requestedWeek = $request->query->getInt('w');
         if ($requestedWeek) {
             $weekInterval = $requestedWeek - $week;
@@ -590,7 +590,7 @@ class SerieController extends AbstractController
                 $end = $end->add(new DateInterval('P' . $weekInterval . 'W'));
             }
             $week = $now->format('W');
-            dump(['requested week' => $requestedWeek, 'now' => $now, 'week' => $week]);
+//            dump(['requested week' => $requestedWeek, 'now' => $now, 'week' => $week]);
         }
         $day_of_the_week = $now->format('N');
         $startInterval = 1 - $day_of_the_week;
@@ -604,11 +604,11 @@ class SerieController extends AbstractController
             $end = $end->sub(new DateInterval('P' . abs($endInterval) . 'D'));
         else
             $end = $end->add(new DateInterval('P' . $endInterval . 'D'));
-        dump(['day of the week' => $day_of_the_week, 'start' => $start, 'end' => $end]);
+//        dump(['day of the week' => $day_of_the_week, 'start' => $start, 'end' => $end]);
         $previousWeek = $this->dateService->getNowImmutable($user->getTimezone(), false)->sub(new DateInterval('P1W'))->format('W');
         $nextWeek = $this->dateService->getNowImmutable($user->getTimezone(), false)->add(new DateInterval('P1W'))->format('W');
         $monday = $now->sub(new DateInterval('P' . ($day_of_the_week - 1) . 'D'));
-        dump(['monday' => $monday, 'day of the week' => $day_of_the_week, 'previous week' => $previousWeek, 'next week' => $nextWeek]);
+//        dump(['monday' => $monday, 'day of the week' => $day_of_the_week, 'previous week' => $previousWeek, 'next week' => $nextWeek]);
 
 //        $start = $this->dateService->newDateImmutable((1 - $day_of_the_week) . 'day', $user->getTimezone());
 //        $end = $this->dateService->newDateImmutable((7 - $day_of_the_week) . 'day', $user->getTimezone());
@@ -628,7 +628,7 @@ class SerieController extends AbstractController
                 'today_offset' => $i - $day_of_the_week,
             ];
         }
-        dump(['episodes of the week' => $episodesOfTheWeek]);
+//        dump(['episodes of the week' => $episodesOfTheWeek]);
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_WEEK);
         $breadcrumb[0]['separator'] = '●';
         $breadcrumb[] = ['name' => $this->translator->trans("My series airing today"), 'url' => $this->generateUrl("app_series_today")];
@@ -903,11 +903,11 @@ class SerieController extends AbstractController
             return !$serie['first_date_air'];
         });
         $series = array_merge($seriesWithoutFirstDateAir, $seriesWithFirstDateAir);
-        dump([
-            'user' => $user,
+//        dump([
+//            'user' => $user,
 //            'seriesWithFirstDateAir' => $seriesWithFirstDateAir,
 //            'seriesWithoutFirstDateAir' => $seriesWithoutFirstDateAir,
-        ]);
+//        ]);
         if ($countryCode == 'all')
             $countryName = $this->translator->trans('All countries');
         else
@@ -1270,10 +1270,10 @@ class SerieController extends AbstractController
         foreach ($filters as $key => $value) {
             $filterString .= "&$key=$value";
         }
-        dump([
-            '$filters' => $filters,
-            '$filterString' => $filterString,
-        ]);
+//        dump([
+//            '$filters' => $filters,
+//            '$filterString' => $filterString,
+//        ]);
         $standing = $this->TMDBService->getFilterTv($filterString);
         $series = json_decode($standing, true);
         $totalResults = $series['total_results'];
@@ -1858,7 +1858,7 @@ class SerieController extends AbstractController
                 $watchProviderList = $this->getRegionProvider($imgConfig, 1, '', ''); // Tous les providers
             }
         }
-        dump(['providersFlatrate' => $providersFlatrate, 'watchProviderList' => $watchProviderList]);
+//        dump(['providersFlatrate' => $providersFlatrate, 'watchProviderList' => $watchProviderList]);
 
         $serieViewing = null;
         $whatsNew = null;
@@ -1887,17 +1887,19 @@ class SerieController extends AbstractController
                 $dl = $serie->getDirectLink();
                 // si le lien contient 'youtube', on récupère le 'logo_path' dans la table 'networks'
                 $networkId = 0;
+                // https://www.youtube.com/watch?v=xpiuV0Xj8zk&list=PLxaYND3fuRFPPEfhIfs9oT3SWOch-B0mL&index=1
                 if (str_contains($dl, 'youtube')) {
-                    $networkId = 83;
+//                    $networkId = 83;
+                    $tv['directLink'][0]['logoPath'] = '/images/series/youtube-premium.png';
+                    $tv['directLink'][0]['name'] = 'Youtube Premium';
                 }
-                // https://www.netflix.com/title/81716080&uct_country=fr
-                if ($networkId) {
-                    $network = $this->networksRepository->find($networkId);
-                    if ($network) {
-                        $tv['directLink'][0]['logoPath'] = $this->fullUrl('logo', 2, $network->getLogoPath(), '', $imgConfig);
-                        $tv['directLink'][0]['name'] = $network->getName();
-                    }
-                }
+//                if ($networkId) {
+//                    $network = $this->networksRepository->find($networkId);
+//                    if ($network) {
+//                        $tv['directLink'][0]['logoPath'] = $this->fullUrl('logo', 2, $network->getLogoPath(), '', $imgConfig);
+//                        $tv['directLink'][0]['name'] = $network->getName();
+//                    }
+//                }
             }
             $providersMatches = [
                 'disney' => 337, // Disney Plus
@@ -1981,7 +1983,7 @@ class SerieController extends AbstractController
                     }
                 }
             }
-            dump($tv['directLink']);
+//            dump($tv['directLink']);
 
             $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
 
