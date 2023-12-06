@@ -1015,7 +1015,7 @@
     position: absolute;
     left: -10.5rem;
     top: -12rem;
-    transition: opacity .25s;
+    transition: opacity 50ms;
     z-index: 1000;
 
     &.display {

@@ -305,12 +305,16 @@ export class Shows {
         bubbleV2.querySelector(".infos").innerHTML = "<div>" + name + "</div><div>" + airDate + "</div>" + (vote > 0 ? ("<div>" + voteText[locale] + vote + " / 10</div>") : "");
 
         bubbleV2.setAttribute("style", "translate: " + evt.pageX + "px " + evt.pageY + "px;");
+        bubbleV2.classList.add("display");
         bubbleV2.classList.add("show");
     }
 
     bubbleItHide() {
         const bubbleV2 = document.querySelector(".bubble-v2");
         bubbleV2.classList.remove("show");
+        setTimeout(() => {
+            bubbleV2.classList.remove("display");
+        }, 50);
         bubbleV2.querySelector(".still").innerHTML = "";
         bubbleV2.querySelector(".infos").innerHTML = "";
     }
