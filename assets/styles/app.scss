@@ -37,6 +37,23 @@ html {
     scroll-padding: 10rem;
 }
 
+a {
+    color: var(--gradient-ardoise-20);
+    text-decoration: none;
+
+    &:hover {
+        color: var(--gradient-orange-20);
+    }
+
+    &:visited {
+        color: var(--gradient-ardoise-20);
+    }
+
+    &:focus {
+        color: var(--gradient-orange-20);
+    }
+}
+
 body {
     align-items: center;
     background: var(--mtt-body-bg);
@@ -54,10 +71,6 @@ body {
 
     &.frozen {
         overflow: hidden;
-    }
-
-    a {
-        text-decoration: none;
     }
 
     img, picture, svg, video {
@@ -156,6 +169,7 @@ body {
     @include flex-col(flex-start, flex-start);
     background-color: var(--gradient-ardoise-10-alpha-90);
     border-radius: .5rem;
+    color: var(--gradient-ardoise-90);
     gap: 1rem;
     padding: 1rem;
     width: 100%;
@@ -1203,7 +1217,7 @@ nav.active {
             background-color: var(--gradient-ardoise-75);
         }
 
-        a {
+        a, a:visited, a:hover, a:focus, a:active {
             color: var(--light-theme-text);
         }
 
@@ -1654,10 +1668,21 @@ nav.active {
 
         a {
             color: var(--gradient-ardoise-80);
+
+            &:hover {
+                color: var(--gradient-orange-60);
+            }
+
+            &:visited {
+                color: var(--gradient-ardoise-80);
+            }
+
+            &:focus {
+                color: var(--gradient-orange-60);
+            }
         }
     }
 }
-
 
 .home-list {
     @include flex-100(start, start);

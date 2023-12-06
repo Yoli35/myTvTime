@@ -342,6 +342,51 @@ label:has(select) {
 
 @media (prefers-color-scheme: light) {
 
+    .form-row {
+        &:nth-child(odd) {
+            background-color: var(--gradient-ardoise-70);
+        }
+
+        &:nth-child(even) {
+            background-color: var(--gradient-ardoise-75);
+        }
+
+        .form-group {
+            background-color: var(--gradient-ardoise-10-alpha-50);
+
+            i {
+                color: var(--gradient-ardoise-50);
+
+                &:hover {
+                    color: var(--gradient-ardoise-10);
+                }
+            }
+
+            .form-switch {
+                @include switcher(var(--gradient-orange-50), var(--gradient-ardoise-60));
+            }
+        }
+
+        .checkboxes {
+            .group {
+                background-color: var(--gradient-ardoise-10-alpha-50);
+                border: 1px solid var(--gradient-ardoise-50);
+
+                .checkbox {
+                    .form-switch {
+                        input:checked + span {
+                            background: var(--gradient-orange-50);
+                        }
+
+                        input:checked + span:before {
+                            background: var(--gradient-orange-20);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     label:has(select) {
         select {
             background-color: var(--gradient-ardoise-80);

@@ -621,6 +621,7 @@
 
                         a, div {
                             @include flex-row();
+                            color: var(--gradient-ardoise-20);
                             height: 100%;
                             min-height: 2rem;
                             width: 100%;
@@ -1004,16 +1005,22 @@
 }
 
 .bubble-v2 {
-    @include flex-row();
+    align-items: center;
+    display: none;
     background-color: var(--gradient-ardoise-10);
     border-radius: .25rem;
     color: var(--gradient-ardoise-80);
+    justify-content: center;
     opacity: 0;
     position: absolute;
     left: -10.5rem;
     top: -12rem;
     transition: opacity .25s;
     z-index: 1000;
+
+    &.display {
+        display: flex;
+    }
 
     &.show {
         opacity: 1;
@@ -2657,7 +2664,7 @@
                     position: relative;
                     transition: all 125ms ease-in-out;
 
-                    &:has(i) {
+                    &:has(>a>i) {
                         a {
                             height: 100%;
                             width: 100%;
@@ -2675,10 +2682,15 @@
                         }
                     }
 
+                    &:has(img) {
+                        padding: 0;
+                    }
+
                     img {
-                        height: 100%;
+                        border-radius: .125rem;
+                        height: 2.75rem;
                         object-fit: contain;
-                        width: 100%;
+                        width: 2.75rem;
                     }
 
                     .link-tool {
