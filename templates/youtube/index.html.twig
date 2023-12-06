@@ -16,17 +16,17 @@
         <div class="yt-header">
             <div class="banner">
                 {{ include('blocks/_clock.html.twig') }}
-                <div class="youtube">
+                <div class="youtube" data-title="{{ 'Go to Youtube'|trans }}">
                     <a href="https://www.youtube.com/" target="_blank">
                         <i class="fa-brands fa-youtube"></i>
                     </a>
                 </div>
-                <div class="search-on-yt">
+                <div class="search-on-yt" data-title="{{ 'Search on Youtube'|trans }}">
                     <a href="https://www.youtube.com/results?search_query=" target="_blank">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </a>
                 </div>
-                <div class="history">
+                <div class="history" data-title="{{ 'Your history on Youtube'|trans }}">
                     <a href="https://www.youtube.com/feed/history" target="_blank">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                     </a>
@@ -151,19 +151,17 @@
 
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
+    <div id="global-data" style="display: none">
+        {
+            "userId": {{ app.user.id }}, "locale": "{{ locale }}",
+            "app_youtube_video": "{{ path('app_youtube_video', {id: 0})|slice(0, -1) }}",
+            "app_youtube_more": "{{ path('app_youtube_more') }}",
+            "app_youtube_add_video": "{{ path('app_youtube_add_video') }}",
+            "youtube_settings_save": "{{ path('youtube_settings_save') }}"
+        }
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/youtube.js"></script>
-    <script>
-        const paths = [
-            "{{ path('app_youtube_video', {id: 0}) }}",
-            "{{ path('app_youtube_more') }}",
-            "{{ path('app_youtube_add_video') }}",
-            "{{ path('youtube_settings_save') }}"
-        ];
-        window.addEventListener("DOMContentLoaded", () => {
-            initYoutube({{ app.user.id }}, "{{ locale }}", paths);
-        })
-    </script>
+    <script src="/js/youtubeIndex.js" type="module"></script>
 {% endblock %}

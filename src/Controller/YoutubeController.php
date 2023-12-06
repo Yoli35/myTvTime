@@ -112,7 +112,7 @@ class YoutubeController extends AbstractController
         ]);
     }
 
-    #[Route('/youtube/more', name: 'app_youtube_more')]
+    #[Route('/{_locale}/youtube/more', name: 'app_youtube_more', requirements: ['_locale' => 'fr|en|de|es'])]
     public function moreVideos(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -521,7 +521,7 @@ class YoutubeController extends AbstractController
 
                 $justAdded = $newVideo->getId();
 
-                $status = "ok";
+                $status = "success";
                 $message = $this->translator->trans("Video added!");
                 $subMessage = "<a href='/" . $locale . "/youtube/video/" . $justAdded . "'>🔗 ";
                 $subMessage .= $this->translator->trans("Go to the video page to see it");
@@ -532,7 +532,7 @@ class YoutubeController extends AbstractController
                 foreach ($users as $u) {
                     if ($u->getId() == $user->getId()) {
                         $userAlreadyLinked = true;
-                        $status = "ok";
+                        $status = "success";
                         $message = $this->translator->trans("Video already added!");
                         $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>🔗 ";
                         $subMessage .= $this->translator->trans("Go to the video page to see it");
@@ -543,7 +543,7 @@ class YoutubeController extends AbstractController
                 if (!$userAlreadyLinked) {
                     $link->addUser($user);
                     $this->videoRepository->add($link, true);
-                    $status = "ok";
+                    $status = "success";
                     $message = $this->translator->trans("Video added!");
                     $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>🔗 ";
                     $subMessage .= $this->translator->trans("Go to the video page to see it");
