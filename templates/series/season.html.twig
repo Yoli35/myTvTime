@@ -32,61 +32,64 @@
         <div class="serie-page">
             <div class="header">
                 <div class="backdrop" style="background-image: url('{{ serie.backdropPath }}')"></div>
-                <div class="posters">
-                    <div class="poster">
-                        <img src="{{ season.poster_path }}" alt="{{ season.name }}">
+                <div class="series-details">
+                    <div class="posters">
+                        <div class="poster">
+                            <img src="{{ season.poster_path }}" alt="{{ season.name }}">
+                        </div>
                     </div>
-                </div>
-                <div class="infos">
-                    <h1>
-                        {% if serie.localized_name %}
-                            {{ serie.localized_name }} ({{ serie.name }})
-                        {% else %}
-                            {{ serie.name }}
-                        {% endif %}
+                    <div class="infos">
+                        <h1>
+                            {% if serie.localized_name %}
+                                <div>{{ serie.localized_name }}</div>
+                                <div>({{ serie.name }})</div>
+                            {% else %}
+                                <div>{{ serie.name }}</div>
+                            {% endif %}
 
-                        {% if serie.firstDateAir %}
-                            <span>({{ serie.firstDateAir|date("Y") }})</span>
+                            {% if serie.firstDateAir %}
+                                <span>({{ serie.firstDateAir|date("Y") }})</span>
+                            {% endif %}
+                        </h1>
+                        <h2>{{ season.name }}</h2>
+                        <div class="info">
+                            {% if season.overview|length %}
+                                <div>{{ season.overview }}</div>
+                            {% endif %}
+                        </div>
+                        {% if seasonViewing %}
+                            <div class="viewing-progress">{{ 'Progress'|trans }} : <span></span>
+                                / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}</div>
                         {% endif %}
-                    </h1>
-                    <h2>{{ season.name }}</h2>
-                    <div class="info">
-                        {% if season.overview|length %}
-                            <div>{{ season.overview }}</div>
+                        {% if not localized %}
+                            <div class="info">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ 'Information about this season (episode titles and descriptions) is not available in your language'|trans }}.
+                            </div>
                         {% endif %}
                     </div>
                     {% if seasonViewing %}
-                        <div class="viewing-progress">{{ 'Progress'|trans }} : <span></span>
-                            / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}</div>
-                    {% endif %}
-                    {% if not localized %}
-                        <div class="info">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            {{ 'Information about this season (episode titles and descriptions) is not available in your language'|trans }}.
+                        <div class="vote-graph">
+                            <label for="select-graph">{{ 'Vote graph'|trans }}
+                                <select id="select-graph">
+                                    {% for type in ['plot', 'bar', 'radial'] %}
+                                        <option value="{{ type }}"{% if seasonsCookie.graph == type %} selected{% endif %}>{{ type|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            <div class="options">
+                                <label>
+                                    <input type="checkbox" id="option-graph-grid" value="grid"{% if seasonsCookie.grid == 'grid' %} checked{% endif %}>
+                                    {{ 'Grid'|trans }}
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="option-graph-colored-grid" value="colored"{% if seasonsCookie.coloredGrid == 'color' %} checked{% endif %}>
+                                    {{ 'Colored grid'|trans }}
+                                </label>
+                            </div>
                         </div>
                     {% endif %}
                 </div>
-                {% if seasonViewing %}
-                    <div class="vote-graph">
-                        <label for="select-graph">{{ 'Vote graph'|trans }}
-                            <select id="select-graph">
-                                {% for type in ['plot', 'bar', 'radial'] %}
-                                    <option value="{{ type }}"{% if seasonsCookie.graph == type %} selected{% endif %}>{{ type|trans }}</option>
-                                {% endfor %}
-                            </select>
-                        </label>
-                        <div class="options">
-                            <label>
-                                <input type="checkbox" id="option-graph-grid" value="grid"{% if seasonsCookie.grid == 'grid' %} checked{% endif %}>
-                                {{ 'Grid'|trans }}
-                            </label>
-                            <label>
-                                <input type="checkbox" id="option-graph-colored-grid" value="colored"{% if seasonsCookie.coloredGrid == 'color' %} checked{% endif %}>
-                                {{ 'Colored grid'|trans }}
-                            </label>
-                        </div>
-                    </div>
-                {% endif %}
             </div>
             <main>
                 <article class="full">

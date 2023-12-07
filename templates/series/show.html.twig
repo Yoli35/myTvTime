@@ -47,81 +47,83 @@
                 {% else %}
                     <div class="backdrop" style="background-image: url('/images/default/no_banner_dark.png')"></div>
                 {% endif %}
-                <div class="posters">
-                    <div class="poster">
-                        {% if serie.poster_path|length %}
-                            {% if addThisSeries %}
-                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
+                <div class="series-details">
+                    <div class="posters">
+                        <div class="poster">
+                            {% if serie.poster_path|length %}
+                                {% if addThisSeries %}
+                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
+                                {% else %}
+                                    <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ serie.name }}">
+                                {% endif %}
                             {% else %}
-                                <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ serie.name }}">
+                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
                             {% endif %}
-                        {% else %}
-                            <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
-                        {% endif %}
-                        {% if watchProviders %}
-                            <div class="watch-providers">
-                                {% if watchProviders.flatrate is defined %}
-                                    {% for flatrate in watchProviders.flatrate %}
-                                        <div class="watch-provider">
-                                            <div class="logo">
-                                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}"
-                                                     alt="{{ flatrate.provider_name }}">
+                            {% if watchProviders %}
+                                <div class="watch-providers">
+                                    {% if watchProviders.flatrate is defined %}
+                                        {% for flatrate in watchProviders.flatrate %}
+                                            <div class="watch-provider">
+                                                <div class="logo">
+                                                    <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ flatrate.logo_path }}"
+                                                         alt="{{ flatrate.provider_name }}">
+                                                </div>
+                                                <div class="watch">
+                                                    <div>{{ 'Available in streaming'|trans }}</div>
+                                                    <div><a href="{{ watchProviders.link }}" data-title="{{ 'Watch now via the movie DB website'|trans }}">{{ 'Watch now'|trans }}</a></div>
+                                                </div>
                                             </div>
-                                            <div class="watch">
-                                                <div>{{ 'Available in streaming'|trans }}</div>
-                                                <div><a href="{{ watchProviders.link }}" data-title="{{ 'Watch now via the movie DB website'|trans }}">{{ 'Watch now'|trans }}</a></div>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                                {% if watchProviders.buy is defined %}
-                                    {% for buy in watchProviders.buy %}
-                                        <div class="watch-provider">
-                                            <div class="logo">
-                                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}"
-                                                     alt="{{ buy.provider_name }}">
-                                            </div>
-                                            <div class="watch">
-                                                <div>{{ 'Available to rent or buy'|trans }}</div>
-                                                <div><a href="{{ watchProviders.link }}">{{ 'Watch now'|trans }}</a></div>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                        <div class="arrow"></div>
-                    </div>
-                    {% if serie.seriePosters|length > 1 %}
-                        <div class="poster-list">
-                            {% for seriePoster in serie.seriePosters %}
-                                <div class="poster-item">
-                                    <img src="{{ "/images/series/posters" ~ seriePoster.posterPath }}" alt="{{ serie.name }}">
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="infos">
-                    <h1>
-                        {% if serieId %}
-                            <div id="localized-name">
-                                <span>
-                                    {% if serie.localized_name is defined and serie.localized_name|length %}
-                                        {{ serie.localized_name }} ({{ serie.name }})
-                                    {% else %}
-                                        {{ serie.name }}
+                                        {% endfor %}
                                     {% endif %}
-                                </span>
-                                <div id="edit-localized-name" data-id="{{ serieId }}"><i class="fa-solid fa-pen"></i></div>
+                                    {% if watchProviders.buy is defined %}
+                                        {% for buy in watchProviders.buy %}
+                                            <div class="watch-provider">
+                                                <div class="logo">
+                                                    <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ buy.logo_path }}"
+                                                         alt="{{ buy.provider_name }}">
+                                                </div>
+                                                <div class="watch">
+                                                    <div>{{ 'Available to rent or buy'|trans }}</div>
+                                                    <div><a href="{{ watchProviders.link }}">{{ 'Watch now'|trans }}</a></div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            <div class="arrow"></div>
+                        </div>
+                        {% if serie.seriePosters|length > 1 %}
+                            <div class="poster-list">
+                                {% for seriePoster in serie.seriePosters %}
+                                    <div class="poster-item">
+                                        <img src="{{ "/images/series/posters" ~ seriePoster.posterPath }}" alt="{{ serie.name }}">
+                                    </div>
+                                {% endfor %}
                             </div>
-                        {% else %}
-                            {{ serie.name }}
                         {% endif %}
-                        {% if serie.first_air_date %}
-                            <span>({{ serie.first_air_date|date("Y") }})</span>
-                        {% else %}
-                            <div class="no-date">
+                    </div>
+                    <div class="infos">
+                        <h1>
+                            {% if serieId %}
+                                <div id="localized-name">
+                                    <span>
+                                        {% if serie.localized_name is defined and serie.localized_name|length %}
+                                           <div>{{ serie.localized_name }}</div>
+                                            <div>({{ serie.name }})</div>
+                                        {% else %}
+                                            {{ serie.name }}
+                                        {% endif %}
+                                    </span>
+                                    <div id="edit-localized-name" data-id="{{ serieId }}"><i class="fa-solid fa-pen"></i></div>
+                                </div>
+                            {% else %}
+                                {{ serie.name }}
+                            {% endif %}
+                            {% if serie.first_air_date %}
+                                <span>({{ serie.first_air_date|date("Y") }})</span>
+                            {% else %}
+                                <div class="no-date">
                                 <span>
                                     {% if serie.upcoming_date_year is defined and serie.upcoming_date_year %}
                                         ({% if serie.upcoming_date_month %}{{ serie.upcoming_date_month }}/{% endif %}{{ serie.upcoming_date_year }})
@@ -129,131 +131,133 @@
                                         — {{ 'No date yet'|trans }}
                                     {% endif %}
                                 </span>
-                                {% if serieId %}
-                                    <div class="no-date-form">
-                                        <div>{{ 'Found a date'|trans }}</div>
-                                        <form name="upcoming">
-                                            <label for="upcoming-month">{{ 'Month'|trans }} :
-                                                <input type="number" id="upcoming_month" name="upcoming[month]" value="{{ serie.upcoming_date_month }}" min="1" max="12" style="width: 3rem">
-                                            </label>
-                                            <label for="upcoming-year">{{ 'Year'|trans }} :
-                                                <input type="number" id="upcoming_year" name="upcoming[year]" value="{{ serie.upcoming_date_year }}" min="{{ currentYear }}" style="width: 5rem">
-                                            </label>
-                                            <button type="submit" id="upcoming_save" name="upcoming[save]" value="{{ serie.id }}" class="btn btn-primary">
-                                                {{ 'Save'|trans }}
-                                            </button>
-                                        </form>
+                                    {% if serieId %}
+                                        <div class="no-date-form">
+                                            <div>{{ 'Found a date'|trans }}</div>
+                                            <form name="upcoming">
+                                                <label for="upcoming-month">{{ 'Month'|trans }} :
+                                                    <input type="number" id="upcoming_month" name="upcoming[month]" value="{{ serie.upcoming_date_month }}" min="1" max="12" style="width: 3rem">
+                                                </label>
+                                                <label for="upcoming-year">{{ 'Year'|trans }} :
+                                                    <input type="number" id="upcoming_year" name="upcoming[year]" value="{{ serie.upcoming_date_year }}" min="{{ currentYear }}" style="width: 5rem">
+                                                </label>
+                                                <button type="submit" id="upcoming_save" name="upcoming[save]" value="{{ serie.id }}" class="btn btn-primary">
+                                                    {{ 'Save'|trans }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </h1>
+                        <div class="info">
+                            {% for genre in serie.genres %}
+                                {{ genre.name }}{% if loop.last == false %}, {% endif %}
+                            {% endfor %}
+                            {% if serie.episode_run_time|length %}
+                                •
+                                {{ serie.episode_run_time.0 }} {{ 'minutes'|trans }}
+                            {% endif %}
+                        </div>
+                        <div class="info">
+                        </div>
+                        <div class="info">
+                            <div class="tagline">{{ serie.tagline }}</div>
+                            <div class="view-vote">
+                                {% if user %}
+                                    {% if not addThisSeries %}
+                                        {#                                    <div class="d-flex-1"> #}
+                                        {#                                        <div class="duration-string"></div> #}
+                                        {#                                        <button id="test" data-id="{{ serieId }}" #}
+                                        {#                                                class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button> #}
+                                        {#                                    </div> #}
+                                        {% if serie.number_of_episodes > 0 %}
+                                            <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
+                                            <div class="view-average">
+                                                <div class="circle">
+                                                    {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
+                                                    {% if percent > 100 %}
+                                                        {% set percent = 100 %}
+                                                    {% endif %}
+                                                    <div class="percentage">{{ percent }}%</div>
+                                                </div>
+                                                <div class="circle-start"></div>
+                                                <div class="circle-end"></div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                {% if serie.vote_count %}
+                                    <div class="vote-count">{{ serie.vote_count }} {{ 'votes'|trans }}</div>
+                                    <div class="vote-average">
+                                        <div class="circle">
+                                            <div class="percentage">{{ (serie.vote_average * 10)|round }}%</div>
+                                        </div>
+                                        <div class="circle-start"></div>
+                                        <div class="circle-end"></div>
                                     </div>
                                 {% endif %}
                             </div>
-                        {% endif %}
-                    </h1>
-                    <div class="info">
-                        {% for genre in serie.genres %}
-                            {{ genre.name }}{% if loop.last == false %}, {% endif %}
-                        {% endfor %}
-                        {% if serie.episode_run_time|length %}
-                            •
-                            {{ serie.episode_run_time.0 }} {{ 'minutes'|trans }}
-                        {% endif %}
-                    </div>
-                    <div class="info">
-                    </div>
-                    <div class="info">
-                        <div class="tagline">{{ serie.tagline }}</div>
-                        <div class="view-vote">
-                            {% if user %}
-                                {% if not addThisSeries %}
-                                    {#                                    <div class="d-flex-1"> #}
-                                    {#                                        <div class="duration-string"></div> #}
-                                    {#                                        <button id="test" data-id="{{ serieId }}" #}
-                                    {#                                                class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button> #}
-                                    {#                                    </div> #}
-                                    {% if serie.number_of_episodes > 0 %}
-                                        <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
-                                        <div class="view-average">
-                                            <div class="circle">
-                                                {% set percent = (viewedEpisodes / serie.number_of_episodes * 100)|round %}
-                                                {% if percent > 100 %}
-                                                    {% set percent = 100 %}
-                                                {% endif %}
-                                                <div class="percentage">{{ percent }}%</div>
-                                            </div>
-                                            <div class="circle-start"></div>
-                                            <div class="circle-end"></div>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
+                        </div>
+                        <div class="info">
+                            {% if serie.overview|length %}
+                                <div class="overview">{{ serie.overview|e }}</div>
                             {% endif %}
-                            {% if serie.vote_count %}
-                                <div class="vote-count">{{ serie.vote_count }} {{ 'votes'|trans }}</div>
-                                <div class="vote-average">
-                                    <div class="circle">
-                                        <div class="percentage">{{ (serie.vote_average * 10)|round }}%</div>
+                        </div>
+                        {# Creators #}
+                        <div class="info">
+                            {% if serie.created_by|length %}
+                                <div class="creators">
+                                    {% for c in serie.created_by %}
+                                        <a href="{{ path('app_people', {id: c.id}) }}">
+                                            <div class="creator">
+                                                <div class="profile">
+                                                    {% if c.profile_path %}
+                                                        <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}"
+                                                             alt="{{ c.name }}">
+                                                    {% else %}
+                                                        <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div>{{ c.name }}</div>
+                                                <div>
+                                                    {% if c.gender is defined %}
+                                                        {{ (c.gender==1?'creator.she':'creator.he')|trans }}
+                                                    {% else %}
+                                                        {{ 'creation'|trans }}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if serie.serieBackdrops|length > 0 %}
+                                <div class="backdrop-list-wrapper">
+                                    {{ 'Backdrops'|trans }}
+                                    <div class="backdrop-list">
+                                        {% for serieBackdrop in serie.serieBackdrops %}
+                                            <div class="backdrop-item">
+                                                <img src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serieBackdrop.backdropPath }}" alt="{{ serie.name }}">
+                                            </div>
+                                        {% endfor %}
                                     </div>
-                                    <div class="circle-start"></div>
-                                    <div class="circle-end"></div>
+                                </div>
+                            {% endif %}
+                            {% if nextEpisodeToWatch %}
+                                <div class="next-block">
+                                    {{ include('blocks/series/_next_episode_to_watch.html.twig') }}
                                 </div>
                             {% endif %}
                         </div>
-                    </div>
-                    <div class="info">
-                        {% if serie.overview|length %}
-                            <div class="overview">{{ serie.overview|e }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="info">
-                        {% if serie.created_by|length %}
-                            <div class="creators">
-                                {% for c in serie.created_by %}
-                                    <a href="{{ path('app_people', {id: c.id}) }}">
-                                        <div class="creator">
-                                            <div class="profile">
-                                                {% if c.profile_path %}
-                                                    <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}"
-                                                         alt="{{ c.name }}">
-                                                {% else %}
-                                                    <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
-                                                {% endif %}
-                                            </div>
-                                            <div>{{ c.name }}</div>
-                                            <div>
-                                                {% if c.gender is defined %}
-                                                    {{ (c.gender==1?'creator.she':'creator.he')|trans }}
-                                                {% else %}
-                                                    {{ 'creation'|trans }}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </a>
+                        {% if whatsNew %}
+                            <div class="what-s-new">
+                                {% for news in whatsNew %}
+                                    <div class="news">{{ news }}</div>
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        {% if serie.serieBackdrops|length > 0 %}
-                            <div class="backdrop-list-wrapper">
-                                {{ 'Backdrops'|trans }}
-                                <div class="backdrop-list">
-                                    {% for serieBackdrop in serie.serieBackdrops %}
-                                        <div class="backdrop-item">
-                                            <img src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serieBackdrop.backdropPath }}" alt="{{ serie.name }}">
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if nextEpisodeToWatch %}
-                            <div class="next-block">
-                                {{ include('blocks/series/_next_episode_to_watch.html.twig') }}
-                            </div>
-                        {% endif %}
                     </div>
-                    {% if whatsNew %}
-                        <div class="what-s-new">
-                            {% for news in whatsNew %}
-                                <div class="news">{{ news }}</div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
                 <div class="add-and-others">
                     {% if user %}
