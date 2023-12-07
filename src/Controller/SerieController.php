@@ -1890,8 +1890,14 @@ class SerieController extends AbstractController
                 // https://www.youtube.com/watch?v=xpiuV0Xj8zk&list=PLxaYND3fuRFPPEfhIfs9oT3SWOch-B0mL&index=1
                 if (str_contains($dl, 'youtube')) {
 //                    $networkId = 83;
-                    $tv['directLink'][0]['logoPath'] = '/images/series/youtube-premium.png';
+                    $tv['directLink'][0]['logoPath'] = '/images/series/logos/youtube-premium.png';
                     $tv['directLink'][0]['name'] = 'Youtube Premium';
+                }
+                // https://www.netflix.com/title/81243969
+                if (str_contains($dl, 'netflix')) {
+//                    $networkId = 83;
+                    $tv['directLink'][0]['logoPath'] = '/images/series/logos/netflix.png';
+                    $tv['directLink'][0]['name'] = 'Netflix';
                 }
 //                if ($networkId) {
 //                    $network = $this->networksRepository->find($networkId);
@@ -2056,14 +2062,14 @@ class SerieController extends AbstractController
         }
         $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
 
-//        dump([
-//            'tv' => $tv,
+        dump([
+            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
 //            'credits' => $credits,
-//        ]);
+        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
@@ -2288,7 +2294,7 @@ class SerieController extends AbstractController
         $allWatchProviders[99999] = [
             "display_priorities" => [],
             "display_priority" => 61,
-            "logo_path" => "/images/series/yggland.png",
+            "logo_path" => "/images/series/logos/yggland.png",
             "provider_name" => "yggtorrent",
             "provider_id" => 99999,
         ];
