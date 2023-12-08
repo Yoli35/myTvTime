@@ -32,7 +32,6 @@ use App\Repository\SeriePosterRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
-use App\Repository\UserTvPreferenceRepository;
 use App\Service\DateService;
 use App\Service\DeeplTranslator;
 use App\Service\TMDBService;
@@ -42,9 +41,9 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use DatePeriod;
 use DeepL\DeepLException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
@@ -84,7 +83,7 @@ class SerieController extends AbstractController
         private readonly EpisodeViewingRepository     $episodeViewingRepository,
         private readonly FavoriteRepository           $favoriteRepository,
         private readonly ImageConfiguration           $imageConfiguration,
-        private readonly NetworksRepository           $networksRepository,
+//        private readonly NetworksRepository           $networksRepository,
         private readonly SeasonViewingRepository      $seasonViewingRepository,
         private readonly SerieCastRepository          $serieCastRepository,
         private readonly SerieBackdropRepository      $serieBackdropRepository,
@@ -571,52 +570,31 @@ class SerieController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $imgConfig = $this->imageConfiguration->getConfig();
-        $now = $this->dateService->getNowImmutable($user->getTimezone(), false);
-        $start = $this->dateService->getNowImmutable($user->getTimezone(), false);
-        $end = $this->dateService->getNowImmutable($user->getTimezone(), false);
-        $week = $now->format('W');
-//        dump(['now' => $now, 'week' => $week]);
-        $requestedWeek = $request->query->getInt('w');
-        if ($requestedWeek) {
-            $weekInterval = $requestedWeek - $week;
-            if ($weekInterval < 0) {
-                $now = $now->sub(new DateInterval('P' . abs($weekInterval) . 'W'));
-                $start = $start->sub(new DateInterval('P' . abs($weekInterval) . 'W'));
-                $end = $end->sub(new DateInterval('P' . abs($weekInterval) . 'W'));
-            }
-            else {
-                $now = $now->add(new DateInterval('P' . $weekInterval . 'W'));
-                $start = $start->add(new DateInterval('P' . $weekInterval . 'W'));
-                $end = $end->add(new DateInterval('P' . $weekInterval . 'W'));
-            }
-            $week = $now->format('W');
-//            dump(['requested week' => $requestedWeek, 'now' => $now, 'week' => $week]);
+
+        $today = $this->dateService->newDateImmutable('now', $user->getTimezone());
+        $week = $request->query->getInt('w', $today->format('W'));
+        $year = $request->query->getInt('y', $today->format('o')); // Year the ISO week number (W) belongs to
+
+        $firstDay = $today->setISODate($year, $week, 1);
+        $days = [];
+        for ($i = 0; $i < 7; $i++) {
+            $days[] = $firstDay;
+            $firstDay = $firstDay->modify('+1 day');
         }
-        $day_of_the_week = $now->format('N');
-        $startInterval = 1 - $day_of_the_week;
-        if ($startInterval < 0)
-            $start = $start->sub(new DateInterval('P' . abs($startInterval) . 'D'));
-        else
-            $start = $start->add(new DateInterval('P' . $startInterval . 'D'));
 
-        $endInterval = 7 - $day_of_the_week;
-        if ($endInterval < 0)
-            $end = $end->sub(new DateInterval('P' . abs($endInterval) . 'D'));
-        else
-            $end = $end->add(new DateInterval('P' . $endInterval . 'D'));
-//        dump(['day of the week' => $day_of_the_week, 'start' => $start, 'end' => $end]);
-        $previousWeek = $this->dateService->getNowImmutable($user->getTimezone(), false)->sub(new DateInterval('P1W'))->format('W');
-        $nextWeek = $this->dateService->getNowImmutable($user->getTimezone(), false)->add(new DateInterval('P1W'))->format('W');
-        $monday = $now->sub(new DateInterval('P' . ($day_of_the_week - 1) . 'D'));
-//        dump(['monday' => $monday, 'day of the week' => $day_of_the_week, 'previous week' => $previousWeek, 'next week' => $nextWeek]);
+        $day_of_the_week = $today->format('N');
 
-//        $start = $this->dateService->newDateImmutable((1 - $day_of_the_week) . 'day', $user->getTimezone());
-//        $end = $this->dateService->newDateImmutable((7 - $day_of_the_week) . 'day', $user->getTimezone());
+        $previousMonday = $today->setISODate($year, $week, 1)->sub($this->dateService->interval('P1W'));
+        $nextMonday = $today->setISODate($year, $week, 1)->add($this->dateService->interval('P1W'));
+        $previousWeek = intval($previousMonday->format('W'));
+        $nextWeek = intval($nextMonday->format('W'));
+        $previousYear = intval($previousMonday->format('o'));
+        $nextYear = intval($nextMonday->format('o'));
+
         $episodesOfTheWeek = [];
         $episodesCount = 0;
         for ($i = 1; $i <= 7; $i++) {
-//            $day = $this->dateService->newDateImmutable(($i - $day_of_the_week) . 'day', $user->getTimezone());
-            $day = $monday->add(new DateInterval('P' . ($i - 1) . 'D'));
+            $day = $days[$i - 1];
             $episodesOfTheDay = $this->todayAiringSeriesV2($day);
             foreach ($episodesOfTheDay as $episode) {
                 $episodesCount += count($episode['episodeNumbers']);
@@ -628,19 +606,29 @@ class SerieController extends AbstractController
                 'today_offset' => $i - $day_of_the_week,
             ];
         }
-//        dump(['episodes of the week' => $episodesOfTheWeek]);
+        $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale(), 20, 1);
+        $seriesToWatch = array_map(function ($series) use ($imgConfig) {
+            if ($series['time_shifted']) {
+                $airDate = $series['air_date'];
+                $date = $this->dateService->newDate($series['air_date'], 'Europe/Paris', true);
+                $series['air_date'] = $date->modify('+1 day')->format('Y-m-d');
+            }
+            $this->savePoster($series['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+            $series['poster_path'] = $this->fullUrl("poster", 3, $series['poster_path'], "no_poster_dark.png", $imgConfig);
+            return $series;
+        }, $seriesToWatch);
+
         $breadcrumb = $this->breadcrumb(self::EPISODES_OF_THE_WEEK);
         $breadcrumb[0]['separator'] = '●';
         $breadcrumb[] = ['name' => $this->translator->trans("My series airing today"), 'url' => $this->generateUrl("app_series_today")];
         $imageConfig = $this->imageConfiguration->getConfig();
 
-//        dump(['episodesOfTheWeek' => $episodesOfTheWeek,]);
-
         return $this->render('series/week.html.twig', [
-            'date' => $now,
-            'week' => ['week_number' => $week, 'start' => $start, 'end' => $end, 'previous' => $previousWeek, 'next' => $nextWeek],
+            'date' => $today,
+            'week' => ['week_number' => $week, 'start' => $days[0], 'end' => $days[6], 'previous' => $previousWeek, 'next' => $nextWeek, 'nextYear' => $nextYear, 'previousYear' => $previousYear],
             'episodesCount' => $episodesCount,
             'episodesOfTheWeek' => $episodesOfTheWeek,
+            'seriesToWatch' => $seriesToWatch,
             'dayNames' => $this->dateService->getDayNames(100),
             'breadcrumb' => $breadcrumb,
             'from' => self::EPISODES_OF_THE_WEEK,

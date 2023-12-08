@@ -89,10 +89,10 @@ $fa-font-path: "../webfonts";
 
     //--gradient-bg: var(--gradient-light);
 
-    --serie-add: hsl(212, 43%, 70%);
-    --serie-seen: hsl(105, 50%, 50%);
-    --movie-add: hsl(212, 43%, 70%);
-    --movie-seen: hsl(105, 50%, 50%);
+    --serie-add: hsl(212, 43%, 90%);
+    --serie-seen: hsl(105, 30%, 50%);
+    --movie-add: hsl(212, 43%, 90%);
+    --movie-seen: hsl(105, 30%, 50%);
 
     --activity-stand-up: hsl(173, 100%, 42%);
     --activity-stand-down: hsl(173, 100%, 22%);
@@ -559,8 +559,10 @@ $fa-font-path: "../webfonts";
     }
 }
 
-@mixin seen($color: var(--serie-add), $size: 1rem, $right: 1rem) {
+@mixin seen($color: var(--serie-add), $border: var(--gradient-ardoise-10), $size: 1rem, $right: 1rem) {
     @include flex-row();
+    background-color: $border;
+    border: 2px solid $border;
     border-radius: 50%;
     bottom: 1rem;
     color: $color;

@@ -147,7 +147,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    // Épisodes à venir paginés
+    // Épisodes à venir
     public function getUpcomingEpisodes($userId, $perPage, $page): array
     {
         $sql = "SELECT "

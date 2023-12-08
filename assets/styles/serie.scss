@@ -444,11 +444,11 @@
                     }
 
                     .add {
-                        @include seen(var(--serie-add), 1.5rem);
+                        @include seen(var(--serie-add), var(--gradient-ardoise-10), 1.5rem);
                     }
 
                     .seen {
-                        @include seen(var(--serie-seen), 1.5rem);
+                        @include seen(var(--serie-seen), var(--gradient-ardoise-10), 1.5rem);
                     }
 
                     &.search {
@@ -1084,9 +1084,11 @@
         .series-details {
             display: flex;
             flex-wrap: wrap;
+            gap: 1rem;
+            width: 100%;
 
             .posters {
-                @include flex-col(flex-start, flex-start);
+                @include flex-col(flex-start, center);
                 flex-shrink: 0;
                 margin-inline: auto;
                 position: unset;
@@ -1197,8 +1199,8 @@
                 @include flex-col(start, center);
                 color: var(--mmt-body-color);
                 flex-grow: 1;
-                min-height: 30rem;
-                padding: 1rem;
+                //min-height: 30rem;
+                //padding: 1rem;
                 position: relative;
                 //width: 100%;
                 z-index: 0;
@@ -2295,11 +2297,17 @@
                         flex-direction: row;
                         flex-wrap: wrap;
                         font-size: var(--episode-roomy-size);
+                        padding-block: 1rem;
 
                         .episode {
+                            border-radius: 1rem 0 0 0;
                             width: unset;
 
                             .still {
+                                img {
+                                    border-radius: 1rem 0 0 0;
+                                }
+
                                 .episode-number, .episode-name, .episode-air-date {
                                     display: flex;
                                 }
@@ -2449,6 +2457,47 @@
                             iframe {
                                 height: 100%;
                                 width: 100%;
+                            }
+                        }
+                    }
+                }
+
+                .similar {
+                    @include flex-100(start, start);
+                    //flex-wrap: wrap;
+                    gap: .5rem;
+                    max-height: 50rem;
+                    overflow-x: auto;
+
+                    a {
+                        .poster {
+                            height: 12rem;
+                            position: relative;
+                            width: 8rem;
+
+                            img {
+                                border-radius: .125rem;
+                                height: 100%;
+                                object-fit: cover;
+                                width: 100%;
+                            }
+
+                            .name {
+                                color: var(--gradient-ardoise-20);
+                                font-weight: 300;
+                                padding: 0 .5rem;
+                                position: absolute;
+                                text-align: center;
+                                top: 1rem;
+                                width: 100%;
+                            }
+
+                            .add {
+                                @include seen(var(--serie-add), var(--gradient-ardoise-10), 1.25rem);
+                            }
+
+                            .seen {
+                                @include seen(var(--serie-seen), var(--gradient-ardoise-10), 1.5rem);
                             }
                         }
                     }
@@ -2607,47 +2656,6 @@
                             &.new {
                                 background-color: var(--gradient-purple-40);
                                 cursor: pointer;
-                            }
-                        }
-                    }
-
-                    .similar {
-                        @include flex-100(start, start);
-                        //flex-wrap: wrap;
-                        gap: .5rem;
-                        max-height: 50rem;
-                        overflow-x: auto;
-
-                        a {
-                            .poster {
-                                height: 12rem;
-                                position: relative;
-                                width: 8rem;
-
-                                img {
-                                    border-radius: .125rem;
-                                    height: 100%;
-                                    object-fit: cover;
-                                    width: 100%;
-                                }
-
-                                .name {
-                                    color: var(--gradient-ardoise-20);
-                                    font-weight: 300;
-                                    padding: 0 .5rem;
-                                    position: absolute;
-                                    text-align: center;
-                                    top: 1rem;
-                                    width: 100%;
-                                }
-
-                                .add {
-                                    @include seen(var(--serie-add), 1.25rem);
-                                }
-
-                                .seen {
-                                    @include seen(var(--serie-seen), 1.5rem);
-                                }
                             }
                         }
                     }
@@ -3244,6 +3252,7 @@
 
         .date {
             background-clip: text;
+            -webkit-background-clip: text;
             background-image: linear-gradient(90deg, var(--gradient-red-50), var(--gradient-purple-50));
             background-position: center 25%;
             color: transparent;
@@ -3626,6 +3635,40 @@
                     }
                 }
             }
+        }
+
+        .series-to-watch {
+            @include flex-col(center, center);
+            gap: 1rem;
+            margin-block: 1rem;
+            width: 100%;
+
+            h3 {
+                font-size: 2rem;
+                font-weight: 100;
+                line-height: 1rem;
+            }
+
+            .wrapper {
+                @include flex-row(flex-start, center);
+                flex-wrap: wrap;
+                gap: 1rem;
+                width: 100%;
+
+                .home-discover {
+                    border: 2px solid transparent;
+                    transition: transform 300ms ease-in-out, border-color 300ms ease-in-out;
+
+                    &:hover {
+                        transform: scale(1.15);
+                        border-color: var(--gradient-ardoise-90);
+                        border-radius: .5rem;
+                        outline: var(--gradient-ardoise-90);
+                        z-index: 1;
+                    }
+                }
+            }
+
         }
     }
 }

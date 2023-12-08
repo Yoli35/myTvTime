@@ -17,9 +17,9 @@
                 <div class="textes">
                     <h1> {{ 'Episodes of the week'|trans }}</h1>
                     <div class="week">
-                        <a href="{{ path('app_series_this_week') }}?w={{ week.previous }}"><i class="fa-solid fa-arrow-circle-left"></i></a>
+                        <a href="{{ path('app_series_this_week') }}?y={{ week.previousYear }}&w={{ week.previous }}"><i class="fa-solid fa-arrow-circle-left"></i></a>
                         {{ 'Week'|trans }} {{ week.week_number }} : {{ episodesCount }} {{ (episodesCount>1 ? 'episodes':'episode')|trans }}
-                        <a href="{{ path('app_series_this_week') }}?w={{ week.next }}"><i class="fa-solid fa-arrow-circle-right"></i></a>
+                        <a href="{{ path('app_series_this_week') }}?y={{ week.nextYear }}&w={{ week.next }}"><i class="fa-solid fa-arrow-circle-right"></i></a>
                     </div>
                     <div class="range">[ {{ week.start|format_date('short') }} — {{ week.end|format_date('short') }} ]</div>
                 </div>
@@ -33,7 +33,7 @@
                             <div class="episodes">
                                 {% for todayAiring in episodeOfTheDay.episodes %}
                                     {{ include('blocks/series/_card-today.html.twig', {extra: episodeOfTheDay.day|format_datetime('full')|capitalize|split(' ')[0], today_offset: episodeOfTheDay.today_offset}) }}
-                                    {% else %}
+                                {% else %}
                                     <div class="no-episode">{{ 'Nothing to watch!'|trans }}</div>
                                 {% endfor %}
                             </div>
@@ -48,6 +48,23 @@
                         </div>
                         <div class="something-else"></div>
                     {% endfor %}
+                </div>
+                <div class="series-to-watch">
+                    <h3>{{ 'And keep watching those series'|trans }}</h3>
+                    <div class="wrapper">
+                        {% for s in seriesToWatch %}
+                            <div class="home-discover" data-id="{{ s.serie_id }}">
+                                <a href="{{ path('app_series_show', {'id': s.serie_id}) }}?from={{ from }}{% if extra is defined %}&extra={{ extra }}&d={{ today_offset }}{% endif %}" title="{{ s.name }}{% if s.localized_name %} - {{ s.localized_name }}{% endif %}">
+                                    <div>
+                                        <img src="{{ s.poster_path }}" alt="{{ 'Poster' }}">
+                                        <div class="view">{{ 'S%02dE%02d'|format(s.season_number, s.episode_number) }}</div>
+                                        <div class="started">{{ s.air_date|format_date('relative_short') }}</div>
+                                    </div>
+                                    <span class="title">{{ s.name }}{% if s.original_name != s.name %} - {{ s.original_name }}{% endif %}{% if s.localized_name %} - {{ s.localized_name }}{% endif %}</span>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </main>
         </div>
@@ -83,7 +100,7 @@
             let nameDivs = createNames();
 
             showNames();
-            anime();
+            // anime();
             setInterval(() => {
                 hideNames();
                 setTimeout(() => {
@@ -91,7 +108,7 @@
                     removeNames();
                     nameDivs = createNames();
                     showNames();
-                    anime();
+                    //    anime();
                 }, 300);
             }, 1000 * 10);
 

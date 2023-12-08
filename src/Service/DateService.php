@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -150,5 +151,14 @@ class DateService
             $days[] = $day;
         }
         return $days;
+    }
+
+    public function interval($interval): DateInterval|false
+    {
+        try {
+            return new DateInterval($interval);
+        } catch (Exception $e) {
+        }
+        return false;
     }
 }
