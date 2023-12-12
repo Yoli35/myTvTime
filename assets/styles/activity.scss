@@ -82,7 +82,7 @@
 
                 .in-progress, .completed {
                     align-items: center;
-                    background-color: var(--gradient-ardoise-40-alpha-50);
+                    background-color: var(--gradient-ardoise-60-alpha-50);
                     border-radius: .25rem;
                     display: flex;
                     gap: .5rem;
@@ -103,7 +103,7 @@
                             gap: .5rem;
 
                             .challenge {
-                                background-color: var(--gradient-ardoise-40);
+                                background-color: var(--gradient-ardoise-60);
                                 border-radius: .25rem;
                                 flex-shrink: 0;
                                 padding: 0;
@@ -148,7 +148,7 @@
         }
 
         .form {
-            background-color: var(--gradient-ardoise-40-alpha-50);
+            background-color: var(--gradient-ardoise-60-alpha-50);
             border-radius: .25em;
             margin-bottom: 2em;
             padding: 2em;
@@ -179,7 +179,7 @@
 
                 .day {
                     @include flex-col(flex-start, center);
-                    background-color: var(--gradient-ardoise-40-alpha-50);
+                    background-color: var(--gradient-ardoise-60-alpha-50);
                     border-radius: .25em;
                     gap: .5rem;
                     padding: .5rem;
@@ -187,26 +187,26 @@
                     width: 100%;
 
                     &:hover {
-                        background-color: var(--gradient-ardoise-40);
+                        background-color: var(--gradient-ardoise-60);
 
                         .activity-of-the-day {
                             //align-items: stretch;
 
                             .rings-of-the-day {
-                                background-color: var(--gradient-ardoise-10-alpha-50);
+                                background-color: var(--gradient-ardoise-90-alpha-50);
                             }
 
                             .stand-up, .move, .exercise {
-                                background-color: var(--gradient-ardoise-10-alpha-50);
+                                background-color: var(--gradient-ardoise-90-alpha-50);
                             }
                         }
                     }
 
                     &.three-rings {
-                        background-color: var(--gradient-green-30-alpha-50);
+                        background-color: var(--gradient-green-70-alpha-50);
 
                         &:hover {
-                            background-color: var(--gradient-green-30);
+                            background-color: var(--gradient-green-70);
 
                             .activity-of-the-day {
                                 .move {
@@ -229,7 +229,7 @@
                                     .details {
                                         .detail {
                                             &:nth-child(2 of .detail) {
-                                                background-color: var(--gradient-green-30);
+                                                background-color: var(--gradient-green-70);
                                             }
                                         }
                                     }
@@ -250,7 +250,7 @@
 
                         .rings-of-the-day {
                             @include flex-row();
-                            background-color: var(--gradient-ardoise-20-alpha-50);
+                            background-color: var(--gradient-ardoise-80-alpha-50);
                             border-radius: 50% .25em .25em 50%;
                             aspect-ratio: 1;
                             gap: 1em;
@@ -266,7 +266,7 @@
 
                         .stand-up, .move, .exercise {
                             @include flex-col(flex-start, flex-start);
-                            background-color: var(--gradient-ardoise-20-alpha-50);
+                            background-color: var(--gradient-ardoise-80-alpha-50);
                             border-radius: .25em;
                             font-size: 1em;
                             font-weight: 300;
@@ -298,7 +298,7 @@
                                 .doubled {
                                     @include flex-row();
                                     border-radius: 50%;
-                                    color: var(--gradient-ardoise-100);
+                                    color: var(--gradient-ardoise-10);
                                     font-size: 1em;
                                     font-weight: 400;
                                     height: 1.5em;
@@ -405,7 +405,7 @@
                                             flex-direction: column;
                                             gap: 0;
                                             padding: .125em .5em;
-                                            background-color: var(--gradient-ardoise-40);
+                                            background-color: var(--gradient-ardoise-60);
                                             margin-left: -.5em;
                                             transition: background-color 1s ease-in-out;
                                         }
@@ -420,7 +420,7 @@
                                     }
 
                                     input {
-                                        background-color: var(--gradient-red-90);
+                                        background-color: var(--gradient-red-10);
                                         border: 1px solid var(--activity-move);
                                         border-radius: .25em;
                                         color: var(--gradient-ardoise-10);
@@ -465,7 +465,7 @@
                                             }
 
                                             input {
-                                                background-color: var(--gradient-green-90);
+                                                background-color: var(--gradient-green-10);
                                                 border: 1px solid var(--activity-exercise);
                                                 border-radius: .25em;
                                                 color: var(--gradient-ardoise-10);
@@ -488,7 +488,7 @@
 
                         .progress {
                             @include flex-row(center, center);
-                            background-color: var(--gradient-ardoise-10);
+                            background-color: var(--gradient-ardoise-90);
                             border-radius: 50%;
                             height: 4em;
                             position: relative;
@@ -504,10 +504,10 @@
 
                                 .percentage {
                                     @include flex-row(center, center);
-                                    background-color: var(--gradient-ardoise-30-alpha-90);
-                                    border: 2px solid var(--gradient-ardoise-10);
+                                    background-color: var(--gradient-ardoise-70-alpha-90);
+                                    border: 2px solid var(--gradient-ardoise-90);
                                     border-radius: 50%;
-                                    color: var(--gradient-ardoise-80);
+                                    color: var(--gradient-ardoise-20);
                                     height: 3em;
                                     width: 3em;
                                 }
@@ -525,8 +525,8 @@
                                 background-color: transparent;
                                 border-bottom: 1px solid transparent;
                                 border-left: 1px solid transparent;
-                                border-right: 1px solid var(--gradient-ardoise-20);
-                                border-top: 1px solid var(--gradient-ardoise-20);
+                                border-right: 1px solid var(--gradient-ardoise-80);
+                                border-top: 1px solid var(--gradient-ardoise-80);
                                 height: 8px;
                                 width: 8px;
 
@@ -596,7 +596,7 @@
 
             .days {
                 @include flex-row(stretch, space-evenly);
-                background-color: var(--gradient-ardoise-40-alpha-50);
+                background-color: var(--gradient-ardoise-60-alpha-50);
                 border-radius: .25em;
                 height: 14.5em;
                 overflow: hidden;
@@ -604,14 +604,14 @@
                 width: 100%;
 
                 &:hover {
-                    background-color: var(--gradient-ardoise-40);
+                    background-color: var(--gradient-ardoise-60);
                 }
 
                 &.seven-rings {
-                    background-color: var(--gradient-green-30-alpha-50);
+                    background-color: var(--gradient-green-70-alpha-50);
 
                     &:hover {
-                        background-color: var(--gradient-green-30);
+                        background-color: var(--gradient-green-70);
                     }
                 }
 
@@ -634,7 +634,7 @@
 
                         .values {
                             @include flex-row();
-                            background-color: var(--gradient-ardoise-10);
+                            background-color: var(--gradient-ardoise-90);
                             border-radius: .25em;
                             font-weight: 400;
                             gap: .5em;
@@ -666,14 +666,14 @@
 
             .graphs {
                 @include flex-row(stretch, start);
-                background-color: var(--gradient-ardoise-40-alpha-50);
+                background-color: var(--gradient-ardoise-60-alpha-50);
                 border-radius: .25em;
                 gap: 1rem;
                 padding: 1em;
                 width: 100%;
 
                 &:hover {
-                    background-color: var(--gradient-ardoise-40);
+                    background-color: var(--gradient-ardoise-60);
                 }
 
                 .graph {
@@ -717,7 +717,7 @@
 
         .activity-values {
             @include flex-col();
-            background-color: var(--gradient-ardoise-40-alpha-50);
+            background-color: var(--gradient-ardoise-60-alpha-50);
             inset: 0;
             position: absolute;
 
@@ -726,7 +726,7 @@
             }
 
             .activity-values-result {
-                background-color: var(--gradient-ardoise-20);
+                background-color: var(--gradient-ardoise-80);
                 width: 20rem;
             }
         }
@@ -757,8 +757,8 @@
                 width: 2rem;
 
                 &:hover {
-                    background-color: var(--gradient-ardoise-40);
-                    color: var(--gradient-ardoise-90);
+                    background-color: var(--gradient-ardoise-60);
+                    color: var(--gradient-ardoise-10);
                     scale: 1.25;
                 }
 
@@ -773,9 +773,9 @@
         }
 
         .challenge-show {
-            background-color: var(--gradient-ardoise-40-alpha-50);
+            background-color: var(--gradient-ardoise-60-alpha-50);
             border-radius: 1rem;
-            color: var(--gradient-ardoise-90);
+            color: var(--gradient-ardoise-10);
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -784,23 +784,23 @@
             position: relative;
 
             &.new {
-                background-color: var(--gradient-orange-40-alpha-50);
-                color: var(--gradient-orange-90);
+                background-color: var(--gradient-orange-60-alpha-50);
+                color: var(--gradient-orange-10);
 
                 .challenge-action {
-                    background-color: var(--gradient-orange-40);
+                    background-color: var(--gradient-orange-60);
                     color: var(--gradient-yellow-80);
                     rotate: 15deg;
                 }
             }
 
             &.update {
-                background-color: var(--gradient-green-40-alpha-50);
+                background-color: var(--gradient-green-60-alpha-50);
                 color: var(--gradient-green-90);
 
                 .challenge-action {
-                    background-color: var(--gradient-green-40);
-                    color: var(--gradient-yellow-80);
+                    background-color: var(--gradient-green-60);
+                    color: var(--gradient-yellow-20);
                     rotate: 15deg;
                 }
             }
@@ -808,7 +808,7 @@
             .challenge-completed,
             .challenge-action {
                 align-items: center;
-                background-color: var(--gradient-green-30);
+                background-color: var(--gradient-green-70);
                 border-radius: 50%;
                 color: var(--gradient-yellow-50);
                 display: flex;
@@ -823,7 +823,7 @@
             }
 
             .challenge-show-info {
-                background-color: var(--gradient-ardoise-40);
+                background-color: var(--gradient-ardoise-60);
                 border-radius: .5rem;
                 font-size: clamp(1rem, 4vw, 3rem);
                 font-weight: 100;
@@ -1165,6 +1165,7 @@
     }
 }
 
+/*
 @media (prefers-color-scheme: light) {
 
     .activity {
@@ -1172,27 +1173,27 @@
             //color: var(--gradient-ardoise-30);
 
             .animated-h1 {
-                color: var(--light-theme-text);
+                color: var(--gradient-ardoise-10);
             }
 
             .clock {
                 .face {
                     .number {
-                        color: var(--light-theme-bg);
+                        color: var(--gradient-ardoise-90);
                     }
 
                     .unit {
-                        background-color: var(--light-theme-bg);
+                        background-color: var(--gradient-ardoise-90);
                     }
                 }
 
                 .username, .time {
-                    color: var(--light-theme-text);
+                    color: var(--gradient-ardoise-90);
                 }
 
                 .date {
                     background-color: transparent;
-                    color: var(--light-theme-text);
+                    color: var(--gradient-ardoise-90);
                 }
 
                 .hands {
@@ -1204,14 +1205,14 @@
         main {
             .recent-activity {
                 .days {
-                    color: var(--light-theme-text);
+                    color: var(--gradient-ardoise-10);
 
                     .day {
-                        background-color: var(--light-theme-button);
+                        background-color: var(--gradient-ardoise-80);
 
                         &:hover {
-                            background-color: var(--light-theme-button-hover);
-                            color: var(--light-theme-bg);
+                            background-color: var(--gradient-ardoise-60);
+                            color: var(--gradient-ardoise-90);
 
                             .activity-of-the-day {
                                 .stand-up {
@@ -1220,8 +1221,8 @@
                                             .wrapper {
                                                 .graduations {
                                                     .quarter {
-                                                        border-left: 1px solid var(--light-theme-bg);
-                                                        color: var(--light-theme-bg);
+                                                        border-left: 1px solid var(--gradient-ardoise-90);
+                                                        color: var(--gradient-ardoise-90);
                                                     }
                                                 }
                                             }
@@ -1252,8 +1253,8 @@
                                         .wrapper {
                                             .graduations {
                                                 .quarter {
-                                                    border-left: 1px solid var(--light-theme-text);
-                                                    color: var(--light-theme-text);
+                                                    border-left: 1px solid var(--gradient-ardoise-90);
+                                                    color: var(--gradient-ardoise-90);
                                                 }
                                             }
                                         }
@@ -1267,10 +1268,10 @@
 
             .week {
                 .days {
-                    background-color: var(--light-theme-button);
+                    background-color: var(--gradient-ardoise-80);
 
                     &:hover {
-                        background-color: var(--light-theme-button-hover);
+                        background-color: var(--gradient-ardoise-60);
                     }
                 }
             }
@@ -1279,5 +1280,9 @@
 
     #activity-dialog {
         background-color: var(--gradient-ardoise-90-alpha-80);
+
+        &::backdrop {
+            background-color: #000000af;
+        }
     }
-}
+}*/

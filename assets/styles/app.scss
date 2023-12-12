@@ -57,7 +57,7 @@ a {
 body {
     align-items: center;
     background: var(--mtt-body-bg);
-    background-image: var(--gradient-light);
+    background-image: var(--gradient-bg);
     background-attachment: fixed;
     color: var(--mtt-body-color);
     display: flex;
@@ -380,9 +380,8 @@ main {
 #modify-tags-dialog::backdrop,
 #multi-people-dialog::backdrop,
 #search-dialog::backdrop,
-#watch-provider-dialog::backdrop
-{
-    background-color: #000000af; //var(--gradient-grey-10-alpha-75);
+#watch-provider-dialog::backdrop {
+    background-color: #000000af;
 }
 
 #multi-people-dialog {
@@ -570,27 +569,17 @@ main {
 
 @media (min-width: 576px) {
     .container {
-        //max-width: 540px;
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-    }
-}
-
-@media (min-width: 768px) {
-    .container {
-        //max-width: unset;
+        padding-inline: 0.75rem;
     }
 }
 
 @media (min-width: 1025px) {
     .container {
         max-width: 1024px;
-        padding-left: unset;
-        padding-right: unset;
+        padding-inline: unset;
     }
     .container-fluid {
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-inline: 1rem;
     }
 }
 
@@ -842,7 +831,7 @@ nav.active {
     }
 }
 
-@media (prefers-color-scheme: light) {
+/*@media (prefers-color-scheme: light) {
     .nav-toggler {
         .connexion {
             > a {
@@ -911,7 +900,7 @@ nav.active {
             }
         }
     }
-}
+}*/
 
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '°';
@@ -1215,7 +1204,7 @@ nav.active {
     }
 }
 
-@media (prefers-color-scheme: light) {
+/*@media (prefers-color-scheme: light) {
     .nav-breadcrumb {
         background-color: var(--gradient-ardoise-75-alpha-25);
         color: var(--gradient-ardoise-100);
@@ -1226,23 +1215,23 @@ nav.active {
         }
 
         a, a:visited, a:hover, a:focus, a:active {
-            color: var(--light-theme-text);
+            color: var(--gradient-ardoise-90);
         }
 
         .breadcrumb {
 
             .breadcrumb-item {
                 span {
-                    color: var(--light-theme-text);
+                    color: var(--gradient-ardoise-90);
                     font-weight: 500;
                 }
 
                 &.active {
-                    color: var(--light-theme-text);
+                    color: var(--gradient-ardoise-90);
                 }
 
                 &:before {
-                    color: var(--light-theme-text);
+                    color: var(--gradient-ardoise-90);
                 }
 
                 .breadcrumb-part {
@@ -1284,7 +1273,7 @@ nav.active {
             }
 
             .bracket {
-                color: var(--light-theme-text);
+                color: var(--gradient-ardoise-90);
             }
 
             .tag-button {
@@ -1317,7 +1306,7 @@ nav.active {
             //}
         }
     }
-}
+}*/
 
 .home-header {
     background-color: var(--gradient-grey-95-alpha-20);
@@ -1624,8 +1613,8 @@ nav.active {
 
 .home-footer {
     @include flex-col(center, space-evenly);
-    background-color: var(--light-theme-button);
-    color: var(--light-theme-text);
+    background-color: var(--gradient-ardoise-80);
+    color: var(--gradient-ardoise-90);
     gap: 1rem;
     margin: auto 0 1rem 0;
     padding-block: 1rem;
@@ -1642,7 +1631,7 @@ nav.active {
     }
 
     a {
-        color: var(--light-theme-text);
+        color: var(--gradient-ardoise-90);
     }
 
 
@@ -1668,7 +1657,7 @@ nav.active {
     }
 }
 
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
 
     .home-footer {
         background-color: var(--gradient-ardoise-30-alpha-50);
@@ -1690,7 +1679,7 @@ nav.active {
             }
         }
     }
-}
+}*/
 
 .home-list {
     @include flex-100(start, start);
@@ -2192,7 +2181,7 @@ nav.active {
     }
 }
 
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
 
     :root {
         --bs-body-bg: var(--gradient-ardoise-20);
@@ -2327,7 +2316,7 @@ nav.active {
         background-color: var(--gradient-ardoise-30-alpha-50);
         color: var(--gradient-ardoise-80);
     }
-}
+}*/
 
 .login, .register {
     @include flex-row();
@@ -2432,7 +2421,7 @@ nav.active {
     }
 }
 
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
     .login, .register {
         .login-dialog, .register-dialog {
             background-color: var(--gradient-ardoise-30);
@@ -2493,4 +2482,4 @@ nav.active {
             }
         }
     }
-}
+}*/
