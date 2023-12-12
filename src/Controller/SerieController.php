@@ -2121,51 +2121,8 @@ class SerieController extends AbstractController
         $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $language, ['credits', 'watch/providers']);
         $season = json_decode($standing, true);
 
-        // Si les données de la saison ne sont pas disponibles dans la langue de l'utilisateur, on les prend en anglais
-        $localized = true;
-        $localizedOverview = '';
-        $localizedResult = 'No need to translate';
-        if (!$this->isThereSomeOverviews($season)) {
-            $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, '', ['credits', 'watch/providers']);
-            $internationalSeason = json_decode($standing, true);
-            if ($this->isThereSomeOverviews($internationalSeason)) {
-                $internationalSeason['watch/providers'] = $season['watch/providers'];
-                $season = $internationalSeason;
-                $localized = false;
-                if (strlen($season['overview'])) {
-                    // Récupérer APP_ENV depuis le fichier .env
-//                    $env = $_ENV['APP_ENV'];
-                    try {
-                        $usage = $this->deeplTranslator->translator->getUsage();
-                        if ($usage->character->count + strlen($season['overview']) < $usage->character->limit) {
-//                            if ($env === 'prod')
-                                $localizedOverview = $this->deeplTranslator->translator->translateText($internationalSeason['overview'], null, $locale);
-//                            else
-//                                $localizedOverview = $season['overview'];
-                            $localizedResult = 'Translated';
-                        } else {
-                            $localizedResult = 'Limit exceeded';
-                        }
-//                    dump([
-//                        'usage' => $usage->character->count,
-//                        'limit' => $usage->character->limit,
-//                        'localizedResult' => $localizedResult,
-//                        'localizedOverview' => $localizedOverview
-//                    ]);
-                    } catch (DeepLException $e) {
-                        $localizedResult = 'Error: code ' . $e->getCode() . ', message: ' . $e->getMessage();
-                        $usage = [
-                            'character' => [
-                                'count' => 0,
-                                'limit' => 500000
-                            ]
-                        ];
-                    }
-                    // for now, we don't use deepl translator
-                    // $localizedOverview = sprintf('No translation in %s mode (%d / %d -> %d%%) - %s - %s', $env, $usage->character->count, $usage->character->limit, intval(100 * $usage->character->count / $usage->character->limit), $localizedResult, $internationalSeason['overview']);
-                }
-            }
-        }
+        // Si les données de la saison ne sont pas disponibles dans la langue de l'utilisateur, on les prend en anglais et on les traduit (deepl)
+        $localization = $this->seasonLocalizedOverview($id, $season, $seasonNumber, $locale);
 
         $credits = $season['credits'];
         if (!key_exists('cast', $credits)) {
@@ -2212,7 +2169,6 @@ class SerieController extends AbstractController
             }
         }
         // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
-        $modifications = [];
         if ($serie['userSerieViewing']) {
             // les infos de la saison
             $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
@@ -2222,11 +2178,13 @@ class SerieController extends AbstractController
                 $episode['viewing'] = $episodeViewing;
                 return $episode;
             }, $episodes);
+
+            $episodesVotes = $this->seasonEpisodeVotes($episodes);
+            $modifications = $this->seasonCheckEpisodeDates($user, $episodes, $isShifted);
         } else {
             $seasonViewing = null;
         }
 
-        $episodesVotes = [];
         foreach ($episodes as $episode) {
             if (array_key_exists('viewing', $episode)) {
                 /** @var EpisodeViewing $episodeViewing */
@@ -2243,56 +2201,13 @@ class SerieController extends AbstractController
                     $episodeViewing->setAirDate($airDate);
                     $this->episodeViewingRepository->save($episodeViewing, true);
                 }
-                $episodesVotes[] = ['number' => $episodeViewing->getEpisodeNumber(), 'vote' => $episodeViewing->getVote()];
             }
         }
 
-        // Les fournisseurs de streaming français de la série
-        $watchProviders = $season['watch/providers'];
-        $watchProviders = array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null;
-
-        // if there is no data for the season, we try to get the data for the serie
-        // May occurs for a newly added season 2+ of a serie
-        if (!$watchProviders) {
-            $watchProviders = $this->TMDBService->getTvWatchProviders($id);
-            $watchProviders = json_decode($watchProviders, true);
-            $watchProviders = array_key_exists("FR", $watchProviders['results']) ? $watchProviders['results']["FR"] : null;
-        }
-
-        if ($watchProviders) {
-            $array1 = $this->getProviders($watchProviders, 'buy', $imgConfig, []);
-            $array2 = $this->getProviders($watchProviders, 'flatrate', $imgConfig, $array1);
-            $array3 = $this->getProviders($watchProviders, 'free', $imgConfig, $array2);
-            $watchProviders = array_filter($array3);
-        }
-        $allWatchProviders = json_decode($this->TMDBService->getTvWatchProviderList($language, $country), true);
-        $allWatchProviders = $allWatchProviders['results'];
-        $allWatchProviders = array_map(function ($provider) use ($imgConfig) {
-            $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_logo.png', $imgConfig);
-            return $provider;
-        }, $allWatchProviders);
-        usort($allWatchProviders, function ($a, $b) {
-            return strcmp($a['provider_name'], $b['provider_name']);
-        });
-        $temp = [];
-        foreach ($allWatchProviders as $provider) {
-            $temp[$provider['provider_id']] = $provider;
-        }
-        $allWatchProviders = $temp;
-        $allWatchProviders[99999] = [
-            "display_priorities" => [],
-            "display_priority" => 61,
-            "logo_path" => "/images/series/logos/yggland.png",
-            "provider_name" => "yggtorrent",
-            "provider_id" => 99999,
-        ];
-//        dump($allWatchProviders);
+        $watchProviders = $this->seasonWatchProviders($id, $season, $language, $country);
 
         // Breadcrumb
-        if ($from === self::SERIES_FROM_COUNTRY) {
-            $query = $request->query->get('c', "FR");
-        }
-        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
+        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $request->query->get('c', "FR") : null);
 
 //        dump([
 //            'serie' => $serie,
@@ -2307,16 +2222,13 @@ class SerieController extends AbstractController
             'season' => $season,
             'seasonViewing' => $seasonViewing,
             'episodes' => $episodes,
-            'episodesVotes' => $episodesVotes,
+            'episodesVotes' => $episodesVotes ?? null,
             'credits' => $credits,
-            'watchProviders' => $watchProviders,
-            'allWatchProviders' => $allWatchProviders,
+            'watchProviders' => $watchProviders['seasonWatchProviders'],
+            'allWatchProviders' => $watchProviders['allWatchProviders'],
             'seasonsCookie' => $seasonsCookie,
-            'modifications' => $modifications,
-            'localized' => $localized,
-            'localizedOverview' => $localizedOverview,
-            'localizedResult' => $localizedResult,
-            'usage' => $usage ?? null,
+            'modifications' => $modifications ?? null,
+            'localization' => $localization,
             'breadcrumb' => $breadcrumb,
             'parameters' => [
                 'from' => $from,
@@ -2459,7 +2371,61 @@ class SerieController extends AbstractController
         return $seasonsCookie;
     }
 
-    public function isThereSomeOverviews($season): bool
+    public function seasonLocalizedOverview(int $id, array $season, int $seasonNumber, string $locale): array
+    {
+        $localized = true;
+        $localizedOverview = '';
+        $localizedResult = 'No need to translate';
+        if (!$this->seasonIsThereSomeOverviews($season)) {
+            $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, '', ['credits', 'watch/providers']);
+            $internationalSeason = json_decode($standing, true);
+            if ($this->seasonIsThereSomeOverviews($internationalSeason)) {
+                $internationalSeason['watch/providers'] = $season['watch/providers'];
+                $season = $internationalSeason;
+                $localized = false;
+                if (strlen($season['overview'])) {
+                    // Récupérer APP_ENV depuis le fichier .env
+//                    $env = $_ENV['APP_ENV'];
+                    try {
+                        $usage = $this->deeplTranslator->translator->getUsage();
+                        if ($usage->character->count + strlen($season['overview']) < $usage->character->limit) {
+//                            if ($env === 'prod')
+                            $localizedOverview = $this->deeplTranslator->translator->translateText($internationalSeason['overview'], null, $locale);
+//                            else
+//                                $localizedOverview = $season['overview'];
+                            $localizedResult = 'Translated';
+                        } else {
+                            $localizedResult = 'Limit exceeded';
+                        }
+//                    dump([
+//                        'usage' => $usage->character->count,
+//                        'limit' => $usage->character->limit,
+//                        'localizedResult' => $localizedResult,
+//                        'localizedOverview' => $localizedOverview
+//                    ]);
+                    } catch (DeepLException $e) {
+                        $localizedResult = 'Error: code ' . $e->getCode() . ', message: ' . $e->getMessage();
+                        $usage = [
+                            'character' => [
+                                'count' => 0,
+                                'limit' => 500000
+                            ]
+                        ];
+                    }
+                    // for now, we don't use deepl translator
+                    // $localizedOverview = sprintf('No translation in %s mode (%d / %d -> %d%%) - %s - %s', $env, $usage->character->count, $usage->character->limit, intval(100 * $usage->character->count / $usage->character->limit), $localizedResult, $internationalSeason['overview']);
+                }
+            }
+        }
+
+        return [
+            'localized' => $localized,
+            'localizedOverview' => $localizedOverview,
+            'localizedResult' => $localizedResult,
+            'usage' => $usage ?? null];
+    }
+
+    public function seasonIsThereSomeOverviews($season): bool
     {
         $episodeOverviewLength = 0;
         if ($season['episodes']) {
@@ -2468,6 +2434,92 @@ class SerieController extends AbstractController
             }
         }
         return $episodeOverviewLength > 0;
+    }
+
+    public function seasonWatchProviders(int $id, array $season, string $language="fr-FR", string $country="FR"): array
+    {
+        $imageConfig = $this->imageConfiguration->getConfig();
+        // Les fournisseurs de streaming de la série du pays ($country)
+        $watchProviders = $season['watch/providers'];
+        $watchProviders = array_key_exists($country, $watchProviders['results']) ? $watchProviders['results'][$country] : null;
+
+        // if there is no data for the season, we try to get the data for the serie
+        // May occurs for a newly added season 2+ of a serie
+        if (!$watchProviders) {
+            $watchProviders = $this->TMDBService->getTvWatchProviders($id);
+            $watchProviders = json_decode($watchProviders, true);
+            $watchProviders = array_key_exists($country, $watchProviders['results']) ? $watchProviders['results'][$country] : null;
+        }
+
+        if ($watchProviders) {
+            $array1 = $this->getProviders($watchProviders, 'buy', $imageConfig, []);
+            $array2 = $this->getProviders($watchProviders, 'flatrate', $imageConfig, $array1);
+            $array3 = $this->getProviders($watchProviders, 'free', $imageConfig, $array2);
+            $watchProviders = array_filter($array3);
+        }
+        $allWatchProviders = json_decode($this->TMDBService->getTvWatchProviderList($language, $country), true);
+        $allWatchProviders = $allWatchProviders['results'];
+        $allWatchProviders = array_map(function ($provider) use ($imageConfig) {
+            $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_logo.png', $imageConfig);
+            return $provider;
+        }, $allWatchProviders);
+        usort($allWatchProviders, function ($a, $b) {
+            return strcmp($a['provider_name'], $b['provider_name']);
+        });
+        $temp = [];
+        foreach ($allWatchProviders as $provider) {
+            $temp[$provider['provider_id']] = $provider;
+        }
+        $allWatchProviders = $temp;
+        $allWatchProviders[99999] = [
+            "display_priorities" => [],
+            "display_priority" => 61,
+            "logo_path" => "/images/series/logos/yggland.png",
+            "provider_name" => "yggtorrent",
+            "provider_id" => 99999,
+        ];
+//        dump($allWatchProviders);
+        return [
+            'seasonWatchProviders' => $watchProviders,
+            'allWatchProviders' => $allWatchProviders,
+        ];
+    }
+
+    public function seasonEpisodeVotes(array $episodes): array
+    {
+        $episodesVotes = [];
+        foreach ($episodes as $episode) {
+            if (array_key_exists('viewing', $episode)) {
+                /** @var EpisodeViewing $episodeViewing */
+                $episodeViewing = $episode['viewing'];
+                $episodesVotes[] = ['number' => $episodeViewing->getEpisodeNumber(), 'vote' => $episodeViewing->getVote()];
+            }
+        }
+        return $episodesVotes;
+    }
+
+    public function seasonCheckEpisodeDates(User $user, array $episodes, bool $isShifted): array
+    {
+        $modifications = [];
+        foreach ($episodes as $episode) {
+            if (array_key_exists('viewing', $episode)) {
+                /** @var EpisodeViewing $episodeViewing */
+                $episodeViewing = $episode['viewing'];
+                // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
+                $airDate = $this->dateService->newDateImmutable($episode['air_date'], $user->getTimezone(), true)->modify($isShifted ? "-1 day" : "0 day");
+                if ($episodeViewing->getAirDate()?->format('Y-m-d') != $airDate->format('Y-m-d')) {
+                    $modifications[] = [
+                        'episode' => $episode['episode_number'],
+                        'episode air date' => $episode['air_date'],
+                        'airDate' => $airDate,
+                        'viewing air date' => $episodeViewing->getAirDate(),
+                    ];
+                    $episodeViewing->setAirDate($airDate);
+                    $this->episodeViewingRepository->save($episodeViewing, true);
+                }
+            }
+        }
+        return $modifications;
     }
 
     public function getProviders($watchProviders, $type, $imgConfig, $providers, $country = 'FR', $indexed = true): array

@@ -61,7 +61,7 @@
                             <div class="viewing-progress">{{ 'Progress'|trans }} : <span></span>
                                 / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}</div>
                         {% endif %}
-                        {% if not localized %}
+                        {% if not localization.localized %}
                             <div class="info">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ 'Information about this season (episode titles and descriptions) is not available in your language'|trans }}.
@@ -93,18 +93,18 @@
             </div>
             <main>
                 <article class="full">
-                    {% if localizedOverview|length %}
+                    {% if localization.localizedOverview|length %}
                         <section>
                             <div class="deepl">
                                 <div class="title">{{ 'Overview'|trans }} by
                                     <div class="logo"><img src="/images/default/deepl.png" alt="deepl"></div>
-                                    {% if usage %}
+                                    {% if localization.usage %}
                                         <div class="usage">
-                                        {{ usage.character.count }} / {{ usage.character.limit }} {{ 'characters'|trans }}
+                                        {{ localization.usage.character.count }} / {{ localization.usage.character.limit }} {{ 'characters'|trans }}
                                         </div>
                                     {% endif %}
                                 </div>
-                                <div class="info">{{ localizedOverview }}</div>
+                                <div class="info">{{ localization.localizedOverview }}</div>
                             </div>
                         </section>
                     {% endif %}
