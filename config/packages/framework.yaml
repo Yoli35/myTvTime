@@ -17,6 +17,13 @@ framework:
     php_errors:
         log: true
 
+    # Since symfony/framework-bundle 6.4: Not setting the "framework.handle_all_throwables" config option is deprecated. It will default to "true" in 7.0
+    handle_all_throwables: true
+
+    # Since symfony/framework-bundle 6.4: Enabling the integration of Doctrine annotations is deprecated. Set the "framework.annotations.enabled" config option to false.
+    annotations:
+        enabled: false
+
 when@test:
     framework:
         test: true
