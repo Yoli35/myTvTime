@@ -2134,14 +2134,14 @@ class SerieController extends AbstractController
                 $localized = false;
                 if (strlen($season['overview'])) {
                     // Récupérer APP_ENV depuis le fichier .env
-                    $env = $_ENV['APP_ENV'];
+//                    $env = $_ENV['APP_ENV'];
                     try {
                         $usage = $this->deeplTranslator->translator->getUsage();
                         if ($usage->character->count + strlen($season['overview']) < $usage->character->limit) {
-                            if ($env === 'prod')
+//                            if ($env === 'prod')
                                 $localizedOverview = $this->deeplTranslator->translator->translateText($internationalSeason['overview'], null, $locale);
-                            else
-                                $localizedOverview = $season['overview'];
+//                            else
+//                                $localizedOverview = $season['overview'];
                             $localizedResult = 'Translated';
                         } else {
                             $localizedResult = 'Limit exceeded';
@@ -2316,6 +2316,7 @@ class SerieController extends AbstractController
             'localized' => $localized,
             'localizedOverview' => $localizedOverview,
             'localizedResult' => $localizedResult,
+            'usage' => $usage ?? null,
             'breadcrumb' => $breadcrumb,
             'parameters' => [
                 'from' => $from,

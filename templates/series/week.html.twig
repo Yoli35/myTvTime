@@ -50,8 +50,8 @@
                     {% endfor %}
                 </div>
                 <div class="series-to-watch">
-                    <h3>{{ 'And keep watching those series'|trans }}</h3>
                     <div class="wrapper">
+                        <h3>{{ 'And keep watching those series'|trans }}</h3>
                         {% for s in seriesToWatch %}
                             <div class="home-discover" data-id="{{ s.serie_id }}">
                                 <a href="{{ path('app_series_show', {'id': s.serie_id}) }}?from={{ from }}{% if extra is defined %}&extra={{ extra }}&d={{ today_offset }}{% endif %}" title="{{ s.name }}{% if s.localized_name %} - {{ s.localized_name }}{% endif %}">

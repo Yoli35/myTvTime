@@ -184,7 +184,7 @@ class TvFilterType extends AbstractType
             ])
             ->add('first_air_date_year', NumberType::class, [
                 'attr' =>[
-                    'size' => '3',
+                    'size' => '4',
                 ],
                 'label' => 'Air date year',
                 'required' => false,

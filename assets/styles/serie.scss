@@ -1732,6 +1732,12 @@
                                 width: auto;
                             }
                         }
+
+                        .usage {
+                            font-size: 1rem;
+                            font-weight: 300;
+                            margin-left: auto;
+                        }
                     }
                 }
 
@@ -3643,17 +3649,20 @@
             margin-block: 1rem;
             width: 100%;
 
-            h3 {
-                font-size: 2rem;
-                font-weight: 100;
-                line-height: 1rem;
-            }
-
             .wrapper {
                 @include flex-row(flex-start, center);
                 flex-wrap: wrap;
                 gap: 1rem;
                 width: 100%;
+
+                h3 {
+                    font-size: 2rem;
+                    font-weight: 100;
+                    line-height: 1rem;
+                    margin-block: 2rem 1rem;
+                    margin-inline-start: 1rem;
+                    width: 100%;
+                }
 
                 .home-discover {
                     border: 2px solid transparent;

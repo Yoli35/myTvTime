@@ -98,6 +98,11 @@
                             <div class="deepl">
                                 <div class="title">{{ 'Overview'|trans }} by
                                     <div class="logo"><img src="/images/default/deepl.png" alt="deepl"></div>
+                                    {% if usage %}
+                                        <div class="usage">
+                                        {{ usage.character.count }} / {{ usage.character.limit }} {{ 'characters'|trans }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 <div class="info">{{ localizedOverview }}</div>
                             </div>
@@ -470,6 +475,7 @@
                         xhr.send();
                     });
                 });
+
                 viewProvider.addEventListener('mouseenter', () => {
                     const providers = view.querySelector('.view-providers');
                     providers.classList.add('visible');
@@ -477,6 +483,7 @@
                         providers.classList.add('show');
                     }, 0);
                 });
+
                 viewProvider.addEventListener('mouseleave', () => {
                     const providers = view.querySelector('.view-providers');
                     providers.classList.remove('show');
@@ -508,6 +515,7 @@
                         xhr.send();
                     });
                 });
+
                 viewDevice.addEventListener('mouseenter', () => {
                     const devices = view.querySelector('.view-devices');
                     devices.classList.add('visible');
@@ -515,6 +523,7 @@
                         devices.classList.add('show');
                     }, 0);
                 });
+
                 viewDevice.addEventListener('mouseleave', () => {
                     const devices = view.querySelector('.view-devices');
                     devices.classList.remove('show');

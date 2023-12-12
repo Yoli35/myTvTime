@@ -229,6 +229,8 @@ class YoutubeController extends AbstractController
             return ['id' => $tag['id'], 'label' => $tag['label'], 'selected' => false];
         }, $tagRepository->getTags());
 
+        // /บรรยากาศรัก Love in The Air l EP\.*([0-9]+) \[([0-9])\/([0-9])].+/gm
+
         return $this->render('youtube/search.html.twig', [
             'tagArr' => $tagArr,
             'textArr' => [
