@@ -1,4 +1,4 @@
-{#{% set route = app.request.attributes.get('_route') %}#}
+{# {% set route = app.request.attributes.get('_route') %} #}
 {% set parameters = app.request.query %}
 {% set route_params = app.request.attributes.get('_route_params') %}
 
@@ -11,11 +11,13 @@
     <div class="d-flex-1">
         <div id="multi-search" class="top-item"><i class="fa-solid fa-magnifying-glass"></i></div>
         <div id="multi-people" class="top-item"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
-        <div id="settings" class="top-item"><i class="fa-solid fa-sliders"></i></div>
+        {% if user %}
+            <div id="settings" class="top-item"><i class="fa-solid fa-sliders"></i></div>
+        {% endif %}
         <div id="localisation" class="top-item"><a href="{{ path('app_open_layers') }}"><i class="fa-solid fa-map"></i></a></div>
         {% if user %}
             <div id="alarms" class="top-item"><i class="fa-solid fa-clock"></i></div>
         {% endif %}
-{#        {{ dump(user) }}#}
+        {#        {{ dump(user) }} #}
     </div>
 </nav>

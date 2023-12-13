@@ -55,16 +55,8 @@ a {
     color: var(--gradient-ardoise-20);
     text-decoration: none;
 
-    &:hover {
-        color: var(--gradient-orange-20);
-    }
-
-    &:visited {
+    &:hover, &:visited, &:focus {
         color: var(--gradient-ardoise-20);
-    }
-
-    &:focus {
-        color: var(--gradient-orange-20);
     }
 }
 
@@ -190,9 +182,9 @@ body {
 
     .todo {
         @include flex-row(center, center);
-        background-color: var(--gradient-yellow-50);
+        background-color: var(--gradient-yellow-60);
         border-radius: .25rem;
-        color: var(--gradient-ardoise-90);
+        color: var(--gradient-ardoise-10);
         font-weight: 300;
         gap: 1rem;
         padding: .5rem 1rem;
@@ -406,7 +398,7 @@ main {
 #multi-people-dialog::backdrop,
 #search-dialog::backdrop,
 #watch-provider-dialog::backdrop {
-    background-color: #000000af;
+    background-color: var(--dialog-backdrop);
 }
 
 #multi-people-dialog {

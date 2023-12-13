@@ -13,7 +13,7 @@
         --quote-opacity: 1;
 
         @include animated-header("../images/serie-header.jpg");
-        background-color: var(--gradient-ardoise-10);
+        background-color: var(--gradient-ardoise-90);
         margin-bottom: 1rem;
         transition: background-color 3s ease-in-out;
 
@@ -238,9 +238,9 @@
                         .no-image {
                             @include flex-col();
                             aspect-ratio: 2 / 3;
-                            background-color: var(--gradient-green-40-alpha-50);
+                            background-color: var(--gradient-green-60-alpha-50);
                             border-radius: .5rem 0 0 .5rem;
-                            color: var(--gradient-green-90);
+                            color: var(--gradient-green-10);
                             width: var(--serie-lg-poster-width);
                         }
                     }
@@ -273,7 +273,7 @@
                     &.light {
                         .infos {
                             div {
-                                color: var(--gradient-ardoise-20);
+                                color: var(--gradient-ardoise-80);
                                 font-weight: 300;
                             }
                         }
@@ -282,7 +282,7 @@
                     &.dark {
                         .infos {
                             div {
-                                color: var(--gradient-ardoise-90);
+                                color: var(--gradient-ardoise-10);
                             }
                         }
                     }
@@ -326,25 +326,25 @@
 
                         &.start-watching {
                             background-color: var(--gradient-orange-50);
-                            color: var(--gradient-orange-90);
+                            color: var(--gradient-orange-10);
                         }
 
                         &.more-to-come {
                             background-color: var(--gradient-ardoise-50);
-                            color: var(--gradient-ardoise-90);
+                            color: var(--gradient-ardoise-10);
                         }
 
                         &.that-s-all {
                             background-color: var(--gradient-ardoise-50);
-                            color: var(--gradient-ardoise-90);
+                            color: var(--gradient-ardoise-10);
                         }
                     }
 
                     .favorite {
                         @include flex-row();
-                        background-color: var(--gradient-green-30);
+                        background-color: var(--gradient-green-70);
                         border-radius: .5rem;
-                        color: var(--gradient-ardoise-100);
+                        color: var(--gradient-ardoise-10);
                         font-weight: 300;
                         height: 2rem;
                         position: absolute;
@@ -357,7 +357,7 @@
                     .today, .tomorrow, .after-tomorrow, .this-week, .later, .next, .passed, .in-production, .planned {
                         @include flex-col();
                         border-radius: 0 .5rem .5rem 0;
-                        color: var(--gradient-ardoise-100);
+                        color: var(--gradient-ardoise-10);
                         font-weight: 300;
                         gap: 1rem;
                         height: var(--serie-lg-height);
@@ -403,7 +403,7 @@
                         }
 
                         .upcoming-event {
-                            background-color: var(--gradient-ardoise-90);
+                            background-color: var(--gradient-ardoise-10);
                             border-radius: .5rem;
                             color: var(--gradient-ardoise-30);
                             font-size: 1.5rem;
@@ -413,14 +413,14 @@
                     }
 
                     .today, .tomorrow, .after-tomorrow {
-                        background-color: var(--gradient-green-40);
+                        background-color: var(--gradient-green-60);
                         color: var(--gradient-green-100);
                         //isolation: isolate;
                     }
 
                     .this-week {
                         background-color: var(--gradient-emerald-40);
-                        color: var(--gradient-ardoise-90);
+                        color: var(--gradient-ardoise-10);
                     }
 
                     .next, .later {
@@ -430,7 +430,7 @@
 
                     .in-production, .planned {
                         background-color: var(--gradient-orange-50);
-                        color: var(--gradient-orange-90);
+                        color: var(--gradient-orange-10);
 
                         div {
                             font-size: 2rem;
@@ -439,7 +439,7 @@
                     }
 
                     .passed {
-                        background-color: var(--gradient-green-30);
+                        background-color: var(--gradient-green-70);
                         color: var(--gradient-green-90);
                     }
 
@@ -452,7 +452,7 @@
                     }
 
                     &.search {
-                        background-color: var(--gradient-ardoise-20);
+                        background-color: var(--gradient-ardoise-80);
                         height: var(--serie-md-height);
 
                         .backdrop {
@@ -473,7 +473,7 @@
                         transition: border 100ms ease-in-out;
 
                         &:hover {
-                            border: .25rem solid var(--gradient-ardoise-90);
+                            border: .25rem solid var(--gradient-ardoise-10);
                             //outline-offset: -.25rem;
                         }
                     }
@@ -512,7 +512,7 @@
 
         .new-series-preview {
             @include flex-col();
-            background-color: var(--gradient-ardoise-10);
+            background-color: var(--gradient-ardoise-90);
             inset: 0;
             display: none;
             opacity: 0;
@@ -534,7 +534,7 @@
                 .content {
                     background-color: var(--gradient-ardoise-30);
                     border-radius: .5rem;
-                    color: var(--gradient-ardoise-90);
+                    color: var(--gradient-ardoise-10);
                     font-size: 2rem;
                     font-weight: bold;
                     padding: 1rem 2rem;
@@ -633,10 +633,10 @@
 
             button {
                 appearance: unset;
-                background-color: var(--gradient-ardoise-20);
-                border: 1px solid var(--gradient-ardoise-80);
+                background-color: var(--gradient-ardoise-80);
+                border: 1px solid var(--gradient-ardoise-20);
                 border-radius: var(--button-border-radius);
-                color: var(--gradient-ardoise-80);
+                color: var(--gradient-ardoise-20);
                 cursor: pointer;
                 font-weight: 100;
                 padding: .25rem 1rem;
@@ -645,53 +645,35 @@
 
                 &.disabled {
                     background-color: var(--gradient-ardoise-50);
-                    border: 1px solid var(--gradient-ardoise-60);
-                    color: var(--gradient-ardoise-60);
+                    border: 1px solid var(--gradient-ardoise-40);
+                    color: var(--gradient-ardoise-40);
                     cursor: default;
                 }
             }
 
             .label {
-                color: var(--gradient-ardoise-30);
+                color: var(--gradient-ardoise-70);
                 font-weight: 100;
                 display: none;
                 text-transform: uppercase;
             }
 
             h2 {
-                color: var(---gradient-orange-70);
+                color: var(---gradient-orange-30);
                 display: none;
                 font-size: 1.5rem;
                 margin-top: 0;
             }
 
-            .search-serie, .add-serie {
-                background-color: var(--gradient-ardoise-80-alpha-50);
+            .search-serie {
+                background-color: var(--gradient-ardoise-20-alpha-50);
                 border-radius: 0;
                 min-height: unset;
                 padding: .5rem;
 
                 .group {
                     @include flex-100(center, space-between);
-                }
 
-                .help {
-                    display: none;
-                    font-weight: 100;
-
-                    details {
-                        div {
-                            background-color: var(--gradient-ardoise-80);
-                            border-radius: .5rem;
-                            padding: .5rem;
-                        }
-                    }
-                }
-
-            }
-
-            .search-serie {
-                .group {
                     .field {
                         position: relative;
                     }
@@ -704,7 +686,7 @@
 
             .settings {
                 @include flex-col(flex-start, flex-start);
-                background-color: var(--gradient-ardoise-80-alpha-50);
+                background-color: var(--gradient-ardoise-20-alpha-50);
                 border-radius: 0;
                 margin-bottom: 1rem;
                 padding: .5rem;
@@ -1120,9 +1102,9 @@
 
                         .watch-provider {
                             @include flex-row();
-                            background-color: var(--gradient-ardoise-10);
+                            background-color: var(--gradient-ardoise-90);
                             border-radius: 0 0 .5rem .5rem;
-                            color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-20);
                             height: 4rem;
                             scroll-snap-align: start;
                             width: 20rem;
@@ -1157,10 +1139,10 @@
 
                     .arrow {
                         @include flex-row();
-                        background-color: var(--gradient-ardoise-20);
+                        background-color: var(--gradient-ardoise-80);
                         border-radius: .25rem;
                         bottom: 1rem;
-                        color: var(--gradient-ardoise-80);
+                        color: var(--gradient-ardoise-20);
                         display: none;
                         height: 2rem;
                         position: absolute;
@@ -1180,7 +1162,7 @@
                     width: 20rem;
 
                     .poster-item {
-                        border: 1px solid var(--gradient-ardoise-80);
+                        border: 1px solid var(--gradient-ardoise-20);
                         border-radius: .25rem;
                         cursor: pointer;
                         height: 4.5rem;
@@ -1228,9 +1210,9 @@
 
                         #edit-localized-name {
                             align-items: center;
-                            background-color: var(--gradient-ardoise-80);
+                            background-color: var(--gradient-ardoise-20);
                             border-radius: 50%;
-                            color: var(--gradient-ardoise-20);
+                            color: var(--gradient-ardoise-80);
                             cursor: pointer;
                             display: flex;
                             font-size: 1rem;
@@ -1271,9 +1253,9 @@
 
                         .no-date-form {
                             -webkit-backdrop-filter: blur(5px);
-                            background-color: var(--gradient-ardoise-40-alpha-50);
+                            background-color: var(--gradient-ardoise-60-alpha-50);
                             border-radius: .5rem;
-                            border: 2px solid var(--gradient-ardoise-80);
+                            border: 2px solid var(--gradient-ardoise-20);
                             display: flex;
                             flex-direction: column;
                             font-size: 1rem;
@@ -1296,7 +1278,7 @@
                                 input {
                                     padding: .125rem .125rem .125rem .5rem;
                                     border-radius: .25rem;
-                                    border: 1px solid var(--gradient-ardoise-80);
+                                    border: 1px solid var(--gradient-ardoise-20);
                                 }
                             }
                         }
@@ -1321,20 +1303,20 @@
                         margin-left: auto;
 
                         .view-count {
-                            color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-20);
                             margin-left: 2rem;
                             flex-shrink: 0;
                         }
 
                         .vote-count {
-                            color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-20);
                             margin-left: 2rem;
                             flex-shrink: 0;
                         }
 
                         .vote-average, .view-average {
                             @include flex-row(center, center);
-                            background-color: var(--gradient-ardoise-20);
+                            background-color: var(--gradient-ardoise-80);
                             border-radius: 50%;
                             height: 3.5rem;
                             margin-left: 1rem;
@@ -1350,9 +1332,9 @@
 
                                 .percentage {
                                     @include flex-row(center, center);
-                                    background-color: var(--gradient-ardoise-20);
+                                    background-color: var(--gradient-ardoise-80);
                                     border-radius: 50%;
-                                    color: var(--gradient-ardoise-80);
+                                    color: var(--gradient-ardoise-20);
                                     font-size: 1rem;
                                     height: calc(3.5rem - 12px);
                                     width: calc(3.5rem - 12px);
@@ -1360,7 +1342,7 @@
                             }
 
                             .circle-start, .circle-end {
-                                background-color: var(--gradient-ardoise-60);
+                                background-color: var(--gradient-ardoise-40);
                                 border-radius: 50%;
                                 height: 4px;
                                 position: absolute;
@@ -1379,7 +1361,7 @@
                     }
 
                     &:has(i[class$="exclamation"]) {
-                        background-color: var(--gradient-green-30-alpha-50);
+                        background-color: var(--gradient-green-70-alpha-50);
                         border-radius: .5rem;
                         border: 2px solid;
                         font-size: 1.1rem;
@@ -1390,7 +1372,7 @@
                     }
 
                     i[class$="exclamation"] {
-                        color: var(--gradient-red-80);
+                        color: var(--gradient-red-20);
                     }
 
                     &:has(.creators), &:has(.backdrop-list-wrapper), &:has(.next-block) {
@@ -1405,7 +1387,7 @@
                         margin-top: 1rem;
 
                         .creator {
-                            @include human-profile(var(--gradient-ardoise-20));
+                            @include human-profile(var(--gradient-ardoise-80));
                             margin: 0;
 
                             img {
@@ -1424,7 +1406,7 @@
                             gap: 1rem;
 
                             .backdrop-item {
-                                border: 1px solid var(--gradient-ardoise-80);
+                                border: 1px solid var(--gradient-ardoise-20);
                                 border-radius: .25rem;
                                 cursor: pointer;
                                 width: 6rem;
@@ -1452,12 +1434,12 @@
                             width: 3.5rem;
 
                             &.active {
-                                background-color: var(--gradient-green-30);
+                                background-color: var(--gradient-green-70);
                             }
                         }
 
                         .next-episode-to-watch {
-                            background-color: var(--gradient-green-30);
+                            background-color: var(--gradient-green-70);
                         }
 
                         .alert-next-episode,
@@ -1471,7 +1453,7 @@
 
                         .next-episode-provider {
                             aspect-ratio: 1;
-                            border: 2px solid var(--gradient-green-30);
+                            border: 2px solid var(--gradient-green-70);
                             border-radius: calc(.25rem + 2px);
                             cursor: pointer;
                             height: 100%;
@@ -1518,7 +1500,7 @@
                                 translate: -50% 0;
 
                                 &:has(.no-watch-providers) {
-                                    background-color: var(--gradient-green-20);
+                                    background-color: var(--gradient-green-80);
                                 }
 
                                 &:has(div:nth-child(2n+4)) {
@@ -1548,10 +1530,10 @@
                                     width: 3.5rem;
 
                                     .country {
-                                        background-color: var(--gradient-green-10);
+                                        background-color: var(--gradient-green-90);
                                         border-radius: .25rem;
                                         bottom: 0;
-                                        color: var(--gradient-green-90);
+                                        color: var(--gradient-green-10);
                                         font-size: .75rem;
                                         font-weight: 300;
                                         line-height: .75rem;
@@ -1580,9 +1562,9 @@
 
                     .news, .finale {
                         background-color: var(--gradient-orange-50);
-                        border: 2px solid var(--gradient-orange-100);
+                        border: 2px solid var(--gradient-orange-10);
                         border-radius: .25rem;
-                        color: var(--gradient-orange-100);
+                        color: var(--gradient-orange-10);
                         font-size: 1.25rem;
                         font-weight: 400;
                         //leading-trim: both;
@@ -1934,9 +1916,9 @@
 
                     .episode {
                         @include flex-row(center, flex-start);
-                        background-color: var(--gradient-ardoise-90);
+                        background-color: var(--gradient-ardoise-70);
                         border-radius: 0;
-                        color: var(--mmt-body-color);
+                        color: var(--gradient-ardoise-10);
                         height: 15em;
                         width: 100%;
 
@@ -1955,11 +1937,11 @@
 
                             .episode-number {
                                 align-items: center;
-                                background-color: var(--gradient-ardoise-30-alpha-50);
+                                background-color: var(--gradient-ardoise-70-alpha-50);
                                 border-radius: 50%;
-                                border: .125em solid var(--gradient-ardoise-90);
+                                border: .125em solid var(--gradient-ardoise-10);
                                 bottom: .5em;
-                                color: var(--gradient-ardoise-90);
+                                color: var(--gradient-ardoise-10);
                                 display: none;
                                 //font-size: 2em;
                                 font-weight: bold;
@@ -1976,10 +1958,10 @@
 
                             .episode-air-date {
                                 align-items: center;
-                                background-color: var(--gradient-ardoise-30-alpha-75);
+                                background-color: var(--gradient-ardoise-70-alpha-75);
                                 border-radius: .25em;
                                 bottom: 1em;
-                                color: var(--gradient-ardoise-90);
+                                color: var(--gradient-ardoise-10);
                                 display: none;
                                 font-size: 1.1em;
                                 height: 2em;
@@ -2012,14 +1994,14 @@
                         }
 
                         &:has(i[class$="check"]) {
-                            background-color: var(--gradient-green-90);
+                            background-color: var(--gradient-green-80);
 
                             .still {
                                 .episode-number {
-                                    background-color: var(--gradient-green-30);
-                                    border-color: var(--gradient-yellow-50);
+                                    background-color: var(--gradient-green-70);
+                                    border-color: var(--gradient-yellow-40);
                                     border-width: .25em;
-                                    color: var(--gradient-yellow-50);
+                                    color: var(--gradient-yellow-40);
                                 }
 
                                 .episode-name {
@@ -2055,7 +2037,7 @@
                         }
 
                         .abstract {
-                            align-items: flex-start;
+                            align-items: center;
                             display: none;
                             flex: 1;
                             font-size: 1.1em;
@@ -2253,8 +2235,7 @@
                                     }
 
                                     &:nth-child(10) {
-                                        border-style: solid;
-                                        border-bottom-width: 2px;
+                                        border-bottom: 2px solid var(--gradient-ardoise-40);
                                         border-radius: 0 0 .375em .375em;
                                         height: calc(.75em + 2px);
                                     }
@@ -2304,15 +2285,15 @@
                         flex-direction: row;
                         flex-wrap: wrap;
                         font-size: var(--episode-roomy-size);
-                        padding-block: 1rem;
+                        padding-block: 1em;
 
                         .episode {
-                            border-radius: 1rem 0 0 0;
+                            border-radius: 1em;
                             width: unset;
 
                             .still {
                                 img {
-                                    border-radius: 1rem 0 0 0;
+                                    border-radius: 1em 0 0 1em;
                                 }
 
                                 .episode-number, .episode-name, .episode-air-date {
@@ -2335,6 +2316,8 @@
                             width: unset;
 
                             .still {
+                                width: 10em;
+
                                 img {
                                     border-radius: 1em;
                                     height: 10em;
@@ -2346,7 +2329,7 @@
                                 }
                             }
 
-                            .infos, .episode-viewing {
+                            .infos, .abstract, .episode-viewing {
                                 display: none;
                             }
                         }
@@ -2361,6 +2344,7 @@
 
                     label {
                         align-items: center;
+                        color: var(--gradient-ardoise-20);
                         display: none;
                         gap: 1rem;
                         justify-content: center;
@@ -2622,14 +2606,14 @@
                             //padding-left: .5rem;
 
                             .frame {
-                                background-color: var(--gradient-ardoise-90);
+                                background-color: var(--gradient-ardoise-10);
                                 border-radius: .25rem;
                                 display: inline-block;
                                 max-height: 4rem;
                                 padding: .25rem .5rem;
 
                                 &:hover {
-                                    background-color: var(--gradient-ardoise-10);
+                                    background-color: var(--gradient-ardoise-90);
                                 }
 
                                 img {
@@ -2645,9 +2629,10 @@
 
                         .keyword {
                             @include flex-col();
-                            background-color: var(--gradient-ardoise-40);
+                            background-color: var(--gradient-ardoise-60);
                             border-radius: .25rem;
-                            color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-10);
+                            font-weight: 300;
                             padding: .25rem .5rem;
                             margin: .125rem;
 
@@ -2753,7 +2738,7 @@
     }
 
     .translationModalBack {
-        background-color: var(--gradient-ardoise-10-alpha-90);
+        background-color: var(--dialog-backdrop);
         display: none;
         inset: 0;
         opacity: 0;
@@ -2769,10 +2754,11 @@
         }
 
         .translationModal {
-            background-color: var(--gradient-ardoise-30);
+            background-color: var(--gradient-ardoise-80);
             border-radius: 1rem;
             display: none;
-            color: var(--gradient-ardoise-80);
+            color: var(--gradient-ardoise-20);
+            font-weight: 300;
             opacity: 0;
             transition: opacity 500ms;
             width: 50rem;

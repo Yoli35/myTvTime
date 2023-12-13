@@ -15,6 +15,7 @@ $fa-font-path: "../webfonts";
     --menu-shadow: 0 0 1em 0 hsla(0, 0%, 0%, .5);
     --dialog-bg: hsla(202, var(--saturation), var(--percent-95), .5);
     --dialog-color: hsl(202, var(--saturation), var(--percent-10));
+    --dialog-backdrop: #000000af;
     --network-bg: hsl(202, 50%, 95%);
     --network-border: hsl(202, 50%, 5%);
     --header-fade-bg: hsla(202, var(--saturation), 10%, .2);
@@ -52,12 +53,15 @@ $fa-font-path: "../webfonts";
     --gradient-ardoise-90: hsl(202, var(--gradient-saturation), var(--percent-90));
     --gradient-ardoise-90-alpha-80: hsla(202, var(--gradient-saturation), var(--percent-90), .8);
     --gradient-ardoise-90-alpha-50: hsla(202, var(--gradient-saturation), var(--percent-90), .5);
+    --gradient-ardoise-90-alpha-20: hsla(202, var(--gradient-saturation), var(--percent-90), .2);
     --gradient-ardoise-90-alpha-10: hsla(202, var(--gradient-saturation), var(--percent-90), .1);
     --gradient-ardoise-80: hsl(202, var(--gradient-saturation), var(--percent-80));
     --gradient-ardoise-80-alpha-50: hsla(202, var(--gradient-saturation), var(--percent-80), .5);
     --gradient-ardoise-75: hsl(202, var(--gradient-saturation), var(--percent-75));
     --gradient-ardoise-75-alpha-25: hsla(202, var(--gradient-saturation), var(--percent-75), .25);
     --gradient-ardoise-70: hsl(202, var(--gradient-saturation), var(--percent-70));
+    --gradient-ardoise-70-alpha-50: hsla(202, var(--gradient-saturation), var(--percent-70), .5);
+    --gradient-ardoise-70-alpha-75: hsla(202, var(--gradient-saturation), var(--percent-70), .75);
     --gradient-ardoise-70-alpha-90: hsla(202, var(--gradient-saturation), var(--percent-70), .9);
     --gradient-ardoise-60: hsl(202, var(--gradient-saturation), var(--percent-60));
     --gradient-ardoise-60-alpha-50: hsla(202, var(--gradient-saturation), var(--percent-60), .5);
@@ -147,6 +151,7 @@ $fa-font-path: "../webfonts";
     --gradient-yellow-60: hsl(45, var(--gradient-saturation), var(--percent-60));
     --gradient-yellow-50: hsl(45, var(--gradient-saturation), var(--percent-50));
     --gradient-yellow-50-alpha-50: hsla(45, var(--gradient-saturation), var(--percent-50), .5);
+    --gradient-yellow-40: hsl(45, var(--gradient-saturation), var(--percent-40));
 
     --serie-add: hsl(212, 43%, 90%);
     --serie-seen: hsl(105, 30%, 50%);
@@ -552,9 +557,9 @@ $fa-font-path: "../webfonts";
 }
 
 @mixin animated-header($bg-image, $h1-color: var(--gradient-ardoise-50)) {
-    background-color: var(--gradient-ardoise-80);
+    background-color: var(--gradient-ardoise-20);
     border-radius: 1em;
-    color: var(--gradient-ardoise-30);
+    color: var(--gradient-ardoise-70);
     height: 20em;
     overflow: hidden;
     position: relative;
@@ -562,7 +567,7 @@ $fa-font-path: "../webfonts";
     width: 100%;
 
     &.fade-bg {
-        background-color: var(--gradient-ardoise-10-alpha-20);
+        background-color: var(--gradient-ardoise-90-alpha-20);
     }
 
     h1 {

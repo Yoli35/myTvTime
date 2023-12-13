@@ -134,13 +134,12 @@ export class Series {
         const header = document.querySelector(".header");
         let indicatorDiv, indicatorsDiv, left, right, modulo, link;
 
-        thisGlobal.slideImages = thisGlobal.getBackdrops();
-        if (!thisGlobal.slideImages.length) return;
+        this.series = thisGlobal.getBackdropsAndNamesAndLinks();
 
-        thisGlobal.slideNames = thisGlobal.getNames();
-        thisGlobal.slideLinks = thisGlobal.getLinks();
+        if (!this.series.length) return;
+
         thisGlobal.slideIndex = 0;
-        modulo = thisGlobal.slideImages.length;
+        modulo = this.series.length;
 
         left = document.createElement("div");
         left.classList.add("left-arrow");
@@ -187,13 +186,13 @@ export class Series {
 
     slideFunc() {
         const header = document.querySelector(".header");
-        const modulo = thisGlobal.slideImages.length;
+        const modulo = thisGlobal.series.length;
         const slideIndex = thisGlobal.slideIndex;
         let filename, nameDiv, name, newBackdrop, newLink, href;
 
-        filename = thisGlobal.slideImages[slideIndex];
-        name = thisGlobal.slideNames[slideIndex];
-        href = thisGlobal.slideLinks[slideIndex];
+        filename = thisGlobal.series[slideIndex].backdrop;
+        name = thisGlobal.series[slideIndex].name;
+        href = thisGlobal.series[slideIndex].link;
 
         newBackdrop = document.createElement("div");
         newBackdrop.classList.add("backdrop", "right");
@@ -244,7 +243,7 @@ export class Series {
 
     gotoSlide(evt) {
         const target = parseInt(evt.target.getAttribute("data-index"));
-        const modulo = thisGlobal.slideImages.length;
+        const modulo = thisGlobal.series.length;
 
         if ((target + 1) % modulo === thisGlobal.slideIndex) return;
 
@@ -254,14 +253,14 @@ export class Series {
     }
 
     nextSlide() {
-        const modulo = thisGlobal.slideImages.length;
+        const modulo = thisGlobal.series.length;
 
         thisGlobal.setSlide();
         thisGlobal.slideIndex = (thisGlobal.slideIndex + 1) % modulo;
     }
 
     previousSlide() {
-        const modulo = thisGlobal.slideImages.length;
+        const modulo = thisGlobal.series.length;
 
         thisGlobal.slideIndex -= 2;
         if (thisGlobal.slideIndex < 0) thisGlobal.slideIndex = modulo + thisGlobal.slideIndex;
@@ -271,16 +270,16 @@ export class Series {
 
     setSlide() {
         const header = document.querySelector(".header");
-        const modulo = thisGlobal.slideImages.length;
+        const modulo = thisGlobal.series.length;
         let filename, name, backdrop, nameDiv, link, href;
 
         let leftBackdrop = document.querySelector(".backdrop.left");
         if (leftBackdrop) {
             header.removeChild(leftBackdrop);
         }
-        filename = thisGlobal.slideImages[thisGlobal.slideIndex];
-        name = thisGlobal.slideNames[thisGlobal.slideIndex];
-        href = thisGlobal.slideLinks[thisGlobal.slideIndex];
+        filename = thisGlobal.series[thisGlobal.slideIndex].backdrop;
+        name = thisGlobal.series[thisGlobal.slideIndex].name;
+        href = thisGlobal.series[thisGlobal.slideIndex].link;
         backdrop = header.querySelector(".backdrop");
         backdrop.setAttribute("style", "background-image: url('" + filename + "')");
         nameDiv = backdrop.querySelector(".name");
@@ -324,27 +323,19 @@ export class Series {
         }
     }
 
-    getBackdrops() {
+    getBackdropsAndNamesAndLinks() {
         const wrapper = document.querySelector(".wrapper");
-        const backdrops = wrapper.querySelectorAll(".backdrop");
-        let tab = [];
-        backdrops.forEach(backdrop => tab.push(backdrop.style.backgroundImage.match(/url\(["']?([^"']*)["']?\)/)[1]));
-        return tab;
-    }
+        if (!wrapper) return [];
 
-    getNames() {
-        const wrapper = document.querySelector(".wrapper");
-        const infos = wrapper.querySelectorAll(".infos");
+        const divs = wrapper.querySelectorAll(".serie");
         let tab = [];
-        infos.forEach(backdrop => tab.push(backdrop.firstElementChild.innerHTML));
-        return tab;
-    }
-
-    getLinks() {
-        const wrapper = document.querySelector(".wrapper");
-        const links = wrapper.querySelectorAll("a");
-        let tab = [];
-        links.forEach(link => tab.push(link.getAttribute("href")));
+        divs.forEach(div => {
+            let backdrop = div.querySelector(".backdrop");
+            let name = div.querySelector(".infos").firstElementChild.innerHTML;
+            let link = div.closest("a").getAttribute("href");
+            if (backdrop)
+                tab.push({backdrop: backdrop.style.backgroundImage.match(/url\(["']?([^"']*)["']?\)/)[1], name: name, link: link});
+        });
         return tab;
     }
 
