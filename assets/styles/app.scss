@@ -35,6 +35,20 @@ html {
     color-scheme: light dark;
     scroll-behavior: smooth;
     scroll-padding: 10rem;
+
+    &:has(body.dark) {
+        @for $i from 0 through 100 {
+            --value-#{$i}: #{100 - $i};
+            --percent-#{$i}: calc(calc(calc(100 - #{$i}) / 100) * 100%) !important;
+        }
+    }
+
+    &:has(body.light) {
+        @for $i from 0 through 100 {
+            --value-#{$i}: #{$i};
+            --percent-#{$i}: calc(calc(#{$i} / 100) * 100%) !important;
+        }
+    }
 }
 
 a {
@@ -167,9 +181,9 @@ body {
 
 .todos {
     @include flex-col(flex-start, flex-start);
-    background-color: var(--gradient-ardoise-10-alpha-90);
+    background-color: var(--gradient-ardoise-40-alpha-20);
     border-radius: .5rem;
-    color: var(--gradient-ardoise-90);
+    color: var(--gradient-ardoise-10);
     gap: 1rem;
     padding: 1rem;
     width: 100%;
@@ -225,32 +239,32 @@ body {
 
         &.success {
             background-color: var(--gradient-green-40);
-            border-color: var(--gradient-green-90);
-            color: var(--gradient-green-90);
+            border-color: var(--gradient-green-10);
+            color: var(--gradient-green-10);
         }
 
         &.friendship {
             background-color: var(--gradient-ardoise-40);
-            border-color: var(--gradient-ardoise-90);
-            color: var(--gradient-ardoise-90);
+            border-color: var(--gradient-ardoise-10);
+            color: var(--gradient-ardoise-10);
 
             button {
                 background-color: var(--gradient-ardoise-50);
-                border-color: var(--gradient-ardoise-90);
-                color: var(--gradient-ardoise-90);
+                border-color: var(--gradient-ardoise-10);
+                color: var(--gradient-ardoise-10);
             }
         }
 
         &.warning {
             background-color: var(--gradient-orange-50);
-            border-color: var(--gradient-orange-90);
-            color: var(--gradient-orange-90);
+            border-color: var(--gradient-orange-10);
+            color: var(--gradient-orange-10);
         }
 
         &.danger {
             background-color: var(--gradient-red-40);
-            border-color: var(--gradient-red-90);
-            color: var(--gradient-red-90);
+            border-color: var(--gradient-red-20);
+            color: var(--gradient-red-20);
         }
 
         button:first-child {
@@ -282,8 +296,19 @@ main {
     //width: 100%;
 }
 
-#multi-search, #multi-people, #settings, #localisation {
+#multi-search, #multi-people, #settings, #localisation, #alarms {
     cursor: pointer;
+}
+
+#localisation {
+    a {
+        align-items: center;
+        color: var(--gradient-ardoise-10);
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+    }
 }
 
 #delete-video-dialog,
@@ -293,14 +318,13 @@ main {
 #multi-people-dialog,
 #search-dialog,
 #settings-dialog,
-#watch-provider-dialog
-{
+#watch-provider-dialog {
     backdrop-filter: blur(.25rem);
     -webkit-backdrop-filter: blur(.25rem);
-    background-color: var(--gradient-grey-10-alpha-75);
+    background-color: var(--dialog-bg);
     border-radius: 1rem;
     border: 4px solid #ffffff7f;
-    color: var(--gradient-ardoise-90);
+    color: var(--dialog-color);
     margin-block: auto;
     margin-inline: auto;
 
@@ -358,6 +382,7 @@ main {
     }
 }
 
+#settings-dialog,
 #search-dialog {
     .content {
         padding: 1rem;
@@ -618,7 +643,7 @@ main {
     .toggler {
         button {
             @include flex-row();
-            background: var(--gradient-ardoise-10-alpha-50);
+            background: var(--gradient-ardoise-90-alpha-50);
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -627,7 +652,7 @@ main {
             width: 3rem;
 
             .line {
-                background-color: var(--gradient-ardoise-90);
+                background-color: var(--gradient-ardoise-10);
                 display: block;
                 height: 4px;
                 position: absolute;
@@ -668,7 +693,7 @@ main {
         transition: opacity 300ms ease-in-out;
 
         > a {
-            background-color: var(--gradient-ardoise-30);
+            background-color: var(--gradient-ardoise-70);
             border-radius: 9999px;
             padding: .125rem 1rem;
 
@@ -808,7 +833,7 @@ nav.active {
 
 .top-menu {
     @include flex-row(center, space-around);
-    background-color: var(--gradient-ardoise-25-alpha-25);
+    background-color: var(--gradient-ardoise-75-alpha-25);
     height: 3rem;
     position: sticky;
     top: 0;
@@ -817,11 +842,11 @@ nav.active {
     -webkit-backdrop-filter: blur(3px);
 
     &:hover {
-        background-color: var(--gradient-ardoise-25);
+        background-color: var(--gradient-ardoise-75);
     }
 
     .top-item {
-        color: var(--gradient-ardoise-90);
+        color: var(--gradient-ardoise-10);
         font-weight: 300;
         border-bottom: 2px solid transparent;
 
@@ -905,8 +930,9 @@ nav.active {
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '°';
     @include flex-row(center, start);
-    background-color: var(--gradient-ardoise-25-alpha-25);
+    background-color: var(--gradient-ardoise-75-alpha-25);
     border-radius: .5rem;
+    color: var(--gradient-ardoise-10);
     //height: 3rem;
     margin: 1rem 0;
     padding: .5rem 1rem;
@@ -916,11 +942,11 @@ nav.active {
     -webkit-backdrop-filter: blur(3px);
 
     &:hover {
-        background-color: var(--gradient-ardoise-25);
+        background-color: var(--gradient-ardoise-75);
     }
 
     a {
-        color: var(--gradient-ardoise-90);
+        color: var(--gradient-ardoise-10);
         text-decoration: none;
     }
 
@@ -947,7 +973,7 @@ nav.active {
 
                 &:hover, &:focus, &:active {
                     background-color: var(--gradient-orange-50);
-                    color: var(--gradient-orange-90);
+                    color: var(--gradient-orange-10);
                     outline-color: var(--gradient-orange-50);
 
                     span {
@@ -962,26 +988,12 @@ nav.active {
             }
 
             span {
-                //color: var(--gradient-ardoise-90);
-                //font-size: .875rem;
-                //font-variant: small-caps;
-                //font-weight: 100;
                 margin-inline: 1rem;
             }
 
-            //+ .breadcrumb-item {
-            //    &::before {
-            //        float: left;
-            //        height: 100%;
-            //        padding: 1rem 0;
-            //        color: #6c757d;
-            //        content: var(--bs-breadcrumb-divider, "/");
-            //    }
-            //}
-
             &.active {
                 align-items: center;
-                color: var(--gradient-ardoise-90);
+                color: var(--gradient-ardoise-10);
                 display: flex;
                 height: 3rem;
                 max-width: 60%;
@@ -989,24 +1001,16 @@ nav.active {
                 padding-inline: .5rem;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-
-                //&:before {
-                //    margin-right: .5rem;
-                //}
             }
-
-            //&:before {
-            //    color: var(--gradient-ardoise-60);
-            //}
 
             .breadcrumb-part {
                 background-color: var(--gradient-green-30);
                 border-radius: .25rem;
-                color: var(--gradient-ardoise-90);
+                color: var(--gradient-ardoise-10);
                 display: inline-block;
 
                 &:has(a) {
-                    background-color: var(--gradient-ardoise-40);
+                    background-color: var(--gradient-ardoise-60);
                 }
 
                 &:not(:has(a)) {
@@ -1039,36 +1043,19 @@ nav.active {
                 gap: .5rem;
 
                 .separator {
-                    color: var(--gradient-ardoise-60);
+                    color: var(--gradient-ardoise-40);
                 }
             }
         }
 
         .menu {
-            color: var(--gradient-ardoise-90);
+            color: var(--gradient-ardoise-10);
             cursor: pointer;
             height: 2rem;
             margin: 0 2rem 0 1rem;
             position: relative;
             width: 2rem;
             z-index: 52;
-
-            //&:before {
-            //    content: '°';
-            //    position: absolute;
-            //    left: -1rem;
-            //    top: .5rem;
-            //    width: 1rem;
-            //}
-            //
-            //&:after {
-            //    content: '°';
-            //    position: absolute;
-            //    right: -1rem;
-            //    text-align: right;
-            //    top: .5rem;
-            //    width: 1rem;
-            //}
 
             &:hover {
                 .menu-items {
@@ -1087,12 +1074,11 @@ nav.active {
             }
 
             .menu-items, .sub-menu {
-                background-color: var(--gradient-ardoise-25);
+                background-color: var(--gradient-ardoise-75);
                 border-radius: .25rem;
-                box-shadow: 0 0 1rem var(--gradient-ardoise-10-alpha-50);
+                box-shadow: var(--menu-shadow);
                 display: none;
                 left: -6rem;
-                //overflow: hidden;
                 position: absolute;
                 top: 2rem;
                 min-width: 17.25rem;
@@ -1103,7 +1089,7 @@ nav.active {
                     width: 100%;
 
                     a {
-                        color: var(--gradient-ardoise-90);
+                        color: var(--gradient-ardoise-10);
                         display: flex;
                         font-weight: 100;
                         gap: .5rem;
@@ -1124,12 +1110,12 @@ nav.active {
                         }
 
                         .icon:has(i) {
-                            color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-20);
                         }
 
                         .image-collection {
                             img {
-                                border: 1px solid var(--gradient-ardoise-80);
+                                border: 1px solid var(--gradient-ardoise-20);
                                 border-radius: 50%;
                                 height: 1.25rem;
                                 object-fit: cover;

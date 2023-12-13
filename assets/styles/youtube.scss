@@ -158,11 +158,13 @@
         @include flex-col();
 
         h1 {
+            color: var(--gradient-ardoise-10);
             font-weight: 100;
             text-align: center;
         }
 
         h2 {
+            color: var(--gradient-ardoise-10);
             font-weight: 100;
             margin: 0 0 1em 0;
             text-align: center;
@@ -182,6 +184,7 @@
         background-color: var(--gradient-ardoise-90);
         border-radius: .5em;
         box-shadow: 0 0 1em rgba(0, 0, 0, .5);
+        color: var(--gradient-ardoise-10);
         gap: 1em;
         margin: 0 auto;
         padding: .5em 1em;
@@ -387,7 +390,6 @@
         }
     }
 }
-
 
 .yt-videos-none {
     background-color: var(--gradient-ardoise-50);
@@ -612,7 +614,7 @@
     @include dialog2(30em);
 }
 
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
     .delete-video {
         .overlay {
             background-color: var(--gradient-ardoise-20);
@@ -637,7 +639,7 @@
             }
         }
     }
-}
+}*/
 
 .youtube-search {
     @include flex-col(flex-start, center);
@@ -1169,7 +1171,7 @@
     }
 }
 
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
 
     .youtube-search {
         .header {
@@ -1255,4 +1257,4 @@
             }
         }
     }
-}
+}*/

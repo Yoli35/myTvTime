@@ -14,16 +14,16 @@
     padding-inline: 1rem;
 
     &:nth-child(odd) {
-        background-color: var(--gradient-ardoise-25);
+        background-color: var(--gradient-ardoise-75);
     }
 
     &:nth-child(even) {
-        background-color: var(--gradient-ardoise-20);
+        background-color: var(--gradient-ardoise-80);
     }
 
     .form-group {
         @include flex-row();
-        background-color: var(--gradient-ardoise-10-alpha-50);
+        background-color: var(--gradient-ardoise-90-alpha-50);
         border-radius: .25em;
         gap: .5rem;
         padding: .5rem;
@@ -51,7 +51,7 @@
             font-size: 1.5rem;
 
             &:hover {
-                color: var(--gradient-ardoise-90);
+                color: var(--gradient-ardoise-10);
             }
         }
 
@@ -93,7 +93,7 @@
 
         .group {
             align-items: center;
-            background-color: var(--gradient-ardoise-10-alpha-50);
+            background-color: var(--gradient-ardoise-90-alpha-50);
             border: 1px solid var(--gradient-ardoise-50);
             border-radius: .25em;
             display: flex;
@@ -129,10 +129,10 @@
 
 .form-select {
     appearance: none;
-    background-color: var(--gradient-ardoise-90);
+    background-color: var(--gradient-ardoise-10);
     border: 1px solid var(--gradient-ardoise-50);
     border-radius: .25em;
-    color: var(--gradient-ardoise-10);
+    color: var(--gradient-ardoise-90);
     font-size: 1em;
     font-weight: 200;
     height: 2em;
@@ -149,13 +149,13 @@
 
 .form-control {
     appearance: unset;
-    border: 1px solid var(--gradient-ardoise-40);
+    border: 1px solid var(--gradient-ardoise-60);
     padding: .125em .5em;
 }
 
 .btn {
     appearance: none;
-    background-color: var(--gradient-ardoise-90);
+    background-color: var(--gradient-ardoise-60);
     border: 1px solid var(--gradient-ardoise-50);
     border-radius: .25em;
     color: var(--gradient-ardoise-10);
@@ -167,7 +167,7 @@
     text-edge: cap alphabetic;
 
     &:hover {
-        background-color: var(--gradient-ardoise-80);
+        background-color: var(--gradient-ardoise-70);
     }
 }
 
@@ -205,21 +205,21 @@
 .btn-primary {
     background-color: var(--gradient-ardoise-50);
     border-color: var(--gradient-ardoise-80);
-    color: var(--gradient-ardoise-90);
+    color: var(--gradient-ardoise-10);
 
     &:hover {
         background-color: var(--gradient-ardoise-60);
-        border-color: var(--gradient-ardoise-90);
+        border-color: var(--gradient-ardoise-10);
     }
 }
 
 .btn-secondary {
-    background-color: var(--gradient-ardoise-40);
+    background-color: var(--gradient-ardoise-60);
     border-color: var(--gradient-ardoise-50);
-    color: var(--gradient-ardoise-90);
+    color: var(--gradient-ardoise-10);
 
     &:hover {
-        background-color: var(--gradient-ardoise-50);
+        background-color: var(--gradient-ardoise-70);
         border-color: var(--gradient-ardoise-60);
     }
 }
@@ -311,10 +311,10 @@ label:has(select) {
 
     select {
         appearance: none;
-        background-color: var(--gradient-ardoise-25);
+        background-color: var(--gradient-ardoise-75);
         border: 1px solid var(--gradient-ardoise-50);
         border-radius: .25em;
-        color: var(--gradient-ardoise-90);
+        color: var(--gradient-ardoise-10);
         cursor: pointer;
         padding: .125em 1.5em .125em .5em;
 
@@ -340,7 +340,7 @@ label:has(select) {
     }
 }
 
-@media (prefers-color-scheme: light) {
+/*@media (prefers-color-scheme: light) {
 
     .form-row {
         &:nth-child(odd) {
@@ -459,4 +459,4 @@ label:has(select) {
             border-color: var(--gradient-ardoise-40);
         }
     }
-}
+}*/

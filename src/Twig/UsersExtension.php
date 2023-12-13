@@ -65,7 +65,7 @@ class UsersExtension extends AbstractExtension
 
         if ($settings === null) {
             $settings = new Settings();
-            $settings->setUser($user)->setName('settings')->setData(['saturation' => 18]);
+            $settings->setUser($user)->setName('settings')->setData(['saturation' => 18, 'theme' => 'light']);
             $this->settingsRepository->save($settings, true);
         }
 

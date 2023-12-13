@@ -1,12 +1,20 @@
 <dialog id="settings-dialog">
     {% set settings = getSettings(app.user) %}
     {% set saturation = settings.saturation %}
+    {% set theme = settings.theme %}
     <div class="content">
         <div class="dialog-title"></div>
         <form method="dialog">
             <label id="settings-saturation-label">{{ 'Saturation'|trans }}
                 <input type="range" value="{{ saturation }}" min="0" max="100" step="1" id="settings-saturation" name="settings-saturation"/>
                 <span id="settings-saturation-value">{{ saturation }}</span>%
+            </label>
+            <label id="settings-theme-label">{{ 'Theme'|trans }}
+                <select id="settings-theme" name="settings-theme">
+                    <option value="light" {% if theme == 'light' %}selected{% endif %}>{{ 'Light'|trans }}</option>
+                    <option value="dark" {% if theme == 'dark' %}selected{% endif %}>{{ 'Dark'|trans }}</option>
+                    <option value="auto" {% if theme == 'auto' %}selected{% endif %}>{{ 'Auto'|trans }}</option>
+                </select>
             </label>
             <menu>
                 <li>

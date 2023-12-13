@@ -65,7 +65,7 @@ export class Activity {
         const arc = element.querySelector(".circle");
         let start = element.querySelector(".circle-start");
         let end = element.querySelector(".circle-end");
-        let style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-grey-10) " + value + "%);";
+        let style = "background: conic-gradient(var(--activity-" + circle + ") 0%, var(--activity-" + circle + ") " + value + "%, var(--gradient-grey-80) " + value + "%);";
         arc.setAttribute("style", style);
         start.setAttribute("style", "translate: 0 -27px;");
         end.setAttribute("style", "transform: rotate(" + (value * 3.6) + "deg) translateY(-27px) rotate(45deg)");

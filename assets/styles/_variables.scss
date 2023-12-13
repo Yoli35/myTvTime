@@ -8,6 +8,18 @@ $fa-font-path: "../webfonts";
     --gradient-saturation: 18%;
     --saturation: calc(var(--gradient-saturation) / 2);
 
+    --mtt-body-bg: hsl(202, var(--saturation), var(--percent-95));
+    --mtt-body-bg-gradiant: hsl(202, 0%, var(--percent-93));
+    --mtt-body-color: hsl(202, var(--saturation), var(--percent-10));
+
+    --menu-shadow: 0 0 1em 0 hsla(0, 0%, 0%, .5);
+    --dialog-bg: hsla(202, var(--saturation), var(--percent-95), .5);
+    --dialog-color: hsl(202, var(--saturation), var(--percent-10));
+    --network-bg: hsl(202, 50%, 95%);
+    --network-border: hsl(202, 50%, 5%);
+    --header-fade-bg: hsla(202, var(--saturation), 10%, .2);
+    --header-flat-color: hsla(202, var(--saturation), 10%, .9);
+
     @media (prefers-color-scheme: light) {
         @for $i from 0 through 100 {
             --value-#{$i}: #{$i};
@@ -21,24 +33,6 @@ $fa-font-path: "../webfonts";
             --percent-#{$i}: calc(calc(calc(100 - #{$i}) / 100) * 100%);
         }
     }
-
-    body.light {
-        @for $i from 0 through 100 {
-            --value-#{$i}: #{$i};
-            --percent-#{$i}: calc(calc(#{$i} / 100) * 100%);
-        }
-    }
-
-    body.dark {
-        @for $i from 0 through 100 {
-            --value-#{$i}: #{100 - $i};
-            --percent-#{$i}: calc(calc(calc(100 - #{$i}) / 100) * 100%);
-        }
-    }
-
-    --mtt-body-bg: hsl(202, var(--saturation), var(--percent-95));
-    --mtt-body-bg-gradiant: hsl(202, 0%, var(--percent-93));
-    --mtt-body-color: hsl(202, var(--saturation), var(--percent-10));
 
     --gradient-bg: linear-gradient(
                     45deg,
@@ -57,13 +51,16 @@ $fa-font-path: "../webfonts";
     --gradient-ardoise-100: hsl(202, var(--gradient-saturation), var(--percent-100));
     --gradient-ardoise-90: hsl(202, var(--gradient-saturation), var(--percent-90));
     --gradient-ardoise-90-alpha-80: hsla(202, var(--gradient-saturation), var(--percent-90), .8);
+    --gradient-ardoise-90-alpha-50: hsla(202, var(--gradient-saturation), var(--percent-90), .5);
     --gradient-ardoise-90-alpha-10: hsla(202, var(--gradient-saturation), var(--percent-90), .1);
     --gradient-ardoise-80: hsl(202, var(--gradient-saturation), var(--percent-80));
     --gradient-ardoise-80-alpha-50: hsla(202, var(--gradient-saturation), var(--percent-80), .5);
     --gradient-ardoise-75: hsl(202, var(--gradient-saturation), var(--percent-75));
     --gradient-ardoise-75-alpha-25: hsla(202, var(--gradient-saturation), var(--percent-75), .25);
     --gradient-ardoise-70: hsl(202, var(--gradient-saturation), var(--percent-70));
+    --gradient-ardoise-70-alpha-90: hsla(202, var(--gradient-saturation), var(--percent-70), .9);
     --gradient-ardoise-60: hsl(202, var(--gradient-saturation), var(--percent-60));
+    --gradient-ardoise-60-alpha-50: hsla(202, var(--gradient-saturation), var(--percent-60), .5);
     --gradient-ardoise-50: hsl(202, var(--gradient-saturation), var(--percent-50));
     --gradient-ardoise-40: hsl(202, var(--gradient-saturation), var(--percent-40));
     --gradient-ardoise-40-alpha-50: hsla(202, var(--gradient-saturation), var(--percent-40), .5);
@@ -91,9 +88,11 @@ $fa-font-path: "../webfonts";
     --gradient-grey-90: hsl(0, 0%, var(--percent-90));
     --gradient-grey-90-alpha-10: hsla(0, 0%, var(--percent-90), .1);
     --gradient-grey-90-alpha-20: hsla(0, 0%, var(--percent-90), .2);
+    --gradient-grey-90-alpha-50: hsla(0, 0%, var(--percent-90), .5);
     --gradient-grey-90-alpha-90: hsla(0, 0%, var(--percent-90), .95);
     --gradient-grey-80: hsl(0, 0%, var(--percent-80));
     --gradient-grey-80-alpha-50: hsla(0, 0%, var(--percent-80), .5);
+    --gradient-grey-75: hsl(0, 0%, var(--percent-75));
     --gradient-grey-75-alpha-40: hsla(0, 0%, var(--percent-75), .4);
     --gradient-grey-70: hsl(0, 0%, var(--percent-70));
     --gradient-grey-60: hsl(0, 0%, var(--percent-60));
@@ -154,11 +153,11 @@ $fa-font-path: "../webfonts";
     --movie-add: hsl(212, 43%, 90%);
     --movie-seen: hsl(105, 30%, 50%);
 
-    --activity-stand-up: hsl(173, 100%, 42%);
-    --activity-stand-down: hsl(173, 100%, 22%);
-    --activity-stand-up-hover: hsl(173, 100%, 52%);
-    --activity-stand-down-hover: hsl(173, 100%, 32%);
-    --activity-stand-up-fade: hsla(173, 100%, 42%, .25);
+    --activity-stand-up: hsl(173, 100%, var(--percent-58));
+    --activity-stand-down: hsl(173, 100%, var(--percent-78));
+    --activity-stand-up-hover: hsl(173, 100%, var(--percent-48));
+    --activity-stand-down-hover: hsl(173, 100%, var(--percent-68));
+    --activity-stand-up-fade: hsla(173, 100%, var(--percent-58), .25);
     --activity-move: hsl(0, 100%, 50%);
     --activity-move-light: hsl(0, 100%, 80%);
     --activity-move-fade: hsla(0, 100%, 50%, .25);
