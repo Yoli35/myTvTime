@@ -9,7 +9,7 @@
 
 .back-diapo {
     @include flex-row();
-    background-color: var(--gradient-grey-10-alpha-90);
+    background-color: var(--gradient-ardoise-90-alpha-80);
     inset: 0;
     position: absolute;
     transition: bottom 300ms ease-in-out, top 300ms ease-in-out;
@@ -28,7 +28,7 @@
             position: relative;
 
             img {
-                border: 1em solid var(--gradient-grey-80);
+                border: 1em solid var(--gradient-ardoise-20);
                 max-height: 95vh;
                 max-width: 90vw;
                 object-fit: cover;
@@ -42,9 +42,9 @@
 
             .chevron {
                 @include flex-row();
-                background-color: var(--gradient-grey-80-alpha-50);
+                background-color: var(--gradient-ardoise-60-alpha-50);
                 border-radius: 50%;
-                color: var(--gradient-grey-90);
+                color: var(--gradient-ardoise-20);
                 cursor: pointer;
                 font-size: 2em;
                 height: 1.5em;
@@ -60,7 +60,7 @@
                 position: relative;
 
                 img {
-                    border: .25em solid var(--gradient-grey-80);
+                    border: .25em solid var(--gradient-grey-20);
                     cursor: pointer;
                     max-height: 4vh;
                     max-width: 4vh;
@@ -108,9 +108,9 @@
 
         > div {
             @include flex-row();
-            background-color: var(--gradient-grey-80-alpha-50);
+            background-color: var(--gradient-grey-20-alpha-50);
             border-radius: 50%;
-            color: var(--gradient-grey-90);
+            color: var(--gradient-grey-10);
             cursor: pointer;
             font-size: 2em;
             height: 1.5em;
@@ -120,7 +120,7 @@
 
     .navigation {
         bottom: 1em;
-        color: var(--gradient-ardoise-90);
+        color: var(--gradient-ardoise-10);
         position: absolute;
         right: 1em;
         transition: height 300ms ease-in-out, width 100ms ease-in-out;
@@ -131,7 +131,7 @@
             width: 15em;
 
             .maxi {
-                background-color: var(--gradient-ardoise-60);
+                background-color: var(--gradient-ardoise-40);
                 border-radius: 1em;
                 inset: 0;
                 padding: 1em;
@@ -168,7 +168,7 @@
 
             .mini {
                 align-items: center;
-                background-color: var(--gradient-ardoise-60);
+                background-color: var(--gradient-ardoise-40);
                 border-radius: 999px;
                 cursor: pointer;
                 display: flex;

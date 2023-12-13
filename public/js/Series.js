@@ -134,12 +134,12 @@ export class Series {
         const header = document.querySelector(".header");
         let indicatorDiv, indicatorsDiv, left, right, modulo, link;
 
-        this.series = thisGlobal.getBackdropsAndNamesAndLinks();
+        thisGlobal.series = thisGlobal.getBackdropsAndNamesAndLinks();
 
-        if (!this.series.length) return;
+        if (!thisGlobal.series.length) return;
 
         thisGlobal.slideIndex = 0;
-        modulo = this.series.length;
+        modulo = thisGlobal.series.length;
 
         left = document.createElement("div");
         left.classList.add("left-arrow");
@@ -312,7 +312,7 @@ export class Series {
 
     indicators(header, idx, count) {
         const indicators = header.querySelectorAll(".indicator");
-        idx--;
+        // idx--;
         for (let i = 0; i < count; i++) {
             indicators[i].classList.remove("active");
         }

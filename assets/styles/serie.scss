@@ -14,6 +14,7 @@
 
         @include animated-header("../images/serie-header.jpg");
         background-color: var(--gradient-ardoise-90);
+        color: var(--gradient-ardoise-10);
         margin-bottom: 1rem;
         transition: background-color 3s ease-in-out;
 
@@ -108,7 +109,7 @@
             position: absolute;
 
             .indicator {
-                background-color: var(--gradient-ardoise-90);
+                background-color: var(--gradient-ardoise-10);
                 border-radius: .125rem;
                 cursor: pointer;
                 height: .25rem;
@@ -135,7 +136,7 @@
             width: 1.5rem;
 
             &:hover {
-                background-color: var(--gradient-ardoise-90-alpha-10);
+                background-color: var(--gradient-ardoise-10-alpha-20);
             }
         }
 
@@ -666,7 +667,7 @@
             }
 
             .search-serie {
-                background-color: var(--gradient-ardoise-20-alpha-50);
+                background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 0;
                 min-height: unset;
                 padding: .5rem;
@@ -686,8 +687,9 @@
 
             .settings {
                 @include flex-col(flex-start, flex-start);
-                background-color: var(--gradient-ardoise-20-alpha-50);
+                background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 0;
+                color: var(--gradient-ardoise-10);
                 margin-bottom: 1rem;
                 padding: .5rem;
 
@@ -702,8 +704,8 @@
                             width: 100%;
 
                             &::after {
-                                border-bottom: 2px solid var(--gradient-ardoise-80);
-                                border-right: 2px solid var(--gradient-ardoise-80);
+                                border-bottom: 2px solid var(--gradient-ardoise-20);
+                                border-right: 2px solid var(--gradient-ardoise-20);
                                 content: '';
                                 height: .5rem;
                                 position: absolute;
@@ -716,9 +718,9 @@
 
                             select {
                                 appearance: unset;
-                                background-color: var(--gradient-ardoise-40);
-                                border: 0 solid var(--gradient-ardoise-80);
-                                color: var(--gradient-ardoise-80);
+                                background-color: var(--gradient-ardoise-60);
+                                border: 0 solid var(--gradient-ardoise-20);
+                                color: var(--gradient-ardoise-20);
                                 font-weight: 100;
                                 padding: .25rem 1rem .25rem .25rem;
                                 position: relative;
@@ -751,7 +753,7 @@
 
                         .value {
                             @include flex-col();
-                            background-color: var(--gradient-ardoise-40);
+                            background-color: var(--gradient-ardoise-60);
                             border-radius: .5rem;
                             font-weight: 100;
                             margin: .5rem;
@@ -794,7 +796,7 @@
                             @include flex-100(center, start);
 
                             .switch {
-                                @include switcher(var(--gradient-green-30), var(--gradient-ardoise-80))
+                                @include switcher(var(--gradient-green-70), var(--gradient-ardoise-20))
                             }
 
                             .anim-settings-toggler {
@@ -842,13 +844,13 @@
                                             padding: .125rem .25rem;
 
                                             &.min {
-                                                background-color: var(--gradient-orange-90);
-                                                color: var(--gradient-orange-20);
+                                                background-color: var(--gradient-orange-10);
+                                                color: var(--gradient-orange-80);
                                             }
 
                                             &.max {
-                                                background-color: var(--gradient-green-90);
-                                                color: var(--gradient-green-20);
+                                                background-color: var(--gradient-green-10);
+                                                color: var(--gradient-green-80);
                                             }
                                         }
                                     }
@@ -880,8 +882,8 @@
 
                                             .between {
                                                 background-color: transparent;
-                                                border-bottom: 1px solid var(--gradient-ardoise-80-alpha-50);
-                                                border-top: 1px solid var(--gradient-ardoise-80-alpha-50);
+                                                border-bottom: 1px solid var(--gradient-ardoise-20-alpha-50);
+                                                border-top: 1px solid var(--gradient-ardoise-20-alpha-50);
                                                 height: 7px;
                                                 left: 0;
                                                 position: relative;
@@ -891,7 +893,7 @@
                                             }
 
                                             .handle {
-                                                background-color: var(--gradient-ardoise-100);
+                                                background-color: var(--gradient-ardoise-10);
                                                 border-radius: 50%;
                                                 cursor: pointer;
                                                 height: 1rem;
@@ -902,12 +904,12 @@
                                                 width: 1rem;
 
                                                 &.min {
-                                                    background-color: var(--gradient-orange-80);
+                                                    background-color: var(--gradient-orange-20);
                                                     top: -12px;
                                                 }
 
                                                 &.max {
-                                                    background-color: var(--gradient-green-80);
+                                                    background-color: var(--gradient-green-20);
                                                     top: -28px;
                                                 }
 
@@ -3683,7 +3685,7 @@
 
     .left-column {
         @include flex-col(start, start);
-        background-color: var(--gradient-ardoise-90-alpha-10);
+        background-color: var(--gradient-ardoise-10-alpha-20);
         border-radius: 1rem;
         min-height: 80vh;
         width: 18rem;
@@ -3712,6 +3714,7 @@
             }
 
             .info {
+                color: var(--gradient-ardoise-20);
                 margin-bottom: .5rem;
 
                 div {
