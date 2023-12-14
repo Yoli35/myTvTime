@@ -152,6 +152,7 @@ $fa-font-path: "../webfonts";
     --gradient-yellow-50: hsl(45, var(--gradient-saturation), var(--percent-50));
     --gradient-yellow-50-alpha-50: hsla(45, var(--gradient-saturation), var(--percent-50), .5);
     --gradient-yellow-40: hsl(45, var(--gradient-saturation), var(--percent-40));
+    --gradient-yellow-20: hsl(45, var(--gradient-saturation), var(--percent-20));
 
     --serie-add: hsl(212, 43%, 90%);
     --serie-seen: hsl(105, 30%, 50%);

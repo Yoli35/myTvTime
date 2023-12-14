@@ -3169,11 +3169,12 @@
 
 .filter-series {
     header {
-
+        color: var(--gradient-ardoise-10);
     }
 
     main {
         align-items: center;
+        color: var(--gradient-ardoise-10);
         display: flex;
         flex-direction: column;
         justify-content: center;

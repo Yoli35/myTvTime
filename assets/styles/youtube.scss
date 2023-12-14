@@ -5,19 +5,15 @@
 
 .yt-header {
     @include banner("../images/youtube.png");
-    background-color: var(--gradient-ardoise-25-alpha-25);
+    background-color: var(--gradient-ardoise-75-alpha-25);
     border-radius: 1em;
     height: clamp(21em, 20vw, 26em);
     margin-top: 1em;
 
-    //&:hover {
-    //    background-color: var(--gradient-ardoise-25);
-    //}
-
     .banner {
         .history, .search-on-yt, .youtube {
             @include flex-row();
-            border: 2px solid var(--gradient-ardoise-90);
+            border: 2px solid var(--gradient-ardoise-10);
             border-radius: 50%;
             bottom: 1rem;
             position: absolute;
@@ -68,7 +64,7 @@
             }
 
             .duration {
-                background-color: var(--gradient-ardoise-10);
+                background-color: var(--gradient-ardoise-90);
                 border-radius: .25rem;
                 bottom: .5rem;
                 font-size: .75rem;
@@ -88,10 +84,10 @@
                 width: calc(100% - 1rem);
 
                 .tag {
-                    background-color: var(--gradient-ardoise-40);
-                    border: 1px solid var(--gradient-ardoise-90);
+                    background-color: var(--gradient-ardoise-60);
+                    border: 1px solid var(--gradient-ardoise-10);
                     border-radius: .25rem;
-                    color: var(--gradient-ardoise-90);
+                    color: var(--gradient-ardoise-10);
                     font-size: .75rem;
                     font-weight: 400;
                     padding: 0 .5rem;
@@ -432,6 +428,7 @@
         }
 
         .details {
+            color: var(--gradient-ardoise-10);
             width: 80%;
 
             .title-tags {
@@ -475,36 +472,36 @@
                         position: relative;
 
                         input {
-                            background-color: var(--gradient-ardoise-40);
-                            border: 1px solid var(--gradient-ardoise-90);
+                            background-color: var(--gradient-ardoise-60);
+                            border: 1px solid var(--gradient-ardoise-10);
                             border-radius: .5em;
-                            caret-color: var(--gradient-ardoise-90);
-                            color: var(--gradient-ardoise-90);
+                            caret-color: var(--gradient-ardoise-10);
+                            color: var(--gradient-ardoise-10);
                             padding-left: .5em;
                         }
 
                         .results {
-                            background-color: var(--gradient-ardoise-40);
-                            border: 1px solid var(--gradient-ardoise-90);
+                            background-color: var(--gradient-ardoise-60);
+                            border: 1px solid var(--gradient-ardoise-10);
                             border-radius: .25em;
                             left: 1em;
                             position: absolute;
                             top: 1.75em;
 
                             .item {
-                                color: var(--gradient-ardoise-90);
+                                color: var(--gradient-ardoise-10);
                                 padding: 0 1em;
 
                                 &:hover {
-                                    background-color: var(--gradient-ardoise-90);
-                                    color: var(--gradient-ardoise-40);
+                                    background-color: var(--gradient-ardoise-10);
+                                    color: var(--gradient-ardoise-60);
                                     cursor: pointer;
                                 }
                             }
                         }
 
                         .add {
-                            color: var(--gradient-ardoise-90);
+                            color: var(--gradient-ardoise-10);
                             cursor: pointer;
                             position: absolute;
                             right: .25em;
@@ -513,10 +510,10 @@
                     }
 
                     .tag {
-                        background-color: var(--gradient-ardoise-40);
-                        border: 1px solid var(--gradient-ardoise-90);
+                        background-color: var(--gradient-ardoise-60);
+                        border: 1px solid var(--gradient-ardoise-10);
                         border-radius: .5em;
-                        color: var(--gradient-ardoise-90);
+                        color: var(--gradient-ardoise-10);
                         font-size: 1em;
                         font-weight: 100;
                         padding: 1px 1.5em 1px .5em; /* -> same height as input */
@@ -542,7 +539,7 @@
 
             .description {
                 a {
-                    color: var(--gradient-ardoise-40);
+                    color: var(--gradient-ardoise-60);
                 }
             }
 
@@ -556,13 +553,13 @@
                 }
 
                 .thumbnail {
-                    @include author(var(--gradient-ardoise-60));
+                    @include author(var(--gradient-ardoise-40));
                 }
             }
         }
 
         .comments {
-            background-color: var(--gradient-ardoise-40);
+            background-color: var(--gradient-ardoise-60);
             border-radius: 1rem;
             padding: 1rem;
             width: 40%;
@@ -657,7 +654,7 @@
 
     .search {
         @include flex-100(start, start);
-        background-color: var(--gradient-ardoise-20);
+        background-color: var(--gradient-ardoise-80);
         margin: 1em 0;
         padding: 1em;
 
@@ -673,8 +670,8 @@
                 position: relative;
 
                 input {
-                    background-color: var(--gradient-ardoise-30);
-                    color: var(--gradient-ardoise-70);
+                    background-color: var(--gradient-ardoise-70);
+                    color: var(--gradient-ardoise-30);
                     border: 0;
                     border-radius: .25em;
                     font-weight: 100;
@@ -685,7 +682,7 @@
 
                 .tag-list {
                     border-radius: .25em;
-                    box-shadow: 0 .5rem 1em var(--gradient-ardoise-10-alpha-50);
+                    box-shadow: 0 .5rem 1em var(--gradient-ardoise-90-alpha-50);
                     display: none;
                     left: 6.125rem;
                     max-height: 10em;
@@ -707,7 +704,7 @@
                     }
 
                     .tag-item {
-                        background-color: var(--gradient-ardoise-40);
+                        background-color: var(--gradient-ardoise-60);
                         color: var(--gradient-ardoise-70);
                         cursor: pointer;
                         overflow: hidden;
@@ -717,12 +714,12 @@
 
                         &:hover {
                             background-color: var(--gradient-ardoise-50);
-                            color: var(--gradient-ardoise-80);
+                            color: var(--gradient-ardoise-20);
                         }
 
                         &.active {
                             background-color: var(--gradient-ardoise-50);
-                            color: var(--gradient-ardoise-90);
+                            color: var(--gradient-ardoise-10);
                         }
 
                         &.selected, &.other {
@@ -744,7 +741,7 @@
                     @include flex-row();
                     background-color: var(--gradient-purple-30);
                     border-radius: .25em;
-                    color: var(--gradient-ardoise-90);
+                    color: var(--gradient-ardoise-10);
                     font-weight: 100;
                     padding: .25em .5em;
 
@@ -757,7 +754,7 @@
             }
 
             .method {
-                color: var(--gradient-ardoise-70);
+                color: var(--gradient-ardoise-30);
                 margin-left: auto;
                 position: relative;
 
@@ -767,10 +764,10 @@
 
                 select {
                     appearance: none;
-                    background-color: var(--gradient-ardoise-30);
+                    background-color: var(--gradient-ardoise-70);
                     border: none;
                     border-radius: .25em;
-                    color: var(--gradient-ardoise-70);
+                    color: var(--gradient-ardoise-30);
                     font-weight: 100;
                     padding: .25em 2em .25em 1em;
                 }
@@ -787,10 +784,10 @@
 
             .apply {
                 appearance: unset;
-                background-color: var(--gradient-ardoise-20);
-                border: 1px solid var(--gradient-ardoise-80);
+                background-color: var(--gradient-ardoise-80);
+                border: 1px solid var(--gradient-ardoise-20);
                 border-radius: var(--button-border-radius);
-                color: var(--gradient-ardoise-80);
+                color: var(--gradient-ardoise-20);
                 font-weight: 100;
                 margin-left: 1em;
                 padding: .25em 1em;
@@ -798,13 +795,13 @@
 
                 &:hover {
                     background-color: var(--gradient-ardoise-50);
-                    color: var(--gradient-orange-80);
+                    color: var(--gradient-orange-20);
                 }
 
                 &.disabled {
                     background-color: var(--gradient-ardoise-50);
-                    border: 1px solid var(--gradient-ardoise-60);
-                    color: var(--gradient-ardoise-60);
+                    border: 1px solid var(--gradient-ardoise-40);
+                    color: var(--gradient-ardoise-40);
                     cursor: default;
                 }
             }
@@ -833,15 +830,15 @@
 
                 button {
                     @include flex-row();
-                    background-color: var(--gradient-ardoise-20);
+                    background-color: var(--gradient-ardoise-80);
                     border-radius: .25em;
-                    border: 1px solid var(--gradient-ardoise-90);
-                    color: var(--gradient-ardoise-90);
+                    border: 1px solid var(--gradient-ardoise-10);
+                    color: var(--gradient-ardoise-10);
                     cursor: pointer;
                     padding: .25em .5em;
 
                     &:hover {
-                        background-color: var(--gradient-ardoise-40);
+                        background-color: var(--gradient-ardoise-60);
                     }
 
                     &:has(i) {
@@ -892,15 +889,15 @@
 
                 .video-item {
                     border-radius: .125rem;
-                    color: var(--gradient-ardoise-90);
+                    color: var(--gradient-ardoise-10);
                     padding-inline: 1rem;
 
                     &:nth-child(even) {
-                    background-color: var(--gradient-ardoise-40);
+                    background-color: var(--gradient-ardoise-60);
                 }
 
                     &:nth-child(odd) {
-                    background-color: var(--gradient-ardoise-30);
+                    background-color: var(--gradient-ardoise-70);
                 }
                 }
             }
@@ -952,7 +949,7 @@
                 gap: 1rem;
 
                 .available-tags, .selected-tags {
-                    border: 1px solid var(--gradient-ardoise-90);
+                    border: 1px solid var(--gradient-ardoise-10);
                     border-radius: .25rem;
                     display: flex;
                     flex-direction: column;
@@ -983,15 +980,15 @@
 
                 .available-tags {
                     .tag-item {
-                        background-color: var(--gradient-ardoise-40);
-                        color: var(--gradient-ardoise-90);
+                        background-color: var(--gradient-ardoise-60);
+                        color: var(--gradient-ardoise-10);
 
                         &.selected, &.other {
                             display: none;
                         }
 
                         &.dragging {
-                            background-color: var(--gradient-green-40);
+                            background-color: var(--gradient-green-60);
                         }
                     }
                 }
