@@ -195,76 +195,6 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    public function getSeasonsAndEpisodes($tvSeries, $series): void
-    {
-        $numberOfSeasons = $tvSeries['number_of_seasons'];
-
-        for ($seasonNumber = 1; $seasonNumber <= $numberOfSeasons; $seasonNumber++) {
-            $tvSeason = json_decode($this->TMDBService->getTvSeason($series->getSerieId(), $seasonNumber, "fr"), true);
-
-            $season = $this->seasonRepository->findOneBy(['series' => $series, 'seasonNumber' => $seasonNumber]);
-
-            if (!$season) {
-                $season = new Season();
-            }
-            $season->set_Id($tvSeason['_id']);
-            $season->setAirDate($this->dateService->newDateImmutable($tvSeason['air_date'], 'Europe/Paris'));
-            $season->setName($tvSeason['name']);
-            $season->setOverview($tvSeason['overview']);
-            $season->setPosterPath($tvSeason['poster_path']);
-            $season->setSeasonNumber($seasonNumber);
-            $season->setSeries($series);
-            $season->setTmdbId($tvSeason['id']);
-            $this->seasonRepository->save($season, true);
-
-            $tvEpisodes = $tvSeason['episodes'];
-            $episodeCount = count($tvEpisodes);
-            for ($i = 1; $i <= $episodeCount; $i++) {
-                $tvEpisode = $tvEpisodes[$i - 1];
-                $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $i]);
-                if (!$episode) {
-                    $episode = new Episode();
-                }
-                $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
-                $episode->setEpisodeNumber($tvEpisode['episode_number']);
-                $episode->setName($tvEpisode['name']);
-                $episode->setOverview($tvEpisode['overview']);
-                $episode->setRuntime($tvEpisode['runtime']);
-                $episode->setSeason($season);
-                $episode->setSeasonNumber($tvEpisode['season_number']);
-                $episode->setSeries($series);
-                $episode->setStillPath($tvEpisode['still_path']);
-                $episode->setTmdbId($tvEpisode['id']);
-                $this->episodeRepository->save($episode, $i === $episodeCount);
-            }
-        }
-    }
-
-    public function collectEpisodeDurations($tv): array
-    {
-        $tmdb = $this->TMDBService;
-        $id = $tv['id'];
-        $durations = [];
-        $durations['episode_run_time'] = $tv['episode_run_time'];
-
-        foreach ($tv['seasons'] as $season) {
-            $seasonNumber = $season['season_number'];
-            if ($seasonNumber == 0) {
-                continue;
-            }
-            if (key_exists($seasonNumber, $durations) && count($durations[$seasonNumber]) == $season['episode_count']) {
-                continue;
-            }
-            $durations[$seasonNumber] = [];
-            $standing = $tmdb->getTvSeason($id, $seasonNumber, 'fr');
-            $tmdbSeason = json_decode($standing, true);
-            foreach ($tmdbSeason['episodes'] as $episode) {
-                $durations[$seasonNumber][] = [$episode['episode_number'] => $episode['runtime']];
-            }
-        }
-        return $durations;
-    }
-
     #[Route('/duration', name: 'app_series_duration')]
     public function getViewedEpisodesDuration(Request $request): Response
     {
@@ -364,12 +294,6 @@ class SerieFrontController extends AbstractController
             'episodeCount' => $episodeCount,
             'nullDurationCount' => $nullDurationCount,
         ]);
-    }
-
-    public function episodeDuration($serieId, $seasonNumber, $episodeNumber): ?int
-    {
-        $episode = json_decode($this->TMDBService->getTvEpisode($serieId, $seasonNumber, $episodeNumber, 'fr'), true);
-        return $episode['runtime'];
     }
 
     #[Route('/favorite/{userId}/{mediaId}/{fav}', name: 'app_series_toggle_favorite', methods: 'GET')]
@@ -701,5 +625,81 @@ class SerieFrontController extends AbstractController
         $block = '<img src="' . $list[$providerId]['logo_path'] . '" alt="' . $list[$providerId]['provider_name'] . '" title="' . $list[$providerId]['provider_name'] . '">';
 
         return $this->json(['success' => true, 'block' => $block]);
+    }
+
+    public function getSeasonsAndEpisodes($tvSeries, $series): void
+    {
+        $numberOfSeasons = $tvSeries['number_of_seasons'];
+
+        for ($seasonNumber = 1; $seasonNumber <= $numberOfSeasons; $seasonNumber++) {
+            $tvSeason = json_decode($this->TMDBService->getTvSeason($series->getSerieId(), $seasonNumber, "fr"), true);
+
+            $season = $this->seasonRepository->findOneBy(['series' => $series, 'seasonNumber' => $seasonNumber]);
+
+            if (!$season) {
+                $season = new Season();
+            }
+            $season->set_Id($tvSeason['_id']);
+            $season->setAirDate($this->dateService->newDateImmutable($tvSeason['air_date'], 'Europe/Paris'));
+            $season->setName($tvSeason['name']);
+            $season->setOverview($tvSeason['overview']);
+            $season->setPosterPath($tvSeason['poster_path']);
+            $season->setSeasonNumber($seasonNumber);
+            $season->setSeries($series);
+            $season->setTmdbId($tvSeason['id']);
+            $this->seasonRepository->save($season, true);
+
+            $tvEpisodes = $tvSeason['episodes'];
+            $episodeCount = count($tvEpisodes);
+            for ($i = 1; $i <= $episodeCount; $i++) {
+                $tvEpisode = $tvEpisodes[$i - 1];
+                $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $i]);
+                if (!$episode) {
+                    $episode = new Episode();
+                }
+                $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
+                $episode->setEpisodeNumber($tvEpisode['episode_number']);
+                $episode->setName($tvEpisode['name']);
+                $episode->setOverview($tvEpisode['overview']);
+                $episode->setRuntime($tvEpisode['runtime']);
+                $episode->setSeason($season);
+                $episode->setSeasonNumber($tvEpisode['season_number']);
+                $episode->setSeries($series);
+                $episode->setStillPath($tvEpisode['still_path']);
+                $episode->setTmdbId($tvEpisode['id']);
+                $this->episodeRepository->save($episode, $i === $episodeCount);
+            }
+        }
+    }
+
+    public function collectEpisodeDurations($tv): array
+    {
+        $tmdb = $this->TMDBService;
+        $id = $tv['id'];
+        $durations = [];
+        $durations['episode_run_time'] = $tv['episode_run_time'];
+
+        foreach ($tv['seasons'] as $season) {
+            $seasonNumber = $season['season_number'];
+            if ($seasonNumber == 0) {
+                continue;
+            }
+            if (key_exists($seasonNumber, $durations) && count($durations[$seasonNumber]) == $season['episode_count']) {
+                continue;
+            }
+            $durations[$seasonNumber] = [];
+            $standing = $tmdb->getTvSeason($id, $seasonNumber, 'fr');
+            $tmdbSeason = json_decode($standing, true);
+            foreach ($tmdbSeason['episodes'] as $episode) {
+                $durations[$seasonNumber][] = [$episode['episode_number'] => $episode['runtime']];
+            }
+        }
+        return $durations;
+    }
+
+    public function episodeDuration($serieId, $seasonNumber, $episodeNumber): ?int
+    {
+        $episode = json_decode($this->TMDBService->getTvEpisode($serieId, $seasonNumber, $episodeNumber, 'fr'), true);
+        return $episode['runtime'];
     }
 }

@@ -187,243 +187,6 @@ class SerieController extends AbstractController
         ]);
     }
 
-    public function getCountries(): array
-    {
-        $results = $this->serieRepository->getCountries();
-        $arr = [];
-        foreach ($results as $result) {
-            $countries = json_decode($result['origin_country'], true);
-            foreach ($countries as $country) {
-                $arr[] = $country;
-            }
-        }
-        $arr = array_unique($arr);
-        $arr = array_values($arr);
-//        dump($arr);
-        $countries = [];
-        foreach ($arr as $country) {
-            if (strlen($country) == 2)
-                $countries[$country] = Countries::getName($country);
-        }
-        asort($countries, SORT_FLAG_CASE | SORT_STRING);
-        return array_merge(["all" => $this->translator->trans("All countries")], $countries);
-    }
-
-    public function cookies($request, $backFromDetail, $somethingChanged, $perPage, $sort, $order): array
-    {
-        if ($somethingChanged) {
-            setcookie("series", json_encode(['pp' => $perPage, 'ob' => $sort, 'o' => $order]), strtotime('+30 days'), '/');
-        }
-        if ($request->query->count() == 0 || $backFromDetail) {
-            if (isset($_COOKIE['series'])) {
-                $cookie = json_decode($_COOKIE['series'], true);
-                return [$cookie['pp'], $cookie['ob'], $cookie['o']];
-            } else {
-                return [20, 'firstDateAir', 'desc'];
-            }
-        }
-        return [$perPage, $sort, $order];
-    }
-
-    public function isSerieAiringSoon($serie, $now): array
-    {
-        if ($serie['status'] == 'In Production' || $serie['status'] == 'Planned') {
-            $serie['prodStatus'] = $this->translator->trans($serie['status']);
-            $serie['prodClass'] = $serie['status'] == 'In Production' ? 'in-production' : 'planned';
-            return $serie;
-        }
-        $serie['today'] = false;
-        $serie['tomorrow'] = false;
-        if ($serie['viewing']->isSerieCompleted()) {
-            return $serie;
-        }
-        $viewing = $serie['viewing'];
-        $findIt = false;
-        /** @var SerieViewing $viewing */
-        foreach ($viewing->getSeasons() as $season) {
-            if ($season->isSeasonCompleted() || $season->getSeasonNumber() == 0) {
-                continue;
-            }
-            foreach ($season->getEpisodes() as $episode) {
-                if ($episode->getViewedAt()) {
-                    continue;
-                }
-                if ($episode->getAirDate()) {
-                    $date = $episode->getAirDate();
-
-                    if ($viewing->isTimeShifted()) {
-                        $date = $date->modify('+1 day');
-                    }
-                    $episodeDiff = date_diff($now, $date);
-                    if (!$findIt) {
-                        if ($episodeDiff->days == 0) {
-                            $serie['today'] = true;
-                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                            $findIt = true;
-                        }
-                    }
-                    if (!$findIt) {
-                        if ($episodeDiff->days) {
-                            if ($episodeDiff->invert) {
-                                $serie['passed'] = $episode->getAirDate()->format("m/d/Y");
-                                if ($episodeDiff->y) {
-                                    $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
-                                } else {
-                                    if ($episodeDiff->m) {
-                                        $serie['passedText'] = $this->translator->trans("available since") . " " . ($episodeDiff->m + +($episodeDiff->d > 20 ? 1 : 0)) . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
-                                    } else {
-                                        if ($episodeDiff->d) {
-                                            if ($episodeDiff->d == 1) {
-                                                $serie['passedText'] = $this->translator->trans("available yesterday");
-                                            } else {
-                                                $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days]);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                if ($episodeDiff->days == 1) {
-                                    $serie['tomorrow'] = true;
-                                } else {
-                                    $serie['next'] = $date->format("m/d/Y");
-                                    $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days]);
-                                    $serie['nextEpisodeDays'] = $episodeDiff->days;
-                                }
-                            }
-                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                            $findIt = true;
-                        }
-                    }
-                } else { // Nouvelle saison et nouvel épisode sans date de diffusion
-                    $findIt = true;
-                    $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                    $serie['nextEpisodeNoDate'] = true;
-                }
-                if ($findIt) {
-                    break;
-                }
-            }
-        }
-
-        return $serie;
-    }
-
-    public function getSeriesViews($user, $results, $imageConfig, $locale): array
-    {
-        $ids = array_map(function ($result) {
-            return $result->getId();
-        }, $results);
-        $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'serie' => $ids]);
-        $favorites = $this->favoriteRepository->findBy(['type' => 'serie', 'userId' => $user->getId(), 'mediaId' => $ids]);
-        $networks = $this->serieRepository->networks($ids);
-
-        $series = [];
-        /** @var Serie $result */
-        foreach ($results as $result) {
-            $serie = $this->serie2array($result, $locale);
-            $serie['viewing'] = $this->getSerieViews($result->getId(), $serieViewings);
-            $serie['favorite'] = $this->isFavorite($serie, $favorites);
-            $serie['networks'] = $this->getNetworks($serie, $networks);
-
-            if ($serie['posterPath'] && !file_exists("../public/images/series/posters" . $serie['posterPath'])) {
-                $this->saveImageFromUrl(
-                    $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $serie['posterPath'],
-                    "../public/images/series/posters" . $serie['posterPath']
-                );
-            }
-
-            $series[] = $serie;
-        }
-        return $series;
-    }
-
-    public function getSerieViews($id, $serieViewings): ?SerieViewing
-    {
-        /** @var SerieViewing $serieViewing */
-        foreach ($serieViewings as $serieViewing) {
-            if ($serieViewing->getSerie()->getId() == $id) {
-                return $serieViewing;
-            }
-        }
-        return null;
-    }
-
-    public function isFavorite($serie, $favorites): bool
-    {
-        /** @var Favorite $favorite */
-        foreach ($favorites as $favorite) {
-            if ($favorite->getMediaId() == $serie['id']) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function getNetworks($serie, $networks): array
-    {
-        $serieNetworks = [];
-        /** @var Networks $network */
-        foreach ($networks as $network) {
-            if ($network['serieId'] == $serie['id']) {
-                $serieNetworks[] = $network;
-            }
-        }
-        return $serieNetworks;
-    }
-
-    public function serie2array(Serie $result, $locale): array
-    {
-        $tv = json_decode($this->TMDBService->getTv($result->getSerieId(), $locale), true);
-
-        $serie['id'] = $result->getId();
-        $serie['name'] = $result->getName();
-        $serie['posterPath'] = $result->getPosterPath();
-        $serie['backdropPath'] = $result->getBackdropPath();
-        $serie['serieId'] = $result->getSerieId();
-        $serie['firstDateAir'] = $result->getFirstDateAir();
-        $serie['createdAt'] = $result->getCreatedAt();
-        $serie['updatedAt'] = $result->getUpdatedAt();
-        $serie['status'] = $result->getStatus();
-        $serie['tmdb_status'] = $tv['status'];
-        $serie['overview'] = $result->getOverview();
-        $serie['networks'] = $result->getNetworks();
-        $serie['numberOfEpisodes'] = $result->getNumberOfEpisodes();
-        $serie['numberOfSeasons'] = $result->getNumberOfSeasons();
-        $serie['originalName'] = $result->getOriginalName();
-        $serie['upcomingDateYear'] = $result->getUpcomingDateYear();
-        $serie['upcomingDateMonth'] = $result->getUpcomingDateMonth();
-
-        $serie['tmdb_next_episode_to_air'] = $tv['next_episode_to_air'];
-
-        return $serie;
-    }
-
-    public function saveImageFromUrl($imageUrl, $localeFile): bool
-    {
-        if (!file_exists($localeFile)) {
-
-            // Vérifier si l'URL de l'image est valide
-            if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
-                // Récupérer le contenu de l'image à partir de l'URL
-                $imageContent = file_get_contents($imageUrl);
-
-                // Ouvrir un fichier en mode écriture binaire
-                $file = fopen($localeFile, 'wb');
-
-                // Écrire le contenu de l'image dans le fichier
-                fwrite($file, $imageContent);
-
-                // Fermer le fichier
-                fclose($file);
-
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
     #[Route('/today', name: 'app_series_today', methods: ['GET'])]
     public function today(Request $request): Response
     {
@@ -502,64 +265,6 @@ class SerieController extends AbstractController
             'from' => self::EPISODES_OF_THE_DAY,
             'imageConfig' => $imgConfig,
         ]);
-    }
-
-    public function todayAiringSeriesV2(DateTimeImmutable $date): array
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $today = $date->format('Y-m-d');
-        $yesterday = $date->sub(new DateInterval('P1D'))->format('Y-m-d');
-
-        $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $yesterday, 1, 20);
-        /*        dump([
-                    'today' => $today,
-                    'yesterday' => $yesterday,
-                    'episodes of the day' => $episodesOfTheDay
-                ]);*/
-        $episodesOfTheDayBySeries = [];
-
-        foreach ($episodesOfTheDay as $episode) {
-            $found = false;
-            foreach ($episodesOfTheDayBySeries as &$ep) {
-                if (!$found && $ep['serieId'] === $episode['serie_id'] && $ep['seasonNumber'] === $episode['season_number']) {
-                    $ep['episodeNumbers'][] = $episode['episode_number'];
-                    $ep['viewed'] = $episode['viewed'];
-                    $found = true;
-                }
-            }
-            if (!$found) {
-                $episodesOfTheDayBySeries[] = [
-                    'serieId' => $episode['serie_id'],
-                    'serieName' => $episode['name'],
-                    'seriePosterPath' => $episode['poster_path'],
-                    'seasonNumber' => $episode['season_number'],
-                    'seasonEpisodeCount' => $episode['episode_count'],
-                    'episodeNumbers' => [$episode['episode_number']],
-                    'viewed' => $episode['viewed'],
-                ];
-            }
-        }
-        return $episodesOfTheDayBySeries;
-    }
-
-    public function getTodayAiringBackdrop($airings): ?string
-    {
-        $index = rand(0, count($airings) - 1);
-        $pos = 0;
-        foreach ($airings as $airing) {
-            if ($index === $pos++) {
-                $serie = $this->serieRepository->find($airing['serieId']);
-                return $serie->getBackdropPath();
-            }
-        }
-        return null;
-    }
-
-    public function getNothingImages(): array
-    {
-        $images = scandir($this->getParameter('kernel.project_dir') . '/public/images/series/today');
-        return array_slice($images, 2);
     }
 
     #[Route('/this-week', name: 'app_series_this_week', methods: ['GET'])]
@@ -925,6 +630,741 @@ class SerieController extends AbstractController
         ]);
     }
 
+    #[Route('/search/{page}', name: 'app_series_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
+    public function search(Request $request, int $page): Response
+    {
+//        $this->logService->log($request, $this->getUser());
+        $tmdbService = $this->TMDBService;
+        $series = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
+        $query = $request->query->get('query');
+        $year = $request->query->get('year');
+
+        $form = $this->createForm(SerieSearchType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $form->getData();
+            $query = $result['query'];
+            $year = $result['year'];
+            $page = 1;
+        }
+        if ($query && strlen($query)) {
+            $standing = $tmdbService->search($page, $query, $year, $request->getLocale());
+            $series = json_decode($standing, true);
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+        return $this->render('series/search.html.twig', [
+            'form' => $form->createView(),
+            'query' => $query,
+            'year' => $year,
+            'series' => $series['results'],
+            'serieIds' => $this->mySerieIds($user),
+            'pages' => [
+                'page' => $page,
+                'total_pages' => $series['total_pages'],
+                'total_results' => $series['total_results'],
+                'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
+            ],
+            'quotes' => (new QuoteService)->getRandomQuotes(),
+            'user' => $user,
+            'breadcrumb' => $this->breadcrumb(self::SEARCH_SERIES),
+            'from' => self::SEARCH_SERIES,
+            'imageConfig' => $this->imageConfiguration->getConfig(),
+        ]);
+    }
+
+    #[Route('/popular', name: 'app_series_popular', methods: ['GET'])]
+    public function popular(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $page = $request->query->getInt('p', 1);
+        $locale = $request->getLocale();
+
+        $standing = $this->TMDBService->getSeries(self::TOP_RATED, $page, $locale, $user->getTimezone());
+        $series = json_decode($standing, true);
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        foreach ($series['results'] as $serie) {
+            $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+        }
+
+        $breadcrumb = $this->breadcrumb(self::POPULAR_SERIES);
+
+        return $this->render('series/popular.html.twig', [
+            'series' => $series['results'],
+            'serieIds' => $this->mySerieIds($user),
+            'pages' => [
+                'total_results' => $series['total_results'],
+                'page' => $page,
+                'per_page' => 20,
+                'link_count' => self::LINK_COUNT,
+                'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
+            ],
+            'breadcrumb' => $breadcrumb,
+            'from' => self::POPULAR_SERIES,
+            'user' => $user,
+            'posters' => $this->getPosters(),
+            'posterPath' => '/images/series/posters/',
+            'imageConfig' => $this->imageConfiguration->getConfig(),
+        ]);
+    }
+
+    #[Route('/filter', name: 'app_series_filter', methods: ['GET', 'POST'])]
+    public function filter(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $tvFilterSettings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
+        if ($tvFilterSettings)
+            $data = $tvFilterSettings->getData();
+        else
+            $data = $this->createTvFilterSettings($user);
+
+        $watchProviders = $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US');
+
+        $data['watchProviderSelect'] = $watchProviders['watchProviderSelect'];
+        $data['genreSelect'] = $this->getTvGenres($user->getPreferredLanguage() ?? 'en-US');
+        $data['watchRegionSelect'] = $this->getAvailableRegions();
+
+        $form = $this->createForm(TvFilterType::class, null, [
+            'data' => $data,
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+        }
+
+        $filters = $this->getTvFilters($data);
+        $filterString = "&page=" . $data['page'] . "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
+        foreach ($filters as $key => $value) {
+            $filterString .= "&$key=$value";
+        }
+//        dump([
+//            '$filters' => $filters,
+//            '$filterString' => $filterString,
+//        ]);
+        $standing = $this->TMDBService->getFilterTv($filterString);
+        $series = json_decode($standing, true);
+        $totalResults = $series['total_results'];
+        $totalPages = $series['total_pages'];
+        $imageConfig = $this->imageConfiguration->getConfig();
+
+        $series = array_map(function ($serie) use ($imageConfig) {
+            $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+            $serie['poster_path'] = $this->fullUrl("poster", 3, $serie['poster_path'], "no_poster_dark.png", $imageConfig);
+            return $serie;
+        }, $series['results']);
+
+        $breadcrumb = $this->breadcrumb(self::SERIES_FILTER);
+
+        return $this->render('series/filter.html.twig', [
+            'series' => $series,
+            'serieIds' => $this->mySerieIds($user),
+            'form' => $form->createView(),
+            'logos' => $watchProviders['watchProviderLogos'],
+            'total_results' => $totalResults,
+            'total_pages' => $totalPages,
+            'breadcrumb' => $breadcrumb,
+            'from' => self::SERIES_FILTER,
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/show/{id}', name: 'app_series_show', methods: ['GET'])]
+    public function show(Request $request, Serie $serie, BreadcrumbBuilder $bc): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $tmdbService = $this->TMDBService;
+
+        $page = $request->query->getInt('p', 1);
+        $from = $request->query->get('from', self::MY_SERIES);
+        if ($from === self::SERIES_FROM_COUNTRY) {
+            $query = $request->query->get('c', "");
+        } else {
+            $query = $request->query->get('query', "");
+        }
+        $year = $request->query->get('year', "");
+
+        $tv = json_decode($tmdbService->getTv($serie->getSerieId(), $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']), true);
+        if (!$tv) {
+            return $this->render('series/error.html.twig', [
+                'serie' => $serie,
+                'serieViewing' => $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]),
+                'imageConfig' => $this->imageConfiguration->getConfig(),
+            ]);
+        }
+        return $this->displaySeriesPage($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
+    }
+
+    #[Route('/tmdb/{id}', name: 'app_series_tmdb', methods: ['GET'])]
+    public function tmdb(Request $request, $id): Response
+    {
+        if ($this->getUser()) {
+            $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
+            if ($serie) {
+                return $this->redirectToRoute('app_series_show', ['id' => $serie->getId()]);
+            }
+        }
+        $page = $request->query->getInt('p', 1);
+        $from = $request->query->get('from', self::POPULAR_SERIES);
+        $query = $request->query->get('query', "");
+        $year = $request->query->get('year', "");
+
+        $tv = json_decode($this->TMDBService->getTv($id, $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']), true);
+        if (!$tv) {
+            $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
+            return $this->render('series/error.html.twig', [
+                'serie' => $serie,
+                'serieViewing' => $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]),
+                'imageConfig' => $this->imageConfiguration->getConfig(),
+            ]);
+        }
+
+        return $this->displaySeriesPage($request, $tv, $page, $from, $id, null, $query, $year);
+    }
+
+    #[Route('/show/{id}/season/{seasonNumber}', name: 'app_series_tmdb_season', methods: ['GET'])]
+    public function season(Request $request, $id, $seasonNumber): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $imgConfig = $this->imageConfiguration->getConfig();
+
+        $from = $request->query->get('from');
+        $page = $request->query->get('p');
+        $query = $request->query->get('query');
+        $year = $request->query->get('year');
+        $backId = $request->query->get('back');
+
+        // user preferred language-country, country
+        $locale = $request->getLocale();
+        $countries = ['fr' => 'FR', 'en' => 'US', 'es' => 'ES', 'de' => 'DE'];
+        $country = $user?->getCountry() ?? $countries[$locale];
+        $language = ($user?->getPreferredLanguage() ?? $locale) . '-' . $country;
+
+        // Cookie pour le layout
+        $seasonsCookie = $this->seasonsCookie();
+
+        // La série (db ou the movie db) et sa bannière
+        $serie = $this->serie($id, $request->getLocale());
+        $serie['backdropPath'] = $this->fullUrl('backdrop', 3, $serie['backdropPath'], 'no_banner_dark.png', $imgConfig);
+
+        // La saison (db ou the movie db) et son affiche (poster)
+        $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $language, ['credits', 'watch/providers']);
+        $season = json_decode($standing, true);
+
+        // Si les données de la saison ne sont pas disponibles dans la langue de l'utilisateur, on les prend en anglais et on les traduit (deepl)
+        $localization = $this->seasonLocalizedOverview($id, $season, $seasonNumber, $locale);
+
+        $credits = $season['credits'];
+        if (!key_exists('cast', $credits)) {
+            $credits['cast'] = [];
+        }
+        $season['poster_path'] = $this->fullUrl('poster', 3, $season['poster_path'], 'no_poster.png', $imgConfig);
+
+        // Les épisodes (the movie db), l'ajustement de la date (J+1 ?) et leurs affiches (still)
+        $episodes = [];
+        $isShifted = $serie['userSerieViewing'] && $serie['userSerieViewing']->isTimeShifted();
+        foreach ($season['episodes'] as $episode) {
+            if ($isShifted) {
+                if ($episode['air_date']) {
+                    $airDate = $this->dateService->newDate($episode['air_date'], $user->getTimezone())?->modify('+1 day')->format('Y-m-d');
+                    $episode['air_date'] = $airDate;
+                }
+            }
+            $episode['still_path'] = $this->fullUrl('still', 3, $episode['still_path'], 'no_poster.png', $imgConfig);
+
+            $episodes[] = $episode;
+            if (key_exists('cast', $episode)) {
+                foreach ($episode['cast'] as $cast) {
+                    if (!in_array($cast, $credits['cast'])) {
+                        $credits['cast'][] = $cast;
+                    }
+                }
+            }
+            if (key_exists('guest_stars', $episode)) {
+                foreach ($episode['guest_stars'] as $cast) {
+                    if (!in_array($cast, $credits['cast'])) {
+                        $credits['cast'][] = $cast;
+                    }
+                }
+            }
+        }
+        // Ajout de l'url des profils des acteurs et de l'équipe technique
+        foreach ($credits['cast'] as $key => $cast) {
+//            dump($cast);
+            $credits['cast'][$key]['profile_path'] = $this->fullUrl('profile', 2, $cast['profile_path'], 'no_profile.png', $imgConfig);
+        }
+        if (key_exists('crew', $credits)) {
+            foreach ($credits['crew'] as $key => $crew) {
+                $credits['crew'][$key]['profile_path'] = $this->fullUrl('profile', 2, $crew['profile_path'], 'no_profile.png', $imgConfig);
+            }
+        }
+        // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
+        if ($serie['userSerieViewing']) {
+            // les infos de la saison
+            $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
+            // les infos des épisodes
+            $episodes = array_map(function ($episode) use ($seasonViewing, $isShifted) {
+                $episodeViewing = $this->getEpisodeViewing($seasonViewing, $episode['episode_number']);
+                $episode['viewing'] = $episodeViewing;
+                return $episode;
+            }, $episodes);
+
+            $episodesVotes = $this->seasonEpisodeVotes($episodes);
+            $modifications = $this->seasonCheckEpisodeDates($user, $episodes, $isShifted);
+        } else {
+            $seasonViewing = null;
+        }
+
+        foreach ($episodes as $episode) {
+            if (array_key_exists('viewing', $episode)) {
+                /** @var EpisodeViewing $episodeViewing */
+                $episodeViewing = $episode['viewing'];
+                // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
+                $airDate = $this->dateService->newDateImmutable($episode['air_date'], $user->getTimezone(), true)->modify($isShifted ? "-1 day" : "0 day");
+                if ($episodeViewing->getAirDate()?->format('Y-m-d') != $airDate->format('Y-m-d')) {
+                    $modifications[] = [
+                        'episode' => $episode['episode_number'],
+                        'episode air date' => $episode['air_date'],
+                        'airDate' => $airDate,
+                        'viewing air date' => $episodeViewing->getAirDate(),
+                    ];
+                    $episodeViewing->setAirDate($airDate);
+                    $this->episodeViewingRepository->save($episodeViewing, true);
+                }
+            }
+        }
+
+        $watchProviders = $this->seasonWatchProviders($id, $season, $language, $country);
+
+        // Breadcrumb
+        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $request->query->get('c', "FR") : null);
+
+//        dump([
+//            'serie' => $serie,
+//            'env' => $_ENV['APP_ENV'],
+//            'season' => $season,
+//            'modifications' => $modifications,
+//            'watchProviders' => $watchProviders,
+//        ]);
+
+        return $this->render('series/season.html.twig', [
+            'serie' => $serie,
+            'season' => $season,
+            'seasonViewing' => $seasonViewing,
+            'episodes' => $episodes,
+            'episodesVotes' => $episodesVotes ?? null,
+            'credits' => $credits,
+            'watchProviders' => $watchProviders['seasonWatchProviders'],
+            'allWatchProviders' => $watchProviders['allWatchProviders'],
+            'seasonsCookie' => $seasonsCookie,
+            'modifications' => $modifications ?? null,
+            'localization' => $localization,
+            'breadcrumb' => $breadcrumb,
+            'parameters' => [
+                'from' => $from,
+                'page' => $page,
+                'query' => $query,
+                'year' => $year,
+                "backId" => $backId
+            ],
+        ]);
+    }
+
+    #[Route('/filter/save/settings', name: 'app_series_filter_save_settings', methods: ['POST'])]
+    public function saveTvFilterSettings(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
+        $settings->setData($data);
+        $this->settingsRepository->save($settings, true);
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/filter/load/settings', name: 'app_series_filter_load_settings', methods: ['POST'])]
+    public function loadTvFilterSettings(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
+
+        return $this->json($settings->getData());
+    }
+
+    #[Route('/episode/substitute/name', name: 'app_episode_substitute_name', methods: ['GET'])]
+    public function saveSubstituteName(Request $request): Response
+    {
+        $data = json_decode($request->query->get('data'), true);
+
+        $episodeViewing = $this->episodeViewingRepository->findOneBy(['id' => $data['id']]);
+        $episodeViewing->setSubstituteName($data['substituteName']);
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        return $this->json([
+            'data id' => $data['id'],
+            'data substituteName' => $data['substituteName'],
+        ]);
+    }
+
+    #[Route('/episode/duration', name: 'app_episode_duration', methods: ['GET'])]
+    public function saveEpisodeDuration(Request $request): Response
+    {
+        $data = json_decode($request->query->get('data'), true);
+        $serieId = $data['serieId'];
+        $seasonNumber = $data['seasonNumber'];
+        $episodeNumber = $data['episodeNumber'];
+        $runtime = $data['runtime'];
+
+        $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
+        $episodeDurations = $serie->getEpisodeDurations();
+        $episodeDurations[$seasonNumber][$episodeNumber - 1] = [$episodeNumber => $runtime];
+        $serie->setEpisodeDurations($episodeDurations);
+        $this->serieRepository->save($serie, true);
+
+        return $this->json([
+            'result' => 'ok',
+            'runtime' => $runtime,
+        ]);
+    }
+
+    #[Route('/set/localized/name', name: 'app_series_set_localized_name', methods: ['POST'])]
+    public function setLocalizedName(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'];
+        $id = $data['id'];
+        $locale = $request->getLocale();
+//        dump(['name' => $name, 'id' => $id, 'locale' => $locale]);
+
+        $serie = $this->serieRepository->find($id);
+        $localizedName = $this->serieLocalizedNameRepository->findOneBy(['serie' => $serie, 'locale' => $locale]);
+        if ($localizedName == null) {
+            $localizedName = new SerieLocalizedName();
+            $localizedName->setSerie($serie);
+            $localizedName->setLocale($locale);
+        }
+        $localizedName->setName($name);
+        $this->serieLocalizedNameRepository->save($localizedName, true);
+
+        return $this->json([
+            'name' => $serie->getName(),
+            'localized' => $localizedName->getName(),
+            'result' => true,
+        ]);
+    }
+
+    #[Route('/set/direct/link/{id}', name: 'app_series_set_direct_link', methods: ['POST'])]
+    public function setDirectLink(Request $request, Serie $serie): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $link = $data['link'];
+
+        $serie->setDirectLink($link);
+        $this->serieRepository->save($serie, true);
+
+        return $this->json([
+            'result' => true,
+        ]);
+    }
+
+    public function getCountries(): array
+    {
+        $results = $this->serieRepository->getCountries();
+        $arr = [];
+        foreach ($results as $result) {
+            $countries = json_decode($result['origin_country'], true);
+            foreach ($countries as $country) {
+                $arr[] = $country;
+            }
+        }
+        $arr = array_unique($arr);
+        $arr = array_values($arr);
+//        dump($arr);
+        $countries = [];
+        foreach ($arr as $country) {
+            if (strlen($country) == 2)
+                $countries[$country] = Countries::getName($country);
+        }
+        asort($countries, SORT_FLAG_CASE | SORT_STRING);
+        return array_merge(["all" => $this->translator->trans("All countries")], $countries);
+    }
+
+    public function cookies($request, $backFromDetail, $somethingChanged, $perPage, $sort, $order): array
+    {
+        if ($somethingChanged) {
+            setcookie("series", json_encode(['pp' => $perPage, 'ob' => $sort, 'o' => $order]), strtotime('+30 days'), '/');
+        }
+        if ($request->query->count() == 0 || $backFromDetail) {
+            if (isset($_COOKIE['series'])) {
+                $cookie = json_decode($_COOKIE['series'], true);
+                return [$cookie['pp'], $cookie['ob'], $cookie['o']];
+            } else {
+                return [20, 'firstDateAir', 'desc'];
+            }
+        }
+        return [$perPage, $sort, $order];
+    }
+
+    public function isSerieAiringSoon($serie, $now): array
+    {
+        if ($serie['status'] == 'In Production' || $serie['status'] == 'Planned') {
+            $serie['prodStatus'] = $this->translator->trans($serie['status']);
+            $serie['prodClass'] = $serie['status'] == 'In Production' ? 'in-production' : 'planned';
+            return $serie;
+        }
+        $serie['today'] = false;
+        $serie['tomorrow'] = false;
+        if ($serie['viewing']->isSerieCompleted()) {
+            return $serie;
+        }
+        $viewing = $serie['viewing'];
+        $findIt = false;
+        /** @var SerieViewing $viewing */
+        foreach ($viewing->getSeasons() as $season) {
+            if ($season->isSeasonCompleted() || $season->getSeasonNumber() == 0) {
+                continue;
+            }
+            foreach ($season->getEpisodes() as $episode) {
+                if ($episode->getViewedAt()) {
+                    continue;
+                }
+                if ($episode->getAirDate()) {
+                    $date = $episode->getAirDate();
+
+                    if ($viewing->isTimeShifted()) {
+                        $date = $date->modify('+1 day');
+                    }
+                    $episodeDiff = date_diff($now, $date);
+                    if (!$findIt) {
+                        if ($episodeDiff->days == 0) {
+                            $serie['today'] = true;
+                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                            $findIt = true;
+                        }
+                    }
+                    if (!$findIt) {
+                        if ($episodeDiff->days) {
+                            if ($episodeDiff->invert) {
+                                $serie['passed'] = $episode->getAirDate()->format("m/d/Y");
+                                if ($episodeDiff->y) {
+                                    $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
+                                } else {
+                                    if ($episodeDiff->m) {
+                                        $serie['passedText'] = $this->translator->trans("available since") . " " . ($episodeDiff->m + +($episodeDiff->d > 20 ? 1 : 0)) . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
+                                    } else {
+                                        if ($episodeDiff->d) {
+                                            if ($episodeDiff->d == 1) {
+                                                $serie['passedText'] = $this->translator->trans("available yesterday");
+                                            } else {
+                                                $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days]);
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                if ($episodeDiff->days == 1) {
+                                    $serie['tomorrow'] = true;
+                                } else {
+                                    $serie['next'] = $date->format("m/d/Y");
+                                    $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days]);
+                                    $serie['nextEpisodeDays'] = $episodeDiff->days;
+                                }
+                            }
+                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                            $findIt = true;
+                        }
+                    }
+                } else { // Nouvelle saison et nouvel épisode sans date de diffusion
+                    $findIt = true;
+                    $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
+                    $serie['nextEpisodeNoDate'] = true;
+                }
+                if ($findIt) {
+                    break;
+                }
+            }
+        }
+
+        return $serie;
+    }
+
+    public function getSeriesViews($user, $results, $imageConfig, $locale): array
+    {
+        $ids = array_map(function ($result) {
+            return $result->getId();
+        }, $results);
+        $serieViewings = $this->serieViewingRepository->findBy(['user' => $user, 'serie' => $ids]);
+        $favorites = $this->favoriteRepository->findBy(['type' => 'serie', 'userId' => $user->getId(), 'mediaId' => $ids]);
+        $networks = $this->serieRepository->networks($ids);
+
+        $series = [];
+        /** @var Serie $result */
+        foreach ($results as $result) {
+            $serie = $this->serie2array($result, $locale);
+            $serie['viewing'] = $this->getSerieViews($result->getId(), $serieViewings);
+            $serie['favorite'] = $this->isFavorite($serie, $favorites);
+            $serie['networks'] = $this->getNetworks($serie, $networks);
+
+            $this->savePoster($serie['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+
+            $series[] = $serie;
+        }
+        return $series;
+    }
+
+    public function getSerieViews($id, $serieViewings): ?SerieViewing
+    {
+        /** @var SerieViewing $serieViewing */
+        foreach ($serieViewings as $serieViewing) {
+            if ($serieViewing->getSerie()->getId() == $id) {
+                return $serieViewing;
+            }
+        }
+        return null;
+    }
+
+    public function isFavorite($serie, $favorites): bool
+    {
+        /** @var Favorite $favorite */
+        foreach ($favorites as $favorite) {
+            if ($favorite->getMediaId() == $serie['id']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getNetworks($serie, $networks): array
+    {
+        $serieNetworks = [];
+        /** @var Networks $network */
+        foreach ($networks as $network) {
+            if ($network['serieId'] == $serie['id']) {
+                $serieNetworks[] = $network;
+            }
+        }
+        return $serieNetworks;
+    }
+
+    public function serie2array(Serie $result, $locale): array
+    {
+        $tv = json_decode($this->TMDBService->getTv($result->getSerieId(), $locale), true);
+
+        $serie['id'] = $result->getId();
+        $serie['name'] = $result->getName();
+        $serie['posterPath'] = $result->getPosterPath();
+        $serie['backdropPath'] = $result->getBackdropPath();
+        $serie['serieId'] = $result->getSerieId();
+        $serie['firstDateAir'] = $result->getFirstDateAir();
+        $serie['createdAt'] = $result->getCreatedAt();
+        $serie['updatedAt'] = $result->getUpdatedAt();
+        $serie['status'] = $result->getStatus();
+        $serie['tmdb_status'] = $tv['status'];
+        $serie['overview'] = $result->getOverview();
+        $serie['networks'] = $result->getNetworks();
+        $serie['numberOfEpisodes'] = $result->getNumberOfEpisodes();
+        $serie['numberOfSeasons'] = $result->getNumberOfSeasons();
+        $serie['originalName'] = $result->getOriginalName();
+        $serie['upcomingDateYear'] = $result->getUpcomingDateYear();
+        $serie['upcomingDateMonth'] = $result->getUpcomingDateMonth();
+
+        $serie['tmdb_next_episode_to_air'] = $tv['next_episode_to_air'];
+
+        return $serie;
+    }
+
+    public function saveImageFromUrl($imageUrl, $localeFile): bool
+    {
+        if (!file_exists($localeFile)) {
+
+            // Vérifier si l'URL de l'image est valide
+            if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+                // Récupérer le contenu de l'image à partir de l'URL
+                $imageContent = file_get_contents($imageUrl);
+
+                // Ouvrir un fichier en mode écriture binaire
+                $file = fopen($localeFile, 'wb');
+
+                // Écrire le contenu de l'image dans le fichier
+                fwrite($file, $imageContent);
+
+                // Fermer le fichier
+                fclose($file);
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function todayAiringSeriesV2(DateTimeImmutable $date): array
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $today = $date->format('Y-m-d');
+        $yesterday = $date->sub(new DateInterval('P1D'))->format('Y-m-d');
+
+        $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $yesterday, 1, 20);
+        /*        dump([
+                    'today' => $today,
+                    'yesterday' => $yesterday,
+                    'episodes of the day' => $episodesOfTheDay
+                ]);*/
+        $episodesOfTheDayBySeries = [];
+
+        foreach ($episodesOfTheDay as $episode) {
+            $found = false;
+            foreach ($episodesOfTheDayBySeries as &$ep) {
+                if (!$found && $ep['serieId'] === $episode['serie_id'] && $ep['seasonNumber'] === $episode['season_number']) {
+                    $ep['episodeNumbers'][] = $episode['episode_number'];
+                    $ep['viewed'] = $episode['viewed'];
+                    $found = true;
+                }
+            }
+            if (!$found) {
+                $episodesOfTheDayBySeries[] = [
+                    'serieId' => $episode['serie_id'],
+                    'serieName' => $episode['name'],
+                    'seriePosterPath' => $episode['poster_path'],
+                    'seasonNumber' => $episode['season_number'],
+                    'seasonEpisodeCount' => $episode['episode_count'],
+                    'episodeNumbers' => [$episode['episode_number']],
+                    'viewed' => $episode['viewed'],
+                ];
+            }
+        }
+        return $episodesOfTheDayBySeries;
+    }
+
+    public function getTodayAiringBackdrop($airings): ?string
+    {
+        $index = rand(0, count($airings) - 1);
+        $pos = 0;
+        foreach ($airings as $airing) {
+            if ($index === $pos++) {
+                $serie = $this->serieRepository->find($airing['serieId']);
+                return $serie->getBackdropPath();
+            }
+        }
+        return null;
+    }
+
+    public function getNothingImages(): array
+    {
+        $images = scandir($this->getParameter('kernel.project_dir') . '/public/images/series/today');
+        return array_slice($images, 2);
+    }
+
     function getPosters(): array|false
     {
         $posterFiles = scandir($this->getParameter('kernel.project_dir') . '/public/images/series/posters');
@@ -1137,6 +1577,7 @@ class SerieController extends AbstractController
 
     public function savePoster($posterPath, $posterUrl): void
     {
+        if (!$posterPath) return;
         $root = $this->getParameter('kernel.project_dir');
         if (!file_exists($root . "/public/images/series/posters" . $posterPath)) {
             $this->saveImageFromUrl(
@@ -1144,149 +1585,6 @@ class SerieController extends AbstractController
                 $root . "/public/images/series/posters" . $posterPath
             );
         }
-    }
-
-    #[Route('/search/{page}', name: 'app_series_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
-    public function search(Request $request, int $page): Response
-    {
-//        $this->logService->log($request, $this->getUser());
-        $tmdbService = $this->TMDBService;
-        $series = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
-        $query = $request->query->get('query');
-        $year = $request->query->get('year');
-
-        $form = $this->createForm(SerieSearchType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $result = $form->getData();
-            $query = $result['query'];
-            $year = $result['year'];
-            $page = 1;
-        }
-        if ($query && strlen($query)) {
-            $standing = $tmdbService->search($page, $query, $year, $request->getLocale());
-            $series = json_decode($standing, true);
-        }
-
-        /** @var User $user */
-        $user = $this->getUser();
-        return $this->render('series/search.html.twig', [
-            'form' => $form->createView(),
-            'query' => $query,
-            'year' => $year,
-            'series' => $series['results'],
-            'serieIds' => $this->mySerieIds($user),
-            'pages' => [
-                'page' => $page,
-                'total_pages' => $series['total_pages'],
-                'total_results' => $series['total_results'],
-                'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
-            ],
-            'quotes' => (new QuoteService)->getRandomQuotes(),
-            'user' => $user,
-            'breadcrumb' => $this->breadcrumb(self::SEARCH_SERIES),
-            'from' => self::SEARCH_SERIES,
-            'imageConfig' => $this->imageConfiguration->getConfig(),
-        ]);
-    }
-
-    #[Route('/popular', name: 'app_series_popular', methods: ['GET'])]
-    public function popular(Request $request): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $page = $request->query->getInt('p', 1);
-        $locale = $request->getLocale();
-
-        $standing = $this->TMDBService->getSeries(self::TOP_RATED, $page, $locale, $user->getTimezone());
-        $series = json_decode($standing, true);
-        $imageConfig = $this->imageConfiguration->getConfig();
-
-        foreach ($series['results'] as $serie) {
-            $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
-        }
-
-        $breadcrumb = $this->breadcrumb(self::POPULAR_SERIES);
-
-        return $this->render('series/popular.html.twig', [
-            'series' => $series['results'],
-            'serieIds' => $this->mySerieIds($user),
-            'pages' => [
-                'total_results' => $series['total_results'],
-                'page' => $page,
-                'per_page' => 20,
-                'link_count' => self::LINK_COUNT,
-                'paginator' => $this->paginator($series['total_results'], $page, 20, self::LINK_COUNT),
-            ],
-            'breadcrumb' => $breadcrumb,
-            'from' => self::POPULAR_SERIES,
-            'user' => $user,
-            'posters' => $this->getPosters(),
-            'posterPath' => '/images/series/posters/',
-            'imageConfig' => $this->imageConfiguration->getConfig(),
-        ]);
-    }
-
-    #[Route('/filter', name: 'app_series_filter', methods: ['GET', 'POST'])]
-    public function filter(Request $request): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-
-        $tvFilterSettings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
-        if ($tvFilterSettings)
-            $data = $tvFilterSettings->getData();
-        else
-            $data = $this->createTvFilterSettings($user);
-
-        $watchProviders = $this->getWatchProviders($user->getPreferredLanguage() ?? 'en-US', $user->getCountry() ?? 'US');
-
-        $data['watchProviderSelect'] = $watchProviders['watchProviderSelect'];
-        $data['genreSelect'] = $this->getTvGenres($user->getPreferredLanguage() ?? 'en-US');
-        $data['watchRegionSelect'] = $this->getAvailableRegions();
-
-        $form = $this->createForm(TvFilterType::class, null, [
-            'data' => $data,
-        ]);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-        }
-
-        $filters = $this->getTvFilters($data);
-        $filterString = "&page=" . $data['page'] . "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
-        foreach ($filters as $key => $value) {
-            $filterString .= "&$key=$value";
-        }
-//        dump([
-//            '$filters' => $filters,
-//            '$filterString' => $filterString,
-//        ]);
-        $standing = $this->TMDBService->getFilterTv($filterString);
-        $series = json_decode($standing, true);
-        $totalResults = $series['total_results'];
-        $totalPages = $series['total_pages'];
-        $imageConfig = $this->imageConfiguration->getConfig();
-
-        $series = array_map(function ($serie) use ($imageConfig) {
-            $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
-            $serie['poster_path'] = $this->fullUrl("poster", 3, $serie['poster_path'], "no_poster_dark.png", $imageConfig);
-            return $serie;
-        }, $series['results']);
-
-        $breadcrumb = $this->breadcrumb(self::SERIES_FILTER);
-
-        return $this->render('series/filter.html.twig', [
-            'series' => $series,
-            'serieIds' => $this->mySerieIds($user),
-            'form' => $form->createView(),
-            'logos' => $watchProviders['watchProviderLogos'],
-            'total_results' => $totalResults,
-            'total_pages' => $totalPages,
-            'breadcrumb' => $breadcrumb,
-            'from' => self::SERIES_FILTER,
-            'user' => $user,
-        ]);
     }
 
     public function getTvFilters(array $data): array
@@ -1399,29 +1697,6 @@ class SerieController extends AbstractController
         $this->settingsRepository->save($settings, true);
 
         return $data;
-    }
-
-    #[Route('/filter/save/settings', name: 'app_series_filter_save_settings', methods: ['POST'])]
-    public function saveTvFilterSettings(Request $request): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $data = json_decode($request->getContent(), true);
-        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
-        $settings->setData($data);
-        $this->settingsRepository->save($settings, true);
-
-        return $this->json(['success' => true]);
-    }
-
-    #[Route('/filter/load/settings', name: 'app_series_filter_load_settings', methods: ['POST'])]
-    public function loadTvFilterSettings(): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'tv_filter']);
-
-        return $this->json($settings->getData());
     }
 
     public function getWatchProviders($language, $watchRegion): array
@@ -1750,60 +2025,6 @@ class SerieController extends AbstractController
         return $ks;
     }
 
-    #[Route('/show/{id}', name: 'app_series_show', methods: ['GET'])]
-    public function show(Request $request, Serie $serie, BreadcrumbBuilder $bc): Response
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $tmdbService = $this->TMDBService;
-
-        $page = $request->query->getInt('p', 1);
-        $from = $request->query->get('from', self::MY_SERIES);
-        if ($from === self::SERIES_FROM_COUNTRY) {
-            $query = $request->query->get('c', "");
-        } else {
-            $query = $request->query->get('query', "");
-        }
-        $year = $request->query->get('year', "");
-
-        $tv = json_decode($tmdbService->getTv($serie->getSerieId(), $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']), true);
-        if (!$tv) {
-            return $this->render('series/error.html.twig', [
-                'serie' => $serie,
-                'serieViewing' => $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]),
-                'imageConfig' => $this->imageConfiguration->getConfig(),
-            ]);
-        }
-        return $this->displaySeriesPage($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
-    }
-
-    #[Route('/tmdb/{id}', name: 'app_series_tmdb', methods: ['GET'])]
-    public function tmdb(Request $request, $id): Response
-    {
-        if ($this->getUser()) {
-            $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
-            if ($serie) {
-                return $this->redirectToRoute('app_series_show', ['id' => $serie->getId()]);
-            }
-        }
-        $page = $request->query->getInt('p', 1);
-        $from = $request->query->get('from', self::POPULAR_SERIES);
-        $query = $request->query->get('query', "");
-        $year = $request->query->get('year', "");
-
-        $tv = json_decode($this->TMDBService->getTv($id, $request->getLocale(), ['credits', 'keywords', 'watch/providers', 'similar', 'images', 'videos']), true);
-        if (!$tv) {
-            $serie = $this->serieRepository->findOneBy(['serieId' => $id]);
-            return $this->render('series/error.html.twig', [
-                'serie' => $serie,
-                'serieViewing' => $this->serieViewingRepository->findOneBy(['user' => $this->getUser(), 'serie' => $serie]),
-                'imageConfig' => $this->imageConfiguration->getConfig(),
-            ]);
-        }
-
-        return $this->displaySeriesPage($request, $tv, $page, $from, $id, null, $query, $year);
-    }
-
     public function displaySeriesPage(Request $request, array $tv, int $page, string $from, $backId, Serie|null $serie, $query = "", $year = ""): Response
     {
 //        dump($tv);
@@ -2088,155 +2309,6 @@ class SerieController extends AbstractController
             'ygg' => $ygg,
             'yggOriginal' => $yggOriginal,
             'imageConfig' => $imgConfig,
-        ]);
-    }
-
-    #[Route('/show/{id}/season/{seasonNumber}', name: 'app_series_tmdb_season', methods: ['GET'])]
-    public function season(Request $request, $id, $seasonNumber): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $imgConfig = $this->imageConfiguration->getConfig();
-
-        $from = $request->query->get('from');
-        $page = $request->query->get('p');
-        $query = $request->query->get('query');
-        $year = $request->query->get('year');
-        $backId = $request->query->get('back');
-
-        // user preferred language-country, country
-        $locale = $request->getLocale();
-        $countries = ['fr' => 'FR', 'en' => 'US', 'es' => 'ES', 'de' => 'DE'];
-        $country = $user?->getCountry() ?? $countries[$locale];
-        $language = ($user?->getPreferredLanguage() ?? $locale) . '-' . $country;
-
-        // Cookie pour le layout
-        $seasonsCookie = $this->seasonsCookie();
-
-        // La série (db ou the movie db) et sa bannière
-        $serie = $this->serie($id, $request->getLocale());
-        $serie['backdropPath'] = $this->fullUrl('backdrop', 3, $serie['backdropPath'], 'no_banner_dark.png', $imgConfig);
-
-        // La saison (db ou the movie db) et son affiche (poster)
-        $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, $language, ['credits', 'watch/providers']);
-        $season = json_decode($standing, true);
-
-        // Si les données de la saison ne sont pas disponibles dans la langue de l'utilisateur, on les prend en anglais et on les traduit (deepl)
-        $localization = $this->seasonLocalizedOverview($id, $season, $seasonNumber, $locale);
-
-        $credits = $season['credits'];
-        if (!key_exists('cast', $credits)) {
-            $credits['cast'] = [];
-        }
-        $season['poster_path'] = $this->fullUrl('poster', 3, $season['poster_path'], 'no_poster.png', $imgConfig);
-
-        // Les épisodes (the movie db), l'ajustement de la date (J+1 ?) et leurs affiches (still)
-        $episodes = [];
-        $isShifted = $serie['userSerieViewing'] && $serie['userSerieViewing']->isTimeShifted();
-        foreach ($season['episodes'] as $episode) {
-            if ($isShifted) {
-                if ($episode['air_date']) {
-                    $airDate = $this->dateService->newDate($episode['air_date'], $user->getTimezone())?->modify('+1 day')->format('Y-m-d');
-                    $episode['air_date'] = $airDate;
-                }
-            }
-            $episode['still_path'] = $this->fullUrl('still', 3, $episode['still_path'], 'no_poster.png', $imgConfig);
-
-            $episodes[] = $episode;
-            if (key_exists('cast', $episode)) {
-                foreach ($episode['cast'] as $cast) {
-                    if (!in_array($cast, $credits['cast'])) {
-                        $credits['cast'][] = $cast;
-                    }
-                }
-            }
-            if (key_exists('guest_stars', $episode)) {
-                foreach ($episode['guest_stars'] as $cast) {
-                    if (!in_array($cast, $credits['cast'])) {
-                        $credits['cast'][] = $cast;
-                    }
-                }
-            }
-        }
-        // Ajout de l'url des profils des acteurs et de l'équipe technique
-        foreach ($credits['cast'] as $key => $cast) {
-//            dump($cast);
-            $credits['cast'][$key]['profile_path'] = $this->fullUrl('profile', 2, $cast['profile_path'], 'no_profile.png', $imgConfig);
-        }
-        if (key_exists('crew', $credits)) {
-            foreach ($credits['crew'] as $key => $crew) {
-                $credits['crew'][$key]['profile_path'] = $this->fullUrl('profile', 2, $crew['profile_path'], 'no_profile.png', $imgConfig);
-            }
-        }
-        // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
-        if ($serie['userSerieViewing']) {
-            // les infos de la saison
-            $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
-            // les infos des épisodes
-            $episodes = array_map(function ($episode) use ($seasonViewing, $isShifted) {
-                $episodeViewing = $this->getEpisodeViewing($seasonViewing, $episode['episode_number']);
-                $episode['viewing'] = $episodeViewing;
-                return $episode;
-            }, $episodes);
-
-            $episodesVotes = $this->seasonEpisodeVotes($episodes);
-            $modifications = $this->seasonCheckEpisodeDates($user, $episodes, $isShifted);
-        } else {
-            $seasonViewing = null;
-        }
-
-        foreach ($episodes as $episode) {
-            if (array_key_exists('viewing', $episode)) {
-                /** @var EpisodeViewing $episodeViewing */
-                $episodeViewing = $episode['viewing'];
-                // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
-                $airDate = $this->dateService->newDateImmutable($episode['air_date'], $user->getTimezone(), true)->modify($isShifted ? "-1 day" : "0 day");
-                if ($episodeViewing->getAirDate()?->format('Y-m-d') != $airDate->format('Y-m-d')) {
-                    $modifications[] = [
-                        'episode' => $episode['episode_number'],
-                        'episode air date' => $episode['air_date'],
-                        'airDate' => $airDate,
-                        'viewing air date' => $episodeViewing->getAirDate(),
-                    ];
-                    $episodeViewing->setAirDate($airDate);
-                    $this->episodeViewingRepository->save($episodeViewing, true);
-                }
-            }
-        }
-
-        $watchProviders = $this->seasonWatchProviders($id, $season, $language, $country);
-
-        // Breadcrumb
-        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $request->query->get('c', "FR") : null);
-
-//        dump([
-//            'serie' => $serie,
-//            'env' => $_ENV['APP_ENV'],
-//            'season' => $season,
-//            'modifications' => $modifications,
-//            'watchProviders' => $watchProviders,
-//        ]);
-
-        return $this->render('series/season.html.twig', [
-            'serie' => $serie,
-            'season' => $season,
-            'seasonViewing' => $seasonViewing,
-            'episodes' => $episodes,
-            'episodesVotes' => $episodesVotes ?? null,
-            'credits' => $credits,
-            'watchProviders' => $watchProviders['seasonWatchProviders'],
-            'allWatchProviders' => $watchProviders['allWatchProviders'],
-            'seasonsCookie' => $seasonsCookie,
-            'modifications' => $modifications ?? null,
-            'localization' => $localization,
-            'breadcrumb' => $breadcrumb,
-            'parameters' => [
-                'from' => $from,
-                'page' => $page,
-                'query' => $query,
-                'year' => $year,
-                "backId" => $backId
-            ],
         ]);
     }
 
@@ -2576,42 +2648,6 @@ class SerieController extends AbstractController
         return $watchProviderList;
     }
 
-    #[Route('/episode/substitute/name', name: 'app_episode_substitute_name', methods: ['GET'])]
-    public function saveSubstituteName(Request $request): Response
-    {
-        $data = json_decode($request->query->get('data'), true);
-
-        $episodeViewing = $this->episodeViewingRepository->findOneBy(['id' => $data['id']]);
-        $episodeViewing->setSubstituteName($data['substituteName']);
-        $this->episodeViewingRepository->save($episodeViewing, true);
-
-        return $this->json([
-            'data id' => $data['id'],
-            'data substituteName' => $data['substituteName'],
-        ]);
-    }
-
-    #[Route('/episode/duration', name: 'app_episode_duration', methods: ['GET'])]
-    public function saveEpisodeDuration(Request $request): Response
-    {
-        $data = json_decode($request->query->get('data'), true);
-        $serieId = $data['serieId'];
-        $seasonNumber = $data['seasonNumber'];
-        $episodeNumber = $data['episodeNumber'];
-        $runtime = $data['runtime'];
-
-        $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
-        $episodeDurations = $serie->getEpisodeDurations();
-        $episodeDurations[$seasonNumber][$episodeNumber - 1] = [$episodeNumber => $runtime];
-        $serie->setEpisodeDurations($episodeDurations);
-        $this->serieRepository->save($serie, true);
-
-        return $this->json([
-            'result' => 'ok',
-            'runtime' => $runtime,
-        ]);
-    }
-
     public function getSeasonViewing(SerieViewing $serieViewing, int $seasonNumber): ?SeasonViewing
     {
         $seasonViewing = null;
@@ -2671,46 +2707,6 @@ class SerieController extends AbstractController
         }
 
         return $serie;
-    }
-
-    #[Route('/set/localized/name', name: 'app_series_set_localized_name', methods: ['POST'])]
-    public function setLocalizedName(Request $request): Response
-    {
-        $data = json_decode($request->getContent(), true);
-        $name = $data['name'];
-        $id = $data['id'];
-        $locale = $request->getLocale();
-//        dump(['name' => $name, 'id' => $id, 'locale' => $locale]);
-
-        $serie = $this->serieRepository->find($id);
-        $localizedName = $this->serieLocalizedNameRepository->findOneBy(['serie' => $serie, 'locale' => $locale]);
-        if ($localizedName == null) {
-            $localizedName = new SerieLocalizedName();
-            $localizedName->setSerie($serie);
-            $localizedName->setLocale($locale);
-        }
-        $localizedName->setName($name);
-        $this->serieLocalizedNameRepository->save($localizedName, true);
-
-        return $this->json([
-            'name' => $serie->getName(),
-            'localized' => $localizedName->getName(),
-            'result' => true,
-        ]);
-    }
-
-    #[Route('/set/direct/link/{id}', name: 'app_series_set_direct_link', methods: ['POST'])]
-    public function setDirectLink(Request $request, Serie $serie): Response
-    {
-        $data = json_decode($request->getContent(), true);
-        $link = $data['link'];
-
-        $serie->setDirectLink($link);
-        $this->serieRepository->save($serie, true);
-
-        return $this->json([
-            'result' => true,
-        ]);
     }
 
     public function getNextEpisodeToWatch(SerieViewing $serieViewing, $locale): ?array
