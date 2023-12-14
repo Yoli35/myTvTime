@@ -3358,11 +3358,11 @@
 
                         .started {
                             align-items: center;
-                            background-color: var(--gradient-ardoise-30);
-                            border: 2px solid var(--gradient-ardoise-40);
+                            background-color: var(--gradient-ardoise-70);
+                            border: 2px solid var(--gradient-ardoise-60);
                             border-radius: .5rem;
                             bottom: .5rem;
-                            color: var(--gradient-ardoise-90);
+                            color: var(--gradient-ardoise-10);
                             left: .5rem;
                             position: absolute;
                             display: flex;
@@ -3412,16 +3412,16 @@
 
             .episode {
                 @include flex-col();
-                background-color: var(--gradient-ardoise-40);
+                background-color: var(--gradient-ardoise-60);
                 border-radius: .5rem;
-                color: var(--gradient-ardoise-90);
+                color: var(--gradient-ardoise-10);
                 margin-top: .25rem;
                 padding: .25rem;
                 position: relative;
                 width: 100%;
 
                 &:has(div span.all) {
-                    background-color: var(--gradient-green-30);
+                    background-color: var(--gradient-green-70);
                 }
 
                 &:has(div span.spe) {
@@ -3434,10 +3434,10 @@
                 }
 
                 .episode-viewed {
-                    background-color: var(--gradient-green-30);
+                    background-color: var(--gradient-green-70);
                     border-radius: 50%;
-                    border: 2px solid var(--gradient-green-90);
-                    color: var(--gradient-green-90);
+                    border: 2px solid var(--gradient-green-10);
+                    color: var(--gradient-green-10);
                     height: 2.5rem;
                     line-height: 2.5rem;
                     position: absolute;
@@ -3497,27 +3497,28 @@
             z-index: 1;
 
             h1 {
-                color: var(--gradient-ardoise-90);
+                color: var(--gradient-ardoise-10);
                 font-size: 4rem;
                 font-weight: 900;
             }
 
             .week, .range {
-                color: var(--gradient-ardoise-90);
+                color: var(--gradient-ardoise-10);
                 font-size: 2.5rem;
             }
         }
 
         .day-names {
-            background-color: var(--gradient-ardoise-10-alpha-80);
+            background-color: var(--gradient-ardoise-75-alpha-25);
             border-radius: 1rem;
+            contain: paint;
             inset: 0;
             margin-block-end: 1rem;
             position: absolute;
             z-index: 0;
 
             .day-name {
-                color: var(--gradient-ardoise-90);
+                color: var(--gradient-ardoise-20);
                 font-size: 4rem;
                 font-weight: 900;
                 line-height: 1rem;
@@ -3545,13 +3546,14 @@
 
             .day {
                 @include flex-col(start, start);
-                background-color: var(--gradient-ardoise-40-alpha-50);
+                background-color: var(--gradient-ardoise-60-alpha-50);
                 border-radius: .5rem;
+                color: var(--gradient-ardoise-10);
                 gap: .5rem;
                 padding: .5rem;
 
                 &.today {
-                    background-color: var(--gradient-green-30);
+                    background-color: var(--gradient-green-70);
                 }
 
                 .date {
@@ -3569,16 +3571,16 @@
 
                         &:hover {
                             transform: scale(1.15);
-                            border-color: var(--gradient-ardoise-90);
+                            border-color: var(--gradient-ardoise-10);
                             border-radius: .5rem;
-                            outline: var(--gradient-ardoise-90);
+                            outline: var(--gradient-ardoise-10);
                             z-index: 1;
                         }
                     }
 
                     .no-episode {
                         align-items: center;
-                        background-color: var(--gradient-ardoise-40-alpha-50);
+                        background-color: var(--gradient-ardoise-60-alpha-50);
                         border-radius: .5rem;
                         display: flex;
                         font-size: 1.5rem;
@@ -3634,6 +3636,7 @@
                 width: 100%;
 
                 h3 {
+                    color: var(--gradient-ardoise-10);
                     font-size: 2rem;
                     font-weight: 100;
                     line-height: 1rem;
@@ -3648,9 +3651,9 @@
 
                     &:hover {
                         transform: scale(1.15);
-                        border-color: var(--gradient-ardoise-90);
+                        border-color: var(--gradient-ardoise-10);
                         border-radius: .5rem;
-                        outline: var(--gradient-ardoise-90);
+                        outline: var(--gradient-ardoise-10);
                         z-index: 1;
                     }
                 }
