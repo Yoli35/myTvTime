@@ -416,13 +416,17 @@
         </div>
     </div>
     {# Pages #}
-    {% for page in 1..total_pages %}
-        {% if page == form.page.vars.value %}
-            <div class="btn current-page">{{ page }}</div>
-        {% else %}
-            <button type="submit" name="{{ field_name(form.page) }}" value="{{ page }}" data-title="{{ 'Go to page'|trans }} {{ page }}" class="btn btn-primary">{{ page }}</button>
-        {% endif %}
-    {% endfor %}
+    {% if total_pages > 1 %}
+        <div class="pages">
+            {% for page in 1..total_pages %}
+                {% if page == form.page.vars.value %}
+                    <div class="btn current-page">{{ page }}</div>
+                {% else %}
+                    <button type="submit" name="{{ field_name(form.page) }}" value="{{ page }}" data-title="{{ 'Go to page'|trans }} {{ page }}" class="btn btn-primary">{{ page }}</button>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
     {# Submit #}
     <input type="submit" class="btn btn-primary ml-auto" value="{{ 'Search'|trans }}"/>
 </div>
