@@ -1,45 +1,11 @@
 {# {{ dump(form.with_genres) }} #}
 {{ form_start(form) }}
 <div class="form-row">
-    {#    Sort by and order by   #}
-    <div class="form-group">
-        <div class="form-field">
-            <label for="{{ form.sort_by.vars.id }}">
-                <div>{{ form.sort_by.vars.label|trans }}</div>
-                {{ form_widget(form.sort_by) }}
-            </label>
-        </div>
-        <div class="form-field">
-            <label for="{{ form.order_by.vars.id }}">
-                <div>{{ form.order_by.vars.label }}</div>
-                {{ form_widget(form.order_by) }}
-            </label>
-        </div>
-    </div>
-    {#    Page   #}
-    <div class="form-group">
-        <div class="form-switch {{ form.switch_page.vars.attr.class }}">
-            <label for="{{ field_name(form.switch_page) }}">
-                <input type="checkbox" {{ form.switch_page.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_page) }}" id="{{ field_name(form.switch_page) }}"/>
-                <span></span>
-            </label>
-        </div>
-        <div class="form-field">
-            {{ form_row(form.page, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        <div class="form-field">
-            {{ total_results }} {{ (total_results>1 ?'results':'result')|trans }}
-        </div>
-        /
-        <div class="form-field">
-            {{ total_pages }} {{ (total_pages>1 ?'pages':'page')|trans }}
-        </div>
-    </div>
     {#    Tools   #}
     <div class="form-group ml-auto">
         <i class="fa-solid fa-upload" id="reset-form" data-title="{{ 'Load last form settings'|trans }}"></i>
         <i class="fa-solid fa-download" id="save-form" data-title="{{ 'Save form settings'|trans }}"></i>
-        <i class="fa-solid fa-circle-arrow-up" id="toggle-view" data-title="{{ 'Toggle form settings'|trans}}"></i>
+        <i class="fa-solid fa-circle-arrow-up" id="toggle-view" data-title="{{ 'Toggle form settings'|trans }}"></i>
     </div>
 </div>
 <div class="form-row">
@@ -133,6 +99,48 @@
     </div>
 </div>
 <div class="form-row">
+    {#    Language   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_language) }}">
+                <input type="checkbox" {{ form.switch_language.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_language) }}" id="{{ field_name(form.switch_language) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ field_name(form.language) }}">
+                <div>{{ field_label(form.language) }}</div>
+                <select name="{{ field_name(form.language) }}" id="{{ field_name(form.language) }}">
+                    <option value="">{{ field_label(form.language) }}</option>
+                    {% for label, value in field_choices(form.language) %}
+                        <option value="{{ value }}" {{ field_value(form.language)==value?'selected':'' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+    </div>
+    {#    Timezone   #}
+    <div class="form-group">
+        <div class="form-switch">
+            <label for="{{ field_name(form.switch_timezone) }}">
+                <input type="checkbox" {{ form.switch_timezone.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_timezone) }}" id="{{ field_name(form.switch_timezone) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ field_name(form.timezone) }}">
+                <div>{{ field_label(form.timezone) }}</div>
+                <select name="{{ field_name(form.timezone) }}" id="{{ field_name(form.timezone) }}">
+                    <option value="">{{ field_label(form.timezone) }}</option>
+                    {% for label, value in field_choices(form.timezone) %}
+                        <option value="{{ value }}" {{ field_value(form.timezone)==value?'selected':'' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-row">
     {#    With origin country   #}
     <div class="form-group">
         <div class="form-switch">
@@ -143,7 +151,7 @@
         </div>
         <div class="form-field">
             <label for="{{ field_name(form.with_origin_country) }}">
-                <div>{{ field_label(form.with_origin_country) }}</div>
+                <span>{{ field_label(form.with_origin_country) }}</span>
                 <select name="{{ field_name(form.with_origin_country) }}" id="{{ field_name(form.with_origin_country) }}">
                     <option value="">{{ field_label(form.with_origin_country) }}</option>
                     {% for label, value in field_choices(form.with_origin_country) %}
@@ -246,48 +254,6 @@
                     {{ form_label(form.include_null_first_air_date) }}
                 </label>
             </div>
-        </div>
-    </div>
-</div>
-<div class="form-row">
-    {#    Language   #}
-    <div class="form-group">
-        <div class="form-switch">
-            <label for="{{ field_name(form.switch_language) }}">
-                <input type="checkbox" {{ form.switch_language.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_language) }}" id="{{ field_name(form.switch_language) }}"/>
-                <span></span>
-            </label>
-        </div>
-        <div class="form-field">
-            <label for="{{ field_name(form.language) }}">
-                <div>{{ field_label(form.language) }}</div>
-                <select name="{{ field_name(form.language) }}" id="{{ field_name(form.language) }}">
-                    <option value="">{{ field_label(form.language) }}</option>
-                    {% for label, value in field_choices(form.language) %}
-                        <option value="{{ value }}" {{ field_value(form.language)==value?'selected':'' }}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </label>
-        </div>
-    </div>
-    {#    Timezone   #}
-    <div class="form-group">
-        <div class="form-switch">
-            <label for="{{ field_name(form.switch_timezone) }}">
-                <input type="checkbox" {{ form.switch_timezone.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_timezone) }}" id="{{ field_name(form.switch_timezone) }}"/>
-                <span></span>
-            </label>
-        </div>
-        <div class="form-field">
-            <label for="{{ field_name(form.timezone) }}">
-                <div>{{ field_label(form.timezone) }}</div>
-                <select name="{{ field_name(form.timezone) }}" id="{{ field_name(form.timezone) }}">
-                    <option value="">{{ field_label(form.timezone) }}</option>
-                    {% for label, value in field_choices(form.timezone) %}
-                        <option value="{{ value }}" {{ field_value(form.timezone)==value?'selected':'' }}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </label>
         </div>
     </div>
 </div>
@@ -415,6 +381,49 @@
     </div>
 </div>
 <div class="form-row">
+    {#    Sort by and order by   #}
+    <div class="form-group">
+        <div class="form-field">
+            <label for="{{ form.sort_by.vars.id }}">
+                <div>{{ form.sort_by.vars.label|trans }}</div>
+                {{ form_widget(form.sort_by) }}
+            </label>
+        </div>
+        <div class="form-field">
+            <label for="{{ form.order_by.vars.id }}">
+                <div>{{ form.order_by.vars.label }}</div>
+                {{ form_widget(form.order_by) }}
+            </label>
+        </div>
+    </div>
+    {#    Page   #}
+    <div class="form-group">
+        <div class="form-switch {{ form.switch_page.vars.attr.class }}">
+            <label for="{{ field_name(form.switch_page) }}">
+                <input type="checkbox" {{ form.switch_page.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_page) }}" id="{{ field_name(form.switch_page) }}"/>
+                <span></span>
+            </label>
+        </div>
+        <div class="form-field">
+            {{ form_row(form.page, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-field">
+            {{ total_results }} {{ (total_results>1 ?'results':'result')|trans }}
+        </div>
+        /
+        <div class="form-field">
+            {{ total_pages }} {{ (total_pages>1 ?'pages':'page')|trans }}
+        </div>
+    </div>
+    {# Pages #}
+    {% for page in 1..total_pages %}
+        {% if page == form.page.vars.value %}
+            <div class="btn current-page">{{ page }}</div>
+        {% else %}
+            <button type="submit" name="{{ field_name(form.page) }}" value="{{ page }}" data-title="{{ 'Go to page'|trans }} {{ page }}" class="btn btn-primary">{{ page }}</button>
+        {% endif %}
+    {% endfor %}
+    {# Submit #}
     <input type="submit" class="btn btn-primary ml-auto" value="{{ 'Search'|trans }}"/>
 </div>
 {{ form_end(form) }}

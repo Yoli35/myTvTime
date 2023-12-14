@@ -3170,6 +3170,15 @@
 .filter-series {
     header {
         color: var(--gradient-ardoise-10);
+
+        .current-page {
+            align-items: center;
+            background-color: var(--gradient-orange-50);
+            color: var(--gradient-ardoise-10);
+            cursor: unset;
+            display: flex;
+            justify-content: center;
+        }
     }
 
     main {
@@ -3238,6 +3247,27 @@
             margin-block-end: 1rem;
             margin-inline: auto;
 
+            .home-discover {
+                a {
+                    display: block;
+                    position: relative;
+
+                    .countries {
+                        @include flex-row(center, center);
+                        background-color: var(--gradient-ardoise-90-alpha-80);
+                        border-radius: .25rem;
+                        gap: .25rem;
+                        padding: .25rem;
+                        position: absolute;
+                        right: .5rem;
+                        top: .5rem;
+
+                        .country {
+                            font-size: 1.75rem;
+                        }
+                    }
+                }
+            }
         }
     }
 }
