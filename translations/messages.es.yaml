@@ -1,257 +1,1690 @@
+# Translation for messages.es.yaml
+# en -> es
 # Home Header
-Movies: Películas
-Tv Shows: Programa de televisión
-Series: Series
-Search Movies by: Buscar películas por
-Search by Name: Buscar por nombre
-Search by Genre: Buscar por género
-Search by Year: Buscar por año
-Genre: Género
+API Platform: Plataforma API
+Home: Inicio
+Another action: Otra acción
 Date: Fecha
-Welcome: Bienvenida
-Toolbar with button groups: Barra de búsqueda de películas
-First group: Grupo de herramientas de búsqueda
-My Account: Mi cuenta
-My Movies: Mis películas
-Another action: Easy Admin
-Php Info: Php Info
-Logout: Cerrar sesión
-Navigation: Navegación
-French: Francés
 English: Inglés
+First group: Primer grupo
+French: Francés
+Genre: Género
 German: Alemán
+Latest Serie: Última serie
+Login: Iniciar sesión
+Logout: Cerrar sesión
+Movie: Película
+Movies: Películas
+My Account: Mi cuenta
+My Events: Mis eventos
+My Movie lists: Mis listas de películas
+My Movies: Mis películas
+My series: Mis series
+Navigation: Navegación
+Php Info: Información de PHP
+Logs: Registros
+People search: Búsqueda de personas
+Pin a list: Fijar una lista
+Select a list: Seleccionar una lista
+Popular series: Series populares
+Search Movies by: Buscar películas por
+Search by Date: Buscar por fecha
+Search by Genre: Buscar por género
+Search by Name: Buscar por nombre
+search by: buscar por
+Series: Series
+Series Airing Today: Series que se emiten hoy
+Series On The Air: Series en el aire
 Spanish: Español
+Toolbar with button groups: Barra de herramientas con grupos de botones
+Top rated Series: Series mejor valoradas
+Tv Shows: Programas de televisión
+Welcome: Bienvenido
+Search by tag: Buscar por etiqueta
+Go to the search by tag page: Ir a la página de búsqueda por etiqueta
+Youtube video search: Búsqueda de videos de Youtube
+Search for movies, TV shows and people: Buscar películas, programas de televisión y personas
+No image: Sin imagen
+People: Personas
+Among your films, series and their castings: Entre tus películas, series y sus repartos
+Results in new window: Resultados en nueva ventana
+
+# Activity
+Actions: Acciones
+Activate Activity: Activar la actividad
+Activate: Activar
+Activity goals: Objetivos de la actividad
+Activity of week: Actividad de la semana
+Activity: Actividad
+Back to challenges: Volver a los desafíos
+Challenge end: Fin del desafío
+Challenge list: Lista de desafíos
+Challenge start: Inicio del desafío
+Challenge: Desafío
+Challenges completed: Desafíos completados
+Challenges in progress: Desafíos en curso
+Choose a challenge: Elija un desafío
+Click me to edit: Haz clic en mí para editar
+Click the goals button to modify: Haga clic en el botón de objetivos para modificar
+Completed: Completado
+Delete challenge: Eliminar desafío
+Distance covered: Distancia recorrida
+Distance: Distancia
+Edit challenge: Editar desafío
+End date: Fecha de finalización
+Exercise Goal (minutes): Objetivo de ejercicio (minutos)
+Exercise duration: Duración del ejercicio
+Exercise: Ejercicio
+Goal: Objetivo
+Goals: Objetivos
+Hello, today is added to your activity: Hola, hoy se añade a tu actividad
+Move Goal (KCal): Mover el objetivo (KCal)
+Move challenge: Mover el desafío
+Move: Mover
+New challenge: Nuevo desafío
+New: Nuevo
+No activity: Sin actividad
+Number of steps: Número de pasos
+One missing day added: Un día perdido añadido
+Quantity: Cantidad
+Recent activity: Actividad reciente
+Show challenge: Mostrar desafío
+Stand Up Goal: Objetivo de levantarse
+Stand up: Levántate
+Start date: Fecha de inicio
+Steps: Pasos
+Value: Valor
+Week: Semana
+Yes: Sí
+back to activity: volver a la actividad
+count missing days added: cuenta de días perdidos añadidos
+distance: distancia
+exercise_result: resultado del ejercicio
+goal: objetivo
+h: h
+km: km
+steps: pasos
+
+#Alarm
+Days: Días
+Every %days% days: Cada %days% días
+Every day: Todos los días
+Every: Cada
+Fri: Vie
+Mon: Lun
+New alarm: Nueva alarma
+Sat: Sáb
+Simple alarm: Alarma simple
+Sun: Dom
+Thu: Jue
+Time: Hora
+Today at: Hoy a las
+Tomorrow at: Mañana a las
+Tue: Mar
+Wed: Mié
+
+#settings
+Auto: Auto
+Dark: Oscuro
+Light: Luz
+Ok: Ok
+Saturation: Saturación
+Theme: Tema
+
+#home
+favorite movies: películas favoritas
+favorite series: series favoritas
+last added movies: últimas películas añadidas
+last added series: últimas series añadidas
+last modified series: últimas series modificadas
+last updated series: últimas series actualizadas
+popular movies: películas populares
+popular people: personas populares
+popular series: series populares
+trending of the week: tendencias de la semana
+trending today: tendencias de hoy
+
+# Show code
+action.close: cerrar
+action.show_code: mostrar código
+not_available: no disponible
+title.controller_code: código del controlador
+title.source_code: código fuente
+title.twig_template_code: código de la plantilla twig
 
 # Registration
-Register: Registro
-Registration: Registro
-Email: Dirección electrónica
-Username: Nombre de usuario
-Password: Contraseña
-Repeat Password: Confirmar contraseña
-Agree terms: Aceptar las condiciones de uso
+Agree terms: Acepto los términos
+Change password: Cambiar contraseña
+Cheers: Saludos
+Choose a username: Elija un nombre de usuario
+Confirm my Email: Confirmar mi correo electrónico
+Confirm new password: Confirmar nueva contraseña
+Confirm your password: Confirme su contraseña
 Connexion: Conexión
-There is already an account with this email: Ya existe una cuenta con este correo
-You should agree to our terms.: Debe aceptar nuestros términos.
+Current password: Contraseña actual
+Email address: Dirección de correo electrónico
+Email: Correo electrónico
+Enter your password: Introduzca su contraseña
+Hi! Please confirm your email!: ¡Hola! Por favor, confirme su correo electrónico.
+Keep me logged in: Mantenerme conectado
+New password: Nueva contraseña
+Password: Contraseña
+Please Confirm your Email: Por favor, confirme su correo electrónico
+Please confirm your email address by clicking the following link: Por favor, confirme su dirección de correo electrónico haciendo clic en el siguiente enlace
+Register: Registrarse
+Registration: Registro
+Repeat Password: Repetir contraseña
+There is already an account with this email: Ya existe una cuenta con este correo electrónico
+This link will expire in: Este enlace caducará en
+Username: Nombre de usuario
+You should agree to our terms.: Deberías aceptar nuestros términos.
+Your email address has been verified.: Su dirección de correo electrónico ha sido verificada.
 Your password should be at least: Su contraseña debe tener al menos
 characters: caracteres
-Please Confirm your Email: Por favor, confirma tu email
-Hi! Please confirm your email!: Hola, confirme su dirección de correo electrónico.
-Please confirm your email address by clicking the following link: Confirme su dirección de correo electrónico haciendo clic en este enlace
-Confirm my Email: Confirmar mi dirección de correo electrónico
-This link will expire in: Este enlace expirará en
-Cheers: ¡Por ti!
-Your email address has been verified.: Tu dirección de email ha sido verificada.
-Keep me logged in: Mantenerme conectado
+
+# Contact
+Contact request from: Solicitud de contacto de
+Contact: Contacto
+Content of the message : Contenido del mensaje
+Drop a image file: Suelta un archivo de imagen
+Email address of the user: Dirección de correo electrónico del usuario
+Image (JPG, PNG file): Imagen (archivo JPG, PNG)
+Image attachment: Adjunto de imagen
+It may take a few days to receive a response.: Puede tardar unos días en recibir una respuesta.
+Message: Mensaje
+New contact message from: Nuevo mensaje de contacto de
+Send: Enviar
+Subject: Asunto
+Your message has been successfully send.: Su mensaje ha sido enviado con éxito.
 
 # Home Paginator
 First Page: Primera página
 Last Page: Última página
-Previous Page: Página anterior
 Next Page: Página siguiente
 Page: Página
-Total Pages: Número de páginas
-Total Results: Número de resultados
+Previous Page: Página anterior
+Total Pages: Páginas totales
+Total Results: Resultados totales
+
+# Blog
+Answer: Responder
+Are you sure you want to delete this item: ¿Estás seguro de que quieres eliminar este elemento?
+Article: Artículo
+ArticleImage index: Índice de ArticleImage
+Be the first to react!: ¡Sé el primero en reaccionar!
+Blog: Blog
+By: Por
+Comments: Comentarios
+Create new ArticleImage: Crear nueva ArticleImage
+Create new: Crear nuevo
+Created at: Creado en
+Delete: Eliminar
+Drop: Soltar
+Edit ArticleImage: Editar ArticleImage
+Modified at: Modificado en
+New ArticleImage: Nueva ArticleImage
+Nothing to show yet: Todavía no hay nada que mostrar
+Path: Ruta
+React!: ¡Reacciona!
+Save: Guardar
+Update: Actualizar
+back to list: volver a la lista
+edit: editar
+show: mostrar
+New article: Nuevo artículo
+Create a new article: Crear un nuevo artículo
+Publish this article: Publicar este artículo
+Abstract / Subtitle: Resumen / Subtítulo
+Thumbnail (JPG, PNG file): Miniatura (archivo JPG, PNG)
+Banner (JPG, PNG file): Banner (archivo JPG, PNG)
+Add article: Añadir artículo
+Edit article: Editar artículo
+Delete article:  Eliminar artículo
+Delete this article?: ¿Eliminar este artículo?
+Do you really want to delete this article?: ¿Realmente quieres eliminar este artículo?
+By myself: Por mí mismo
+Edit Article: Editar artículo
+List of all my articles: Lista de todos mis artículos
+Update the article: Actualizar el artículo
+
+# Lists
+Lists: Listas
+Description: Descripción
+My lists: Mis listas
+The movie « movie_name » has been added to your list « list_name ».: La película " nombre_película " ha sido añadida a tu lista " nombre_lista ".
+The movie « movie_name » has been removed from your list « list_name ».: La película " nombre_película " ha sido eliminada de tu lista " nombre_lista ".
+# new/edit list
+Add list: Añadir lista
+New list: Nueva lista
+Edit list: Editar lista
+Update the list: Actualizar la lista
+Color: Color
+Thumbnail Image (JPG, PNG file): Imagen en miniatura (archivo JPG, PNG)
+Click here or drop a thumbnail image file: Haga clic aquí o suelte un archivo de imagen en miniatura
+Click here or drop a banner image file: Haga clic aquí o suelte un archivo de imagen de banner
+# delete list
+Delete this list?: ¿Borrar esta lista?
+Do you really want to delete this list?: ¿Realmente desea eliminar esta lista?
+
+# User Series
+Add a link: Añadir un enlace
+Add order: Añadir orden
+Add translated keywords, close the dialog and reload the page: Añadir palabras clave traducidas, cerrar el diálogo y recargar la página
+Alert activated: Alerta activada
+Alert created and activated: Alerta creada y activada
+Alert deactivated: Alerta desactivada
+Alert: Alerta
+All countries: Todos los países
+Apply: Aplicar
+Ascending: Ascendente
+Cancel and close the dialog: Cancelar y cerrar el diálogo
+Cancel: Cancelar
+Click here to watch your series: Haga clic aquí para ver su serie
+Coming soon: Próximamente
+Create an alert: Crear una alerta
+Descending: Descendente
+Direct link: Enlace directo
+Edit url: Editar url
+Favorite serie: Serie favorita
+First Air at: Primera emisión en
+Help: Ayuda
+Last modified by TMDB: Última modificación por TMDB
+Last modified by user: Última modificación por el usuario
+New Serie Help: Ayuda para la nueva serie
+New Serie Id: Nuevo identificador de serie
+New backdrop (previously added): Nuevo telón de fondo (añadido anteriormente)
+New backdrop: Nuevo fondo
+New date: Nueva fecha
+New episode from TMDB: Nuevo episodio de TMDB
+New name: Nuevo nombre
+New original name: Nuevo nombre original
+New overview: Nuevo resumen
+New poster (previously added): Nuevo cartel (añadido anteriormente)
+New poster: Nuevo póster
+New season from TMDB: Nueva temporada de TMDB
+New serie added: Nueva serie añadida
+New status: Nuevo estado
+New url: Nueva url
+No airing series date, considere watching those: No hay fecha de emisión de la serie, considere ver esos
+No date: Sin fecha
+No poster: Sin cartel
+Order by: Ordenar por
+Order: Pedir
+Pagination: Paginación
+Results per page: Resultados por página
+Select: Seleccione
+Serie not found: Serie no encontrada
+Serie updated: Serie actualizada
+Series advanced search: Búsqueda avanzada de series
+Series by country of origin: Series por país de origen
+Start to watch: Empezar a ver
+Suggest a title: Sugerir un título
+Suggest: Sugerir
+Translate new keywords: Traducir nuevas palabras clave
+Translate: Traducir
+Watch now via the movie DB website: Ver ahora a través de la página web de movie DB
+Watch on: Ver en
+Where did you watch the series?: ¿Dónde has visto la serie?
+creation: creación
+creator.he: creador.él
+creator.she: creador.ella
+serie: serie
+series: serie
+
+# Series filters
+Action & Adventure: Acción y aventura
+Ads: Anuncios
+Adult: Adulto
+After: Después de
+Air date year: Año de emisión
+Before: Antes de
+Buy: Comprar
+Crime: Crimen
+Documentary: Documental
+Drame: Juego
+Familial: Familiar
+Filter: Filtrar
+Flatrate: Tarifa plana
+Free: Gratis
+Kids: Infantil
+Language: Idioma
+Miniseries: Miniserie
+News: Noticias
+No air date: Sin fecha de emisión
+Origin country: País de origen
+Popularity: Popularidad
+Primary release date: Fecha de lanzamiento principal
+Reality: Reality
+Rent: Alquilar
+Revenus: Revenus
+Runtime greater than: Tiempo de ejecución mayor que
+Runtime less than: Tiempo de ejecución menor que
+Screened theatrically: Proyectada en cines
+Scripted: Guiones
+Series displayed by: Series mostradas por
+Soap: Culebrón
+Sort by: Ordenar por
+Talk Show: Programa de entrevistas
+Talk: Talk
+Type of monetization: Tipo de monetización
+Vote average greater than: Media de votos superior a
+Vote average less than: Media de votos menor que
+Vote average: Media de votos
+Vote count greater than: Número de votos superior a
+Vote count less than: Número de votos inferior a
+Vote count: Recuento de votos
+War & Politics: Guerra y política
+Watch provider: Proveedor de vigilancia
+Watch region: Región de vigilancia
+Western: Occidental
+result: resultado
+results: resultados
+with_genres: con_géneros
+
+# Series filters tooltips
+Load last form settings: Cargar los últimos ajustes del formulario
+Save form settings: Guardar configuración del formulario
+Toggle form settings: Cambiar la configuración del formulario
+Before this date. Enabling this field without filling it in is equivalent to "Before now".: Antes de esta fecha. Habilitar este campo sin rellenarlo equivale a "Antes de ahora".
+After this date. Enabling this field without filling it in is equivalent to "After now".: Después de esta fecha. Habilitar este campo sin rellenarlo equivale a "Después de ahora".
+
+#User series airing today
+All episodes: Todos los episodios
+Episodes: Episodios
+List of the series I'm watching, aired today: Lista de las series que estoy viendo, emitidas hoy
+My series airing today: Mis series emitidas hoy
+New episodes: Nuevos episodios
+Next day: Día siguiente
+Next month: Mes siguiente
+Next week: Semana siguiente
+Nothing to show here: Nada que mostrar aquí
+Previous day: Día anterior
+Previous month: Mes anterior
+Previous week: Semana anterior
+Specials: Especiales
+Viewed episodes: Episodios vistos
+time.next.day: día siguiente
+time.next.month: mes siguiente
+time.next.week: semana siguiente
+time.previous.day: día anterior
+time.previous.month: mes anterior
+time.previous.week: semana anterior
 
 # Movies
+Deselect all: Deseleccionar todo
+Filter by name: Filtrar por nombre
+Movie title: Título de la película
+Select all: Seleccionar todo
+Sort selection: Ordenar selección
 Sort: Ordenar
-Sort selection: Selección de la clasificación
 
 # Movies by name
-Movies Search Result: Resultado de la búsqueda
-Movie Search Result: Resultado de la búsqueda
+Enter a movie name: Introduzca el nombre de la película
+Movie Search Result: Resultado de la búsqueda de películas
+Movies Search Result: Resultado de la búsqueda de películas
 Select a Year: Seleccione un año
 
 # Movies by genre
-Movies by genre:  Películas por género
+Movies by genre: Películas por género
 
 # Movies by Year
 Movies by Year: Películas por año
 Year: Año
+Month: Mes
 
 # Movie Detail
-Original Title: Titulo original
-Overview: Resumen
-Release Date: Fecha de lanzamiento
-Release Dates: Fechas de lanzamiento
-Runtime: Duración
-Revenue: Ingresos
-Average Vote: Voto promedio
-Vote Count: Recuento de votos
-Home Page: Página de inicio
-IMDB Page: Página de IMDB
-Personal IMDB Page: Página de IMDB
-Production: Producción
-Production Companies: Compañías de producción
-Production Countries: Países de producción
-Crew: Tripulación
-Casting: Fundición
-Recommendations: Recomendaciones
-Hour: hora
-Minute: minuto
-Hours: horas
-Minutes: minutos
-Premiere: Estreno
-Theatrical (limited): Estreno en cines (limitado)
-Theatrical: Estreno en cines
-Digital: Digital
-Physical: Físico
-TV: Televisión
+Add a new backdrop: Añadir un nuevo telón de fondo
+Add a new poster: Añadir un nuevo cartel
+Add an overview: Añadir una vista general
+Average Vote: Voto medio
+Casting: Casting
+Choose this backdrop: Elige este fondo
 Created by: Creado por
+Crew: Equipo
+Digital: Digital
+Drag and drop a file or click to browse: Arrastre y suelte un archivo o haga clic para examinar
+Drop media: Añadir medios
+Edit later: Editar más tarde
+Edit the overview: Editar la vista general
+Home Page: Página de inicio
+Hour: Hora
+Hours: Horas
+IMDB Page: Página IMDB
+Minute: Minuto
+Minutes: Minutos
+No backdrop: Sin telón de fondo
+Original Title: Título original
+Overview: Vista general
+Personal IMDB Page: Página personal en IMDB
+Physical: Físico
+Premiere: Estreno
+Production Companies: Productoras
+Production Countries: Países productores
+Recommendations: Recomendaciones
+Release Date: Fecha de publicación
+Release Dates: Fechas de publicación
+Revenue: Ingresos
+Runtime: Tiempo de ejecución
+TV: TV
+Theatrical (limited): Cine (limitado)
+Theatrical: Teatral
+Upload: Cargar
+Visit the Movie Page on IMDB: Visita la página de la película en IMDB
+Visit the official Movie Website: Visite la página oficial de la película
+Vote Count: Recuento de votos
+backdrop: telón de fondo
+
+# Movie Lists
+Belongs to list: Pertenece a la lista
+Create one by clicking the button above: Crea una haciendo clic en el botón de arriba
+Films: Películas
+List movie list: Lista de películas
+Liste: Lista
+Movie List: Lista de películas
+Movie lists: Listas de películas
+My movie lists: Mis listas de películas
+No banner: No banner
+No movie list yet: Aún no hay lista de películas
+Roomy movie list: Lista de películas
+See the Collection: Ver la colección
 
 # Tv Show Detail
-Name: Apellido
+Air Date: Fecha de emisión
+Episode Count: Número de episodios
+Episode Name: Nombre del Episodio
+Episode Number: Número de episodios
 Episode Run Time: Duración del episodio
+Episode: Episodio
+Finale: Finale
+First Air Date: Primera emisión
+Found a date: Encontré una cita
+Guests: Invitados
+Last Air Date: Última fecha de emisión
+Last Episode Name: Nombre del último episodio
+Last Episode to air: Último episodio emitido
+Last episode of the season: Último episodio de la temporada
+Last season: Última temporada
+Name: Nombre
 Number of Episodes: Número de episodios
 Number of Seasons: Número de temporadas
-First Air Date: Primera fecha de emisión
-Last Air Date: Última fecha de emisión
-Last Episode to air: Último episodio emitido
-Air Date: Fecha de emisión
-Episode Count: Recuento de episodios
-Episode Number: Número de episodio
-Season Number: Numéro de la saison
-Season Name: Número de temporada
-Last Episode Name: Nombre del último episodio
-See Details: Ver detalles
-Episode Name: Nombre del episodio
+Season Name: Nombre de la temporada
+Season Number: Número de temporada
 Season: Temporada
-Seasons: Temporadas
-Episode: Episodio
-Guests: Invitadas / Invitados especiales
+Seasons: Temporada
+See Details: Ver detalles
 
-#Person
+# Person
 Also known as: También conocido como
 Biography: Biografía
 Birthday: Cumpleaños
-Death-day: Día de la muerte
-Known for Department: Conocido por departamento
+Close: Cerca de
+Deathday: Día de la muerte
+Female: Mujer
+Gender: Sexo
+Known appearances: Apariencia conocida
+Known for Department: Conocido por Departamento
+Male: Masculino
+Personal Informations: Información personal
 Place of Birth: Lugar de nacimiento
-Close: Cerca
 
-#Series
-Creation: Creación
-View on: Ver en
+# Series
+No date yet: Aún no hay fecha
+No provider yet: Aún no hay proveedor
+On the air: En el aire
+Start typing…: Empieza a escribir…
+Today: Hoy
+Top rated: Más votados
+votes: votos
+
+# descriptions
+Added at: Añadido en
 Country: País
-Network: Red
+Creation: Creación
+Information about this season (episode titles and descriptions) is not available in your language: La información sobre esta temporada (títulos y descripciones de los episodios) no está disponible en tu idioma
+List of all the series I have watched in my life: Lista de todas las series que he visto en mi vida
+No date yet for the upcoming episode: Aún no hay fecha para el próximo episodio
+No upcoming episodes for the moment: No hay próximos episodios por el momento
+No upcoming season for the moment: No hay temporadas por el momento
+Series, Tv Shows: Series, Programas de TV
 Showrunner: Showrunner
+Time spent watching my series: Tiempo dedicado a ver mis series
+Updated at: Actualizado a
+View on: Ver en
+episode more: episodio más
+episodes more: episodios más
+new episode: nuevo episodio
+new episodes: nuevos episodios
+new season: nueva temporada
+new seasons: nuevas temporadas
+viewed episode: episodio visto
+viewed episodes: episodios vistos
+
+# Status
+"Series not found on https://www.themoviedb.org/": "Serie no encontrada en https://www.themoviedb.org/"
+Be patient!: Ten paciencia
+Canceled: Cancelado
+Continuing: Continúa
+Ended: Finalizado
+In Production: En producción
+More episodes to come: Más episodios por venir
+Pilot: Piloto
+Planned: Previsto
+Returning Series: Series que regresan
+Settings saved: Ajustes guardados
+Start watching the show: Empezar a ver el programa
 Status: Estado
-Continuing: Continuo
-Ended: Terminado
+That's all: Eso es todo
+Watching in progress: Ver en curso
+# Watch
+Available in streaming: Disponible en streaming
+Available to buy: Disponible para comprar
+Available to rent or buy: Disponible para alquilar o comprar
+Available to rent: Disponible para alquilar
+Watch now: Ver ahora
+# cast / crew
+'"A" Camera Operator.he': Operador de cámara "A"
+'"A" Camera Operator.she': Operador de Cámara "A"
+'"B" Camera Operator.he': Operador de Cámara "B"
+'"B" Camera Operator.she': Operador de Cámara "B"
+24 Frame Playback.he: Reproducción 24 fotogramas
+24 Frame Playback.she: 24 Frame Playback
+3D Artist.he: Artista 3D
+3D Artist.she: Artista 3D
+ADR Editor.he: Editor ADR
+ADR Editor.she: Editor ADR
+ADR Mixer.he: Mezclador ADR
+ADR Mixer.she: Mezcladora ADR
+ADR Recordist.he: Grabador ADR
+ADR Recordist.she: Grabadora ADR
+ADR Supervisor.he: Supervisor ADR
+ADR Supervisor.she: ADR Supervisor
+ADR Voice Casting.he: ADR Casting
+ADR Voice Casting.she: ADR Casting
+Accountant.he: Contable
+Accountant.she: Contable
+Acting.he: Actor
+Acting.she: Actriz
+Acting: Actuación
+Actor's Assistant.he: Asistente de Actor
+Actor's Assistant.she: Asistente de Actor
+Adaptation.he: Adaptación
+Adaptation.she: Adaptación
+Additional Music.he: Música Adicional
+Additional Music.she: Música Adicional
+Additional Photography.he: Fotografía Adicional
+Additional Photography.she: Fotografía Adicional
+Additional Script Supervisor.he: Supervisor de Guión Adicional
+Additional Script Supervisor.she: Supervisor de Guión Adicional
+Animal Wrangler.he: Entrenador de Animales
+Animal Wrangler.she: Entrenadora de Animales
+Animation Supervisor.he: Supervisor de Animación
+Animation Supervisor.she: Supervisora de Animación
+Animation.he: Animación
+Animation.she: Animación
+Armorer.he: Armero
+Armorer.she: Armera
+Art Department Assistant.he: Asistente de Departamento de Arte
+Art Department Assistant.she: Asistente de Departamento de Arte
+Art Department Coordinator.he: Coordinador de Departamento de Arte
+Art Department Coordinator.she: Coordinadora de Departamento de Arte
+Art Department Manager.he: Gerente de Departamento de Arte
+Art Department Manager.she: Gerente de Departamento de Arte
+Art Direction.he: Dirección de Arte
+Art Direction.she: Dirección de Arte
+Art.he: Arte
+Art.she: Arte
+Art: Arte
+Assistant Accountant.he: Asistente de Contabilidad
+Assistant Accountant.she: Asistente de Contabilidad
+Assistant Art Director.he: Asistente de Director de Arte
+Assistant Art Director.she: Asistente de Director de Arte
+Assistant Costume Designer.he: Asistente de Diseño de Vestuario
+Assistant Costume Designer.she: Asistente de Diseño de Vestuario
+Assistant Director.he: Asistente de Director
+Assistant Director.she: Asistente de Director
+Assistant Editor.he: Asistente de Editor
+Assistant Editor.she: Asistente de Editor
+Assistant Production Coordinator.he: Asistente de Coordinación de Producción
+Assistant Production Coordinator.she: Asistente de Coordinación de Producción
+Assistant Production Manager.he: Asistente de Gerente de Producción
+Assistant Production Manager.she: Asistente de Gerente de Producción
+Assistant Property Master.he: Asistente de Maestro de Propiedades
+Assistant Property Master.she: Asistente de Maestro de Propiedades
+Assistant Set Decoration.he: Asistente de Decoración de Set
+Assistant Set Decoration.she: Asistente de Decoración de Set
+Assistant Sound Editor.he: Asistente de Editor de Sonido
+Assistant Sound Editor.she: Asistente de Editor de Sonido
+Associate Editor.he: Editor Asociado
+Associate Editor.she: Editora Asociada
+Associate Producer.he: Productor Asociado
+Associate Producer.she: Productora Asociada
+Best Boy Electric.he: Electricista jefe
+Best Boy Electric.she: Electricista jefe
+Best Boy Grip.he: Grip jefe
+Book.he: Libro
+Book.she: Libro
+Boom Operator.he: Operador de Boom
+Boom Operator.she: Operadora de Boom
+Business Affairs Coordinator.he: Coordinador de Asuntos Comerciales
+Business Affairs Coordinator.she: Coordinadora de Asuntos Comerciales
+Camera Operator.he: Operador de Cámara
+Camera Operator.she: Operadora de Cámara
+Camera Trainee.he: Aprendiz de Cámara
+Camera Trainee.she: Aprendiz de Cámara
+Cast: Reparto
+Casting Assistant.he: Asistente de Casting
+Casting Assistant.she: Asistente de Casting
+Casting Associate.he: Asociado de Casting
+Casting Associate.she: Asociada de Casting
+Casting Coordinator.he: Coordinador de Casting
+Casting Coordinator.she: Coordinadora de Casting
+Casting Director.he: Director de Casting
+Casting Director.she: Directora de Casting
+Casting.he: Casting
+Casting.she: Casting
+Catering.he: Catering
+Catering.she: Catering
+Character Designer.he: Diseñador de Personajes
+Character Designer.she: Diseñadora de Personajes
+Characters.he: Personajes
+Characters.she: Personajes
+Charge Scenic Artist.he: Artista Escénico Principal
+Charge Scenic Artist.she: Artista Escénica Principal
+Chief Lighting Technician.he: Jefe de Iluminación
+Chief Lighting Technician.she: Jefa de Iluminación
+Cinematography.he: Cinematografía
+Cinematography.she: Cinematografía
+Clearances Coordinator.he: Coordinador de Autorizaciones
+Clearances Coordinator.she: Coordinadora de Autorizaciones
+Co-Director.he: Co-Director
+Co-Director.she: Co-Directora
+Co-Executive Producer.he: Co-Productor Ejecutivo
+Co-Executive Producer.she: Co-Productora Ejecutiva
+Co-Producer.he: Co-Productor
+Co-Producer.she: Co-Productora
+Colorist.he: Colorista
+Colorist.she: Colorista
+Comic Book.he: Comic Book
+Comic Book.she: Comic Book
+Commissioning Editor.he: Editor de Comisiones
+Commissioning Editor.she: Editora de Comisiones
+Compositing Supervisor.he: Supervisor de Composición
+Compositing Supervisor.she: Supervisora de Composición
+Concept Artist.he: Artista conceptual
+Concept Artist.she: Artista conceptual
+Conceptual Illustrator.he: Ilustrador conceptual
+Conceptual Illustrator.she: Ilustrador conceptual
+Conductor.he: Conductor
+Conductor.she: Conductor
+Construction Buyer.he: Comprador de Construcción
+Construction Buyer.she: Compradora de Construcción
+Construction Coordinator.he: Coordinador de Construcción
+Construction Coordinator.she: Coordinadora de Construcción
+Construction Foreman.he: Capataz de Construcción
+Construction Foreman.she: Capataza de Construcción
+Construction Manager.he: Gerente de Construcción
+Construction Manager.she: Gerente de Construcción
+Consulting Producer.he: Productor Consultor
+Consulting Producer.she: Productora Consultora
+Controller.he: Controlador
+Controller.she: Controladora
+Costume & Make-Up.he: Vestuario y maquillaje
+Costume & Make-Up.she: Vestuario y maquillaje
+Costume & Make-Up: Vestuario y maquillaje
+Costume Assistant.he: Ayudante de vestuario
+Costume Assistant.she: Ayudante de vestuario
+Costume Coordinator.he: Coordinador de vestuario
+Costume Coordinator.she: Coordinador de vestuario
+Costume Design.he: Diseño de vestuario
+Costume Design.she: Diseñador de vestuario
+Costume Designer.he: Diseñador de vestuario
+Costume Designer.she: Diseñador de vestuario
+Costume Supervisor.he: Supervisor de vestuario
+Costume Supervisor.she: Supervisor de vestuario
+Costumer.he: Costurero
+Costumer.she: Costurera
+Creator.he: Creador
+Creator.she: Creadora
+Creator: Creador
+Crew.he: Equipo
+Crew.she: Equipo
+Dailies Manager.he: Gerente de Dailies
+Dailies Manager.she: Gerente de Dailies
+Dailies Operator.he: Operador de Dailies
+Dailies Operator.she: Operadora de Dailies
+Development Manager.he: Gerente de Desarrollo
+Development Manager.she: Gerente de Desarrollo
+Dialect Coach.he: Entrenador de Dialecto
+Dialect Coach.she: Entrenadora de Dialecto
+Dialogue Editor.he: Editor de Diálogo
+Dialogue Editor.she: Editora de Diálogo
+Digital Compositor.he: Compositor Digital
+Digital Compositor.she: Compositora Digital
+Digital Imaging Technician.he: Técnico de Imágenes Digitales
+Digital Imaging Technician.she: Técnica de Imágenes Digitales
+Digital Intermediate.he: Intermedio Digital
+Digital Intermediate.she: Intermedio Digital
+Directing.he: Dirección
+Directing.she: Dirección
+Directing: Dirección
+Director of Photography.he: Director de Fotografía
+Director of Photography.she: Directora de Fotografía
+Director.he: Director
+Director.she: Directora
+Dolly Grip.he: Dolly Grip
+Dolly Grip.she: Dolly Grip
+Editor.he: Editor
+Editor.she: Editora
+Editorial Staff.he: Personal Editorial
+Editorial Staff.she: Personal Editorial
+Executive Assistant.he: Asistente Ejecutivo
+Executive Assistant.she: Asistente Ejecutiva
+Executive Consultant.he: Consultor Ejecutivo
+Executive Consultant.she: Consultora Ejecutiva
+Executive Producer's Assistant.he: Asistente del Productor Ejecutivo
+Executive Producer's Assistant.she: Asistente del Productor Ejecutivo
+Executive Producer.he: Productor ejecutivo
+Executive Producer.she: Productor ejecutivo
+Executive Story Editor.he: Redactor Jefe Ejecutivo
+Executive Story Editor.she: Editor ejecutivo jefe
+Executive Visual Effects Producer.he: Productor ejecutivo de efectos visuales
+Executive Visual Effects Producer.she: Productor ejecutivo de efectos visuales
+Extras Casting.he: Casting de Extras
+Extras Casting.she: Casting de Extras
+Fight Choreographer.he: Coreógrafo de Lucha
+Fight Choreographer.she: Coreógrafa de Lucha
+Finishing Producer.he: Productor de Acabado
+Finishing Producer.she: Productora de Acabado
+First Assistant "A" Camera.he: Primer Asistente de Cámara "A"
+First Assistant "B" Camera.he: Primer Asistente de Cámara "B"
+First Assistant Director.he: Primer Asistente de Director
+First Assistant Director.she: Primera Asistente de Director
+First Assistant Hairstylist.he: Primer Asistente de Peluquería
+First Assistant Hairstylist.she: Primera Asistente de Peluquería
+First Assistant Makeup Artist.he: Primer Asistente de Maquillaje
+First Assistant Makeup Artist.she: Primera Asistente de Maquillaje
+First Assistant Sound Editor.he: Primer Asistente de Editor de Sonido
+First Assistant Sound Editor.she: Primera Asistente de Editor de Sonido
+First Company Grip.he: Primer Grip de la Compañía
+First Company Grip.she: Primera Grip de la Compañía
+Floor Runner.he: Corredor de Piso
+Floor Runner.she: Corredora de Piso
+Foley Artist.he: Artista de efectos de sonido
+Foley Artist.she: Artista de efectos de sonido
+Foley Editor.he: Editor de efectos de sonido
+Foley Editor.she: Editor de efectos de sonido
+Foley Mixer.he: Mezclador de efectos de sonido
+Foley Mixer.she: Mezclador de efectos de sonido
+Foley Recordist.he: Grabador de efectos de sonido
+Foley Recordist.she: Grabadora de efectos de sonido
+Foley Supervisor.he: Supervisor de efectos de sonido
+Foley Supervisor.she: Efectos de sonido de supervisor
+Gaffer.he: Gaffer
+Gaffer.she: Gaffer
+Generator Operator.he: Operador de Generador
+Generator Operator.she: Operadora de Generador
+Graphic Designer.he: Diseñador Gráfico
+Graphic Designer.she: Diseñadora Gráfica
+Graphic Novel.he: Novela Gráfica
+Graphic Novel.she: Novela Gráfica
+Grip.he: Grip
+Grip.she: Grip
+Guest star: Estrella invitada
+Hair Department Head.he: Jefe de Departamento de Peluquería
+Hair Department Head.she: Jefa de Departamento de Peluquería
+Hair Designer.he: Diseñador de Peluquería
+Hair Designer.she: Diseñadora de Peluquería
+Hair Supervisor.he: Supervisor de Peluquería
+Hair Supervisor.she: Supervisora de Peluquería
+Hairstylist.he: Peluquero
+Hairstylist.she: Peluquera
+Head of Production.he: Jefe de Producción
+Head of Production.she: Jefa de Producción
+Key Carpenter.he: Carpintero Jefe
+Key Carpenter.she: Carpintera Jefe
+Key Construction Grip.he: Key Construction Grip
+Key Construction Grip.she: Key Construction Grip
+Key Grip.he: Key Grip
+Key Grip.she: Key Grip
+Key Hair Stylist.he: Head Stylist
+Key Hair Stylist.she: Head stylist
+Key Makeup Artist.he: Senior make-up artist
+Key Makeup Artist.she: Senior make-up artist
+Key Production Assistant.he: Senior production assistant
+Key Production Assistant.she: Senior Production Assistant
+Key Rigging Grip.he: Key Rigging Grip
+Key Rigging Grip.she: Key Rigging Grip
+Layout Supervisor.he: Supervisor de Diseño
+Layout Supervisor.she: Supervisora de Diseño
+Lead Character Designer.he: Diseñador principal de personajes
+Lead Character Designer.she: Diseñador principal de personajes
+Lead Set Dresser.he: Jefe decorador
+Lead Set Dresser.she: Jefe decorador
+Leadman.he: Jefe de equipo
+Leadman.she: Jefe de equipo
+Legal Services.he: Servicios Legales
+Legal Services.she: Servicios Legales
+Lighting Director.he: Lighting Director
+Lighting Director.she: Lighting Director
+Lighting Technician.he: Técnico de Iluminación
+Lighting Technician.she: Técnica de Iluminación
+Line Producer.he: Productor Ejecutivo
+Line Producer.she: Productora Ejecutiva
+Loader.he: Cargador
+Loader.she: Cargadora
+Local Casting.he: Casting Local
+Local Casting.she: Casting Local
+Location Coordinator.he: Coordinador de Localización
+Location Coordinator.she: Coordinadora de Localización
+Location Manager.he: Gerente de Localización
+Location Manager.she: Gerente de Localización
+Location Scout.he: Location Scout
+Location Scout.she: Location Scout
+Main Title Designer.he: Diseñador de Título Principal
+Main Title Designer.she: Diseñadora de Título Principal
+Main Title Theme Composer.he: Compositor de Tema Principal
+Main Title Theme Composer.she: Compositora de Tema Principal
+Makeup & Hair Assistant.he: Asistente de Maquillaje y Peluquería
+Makeup & Hair Assistant.she: Asistente de Maquillaje y Peluquería
+Makeup & Hair.he: Maquillaje y Peluquería
+Makeup & Hair.she: Maquillaje y Peluquería
+Makeup Artist.he: Maquillador
+Makeup Artist.she: Maquilladora
+Makeup Department Head.he: Jefe de Departamento de Maquillaje
+Makeup Department Head.she: Jefa de Departamento de Maquillaje
+Makeup Designer.he: Diseñador de Maquillaje
+Makeup Designer.she: Diseñadora de Maquillaje
+Makeup Supervisor.he: Supervisor de Maquillaje
+Makeup Supervisor.she: Supervisora de Maquillaje
+Makeup Trainee.he: Aprendiz de Maquillaje
+Makeup Trainee.she: Aprendiz de Maquillaje
+Martial Arts Choreographer.he: Coreógrafo de Artes Marciales
+Martial Arts Choreographer.she: Coreógrafa de Artes Marciales
+Music Coordinator.he: Coordinador de Música
+Music Coordinator.she: Coordinadora de Música
+Music Editor.he: Editor de Música
+Music Editor.she: Editora de Música
+Music Supervisor.he: Supervisor de Música
+Music Supervisor.she: Supervisora de Música
+Music.he: Música
+Music.she: Música
+Novel.he: Novela
+Novel.she: Novela
+Online Editor.he: Editor en línea
+Online Editor.she: Editora en línea
+Orchestrator.he: Orquestador
+Orchestrator.she: Orquestadora
+Original Concept.he: Concepto Original
+Original Concept.she: Concepto Original
+Original Film Writer.he: Escritor de Películas Originales
+Original Film Writer.she: Escritora de Películas Originales
+Original Music Composer.he: Compositor de Música Original
+Original Music Composer.she: Compositora de Música Original
+Original Series Creator.he: Creador de la Serie Original
+Original Series Creator.she: Creadora de la Serie Original
+Original Story.he: Historia Original
+Original Story.she: Historia Original
+Other.he: Otro
+Other.she: Otro
+Paint Coordinator.he: Coordinador de Pintura
+Paint Coordinator.she: Coordinadora de Pintura
+Payroll Accountant.he: Contable de Nómina
+Payroll Accountant.she: Contable de Nómina
+Picture Car Coordinator.he: Coordinador de Coches de Imagen
+Picture Car Coordinator.she: Coordinadora de Coches de Imagen
+Playback Coordinator.he: Coordinador de Reproducción
+Playback Coordinator.she: Coordinadora de Reproducción
+Post Producer.he: Productor de Post-Producción
+Post Producer.she: Productora de Post-Producción
+Post Production Accountant.he: Contable de Post-Producción
+Post Production Accountant.she: Contable de Post-Producción
+Post Production Assistant.he: Asistente de Post-Producción
+Post Production Assistant.she: Asistente de Post-Producción
+Post Production Consulting.he: Consultoría de Post-Producción
+Post Production Consulting.she: Consultoría de Post-Producción
+Post Production Coordinator.he: Coordinador de Post-Producción
+Post Production Coordinator.she: Coordinadora de Post-Producción
+Post Production Supervisor.he: Supervisor de Post-Producción
+Post Production Supervisor.she: Supervisora de Post-Producción
+Post-Production Manager.he: Gerente de Post-Producción
+Post-Production Manager.she: Gerente de Post-Producción
+Petty Cash Buyer.he: Comprador de Caja Menor
+Petty Cash Buyer.she: Compradora de Caja Menor
+Producer's Assistant.he: Asistente del Productor
+Producer's Assistant.she: Asistente del Productor
+Producer.he: Productor
+Producer.she: Productora
+Production Accountant.he: Contable de Producción
+Production Accountant.she: Contable de Producción
+Production Assistant.he: Asistente de Producción
+Production Assistant.she: Asistente de Producción
+Production Consultant.he: Consultor de Producción
+Production Consultant.she: Consultora de Producción
+Production Coordinator.he: Coordinador de Producción
+Production Coordinator.she: Coordinadora de Producción
+Production Design.he: Diseño de Producción
+Production Design.she: Diseño de Producción
+Production Designer.he: Diseñador de Producción
+Production Designer.she: Diseñadora de Producción
+Production Manager.he: Gerente de Producción
+Production Manager.she: Gerente de Producción
+Production Sound Mixer.he: Mezclador de Sonido de Producción
+Production Sound Mixer.she: Mezcladora de Sonido de Producción
+Production Supervisor.he: Supervisor de Producción
+Production Supervisor.she: Supervisora de Producción
+Production.he: Producción
+Production.she: Producción
+Production: Producción
+Project Manager.he: Gerente de Proyecto
+Project Manager.she: Gerente de Proyecto
+Property Builder.he: Constructor de Propiedades
+Property Builder.she: Constructora de Propiedades
+Property Buyer.he: Comprador de Propiedades
+Property Buyer.she: Compradora de Propiedades
+Property Master.he: Maestro de Propiedades
+Property Master.she: Maestra de Propiedades
+Props.he: Props
+Props.she: Props
+Prosthetic Designer.he: Diseñador de Prótesis
+Prosthetic Designer.she: Diseñadora de Prótesis
+Prosthetic Makeup Artist.he: Artista de Maquillaje de Prótesis
+Prosthetic Makeup Artist.she: Artista de Maquillaje de Prótesis
+Prosthetic Supervisor.he: Supervisor de Prótesis
+Prosthetic Supervisor.she: Supervisora de Prótesis
+Publicist.he: Publicista
+Publicist.she: Publicista
+Recording Supervision.he: Supervisión de Grabación
+Recording Supervision.she: Supervisión de Grabación
+Recurring character: Personaje recurrente
+Researcher.he: Investigador
+Researcher.she: Investigadora
+Rigging Gaffer.he: Rigging Gaffer
+Rigging Gaffer.she: Rigging Gaffer
+Rigging Grip.he: Rigging Grip
+Rigging Grip.she: Rigging Grip
+Scenario Writer.he: Escritor de Escenarios
+Scenario Writer.she: Escritora de Escenarios
+Scenic Artist.he: Artista Escénico
+Scenic Artist.she: Artista Escénica
+Scientific Consultant.he: Consultor Científico
+Scientific Consultant.she: Consultora Científica
+Scoring Mixer.he: Mezclador de Puntuación
+Scoring Mixer.she: Mezcladora de Puntuación
+Screenplay.he: Guión
+Screenplay.she: Guión
+Script Coordinator.he: Coordinador de Guión
+Script Coordinator.she: Coordinadora de Guión
+Script Supervisor.he: Supervisor de Guión
+Script Supervisor.she: Supervisora de Guión
+Sculptor.he: Escultor
+Sculptor.she: Escultora
+Second Assistant "A" Camera.he: Segundo Asistente de Cámara "A"
+Second Assistant "B" Camera.he: Segundo Asistente de Cámara "B"
+Second Assistant Accountant.he: Segundo Asistente de Contabilidad
+Second Assistant Accountant.she: Segunda Asistente de Contabilidad
+Second Assistant Camera.he: Segundo Asistente de Cámara
+Second Assistant Camera.she: Segunda Asistente de Cámara
+Second Assistant Director.he: Segundo Asistente de Director
+Second Assistant Director.she: Segunda Asistente de Director
+Second Second Assistant Director.he: Segundo Asistente de Director
+Second Second Assistant Director.she: Segunda Asistente de Director
+Second Unit Director.he: Director de la Segunda Unidad
+Second Unit Director.she: Directora de la Segunda Unidad
+Series Director.he: Director de la Serie
+Series Director.she: Directora de la Serie
+Series Writer.he: Escritor de la Serie
+Series Writer.she: Escritora de la Serie
+Set Costumer.he: Costurero de Set
+Set Costumer.she: Costurera de Set
+Set Decorating Coordinator.he: Coordinador de Decoración de Set
+Set Decorating Coordinator.she: Coordinadora de Decoración de Set
+Set Decoration Buyer.he: Comprador de Decoración de Set
+Set Decoration Buyer.she: Compradora de Decoración de Set
+Set Decoration.he: Decoración de Set
+Set Decoration.she: Decoración de Set
+Set Designer.he: Diseñador de Set
+Set Designer.she: Diseñadora de Set
+Set Dresser.he: Decorador de Set
+Set Dresser.she: Decoradora de Set
+Set Dressing Production Assistant.he: Asistente de Producción de Decoración de Set
+Set Dressing Production Assistant.she: Asistente de Producción de Decoración de Set
+Set Supervisor.he: Supervisor de Set
+Set Supervisor.she: Supervisora de Set
+Sound Assistant.he: Asistente de Sonido
+Sound Assistant.she: Asistente de Sonido
+Sound Designer.he: Diseñador de Sonido
+Sound Designer.she: Diseñadora de Sonido
+Sound Editor.he: Editor de Sonido
+Sound Editor.she: Editora de Sonido
+Sound Effects Editor.he: Editor de Efectos de Sonido
+Sound Effects Editor.she: Editora de Efectos de Sonido
+Sound Mix Technician.he: Técnico de Mezcla de Sonido
+Sound Mix Technician.she: Técnica de Mezcla de Sonido
+Sound Mixer.he: Mezclador de Sonido
+Sound Mixer.she: Mezcladora de Sonido
+Sound Re-Recording Mixer.he: Mezclador de Sonido
+Sound Re-Recording Mixer.she: Mezcladora de Sonido
+Sound Supervisor.he: Supervisor de Sonido
+Sound Supervisor.she: Supervisora de Sonido
+Sound.he: Sonido
+Sound.she: Sonido
+Special Effects Coordinator.he: Coordinador de Efectos Especiales
+Special Effects Coordinator.she: Coordinadora de Efectos Especiales
+Special Effects Makeup Artist.he: Artista de Maquillaje de Efectos Especiales
+Special Effects Makeup Artist.she: Artista de Maquillaje de Efectos Especiales
+Special Effects Supervisor.he: Supervisor de Efectos Especiales
+Special Effects Supervisor.she: Supervisora de Efectos Especiales
+Staff Writer.he: Escritor de Personal
+Staff Writer.she: Escritora de Personal
+Standby Art Director.he: Director de Arte de Standby
+Standby Art Director.she: Directora de Arte de Standby
+Standby Painter.he: Pintor de Standby
+Standby Painter.she: Pintora de Standby
+Stereoscopic Supervisor.he: Supervisor Estereoscópico
+Stereoscopic Supervisor.she: Supervisora Estereoscópica
+Still Photographer.he: Fotógrafo Fijo
+Still Photographer.she: Fotógrafa Fija
+Story Editor.he: Editor de Historia
+Story Editor.she: Editora de Historia
+Story.he: Historia
+Story.she: Historia
+Storyboard Artist.he: Artista de Storyboard
+Storyboard Artist.she: Artista de Storyboard
+Stunt Coordinator.he: Coordinador de Acrobacias
+Stunt Coordinator.she: Coordinadora de Acrobacias
+Stunt Double.he: Doble de Acrobacias
+Stunt Double.she: Doble de Acrobacias
+Stunts.he: Acrobacias
+Stunts.she: Acrobacias
+Supervising Art Director.he: Director de Arte Supervisor
+Supervising Art Director.she: Directora de Arte Supervisor
+Supervising Music Editor.he: Editor de Música Supervisor
+Supervising Music Editor.she: Editora de Música Supervisor
+Supervising Producer.he: Productor Supervisor
+Supervising Producer.she: Productora Supervisor
+Supervising Sound Editor.he: Editor de Sonido Supervisor
+Supervising Sound Editor.she: Editora de Sonido Supervisor
+Supervising Sound Effects Editor.he: Editor de Efectos de Sonido Supervisor
+Supervising Sound Effects Editor.she: Editora de Efectos de Sonido Supervisor
+Thanks.he: Gracias
+Thanks.she: Gracias
+Theme Song Performance.he: Interpretación de la Canción Tema
+Theme Song Performance.she: Interpretación de la Canción Tema
+Third Assistant Director.he: Tercer Asistente de Director
+Third Assistant Director.she: Tercera Asistente de Director
+Trainee Production Coordinator.he: Coordinador de Producción de Aprendiz
+Trainee Production Coordinator.she: Coordinadora de Producción de Aprendiz
+Transportation Captain.he: Capitán de Transporte
+Transportation Captain.she: Capitana de Transporte
+Transportation Co-Captain.he: Co-Capitán de Transporte
+Transportation Co-Captain.she: Co-Capitana de Transporte
+Transportation Coordinator.he: Coordinador de Transporte
+Transportation Coordinator.she: Coordinadora de Transporte
+Travel Coordinator.he: Coordinador de Viajes
+Travel Coordinator.she: Coordinadora de Viajes
+Truck Supervisor.he: Supervisor de Camiones
+Truck Supervisor.she: Supervisora de Camiones
+Unit Manager.he: Gerente de Unidad
+Unit Manager.she: Gerente de Unidad
+Unit Production Manager.he: Gerente de Producción de Unidad
+Unit Production Manager.she: Gerente de Producción de Unidad
+Utility Sound.he: Sonido de Utilidad
+Utility Sound.she: Sonido de Utilidad
+VFX Artist.he: Artista de VFX
+VFX Artist.she: Artista de VFX
+VFX Editor.he: Editor de VFX
+VFX Editor.she: Editora de VFX
+VFX Supervisor.he: Supervisor de VFX
+VFX Supervisor.she: Supervisora de VFX
+Video Assist Operator.he: Operador de Asistencia de Video
+Video Assist Operator.she: Operadora de Asistencia de Video
+Video Game.he: Videojuego
+Video Game.she: Videojuego
+Visual Development.he: Desarrollo Visual
+Visual Development.she: Desarrollo Visual
+Visual Effects Assistant Editor.he: Editor Asistente de Efectos Visuales
+Visual Effects Assistant Editor.she: Editora Asistente de Efectos Visuales
+Visual Effects Coordinator.he: Coordinador de Efectos Visuales
+Visual Effects Coordinator.she: Coordinadora de Efectos Visuales
+Visual Effects Editor.he: Editor de Efectos Visuales
+Visual Effects Editor.she: Editora de Efectos Visuales
+Visual Effects Producer.he: Productor de Efectos Visuales
+Visual Effects Producer.she: Productora de Efectos Visuales
+Visual Effects Production Assistant.he: Asistente de Producción de Efectos Visuales
+Visual Effects Production Assistant.she: Asistente de Producción de Efectos Visuales
+Visual Effects Production Manager.he: Gerente de Producción de Efectos Visuales
+Visual Effects Production Manager.she: Gerente de Producción de Efectos Visuales
+Visual Effects Supervisor.he: Supervisor de Efectos Visuales
+Visual Effects Supervisor.she: Supervisora de Efectos Visuales
+Visual Effects.he: Efectos Visuales
+Visual Effects.she: Efectos Visuales
+Writer.he: Escritor
+Writer.she: Escritora
+Writers' Production.he: Producción de Escritores
+Writers' Production.she: Producción de Escritores
+Writing.he: Escritura
+Writing.she: Escritura
+Writing: Escritura
 
-# Serie's Genres
-Action: Acción
-Adventure: Aventura
+# Last jobs added
+Finance.he: Finanzas
+Finance.she: Finanzas
+Aerial Director of Photography.he: Director de Fotografía Aérea
+Aerial Director of Photography.she: Directora de Fotografía Aérea
+Additional Director of Photography.he: Director de Fotografía Adicional
+Additional Director of Photography.she: Directora de Fotografía Adicional
+Assistant Camera.he: Asistente de Cámara
+Assistant Camera.she: Asistente de Cámara
+Camera Technician.he: Técnico de Cámara
+Camera Technician.she: Técnica de Cámara
+Development Producer.he: Productor de Desarrollo
+Development Producer.she: Productora de Desarrollo
+Music Producer.he: Productor de Música
+Music Producer.she: Productora de Música
+CG Supervisor.he: Supervisor de CG
+CG Supervisor.she: Supervisora de CG
+VFX Production Coordinator.he: Coordinador de Producción de VFX
+VFX Production Coordinator.she: Coordinadora de Producción de VFX
+Title Designer.he: Diseñador de Títulos
+Production Executive.he: Ejecutivo de Producción
+Production Executive.she: Ejecutiva de Producción
+On Set Dresser.he: Decorador de Set
+On Set Dresser.she: Decoradora de Set
+Animal Coordinator.he: Coordinador de Animales
+Animal Coordinator.she: Coordinadora de Animales
+First Assistant Accountant.he: Primer Asistente de Contabilidad
+First Assistant Accountant.she: Primera Asistente de Contabilidad
+Steadicam Operator.he: Operador de Steadicam
+Steadicam Operator.she: Operadora de Steadicam
+
+# key facts
+Favorite: Favoritos
+Add to favorites: Añadir a favoritos
+Airing D+1: Aireación D+1
+Successfully added to favorites: Añadido con éxito a favoritos
+Successfully removed from favorites: Eliminado con éxito de favoritos
+Key facts: Datos clave
+Network: Red
+Networks: Redes
+Original Country: País original
+Original language: Idioma original
+Original name: Nombre original
+Keywords: Palabras clave
+Similar Series: Series similares
+# images
+Backdrops: Telones de fondo
+Logos: Logotipos
+Posters: Carteles
+# seasons
+episodes: episodios
+episode: episodio
+TBA: Por anunciar
+seasons: temporadas
+The season season_number of serie_name aired from season_air_date.: La temporada season_number de serie_name se emitió desde season_air_date.
+The season season_number of serie_name will be aired from the season_air_date.: La temporada season_number de serie_name se emitirá desde la season_air_date.
+The season season_number of serie_name is aired from today.: La temporada season_number de serie_name se emite desde hoy.
+The episode episode_number, season season_number of serie_name aired from episode_air_date.: El episodio episode_number, temporada season_number de serie_name se emitió desde episode_air_date.
+The episode episode_number, season season_number of serie_name will be aired from episode_air_date.: El episodio episode_number, temporada season_number de serie_name se emitirá desde episode_air_date.
+The episode episode_number, season season_number of serie_name is aired from today.: El episodio episode_number, temporada season_number de serie_name se emite desde hoy.
+This episode aired from episode_air_date.: Este episodio se emitió desde episode_air_date.
+This episode will be aired from episode_air_date.: Este episodio se emitirá desde episode_air_date.
+This episode is aired from today.: Este episodio se emite desde hoy.
+Serie "serieName", season seasonNumber (episodeCount ep.) added.: Serie "serieName", temporada seasonNumber (episodeCount ep.) añadida.
+Serie "serieName", episode episodeNumber added.: Serie "serieName", episodio episodeNumber añadido.
+Serie "serieName", episode episodeNumber removed.: Serie "serieName", episodio episodeNumber eliminado.
+Substitute name: Nombre sustituto
+Roomy: Espacioso
+Compact: Compacto
+List: Lista
+Size for roomy mode: Tamaño para modo espacioso
+#episodes
+Where did you watched it?: ¿Dónde lo ha visto?
+Desktop: Sobremesa
+Laptop: Portátil
+Phone: Teléfono
+Tablet: Tableta
+Tv: Tv
+Remember my choices: Recordar mis elecciones
+Remember my choice as long as I stay on this page: Recordar mi elección mientras permanezca en esta página
+Episodes seen as they happen: Episodios vistos en el momento
+Mark previous episodes as viewed: Marcar episodios anteriores como vistos
+update: actualizar
+Done: Hecho
+Up to date!: Al día
+New episode today: Nuevo episodio hoy
+New episode tomorrow: Nuevo episodio mañana
+Tomorrow: Mañana
+The day after tomorrow: Pasado mañana
+Next episode in: Próximo episodio en
+Next episode: Próximo episodio
+No date for the moment: Sin fecha por el momento
+of season: de la temporada
+in: en
+in-invert: en-invertir
+today: hoy
+tomorrow: mañana
+available since: disponible desde
+available yesterday: disponible ayer
+New season: Nueva temporada
+#vote graphics
+bar: bar
+plot: gráfico
+radial: radial
+Vote graph: Gráfico de votos
+Grid: Cuadrícula
+Colored grid: Cuadrícula de colores
+
+#search user's series
+Search my series: Buscar mi serie
+Name of the serie: Nombre de la serie
+Start taping the name: Empezar a grabar el nombre
+Enter the name: Introducir el nombre
+Search series: Buscar serie
+Show: Mostrar
 Animation: Animación
-Anime: Anime
-Comedy: Comedia
-Crime: Policíaca
-Drama: Drama
-Family: Familia
-Fantasy: Fantasía
-History: Historia
-Horror: Horror
-Mini-Series: Miniserie
-Mystery: Misterio
-Romance: Romance
-Science Fiction: Ciencia Ficción
-Sport: Deporte
-Suspense: Suspenso
-Thriller: Thriller
-War: Guerra
+Number: Número
+Life's Length: Duración
+Initial angle: Ángulo inicial
+Turn per minute: Giro por minuto
+Scale: Escala
+The settings have been saved: La configuración ha sido guardada
+# search
+Enter a Serie name: Introduzca un nombre de serie
+Enter a year: Introduzca un año
+Series search: Buscar serie
+Browse results: Buscar resultados
+See the details of a series: Ver los detalles de una serie
+Add a series: Añadir una serie
+Search films or series by people: Buscar películas o series por personas
+Enter a name…: Introduzca un nombre...
+Add people: Añadir personas
 
-# Youtube
+#Series to start
+List of my series to start: Lista de mis series para empezar
+My series to start: Mis series para empezar
+
+#Series to end
+List of my series to end: Lista de mis series para terminar
+My series to end: Mis series para terminar
+
+# Upcoming episodes
+Upcoming episodes: Próximos episodios
+List of upcoming episodes: Lista de próximos episodios
+
+# Upcoming series
+Upcoming series: Próximas series
+List of my series to come: Lista de mis series por venir
+
+# Episodes of the week
+Episodes of the week: Episodios de la semana
+List of the series I'm watching, aired this week: Lista de las series que estoy viendo, emitidas esta semana
+Nothing to watch!: ¡Nada que ver!
+And keep watching those series: Y sigue viendo esas series
+
+# People
+Known for: Conocido por
+as: como
+as.job: como
+Serie: Serie
+old: antiguo
+tv: tv
+movie: película
+Camera: Cámara
+Editing: Montaje
+Sound: Sonido
+Lighting: Iluminación
+Visual Effects: Efectos visuales
+No information available: No hay información disponible
+The person you are looking for does not exist: La persona que busca no existe
+Back: Volver
+job.Adaptation.he: Adaptación
+job.Animation.she: Animador
+job.Assistant Director.he: Ayudante de dirección
+job.Associate Producer.he: Productor asociado
+job.Associate Producer.she: Productor asociado
+job.Author.he: Autor
+job.Book.he: Libro
+job.Characters.he: Creador (personajes)
+job.Cinematography.he: Cinematografía
+job.Co-Executive Producer.he: Coproductor ejecutivo
+job.Co-Producer.he: Coproductor
+job.Co-Producer.she: Coproductor
+job.Co-Writer.he: Coautor
+job.Comic Book.he: Cómic
+job.Conductor.he: Director de orquesta
+job.Creative Producer.he: Productor creativo
+job.Creator.he: Creador
+job.Creator.she: Creador
+job.Development Producer.he: Productor de desarrollo
+job.Development Producer.she: Productor de desarrollo
+job.Dialogue.he: Diálogo
+job.Director of Photography.he: Director de fotografía
+job.Director.he: Director
+job.Director.she: Director
+job.Editor.he: Editor jefe
+job.Executive Producer.he: Productor ejecutivo
+job.Executive Producer.she: Productor ejecutivo
+job.Executive Co-Producer.he: Coproductor ejecutivo
+job.Executive Co-Producer.she: Coproductor ejecutivo
+job.Lighting Technician.he: Técnico de iluminación
+job.Music Director.he: Director musical
+job.Music Supervisor.he: Supervisor musical
+job.Music.he: Música
+job.Novel.he: Nuevo
+job.Original Music Composer.he: Compositor de música original
+job.Original Story.he: Historia original
+job.Presenter.he: Presentador
+job.Producer.he: Productor
+job.Producer.she: Productor
+job.Production Assistant.he: Ayudante de producción
+job.Production Design.he: Diseño (producción)
+job.Production Executive.he: Ejecutivo de producción
+job.Production Sound Mixer.he: Mezclador de sonido (producción)
+job.Screenplay.he: Guionista
+job.Screenstory.he: Guión
+job.Script.he: Redacción
+job.Songs.he: Letra
+job.Songs.she: Letra
+job.Sound Mixer.he: Mezclador de sonido
+job.Story.he: Autor (historia)
+job.Stunts.he: Stuntman
+job.Teleplay.he: Teletexto
+job.Thanks.he: Agradecimientos
+job.Thanks.she: Agradecimientos
+job.Writer.he: Escritor
+job.Writer.she: Escritor
+Self: Él mismo
+Himself: Él mismo
+Herself: Ella misma
+
+# Events
+event: evento
+events: eventos
+My events: Mis eventos
+Events: Eventos
+Past event: Eventos anteriores
+List of all my events: Lista de todos mis eventos
+Visible: Visible
+Edit: Editar
+Hide: Ocultar
+Subheading: Subtítulo
+EventImage: EventImage
+Caption: Título
+Event: Evento
+No event: Sin evento
+Add event: Añadir evento
+New event: Nuevo evento
+Edit event: Editar evento
+Update the event: Actualizar el evento
+Delete this event?: ¿Suprimir este evento?
+Do you really want to delete this event?: ¿Realmente desea eliminar este evento?
+This operation is final and cannot be cancelled.: Esta operación es definitiva y no puede cancelarse.
+Click here or drop a thumbnail file: Haga clic aquí o suelte un archivo en miniatura
+Click here or drop a banner file: Haga clic aquí o suelte un archivo de banner
+Click here or drop an image file: Haga clic aquí o suelte un archivo de imagen
+on: en
+No thumbnail: Ninguna miniatura
+
+# Serie Genres
+#Action:
+#Adventure:
+#Animation:
+#Anime:
+#Comedy:
+#Crime:
+#Drama:
+#Family:
+#Fantasy:
+#History:
+#Horror:
+#Mini-Series:
+#Mystery:
+#Romance:
+#Science Fiction:
+#Sport:
+#Suspense:
+#Thriller:
+#War:
+
+# YoutubeVideo
 My Youtube Videos: Mis vídeos en Youtube
-No: No hay
-Videos: vídeos
-Video: vídeo
-No Videos at this Time: No hay vídeos por el momento
-Youtube Link: Enlace a Youtube
+No: No
+Videos: Vídeos
+Video: Vídeo
+No Videos at this Time: No hay vídeos en este momento
+Youtube Link: Enlace Youtube
 Link: Enlace
-Publiée le: Publicado en
+Go to Youtube: Ir a Youtube
+Search on Youtube: Buscar en Youtube
+Your history on Youtube: Tu historia en Youtube
+Go to the video page: Ir a la página de vídeos
+Go to the video page after: Ir a la página de vídeo después de
+Stay on current page: Permanecer en la página actual
+Sort by publishedAt: Ordenar por publishedAt
+Sort by addedAt: Ordenar por addedAt
+Sort in ASC order: Ordenar por ASC
+Sort in DESC order: Ordenar por DESC
+Video added!: Vídeo añadido
+Video already added!: Vídeo añadido
+Go to the video page to see it: Ir a la página de vídeo para verlo
+Published at: Publicado en
+sort: ordenar
+Date added: Fecha de adición
+Date of publication: Fecha de publicación
+Channel: Canal
+order: ordenar
+Descendant: Descendente
+Ascendant: Ascendente
+Reload: Recargar
 Time spent watching Youtube: Tiempo dedicado a ver Youtube
-since: desde el
+since: desde
 Add a Youtube video: Añadir un vídeo de Youtube
-secondes i.e.: segundos, es decir,
-month: mes
-months: meses
-day: día
-days: días
-hour: hora
-hours: horas
-minute: minuto
-minutes: minutos
-seconde: segundo
-secondes: segundos
-and: y
+Duration: Duración
+seconds i.e. : segundos es decir
+second: segundo
+seconds: segundos
 Add Youtube video: Añadir un vídeo de Youtube
 For example: Por ejemplo
 or: o
+Search among your Youtube videos: Busca entre tus vídeos de Youtube
+You have already added this video previously.: Ya ha añadido este vídeo anteriormente.
+Tags: Etiquetas
+Start taping…: Empezar a grabar...
+Selection: Selección
+Delete this video: Borrar este vídeo
+Do you really want to delete this video?: ¿Realmente quieres borrar este vídeo?
+See this video on Youtube: Ver este vídeo en Youtube
+Copy the link: Copiar el enlace
+Copied!: Copiado
+Delete the video: Borrar el vídeo
+Modify: Modificar
+Modify tag list: Modificar la lista de etiquetas
+Add video to tag: Añadir vídeo a etiqueta
+Add video to tags: Añadir vídeo a etiquetas
+Delete selected videos: Eliminar los vídeos seleccionados
+video: vídeo
+videos: vídeos
+video deleted!: ¡vídeos borrados!
+videos deleted!: ¡vídeos borrados!
+
+#TikTok
+My TikTok Videos: Mis vídeos en TikTok
+TikTok Link: Enlace TikTok
+See more results: Ver más resultados
+
+# Search User
+yourself: usted mismo
+friend: amigo
+request: solicitud
+pending: pendiente
+users: usuarios
 
 # User Account
-User Account: Actualizar el perfil
-Preferred language: Lengua preferida
+User Account: Cuenta de usuario
+My account: Mi cuenta
+City: Ciudad
+Zip code: Código postal
+Preferred language: Idioma preferido
+Timezone: Zona horaria
 Profile Image (JPG, PNG file): Imagen de perfil (archivo JPG, PNG)
-Banner Image (JPG, PNG file): Imagen del banner (archivo JPG, PNG)
-Update Profile: Actualizar el perfil
-Search: Buscar
-Min: Min
-Max: Máximo
+Banner Image (JPG, PNG file): Imagen de banner (archivo JPG, PNG)
+Drop a profile file: Suelte un archivo de perfil
+Drop a banner file: Suelte un archivo de banner
+Profile Image: Imagen de perfil
+Banner Image: Imagen de banner
+Drop file here: Suelte el archivo aquí
+Search: Buscar en
 Watched Films: Películas vistas
-"Time spent watching TV:": "Tiempo de observación:"
-i.e.: es decir
+"Time spent watching TV:": "Tiempo dedicado a ver la televisión:"
 Export: Exportar
-Append: Añadir una lista de películas
+Append: Añadir
 Select a Movie List File (.json): Seleccione un archivo de lista de películas (.json)
 Copy: Copiar
-Progress: Progresión
+Add: Añadir
+Progress: Progreso
 Download: Descargar
+minutes: minutos
+minute: minuto
+i.e.: es decir
+years: años
+year: año
+months: meses
+month: mes
+days: días
+day: día
+hours: horas
+hour: hora
+and: y
+Friends: Amigos
+Friend requests: Solicitudes de amistad
+Reject: Rechazar
+You have a friend request from: Tienes una solicitud de amistad de
+Serie viewings: Visualizaciones de series
+Youtube videos: Vídeos de Youtube
+Tiktok videos: Vídeos de Tiktok
+Articles: Artículos
+
+# Chat
+new message: nuevo mensaje
 
 # Weather
+Update Profile: Actualizar perfil
+Sunrise: Amanecer
+Sunset: Puesta de sol
 Now: Ahora
 Last updated: Última actualización
 Feelslike: Se siente como
-Precipitation: Precipitación
-Humidity: Humedad
-Pressure: Presión
-Millibars: Milibares
+Min: Min
+Max: Máx
 Visibility: Visibilidad
 UV: UV
 Wind: Viento
-km/h: km/h
 Direction: Dirección
+Precipitation: Precipitación
+Humidity: Humedad
+Pressure: Presión
+km/h: km/h
 Gust: Ráfaga
-Sunrise: Salida del sol
-Sunset: Puesta de sol
-City: Ciudad
-Zip code: Código postal
+N: N
+E: E
+S: S
+W: O
+NW: NO
+NE: NE
+SW: SO
+SE: SE
+WNW: ONO
+WSW: OSO
+ENE: ENE
+ESE: ESE
+SSE: SSE
+SSW: SSO
+NNE: NNE
+NNW: NNO
+Millibars: Milibares
+Patchy rain possible: Posibilidad de lluvia dispersa
+Moderate rain: Lluvia moderada
+Sunny: Soleado
+Moderate or heavy rain with thunder: Lluvia moderada o fuerte con truenos
+Monday: Lunes
+Tuesday: Martes
+Wednesday: Miércoles
+Thursday: Jueves
+Friday: Viernes
+Saturday: Sábado
+Sunday: Domingo
+January: Enero
+February: Febrero
+March: Marzo
+April: Abril
+May: Mayo
+June: Junio
+July: Julio
+August: Agosto
+September: Septiembre
+October: Octubre
+November: Noviembre
+December: Diciembre
+No sunrise: No amanece
+No sunset: No hay puesta de sol
+No moonrise: No hay salida de la luna
+No moonset: No hay puesta de luna
 
 # Admin
-Dashboard: Tablero de mandos
+Dashboard: Cuadro de mandos
 Users: Usuarios
 Entities: Entidades
 Settings: Configuración
-Image Configuration: Configuración de la imagen
+Image Configuration: Configuración de imágenes
 Genres: Géneros
 Other: Otros
 Homepage: Página de inicio
 ID: ID
-Genre Id: Genre Id
-ImageConfig: ImageConfiguration
+Genre Id: Id de género
+ImageConfig: ImageConfig
 Base Url: Url base
 Secure Base Url: Url base segura
 Backdrop Sizes: Tamaños de telón de fondo
-Logo Sizes: Tamaños de logotipo
-Poster Sizes: Tamaños de póster
-Profile Sizes: Tamaños de perfil
+Logo Sizes: Logotipo
+Poster Sizes: Tamaño del póster
+Profile Sizes: Perfil
 User: Usuario
-Is Verified: Se verifica
+Is Verified: Verificado
 Avatar: Avatar
-Banner: Bannière
-UserMovie: Movie
+Banner: Banner
+UserMovie: UsuarioPelícula
 Title: Título
-Movie Db Id: Movie Db Id
+Movie Db Id: Película Db Id
+article: artículo
+articles: artículos
+Images: Imágenes
+Youtube Videos: Vídeos Youtube
+Youtube: Youtube
+Tik Tok Videos: Vídeos de Tik Tok
+Tik Tok: Tik Tok
+Is Published: Se publica
+Abstract: Resumen
+Content: Contenido
+Thumbnail: Miniaturas
+files: archivos
+Article Images: Imágenes del artículo
+Published At: Publicado en
+Created At: Creado en
+Updated At: Actualizado en
+Published: Publicado
+Created: Creado
+Updated: Actualizado
 
 # Others
 None: Ninguno
+cookie consent: consentimiento de cookies
+Accept: Aceptar
+Confidentiality policy: Política de confidencialidad
+This page is: Esta página está
+under construction: en construcción
+
+# Open Layers
+Localisation: Localización
+Remaining requests: Solicitudes restantes
+
 
