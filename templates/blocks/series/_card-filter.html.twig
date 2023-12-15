@@ -13,5 +13,8 @@
                 {% endfor %}
             </div>
         {% endif %}
+        {% if serie.has_progress %}
+            <div class="progress" data-title="{{ 'progression'|trans }} {{ serie.progress * 100 }}%"><div class="progress-value" style="width: {{ serie.progress * 100 }}%"></div></div>
+        {% endif %}
     </a>
 </div>

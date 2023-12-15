@@ -752,11 +752,16 @@ class SerieController extends AbstractController
         $totalPages = $series['total_pages'];
         $imageConfig = $this->imageConfiguration->getConfig();
 
-        $series = array_map(function ($serie) use ($imageConfig) {
+        $arr = $this->serieViewingRepository->getUserSeriesProgress($user->getId());
+        $userSeriesProgress = array_combine(array_column($arr, 'id'), array_column($arr, 'progress'));
+        $series = array_map(function ($serie) use ($imageConfig, $userSeriesProgress) {
             $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
             $serie['poster_path'] = $this->fullUrl("poster", 3, $serie['poster_path'], "no_poster_dark.png", $imageConfig);
+            $serie['has_progress'] = isset($userSeriesProgress[$serie['id']]);
+            $serie['progress'] = $userSeriesProgress[$serie['id']] ?? 0;
             return $serie;
         }, $series['results']);
+//        dump($series);
 
         $breadcrumb = $this->breadcrumb(self::SERIES_FILTER);
 
@@ -2271,14 +2276,14 @@ class SerieController extends AbstractController
         }
         $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
 
-        dump([
-            'tv' => $tv,
+//        dump([
+//            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
 //            'credits' => $credits,
-        ]);
+//        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),

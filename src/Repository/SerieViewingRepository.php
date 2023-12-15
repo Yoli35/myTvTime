@@ -329,4 +329,17 @@ class SerieViewingRepository extends ServiceEntityRepository
             ->executeQuery()
             ->fetchAllAssociative();
     }
+
+    public function getUserSeriesProgress($userId): array
+    {
+        $sql = "SELECT s.`serie_id` as id, sv.`viewed_episodes` / sv.`number_of_episodes` as progress "
+            . "FROM `serie_viewing` sv "
+            . "INNER JOIN `serie` s ON s.`id`=sv.`serie_id` "
+            . "WHERE sv.`user_id`=" . $userId;
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
 }

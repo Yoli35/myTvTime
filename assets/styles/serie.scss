@@ -1444,9 +1444,16 @@
                             background-color: var(--gradient-green-70);
                         }
 
-                        .alert-next-episode,
-                        .next-episode-to-watch {
+                        .alert-next-episode {
                             @include flex-row();
+                            border-radius: .25rem;
+                            font-weight: 300;
+                            line-height: 1.25rem;
+                            padding: .5rem 1rem;
+                        }
+
+                        .next-episode-to-watch {
+                            @include flex-col();
                             border-radius: .25rem;
                             font-weight: 300;
                             line-height: 1.25rem;
@@ -3166,25 +3173,35 @@
     }
 }
 
-
 .filter-series {
     header {
         color: var(--gradient-ardoise-10);
 
-        .pages {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: .25rem;
-            margin-block: .5rem;
-            overflow-x: scroll;
+        form {
+            .form-row:last-of-type {
+                flex-wrap: nowrap;
 
-            .current-page {
-                align-items: center;
-                background-color: var(--gradient-orange-50);
-                color: var(--gradient-ardoise-10);
-                cursor: unset;
-                display: flex;
-                justify-content: center;
+                .form-group {
+                    flex-grow: 1;
+                    flex-shrink: 0;
+                }
+
+                .pages {
+                    display: flex;
+                    flex-wrap: nowrap;
+                    gap: .25rem;
+                    margin-block: .5rem;
+                    overflow-x: scroll;
+
+                    .current-page {
+                        align-items: center;
+                        background-color: var(--gradient-orange-50);
+                        color: var(--gradient-ardoise-10);
+                        cursor: unset;
+                        display: flex;
+                        justify-content: center;
+                    }
+                }
             }
         }
     }
@@ -3205,9 +3222,14 @@
             margin-inline: auto;
 
             .home-discover {
+                border-radius: .5rem .5rem 0 0;
                 a {
                     display: block;
                     position: relative;
+
+                    .title {
+                        padding-block: .5rem .75rem;
+                    }
 
                     .countries {
                         @include flex-row(center, center);
@@ -3221,6 +3243,22 @@
 
                         .country {
                             font-size: 1.75rem;
+                        }
+                    }
+
+                    .progress {
+                        background-color: var(--gradient-ardoise-90-alpha-80);
+                        border: 1px solid var(--gradient-orange-50);
+                        bottom: 0;
+                        height: .5rem;
+                        left:0;
+                        position: absolute;
+                        right: 0;
+
+                        .progress-value {
+                            background-color: var(--gradient-orange-50);
+                            height: 100%;
+                            width: 0;
                         }
                     }
                 }
@@ -4377,656 +4415,3 @@
         }
     }
 }
-
-/*@media (prefers-color-scheme: dark) {
-    .choose-origin-country {
-        background-color: var(--gradient-ardoise-30);
-    }
-
-    .my-series, .series-search {
-        color: var(--gradient-ardoise-80);
-
-        .header {
-            h1 {
-                color: var(--gradient-ardoise-90);
-            }
-
-            .quote {
-                color: var(--gradient-ardoise-80);
-            }
-        }
-
-        .series {
-            .wrapper {
-                a {
-                    .serie {
-                        background-color: var(--gradient-ardoise-10);
-
-                        &.light {
-                            .infos {
-                                div {
-                                    color: var(--gradient-ardoise-20);
-                                    font-weight: 300;
-                                }
-                            }
-                        }
-
-                        &.dark {
-                            .infos {
-                                div {
-                                    color: var(--gradient-ardoise-90);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            .series-tools {
-                .search-serie, .add-serie, .numbers, .settings {
-                    background-color: var(--gradient-ardoise-30);
-                }
-
-                .pages {
-                    background-color: var(--gradient-ardoise-30);
-
-                    .position {
-                        color: var(--gradient-ardoise-70);
-                    }
-
-                    .page-group {
-                        .page {
-                            border-color: var(--gradient-ardoise-70);
-
-                            &.current {
-                                background-color: var(--gradient-ardoise-40);
-                                color: var(--gradient-ardoise-90);
-                            }
-
-                            &:hover {
-                                background-color: var(--gradient-ardoise-60);
-
-                                a {
-                                    color: var(--gradient-ardoise-20);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                .search-serie, .add-serie, .settings {
-                    .label {
-                        color: var(--gradient-ardoise-70);
-                    }
-                }
-
-                .search-serie {
-                    .autocomplete-items {
-                        border: 1px solid var(--gradient-ardoise-40);
-                    }
-
-                    .autocomplete-items div {
-                        background-color: var(--gradient-ardoise-30);
-                        border-bottom: 1px solid var(--gradient-ardoise-40);
-                    }
-
-                    .autocomplete-items div:hover {
-                        background-color: var(--gradient-ardoise-60);
-                    }
-                }
-
-                .add-serie {
-                    .help {
-                        details {
-                            div {
-                                background-color: var(--gradient-ardoise-30);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .serie-page {
-        main {
-            article {
-                section {
-                    .seasons, .episodes, .cast {
-                        color: var(--gradient-ardoise-90);
-                        background-color: var(--gradient-ardoise-20-alpha-50);
-
-                        a {
-                            .season {
-                                color: var(--gradient-ardoise-90);
-                                background-color: var(--gradient-ardoise-30-alpha-50);
-
-                                .infos {
-                                    .details {
-                                        div {
-                                            .viewing {
-                                                .ep {
-                                                    border: 2px solid var(--gradient-ardoise-80);
-                                                    color: var(--gradient-ardoise-60);
-
-                                                    span {
-                                                        color: var(--gradient-ardoise-80);
-                                                    }
-
-                                                    &:has(i) {
-                                                        background-color: var(--gradient-green-30);
-                                                        border-color: var(--gradient-yellow-50);
-                                                        color: var(--gradient-yellow-50);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        .episode {
-                            color: var(--gradient-ardoise-90);
-                            background-color: var(--gradient-ardoise-30);
-
-                            .still {
-                                .episode-name {
-                                    background-color: var(--gradient-ardoise-30);
-                                    color: var(--gradient-ardoise-80);
-                                }
-                            }
-
-                            &:has(i[class$="check"]) {
-                                background-color: var(--gradient-green-20);
-
-                                .still {
-                                    .episode-name {
-                                        background-color: var(--gradient-green-20);
-                                        color: var(--gradient-green-80);
-                                    }
-                                }
-                            }
-
-                            .episode-viewing {
-                                background-color: var(--gradient-ardoise-25);
-                                border: 8px solid var(--gradient-ardoise-30);
-
-                                &:has(i[class$="check"]) {
-                                    background-color: var(--gradient-green-15);
-                                    border: 8px solid var(--gradient-green-20);
-                                }
-
-                                .view {
-                                    .view-value {
-                                        border: 4px solid var(--gradient-ardoise-50);
-                                        color: var(--gradient-ardoise-50);
-
-                                        &:has(i[class$="check"]) {
-                                            background-color: var(--gradient-ardoise-50);
-                                            border-color: var(--gradient-ardoise-80);
-                                            color: var(--gradient-ardoise-80);
-
-                                            &.completed {
-                                                background-color: var(--gradient-green-30);
-                                                border-color: var(--gradient-yellow-50);
-                                                color: var(--gradient-yellow-50);
-                                            }
-                                        }
-                                    }
-
-                                    .view-provider, .view-device {
-                                        color: var(--gradient-ardoise-90);
-
-                                        &.show {
-                                            opacity: 1;
-                                        }
-                                    }
-
-                                    .view-provider {
-                                        .other {
-                                            background-image: url("../images/devices/network-other-dark.png");
-                                            border: 2px solid transparent;
-                                        }
-                                    }
-
-                                    .view-device {
-                                        @include devices("dark");
-                                    }
-                                }
-
-                                .vote {
-                                    .vote-graduation {
-                                        border-color: var(--gradient-ardoise-70);
-
-                                        &:hover {
-                                            background-color: var(--gradient-ardoise-60);
-                                        }
-
-                                        &.active {
-                                            background-color: var(--gradient-ardoise-60);
-
-                                            &:hover {
-                                                background-color: var(--gradient-ardoise-70);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    .episodes-layout {
-                        label {
-                            .layout-size-value {
-                                background-color: var(--gradient-ardoise-50);
-                            }
-
-                            input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb, input[type="range"]::-ms-thumb {
-                                background-color: var(--gradient-ardoise-50);
-                                border: 2px solid var(--gradient-ardoise-90);
-                            }
-                        }
-
-                        .episodes-layout-items {
-                            background-color: var(--gradient-ardoise-30);
-
-                            .episodes-layout-item {
-                                &.active {
-                                    background-color: var(--gradient-ardoise-50);
-                                }
-
-                                &:hover {
-                                    background-color: var(--gradient-ardoise-60);
-                                }
-                            }
-                        }
-                    }
-
-                    .images {
-                        > div {
-                            background-color: var(--gradient-ardoise-20-alpha-50);
-                            border-radius: .5rem;
-                        }
-                    }
-                }
-            }
-
-            aside {
-                background-color: var(--gradient-ardoise-20-alpha-50);
-
-                .key-facts {
-                    .fact {
-                        background-color: var(--gradient-ardoise-30-alpha-50);
-                    }
-                }
-            }
-        }
-    }
-
-    .viewed-episode {
-        .overlay {
-            background-color: var(--gradient-ardoise-20);
-            border-color: var(--gradient-ardoise-50);
-            color: var(--gradient-ardoise-80);
-
-            .header {
-                .close {
-                    color: var(--gradient-ardoise-80);
-                }
-            }
-
-            .content {
-                .networks {
-                    .wrapper {
-                        .network {
-                            .logo {
-                                border-color: var(--gradient-ardoise-80);
-
-                                &.other {
-                                    background-image: url("../images/devices/network-other-dark.png");
-                                }
-                            }
-
-                            &:hover {
-                                background-color: var(--gradient-ardoise-40);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .viewed-update {
-        .loading {
-            background-color: var(--gradient-ardoise-20);
-            border-color: var(--gradient-ardoise-50);
-            color: var(--gradient-ardoise-80);
-
-            .dot {
-                background-color: var(--gradient-ardoise-30);
-                border: 1px solid var(--gradient-ardoise-60);
-            }
-        }
-    }
-
-    .person {
-        .left-column {
-            background-color: var(--gradient-ardoise-10-alpha-20);
-
-            .infos {
-                h4 {
-                    color: var(--gradient-ardoise-20);
-                }
-            }
-        }
-
-        .right-column {
-            .content {
-                background-color: var(--gradient-ardoise-10-alpha-20);
-
-                h1 {
-                    color: var(--gradient-ardoise-80);
-                }
-
-                .known-for {
-                    background-color: var(--gradient-ardoise-20-alpha-50);
-                }
-
-                .credits {
-                    .acting, .sub-credits {
-                        background-color: var(--gradient-ardoise-20-alpha-50);
-
-                        .separation {
-                            border-bottom: 1px solid var(--gradient-ardoise-40-alpha-50);
-                        }
-                    }
-                }
-            }
-        }
-
-        .pop-infos {
-            .content {
-                background-color: var(--gradient-ardoise-10);
-                color: var(--gradient-ardoise-90);
-
-                .body {
-                    .spinner {
-                        .circle1 {
-                            animation: 1s infinite clockwise linear;
-                            background: conic-gradient(
-                                            var(--gradient-ardoise-90) 0deg,
-                                            var(--gradient-ardoise-90) 270deg,
-                                            var(--gradient-ardoise-10) 270deg,
-                                            var(--gradient-ardoise-10) 360deg);
-
-                            .circle2 {
-                                background-color: var(--gradient-ardoise-10);
-
-                                .circle3 {
-                                    background: conic-gradient(
-                                                    var(--gradient-ardoise-10) 0deg,
-                                                    var(--gradient-ardoise-10) 90deg,
-                                                    var(--gradient-ardoise-80) 90deg,
-                                                    var(--gradient-ardoise-80) 360deg);
-
-                                    .circle4 {
-                                        background-color: var(--gradient-ardoise-10);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            .tail {
-                background-color: var(--gradient-ardoise-10);
-            }
-        }
-    }
-
-    .today-series, .this-week-series {
-        .header {
-            .date {
-                -webkit-text-stroke: 1px var(--gradient-ardoise-10);
-            }
-        }
-
-        main {
-            .wrapper {
-                @include flex-100(stretch, center);
-                flex-wrap: wrap;
-                gap: 1rem;
-
-                .home-discover {
-                    a {
-                        div:has(img) {
-                            border-radius: .5rem;
-                            overflow: hidden;
-                            position: relative;
-
-                            img {
-                                border-radius: unset;
-                            }
-
-                            .new-season, .finale {
-                                background-color: var(--gradient-ardoise-10-alpha-80);
-                                //border: 2px solid var(--gradient-orange-100);
-                                //border-radius: .5rem .5rem 0 0;
-                                color: var(--gradient-ardoise-100);
-                                font-size: 1.25rem;
-                                font-weight: 400;
-                                left: 0;
-                                line-height: 1.5rem;
-                                padding: .25rem 1rem;
-                                position: absolute;
-                                right: 0;
-                                text-align: center;
-                                top: 0;
-                                white-space: nowrap;
-                            }
-                        }
-                    }
-                }
-
-                .episode {
-                    @include flex-col();
-                    background-color: var(--gradient-ardoise-40);
-                    border-radius: .5rem;
-                    color: var(--gradient-ardoise-90);
-                    margin-top: .5rem;
-                    padding: .5rem;
-                    position: relative;
-                    width: 100%;
-
-                    &:has(div span.all) {
-                        background-color: var(--gradient-green-30);
-                    }
-
-                    &:has(div span.spe) {
-                        background-color: var(--gradient-orange-40);
-                    }
-
-                    .episode-detail {
-                        line-height: 1.25rem;
-                        text-align: center;
-                    }
-
-                    .episode-viewed {
-                        background-color: var(--gradient-green-30);
-                        border-radius: 50%;
-                        border: 2px solid var(--gradient-green-90);
-                        color: var(--gradient-green-90);
-                        height: 2.5rem;
-                        line-height: 2.5rem;
-                        position: absolute;
-                        right: 1rem;
-                        text-align: center;
-                        top: -1rem;
-                        width: 2.5rem;
-                    }
-                }
-
-                .nothing {
-                    @include flex-row();
-                    aspect-ratio: 512 / 508;
-                    background-image: url("../images/today-nothing.png");
-                    background-size: cover;
-                    height: auto;
-                    width: clamp(128px, 20vw, 512px);
-                }
-
-                &:has(.nothing) {
-                    align-items: center;
-                    flex-direction: column;
-                }
-
-                .something-else {
-                    img {
-                        aspect-ratio: 20 / 9;
-                        border-radius: 1rem;
-                        height: auto;
-                        object-fit: cover;
-                        opacity: 0;
-                        transition: opacity 300ms ease-in-out;
-                        width: clamp(360px, 75vw, 1000px);
-
-                        &.show {
-                            opacity: 1;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .this-week-series {
-        .header {
-            @include flex-col();
-            gap: 1rem;
-            height: 20rem;
-            overflow: hidden;
-            position: relative;
-
-            .textes {
-                @include flex-col();
-                gap: 1rem;
-                inset: 0;
-                position: absolute;
-                z-index: 1;
-
-                h1 {
-                    color: var(--gradient-ardoise-90);
-                    font-size: 4rem;
-                    font-weight: 900;
-                }
-
-                .week, .range {
-                    color: var(--gradient-ardoise-90);
-                    font-size: 2.5rem;
-                }
-            }
-
-            .day-names {
-                inset: 0;
-                position: absolute;
-                z-index: 0;
-
-                .day-name {
-                    color: var(--gradient-ardoise-90);
-                    font-size: 4rem;
-                    font-weight: 900;
-                    line-height: 1rem;
-                    mix-blend-mode: screen;
-                    opacity: 0;
-                    position: absolute;
-                    transform: translate(-50%, -50%);
-                    transition: opacity 300ms ease-in-out;
-                    width: max-content;
-
-                    &.show {
-                        opacity: .1;
-                    }
-                }
-            }
-        }
-
-        main {
-            width: 100%;
-
-            .wrapper {
-                @include flex-row(center, center);
-                flex-wrap: wrap;
-                gap: 2rem;
-
-                .day {
-                    @include flex-col(start, start);
-                    background-color: var(--gradient-ardoise-40-alpha-50);
-                    border-radius: .5rem;
-                    gap: .5rem;
-                    padding: .5rem;
-
-                    &.today {
-                        background-color: var(--gradient-green-30);
-                    }
-
-                    .date {
-                        font-size: 2rem;
-                    }
-
-                    .episodes {
-                        @include flex-100();
-                        flex-wrap: wrap;
-                        gap: .5rem;
-
-                        .home-discover {
-                            border: 2px solid transparent;
-                            transition: transform 300ms ease-in-out, border-color 300ms ease-in-out;
-
-                            &:hover {
-                                transform: scale(1.15);
-                                border-color: var(--gradient-ardoise-90);
-                                border-radius: .5rem;
-                                outline: var(--gradient-ardoise-90);
-                                z-index: 1;
-                            }
-                        }
-                    }
-                }
-
-                .nothing {
-                    @include flex-row();
-                    aspect-ratio: 512 / 508;
-                    background-image: url("../images/today-nothing.png");
-                    background-size: cover;
-                    height: auto;
-                    width: clamp(128px, 20vw, 512px);
-                }
-
-                &:has(.nothing) {
-                    align-items: center;
-                    flex-direction: column;
-                }
-
-                .something-else {
-                    img {
-                        aspect-ratio: 20 / 9;
-                        border-radius: 1rem;
-                        height: auto;
-                        object-fit: cover;
-                        opacity: 0;
-                        transition: opacity 300ms ease-in-out;
-                        width: clamp(360px, 75vw, 1000px);
-
-                        &.show {
-                            opacity: 1;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-}*/
