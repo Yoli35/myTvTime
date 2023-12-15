@@ -10,9 +10,9 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class FriendSubscriber implements EventSubscriberInterface
+readonly class FriendSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly UserController $userController)
+    public function __construct(private UserController $userController)
     {
     }
 

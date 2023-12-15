@@ -11,6 +11,7 @@ use App\Repository\MovieListRepository;
 use App\Repository\MovieRepository;
 use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
+use App\Service\AlertService;
 use App\Service\DateService;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -25,6 +26,7 @@ use Twig\TwigFunction;
 class UsersExtension extends AbstractExtension
 {
     public function __construct(
+        private readonly AlertService             $alertService,
         private readonly ChatDiscussionRepository $chatDiscussionRepository,
         private readonly DateService              $dateService,
         private readonly MovieListRepository      $movieListRepository,
@@ -39,6 +41,7 @@ class UsersExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
+            new TwigFunction('getAlerts', [$this, 'getAlerts'], ['is_safe' => ['html']]),
             new TwigFunction('getSettings', [$this, 'getSettings'], ['is_safe' => ['html']]),
             new TwigFunction('getTime', [$this, 'getTime'], ['is_safe' => ['html']]),
             new TwigFunction('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
@@ -70,6 +73,11 @@ class UsersExtension extends AbstractExtension
         }
 
         return $settings->getData();
+    }
+
+    public function getAlerts(User $user, $from): void
+    {
+        $this->alertService->checkUserAlertsOfTheDay($user, $from);
     }
 
     public function userList(): array

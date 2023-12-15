@@ -3304,6 +3304,8 @@ class SerieController extends AbstractController
                 $serieViewing->getNextEpisodeToWatch()->getSeason()->getSeasonNumber(),
                 $serieViewing->getNextEpisodeToWatch()->getEpisodeNumber());
             $date = $date->setTime(9, 0);
+            $alert->setEpisodeNumber($serieViewing->getNextEpisodeToWatch()->getEpisodeNumber());
+            $alert->setSeasonNumber($serieViewing->getNextEpisodeToWatch()->getSeason()->getSeasonNumber());
             $alert->setMessage($message);
             $alert->setDate($date);
             $alert->setActivated(true);

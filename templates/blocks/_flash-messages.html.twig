@@ -2,7 +2,24 @@
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="flash-message {{ label }}">
-                {{ message|raw }}
+                {% if label=='alert' %}
+                    <a href="{{ message.href }}">
+                        <div class="still">
+                            <img src="{{ message.episode_still_path ?? message.season_poster_path ?? '/images/default/no_poster_dark.png' }}" alt="{{ message.name }}">
+                        </div>
+                        <div class="infos">
+                            <div>
+                                {{ message.name }}
+                                {% if message.original_name %} | {{ message.original_name }}{% endif %}
+                                {% if message.localized_name %} | {{ message.localized_name }}{% endif %}
+                            </div>
+                            <div>S{% if message.alert_season_number < 10 %}0{% endif %}{{ message.alert_episode_number }}E{% if message.alert_episode_number < 10 %}0{% endif %}{{ message.alert_episode_number }}</div>
+                            <button class="btn btn-primary" id="disable-this-alert" data-id="{{ message.alert_id }}">{{ 'Dismiss this alert'|trans }}</button>
+                        </div>
+                    </a>
+                {% else %}
+                    {{ message|raw }}
+                {% endif %}
                 <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
             </div>
         {% endfor %}

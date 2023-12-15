@@ -40,10 +40,18 @@ class Alert
     #[ORM\Column(nullable: true)]
     private ?int $providerId = null;
 
-    public function __construct($user, $serieViewingId, $date, $message, DateService $dateService)
+    #[ORM\Column(nullable: true)]
+    private ?int $episodeNumber = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $seasonNumber = null;
+
+    public function __construct($user, $serieViewingId, $seasonNumber, $episodeNumber, $date, $message, DateService $dateService)
     {
         $this->user = $user;
         $this->serieViewingId = $serieViewingId;
+        $this->seasonNumber = $seasonNumber;
+        $this->episodeNumber = $episodeNumber;
         $this->message = $message;
         $this->activated = true;
         $this->date = $date;
@@ -135,6 +143,30 @@ class Alert
     public function setProviderId(?int $providerId): static
     {
         $this->providerId = $providerId;
+
+        return $this;
+    }
+
+    public function getEpisodeNumber(): ?int
+    {
+        return $this->episodeNumber;
+    }
+
+    public function setEpisodeNumber(?int $episodeNumber): static
+    {
+        $this->episodeNumber = $episodeNumber;
+
+        return $this;
+    }
+
+    public function getSeasonNumber(): ?int
+    {
+        return $this->seasonNumber;
+    }
+
+    public function setSeasonNumber(?int $seasonNumber): static
+    {
+        $this->seasonNumber = $seasonNumber;
 
         return $this;
     }

@@ -46,12 +46,12 @@ class SerieFrontController extends AbstractController
     public function __construct(
         private readonly AlertRepository          $alertRepository,
         private readonly DateService              $dateService,
-        private readonly EpisodeRepository $episodeRepository,
+        private readonly EpisodeRepository        $episodeRepository,
         private readonly EpisodeViewingRepository $episodeViewingRepository,
         private readonly FavoriteRepository       $favoriteRepository,
         private readonly ImageConfiguration       $imageConfiguration,
         private readonly NetworksRepository       $networkRepository,
-        private readonly SeasonRepository  $seasonRepository,
+        private readonly SeasonRepository         $seasonRepository,
         private readonly SerieController          $serieController,
         private readonly SerieRepository          $serieRepository,
         private readonly SerieViewingRepository   $serieViewingRepository,
@@ -571,7 +571,7 @@ class SerieFrontController extends AbstractController
                 $airDate = $nextEpisodeToWatch['airDate'];
                 $airDate = $airDate->setTime(9, 0); // Netflix : 9h01, Apple TV+ : 9h00, Disney+ : 9h00, Prime Video : 9h00
                 $message = sprintf("%s : S%02dE%02d\n", $serie->getName(), $nextEpisodeToWatch['seasonNumber'], $nextEpisodeToWatch['episodeNumber']);
-                $alert = new Alert($this->getUser(), $serieViewing->getId(), $airDate, $message, $this->dateService);
+                $alert = new Alert($this->getUser(), $serieViewing->getId(), $nextEpisodeToWatch['seasonNumber'], $nextEpisodeToWatch['episodeNumber'], $airDate, $message, $this->dateService);
                 $this->alertRepository->save($alert, true);
                 $alertMessage = $this->translator->trans("Alert created and activated");
             } else {
@@ -591,6 +591,18 @@ class SerieFrontController extends AbstractController
             'success' => $success,
             'alertMessage' => $alertMessage,
         ]);
+    }
+
+    #[Route('/alert/disable/{id}', name: 'app_series_alert_disable', methods: ['GET'])]
+    public function disableAlert(Request $request, int $id): Response
+    {
+        $alert = $this->alertRepository->find($id);
+        if ($alert) {
+            $alert->setActivated(false);
+            $this->alertRepository->save($alert, true);
+        }
+
+        return $this->json(['success' => true]);
     }
 
     #[Route('/alert-provider/{id}/{providerId}', name: 'app_series_alert_provider', methods: ['GET'])]
@@ -632,43 +644,59 @@ class SerieFrontController extends AbstractController
         $numberOfSeasons = $tvSeries['number_of_seasons'];
 
         for ($seasonNumber = 1; $seasonNumber <= $numberOfSeasons; $seasonNumber++) {
-            $tvSeason = json_decode($this->TMDBService->getTvSeason($series->getSerieId(), $seasonNumber, "fr"), true);
+            $this->getSeasonAndEpisodes($series, $seasonNumber);
+        }
+    }
 
-            $season = $this->seasonRepository->findOneBy(['series' => $series, 'seasonNumber' => $seasonNumber]);
+    public function getLastSeasonAndEpisodes($tvSeries, $series): void
+    {
+        $seasons = $tvSeries['seasons'];
+        $lastSeason = $seasons[count($seasons) - 1];
+        foreach ($seasons as $season) {
+            $lastSeason = $season['season_number'] > $lastSeason['season_number'] ? $season : $lastSeason;
+        }
+        $seasonNumber = $lastSeason['season_number'];
+        $this->getSeasonAndEpisodes($series, $seasonNumber);
+    }
 
-            if (!$season) {
-                $season = new Season();
+    public function getSeasonAndEpisodes($series, $seasonNumber): void
+    {
+        $tvSeason = json_decode($this->TMDBService->getTvSeason($series->getSerieId(), $seasonNumber, "fr"), true);
+
+        $season = $this->seasonRepository->findOneBy(['series' => $series, 'seasonNumber' => $seasonNumber]);
+
+        if (!$season) {
+            $season = new Season();
+        }
+        $season->set_Id($tvSeason['_id']);
+        $season->setAirDate($this->dateService->newDateImmutable($tvSeason['air_date'], 'Europe/Paris'));
+        $season->setName($tvSeason['name']);
+        $season->setOverview($tvSeason['overview']);
+        $season->setPosterPath($tvSeason['poster_path']);
+        $season->setSeasonNumber($seasonNumber);
+        $season->setSeries($series);
+        $season->setTmdbId($tvSeason['id']);
+        $this->seasonRepository->save($season, true);
+
+        $tvEpisodes = $tvSeason['episodes'];
+        $episodeCount = count($tvEpisodes);
+        for ($i = 1; $i <= $episodeCount; $i++) {
+            $tvEpisode = $tvEpisodes[$i - 1];
+            $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $i]);
+            if (!$episode) {
+                $episode = new Episode();
             }
-            $season->set_Id($tvSeason['_id']);
-            $season->setAirDate($this->dateService->newDateImmutable($tvSeason['air_date'], 'Europe/Paris'));
-            $season->setName($tvSeason['name']);
-            $season->setOverview($tvSeason['overview']);
-            $season->setPosterPath($tvSeason['poster_path']);
-            $season->setSeasonNumber($seasonNumber);
-            $season->setSeries($series);
-            $season->setTmdbId($tvSeason['id']);
-            $this->seasonRepository->save($season, true);
-
-            $tvEpisodes = $tvSeason['episodes'];
-            $episodeCount = count($tvEpisodes);
-            for ($i = 1; $i <= $episodeCount; $i++) {
-                $tvEpisode = $tvEpisodes[$i - 1];
-                $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $i]);
-                if (!$episode) {
-                    $episode = new Episode();
-                }
-                $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
-                $episode->setEpisodeNumber($tvEpisode['episode_number']);
-                $episode->setName($tvEpisode['name']);
-                $episode->setOverview($tvEpisode['overview']);
-                $episode->setRuntime($tvEpisode['runtime']);
-                $episode->setSeason($season);
-                $episode->setSeasonNumber($tvEpisode['season_number']);
-                $episode->setSeries($series);
-                $episode->setStillPath($tvEpisode['still_path']);
-                $episode->setTmdbId($tvEpisode['id']);
-                $this->episodeRepository->save($episode, $i === $episodeCount);
-            }
+            $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
+            $episode->setEpisodeNumber($tvEpisode['episode_number']);
+            $episode->setName($tvEpisode['name']);
+            $episode->setOverview($tvEpisode['overview']);
+            $episode->setRuntime($tvEpisode['runtime']);
+            $episode->setSeason($season);
+            $episode->setSeasonNumber($tvEpisode['season_number']);
+            $episode->setSeries($series);
+            $episode->setStillPath($tvEpisode['still_path']);
+            $episode->setTmdbId($tvEpisode['id']);
+            $this->episodeRepository->save($episode, $i === $episodeCount);
         }
     }
 

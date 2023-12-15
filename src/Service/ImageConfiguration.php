@@ -34,4 +34,9 @@ class ImageConfiguration
     {
         return $this->imageConfiguration;
     }
+
+    public function getCompleteUrl(string $path, $type, $size): string
+    {
+        return $this->imageConfiguration['url'] . $this->imageConfiguration[$type][$size] . $path;
+    }
 }

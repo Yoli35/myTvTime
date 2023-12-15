@@ -1,5 +1,6 @@
 {% set route = app.request.attributes.get('_route') %}
 {% set user = app.user %}
+{% if user is not null %}{{ getAlerts(user, from??null) }}{% endif %}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale }}">
 <head>
@@ -25,7 +26,7 @@
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
-   </head>
+</head>
 <body>
 {% include 'blocks/_topMenu.html.twig' %}
 {% block body %}{% endblock %}
