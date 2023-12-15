@@ -51,11 +51,11 @@
         {% endif %}
     {% endif %}
     <div class="next-episode-to-watch">
-        {{ 'Next episode'|trans }} : {{ 'Episode'|trans }}&nbsp{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp{{ nextEpisodeToWatch.seasonNumber }}<br>
+        <div>{{ 'Next episode'|trans }} : {{ 'Episode'|trans }}&nbsp{{ nextEpisodeToWatch.episodeNumber }} {{ 'of season'|trans }}&nbsp{{ nextEpisodeToWatch.seasonNumber }}</div>
         {% if nextEpisodeToWatch.airDate %}
-            {{ nextEpisodeToWatch.airDate|format_date('relative_full', timezone='Europe/Paris')|capitalize }}
+            <div>{{ fixIfFirstDayOfTheMonth(nextEpisodeToWatch.airDate|format_date('relative_full', timezone='Europe/Paris')|capitalize) }}</div>
         {% else %}
-            {{ 'No date for the moment'|trans }}
+            <div>{{ 'No date for the moment'|trans }}</div>
         {% endif %}
     </div>
 {% endif %}
