@@ -81,7 +81,7 @@ class CollectSeriesInfos extends Command
                     continue;
                 }
 
-                $this->serieFrontController->getSeasonsAndEpisodes($tvSeries, $series);
+                $this->serieFrontController->getLastSeasonAndEpisodes($tvSeries, $series);
 
                 $count++;
             } else {
