@@ -2048,13 +2048,13 @@ class SerieController extends AbstractController
         $missingTranslations = $this->keywordsTranslation($keywords, $request->getLocale());
 
         $temp = $tv['watch/providers'];
-        if ($user) {
-            $country = $user->getCountry();
-            $language = $user->getPreferredLanguage();
-        } else {
-            $country = 'FR';
-            $language = 'fr';
-        }
+//        if ($user) {
+        $country = $user?->getCountry() ?? 'FR';
+        $language = $user?->getPreferredLanguage() ?? 'fr';
+//        } else {
+//            $country = 'FR';
+//            $language = 'fr';
+//        }
         if ($temp && array_key_exists($country, $temp['results'])) {
             $watchProviders = $temp['results'][$country];
             $providersFlatrate = $this->getProviders($watchProviders, 'flatrate', $imgConfig, []); // Providers FR (streaming)
@@ -2068,11 +2068,11 @@ class SerieController extends AbstractController
             if (!count($providersFlatrate)) {
                 $providersFlatrate = null;
                 $watchProviderList = null;
-            } else {
+            }/* else {*/
                 $watchProviderList = $this->getRegionProvider($imgConfig, 1, '', ''); // Tous les providers
-            }
+//            }
         }
-//        dump(['providersFlatrate' => $providersFlatrate, 'watchProviderList' => $watchProviderList]);
+//        dump(['temp' => $temp, 'providersFlatrate' => $providersFlatrate, 'watchProviderList' => $watchProviderList]);
 
         $serieViewing = null;
         $whatsNew = null;
@@ -2136,7 +2136,7 @@ class SerieController extends AbstractController
 //                    '' => 234, // Arte
 //                    '' => 223, // Hayu
 //                    '' => 68, // Microsoft Store
-//                    '' => 188, // YouTube Premium
+                'youtube' => 188, // YouTube Premium
 //                    '' => 58, // Canal VOD
 //                    '' => 59, // Bbox VOD
 //                    '' => 177, // Pantaflix
@@ -2513,7 +2513,7 @@ class SerieController extends AbstractController
         return $episodeOverviewLength > 0;
     }
 
-    public function seasonWatchProviders(int $id, array $season, string $language="fr-FR", string $country="FR"): array
+    public function seasonWatchProviders(int $id, array $season, string $language = "fr-FR", string $country = "FR"): array
     {
         $imageConfig = $this->imageConfiguration->getConfig();
         // Les fournisseurs de streaming de la série du pays ($country)

@@ -6,17 +6,22 @@
                     <a href="{{ message.href }}">
                         <div class="still">
                             <img src="{{ message.episode_still_path ?? message.season_poster_path ?? '/images/default/no_poster_dark.png' }}" alt="{{ message.name }}">
-                        </div>
-                        <div class="infos">
-                            <div>
-                                {{ message.name }}
-                                {% if message.original_name %} | {{ message.original_name }}{% endif %}
-                                {% if message.localized_name %} | {{ message.localized_name }}{% endif %}
+                            <div class="countries">
+                                {% for country in message.origin_country_array %}
+                                    <div class="country" data-title="{{ country|country_name }}">{{ getEmojiFlag(country) }}</div>
+                                {% endfor %}
                             </div>
-                            <div>S{% if message.alert_season_number < 10 %}0{% endif %}{{ message.alert_episode_number }}E{% if message.alert_episode_number < 10 %}0{% endif %}{{ message.alert_episode_number }}</div>
-                            <button class="btn btn-primary" id="disable-this-alert" data-id="{{ message.alert_id }}">{{ 'Dismiss this alert'|trans }}</button>
                         </div>
                     </a>
+                    <div class="infos">
+                        <div>
+                            {{ message.name }}
+                            {% if message.original_name %} | {{ message.original_name }}{% endif %}
+                            {% if message.localized_name %} | {{ message.localized_name }}{% endif %}
+                        </div>
+                        <div>{{ 'Episode'|trans }} S{% if message.alert_season_number < 10 %}0{% endif %}{{ message.alert_season_number }}E{% if message.alert_episode_number < 10 %}0{% endif %}{{ message.alert_episode_number }}</div>
+                        <button class="btn btn-primary" id="disable-this-alert" data-id="{{ message.alert_id }}">{{ 'Disable the alert for this episode'|trans }}</button>
+                    </div>
                 {% else %}
                     {{ message|raw }}
                 {% endif %}

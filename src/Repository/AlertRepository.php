@@ -43,7 +43,7 @@ class AlertRepository extends ServiceEntityRepository
     {
         $sql = "SELECT a.`id` as id, a.`message` as message, a.`provider_id` as provider_id, a.`episode_number` as alert_episode_number, a.`season_number` as alert_season_number, "
             . "        sv.`number_of_episodes` as number_of_episodes, sv.`number_of_seasons` as number_of_seasons, sv.`viewed_episodes` as viewed_episodes, "
-            . "        s.`name` as name, s.`original_name` as original_name, s.`serie_id` as tmdb_id,"
+            . "        s.`name` as name, s.`original_name` as original_name, s.`serie_id` as tmdb_id, s.`origin_country` as origin_country_array,"
             . "        sln.`name` as localized_name, "
             . "        se.`poster_path` as season_poster_path, ep.`still_path` as episode_still_path "
             . "FROM `alert` a "

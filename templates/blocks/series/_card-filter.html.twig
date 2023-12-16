@@ -3,7 +3,7 @@
         <img src="{{ serie.poster_path }}" alt="{{ 'Poster' }}">
         <div class="title">
             <div>
-                {{ serie.name }}{% if serie.first_air_date %}<br>{{ serie.first_air_date|format_date() }}{% endif %}
+                {{ serie.name }}{% if serie.first_air_date is defined %}<br>{{ serie.first_air_date|format_date() }}{% endif %}
             </div>
         </div>
         {% if serie.origin_country|length %}

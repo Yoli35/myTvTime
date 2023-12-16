@@ -1,3 +1,4 @@
+import {ToolTips} from "./ToolTips.js";
 let thisGlobal;
 
 export class WatchProvidersModule {
@@ -16,6 +17,9 @@ export class WatchProvidersModule {
             });
         });
         this.initDialog();
+
+        const tooltips = new ToolTips();
+        tooltips.init();
     }
 
     watchProviders(e) {

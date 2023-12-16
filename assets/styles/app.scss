@@ -235,7 +235,7 @@ body {
         }
 
         &.alert {
-            background-color: var(--gradient-ardoise-90);
+            background-color: var(--gradient-ardoise-90-alpha-80);
             border-color: var(--gradient-ardoise-10);
             color: var(--gradient-ardoise-10);
             padding: 0;
@@ -246,10 +246,10 @@ body {
                 display: flex;
                 gap: 1rem;
                 justify-content: flex-start;
-                width: 100%;
 
                 .still {
                     flex-shrink: 0;
+                    position: relative;
 
                     img {
                         border-radius: .5rem 0 0 .5rem;
@@ -259,21 +259,38 @@ body {
                         display: block;
                         transition: all 500ms ease-in-out;
                     }
-                }
 
-                .infos {
-                    @include flex-col(flex-start, center);
-                    gap: .5rem;
-                    height: 100%;
-                    padding: 0 1rem;
-                    width: calc(100% - 3.5rem);
+                    .countries {
+                        align-items: center;
+                        background-color: var(--gradient-ardoise-90-alpha-80);
+                        border-radius: .5rem;
+                        bottom: .5rem;
+                        display: flex;
+                        gap: .5rem;
+                        justify-content: center;
+                        padding: .25rem;
+                        position: absolute;
+                        right: .5rem;
 
-                    button {
-                        background-color: var(--gradient-ardoise-50);
-                        border-color: var(--gradient-ardoise-10);
-                        color: var(--gradient-ardoise-10);
-                        margin-left: auto;
+                        .country {
+                            font-size: 2rem;
+                        }
                     }
+                }
+            }
+
+            .infos {
+                @include flex-col(flex-start, center);
+                flex-grow: 1;
+                gap: .5rem;
+                height: 100%;
+                padding: 1rem;
+
+                button {
+                    background-color: var(--gradient-ardoise-50);
+                    border-color: var(--gradient-ardoise-10);
+                    color: var(--gradient-ardoise-10);
+                    margin-left: auto;
                 }
             }
 
