@@ -601,7 +601,6 @@ class SerieFrontController extends AbstractController
             $alert->setActivated(false);
             $this->alertRepository->save($alert, true);
         }
-
         return $this->json(['success' => true]);
     }
 

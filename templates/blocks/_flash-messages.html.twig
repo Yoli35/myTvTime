@@ -11,6 +11,11 @@
                                     <div class="country" data-title="{{ country|country_name }}">{{ getEmojiFlag(country) }}</div>
                                 {% endfor %}
                             </div>
+                            {% if message.provider_logo_path %}
+                                <div class="watch-provider">
+                                    <img src=" {{ message.provider_logo_path }}" alt="{{ message.provider_name }}" data-tile="{{ message.provider_name }}">
+                                </div>
+                            {% endif %}
                         </div>
                     </a>
                     <div class="infos">
@@ -20,7 +25,7 @@
                             {% if message.localized_name %} | {{ message.localized_name }}{% endif %}
                         </div>
                         <div>{{ 'Episode'|trans }} S{% if message.alert_season_number < 10 %}0{% endif %}{{ message.alert_season_number }}E{% if message.alert_episode_number < 10 %}0{% endif %}{{ message.alert_episode_number }}</div>
-                        <button class="btn btn-primary" id="disable-this-alert" data-id="{{ message.alert_id }}">{{ 'Disable the alert for this episode'|trans }}</button>
+                        <button class="btn" id="disable-this-alert" data-id="{{ message.alert_id }}">{{ 'Disable the alert for this episode'|trans }}</button>
                     </div>
                 {% else %}
                     {{ message|raw }}

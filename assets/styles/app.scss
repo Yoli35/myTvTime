@@ -276,6 +276,26 @@ body {
                             font-size: 2rem;
                         }
                     }
+
+                    .watch-provider {
+                        align-items: center;
+                        background-color: var(--gradient-ardoise-90-alpha-80);
+                        border-radius: .5rem;
+                        bottom: .5rem;
+                        display: flex;
+                        gap: .5rem;
+                        justify-content: center;
+                        padding: .25rem;
+                        position: absolute;
+                        left: .5rem;
+
+                        img {
+                            border-radius: .25rem;
+                            height: 2rem;
+                            object-fit: cover;
+                            width: 2rem;
+                        }
+                    }
                 }
             }
 
@@ -287,8 +307,8 @@ body {
                 padding: 1rem;
 
                 button {
-                    background-color: var(--gradient-ardoise-50);
-                    border-color: var(--gradient-ardoise-10);
+                    background-color: var(--gradient-ardoise-80);
+                    border-color: var(--gradient-ardoise-60);
                     color: var(--gradient-ardoise-10);
                     margin-left: auto;
                 }
@@ -302,6 +322,7 @@ body {
                 gap: 1rem;
                 inset: 0;
                 justify-content: center;
+                position: absolute;
 
                 > div {
                     border-radius: 50%;
@@ -310,8 +331,11 @@ body {
 
                     > div {
                         animation: rotation 1s infinite linear;
-                        border-color: var(--gradient-ardoise-10) transparent transparent transparent;
-                        border: 2px solid var(--gradient-ardoise-10);
+                        border-bottom: 2px solid transparent;
+                        border-left: 2px solid transparent;
+                        border-radius: 50%;
+                        border-right: 2px solid transparent;
+                        border-top: 2px solid var(--gradient-ardoise-10);
                         height: 3rem;
                         width: 3rem;
                     }

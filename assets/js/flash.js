@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 loading.parentNode.removeChild(loading);
                 closeFlash(flash);
             }
-            xhr.open("GET", "/fr/series/alert/disabled/" + id);
+            xhr.open("GET", "/fr/series/alert/disable/" + id);
             xhr.send();
         });
     })

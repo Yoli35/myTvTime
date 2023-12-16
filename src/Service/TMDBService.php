@@ -318,12 +318,12 @@ class TMDBService
         }
     }
 
-    public function getTvWatchProviderList($language, $region): ?string
+    public function getTvWatchProviderList($language = 'fr-FR', $region = null): ?string
     {
         try {
             $response = $this->client->request(
                 'GET',
-                'https://api.themoviedb.org/3/watch/providers/tv?language=' . $language . '&watch_region=' . $region . '&api_key=' . $this->api_key,
+                'https://api.themoviedb.org/3/watch/providers/tv?language=' . $language . ($region ? '&watch_region=' . $region : '') . '&api_key=' . $this->api_key,
             );
             try {
                 return $response->getContent();

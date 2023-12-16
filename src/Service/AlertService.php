@@ -41,6 +41,8 @@ class AlertService extends AbstractController
                 'localized_name' => $alert['localized_name'],
                 'season_poster_path' => $alert['season_poster_path'] ? $this->imageConfiguration->getCompleteUrl($alert['season_poster_path'], 'poster_sizes', 3) : null,
                 'episode_still_path' => $alert['episode_still_path'] ? $this->imageConfiguration->getCompleteUrl($alert['episode_still_path'], 'still_sizes', 3) : null,
+                'provider_name' => $alert['provider_name'],
+                'provider_logo_path' => $alert['provider_logo_path'] ? $this->imageConfiguration->getCompleteUrl($alert['provider_logo_path'], 'logo_sizes', 3) : null,
             ]);
         }
     }
