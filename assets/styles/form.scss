@@ -225,31 +225,35 @@
 }
 
 .btn-danger {
-    background-color: var(--gradient-red-40);
-    border-color: var(--gradient-red-80);
-    color: var(--gradient-red-90);
+    background-color: hsl(0, 60%, 50%);
+    border-color: hsl(0, 60%, 70%);
+    color: hsl(0, 60%, 95%);
+    font-weight: 300;
 
     &:hover {
-        background-color: var(--gradient-red-50);
-        border-color: var(--gradient-red-90);
+        background-color: hsl(0, 100%, 50%);
+        border-color: hsl(0, 100%, 70%);
+        color: hsl(0, 100%, 95%);
     }
 }
 
 .btn-warning {
-    background-color: var(--gradient-orange-50);
-    border-color: var(--gradient-orange-80);
-    color: var(--gradient-orange-90);
+    background-color: hsl(30, 60%, 50%);
+    border-color: hsl(30, 60%, 70%);
+    color: hsl(30, 60%, 95%);
+    font-weight: 300;
 
     &:hover {
-        background-color: var(--gradient-orange-60);
-        border-color: var(--gradient-orange-90);
+        background-color: hsl(30, 100%, 50%);
+        border-color: hsl(30, 100%, 70%);
+        color: hsl(30, 100%, 95%);
     }
 }
 
 .btn-outline-secondary {
     background-color: transparent;
     border-color: var(--gradient-ardoise-50);
-    color: var(--gradient-ardoise-90);
+    color: var(--gradient-ardoise-10);
 
     &:hover {
         background-color: var(--gradient-ardoise-30-alpha-50);
@@ -339,124 +343,3 @@ label:has(select) {
         z-index: 2;
     }
 }
-
-/*@media (prefers-color-scheme: light) {
-
-    .form-row {
-        &:nth-child(odd) {
-            background-color: var(--gradient-ardoise-70);
-        }
-
-        &:nth-child(even) {
-            background-color: var(--gradient-ardoise-75);
-        }
-
-        .form-group {
-            background-color: var(--gradient-ardoise-10-alpha-50);
-
-            i {
-                color: var(--gradient-ardoise-50);
-
-                &:hover {
-                    color: var(--gradient-ardoise-10);
-                }
-            }
-
-            .form-switch {
-                @include switcher(var(--gradient-orange-50), var(--gradient-ardoise-60));
-            }
-        }
-
-        .checkboxes {
-            .group {
-                background-color: var(--gradient-ardoise-10-alpha-50);
-                border: 1px solid var(--gradient-ardoise-50);
-
-                .checkbox {
-                    .form-switch {
-                        input:checked + span {
-                            background: var(--gradient-orange-50);
-                        }
-
-                        input:checked + span:before {
-                            background: var(--gradient-orange-20);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    label:has(select) {
-        select {
-            background-color: var(--gradient-ardoise-80);
-            border: 1px solid var(--gradient-ardoise-50);
-            color: var(--gradient-ardoise-10);
-        }
-
-        &::after {
-            border-bottom: 4px solid var(--gradient-ardoise-50);
-            border-left: 4px solid transparent;
-            border-right: 4px solid var(--gradient-ardoise-50);
-            border-top: 4px solid transparent;
-        }
-    }
-
-    .form-select {
-        background-color: var(--gradient-ardoise-80);
-        border: 1px solid var(--gradient-ardoise-10);
-        color: var(--gradient-ardoise-10);
-    }
-
-    .form-control {
-        border: 1px solid var(--gradient-ardoise-60);
-    }
-
-    .btn {
-        background-color: var(--gradient-ardoise-10);
-        border: 1px solid var(--gradient-ardoise-50);
-        color: var(--gradient-ardoise-90);
-
-        &:hover {
-            background-color: var(--gradient-ardoise-20);
-        }
-    }
-
-    .btn-group {
-        .btn:first-child {
-            border-left: 1px solid var(--gradient-ardoise-50);
-        }
-    }
-
-    .btn-primary {
-        background-color: var(--gradient-ardoise-70);
-        border-color: var(--gradient-ardoise-30);
-        color: var(--gradient-ardoise-10);
-
-        &:hover {
-            background-color: var(--gradient-ardoise-80);
-            border-color: var(--gradient-ardoise-40);
-        }
-    }
-
-    .btn-secondary {
-        background-color: var(--gradient-ardoise-80);
-        border-color: var(--gradient-ardoise-50);
-        color: var(--gradient-ardoise-10);
-
-        &:hover {
-            background-color: var(--gradient-ardoise-50);
-            border-color: var(--gradient-ardoise-40);
-        }
-    }
-
-    .btn-outline-secondary {
-        background-color: transparent;
-        color: var(--gradient-ardoise-10);
-
-        &:hover {
-            background-color: var(--gradient-ardoise-30-alpha-50);
-            border-color: var(--gradient-ardoise-40);
-        }
-    }
-}*/

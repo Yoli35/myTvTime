@@ -257,7 +257,7 @@ body {
                         object-fit: cover;
                         width: 10rem;
                         display: block;
-                        transition: all 500ms ease-in-out;
+                        transition: height 500ms ease-in-out, width 500ms ease-in-out;
                     }
 
                     .countries {
@@ -294,6 +294,7 @@ body {
                             height: 2rem;
                             object-fit: cover;
                             width: 2rem;
+                            transition: height 500ms ease-in-out, width 500ms ease-in-out;
                         }
                     }
                 }
