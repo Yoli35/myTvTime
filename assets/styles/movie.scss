@@ -458,6 +458,7 @@
 
 .movie-info {
     @include flex-col(unset, unset);
+    color: var(--gradient-ardoise-20);
     font-weight: 100;
 
     .top {
