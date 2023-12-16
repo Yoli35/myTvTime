@@ -108,9 +108,9 @@
                 <div class="article-tools" id="{{ article.id }}">
                     {% if article.id in userArticleIds %}
                         <a href="{{ path('app_blog_edit', {id: article.id}) }}">
-                            <div class="edit-article"><i class="fa-solid fa-pen-to-square"></i> {{ 'Edit article'|trans }}</div>
+                            <div class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> {{ 'Edit article'|trans }}</div>
                         </a>
-                        <div class="delete-article"><i class="fa-solid fa-trash-can"></i> {{ 'Delete article'|trans }}</div>
+                        <div class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> {{ 'Delete article'|trans }}</div>
                     {% endif %}
                 </div>
             </div>
