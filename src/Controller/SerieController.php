@@ -3316,7 +3316,7 @@ class SerieController extends AbstractController
         }
     }
 
-    public function mySerieIds(User $user): array
+    public function mySerieIds(User|null $user): array
     {
         if ($user == null) {
             return [];

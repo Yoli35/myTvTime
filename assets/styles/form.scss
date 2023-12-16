@@ -9,17 +9,17 @@
     border-radius: .25em;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-block-end: .5rem;
-    padding-block: .5rem;
+    //margin-block-end: .5rem;
+    //padding-block: .5rem;
     padding-inline: 1rem;
 
-    &:nth-child(odd) {
-        background-color: var(--gradient-ardoise-75);
-    }
-
-    &:nth-child(even) {
-        background-color: var(--gradient-ardoise-80);
-    }
+    //&:nth-child(odd) {
+    //    background-color: var(--gradient-ardoise-75);
+    //}
+    //
+    //&:nth-child(even) {
+    //    background-color: var(--gradient-ardoise-80);
+    //}
 
     .form-group {
         @include flex-row();

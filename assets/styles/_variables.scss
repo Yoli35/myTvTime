@@ -345,20 +345,6 @@ $fa-font-path: "../webfonts";
     --vote-10: hsl(0deg 30% 48%);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        //--gradient-bg: var(--gradient-dark);
-        --mtt-body-bg: var(--gradient-ardoise-10);
-        --mtt-body-bg-gradiant: var(--gradient-ardoise-40);
-        --mtt-body-color: var(--gradient-ardoise-90);
-
-        --form-bg: var(--gradient-ardoise-20);
-        --form-border: var(--gradient-ardoise-80);
-        --form-text: var(--gradient-ardoise-80);
-
-    }
-}
-
 @mixin banner($image) {
     align-items: center;
     display: flex;
@@ -1134,17 +1120,18 @@ $fa-font-path: "../webfonts";
 
         &:hover {
             background: var(--gradient-ardoise-40);
+            color: var(--gradient-ardoise-90);
         }
     }
 
     .dropzone-container {
         border: 2px dashed var(--form-border);
         border-radius: 1em;
-        color: var(--form-text);
+        color: var(--gradient-ardoise-20);
         width: 100%;
 
         &:hover {
-            background: var(--gradient-ardoise-40);
+            background: var(--gradient-ardoise-75);
             border-color: var(--gradient-ardoise-60);
         }
 
@@ -1176,7 +1163,7 @@ $fa-font-path: "../webfonts";
             border-color: var(--gradient-ardoise-60);
 
             &.drop-title {
-                color: var(--form-text);
+                color: var(--gradient-ardoise-90);
             }
         }
 
