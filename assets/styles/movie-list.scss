@@ -4,37 +4,23 @@
     @include flex-col(flex-start, flex-start);
     width: 100%;
 
+    main {
+        @include flex-row(flex-start, flex-start);
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .nav-breadcrumb {
+        margin-block: 0 1rem;
+    }
+
     .movie-list-tools {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
         justify-content: flex-end;
-        margin-block-end: 1rem;
-
-        .nav-breadcrumb {
-            flex-shrink: 0;
-            margin: 0;
-            margin-inline-end: auto;
-        }
-
-        .add-list {
-            align-items: center;
-            box-shadow: 0 0 0 var(--gradient-ardoise-20);
-            cursor: pointer;
-            display: flex;
-            flex-shrink: 0;
-            margin-left: auto;
-            white-space: nowrap;
-
-            i {
-                font-size: 1.5rem;
-                margin-right: .5rem;
-            }
-
-            &:hover {
-                box-shadow: 0 4px 0 var(--gradient-ardoise-20);
-            }
-        }
+        margin-block: auto;
+        margin-inline: auto 1rem;
 
         .movie-list-layout-items {
             border-radius: .25rem;
@@ -73,15 +59,15 @@
         @include flex-row();
         flex-wrap: wrap;
         gap: 1rem;
-        width: clamp(30rem, 50%, 40rem);
+        //width: clamp(30rem, 50%, 40rem);
+        width: 100%;
 
         &.list {
             border: 2px solid transparent;
             flex-direction: column;
             flex-wrap: unset;
-            gap: 0;
+            gap: .25rem;
             margin-inline: auto;
-            max-width: 60rem;
 
             &.dragover {
                 border-color: var(--gradient-green-50);
@@ -92,6 +78,7 @@
                 border-radius: .25rem;
                 display: flex;
                 height: 3rem;
+                max-width: 40rem;
                 transition: scale 100ms ease-in-out;
                 width: 100%;
 
@@ -293,14 +280,9 @@
 
 @media (min-width: 840px) {
     .movie-list-page {
-        .movie-list-tools {
-            margin-inline: auto;
-            width: clamp(25rem, 100%, 101rem);
-        }
-
         .wrapper {
             .movie-list {
-                width: clamp(25rem, calc(50% - 1rem), 50rem);
+                width: clamp(25rem, calc(50% - 1rem), 40rem);
             }
         }
     }
