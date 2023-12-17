@@ -53,6 +53,7 @@ export class TvFilterModule {
                 }
                 row.classList.remove('d-none');
             });
+            this.setFormLayoutCookie('open');
         } else {
             toggleViewIcon.classList.remove('fa-circle-arrow-up');
             toggleViewIcon.classList.add('fa-circle-arrow-down');
@@ -62,6 +63,7 @@ export class TvFilterModule {
                 }
                 row.classList.add('d-none');
             });
+            this.setFormLayoutCookie('collapse');
         }
     }
 
@@ -85,5 +87,35 @@ export class TvFilterModule {
             logoImg.src = logo;
         }
         logoFormField.classList.remove('d-none');
+    }
+
+    getFormLayoutCookie() {
+        return this.getCookie().layout;
+    }
+
+    setFormLayoutCookie(layout) {
+        const cookie = this.getCookie();
+        cookie.layout = layout;
+        this.setCookie(cookie);
+    }
+
+    getCookie() {
+        const cookies = document.cookie.split('; ');
+        const cookie = cookies.find(row => row.startsWith('formFilter='));
+        if (!cookie) {
+            const cookieValue = {layout: 'open'};
+            this.setCookie(cookieValue);
+            return cookieValue;
+        }
+        console.log(cookie);
+        console.log(JSON.parse(cookie.split('=')[1]));
+        return JSON.parse(cookie.split('=')[1]);
+    }
+
+    setCookie(cookieValue) {
+        const time = new Date();
+        time.setFullYear(time.getFullYear() + 1);
+        document.cookie = "formFilter=" + JSON.stringify(cookieValue) + "; expires=" + time.toUTCString() + "; path=/";
+        console.log(this.getCookie());
     }
 }

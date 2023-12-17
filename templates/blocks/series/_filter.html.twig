@@ -1,14 +1,19 @@
 {# {{ dump(form.with_genres) }} #}
+{%  set layout=getFormFilterLayout() %}
 {{ form_start(form) }}
 <div class="form-row">
     {#    Tools   #}
     <div class="form-group ml-auto">
         <i class="fa-solid fa-upload" id="reset-form" data-title="{{ 'Load last form settings'|trans }}"></i>
         <i class="fa-solid fa-download" id="save-form" data-title="{{ 'Save form settings'|trans }}"></i>
-        <i class="fa-solid fa-circle-arrow-up" id="toggle-view" data-title="{{ 'Toggle form settings'|trans }}"></i>
+        {% if layout=='open' %}
+            <i class="fa-solid fa-circle-arrow-up" id="toggle-view" data-title="{{ 'Toggle form settings'|trans }}"></i>
+        {% else %}
+            <i class="fa-solid fa-circle-arrow-down" id="toggle-view" data-title="{{ 'Toggle form settings'|trans }}"></i>
+        {% endif %}
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    With status   #}
     <div class="form-group">
         <div class="form-switch">
@@ -40,7 +45,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    Watch region   #}
     <div class="form-group">
         <div class="form-switch">
@@ -98,7 +103,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    Language   #}
     <div class="form-group">
         <div class="form-switch">
@@ -140,7 +145,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    With origin country   #}
     <div class="form-group">
         <div class="form-switch">
@@ -182,7 +187,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    With genres   #}
     <div class="form-group">
         <div class="form-switch">
@@ -196,7 +201,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {# First air date year #}
     <div class="form-group">
         <div class="form-switch">
@@ -257,7 +262,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {# Average vote (greater than or equal) #}
     <div class="form-group">
         <div class="form-switch">
@@ -307,7 +312,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {# Runtime (greater than or equal) #}
     <div class="form-group">
         <div class="form-switch">
@@ -333,7 +338,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {# Miscellaneous #}
     <div class="form-group">
         <div class="form-switch">
