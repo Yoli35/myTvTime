@@ -9,20 +9,18 @@
     <div class="container-fluid">
         <div class="movie-list-page">
 
-            <main class="w100">
+            <main>
+                {{ include('blocks/_nav.html.twig') }}
                 <div class="movie-list-tools">
-                    {{ include('blocks/_nav.html.twig') }}
-                    <div class="d-flex-1">
-                        <a href="{{ path('app_movie_list_new') }}">
-                            <div class="add-list"><i class="fa-solid fa-circle-plus"></i> {{ 'Add list'|trans }}</div>
-                        </a>
-                        <div class="movie-list-layout-items">
-                            <div data-type="roomy" title="{{ 'Roomy movie list'|trans }}" class="movie-list-layout-item{% if layout == 'roomy' %} active{% endif %}">
-                                <i class="fa-solid fa-table-cells-large"></i>
-                            </div>
-                            <div data-type="list" title="{{ 'List movie list'|trans }}" class="movie-list-layout-item{% if layout == 'list' %} active{% endif %}">
-                                <i class="fa-solid fa-table-list"></i>
-                            </div>
+                    <a href="{{ path('app_movie_list_new') }}">
+                        <div class="btn btn-primary"><i class="fa-solid fa-circle-plus"></i> {{ 'Add list'|trans }}</div>
+                    </a>
+                    <div class="movie-list-layout-items">
+                        <div data-type="roomy" title="{{ 'Roomy movie list'|trans }}" class="movie-list-layout-item{% if layout == 'roomy' %} active{% endif %}">
+                            <i class="fa-solid fa-table-cells-large"></i>
+                        </div>
+                        <div data-type="list" title="{{ 'List movie list'|trans }}" class="movie-list-layout-item{% if layout == 'list' %} active{% endif %}">
+                            <i class="fa-solid fa-table-list"></i>
                         </div>
                     </div>
                 </div>
