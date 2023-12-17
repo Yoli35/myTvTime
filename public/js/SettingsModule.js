@@ -5,6 +5,7 @@ export class SettingsModule {
         thisGlobal = this;
         this.saturationValue = settings.saturationValue;
         this.theme = settings.theme;
+        this.tempTheme = settings.theme;
         this.app_set_settings = globs.app_set_settings.slice(0, -3);
         this.initSettings();
     }
@@ -25,6 +26,7 @@ export class SettingsModule {
         thisGlobal.satuationValue = document.querySelector(":root").style.getPropertyValue('--gradient-saturation').slice(0, -1);
         const themeSelect = dialog.querySelector("#settings-theme");
         themeSelect.value = thisGlobal.theme;
+        thisGlobal.tempTheme = thisGlobal.theme;
         dialog.showModal();
     }
 
@@ -53,7 +55,7 @@ export class SettingsModule {
                 // restaurer les valeurs
                 const root = document.querySelector(":root");
                 root.style.setProperty('--gradient-saturation', thisGlobal.satuationValue + "%");
-                thisGlobal.setTheme(thisGlobal.theme);
+                thisGlobal.setTheme(thisGlobal.tempTheme);
             }
             if (dialog.returnValue === "ok") {
                 // sauvegarder les valeurs dans la table settings de la base de données
