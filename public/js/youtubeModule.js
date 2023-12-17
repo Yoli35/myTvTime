@@ -220,26 +220,25 @@ export class YoutubeModule {
     savePageState(e) {
         const page = e.target.checked;
 
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
+        gThis.xhr.onload = function () {
             const response = JSON.parse(this.response);
             gThis.showStatus(response);
         }
-        xhr.open("GET", this.youtube_settings_save + '?page=' + (page ? 1 : 0));
-        xhr.send();
+        gThis.xhr.open("GET", this.youtube_settings_save + '?page=' + (page ? 1 : 0));
+        gThis.xhr.send();
     }
 
     saveSortState(e) {
         const sort = e.target.value;
 
-        gThis.onload = function () {
+        gThis.xhr.onload = function () {
             const response = JSON.parse(this.response);
             gThis.showStatus(response);
             setTimeout(function () {
                 gThis.ytReload.parentElement.classList.add("active");
             }, 0);
         }
-        gThis.open("GET", this.youtube_settings_save + '?sort=' + encodeURIComponent(sort));
+        gThis.xhr.open("GET", this.youtube_settings_save + '?sort=' + encodeURIComponent(sort));
         gThis.xhr.send();
     }
 
