@@ -3179,11 +3179,18 @@
         margin-block-end: 1rem;
 
         form {
+            background-color: var(--gradient-ardoise-80);
+            border-radius: .5rem;
+            padding-block: 1rem;
+
+            .form-row {
+                align-items: center;
+            }
+
             .form-row:last-of-type {
                 flex-wrap: nowrap;
 
                 .form-group {
-                    flex-grow: 1;
                     flex-shrink: 0;
                 }
 
@@ -3216,7 +3223,7 @@
         margin-block-end: 1rem;
 
         .wrapper {
-            @include flex-row(stretch, start);
+            @include flex-row(stretch, space-evenly);
             flex-wrap: wrap;
             gap: 1rem;
             margin-block-end: 1rem;
@@ -3251,12 +3258,13 @@
                         background-color: var(--gradient-ardoise-90-alpha-80);
                         border: 1px solid var(--gradient-orange-50);
                         bottom: 0;
-                        height: .5rem;
+                        height: .75rem;
                         left:0;
                         position: absolute;
                         right: 0;
 
                         .progress-value {
+                            animation: 3s linear progress-grow;
                             background-color: var(--gradient-orange-50);
                             height: 100%;
                             width: 0;
@@ -3265,6 +3273,15 @@
                 }
             }
         }
+    }
+}
+
+@keyframes progress-grow {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
     }
 }
 

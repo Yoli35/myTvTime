@@ -18,13 +18,15 @@ class AlertService extends AbstractController
     public function checkUserAlertsOfTheDay($user, $from): void
     {
         $alerts = $this->alertRepository->alertOfTheDay($user->getId());
-//        dump($alerts);
+
+        if (count($alerts) === 0) {
+            return;
+        }
         $from = $from ? '?from=' . $from : '';
 
-        $countries = preg_match('/[A-Z]{2}/', $alerts[0]['origin_country_array'], $matches);
-//        dump($matches);
-
         foreach ($alerts as $alert) {
+            $countries = preg_match('/[A-Z]{2}/', $alert['origin_country_array'], $matches);
+//          dump($matches);
             $this->addFlash('alert', [
                 'alert_id' => $alert['id'],
                 'href' => $this->generateUrl('app_series_tmdb_season', ['id' => $alert['tmdb_id'], 'seasonNumber' => $alert['alert_season_number']]) . $from,
