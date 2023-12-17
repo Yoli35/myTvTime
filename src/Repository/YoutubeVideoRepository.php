@@ -87,8 +87,9 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         }
         $sql = "SELECT y.`id` as id, y.`thumbnail_high_path` as thumbnailHighPath, y.`title` as title, y.`content_duration` as contentDuration, y.`published_at` as publishedAt, yc.`title` as channelTitle, yc.`custom_url` as channelCustomUrl, yc.`youtube_id` as channelYoutubeId, yc.`thumbnail_default_url` as channelThumbnailDefaultUrl "
             . "FROM `youtube_video` y "
-            . "INNER JOIN `user_youtube_video` u ON u.`user_id`=".$userId." AND u.`youtube_video_id`=y.`id` "
+            . "INNER JOIN `user_yvideo` uyv ON uyv.`user_id`=" . $userId . " AND uyv.`video_id`=y.`id` "
             . "LEFT JOIN `youtube_channel` yc ON yc.`id`=y.`channel_id` "
+            . "WHERE uyv.`hidden`=0 "
             . "ORDER BY y.`" . $sort . "` " . $order . " "
             . "LIMIT " . $limit . " OFFSET " . $offset;
 
@@ -152,5 +153,16 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         $resultSet = $statement->executeQuery();
 
         return $resultSet->fetchAllAssociative();
+    }
+
+    public function userYoutubeVideos(): array
+    {
+        $sql = "SELECT user_id, youtube_video_id "
+            . "FROM user_youtube_video";
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 }

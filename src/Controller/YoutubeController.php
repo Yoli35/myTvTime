@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Settings;
 use App\Entity\User;
+use App\Entity\UserYVideo;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
 use App\Entity\YoutubeVideoTag;
 use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
+use App\Repository\UserYVideoRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
 use App\Repository\YoutubeVideoTagRepository;
@@ -43,6 +45,7 @@ class YoutubeController extends AbstractController
         private readonly SettingsRepository        $settingsRepository,
         private readonly TranslatorInterface       $translator,
         private readonly UserRepository            $userRepository,
+        private readonly UserYVideoRepository      $userYVideoRepository,
         private readonly YoutubeChannelRepository  $channelRepository,
         private readonly YoutubeVideoRepository    $videoRepository,
         private readonly YoutubeVideoTagRepository $videoTagRepository,
@@ -123,7 +126,7 @@ class YoutubeController extends AbstractController
         $offset = $request->query->get('offset', 0);
         $limit = $request->query->get('limit', 20);
         /** @var YoutubeVideo [] $vids */
-        $vids = $this->videoRepository->findAllWithChannelByDate($userId, $sort, $order, $offset, $limit);
+        $vids = $this->videoRepository->findAllWithChannelByDateSQL($userId, $sort, $order, $offset, $limit);
 
         return $this->json([
             'results' => $this->getVideos($vids),
@@ -165,7 +168,7 @@ class YoutubeController extends AbstractController
         return $videos;
     }
 
-     public function formatDuration(int $durationInSecond): string
+    public function formatDuration(int $durationInSecond): string
     {
         $h = floor($durationInSecond / 3600);
         $m = floor(($durationInSecond % 3600) / 60);
@@ -242,6 +245,7 @@ class YoutubeController extends AbstractController
                 "modify_tag_list" => $this->translator->trans("Modify tag list"),
                 "add_video_to_tag" => $this->translator->trans("Add video to tag"),
                 "add_video_to_tags" => $this->translator->trans("Add video to tags"),
+                "set_visibility" => $this->translator->trans("Set visibility"),
                 "delete" => $this->translator->trans("Delete selected videos"),
                 "video" => $this->translator->trans("video"),
                 "videos" => $this->translator->trans("videos"),
@@ -263,20 +267,22 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $list = $request->query->get("tags");
         $method = $request->query->get("m");
-        $ids = [];
         $videos = [];
+        $visibilities = [];
         $tagIds = explode(',', $list);
         $count = count($tagIds);
 
         // Toutes les vidéos
         if ($list) {
             $videoIds = $videoRepository->videosByTag($user->getId(), $list, $count, $method);
-            foreach ($videoIds as $videoId) {
-                $ids[] = $videoId['id'];
-            }
+            $ids = array_column($videoIds, 'id');
             $videos = $videoRepository->findBy(['id' => $ids], ['publishedAt' => 'DESC']);
+            $yVideos = $this->userYVideoRepository->getVisibilityFromList($user->getId(), $ids);
+            foreach ($yVideos as $yVideo) {
+                $visibilities[$yVideo->getVideo()->getId()] = $yVideo->isHidden();
+            }
         }
-        $videos = array_map(function ($video) {
+        $videos = array_map(function ($video) use ($visibilities) {
             return [
                 'id' => $video->getId(),
                 'title' => $video->getTitle(),
@@ -289,6 +295,7 @@ class YoutubeController extends AbstractController
                     ];
                 }, $video->getTags()->toArray()),
                 'contentDuration' => $this->formatDuration($video->getContentDuration()),
+                'hidden' => $visibilities[$video->getId()],
                 'channel' => [
                     'title' => $video->getChannel()->getTitle(),
                     'customUrl' => $video->getChannel()->getCustomUrl(),
@@ -371,16 +378,53 @@ class YoutubeController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/youtube/video/set/visibility', name: 'app_youtube_video_set_visibility', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function setVisibility(Request $request): Response
+    {
+        $ids = $request->query->get('ids');
+        $visibility = $request->query->get('visibility');
+        $hidden = $visibility == "hidden";
+        $videos = $this->videoRepository->findBy(['id' => explode(',', $ids)]);
+        $yVideo = $this->userYVideoRepository->findBy(['user' => $this->getUser(), 'video' => $videos]);
+
+        foreach ($yVideo as $yv) {
+            $yv->setHidden($hidden);
+            $this->userYVideoRepository->save($yv, false);
+        }
+        $this->userYVideoRepository->flush();
+
+        //$message = sprintf("%d video%s are now %s", count($videos), count($videos) > 1 ? "s" : "", $hidden ? "hidden" : "visible");
+        $message = $this->translator->trans("count video%s% are now visibility", [
+            'count' => count($videos),
+            '%s%' => count($videos) > 1 ? "s" : "",
+            'visibility' => $hidden ? "hidden" : "visible",
+        ]);
+
+        dump([
+            'ids' => $ids,
+            'videos' => $videos,
+            'yVideo' => $yVideo,
+        ]);
+
+        return $this->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
+
     #[Route('/{_locale}/youtube/video/delete/{id}', name: 'app_youtube_video_delete', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function removeVideo($id, UserRepository $userRepository, YoutubeVideoRepository $youtubeVideoRepository): JsonResponse
+    public function removeVideo(YoutubeVideo $video): JsonResponse
     {
         //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
 
-        $video = $youtubeVideoRepository->find($id);
+        $yvideo = $this->userYVideoRepository->findOneBy(['user' => $user, 'video' => $video]);
         $user->removeYoutubeVideo($video);
-        $userRepository->save($user, true);
+        $user->removeUserYVideo($yvideo);
+        $video->removeUserYVideo($yvideo);
+        $this->userYVideoRepository->remove($yvideo, true);
+        $this->userRepository->save($user, true);
 
         return $this->json([$video->getTitle()]);
     }
@@ -397,13 +441,17 @@ class YoutubeController extends AbstractController
 
         foreach ($list as $id) {
             $video = $this->videoRepository->find($id);
+            $yvideo = $this->userYVideoRepository->findOneBy(['user' => $user, 'video' => $video]);
             $user->removeYoutubeVideo($video);
+            $user->removeUserYVideo($yvideo);
+            $video->removeUserYVideo($yvideo);
+            $this->userYVideoRepository->remove($yvideo);
         }
         $this->userRepository->save($user, true);
 
         return $this->json([
             'success' => true,
-            'message' => $count . " " . $this->translator->trans($count>1 ?'videos deleted!':'video deleted!'),
+            'message' => $count . " " . $this->translator->trans($count > 1 ? 'videos deleted!' : 'video deleted!'),
         ]);
     }
 
@@ -517,42 +565,34 @@ class YoutubeController extends AbstractController
                 $newVideo->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
                 $newVideo->setContentProjection($contentDetails['projection']);
                 $newVideo->setAddedAt($this->dateService->newDateImmutable('now', 'Europe/Paris'));
-                $newVideo->addUser($user);
 
+                $newVideo->addUser($user);
                 $this->videoRepository->add($newVideo, true);
+                $this->newYVideo($user, $newVideo);
+                $message = $this->translator->trans("Video added!");
 
                 $justAdded = $newVideo->getId();
-
-                $status = "success";
-                $message = $this->translator->trans("Video added!");
-                $subMessage = "<a href='/" . $locale . "/youtube/video/" . $justAdded . "'>🔗 ";
-                $subMessage .= $this->translator->trans("Go to the video page to see it");
-                $subMessage .= " 🔗</a>";
             } else {
                 // Si le lien a déjà été ajouté, on vérifie que l'utilisateur n'est pas déjà lié à la vidéo
-                $users = $link->getUsers();
-                foreach ($users as $u) {
-                    if ($u->getId() == $user->getId()) {
-                        $userAlreadyLinked = true;
-                        $status = "success";
-                        $message = $this->translator->trans("Video already added!");
-                        $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>🔗 ";
-                        $subMessage .= $this->translator->trans("Go to the video page to see it");
-                        $subMessage .= " 🔗</a>";
-                    }
-                }
-                // Si l'utilisateur n'est pas encore lié à la vidéo, on le lie
-                if (!$userAlreadyLinked) {
+                $userIds = array_map(function ($user) {
+                    return $user->getId();
+                }, $link->getUsers()->toArray());
+                if (in_array($user->getId(), $userIds)) {
+                    $userAlreadyLinked = true;
+                    $message = $this->translator->trans("Video already added!");
+                } // Sinon, on lie l'utilisateur à la vidéo
+                else {
                     $link->addUser($user);
                     $this->videoRepository->add($link, true);
-                    $status = "success";
+                    $this->newYVideo($user, $link);
                     $message = $this->translator->trans("Video added!");
-                    $subMessage = "<a href='/" . $locale . "/youtube/video/" . $link->getId() . "'>🔗 ";
-                    $subMessage .= $this->translator->trans("Go to the video page to see it");
-                    $subMessage .= " 🔗</a>";
                 }
                 $justAdded = $link->getId();
             }
+            $status = "success";
+            $subMessage = "<a href='/" . $locale . "/youtube/video/" . $justAdded . "'>🔗 ";
+            $subMessage .= $this->translator->trans("Go to the video page to see it");
+            $subMessage .= " 🔗</a>";
         }
 
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => "youtube"]);
@@ -568,7 +608,7 @@ class YoutubeController extends AbstractController
         } else {
             $sort = $data['sort'];
             $order = $data['order'];
-            $vids = $this->videoRepository->findAllWithChannelByDate($user->getId(), $sort, $order);
+            $vids = $this->videoRepository->findAllWithChannelByDateSQL($user->getId(), $sort, $order);
             $videos = $this->getVideos($vids);
             $videoCount = $this->getVideosCount($user);
             $firstView = $this->getFirstView($user);
@@ -595,6 +635,15 @@ class YoutubeController extends AbstractController
             'totalRuntime' => $totalRuntime,
             'time2Human' => $time2Human,
         ]);
+    }
+
+    public function newYVideo(User $user, YoutubeVideo $video): void
+    {
+        $yvideo = new UserYVideo();
+        $yvideo->setUser($user);
+        $yvideo->setVideo($video);
+        $yvideo->setHidden(false);
+        $this->userYVideoRepository->save($yvideo, true);
     }
 
     public function getVideosCount(User $user): int

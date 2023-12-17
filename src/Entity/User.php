@@ -135,6 +135,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserTvPreference::class, orphanRemoval: true)]
     private Collection $userTvPreferences;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserYVideo::class)]
+    private Collection $userYVideos;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -151,6 +154,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->alarms = new ArrayCollection();
         $this->contributions = new ArrayCollection();
         $this->userTvPreferences = new ArrayCollection();
+        $this->userYVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -770,33 +774,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, TvGenre>
-     */
-    public function getTvGenres(): Collection
-    {
-        return $this->tvGenres;
-    }
-
-    public function addTvGenre(TvGenre $tvGenre): static
-    {
-        if (!$this->tvGenres->contains($tvGenre)) {
-            $this->tvGenres->add($tvGenre);
-            $tvGenre->addUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTvGenre(TvGenre $tvGenre): static
-    {
-        if ($this->tvGenres->removeElement($tvGenre)) {
-            $tvGenre->removeUser($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, UserTvPreference>
      */
     public function getUserTvPreferences(): Collection
@@ -820,6 +797,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userTvPreference->getUser() === $this) {
                 $userTvPreference->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserYVideo>
+     */
+    public function getUserYVideos(): Collection
+    {
+        return $this->userYVideos;
+    }
+
+    public function addUserYVideo(UserYVideo $userYVideo): static
+    {
+        if (!$this->userYVideos->contains($userYVideo)) {
+            $this->userYVideos->add($userYVideo);
+            $userYVideo->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserYVideo(UserYVideo $userYVideo): static
+    {
+        if ($this->userYVideos->removeElement($userYVideo)) {
+            // set the owning side to null (unless already changed)
+            if ($userYVideo->getUser() === $this) {
+                $userYVideo->setUser(null);
             }
         }
 

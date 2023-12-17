@@ -31,6 +31,7 @@ export class YoutubeSearch {
      * @property {string} modify_tag_list
      * @property {string} add_video_to_tag
      * @property {string} add_video_to_tags
+     * @property {string} set_visibility
      * @property {string} delete
      * @property {string} video
      * @property {string} videos
@@ -41,6 +42,7 @@ export class YoutubeSearch {
      * @type {Object}
      * @property {string} app_youtube_video_by_tag
      * @property {string} app_youtube_video_list_delete
+     * @property {string} app_youtube_video_set_visibility
      * @property {Array.<Tag>} tags
      * @property {Translation} text
      */
@@ -53,9 +55,10 @@ export class YoutubeSearch {
         this.tags = globs.tags;
         this.app_youtube_video_by_tag = globs.app_youtube_video_by_tag;
         this.app_youtube_video_list_delete = globs.app_youtube_video_list_delete;
+        this.app_youtube_video_set_visibility = globs.app_youtube_video_set_visibility;
         this.text = globs.text;
         this.letterRatios = [];
-        this.toolTips = new ToolTips();
+        this.toolTips = new ToolTips(null, "orange");
         this.xhr = new XMLHttpRequest();
 
         this.init();
@@ -333,6 +336,14 @@ export class YoutubeSearch {
         modifyTools.insertBefore(modifyTagSelection, addTagSelection);
         gThis.toolTips.initElement(modifyTagSelection);
 
+        const setVisibility = document.createElement("button");
+        setVisibility.setAttribute("id", "set-visibility-tool");
+        setVisibility.innerHTML = '<i class="fa-solid fa-eye"></i>';
+        setVisibility.setAttribute("data-title", gThis.text.set_visibility);
+        setVisibility.addEventListener("click", gThis.openVisibilityDialog);
+        modifyTools.insertBefore(setVisibility, modifyTagSelection);
+        gThis.toolTips.initElement(setVisibility);
+
         gThis.hideTagTools();
 
         const results = document.querySelectorAll(".yt-result");
@@ -401,6 +412,7 @@ export class YoutubeSearch {
     initDialogs() {
         this.initModifyTagsDialog();
         this.initDeleteDialog();
+        this.initVisibilityDialog();
     }
 
     initDeleteDialog() {
@@ -410,13 +422,7 @@ export class YoutubeSearch {
             document.querySelector("body").classList.remove("frozen");
             if (dialog.returnValue === "delete") {
                 const videoSelectionButton = document.querySelectorAll(".select-video.selected");
-                let ids = "";
-
-                videoSelectionButton.forEach((button) => {
-                    const ytResult = button.closest(".yt-result");
-                    if (ids.length) ids += ',';
-                    ids += ytResult.getAttribute("data-id");
-                });
+                let ids = gThis.selectedVideoIds(videoSelectionButton);
 
                 const xhr = gThis.xhr;
                 xhr.onload = function () {
@@ -580,6 +586,46 @@ export class YoutubeSearch {
 
         document.querySelector("body").classList.add("frozen");
         dialog.showModal();
+    }
+
+    initVisibilityDialog() {
+        const dialog = document.querySelector('#set-visibility-dialog');
+
+        dialog.addEventListener('close', () => {
+            document.querySelector("body").classList.remove("frozen");
+            if (dialog.returnValue === "apply-visibility") {
+                const videoSelectionButton = document.querySelectorAll(".select-video.selected");
+                const ids = gThis.selectedVideoIds(videoSelectionButton);
+                const visibility = dialog.querySelector("#visibility-select").value;
+
+                const xhr = gThis.xhr;
+                xhr.onload = function () {
+                    const result = JSON.parse(this.response);
+                    if (result.success) {
+                        console.log({result});
+                    }
+                }
+                xhr.open("GET", gThis.app_youtube_video_set_visibility + '?ids=' + ids + '&visibility=' + visibility);
+                xhr.send();
+            }
+        });
+    }
+
+    openVisibilityDialog() {
+        const dialog = document.querySelector('#set-visibility-dialog');
+
+        document.querySelector("body").classList.add("frozen");
+        dialog.showModal();
+    }
+
+    selectedVideoIds(videoSelectionButton) {
+        let ids = "";
+        videoSelectionButton.forEach((button) => {
+            const ytResult = button.closest(".yt-result");
+            if (ids.length) ids += ',';
+            ids += ytResult.getAttribute("data-id");
+        });
+        return ids;
     }
 
     dropoverTagList(e) {

@@ -36,8 +36,9 @@
                             {#                            <div class="arrow"><i class="fa-solid fa-caret-down"></i></div> #}
                         </div>
                         <button class="apply" type="submit">{{ 'Apply'|trans }}</button>
-                        {{ include('blocks/youtube/_modifyTags.html.twig') }}
+                        {{ include('blocks/youtube/_modify_tags_dialog.html.twig') }}
                         {{ include('blocks/youtube/_delete_video_dialog.html.twig') }}
+                        {{ include('blocks/youtube/_set_visibility_dialog.html.twig') }}
                     </div>
                 </div>
                 <div class="results"></div>
@@ -46,6 +47,8 @@
                 {
                     "app_youtube_video_by_tag": "{{ path('app_youtube_video_by_tag') }}",
                     "app_youtube_video_list_delete": "{{ path('app_youtube_video_list_delete') }}",
+{#                    "app_youtube_video_list_modify_tags": "{{ path('app_youtube_video_list_modify_tags') }}",#}
+                    "app_youtube_video_set_visibility": "{{ path('app_youtube_video_set_visibility') }}",
                     "tags": {{ tagArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
                     "text": {{ textArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
                 }

@@ -1501,6 +1501,13 @@ Modify: Modifier
 Modify tag list: Modifier la liste de mots-clés
 Add video to tag: Ajouter une vidéo au mot-clé
 Add video to tags: Ajouter une vidéo aux mots-clés
+Set visibility: Définir la visibilité des vidéos sélectionnées
+Set visibility to: Définir la visibilité à
+count video%s% are now hidden%s%: count vidéo%s% sont maintenant masquée%s%
+count video%s% are now visible%s%: count vidéo%s% sont maintenant visible%s%
+hidden: masquée
+visible: visible
+Hidden: Masqué
 Delete selected videos: Supprimer les vidéos sélectionnées
 video: vidéo
 videos: vidéos

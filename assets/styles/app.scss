@@ -380,18 +380,19 @@ body {
         }
 
         &.hide {
-            height: 0;
-            font-size: 0;
+            transform: scale(0);
+            //height: 0;
+            //font-size: 0;
             opacity: 0;
-            margin: 0 auto;
-            padding-block: 0;
-            padding-inline: 0;
-            width: 100%;
+            //margin: 0 auto;
+            //padding-block: 0;
+            //padding-inline: 0;
+            //width: 100%;
 
-            img {
-                height: 0;
-                width: 0;
-            }
+            //img {
+            //    height: 0;
+            //    width: 0;
+            //}
         }
     }
 }
@@ -433,6 +434,7 @@ main {
 #modify-tags-dialog,
 #multi-people-dialog,
 #search-dialog,
+#set-visibility-dialog,
 #settings-dialog,
 #watch-provider-dialog {
     backdrop-filter: blur(.25rem);
@@ -521,6 +523,7 @@ main {
 #modify-tags-dialog::backdrop,
 #multi-people-dialog::backdrop,
 #search-dialog::backdrop,
+#set-visibility-dialog::backdrop,
 #watch-provider-dialog::backdrop {
     background-color: var(--dialog-backdrop);
 }

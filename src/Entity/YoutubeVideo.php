@@ -84,11 +84,15 @@ class YoutubeVideo
     #[ORM\OneToMany(mappedBy: 'video', targetEntity: YoutubeVideoComment::class)]
     private Collection $youtubeVideoComments;
 
+    #[ORM\OneToMany(mappedBy: 'video', targetEntity: UserYVideo::class)]
+    private Collection $userYVideos;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->youtubeVideoComments = new ArrayCollection();
+        $this->userYVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -288,7 +292,7 @@ class YoutubeVideo
         return $this;
     }
 
-    public function getContentProjection(): ?int
+    public function getContentProjection(): ?string
     {
         return $this->contentProjection;
     }
@@ -402,6 +406,36 @@ class YoutubeVideo
             // set the owning side to null (unless already changed)
             if ($youtubeVideoComment->getVideo() === $this) {
                 $youtubeVideoComment->setVideo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserYVideo>
+     */
+    public function getUserYVideos(): Collection
+    {
+        return $this->userYVideos;
+    }
+
+    public function addUserYVideo(UserYVideo $userYVideo): static
+    {
+        if (!$this->userYVideos->contains($userYVideo)) {
+            $this->userYVideos->add($userYVideo);
+            $userYVideo->setVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserYVideo(UserYVideo $userYVideo): static
+    {
+        if ($this->userYVideos->removeElement($userYVideo)) {
+            // set the owning side to null (unless already changed)
+            if ($userYVideo->getVideo() === $this) {
+                $userYVideo->setVideo(null);
             }
         }
 

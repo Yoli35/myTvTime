@@ -1,0 +1,25 @@
+<dialog id="set-visibility-dialog">
+    <div class="content" role="search">
+        <div class="dialog-title">{{ 'Set visibility'|trans }}</div>
+        <form method="dialog">
+            <input type="hidden" name="action" value="applyModifications"/>
+            <div class="field">
+                <label class="label" for="visibility-select">
+                    {{ 'Set visibility to'|trans }}
+                    <select id="visibility-select" name="visibility">
+                        <option value="visible"><i class="fa-solid fa-eye"></i> {{ 'Visible'|trans }}</option>
+                        <option value="hidden"><i class="fa-solid fa-eye-slash"></i> {{ 'Hidden'|trans }}</option>
+                    </select>
+                </label>
+            </div>
+            <menu>
+                <li>
+                    <button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button>
+                </li>
+                <li>
+                    <button class="btn btn-primary" value="apply-visibility">{{ 'Apply'|trans }}</button>
+                </li>
+            </menu>
+        </form>
+    </div>
+</dialog>

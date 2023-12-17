@@ -74,6 +74,28 @@
                 right: .5rem;
             }
 
+            .visibility {
+                align-items: center;
+                aspect-ratio: 1;
+                background-color: var(--gradient-ardoise-90);
+                border-radius: 50%;
+                border: 2px solid var(--gradient-ardoise-10);
+                bottom: .5rem;
+                color: var(--gradient-ardoise-10);
+                display: flex;
+                font-size: 1rem;
+                font-weight: 400;
+                justify-content: center;
+                left: .5rem;
+                position: absolute;
+                width: 2rem;
+
+                &:has(i[class$="slash"]) {
+                    border-color: var(--gradient-orange-50);
+                    color: var(--gradient-orange-50);
+                }
+            }
+
             .tags {
                 @include flex-row(center, flex-start);
                 flex-wrap: wrap;
@@ -363,10 +385,10 @@
     .status {
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-        background-color: var(--gradient-ardoise-20-alpha-80);
+        background-color: var(--gradient-ardoise-80-alpha-50);
         border-radius: .5rem;
-        border: 2px solid var(--gradient-ardoise-90);
-        color: var(--gradient-ardoise-90);
+        border: 2px solid var(--gradient-ardoise-70);
+        color: var(--gradient-ardoise-10);
         left: 50%;
         min-width: 15rem;
         opacity: 0;
