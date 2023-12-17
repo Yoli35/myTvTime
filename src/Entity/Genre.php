@@ -17,7 +17,7 @@ class Genre
     private string $name;
 
     #[ORM\Column(type: 'integer', length: 255)]
-    private string $genreId;
+    private int $genreId;
 
     public function getId(): ?int
     {
