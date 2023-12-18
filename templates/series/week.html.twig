@@ -88,19 +88,20 @@
 
         function initHeader() {
             const header = document.querySelector('.this-week-series .header');
+            /** @var dayNamesDiv {HTMLElement} */
             const dayNamesDiv = header.querySelector('.day-names');
             const speed = 2.5;
             const dayNames = getDayNames();
             /**
-             * @type {Array.<x: number, y: number, w: number, h: number, size: number, color: string, dx: number, dy: number>}
+             * @typedef Position {x: number, y: number, w: number, h: number, size: number, color: string, dx: number, dy: number}
+             * @type {Array.<Position>} positions
              */
             const positions = [];
-            // const indexMax = dayNames.length - 1;
             let ticking = false, interval;
             let nameDivs = createNames();
 
             showNames();
-            // anime();
+            anime();
             setInterval(() => {
                 hideNames();
                 setTimeout(() => {
@@ -108,7 +109,7 @@
                     removeNames();
                     nameDivs = createNames();
                     showNames();
-                    //    anime();
+                       anime();
                 }, 300);
             }, 1000 * 10);
 
@@ -139,7 +140,7 @@
             function createNames() {
                 const dayNamesWidth = dayNamesDiv.offsetWidth;
                 const dayNamesHeight = dayNamesDiv.offsetHeight;
-                let number = 25, index = 0, indexMax = dayNames.length - 1, indexName = 0;
+                let number = 25, index, indexMax = dayNames.length - 1, indexName = 0;
                 for (index = 0; index < number; index++) {
                     const div = document.createElement('div');
                     div.classList.add('day-name');
@@ -157,7 +158,8 @@
                         dy: speed * (Math.random() - 0.5)
                     };
                     /**
-                     * @type {x: number, y: number, w: number, h: number, size: number, color: string, dx: number, dy: number}
+                     * @var positions {Array.<Position>}
+                     * @var pos {Position}
                      */
                     let pos = positions[index];
                     div.setAttribute("style", "color: " + pos.color + "; font-size: " + pos.size + "rem; top: " + pos.y + "px; left: " + pos.x + "px;");

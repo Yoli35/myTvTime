@@ -252,7 +252,7 @@ class SerieController extends AbstractController
             ->addBreadcrumb('My series airing today', $this->generateUrl('app_series_today'));
 //        dump($bc);
 
-        return $this->render('series/today.html.twig', [
+        return $this->render('series/day.html.twig', [
             'todayAirings' => $todayAirings,
             'seriesToWatch' => $seriesToWatch,
             'date' => $date,
@@ -3321,8 +3321,7 @@ class SerieController extends AbstractController
         if ($user == null) {
             return [];
         }
-        return array_map(function ($mySerieId) {
-            return $mySerieId['serieId'];
-        }, $this->serieRepository->findMySerieIds($user->getId()));
+        $arr = $this->serieRepository->findMySerieIds($user->getId());
+        return array_column($arr, 'serie_id');
     }
 }
