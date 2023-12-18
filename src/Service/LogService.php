@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\User;
 use App\Entity\VisitorLog;
 use App\Repository\VisitorLogRepository;
 use Jenssegers\Agent\Agent;
@@ -16,7 +17,7 @@ class LogService
         $this->agent = new Agent();
     }
 
-    public function log(Request $request, $user): void
+    public function log(Request $request, User|null $user): void
     {
         $agent = $this->agent;
 

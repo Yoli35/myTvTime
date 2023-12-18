@@ -54,6 +54,11 @@ readonly class ControllerSubscriber implements EventSubscriberInterface
         // number of sub-requests. See
         // https://symfony.com/doc/current/components/http_kernel.html#sub-requests
         if ($event->isMainRequest()) {
+            $avoidTheseControllerFunctions = [
+                'getSearchPeopleHistory',
+                'chatUpdate',
+                'chatDiscussionUpdate',
+            ];
             /** @var User $user */
             $user = $this->security->getUser();
 
@@ -62,9 +67,11 @@ readonly class ControllerSubscriber implements EventSubscriberInterface
 
 //            dump($controller);
 
-            $this->logService->log($event->getRequest(), $user);
+            if (gettype($controller)== "array" && !in_array($controller[1], $avoidTheseControllerFunctions)) {
+                $this->logService->log($event->getRequest(), $user);
+            }
 
-            if (gettype($controller)== "array" && $user && $controller[1] !== 'chatUpdate' && $controller[1] !== 'chatDiscussionUpdate') {
+            if (gettype($controller)== "array" && $user && !in_array($controller[1], $avoidTheseControllerFunctions)) {
                 try {
                     $user->setLastActivityAt(new DateTimeImmutable('now', new DateTimeZone('Europe/Paris')));
                 } catch (Exception) {
