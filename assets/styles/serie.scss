@@ -3181,6 +3181,9 @@
         form {
             background-color: var(--gradient-ardoise-80);
             border-radius: .5rem;
+            display: flex;
+            flex-direction: column;
+            gap: .25rem;
             padding-block: 1rem;
 
             .form-row {

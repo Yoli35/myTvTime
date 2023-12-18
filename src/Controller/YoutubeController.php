@@ -400,11 +400,11 @@ class YoutubeController extends AbstractController
             'visibility' => $hidden ? "hidden" : "visible",
         ]);
 
-        dump([
-            'ids' => $ids,
-            'videos' => $videos,
-            'yVideo' => $yVideo,
-        ]);
+//        dump([
+//            'ids' => $ids,
+//            'videos' => $videos,
+//            'yVideo' => $yVideo,
+//        ]);
 
         return $this->json([
             'success' => true,

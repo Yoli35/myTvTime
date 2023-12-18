@@ -30,11 +30,11 @@ class TanService
                     'limit' => $header['x-ratelimit-limit'][0]
                 ];
             } catch (Throwable $e) {
-                dump(['response' => $e]);
+//                dump(['response' => $e]);
                 return "";
             }
         } catch (Throwable $e) {
-            dump(['request' => $e]);
+//            dump(['request' => $e]);
             return "";
         }
     }

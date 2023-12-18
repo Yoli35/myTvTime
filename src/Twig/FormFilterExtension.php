@@ -16,14 +16,14 @@ class FormFilterExtension extends AbstractExtension
 
     function getFormFilterLayout(): string
     {
-        $cookie = $_COOKIE['formFilter'];
-        if ($cookie) {
+        if (array_key_exists('formFilter', $_COOKIE)) {
+            $cookie = $_COOKIE['formFilter'];
             $cookie = json_decode($cookie, true);
         } else {
             $cookie = ['layout' => 'open'];
             setcookie('formFilter', json_encode($cookie), time() + 365 * 24 * 3600, null, null, false, true);
         }
-        dump($cookie);
+//        dump($cookie);
 
         return $cookie['layout'];
     }
