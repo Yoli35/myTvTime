@@ -42,9 +42,27 @@
                         <tr>
                             <td>{{ challenge.name }}</td>
                             <td>{{ challenge.completed ? 'Yes'|trans : 'No'|trans }}</td>
-                            <td>{% if challenge.challenge == 'exercise_result' %}{{ 'Exercise'|trans }}{% else %}{{ challenge.challenge|capitalize }}{% endif %}</td>
+                            <td>
+                                {% if challenge.challenge == 'move_result' %}
+                                    {{ 'Move'|trans }}
+                                {% elseif challenge.challenge == 'exercise_result' %}
+                                    {{ 'Exercise'|trans }}
+                                {% else %}
+                                    {{ challenge.challenge|capitalize }}
+                                {% endif %}
+                            </td>
                             <td>{{ challenge.goal }} {{ 'days'|trans }}</td>
-                            <td>{{ challenge.value }} {% if challenge.challenge == 'exercise_result' %}{{ 'minutes'|trans }}{% endif %}{% if challenge.challenge == 'distance' %}{{ 'km'|trans }}{% endif %}</td>
+                            <td>{{ challenge.value }}
+                                {% if challenge.challenge == 'exercise_result' %}
+                                    {{ 'minutes'|trans }}
+                                {% endif %}
+                                {% if challenge.challenge == 'move_result' %}
+                                    {{ 'Kcal'|trans }}
+                                {% endif %}
+                                {% if challenge.challenge == 'distance' %}
+                                    {{ 'km'|trans }}
+                                {% endif %}
+                            </td>
                             <td>{{ challenge.startAt ? challenge.startAt|format_date('relative_full') : '' }}</td>
                             <td>{{ challenge.endAt ? challenge.endAt|format_date('relative_full') : '' }}</td>
                             <td>{{ challenge.createdAt ? challenge.createdAt|format_datetime('relative_full', 'short') : '' }}</td>
