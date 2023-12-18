@@ -12,6 +12,7 @@ use App\Repository\SerieViewingRepository;
 use App\Service\DateService;
 use App\Service\FileUploader;
 use App\Service\ImageConfiguration;
+use DateInterval;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -57,10 +58,16 @@ class EventController extends AbstractController
 
         $imgConfig = $this->imageConfiguration->getConfig();
         $watchProviderList = $this->serieController->getRegionProvider($imgConfig, 3, '', '');
-        $alerts = $this->alertRepository->findBy(['user' => $user, 'activated' => true], ['date' => 'DESC']);
+        $alerts = $this->alertRepository->findBy(['user' => $user], ['date' => 'DESC']);
         $alerts = array_map(function ($alert) use ($watchProviderList, $now) {
             $serieViewing = $this->serieViewingRepository->find($alert->getSerieViewingId());
-            $diff = date_diff($now, $alert->getDate());
+
+            $airDate = $this->dateService->newDateImmutable($alert->getDate()->format("Y-m-d H:i:s"), 'Europe/Paris');
+            if ($serieViewing->isTimeShifted()) {
+                $airDate = $airDate->add(new DateInterval('P1D'));
+            }
+
+            $diff = date_diff($now, $airDate);
 
             $provider = $alert->getProviderId() ? $watchProviderList[$alert->getProviderId()] : null;
             if ($provider) {
@@ -76,7 +83,7 @@ class EventController extends AbstractController
 
                 'banner' => $serieViewing->getSerie()->getBackdropPath(),
                 'createdAt' => $alert->getCreatedAt(),
-                'date' => $alert->getDate(),
+                'date' => $airDate,
                 'description' => '',
                 'images' => [],
                 'name' => $serieViewing->getSerie()->getName(),

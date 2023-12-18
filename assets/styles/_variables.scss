@@ -86,6 +86,9 @@ $fa-font-path: "../webfonts";
     --gradient-ardoise-10-alpha-20: hsla(202, var(--gradient-saturation), var(--percent-10), .2);
     --gradient-ardoise-0: hsl(202, var(--gradient-saturation), var(--percent-0));
 
+    --gradient-ardoise-90-forced: hsl(202, var(--gradient-saturation), 90%);
+    --gradient-ardoise-30-forced: hsl(202, var(--gradient-saturation), 30%);
+
     --gradient-grey-100: hsl(0, 0%, var(--percent-100));
     --gradient-grey-95: hsl(0, 0%, var(--percent-95));
     --gradient-grey-95-alpha-20: hsla(0, 0%, var(--percent-95), .2);
