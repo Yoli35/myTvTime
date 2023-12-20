@@ -11,7 +11,7 @@
     }
 
     .chat-users {
-        background-color: transparent;
+        background-color: var(--gradient-ardoise-80);
         border-left: 1px solid var(--gradient-ardoise-20);
         border-radius: calc(.25rem + 1px) 0 0 0;
         border-top: 1px solid var(--gradient-ardoise-20);
@@ -75,8 +75,6 @@
 
         .chat-users-list {
             @include flex-col(center, flex-start);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
             background-color: var(--gradient-ardoise-80-alpha-50);
             color: var(--gradient-ardoise-20);
             overflow: auto;
@@ -142,7 +140,7 @@
                     }
 
                     .last {
-                        color: var(--gradient-ardoise-70);
+                        color: var(--gradient-ardoise-40);
                         font-size: .75rem;
 
                         &.right {
@@ -197,7 +195,7 @@
         &.active {
             .header {
                 @include flex-row(center, flex-start);
-                background-color: var(--gradient-orange-70);
+                background-color: var(--gradient-orange-40);
             }
         }
 
@@ -330,6 +328,7 @@
     }
 }
 
+/*
 @media (prefers-color-scheme: dark) {
     .chat-wrapper {
         .chat-users {
@@ -432,4 +431,4 @@
             }
         }
     }
-}
+}*/
