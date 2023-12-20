@@ -579,6 +579,8 @@ class SerieController extends AbstractController
     #[Route('/country/{countryCode}', name: 'app_series_from_country', methods: ['GET'])]
     public function seriesFromCountry(Request $request, string $countryCode): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /** @var User $user */
         $user = $this->getUser();
         $imageConfig = $this->imageConfiguration->getConfig();
@@ -632,7 +634,6 @@ class SerieController extends AbstractController
     #[Route('/search/{page}', name: 'app_series_search', defaults: ['page' => 1], methods: ['GET', 'POST'])]
     public function search(Request $request, int $page): Response
     {
-//        $this->logService->log($request, $this->getUser());
         $tmdbService = $this->TMDBService;
         $series = ['results' => [], 'page' => 0, 'total_pages' => 0, 'total_results' => 0];
         $query = $request->query->get('query');
@@ -713,6 +714,8 @@ class SerieController extends AbstractController
     #[Route('/filter', name: 'app_series_filter', methods: ['GET', 'POST'])]
     public function filter(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /** @var User $user */
         $user = $this->getUser();
 
