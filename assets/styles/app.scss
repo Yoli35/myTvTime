@@ -41,12 +41,28 @@ html {
             --value-#{$i}: #{100 - $i};
             --percent-#{$i}: calc(calc(calc(100 - #{$i}) / 100) * 100%) !important;
         }
+
+        .devices {
+            .choice {
+                .device {
+                    @include devices("dark");
+                }
+            }
+        }
     }
 
     &:has(body.light) {
         @for $i from 0 through 100 {
             --value-#{$i}: #{$i};
             --percent-#{$i}: calc(calc(#{$i} / 100) * 100%) !important;
+        }
+
+        .devices {
+            .choice {
+                .device {
+                    @include devices("light");
+                }
+            }
         }
     }
 }

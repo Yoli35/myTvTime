@@ -28,16 +28,18 @@
             <main>
                 <div class="wrapper">
                     {% for episodeOfTheDay in episodesOfTheWeek %}
-                        <div class="day{% if not episodeOfTheDay.today_offset %} today{% endif %}">
-                            <div class="date">{{ fixIfFirstDayOfTheMonth(episodeOfTheDay.day|format_date('relative_full')|capitalize) }}{% if not episodeOfTheDay.today_offset %} (9:00){% endif %}</div>
-                            <div class="episodes">
-                                {% for todayAiring in episodeOfTheDay.episodes %}
-                                    {{ include('blocks/series/_card-today.html.twig', {extra: episodeOfTheDay.day|format_datetime('full')|capitalize|split(' ')[0], today_offset: episodeOfTheDay.today_offset}) }}
-                                {% else %}
-                                    <div class="no-episode">{{ 'Nothing to watch!'|trans }}</div>
-                                {% endfor %}
+                        {% if episodeOfTheDay.episodes|length %}
+                            <div class="day{% if not episodeOfTheDay.today_offset %} today{% endif %}">
+                                <div class="date">{{ fixIfFirstDayOfTheMonth(episodeOfTheDay.day|format_date('relative_full')|capitalize) }}{% if not episodeOfTheDay.today_offset %} (9:00){% endif %}</div>
+                                <div class="episodes">
+                                    {% for todayAiring in episodeOfTheDay.episodes %}
+                                        {{ include('blocks/series/_card-today.html.twig', {extra: episodeOfTheDay.day|format_datetime('full')|capitalize|split(' ')[0], today_offset: episodeOfTheDay.today_offset}) }}
+                                        {#                                {% else %} #}
+                                        {#                                    <div class="no-episode">{{ 'Nothing to watch!'|trans }}</div> #}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% else %}
                         <div class="nothing">
                             <div class="image-filenames" style="display: none">
@@ -101,7 +103,7 @@
             let nameDivs = createNames();
 
             showNames();
-            anime();
+            // anime();
             setInterval(() => {
                 hideNames();
                 setTimeout(() => {
@@ -109,7 +111,7 @@
                     removeNames();
                     nameDivs = createNames();
                     showNames();
-                       anime();
+                    // anime();
                 }, 300);
             }, 1000 * 10);
 

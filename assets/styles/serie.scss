@@ -2103,9 +2103,9 @@
                                     }
 
                                     &:has(i[class$="check"]) {
-                                        background-color: var(--gradient-ardoise-40);
-                                        border-color: var(--gradient-ardoise-30);
-                                        color: var(--gradient-ardoise-70);
+                                        background-color: var(--gradient-green-60);
+                                        border-color: var(--gradient-green-10);
+                                        color: var(--gradient-green-10);
 
                                         &.completed {
                                             background-color: var(--gradient-green-30);

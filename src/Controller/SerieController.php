@@ -314,7 +314,6 @@ class SerieController extends AbstractController
         $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale(), 20, 1);
         $seriesToWatch = array_map(function ($series) use ($imgConfig) {
             if ($series['time_shifted']) {
-                $airDate = $series['air_date'];
                 $date = $this->dateService->newDate($series['air_date'], 'Europe/Paris', true);
                 $series['air_date'] = $date->modify('+1 day')->format('Y-m-d');
             }
@@ -1346,6 +1345,8 @@ class SerieController extends AbstractController
                     'episodeNumbers' => [$episode['episode_number']],
                     'viewed' => $episode['viewed'],
                 ];
+            } else {
+                sort($ep['episodeNumbers']);
             }
         }
         return $episodesOfTheDayBySeries;
