@@ -429,6 +429,7 @@ main {
     }
 }
 
+#add-overview-dialog,
 #delete-video-dialog,
 #direct-link-dialog,
 #localize-dialog,
@@ -518,6 +519,7 @@ main {
     }
 }
 
+#add-overview-dialog::backdrop,
 #delete-video-dialog::backdrop,
 #direct-link-dialog::backdrop,
 #localize-dialog::backdrop,

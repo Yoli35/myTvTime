@@ -95,7 +95,7 @@ class Serie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $directLink = null;
 
-    #[ORM\OneToMany(mappedBy: 'series', targetEntity: SerieAlternateOverview::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'series', targetEntity: SerieAlternateOverview::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $seriesAlternateOverviews;
 
     public function __construct()

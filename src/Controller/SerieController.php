@@ -10,6 +10,7 @@ use App\Entity\Favorite;
 use App\Entity\Networks;
 use App\Entity\SeasonViewing;
 use App\Entity\Serie;
+use App\Entity\SerieAlternateOverview;
 use App\Entity\SerieBackdrop;
 use App\Entity\SerieCast;
 use App\Entity\SerieLocalizedName;
@@ -1082,6 +1083,22 @@ class SerieController extends AbstractController
         ]);
     }
 
+    #[Route('/set/alternate/overview/{id}', name: 'app_series_set_alternate_overview', methods: ['POST'])]
+    public function setAlternateOverview(Request $request, Serie $serie): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $overview = $data['overview'];
+
+        $ao = new SerieAlternateOverview($serie, $request->getLocale(), $overview);
+
+        $serie->addSeriesAlternateOverview($ao);
+        $this->serieRepository->save($serie, true);
+
+        return $this->json([
+            'result' => true,
+        ]);
+    }
+
     public function getCountries(): array
     {
         $results = $this->serieRepository->getCountries();
@@ -2071,10 +2088,8 @@ class SerieController extends AbstractController
             }
             if (!count($providersFlatrate)) {
                 $providersFlatrate = null;
-                $watchProviderList = null;
-            }/* else {*/
-                $watchProviderList = $this->getRegionProvider($imgConfig, 1, '', ''); // Tous les providers
-//            }
+            }
+            $watchProviderList = $this->getRegionProvider($imgConfig, 1, '', ''); // Tous les providers
         }
 //        dump(['temp' => $temp, 'providersFlatrate' => $providersFlatrate, 'watchProviderList' => $watchProviderList]);
 
@@ -2103,27 +2118,17 @@ class SerieController extends AbstractController
             if ($dl && strlen($dl) > 0) {
                 $tv['directLink'][0]['url'] = $serie->getDirectLink();
                 $dl = $serie->getDirectLink();
-                // si le lien contient 'youtube', on récupère le 'logo_path' dans la table 'networks'
-                $networkId = 0;
+
                 // https://www.youtube.com/watch?v=xpiuV0Xj8zk&list=PLxaYND3fuRFPPEfhIfs9oT3SWOch-B0mL&index=1
                 if (str_contains($dl, 'youtube')) {
-//                    $networkId = 83;
                     $tv['directLink'][0]['logoPath'] = '/images/series/logos/youtube-premium.png';
                     $tv['directLink'][0]['name'] = 'Youtube Premium';
                 }
                 // https://www.netflix.com/title/81243969
                 if (str_contains($dl, 'netflix')) {
-//                    $networkId = 83;
                     $tv['directLink'][0]['logoPath'] = '/images/series/logos/netflix.png';
                     $tv['directLink'][0]['name'] = 'Netflix';
                 }
-//                if ($networkId) {
-//                    $network = $this->networksRepository->find($networkId);
-//                    if ($network) {
-//                        $tv['directLink'][0]['logoPath'] = $this->fullUrl('logo', 2, $network->getLogoPath(), '', $imgConfig);
-//                        $tv['directLink'][0]['name'] = $network->getName();
-//                    }
-//                }
             }
             $providersMatches = [
                 'disney' => 337, // Disney Plus
@@ -2221,7 +2226,9 @@ class SerieController extends AbstractController
             if (strlen($tv['overview']) == 0) {
                 $tv['overview'] = $serieOverview;
             }
-            $tv['alternate_overviews'] = $serie->getSeriesAlternateOverviews();
+            $tv['alternate_overviews'] = array_filter($serie->getSeriesAlternateOverviews()->toArray(), function ($overview) use ($locale) {
+                return $overview->getLocale() == $locale;
+            });
 
             $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
 
@@ -2715,7 +2722,9 @@ class SerieController extends AbstractController
             } else {
                 $serie['userSerieViewing'] = null;
             }
-            $serie['alternate_overviews'] = $userSerie->getSeriesAlternateOverviews();
+            $serie['alternate_overviews'] = array_filter($userSerie->getSeriesAlternateOverviews()->toArray(), function ($overview) use ($locale) {
+                return $overview->getLocale() == $locale;
+            });
         }
 
         return $serie;

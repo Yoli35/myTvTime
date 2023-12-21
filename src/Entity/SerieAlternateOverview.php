@@ -20,9 +20,16 @@ class SerieAlternateOverview
     #[ORM\Column(length: 2)]
     private ?string $locale = null;
 
-    #[ORM\ManyToOne(inversedBy: 'seriesAlternateOverviews')]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'seriesAlternateOverviews')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Serie $series = null;
+
+    public function __construct($series, $locale, $overview)
+    {
+        $this->setSeries($series);
+        $this->setLocale($locale);
+        $this->setOverview($overview);
+    }
 
     public function getId(): ?int
     {

@@ -1,0 +1,15 @@
+<dialog id="add-overview-dialog" data-id="{{ serieId }}">
+    <search class="content" role="search">
+        <div class="dialog-title">{{ 'Add an overview'|trans }}</div>
+        <form method="dialog">
+            <input type="hidden" name="action" value="addOverview"/>
+            <label for="new-overview">
+                <textarea id="new-overview" name="new-overview" autofocus></textarea>
+            </label>
+            <menu>
+                <li><button class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button></li>
+                <li><button class="btn btn-primary" value="addOverview">{{ 'Add'|trans }}</button></li>
+            </menu>
+        </form>
+    </search>
+</dialog>

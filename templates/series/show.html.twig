@@ -199,7 +199,7 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="info">
+                        <div class="info with-overview">
                             {% if serie.overview|length %}
                                 <div class="overview">{{ serie.overview|e }}</div>
                             {% endif %}
@@ -267,6 +267,7 @@
                             </div>
                         {% endif %}
                     </div>
+                    <div class="add-overview"><i class="fa-solid fa-plus" data-title="{{ 'Add an overview'|trans }}"></i></div>
                 </div>
                 <div class="add-and-others">
                     {% if user %}
@@ -477,6 +478,7 @@
     {% if serieId %}
         {{ include('blocks/movie/_localizedName.html.twig') }}
         {{ include('blocks/series/_addDirectLink.html.twig') }}
+        {{ include('blocks/series/_addOverview.html.twig') }}
     {% endif %}
     <dialog class="viewed-update">
         <div class="loading">
@@ -603,8 +605,9 @@
 {% block javascripts %}
     {{ parent() }}
     {% if serieId %}
-        <script src="/js/localize.js" type="module"></script>
+        <script src="/js/addOverview.js" type="module"></script>
         <script src="/js/directLink.js" type="module"></script>
+        <script src="/js/localize.js" type="module"></script>
     {% endif %}
     <script src="/js/serie.js"></script>
     <script src="/js/diaporama.js"></script>

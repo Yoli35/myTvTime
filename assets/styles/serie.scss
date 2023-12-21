@@ -1072,6 +1072,12 @@
             gap: 1rem;
             width: 100%;
 
+            &:hover {
+                .add-overview {
+                    display: flex;
+                }
+            }
+
             .posters {
                 @include flex-col(flex-start, center);
                 flex-shrink: 0;
@@ -1363,15 +1369,15 @@
                     }
 
                     .alternate-overviews {
-                        @include flex-col();
-                        border-left: .25rem solid var(--gradient-orange-50);
+                        @include flex-col(flex-start, flex-start);
                         gap: 1rem;
                         margin-block-start: 1rem;
-                        padding-inline-start: 1rem;
                         width: 100%;
 
                         .alternate-overview {
+                            border-left: .25rem solid var(--gradient-orange-50);
                             font-style: italic;
+                            padding-inline-start: 1rem;
                         }
                     }
 
@@ -1645,6 +1651,28 @@
                         transform: scale(50%);
                         -webkit-backdrop-filter: blur(8px);
                     }
+                }
+            }
+
+            .add-overview {
+                align-items: center;
+                background-color: var(--gradient-ardoise-80);
+                border-radius: 50%;
+                border: 2px solid var(--gradient-ardoise-20);
+                color: var(--gradient-ardoise-20);
+                cursor: pointer;
+                display: none;
+                height: 2rem;
+                justify-content: center;
+                position: absolute;
+                right: 1rem;
+                top: 1rem;
+                width: 2rem;
+
+                &:hover {
+                    background-color: var(--gradient-ardoise-70);
+                    border-color: var(--gradient-orange-50);
+                    color: var(--gradient-orange-50);
                 }
             }
         }
@@ -2951,6 +2979,27 @@
 
             menu {
                 margin-block-start: 1rem;
+                width: 100%;
+            }
+        }
+    }
+}
+
+#add-overview-dialog {
+    search {
+        form {
+            flex-direction: column;
+            flex-wrap: nowrap;
+
+            label {
+                textarea {
+                    height: 10rem;
+                    width: 32rem;
+                }
+            }
+
+            menu {
+                margin-block-end: 1rem;
                 width: 100%;
             }
         }
