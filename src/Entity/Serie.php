@@ -95,6 +95,9 @@ class Serie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $directLink = null;
 
+    #[ORM\OneToMany(mappedBy: 'series', targetEntity: SerieAlternateOverview::class, orphanRemoval: true)]
+    private Collection $seriesAlternateOverviews;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -106,6 +109,7 @@ class Serie
         $this->serieCasts = new ArrayCollection();
         $this->episodes = new ArrayCollection();
         $this->seasons = new ArrayCollection();
+        $this->seriesAlternateOverviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -472,7 +476,7 @@ class Serie
     {
         if (!$this->episodes->contains($episode)) {
             $this->episodes->add($episode);
-            $episode->setSerie($this);
+            $episode->setSeries($this);
         }
 
         return $this;
@@ -482,8 +486,8 @@ class Serie
     {
         if ($this->episodes->removeElement($episode)) {
             // set the owning side to null (unless already changed)
-            if ($episode->getSerie() === $this) {
-                $episode->setSerie(null);
+            if ($episode->getSeries() === $this) {
+                $episode->setSeries(null);
             }
         }
 
@@ -502,7 +506,7 @@ class Serie
     {
         if (!$this->seasons->contains($season)) {
             $this->seasons->add($season);
-            $season->setSerie($this);
+            $season->setSeries($this);
         }
 
         return $this;
@@ -512,8 +516,8 @@ class Serie
     {
         if ($this->seasons->removeElement($season)) {
             // set the owning side to null (unless already changed)
-            if ($season->getSerie() === $this) {
-                $season->setSerie(null);
+            if ($season->getSeries() === $this) {
+                $season->setSeries(null);
             }
         }
 
@@ -528,6 +532,36 @@ class Serie
     public function setDirectLink(?string $directLink): static
     {
         $this->directLink = $directLink;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SerieAlternateOverview>
+     */
+    public function getSeriesAlternateOverviews(): Collection
+    {
+        return $this->seriesAlternateOverviews;
+    }
+
+    public function addSeriesAlternateOverview(SerieAlternateOverview $seriesAlternateOverview): static
+    {
+        if (!$this->seriesAlternateOverviews->contains($seriesAlternateOverview)) {
+            $this->seriesAlternateOverviews->add($seriesAlternateOverview);
+            $seriesAlternateOverview->setSeries($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeriesAlternateOverview(SerieAlternateOverview $seriesAlternateOverview): static
+    {
+        if ($this->seriesAlternateOverviews->removeElement($seriesAlternateOverview)) {
+            // set the owning side to null (unless already changed)
+            if ($seriesAlternateOverview->getSeries() === $this) {
+                $seriesAlternateOverview->setSeries(null);
+            }
+        }
 
         return $this;
     }

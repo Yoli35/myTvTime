@@ -93,5 +93,10 @@
   "build/images/the-movie-db.svg": "/build/images/the-movie-db.da3f379f.svg",
   "build/images/arrow-up-circle-outline.png": "/build/images/arrow-up-circle-outline.137a27d1.png",
   "build/images/star-outline.png": "/build/images/star-outline.3e7dbff2.png",
-  "build/images/star.png": "/build/images/star.16ef0d59.png"
+  "build/images/star.png": "/build/images/star.16ef0d59.png",
+  "build/images/computer.svg": "/build/images/computer.37f7666f.svg",
+  "build/images/laptop.svg": "/build/images/laptop.779cc21f.svg",
+  "build/images/tv.svg": "/build/images/tv.0222ae6f.svg",
+  "build/images/tablet.svg": "/build/images/tablet.1f2ae4ac.svg",
+  "build/images/mobile.svg": "/build/images/mobile.0a0dbf33.svg"
 }

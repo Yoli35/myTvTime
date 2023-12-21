@@ -2221,6 +2221,7 @@ class SerieController extends AbstractController
             if (strlen($tv['overview']) == 0) {
                 $tv['overview'] = $serieOverview;
             }
+            $tv['alternate_overviews'] = $serie->getSeriesAlternateOverviews();
 
             $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
 
@@ -2700,6 +2701,7 @@ class SerieController extends AbstractController
             $serie['localized_name'] = null;
             $serie['userSerie'] = null;
             $serie['userSerieViewing'] = null;
+            $serie['alternate_overviews'] = [];
         } else {
             $serie['id'] = $userSerie->getSerieId();
             $serie['name'] = $userSerie->getName();
@@ -2713,6 +2715,7 @@ class SerieController extends AbstractController
             } else {
                 $serie['userSerieViewing'] = null;
             }
+            $serie['alternate_overviews'] = $userSerie->getSeriesAlternateOverviews();
         }
 
         return $serie;

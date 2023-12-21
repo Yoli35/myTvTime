@@ -203,6 +203,15 @@
                             {% if serie.overview|length %}
                                 <div class="overview">{{ serie.overview|e }}</div>
                             {% endif %}
+                            {%if serie.alternate_overviews|length %}
+                                <div class="alternate-overviews">
+                                    {% for item in serie.alternate_overviews %}
+                                        <div class="alternate-overview">
+                                            <div class="overview">{{ item.overview }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                         {# Creators #}
                         <div class="info">

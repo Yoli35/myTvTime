@@ -57,9 +57,21 @@
                                 <div>{{ season.overview }}</div>
                             {% endif %}
                         </div>
+                        <div class="info">
+                            {%if serie.alternate_overviews|length %}
+                                <div class="alternate-overviews">
+                                    {% for item in serie.alternate_overviews %}
+                                        <div class="alternate-overview">
+                                            <div class="overview">{{ item.overview }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
                         {% if seasonViewing %}
-                            <div class="viewing-progress">{{ 'Progress'|trans }} : <span></span>
-                                / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}</div>
+                            <div class="viewing-progress">
+                                {{ 'Progress'|trans }} : <span></span> / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}
+                            </div>
                         {% endif %}
                         {% if not localization.localized %}
                             <div class="info">
@@ -246,16 +258,16 @@
                                                     </div>
                                                     <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if viewed %} show{% endif %}"
                                                          data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
-                                                    <span>
-                                                        {% if episode.viewing.deviceType is null %}?{% endif %}
-                                                        {% if episode.viewing.deviceType == 'tv' %}TV{% endif %}
-                                                    </span>
+                                                        <span>
+                                                            {% if episode.viewing.deviceType is null %}?{% endif %}
+                                                            {% if episode.viewing.deviceType == 'tv' %}TV{% endif %}
+                                                        </span>
                                                         <div class="view-devices">
-                                                            <div class="device desktop" data-device="desktop"></div>
-                                                            <div class="device laptop" data-device="laptop"></div>
-                                                            <div class="device tablet" data-device="tablet"></div>
-                                                            <div class="device phone" data-device="phone"></div>
-                                                            <div class="device tv" data-device="tv"></div>
+                                                            <div class="device desktop" data-device="desktop" data-title="{{ 'Desktop computer'|trans }}"></div>
+                                                            <div class="device laptop" data-device="laptop" data-title="{{ 'Laptop'|trans }}"></div>
+                                                            <div class="device tablet-device" data-device="tablet" data-title="{{ 'Tablet'|trans }}"></div>
+                                                            <div class="device phone" data-device="phone" data-title="{{ 'Mobile'|trans }}"></div>
+                                                            <div class="device tv" data-device="tv" data-title="{{ 'Television'|trans }}"></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -516,7 +528,7 @@
                     });
                 });
 
-                viewDevice.addEventListener('mouseenter', () => {
+                /*viewDevice.addEventListener('mouseenter', () => {
                     const devices = view.querySelector('.view-devices');
                     devices.classList.add('visible');
                     setTimeout(() => {
@@ -530,7 +542,7 @@
                     setTimeout(() => {
                         devices.classList.remove('visible');
                     }, 125);
-                });
+                });*/
             });
         }
 

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        id="svg3455"
+        viewBox="0 0 185.09 220.69"
+        version="1.0"
+>
+    <g
+            id="layer1"
+            transform="translate(-290.55 -559.43)"
+    >
+        <path
+                id="path3328"
+                stroke="#555"
+                fill="#29363d"
+                style="fill-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-width:2"
+                d="m364.35 712.6l-20.3 19.35c-2.64 3.88 0.48 8.58 5.67 8.23l67.58-0.26c4.61 0.35 8.23-5.19 5.28-9.03l-18.66-18.03-2.06-13.36-36.42-1.07-1.09 14.17z"
+        />
+        <path
+                id="path3330"
+                stroke="#555"
+                fill="#29363d"
+                style="fill-opacity:1;stroke-linejoin:round;stroke-linecap:round;stroke-width:2"
+                d="m296.53 569.58l-0.37 127.4c2.27 7.54 5.88 9.65 10.9 9.57l154.79-0.23c7.53-0.06 9.6-6.18 9.16-12.62l0.69-123.94c-0.22-7.82-4.33-8.84-10.28-9.33l-153.76 0.15c-7.06 0.35-10.3 3.24-11.13 9z"
+        />
+        <path
+                id="path3332"
+                stroke="#555"
+                fill="#000"
+                style="fill-opacity:.1;stroke-linejoin:round;stroke-linecap:round;"
+                d="m300.76 570.32l-0.49 98.03c0.08 3.39 1.74 6.7 5.4 7.09l153.76 0.26c5.58 0.63 7.95-1.69 8.12-6.35l0.11-97.47c0.62-5.66-3.99-7.76-8.94-7.35l-149.96 0.36c-5.12-0.24-7.73 1.68-8 5.43z"
+        />
+        <path
+                id="path3338"
+                stroke="#555"
+                fill="#29363d"
+                style="stroke-linejoin:round;stroke-linecap:round;stroke-width:2.1038;"
+                d="m363.45 511.43a16.971 16.263 0 1 1 -33.94 0 16.971 16.263 0 1 1 33.94 0z"
+                transform="matrix(.46020 0 0 .49095 226.92 438.4)"
+        />
+        <path
+                id="path3987"
+                stroke="#555"
+                fill="#29363d"
+                style="fill-opacity:.2;stroke-linejoin:round;fill-opacity:.2;stroke-linecap:round;"
+                d="m307.59 571.28l-0.25 96.47h152.78v-96.22l-152.53-0.25z"
+        />
+        <path
+                id="path3989"
+                stroke="#555"
+                fill="#29363d"
+                style="fill-opacity:.2;stroke-linejoin:round;stroke-linecap:round"
+                d="m344.46 731.39c-0.32 3.62 2.1 4.1 5.05 4.54l66.17-0.76c3.95-0.15 7.24-1.19 7.07-4.29"
+        />
+        <path
+                id="path3991"
+                stroke="#555"
+                fill="#29363d"
+                style="fill-opacity:.2;stroke-linejoin:round;stroke-linecap:round;stroke-width:2"
+                d="m307.14 750.22l-15.59 23.57 0.28 3.57c0.56 1.43 1.43 1.47 2.38 1.76l177.85-0.08c2.24-0.34 1.98-0.86 2.34-2.2l0.24-3.76c-4.15-7.66-8.64-16.36-12.47-22.97-0.41-0.99-1.29-1.51-2.17-2.03l-149.82 0.7c-1.65-0.16-2.31 0.68-3.04 1.44z"
+        />
+        <path
+                id="path3993"
+                stroke="#555"
+                fill="#29363d"
+                style="stroke-linejoin:round;stroke-linecap:round"
+                d="m292.14 773.43c0.96 1.06 1.64 2.68 3.22 2.5l175.35-0.35c2.63 0.33 3.2-1.39 2.92-2.78"
+        />
+        <path
+                id="path3995"
+                stroke="#555"
+                fill="#29363d"
+                style="stroke-linejoin:round;stroke-linecap:round;"
+                d="m312.86 753.79l-12.15 17.86 108.93-0.36-1.78-18.21-95 0.71z"
+        />
+        <path
+                id="path3997"
+                stroke="#555"
+                fill="#29363d"
+                style="stroke-linejoin:round;stroke-linecap:round"
+                d="m412.14 753.43l1.43 8.22h17.14l-2.14-8.57-16.43 0.35z"
+        />
+        <path
+                id="path3999"
+                stroke="#555"
+                fill="#29363d"
+                style="stroke-linejoin:round;stroke-linecap:round"
+                d="m433.93 753.08l5.36 17.85h26.78l-7.86-17.85h-24.28z"
+        />
+        <path
+                id="path4001"
+                stroke="#555"
+                fill="#29363d"
+                style="stroke-linejoin:round;stroke-linecap:round"
+                d="m413.93 764.86l1.07 6.07 17.5-0.35-1.79-6.07-16.78 0.35z"
+        />
+        <path
+                id="path4003"
+                stroke="#555"
+                fill="#29363d"
+                style="stroke-linejoin:round;stroke-linecap:round;stroke-width:1.0792"
+                d="m386.43 568.08a1.7857 1.4286 0 1 1 -3.57 0 1.7857 1.4286 0 1 1 3.57 0z"
+                transform="matrix(.85858 0 0 1 54.397 0)"
+        />
+    </g>
+</svg
+>

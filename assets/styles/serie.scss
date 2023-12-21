@@ -1362,6 +1362,19 @@
                         width: 100%;
                     }
 
+                    .alternate-overviews {
+                        @include flex-col();
+                        border-left: .25rem solid var(--gradient-orange-50);
+                        gap: 1rem;
+                        margin-block-start: 1rem;
+                        padding-inline-start: 1rem;
+                        width: 100%;
+
+                        .alternate-overview {
+                            font-style: italic;
+                        }
+                    }
+
                     &:has(i[class$="exclamation"]) {
                         background-color: var(--gradient-green-70-alpha-50);
                         border-radius: .5rem;
@@ -1586,6 +1599,7 @@
                 .viewing-progress {
                     font-size: 1.5rem;
                     font-weight: 100;
+                    margin-block-start: 1rem;
                 }
             }
 
@@ -1620,7 +1634,7 @@
 
                 .graph-container {
                     align-items: center;
-                    background-color: #000;//var(--gradient-ardoise-100);
+                    background-color: #000; //var(--gradient-ardoise-100);
                     border-radius: .5rem;
                     display: flex;
                     height: 14rem;
@@ -2198,6 +2212,7 @@
                                     background-repeat: no-repeat;
                                     background-size: contain;
                                     border-radius: .25em;
+                                    cursor: pointer;
                                     font-weight: 400;
                                     height: 3em;
                                     line-height: 3em;
@@ -2206,16 +2221,34 @@
 
                                     @include devices("light");
 
+                                    &:hover {
+                                        .view-devices {
+                                            display: flex;
+                                            opacity: 1;
+                                        }
+                                    }
+
                                     .view-devices {
                                         .device {
                                             background-position: center;
                                             background-repeat: no-repeat;
                                             background-size: contain;
+                                            border: 2px solid transparent;
                                             border-radius: .25em;
+                                            cursor: pointer;
                                             height: 3em;
                                             width: 3em;
 
                                             @include devices("light");
+
+                                            &:hover {
+                                                border-color: var(--gradient-orange-50);
+                                            }
+                                        }
+
+                                        &:hover {
+                                            display: flex;
+                                            opacity: 1;
                                         }
                                     }
                                 }
@@ -3234,6 +3267,7 @@
 
             .home-discover {
                 border-radius: .5rem .5rem 0 0;
+
                 a {
                     display: block;
                     position: relative;
@@ -3262,7 +3296,7 @@
                         border: 1px solid var(--gradient-orange-50);
                         bottom: 0;
                         height: .75rem;
-                        left:0;
+                        left: 0;
                         position: absolute;
                         right: 0;
 

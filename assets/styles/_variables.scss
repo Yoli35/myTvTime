@@ -1293,7 +1293,7 @@ $fa-font-path: "../webfonts";
         }
     }
 
-    &.tablet {
+    &.tablet-device {
         background-image: url("../images/devices/device-tablet-#{$theme}.png");
 
         &.active, &:hover {
