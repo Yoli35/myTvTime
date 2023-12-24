@@ -104,6 +104,18 @@ goal: objetivo
 h: h
 km: km
 steps: pasos
+Number of days: Número de días
+Total distance: Distancia total
+Average distance: Distancia media
+Total steps: Pasos totales
+Average steps: Pasos medios
+Total exercise: Ejercicio total
+Average exercise: Ejercicio medio
+Total move: Movimiento total
+Average move: Movimiento medio
+Min stand up: Levantamiento mínimo
+Max stand up: Levantamiento máximo
+Average stand up: Levantamiento medio
 
 #Alarm
 Days: Días

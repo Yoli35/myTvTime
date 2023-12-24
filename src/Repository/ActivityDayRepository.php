@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ActivityDay;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -112,6 +113,26 @@ class ActivityDayRepository extends ServiceEntityRepository
             . "AND WEEK(`day`) = " . $week . " "
             . "ORDER BY day";
 //        dump($sql);
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getStats(User $user, int $month): array
+    {
+        $sql = 'SELECT COUNT(*) as number_of_days, '
+            . 'SUM(ad.`distance`) as total_distance, AVG(ad.`distance`) as average_distance, '
+            . 'SUM(ad.`steps`) as total_steps, AVG(ad.`steps`) as average_steps, '
+            . 'SUM(ad.`exercise_result`) as total_exercise, AVG(ad.`exercise_result`) as average_exercise, '
+            . 'SUM(ad.`move_result`) as total_move, AVG(ad.`move_result`) as average_move, '
+            . 'MIN(ad.`stand_up_result`) as min_stand_up, MAX(ad.`stand_up_result`) as max_stand_up, AVG(ad.`stand_up_result`) as average_stand_up '
+            . 'FROM `activity_day` ad '
+            . 'INNER JOIN `activity` a ON a.id=ad.`activity_id` '
+            . 'WHERE MONTH(ad.`day`)=' . $month . ' '
+            . '	AND DATE(ad.`day`)<DATE(NOW())'
+            . '	AND a.`user_id`=' . $user->getId();
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();

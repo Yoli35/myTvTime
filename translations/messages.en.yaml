@@ -71,6 +71,18 @@ Distance: Distance
 goal: goal
 Click me to edit: Click me to edit
 Click the goals button to modify: Click the goals button to modify
+Number of days: Number of days
+Total distance: Total distance
+Average distance: Average distance
+Total steps: Total steps
+Average steps: Average steps
+Total exercise: Total exercise
+Average exercise: Average exercise
+Total move: Total move
+Average move: Average move
+Min stand up: Min stand up
+Max stand up: Max stand up
+Average stand up: Average stand up
 
 #Alarm
 Simple alarm: Simple alarm

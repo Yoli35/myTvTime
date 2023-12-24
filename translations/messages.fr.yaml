@@ -102,6 +102,18 @@ Completed: Terminé
 Yes: Oui
 Value: Valeur
 Actions: Actions
+Number of days: Nombre de jours pris en compte
+Total distance: Distance totale
+Average distance: Distance moyenne
+Total steps: Nombre total de pas
+Average steps: Nombre moyen de pas
+Total exercise: Exercice total
+Average exercise: Exercice moyen
+Total move: Mouvement total
+Average move: Mouvement moyen
+Min stand up: Se lever min
+Max stand up: Se lever max
+Average stand up: Se lever moyen
 
 #Alarm
 Simple alarm: Alarme simple
@@ -1240,10 +1252,13 @@ Size for roomy mode: Taille pour le mode spacieux
 #episodes
 Where did you watched it?: Où l'avez-vous vu ?
 Desktop: Ordinateur de bureau
+Desktop computer: Ordinateur de bureau
 Laptop: Portable
 Phone: Téléphone
+Mobile: Mobile
 Tablet: Tablette
 Tv: Tv
+Television: Télévision
 Remember my choices: Se souvenir de mes choix
 Remember my choice as long as I stay on this page: Se souvenirs de mes choix tant que je reste sur cette page
 Episodes seen as they happen: Épisodes vus au fur et à mesure

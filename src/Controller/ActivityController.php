@@ -107,6 +107,13 @@ class ActivityController extends AbstractController
             }
         }
 
+        if ($now->format('d') === '01') {
+            $month = $now->sub(new DateInterval('P1M'))->format('n');
+        } else {
+            $month = $now->format('n');
+        }
+        $stats = $this->activityDayRepository->getStats($user, $month);
+
         $goals = [];
         $goals['move'] = $activity->getMoveGoals()->toArray();
         $goals['move'][count($goals['move']) - 1]->setEnd($now);
@@ -125,6 +132,7 @@ class ActivityController extends AbstractController
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
             'challenges' => $challenges,
+            'stats' => $stats[0],
             'goals' => $goals,
             'days' => $days,
             'years' => $years,
