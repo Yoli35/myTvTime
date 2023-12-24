@@ -59,7 +59,7 @@ class CollectSeriesInfos extends Command
         $error = 0;
         $report = [];
         $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
-        $io->writeln('Next episode to air Command started at ' . $now->format('Y-m-d H:i:s'));
+        $io->writeln('Season & episode infos Command started at ' . $now->format('Y-m-d H:i:s'));
 
         foreach ($seriesList as $series) {
 
@@ -104,7 +104,7 @@ class CollectSeriesInfos extends Command
         $io->success($line);
 
         $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
-        $line = 'Next episode to air Command ended at ' . $now->format('Y-m-d H:i:s');
+        $line = 'Season & episode infos Command ended at ' . $now->format('Y-m-d H:i:s');
         $io->writeln($line);
 
         return Command::SUCCESS;

@@ -143,7 +143,7 @@
                             {% for episode in episodes %}
                                 {% set now = 'now'|date("Y-m-d") %}
                                 {% set upcoming = episode.air_date > now %}
-                                {% set past = episode.air_date < now %}
+                                {% set past = episode.air_date <= now %}
                                 {% if not upcoming %}
                                     <div class="episode">
                                         <div class="still">
@@ -177,6 +177,7 @@
                                                     {{ episode.name }}
                                                 {% endif %}
                                             </h4>
+{#                                            <pre>{{ dump(past) }}</pre>#}
                                             {% if episode.viewing is defined
                                                 and past
                                                 and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
@@ -186,8 +187,7 @@
                                                         {{ 'Substitute name'|trans }} :
                                                         <input type="text" data-id="{{ episode.viewing.id }}">
                                                     </label>
-                                                    <button class="btn btn-primary btn-sm"
-                                                            data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
+                                                    <button class="btn btn-primary btn-sm" data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
                                                 </div>
                                             {% endif %}
 

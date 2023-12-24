@@ -1969,11 +1969,17 @@
                         @include flex-row(center, flex-start);
                         background-color: var(--gradient-ardoise-70);
                         border-radius: 0;
+                        border: 0.25em solid var(--gradient-ardoise-90);
                         color: var(--gradient-ardoise-10);
                         height: 15em;
                         width: 100%;
 
                         .still {
+                            //border-bottom: 0.5em solid var(--gradient-green-90);
+                            //border-left: 0.5em solid var(--gradient-green-90);
+                            border-radius: 1rem 0 0 1rem;
+                            //border-right: none;
+                            //border-top: 0.5em solid var(--gradient-green-90);
                             height: 100%;
                             position: relative;
                             width: 15em;
@@ -2029,7 +2035,7 @@
                             .episode-name {
                                 align-items: center;
                                 background-color: var(--gradient-ardoise-90);
-                                border-top-left-radius: 1em;
+                                border-top-left-radius: .5rem;
                                 color: var(--gradient-ardoise-20);
                                 display: none;
                                 font-size: 1em;
@@ -2046,11 +2052,11 @@
 
                         &:has(i[class$="check"]) {
                             background-color: var(--gradient-green-80);
+                            border: 0.25em solid var(--gradient-green-90);
 
                             .still {
                                 .episode-number {
                                     background-color: var(--gradient-green-70);
-                                    border-color: var(--gradient-yellow-40);
                                     border-width: .25em;
                                     color: var(--gradient-yellow-40);
                                 }
@@ -2060,11 +2066,16 @@
                                     color: var(--gradient-green-30);
                                 }
                             }
+
+                            .episode-viewing {
+                                border-left: 0.25em solid var(--gradient-green-90);
+                            }
                         }
 
                         .infos {
                             @include flex-col(flex-start, flex-start);
                             flex: 1;
+                            height: 100%;
                             padding: .5em;
                             //width: calc(100% - 30em);
 
@@ -2102,8 +2113,8 @@
 
                         .episode-viewing {
                             background-color: var(--gradient-ardoise-70);
+                            border-left: 0.25em solid var(--gradient-ardoise-90);
                             border-radius: 0 1em 1em 0;
-                            border: .5em solid var(--gradient-ardoise-90);
                             display: flex;
                             height: 100%;
                             width: 15em;
@@ -2116,7 +2127,6 @@
 
                             &:has(i[class$="check"]) {
                                 background-color: var(--gradient-green-80);
-                                border: .5em solid var(--gradient-green-90);
                             }
 
                             .view {
@@ -2363,7 +2373,7 @@
 
                             .still {
                                 img {
-                                    border-radius: 1em 0 0 1em;
+                                    border-radius: .75em 0 0 .75em;
                                 }
 
                                 .episode-number, .episode-name, .episode-air-date {

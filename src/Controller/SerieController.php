@@ -2104,6 +2104,11 @@ class SerieController extends AbstractController
             if ($serie->getSerieLocalizedName() && $tv['name'] !== $serie->getSerieLocalizedName()->getName()) {
                 $tv['localized_name'] = $serie->getSerieLocalizedName()->getName();
             }
+            $tv['alternate_overviews'] = array_filter($serie->getSeriesAlternateOverviews()->toArray(), function ($overview) use ($locale) {
+                return $overview->getLocale() == $locale;
+            });
+        } else {
+            $tv['alternate_overviews'] = [];
         }
 
         if ($user && $serie) {
@@ -2226,9 +2231,6 @@ class SerieController extends AbstractController
             if (strlen($tv['overview']) == 0) {
                 $tv['overview'] = $serieOverview;
             }
-            $tv['alternate_overviews'] = array_filter($serie->getSeriesAlternateOverviews()->toArray(), function ($overview) use ($locale) {
-                return $overview->getLocale() == $locale;
-            });
 
             $nextEpisodeToWatch = $this->getNextEpisodeToWatch($serieViewing, $locale);
 
@@ -2694,10 +2696,10 @@ class SerieController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $serie = [];
-        /** @var Serie $userSerie */
-        $userSerie = $this->serieRepository->findOneBy(['serieId' => $id]);
+        /** @var Serie $dbSeries */
+        $dbSeries = $this->serieRepository->findOneBy(['serieId' => $id]);
 
-        if ($userSerie == null) {
+        if ($dbSeries == null) {
             $standing = $this->TMDBService->getTv($id, $locale);
             $tmdbSerie = json_decode($standing, true);
             $serie['id'] = $tmdbSerie['id'];
@@ -2710,19 +2712,19 @@ class SerieController extends AbstractController
             $serie['userSerieViewing'] = null;
             $serie['alternate_overviews'] = [];
         } else {
-            $serie['id'] = $userSerie->getSerieId();
-            $serie['name'] = $userSerie->getName();
-            $serie['backdropPath'] = $userSerie->getBackdropPath();
-            $serie['firstDateAir'] = $userSerie->getFirstDateAir();
-            $serie['posterPath'] = $userSerie->getPosterPath();
-            $serie['localized_name'] = $userSerie->getSerieLocalizedName()?->getName();
-            $serie['userSerie'] = $userSerie;
+            $serie['id'] = $dbSeries->getSerieId();
+            $serie['name'] = $dbSeries->getName();
+            $serie['backdropPath'] = $dbSeries->getBackdropPath();
+            $serie['firstDateAir'] = $dbSeries->getFirstDateAir();
+            $serie['posterPath'] = $dbSeries->getPosterPath();
+            $serie['localized_name'] = $dbSeries->getSerieLocalizedName()?->getName();
+            $serie['userSerie'] = $dbSeries;
             if ($user != null) {
-                $serie['userSerieViewing'] = $this->serieViewingRepository->findOneBy(['serie' => $userSerie, 'user' => $user]);
+                $serie['userSerieViewing'] = $this->serieViewingRepository->findOneBy(['serie' => $dbSeries, 'user' => $user]);
             } else {
                 $serie['userSerieViewing'] = null;
             }
-            $serie['alternate_overviews'] = array_filter($userSerie->getSeriesAlternateOverviews()->toArray(), function ($overview) use ($locale) {
+            $serie['alternate_overviews'] = array_filter($dbSeries->getSeriesAlternateOverviews()->toArray(), function ($overview) use ($locale) {
                 return $overview->getLocale() == $locale;
             });
         }
