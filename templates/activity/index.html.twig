@@ -27,13 +27,13 @@
                                     <div class="title">{{ 'Challenges in progress'|trans }}</div>
                                     <div class="wrapper">
                                         <div class="content">
-                                        {% for challenge in challenges.inProgress %}
-                                            <div class="challenge">
-                                                <a href="{{ path('app_activity_challenge_show', {id: challenge.id}) }}">
-                                                    {% if challenge.completed %}<i class="fa-solid fa-crown"></i> {% endif %}{{ challenge.name }} ({{ challenge.progress }} / {{ challenge.goal }})
-                                                </a>
-                                            </div>
-                                        {% endfor %}
+                                            {% for challenge in challenges.inProgress %}
+                                                <div class="challenge">
+                                                    <a href="{{ path('app_activity_challenge_show', {id: challenge.id}) }}">
+                                                        {% if challenge.completed %}<i class="fa-solid fa-crown"></i> {% endif %}{{ challenge.name }} ({{ challenge.progress }} / {{ challenge.goal }})
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>
@@ -43,13 +43,13 @@
                                     <div class="title">{{ 'Challenges completed'|trans }}</div>
                                     <div class="wrapper">
                                         <div class="content">
-                                        {% for challenge in challenges.completed %}
-                                            <div class="challenge" data-title="{{ challenge.progress }} / {{ challenge.goal }}">
-                                                <a href="{{ path('app_activity_challenge_show', {id: challenge.id}) }}">
-                                                    {% if challenge.completed %}<i class="fa-solid fa-crown"></i> {% endif %}{{ challenge.name }}
-                                                </a>
-                                            </div>
-                                        {% endfor %}
+                                            {% for challenge in challenges.completed %}
+                                                <div class="challenge" data-title="{{ challenge.progress }} / {{ challenge.goal }}">
+                                                    <a href="{{ path('app_activity_challenge_show', {id: challenge.id}) }}">
+                                                        {% if challenge.completed %}<i class="fa-solid fa-crown"></i> {% endif %}{{ challenge.name }}
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>
@@ -59,31 +59,41 @@
                             <a href="{{ path('app_activity_edit', {id: activity.id}) }}">{{ 'Goals'|trans }}</a>
                         </button>
                     </div>
-                    <div class="activity-stats">
-{#                        "number_of_days" => 23#}
-{#                        "total_distance" => 218.1#}
-{#                        "average_distance" => 9.4826086956522#}
-{#                        "total_steps" => "259996"#}
-{#                        "average_steps" => "11304.1739"#}
-{#                        "total_exercise" => "1808"#}
-{#                        "average_exercise" => "78.6087"#}
-{#                        "total_move" => "13263"#}
-{#                        "average_move" => "576.6522"#}
-{#                        "min_stand_up" => 16#}
-{#                        "max_stand_up" => 19#}
-{#                        "average_stand_up" => "17.7826"#}
-                        <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.number_of_days }}</span></div>
-                        <div class="activity-stat">{{ 'Total distance'|trans }}<span>{{ stats.total_distance }}</span>km</div>
-                        <div class="activity-stat">{{ 'Average distance'|trans }}<span>{{ stats.average_distance|round(2) }}</span>km</div>
-                        <div class="activity-stat">{{ 'Total steps'|trans }}<span>{{ stats.total_steps }}</span></div>
-                        <div class="activity-stat">{{ 'Average steps'|trans }}<span>{{ stats.average_steps|round(0, 'floor') }}</span></div>
-                        <div class="activity-stat">{{ 'Total exercise'|trans }}<span>{{ stats.total_exercise }}</span>{{ 'minutes'|trans }}</div>
-                        <div class="activity-stat">{{ 'Average exercise'|trans }}<span>{{ stats.average_exercise|round(1) }}</span>{{ 'minutes'|trans }}</div>
-                        <div class="activity-stat">{{ 'Total move'|trans }}<span>{{ stats.total_move }}</span>KCal</div>
-                        <div class="activity-stat">{{ 'Average move'|trans }}<span>{{ stats.average_move|round(2) }}</span>KCal</div>
-                        <div class="activity-stat">{{ 'Min stand up'|trans }}<span>{{ stats.min_stand_up }}</span>{{ 'h'|trans }}</div>
-                        <div class="activity-stat">{{ 'Max stand up'|trans }}<span>{{ stats.max_stand_up }}</span>{{ 'h'|trans }}</div>
-                        <div class="activity-stat">{{ 'Average stand up'|trans }}<span>{{ stats.average_stand_up|round(1,'floor') }}</span>{{ 'h'|trans }}</div>
+                    <div class="activity-numbers">
+                        <div class="current-month">
+                            <div>{{ 'Current month'|trans }}</div>
+                            <div class="activity-stats">
+                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.currentMonth.number_of_days }}</span></div>
+                                <div class="activity-stat">{{ 'Total distance'|trans }}<span>{{ stats.currentMonth.total_distance }}</span>km</div>
+                                <div class="activity-stat">{{ 'Average distance'|trans }}<span>{{ stats.currentMonth.average_distance|round(2) }}</span>km</div>
+                                <div class="activity-stat">{{ 'Total steps'|trans }}<span>{{ stats.currentMonth.total_steps }}</span></div>
+                                <div class="activity-stat">{{ 'Average steps'|trans }}<span>{{ stats.currentMonth.average_steps|round(0, 'floor') }}</span></div>
+                                <div class="activity-stat">{{ 'Total exercise'|trans }}<span>{{ stats.currentMonth.total_exercise }}</span>{{ 'minutes'|trans }}</div>
+                                <div class="activity-stat">{{ 'Average exercise'|trans }}<span>{{ stats.currentMonth.average_exercise|round(1) }}</span>{{ 'minutes'|trans }}</div>
+                                <div class="activity-stat">{{ 'Total move'|trans }}<span>{{ stats.currentMonth.total_move }}</span>KCal</div>
+                                <div class="activity-stat">{{ 'Average move'|trans }}<span>{{ stats.currentMonth.average_move|round(2) }}</span>KCal</div>
+                                <div class="activity-stat">{{ 'Min stand up'|trans }}<span>{{ stats.currentMonth.min_stand_up }}</span>{{ 'h'|trans }}</div>
+                                <div class="activity-stat">{{ 'Max stand up'|trans }}<span>{{ stats.currentMonth.max_stand_up }}</span>{{ 'h'|trans }}</div>
+                                <div class="activity-stat">{{ 'Average stand up'|trans }}<span>{{ stats.currentMonth.average_stand_up|round(1,'floor') }}</span>{{ 'h'|trans }}</div>
+                            </div>
+                        </div>
+                        <div class="last-month">
+                            <div>{{ 'Last 30 days'|trans }} - {{ 'Start'|trans }} {{ stats.lastMonth.start|format_date('medium') }} - {{ 'End'|trans }} {{ stats.lastMonth.end|format_date('medium') }}</div>
+                            <div class="activity-stats">
+                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.lastMonth.number_of_days }}</span></div>
+                                <div class="activity-stat">{{ 'Total distance'|trans }}<span>{{ stats.lastMonth.total_distance }}</span>km</div>
+                                <div class="activity-stat">{{ 'Average distance'|trans }}<span>{{ stats.lastMonth.average_distance|round(2) }}</span>km</div>
+                                <div class="activity-stat">{{ 'Total steps'|trans }}<span>{{ stats.lastMonth.total_steps }}</span></div>
+                                <div class="activity-stat">{{ 'Average steps'|trans }}<span>{{ stats.lastMonth.average_steps|round(0, 'floor') }}</span></div>
+                                <div class="activity-stat">{{ 'Total exercise'|trans }}<span>{{ stats.lastMonth.total_exercise }}</span>{{ 'minutes'|trans }}</div>
+                                <div class="activity-stat">{{ 'Average exercise'|trans }}<span>{{ stats.lastMonth.average_exercise|round(1) }}</span>{{ 'minutes'|trans }}</div>
+                                <div class="activity-stat">{{ 'Total move'|trans }}<span>{{ stats.lastMonth.total_move }}</span>KCal</div>
+                                <div class="activity-stat">{{ 'Average move'|trans }}<span>{{ stats.lastMonth.average_move|round(2) }}</span>KCal</div>
+                                <div class="activity-stat">{{ 'Min stand up'|trans }}<span>{{ stats.lastMonth.min_stand_up }}</span>{{ 'h'|trans }}</div>
+                                <div class="activity-stat">{{ 'Max stand up'|trans }}<span>{{ stats.lastMonth.max_stand_up }}</span>{{ 'h'|trans }}</div>
+                                <div class="activity-stat">{{ 'Average stand up'|trans }}<span>{{ stats.lastMonth.average_stand_up|round(1,'floor') }}</span>{{ 'h'|trans }}</div>
+                            </div>
+                        </div>
                     </div>
                     {% for year in years %}
                         {% for week in year %}

@@ -102,6 +102,10 @@ Completed: Terminé
 Yes: Oui
 Value: Valeur
 Actions: Actions
+Start: Début
+End: Fin
+Current month: Mois en cours
+Last 30 days: 30 derniers jours
 Number of days: Nombre de jours pris en compte
 Total distance: Distance totale
 Average distance: Distance moyenne
@@ -1024,6 +1028,8 @@ Scoring Mixer.he: Mixeur score
 Scoring Mixer.she: Mixeuse score
 Screenplay.he: Scénario
 Screenplay.she: Scénario
+Screenstory.he: Scénario
+Screenstory.she: Scénario
 Script Coordinator.he: Coordinateur scénario
 Script Coordinator.she: Coordinatrice scénario
 Script Supervisor.he: Superviseur scénario
