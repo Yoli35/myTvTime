@@ -3073,8 +3073,14 @@ class SerieController extends AbstractController
         $locale = $request->getLocale();
 
         if ($newValue) {
-            $deviceType = $request->query->getAlpha('device-type', null);
-            $networkType = $request->query->getAlpha('network-type', null);
+            $deviceType = $request->query->getAlpha('device-type');
+            if ($deviceType == '') {
+                $deviceType = null;
+            }
+            $networkType = $request->query->getAlpha('network-type');
+            if ($networkType == '') {
+                $networkType = null;
+            }
             $networkId = $request->query->getInt('network-id');
 
             /** @var EpisodeViewing $episode */

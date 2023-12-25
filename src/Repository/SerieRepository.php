@@ -193,7 +193,7 @@ class SerieRepository extends ServiceEntityRepository
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
-        $result = $resultSet->fetchAssociative();
+        $result = $resultSet->fetchAllAssociative();
         return $result['count'];
     }
 
@@ -257,7 +257,7 @@ class SerieRepository extends ServiceEntityRepository
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
-        $result = $resultSet->fetchAssociative();
+        $result = $resultSet->fetchAllAssociative();
         return $result['count'];
     }
 }
