@@ -30,6 +30,8 @@ class AlertService extends AbstractController
             $this->addFlash('alert', [
                 'alert_id' => $alert['id'],
                 'href' => $this->generateUrl('app_series_tmdb_season', ['id' => $alert['tmdb_id'], 'seasonNumber' => $alert['alert_season_number']]) . $from,
+                'direct_link' => $alert['direct_link'],
+                'country_page' => $this->generateUrl('app_series_from_country', ['countryCode' => $matches[0]]) . $from,
                 'message' => $alert['message'],
                 'provider_id' => $alert['provider_id'],
                 'alert_episode_number' => $alert['alert_episode_number'],

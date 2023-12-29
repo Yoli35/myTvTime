@@ -243,23 +243,23 @@ body {
         }
 
         &.alert {
+            align-items: center;
             background-color: var(--gradient-ardoise-90-alpha-80);
             border-color: var(--gradient-ardoise-10);
             color: var(--gradient-ardoise-10);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-start;
             margin: unset;
             padding: 0;
             width: 32rem;
 
-            a {
-                align-items: center;
-                display: flex;
-                gap: 1rem;
-                justify-content: flex-start;
 
-                .still {
-                    flex-shrink: 0;
-                    position: relative;
+            .still {
+                flex-shrink: 0;
+                position: relative;
 
+                a {
                     img {
                         border-radius: .5rem 0 0 .5rem;
                         height: 10rem;
@@ -268,43 +268,43 @@ body {
                         display: block;
                         transition: height 500ms ease-in-out, width 500ms ease-in-out;
                     }
+                }
 
-                    .countries {
-                        align-items: center;
-                        background-color: var(--gradient-ardoise-90-alpha-80);
-                        border-radius: .5rem;
-                        bottom: .5rem;
-                        display: flex;
-                        gap: .5rem;
-                        justify-content: center;
-                        padding: .25rem;
-                        position: absolute;
-                        right: .5rem;
+                .countries {
+                    align-items: center;
+                    background-color: var(--gradient-ardoise-90-alpha-80);
+                    border-radius: .5rem;
+                    bottom: .5rem;
+                    display: flex;
+                    gap: .5rem;
+                    justify-content: center;
+                    padding: .25rem;
+                    position: absolute;
+                    right: .5rem;
 
-                        .country {
-                            font-size: 2rem;
-                        }
+                    .country {
+                        font-size: 2rem;
                     }
+                }
 
-                    .watch-provider {
-                        align-items: center;
-                        background-color: var(--gradient-ardoise-90-alpha-80);
-                        border-radius: .5rem;
-                        bottom: .5rem;
-                        display: flex;
-                        gap: .5rem;
-                        justify-content: center;
-                        padding: .25rem;
-                        position: absolute;
-                        left: .5rem;
+                .watch-provider {
+                    align-items: center;
+                    background-color: var(--gradient-ardoise-90-alpha-80);
+                    border-radius: .5rem;
+                    bottom: .5rem;
+                    display: flex;
+                    gap: .5rem;
+                    justify-content: center;
+                    padding: .25rem;
+                    position: absolute;
+                    left: .5rem;
 
-                        img {
-                            border-radius: .25rem;
-                            height: 2rem;
-                            object-fit: cover;
-                            width: 2rem;
-                            transition: height 500ms ease-in-out, width 500ms ease-in-out;
-                        }
+                    img {
+                        border-radius: .25rem;
+                        height: 2rem;
+                        object-fit: cover;
+                        width: 2rem;
+                        transition: height 500ms ease-in-out, width 500ms ease-in-out;
                     }
                 }
             }
@@ -317,11 +317,22 @@ body {
                 padding: 1rem;
                 width: 22rem;
 
-                button {
+                .silence {
+                    align-items: center;
+                    aspect-ratio: 1;
+                    display: flex;
                     background-color: var(--gradient-ardoise-80);
-                    border-color: var(--gradient-ardoise-60);
+                    border: 1px solid var(--gradient-ardoise-60);
+                    border-radius: 50%;
                     color: var(--gradient-ardoise-10);
+                    cursor: pointer;
+                    justify-content: center;
                     margin-left: auto;
+                    padding: .25rem;
+
+                    &:hover {
+                        background-color: var(--gradient-ardoise-70);
+                    }
                 }
             }
 

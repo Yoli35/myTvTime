@@ -3,29 +3,35 @@
         {% for message in messages %}
             <div class="flash-message {{ label }}">
                 {% if label=='alert' %}
-                    <a href="{{ message.href }}">
-                        <div class="still">
+                    <div class="still">
+                        <a href="{{ message.href }}">
                             <img src="{{ message.episode_still_path ?? message.season_poster_path ?? '/images/default/no_poster_dark.png' }}" alt="{{ message.name }}">
-                            <div class="countries">
-                                {% for country in message.origin_country_array %}
+                        </a>
+                        <div class="countries">
+                            {% for country in message.origin_country_array %}
+                                <a href="{{ message.country_page }}">
                                     <div class="country" data-title="{{ country|country_name }}">{{ getEmojiFlag(country) }}</div>
-                                {% endfor %}
-                            </div>
-                            {% if message.provider_logo_path %}
+                                </a>
+                            {% endfor %}
+                        </div>
+                        {% if message.provider_logo_path %}
+                            <a href="{{ message.direct_link }}" target="_blank" rel="noopener noreferrer">
                                 <div class="watch-provider">
                                     <img src=" {{ message.provider_logo_path }}" alt="{{ message.provider_name }}" data-tile="{{ message.provider_name }}">
                                 </div>
-                            {% endif %}
-                        </div>
-                    </a>
+                            </a>
+                        {% endif %}
+                    </div>
                     <div class="infos">
                         <div>
                             {{ message.name }}
                             {% if message.original_name %} | {{ message.original_name }}{% endif %}
                             {% if message.localized_name %} | {{ message.localized_name }}{% endif %}
                         </div>
-                        <div>{{ 'Episode'|trans }} S{% if message.alert_season_number < 10 %}0{% endif %}{{ message.alert_season_number }}E{% if message.alert_episode_number < 10 %}0{% endif %}{{ message.alert_episode_number }}</div>
-                        <button class="btn" id="disable-this-alert" data-id="{{ message.alert_id }}">{{ 'Disable the alert for this episode'|trans }}</button>
+                        <div>{{ 'Episode'|trans }} {{ 'S%02dE%02d'|format(message.alert_season_number, message.alert_episode_number) }}</div>
+                        {#                        <div>{{ 'Episode'|trans }} S{% if message.alert_season_number < 10 %}0{% endif %}{{ message.alert_season_number }}E{% if message.alert_episode_number < 10 %}0{% endif %}{{ message.alert_episode_number }}</div> #}
+                        <div class="silence" id="disable-this-alert" data-id="{{ message.alert_id }}" data-title="{{ 'Disable the alert for this episode'|trans }}"><i class="fa-regular fa-bell-slash"></i></div>
+                        {#                        <button class="btn" id="disable-this-alert" data-id="{{ message.alert_id }}">{{ 'Disable the alert for this episode'|trans }}</button> #}
                     </div>
                 {% else %}
                     {{ message|raw }}
