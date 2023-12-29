@@ -20,9 +20,9 @@ function initSerieStuff(paths, circles = undefined) {
 
 function markMultiWatchProviders() {
 
-    const providers = document.querySelectorAll(".watch-provider");
+    const providers = document.querySelector(".posters")?.querySelectorAll(".watch-provider");
 
-    if (providers.length > 1) {
+    if (providers?.length > 1) {
         const arrow = document.querySelector(".arrow");
         arrow.classList.add("d-flex");
         arrow.innerHTML = "+" + (providers.length - 1);
