@@ -2119,20 +2119,46 @@ class SerieController extends AbstractController
             $tv['seriePosters'] = $serie->getSeriePosters();
             $tv['serieBackdrops'] = $serie->getSerieBackdrops();
             $tv['directLink'] = [];
-            $dl = $serie->getDirectLink();
-            if ($dl && strlen($dl) > 0) {
-                $tv['directLink'][0]['url'] = $serie->getDirectLink();
-                $dl = $serie->getDirectLink();
+            $dls = $serie->getDirectLink();
+            $urls = [];
+            if ($dls) {
+                $dls = explode(',', $dls);
+//                dump($serie->getDirectLink(), $dls);
+                if ($dls && count($dls)) {
+                    $index = 0;
+                    foreach ($dls as $dl) {
+                        if ($dl && strlen($dl) > 0) {
+                            $tv['directLink'][$index]['url'] = $dl;
+                            $urls[] = $dl;
 
-                // https://www.youtube.com/watch?v=xpiuV0Xj8zk&list=PLxaYND3fuRFPPEfhIfs9oT3SWOch-B0mL&index=1
-                if (str_contains($dl, 'youtube')) {
-                    $tv['directLink'][0]['logoPath'] = '/images/series/logos/youtube-premium.png';
-                    $tv['directLink'][0]['name'] = 'Youtube Premium';
-                }
-                // https://www.netflix.com/title/81243969
-                if (str_contains($dl, 'netflix')) {
-                    $tv['directLink'][0]['logoPath'] = '/images/series/logos/netflix.png';
-                    $tv['directLink'][0]['name'] = 'Netflix';
+                            // https://www.youtube.com/watch?v=xpiuV0Xj8zk&list=PLxaYND3fuRFPPEfhIfs9oT3SWOch-B0mL&index=1
+                            if (str_contains($dl, 'youtube')) {
+                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/youtube-premium.png';
+                                $tv['directLink'][$index]['name'] = 'Youtube Premium';
+                            }
+                            // https://www.netflix.com/title/81243969
+                            if (str_contains($dl, 'netflix')) {
+                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/netflix.png';
+                                $tv['directLink'][$index]['name'] = 'Netflix';
+                            }
+                            // https://www.viki.com/tv/39525c-star-in-my-mind
+                            if (str_contains($dl, 'viki')) {
+                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/viki.jpg';
+                                $tv['directLink'][$index]['name'] = 'Viki';
+                            }
+                            // https://tv.apple.com/fr/episode/red-moon/umc.cmc.58f7yvuesckz5c6bnprcgkb8s?at=1000l3V2
+                            if (str_contains($dl, 'apple')) {
+                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/apple-tv.jpg';
+                                $tv['directLink'][$index]['name'] = 'Apple TV Plus';
+                            }
+
+                            if (!key_exists('logoPath', $tv['directLink'][0])) {
+                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/vod.jpg';
+                                $tv['directLink'][$index]['name'] = 'Direct Link';
+                            }
+                            $index++;
+                        }
+                    }
                 }
             }
             $providersMatches = [
@@ -2154,7 +2180,7 @@ class SerieController extends AbstractController
 //                    '' => 58, // Canal VOD
 //                    '' => 59, // Bbox VOD
 //                    '' => 177, // Pantaflix
-//                    '' => 35, // Rakuten TV
+                'viki' => 35, // Rakuten TV
 //                    '' => 415, // Anime Digital Networks
 //                    '' => 190, // Curiosity Stream
 //                    '' => 475, // DOCSVILLE
@@ -2201,9 +2227,27 @@ class SerieController extends AbstractController
                 if (count($matches)) {
                     foreach ($matches as $match) {
                         $url = $match;
+                        dump($url);
                         if (str_contains($url, "netflix")) {
                             $url = preg_replace('/&.*$/', '', $url);
                         }
+                        if (str_contains($url, "primevideo")) {
+                            $url = preg_replace('/&.*$/', '', $url);
+                        }
+                        if (str_contains($url, "disneyplus")) {
+                            $url = preg_replace('/&.*$/', '', $url);
+                        }
+                        if (str_contains($url, "youtube")) {
+                            $url = preg_replace('/&.*$/', '', $url);
+                        }
+                        if (str_contains($url, "viki")) {
+                            $url = preg_replace('/&.*$/', '', $url);
+                        }
+                        if (str_contains($url, "apple")) {
+                            $url = preg_replace('/&.*$/', '', $url);
+                        }
+                        $urls[] = $url;
+
                         $logoPath = null;
                         $name = null;
                         foreach ($providersMatches as $providerMatch => $providerId) {
@@ -2214,10 +2258,27 @@ class SerieController extends AbstractController
                             }
                         }
                         $tv['directLink'][] = ['url' => $url, 'logoPath' => $logoPath, 'name' => $name];
+                        if ($dls == null) {
+                            $serie->setDirectLink($serie->getDirectLink() ? $serie->getDirectLink() . ',' : '' . $url);
+                            $this->serieRepository->save($serie);
+                        }
+                    }
+                    if ($dls == null) {
+                        $this->serieRepository->flush();
                     }
                 }
             }
-//            dump($tv['directLink']);
+            dump($tv['directLink']);
+            $foundUrls = [];
+            $tv['directLink'] = array_filter($tv['directLink'], function ($dl) use (&$foundUrls) {
+                if (!in_array($dl['url'], $foundUrls)){
+                    $foundUrls[] = $dl['url'];
+                    $added = true;
+                } else {
+                    $added = false;
+                }
+                return $added;
+            });
 
             $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);
 

@@ -29,6 +29,7 @@
 <div class="key-facts">
     {% if user and serieId %}
         <h4>{{ 'Direct link'|trans }}</h4>
+{#        <pre>{{ dump(serie.directLink) }}</pre>#}
         <div class="direct-link">
             {% if serie.directLink|length %}
                 <div class="label">{{ 'Watch now'|trans }}</div>
