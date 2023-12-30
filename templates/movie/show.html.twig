@@ -296,27 +296,6 @@
                 </div>
             </div>
 
-            {% if recommendations is not empty %}
-                <h2>{{ 'Recommendations'|trans }}</h2>
-                <div class="recommendations">
-                    {% for recommendation in recommendations %}
-                        <div class="recommendation">
-                            <a href="{{ path('app_movie', {id: recommendation.id}) }}">
-                                {% if recommendation.poster_path %}
-                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
-                                {% else %}
-                                    <div class="no-poster">
-                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
-                                        <div class="title">{{ recommendation.title }}</div>
-                                        <div class="original-title">{{ recommendation.original_title }}</div>
-                                    </div>
-                                {% endif %}
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
             {% if cast is not empty %}
                 <h2>{{ 'Casting'|trans }}</h2>
                 <div class="cast">
@@ -373,6 +352,28 @@
                     </div>
                 </div>
             {% endif %}
+
+            {% if recommendations is not empty %}
+                <h2>{{ 'Recommendations'|trans }}</h2>
+                <div class="recommendations">
+                    {% for recommendation in recommendations %}
+                        <div class="recommendation">
+                            <a href="{{ path('app_movie', {id: recommendation.id}) }}">
+                                {% if recommendation.poster_path %}
+                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
+                                {% else %}
+                                    <div class="no-poster">
+                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
+                                        <div class="title">{{ recommendation.title }}</div>
+                                        <div class="original-title">{{ recommendation.original_title }}</div>
+                                    </div>
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             {% if images.backdrops|length or images.logos|length or images.posters|length %}
                 <section>
                     <div class="images">
