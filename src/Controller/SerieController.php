@@ -872,7 +872,7 @@ class SerieController extends AbstractController
         if (!key_exists('cast', $credits)) {
             $credits['cast'] = [];
         }
-        $season['poster_path'] = $this->fullUrl('poster', 3, $season['poster_path'], 'no_poster.png', $imgConfig);
+        $season['poster_path'] = $this->fullUrl('poster', 5, $season['poster_path'], 'no_poster.png', $imgConfig);
 
         // Les épisodes (the movie db), l'ajustement de la date (J+1 ?) et leurs affiches (still)
         $episodes = [];
@@ -1391,7 +1391,7 @@ class SerieController extends AbstractController
         return array_slice($images, 2);
     }
 
-    function getPosters(): array|false
+    public function getPosters(): array|false
     {
         $posterFiles = scandir($this->getParameter('kernel.project_dir') . '/public/images/series/posters');
         /*
@@ -2349,7 +2349,7 @@ class SerieController extends AbstractController
                 'name' => $extra
             ];
         }
-        $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+        $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][5]);
 
 //        dump([
 //            'tv' => $tv,
