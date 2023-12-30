@@ -1385,6 +1385,7 @@
                         background-color: var(--gradient-green-70-alpha-50);
                         border-radius: .5rem;
                         border: 2px solid;
+                        flex-wrap: nowrap;
                         font-size: 1.1rem;
                         gap: 1rem;
                         justify-content: center;
@@ -1777,7 +1778,7 @@
 
                 .cast {
                     @include flex-col(flex-start, flex-start);
-                    background-color: var(--gradient-ardoise-80);
+                    background-color: var(--gradient-ardoise-80-alpha-50);
                     border-radius: .5rem;
                     overflow-x: auto;
                     padding: 0 1rem 1rem 1rem;
@@ -1855,7 +1856,7 @@
 
                 .seasons, .episodes {
                     @include flex-col();
-                    background-color: var(--gradient-ardoise-80);
+                    background-color: var(--gradient-ardoise-80-alpha-50);
                     gap: 1rem;
                     width: 100%;
 
@@ -2329,21 +2330,21 @@
                                     }
 
                                     &:hover {
-                                        background-color: var(--gradient-ardoise-60);
+                                        background-color: var(--gradient-ardoise-30);
                                     }
 
                                     &.active {
                                         background-color: var(--gradient-ardoise-40);
 
                                         &:hover {
-                                            background-color: var(--gradient-ardoise-50);
+                                            background-color: var(--gradient-ardoise-40);
                                         }
                                     }
 
                                     &.light-on {
-                                        background-color: var(--gradient-green-70);
-                                        border-color: var(--gradient-green-70);
-                                        box-shadow: 0 0 10px var(--gradient-green-80);
+                                        background-color: var(--gradient-green-30);
+                                        border-color: var(--gradient-green-30);
+                                        box-shadow: 0 0 10px var(--gradient-green-20);
                                     }
                                 }
 
@@ -2594,7 +2595,7 @@
 
         aside {
             @include flex-col(flex-start, flex-start);
-            background-color: var(--gradient-ardoise-80);
+            background-color: var(--gradient-ardoise-80-alpha-50);
             border-radius: .5rem;
             color: var(--gradient-ardoise-10);
             //min-height: 50vh;
@@ -3831,7 +3832,7 @@
 
     .left-column {
         @include flex-col(start, start);
-        background-color: var(--gradient-ardoise-10-alpha-20);
+        background-color: var(--gradient-ardoise-80-alpha-50);
         border-radius: 1rem;
         color: var(--gradient-ardoise-20);
         min-height: 80vh;
