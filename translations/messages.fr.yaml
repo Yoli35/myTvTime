@@ -105,7 +105,7 @@ Actions: Actions
 Start: Début
 End: Fin
 Current month: Mois en cours
-Last 30 days: 30 derniers jours
+Last number_of_days days: number_of_days derniers jours
 Number of days: Nombre de jours pris en compte
 Total distance: Distance totale
 Average distance: Distance moyenne

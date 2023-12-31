@@ -164,6 +164,9 @@ class YoutubeController extends AbstractController
                     $video['tags'][] = $tag;
                 }
             }
+            usort($video['tags'], function ($a, $b) {
+                return $a['label'] <=> $b['label'];
+            });
         }
         return $videos;
     }
