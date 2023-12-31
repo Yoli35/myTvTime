@@ -258,6 +258,6 @@ class SerieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
         $result = $resultSet->fetchAllAssociative();
-        return $result['count'];
+        return $result[0]['count'];
     }
 }
