@@ -78,7 +78,7 @@
                             </div>
                         </div>
                         <div class="last-month">
-                            <div>{{ 'Last 30 days'|trans }} - {{ 'Start'|trans }} {{ stats.lastMonth.start|format_date('medium') }} - {{ 'End'|trans }} {{ stats.lastMonth.end|format_date('medium') }}</div>
+                            <div>{{ 'Last number_of_days days'|trans({'number_of_days': stats.lastMonth.number_of_days}) }} - {{ 'Start'|trans }} {{ stats.lastMonth.start|format_date('medium') }} - {{ 'End'|trans }} {{ stats.lastMonth.end|format_date('medium') }}</div>
                             <div class="activity-stats">
                                 <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.lastMonth.number_of_days }}</span></div>
                                 <div class="activity-stat">{{ 'Total distance'|trans }}<span>{{ stats.lastMonth.total_distance }}</span>km</div>
