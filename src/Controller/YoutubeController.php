@@ -529,9 +529,9 @@ class YoutubeController extends AbstractController
                 $channel->setDescription($snippet['description']);
                 $channel->setCustomUrl($snippet['customUrl']);
                 $channel->setPublishedAt(date_create_immutable($snippet['publishedAt']));
-                if (array_key_exists('default', $thumbnails)) $channel->setThumbnailDefaultUrl($thumbnails['default']['url']);
-                if (array_key_exists('medium', $thumbnails)) $channel->setThumbnailMediumUrl($thumbnails['medium']['url']);
-                if (array_key_exists('high', $thumbnails)) $channel->setThumbnailHighUrl($thumbnails['high']['url']);
+                if (array_key_exists('default', $thumbnails) && $thumbnails['default']['url']) $channel->setThumbnailDefaultUrl($thumbnails['default']['url']);
+                if (array_key_exists('medium', $thumbnails) && $thumbnails['medium']['url']) $channel->setThumbnailMediumUrl($thumbnails['medium']['url']);
+                if (array_key_exists('high', $thumbnails) && $thumbnails['high']['url']) $channel->setThumbnailHighUrl($thumbnails['high']['url']);
                 $channel->setLocalizedDescription($localized['description']);
                 $channel->setLocalizedTitle($localized['title']);
                 $channel->setCountry($snippet['country']);
@@ -648,12 +648,14 @@ class YoutubeController extends AbstractController
 
     public function getVideosCount(User $user): int
     {
-        return count($user->getYoutubeVideos());
+//        return count($user->getYoutubeVideos());
+        return $this->videoRepository->getUserYTVideosCount($user->getId()) ?? 0;
     }
 
     public function getTotalRuntime(User $user): int
     {
-        return $this->videoRepository->getUserYTVideosRuntime($user->getId()) ?? 0;
+//        return $this->videoRepository->getUserYTVideosRuntime($user->getId()) ?? 0;
+        return $this->videoRepository->getUserYTVideosDuration($user->getId()) ?? 0;
     }
 
     public function getFirstView($user): ?DateTimeImmutable
@@ -662,7 +664,7 @@ class YoutubeController extends AbstractController
         if ($firstAddedVideo) {
             $last = $firstAddedVideo->getAddedAt();
         } else {
-            $last = new DateTimeImmutable("now");
+            $last = new DateTimeImmutable();
         }
         return $last;
     }

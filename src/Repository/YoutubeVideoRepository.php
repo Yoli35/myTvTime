@@ -85,7 +85,8 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         if ($sort == 'contentDuration') {
             $sort = 'content_duration';
         }
-        $sql = "SELECT y.`id` as id, y.`thumbnail_high_path` as thumbnailHighPath, y.`title` as title, y.`content_duration` as contentDuration, y.`published_at` as publishedAt, yc.`title` as channelTitle, yc.`custom_url` as channelCustomUrl, yc.`youtube_id` as channelYoutubeId, yc.`thumbnail_default_url` as channelThumbnailDefaultUrl "
+        $sql = "SELECT y.`id` as id, y.`thumbnail_high_path` as thumbnailHighPath, y.`title` as title, y.`content_duration` as contentDuration, y.`published_at` as publishedAt, "
+            . "yc.`title` as channelTitle, yc.`custom_url` as channelCustomUrl, yc.`youtube_id` as channelYoutubeId, yc.`thumbnail_default_url` as channelThumbnailDefaultUrl "
             . "FROM `youtube_video` y "
             . "INNER JOIN `user_yvideo` uyv ON uyv.`user_id`=" . $userId . " AND uyv.`video_id`=y.`id` "
             . "LEFT JOIN `youtube_channel` yc ON yc.`id`=y.`channel_id` "
@@ -153,6 +154,34 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         $resultSet = $statement->executeQuery();
 
         return $resultSet->fetchAllAssociative();
+    }
+
+    public function getUserYTVideosCount($userId): int
+    {
+        $sql = "SELECT COUNT(*) as count "
+            . "FROM `user_youtube_video` "
+            . "WHERE `user_id`=" . $userId;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAssociative()['count'];
+    }
+
+    public function getUserYTVideosDuration($userId): int
+    {
+        $sql = "SELECT SUM(yv.`content_duration`) as duration "
+            . "FROM `youtube_video` yv "
+            . "INNER JOIN `user_youtube_video` uyv ON uyv.`youtube_video_id`=yv.`id` "
+            . "INNER JOIN `user` u ON u.id=uyv.`user_id` "
+            . "WHERE `user_id`=2";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAssociative()['duration'];
     }
 
     public function userYoutubeVideos(): array

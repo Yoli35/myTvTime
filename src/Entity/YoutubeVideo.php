@@ -177,7 +177,7 @@ class YoutubeVideo
         return $this->thumbnailDefaultPath;
     }
 
-    public function setThumbnailDefaultPath(string $thumbnailDefaultPath): self
+    public function setThumbnailDefaultPath(?string $thumbnailDefaultPath): self
     {
         $this->thumbnailDefaultPath = $thumbnailDefaultPath;
 
@@ -189,7 +189,7 @@ class YoutubeVideo
         return $this->thumbnailMediumPath;
     }
 
-    public function setThumbnailMediumPath(string $thumbnailMediumPath): self
+    public function setThumbnailMediumPath(?string $thumbnailMediumPath): self
     {
         $this->thumbnailMediumPath = $thumbnailMediumPath;
 
@@ -201,7 +201,7 @@ class YoutubeVideo
         return $this->thumbnailHighPath;
     }
 
-    public function setThumbnailHighPath(string $thumbnailHighPath): self
+    public function setThumbnailHighPath(?string $thumbnailHighPath): self
     {
         $this->thumbnailHighPath = $thumbnailHighPath;
 
@@ -213,7 +213,7 @@ class YoutubeVideo
         return $this->thumbnailStandardPath;
     }
 
-    public function setThumbnailStandardPath(string $thumbnailStandardPath): self
+    public function setThumbnailStandardPath(?string $thumbnailStandardPath): self
     {
         $this->thumbnailStandardPath = $thumbnailStandardPath;
 
