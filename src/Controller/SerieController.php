@@ -924,28 +924,9 @@ class SerieController extends AbstractController
             }, $episodes);
 
             $episodesVotes = $this->seasonEpisodeVotes($episodes);
-            $modifications = $this->seasonCheckEpisodeDates($user, $episodes, $isShifted);
+            list($episodes, $modifications) = $this->seasonCheckEpisodeDates($user, $episodes, $isShifted);
         } else {
             $seasonViewing = null;
-        }
-
-        foreach ($episodes as $episode) {
-            if (array_key_exists('viewing', $episode)) {
-                /** @var EpisodeViewing $episodeViewing */
-                $episodeViewing = $episode['viewing'];
-                // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
-                $airDate = $this->dateService->newDateImmutable($episode['air_date'], $user->getTimezone(), true)->modify($isShifted ? "-1 day" : "0 day");
-                if ($episodeViewing->getAirDate()?->format('Y-m-d') != $airDate->format('Y-m-d')) {
-                    $modifications[] = [
-                        'episode' => $episode['episode_number'],
-                        'episode air date' => $episode['air_date'],
-                        'airDate' => $airDate,
-                        'viewing air date' => $episodeViewing->getAirDate(),
-                    ];
-                    $episodeViewing->setAirDate($airDate);
-                    $this->episodeViewingRepository->save($episodeViewing, true);
-                }
-            }
         }
 
         $watchProviders = $this->seasonWatchProviders($id, $season, $language, $country);
@@ -2107,6 +2088,9 @@ class SerieController extends AbstractController
             $tv['alternate_overviews'] = array_filter($serie->getSeriesAlternateOverviews()->toArray(), function ($overview) use ($locale) {
                 return $overview->getLocale() == $locale;
             });
+            if ($tv['first_air_date'] == null || $tv['first_air_date'] == "") {
+                $tv['first_air_date'] = $serie->getFirstDateAir()->format('Y-m-d');
+            }
         } else {
             $tv['alternate_overviews'] = [];
         }
@@ -2653,25 +2637,33 @@ class SerieController extends AbstractController
     public function seasonCheckEpisodeDates(User $user, array $episodes, bool $isShifted): array
     {
         $modifications = [];
+        $newEpisodes = [];
         foreach ($episodes as $episode) {
             if (array_key_exists('viewing', $episode)) {
                 /** @var EpisodeViewing $episodeViewing */
                 $episodeViewing = $episode['viewing'];
-                // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
-                $airDate = $this->dateService->newDateImmutable($episode['air_date'], $user->getTimezone(), true)->modify($isShifted ? "-1 day" : "0 day");
-                if ($episodeViewing->getAirDate()?->format('Y-m-d') != $airDate->format('Y-m-d')) {
-                    $modifications[] = [
-                        'episode' => $episode['episode_number'],
-                        'episode air date' => $episode['air_date'],
-                        'airDate' => $airDate,
-                        'viewing air date' => $episodeViewing->getAirDate(),
-                    ];
-                    $episodeViewing->setAirDate($airDate);
-                    $this->episodeViewingRepository->save($episodeViewing, true);
+                if ($episode['air_date']) {
+                    // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
+                    $airDate = $this->dateService->newDateImmutable($episode['air_date'], $user->getTimezone(), true)->modify($isShifted ? "-1 day" : "0 day");
+                    if ($episodeViewing->getAirDate()?->format('Y-m-d') != $airDate->format('Y-m-d')) {
+                        $modifications[] = [
+                            'episode' => $episode['episode_number'],
+                            'episode air date' => $episode['air_date'],
+                            'airDate' => $airDate,
+                            'viewing air date' => $episodeViewing->getAirDate(),
+                        ];
+                        $episodeViewing->setAirDate($airDate);
+                        $this->episodeViewingRepository->save($episodeViewing, true);
+                    }
+                } else {
+                    if ($episodeViewing->getAirDate()) {
+                        $episode['air_date'] = $episodeViewing->getAirDate()->format('Y-m-d');
+                    }
                 }
             }
+            $newEpisodes[] = $episode;
         }
-        return $modifications;
+        return [$newEpisodes, $modifications];
     }
 
     public function getProviders($watchProviders, $type, $imgConfig, $providers, $country = 'FR', $indexed = true): array
