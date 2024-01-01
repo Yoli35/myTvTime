@@ -94,11 +94,19 @@ class ActivityController extends AbstractController
         foreach ($days as $day) {
             $week = $day->getWeek();
             $year = $day->getDay()->format('Y');
-            $years[$currentYear - $year][$currentWeek - $week][] = $day;
+            $years[$currentYear - $year][$week-1][] = $day;
         }
 
         $yearIndex = count($years) - 1;
         $weekIndex = count($years[$yearIndex]) - 1;
+//        dump([
+//            'days' => $days,
+//            'currentYear' => $currentYear,
+//            'currentWeek' => $currentWeek,
+//            'years' => $years,
+//            'yearIndex' => $yearIndex,
+//            'weekIndex' => $weekIndex
+//            ]);
         if ($weekIndex) {
             $firstWeekDayCount = count($years[$yearIndex][$weekIndex]);
 
