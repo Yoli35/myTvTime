@@ -2247,10 +2247,12 @@
                                 }
 
                                 .view-device {
+                                    background-color: #FFFFFF5F;
                                     background-position: center;
                                     background-repeat: no-repeat;
                                     background-size: contain;
-                                    border-radius: .25em;
+                                    border-radius: 50%;
+                                    color: #0a0a0a;
                                     cursor: pointer;
                                     font-weight: 400;
                                     height: 3em;

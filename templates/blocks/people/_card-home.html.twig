@@ -1,14 +1,14 @@
 <div class="home-discover" data-id="{{ people.id }}">
     <div class="profile">
         <a href="{{ path('app_people', {'id': people.id}) }}?from={{ from }}" title="{{ people.name }}">
-            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.3 ~ people.profile_path }}" alt="{{ people.name ~ '\'s profile' }}">
+            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name ~ '\'s profile' }}">
         </a>
         <div class="known-for">
             {% for medium in people.known_for %}
                 {% set url = medium.media_type == 'tv' ? path('app_series_tmdb', {id: medium.id}) : path('app_movie', {id: medium.id}) %}
                 <a href="{{ url ~ '?from=home' }}">
                     {% if medium.poster_path is defined %}
-                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ medium.poster_path }}" alt="">
+                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.2 ~ medium.poster_path }}" alt="">
                     {% else %}
                         <div class="no-poster"><div>{{ medium.title }}</div></div>
                     {% endif %}
