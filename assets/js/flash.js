@@ -44,7 +44,13 @@ window.addEventListener("DOMContentLoaded", () => {
             xhr.open("GET", "/fr/series/alert/disable/" + id);
             xhr.send();
         });
-    })
+    });
+
+    document.querySelector(".flash-messages").querySelector("#close-all-alerts")?.addEventListener("click", () => {
+        flashes.forEach(flash => {
+            closeFlash(flash);
+        });
+    });
 
     function closeFlash(flash) {
         setTimeout(()=>{

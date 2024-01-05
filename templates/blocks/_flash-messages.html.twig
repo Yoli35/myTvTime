@@ -1,6 +1,8 @@
 <div class="flash-messages">
+    {% set count=0 %}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
+            {% set count=count+1 %}
             <div class="flash-message {{ label }}">
                 {% if label=='alert' %}
                     <div class="still">
@@ -29,9 +31,7 @@
                             {% if message.localized_name %} | {{ message.localized_name }}{% endif %}
                         </div>
                         <div>{{ 'Episode'|trans }} {{ 'S%02dE%02d'|format(message.alert_season_number, message.alert_episode_number) }}</div>
-                        {#                        <div>{{ 'Episode'|trans }} S{% if message.alert_season_number < 10 %}0{% endif %}{{ message.alert_season_number }}E{% if message.alert_episode_number < 10 %}0{% endif %}{{ message.alert_episode_number }}</div> #}
                         <div class="silence" id="disable-this-alert" data-id="{{ message.alert_id }}" data-title="{{ 'Disable the alert for this episode'|trans }}"><i class="fa-regular fa-bell-slash"></i></div>
-                        {#                        <button class="btn" id="disable-this-alert" data-id="{{ message.alert_id }}">{{ 'Disable the alert for this episode'|trans }}</button> #}
                     </div>
                 {% else %}
                     {{ message|raw }}
@@ -40,4 +40,10 @@
             </div>
         {% endfor %}
     {% endfor %}
+    {% if count > 1 %}
+        <div class="flash-message warning close-all" id="close-all-alerts">
+            <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
+            {{ 'Close count alerts'|trans({'count': count}) }}
+        </div>
+    {% endif %}
 </div>

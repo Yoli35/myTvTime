@@ -171,6 +171,23 @@ body {
     }
 }
 
+.scroll-watcher {
+    height: .5rem;
+    position: fixed;
+    top:0;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--gradient-orange-50);
+    scale: 0 1;
+    animation: scroll-watcher linear;
+    animation-timeline: scroll();
+    transform-origin: left;
+}
+
+@keyframes scroll-watcher {
+    to { scale: 1 1; }
+}
+
 .todos {
     @include flex-col(flex-start, flex-start);
     background-color: var(--gradient-ardoise-40-alpha-20);
@@ -365,6 +382,10 @@ body {
             }
         }
 
+        &.close-all {
+            cursor: pointer;
+        }
+
         &.friendship {
             background-color: var(--gradient-ardoise-40);
             border-color: var(--gradient-ardoise-10);
@@ -379,8 +400,9 @@ body {
 
         &.warning {
             background-color: var(--gradient-orange-50);
-            border-color: var(--gradient-orange-10);
-            color: var(--gradient-orange-10);
+            border-color: var(--gradient-orange-70);
+            color: var(--gradient-orange-90);
+            font-weight: 300;
         }
 
         &.danger {
@@ -402,18 +424,7 @@ body {
 
         &.hide {
             transform: scale(0);
-            //height: 0;
-            //font-size: 0;
             opacity: 0;
-            //margin: 0 auto;
-            //padding-block: 0;
-            //padding-inline: 0;
-            //width: 100%;
-
-            //img {
-            //    height: 0;
-            //    width: 0;
-            //}
         }
     }
 }
