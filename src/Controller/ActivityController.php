@@ -65,8 +65,9 @@ class ActivityController extends AbstractController
 //        dump($monthCount);
 
         $days = $this->activityDayRepository->getActivityDays($activity->getId());
+        $dayCount = count($days);
 
-        if (!count($days)) {
+        if (!$dayCount) {
             $today = new ActivityDay($activity, $now);
             $activity->addActivityDay($today);
             $this->activityDayRepository->save($today, true);
@@ -94,16 +95,21 @@ class ActivityController extends AbstractController
         foreach ($days as $day) {
             $week = $day->getWeek();
             $year = $day->getDay()->format('Y');
-            $years[$currentYear - $year][$week-1][] = $day;
+            $years[$currentYear - $year][$week][] = $day;
         }
 
         $yearIndex = count($years) - 1;
-        $weekIndex = count($years[$yearIndex]) - 1;
+        $weekIndex = $days[$dayCount-1]->getWeek();
 //        dump([
 //            'days' => $days,
+//            'day count' => $dayCount,
+//            'first day' => $days[$dayCount-1]->getDay()->format('Y-m-d'),
+//            'first week' => $days[$dayCount-1]->getWeek(),
+//            'first year' => $days[$dayCount-1]->getDay()->format('Y'),
 //            'currentYear' => $currentYear,
 //            'currentWeek' => $currentWeek,
-//            'years' => $years,
+//            'year 0' => $years[0],
+//            'year 1' => $years[1],
 //            'yearIndex' => $yearIndex,
 //            'weekIndex' => $weekIndex
 //            ]);
