@@ -312,7 +312,7 @@ class SerieController extends AbstractController
                 'today_offset' => $i - $day_of_the_week,
             ];
         }
-        $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale(), 20, 1);
+        $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale(), 40, 1);
         $seriesToWatch = array_map(function ($series) use ($imgConfig) {
             if ($series['time_shifted']) {
                 $date = $this->dateService->newDate($series['air_date'], 'Europe/Paris', true);
