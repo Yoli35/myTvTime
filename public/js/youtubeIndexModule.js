@@ -2,7 +2,7 @@ import {ToolTips} from "./ToolTips.js";
 
 let gThis;
 
-export class YoutubeModule {
+export class YoutubeIndexModule {
 
     constructor(globs) {
         gThis = this;

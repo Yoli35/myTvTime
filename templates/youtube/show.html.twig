@@ -33,22 +33,16 @@
                         <div class="title-tags">
                             <div class="title-trash">
                                 <div class="title">{{ video.title }}</div>
-                                <div class="youtube" title="{{ 'See this video on Youtube'|trans }}"><a href="https://youtu.be/{{ video.link }}" target="_blank"><i class="fa-brands fa-youtube"></i></a></div>
-                                <div class="copy" data-url="https://youtu.be/{{ video.link }}" title="{{ 'Copy the link'|trans }}"><i class="fa-solid fa-copy"></i></div>
-                                <div class="trash" data-dialog="delete-video" title="{{ 'Delete the video'|trans }}"><i class="fa-solid fa-trash"></i></div>
+                                <div class="youtube" data-title="{{ 'See this video on Youtube'|trans }}"><a href="https://youtu.be/{{ video.link }}" target="_blank"><i class="fa-brands fa-youtube"></i></a></div>
+                                <div class="copy" data-url="https://youtu.be/{{ video.link }}" data-title="{{ 'Copy the link'|trans }}"><i class="fa-solid fa-copy"></i></div>
+                                <div class="trash" data-dialog="delete-video" data-title="{{ 'Delete the video'|trans }}"><i class="fa-solid fa-trash"></i></div>
                             </div>
-                            {#                  {{ component('youtube_video_tags', {class: 'tags', 'id': user.id, 'video': video.id}) }} #}
                             <div class="tags">
                                 <div class="add-tag">
-                                    <label for="new-tag">{{ 'Tags' }}
+                                    <div class="tags-field">
+                                        <label for="new-tag">{{ 'Tags'|trans }}</label>
                                         <input id="new-tag" type="search" name="tag_query" list="other-tags" autocomplete="off" autofocus>
-                                        <datalist id="other-tags">
-                                            {% for tag in other_tags %}
-                                            <option value="{{ tag }}">
-                                                {% endfor %}
-                                        </datalist>
-                                    </label>
-                                    <div class="add"><i class="fa-solid fa-circle-plus"></i></div>
+                                    </div>
                                 </div>
                                 {% for tag in video.tags %}
                                     <div class="tag">
@@ -76,18 +70,18 @@
                     {% if video.youtubeVideoComments|length %}
                         <div class="comments">
                             {% for comment in video.youtubeVideoComments %}
-                            <div class="comment">
-                                <div class="user"></div>
-                                <div class="date">{{ comment.createdAt|date('d/m/Y @ H:m:i') }}</div>
-                                <div class="content">
-                                    {{ comment.content|nl2br|raw }}
+                                <div class="comment">
+                                    <div class="user"></div>
+                                    <div class="date">{{ comment.createdAt|date('d/m/Y @ H:m:i') }}</div>
+                                    <div class="content">
+                                        {{ comment.content|nl2br|raw }}
+                                    </div>
                                 </div>
-                            </div>
                             {% endfor %}
                         </div>
                     {% endif %}
                     <div class="qr-code">
-                        <img src="https://api.qrcode-monkey.com/qr/custom?data=https://www.youtube.com/watch?v={{ video.link }}">
+                        <img src="https://api.qrcode-monkey.com/qr/custom?data=https://www.youtube.com/watch?v={{ video.link }}" alt="QR Code">
                     </div>
                 </div>
                 <div class="copied-text">{{ 'Copied!'|trans }}</div>
@@ -112,7 +106,22 @@
             </div>
         </div>
     </dialog>
+
+    <div id="global-data" style="display: none">
+        {
+        "app_youtube": "{{ path('app_youtube') }}",
+        "yt_video_delete": "{{ path('app_youtube_video_delete', {id: video.id}) }}",
+        "yt_video_add_tag": "{{ path('app_youtube_video_add_tag', {id: video.id, tag: 'tag', tagId: 0})|slice(0, -5) }}",
+        "yt_video_remove_tag": "{{ path('app_youtube_video_remove_tag', {id: video.id, tag: 1})|slice(0, -1) }}",
+        "tags": {{ tagArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+        }
+    </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/youtubeVideo.js" type="module"></script>
+{% endblock %}
+{#
 {% block javascripts %}
     {{ parent() }}
     <script>
@@ -295,4 +304,4 @@
             enumerable: false
         });
     </script>
-{% endblock %}
+{% endblock %} #}

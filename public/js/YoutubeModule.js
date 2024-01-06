@@ -2,7 +2,7 @@ import {ToolTips} from "./ToolTips.js";
 
 let gThis;
 
-export class YoutubeSearch {
+export class Youtube {
 
     /**
      * @typedef Tag
@@ -45,46 +45,109 @@ export class YoutubeSearch {
      * @property {string} app_youtube_video_set_visibility
      * @property {Array.<Tag>} tags
      * @property {Translation} text
+     *
+     * @property {string} app_youtube
+     * @property {string} yt_video_delete
+     * @property {string} yt_video_add_tag
+     * @property {string} yt_video_remove_tag
      */
 
     /**
+     * @param {string} page
      * @param {Globs} globs
      */
-    constructor(globs) {
+    constructor(page, globs) {
         gThis = this;
         this.tags = globs.tags;
-        this.app_youtube_video_by_tag = globs.app_youtube_video_by_tag;
-        this.app_youtube_video_list_delete = globs.app_youtube_video_list_delete;
-        this.app_youtube_video_set_visibility = globs.app_youtube_video_set_visibility;
-        this.text = globs.text;
-        this.letterRatios = [];
-        this.toolTips = new ToolTips(null, "orange");
+        this.toolTips = new ToolTips();
         this.xhr = new XMLHttpRequest();
+        this.toolTips.init(null, "orange");
 
-        this.init();
+        if (page === 'search') {
+            this.app_youtube_video_by_tag = globs.app_youtube_video_by_tag;
+            this.app_youtube_video_list_delete = globs.app_youtube_video_list_delete;
+            this.app_youtube_video_set_visibility = globs.app_youtube_video_set_visibility;
+            this.text = globs.text;
+            this.letterRatios = [];
+            this.inputTagSelector = "#search-tag";
+            this.initSearch();
+        }
+        if (page === 'video') {
+            this.app_youtube = globs.app_youtube;
+            this.yt_video_delete = globs.yt_video_delete;
+            this.yt_video_add_tag = globs.yt_video_add_tag;
+            this.yt_video_remove_tag = globs.yt_video_remove_tag;
+            this.inputTagSelector = "#new-tag";
+            this.initVideo();
+        }
     }
 
-    init() {
+    initSearch() {
         this.initHeader();
         this.initDialogs();
-        this.autocomplete("#search-tag");
-        this.toolTips.init();
+        this.autocomplete();
 
         document.querySelector(".apply").addEventListener("click", this.applyTags);
     }
 
-    autocomplete(inputTag) {
+    initVideo() {
+        this.initDeleteVideoDialog(document.querySelector(".delete-video"))
+        const trash = document.querySelector(".trash");
+        trash.addEventListener("click", this.openDeleteVideoDialog);
+
+        // const addTag = document.querySelector(".add");
+        // addTag.addEventListener("click", gThis.videoAddNewTag);
+        const input = document.querySelector("#new-tag");
+        input.addEventListener("keyup", ({key}) => {
+            if (key === "Enter") {
+                gThis.addVideoTag(key);
+            }
+        });
+        const delTags = document.querySelectorAll("div[class=close]");
+        delTags.forEach(delTag => {
+            delTag.addEventListener("click", () => {
+                gThis.removeVideoTag(delTag);
+            });
+        });
+
+        const copy = document.querySelector(".copy");
+        /** @param {MouseEvent} evt */
+        copy.addEventListener("click", (evt) => {
+            const mouseX = evt.pageX, mouseY = evt.pageY;
+            const copied = document.querySelector(".copied-text");
+            navigator.clipboard.writeText("https://youtu.be/{{ video.link }}").then(r => console.log(r));
+            copy.classList.add("copied");
+            setTimeout(() => {
+                copy.classList.remove("copied")
+            }, 500);
+            copied.style.top = (mouseY - (copied.clientHeight / 2)) + "px";
+            copied.style.left = (mouseX - (copied.clientWidth / 2)) + "px";
+            setTimeout(() => {
+                copied.classList.add("visible", "move-up");
+            }, 0);
+            setTimeout(() => {
+                copied.classList.remove("visible");
+            }, 1500);
+            setTimeout(() => {
+                copied.classList.remove("move-up");
+            }, 2500);
+        });
+
+        this.autocomplete();
+    }
+
+    autocomplete() {
         /** @type {HTMLInputElement} */
-        const searchTag = document.querySelector(inputTag);
-        const field = searchTag.closest(".field");
+        const inputTag = document.querySelector(this.inputTagSelector);
+        const field = inputTag.closest(".tags-field");
         // const selector = "input[id=" + inputTag + "]";
-        searchTag.focus();
+        inputTag.focus();
 
-        this.createTagList(inputTag);
+        this.createTagList(this.inputTagSelector);
 
-        searchTag.addEventListener("input", () => {
+        inputTag.addEventListener("input", () => {
             const tagList = field.querySelector(".tag-list");
-            let value = gThis.removeAccent(searchTag.value);
+            let value = gThis.removeAccent(inputTag.value);
             if (!value.length) {
                 gThis.hideList(tagList);
                 return;
@@ -105,7 +168,7 @@ export class YoutubeSearch {
             });
         });
 
-        searchTag.addEventListener("keydown", function (e) {
+        inputTag.addEventListener("keydown", function (e) {
             const tagList = field.querySelector(".tag-list");
             if (e.keyCode === 40) { // arrow DOWN key
                 e.preventDefault();
@@ -139,7 +202,7 @@ export class YoutubeSearch {
 
     createTagList(inputElement) {
         const searchTag = document.querySelector(inputElement);
-        const field = searchTag.closest(".field");
+        const field = searchTag.closest(".tags-field");
         const tagList = document.createElement("div");
         tagList.classList.add("tag-list");
         field.appendChild(tagList);
@@ -150,7 +213,11 @@ export class YoutubeSearch {
             tagItem.classList.add("tag-item");
             tagItem.setAttribute("data-id", tag.id);
             tagItem.innerText = tag.label;
-            tagItem.addEventListener("click", gThis.addTag);
+            if (this.inputTagSelector === "#search-tag") {
+                tagItem.addEventListener("click", gThis.addSearchTag);
+            } else {
+                tagItem.addEventListener("click", gThis.addVideoTag);
+            }
             tagList.appendChild(tagItem);
         });
     }
@@ -182,6 +249,129 @@ export class YoutubeSearch {
         tagItems.forEach((tagItem) => {
             tagItem.classList.remove("active");
         });
+    }
+
+    initDeleteVideoDialog(dialog) {
+
+        dialog.querySelector(".delete-video-done").addEventListener("click", () => {
+            gThis.closeDeleteVideoDialog(dialog, true);
+        })
+        dialog.querySelector(".delete-video-cancel").addEventListener("click", () => {
+            gThis.closeDeleteVideoDialog(dialog, false);
+        })
+        dialog.querySelector(".close").addEventListener('click', function () {
+            gThis.closeDeleteVideoDialog(dialog, false);
+        });
+    }
+
+    openDeleteVideoDialog(evt) {
+        const dialog = document.querySelector("." + evt.currentTarget.getAttribute("data-dialog"));
+        if (typeof dialog.showModal === "function") {
+            dialog.showModal();
+            setTimeout(() => {
+                dialog.classList.add("show")
+            }, 0);
+        } else {
+            console.error("L'API <dialog> n'est pas prise en charge par ce navigateur.");
+            /*dialog.setAttribute("open");
+            let offset = document.querySelector("html").scrollTop;
+            dialog.setAttribute("style", "translate: 0 " + offset + "px;");
+            dialog.classList.remove("d-none");
+            dialog.classList.add("d-block");*/
+        }
+    }
+
+    closeDeleteVideoDialog(dialog, lets_delete) {
+        dialog.classList.remove("show");
+        setTimeout(() => {
+            dialog.close()
+        }, 300);
+        if (lets_delete) {
+            gThis.deleteVideo();
+        }
+    }
+
+    deleteVideo() {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            console.log({response});
+            // window.location.href = _app_youtube;
+            history.back();
+        }
+        xhr.open("GET", gThis.yt_video_delete);
+        xhr.send();
+    }
+
+    addVideoTag(key) {
+        const tags = document.querySelector(".tags");
+        const videoTags = document.querySelectorAll(".tag");
+        const input = document.querySelector("#new-tag");
+        let newTag, id;
+        console.log({key});
+        if (key === "Enter") {
+            id= 0;
+            newTag = input.value;
+        }
+        else {
+            /** @type HTMLElement */
+            const tagItemClicked = this;
+            tagItemClicked.classList.add("selected");
+            id = parseInt(tagItemClicked.getAttribute("data-id"));
+            newTag = tagItemClicked.innerText;
+        }
+
+        if (newTag.length === 0) return;
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            // console.log({response});
+
+            if (response['tag_added']) {
+                let newTagButton = document.createElement("div");
+                newTagButton.classList.add("tag", "new");
+                newTagButton.appendChild(document.createTextNode('#' + response['new_tag']));
+                let closeButton = document.createElement("div");
+                closeButton.classList.add("close");
+                closeButton.setAttribute("data-id", response['new_tag_id']);
+                let circleXMark = document.createElement("i");
+                circleXMark.classList.add("fa-solid", "fa-circle-xmark");
+                closeButton.appendChild(circleXMark);
+                newTagButton.appendChild(closeButton);
+                if (videoTags.length) {
+                    tags.insertBefore(newTagButton, videoTags[0]);
+                } else {
+                    tags.appendChild(newTagButton);
+                }
+                closeButton.addEventListener("click", () => {
+                    gThis.removeVideoTag(closeButton);
+                });
+            }
+            input.value = "";
+            input.focus();
+        }
+
+        xhr.open("GET", gThis.yt_video_add_tag + gThis.capitalize(newTag) + '/' + id);
+        xhr.send();
+    }
+
+    removeVideoTag(tag) {
+        const tags = document.querySelector(".tags");
+        const tagId = tag.getAttribute("data-id");
+        if (tagId === null) return;
+
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            // console.log({response});
+            if (response['result']) {
+                tags.removeChild(tag.parentElement);
+            }
+        }
+
+        xhr.open("GET", gThis.yt_video_remove_tag + tagId);
+        xhr.send();
     }
 
     /** @param {number} id
@@ -222,8 +412,8 @@ export class YoutubeSearch {
         }
     }
 
-    addTag() {
-        const searchTag = document.querySelector("input[id=search-tag]");
+    addSearchTag() {
+        const searchTag = document.querySelector(gThis.inputTagSelector);
         /** @type HTMLElement */
         const tagItemClicked = this;
         const id = parseInt(tagItemClicked.getAttribute("data-id"));
@@ -683,7 +873,7 @@ export class YoutubeSearch {
         e.stopImmediatePropagation();
         const tagItem = e.currentTarget.closest(".tag-item");
         const id = parseInt(tagItem.getAttribute("data-id"));
-        const tag = gThis.tagFromList(id, false);
+        // const tag = gThis.tagFromList(id, false);
         const availableTag = document.querySelector(".available-tags").querySelector(".tag-item[data-id='" + id + "']");
         availableTag.classList.remove("selected");
         tagItem.parentElement.removeChild(tagItem);
@@ -752,7 +942,7 @@ export class YoutubeSearch {
     removeAccent(str) {
         str = str.toLowerCase();
 
-        let from = "àáäâèéëêìíïîòóöôùúüûñç";
+        let from = `àáäâèéëêìíïîòóöôùúüûñç`;
         let to = "aaaaeeeeiiiioooouuuunc";
         for (let i = 0, l = from.length; i < l; i++) {
             str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
@@ -817,5 +1007,13 @@ export class YoutubeSearch {
             part.setAttribute("style", "transform: rotate(" + (720 * (1 - ratio) * gThis.letterRatios[n++]) + "deg);");
         })
         h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
+    }
+
+    // Object.defineProperty(String.prototype, 'capitalize', {
+    // value: function () {
+    //     return this.charAt(0).toUpperCase() + this.slice(1);
+    // }, enumerable: false});
+    capitalize(text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
     }
 }

@@ -200,6 +200,9 @@ class YoutubeController extends AbstractController
         $userAlreadyLinked = $request->query->get('user-already-linked');
 
         $tags = $this->videoTagRepository->findAllByLabel();
+        $tagArr = array_map(function ($tag) {
+            return ['id' => $tag['id'], 'label' => $tag['label'], 'selected' => false];
+        }, $this->videoTagRepository->getTags());
         $description = preg_replace(
             [
                 '/(https:\/\/\S+)/',
@@ -218,6 +221,7 @@ class YoutubeController extends AbstractController
         return $this->render('youtube/show.html.twig', [
                 'video' => $youtubeVideo,
                 'description' => $description,
+                'tagArr' => $tagArr,
                 'other_tags' => array_diff($tags, $youtubeVideo->getTags()->toArray()),
                 'userAlreadyLinked' => $userAlreadyLinked,
             ]
@@ -225,7 +229,7 @@ class YoutubeController extends AbstractController
     }
 
     #[Route('/{_locale}/youtube/search', name: 'app_youtube_search', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function search(YoutubeVideoTagRepository $tagRepository): Response
+    public function search(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -233,7 +237,7 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $tagArr = array_map(function ($tag) {
             return ['id' => $tag['id'], 'label' => $tag['label'], 'selected' => false];
-        }, $tagRepository->getTags());
+        }, $this->videoTagRepository->getTags());
 
         // /บรรยากาศรัก Love in The Air l EP\.*([0-9]+) \[([0-9])\/([0-9])].+/gm
 
@@ -319,56 +323,71 @@ class YoutubeController extends AbstractController
             ]);
     }
 
-    #[Route('/{_locale}/youtube/video/add/tag/{id}/{tag}', name: 'app_youtube_video_add_tag', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function addTag($tag, YoutubeVideo $youtubeVideo, YoutubeVideoTagRepository $tagRepository, YoutubeVideoRepository $videoRepository): Response
+    #[Route('/{_locale}/youtube/video/add/tag/{id}/{tag}/{tagId}', name: 'app_youtube_video_add_tag', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function addTag(YoutubeVideo $youtubeVideo, $tag, $tagId): Response
     {
-        //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $existingTags = $tagRepository->findAll();
-        $newTagId = -1;
-        $fromList = false; // Was the tag in the list <datalist>
-
-        $videoTags = $youtubeVideo->getTags()->toArray();
-        if (!in_array($tag, $videoTags)) {
-
-            $newTag = $tagRepository->findOneBy(['label' => $tag]);
-
-            if (!$newTag) {
-                $newTag = new YoutubeVideoTag();
-                $newTag->setLabel($tag);
-                $tagRepository->add($newTag, true);
-                $newTag = $tagRepository->findOneBy(['label' => $tag]);
-            } else {
-                $fromList = true;
+        $newTag = null;
+        $tagAdded = false;
+        if ($tagId) {
+            $newTagId = $tagId;
+            $newTag = $this->videoTagRepository->find($tagId);
+            $videoTagIds = array_map(function ($tag) {
+                return $tag->getId();
+            }, $youtubeVideo->getTags()->toArray());
+            dump([
+                'tag' => $tag,
+                'tag id' => $tagId,
+                'video tag Ids' => $videoTagIds
+            ]);
+            if (!in_array($newTagId, $videoTagIds)) {
+                $youtubeVideo->addTag($newTag);
+                $this->videoRepository->add($youtubeVideo, true);
+                $tagAdded = true;
             }
-            $youtubeVideo->addTag($newTag);
-            $videoRepository->add($youtubeVideo, true);
-            $newTagId = $newTag->getId();
-        }
+        } else {
+            $newTagId = 0;
 
-        $others_tags = [];
-        $diff = array_diff($existingTags, $youtubeVideo->getTags()->toArray());
-        foreach ($diff as $t) {
-            $others_tags[] = $t->getLabel();
+            $videoTags = array_map(function ($tag) {
+                return $tag->getLabel();
+            }, $youtubeVideo->getTags()->toArray());
+            dump([
+                'tag' => $tag,
+                'tag id' => $tagId,
+                'video tags' => $videoTags
+            ]);
+            if (!in_array($tag, $videoTags)) {
+
+                $newTag = $this->videoTagRepository->findOneBy(['label' => $tag]);
+
+                if (!$newTag) {
+                    $newTag = new YoutubeVideoTag();
+                    $newTag->setLabel($tag);
+                    $this->videoTagRepository->add($newTag, true);
+                    $newTag = $this->videoTagRepository->findOneBy(['label' => $tag]);
+                }
+                $newTagId = $newTag->getId();
+            }
+            if ($newTag) {
+                $youtubeVideo->addTag($newTag);
+                $this->videoRepository->add($youtubeVideo, true);
+                $newTagId = $newTag->getId();
+                $tagAdded = true;
+            }
         }
 
         return $this->json([
             "new_tag" => $tag,
             "new_tag_id" => $newTagId,
-            "other_tags" => $others_tags,
-            "rebuild_list" => $fromList,
+            "tag_added" => $tagAdded,
         ]);
     }
 
     #[Route('/{_locale}/youtube/video/remove/tag/{id}/{tag}', name: 'app_youtube_video_remove_tag', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function removeTag($tag, YoutubeVideo $youtubeVideo, YoutubeVideoRepository $videoRepository, YoutubeVideoTagRepository $tagRepository): Response
+    public function removeTag($tag, YoutubeVideo $youtubeVideo): Response
     {
-        //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $videoTag = $tagRepository->find($tag);
+        $videoTag = $this->videoTagRepository->find($tag);
         $youtubeVideo->removeTag($videoTag);
-        $videoRepository->add($youtubeVideo, true);
-//        $tagRepository->add($videoTag, true);
+        $this->videoRepository->add($youtubeVideo, true);
 
         $videoTags = [];
         $tags = $youtubeVideo->getTags()->toArray();
@@ -377,6 +396,7 @@ class YoutubeController extends AbstractController
         }
 
         return $this->json([
+            'result' => true,
             'tags' => $videoTags,
         ]);
     }
@@ -642,11 +662,11 @@ class YoutubeController extends AbstractController
 
     public function newYVideo(User $user, YoutubeVideo $video): void
     {
-        $yvideo = new UserYVideo();
-        $yvideo->setUser($user);
-        $yvideo->setVideo($video);
-        $yvideo->setHidden(false);
-        $this->userYVideoRepository->save($yvideo, true);
+        $ytvideo = new UserYVideo();
+        $ytvideo->setUser($user);
+        $ytvideo->setVideo($video);
+        $ytvideo->setHidden(false);
+        $this->userYVideoRepository->save($ytvideo, true);
     }
 
     public function getVideosCount(User $user): int

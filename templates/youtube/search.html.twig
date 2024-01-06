@@ -20,8 +20,8 @@
             <main class="w100">
                 <div class="search">
                     <div class="group">
-                        <div class="field">
-                            <label class="label" for="search-tag">{{ 'Tags'|trans }}&nbsp;:</label>
+                        <div class="tags-field">
+                            <label class="label" for="search-tag">{{ 'Tags'|trans }}</label>
                             <input id="search-tag" type="text" value="" placeholder="{{ 'Start taping…'|trans }}">
                         </div>
                         <div class="tags"></div>
@@ -59,5 +59,5 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/youtubeSearch.js" type="module"></script>
+    <script src="/js/youtube.js" type="module"></script>
 {% endblock %}
