@@ -611,8 +611,9 @@
 
                         &.current {
                             @include flex-row();
-                            background-color: var(--gradient-ardoise-80);
-                            color: var(--gradient-ardoise-30);
+                            background-color: var(--gradient-orange-50);
+                            color: var(--gradient-orange-90);
+                            font-weight: 300;
                         }
 
                         &:hover {
@@ -1860,8 +1861,16 @@
                     gap: 1rem;
                     width: 100%;
 
-                    a {
+                    .season-link {
+                        cursor: pointer;
+                        transition: all 400ms ease-out;
                         width: 100%;
+
+                        &.clicked {
+                            opacity: 0;
+                            scale: 500%;
+                            translate: 200% 0;
+                        }
 
                         .season {
                             @include flex-row(center, flex-start);

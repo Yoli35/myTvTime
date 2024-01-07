@@ -63,6 +63,11 @@ export class Shows {
             upcomingSave?.addEventListener("click", thisGlobal.saveUpcomingDate);
         }
         this.toolTips.init();
+
+        const seasonLinkDivs = document.querySelectorAll(".season-link");
+        seasonLinkDivs.forEach(seasonLinkDiv => {
+            seasonLinkDiv.addEventListener("click", ()=> { seasonLinkDiv.classList.add("clicked"); });
+        });
     }
 
     getViewedEpisodesDuration(evt) {

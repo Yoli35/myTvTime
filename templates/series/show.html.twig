@@ -309,7 +309,7 @@
                                     {% if query is defined %} {% set url = url ~ '&query=' ~ query %}{% endif %}
                                     {% if year is defined %} {% set url = url ~ '&year=' ~ year %}{% endif %}
                                     {% if backId is defined %} {% set url = url ~ '&back=' ~ backId %}{% endif %}
-                                    <a href="{{ url }}">
+                                    <a href="{{ url }}" class="season-link">
                                         <div class="season">
                                             <div class="poster">
                                                 {% if season.poster_path|length %}
