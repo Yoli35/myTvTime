@@ -2211,7 +2211,7 @@ class SerieController extends AbstractController
                 if (count($matches)) {
                     foreach ($matches as $match) {
                         $url = $match;
-                        dump($url);
+//                        dump($url);
                         if (str_contains($url, "netflix")) {
                             $url = preg_replace('/&.*$/', '', $url);
                         }
@@ -2252,7 +2252,7 @@ class SerieController extends AbstractController
                     }
                 }
             }
-            dump($tv['directLink']);
+//            dump($tv['directLink']);
             $foundUrls = [];
             $tv['directLink'] = array_filter($tv['directLink'], function ($dl) use (&$foundUrls) {
                 if (!in_array($dl['url'], $foundUrls)){
