@@ -3,6 +3,7 @@
         <img src="{{ serie.poster_path }}" alt="{{ 'Poster' }}" loading="lazy">
         <div class="title">
             <div>
+                {% if serie.localized_name %}{{ serie.localized_name }}<br>{% endif %}
                 {{ serie.name }}{% if serie.first_air_date is defined %}<br>{{ serie.first_air_date|format_date() }}{% endif %}
             </div>
         </div>

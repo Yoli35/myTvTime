@@ -755,13 +755,22 @@ class SerieController extends AbstractController
         $totalPages = $series['total_pages'];
         $imageConfig = $this->imageConfiguration->getConfig();
 
-        $arr = $this->serieViewingRepository->getUserSeriesProgress($user->getId());
+        $arr = $this->serieViewingRepository->getUserSeriesProgressAndLocalizedName($user->getId(), array_column($series['results'], 'id'), $user->getPreferredLanguage() ?? $request->getLocale());
         $userSeriesProgress = array_combine(array_column($arr, 'id'), array_column($arr, 'progress'));
-        $series = array_map(function ($serie) use ($imageConfig, $userSeriesProgress) {
+        $userSeriesLocalizedName = array_combine(array_column($arr, 'id'), array_column($arr, 'localized_name'));
+//        dump([
+//            'results' => $series['results'], // 'id', 'name', 'poster_path
+//            'ids' => array_column($series['results'], 'id'),
+//            'arr' => $arr, // 'id', 'progress', 'localized_name
+//            'userSeriesProgress' => $userSeriesProgress,
+//            'userSeriesLocalizedName' => $userSeriesLocalizedName,
+//        ]);
+        $series = array_map(function ($serie) use ($imageConfig, $userSeriesProgress, $userSeriesLocalizedName) {
             $this->savePoster($serie['poster_path'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
             $serie['poster_path'] = $this->fullUrl("poster", 3, $serie['poster_path'], "no_poster_dark.png", $imageConfig);
             $serie['has_progress'] = isset($userSeriesProgress[$serie['id']]);
             $serie['progress'] = $userSeriesProgress[$serie['id']] ?? 0;
+            $serie['localized_name'] = $userSeriesLocalizedName[$serie['id']] ?? null;
             return $serie;
         }, $series['results']);
 //        dump($series);
