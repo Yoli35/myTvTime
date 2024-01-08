@@ -8,20 +8,22 @@
                     <input type="search" id="watch-provider-search" name="watch-provider-search" placeholder="{{ 'Start typing...'|trans }}" autofocus/>
                 </label>
             </div>
-            {% for wp in allWatchProviders %}
-                <div class="watch-provider" data-name="{{ wp.provider_name }}">
-                    <label for="watch-provider-{{ wp.provider_id }}">
-                        <input type="radio" id="watch-provider-{{ wp.provider_id }}" name="watch-provider" value="{{ wp.provider_id }}"/>
-                        <div class="logo"><img src="{{ wp.logo_path }}" alt="{{ wp.provider_name }}" loading="lazy"></div>
-                        {{ wp.provider_name }}
+            <div class="watch-provider-list">
+                {% for wp in allWatchProviders %}
+                    <div class="watch-provider" data-name="{{ wp.provider_name }}">
+                        <label for="watch-provider-{{ wp.provider_id }}">
+                            <input type="radio" id="watch-provider-{{ wp.provider_id }}" name="watch-provider" value="{{ wp.provider_id }}"/>
+                            <div class="logo"><img src="{{ wp.logo_path }}" alt="{{ wp.provider_name }}" loading="lazy"></div>
+                            {{ wp.provider_name }}
+                        </label>
+                    </div>
+                {% endfor %}
+                <div class="watch-provider" data-name="other">
+                    <label for="watch-provider--1">
+                        <input type="radio" id="watch-provider--1" name="watch-provider" value="{{ 'Other'|trans }}"/>
+                        {{ 'Other'|trans }}
                     </label>
                 </div>
-            {% endfor %}
-            <div class="watch-provider" data-name="other">
-                <label for="watch-provider--1">
-                    <input type="radio" id="watch-provider--1" name="watch-provider" value="{{ 'Other'|trans }}"/>
-                    {{ 'Other'|trans }}
-                </label>
             </div>
             <menu>
                 <li>

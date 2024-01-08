@@ -2958,46 +2958,51 @@
 
             }
 
-            .watch-provider {
-                width: 100%;
+            .watch-provider-list {
+                max-height: calc(80vh - 10rem);
+                overflow-y: scroll;
 
-                &.hidden {
-                    display: none;
-                }
-
-                label {
-                    align-items: center;
-                    display: flex;
-                    justify-content: flex-start;
+                .watch-provider {
                     width: 100%;
 
-                    input[type=radio] {
-                        appearance: none;
-                        border: 2px solid var(--gradient-ardoise-80);
-                        border-radius: 1rem;
-                        height: 1.25rem;
-                        margin-inline-end: .5rem;
-                        width: 1.25rem;
+                    &.hidden {
+                        display: none;
+                    }
 
-                        &:checked {
-                            background-color: var(--gradient-orange-50);
-                            border-color: var(--gradient-ardoise-10);
-                            border-width: .25rem;
-                            outline: .25rem solid var(--gradient-orange-50);
+                    label {
+                        align-items: center;
+                        display: flex;
+                        justify-content: flex-start;
+                        width: 100%;
+
+                        input[type=radio] {
+                            appearance: none;
+                            border: 2px solid var(--gradient-ardoise-50);
+                            border-radius: 1rem;
+                            height: 1.25rem;
+                            margin-inline: .5rem;
+                            width: 1.25rem;
+
+                            &:checked {
+                                background-color: var(--gradient-orange-50);
+                                border-color: var(--gradient-ardoise-10);
+                                border-width: .25rem;
+                                outline: .25rem solid var(--gradient-orange-50);
+                            }
                         }
                     }
-                }
 
-                &:hover {
-                    //background-color: var(--gradient-ardoise-30-alpha-50);
-                }
+                    &:hover {
+                        //background-color: var(--gradient-ardoise-30-alpha-50);
+                    }
 
-                .logo {
-                    img {
-                        border-radius: .25rem;
-                        height: 2rem;
-                        object-fit: contain;
-                        width: 2rem;
+                    .logo {
+                        img {
+                            border-radius: .25rem;
+                            height: 2rem;
+                            object-fit: contain;
+                            width: 2rem;
+                        }
                     }
                 }
             }
