@@ -64,7 +64,7 @@ class YoutubeController extends AbstractController
      * @throws \Exception
      */
     #[Route('/{_locale}/youtube', name: 'app_youtube', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request): Response
+    public function index(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -334,14 +334,14 @@ class YoutubeController extends AbstractController
             $videoTagIds = array_map(function ($tag) {
                 return $tag->getId();
             }, $youtubeVideo->getTags()->toArray());
-            dump([
-                'tag' => $tag,
-                'tag id' => $tagId,
-                'video tag Ids' => $videoTagIds
-            ]);
+//            dump([
+//                'tag' => $tag,
+//                'tag id' => $tagId,
+//                'video tag Ids' => $videoTagIds
+//            ]);
             if (!in_array($newTagId, $videoTagIds)) {
                 $youtubeVideo->addTag($newTag);
-                $this->videoRepository->add($youtubeVideo, true);
+                $this->videoRepository->add($youtubeVideo, flush:true);
                 $tagAdded = true;
             }
         } else {
@@ -350,11 +350,11 @@ class YoutubeController extends AbstractController
             $videoTags = array_map(function ($tag) {
                 return $tag->getLabel();
             }, $youtubeVideo->getTags()->toArray());
-            dump([
-                'tag' => $tag,
-                'tag id' => $tagId,
-                'video tags' => $videoTags
-            ]);
+//            dump([
+//                'tag' => $tag,
+//                'tag id' => $tagId,
+//                'video tags' => $videoTags
+//            ]);
             if (!in_array($tag, $videoTags)) {
 
                 $newTag = $this->videoTagRepository->findOneBy(['label' => $tag]);
@@ -412,7 +412,7 @@ class YoutubeController extends AbstractController
 
         foreach ($yVideo as $yv) {
             $yv->setHidden($hidden);
-            $this->userYVideoRepository->save($yv, false);
+            $this->userYVideoRepository->save($yv);
         }
         $this->userYVideoRepository->flush();
 
@@ -637,7 +637,7 @@ class YoutubeController extends AbstractController
             $firstView = $this->getFirstView($user);
             $h1innerText = $videoCount . " " . $this->translator->trans('videos') . " " . $this->translator->trans('since') . " " . $this->dateService->formatDate($firstView, "Europe/Paris", $request->getLocale());
             $totalRuntime = $this->getTotalRuntime($user);
-            $time2Human = $this->getTime2human($totalRuntime, $request->getLocale());
+            $time2Human = $this->getTime2human($totalRuntime);
 
             $videosBlock = $this->render('blocks/youtube/_videos.html.twig', [
                 'videos' => $videos,
@@ -734,16 +734,17 @@ class YoutubeController extends AbstractController
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     private function getTime2human($secondes): string
     {
         if ($secondes) {
             // convert total runtime ($total in secondes) in years, months, days, hours, minutes, secondes
             $now = new DateTimeImmutable();
-            // past = now - total
-            $past = $now->sub(new DateInterval('PT' . $secondes . 'S'));
+            try {
+                // past = now - total
+                $past = $now->sub(new DateInterval('PT' . $secondes . 'S'));
+            } catch (\Exception) {
+                $past = $now;
+            }
 
             $diff = $now->diff($past);
             // diff string with years, months, days, hours, minutes, seconds

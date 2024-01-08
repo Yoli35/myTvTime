@@ -187,6 +187,7 @@ export class Youtube {
                 const activeTag = tagList.querySelector(".active");
                 if (activeTag) {
                     activeTag.click();
+                    e.stopImmediatePropagation();
                 } else {
                     let tags = field.parentElement.querySelector(".tags").querySelectorAll(".tag");
                     if (tags.length) gThis.applyTags();
@@ -309,6 +310,8 @@ export class Youtube {
         const input = document.querySelector("#new-tag");
         let newTag, id;
         console.log({key});
+
+
         if (key === "Enter") {
             id= 0;
             newTag = input.value;
@@ -319,6 +322,10 @@ export class Youtube {
             tagItemClicked.classList.add("selected");
             id = parseInt(tagItemClicked.getAttribute("data-id"));
             newTag = tagItemClicked.innerText;
+
+            const field = input.closest(".tags-field");
+            const tagList = field.querySelector(".tag-list");
+            gThis.hideList(tagList);
         }
 
         if (newTag.length === 0) return;
