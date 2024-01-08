@@ -1,7 +1,7 @@
 <div class="home-discover" data-id="{{ serie.id }}">
     <a href="{{ path('app_series_'~type, {'id': serie.id}) }}?from={{ from }}" title="{{ serie.name }}">
         {% if poster_path %}
-            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster_path }}" alt="{{ 'Poster' }}">
+            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ poster_path }}" alt="{{ 'Poster' }}" loading="lazy">
         {% else %}
             <div class="no-image">{{ 'No image'|trans }}</div>
         {% endif %}

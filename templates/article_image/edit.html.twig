@@ -14,7 +14,7 @@
             <div class="image-article">
 
                 <div class="preview">
-                    <img src="/images/articles/images/{{ article_image.path }}" alt="{{ article_image.path }}">
+                    <img src="/images/articles/images/{{ article_image.path }}" alt="{{ article_image.path }}" loading="lazy">
                 </div>
 
                 {{ include('article_image/_form.html.twig', {'button_label': 'Update'|trans, 'icon': 'fa-pen-to-square'|raw}) }}

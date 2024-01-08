@@ -10,12 +10,12 @@
                                 <div class="profile">
                                     {% if people.profile_path %}
                                         {% if imageConfig is defined %}
-                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
+                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}" loading="lazy">
                                         {% else %}
-                                            <img src="{{ people.profile_path }}" alt="{{ people.name }}">
+                                            <img src="{{ people.profile_path }}" alt="{{ people.name }}" loading="lazy">
                                         {% endif %}
                                     {% else %}
-                                        <img src="/images/default/no_avatar.png" alt="{{ people.name }}">
+                                        <img src="/images/default/no_avatar.png" alt="{{ people.name }}" loading="lazy">
                                     {% endif %}
                                     {% if people.recurring_character is defined and people.recurring_character %}
                                         <div class="status">

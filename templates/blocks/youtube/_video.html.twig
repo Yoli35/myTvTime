@@ -3,7 +3,7 @@
     <div class="yt-video">
         <a href="{{ path('app_youtube_video', {id: item.id}) }}">
             <div class="yt-thumbnail">
-                <img src="{{ item.thumbnailPath }}" alt="{{ item.title }}">
+                <img src="{{ item.thumbnailPath }}" alt="{{ item.title }}" loading="lazy">
                 <div class="duration">{{ item.contentDuration }}</div>
                 {% if item.hidden is defined %}
                     <div class="visibility"><i class="fa-solid fa-eye{% if item.hidden %}-slash{% endif %}"></i></div>
@@ -32,7 +32,7 @@
             <a href="https://www.youtube.com/{{ url }}" target="_blank" rel="noopener">
                 <div class="channel">
                     {% if item.channel.thumbnailDefaultUrl %}
-                        <img src="{{ item.channel.thumbnailDefaultUrl }}" alt="{{ item.channel.title }}">
+                        <img src="{{ item.channel.thumbnailDefaultUrl }}" alt="{{ item.channel.title }}" loading="lazy">
                     {% else %}
                         <div class="initial">
                             {{ item.channel.title|first }}

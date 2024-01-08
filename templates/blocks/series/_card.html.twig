@@ -5,7 +5,7 @@
         {% endif %}
         <div class="poster">
             {% if serie.posterPath %}
-                <img src="{{ "/images/series/posters" ~ serie.posterPath }}" alt="{{ 'Poster' }}">
+                <img src="{{ "/images/series/posters" ~ serie.posterPath }}" alt="{{ 'Poster' }}" loading="lazy">
             {% else %}
                 <div class="no-image">{{ 'No poster'|trans }}</div>
             {% endif %}

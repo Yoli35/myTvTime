@@ -52,7 +52,7 @@
                             {% endif %}
                             <div class="user">
                                 {% if user.avatar %}
-                                    <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
+                                    <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}" loading="lazy">
                                 {% endif %}
                                 <div class="name">{{ user.username?:user.email }}</div>
                             </div>
@@ -89,7 +89,7 @@
                                                 <div class="answer">
                                                     <div class="user">
                                                         {% if user.avatar %}
-                                                            <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}">
+                                                            <img src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username?:user.email }}" loading="lazy">
                                                         {% endif %}
                                                         <div class="name">{{ user.username?:user.email }}</div>
                                                     </div>

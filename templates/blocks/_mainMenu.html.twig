@@ -28,7 +28,7 @@
                     {{ user.username }}
                     {% if user.avatar|length %}
                         <div class="thumbnail">
-                            <img class="avatar" src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username }}">
+                            <img src="/images/users/avatars/{{ user.avatar }}" class="avatar" alt="{{ user.username }}" loading="lazy">
                         </div>
                     {% endif %}
                 </div>
@@ -58,10 +58,10 @@
                 {% endfor %}
             {% endif %}
             <div class="locales">
-                <a href="{{ path(route, route_params|merge({'_locale': 'fr'})) ~ p }}"><img src="/images/interface/fr.png" alt="{{ 'French'|trans }}"></a>
-                <a href="{{ path(route, route_params|merge({'_locale': 'en'})) ~ p }}"><img src="/images/interface/en.png" alt="{{ 'English'|trans }}"></a>
-                <a href="{{ path(route, route_params|merge({'_locale': 'de'})) ~ p }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}"></a>
-                <a href="{{ path(route, route_params|merge({'_locale': 'es'})) ~ p }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}"></a>
+                <a href="{{ path(route, route_params|merge({'_locale': 'fr'})) ~ p }}"><img src="/images/interface/fr.png" alt="{{ 'French'|trans }}" loading="lazy"></a>
+                <a href="{{ path(route, route_params|merge({'_locale': 'en'})) ~ p }}"><img src="/images/interface/en.png" alt="{{ 'English'|trans }}" loading="lazy"></a>
+                <a href="{{ path(route, route_params|merge({'_locale': 'de'})) ~ p }}"><img src="/images/interface/de.png" alt="{{ 'German'|trans }}" loading="lazy"></a>
+                <a href="{{ path(route, route_params|merge({'_locale': 'es'})) ~ p }}"><img src="/images/interface/es.png" alt="{{ 'Spanish'|trans }}" loading="lazy"></a>
             </div>
             <a href="{{ path('app_contact', {from: route|slice(4), params: route_params|serialize(format = 'json', context = [])}) }}">{{ 'Contact'|trans }}</a>
             <a href="{{ path('app_rgpd') }}">{{ 'Confidentiality policy'|trans }}</a>

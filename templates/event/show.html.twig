@@ -17,12 +17,12 @@
                 <div class="sub-header">
                     <div class="thumbnail">
                         {% if event.thumbnail %}
-                            <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                            <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}" loading="lazy">
                         {% endif %}
                     </div>
                     <div class="banner">
                         {% if event.banner %}
-                            <img src="/images/events/banners/{{ event.banner }}" alt="{{ event.name }}">
+                            <img src="/images/events/banners/{{ event.banner }}" alt="{{ event.name }}" loading="lazy">
                         {% endif %}
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                     {% for image in event.images %}
                         <div class="image">
                             <figure>
-                                <img src="/images/events/images/{{ image.path }}" alt="{{ image.caption }}">
+                                <img src="/images/events/images/{{ image.path }}" alt="{{ image.caption }}" loading="lazy">
                                 <figcaption>{{ image.caption }}</figcaption>
                             </figure>
                         </div>

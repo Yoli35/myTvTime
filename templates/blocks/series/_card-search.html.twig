@@ -7,9 +7,9 @@
         {% endif %}
         <div class="poster">
             {% if serie.poster_path|length %}
-                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ 'Poster' }}">
+                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ 'Poster' }}" loading="lazy">
             {% else %}
-                <img src="/images/default/no_poster_dark.png" alt="No poster">
+                <img src="/images/default/no_poster_dark.png" alt="No poster" loading="lazy">
             {% endif %}
         </div>
         <div class="infos">

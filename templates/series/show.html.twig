@@ -52,12 +52,12 @@
                         <div class="poster">
                             {% if serie.poster_path|length %}
                                 {% if addThisSeries %}
-                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.4 ~ serie.poster_path }}" alt="{{ serie.name }}">
+                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.4 ~ serie.poster_path }}" alt="{{ serie.name }}" loading="lazy">
                                 {% else %}
-                                    <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ serie.name }}">
+                                    <img src="{{ "/images/series/posters" ~ serie.poster_path }}" alt="{{ serie.name }}" loading="lazy">
                                 {% endif %}
                             {% else %}
-                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
+                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}" loading="lazy">
                             {% endif %}
                             {% if watchProviders %}
                                 <div class="watch-providers">
@@ -97,7 +97,7 @@
                             <div class="poster-list">
                                 {% for seriePoster in serie.seriePosters %}
                                     <div class="poster-item">
-                                        <img src="{{ "/images/series/posters" ~ seriePoster.posterPath }}" alt="{{ serie.name }}">
+                                        <img src="{{ "/images/series/posters" ~ seriePoster.posterPath }}" alt="{{ serie.name }}" loading="lazy">
                                     </div>
                                 {% endfor %}
                             </div>
@@ -225,7 +225,7 @@
                                                         <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ c.profile_path }}"
                                                              alt="{{ c.name }}">
                                                     {% else %}
-                                                        <img src="/images/default/no_avatar.png" alt="{{ c.name }}">
+                                                        <img src="/images/default/no_avatar.png" alt="{{ c.name }}" loading="lazy">
                                                     {% endif %}
                                                 </div>
                                                 <div>{{ c.name }}</div>
@@ -247,7 +247,7 @@
                                     <div class="backdrop-list">
                                         {% for serieBackdrop in serie.serieBackdrops %}
                                             <div class="backdrop-item">
-                                                <img src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serieBackdrop.backdropPath }}" alt="{{ serie.name }}">
+                                                <img src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serieBackdrop.backdropPath }}" alt="{{ serie.name }}" loading="lazy">
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -313,12 +313,12 @@
                                         <div class="season">
                                             <div class="poster">
                                                 {% if season.poster_path|length %}
-                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}">
+                                                    <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ season.poster_path }}" alt="{{ season.name }}" loading="lazy">
                                                 {% else %}
                                                     {% if serie.poster_path %}
-                                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ season.name }}">
+                                                        <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ season.name }}" loading="lazy">
                                                     {% else %}
-                                                        <img src="/images/default/no_poster.png" alt="{{ season.name }}">
+                                                        <img src="/images/default/no_poster.png" alt="{{ season.name }}" loading="lazy">
                                                     {% endif %}
                                                 {% endif %}
                                             </div>
@@ -435,9 +435,9 @@
                                     <a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?p={{ page }}&from={{ from }}" title="{{ serie.name }}">
                                         <div class="poster">
                                             {% if serie.poster_path|length %}
-                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}">
+                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}" loading="lazy">
                                             {% else %}
-                                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
+                                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}" loading="lazy">
                                                 <div class="name">{{ serie.name }}</div>
                                             {% endif %}
                                             {% if serieIds|length %}

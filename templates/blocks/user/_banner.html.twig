@@ -1,15 +1,15 @@
 <div id="user-banner" class="banner">
     {% if user.banner %}
-        <img src="/images/users/banners/{{ user.banner }}" alt="User banner">
+        <img src="/images/users/banners/{{ user.banner }}" alt="User banner" loading="lazy">
     {% else %}
-        <img src="/images/default/no_banner_dark.png" alt="No banner">
+        <img src="/images/default/no_banner_dark.png" alt="No banner" loading="lazy">
     {% endif %}
     <div class="title">{{ user }}</div>
     <div id="user-avatar" class="avatar">
         {% if user.avatar %}
-            <img src="/images/users/avatars/{{ user.avatar }}" alt="User avatar">
+            <img src="/images/users/avatars/{{ user.avatar }}" alt="User avatar" loading="lazy">
         {% else %}
-            <img src="/images/default/no_avatar.png" alt="No avatar">
+            <img src="/images/default/no_avatar.png" alt="No avatar" loading="lazy">
         {% endif %}
     </div>
     {% if user.city or user.zipCode %}

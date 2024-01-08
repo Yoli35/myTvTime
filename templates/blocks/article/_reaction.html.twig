@@ -1,6 +1,6 @@
 <div class="user">
     {% if reaction.user.avatar %}
-        <img src="/images/users/avatars/{{ reaction.user.avatar }}" alt="{{ reaction.user.username?:reaction.user.email }}">
+        <img src="/images/users/avatars/{{ reaction.user.avatar }}" alt="{{ reaction.user.username?:reaction.user.email }}" loading="lazy">
     {% endif %}
     <div class="name">{{ reaction.user.username?:reaction.user.email }}</div>
     <div class="dates">

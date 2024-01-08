@@ -7,7 +7,7 @@
                 {% if label=='alert' %}
                     <div class="still">
                         <a href="{{ message.href }}">
-                            <img src="{{ message.episode_still_path ?? message.season_poster_path ?? '/images/default/no_poster_dark.png' }}" alt="{{ message.name }}">
+                            <img src="{{ message.episode_still_path ?? message.season_poster_path ?? '/images/default/no_poster_dark.png' }}" alt="{{ message.name }}" loading="lazy">
                         </a>
                         <div class="countries">
                             {% for country in message.origin_country_array %}
@@ -19,7 +19,7 @@
                         {% if message.provider_logo_path %}
                             <a href="{{ message.direct_link }}" target="_blank" rel="noopener noreferrer">
                                 <div class="watch-provider">
-                                    <img src=" {{ message.provider_logo_path }}" alt="{{ message.provider_name }}" data-tile="{{ message.provider_name }}">
+                                    <img src=" {{ message.provider_logo_path }}" alt="{{ message.provider_name }}" data-tile="{{ message.provider_name }}" loading="lazy">
                                 </div>
                             </a>
                         {% endif %}

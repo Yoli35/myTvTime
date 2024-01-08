@@ -17,7 +17,7 @@
             {{ 'Feelslike'|trans }} : {{ weather.current.feelslike_c|round ~ '°' }}
         </div>
         <div class="condition">
-            <img src="{{ weather.current.condition.icon }}" alt="">
+            <img src="{{ weather.current.condition.icon }}" alt="" loading="lazy">
             <div>{{ weather.current.condition.text }}</div>
         </div>
         <div class="item">

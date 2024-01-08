@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="condition">
-                    <img src="{{ weather.current.condition.icon }}" alt="">
+                    <img src="{{ weather.current.condition.icon }}" alt="" loading="lazy">
                     <div class="vertical">{{ weather.current.condition.text }}</div>
                 </div>
                 <div class="vertical">
@@ -125,13 +125,13 @@
                             {% set time = hour.time[11:2] %}
                             <div class="hour"{% if hour.is_day == 0 %} style="background-color: rgba(43,50,52,0.5)"{% endif %}>
                                 <div>{{ time }}h</div>
-                                <div><img src="{{ hour.condition.icon }}" alt="{{ hour.condition.text }}"></div>
+                                <div><img src="{{ hour.condition.icon }}" alt="{{ hour.condition.text }}" loading="lazy"></div>
                                 <div>{{ hour.temp_c|round }}°C</div>
                             </div>
                             {% if time <= now and time+1 > now %}
                                 <button class="hour" id="now"{% if hour.is_day == 0 %} style="background-color: rgba(43,50,52,0.5)"{% endif %}>
                                     <div>{{ "now"|date("G:i") }}</div>
-                                    <div><img src="{{ weather.current.condition.icon }}" alt="{{ weather.current.condition.text }}"></div>
+                                    <div><img src="{{ weather.current.condition.icon }}" alt="{{ weather.current.condition.text }}" loading="lazy"></div>
                                     <div>{{ 'Now'|trans }}</div>
                                 </button>
                             {% endif %}

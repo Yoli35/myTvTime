@@ -6,7 +6,7 @@
         <p>{{ 'Content of the message'|trans }} :</p>
         <div class="message">{{ contact.message|nl2br }}</div>
         {% if image|length %}
-            <div><img src="{{ email.image('@images/'~image) }}" alt="{{ 'Image attachment'|trans }}"></div>
+            <div><img src="{{ email.image('@images/'~image) }}" alt="{{ 'Image attachment'|trans }}" loading="lazy"></div>
         {% endif %}
     </div>
 {% endapply %}

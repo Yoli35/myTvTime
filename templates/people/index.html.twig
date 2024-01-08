@@ -9,7 +9,7 @@
                 <div class="left-column">
                     {% if people.profile_path|length %}
                         <div class="profile">
-                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}">
+                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}" loading="lazy">
                         </div>
                     {% endif %}
                     <div class="infos">
@@ -63,7 +63,7 @@
                         {% if people.images.profiles|length %}
                             <div class="images">
                                 {% for image in people.images.profiles %}
-                                    <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.3 ~ image.file_path }}" alt="{{ people.name }}">
+                                    <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.3 ~ image.file_path }}" alt="{{ people.name }}" loading="lazy">
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -92,7 +92,7 @@
                                             <a href="{{ url }}">
                                         {% endif %}
                                         <div class="media">
-                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ media.poster_path }}" alt="{{ media.title }}">
+                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ media.poster_path }}" alt="{{ media.title }}" loading="lazy">
                                             <div class="title">{{ media.title }}</div>
                                         </div>
                                         {% if url is defined %}

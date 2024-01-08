@@ -20,7 +20,7 @@
                 <div class="tt-video">
                     <a href="{{ path('app_tik_tok_video', {id: item.id}) }}">
                         <div class="thumbnail">
-                            <img src="{{ this.thumbnail({tiktok: item}) }}" alt="{{ item.title }}">
+                            <img src="{{ this.thumbnail({tiktok: item}) }}" alt="{{ item.title }}" loading="lazy">
                             <div class="title">{{ item.title }}</div>
                         </div>
                         <div class="details">

@@ -28,14 +28,14 @@
                                 <div class="poster">
                                     {% if event.type == 'event' %}
                                         {% if event.thumbnail %}
-                                            <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                            <img src="/images/events/thumbnails/{{ event.thumbnail }}" alt="{{ event.name }}" loading="lazy">
                                         {% else %}
                                             <div class="no-poster"><i class="fa-solid fa-camera"></i><div>{{ 'No thumbnail'|trans }}</div></div>
                                         {% endif %}
                                     {% endif %}
                                     {% if event.type == 'alert' %}
                                         {% if event.thumbnail %}
-                                            <img src="/images/series/posters/{{ event.thumbnail }}" alt="{{ event.name }}">
+                                            <img src="/images/series/posters/{{ event.thumbnail }}" alt="{{ event.name }}" loading="lazy">
                                         {% else %}
                                             <div class="no-poster"><i class="fa-solid fa-camera"></i><div>{{ 'No thumbnail'|trans }}</div></div>
                                         {% endif %}

@@ -27,7 +27,7 @@
                             </div>
                             {% for u in users %}
                                 <div class="user{% if u==user %} myself{% endif %}">
-                                    <div class="thumbnail"><img src="{{ getPath('userAvatar')~u.avatar }}" alt="{{ u.username }}"></div>
+                                    <div class="thumbnail"><img src="{{ getPath('userAvatar')~u.avatar }}" alt="{{ u.username }}" loading="lazy"></div>
                                     <div class="username">{{ u.username }}
                                         {% if u==user %}
                                             <div class="self">({{ 'yourself'|trans }})</div>

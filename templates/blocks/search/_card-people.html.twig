@@ -2,7 +2,7 @@
     <div class="profile">
         <a href="{{ path('app_people', {'id': people.id}) }}?from={{ from }}" title="{{ people.name }}">
             {% if people.profile_path %}
-                <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.3 ~ people.profile_path }}" alt="{{ people.name ~ '\'s profile' }}">
+                <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.3 ~ people.profile_path }}" alt="{{ people.name ~ '\'s profile' }}" loading="lazy">
             {% else %}
                 <div class="no-image">{{ 'No image'|trans }}</div>
             {% endif %}

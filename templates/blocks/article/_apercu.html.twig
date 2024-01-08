@@ -5,7 +5,7 @@
     <div class="apercu">
         {% if article.thumbnail %}
             <div class="thumbnail">
-                <img src="/images/articles/thumbnails/{{ article.thumbnail }}" alt="{{ article.title }}">
+                <img src="/images/articles/thumbnails/{{ article.thumbnail }}" alt="{{ article.title }}" loading="lazy">
             </div>
         {% endif %}
         <div class="presentation">

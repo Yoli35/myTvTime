@@ -13,7 +13,7 @@
                     {% set chatterbox = u.id in chatterboxes %}
                     <li data-id="{{ u.id }}">
                         <div class="user-avatar">
-                            <img src="/images/users/avatars/{{ u.avatar }}" alt="{{ u.username }}">
+                            <img src="/images/users/avatars/{{ u.avatar }}" alt="{{ u.username }}" loading="lazy">
                         </div>
                         <span>{{ u.username }}</span>
                         <div class="writing{% if not chatterbox %} hidden{% endif %}"><i class="fa-regular fa-pen-to-square"></i></div>

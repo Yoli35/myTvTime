@@ -21,7 +21,7 @@
                         <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}"
                              alt="{{ serie.name }}">
                     {% else %}
-                        <img src="/images/default/no_poster.png" alt="{{ serie.name }}">
+                        <img src="/images/default/no_poster.png" alt="{{ serie.name }}" loading="lazy">
                     {% endif %}
                 </div>
                 <div class="infos">

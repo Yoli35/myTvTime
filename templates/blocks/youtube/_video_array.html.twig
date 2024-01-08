@@ -1,7 +1,7 @@
 <div class="yt-video">
     <a href="{{ path('app_youtube_video', {id: item.id}) }}">
         <div class="thumbnail">
-            <img src="{{ item.thumbnail_medium_path }}" alt="{{ item.title }}">
+            <img src="{{ item.thumbnail_medium_path }}" alt="{{ item.title }}" loading="lazy">
             {% if item.content_duration < 36000 %} {# < 10:00:00 => 0:00:00 #}
                 {% if item.content_duration < 3600 %} {# < 01:00:00 => 00:00 #}
                     {% if item.content_duration < 600 %} {# < 00:10:00 => 0:00 #}
@@ -41,7 +41,7 @@
                 <a href="https://www.youtube.com/c/{{ url }}" target="_blank" rel="noopener">
                     <span data-descr="{{ item.channel.title }}">
                         {% if item.channel.thumbnail_default_url %}
-                            <img src="{{ item.channel.thumbnail_default_url }}" alt="{{ item.channel.title }}" class="w-100">
+                            <img src="{{ item.channel.thumbnail_default_url }}" alt="{{ item.channel.title }}" class="w-100" loading="lazy">
                         {% else %}
                             {{ item.channel.title|first }}
                         {% endif %}

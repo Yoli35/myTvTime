@@ -7,8 +7,8 @@
 </div>
 <div class="">
     {% if field.value|length %}
-        <img src="{{ asset('usersAvatarPath') }}{{ field.value }}">
+        <img src="{{ asset('usersAvatarPath') }}{{ field.value }}" alt="Avatar" loading="lazy">
     {% else %}
-        <img src="{{ asset('userAccountNoAvatar') }}">
+        <img src="{{ asset('userAccountNoAvatar') }}" alt="Avatar" loading="lazy">
     {% endif %}
 </div>

@@ -12,7 +12,7 @@
                 <div class="watch-provider" data-name="{{ wp.provider_name }}">
                     <label for="watch-provider-{{ wp.provider_id }}">
                         <input type="radio" id="watch-provider-{{ wp.provider_id }}" name="watch-provider" value="{{ wp.provider_id }}"/>
-                        <div class="logo"><img src="{{ wp.logo_path }}" alt="{{ wp.provider_name }}"></div>
+                        <div class="logo"><img src="{{ wp.logo_path }}" alt="{{ wp.provider_name }}" loading="lazy"></div>
                         {{ wp.provider_name }}
                     </label>
                 </div>

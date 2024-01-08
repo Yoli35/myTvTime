@@ -1,7 +1,7 @@
 <div data-id="{{ id }}" class="home-discover"{% if more is defined %} style="opacity: 0; transform: scale({{ random(100)/100 }}) rotate({{ random(-360, 360) }}deg)"{% endif %}>
     <a href="{{ path('app_movie', {id: id}) }}{% if from is defined %}?from={{ from }}{% if mandatory is defined %}{% for k,v in mandatory %}&--{{ k }}={{ v }}{% endfor %}{% endif %}{% if before is defined %}&before={{ before }}{% endif %}{% endif %}">
         {% if poster %}
-            <img src="{{ poster }}" alt="{{ title }}">
+            <img src="{{ poster }}" alt="{{ title }}" loading="lazy">
         {% else %}
             <div class="no-poster">{{ 'No poster'|trans }}</div>
         {% endif %}

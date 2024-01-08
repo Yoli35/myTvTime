@@ -47,7 +47,7 @@
                         <div class="home-discover" data-id="{{ s.serie_id }}">
                             <a href="{{ path('app_series_show', {'id': s.id}) }}?from={{ from }}&c={{ countryCode }}" title="{{ s.name }}">
                                 <div>
-                                    <img src="{{ s.poster_path }}" alt="{{ 'Poster' }}">
+                                    <img src="{{ s.poster_path }}" alt="{{ 'Poster' }}" loading="lazy">
                                     <span class="status">{{ s.status|trans }}</span>
                                     <div class="view{% if s.serie_completed %} completed{% else %}{% if s.viewed_episodes %} in-progress{% endif %}{% endif %}">
                                         <span class="viewed-episodes">{{ s.viewed_episodes }}</span>&nbsp;/&nbsp;<span class="total-episodes">{{ s.number_of_episodes }}</span>

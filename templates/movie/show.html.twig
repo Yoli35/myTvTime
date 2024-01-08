@@ -11,15 +11,15 @@
         <div class="movie-header">
             <div class="poster">
                 {% if movie.poster_path %}
-                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}">
+                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" loading="lazy">
                 {% else %}
-                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}">
+                    <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ movie.title }}" loading="lazy">
                 {% endif %}
                 <div class="caption">{% if movie.poster_caption %}<span>{{ movie.poster_caption }}</span>{% endif %}</div>
             </div>
             <div class="backdrop">
                 {% if movie.backdrop_path %}
-                    <img src="{{ movie.backdrop_path }}" alt="{{ movie.title }}" loading="lazy">
+                    <img src="{{ movie.backdrop_path }}" alt="{{ movie.title }}" loading="lazy" loading="lazy">
                 {% else %}
                     <div class="no-backdrop">
                         <div class="label">{{ 'No backdrop'|trans }}</div>
@@ -31,7 +31,7 @@
                 <div class="backdrops">
                     {% for b in backdrops %}
                         <div class="backdrops-item">
-                            <img src="{{ b.path }}" alt="{{ b.caption ?? ('backdrop'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ b.caption }}" data-id="{{ b.id }}">
+                            <img src="{{ b.path }}" alt="{{ b.caption ?? ('backdrop'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ b.caption }}" data-id="{{ b.id }}" loading="lazy">
                             <div class="set-backdrop"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
                         </div>
                     {% endfor %}
@@ -41,7 +41,7 @@
                 <div class="posters">
                     {% for p in posters %}
                         <div class="posters-item">
-                            <img src="{{ p.path }}" alt="{{ p.caption ?? ('backdrop'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ p.caption }}" data-id="{{ p.id }}">
+                            <img src="{{ p.path }}" alt="{{ p.caption ?? ('backdrop'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ p.caption }}" data-id="{{ p.id }}" loading="lazy">
                             <div class="set-poster"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
                         </div>
                     {% endfor %}
@@ -85,7 +85,7 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}" loading="lazy">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -98,7 +98,7 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}" loading="lazy">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -111,7 +111,7 @@
                                             <div class="provider">
                                                 <div class="name">{{ provider.provider_name }}{% if provider.native_name is defined %} ({{ provider.native_name }}){% endif %}</div>
                                                 <div class="logo">
-                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}">
+                                                    <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ provider.logo_path }}" alt="{{ provider.provider_name }}" loading="lazy">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -246,14 +246,14 @@
                                 <div class="collection">
                                     {% if movie.belongs_to_collection.backdrop_path %}
                                         <div class="banner">
-                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" alt="{{ movie.belongs_to_collection.name }}">
+                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.0 }}{{ movie.belongs_to_collection.backdrop_path }}" alt="{{ movie.belongs_to_collection.name }}" loading="lazy">
                                         </div>
                                     {% endif %}
                                     <div class="content">
                                         <h2>{{ movie.belongs_to_collection.name }}</h2>
                                         {% if movie.belongs_to_collection.poster_path %}
                                             <div class="poster">
-                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt="">
+                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ movie.belongs_to_collection.poster_path }}" alt="" loading="lazy">
                                             </div>
                                         {% endif %}
                                         <div>
@@ -360,10 +360,10 @@
                         <div class="recommendation">
                             <a href="{{ path('app_movie', {id: recommendation.id}) }}">
                                 {% if recommendation.poster_path %}
-                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}">
+                                    <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.1 }}{{ recommendation.poster_path }}" alt="{{ recommendation.original_title }}" loading="lazy">
                                 {% else %}
                                     <div class="no-poster">
-                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}">
+                                        <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ recommendation.original_title }}" loading="lazy">
                                         <div class="title">{{ recommendation.title }}</div>
                                         <div class="original-title">{{ recommendation.original_title }}</div>
                                     </div>
@@ -545,7 +545,7 @@
                         if (data.success) {
                             if (data.type === 'backdrop') {
                                 const backdrop = header.querySelector(".backdrop");
-                                backdrop.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'backdrop') + '" data-caption="' + data.caption + '"><div class="caption">' + data.caption + '</div>';
+                                backdrop.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'backdrop') + '" data-caption="' + data.caption + '"><div class="caption" loading="lazy">' + data.caption + '</div>';
                                 /**
                                  * @type {HTMLButtonElement} clearPreview
                                  */
@@ -577,7 +577,7 @@
                             }
                             if (data.type === 'poster') {
                                 const poster = header.querySelector(".poster");
-                                poster.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'poster') + '" data-caption="' + data.caption + '"><div class="caption">' + data.caption + '</div>';
+                                poster.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'poster') + '" data-caption="' + data.caption + '"><div class="caption" loading="lazy">' + data.caption + '</div>';
                                 /**
                                  * @type {HTMLButtonElement} clearPreview
                                  */

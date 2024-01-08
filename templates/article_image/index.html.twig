@@ -34,7 +34,7 @@
                         <td>{{ article_image.path }}</td>
                         <td>{{ article_image.article.title }}</td>
                         <td>
-                            <div class="thumbnail"><img src="/images/articles/images/{{ article_image.path }}" alt=""></div>
+                            <div class="thumbnail"><img src="/images/articles/images/{{ article_image.path }}" alt="" loading="lazy"></div>
                         </td>
                         <td>
                             {#                            <a href="{{ path('app_article_image_show', {'id': article_image.id}) }}">{{ 'show'|trans }}</a> #}

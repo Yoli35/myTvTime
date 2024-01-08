@@ -35,7 +35,7 @@
                 <div class="series-details">
                     <div class="posters">
                         <div class="poster">
-                            <img src="{{ season.poster_path }}" alt="{{ season.name }}">
+                            <img src="{{ season.poster_path }}" alt="{{ season.name }}" loading="lazy">
                         </div>
                     </div>
                     <div class="infos">
@@ -109,7 +109,7 @@
                         <section>
                             <div class="deepl">
                                 <div class="title">{{ 'Overview'|trans }} by
-                                    <div class="logo"><img src="/images/default/deepl.png" alt="deepl"></div>
+                                    <div class="logo"><img src="/images/default/deepl.png" alt="deepl" loading="lazy"></div>
                                     {% if localization.usage %}
                                         <div class="usage">
                                         {{ localization.usage.character.count }} / {{ localization.usage.character.limit }} {{ 'characters'|trans }}
@@ -147,7 +147,7 @@
                                 {% if not upcoming %}
                                     <div class="episode">
                                         <div class="still">
-                                            <img src="{{ episode.still_path }}" alt="{{ episode.name }}">
+                                            <img src="{{ episode.still_path }}" alt="{{ episode.name }}" loading="lazy">
                                             <div class="episode-name">
                                                 {% if episode.viewing is defined and episode.viewing.substituteName is not null %}
                                                     {{ episode.viewing.substituteName }}
@@ -248,7 +248,7 @@
                                                                 {% if watchProviders is defined %}
                                                                     {% for provider in watchProviders %}
                                                                         <div class="provider" data-id="{{ provider.provider_id }}">
-                                                                            <img src="{{ provider.logo_path }}" alt="{{ provider.provider_name }}" title="{{ provider.provider_name }}">
+                                                                            <img src="{{ provider.logo_path }}" alt="{{ provider.provider_name }}" title="{{ provider.provider_name }}" loading="lazy">
                                                                         </div>
                                                                     {% endfor %}
                                                                 {% endif %}

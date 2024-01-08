@@ -1,9 +1,9 @@
 {% if is_granted('ROLE_USER') %}
     <div class="menu">
         {% if user.avatar %}
-            <img class="avatar" src="/images/users/avatars/{{ user.avatar }}" alt="{{ user.username }}">
+            <img src="/images/users/avatars/{{ user.avatar }}" class="avatar" alt="{{ user.username }}" loading="lazy">
         {% else %}
-            <img class="avatar" src="/images/default/no_avatar.png" alt="{{ user.username }}">
+            <img src="/images/default/no_avatar.png" class="avatar" alt="{{ user.username }}" loading="lazy">
         {% endif %}
         <div class="menu-items">
             <div class="menu-item">
@@ -47,7 +47,7 @@
                         <div class="menu-item">
                             <a href="{{ path('app_movie_list_show', {id: ml.id}) }}">
                                 <div class="image-collection">
-                                    <img src="/images/movie_lists/thumbnails/{{ ml.image }}" alt="{{ ml.name }}"></div>
+                                    <img src="/images/movie_lists/thumbnails/{{ ml.image }}" alt="{{ ml.name }}" loading="lazy"></div>
                                 <div>{{ ml.name }} ({{ ml.count }})</div>
                             </a>
                         </div>

@@ -3,9 +3,9 @@
     <a href="{{ path('app_series_show', {'id': todayAiring.serieId}) }}?from={{ from }}{% if extra is defined %}&extra={{ extra }}&d={{ today_offset }}{% endif %}" title="{{ todayAiring.serieName }}">
         <div>
             {% if todayAiring.seriePosterPath %}
-            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ todayAiring.seriePosterPath }}" alt="{{ 'Poster' }}">
+            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ todayAiring.seriePosterPath }}" alt="{{ 'Poster' }}" loading="lazy">
             {% else %}
-            <img src="/images/default/no_poster_dark.png" alt="{{ 'Poster' }}">
+            <img src="/images/default/no_poster_dark.png" alt="{{ 'Poster' }}" loading="lazy">
             {% endif %}
             {% if todayAiring.episodeNumbers.0 == 1 %}
                 {% if todayAiring.seasonNumber == 1 %}

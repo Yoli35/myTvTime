@@ -37,7 +37,7 @@
                     <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}">
                         <a href="{{ dl.url }}" target="_blank">
                             {% if dl.logoPath %}
-                                <img src="{{ dl.logoPath }}" alt="{{ dl.name }}">
+                                <img src="{{ dl.logoPath }}" alt="{{ dl.name }}" loading="lazy">
                             {% else %}
                                 <i class="fa-solid fa-circle-arrow-right"></i>
                             {% endif %}
@@ -78,7 +78,7 @@
                     <div class="network-detail">
                         <div class="frame">
                             {% if network.logo_path %}
-                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}">
+                                <img src="{{ imageConfig.url ~ imageConfig.logo_sizes.2 ~ network.logo_path }}" alt="{{ network.name }}" loading="lazy">
                             {% else %}
                                 {{ network.name }}
                             {% endif %}

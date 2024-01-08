@@ -58,7 +58,7 @@
                             <div class="thumbnail">
                                 <a href="https://www.youtube.com/{{ url }}" target="_blank" rel="noopener">
                                     {% if video.channel.thumbnailDefaultUrl %}
-                                        <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100">
+                                        <img src="{{ video.channel.thumbnailDefaultUrl }}" alt="{{ video.channel.title }}" class="w-100" loading="lazy">
                                     {% else %}
                                         {{ video.channel.title|first }}
                                     {% endif %}
@@ -81,7 +81,7 @@
                         </div>
                     {% endif %}
                     <div class="qr-code">
-                        <img src="https://api.qrcode-monkey.com/qr/custom?data=https://www.youtube.com/watch?v={{ video.link }}" alt="QR Code">
+                        <img src="https://api.qrcode-monkey.com/qr/custom?data=https://www.youtube.com/watch?v={{ video.link }}" alt="QR Code" loading="lazy">
                     </div>
                 </div>
                 <div class="copied-text">{{ 'Copied!'|trans }}</div>

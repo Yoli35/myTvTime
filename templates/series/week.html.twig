@@ -58,7 +58,7 @@
                             <div class="home-discover" data-id="{{ s.serie_id }}">
                                 <a href="{{ path('app_series_show', {'id': s.serie_id}) }}?from={{ from }}{% if extra is defined %}&extra={{ extra }}&d={{ today_offset }}{% endif %}" title="{{ s.name }}{% if s.localized_name %} - {{ s.localized_name }}{% endif %}">
                                     <div>
-                                        <img src="{{ s.poster_path }}" alt="{{ 'Poster' }}">
+                                        <img src="{{ s.poster_path }}" alt="{{ 'Poster' }}" loading="lazy">
                                         <div class="view">{{ 'S%02dE%02d'|format(s.season_number, s.episode_number) }}</div>
                                         <div class="started">{{ s.air_date|format_date('relative_short') }}</div>
                                     </div>

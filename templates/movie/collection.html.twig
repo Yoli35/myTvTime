@@ -17,7 +17,7 @@
             <div class="collection-header" style="background-image: url('{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ collection.backdrop_path }}')">
                 {% if collection.poster_path %}
                     <div class="collection-poster">
-                        <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ collection.poster_path }}" alt="{{ collection.name }}">
+                        <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ collection.poster_path }}" alt="{{ collection.name }}" loading="lazy">
                     </div>
                 {% endif %}
             </div>
@@ -41,15 +41,15 @@
                                     <div class="poster">
                                         {% if part.poster_path %}
                                             <a href="{{ path('app_movie', {id: part.id}) }}?from={{ from }}" class="w-100">
-                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ part.poster_path }}" alt="{{ part.title }}" class="w-100 h-auto">
+                                                <img src="{{ imageConfig.url }}{{ imageConfig.poster_sizes.3 }}{{ part.poster_path }}" alt="{{ part.title }}" class="w-100 h-auto" loading="lazy">
                                             </a>
                                         {% else %}
-                                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ part.title }}">
+                                            <img src="/images/default/no_poster_dark.png" class="d-block w-100" alt="{{ part.title }}" loading="lazy">
                                         {% endif %}
                                     </div>
                                     <div class="backdrop">
                                         {% if part.backdrop_path %}
-                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ part.backdrop_path }}" class="d-block w-100" alt="{{ part.title }}">
+                                            <img src="{{ imageConfig.url }}{{ imageConfig.backdrop_sizes.2 }}{{ part.backdrop_path }}" class="d-block w-100" alt="{{ part.title }}" loading="lazy">
                                         {% else %}
                                             <div class="no-backdrop">{{ 'No banner'|trans }}</div>
                                         {% endif %}

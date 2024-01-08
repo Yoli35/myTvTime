@@ -12,10 +12,10 @@
             <header>
                 <div class="banner">
                     {% if movieList.banner %}
-                        <img src="/images/movie_lists/banners/{{ movieList.banner }}" alt="{{ movieList.title }}'s banner">
+                        <img src="/images/movie_lists/banners/{{ movieList.banner }}" alt="{{ movieList.title }}'s banner" loading="lazy">
                         <div class="thumbnail" style="background-color: {{ movieList.color }}">
                             {% if movieList.thumbnail %}
-                                <img src="/images/movie_lists/thumbnails/{{ movieList.thumbnail }}" alt="{{ movieList.title }}'s thumbnail">
+                                <img src="/images/movie_lists/thumbnails/{{ movieList.thumbnail }}" alt="{{ movieList.title }}'s thumbnail" loading="lazy">
                             {% endif %}
                         </div>
                     {% endif %}
