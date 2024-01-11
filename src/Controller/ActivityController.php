@@ -80,7 +80,8 @@ class ActivityController extends AbstractController
         $missingDayIsToday = $results['missing day is today'];
 
         if ($missingDayCount) {
-            $days = $this->activityDayRepository->getActivityDays($activity->getId(), 0, intval($dayOfTheWeek) + 10 * 7);
+            $days = $this->activityDayRepository->getActivityDays($activity->getId());
+            $dayCount = count($days);
             if ($missingDayIsToday) {
                 $this->addFlash("success", $this->translator->trans("Hello, today is added to your activity"));
             } else {
