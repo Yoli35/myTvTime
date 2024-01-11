@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container">
+    <div class="container-fluid">
         {{ include('blocks/_nav.html.twig', {thisPage:('People'|trans)}) }}
-{#        {{ include('blocks/source/_button.html.twig') }}#}
+        {#        {{ include('blocks/source/_button.html.twig') }} #}
         <main>
             <div class="person">
                 <div class="left-column">
@@ -91,17 +91,17 @@
                                         {% if url is defined %}
                                             <a href="{{ url }}">
                                         {% endif %}
-                                        <div class="media">
-                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ media.poster_path }}" alt="{{ media.title }}" loading="lazy">
+                                        <div class="media" data-poster="{{ media.big_poster_path }}">
+                                            <img src="{{ media.poster_path }}" alt="{{ media.title }}" loading="lazy">
                                             <div class="title">{{ media.title }}</div>
                                         </div>
                                         {% if url is defined %}
                                             </a>
                                         {% endif %}
-
                                     {% endfor %}
                                 </div>
                             </div>
+                            <div class="poster-hover"><img src="" alt=""></div>
                         {% endif %}
                         <div class="credits">
                             {% if credits.cast|length %}
@@ -242,11 +242,11 @@
         <footer>{{ include('blocks/_pageFooter.html.twig') }}</footer>
     </div>
 
-{#    {{ show_source_code(_self) }}#}
+    {#    {{ show_source_code(_self) }} #}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-{#    <script src="/js/source.js"></script>#}
+    {#    <script src="/js/source.js"></script> #}
     <script src="/js/diaporama.js"></script>
     <script>
         const _app_series_get_overview = "{{ path('app_series_get_overview', {id: 0}) }}";
@@ -265,6 +265,13 @@
             images.forEach(image => {
                 image.classList.add("pointer");
                 image.addEventListener("click", openDiaporama);
+            });
+
+            const media = document.querySelector(".person").querySelector(".known-for").querySelectorAll(".media");
+            media.forEach(m => {
+                m.addEventListener("mouseover", showPoster);
+                m.addEventListener("mousemove", showPoster)
+                m.addEventListener("mouseout", hidePoster);
             });
         });
 
@@ -309,7 +316,7 @@
 
                 const xhr = new XMLHttpRequest();
                 xhr.onload = function () {
-                    let result = {'overview': "", "media_type": ""};
+                    let result;
                     result = JSON.parse(this.response);
                     popInfos.querySelector(".title").innerHTML = "";
                     popInfos.querySelector(".overview").innerHTML = "";
@@ -334,6 +341,25 @@
                     popInfos.querySelector(".overview").innerHTML = "";
                 }, 150);
             }
+        }
+
+        function showPoster(evt) {
+            const poster = document.querySelector(".person").querySelector(".poster-hover");
+            poster.setAttribute("style", "left: " + (evt.clientX - 144) + "px; top: " + (evt.clientY + 16) + "px;");
+
+            if (poster.classList.contains("show")) return;
+
+            const img = poster.querySelector("img");
+            const imgSrc = evt.currentTarget.getAttribute("data-poster");
+            const title = evt.currentTarget.querySelector(".title").innerHTML;
+            img.setAttribute("src", imgSrc);
+            img.setAttribute("alt", title);
+            poster.classList.add("show");
+        }
+
+        function hidePoster() {
+            const poster = document.querySelector(".person").querySelector(".poster-hover");
+            poster.classList.remove("show");
         }
     </script>
 {% endblock %}

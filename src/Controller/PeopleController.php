@@ -27,10 +27,9 @@ class PeopleController extends AbstractController
     public function people(Request $request, $id): Response
     {
 //        $this->logService->log($request, $this->getUser());
-        $standing = $this->TMDBService->getPerson($id, $request->getLocale(), "images");
+        $standing = $this->TMDBService->getPerson($id, $request->getLocale(), "images,combined_credits");
         $people = json_decode($standing, true);
-        $standing = $this->TMDBService->getPersonCredits($id, $request->getLocale());
-        $credits = json_decode($standing, true);
+        $credits = $people['combined_credits'];
 
 //        dump([
 //                'people' => $people,
@@ -323,7 +322,8 @@ class PeopleController extends AbstractController
                 $item['id'] = $date['id'];
                 $item['media_type'] = $date['media_type'];
                 $item['title'] = $date['title'];
-                $item['poster_path'] = $date['poster_path'];
+                $item['poster_path'] = $this->serieController->fullUrl('poster', 3, $date['poster_path'], 'no_poster.png', $this->imageConfiguration->getConfig());
+                $item['big_poster_path'] = $this->serieController->fullUrl('poster', 5, $date['poster_path'], 'no_poster.png', $this->imageConfiguration->getConfig());
                 $knownFor[$date['release_date']] = $item;
             }
         }
