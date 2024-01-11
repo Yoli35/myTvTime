@@ -1672,7 +1672,7 @@ nav.active {
                 .known-for {
                     @include flex-100(center, space-around);
                     bottom: 0;
-                    height: 9rem;
+                    height: 6.5rem;
                     left: 0;
                     overflow-x: hidden;
                     position: absolute;
@@ -1682,11 +1682,11 @@ nav.active {
 
                         img, .no-poster {
                             border: 2px solid var(--gradient-ardoise-90);
-                            border-radius: .25rem;
-                            height: 8rem;
+                            border-radius: .375rem;
+                            height: 6rem;
                             object-fit: cover;
                             transition: scale 150ms ease-in-out;
-                            width: 5rem;
+                            width: 4rem;
 
                             &:hover {
                                 scale: 1.1;
