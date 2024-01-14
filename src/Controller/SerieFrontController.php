@@ -26,6 +26,7 @@ use App\Service\QuoteService;
 use App\Service\TMDBService;
 use DateTimeImmutable;
 use Exception;
+use IntlDateFormatter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -322,6 +323,34 @@ class SerieFrontController extends AbstractController
         $this->serieViewingRepository->save($serieViewing, true);
 
         return $this->json(['status' => 'ok']);
+    }
+
+    #[Route('/history', name: 'app_series_history', methods: 'GET')]
+    public function getMoreHistory(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $locale = $request->getLocale();
+        $timeZone = $user->getTimezone() ?? 'Europe/Paris';
+        $page = $request->query->getInt('page', 1);
+        $format = datefmt_create($locale,
+            IntlDateFormatter::MEDIUM,
+            IntlDateFormatter::NONE,
+            $timeZone,
+            IntlDateFormatter::GREGORIAN);
+
+        $history = array_map(function ($h) use ($format, $timeZone) {
+            $h['viewed_at'] = preg_replace(
+                '/^1 /',
+                '1<sup>er</sup>&nbsp;',
+                datefmt_format($format, $this->dateService->newDate($h['viewed_at'], $timeZone, true)));
+            return $h;
+        }, $this->serieController->getHistory($user, $locale, $page));
+
+        return $this->json([
+            'status' => 'Ok',
+            'history' => $history,
+        ]);
     }
 
     #[Route('/overview/{id}', name: 'app_series_get_overview', methods: 'GET')]

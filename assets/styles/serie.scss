@@ -686,6 +686,84 @@
                 }
             }
 
+            .history {
+                @include flex-col(flex-start, flex-start);
+                background-color: var(--gradient-ardoise-80-alpha-50);
+                border-radius: 0;
+                color: var(--gradient-ardoise-10);
+                margin-bottom: 1rem;
+                padding: .5rem;
+
+                .history-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    gap: .25rem;
+                    max-height: 30rem;
+                    overflow-y: auto;
+                    width: 100%;
+
+                    .episode-history {
+                        align-items: center;
+                        background-color: var(--gradient-ardoise-70-alpha-90);
+                        border-radius: .25rem;
+                        display: flex;
+                        gap: .5rem;
+                        width: 100%;
+
+                        .poster {
+                            img {
+                                border-radius: .125rem 0 0 .125rem;
+                                height: 3rem;
+                                object-fit: cover;
+                                width: 3rem;
+                            }
+                        }
+
+                        .offset {
+                            align-items: center;
+                            background-color: var(--gradient-ardoise-80);
+                            border: 1px solid var(--gradient-ardoise-20);
+                            border-radius: 999px;
+                            color: var(--gradient-ardoise-10);
+                            display: flex;
+                            height: 2rem;
+                            justify-content: center;
+                            min-width: 2rem;
+                        }
+
+                        .name, .date {
+                            align-items: center;
+                            display: flex;
+                            justify-content: center;
+                            font-size: .75rem;
+                            font-weight: 100;
+                            line-height: 1rem;
+                            padding-top: .25rem;
+                        }
+
+                        .name {
+                            flex-direction: column;
+                        }
+
+                        .date {
+                            flex-direction: row;
+                            margin-inline-start: auto;
+                        }
+
+                        .episode {
+                            font-size: 2rem;
+                            margin-inline: auto 1rem;
+                        }
+                    }
+                }
+
+                .history-more {
+                    cursor: pointer;
+                    margin-block-start: .5rem;
+                    margin-inline-start: auto;
+                }
+            }
+
             .settings {
                 @include flex-col(flex-start, flex-start);
                 background-color: var(--gradient-ardoise-80-alpha-50);
@@ -2801,7 +2879,7 @@
                     }
 
                     img {
-                        border-radius: .125rem;
+                        border-radius: .25rem;
                         height: 2.75rem;
                         object-fit: contain;
                         width: 2.75rem;
@@ -3971,19 +4049,19 @@
                 display: none;
                 background-color: var(--gradient-ardoise-90-alpha-80);
                 border-radius: .5rem;
-                height: 30rem;
+                height: 44rem;
                 justify-content: center;
                 opacity: 0;
                 position: absolute;
                 transition: opacity 150ms ease-in-out;
-                width: 18rem;
+                width: 30rem;
                 z-index: 1;
 
                 img {
                     border-radius: .5rem;
-                    height: 28rem;
+                    height: 42rem;
                     object-fit: cover;
-                    width: 16rem;
+                    width: 28rem;
                 }
 
                 &.show {
@@ -4510,6 +4588,12 @@
                             width: 6.75rem;
                         }
                     }
+                }
+
+                .history {
+                    border: 1rem;
+                    border-radius: .5rem;
+                    padding: 1rem;
                 }
 
                 .settings {

@@ -164,12 +164,15 @@ class SerieController extends AbstractController
                 $serie = $this->isSerieAiringSoon($serie, $now);
             }
         }
+        $history = $this->getHistory($user, $request->getLocale());
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'numbers' => $serieRepository->numbers($user->getId())[0],
             'seriesList' => $list,
             'countries' => $this->getCountries(),
+            'history' => $history,
+            'historyPerPage' => 40,
             'pages' => [
                 'total_results' => $totalResults,
                 'page' => $page,
@@ -1109,6 +1112,14 @@ class SerieController extends AbstractController
         }
         asort($countries, SORT_FLAG_CASE | SORT_STRING);
         return array_merge(["all" => $this->translator->trans("All countries")], $countries);
+    }
+
+    public function getHistory($user, $locale, $page = 1, $limit = 40): array
+    {
+        return array_map(function ($h) {
+            $h['poster_path'] = $this->fullUrl('poster', 2, $h['serie_poster_path'], 'no_poster.png', $this->imageConfiguration->getConfig());
+            return $h;
+        }, $this->episodeViewingRepository->episodeUserHistory($user->getId(), $user->getPreferredLanguage() ?? $locale, $page, $limit));
     }
 
     public function cookies($request, $backFromDetail, $somethingChanged, $perPage, $sort, $order): array
@@ -2264,7 +2275,7 @@ class SerieController extends AbstractController
 //            dump($tv['directLink']);
             $foundUrls = [];
             $tv['directLink'] = array_filter($tv['directLink'], function ($dl) use (&$foundUrls) {
-                if (!in_array($dl['url'], $foundUrls)){
+                if (!in_array($dl['url'], $foundUrls)) {
                     $foundUrls[] = $dl['url'];
                     $added = true;
                 } else {

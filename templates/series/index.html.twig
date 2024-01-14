@@ -79,6 +79,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="history">
+                                <h2>{{ 'History'|trans }}</h2>
+                                <div class="history-wrapper">
+                                    {% for h in history %}
+                                        <div class="episode-history">
+                                            <div class="poster"><img src="{{ h.poster_path }}" alt=""></div>
+                                            <div class="offset">{{ h.offset }}</div>
+                                            <div class="name">
+                                                <div>{{ h.name }}</div>
+                                                <div>{% if h.localized_name %}{{ h.localized_name }}{% endif %}</div>
+                                            </div>
+                                            <div class="date">{{ h.viewed_at|format_date('relative_medium')|capitalize }}</div>
+                                            <div class="episode">{{ 'S%02dE%02d'|format(h.season_number, h.episode_number) }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="history-more" data-per-page="{{ historyPerPage }}">{{ 'See more'|trans }}</div>
+                            </div>
                             <div class="settings">
                                 <h2>{{ 'Settings'|trans }}</h2>
 
@@ -201,6 +219,7 @@
         "app_series_new": "{{ path('app_series_new') }}",
         "app_series_show": "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
         "app_series_search": "{{ path('app_series_search') }}",
+        "app_series_history": "{{ path('app_series_history') }}",
         "app_series_set_settings": "{{ path('app_series_set_settings') }}",
         "app_series_from_country": "{{ path('app_series_from_country', {countryCode:'FR'})|slice(0, -3) }}",
         "locale": "{{ app.request.locale }}",

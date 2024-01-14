@@ -12,6 +12,7 @@ export class Series {
         this.app_series_new = globs.app_series_new;
         this.app_series_show = globs.app_series_show;
         this.app_series_search = globs.app_series_search;
+        this.app_series_history = globs.app_series_history;
         this.app_series_set_settings = globs.app_series_set_settings;
         this.app_series_from_country = globs.app_series_from_country;
         this.locale = globs.locale;
@@ -58,6 +59,7 @@ export class Series {
 
         const tools = document.querySelector(".series-tools");
         if (tools) {
+            this.initHistory();
             this.initSettings();
             this.initPreview();
             this.newSerie();
@@ -1045,4 +1047,97 @@ export class Series {
         });
     }
 
+    initHistory() {
+        const historyMore = document.querySelector(".history-more");
+        if (!historyMore) return;
+
+        historyMore.addEventListener("click", thisGlobal.getMoreHistory);
+    }
+
+    getMoreHistory() {
+        const historyMore = document.querySelector(".history-more");
+        const history = document.querySelector(".history");
+        const historyWrapper = history.querySelector(".history-wrapper");
+        const historyItems = historyWrapper.querySelectorAll(".episode-history");
+        const perPage = historyMore.getAttribute("data-per-page");
+        const page = 1 + historyItems.length / perPage;
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            let data;
+            if (this.response.slice(0, 1) === '<') {
+                data = this.response;
+                console.log(data);
+            } else {
+                data = JSON.parse(this.response);
+                if (data.status === 'Ok') {
+                    /**
+                     * @typedef HistoryItem
+                     * @type {Object}
+                     * @property {number} 'id'
+                     * @property {number} 'offset'
+                     * @property {string} 'name'
+                     * @property {string} 'localized_name'
+                     * @property {number} 'season_number'
+                     * @property {number} 'episode_number'
+                     * @property {string} 'substitute_name'
+                     * @property {number} 'vote'
+                     * @property {string} 'viewed_at'
+                     * @property {string} 'poster_path'
+                     */
+                    const newItems = data.history;
+                    /** @param {HistoryItem} item */
+                    newItems.forEach(item => {
+                        // <div class="episode-history">
+                        //     <div class="poster"><img src="{{ h.poster_path }}" alt=""></div>
+                        //     <div class="offset">{{ h.offset }}</div>
+                        //     <div class="name">
+                        //         <div>{{ h.name }}</div>
+                        //         <div>{% if h.localized_name %}{{ h.localized_name }}{% endif %}</div>
+                        //     </div>
+                        //     <div class="date">{{ h.viewed_at|format_date('relative_medium')|capitalize }}</div>
+                        //     <div class="episode">{{ 'S%02dE%02d'|format(h.season_number, h.episode_number) }}</div>
+                        // </div>
+                        const newHistoryItem = document.createElement("div");
+                        newHistoryItem.classList.add("episode-history");
+                        const newPoster = document.createElement("div");
+                        newPoster.classList.add("poster");
+                        const newPosterImg = document.createElement("img");
+                        newPosterImg.setAttribute("src", item.poster_path);
+                        newPoster.appendChild(newPosterImg);
+                        newHistoryItem.appendChild(newPoster);
+                        const newOffset = document.createElement("div");
+                        newOffset.classList.add("offset");
+                        newOffset.appendChild(document.createTextNode(item.offset));
+                        newHistoryItem.appendChild(newOffset);
+                        const newName = document.createElement("div");
+                        newName.classList.add("name");
+                        const newName1 = document.createElement("div");
+                        newName1.appendChild(document.createTextNode(item.name));
+                        newName.appendChild(newName1);
+                        const newName2 = document.createElement("div");
+                        if (item.localized_name) {
+                            newName2.appendChild(document.createTextNode(item.localized_name));
+                        }
+                        newName.appendChild(newName2);
+                        newHistoryItem.appendChild(newName);
+                        const newDate = document.createElement("div");
+                        newDate.classList.add("date");
+                        newDate.innerHTML = item.viewed_at;
+                        newHistoryItem.appendChild(newDate);
+                        const newEpisode = document.createElement("div");
+                        newEpisode.classList.add("episode");
+                        newEpisode.appendChild(document.createTextNode("S" + item.season_number.toString().padStart(2, '0') + "E" + item.episode_number.toString().padStart(2, '0')));
+                        newHistoryItem.appendChild(newEpisode);
+
+                        historyWrapper.appendChild(newHistoryItem);
+                    });
+                }
+            }
+            if (historyItems.length < perPage) {
+                historyMore.classList.add("hidden");
+            }
+        }
+        xhr.open("GET", thisGlobal.app_series_history + "?page=" + page);
+        xhr.send();
+    }
 }

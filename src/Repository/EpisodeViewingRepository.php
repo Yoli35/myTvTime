@@ -70,6 +70,28 @@ class EpisodeViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function episodeUserHistory($userId, $locale, $page = 1, $limit = 40): array
+    {
+        $sql = "SELECT s.`id`, s.`name` as name, sln.`name` as localized_name, "
+            . "     seav.`season_number` as season_number, epiv.`episode_number` as episode_number, "
+            . "     DATE(epiv.`viewed_at`) as viewed_at, epiv.`vote` as vote, epiv.`substitute_name` as substitute_name, "
+            . "     s.`poster_path` as serie_poster_path, "
+            . "     ROW_NUMBER() OVER (ORDER BY epiv.`viewed_at` DESC) as offset "
+            . "FROM `episode_viewing` epiv "
+            . "LEFT JOIN `season_viewing` seav ON seav.`id`=epiv.`season_id` "
+            . "LEFT JOIN `serie_viewing` serv ON serv.`id`=seav.`serie_viewing_id` "
+            . "LEFT JOIN `serie` s ON s.`id`=serv.`serie_id` "
+            . "LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='" . $locale . "' "
+            . "WHERE serv.`user_id`=" . $userId . " "
+            . "ORDER BY epiv.`viewed_at` DESC "
+            . "LIMIT " . (($page - 1) * $limit) . "," . $limit;
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return EpisodeViewing[] Returns an array of EpisodeViewing objects
 //     */
