@@ -389,6 +389,7 @@
                             .block-header {
                                 .doubled {
                                     background-color: var(--activity-move);
+                                    color: var(--gradient-ardoise-50);
                                 }
 
                                 .completed {
@@ -445,7 +446,7 @@
                             .block-header {
                                 .doubled {
                                     background-color: var(--activity-exercise);
-                                    color: var(--gradient-ardoise-10);
+                                    color: var(--gradient-ardoise-50);
                                 }
 
                                 .completed {
