@@ -34,7 +34,7 @@
             {% if serie.directLink|length %}
                 <div class="label">{{ 'Watch now'|trans }}</div>
                 {% for dl in serie.directLink %}
-                    <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}">
+                    <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}">
                         <a href="{{ dl.url }}" target="_blank">
                             {% if dl.logoPath %}
                                 <img src="{{ dl.logoPath }}" alt="{{ dl.name }}" loading="lazy">
