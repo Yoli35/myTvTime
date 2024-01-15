@@ -12,7 +12,7 @@
         <div class="my-series">
             <div class="header">
                 {{ include('blocks/series/_quotes.html.twig') }}
-                <h1>{{ 'My Series'|trans }}</h1>
+                <h1>{{ 'My series'|trans }}</h1>
                 <div class="backdrop"></div>
                 {{ include('blocks/_clock.html.twig') }}
             </div>
@@ -55,19 +55,6 @@
                                 </label>
                             </div>
                             <div class="search-serie">
-                                <h2>{{ 'Search my series'|trans }}</h2>
-                                <label class="label" for="search-name">{{ 'Name of the series'|trans }}</label>
-                                <div class="group">
-                                    <div class="field">
-                                        <input id="search-name" type="search" value="" placeholder="{{ 'Start taping the name'|trans }}">
-                                        <input id="search-id" type="hidden" value="-1">
-                                    </div>
-                                    <div>
-                                        <button id="search_serie" class="disabled" type="submit">{{ 'Show'|trans }}</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="search-serie">
                                 <h2>{{ 'Search series'|trans }}</h2>
                                 <label class="label" for="search-tmdb-name">{{ 'Name of the series'|trans }}</label>
                                 <div class="group">
@@ -83,16 +70,18 @@
                                 <h2>{{ 'History'|trans }}</h2>
                                 <div class="history-wrapper">
                                     {% for h in history %}
-                                        <div class="episode-history">
-                                            <div class="poster"><img src="{{ h.poster_path }}" alt=""></div>
-                                            <div class="offset">{{ h.offset }}</div>
-                                            <div class="name">
-                                                <div>{{ h.name }}</div>
-                                                <div>{% if h.localized_name %}{{ h.localized_name }}{% endif %}</div>
+                                        <a href="{{ path('app_series_show', {id: h.id}) }}?p={{ pages.page }}&from=my_series">
+                                            <div class="episode-history">
+                                                <div class="poster"><img src="{{ h.poster_path }}" alt=""></div>
+                                                <div class="offset">{{ h.offset }}</div>
+                                                <div class="name">
+                                                    <div>{{ h.name }}</div>
+                                                    <div>{% if h.localized_name and h.localized_name|lower|trim != h.name|lower|trim %}<i>{{ h.localized_name }}</i>{% endif %}</div>
+                                                </div>
+                                                <div class="date">{{ h.viewed_at|format_datetime('relative_medium', 'short')|capitalize }}</div>
+                                                <div class="episode">{{ 'S%02dE%02d'|format(h.season_number, h.episode_number) }}</div>
                                             </div>
-                                            <div class="date">{{ h.viewed_at|format_date('relative_medium')|capitalize }}</div>
-                                            <div class="episode">{{ 'S%02dE%02d'|format(h.season_number, h.episode_number) }}</div>
-                                        </div>
+                                        </a>
                                     {% endfor %}
                                 </div>
                                 <div class="history-more" data-per-page="{{ historyPerPage }}">{{ 'See more'|trans }}</div>
@@ -146,54 +135,6 @@
                                     </div>
                                     <div class="apply">
                                         <button id="apply" type="submit">{{ 'Apply'|trans }}</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="settings">
-                                <div class="animation">
-                                    <h3>{{ 'Animation'|trans }}</h3>
-                                    <div class="leaf">
-                                        <h4>
-                                            {{ 'Leaf' }}
-                                            <label class="switch">
-                                                <input type="checkbox"/>
-                                                <span></span>
-                                            </label>
-                                            <div class="anim-settings-toggler"></div>
-                                            {#                                            <div class="anim-settings-toggler"><i class="fa-solid fa-gear"></i></div> #}
-                                        </h4>
-                                        <div class="anim-settings">
-                                            <div class="slider" id="frequency">
-                                                <div class="label">{{ 'Number'|trans }} (0-100)</div>
-                                                <div class="control" data-name="number" data-type="range" data-min="0"
-                                                     data-max="100" data-value="10"></div>
-                                            </div>
-                                            <div class="slider" id="life-length">
-                                                <div class="label">{{ 'Life\'s Length'|trans }} (0-300sec)</div>
-                                                <div class="control" data-name="life-length" data-type="interval"
-                                                     data-min="0" data-max="300" data-min-value="2"
-                                                     data-max-value="60"></div>
-                                            </div>
-                                            <div class="slider" id="initial-angle">
-                                                <div class="label">{{ 'Initial angle'|trans }} (0°-360°)</div>
-                                                <div class="control" data-name="initial-angle" data-type="range"
-                                                     data-min="0" data-max="360" data-value="0"></div>
-                                            </div>
-                                            <div class="slider" id="turn-per-minute">
-                                                <div class="label">{{ 'Turn per minute'|trans }} (0-100)</div>
-                                                <div class="control" data-name="turn-per-minute" data-type="range"
-                                                     data-min="0" data-max="100" data-value="5"></div>
-                                            </div>
-                                            <div class="slider" id="scale">
-                                                <div class="label">{{ 'Scale'|trans }} (25%-500%)</div>
-                                                <div class="control" data-name="scale" data-type="interval"
-                                                     data-min="25"
-                                                     data-max="500" data-min-value="25" data-max-value="200"></div>
-                                            </div>
-                                            <div class="save">
-                                                <button>{{ 'Save'|trans }}</button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

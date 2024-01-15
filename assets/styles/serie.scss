@@ -654,7 +654,7 @@
             }
 
             .label {
-                color: var(--gradient-ardoise-70);
+                color: var(--gradient-ardoise-30);
                 font-weight: 100;
                 display: none;
                 text-transform: uppercase;
@@ -711,11 +711,15 @@
                         width: 100%;
 
                         .poster {
+                            flex-shrink: 0;
+                            height: 100%;
+                            width: 3rem;
+
                             img {
                                 border-radius: .125rem 0 0 .125rem;
-                                height: 3rem;
+                                height: 100%;
                                 object-fit: cover;
-                                width: 3rem;
+                                width: 100%
                             }
                         }
 
@@ -729,6 +733,7 @@
                             height: 2rem;
                             justify-content: center;
                             min-width: 2rem;
+                            padding-inline: .5rem;
                         }
 
                         .name, .date {
@@ -747,10 +752,13 @@
 
                         .date {
                             flex-direction: row;
+                            flex-grow: 1;
                             margin-inline-start: auto;
+                            text-align: center;
                         }
 
                         .episode {
+                            font-family: "Courier New", monospace;
                             font-size: 2rem;
                             margin-inline: auto 1rem;
                         }
@@ -4511,7 +4519,7 @@
             }
 
             .wrapper {
-                width: calc(75% - 1rem);
+                width: calc(70% - 1rem);
 
                 a {
                     .serie {
@@ -4526,7 +4534,7 @@
                 margin-left: 1rem;
                 //position: sticky;
                 //top: 4rem;
-                width: 25%;
+                width: 30%;
 
                 &.mobile {
                     display: none;

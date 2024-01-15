@@ -601,10 +601,10 @@ $fa-font-path: "../webfonts";
         z-index: -1;
 
         .name {
-            color: var(--gradient-ardoise-100);
+            color: var(--gradient-ardoise-10);
             font-size: 3em;
             font-weight: bold;
-            text-shadow: 0 0 8px var(--gradient-ardoise-10);
+            text-shadow: 0 0 8px var(--gradient-ardoise-90);
             z-index: 1;
         }
 

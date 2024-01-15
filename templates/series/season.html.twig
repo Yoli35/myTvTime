@@ -185,7 +185,7 @@
                                                 <div class="substituteName">
                                                     <label>
                                                         {{ 'Substitute name'|trans }} :
-                                                        <input type="text" data-id="{{ episode.viewing.id }}">
+                                                        <input type="text" id="substitute_name_{{ episode.viewing.id }}" data-id="{{ episode.viewing.id }}">
                                                     </label>
                                                     <button class="btn btn-primary btn-sm" data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
                                                 </div>
@@ -353,16 +353,26 @@
         }
 
         function saveSubstituteName(e) {
-            const substituteName = e.target.parentElement.querySelector('input').value;
+            const input = e.target.parentElement.querySelector('input');
+            const substituteName = input.value;
+            if (!substituteName.length) return;
+
             const id = e.target.dataset.id;
-            const url = '{{ path('app_episode_substitute_name') }}';
+            const url = '{{ path('app_episode_set_substitute_name') }}';
             const data = JSON.stringify({
                 id: id,
                 substituteName: substituteName
             });
             const xhr = new XMLHttpRequest();
             xhr.onload = function () {
-                window.location.reload();
+                const {result, substituteName} = JSON.parse(xhr.responseText);
+                if (result === "ok") {
+                    const infos = input.closest(".infos");
+                    const h4 = infos.querySelector("h4");
+                    h4.innerHTML += ' ' + substituteName;
+                    const substituteNameDiv = input.closest(".substituteName");
+                    substituteNameDiv.remove();
+                }
             }
             xhr.open("GET", url + '?data=' + data, true);
             xhr.send();

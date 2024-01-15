@@ -74,7 +74,7 @@ class EpisodeViewingRepository extends ServiceEntityRepository
     {
         $sql = "SELECT s.`id`, s.`name` as name, sln.`name` as localized_name, "
             . "     seav.`season_number` as season_number, epiv.`episode_number` as episode_number, "
-            . "     DATE(epiv.`viewed_at`) as viewed_at, epiv.`vote` as vote, epiv.`substitute_name` as substitute_name, "
+            . "     epiv.`viewed_at` as viewed_at, epiv.`vote` as vote, epiv.`substitute_name` as substitute_name, "
             . "     s.`poster_path` as serie_poster_path, "
             . "     ROW_NUMBER() OVER (ORDER BY epiv.`viewed_at` DESC) as offset "
             . "FROM `episode_viewing` epiv "

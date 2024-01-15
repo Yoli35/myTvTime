@@ -9,6 +9,8 @@ use App\Entity\Favorite;
 use App\Entity\Networks;
 use App\Entity\Season;
 use App\Entity\Serie;
+use App\Entity\SerieAlternateOverview;
+use App\Entity\SerieLocalizedName;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Repository\AlertRepository;
@@ -17,6 +19,7 @@ use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
 use App\Repository\NetworksRepository;
 use App\Repository\SeasonRepository;
+use App\Repository\SerieLocalizedNameRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
@@ -45,20 +48,21 @@ class SerieFrontController extends AbstractController
     const SEARCH = 'search';
 
     public function __construct(
-        private readonly AlertRepository          $alertRepository,
-        private readonly DateService              $dateService,
-        private readonly EpisodeRepository        $episodeRepository,
-        private readonly EpisodeViewingRepository $episodeViewingRepository,
-        private readonly FavoriteRepository       $favoriteRepository,
-        private readonly ImageConfiguration       $imageConfiguration,
-        private readonly NetworksRepository       $networkRepository,
-        private readonly SeasonRepository         $seasonRepository,
-        private readonly SerieController          $serieController,
-        private readonly SerieRepository          $serieRepository,
-        private readonly SerieViewingRepository   $serieViewingRepository,
-        private readonly SettingsRepository       $settingsRepository,
-        private readonly TMDBService              $TMDBService,
-        private readonly TranslatorInterface      $translator,
+        private readonly AlertRepository              $alertRepository,
+        private readonly DateService                  $dateService,
+        private readonly EpisodeRepository            $episodeRepository,
+        private readonly EpisodeViewingRepository     $episodeViewingRepository,
+        private readonly FavoriteRepository           $favoriteRepository,
+        private readonly ImageConfiguration           $imageConfiguration,
+        private readonly NetworksRepository           $networkRepository,
+        private readonly SeasonRepository             $seasonRepository,
+        private readonly SerieController              $serieController,
+        private readonly SerieLocalizedNameRepository $serieLocalizedNameRepository,
+        private readonly SerieRepository              $serieRepository,
+        private readonly SerieViewingRepository       $serieViewingRepository,
+        private readonly SettingsRepository           $settingsRepository,
+        private readonly TMDBService                  $TMDBService,
+        private readonly TranslatorInterface          $translator,
     )
     {
     }
@@ -335,7 +339,7 @@ class SerieFrontController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $format = datefmt_create($locale,
             IntlDateFormatter::MEDIUM,
-            IntlDateFormatter::NONE,
+            IntlDateFormatter::SHORT,
             $timeZone,
             IntlDateFormatter::GREGORIAN);
 
@@ -343,7 +347,7 @@ class SerieFrontController extends AbstractController
             $h['viewed_at'] = preg_replace(
                 '/^1 /',
                 '1<sup>er</sup>&nbsp;',
-                datefmt_format($format, $this->dateService->newDate($h['viewed_at'], $timeZone, true)));
+                datefmt_format($format, $this->dateService->newDate($h['viewed_at'], $timeZone)));
             return $h;
         }, $this->serieController->getHistory($user, $locale, $page));
 
@@ -665,6 +669,98 @@ class SerieFrontController extends AbstractController
         $block = '<img src="' . $list[$providerId]['logo_path'] . '" alt="' . $list[$providerId]['provider_name'] . '" title="' . $list[$providerId]['provider_name'] . '">';
 
         return $this->json(['success' => true, 'block' => $block]);
+    }
+
+    #[Route('/episode/substitute/name', name: 'app_episode_set_substitute_name', methods: ['GET'])]
+    public function setEpisodeSubstituteName(Request $request): Response
+    {
+        $data = json_decode($request->query->get('data'), true);
+
+        $episodeViewing = $this->episodeViewingRepository->findOneBy(['id' => $data['id']]);
+        $episodeViewing->setSubstituteName($data['substituteName']);
+        $this->episodeViewingRepository->save($episodeViewing, true);
+
+        return $this->json([
+            'result' => 'ok',
+            'substituteName' => $data['substituteName'],
+        ]);
+    }
+
+    #[Route('/episode/duration', name: 'app_episode_duration', methods: ['GET'])]
+    public function saveEpisodeDuration(Request $request): Response
+    {
+        $data = json_decode($request->query->get('data'), true);
+        $serieId = $data['serieId'];
+        $seasonNumber = $data['seasonNumber'];
+        $episodeNumber = $data['episodeNumber'];
+        $runtime = $data['runtime'];
+
+        $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
+        $episodeDurations = $serie->getEpisodeDurations();
+        $episodeDurations[$seasonNumber][$episodeNumber - 1] = [$episodeNumber => $runtime];
+        $serie->setEpisodeDurations($episodeDurations);
+        $this->serieRepository->save($serie, true);
+
+        return $this->json([
+            'result' => 'ok',
+            'runtime' => $runtime,
+        ]);
+    }
+
+    #[Route('/set/localized/name', name: 'app_series_set_localized_name', methods: ['POST'])]
+    public function setSeriesLocalizedName(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'];
+        $id = $data['id'];
+        $locale = $request->getLocale();
+//        dump(['name' => $name, 'id' => $id, 'locale' => $locale]);
+
+        $serie = $this->serieRepository->find($id);
+        $localizedName = $this->serieLocalizedNameRepository->findOneBy(['serie' => $serie, 'locale' => $locale]);
+        if ($localizedName == null) {
+            $localizedName = new SerieLocalizedName();
+            $localizedName->setSerie($serie);
+            $localizedName->setLocale($locale);
+        }
+        $localizedName->setName($name);
+        $this->serieLocalizedNameRepository->save($localizedName, true);
+
+        return $this->json([
+            'name' => $serie->getName(),
+            'localized' => $localizedName->getName(),
+            'result' => true,
+        ]);
+    }
+
+    #[Route('/set/direct/link/{id}', name: 'app_series_set_direct_link', methods: ['POST'])]
+    public function setDirectLink(Request $request, Serie $serie): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $link = $data['link'];
+
+        $serie->setDirectLink($link);
+        $this->serieRepository->save($serie, true);
+
+        return $this->json([
+            'result' => true,
+        ]);
+    }
+
+    #[Route('/set/alternate/overview/{id}', name: 'app_series_set_alternate_overview', methods: ['POST'])]
+    public function setAlternateOverview(Request $request, Serie $serie): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $overview = $data['overview'];
+
+        $ao = new SerieAlternateOverview($serie, $request->getLocale(), $overview);
+
+        $serie->addSeriesAlternateOverview($ao);
+        $this->serieRepository->save($serie, true);
+
+        return $this->json([
+            'result' => true,
+        ]);
     }
 
     public function getSeasonsAndEpisodes($tvSeries, $series): void
