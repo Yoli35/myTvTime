@@ -2463,19 +2463,24 @@
                         flex-direction: row;
                         flex-wrap: wrap;
                         font-size: var(--episode-roomy-size);
+                        gap: .125rem;
                         padding-block: 1em;
 
                         .episode {
-                            border-radius: 1em;
+                            border-radius: .5em;
                             width: unset;
 
                             .still {
                                 img {
-                                    border-radius: .75em 0 0 .75em;
+                                    border-radius: .25em 0 0 .25em;
                                 }
 
                                 .episode-number, .episode-name, .episode-air-date {
                                     display: flex;
+                                }
+
+                                .episode-name {
+                                    border-top-left-radius: .125rem;
                                 }
                             }
 
@@ -3038,7 +3043,15 @@
                     gap: 1rem;
 
                     input {
+                        background-color: transparent;
+                        caret-color: var(--gradient-orange-50);
+                        caret-shape: block;
+                        color: var(--gradient-ardoise-10);
                         flex-grow: 1;
+                        font-size: 1.5rem;
+                        height: auto;
+                        outline: none;
+                        padding: 0;
                     }
                 }
 
