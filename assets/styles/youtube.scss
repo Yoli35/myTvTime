@@ -32,7 +32,6 @@
 }
 
 .yt-result {
-    height: 17em;
     width: 20em;
 
     .yt-video {
@@ -1164,91 +1163,3 @@
         }
     }
 }
-
-/*@media (prefers-color-scheme: dark) {
-
-    .youtube-search {
-        .header {
-            .backdrop {
-                background-image: url("../images/youtube.png");
-            }
-        }
-    }
-
-    .yt-header {
-        .banner {
-            .nav-breadcrumb {
-                .breadcrumb {
-                    background-color: transparent;
-                    padding: 0;
-                }
-            }
-        }
-    }
-
-    .yt-result {
-        .yt-video {
-            background-color: var(--gradient-ardoise-30-alpha-50);
-        }
-    }
-
-    .yt-videos {
-
-        .parameters {
-            background-color: var(--gradient-ardoise-20);
-
-            .content {
-                .input {
-                    background-color: var(--gradient-ardoise-30);
-
-                    .link {
-                        input {
-                            background-color: var(--gradient-ardoise-30);
-                            border: 1px solid var(--gradient-ardoise-80);
-                        }
-                    }
-                }
-
-                &.minimise {
-                    .input {
-                        background-color: transparent;
-                        padding: .25em 0;
-                    }
-                }
-            }
-
-            span {
-                color: var(--gradient-ardoise-60);
-
-                span {
-                    color: var(--gradient-ardoise-70);
-                }
-            }
-        }
-
-        .search-tags {
-            background-color: var(--gradient-ardoise-20);
-        }
-
-        .result {
-        }
-    }
-
-    .yt-video {
-        background-color: var(--gradient-ardoise-20);
-    }
-
-    .yt-video-page {
-        font-weight: 200;
-    }
-
-    .yt-video-page {
-        .details {
-            .description {
-                a {
-                    color: var(--gradient-ardoise-70);
-                }
-            }
-        }
-    }
-}*/

@@ -186,8 +186,9 @@ export class Youtube {
                 e.preventDefault();
                 const activeTag = tagList.querySelector(".active");
                 if (activeTag) {
-                    activeTag.click();
+                    e.preventDefault()
                     e.stopImmediatePropagation();
+                    activeTag.click();
                 } else {
                     let tags = field.parentElement.querySelector(".tags").querySelectorAll(".tag");
                     if (tags.length) gThis.applyTags();
