@@ -172,12 +172,14 @@ export class Youtube {
             const tagList = field.querySelector(".tag-list");
             if (e.keyCode === 40) { // arrow DOWN key
                 e.preventDefault();
+                e.stopImmediatePropagation();
                 if (!tagList.classList.contains("visible")) {
                     gThis.showList(tagList);
                 }
                 gThis.setActiveTagItem('next');
             } else if (e.keyCode === 38) { // arrow UP key
                 e.preventDefault();
+                e.stopImmediatePropagation();
                 if (!tagList.classList.contains("visible")) {
                     gThis.showList(tagList);
                 }
@@ -186,7 +188,6 @@ export class Youtube {
                 e.preventDefault();
                 const activeTag = tagList.querySelector(".active");
                 if (activeTag) {
-                    e.preventDefault()
                     e.stopImmediatePropagation();
                     activeTag.click();
                 } else {
@@ -314,10 +315,11 @@ export class Youtube {
 
 
         if (key === "Enter") {
-            id= 0;
+            id = 0;
             newTag = input.value;
-        }
-        else {
+        } else {
+            input.value = "";
+            input.focus();
             /** @type HTMLElement */
             const tagItemClicked = this;
             tagItemClicked.classList.add("selected");
