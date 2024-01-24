@@ -178,7 +178,7 @@ class MovieController extends AbstractController
         'fr' => '/{_locale}/film/{id}',
         'en' => '/{_locale}/movie/{id}',
         'de' => '/{_locale}/filme/{id}',
-        'es' => '/{_locale}/pelicula/{id}'
+        'es' => '/{_locale}/película/{id}'
     ], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
     public function show(Request $request, $id): Response
     {
@@ -449,7 +449,7 @@ class MovieController extends AbstractController
         'fr' => '/{_locale}/film/collection/{mid}/{id}',
         'en' => '/{_locale}/movie/collection/{mid}/{id}',
         'de' => '/{_locale}/filme/sammlung/{mid}/{id}',
-        'es' => '/{_locale}/pelicula/coleccion/{mid}/{id}'
+        'es' => '/{_locale}/película/coleccion/{mid}/{id}'
     ], 'app_movie_collection', requirements: ['_locale' => 'fr|en|de|es'])]
     public function movieCollection(Request $request, $mid, $id): Response
     {
@@ -858,13 +858,14 @@ class MovieController extends AbstractController
 
     public function skipKeys($array): array
     {
-        $newArray = [];
-        foreach ($array as $key => $varrayValue) {
-            foreach ($varrayValue as $k => $value) {
-                $newArray[] = $value;
-            }
-        }
-        return $newArray;
+//        $newArray = [];
+//        foreach ($array as $key => $varrayValue) {
+//            foreach ($varrayValue as $k => $value) {
+//                $newArray[] = $value;
+//            }
+//        }
+//        return $newArray;
+        return array_merge(...array_values($array));
     }
 
     public function collectPeopleJobs($people, $sortedCrew): array
