@@ -172,14 +172,16 @@ export class Youtube {
             const tagList = field.querySelector(".tag-list");
             if (e.keyCode === 40) { // arrow DOWN key
                 e.preventDefault();
-                e.stopImmediatePropagation();
+                // e.stopImmediatePropagation();
+                e.stopPropagation();
                 if (!tagList.classList.contains("visible")) {
                     gThis.showList(tagList);
                 }
                 gThis.setActiveTagItem('next');
             } else if (e.keyCode === 38) { // arrow UP key
                 e.preventDefault();
-                e.stopImmediatePropagation();
+                // e.stopImmediatePropagation();
+                e.stopPropagation();
                 if (!tagList.classList.contains("visible")) {
                     gThis.showList(tagList);
                 }
