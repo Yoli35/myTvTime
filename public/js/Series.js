@@ -524,16 +524,20 @@ export class Series {
                     const newItems = data.history;
                     /** @param {HistoryItem} item */
                     newItems.forEach(item => {
-                        // <div class="episode-history">
-                        //     <div class="poster"><img src="{{ h.poster_path }}" alt=""></div>
-                        //     <div class="offset">{{ h.offset }}</div>
-                        //     <div class="name">
-                        //         <div>{{ h.name }}</div>
-                        //         <div>{% if h.localized_name %}<i>{{ h.localized_name }}</i>{% endif %}</div>
+                        // <a href="{{ path('app_series_show', {id: h.id}) }}?p={{ pages.page }}&from=my_series">
+                        //     <div class="episode-history">
+                        //         <div class="poster"><img src="{{ h.poster_path }}" alt=""></div>
+                        //         <div class="offset">{{ h.offset }}</div>
+                        //         <div class="name">
+                        //             <div>{{ h.name }}</div>
+                        //             <div>{% if h.localized_name %}<i>{{ h.localized_name }}</i>{% endif %}</div>
+                        //         </div>
+                        //         <div class="date">{{ h.viewed_at|format_date('relative_medium')|capitalize }}</div>
+                        //         <div class="episode">{{ 'S%02dE%02d'|format(h.season_number, h.episode_number) }}</div>
                         //     </div>
-                        //     <div class="date">{{ h.viewed_at|format_date('relative_medium')|capitalize }}</div>
-                        //     <div class="episode">{{ 'S%02dE%02d'|format(h.season_number, h.episode_number) }}</div>
-                        // </div>
+                        // </a>
+                        const a = document.createElement("a");
+                        a.setAttribute("href", thisGlobal.app_series_show + item.id + "?p=" + thisGlobal.current_page + "&from=my_series");
                         const newHistoryItem = document.createElement("div");
                         newHistoryItem.classList.add("episode-history");
                         const newPoster = document.createElement("div");
@@ -567,8 +571,9 @@ export class Series {
                         newEpisode.classList.add("episode");
                         newEpisode.appendChild(document.createTextNode("S" + item.season_number.toString().padStart(2, '0') + "E" + item.episode_number.toString().padStart(2, '0')));
                         newHistoryItem.appendChild(newEpisode);
+                        a.appendChild(newHistoryItem);
 
-                        historyWrapper.appendChild(newHistoryItem);
+                        historyWrapper.appendChild(a);
                     });
                 }
             }
