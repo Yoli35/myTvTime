@@ -1139,7 +1139,7 @@
 .serie-page {
     .header {
         @include flex-col();
-        background-color: var(--mmt-body-bg);
+        background-color: var(--gradient-ardoise-80-alpha-50);
         border-radius: 1rem;
         color: var(--gradient-ardoise-10);
         margin-bottom: 1rem;
