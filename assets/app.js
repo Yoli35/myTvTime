@@ -3,6 +3,7 @@ import './styles/alarm.scss';
 import './styles/app.scss';
 import './styles/article.scss';
 import './styles/chat.scss';
+import './styles/cv.scss';
 import './styles/devices.scss';
 import './styles/diaporama.scss';
 import './styles/event.scss';
