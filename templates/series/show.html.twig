@@ -36,8 +36,8 @@
         <div class="tail"></div>
     </div>
     {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container-fluid" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}'); background-size: cover; position: relative">
-        <div style="-webkit-backdrop-filter: blur(32px) brightness(75%) saturate(50%); inset: 0; padding: 1rem; position: absolute;">
+    <div class="container-fluid backgroundImage" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')">
+        <div class="backgroundImageOverlay">
             {{ include('blocks/_nav.html.twig') }}
             <div class="serie-page">
                 <div class="header">

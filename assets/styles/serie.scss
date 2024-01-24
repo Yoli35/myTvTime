@@ -245,6 +245,23 @@
                             color: var(--gradient-green-10);
                             width: var(--serie-lg-poster-width);
                         }
+
+                        .progress {
+                            border: 2px solid var(--gradient-orange-50);
+                            border-radius: 0 0 0 .5rem;
+                            bottom: 0;
+                            height: .5rem;
+                            position: absolute;
+                            width: 100%;
+
+                            .progress-bar {
+                                background-color: var(--gradient-orange-50);
+                                border-radius: 0 0 0 .5rem;
+                                height: 100%;
+                                transition: width 500ms ease-in-out;
+                                width: 0;
+                            }
+                        }
                     }
 
                     .infos {

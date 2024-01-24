@@ -9,7 +9,7 @@
             {% else %}
                 <div class="no-image">{{ 'No poster'|trans }}</div>
             {% endif %}
-
+            <div class="progress"><div class="progress-bar" style="width: {{ serie.progress *100 }}%"></div></div>
         </div>
         <div class="infos">
             <div>{{ serie.name }}{% if serie.localizedName %} - {{ serie.localizedName }}{% endif %}</div>
@@ -88,7 +88,7 @@
                     <div>{{ serie.nextEpisode }}</div>
                 </div>
             {% endif %}
-            {% if serie.tomorrow is defined and serie.tomorrow%}
+            {% if serie.tomorrow is defined and serie.tomorrow %}
                 <div class="tomorrow">
                     <div>{{ 'New episode tomorrow'|trans }}</div>
                     <div>{{ serie.nextEpisode }}</div>

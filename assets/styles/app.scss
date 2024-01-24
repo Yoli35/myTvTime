@@ -743,15 +743,27 @@ main {
     display: flex;
     flex-direction: column;
     background-color: transparent;
-    margin-left: auto;
-    margin-right: auto;
+    margin-inline: auto;
     min-height: 100vh;
-    padding-left: 0;
-    padding-right: 0;
+    padding-inline: 0;
     width: 100%;
 }
 
-.container-fluid {
+.backgroundImage {
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.backgroundImageOverlay {
+    -webkit-backdrop-filter: blur(32px) brightness(75%) saturate(50%);
+    height: 100%;
+    padding: 1rem;
+    width: 100%;
+}
+
+.container-fluid:not(:has(.backgroundImageOverlay)) {
     padding: 1rem 0;
 }
 
@@ -766,7 +778,7 @@ main {
         max-width: 1024px;
         padding-inline: unset;
     }
-    .container-fluid {
+    .container-fluid:not(:has(.backgroundImageOverlay)) {
         padding-inline: 1rem;
     }
 }
