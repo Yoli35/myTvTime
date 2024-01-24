@@ -57,17 +57,29 @@
                                 <div>{{ season.overview }}</div>
                             {% endif %}
                         </div>
-                        <div class="info">
-                            {%if serie.alternate_overviews|length %}
+                        {% if serie.alternate_overviews|length %}
+                            <div class="info">
                                 <div class="alternate-overviews">
                                     {% for item in serie.alternate_overviews %}
                                         <div class="alternate-overview">
-                                            <div class="overview">{{ item.overview }}</div>
+                                            <div class="overview">{{ item.overview|nl2br }}</div>
+                                            {% if item.source %}
+                                                <div class="source">
+                                                    <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer" title="{{ item.source }}">
+                                                        {% if item.logoPath %}
+                                                            <div class="source-logo">
+                                                                <img src="{{ item.logoPath }}" alt="{{ item.source }}" loading="lazy">
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="source-name">{{ item.source }}</div>
+                                                    </a>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     {% endfor %}
                                 </div>
-                            {% endif %}
-                        </div>
+                            </div>
+                        {% endif %}
                         {% if seasonViewing %}
                             <div class="viewing-progress">
                                 {{ 'Progress'|trans }} : <span></span> / {{ seasonViewing.episodeCount }} {{ 'episodes'|trans }}
@@ -112,7 +124,7 @@
                                     <div class="logo"><img src="/images/default/deepl.png" alt="deepl" loading="lazy"></div>
                                     {% if localization.usage %}
                                         <div class="usage">
-                                        {{ localization.usage.character.count }} / {{ localization.usage.character.limit }} {{ 'characters'|trans }}
+                                            {{ localization.usage.character.count }} / {{ localization.usage.character.limit }} {{ 'characters'|trans }}
                                         </div>
                                     {% endif %}
                                 </div>
@@ -177,7 +189,7 @@
                                                     {{ episode.name }}
                                                 {% endif %}
                                             </h4>
-{#                                            <pre>{{ dump(past) }}</pre>#}
+                                            {#                                            <pre>{{ dump(past) }}</pre> #}
                                             {% if episode.viewing is defined
                                                 and past
                                                 and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
@@ -370,6 +382,9 @@
                     const infos = input.closest(".infos");
                     const h4 = infos.querySelector("h4");
                     h4.innerHTML += ' ' + substituteName;
+                    const still = infos.parentElement.querySelector(".still");
+                    const episodeName = still.querySelector(".episode-name");
+                    episodeName.innerHTML = substituteName;
                     const substituteNameDiv = input.closest(".substituteName");
                     substituteNameDiv.remove();
                 }
@@ -523,7 +538,7 @@
                             if (result === 'success') {
                                 const newDeviceName = device;
                                 viewDevice.classList.remove(oldDeviceName);
-                                viewDevice.classList.add(newDeviceName==='tablet'?'tablet-device':newDeviceName);
+                                viewDevice.classList.add(newDeviceName === 'tablet' ? 'tablet-device' : newDeviceName);
                                 viewDevice.setAttribute('data-device', newDeviceName);
                                 if (newDeviceName === 'tv') {
                                     viewDevice.querySelector('span').innerText = 'TV';

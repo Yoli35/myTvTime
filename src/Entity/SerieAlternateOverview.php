@@ -24,6 +24,15 @@ class SerieAlternateOverview
     #[ORM\JoinColumn(nullable: false)]
     private ?Serie $series = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $source = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logoPath = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $url = null;
+
     public function __construct($series, $locale, $overview)
     {
         $this->setSeries($series);
@@ -68,6 +77,42 @@ class SerieAlternateOverview
     public function setSeries(?Serie $series): static
     {
         $this->series = $series;
+
+        return $this;
+    }
+
+    public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    public function setSource(?string $source): static
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    public function getLogoPath(): ?string
+    {
+        return $this->logoPath;
+    }
+
+    public function setLogoPath(?string $logoPath): static
+    {
+        $this->logoPath = $logoPath;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): static
+    {
+        $this->url = $url;
 
         return $this;
     }

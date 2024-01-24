@@ -166,11 +166,6 @@
                             <div class="view-vote">
                                 {% if user %}
                                     {% if not addThisSeries %}
-                                        {#                                    <div class="d-flex-1"> #}
-                                        {#                                        <div class="duration-string"></div> #}
-                                        {#                                        <button id="test" data-id="{{ serieId }}" #}
-                                        {#                                                class="btn btn-primary">{{ 'Time spent watching my series'|trans }}</button> #}
-                                        {#                                    </div> #}
                                         {% if serie.number_of_episodes > 0 %}
                                             <div class="view-count">{{ viewedEpisodes }} {{ (viewedEpisodes>1?'viewed episodes':'viewed episode')|trans }}</div>
                                             <div class="view-average">
@@ -203,11 +198,23 @@
                             {% if serie.overview|length %}
                                 <div class="overview">{{ serie.overview|e }}</div>
                             {% endif %}
-                            {%if serie.alternate_overviews|length %}
+                            {% if serie.alternate_overviews|length %}
                                 <div class="alternate-overviews">
                                     {% for item in serie.alternate_overviews %}
                                         <div class="alternate-overview">
-                                            <div class="overview">{{ item.overview }}</div>
+                                            <div class="overview">{{ item.overview|nl2br }}</div>
+                                            {% if item.source %}
+                                                <div class="source">
+                                                    <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer" title="{{ item.source }}">
+                                                        {% if item.logoPath %}
+                                                            <div class="source-logo">
+                                                                <img src="{{ item.logoPath }}" alt="{{ item.source }}" loading="lazy">
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="source-name">{{ item.source }}</div>
+                                                    </a>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     {% endfor %}
                                 </div>
