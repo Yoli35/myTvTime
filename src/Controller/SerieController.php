@@ -10,10 +10,8 @@ use App\Entity\Favorite;
 use App\Entity\Networks;
 use App\Entity\SeasonViewing;
 use App\Entity\Serie;
-use App\Entity\SerieAlternateOverview;
 use App\Entity\SerieBackdrop;
 use App\Entity\SerieCast;
-use App\Entity\SerieLocalizedName;
 use App\Entity\SeriePoster;
 use App\Entity\SerieViewing;
 use App\Entity\Settings;
@@ -24,11 +22,9 @@ use App\Repository\AlertRepository;
 use App\Repository\CastRepository;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
-use App\Repository\NetworksRepository;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieBackdropRepository;
 use App\Repository\SerieCastRepository;
-use App\Repository\SerieLocalizedNameRepository;
 use App\Repository\SeriePosterRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
@@ -42,7 +38,6 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
-use DatePeriod;
 use DeepL\DeepLException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,26 +71,22 @@ class SerieController extends AbstractController
     public array $messages = [];
 
     public function __construct(
-//        private readonly BreadcrumbBuilder            $breadcrumbBuilder,
-        private readonly AlertRepository              $alertRepository,
-        private readonly CastRepository               $castRepository,
-        private readonly DateService                  $dateService,
-        private readonly DeeplTranslator              $deeplTranslator,
-        private readonly EpisodeViewingRepository     $episodeViewingRepository,
-        private readonly FavoriteRepository           $favoriteRepository,
-        private readonly ImageConfiguration           $imageConfiguration,
-//        private readonly NetworksRepository           $networksRepository,
-        private readonly SeasonViewingRepository      $seasonViewingRepository,
-        private readonly SerieCastRepository          $serieCastRepository,
-        private readonly SerieBackdropRepository      $serieBackdropRepository,
-        private readonly SerieLocalizedNameRepository $serieLocalizedNameRepository,
-        private readonly SeriePosterRepository        $seriePosterRepository,
-        private readonly SerieRepository              $serieRepository,
-        private readonly SerieViewingRepository       $serieViewingRepository,
-        private readonly SettingsRepository           $settingsRepository,
-        private readonly TMDBService                  $TMDBService,
-        private readonly TranslatorInterface          $translator,
-//        private readonly UserTvPreferenceRepository   $userTvPreferenceRepository,
+        private readonly AlertRepository          $alertRepository,
+        private readonly CastRepository           $castRepository,
+        private readonly DateService              $dateService,
+        private readonly DeeplTranslator          $deeplTranslator,
+        private readonly EpisodeViewingRepository $episodeViewingRepository,
+        private readonly FavoriteRepository       $favoriteRepository,
+        private readonly ImageConfiguration       $imageConfiguration,
+        private readonly SeasonViewingRepository  $seasonViewingRepository,
+        private readonly SerieCastRepository      $serieCastRepository,
+        private readonly SerieBackdropRepository  $serieBackdropRepository,
+        private readonly SeriePosterRepository    $seriePosterRepository,
+        private readonly SerieRepository          $serieRepository,
+        private readonly SerieViewingRepository   $serieViewingRepository,
+        private readonly SettingsRepository       $settingsRepository,
+        private readonly TMDBService              $TMDBService,
+        private readonly TranslatorInterface      $translator,
     )
     {
     }
@@ -230,7 +221,7 @@ class SerieController extends AbstractController
             $seriesToWatch = array_map(function ($series) use ($imgConfig) {
                 if ($series['time_shifted']) {
                     $airDate = $series['air_date'];
-                    $date = $this->dateService->newDate($series['air_date'], 'Europe/Paris', true);
+                    $date = $this->dateService->newDate($airDate, 'Europe/Paris', true);
                     $series['air_date'] = $date->modify('+1 day')->format('Y-m-d');
 //                    dump([
 //                        'series' => $series['name'],
@@ -284,7 +275,7 @@ class SerieController extends AbstractController
         $week = $request->query->getInt('w', $today->format('W'));
         $year = $request->query->getInt('y', $today->format('o')); // Year the ISO week number (W) belongs to
 
-        $firstDay = $today->setISODate($year, $week, 1);
+        $firstDay = $today->setISODate($year, $week);
         $days = [];
         for ($i = 0; $i < 7; $i++) {
             $days[] = $firstDay;
@@ -293,14 +284,15 @@ class SerieController extends AbstractController
 
         $day_of_the_week = $today->format('N');
 
-        $previousMonday = $today->setISODate($year, $week, 1)->sub($this->dateService->interval('P1W'));
-        $nextMonday = $today->setISODate($year, $week, 1)->add($this->dateService->interval('P1W'));
+        $previousMonday = $today->setISODate($year, $week)->sub($this->dateService->interval('P1W'));
+        $nextMonday = $today->setISODate($year, $week)->add($this->dateService->interval('P1W'));
         $previousWeek = intval($previousMonday->format('W'));
         $nextWeek = intval($nextMonday->format('W'));
         $previousYear = intval($previousMonday->format('o'));
         $nextYear = intval($nextMonday->format('o'));
 
         $episodesOfTheWeek = [];
+        $seriesOfTheWeekIds = [];
         $episodesCount = 0;
         for ($i = 1; $i <= 7; $i++) {
             $day = $days[$i - 1];
@@ -308,6 +300,10 @@ class SerieController extends AbstractController
             foreach ($episodesOfTheDay as $episode) {
                 $episodesCount += count($episode['episodeNumbers']);
                 $this->savePoster($episode['seriePosterPath'], $imgConfig['url'] . $imgConfig['poster_sizes'][3]);
+
+                if (!in_array($episode['serieId'], $seriesOfTheWeekIds)) {
+                    $seriesOfTheWeekIds[] = $episode['serieId'];
+                }
             }
             $episodesOfTheWeek[] = [
                 'day' => $day,
@@ -316,6 +312,9 @@ class SerieController extends AbstractController
             ];
         }
         $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale(), 40, 1);
+        $seriesToWatch = array_filter($seriesToWatch, function ($serie) use ($seriesOfTheWeekIds) {
+            return !in_array($serie['serie_id'], $seriesOfTheWeekIds);
+        });
         $seriesToWatch = array_map(function ($series) use ($imgConfig) {
             if ($series['time_shifted']) {
                 $date = $this->dateService->newDate($series['air_date'], 'Europe/Paris', true);
@@ -445,7 +444,7 @@ class SerieController extends AbstractController
             $tv = json_decode($this->TMDBService->getTv($result['tmdb_id'], $request->getLocale()), true);
             $result['networks'] = $tv ? $tv['networks'] : [];
 
-            // Date et épisode. Ex : Demain /  S01E01
+            // Date et épisode. Ex : Demain / S01E01
             $now = $this->dateService->newDate('now', $user->getTimezone(), true);
             $date = $this->dateService->newDate($result['air_date'], $user->getTimezone());
             if ($result['time_shifted']) $date->add(new DateInterval('P1D'));
@@ -545,7 +544,6 @@ class SerieController extends AbstractController
             if (!key_exists('networks', $result)) {
                 $result['networks'][] = ['name' => $result['network_name'], 'logo_path' => $result['network_logo_path']];
             }
-            // on factorise les networks
             if ($lastResult && $lastResult['id'] == $result['id']) {
                 $lastResult['networks'] = array_merge($lastResult['networks'], $result['networks']);
                 return null;
@@ -794,7 +792,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'app_series_show', methods: ['GET'])]
-    public function show(Request $request, Serie $serie, BreadcrumbBuilder $bc): Response
+    public function show(Request $request, Serie $serie): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -856,7 +854,7 @@ class SerieController extends AbstractController
 
         $from = $request->query->get('from');
         $page = $request->query->get('p');
-        $query = $request->query->get('query');
+        $query = $request->query->get('query', $request->query->get('c'));
         $year = $request->query->get('year');
         $backId = $request->query->get('back');
 
@@ -926,9 +924,9 @@ class SerieController extends AbstractController
         }
         // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
         if ($serie['userSerieViewing']) {
-            // les infos de la saison
+            // Infos de la saison
             $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
-            // les infos des épisodes
+            // Infos des épisodes
             $episodes = array_map(function ($episode) use ($seasonViewing, $isShifted) {
                 $episodeViewing = $this->getEpisodeViewing($seasonViewing, $episode['episode_number']);
                 $episode['viewing'] = $episodeViewing;
@@ -944,7 +942,7 @@ class SerieController extends AbstractController
         $watchProviders = $this->seasonWatchProviders($id, $season, $language, $country);
 
         // Breadcrumb
-        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $request->query->get('c', "FR") : null);
+        $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
 
 //        dump([
 //            'serie' => $serie,
@@ -1817,6 +1815,7 @@ class SerieController extends AbstractController
                         ['serieName' => $serieViewing->getSerie()->getName(), 'seasonNumber' => $seasonNumber, 'episodeCount' => $s['episode_count']]));
                 }
             } else {
+                if ($season->isSeasonCompleted()) continue;
 
                 if ($season->getEpisodeCount() == $s['episode_count']) continue;
 
@@ -2128,10 +2127,9 @@ class SerieController extends AbstractController
 //                    '' => 1967, // Molotov TV
 //                    '' => 542 // filmfriend
             ];
-            if (count($providersFlatrate ?? []) && count($watchProviderList ?? [])) {
+            if (count($providersFlatrate ?? []) && count($watchProviderList)) {
                 $justWatchPage = $this->TMDBService->justWatchPage($tv['id']);
                 preg_match_all('/https:\/\/click.+r=(http.+uct_country=fr)/', $justWatchPage, $matches);
-                $justWatchPage = "";
                 $matches = array_map(function ($match) {
                     return urldecode($match);
                 }, array_unique($matches[1]));
@@ -2238,7 +2236,6 @@ class SerieController extends AbstractController
             $standing = $this->TMDBService->getTvSeason($tv['id'], $season['season_number'], $locale);
             $seasonTMDB = json_decode($standing, true);
             $season['episodes'] = $seasonTMDB['episodes'];
-//            $episodeCast =
             return $season;
         }, $tv['seasons']);
 
@@ -2448,25 +2445,14 @@ class SerieController extends AbstractController
                 $season = $internationalSeason;
                 $localized = false;
                 if (strlen($season['overview'])) {
-                    // Récupérer APP_ENV depuis le fichier .env
-//                    $env = $_ENV['APP_ENV'];
                     try {
                         $usage = $this->deeplTranslator->translator->getUsage();
                         if ($usage->character->count + strlen($season['overview']) < $usage->character->limit) {
-//                            if ($env === 'prod')
                             $localizedOverview = $this->deeplTranslator->translator->translateText($internationalSeason['overview'], null, $locale);
-//                            else
-//                                $localizedOverview = $season['overview'];
                             $localizedResult = 'Translated';
                         } else {
                             $localizedResult = 'Limit exceeded';
                         }
-//                    dump([
-//                        'usage' => $usage->character->count,
-//                        'limit' => $usage->character->limit,
-//                        'localizedResult' => $localizedResult,
-//                        'localizedOverview' => $localizedOverview
-//                    ]);
                     } catch (DeepLException $e) {
                         $localizedResult = 'Error: code ' . $e->getCode() . ', message: ' . $e->getMessage();
                         $usage = [
@@ -2476,8 +2462,6 @@ class SerieController extends AbstractController
                             ]
                         ];
                     }
-                    // for now, we don't use deepl translator
-                    // $localizedOverview = sprintf('No translation in %s mode (%d / %d -> %d%%) - %s - %s', $env, $usage->character->count, $usage->character->limit, intval(100 * $usage->character->count / $usage->character->limit), $localizedResult, $internationalSeason['overview']);
                 }
             }
         }
@@ -2722,13 +2706,14 @@ class SerieController extends AbstractController
         $seasons = $serieViewing->getSeasons();
 
         foreach ($seasons as $season) {
-            if ($season->getSeasonNumber() && !$season->isSeasonCompleted()) {
-                $episodes = $season->getEpisodes();
-                foreach ($episodes as $episode) {
-                    if (!$episode->isViewed()) {
-                        $lastNotViewedEpisode = $episode;
-                        break 2;
-                    }
+            if (!$season->getSeasonNumber()) continue;
+            if ($season->isSeasonCompleted()) continue;
+
+            $episodes = $season->getEpisodes();
+            foreach ($episodes as $episode) {
+                if (!$episode->isViewed()) {
+                    $lastNotViewedEpisode = $episode;
+                    break 2;
                 }
             }
         }
@@ -2815,7 +2800,7 @@ class SerieController extends AbstractController
         return $cast;
     }
 
-    public function updateTvCast($tv, $serie, $verbose = false): void
+    public function updateTvCast($tv, $serie, $serieViewing = null, $verbose = false): void
     {
         if ($verbose) $this->messages = [];
 
@@ -2825,6 +2810,12 @@ class SerieController extends AbstractController
             $seasonNumber = $s['season_number'];
             if ($seasonNumber == 0) { // 21/12/2022 : plus d'épisodes spéciaux
                 continue;
+            }
+            if ($serieViewing) {
+                $seasonViewing = $serieViewing->getSeasonByNumber($seasonNumber);
+                if ($seasonViewing && $seasonViewing->isSeasonCompleted()) {
+                    continue;
+                }
             }
             $episodeCount = $s['episode_count'];
 
