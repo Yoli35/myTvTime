@@ -41,9 +41,8 @@
         {% endfor %}
     {% endfor %}
     {% if count > 1 %}
-        <div class="flash-message warning close-all" id="close-all-alerts">
-            <div class="close"><i class="fa-solid fa-circle-xmark"></i></div>
-            {{ 'Close count alerts'|trans({'count': count}) }}
+        <div class="flash-close-all" id="close-all-alerts" data-title="{{ 'Close count alerts'|trans({'count': count}) }}">
+            <i class="fa-solid fa-circle-xmark"></i>
         </div>
     {% endif %}
 </div>

@@ -382,10 +382,6 @@ body {
             }
         }
 
-        &.close-all {
-            cursor: pointer;
-        }
-
         &.friendship {
             background-color: var(--gradient-ardoise-40);
             border-color: var(--gradient-ardoise-10);
@@ -426,6 +422,20 @@ body {
             transform: scale(0);
             opacity: 0;
         }
+    }
+
+    .flash-close-all {
+        align-items: center;background-color: var(--gradient-orange-50);
+        border-color: var(--gradient-orange-70);
+        border-radius: 50%;
+        color: var(--gradient-orange-90);
+        cursor: pointer;
+        display: flex;
+        font-size: 3rem;
+        height: 3rem;
+        justify-content: center;
+        margin-left: auto;
+        width: 3rem;
     }
 }
 
@@ -1056,11 +1066,11 @@ nav.active {
 
                 &:hover, &:focus, &:active {
                     background-color: var(--gradient-orange-50);
-                    color: var(--gradient-orange-10);
+                    color: var(--gradient-ardoisee-10);
                     outline-color: var(--gradient-orange-50);
 
                     span {
-                        color: var(--gradient-orange-80);
+                        color: var(--gradient-ardoise-80);
                     }
                 }
             }
@@ -1102,7 +1112,7 @@ nav.active {
 
                 &:hover {
                     background-color: var(--gradient-orange-50);
-                    color: var(--gradient-orange-90);
+                    color: var(--gradient-ardoise-10);
                 }
 
                 > a {
@@ -1113,7 +1123,7 @@ nav.active {
 
                     &:hover, &:focus, &:active {
                         background-color: transparent;
-                        color: var(--gradient-orange-90);
+                        color: var(--gradient-ardoise-10);
                         outline-color: unset;
                     }
                 }

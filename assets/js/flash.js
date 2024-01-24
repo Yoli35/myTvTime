@@ -50,6 +50,9 @@ window.addEventListener("DOMContentLoaded", () => {
         flashes.forEach(flash => {
             closeFlash(flash);
         });
+        const flashMessagesDiv = document.querySelector(".flash-messages");
+        const flashCloseAllDiv = document.querySelector(".flash-close-all");
+        flashMessagesDiv.removeChild(flashCloseAllDiv);
     });
 
     function closeFlash(flash) {
