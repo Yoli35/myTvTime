@@ -98,7 +98,8 @@ export class MultiSearch {
                         const newContext = window.open(url, "_blank");
                         console.log({newContext});
                         // TODO: if newContext is null, display a dialog to allow pop-ups
-                        window.alert("Veuillez autoriser les pop-ups pour ce site (Safari: Préférences > Sites Web > Pop-up > Autoriser - Google Chrome: Paramètres > Confidentialité et sécurité > Paramètres du site > Pop-ups et redirections > Autoriser tous les sites à afficher des pop-ups (recommandé) - Firefox: Options > Vie privée et sécurité > Permissions > Notifications > Exceptions > Autoriser > https://www.mytvtime.fr)");
+                        if (newContext === null)
+                            window.alert("Veuillez autoriser les pop-ups pour ce site (Safari: Préférences > Sites Web > Pop-up > Autoriser - Google Chrome: Paramètres > Confidentialité et sécurité > Paramètres du site > Pop-ups et redirections > Autoriser tous les sites à afficher des pop-ups (recommandé) - Firefox: Options > Vie privée et sécurité > Permissions > Notifications > Exceptions > Autoriser > https://www.mytvtime.fr)");
                     }
                     return;
                 }
