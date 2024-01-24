@@ -511,7 +511,7 @@ $fa-font-path: "../webfonts";
     width: $size;
 }
 
-@mixin human-profile($bg-color: var(--gradient-ardoise-20-alpha-50), $color: var(--gradient-ardoise-80)) {
+@mixin human-profile($bg-color: var(--gradient-ardoise-20-alpha-50), $color: var(--gradient-ardoise-10)) {
     @include flex-col(center, flex-start);
     background-color: $bg-color;
     border-radius: .5rem;
