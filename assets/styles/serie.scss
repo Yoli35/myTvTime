@@ -365,6 +365,7 @@
                         font-weight: 300;
                         gap: 1rem;
                         height: calc(var(--serie-lg-height) - 2rem);
+                        padding-block-start: 1rem;
                         width: var(--serie-lg-poster-width);
 
                         > div:nth-child(2) {
@@ -4389,7 +4390,7 @@
                         }
 
                         .network-list {
-                            @include flex-col();
+                            @include flex-row();
                             position: absolute;
                             right: -.5rem;
                             top: 0;

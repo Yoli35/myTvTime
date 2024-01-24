@@ -92,7 +92,7 @@ class SerieController extends AbstractController
     }
 
     #[Route('/', name: 'app_series_index', methods: ['GET'])]
-    public function index(Request $request, SettingsRepository $settingsRepository): Response
+    public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -109,58 +109,36 @@ class SerieController extends AbstractController
 
         list($perPage, $sort, $order) = $this->cookies($request, $backFromDetail, $settingsChanged, $perPage, $sort, $order);
 
-        if ($sort == 'modifiedAt') {
-            $lastModifiedSerieViewings = $this->serieViewingRepository->findBy(['user' => $user], ['modifiedAt' => $order], $perPage, $perPage * ($page - 1));
-            $results = array_map(function ($serieViewing) {
-                return $serieViewing->getSerie();
-            }, $lastModifiedSerieViewings);
-        } else {
-            $results = $serieRepository->findAllSeries($user->getId(), $page, $perPage, $sort, $order);
-        }
-
-        // Liste des séries ajoutées par l'utilisateur pour le menu de recherche
-        $list = $serieRepository->listUserSeries($user->getId());
-        $list = array_map(function ($serie) {
-            $newSerie = [];
-            $newSerie['id'] = $serie['id'];
-            $newSerie['name'] = $serie['name'];
-            $newSerie['original'] = $serie['original'];
-            $newSerie['date'] = $serie['first_date_air'] ? $serie['first_date_air']->format('Y-m-d') : null;
-            return $newSerie;
-        }, $list);
-        $totalResults = count($list);
-
         $imageConfig = $this->imageConfiguration->getConfig();
-        $series = $totalResults ? $this->getSeriesViews($user, $results, $imageConfig, $request->getLocale()) : null;
+        $sqlResults = $this->serieRepository->userSeries($user->getId(), $request->getLocale(), $sort, $order, ($page - 1) * $perPage, $perPage);
+        $sqlResultIds = array_map(function ($result) {
+            return $result['id'];
+        }, $sqlResults);
+        $sqlResultsNetworks = $this->serieRepository->userSeriesNetworks($sqlResultIds);
+        $sqlResults = array_map(function ($result) use ($sqlResultsNetworks, $imageConfig) {
+            $result['networks'] = array_filter($sqlResultsNetworks, function ($network) use ($result) {
+                return $network['serie_id'] == $result['id'];
+            });
 
-        $leafSettings = $settingsRepository->findOneBy(["user" => $user, "name" => "leaf"]);
-        if ($leafSettings == null) {
-            $leafSettings = new Settings();
-            $leafSettings->setUser($user);
-            $leafSettings->setName("leaf");
-            $leafSettings->setData([
-                ["data" => "30", "name" => "number", "type" => "range"],
-                ["data" => ["30", "80"], "name" => "life-length", "type" => "interval"],
-                ["data" => "180", "name" => "initial-angle", "type" => "range"],
-                ["data" => "16", "name" => "turn-per-minute", "type" => "range"],
-                ["data" => ["25", "200"], "name" => "scale", "type" => "interval"]
-            ]);
-            $settingsRepository->save($leafSettings, true);
+            $this->savePoster($result['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+            return $result;
+        }, $sqlResults);
+
+        $totalResults = $this->serieViewingRepository->userSeriesCount($user->getId());
+
+        $series = $sqlResults;
+        if ($sqlResults) {
+            $series = array_map(function($serie) use ($user) {
+                return $this->isSerieAiringSoon($serie, $user);
+            }, $sqlResults);
         }
+        $numbers = $serieRepository->numbers($user->getId())[0];
 
-        if ($series) {
-            $now = $this->dateService->newDateImmutable('now', $user->getTimezone());
-
-            foreach ($series as &$serie) {
-                $serie = $this->isSerieAiringSoon($serie, $now);
-            }
-        }
         $history = $this->getHistory($user, $request->getLocale());
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
-            'numbers' => $serieRepository->numbers($user->getId())[0],
-            'seriesList' => $list,
+            'numbers' => $numbers,
             'countries' => $this->getCountries(),
             'history' => $history,
             'historyPerPage' => 40,
@@ -175,7 +153,6 @@ class SerieController extends AbstractController
                 'order' => $order],
             'user' => $user,
             'quotes' => (new QuoteService)->getRandomQuotes(),
-            'leafSettings' => $leafSettings,
             'breadcrumb' => $this->breadcrumb(self::MY_SERIES),
             'from' => self::MY_SERIES,
             'imageConfig' => $imageConfig,
@@ -1044,7 +1021,7 @@ class SerieController extends AbstractController
         return [$perPage, $sort, $order];
     }
 
-    public function isSerieAiringSoon($serie, $now): array
+    public function isSerieAiringSoon($serie, $user): array
     {
         if ($serie['status'] == 'In Production' || $serie['status'] == 'Planned') {
             $serie['prodStatus'] = $this->translator->trans($serie['status']);
@@ -1053,75 +1030,53 @@ class SerieController extends AbstractController
         }
         $serie['today'] = false;
         $serie['tomorrow'] = false;
-        if ($serie['viewing']->isSerieCompleted()) {
+        if ($serie['serieCompleted']) {
             return $serie;
         }
-        $viewing = $serie['viewing'];
-        $findIt = false;
-        /** @var SerieViewing $viewing */
-        foreach ($viewing->getSeasons() as $season) {
-            if ($season->isSeasonCompleted() || $season->getSeasonNumber() == 0) {
-                continue;
-            }
-            foreach ($season->getEpisodes() as $episode) {
-                if ($episode->getViewedAt()) {
-                    continue;
-                }
-                if ($episode->getAirDate()) {
-                    $date = $episode->getAirDate();
+        $now = $this->dateService->newDateImmutable('now', $user->getTimezone());
+        if ($serie['airDate']) {
+            $date = $this->dateService->newDateImmutable($serie['airDate'], $user->getTimezone());
 
-                    if ($viewing->isTimeShifted()) {
-                        $date = $date->modify('+1 day');
-                    }
-                    $episodeDiff = date_diff($now, $date);
-                    if (!$findIt) {
-                        if ($episodeDiff->days == 0) {
-                            $serie['today'] = true;
-                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                            $findIt = true;
-                        }
-                    }
-                    if (!$findIt) {
-                        if ($episodeDiff->days) {
-                            if ($episodeDiff->invert) {
-                                $serie['passed'] = $episode->getAirDate()->format("m/d/Y");
-                                if ($episodeDiff->y) {
-                                    $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
+            if ($serie['isTimeShifted']) {
+                $date = $date->modify('+1 day');
+            }
+            $episodeDiff = date_diff($now, $date);
+            if ($episodeDiff->days == 0) {
+                $serie['today'] = true;
+                $serie['nextEpisode'] = sprintf("S%02dE%02d", $serie['seasonNumber'], $serie['episodeNumber']);
+            }
+            if ($episodeDiff->days) {
+                if ($episodeDiff->invert) {
+                    $serie['passed'] = $date->format("m/d/Y");
+                    if ($episodeDiff->y) {
+                        $serie['passedText'] = $this->translator->trans("available since") . " " . $episodeDiff->y . " " . $this->translator->trans($episodeDiff->y > 1 ? "years" : "year");
+                    } else {
+                        if ($episodeDiff->m) {
+                            $serie['passedText'] = $this->translator->trans("available since") . " " . ($episodeDiff->m + +($episodeDiff->d > 20 ? 1 : 0)) . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
+                        } else {
+                            if ($episodeDiff->d) {
+                                if ($episodeDiff->d == 1) {
+                                    $serie['passedText'] = $this->translator->trans("available yesterday");
                                 } else {
-                                    if ($episodeDiff->m) {
-                                        $serie['passedText'] = $this->translator->trans("available since") . " " . ($episodeDiff->m + +($episodeDiff->d > 20 ? 1 : 0)) . " " . $this->translator->trans($episodeDiff->m > 1 ? "months" : "month");
-                                    } else {
-                                        if ($episodeDiff->d) {
-                                            if ($episodeDiff->d == 1) {
-                                                $serie['passedText'] = $this->translator->trans("available yesterday");
-                                            } else {
-                                                $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days]);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                if ($episodeDiff->days == 1) {
-                                    $serie['tomorrow'] = true;
-                                } else {
-                                    $serie['next'] = $date->format("m/d/Y");
-                                    $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days]);
-                                    $serie['nextEpisodeDays'] = $episodeDiff->days;
+                                    $serie['passedText'] = $this->translator->trans("available.since", ['%days%' => $episodeDiff->days]);
                                 }
                             }
-                            $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                            $findIt = true;
                         }
                     }
-                } else { // Nouvelle saison et nouvel épisode sans date de diffusion
-                    $findIt = true;
-                    $serie['nextEpisode'] = sprintf("S%02dE%02d", $episode->getSeason()->getSeasonNumber(), $episode->getEpisodeNumber());
-                    $serie['nextEpisodeNoDate'] = true;
+                } else {
+                    if ($episodeDiff->days == 1) {
+                        $serie['tomorrow'] = true;
+                    } else {
+                        $serie['next'] = $date->format("m/d/Y");
+                        $serie['nextText'] = $this->translator->trans("available.next", ['%days%' => $episodeDiff->days]);
+                        $serie['nextEpisodeDays'] = $episodeDiff->days;
+                    }
                 }
-                if ($findIt) {
-                    break;
-                }
+                $serie['nextEpisode'] = sprintf("S%02dE%02d", $serie['seasonNumber'], $serie['episodeNumber']);
             }
+        } else { // Nouvelle saison et nouvel épisode sans date de diffusion
+            $serie['nextEpisode'] = sprintf("S%02dE%02d", $serie['seasonNumber'], $serie['episodeNumber']);
+            $serie['nextEpisodeNoDate'] = true;
         }
 
         return $serie;

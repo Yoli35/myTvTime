@@ -266,6 +266,7 @@ input[type="number"],
 input[type="search"],
 input[type="text"] {
     appearance: unset;
+    background-color: var(--gradient-ardoise-80);
     border: none;
     border-radius: .25em;
     font-size: 1em;

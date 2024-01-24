@@ -168,9 +168,7 @@
         "per_page": {{ pages.per_page }},
         "order_by": "{{ pages.order_by }}",
         "order": "{{ pages.order }}",
-        "from": "{{ from }}",
-        "leaf_settings": {{ leafSettings.data|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
-        "series_list": {{ seriesList|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+        "from": "{{ from }}"
         }
     </div>
 {% endblock %}

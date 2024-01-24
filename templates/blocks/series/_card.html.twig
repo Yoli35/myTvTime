@@ -12,7 +12,7 @@
 
         </div>
         <div class="infos">
-            <div>{{ serie.localized_name ?? serie.name }}</div>
+            <div>{{ serie.name }}{% if serie.localizedName %} - {{ serie.localizedName }}{% endif %}</div>
             <div>{{ 'First Air at'|trans }} : {{ serie.firstDateAir ? serie.firstDateAir|format_date() : (serie.upcomingDateYear ? ((serie.upcomingDateMonth ? (serie.upcomingDateMonth ~ '/'):'') ~ serie.upcomingDateYear):'') }}</div>
             <div>{{ 'Added at'|trans }} : {{ serie.createdAt ? serie.createdAt|format_date() : '' }}
                 — {{ 'Updated at'|trans }} : {{ serie.updatedAt ? serie.updatedAt|format_datetime() : '' }}</div>
@@ -35,11 +35,11 @@
         {% endif %}
         {% if from == 'my_series' or from == 'my_series_to_start' or from == 'my_series_to_end' %}
             <div class="status
-            {% if serie.viewing.viewedEpisodes == 0 %} start-watching{% endif %}
-            {% if serie.viewing.serieCompleted and  serie.status in ["Returning Series"] %} more-to-come{% endif %}
-            {% if serie.viewing.serieCompleted and  serie.status in ["Ended","Canceled"] %} that-s-all{% endif %}">
+            {% if serie.viewedEpisodes == 0 %} start-watching{% endif %}
+            {% if serie.serieCompleted and  serie.status in ["Returning Series"] %} more-to-come{% endif %}
+            {% if serie.serieCompleted and  serie.status in ["Ended","Canceled"] %} that-s-all{% endif %}">
                 {{ serie.status|trans }} —
-                {% if serie.viewing.serieCompleted %}
+                {% if serie.serieCompleted %}
                     {% if serie.status in ["Ended","Canceled"] %}
                         {{ 'That\'s all'|trans }}
                     {% endif %}
@@ -47,7 +47,7 @@
                         {{ 'More episodes to come'|trans }}
                     {% endif %}
                 {% else %}
-                    {% if serie.viewing.viewedEpisodes > 0 %}
+                    {% if serie.viewedEpisodes > 0 %}
                         {% if serie.nextEpisodeDays is defined %}
                             {{ 'Up to date!'|trans }}
                             {% if serie.nextEpisodeDays == 0 %}
@@ -60,7 +60,7 @@
                         {% elseif serie.nextEpisodeNoDate is defined %}
                             {{ 'Up to date!'|trans }} {{ 'No date for the moment'|trans }}
                         {% else %}
-                            {% set more = serie.numberOfEpisodes - serie.viewing.viewedEpisodes %}
+                            {% set more = serie.numberOfEpisodes - serie.viewedEpisodes %}
                             {{ more }} {{ (more > 1 ? 'episodes more':'episode more')|trans }}
                         {% endif %}
                     {% else %}

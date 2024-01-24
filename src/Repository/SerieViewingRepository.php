@@ -64,6 +64,18 @@ class SerieViewingRepository extends ServiceEntityRepository
 //            ->getResult();
 //    }
 
+    public function userSeriesCount($userId): int
+    {
+        $sql = "SELECT COUNT(*) "
+            . "FROM `serie_viewing` sv "
+            . "WHERE sv.`user_id`=" . $userId;
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchOne();
+    }
+
     public function getSeriesToStartV2(User $user, $locale, $perPage, $page): array
     {
         $sql = "SELECT "

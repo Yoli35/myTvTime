@@ -21,8 +21,6 @@ export class Series {
         this.order_by = globs.order_by;
         this.order = globs.order;
         this.from = globs.from;
-        this.leaf_settings = globs.leaf_settings;
-        this.series_list = globs.series_list;
 
         this.slideDuration = 6000;
         this.translateDuration = 3000;
