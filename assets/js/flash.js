@@ -63,5 +63,13 @@ window.addEventListener("DOMContentLoaded", () => {
             flash.classList.add("d-none");
         }, 500);
 
+
+        const flashMessagesDiv = document.querySelector(".flash-messages");
+        const closeAll = flashMessagesDiv.querySelector("#close-all-alerts");
+        if (closeAll) {
+            const flashes = flashMessagesDiv.querySelectorAll(".flash-message");
+            if (flashes.length < 2)
+                flashMessagesDiv.removeChild(closeAll);
+        }
     }
 })
