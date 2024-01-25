@@ -155,7 +155,7 @@ class SerieRepository extends ServiceEntityRepository
 
     public function userSeriesNetworks($seriesIds): array
     {
-       $sql = "SELECT s.`id` as serie_id, n.`name` as name, n.`logo_path` as logoPath, n.`origin_country` as originCountry "
+        $sql = "SELECT s.`id` as serie_id, n.`name` as name, n.`logo_path` as logoPath, n.`origin_country` as originCountry "
             . "FROM `serie` s "
             . "INNER JOIN `serie_networks` sn ON sn.`serie_id`=s.`id` "
             . "INNER JOIN `networks` n ON n.`id`=sn.`networks_id` "
@@ -279,10 +279,13 @@ class SerieRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getCountries(): array
+    public function getCountries($userId): array
     {
-        $sql = "SELECT t0.`origin_country` AS `origin_country` "
-            . "FROM `serie` t0 ";
+        $sql = "SELECT s.`origin_country` AS `origin_country` "
+            . "FROM `serie` s "
+            . "INNER JOIN `serie_viewing` sv ON sv.`serie_id`=s.`id` AND sv.`user_id`=" . $userId . " "
+            . "GROUP BY s.`origin_country` "
+            . "ORDER BY s.`origin_country` ASC";
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

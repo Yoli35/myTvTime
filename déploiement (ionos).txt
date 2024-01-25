@@ -1,0 +1,43 @@
+Déploiement :
+
+- composer u en mode dev afin de vérifier s'il y a des mises à jour avant de le faire en mode prod.
+
+- modifier le fichier .env
+	APP_ENV=dev  -> APP_ENV=prod
+	commenter DATABASE_URL locale pour la remplacer par celle de prod
+
+- composer install --no-dev --optimize-autoloader
+- yarn build
+
+- phpMyAdmin local : exporter la base
+
+- éventuellement, éditer le fichier index.html situé à la racine sur le serveur ionos
+
+- connecter l'espace web à la racine, et attendre que le site affiche bien la page de maintenance
+
+- mettre à jour la base distante
+
+- sur le serveur, déplacer tous les dossiers et fichiers (sauf logs et index.html) à la racine vers le dossier temp
+
+- en local, vider le dossier var/cache/dev/ : cd var/cache/dev puis rm -R * puis cd ../../..
+
+- en local, remettre à zéro le fichier dev.log : echo '' > var/log/dev.log
+
+- en local, compresser tous les dossiers et fichiers sauf :
+	docker-compose.override.yml
+	docker-compose.yml
+	migrations
+	tests
+	
+- téléverser l'archive obtenue sur le serveur puis la supprimer (en local)
+
+- depuis un terminal, se connecter en ssh puis 
+	décompresser l'archive (unzip archive.zip)
+	la supprimer (rm archive.zip)
+	aller dans le dossier temp et compresser son contenu et le supprimer
+	
+- si l'archive a été créée sur macos, il est possible qu'un dossier __MACOS ait été créé à la racine, le supprimer
+
+- connecter l'espace web à /public
+
+- en local, .env -> dev, composer u, restart yarn watch

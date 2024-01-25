@@ -2,7 +2,16 @@
 
 {% block title %}myTvTime ▶ ︎{{ movie.title }}{% endblock %}
 {% block body %}
-    <div class="container-fluid">
+    <script>
+        const bd = '{{ movie.backdrop_path ?? movie.poster_path }}';
+        const body = document.querySelector("body");
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
+        body.style.backgroundRepeat = "no-repeat";
+        body.style.backgroundAttachment = "fixed";
+        body.style.backgroundImage = "url(" + bd + ")";
+    </script>
+    <div class="container-fluid backgroundImageOverlay">
 
         {{ include('blocks/_mainMenu.html.twig') }}
 
@@ -19,7 +28,7 @@
             </div>
             <div class="backdrop">
                 {% if movie.backdrop_path %}
-                    <img src="{{ movie.backdrop_path }}" alt="{{ movie.title }}" loading="lazy" loading="lazy">
+                    <img src="{{ movie.backdrop_path }}" alt="{{ movie.title }}" loading="lazy">
                 {% else %}
                     <div class="no-backdrop">
                         <div class="label">{{ 'No backdrop'|trans }}</div>

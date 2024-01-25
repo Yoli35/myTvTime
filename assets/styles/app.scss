@@ -174,7 +174,7 @@ body {
 .scroll-watcher {
     height: .5rem;
     position: fixed;
-    top:0;
+    top: 0;
     width: 100%;
     z-index: 1000;
     background-color: var(--gradient-orange-50);
@@ -185,7 +185,9 @@ body {
 }
 
 @keyframes scroll-watcher {
-    to { scale: 1 1; }
+    to {
+        scale: 1 1;
+    }
 }
 
 .todos {
@@ -425,7 +427,8 @@ body {
     }
 
     .flash-close-all {
-        align-items: center;background-color: var(--gradient-orange-50);
+        align-items: center;
+        background-color: var(--gradient-orange-50);
         border-color: var(--gradient-orange-70);
         border-radius: 50%;
         color: var(--gradient-orange-90);
@@ -757,7 +760,8 @@ main {
 }
 
 .backgroundImageOverlay {
-    -webkit-backdrop-filter: blur(32px) brightness(75%) saturate(50%);
+    -webkit-backdrop-filter: blur(32px) brightness(50%) saturate(75%);
+    backdrop-filter: blur(32px) brightness(50%) saturate(75%);
     height: 100%;
     padding: 1rem;
     width: 100%;

@@ -59,7 +59,7 @@
     "symfony/validator": "6.4.*",
     "symfony/web-link": "6.4.*",
     "symfony/webapp-meta": "^1.0",
-    "symfony/webpack-encore-bundle": "^1.16",
+    "symfony/webpack-encore-bundle": "^2.0",
     "symfony/yaml": "6.4.*",
     "symfonycasts/verify-email-bundle": "^1.10",
     "twig/cssinliner-extra": "3.*",

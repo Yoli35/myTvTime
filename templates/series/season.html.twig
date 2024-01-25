@@ -24,11 +24,18 @@
 {% endblock %}
 
 {% block body %}
+    <script>
+        const bd = '{{ serie.backdropPath }}';
+        const body = document.querySelector("body");
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
+        body.style.backgroundRepeat = "no-repeat";
+        body.style.backgroundAttachment = "fixed";
+        body.style.backgroundImage = "url(" + bd + ")";
+    </script>
     {{ include('blocks/_mainMenu.html.twig') }}
-    <div class="container-fluid">
-
+    <div class="container-fluid backgroundImageOverlay">
         {{ include('blocks/_nav.html.twig') }}
-
         <div class="serie-page">
             <div class="header">
                 <div class="backdrop" style="background-image: url('{{ serie.backdropPath }}')"></div>
@@ -322,9 +329,7 @@
             </main>
             {{ include('blocks/series/_watchProviders.html.twig') }}
         </div>
-
         {{ include('blocks/_pageFooter.html.twig') }}
-
     </div>
     <div class="season-data" style="display: none">
         {

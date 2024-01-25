@@ -1914,7 +1914,7 @@
 
                 .cast {
                     @include flex-col(flex-start, flex-start);
-                    background-color: var(--gradient-ardoise-80-alpha-50);
+                    //background-color: var(--gradient-ardoise-80-alpha-50);
                     border-radius: .5rem;
                     overflow-x: auto;
                     padding: 0 1rem 1rem 1rem;
@@ -1992,7 +1992,7 @@
 
                 .seasons, .episodes {
                     @include flex-col();
-                    background-color: var(--gradient-ardoise-80-alpha-50);
+                    //background-color: var(--gradient-ardoise-80-alpha-50);
                     gap: 1rem;
                     width: 100%;
 
@@ -2750,7 +2750,8 @@
             border-radius: .5rem;
             color: var(--gradient-ardoise-10);
             //min-height: 50vh;
-            padding: 0 1rem;
+            padding-block-end: 1rem;
+            padding-inline: 1rem;
             width: 100%;
 
             .favorite, .timeShifted {
@@ -2856,7 +2857,7 @@
                     }
 
                     .keywords {
-                        @include flex-row(flex-start, flex-start);
+                        @include flex-row(center, center);
                         flex-wrap: wrap;
 
                         .keyword {

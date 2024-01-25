@@ -139,7 +139,7 @@ class SerieController extends AbstractController
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'numbers' => $numbers,
-            'countries' => $this->getCountries(),
+            'countries' => $this->getCountries($user->getId()),
             'history' => $history,
             'historyPerPage' => 40,
             'pages' => [
@@ -592,7 +592,7 @@ class SerieController extends AbstractController
             'series' => $series,
             'countryCode' => $countryCode,
             'countryName' => $countryName,
-            'countries' => $this->getCountries(),
+            'countries' => $this->getCountries($user->getId()),
             'breadcrumb' => [
                 [
                     'name' => $this->translator->trans('My series'),
@@ -975,9 +975,9 @@ class SerieController extends AbstractController
         return $this->json($settings->getData());
     }
 
-    public function getCountries(): array
+    public function getCountries($userId): array
     {
-        $results = $this->serieRepository->getCountries();
+        $results = $this->serieRepository->getCountries($userId);
         $arr = [];
         foreach ($results as $result) {
             $countries = json_decode($result['origin_country'], true);
@@ -1286,10 +1286,10 @@ class SerieController extends AbstractController
             return $serie;
         }, $results);
 
-        $now = new DateTime();
-        $now->setTime(0, 0);
+        /** @var User $user */
+        $user = $this->getUser();
         foreach ($seriesToBe as &$serie) {
-            $serie = $this->isSerieAiringSoon($serie, $now);
+            $serie = $this->isSerieAiringSoon($serie, $user);
         }
 //        dump([
 //            'seriesToBeV2' => $seriesToBe,
@@ -1408,6 +1408,7 @@ class SerieController extends AbstractController
         $serie['id'] = $result['serie_id']; //getId();
         $serie['name'] = $result['name']; //getName();
         $serie['localized_name'] = $result['localized_name']; //getLocalizedName()->getName();
+        $serie['localizedName'] = $result['localized_name']; //getLocalizedName()->getName();
         $serie['posterPath'] = $result['poster_path']; //getPosterPath();
         $serie['backdropPath'] = $result['backdrop_path']; //getBackdropPath();
         $serie['serieId'] = $result['tmdb_id']; //getSerieId();
@@ -1421,6 +1422,32 @@ class SerieController extends AbstractController
         $serie['originalName'] = $result['original_name']; //getOriginalName();
         $serie['upcomingDateYear'] = $result['upcoming_date_year']; //getUpcomingDateYear();
         $serie['upcomingDateMonth'] = $result['upcoming_date_month']; //getUpcomingDateMonth();
+
+        if (key_exists('serie_completed', $result) && $result['serie_completed']) {
+            $serie['serieCompleted'] = true;
+        } else {
+            $serie['serieCompleted'] = false;
+        }
+        if (key_exists('time_shifted', $result) && $result['time_shifted']) {
+            $serie['isTimeShifted'] = true;
+        } else {
+            $serie['isTimeShifted'] = false;
+        }
+        if (key_exists('airDate', $result)) {
+            $serie['airDate'] = $result['airDate'];
+        }
+        if (key_exists('seasonNumber', $result)) {
+            $serie['seasonNumber'] = $result['seasonNumber'];
+        }
+        if (key_exists('episodeNumber', $result)) {
+            $serie['episodeNumber'] = $result['episodeNumber'];
+        }
+        if (key_exists('viewed_episodes', $result)) {
+            $serie['viewedEpisodes'] = $result['viewed_episodes'];
+        }
+        if (key_exists('progress', $result)) {
+            $serie['progress'] = $result['progress'];
+        }
 
         $serie['favorite'] = $result['favorite'];
 

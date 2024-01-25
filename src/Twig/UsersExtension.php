@@ -201,7 +201,7 @@ class UsersExtension extends AbstractExtension
     public function userAlarms(User $user): Collection
     {
         $alarms = $user->getAlarms();
-        $alarms->add($this->newAlarm($user));
+//        $alarms->add($this->newAlarm($user));
         return $alarms;
     }
 
