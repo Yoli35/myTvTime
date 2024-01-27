@@ -61,15 +61,15 @@ window.addEventListener("DOMContentLoaded", () => {
         }, 0);
         setTimeout(()=>{
             flash.classList.add("d-none");
+            flash.parentElement.removeChild(flash);
+
+            const flashMessagesDiv = document.querySelector(".flash-messages");
+            const closeAll = flashMessagesDiv.querySelector("#close-all-alerts");
+            if (closeAll) {
+                const flashes = flashMessagesDiv.querySelectorAll(".flash-message");
+                if (flashes.length < 2)
+                    flashMessagesDiv.removeChild(closeAll);
+            }
         }, 500);
-
-
-        const flashMessagesDiv = document.querySelector(".flash-messages");
-        const closeAll = flashMessagesDiv.querySelector("#close-all-alerts");
-        if (closeAll) {
-            const flashes = flashMessagesDiv.querySelectorAll(".flash-message");
-            if (flashes.length < 2)
-                flashMessagesDiv.removeChild(closeAll);
-        }
     }
 })
