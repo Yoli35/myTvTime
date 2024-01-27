@@ -22,6 +22,9 @@ class UserYVideo
     #[ORM\Column]
     private ?bool $hidden = null;
 
+    #[ORM\ManyToOne(inversedBy: 'userYVideos')]
+    private ?YoutubeVideoSeries $series = null;
+
     public function __construct()
     {
     }
@@ -63,6 +66,18 @@ class UserYVideo
     public function setHidden(bool $hidden): static
     {
         $this->hidden = $hidden;
+
+        return $this;
+    }
+
+    public function getSeries(): ?YoutubeVideoSeries
+    {
+        return $this->series;
+    }
+
+    public function setSeries(?YoutubeVideoSeries $series): static
+    {
+        $this->series = $series;
 
         return $this;
     }

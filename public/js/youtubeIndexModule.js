@@ -22,6 +22,7 @@ export class YoutubeIndexModule {
         this.ytOrder = document.getElementById('order');
         this.ytReload = document.getElementById('reload');
         this.moreButton = document.getElementById('more');
+        this.searchOnYt = document.querySelector('.search-on-yt');
         this.totalResults = 0;
         this.txt = {
             'published_at': {'fr': 'Publiée le', 'en': 'Published at', 'de': 'Veröffentlicht am', 'es': 'Publicado en'},
@@ -42,6 +43,15 @@ export class YoutubeIndexModule {
         this.ytOrder.addEventListener("change", this.saveOrderState.bind(this));
         this.ytReload.addEventListener("click", this.loadVideos.bind(this));
         this.moreButton?.addEventListener('click', this.loadVideos.bind(this));
+        this.searchOnYt?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            navigator.clipboard
+                .readText()
+                .then((clipText) => {
+                    window.open('https://www.youtube.com/results?search_query=' + clipText, '_blank');
+                });
+        });
 
         document.addEventListener("visibilitychange", this.focusLink.bind(this));
     }
