@@ -16,33 +16,71 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class YoutubeVideoSeriesRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, YoutubeVideoSeries::class);
     }
 
-//    /**
-//     * @return YoutubeVideoSeries[] Returns an array of YoutubeVideoSeries objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('y')
-//            ->andWhere('y.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('y.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(YoutubeVideoSeries $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
 
-//    public function findOneBySomeField($value): ?YoutubeVideoSeries
-//    {
-//        return $this->createQueryBuilder('y')
-//            ->andWhere('y.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
+    public function findVideosBySeries(int $userId, YoutubeVideoSeries $series): array
+    {
+        $format = $series->getFormat();
+        $matches = $series->getMatches();
+
+        dump([
+            'series' => $series,
+            'matches' => $matches,
+        ]);
+
+        $sql = "SELECT yv.`id` as id, yv.`link` as link, yv.`title` as title, "
+            . "yv.thumbnail_high_path as thumbnailHighPath, yv.published_at as publishedAt, "
+            . "yv.content_duration as contentDuration, "
+            . "uyv.hidden as hidden, "
+            . "yc.youtube_id as channelYoutubeId, yc.thumbnail_default_url as channelThumbnailDefaultUrl, "
+            . "yc.title as channelTitle, yc.custom_url as channelCustomUrl";
+        if ($series->isRegex()) {
+            if (count($matches)) {
+                foreach ($matches as $match) {
+                    $sql .= ", CAST(REGEXP_SUBSTR(yv.`title`, '" . $match['expr'] . "', " . $match['position'] . ", " . $match['occurrence'] . ") AS " . $match['type'] . ") as " . $match['name'] . " ";
+                }
+            }
+            $sql .= " FROM `youtube_video_series` yvs "
+                . "INNER JOIN `user_yvideo` uyv ON uyv.`series_id`=yvs.`id` AND uyv.`user_id`=" . $userId . " "
+                . "INNER JOIN `youtube_video` yv ON yv.`id`=uyv.`video_id` "
+                . "LEFT JOIN `youtube_channel` yc ON yc.`id`=yv.`channel_id` "
+                . "WHERE yv.`title` REGEXP '" . $format . "' "
+                . "ORDER BY ";
+            foreach ($matches as $match) {
+                $sql .= $match['name'] . " ASC, ";
+            }
+            $sql .= "yv.published_at ASC";
+        } else {
+            $sql .= " FROM `youtube_video` yv"
+                . "LEFT JOIN 'youtube_channel' yc ON yc.`id`=yv.`channel_id` "
+                . "WHERE yv.`title` LIKE '%" . $series->getFormat() . "%'"
+                . "ORDER BY yv.published_at ASC";
+        }
+
+        dump([
+            'sql' => $sql,
+        ]);
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
 }

@@ -7,12 +7,14 @@ use App\Entity\User;
 use App\Entity\UserYVideo;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
+use App\Entity\YoutubeVideoSeries;
 use App\Entity\YoutubeVideoTag;
 use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserYVideoRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubeVideoRepository;
+use App\Repository\YoutubeVideoSeriesRepository;
 use App\Repository\YoutubeVideoTagRepository;
 use App\Service\DateService;
 use DateInterval;
@@ -41,14 +43,15 @@ class YoutubeController extends AbstractController
      * @throws Exception
      */
     public function __construct(
-        private readonly DateService               $dateService,
-        private readonly SettingsRepository        $settingsRepository,
-        private readonly TranslatorInterface       $translator,
-        private readonly UserRepository            $userRepository,
-        private readonly UserYVideoRepository      $userYVideoRepository,
-        private readonly YoutubeChannelRepository  $channelRepository,
-        private readonly YoutubeVideoRepository    $videoRepository,
-        private readonly YoutubeVideoTagRepository $videoTagRepository,
+        private readonly DateService                  $dateService,
+        private readonly SettingsRepository           $settingsRepository,
+        private readonly TranslatorInterface          $translator,
+        private readonly UserRepository               $userRepository,
+        private readonly UserYVideoRepository         $userYVideoRepository,
+        private readonly YoutubeChannelRepository     $channelRepository,
+        private readonly YoutubeVideoRepository       $videoRepository,
+        private readonly YoutubeVideoSeriesRepository $videoSeriesRepository,
+        private readonly YoutubeVideoTagRepository    $videoTagRepository,
     )
     {
         $client = new Google_Client();
@@ -98,8 +101,11 @@ class YoutubeController extends AbstractController
         $time2Human = $this->getTime2human($totalRuntime/*, $request->getLocale()*/);
         $preview = $this->getPreview();
 
+        $list = $this->userYVideoRepository->getUserVideoSeries($user->getId());
+
         return $this->render('youtube/index.html.twig', [
             'videos' => $this->getVideos($vids),
+            'list' => $list,
             'videoCount' => $videoCount,
             'totalRuntime' => $totalRuntime,
             'firstView' => $firstView,
@@ -341,7 +347,7 @@ class YoutubeController extends AbstractController
 //            ]);
             if (!in_array($newTagId, $videoTagIds)) {
                 $youtubeVideo->addTag($newTag);
-                $this->videoRepository->add($youtubeVideo, flush:true);
+                $this->videoRepository->add($youtubeVideo, flush: true);
                 $tagAdded = true;
             }
         } else {
@@ -660,6 +666,45 @@ class YoutubeController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/youtube/video/series/{id}', name: 'app_youtube_video_series', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function loadVideoSeries(Request $request, YoutubeVideoSeries $series): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $videos = $this->videoSeriesRepository->findVideosBySeries($user->getId(), $series);
+        $matches = $series->getMatches();
+        $videos = array_map(function ($video) use ($matches){
+            $v = [
+                'id' => $video['id'],
+                'link' => $video['link'],
+                'title' => $video['title'],
+                'thumbnailPath' => $video['thumbnailHighPath'],
+                'publishedAt' => $video['publishedAt'],
+//                'tags' => array_map(function ($tag) {
+//                    return [
+//                        'id' => $tag['id'],
+//                        'label' => $tag['label'],
+//                    ];
+//                }, $video['tags']),
+                'contentDuration' => $this->formatDuration($video['contentDuration']),
+                'hidden' => $video['hidden'],
+                'channel' => [
+                    'title' => $video['channelTitle'],
+                    'customUrl' => $video['channelCustomUrl'],
+                    'youtubeId' => $video['channelYoutubeId'],
+                    'thumbnailDefaultUrl' => $video['channelThumbnailDefaultUrl'],
+                ],
+            ];
+            $v['matches'] = [];
+            foreach ($matches as $match) {
+                $v['matches'][] = ['name' =>$match['name'], 'value' => $video[$match['name']]];
+            }
+            return $v;
+        }, $videos);
+        dump($videos);
+        return $this->json(['videos' => $videos]);
+    }
+
     public function newYVideo(User $user, YoutubeVideo $video): void
     {
         $ytvideo = new UserYVideo();
@@ -745,11 +790,13 @@ class YoutubeController extends AbstractController
             } catch (\Exception) {
                 $past = $now;
             }
+            // "5156720 secondes" → "5 156 720 secondes"
+            $secondesStr = number_format($secondes, 0, '', ' ');
 
             $diff = $now->diff($past);
             // diff string with years, months, days, hours, minutes, seconds
             $runtimeString = $this->translator->trans('Time spent watching Youtube') . " : ";
-            $runtimeString .= $secondes . ' ' . $this->translator->trans('seconds i.e.') . " ";
+            $runtimeString .= $secondesStr . ' ' . $this->translator->trans('seconds i.e.') . " ";
             $runtimeString .= $diff->days ? $diff->days . ' ' . ($diff->days > 1 ? $this->translator->trans('days') : $this->translator->trans('day')) . ($diff->y + $diff->m + $diff->d + $diff->h + $diff->i + $diff->s ? (', ' . $this->translator->trans('or') . ' ') : '') : '';
             $runtimeString .= $diff->y ? ($diff->y . ' ' . ($diff->y > 1 ? $this->translator->trans('years') : $this->translator->trans('year')) . ($diff->m + $diff->d + $diff->h + $diff->i + $diff->s ? ', ' : '')) : '';
             $runtimeString .= $diff->m ? ($diff->m . ' ' . ($diff->m > 1 ? $this->translator->trans('months') : $this->translator->trans('month')) . ($diff->d + $diff->h + $diff->i + $diff->s ? ', ' : '')) : '';

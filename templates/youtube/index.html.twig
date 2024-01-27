@@ -58,7 +58,7 @@
                                     <label for="page">
                                         <input type="checkbox" id="page" name="page"{{ settings.page ? " checked": "" }}>
                                         {{ 'Go to the video page'|trans }}
-{#                                        <div><i class="fa-solid fa-check"></i></div>#}
+                                        {#                                        <div><i class="fa-solid fa-check"></i></div> #}
                                     </label>
                                 </div>
                                 <div class="sort">
@@ -119,31 +119,46 @@
                     </script>
                 </div>
 
-                <div id="result" class="result">
-                    {% if videos|length %}
-                        {% for video in videos %}
-                            {{ include('blocks/youtube/_video.html.twig', {item: video}) }}
-                        {% endfor %}
-                    {% if videoCount > (videos|length) %}
-                        <div id="see-more" class="see-more">
-                            <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
+                <div class="user-content">
+                    {% if list|length %}
+                        <div class="video-series-list">
+                            {% for item in list %}
+                                <div class="video-series-item" data-id="{{ item.id }}">
+                                    <div class="header">
+                                        <div class="title">{{ item.title }}</div>
+                                        <div class="count"></div>
+                                    </div>
+                                    <div class="videos"></div>
+                                </div>
+                            {% endfor %}
                         </div>
                     {% endif %}
-                    {% else %}
-                        <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
-                        <script>
-                            window.addEventListener("DOMContentLoaded", () => {
-                                const videoCount = {{ count }};
-                                if (!videoCount) {
-                                    document.querySelector(".tag-button").style.display = "none";
-                                    document.querySelector(".menu-item.youtube-video-search").style.display = "none";
-                                }
-                                document.querySelector(".icon").addEventListener("click", () => {
-                                    document.querySelector(".content").classList.toggle("minimise");
+                    <div id="result" class="result">
+                        {% if videos|length %}
+                            {% for video in videos %}
+                                {{ include('blocks/youtube/_video.html.twig', {item: video}) }}
+                            {% endfor %}
+                        {% if videoCount > (videos|length) %}
+                            <div id="see-more" class="see-more">
+                                <div id="more" class="btn btn-sm btn-secondary">{{ 'See more results'|trans }}</div>
+                            </div>
+                        {% endif %}
+                        {% else %}
+                            <div class="yt-videos-none">{{ 'No Videos at this Time'|trans }}</div>
+                            <script>
+                                window.addEventListener("DOMContentLoaded", () => {
+                                    const videoCount = {{ count }};
+                                    if (!videoCount) {
+                                        document.querySelector(".tag-button").style.display = "none";
+                                        document.querySelector(".menu-item.youtube-video-search").style.display = "none";
+                                    }
+                                    document.querySelector(".icon").addEventListener("click", () => {
+                                        document.querySelector(".content").classList.toggle("minimise");
+                                    });
                                 });
-                            });
-                        </script>
-                    {% endif %}
+                            </script>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
@@ -154,11 +169,12 @@
     </div>
     <div id="global-data" style="display: none">
         {
-            "userId": {{ app.user.id }}, "locale": "{{ locale }}",
-            "app_youtube_video": "{{ path('app_youtube_video', {id: 0})|slice(0, -1) }}",
-            "app_youtube_more": "{{ path('app_youtube_more') }}",
-            "app_youtube_add_video": "{{ path('app_youtube_add_video') }}",
-            "youtube_settings_save": "{{ path('youtube_settings_save') }}"
+        "userId": {{ app.user.id }}, "locale": "{{ locale }}",
+        "app_youtube_video": "{{ path('app_youtube_video', {id: 0})|slice(0, -1) }}",
+        "app_youtube_more": "{{ path('app_youtube_more') }}",
+        "app_youtube_add_video": "{{ path('app_youtube_add_video') }}",
+        "youtube_settings_save": "{{ path('youtube_settings_save') }}",
+        "app_youtube_video_series": "{{ path('app_youtube_video_series', {id: 0})|slice(0, -1) }}"
         }
     </div>
 {% endblock %}

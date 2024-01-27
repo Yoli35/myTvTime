@@ -10,6 +10,7 @@ export class YoutubeIndexModule {
         this.app_youtube_more = globs.app_youtube_more;
         this.app_youtube_add_video = globs.app_youtube_add_video;
         this.youtube_settings_save = globs.youtube_settings_save;
+        this.app_youtube_video_series = globs.app_youtube_video_series;
         this.userId = globs.userId;
         this.locale = globs.locale;
         this.toolTips = new ToolTips();
@@ -54,6 +55,16 @@ export class YoutubeIndexModule {
         });
 
         document.addEventListener("visibilitychange", this.focusLink.bind(this));
+        this.focusLink();
+
+        const seriesList = document.querySelectorAll('.video-series-item');
+        seriesList.forEach(series => {
+            series.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.loadSeries(series.getAttribute('data-id'));
+            });
+        });
     }
 
 
@@ -263,6 +274,101 @@ export class YoutubeIndexModule {
             }, 0);
         }
         gThis.xhr.open("GET", this.youtube_settings_save + '?order=' + encodeURIComponent(order));
+        gThis.xhr.send();
+    }
+
+    loadSeries(id) {
+        const series = document.querySelector('.video-series-item[data-id="' + id + '"]');
+        if (series.classList.contains('loaded')) {
+            series.classList.toggle('open');
+            return;
+        }
+        gThis.xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            const videos = response['videos'];
+            const countDiv = series.querySelector('.count');
+            countDiv.innerText = videos.length;
+            const videosDiv = series.querySelector('.videos');
+            series.classList.add('open');
+
+            videos.forEach(video => {
+                console.log(video);
+                /*
+                    "id" => 3820
+                    "link" => "Pg7FP7Fdtt4"
+                    "title" => "[Eng Sub] Last Twilight ภาพนายไม่เคยลืม | EP.2 [1/4]"
+                    "thumbnailPath" => "https://i.ytimg.com/vi/Pg7FP7Fdtt4/hqdefault.jpg"
+                    "publishedAt" => "2023-11-17 13:37:09"
+                    "contentDuration" => "19:58"
+                    "hidden" => 0
+                    "channel" => array:4 [▼
+                        "title" => "GMMTV OFFICIAL\u{200B}\u{200B}"
+                        "customUrl" => "@gmmtv"
+                        "youtubeId" => "UC8BzJM6_VbZTdiNLD4R1jxQ"
+                        "thumbnailDefaultUrl" => "https://yt3.ggpht.com/l12SShLYzk1VBdqlIAoli3wPWq_G1X1XtE-6RgADf53cfkczlQ3zYQu2av-4hOYLLIgCf8KJag=s88-c-k-c0x00ffffff-no-rj"
+                    ]
+                    "matches" => array:2 [▼
+                         0 => array:2 [▼
+                             "name" => "episode"
+                             "value" => 2
+                         ]
+                         1 => array:2 [▼
+                             "name" => "part"
+                             "value" => 1
+                         ]
+                    ]
+                */
+                /*
+
+                    <div class="videos">
+                        {% for video in list.videos %}
+                            <div class="video">
+                                <a href="{{ path('app_youtube_video', {id: video.id}) }}">
+                                    <div class="thumbnail">
+                                        <img src="{{ video.thumbnailPath }}" alt="{{ video.title }}" loading="lazy">
+                                    </div>
+                                    <div class="title">{{ video.title }}</div>
+                                    {% for match in video.matches %}
+                                        <div class="match">{{ match.name|capitalize }} {{ match.value }}</div>
+                                    {% endfor %}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                 */
+                const videoDiv = document.createElement('div');
+                videoDiv.classList.add('video');
+                const a = document.createElement('a');
+                a.setAttribute('href', gThis.app_youtube_video + video.id);
+                const thumbnail = document.createElement('div');
+                thumbnail.classList.add('thumbnail');
+                const img = document.createElement('img');
+                img.setAttribute('src', video.thumbnailPath);
+                img.setAttribute('alt', video.title);
+                img.setAttribute('loading', 'lazy');
+                thumbnail.appendChild(img);
+                a.appendChild(thumbnail);
+                const title = document.createElement('div');
+                title.classList.add('title');
+                title.innerText = video.title;
+                a.appendChild(title);
+                const matches = document.createElement('div');
+                matches.classList.add('matches');
+                video.matches.forEach(match => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.classList.add('match');
+                    matchDiv.innerText = match.name + ' ' + match.value;
+                    matches.appendChild(matchDiv);
+                });
+                a.appendChild(matches);
+                videoDiv.appendChild(a);
+                videosDiv.appendChild(videoDiv);
+            });
+
+            series.classList.add('loaded');
+            series.classList.add('open');
+        }
+        gThis.xhr.open("GET", this.app_youtube_video_series + id);
         gThis.xhr.send();
     }
 

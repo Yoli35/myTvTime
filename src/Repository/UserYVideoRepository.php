@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserYVideoRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, UserYVideo::class);
     }
@@ -58,16 +58,17 @@ class UserYVideoRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByUserAndVideo($userId, $videoId): ?UserYVideo
+    public function getUserVideoSeries($userId): array
     {
-        return $this->createQueryBuilder('y')
-            ->innerJoin('y.user', 'u')
-            ->innerJoin('y.video', 'v')
-            ->where('u.id = :userId')
-            ->andWhere('v.id = :videoId')
-            ->setParameter('userId', $userId)
-            ->setParameter('videoId', $videoId)
-            ->getQuery()
-            ->getOneOrNullResult();
+        $sql = "SELECT yvs.id, yvs.title " /*, yvs.format, yvs.regex, yvs.matches*/
+            . "FROM user_yvideo uyv "
+            . "INNER JOIN youtube_video_series yvs ON yvs.id = uyv.series_id "
+            . "WHERE uyv.user_id=" . $userId . " AND uyv.series_id IS NOT NULL"
+            . " GROUP BY uyv.series_id";
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 }
