@@ -2,7 +2,7 @@
 
 .activity {
     @include flex-col(flex-start, center);
-    padding-top: 1em;
+    padding-block-start: 3rem;
 
     .header {
         @include animated-header("../images/activity-header.jpeg");

@@ -1923,7 +1923,7 @@
                     .list {
                         @include flex-row(stretch, flex-start);
                         gap: .5rem;
-                        margin-inline: auto;
+                        //margin-inline: auto;
                         overflow-x: auto;
 
                         a {
@@ -4489,10 +4489,9 @@
 
                 section {
                     .seasons, .episodes {
-                        border-radius: .5rem;
-                        padding: 1rem;
+                        padding: 0;
 
-                        a {
+                        .season-link {
                             .season, .episode {
                                 border-radius: .5rem;
 

@@ -748,6 +748,7 @@ main {
     background-color: transparent;
     margin-inline: auto;
     min-height: 100vh;
+    padding-block-start: 3rem;
     padding-inline: 0;
     width: 100%;
 }
@@ -1015,7 +1016,7 @@ nav.active {
     @include flex-row(center, space-around);
     background-color: var(--gradient-ardoise-75-alpha-25);
     height: 3rem;
-    position: sticky;
+    position: fixed;
     top: 0;
     width: 100%;
     z-index: 50;
