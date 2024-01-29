@@ -24,14 +24,20 @@ class YoutubeVideoSeries
     #[ORM\Column(nullable: true)]
     private ?array $matches = null;
 
+    private Collection $matchesCollection; // Pour le formulaire Nouvelle serie
+
     #[ORM\OneToMany(mappedBy: 'series', targetEntity: UserYVideo::class)]
     private Collection $userYVideos;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $serieId = null;
+
     public function __construct()
     {
+        $this->matchesCollection = new ArrayCollection();
         $this->userYVideos = new ArrayCollection();
     }
 
@@ -114,6 +120,39 @@ class YoutubeVideoSeries
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getMatchesCollection(): Collection
+    {
+        return $this->matchesCollection;
+    }
+
+    public function addMatch(VideoSeriesMatch $match): static
+    {
+        if (!$this->matchesCollection->contains($match)) {
+            $this->matchesCollection->add($match);
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(VideoSeriesMatch $match): static
+    {
+        $this->matchesCollection->removeElement($match);
+
+        return $this;
+    }
+
+    public function getSerieId(): ?int
+    {
+        return $this->serieId;
+    }
+
+    public function setSerieId(?int $serieId): static
+    {
+        $this->serieId = $serieId;
 
         return $this;
     }

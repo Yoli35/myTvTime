@@ -121,16 +121,24 @@
 
                 <div class="user-content">
                     {% if list|length %}
-                        <div class="video-series-list">
-                            {% for item in list %}
-                                <div class="video-series-item" data-id="{{ item.id }}">
-                                    <div class="header">
-                                        <div class="title">{{ item.title }}</div>
-                                        <div class="count"></div>
+                        <div class="video-series">
+                            <div class="video-series-header">
+                                <div class="title">{{ 'Series'|trans }}</div>
+                                <div class="new-list"><i class="fa-solid fa-plus"></i></div>
+                            </div>
+                            <div class="video-series-list">
+                                {% for item in list %}
+                                    <div class="video-series-item" data-id="{{ item.id }}">
+                                        <div class="header">
+                                            <div class="title">{{ item.title }}</div>
+                                            <div class="count">
+                                                <div class="loading"></div>
+                                                <span></span></div>
+                                        </div>
+                                        <div class="videos"></div>
                                     </div>
-                                    <div class="videos"></div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
                     {% endif %}
                     <div id="result" class="result">
@@ -167,6 +175,7 @@
 
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
+    {{ include('blocks/youtube/_new_list_dialog.html.twig') }}
     <div id="global-data" style="display: none">
         {
         "userId": {{ app.user.id }}, "locale": "{{ locale }}",
@@ -174,7 +183,8 @@
         "app_youtube_more": "{{ path('app_youtube_more') }}",
         "app_youtube_add_video": "{{ path('app_youtube_add_video') }}",
         "youtube_settings_save": "{{ path('youtube_settings_save') }}",
-        "app_youtube_video_series": "{{ path('app_youtube_video_series', {id: 0})|slice(0, -1) }}"
+        "app_youtube_video_series": "{{ path('app_youtube_video_series', {id: 0})|slice(0, -1) }}",
+        "app_youtube_preview_video_series": "{{ path('app_youtube_preview_video_series') }}"
         }
     </div>
 {% endblock %}

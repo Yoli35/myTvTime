@@ -1,0 +1,114 @@
+<dialog id="new-list-dialog">
+    <div class="content" role="search">
+        <div class="dialog-title">{{ 'New list'|trans }}</div>
+        {{ form_start(form) }}
+        <input type="hidden" name="action" value="saveNewList"/>
+        {{ form_errors(form) }}
+        {#            {{ form_row(form.title) }} #}
+        <div class="form-row">
+            <div class="form-group">
+                <div class="form-field">
+                    <label for="{{ form.title.vars.id }}">
+                        <span>{{ form.title.vars.label|trans }}</span>
+                        {{ form_widget(form.title) }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        {#            {{ form_row(form.format) }} #}
+        <div class="form-row">
+            <div class="form-group">
+                <div class="form-field">
+                    <label for="{{ form.format.vars.id }}">
+                        <span>{{ form.format.vars.label|trans }}</span>
+                        {{ form_widget(form.format) }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        {#        {{ form_row(form.regex) }} #}
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ field_name(form.regex) }}">
+                    <span>{{ form.regex.vars.label|trans }}</span>
+                </label>
+                <div class="form-switch">
+                    <input type="checkbox" {{ form.regex.vars.checked ? 'checked':'' }} name="{{ field_name(form.regex) }}" id="{{ form.regex.vars.id }}"/>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        {#        {{ form_row(form.matchesCollection) }} #}
+{#        <pre>{{ dump(form.matchesCollection) }}</pre>#}
+        <div class="form-row">
+            <div class="form-group">
+                <div class="matches">
+                    {% for match in form.matchesCollection %}
+                        <div class="match-item" data-index="{{ loop.index0 }}">
+                            <label class="match-item-index">
+                                <div class="form-switch">
+                                    <input type="checkbox" {{ match.active.vars.checked ? 'checked':'' }} name="{{ field_name(match.active) }}" id="{{ match.active.vars.id }}"/>
+                                    <span></span>
+                                </div>
+                                <span>{{ 'Match #'~loop.index }}</span>
+                            </label>
+                            <div class="match-item-settings">
+                                {#                            {{ form_row(match) }} #}
+                                <label for="{{ match.expr.vars.id }}">
+                                    <span>{{ match.expr.vars.label|trans }}</span>
+                                    <input id="{{ match.expr.vars.id }}" name="{{ field_name(match.expr) }}" type="text" value="{{ match.expr.vars.value }}">
+                                </label>
+                                <label for="{{ match.name.vars.id }}">
+                                    <span>{{ match.name.vars.label|trans }}</span>
+                                    <input id="{{ match.name.vars.id }}" name="{{ field_name(match.name) }}" type="text" value="{{ match.name.vars.value }}">
+                                </label>
+                                <label for="{{ match.position.vars.id }}">
+                                    <span>{{ match.position.vars.label|trans }}</span>
+                                    <input id="{{ match.position.vars.id }}" name="{{ field_name(match.position) }}" type="number" size="4" value="{{ match.position.vars.value }}">
+                                </label>
+                                <label for="{{ match.occurrence.vars.id }}">
+                                    <span>{{ match.occurrence.vars.label|trans }}</span>
+                                    <input id="{{ match.occurrence.vars.id }}" name="{{ field_name(match.occurrence) }}" type="number" size="4" value="{{ match.occurrence.vars.value }}">
+                                </label>
+                                <label for="{{ match.type.vars.id }}">
+                                    <span>{{ field_label(match.type) }}</span>
+                                    <select name="{{ match.type.vars.id }}" id="{{ match.type.vars.id }}" name="{{ field_name(match.type) }}">
+                                        <option value="">{{ field_label(match.type) }}</option>
+                                        {% for label, value in field_choices(match.type) %}
+                                            <option value="{{ value }}" {{ field_value(match.type)==value?'selected':'' }}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <menu>
+            <li>
+                <button type="button" class="btn btn-secondary" value="preview" disabled>{{ 'Preview'|trans }}</button>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-secondary" value="cancel">{{ 'Cancel'|trans }}</button>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-primary" value="add-new-list">{{ 'Apply'|trans }}</button>
+            </li>
+        </menu>
+        {{ form_end(form) }}
+    </div>
+</dialog>
+<dialog id="list-preview-dialog">
+    <div class="content" role="search">
+        <div class="dialog-title"></div>
+        <div class="result-count"></div>
+        <div class="result-list">
+        </div>
+    </div>
+    <menu>
+        <li>
+            <button class="btn btn-primary" value="close-list-preview">{{ 'Close'|trans }}</button>
+        </li>
+    </menu>
+</dialog>

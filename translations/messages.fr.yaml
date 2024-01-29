@@ -1548,6 +1548,14 @@ video: vidéo
 videos: vidéos
 video deleted!: vidéo supprimée !
 videos deleted!: vidéos supprimées !
+Format: Format
+Regex: Regex
+Expr: Expression
+Position: Position
+Occurrence: Occurrence
+Type: Type
+String: Chaîne de caractères
+Preview: Aperçu
 
 #TikTok
 My TikTok Videos: Mes vidéos TikTok

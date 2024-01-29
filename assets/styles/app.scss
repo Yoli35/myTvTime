@@ -479,6 +479,8 @@ main {
 #localize-dialog,
 #modify-tags-dialog,
 #multi-people-dialog,
+#list-preview-dialog,
+#new-list-dialog,
 #search-dialog,
 #set-visibility-dialog,
 #settings-dialog,
@@ -512,12 +514,13 @@ main {
             justify-content: center;
 
             label {
+                align-items: center;
                 display: flex;
                 gap: .5rem;
 
                 input[type=search], input[type=text] {
-                    background-color: var(--gradient-ardoise-20);
-                    color: var(--gradient-ardoise-90);
+                    //background-color: var(--gradient-ardoise-80);
+                    //color: var(--gradient-ardoise-10);
                     width: 21rem;
                 }
 
@@ -546,6 +549,130 @@ main {
     }
 }
 
+#new-list-dialog {
+    .content {
+        form {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: .5rem;
+            width: 30rem;
+
+            label {
+                span {
+                    width: 6rem;
+                }
+
+                > input[type=number] {
+                    width: 3rem;
+                }
+
+                > input[type=text] {
+                    width: 15rem;
+                }
+
+                > select {
+                    width: calc(100% - 6rem);
+                }
+            }
+
+            .matches {
+                background-color: var(--gradient-ardoise-80-alpha-50);
+                border-radius: .5rem;
+                display: flex;
+                flex-direction: column;
+                gap: .25rem;
+                padding: 1rem;
+                width: 100%;
+
+                .match-item {
+                    .match-item-index {
+                        color: var(--gradient-ardoise-50);
+                    }
+
+                    &.active {
+                        .match-item-index {
+                            color: var(--gradient-orange-50);
+                        }
+                    }
+
+                    .match-item-settings {
+                        background-color: var(--gradient-ardoise-90-alpha-50);
+                        color: var(--gradient-ardoise-50);
+                        border-radius: .5rem;
+                        display: flex;
+                        flex-direction: column;
+                        gap: .25rem;
+                        padding: 1rem;
+                        width: 100%;
+
+                        &.active {
+                            background-color: var(--gradient-ardoise-70-alpha-50);
+                            color: var(--gradient-ardoise-10);
+                        }
+                    }
+                }
+            }
+
+            menu {
+                width: 100%;
+
+                button[value=preview] {
+                    background-color: var(--gradient-orange-50);
+                    color: var(--gradient-orange-90);
+
+                    &:disabled {
+                        background-color: var(--gradient-ardoise-90);
+                        color: var(--gradient-ardoise-50);
+                        cursor: not-allowed;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#list-preview-dialog {
+    .result-list {
+        @include flex-col(flex-start, flex-start);
+        background-color: var(--gradient-ardoise-80-alpha-50);
+        gap: .25rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        width: 100%;
+
+        .result-count {
+            color: var(--gradient-orange-50);
+            font-size: 1.25rem;
+            margin-bottom: .5rem;
+        }
+
+        .result-item {
+            @include flex-row(center, flex-start);
+            gap: .25rem;
+            padding: .5rem;
+            width: 100%;
+
+            &:nth-child(odd) {
+                background-color: var(--gradient-ardoise-90-alpha-50);
+            }
+
+            &:nth-child(even) {
+                background-color: var(--gradient-ardoise-80-alpha-50);
+            }
+        }
+    }
+
+    menu {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+
+        li {
+            list-style: none;
+        }
+    }
+}
+
 #settings-dialog,
 #search-dialog {
     .content {
@@ -566,13 +693,15 @@ main {
 #add-overview-dialog::backdrop,
 #delete-video-dialog::backdrop,
 #direct-link-dialog::backdrop,
+#list-preview-dialog::backdrop,
 #localize-dialog::backdrop,
 #modify-tags-dialog::backdrop,
 #multi-people-dialog::backdrop,
+#new-list-dialog::backdrop,
 #search-dialog::backdrop,
 #set-visibility-dialog::backdrop,
 #watch-provider-dialog::backdrop {
-    background-color: var(--dialog-backdrop);
+    background-color: #000000af;//var(--dialog-backdrop);
 }
 
 #multi-people-dialog {

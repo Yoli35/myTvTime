@@ -63,8 +63,8 @@ class UserYVideoRepository extends ServiceEntityRepository
         $sql = "SELECT yvs.id, yvs.title " /*, yvs.format, yvs.regex, yvs.matches*/
             . "FROM user_yvideo uyv "
             . "INNER JOIN youtube_video_series yvs ON yvs.id = uyv.series_id "
-            . "WHERE uyv.user_id=" . $userId . " AND uyv.series_id IS NOT NULL"
-            . " GROUP BY uyv.series_id";
+            . "WHERE uyv.user_id=" . $userId . " AND uyv.series_id IS NOT NULL "
+            . "GROUP BY uyv.series_id";
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)

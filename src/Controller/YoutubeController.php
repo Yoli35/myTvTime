@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Entity\UserYVideo;
+use App\Entity\VideoSeriesMatch;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubeVideo;
 use App\Entity\YoutubeVideoSeries;
 use App\Entity\YoutubeVideoTag;
+use App\Form\YoutubeVideoSeriesType;
 use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserYVideoRepository;
@@ -85,15 +87,7 @@ class YoutubeController extends AbstractController
         $settings = $settings->getData();
         $order = $settings['order'];
         $sort = $settings['sort'];
-//        $page = $settings['page'];
-//        dump([
-//            "data" => $settings,
-//            "order" => $order,
-//            "sort" => $sort,
-//            "page" => $page,
-//        ]);
 
-//        $vids = $this->videoRepository->findAllWithChannelByDate($user->getId(), $sort, $order);
         $vids = $this->videoRepository->findAllWithChannelByDateSQL($user->getId(), $sort, $order);
         $videoCount = $this->getVideosCount($user);
         $totalRuntime = $this->getTotalRuntime($user);
@@ -101,11 +95,21 @@ class YoutubeController extends AbstractController
         $time2Human = $this->getTime2human($totalRuntime/*, $request->getLocale()*/);
         $preview = $this->getPreview();
 
-        $list = $this->userYVideoRepository->getUserVideoSeries($user->getId());
+        $videoSeriesList = $this->userYVideoRepository->getUserVideoSeries($user->getId());
+        usort($videoSeriesList, function ($a, $b) {
+            return $a['title'] <=> $b['title'];
+        });
+        $videoSeries = new YoutubeVideoSeries();
+        $videoSeries->addMatch(new VideoSeriesMatch(false, '([0-9]+)', 'season', 1, 1, 'UNSIGNED'),);
+        $videoSeries->addMatch(new VideoSeriesMatch(false, '([0-9]+)', 'episode', 2, 1, 'UNSIGNED'),);
+        $videoSeries->addMatch(new VideoSeriesMatch(false, '([0-9]+)', 'part', 3, 1, 'UNSIGNED'),);
+        dump($videoSeries);
+        $videoSeriesForm = $this->createForm(YoutubeVideoSeriesType::class, $videoSeries);
 
         return $this->render('youtube/index.html.twig', [
             'videos' => $this->getVideos($vids),
-            'list' => $list,
+            'list' => $videoSeriesList,
+            'form' => $videoSeriesForm->createView(),
             'videoCount' => $videoCount,
             'totalRuntime' => $totalRuntime,
             'firstView' => $firstView,
@@ -673,13 +677,14 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $videos = $this->videoSeriesRepository->findVideosBySeries($user->getId(), $series);
         $matches = $series->getMatches();
-        $videos = array_map(function ($video) use ($matches){
+        $videos = array_map(function ($video) use ($matches, $user) {
             $v = [
                 'id' => $video['id'],
                 'link' => $video['link'],
                 'title' => $video['title'],
                 'thumbnailPath' => $video['thumbnailHighPath'],
-                'publishedAt' => $video['publishedAt'],
+                // 2024-01-25 -> 25/01/2024
+                'publishedAt' => $this->dateService->newDateImmutable($video['publishedAt'], $user->getTimezone() ?? "Europe/Paris")->format('d/m/Y'),
 //                'tags' => array_map(function ($tag) {
 //                    return [
 //                        'id' => $tag['id'],
@@ -697,11 +702,22 @@ class YoutubeController extends AbstractController
             ];
             $v['matches'] = [];
             foreach ($matches as $match) {
-                $v['matches'][] = ['name' =>$match['name'], 'value' => $video[$match['name']]];
+                $v['matches'][] = ['name' => $match['name'], 'value' => $video[$match['name']]];
             }
             return $v;
         }, $videos);
         dump($videos);
+        return $this->json(['videos' => $videos]);
+    }
+
+    #[Route('/{_locale}/youtube/preview/video/series', name: 'app_youtube_preview_video_series', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]
+    public function previewVideoSeries(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $data = json_decode($request->query->get('data'), true);
+        dump($data);
+        $videos = $this->videoSeriesRepository->findVideosByFormat($user->getId(), $data['format'], $data['regex']);
         return $this->json(['videos' => $videos]);
     }
 

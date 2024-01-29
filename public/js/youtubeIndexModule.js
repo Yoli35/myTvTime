@@ -11,6 +11,7 @@ export class YoutubeIndexModule {
         this.app_youtube_add_video = globs.app_youtube_add_video;
         this.youtube_settings_save = globs.youtube_settings_save;
         this.app_youtube_video_series = globs.app_youtube_video_series;
+        this.app_youtube_preview_video_series = globs.app_youtube_preview_video_series;
         this.userId = globs.userId;
         this.locale = globs.locale;
         this.toolTips = new ToolTips();
@@ -24,9 +25,18 @@ export class YoutubeIndexModule {
         this.ytReload = document.getElementById('reload');
         this.moreButton = document.getElementById('more');
         this.searchOnYt = document.querySelector('.search-on-yt');
+        this.newListDialog = document.querySelector('#new-list-dialog');
         this.totalResults = 0;
         this.txt = {
+            'episode': {'fr': 'Épisode', 'en': 'Episode', 'de': 'Episode', 'es': 'Episodio'},
+            'episode_number': {'fr': 'Numéro', 'en': 'Number', 'de': 'Nummer', 'es': 'Número'},
+            'episode_title': {'fr': 'Titre', 'en': 'Title', 'de': 'Titel', 'es': 'Título'},
+            'part': {'fr': 'Partie', 'en': 'Part', 'de': 'Teil', 'es': 'Parte'},
             'published_at': {'fr': 'Publiée le', 'en': 'Published at', 'de': 'Veröffentlicht am', 'es': 'Publicado en'},
+            'teil': {'fr': 'Partie', 'en': 'Part', 'de': 'Teil', 'es': 'Parte'},
+            'year': {'fr': 'Année', 'en': 'Year', 'de': 'Jahr', 'es': 'Año'},
+            'video': {'fr': 'Vidéo', 'en': 'Video', 'de': 'Video', 'es': 'Video'},
+            'videos': {'fr': 'Vidéos', 'en': 'Videos', 'de': 'Videos', 'es': 'Videos'},
         }
 
         this.toolTips.init();
@@ -59,14 +69,119 @@ export class YoutubeIndexModule {
 
         const seriesList = document.querySelectorAll('.video-series-item');
         seriesList.forEach(series => {
-            series.addEventListener('click', (e) => {
+            const header = series.querySelector('.header');
+            header.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 this.loadSeries(series.getAttribute('data-id'));
             });
         });
+        const newList = document.querySelector('.new-list');
+        this.initNewListDialog();
+        newList.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // ouvrir le dialogue new-list-dialog
+            document.querySelector('body').classList.add('frozen');
+            gThis.newListDialog.showModal();
+        });
     }
 
+    initNewListDialog() {
+        /** @type {HTMLDialogElement} */
+        const dialog = gThis.newListDialog;
+        const matches = dialog.querySelectorAll('.match-item');
+
+        dialog.addEventListener('close', () => {
+            document.querySelector('body').classList.remove('frozen');
+            if (dialog.returnValue === 'add-new-list') {
+
+            }
+        });
+        matches.forEach((match) => {
+            const input = match.querySelector('input[type=checkbox]');
+            input.addEventListener('change', () => {
+                match.classList.toggle('active');
+                gThis.toggleMatch(match);
+            });
+            this.toggleMatch(match);
+        });
+
+        const formatInput = dialog.querySelector('#youtube_video_series_format');
+        const previewButton = dialog.querySelector('button[value=preview]');
+        formatInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            previewButton.disabled = !value.length;
+        });
+        previewButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const previewDialog = document.querySelector('#list-preview-dialog');
+            const resultDiv = previewDialog.querySelector('.result-list');
+            const format = dialog.querySelector('#youtube_video_series_format').value;
+            const regex = dialog.querySelector('#youtube_video_series_regex').checked;
+            resultDiv.innerHTML = '';
+            previewDialog.showModal();
+
+            gThis.xhr.onload = function () {
+                const response = JSON.parse(this.response);
+                const videos = response['videos'];
+                console.log(videos);
+                const count = videos.length;
+                const resultCountDiv = previewDialog.querySelector('.result-count');
+                resultCountDiv.innerText = count + ' ' + (count > 1 ? gThis.txt.videos[gThis.locale] : gThis.txt.video[gThis.locale]);
+                videos.forEach(video => {
+                    const resultItemDiv = document.createElement('div');
+                    resultItemDiv.classList.add('result-item');
+                    const title = document.createElement('div');
+                    title.classList.add('title');
+                    title.innerText = video.title;
+                    resultItemDiv.appendChild(title);
+                    resultDiv.appendChild(resultItemDiv);
+                });
+            }
+            gThis.xhr.open("GET", this.app_youtube_preview_video_series + '?data=' + JSON.stringify({"format": format, "regex": regex, "matches": []}));
+            gThis.xhr.send();
+        });
+    }
+
+    toggleMatch(match) {
+        const input = match.querySelector('input[type=checkbox]');
+        const settings = match.querySelector('.match-item-settings');
+        const expr = match.querySelector('input[id$=expr]');
+        const name = match.querySelector('input[id$=name]');
+        const position = match.querySelector('input[id$=position]');
+        const occurrence = match.querySelector('input[id$=occurrence]');
+        const type = match.querySelector('select[id$=type]');
+
+        if (input.checked) {
+            match.classList.add('active');
+            settings.classList.add('active');
+            expr.disabled = false;
+            name.disabled = false;
+            position.disabled = false;
+            occurrence.disabled = false;
+            type.disabled = false;
+            // expr.removeAttribute('disabled');
+            // name.removeAttribute('disabled');
+            // position.removeAttribute('disabled');
+            // occurrence.removeAttribute('disabled');
+            // type.removeAttribute('disabled');
+        } else {
+            match.classList.remove('active');
+            settings.classList.remove('active');
+            expr.disabled = true;
+            name.disabled = true;
+            position.disabled = true;
+            occurrence.disabled = true;
+            type.disabled = true;
+            // expr.setAttribute('disabled', 'disabled');
+            // name.setAttribute('disabled', 'disabled');
+            // position.setAttribute('disabled', 'disabled');
+            // occurrence.setAttribute('disabled', 'disabled');
+            // type.setAttribute('disabled', 'disabled');
+        }
+    }
 
     focusLink() {
         if (document.visibilityState === 'visible') {
@@ -283,59 +398,20 @@ export class YoutubeIndexModule {
             series.classList.toggle('open');
             return;
         }
+        const countDiv = series.querySelector('.count');
+        countDiv.querySelector(".loading").classList.add('active');
+
         gThis.xhr.onload = function () {
             const response = JSON.parse(this.response);
             const videos = response['videos'];
-            const countDiv = series.querySelector('.count');
-            countDiv.innerText = videos.length;
+            countDiv.querySelector(".loading").classList.remove('active');
+            const count = videos.length;
+            countDiv.querySelector("span").innerHTML = count + ' ' + (count > 1 ? gThis.txt.videos[gThis.locale] : gThis.txt.video[gThis.locale]);
             const videosDiv = series.querySelector('.videos');
             series.classList.add('open');
 
             videos.forEach(video => {
                 console.log(video);
-                /*
-                    "id" => 3820
-                    "link" => "Pg7FP7Fdtt4"
-                    "title" => "[Eng Sub] Last Twilight ภาพนายไม่เคยลืม | EP.2 [1/4]"
-                    "thumbnailPath" => "https://i.ytimg.com/vi/Pg7FP7Fdtt4/hqdefault.jpg"
-                    "publishedAt" => "2023-11-17 13:37:09"
-                    "contentDuration" => "19:58"
-                    "hidden" => 0
-                    "channel" => array:4 [▼
-                        "title" => "GMMTV OFFICIAL\u{200B}\u{200B}"
-                        "customUrl" => "@gmmtv"
-                        "youtubeId" => "UC8BzJM6_VbZTdiNLD4R1jxQ"
-                        "thumbnailDefaultUrl" => "https://yt3.ggpht.com/l12SShLYzk1VBdqlIAoli3wPWq_G1X1XtE-6RgADf53cfkczlQ3zYQu2av-4hOYLLIgCf8KJag=s88-c-k-c0x00ffffff-no-rj"
-                    ]
-                    "matches" => array:2 [▼
-                         0 => array:2 [▼
-                             "name" => "episode"
-                             "value" => 2
-                         ]
-                         1 => array:2 [▼
-                             "name" => "part"
-                             "value" => 1
-                         ]
-                    ]
-                */
-                /*
-
-                    <div class="videos">
-                        {% for video in list.videos %}
-                            <div class="video">
-                                <a href="{{ path('app_youtube_video', {id: video.id}) }}">
-                                    <div class="thumbnail">
-                                        <img src="{{ video.thumbnailPath }}" alt="{{ video.title }}" loading="lazy">
-                                    </div>
-                                    <div class="title">{{ video.title }}</div>
-                                    {% for match in video.matches %}
-                                        <div class="match">{{ match.name|capitalize }} {{ match.value }}</div>
-                                    {% endfor %}
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                 */
                 const videoDiv = document.createElement('div');
                 videoDiv.classList.add('video');
                 const a = document.createElement('a');
@@ -352,12 +428,17 @@ export class YoutubeIndexModule {
                 title.classList.add('title');
                 title.innerText = video.title;
                 a.appendChild(title);
+                const publishedAt = document.createElement('div');
+                publishedAt.classList.add('published-at');
+                publishedAt.innerText = video.publishedAt;
+                a.appendChild(publishedAt);
                 const matches = document.createElement('div');
                 matches.classList.add('matches');
                 video.matches.forEach(match => {
                     const matchDiv = document.createElement('div');
                     matchDiv.classList.add('match');
-                    matchDiv.innerText = match.name + ' ' + match.value;
+                    matchDiv.innerHTML = gThis.txt[match.name][gThis.locale] ?? ('<i>' + match.name + '</i>');
+                    matchDiv.innerHTML += ' ' + match.value;
                     matches.appendChild(matchDiv);
                 });
                 a.appendChild(matches);

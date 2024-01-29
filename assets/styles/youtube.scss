@@ -195,126 +195,190 @@
             margin-block-start: 1rem;
             width: 100%;
 
-            .video-series-list {
-                display: flex;
-                flex-direction: column;
+            .video-series {
                 flex-grow: 1;
-                gap: .25rem;
                 min-width: 16rem;
 
-                .video-series-item {
+                .video-series-header {
+                    background-color: var(--gradient-orange-50);
+                    border-radius: .25rem;
+                    color: var(--gradient-ardoise-10);
+                    display: flex;
+                    padding-block: .25rem;
+                    padding-inline: .5rem;
+                    width: 100%;
 
-                    &.open {
-                        .videos {
-                            display: flex;
-                        }
+                    .title {
+                        font-size: 1rem;
+                        font-weight: 400;
                     }
 
-                    .header {
-                        background-color: var(--gradient-ardoise-80);
-                        border-radius: .25rem;
-                        color: var(--gradient-ardoise-10);
+                    .new-list {
+                        align-items: center;
+                        border: 2px solid var(--gradient-ardoise-10);
+                        border-radius: 50%;
                         cursor: pointer;
                         display: flex;
-                        gap: .25rem;
-                        padding: .25rem;
-                        transition: background-color 250ms ease-in-out;
-
-                        &:hover {
-                            background-color: var(--gradient-ardoise-60);
-                        }
-
-                        &.selected {
-                            background-color: var(--gradient-orange-50);
-                        }
-
-                        .title {
-                            font-size: .75rem;
-                            font-weight: 400;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-
-                        .count {
-                            font-size: .75rem;
-                            font-weight: 400;
-                            margin-left: auto;
-                        }
+                        height: 1.5rem;
+                        justify-content: center;
+                        margin-inline-start: auto;
+                        width: 1.5rem;
                     }
+                }
 
-                    .videos {
-                        align-items: center;
-                        background-color: var(--gradient-orange-50);
-                        color: var(--gradient-ardoise-10);
-                        display: none;
-                        flex-direction: column;
-                        gap: .25rem;
-                        justify-content: flex-start;
-                        max-height: 32rem;
-                        overflow-y: auto;
-                        padding: .25rem;
+                .video-series-list {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+                    gap: .25rem;
+                    width: 100%;
 
-                        .video {
-                            width: 100%;
+                    .video-series-item {
 
-                            a {
-                                align-items: center;
-                                background-color: var(--gradient-ardoise-80);
-                                border-radius: .25rem;
-                                color: var(--gradient-ardoise-10);
-                                cursor: pointer;
+                        &.open {
+                            .videos {
                                 display: flex;
-                                gap: .25rem;
+                            }
+                        }
+
+                        .header {
+                            background-color: var(--gradient-ardoise-80);
+                            border-radius: .25rem;
+                            color: var(--gradient-ardoise-10);
+                            cursor: pointer;
+                            display: flex;
+                            gap: .25rem;
+                            padding: .25rem;
+                            transition: background-color 250ms ease-in-out;
+
+                            &:hover {
+                                background-color: var(--gradient-ardoise-60);
+                            }
+
+                            &.selected {
+                                background-color: var(--gradient-orange-50);
+                            }
+
+                            .title {
                                 font-size: .75rem;
-                                padding: .25rem;
-                                transition: background-color 250ms ease-in-out;
-                                width: 100%;
+                                font-weight: 400;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
 
-                                &:hover {
-                                    background-color: var(--gradient-ardoise-60);
-                                }
+                            .count {
+                                font-size: .75rem;
+                                font-weight: 400;
+                                margin-left: auto;
 
-                                .thumbnail {
-                                    border-radius: .25rem;
-                                    flex-shrink: 0;
-                                    height: 3rem;
-                                    width: 5rem;
+                                .loading {
+                                    animation: loop 1s linear infinite;
+                                    background: conic-gradient(
+                                                    hsla(0, 0, 0, 0) 0%,
+                                                    hsla(0, 50%, 50%, .2) 75%,
+                                                    hsla(0, 100%, 100%, 1) 100%);
+                                    border-radius: 50%;
+                                    display: none;
+                                    height: 1rem;
+                                    width: 1rem;
 
-                                    img {
-                                        border-radius: .25rem;
-                                        height: 100%;
-                                        object-fit: cover;
-                                        width: 100%;
+                                    &.active {
+                                        display: block;
                                     }
                                 }
 
-                                .title {
-                                    align-items: center;
-                                    display: flex;
-                                    flex-shrink: 1;
-                                    font-size: .75rem;
-                                    font-weight: 400;
-                                    height: 100%;
-                                    justify-content: flex-start;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
+                                @keyframes loop {
+                                    100% {
+                                        transform: rotate(359deg);
+                                    }
                                 }
+                            }
+                        }
 
-                                .matches {
+                        .videos {
+                            align-items: center;
+                            background-color: var(--gradient-orange-50);
+                            color: var(--gradient-ardoise-10);
+                            display: none;
+                            flex-direction: column;
+                            gap: .25rem;
+                            justify-content: flex-start;
+                            max-height: 32rem;
+                            overflow-y: auto;
+                            padding: .25rem;
+
+                            .video {
+                                width: 100%;
+
+                                a {
+                                    align-items: center;
+                                    background-color: var(--gradient-ardoise-80);
+                                    border-radius: .25rem;
+                                    color: var(--gradient-ardoise-10);
+                                    cursor: pointer;
                                     display: flex;
-                                    flex-shrink: 0;
                                     gap: .25rem;
-                                    margin-inline-start: auto;
+                                    font-size: .75rem;
+                                    padding: .25rem;
+                                    transition: background-color 250ms ease-in-out;
+                                    width: 100%;
 
-                                    .match {
-                                        background-color: var(--gradient-purple-40);
+                                    &:hover {
+                                        background-color: var(--gradient-ardoise-60);
+                                    }
+
+                                    .thumbnail {
                                         border-radius: .25rem;
-                                        color: var(--gradient-purple-90);
+                                        flex-shrink: 0;
+                                        height: 3rem;
+                                        width: 5rem;
+
+                                        img {
+                                            border-radius: .25rem;
+                                            height: 100%;
+                                            object-fit: cover;
+                                            width: 100%;
+                                        }
+                                    }
+
+                                    .title {
+                                        align-items: center;
+                                        display: flex;
+                                        flex-shrink: 1;
                                         font-size: .75rem;
                                         font-weight: 400;
+                                        height: 100%;
+                                        justify-content: flex-start;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                    }
+
+                                    .published-at {
+                                        background-color: var(--gradient-orange-40);
+                                        border-radius: .25rem;
+                                        color: var(--gradient-orange-90);
+                                        flex-shrink: 0;
+                                        font-size: .75rem;
+                                        font-weight: 400;
+                                        margin-inline-start: auto;
                                         padding: .125rem .25rem;
+                                    }
+
+                                    .matches {
+                                        display: flex;
+                                        flex-shrink: 0;
+                                        gap: .25rem;
+
+                                        .match {
+                                            background-color: var(--gradient-purple-40);
+                                            border-radius: .25rem;
+                                            color: var(--gradient-purple-90);
+                                            font-size: .75rem;
+                                            font-weight: 400;
+                                            padding: .125rem .25rem;
+                                        }
                                     }
                                 }
                             }
