@@ -152,7 +152,7 @@
                                                     <div class="character">{{ prod.character }}</div>
                                                 {% endif %}
                                             {% endif %}
-                                            {% if prod.media_type=='movie' and app.user|viewedMovie(prod.id) %}
+                                            {% if (prod.media_type=='movie' and app.user|viewedMovie(prod.id)) or (prod.media_type=='tv' and app.user|viewedSeries(prod.id)) %}
                                                 <i class="fa-solid fa-eye ml-auto" title="{{ 'Viewed'|trans }}"></i>
                                             {% endif %}
                                         </div>
