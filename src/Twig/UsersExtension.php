@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Repository\ChatDiscussionRepository;
 use App\Repository\MovieListRepository;
 use App\Repository\MovieRepository;
+use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Service\AlertService;
@@ -31,6 +32,7 @@ class UsersExtension extends AbstractExtension
         private readonly DateService              $dateService,
         private readonly MovieListRepository      $movieListRepository,
         private readonly MovieRepository          $movieRepository,
+        private readonly SerieViewingRepository   $serieViewingRepository,
         private readonly SettingsRepository       $settingsRepository,
         private readonly TranslatorInterface      $translator,
         private readonly UserRepository           $userRepository,
@@ -59,6 +61,7 @@ class UsersExtension extends AbstractExtension
         return array(
             new TwigFilter('lastActivityAgo', [$this, 'lastActivityAgo'], ['is_safe' => ['html']]),
             new TwigFilter('viewedMovie', [$this, 'viewedMovie'], ['is_safe' => ['html']]),
+            new TwigFilter('viewedSeries', [$this, 'viewedSeries'], ['is_safe' => ['html']]),
         );
     }
 
@@ -176,6 +179,17 @@ class UsersExtension extends AbstractExtension
             return false;
         }
         $result = $this->movieRepository->viewedMovie($user->getId(), $movieId);
+//        dump(['result' => $result, 'movieId' => $movieId, 'userId' => $user->getId()]);
+
+        return (bool)count($result);
+    }
+
+    public function viewedSeries($user, $serieId): bool
+    {
+        if ($user == null) {
+            return false;
+        }
+        $result = $this->serieViewingRepository->viewedSeries($user->getId(), $serieId);
 //        dump(['result' => $result, 'movieId' => $movieId, 'userId' => $user->getId()]);
 
         return (bool)count($result);
