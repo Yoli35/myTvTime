@@ -3115,12 +3115,20 @@
             .watch-provider-list {
                 max-height: calc(80vh - 10rem);
                 overflow-y: scroll;
+                padding-inline: 10px;
 
                 .watch-provider {
                     width: 100%;
 
                     &.hidden {
                         display: none;
+                    }
+
+                    &:hover {
+                        background-color: var(--gradient-ardoise-30-alpha-50);
+                        border-radius: .25rem;
+                        box-shadow: 0 0 10px var(--gradient-ardoise-30-alpha-50);
+                        outline-offset: 1px;
                     }
 
                     label {
