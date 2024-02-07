@@ -27,7 +27,7 @@
 
 {% block body %}
     <script>
-        const bd = '{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}';
+        const bd = '{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}';
         const body = document.querySelector("body");
         body.style.backgroundSize = "cover";
         body.style.backgroundPosition = "center";
