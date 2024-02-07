@@ -2903,7 +2903,7 @@ class SerieController extends AbstractController
         return $serieCast;
     }
 
-    public function whatsNew(array $tv, Serie $serie, SerieViewing $serieViewing): array|null
+    public function whatsNew(array $tv, Serie $serie, SerieViewing $serieViewing, bool $fromCommand = false): array|null
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -3005,8 +3005,11 @@ class SerieController extends AbstractController
 
         if ($modified) {
             $now = $this->dateService->newDate('now', $timezone);
-            $serieViewing->setModifiedAt($now);
-            $this->serieViewingRepository->save($serieViewing);
+
+            if (!$fromCommand) {
+                $serieViewing->setModifiedAt($now);
+                $this->serieViewingRepository->save($serieViewing);
+            }
 
             $serie->setUpdatedAt($now);
             $this->serieRepository->save($serie, true);

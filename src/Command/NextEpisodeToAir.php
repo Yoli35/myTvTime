@@ -60,11 +60,11 @@ class NextEpisodeToAir extends Command
         } else {
             $serieViewings = $this->serieViewingRepository->findAll();
             $confirm = $io->ask('Do you want to skip series with recent check and last episode viewed more than 2 years ago?', 'yes');
-            if ($confirm !== 'yes') {
+            if ($confirm !== 'yes' && $confirm !== 'y') {
                 $canSkip = false;
             }
             $confirm = $io->ask('Check all the series (' . count($serieViewings) . ' series)?', 'yes');
-            if ($confirm !== 'yes') {
+            if ($confirm !== 'yes' && $confirm !== 'y') {
                 $io->warning('Confirmation not given. Exiting.');
                 return Command::SUCCESS;
             }
@@ -136,7 +136,7 @@ class NextEpisodeToAir extends Command
             $tvSeries = json_decode($this->tmdbService->getTv($serie->getSerieId(), "fr"), true);
 
             if ($tvSeries) {
-                $whatsNew = $this->serieController->whatsNew($tvSeries, $serie, $serieViewing);
+                $whatsNew = $this->serieController->whatsNew($tvSeries, $serie, $serieViewing, true);
                 if ($whatsNew) {
                     foreach ($whatsNew as $new) {
                         if ($new) {
