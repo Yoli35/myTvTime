@@ -1,8 +1,10 @@
-UPDATE user_yvideo uyv, (SELECT id FROM `youtube_video`
-						 WHERE id IN
-						 		  (SELECT id FROM `youtube_video`
-						 		   WHERE `title` LIKE '%Stern DuTube%'))
-						 	 AS stern_videos
-SET uyv.`series_id`=2
-WHERE uyv.`video_id`=stern_videos.`id`
-
+SELECT s.`id`,
+	GROUP_CONCAT(sao.`logo_path` SEPARATOR "|||") sao_logo_paths,
+	GROUP_CONCAT(sao.`overview`SEPARATOR "|||") as sao_overviews,
+	GROUP_CONCAT(sao.`source` SEPARATOR "|||") sao_sources,
+	GROUP_CONCAT(sao.`url` SEPARATOR "|||") sao_urls
+	
+FROM `serie` s
+LEFT JOIN `serie_alternate_overview` sao ON sao.`series_id`=s.`id`
+WHERE s.`id` > 830
+GROUP BY s.`id`

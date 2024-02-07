@@ -15,6 +15,21 @@
                 </div>
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-group">
+                <div class="form-field">
+                    <label for="{{ form.serieId.vars.id }}">
+                        <span>{{ field_label(form.serieId) }}</span>
+                        <select name="{{ form.serieId.vars.id }}" id="{{ form.serieId.vars.id }}" name="{{ field_name(form.serieId) }}">
+                            <option value="">{{ field_label(form.serieId) }}</option>
+                            {% for label, value in field_choices(form.serieId) %}
+                                <option value="{{ value }}" {{ field_value(form.serieId)==value?'selected':'' }}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
         {#            {{ form_row(form.format) }} #}
         <div class="form-row">
             <div class="form-group">
@@ -30,16 +45,16 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="{{ field_name(form.regex) }}">
+                    <div class="form-switch">
+                        <input type="checkbox" {{ form.regex.vars.checked ? 'checked':'' }} name="{{ field_name(form.regex) }}" id="{{ form.regex.vars.id }}" value="{{ form.regex.vars.value }}"/>
+                        <span></span>
+                    </div>
                     <span>{{ form.regex.vars.label|trans }}</span>
                 </label>
-                <div class="form-switch">
-                    <input type="checkbox" {{ form.regex.vars.checked ? 'checked':'' }} name="{{ field_name(form.regex) }}" id="{{ form.regex.vars.id }}"/>
-                    <span></span>
-                </div>
             </div>
         </div>
         {#        {{ form_row(form.matchesCollection) }} #}
-{#        <pre>{{ dump(form.matchesCollection) }}</pre>#}
+        {#        <pre>{{ dump(form.matchesCollection) }}</pre> #}
         <div class="form-row">
             <div class="form-group">
                 <div class="matches">
@@ -108,7 +123,7 @@
     </div>
     <menu>
         <li>
-            <button class="btn btn-primary" value="close-list-preview">{{ 'Close'|trans }}</button>
+            <button type="submit" value="close-list-preview"></button>
         </li>
     </menu>
 </dialog>

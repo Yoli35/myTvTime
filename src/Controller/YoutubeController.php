@@ -11,6 +11,7 @@ use App\Entity\YoutubeVideo;
 use App\Entity\YoutubeVideoSeries;
 use App\Entity\YoutubeVideoTag;
 use App\Form\YoutubeVideoSeriesType;
+use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserYVideoRepository;
@@ -46,6 +47,7 @@ class YoutubeController extends AbstractController
      */
     public function __construct(
         private readonly DateService                  $dateService,
+        private readonly SerieViewingRepository       $serieViewingRepository,
         private readonly SettingsRepository           $settingsRepository,
         private readonly TranslatorInterface          $translator,
         private readonly UserRepository               $userRepository,
@@ -69,7 +71,7 @@ class YoutubeController extends AbstractController
      * @throws \Exception
      */
     #[Route('/{_locale}/youtube', name: 'app_youtube', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -100,11 +102,19 @@ class YoutubeController extends AbstractController
             return $a['title'] <=> $b['title'];
         });
         $videoSeries = new YoutubeVideoSeries();
+        $videoSeries->setFormat('(.+)');
+        $videoSeries->setRegex(true);
         $videoSeries->addMatch(new VideoSeriesMatch(false, '([0-9]+)', 'season', 1, 1, 'UNSIGNED'),);
-        $videoSeries->addMatch(new VideoSeriesMatch(false, '([0-9]+)', 'episode', 2, 1, 'UNSIGNED'),);
-        $videoSeries->addMatch(new VideoSeriesMatch(false, '([0-9]+)', 'part', 3, 1, 'UNSIGNED'),);
-        dump($videoSeries);
-        $videoSeriesForm = $this->createForm(YoutubeVideoSeriesType::class, $videoSeries);
+        $videoSeries->addMatch(new VideoSeriesMatch(false, '([0-9]+)', 'episode', 1, 2, 'UNSIGNED'),);
+        $videoSeries->addMatch(new VideoSeriesMatch(false, '([0-9]+)', 'part', 1, 3, 'UNSIGNED'),);
+        $userSeries = $this->serieViewingRepository->userSeries($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale());
+        $userSeries = array_combine(array_column($userSeries, 'name'), array_column($userSeries, 'id'));
+
+        $videoSeriesForm = $this->createForm(YoutubeVideoSeriesType::class, $videoSeries, [
+            'allow_extra_fields' => true,
+            'user_series' => $userSeries
+        ]);
+
 
         return $this->render('youtube/index.html.twig', [
             'videos' => $this->getVideos($vids),
@@ -716,7 +726,7 @@ class YoutubeController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $data = json_decode($request->query->get('data'), true);
-        dump($data);
+        dump(['data' => $data, 'request query' => $request->query->get('data')]);
         $videos = $this->videoSeriesRepository->findVideosByFormat($user->getId(), $data['format'], $data['regex']);
         return $this->json(['videos' => $videos]);
     }

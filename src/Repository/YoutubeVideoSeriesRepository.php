@@ -104,15 +104,14 @@ class YoutubeVideoSeriesRepository extends ServiceEntityRepository
 //                        $sql .= ", REGEXP_SUBSTR(yv.`title`, '" . $match['expr'] . "', " . $match['position'] . ", " . $match['occurrence'] . ") as " . $match['name'] . " ";
 //                }
 //            }
-            $sql .= " FROM `youtube_video_series` yvs "
+            $sql .= " FROM `youtube_video` yv "
                 . "INNER JOIN `user_yvideo` uyv ON uyv.`user_id`=" . $userId . " AND yv.`id`=uyv.`video_id` "
                 . "WHERE yv.`title` REGEXP '" . $format . "' "
-//                . "ORDER BY ";
+                . "ORDER BY "
 //            foreach ($matches as $match) {
 //                $sql .= $match['name'] . " ASC, ";
 //            }
-                . "ORDER BY yv.published_at ASC";
-            $sql .= "yv.published_at ASC";
+                . "yv.published_at ASC ";
         } else {
             $sql .= " FROM `youtube_video` yv "
                 . "INNER JOIN `user_yvideo` uyv ON uyv.`user_id`=" . $userId . " AND yv.`id`=uyv.`video_id` "

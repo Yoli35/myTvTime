@@ -120,6 +120,8 @@ export class YoutubeIndexModule {
             const resultDiv = previewDialog.querySelector('.result-list');
             const format = dialog.querySelector('#youtube_video_series_format').value;
             const regex = dialog.querySelector('#youtube_video_series_regex').checked;
+            const data = JSON.stringify({"format": format, "regex": regex, "matches": []});
+            console.log(data);
             resultDiv.innerHTML = '';
             previewDialog.showModal();
 
@@ -140,7 +142,7 @@ export class YoutubeIndexModule {
                     resultDiv.appendChild(resultItemDiv);
                 });
             }
-            gThis.xhr.open("GET", this.app_youtube_preview_video_series + '?data=' + JSON.stringify({"format": format, "regex": regex, "matches": []}));
+            gThis.xhr.open("GET", this.app_youtube_preview_video_series + '?data=' + data);
             gThis.xhr.send();
         });
     }

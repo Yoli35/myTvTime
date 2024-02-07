@@ -42,6 +42,7 @@ class VideoSeriesMatchType extends AbstractType
                     'String' => 'VARCHAR',
                     'Number' => 'UNSIGNED',
                 ],
+                'choice_translation_domain' => false,
                 'required' => true,
             ])
         ;
