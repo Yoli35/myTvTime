@@ -122,6 +122,7 @@ class TvFilterType extends AbstractType
             ->add('watch_region', ChoiceType::class, [
                 'label' => 'Watch region',
                 'choices' => $options['data']['watchRegionSelect'],
+                'choice_translation_domain' => false,
                 'expanded' => false,
                 'multiple' => false,
             ])
@@ -147,6 +148,7 @@ class TvFilterType extends AbstractType
             ->add('with_watch_providers', ChoiceType::class, [
                 'label' => 'Watch provider',
                 'choices' => $options['data']['watchProviderSelect'],
+                'choice_translation_domain' => false,
                 'expanded' => false,
                 'multiple' => false,
             ])
