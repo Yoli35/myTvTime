@@ -64,14 +64,14 @@ class ActivityDayRepository extends ServiceEntityRepository
             $sql = "SELECT * "
                 . "FROM `activity_day` "
                 . "WHERE `activity_id`=" . $activityId . " "
-                . "AND `" . $discipline . "` > " . $value . " "
+                . "AND `" . $discipline . "` >= " . $value . " "
                 . "AND MONTH(`day`) = " . $month . " "
                 . "ORDER BY day";
         } else {
             $sql = "SELECT * "
                 . "FROM `activity_day` "
                 . "WHERE `activity_id`=" . $activityId . " "
-                . "AND `" . $discipline . "` > " . $value . " "
+                . "AND `" . $discipline . "` >= " . $value . " "
                 . "AND `day` >= '" . $start . "' "
                 . "AND `day` <= '" . $end . "' "
                 . "ORDER BY day";
