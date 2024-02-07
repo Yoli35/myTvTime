@@ -467,8 +467,11 @@
 
         .movie-detail {
             @include flex-col(unset, unset);
+            background-color: var(--gradient-ardoise-75-alpha-25);
+            border-radius: .5rem;
             flex-shrink: 0;
             flex-wrap: wrap;
+            padding: 1em;
             width: 100%;
 
             .title {

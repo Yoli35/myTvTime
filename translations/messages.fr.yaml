@@ -594,7 +594,7 @@ That's all: C'est tout !
 More episodes to come: Plus d'épisodes à venir !
 Watching in progress: Visionnage en cours
 Start watching the show: Commencer à regarder
-Be patient!: Soyez patient !
+Be patient!: Patience !
 "Series not found on https://www.themoviedb.org/": "Série non trouvée sur https://www.themoviedb.org/"
 Settings saved: Paramètres enregistrés
 # Watch
@@ -664,12 +664,16 @@ Assistant Costume Designer.he: Assistant costumier
 Assistant Costume Designer.she: Assistante costumière
 Assistant Director.he: Assistant réalisateur
 Assistant Director.she: Assistante réalisateur
+Assistant Director Trainee.he: Stagiaire assistant réalisateur
+Assistant Director Trainee.she: Stagiaire assistante réalisateur
 Assistant Editor.he: Rédacteur adjoint
 Assistant Editor.she: Rédactrice adjointe
 Assistant Production Coordinator.he: Assistant coordinateur de production
 Assistant Production Coordinator.she: Assistante coordinateur de production
 Assistant Production Manager.he: Directeur adjoint de production
 Assistant Production Manager.she: Directrice adjointe de production
+Assistant Production Design.he: Assistant directeur artistique
+Assistant Production Design.she: Assistante directrice artistique
 Assistant Property Master.he: Assistant maître d'œuvre
 Assistant Property Master.she: Assistante maître d'œuvre
 Assistant Set Decoration.he: Assistant Décorateur
@@ -1291,6 +1295,7 @@ Tomorrow: Demain
 The day after tomorrow: Après-demain
 Next episode in: Prochain épisode dans
 Next episode: Prochain épisode
+First episode: Premier épisode
 No date for the moment: Pas de date pour le moment
 of season: de la saison
 in: dans
