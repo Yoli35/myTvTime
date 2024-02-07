@@ -145,14 +145,17 @@ class SerieViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getEpisodesOfTheDay($userId, $today, $yesterday, $page, $perPage): array
+    public function getEpisodesOfTheDay($userId, $today, $yesterday, $locale, $page, $perPage): array
     {
-        $sql = "SELECT `serie_viewing`.`serie_id`, `serie`.`name`, `serie`.`poster_path`, `episode_viewing`.`episode_number`, `season_viewing`.`season_number`, `season_viewing`.`episode_count`, `episode_viewing`.`viewed_at` IS NOT NULL AS viewed "
+        $sql = "SELECT `serie_viewing`.`serie_id`, `serie`.`name`, `serie`.`poster_path`, `episode_viewing`.`episode_number`, `season_viewing`.`season_number`, "
+            . "`season_viewing`.`episode_count`, `episode_viewing`.`viewed_at` IS NOT NULL AS viewed, `favorite`.`id` IS NOT NULL AS favorite, `serie_localized_name`.`name` as localized_name "
             . "FROM `serie_viewing` "
             . "INNER JOIN `serie` ON `serie`.`id`=`serie_viewing`.`serie_id` "
             . "INNER JOIN `season_viewing` ON `season_viewing`.`serie_viewing_id` = `serie_viewing`.`id` "
             . "INNER JOIN `episode_viewing` ON `episode_viewing`.`season_id` = `season_viewing`.`id` "
-            . "WHERE `user_id`= " . $userId . " "
+            . "LEFT JOIN `favorite` ON `favorite`.`user_id`=" . $userId . " AND `favorite`.`type`='serie' AND `favorite`.`media_id`=`serie`.`id` "
+            . "LEFT JOIN `serie_localized_name` ON `serie_localized_name`.`serie_id`=`serie`.`id` AND `serie_localized_name`.`locale`= '" . $locale . "' "
+            . "WHERE `serie_viewing`.`user_id`= " . $userId . " "
             . "    AND `season_viewing`.`season_number`>0 "
 //            . "    AND `season_viewing`.`season_completed`=0 "
             . "    AND ((`episode_viewing`.`air_date` = '" . $today . "' AND `serie_viewing`.`time_shifted` = 0) OR (`episode_viewing`.`air_date` = '" . $yesterday . "' AND `serie_viewing`.`time_shifted` = 1)) "
@@ -364,5 +367,37 @@ class SerieViewingRepository extends ServiceEntityRepository
             ->getConnection()->prepare($sql)
             ->executeQuery()
             ->fetchAllAssociative();
+    }
+
+    public function userSeries($userId, $locale): array
+    {
+        $sql = "SELECT s.`id`, s.`name` as name "
+            . "    FROM `serie_viewing` sv "
+            . "    LEFT JOIN `serie` s ON sv.`serie_id`=s.`id` "
+            . "    LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='fr' "
+            . "    WHERE sv.`user_id`=2 AND sln.`name` IS NULL "
+            . "UNION "
+            . "    SELECT s.`id`, CONCAT(CONCAT(sln.name, \" - \"), s.`name`) as name "
+            . "    FROM `serie_viewing` sv "
+            . "    LEFT JOIN `serie` s ON sv.`serie_id`=s.`id` "
+            . "    LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='fr' "
+            . "    WHERE sv.`user_id`=2 AND sln.`name` IS NOT NULL "
+            . "ORDER BY name";
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
+
+    public function viewedSeries($userId, $serieId): array
+    {
+        $sql = "SELECT * "
+            . "FROM `serie_viewing` sv "
+            . "INNER JOIN `serie` s ON s.`serie_id`=" . $serieId . " "
+            . "WHERE sv.`user_id`=" . $userId . " AND sv.`serie_id`=s.id";
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
     }
 }

@@ -1478,19 +1478,22 @@
 
                     .alternate-overviews {
                         @include flex-col(flex-start, flex-start);
-                        gap: 1rem;
+                        gap: .5rem;
                         margin-block-start: 1rem;
                         width: 100%;
 
                         .alternate-overview {
-                            border-left: .25rem solid var(--gradient-orange-50);
+                            background-color: var(--gradient-green-70-alpha-50);
+                            border-left: 0.25rem solid var(--gradient-orange-50);
+                            border-radius: .25rem;
                             display: flex;
                             flex-direction: column;
                             font-style: italic;
-                            padding-inline-start: 1rem;
+                            padding-block: .5rem;
+                            padding-inline: .5rem;
 
                             .source {
-                                margin-block-start: .5rem;
+                                margin-block-start: .25rem;
                                 margin-inline-start: auto;
 
                                 a {
@@ -1499,17 +1502,19 @@
                                     gap: .5rem;
 
                                     .source-logo {
-                                        height: 2rem;
-                                        width: 2rem;
+                                        height: 1.5rem;
+                                        width: 1.5rem;
 
                                         img {
-                                            height: 2rem;
+                                            border-radius: .125rem;
+                                            height: 1.5rem;
                                             object-fit: cover;
-                                            width: 2rem;
+                                            width: 1.5rem;
                                         }
                                     }
 
                                     .source-name {
+                                        font-size: .75rem;
                                         font-weight: 300;
                                     }
                                 }
@@ -2035,7 +2040,7 @@
                                 width: calc(100% - 10rem);
 
                                 h4 {
-                                    color: var(--gradient-ardoise-60);
+                                    color: var(--gradient-ardoise-30);
                                     font-size: 3rem;
                                 }
 
@@ -2911,7 +2916,7 @@
                     @include flex-row(center, center);
                     background-color: var(--gradient-ardoise-90);
                     border: 2px solid transparent;
-                    border-radius: .25rem;
+                    border-radius: calc(.25rem + 2px);
                     color: var(--gradient-ardoise-20);
                     height: 3rem;
                     //margin-inline-start: auto;
@@ -3725,6 +3730,10 @@
                     }
 
                     .title {
+                        display: flex;
+                        flex-direction: column;
+                        height: 2.25rem;
+                        justify-content: center;
                         margin-top: unset;
                         padding-top: .25rem;
                     }

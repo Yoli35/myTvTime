@@ -288,6 +288,7 @@ class SerieController extends AbstractController
                 'today_offset' => $i - $day_of_the_week,
             ];
         }
+        dump($episodesOfTheWeek);
         $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale(), 40, 1);
         $seriesToWatch = array_filter($seriesToWatch, function ($serie) use ($seriesOfTheWeekIds) {
             return !in_array($serie['serie_id'], $seriesOfTheWeekIds);
@@ -796,7 +797,7 @@ class SerieController extends AbstractController
                 'imageConfig' => $this->imageConfiguration->getConfig(),
             ]);
         }
-        return $this->displaySeriesPage($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
+        return $this->showSeriesPage($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
     }
 
     #[Route('/tmdb/{id}', name: 'app_series_tmdb', methods: ['GET'])]
@@ -823,7 +824,7 @@ class SerieController extends AbstractController
             ]);
         }
 
-        return $this->displaySeriesPage($request, $tv, $page, $from, $id, null, $query, $year);
+        return $this->showSeriesPage($request, $tv, $page, $from, $id, null, $query, $year);
     }
 
     #[Route('/show/{id}/season/{seasonNumber}', name: 'app_series_tmdb_season', methods: ['GET'])]
@@ -1204,7 +1205,9 @@ class SerieController extends AbstractController
         $today = $date->format('Y-m-d');
         $yesterday = $date->sub(new DateInterval('P1D'))->format('Y-m-d');
 
-        $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $yesterday, 1, 20);
+        $locale = $user->getPreferredLanguage() ?? $this->getParameter('locale');
+
+        $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $yesterday, $locale, 1, 20);
         /*        dump([
                     'today' => $today,
                     'yesterday' => $yesterday,
@@ -1230,6 +1233,8 @@ class SerieController extends AbstractController
                     'seasonEpisodeCount' => $episode['episode_count'],
                     'episodeNumbers' => [$episode['episode_number']],
                     'viewed' => $episode['viewed'],
+                    'favorite' => $episode['favorite'],
+                    'localizedName' => $episode['localized_name'],
                 ];
             } else {
                 sort($ep['episodeNumbers']);
@@ -1945,7 +1950,7 @@ class SerieController extends AbstractController
         return $ks;
     }
 
-    public function displaySeriesPage(Request $request, array $tv, int $page, string $from, $backId, Serie|null $serie, $query = "", $year = ""): Response
+    public function showSeriesPage(Request $request, array $tv, int $page, string $from, $backId, Serie|null $serie, $query = "", $year = ""): Response
     {
 //        dump($tv);
         /** @var User $user */
@@ -2016,63 +2021,30 @@ class SerieController extends AbstractController
             $tv['seriePosters'] = $serie->getSeriePosters();
             $tv['serieBackdrops'] = $serie->getSerieBackdrops();
             $tv['directLink'] = [];
+            // directLink: [
+            //     {
+            //          url: "https://www.netflix.com/watch/80025678",
+            //          logoPath: "/images/series/logos/netflix.png",
+            //          name: "Netflix"
+            //     }
+            // ]
             $dls = $serie->getDirectLink();
             $urls = [];
-            if ($dls) {
-                $dls = explode(',', $dls);
-//                dump($serie->getDirectLink(), $dls);
-                if ($dls && count($dls)) {
-                    $index = 0;
-                    foreach ($dls as $dl) {
-                        if ($dl && strlen($dl) > 0) {
-                            $tv['directLink'][$index]['url'] = $dl;
-                            $urls[] = $dl;
-
-                            // https://www.youtube.com/watch?v=xpiuV0Xj8zk&list=PLxaYND3fuRFPPEfhIfs9oT3SWOch-B0mL&index=1
-                            if (str_contains($dl, 'youtube')) {
-                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/youtube-premium.png';
-                                $tv['directLink'][$index]['name'] = 'Youtube Premium';
-                            }
-                            // https://www.netflix.com/title/81243969
-                            if (str_contains($dl, 'netflix')) {
-                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/netflix.png';
-                                $tv['directLink'][$index]['name'] = 'Netflix';
-                            }
-                            // https://www.viki.com/tv/39525c-star-in-my-mind
-                            if (str_contains($dl, 'viki')) {
-                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/viki.jpg';
-                                $tv['directLink'][$index]['name'] = 'Viki';
-                            }
-                            // https://tv.apple.com/fr/episode/red-moon/umc.cmc.58f7yvuesckz5c6bnprcgkb8s?at=1000l3V2
-                            if (str_contains($dl, 'apple')) {
-                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/apple-tv.jpg';
-                                $tv['directLink'][$index]['name'] = 'Apple TV Plus';
-                            }
-
-                            if (!key_exists('logoPath', $tv['directLink'][0])) {
-                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/vod.jpg';
-                                $tv['directLink'][$index]['name'] = 'Direct Link';
-                            }
-                            $index++;
-                        }
-                    }
-                }
-            }
             $providersMatches = [
                 'disney' => 337, // Disney Plus
                 'netflix' => 8, // Netflix
-                'prime' => 119, // Amazon Prime Video
+                'primevideo' => 119, // Amazon Prime Video
                 'canal' => 381, // Canal+
                 'ocs' => 56, // OCS Go
                 'apple' => 350, // Apple TV Plus
-//                    '' => 3, // Google Play Movies
+                'play.google' => 3, // Google Play Movies
 //                    '' => 193, // SFR Play
 //                    '' => 147, // Sixplay
 //                    '' => 61, // Orange VOD
 //                    '' => 236, // France TV
-//                    '' => 234, // Arte
+                'arte' => 234, // Arte
 //                    '' => 223, // Hayu
-//                    '' => 68, // Microsoft Store
+                'microsoft' => 68, // Microsoft Store
                 'youtube' => 188, // YouTube Premium
 //                    '' => 58, // Canal VOD
 //                    '' => 59, // Bbox VOD
@@ -2113,6 +2085,52 @@ class SerieController extends AbstractController
 //                    '' => 1967, // Molotov TV
 //                    '' => 542 // filmfriend
             ];
+            if ($dls) {
+                $dls = explode(',', $dls);
+//                dump($serie->getDirectLink(), $dls);
+                if ($dls && count($dls)) {
+                    $index = 0;
+                    foreach ($dls as $dl) {
+                        if ($dl && strlen($dl) > 0) {
+//                            $tv['directLink'][$index]['url'] = $dl;
+//                            $urls[] = $dl;
+                            $logoPath = null;
+                            $name = null;
+
+                            foreach ($providersMatches as $providerMatch => $providerId) {
+                                if (str_contains($dl, $providerMatch)) {
+                                    $logoPath = $watchProviderList[$providerId]['logo_path'];
+                                    $name = $watchProviderList[$providerId]['provider_name'];
+                                    break;
+                                }
+                            }
+                            $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name];
+                            // https://www.youtube.com/watch?v=xpiuV0Xj8zk&list=PLxaYND3fuRFPPEfhIfs9oT3SWOch-B0mL&index=1
+//                            if (str_contains($dl, 'youtube')) {
+//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/youtube-premium.png';
+//                                $tv['directLink'][$index]['name'] = 'Youtube Premium';
+//                            }
+//                            if (str_contains($dl, 'netflix')) {
+//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/netflix.png';
+//                                $tv['directLink'][$index]['name'] = 'Netflix';
+//                            }
+//                            if (str_contains($dl, 'viki')) {
+//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/viki.jpg';
+//                                $tv['directLink'][$index]['name'] = 'Viki';
+//                            }
+//                            if (str_contains($dl, 'apple')) {
+//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/apple-tv.jpg';
+//                                $tv['directLink'][$index]['name'] = 'Apple TV Plus';
+//                            }
+//                            if (!key_exists('logoPath', $tv['directLink'][0])) {
+//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/vod.jpg';
+//                                $tv['directLink'][$index]['name'] = 'Direct Link';
+//                            }
+                            $index++;
+                        }
+                    }
+                }
+            }
             if (count($providersFlatrate ?? []) && count($watchProviderList)) {
                 $justWatchPage = $this->TMDBService->justWatchPage($tv['id']);
                 preg_match_all('/https:\/\/click.+r=(http.+uct_country=fr)/', $justWatchPage, $matches);
@@ -2121,6 +2139,7 @@ class SerieController extends AbstractController
                 }, array_unique($matches[1]));
 
                 if (count($matches)) {
+                    dump($matches);
                     foreach ($matches as $match) {
                         $url = $match;
 //                        dump($url);
@@ -2164,16 +2183,14 @@ class SerieController extends AbstractController
                     }
                 }
             }
-//            dump($tv['directLink']);
+            dump(['watch provider list' => $watchProviderList, 'direct link' => $tv['directLink']]);
             $foundUrls = [];
             $tv['directLink'] = array_filter($tv['directLink'], function ($dl) use (&$foundUrls) {
                 if (!in_array($dl['url'], $foundUrls)) {
                     $foundUrls[] = $dl['url'];
-                    $added = true;
-                } else {
-                    $added = false;
+                    return true;
                 }
-                return $added;
+                return false;
             });
 
             $serieViewing = $this->serieViewingRepository->findOneBy(['user' => $user, 'serie' => $serie]);

@@ -22,6 +22,9 @@
         </div>
         <div class="title">
             <div>{{ todayAiring.serieName }}</div>
+            {% if todayAiring.localizedName %}
+                <div class="localized-name">{{ todayAiring.localizedName }}</div>
+            {% endif %}
         </div>
         <div class="episode">
             <div class="episode-detail">
