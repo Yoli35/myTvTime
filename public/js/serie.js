@@ -234,6 +234,11 @@ function addSerie(evt) {
 
     evt.preventDefault();
 
+    const loadingDiv = document.createElement("div");
+    loadingDiv.classList.add("loading");
+    addButton.classList.add("adding");
+    addButton.appendChild(loadingDiv);
+
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
         let data = {'serie': "", status: "", response: "", id: 0, card: null, userSerieId: 0, pagination: null};
