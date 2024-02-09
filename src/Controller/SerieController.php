@@ -1971,10 +1971,7 @@ class SerieController extends AbstractController
 //        if ($user) {
         $country = $user?->getCountry() ?? 'FR';
         $language = $user?->getPreferredLanguage() ?? 'fr';
-//        } else {
-//            $country = 'FR';
-//            $language = 'fr';
-//        }
+
         if ($temp && array_key_exists($country, $temp['results'])) {
             $watchProviders = $temp['results'][$country];
             $providersFlatrate = $this->getProviders($watchProviders, 'flatrate', $imgConfig, []); // Providers FR (streaming)
@@ -2073,7 +2070,7 @@ class SerieController extends AbstractController
 //                    '' => 309, // Sun Nxt
 //                    '' => 445, // Classix
 //                    '' => 1796, // Netflix basic with Ads
-//                    '' => 531, // Paramount Plus
+                'paramountplus' => 531, // Paramount Plus
 //                    '' => 582, // Paramount+ Amazon Channel
 //                    '' => 1853, // Paramount Plus Apple TV Channel
 //                    '' => 1870, // Pass Warner Amazon Channel

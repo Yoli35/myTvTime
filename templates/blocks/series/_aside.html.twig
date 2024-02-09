@@ -18,33 +18,35 @@
             </label>
         </div>
     </div>
-{#    <div class="todos">#}
-{#        TODOS#}
-{#        <div class="todo">#}
-{#            <div class="todo-text">Ajouter un switch pour masquer les épisodes et saisons à venir</div>#}
-{#            <div class="todo-close"><i class="fa-solid fa-xmark"></i></div>#}
-{#        </div>#}
-{#    </div>#}
+    {#    <div class="todos"> #}
+    {#        TODOS #}
+    {#        <div class="todo"> #}
+    {#            <div class="todo-text">Ajouter un switch pour masquer les épisodes et saisons à venir</div> #}
+    {#            <div class="todo-close"><i class="fa-solid fa-xmark"></i></div> #}
+    {#        </div> #}
+    {#    </div> #}
 {% endif %}
 <div class="key-facts">
     {% if user and serieId %}
         <h4>{{ 'Direct link'|trans }}</h4>
-{#        <pre>{{ dump(serie.directLink) }}</pre>#}
+        {#        <pre>{{ dump(serie.directLink) }}</pre> #}
         <div class="direct-link">
             {% if serie.directLink|length %}
                 <div class="label">{{ 'Watch now'|trans }}</div>
-                {% for dl in serie.directLink %}
-                    <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">
-                        <a href="{{ dl.url }}" target="_blank">
-                            {% if dl.logoPath %}
-                                <img src="{{ dl.logoPath }}" alt="{{ dl.name }}" loading="lazy">
-                            {% else %}
-                                <i class="fa-solid fa-circle-arrow-right"></i>
-                            {% endif %}
-                        </a>
-                        <div class="link-tool" id="edit-direct-link-{{ block }}"><i class="fa-solid fa-pen" data-title="{{ 'Edit url'|trans }}"></i></div>
-                    </div>
-                {% endfor %}
+                <div class="direct-link-list">
+                    {% for dl in serie.directLink %}
+                        <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">
+                            <a href="{{ dl.url }}" target="_blank">
+                                {% if dl.logoPath %}
+                                    <img src="{{ dl.logoPath }}" alt="{{ dl.name }}" loading="lazy">
+                                {% else %}
+                                    <i class="fa-solid fa-circle-arrow-right"></i>
+                                {% endif %}
+                            </a>
+                            <div class="link-tool" id="edit-direct-link-{{ block }}"><i class="fa-solid fa-pen" data-title="{{ 'Edit url'|trans }}"></i></div>
+                        </div>
+                    {% endfor %}
+                </div>
             {% else %}
                 <div class="label">{{ 'Add a link'|trans }}</div>
                 <div class="link-tool" id="new-direct-link-{{ block }}"><i class="fa-solid fa-circle-plus" data-title="{{ 'New url'|trans }}"></i></div>
