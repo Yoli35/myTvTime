@@ -135,12 +135,14 @@ class SerieController extends AbstractController
         $numbers = $serieRepository->numbers($user->getId())[0];
 
         $history = $this->getHistory($user, $request->getLocale());
+        $sevenDaysCount = $this->episodeViewingRepository->sevenDaysEpisodeUserHistory($user->getId(), ($this->dateService->getNow('UTC')->sub(new DateInterval("P7D")))->format('Y-m-d H:i:s'));
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'numbers' => $numbers,
             'countries' => $this->getCountries($user->getId()),
             'history' => $history,
+            'sevenDaysCount' => $sevenDaysCount[0]['count'],
             'historyPerPage' => 40,
             'pages' => [
                 'total_results' => $totalResults,

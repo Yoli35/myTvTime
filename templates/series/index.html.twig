@@ -68,6 +68,7 @@
                             </div>
                             <div class="history">
                                 <h2>{{ 'History'|trans }}</h2>
+                                <h4>{{ sevenDaysCount }} {{ 'episodes viewed in the last 7 days at'|trans }} {{ "now"|date("H:i", "Europe/Paris") }}</h4>
                                 <div class="history-wrapper">
                                     {% for h in history %}
                                         <a href="{{ path('app_series_show', {id: h.id}) }}?p={{ pages.page }}&from=my_series">

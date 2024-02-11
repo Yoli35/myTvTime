@@ -2604,9 +2604,12 @@
 
                 .episodes-layout {
                     @include flex-row(center, flex-end);
+                    background-color: var(--gradient-ardoise-70-alpha-50);
+                    border-radius: .25rem;
                     gap: 1rem;
                     margin-left: auto;
                     margin-bottom: 1rem;
+                    padding-inline-start: 1rem;
 
                     label {
                         align-items: center;

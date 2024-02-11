@@ -246,11 +246,11 @@ function addSerie(evt) {
             data = this.response;
         } else {
             data = JSON.parse(this.response);
-            if (data.status === 'Ok') {
-                addButton.classList.remove("add");
-                addButton.classList.add("seen");
-                addButton.innerHTML = "<i class=\"fa-solid fa-eye\"></i>"
-            }
+            // if (data.status === 'Ok') {
+            //     addButton.classList.remove("add");
+            //     addButton.classList.add("seen");
+            //     addButton.innerHTML = "<i class=\"fa-solid fa-eye\"></i>"
+            // }
 
             if (data.status === "Ko") {
                 alert("{{ 'Serie not found'|trans }} (ID: " + data.id + ")");

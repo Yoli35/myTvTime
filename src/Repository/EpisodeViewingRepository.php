@@ -92,6 +92,20 @@ class EpisodeViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function sevenDaysEpisodeUserHistory($userId, $date): array
+    {
+        $sql = "SELECT COUNT(*) as count "
+            . "FROM `episode_viewing` epiv "
+            . "LEFT JOIN `season_viewing` seav ON seav.`id`=epiv.`season_id` "
+            . "LEFT JOIN `serie_viewing` serv ON serv.`id`=seav.`serie_viewing_id` "
+            . "WHERE serv.`user_id`=" . $userId . " AND epiv.`viewed_at` >= '" . $date . "'";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return EpisodeViewing[] Returns an array of EpisodeViewing objects
 //     */
