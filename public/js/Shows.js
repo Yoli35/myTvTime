@@ -66,7 +66,12 @@ export class Shows {
 
         const seasonLinkDivs = document.querySelectorAll(".season-link");
         seasonLinkDivs.forEach(seasonLinkDiv => {
-            seasonLinkDiv.addEventListener("click", ()=> { seasonLinkDiv.classList.add("clicked"); });
+            seasonLinkDiv.addEventListener("click", ()=> {
+                seasonLinkDiv.classList.add("clicked");
+                setTimeout(() => {
+                    seasonLinkDiv.classList.remove("clicked");
+                }, 395);
+            });
         });
     }
 
