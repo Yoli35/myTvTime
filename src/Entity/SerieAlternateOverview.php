@@ -14,15 +14,15 @@ class SerieAlternateOverview
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'seriesAlternateOverviews')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Serie $series = null;
+
     #[ORM\Column(type: Types::TEXT)]
     private ?string $overview = null;
 
     #[ORM\Column(length: 2)]
     private ?string $locale = null;
-
-    #[ORM\ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'seriesAlternateOverviews')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Serie $series = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $source = null;
@@ -32,6 +32,9 @@ class SerieAlternateOverview
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $url = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $overviews = null;
 
     public function __construct($series, $locale, $overview)
     {
@@ -113,6 +116,18 @@ class SerieAlternateOverview
     public function setUrl(?string $url): static
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getOverviews(): ?array
+    {
+        return $this->overviews;
+    }
+
+    public function setOverviews(?array $overviews): static
+    {
+        $this->overviews = $overviews;
 
         return $this;
     }

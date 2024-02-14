@@ -199,7 +199,7 @@
                         </div>
                         <div class="info with-overview">
                             {% if serie.overview|length %}
-                                <div class="overview">{{ serie.overview|e }}</div>
+                                <div class="overview">{{ serie.overview|nl2br }}</div>
                             {% endif %}
                             {% if serie.alternate_overviews|length %}
                                 <div class="alternate-overviews">

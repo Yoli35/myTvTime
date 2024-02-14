@@ -121,6 +121,7 @@ class SerieController extends AbstractController
             });
 
             $this->savePoster($result['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
+            $result['alternateOverviews'] = json_decode($result['alternateOverviews'], true);
             return $result;
         }, $sqlResults);
 
@@ -137,6 +138,7 @@ class SerieController extends AbstractController
         $history = $this->getHistory($user, $request->getLocale());
         $sevenDaysCount = $this->episodeViewingRepository->sevenDaysEpisodeUserHistory($user->getId(), ($this->dateService->getNow('UTC')->sub(new DateInterval("P7D")))->format('Y-m-d H:i:s'));
 
+        dump($series);
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'numbers' => $numbers,
@@ -2262,14 +2264,14 @@ class SerieController extends AbstractController
         }
         $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][5]);
 
-//        dump([
-//            'tv' => $tv,
+        dump([
+            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
 //            'credits' => $credits,
-//        ]);
+        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),

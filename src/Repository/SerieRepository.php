@@ -102,29 +102,18 @@ class SerieRepository extends ServiceEntityRepository
 
     public function userSeries($userId, $locale, $sort, $order, $offset, $limit): array
     {
-        switch ($sort) {
-            case 'name':
-                $order = 's.`name` ' . $order;
-                break;
-            case 'firstDateAir':
-                $order = 's.`first_date_air` ' . $order;
-                break;
-            case 'modifiedAt':
-                $order = 'sv.`modified_at` ' . $order;
-                break;
-            case 'updatedAt':
-                $order = 's.`updated_at` ' . $order;
-                break;
-            case 'id':
-            default:
-                $order = 's.`id` ' . $order;
-                break;
-        }
+        $order = match ($sort) {
+            'name' => 's.`name` ' . $order,
+            'firstDateAir' => 's.`first_date_air` ' . $order,
+            'modifiedAt' => 'sv.`modified_at` ' . $order,
+            'updatedAt' => 's.`updated_at` ' . $order,
+            default => 's.`id` ' . $order,
+        };
         $sql = "SELECT s.`id` as id, s.`serie_id` as tmdbId, sv.`id` as svId, "
             . "s.`name` as name, sln.`name` as localizedName, "
             . "sev.`season_number` as seasonNumber, epv.`episode_number` as episodeNumber, "
             . "s.`first_date_air` as firstDateAir, s.`created_at` as createdAt, s.`updated_at` as updatedAt, "
-            . "s.`status` as status, s.`overview` as overview, sao.`overview` as alternateOverview, "
+            . "s.`status` as status, s.`overview` as overview, sao.`overview` as alternateOverview, sao.`overviews` as alternateOverviews, "
             . "s.`number_of_episodes` as numberOfEpisodes, s.`number_of_seasons` as numberOfSeasons, "
             . "sv.`viewed_episodes` as viewedEpisodes, (sv.`viewed_episodes` / s.`number_of_episodes`) as progress, "
             . "sv.`serie_completed` as serieCompleted, "
