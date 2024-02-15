@@ -2078,7 +2078,8 @@ class SerieController extends AbstractController
                 'disney' => 337, // Disney Plus
                 'netflix' => 8, // Netflix
                 'primevideo' => 119, // Amazon Prime Video
-                'canal' => 381, // Canal+
+                'canalplus' => 381, // Canal+
+                'mycanal' => 345, // Canal+ Series
                 'ocs' => 56, // OCS Go
                 'apple' => 350, // Apple TV Plus
                 'play.google' => 3, // Google Play Movies
