@@ -3254,7 +3254,7 @@
     border: 2px solid;
     margin-block: auto;
     margin-inline: auto;
-    padding: 1rem;
+    padding-block: 1rem;
 
     form {
         display: flex;
@@ -3274,6 +3274,11 @@
                         justify-content: flex-start;
                         width: 100%;
 
+                        > span {
+                            display: block;
+                            flex-shrink: 0;
+                        }
+
                         input {
                             background-color: var(--gradient-ardoise-80);
                             border: 1px solid var(--gradient-ardoise-50);
@@ -3282,6 +3287,12 @@
                             font-size: 1rem;
                             padding: .5rem;
                             width: 100%;
+                        }
+
+                        &:has(select) {
+                            select {
+                                width: 100%;
+                            }
                         }
                     }
 

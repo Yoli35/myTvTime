@@ -20,14 +20,12 @@ class OverviewsType extends AbstractType
         $builder
             ->add('type', ChoiceType::class, [
                 'attr' => ['class' => 'w100'],
-                'choice_translation_domain' => false,
                 'choices' => [
                     'Series overview' => 'series',
                     'Season overview' => 'season',
                 ],
                 'label' => 'Type',
                 'required' => true,
-//                'choice_value' => $options['data']['overview_type'],
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'Content',
@@ -47,7 +45,6 @@ class OverviewsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-//            'data_class' => SerieAlternateOverview::class,
             'watch_providers' => [],
         ]);
         $resolver->setAllowedTypes('watch_providers', 'array');

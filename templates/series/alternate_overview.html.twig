@@ -67,7 +67,55 @@
                     </div>
                 </div>
             </div>
-            <pre>{{ dump(form.overviews) }}</pre>
+{#            <pre>{{ dump(form.overviews) }}</pre>#}
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ field_name(form.overviews.type) }}">
+                            <span>{{ field_label(form.overviews.type) }}</span>
+                            <select name="{{ field_name(form.overviews.type) }}" id="{{ field_name(form.overviews.type) }}">
+                                <option value="">{{ field_label(form.overviews.type) }}</option>
+                                {% for choice in form.overviews.type.vars.choices %}
+                                    <option value="{{ choice.value }}"{{ choice.value==form.overviews.vars.data.overview_type ? ' selected':'' }}>{{ choice.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row{% if form.overviews.vars.data.overview_type=='series' %} d-none{% endif %}">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ form.overviews.season_number.vars.id }}">
+                            <span>{{ form.overviews.season_number.vars.label|trans }}</span>
+                            {{ form_widget(form.overviews.season_number) }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ form.overviews.content.vars.id }}" class="required">Résumé</label>
+                        <textarea id="{{ form.overviews.content.vars.id }}" name="{{ field_name(form.overviews.content) }}" required="required" rows="8" cols="48">{{ form.overviews.content.vars.value }}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ field_name(form.overviews.watch_provider) }}">
+                            <span>{{ field_label(form.overviews.watch_provider) }}</span>
+                            <select name="{{ field_name(form.overviews.watch_provider) }}" id="{{ field_name(form.overviews.watch_provider) }}">
+                                <option value="">{{ field_label(form.overviews.watch_provider) }}</option>
+                                {% for choice in form.overviews.watch_provider.vars.choices %}
+                                    <option value="{{ choice.value }}"{{ choice.value==form.overviews.vars.data.watch_provider_id ? ' selected':'' }}>{{ choice.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
             {{ form_widget(form) }}
             {{ form_end(form) }}
         </div>
