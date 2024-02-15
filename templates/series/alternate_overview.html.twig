@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}myTvTime ▶ ︎{{ 'Series'|trans }} ▶ ︎{{ 'Overview'|trans }}{% endblock %}
+{% block description %}{{ 'List of the series I\'m watching, aired today'|trans }}{% endblock %}
+{% block keywords %}{{ 'Series, Tv Shows'|trans }}{% endblock %}
+
+{% block body %}
+    <script>
+        const bd = '{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.posterPath }}';
+        const body = document.querySelector("body");
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
+        body.style.backgroundRepeat = "no-repeat";
+        body.style.backgroundAttachment = "fixed";
+        body.style.backgroundImage = "url(" + bd + ")";
+    </script>
+    {{ include('blocks/_mainMenu.html.twig') }}
+    <div class="container-fluid backgroundImageOverlay">
+        {{ include('blocks/_nav.html.twig') }}
+        <div class="series-overviews">
+            {{ form_start(form) }}
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ form.overview.vars.id }}" class="required">Résumé</label>
+                        <textarea id="{{ form.overview.vars.id }}" name="{{ field_name(form.overview) }}" required="required" rows="8" cols="48">{{ form.overview.vars.value }}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ form.locale.vars.id }}">
+                            <span>{{ form.locale.vars.label|trans }}</span>
+                            {{ form_widget(form.locale) }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ form.source.vars.id }}">
+                            <span>{{ form.source.vars.label|trans }}</span>
+                            {{ form_widget(form.source) }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ form.logoPath.vars.id }}">
+                            <span>{{ form.logoPath.vars.label|trans }}</span>
+                            {{ form_widget(form.logoPath) }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="{{ form.url.vars.id }}">
+                            <span>{{ form.url.vars.label|trans }}</span>
+                            {{ form_widget(form.url) }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <pre>{{ dump(form.overviews) }}</pre>
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+    {{ include('blocks/_pageFooter.html.twig') }}
+{% endblock %}

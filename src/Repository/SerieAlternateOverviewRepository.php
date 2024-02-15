@@ -21,28 +21,11 @@ class SerieAlternateOverviewRepository extends ServiceEntityRepository
         parent::__construct($registry, SerieAlternateOverview::class);
     }
 
-//    /**
-//     * @return SerieAlternateOverview[] Returns an array of SerieAlternateOverview objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?SerieAlternateOverview
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function save(SerieAlternateOverview $serieAlternateOverview, $flush = false): void
+    {
+        $this->_em->persist($serieAlternateOverview);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
 }

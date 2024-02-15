@@ -10,12 +10,15 @@ use App\Entity\Favorite;
 use App\Entity\Networks;
 use App\Entity\SeasonViewing;
 use App\Entity\Serie;
+use App\Entity\SerieAlternateOverview;
 use App\Entity\SerieBackdrop;
 use App\Entity\SerieCast;
 use App\Entity\SeriePoster;
 use App\Entity\SerieViewing;
 use App\Entity\Settings;
 use App\Entity\User;
+use App\Entity\WatchProvider;
+use App\Form\SeriesAlternateOverviewsType;
 use App\Form\SerieSearchType;
 use App\Form\TvFilterType;
 use App\Repository\AlertRepository;
@@ -23,12 +26,14 @@ use App\Repository\CastRepository;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
 use App\Repository\SeasonViewingRepository;
+use App\Repository\SerieAlternateOverviewRepository;
 use App\Repository\SerieBackdropRepository;
 use App\Repository\SerieCastRepository;
 use App\Repository\SeriePosterRepository;
 use App\Repository\SerieRepository;
 use App\Repository\SerieViewingRepository;
 use App\Repository\SettingsRepository;
+use App\Repository\WatchProviderRepository;
 use App\Service\DateService;
 use App\Service\DeeplTranslator;
 use App\Service\TMDBService;
@@ -71,22 +76,24 @@ class SerieController extends AbstractController
     public array $messages = [];
 
     public function __construct(
-        private readonly AlertRepository          $alertRepository,
-        private readonly CastRepository           $castRepository,
-        private readonly DateService              $dateService,
-        private readonly DeeplTranslator          $deeplTranslator,
-        private readonly EpisodeViewingRepository $episodeViewingRepository,
-        private readonly FavoriteRepository       $favoriteRepository,
-        private readonly ImageConfiguration       $imageConfiguration,
-        private readonly SeasonViewingRepository  $seasonViewingRepository,
-        private readonly SerieCastRepository      $serieCastRepository,
-        private readonly SerieBackdropRepository  $serieBackdropRepository,
-        private readonly SeriePosterRepository    $seriePosterRepository,
-        private readonly SerieRepository          $serieRepository,
-        private readonly SerieViewingRepository   $serieViewingRepository,
-        private readonly SettingsRepository       $settingsRepository,
-        private readonly TMDBService              $TMDBService,
-        private readonly TranslatorInterface      $translator,
+        private readonly AlertRepository                  $alertRepository,
+        private readonly CastRepository                   $castRepository,
+        private readonly DateService                      $dateService,
+        private readonly DeeplTranslator                  $deeplTranslator,
+        private readonly EpisodeViewingRepository         $episodeViewingRepository,
+        private readonly FavoriteRepository               $favoriteRepository,
+        private readonly ImageConfiguration               $imageConfiguration,
+        private readonly SeasonViewingRepository          $seasonViewingRepository,
+        private readonly SerieAlternateOverviewRepository $serieAlternateOverviewRepository,
+        private readonly SerieCastRepository              $serieCastRepository,
+        private readonly SerieBackdropRepository          $serieBackdropRepository,
+        private readonly SeriePosterRepository            $seriePosterRepository,
+        private readonly SerieRepository                  $serieRepository,
+        private readonly SerieViewingRepository           $serieViewingRepository,
+        private readonly SettingsRepository               $settingsRepository,
+        private readonly TMDBService                      $TMDBService,
+        private readonly TranslatorInterface              $translator,
+        private readonly WatchProviderRepository          $watchProviderRepository,
     )
     {
     }
@@ -930,13 +937,15 @@ class SerieController extends AbstractController
         // Breadcrumb
         $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
 
-//        dump([
+        dump([
 //            'serie' => $serie,
 //            'env' => $_ENV['APP_ENV'],
 //            'season' => $season,
 //            'modifications' => $modifications,
 //            'watchProviders' => $watchProviders,
-//        ]);
+            'episodes' => $episodes,
+            'seasonViewing' => $seasonViewing,
+        ]);
 
         return $this->render('series/season.html.twig', [
             'serie' => $serie,
@@ -958,6 +967,40 @@ class SerieController extends AbstractController
                 'year' => $year,
                 "backId" => $backId
             ],
+        ]);
+    }
+
+    #[Route('/show/{id}/overviews', name: 'app_series_overviews', methods: ['GET'])]
+    public function alternateOverview(Request $request, Serie $serie): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $serieAlternateOverview = $this->serieAlternateOverviewRepository->findOneBy(['series' => $serie]);
+        $watchProviders = $this->watchProviderRepository->getWatchProviders($user->getCountry());
+        $watchProviders = array_combine(array_column($watchProviders, 'name'), array_column($watchProviders, 'id'));
+        dump([
+            'serie' => $serie,
+            'serieAlternateOverview' => $serieAlternateOverview,
+            'watchProviders' => $watchProviders,
+        ]);
+        $form = $this->createForm(SeriesAlternateOverviewsType::class, $serieAlternateOverview, [
+            'allow_extra_fields' => true,
+            'overviews' => $serieAlternateOverview?->getOverviews(),
+            'watch_providers' => $watchProviders,
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $serieAlternateOverview = $form->getData();
+            $this->serieAlternateOverviewRepository->save($serieAlternateOverview, true);
+        }
+
+        return $this->render('series/alternate_overview.html.twig', [
+            'serie' => $serie,
+            'form' => $form->createView(),
+            'imageConfig' => $this->imageConfiguration->getConfig(),
         ]);
     }
 

@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class WatchProviderRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, WatchProvider::class);
     }
@@ -35,28 +35,18 @@ class WatchProviderRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-//    /**
-//     * @return WatchProvider[] Returns an array of WatchProvider objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('w')
-//            ->andWhere('w.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('w.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getWatchProviders($country = null): array
+    {
+        $sql = "SELECT wp.`provider_id` as id, wp.`provider_name` as name "
+            . "FROM `watch_provider` wp ";
+        if ($country) {
+            $sql .= "WHERE wp.`display_priorities` LIKE '%FR%' ";
+        }
+        $sql .= "ORDER BY name";
 
-//    public function findOneBySomeField($value): ?WatchProvider
-//    {
-//        return $this->createQueryBuilder('w')
-//            ->andWhere('w.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
 }
