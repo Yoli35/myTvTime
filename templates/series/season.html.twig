@@ -182,6 +182,11 @@
                                                     {{ episode.air_date|format_date('short') }}
                                                 </div>
                                             {% endif %}
+                                            {% if episode.viewing is defined and episode.viewing.viewedAt %}
+                                                <div class="viewed-at">
+                                                    <i class="fa-solid fa-eye"></i> {{ episode.viewing.viewedAt|format_datetime('relative_short', 'short')|capitalize }}
+                                                </div>
+                                            {% endif %}
                                         </div>
                                         <div class="infos">
                                             <h4>
@@ -394,7 +399,7 @@
                     substituteNameDiv.remove();
                 }
             }
-            xhr.open("GET", url + '?data=' + data, true);
+            xhr.open("GET", url + '?data=' + encodeURIComponent(data), true);
             xhr.send();
         }
 
