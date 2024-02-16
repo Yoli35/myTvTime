@@ -102,7 +102,7 @@
                         .content {
                             display: flex;
                             flex-shrink: 0;
-                            gap: .5rem;
+                            gap: .25rem;
 
                             .challenge {
                                 background-color: var(--gradient-ardoise-80);
@@ -929,7 +929,7 @@
 
 .activity-numbers {
     display: flex;
-    gap: 1rem;
+    gap: .5rem;
     margin-block-start: 1rem;
 
     .current-month, .last-month {
@@ -938,8 +938,8 @@
             border-radius: .5rem;
             display: flex;
             flex-wrap: wrap;
-            gap: .5rem;
-            padding: .5rem;
+            gap: .25rem;
+            padding: .25rem;
 
             .activity-stat {
                 background-color: var(--gradient-ardoise-60-alpha-50);

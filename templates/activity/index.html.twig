@@ -61,9 +61,10 @@
                     </div>
                     <div class="activity-numbers">
                         <div class="current-month">
-                            <div>{{ 'Current month'|trans }}</div>
+                            {% set n = stats.currentMonth.number_of_days %}
+                            <div>{{ 'Current month'|trans }} - {{ n }} {{ (n>1?'days':'day')|trans }}</div>
                             <div class="activity-stats">
-                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.currentMonth.number_of_days }}</span></div>
+{#                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.currentMonth.number_of_days }}</span></div>#}
                                 <div class="activity-stat">{{ 'Total distance'|trans }}<span>{{ stats.currentMonth.total_distance }}</span>km</div>
                                 <div class="activity-stat">{{ 'Average distance'|trans }}<span>{{ stats.currentMonth.average_distance|round(2) }}</span>km</div>
                                 <div class="activity-stat">{{ 'Total steps'|trans }}<span>{{ stats.currentMonth.total_steps }}</span></div>
@@ -80,7 +81,7 @@
                         <div class="last-month">
                             <div>{{ 'Last number_of_days days'|trans({'number_of_days': stats.lastMonth.number_of_days}) }} - {{ 'Start'|trans }} {{ stats.lastMonth.start|format_date('medium') }} - {{ 'End'|trans }} {{ stats.lastMonth.end|format_date('medium') }}</div>
                             <div class="activity-stats">
-                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.lastMonth.number_of_days }}</span></div>
+                                {#                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.lastMonth.number_of_days }}</span></div> #}
                                 <div class="activity-stat">{{ 'Total distance'|trans }}<span>{{ stats.lastMonth.total_distance }}</span>km</div>
                                 <div class="activity-stat">{{ 'Average distance'|trans }}<span>{{ stats.lastMonth.average_distance|round(2) }}</span>km</div>
                                 <div class="activity-stat">{{ 'Total steps'|trans }}<span>{{ stats.lastMonth.total_steps }}</span></div>
