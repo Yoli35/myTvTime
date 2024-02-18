@@ -35,15 +35,24 @@
                 <div class="label">{{ 'Watch now'|trans }}</div>
                 <div class="direct-link-list">
                     {% for dl in serie.directLink %}
-                        <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">
-                            <a href="{{ dl.url }}" target="_blank">
+                        {% if dl.type == 'link' %}
+                            <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">
+                        {% endif %}
+                        {% if dl.type == 'file' %}
+                            <div class="link-pass" data-title="{{ 'Play video'|trans }} “{{ dl.name }}”">
+                        {% endif %}
+                        <a href="{{ dl.url }}" target="_blank">
+                            {% if dl.type == 'link' %}
                                 {% if dl.logoPath %}
                                     <img src="{{ dl.logoPath }}" alt="{{ dl.name }}" loading="lazy">
                                 {% else %}
                                     <i class="fa-solid fa-circle-arrow-right"></i>
                                 {% endif %}
-                            </a>
-                            <div class="link-tool" id="edit-direct-link-{{ block }}"><i class="fa-solid fa-pen" data-title="{{ 'Edit url'|trans }}"></i></div>
+                            {% else %}
+                                <span>{{ dl.ext }}</span>
+                            {% endif %}
+                        </a>
+                        <div class="link-tool" id="edit-direct-link-{{ block }}"><i class="fa-solid fa-pen" data-title="{{ 'Edit url'|trans }}"></i></div>
                         </div>
                     {% endfor %}
                 </div>

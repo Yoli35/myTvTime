@@ -2973,8 +2973,9 @@
                         transition: all 125ms ease-in-out;
                         width: 3rem;
 
-                        &:has(>a>i) {
+                        &:has(>a>i), &:has(>a>span) {
                             a {
+                                @include flex-row(center, center);
                                 height: 100%;
                                 width: 100%;
                             }

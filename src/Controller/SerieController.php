@@ -2073,7 +2073,6 @@ class SerieController extends AbstractController
             //     }
             // ]
             $dls = $serie->getDirectLink();
-            $urls = [];
             $providersMatches = [
                 'disney' => 337, // Disney Plus
                 'netflix' => 8, // Netflix
@@ -2132,13 +2131,29 @@ class SerieController extends AbstractController
             ];
             if ($dls) {
                 $dls = explode(',', $dls);
-//                dump($serie->getDirectLink(), $dls);
                 if ($dls && count($dls)) {
-                    $index = 0;
                     foreach ($dls as $dl) {
                         if ($dl && strlen($dl) > 0) {
-//                            $tv['directLink'][$index]['url'] = $dl;
-//                            $urls[] = $dl;
+                            // Est-ce que le lien pointe vers un fichier ?
+                            if (str_contains($dl, 'm3u8') || str_contains($dl, 'mp4') || str_contains($dl, 'mkv') || str_contains($dl, 'avi')) {
+                                // Récupérer l'extension du fichier
+                                $ext = pathinfo($dl, PATHINFO_EXTENSION);
+                                // Récupérer le nom de fichier
+                                $name = pathinfo($dl, PATHINFO_FILENAME);
+                                $tv['directLink'][] = ['url' => $dl, 'logoPath' => null, 'name' => $name, 'type' => 'file', 'ext' => $ext];
+                            } else {
+                                $logoPath = null;
+                                $name = null;
+
+                                foreach ($providersMatches as $providerMatch => $providerId) {
+                                    if (str_contains($dl, $providerMatch)) {
+                                        $logoPath = $watchProviderList[$providerId]['logo_path'];
+                                        $name = $watchProviderList[$providerId]['provider_name'];
+                                        break;
+                                    }
+                                }
+                                $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'link'];
+                            }
                             $logoPath = null;
                             $name = null;
 
@@ -2150,28 +2165,6 @@ class SerieController extends AbstractController
                                 }
                             }
                             $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name];
-                            // https://www.youtube.com/watch?v=xpiuV0Xj8zk&list=PLxaYND3fuRFPPEfhIfs9oT3SWOch-B0mL&index=1
-//                            if (str_contains($dl, 'youtube')) {
-//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/youtube-premium.png';
-//                                $tv['directLink'][$index]['name'] = 'Youtube Premium';
-//                            }
-//                            if (str_contains($dl, 'netflix')) {
-//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/netflix.png';
-//                                $tv['directLink'][$index]['name'] = 'Netflix';
-//                            }
-//                            if (str_contains($dl, 'viki')) {
-//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/viki.jpg';
-//                                $tv['directLink'][$index]['name'] = 'Viki';
-//                            }
-//                            if (str_contains($dl, 'apple')) {
-//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/apple-tv.jpg';
-//                                $tv['directLink'][$index]['name'] = 'Apple TV Plus';
-//                            }
-//                            if (!key_exists('logoPath', $tv['directLink'][0])) {
-//                                $tv['directLink'][$index]['logoPath'] = '/images/series/logos/vod.jpg';
-//                                $tv['directLink'][$index]['name'] = 'Direct Link';
-//                            }
-                            $index++;
                         }
                     }
                 }
@@ -2206,7 +2199,6 @@ class SerieController extends AbstractController
                         if (str_contains($url, "apple")) {
                             $url = preg_replace('/&.*$/', '', $url);
                         }
-                        $urls[] = $url;
 
                         $logoPath = null;
                         $name = null;
