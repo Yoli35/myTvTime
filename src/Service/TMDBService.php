@@ -2,10 +2,6 @@
 
 namespace App\Service;
 
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
@@ -33,10 +29,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -50,10 +46,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -67,10 +63,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -84,10 +80,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -101,10 +97,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -125,10 +121,10 @@ class TMDBService
             }
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -143,10 +139,10 @@ class TMDBService
 
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -160,10 +156,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -182,10 +178,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -199,31 +195,31 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
 
-    public function getMovieCredits($movieId, $locale): ?string
-    {
-        $noCredits = json_encode(["id" => $movieId, "cast" => [], "crew" => []]);
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/movie/' . $movieId . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $e) {
-                return $noCredits;
-            }
-        } catch (Throwable $e) {
-            return $noCredits;
-        }
-    }
+//    public function getMovieCredits($movieId, $locale): ?string
+//    {
+//        $noCredits = json_encode(["id" => $movieId, "cast" => [], "crew" => []]);
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/movie/' . $movieId . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return $noCredits;
+//            }
+//        } catch (Throwable) {
+//            return $noCredits;
+//        }
+//    }
 
     public function getTv($showId, $locale, $details = null): ?string
     {
@@ -238,10 +234,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -267,39 +263,39 @@ class TMDBService
         }
     }
 
-    public function getTvCredits($tvId, $locale): ?string
-    {
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/tv/' . $tvId . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $exception) {
-                return 'Response : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
-            }
-        } catch (Throwable $exception) {
-            return 'Request : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
-        }
-    }
-
-    public function getTvKeywords($tvId, $locale): ?string
-    {
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/tv/' . $tvId . '/keywords?api_key=' . $this->api_key . '&language=' . $locale,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $exception) {
-                return "";
-            }
-        } catch (Throwable $exception) {
-            return "";
-        }
-    }
+//    public function getTvCredits($tvId, $locale): ?string
+//    {
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/tv/' . $tvId . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return 'Response : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
+//            }
+//        } catch (Throwable) {
+//            return 'Request : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
+//        }
+//    }
+//
+//    public function getTvKeywords($tvId, $locale): ?string
+//    {
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/tv/' . $tvId . '/keywords?api_key=' . $this->api_key . '&language=' . $locale,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return "";
+//            }
+//        } catch (Throwable) {
+//            return "";
+//        }
+//    }
 
     public function getTvWatchProviders($tvId): ?string
     {
@@ -310,10 +306,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -327,10 +323,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -344,30 +340,30 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return "";
         }
     }
 
-    public function getTvSimilar($tvId): ?string
-    {
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/tv/' . $tvId . '/similar?api_key=' . $this->api_key,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $exception) {
-                return "";
-            }
-        } catch (Throwable $exception) {
-            return "";
-        }
-    }
+//    public function getTvSimilar($tvId): ?string
+//    {
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/tv/' . $tvId . '/similar?api_key=' . $this->api_key,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return "";
+//            }
+//        } catch (Throwable) {
+//            return "";
+//        }
+//    }
 
     public function search($page, $query, $year, $locale): ?string
     {
@@ -378,10 +374,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -395,30 +391,30 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return "";
         }
     }
 
-    public function getLatest($locale): ?string
-    {
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/tv/latest?api_key=' . $this->api_key . '&language=' . $locale,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $exception) {
-                return "";
-            }
-        } catch (Throwable $exception) {
-            return "";
-        }
-    }
+//    public function getLatest($locale): ?string
+//    {
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/tv/latest?api_key=' . $this->api_key . '&language=' . $locale,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return "";
+//            }
+//        } catch (Throwable) {
+//            return "";
+//        }
+//    }
 
     public function getSeries($kind, $page, $locale, $timezone = null): ?string
     {
@@ -429,10 +425,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -450,30 +446,30 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
 
-    public function getTvSeasonCredits($tvId, $seasonNumber, $locale): ?string
-    {
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $e) {
-                return "";
-            }
-        } catch (Throwable $e) {
-            return "";
-        }
-    }
+//    public function getTvSeasonCredits($tvId, $seasonNumber, $locale): ?string
+//    {
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return "";
+//            }
+//        } catch (Throwable) {
+//            return "";
+//        }
+//    }
 
     public function getTvEpisode($tvId, $seasonNumber, $episodeNumber, $locale, $details = null): ?string
     {
@@ -488,10 +484,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
@@ -506,65 +502,65 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return "";
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return "";
         }
     }
 
-    public function getMovieImages($id, $locale): ?string
-    {
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/movie/' . $id . '/images?api_key=' . $this->api_key . '&language=' . $locale,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $e) {
-                return "";
-            }
-        } catch (Throwable $e) {
-            return "";
-        }
-    }
-
-    public function getTvImages($tvId, $locale): ?string
-    {
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/tv/' . $tvId . '/images?api_key=' . $this->api_key . '&language=' . $locale,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $e) {
-                return "";
-            }
-        } catch (Throwable $e) {
-            return "";
-        }
-    }
-
-    public function getMovieRecommendations($movieId, $locale): ?string
-    {
-        $zeroRecommandations = json_encode(["page" => 1, "results" => [], "total_pages" => 0, "total_results" => 40]);
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/movie/' . $movieId . '/recommendations?api_key=' . $this->api_key . '&language=' . $locale . '&page=1' . $locale,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $e) {
-                return $zeroRecommandations;
-            }
-        } catch (Throwable $e) {
-            return $zeroRecommandations;
-        }
-    }
+//    public function getMovieImages($id, $locale): ?string
+//    {
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/movie/' . $id . '/images?api_key=' . $this->api_key . '&language=' . $locale,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return "";
+//            }
+//        } catch (Throwable) {
+//            return "";
+//        }
+//    }
+//
+//    public function getTvImages($tvId, $locale): ?string
+//    {
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/tv/' . $tvId . '/images?api_key=' . $this->api_key . '&language=' . $locale,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return "";
+//            }
+//        } catch (Throwable) {
+//            return "";
+//        }
+//    }
+//
+//    public function getMovieRecommendations($movieId, $locale): ?string
+//    {
+//        $zeroRecommandations = json_encode(["page" => 1, "results" => [], "total_pages" => 0, "total_results" => 40]);
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/movie/' . $movieId . '/recommendations?api_key=' . $this->api_key . '&language=' . $locale . '&page=1' . $locale,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return $zeroRecommandations;
+//            }
+//        } catch (Throwable) {
+//            return $zeroRecommandations;
+//        }
+//    }
 
     public function getMovieReleaseDates($movieId): ?string
     {
@@ -576,10 +572,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return $noReleaseDates;
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return $noReleaseDates;
         }
     }
@@ -594,31 +590,31 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return $noCountries;
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return $noCountries;
         }
     }
 
-    public function getWatchProviders($movieId): ?string
-    {
-        $noWatchProviders = json_encode([]);
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://api.themoviedb.org/3/movie/' . $movieId . '/watch/providers?api_key=' . $this->api_key,
-            );
-            try {
-                return $response->getContent();
-            } catch (Throwable $e) {
-                return $noWatchProviders;
-            }
-        } catch (Throwable $e) {
-            return $noWatchProviders;
-        }
-    }
+//    public function getWatchProviders($movieId): ?string
+//    {
+//        $noWatchProviders = json_encode([]);
+//        try {
+//            $response = $this->client->request(
+//                'GET',
+//                'https://api.themoviedb.org/3/movie/' . $movieId . '/watch/providers?api_key=' . $this->api_key,
+//            );
+//            try {
+//                return $response->getContent();
+//            } catch (Throwable) {
+//                return $noWatchProviders;
+//            }
+//        } catch (Throwable) {
+//            return $noWatchProviders;
+//        }
+//    }
 
     public function getPopularPeople($locale): ?string
     {
@@ -630,10 +626,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return $noPopularPeople;
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return $noPopularPeople;
         }
     }
@@ -655,10 +651,10 @@ class TMDBService
             }
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return $noOne;
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return $noOne;
         }
     }
@@ -673,10 +669,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return $noCredits;
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return $noCredits;
         }
     }
@@ -691,10 +687,10 @@ class TMDBService
             );
             try {
                 return $response->getContent();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 return $noRegions;
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return $noRegions;
         }
     }
