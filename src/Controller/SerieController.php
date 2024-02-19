@@ -735,12 +735,14 @@ class SerieController extends AbstractController
         foreach ($filters as $key => $value) {
             $filterString .= "&$key=$value";
         }
-//        dump([
-//            '$filters' => $filters,
-//            '$filterString' => $filterString,
-//        ]);
+        dump([
+            '$filters' => $filters,
+            '$filterString' => $filterString,
+        ]);
         $standing = $this->TMDBService->getFilterTv($filterString);
+        dump($standing);
         $series = json_decode($standing, true);
+        dump($series);
         $totalResults = $series['total_results'];
         $totalPages = $series['total_pages'];
         $imageConfig = $this->imageConfiguration->getConfig();

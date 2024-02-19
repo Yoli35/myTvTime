@@ -57,7 +57,7 @@ class TvFilterType extends AbstractType
                 'choices' => [
                     'Popularity' => 'popularity',
                     'Revenue' => 'revenue',
-                    'Primary release date' => 'primary_release_date',
+                    'Primary release date' => 'first_air_date',
                     'Vote average' => 'vote_average',
                     'Vote count' => 'vote_count',
                 ],
