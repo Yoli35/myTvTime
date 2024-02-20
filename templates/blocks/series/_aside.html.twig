@@ -35,6 +35,9 @@
                 <div class="label">{{ 'Watch now'|trans }}</div>
                 <div class="direct-link-list">
                     {% for dl in serie.directLink %}
+                        {% if dl.type == 'dir' %}
+                            <div class="link-pass" data-title="{{ 'Watch'|trans }} {{ dl.name }}">
+                        {% endif %}
                         {% if dl.type == 'link' %}
                             <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">
                         {% endif %}
@@ -48,8 +51,12 @@
                                 {% else %}
                                     <i class="fa-solid fa-circle-arrow-right"></i>
                                 {% endif %}
-                            {% else %}
+                            {% endif %}
+                            {% if dl.type == 'file' %}
                                 <span>{{ dl.ext }}</span>
+                            {% endif %}
+                            {% if dl.type == 'dir' %}
+                                <i class="fa-solid fa-folder"></i>
                             {% endif %}
                         </a>
                         <div class="link-tool" id="edit-direct-link-{{ block }}"><i class="fa-solid fa-pen" data-title="{{ 'Edit url'|trans }}"></i></div>

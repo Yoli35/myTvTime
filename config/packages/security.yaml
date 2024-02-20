@@ -26,7 +26,7 @@ security:
                 enable_csrf: true
             remember_me:
                 secret: '%kernel.secret%' # required
-#                lifetime: 1209600 # 2 weeks in seconds
+                lifetime: 1209600 # 2 weeks in seconds
                 always_remember_me: true
             logout:
                 path: app_logout

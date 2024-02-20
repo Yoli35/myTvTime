@@ -32,6 +32,9 @@ class Serie
     #[ORM\Column]
     private ?int $serieId = null;
 
+    #[ORM\Column(length: 1024, nullable: true)]
+    private ?string $directLink = null;
+
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $firstDateAir = null;
 
@@ -91,9 +94,6 @@ class Serie
 
     #[ORM\OneToMany(mappedBy: 'series', targetEntity: Season::class, orphanRemoval: true)]
     private Collection $seasons;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $directLink = null;
 
     #[ORM\OneToMany(mappedBy: 'series', targetEntity: SerieAlternateOverview::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $seriesAlternateOverviews;

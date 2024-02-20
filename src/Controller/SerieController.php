@@ -2136,6 +2136,11 @@ class SerieController extends AbstractController
                 if ($dls && count($dls)) {
                     foreach ($dls as $dl) {
                         if ($dl && strlen($dl) > 0) {
+                            if (str_contains($dl, '|')) {
+                                $dlArr = explode('|', $dl);
+                                $tv['directLink'][] = ['url' => $dlArr[0], 'logoPath' => null, 'name' => $dlArr[1], 'type' => $dlArr[2]];
+                                continue;
+                            }
                             // Est-ce que le lien pointe vers un fichier ?
                             if (str_contains($dl, 'm3u8') || str_contains($dl, 'mp4') || str_contains($dl, 'mkv') || str_contains($dl, 'avi')) {
                                 // Récupérer l'extension du fichier
@@ -2166,7 +2171,7 @@ class SerieController extends AbstractController
                                     break;
                                 }
                             }
-                            $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name];
+                            $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'link'];
                         }
                     }
                 }
@@ -2211,7 +2216,7 @@ class SerieController extends AbstractController
                                 break;
                             }
                         }
-                        $tv['directLink'][] = ['url' => $url, 'logoPath' => $logoPath, 'name' => $name];
+                        $tv['directLink'][] = ['url' => $url, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'link'];
                         if ($dls == null) {
                             $serie->setDirectLink($serie->getDirectLink() ? $serie->getDirectLink() . ',' : '' . $url);
                             $this->serieRepository->save($serie);
