@@ -446,6 +446,7 @@ class SerieFrontController extends AbstractController
     #[Route('/episode/vote/{id}/{vote}', name: 'app_episode_vote', methods: ['GET'])]
     public function episodeVote(EpisodeViewing $episodeViewing, int $vote): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
 
@@ -462,6 +463,7 @@ class SerieFrontController extends AbstractController
     #[Route('/episode/view/{id}/{view}', name: 'app_episode_view', methods: ['GET'])]
     public function episodeView(Request $request, EpisodeViewing $episodeViewing, int $view): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
 
@@ -513,6 +515,7 @@ class SerieFrontController extends AbstractController
     #[Route('/episode/view/network/{id}/{networkId}', name: 'app_episode_view_network', methods: ['GET'])]
     public function episodeViewNetwork(EpisodeViewing $episodeViewing, int $networkId): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
 
@@ -550,6 +553,7 @@ class SerieFrontController extends AbstractController
     #[Route('/settings/set/{settings}', name: 'app_set_settings', methods: ['GET'])]
     public function setSettings($settings): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $settings = json_decode($settings, true);
 //        dump($settings);
 

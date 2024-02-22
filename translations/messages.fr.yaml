@@ -111,6 +111,7 @@ Total distance: Distance totale
 Average distance: Distance moyenne
 Total steps: Nombre total de pas
 Average steps: Nombre moyen de pas
+Average step length: Longueur moyenne du pas
 Total exercise: Exercice total
 Average exercise: Exercice moyen
 Total move: Mouvement total
@@ -663,18 +664,18 @@ Assistant Art Director.he: Directeur artistique adjoint
 Assistant Art Director.she: Directrice artistique adjointe
 Assistant Costume Designer.he: Assistant costumier
 Assistant Costume Designer.she: Assistante costumière
-Assistant Director.he: Assistant réalisateur
-Assistant Director.she: Assistante réalisateur
 Assistant Director Trainee.he: Stagiaire assistant réalisateur
 Assistant Director Trainee.she: Stagiaire assistante réalisateur
+Assistant Director.he: Assistant réalisateur
+Assistant Director.she: Assistante réalisateur
 Assistant Editor.he: Rédacteur adjoint
 Assistant Editor.she: Rédactrice adjointe
 Assistant Production Coordinator.he: Assistant coordinateur de production
 Assistant Production Coordinator.she: Assistante coordinateur de production
-Assistant Production Manager.he: Directeur adjoint de production
-Assistant Production Manager.she: Directrice adjointe de production
 Assistant Production Design.he: Assistant directeur artistique
 Assistant Production Design.she: Assistante directrice artistique
+Assistant Production Manager.he: Directeur adjoint de production
+Assistant Production Manager.she: Directrice adjointe de production
 Assistant Property Master.he: Assistant maître d'œuvre
 Assistant Property Master.she: Assistante maître d'œuvre
 Assistant Set Decoration.he: Assistant Décorateur
@@ -703,6 +704,7 @@ Casting Assistant.he: Assistant de casting
 Casting Assistant.she: Assistante de casting
 Casting Associate.he: Associé de distribution
 Casting Associate.she: Associée de distribution
+Casting Consultant.he: Consultant casting
 Casting Coordinator.he: Coordinateur casting
 Casting Coordinator.she: Coordinatrice casting
 Casting Director.he: Directeur de casting
@@ -815,10 +817,10 @@ Executive Story Editor.he: Rédacteur exécutif en chef
 Executive Story Editor.she: Rédactrice exécutive en chef
 Executive Visual Effects Producer.he: Producteur exécutif des effets visuels
 Executive Visual Effects Producer.she: Productrice exécutive des effets visuels
-Extras Casting.he: Casting de figurants
-Extras Casting.she: Casting de figurants
 Extras Casting Assistant.he: Assistant du casting de figurants
 Extras Casting Assistant.she: Assistante du casting de figurants
+Extras Casting.he: Casting de figurants
+Extras Casting.she: Casting de figurants
 Fight Choreographer.he: Chorégraphe de combat
 Fight Choreographer.she: Chorégraphe de combat
 Finishing Producer.he: Producteur de finition
@@ -837,8 +839,6 @@ First Company Grip.he: Chef du département Grip
 First Company Grip.she: Cheffe du département Grip
 Floor Runner.he: Assistant plateau
 Floor Runner.she: Assistante plateau
-Foley.he: Bruitage
-Foley.she: Bruitage
 Foley Artist.he: Artiste de bruitage
 Foley Artist.she: Artiste de bruitage
 Foley Editor.he: Rédacteur bruitage
@@ -849,6 +849,8 @@ Foley Recordist.he: Enregistreur de bruitage
 Foley Recordist.she: Enregistreuse de bruitage
 Foley Supervisor.he: Superviseur bruitage
 Foley Supervisor.she: Superviseuse bruitage
+Foley.he: Bruitage
+Foley.she: Bruitage
 Gaffer.he: Gaffeur
 Gaffer.she: Gaffeuse
 Generator Operator.he: Opérateur de générateur
@@ -872,6 +874,8 @@ Hairstylist.he: Coiffeur
 Hairstylist.she: Coiffeuse
 Head of Production.he: Chef de production
 Head of Production.she: Cheffe de production
+In Memory Of.he: En mémoire de
+In Memory Of.she: En mémoire de
 Key Carpenter.he: Key Carpenter.he
 Key Carpenter.she: Key Carpenter.she
 Key Construction Grip.he: Key Construction Grip
@@ -962,6 +966,8 @@ Paint Coordinator.he: Coordinateur peinture
 Paint Coordinator.she: Coordinatrice peinture
 Payroll Accountant.he: Comptable salaires
 Payroll Accountant.she: Comptable salaires
+Petty Cash Buyer.he: Acheteur de petite caisse
+Petty Cash Buyer.she: Acheteuse de petite caisse
 Picture Car Coordinator.he: Coordinateur véhicule de tournage
 Picture Car Coordinator.she: Coordinatrice véhicule de tournage
 Playback Coordinator.he: Coordinateur de lecture
@@ -980,8 +986,6 @@ Post Production Supervisor.he: Superviseur post-production
 Post Production Supervisor.she: Superviseuse post-production
 Post-Production Manager.he: Directeur de post-production
 Post-Production Manager.she: Directrice de post-production
-Petty Cash Buyer.he: Acheteur de petite caisse
-Petty Cash Buyer.she: Acheteuse de petite caisse
 Producer's Assistant.he: Assistant de production
 Producer's Assistant.she: Assistante de production
 Producer.he: Producteur
@@ -1048,6 +1052,8 @@ Screenstory.he: Scénario
 Screenstory.she: Scénario
 Script Coordinator.he: Coordinateur scénario
 Script Coordinator.she: Coordinatrice scénario
+Script Editor.he: Éditeur de scénario
+Script Editor.she: Éditrice de scénario
 Script Supervisor.he: Superviseur scénario
 Script Supervisor.she: Superviseuse scénario
 Sculptor.he: Sculpteur
@@ -1118,6 +1124,8 @@ Stereoscopic Supervisor.he: Superviseur stéréoscopie
 Stereoscopic Supervisor.she: Superviseuse stéréoscopie
 Still Photographer.he: Photographe de plateau
 Still Photographer.she: Photographe de plateau
+Story Consultant.he: Consultant scénario
+Story Consultant.she: Consultante scénario
 Story Editor.he: Rédacteur en chef
 Story Editor.she: Rédactrice en chef
 Story.he: Récit
@@ -1201,6 +1209,7 @@ Writers' Production.she: Production des auteures
 Writing.he: Auteur
 Writing.she: Autrice
 Writing: Écriture
+
 
 # Last jobs added
 Finance.he: Finance
