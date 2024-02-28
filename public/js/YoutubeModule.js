@@ -111,26 +111,29 @@ export class Youtube {
         });
 
         const copy = document.querySelector(".copy");
+        const dataLink = copy.getAttribute("data-link");
         /** @param {MouseEvent} evt */
         copy.addEventListener("click", (evt) => {
             const mouseX = evt.pageX, mouseY = evt.pageY;
             const copied = document.querySelector(".copied-text");
-            navigator.clipboard.writeText("https://youtu.be/{{ video.link }}").then(r => console.log(r));
-            copy.classList.add("copied");
-            setTimeout(() => {
-                copy.classList.remove("copied")
-            }, 500);
-            copied.style.top = (mouseY - (copied.clientHeight / 2)) + "px";
-            copied.style.left = (mouseX - (copied.clientWidth / 2)) + "px";
-            setTimeout(() => {
-                copied.classList.add("visible", "move-up");
-            }, 0);
-            setTimeout(() => {
-                copied.classList.remove("visible");
-            }, 1500);
-            setTimeout(() => {
-                copied.classList.remove("move-up");
-            }, 2500);
+            navigator.clipboard.writeText("https://youtu.be/" + dataLink).then(r => {
+                console.log(r);
+                copy.classList.add("copied");
+                setTimeout(() => {
+                    copy.classList.remove("copied")
+                }, 500);
+                copied.style.top = (mouseY - (copied.clientHeight / 2)) + "px";
+                copied.style.left = (mouseX - (copied.clientWidth / 2)) + "px";
+                setTimeout(() => {
+                    copied.classList.add("visible", "move-up");
+                }, 0);
+                setTimeout(() => {
+                    copied.classList.remove("visible");
+                }, 1500);
+                setTimeout(() => {
+                    copied.classList.remove("move-up");
+                }, 2500);
+            });
         });
 
         this.autocomplete();
