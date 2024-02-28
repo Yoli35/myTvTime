@@ -143,18 +143,75 @@ class ActivityController extends AbstractController
             ['name' => $this->translator->trans('Activity'), 'url' => $this->generateUrl('app_activity_index')],
         ];
 
-//        dump(['days' => $days]);
+        $periods = $this->periods($days);
+
+        dump(['days' => $days, 'periods' => $periods]);
 
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
             'challenges' => $challenges,
             'stats' => ['currentMonth' => $stats[0], 'lastMonth' => $lastMonthStats[0]],
+            'periods' => $periods,
             'goals' => $goals,
             'days' => $days,
             'years' => $years,
             'currentWeek' => $currentWeek,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    public function periods($days): array
+    {
+        $dayCount = count($days);
+        $dayIndex = 0;
+        $moveCount = 0;
+        $moveBreak = false;
+        $exerciseCount = 0;
+        $exerciseBreak = false;
+        $standUpCount = 0;
+        $standUpBreak = false;
+
+        /** @var ActivityDay $day */
+        foreach ($days as $day) {
+            // On ne prend pas en compte le premier jour sauf si les 3 anneaux sont complets
+            if (!$dayIndex && $day->isMoveRingCompleted() && $day->isExerciseRingCompleted() && $day->isStandUpRingCompleted())
+                $dayIndex++;
+            if (!$dayIndex) {
+                $dayCount--;
+                $dayIndex++;
+                continue;
+            } else {
+                if (!$moveBreak) {
+                    $moveResult = $day->isMoveRingCompleted();
+                    if ($moveResult) {
+                        $moveCount++;
+                    } else {
+                        $moveBreak = true;
+                    }
+                }
+                if (!$exerciseBreak) {
+                    $exerciseResult = $day->isExerciseRingCompleted();
+                    if ($exerciseResult) {
+                        $exerciseCount++;
+                    } else {
+                        $exerciseBreak = true;
+                    }
+                }
+                if (!$standUpBreak) {
+                    $standUpResult = $day->isStandUpRingCompleted();
+                    if ($standUpResult) {
+                        $standUpCount++;
+                    } else {
+                        $standUpBreak = true;
+                    }
+                }
+                if ($moveBreak && $exerciseBreak && $standUpBreak) {
+                    break;
+                }
+            }
+        }
+
+        return ['dayCount'=>$dayCount, 'move' => $moveCount, 'exercise' => $exerciseCount, 'standUp' => $standUpCount];
     }
 
     public function checkForMissingDays(Activity $activity, array $days, $now): array

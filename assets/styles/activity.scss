@@ -927,6 +927,33 @@
     }
 }
 
+.periods {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+
+    .move {
+        background-color: var(--activity-move-fade);
+        border-radius: .25rem;
+        padding-inline: 1rem;
+        padding-block: .125rem;
+    }
+
+    .exercise {
+        background-color: var(--activity-exercise-fade);
+        border-radius: .25rem;
+        padding-inline: 1rem;
+        padding-block: .125rem;
+    }
+
+    .stand-up {
+        background-color: var(--activity-stand-up-fade);
+        border-radius: .25rem;
+        padding-inline: 1rem;
+        padding-block: .125rem;
+    }
+}
+
 .activity-numbers {
     display: flex;
     gap: .5rem;
@@ -948,6 +975,16 @@
                 display: flex;
                 gap: .5rem;
                 padding: .25rem .5rem;
+
+                &.total {
+                    background-color: var(--gradient-green-60-alpha-50);
+                    color: var(--gradient-green-20);
+                }
+
+                &.average {
+                    background-color: var(--gradient-orange-20);
+                    color: var(--gradient-orange-90);
+                }
             }
         }
     }
