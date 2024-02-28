@@ -268,7 +268,7 @@ class UserController extends AbstractController
 
         $form = $this->createForm(UserMovieSortType::class,
             ['sort' => $sort, 'order' => $order],
-            ['method' => 'POST', 'csrf_protection' => false]);
+            ['method' => 'POST', 'csrf_protection' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
