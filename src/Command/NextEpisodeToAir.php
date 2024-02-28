@@ -80,7 +80,7 @@ class NextEpisodeToAir extends Command
         foreach ($serieViewings as $serieViewing) {
 
             $serie = $serieViewing->getSerie();
-            $line = sprintf("%s (%d) for user %s (%d)", $serie->getName(), $serie->getId(), $serieViewing->getUser()->getUsername(), $serieViewing->getUser()->getId());
+            $line = sprintf("%d - %s", $serie->getId(), $serie->getName());
             $io->writeln($line);
             $this->logs($line);
 
