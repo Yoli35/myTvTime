@@ -140,21 +140,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->alarms = new ArrayCollection();
+        $this->alerts = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->chatDiscussions = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->friends = new ArrayCollection();
         $this->movieLists = new ArrayCollection();
         $this->movies = new ArrayCollection();
         $this->serieViewings = new ArrayCollection();
         $this->series = new ArrayCollection();
-        $this->youtubeVideos = new ArrayCollection();
-        $this->alerts = new ArrayCollection();
-        $this->youtubeVideoComments = new ArrayCollection();
-        $this->alarms = new ArrayCollection();
-        $this->contributions = new ArrayCollection();
         $this->userTvPreferences = new ArrayCollection();
         $this->userYVideos = new ArrayCollection();
+        $this->youtubeVideoComments = new ArrayCollection();
+        $this->youtubeVideos = new ArrayCollection();
     }
 
     public function getId(): ?int

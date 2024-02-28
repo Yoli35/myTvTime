@@ -2045,26 +2045,26 @@
                             @include flex-row(center, flex-start);
                             background-color: var(--gradient-ardoise-90-alpha-50);
                             border-radius: 0;
-                            height: 15rem;
+                            height: 18rem;
                             width: 100%;
 
                             .poster {
                                 flex-shrink: 0;
-                                height: 15rem;
-                                width: 10rem;
+                                height: 18rem;
+                                width: 12rem;
                                 z-index: 0;
 
                                 img {
                                     border-radius: 0;
-                                    height: 15rem;
+                                    height: 18rem;
                                     object-fit: cover;
-                                    width: 10rem;
+                                    width: 12rem;
                                 }
                             }
 
                             .infos {
-                                @include flex-col(flex-start, flex-start);
-                                height: 15rem;
+                                @include flex-col(flex-start, center);
+                                height: 18rem;
                                 padding: .5rem;
                                 width: calc(100% - 10rem);
 

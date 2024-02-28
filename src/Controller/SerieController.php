@@ -731,7 +731,7 @@ class SerieController extends AbstractController
         }
 
         $filters = $this->getTvFilters($data);
-        $filterString = "&page=" . $data['page'] . "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
+        $filterString = /*"&page=" . $data['page'] .*/ "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
         foreach ($filters as $key => $value) {
             $filterString .= "&$key=$value";
         }
@@ -1583,7 +1583,7 @@ class SerieController extends AbstractController
                 $switch = $switches['switch_' . $key];
                 if ($switch) {
                     if ($key == 'with_genres') {
-                        $value = implode(',', $value);
+                        $value = implode('|', $value);
                     }
                     if ($key == 'first_air_date_gte' || $key == 'first_air_date_lte') {
                         if (!$value) $value = $this->dateService->getNow('UTC', true);
@@ -2052,9 +2052,9 @@ class SerieController extends AbstractController
             $tv['alternate_overviews'] = array_filter($serie->getSeriesAlternateOverviews()->toArray(), function ($overview) use ($locale) {
                 return $overview->getLocale() == $locale;
             });
-            if ($tv['first_air_date'] == null || $tv['first_air_date'] == "") {
-                $tv['first_air_date'] = $serie->getFirstDateAir()->format('Y-m-d');
-            }
+//            if ($tv['first_air_date'] == null || $tv['first_air_date'] == "") {
+//                $tv['first_air_date'] = $serie->getFirstDateAir()?->format('Y-m-d');
+//            }
         } else {
             $tv['alternate_overviews'] = [];
         }
@@ -2086,7 +2086,7 @@ class SerieController extends AbstractController
                 'play.google' => 3, // Google Play Movies
 //                    '' => 193, // SFR Play
 //                    '' => 147, // Sixplay
-//                    '' => 61, // Orange VOD
+                'orange' => 61, // Orange VOD
 //                    '' => 236, // France TV
                 'arte' => 234, // Arte
 //                    '' => 223, // Hayu
