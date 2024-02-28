@@ -6,7 +6,7 @@ let _url;
 let _app_movie_list_show;
 
 // more videos variables
-let userMovieList, total_videos, displayed_videos, more_video_controller, loading_more_videos, nav_to_top, nav_to_top_visible;
+let userMovieList, uml_sort, uml_order, total_videos, displayed_videos, more_video_controller, loading_more_videos, nav_to_top, nav_to_top_visible;
 
 function initButtons(id, locale, paths, url) {
 
@@ -320,6 +320,8 @@ function initButtons(id, locale, paths, url) {
 
     // more videos event listener
     userMovieList = document.querySelector("#content");
+    uml_sort = userMovieList.getAttribute("data-sort") ?? 'id';
+    uml_order = userMovieList.getAttribute("data-order") ?? 'DESC';
     nav_to_top = document.querySelector(".nav-to-top");
     total_videos = parseInt(document.querySelector("h1").getAttribute("data-total-results"));
     displayed_videos = document.querySelectorAll(".home-discover").length;
@@ -437,7 +439,7 @@ function moreVideos() {
                     more_video_controller.abort();
                 }
             }
-            xhr.open("GET", _movies_more + '?id=' + _user_id + '&offset=' + displayed_videos);
+            xhr.open("GET", _movies_more + '?id=' + _user_id + '&offset=' + displayed_videos + '&sort=' + uml_sort + '&order=' + uml_order);
             xhr.send();
         }
     }

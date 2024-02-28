@@ -39,7 +39,18 @@
                 </div>
 
                 <div class="home-discovers">
-                    <div id="content" class="content">
+                    <div class="sort-form">
+                        {{ form_start(form) }}
+                        <label for="{{ form.sort.vars.id }}">{{ form.sort.vars.label|trans }}
+                            {{ form_widget(form.sort) }}
+                        </label>
+                        <label for="{{ form.order.vars.id }}">{{ form.order.vars.label|trans }}
+                            {{ form_widget(form.order) }}
+                        </label>
+                        <button type="submit" id="uml_sort" class="btn btn-secondary">{{ 'Update list'|trans }}</button>
+                        {{ form_end(form) }}
+                    </div>
+                    <div id="content" class="content" data-sort="{{ sort }}" data-order="{{ order }}">
                         {% for discover in discovers %}
                             {% set poster = discover.poster_path ? imageConfig.url ~ imageConfig.poster_sizes.3 ~ discover.poster_path : discover.poster_path %}
                             {{ include('blocks/movie/_discover.html.twig', { title: discover.title, poster: poster, id: discover.movie_db_id }) }}

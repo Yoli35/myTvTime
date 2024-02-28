@@ -119,7 +119,8 @@ Average move: Mouvement moyen
 Min stand up: Se lever min
 Max stand up: Se lever max
 Average stand up: Se lever moyen
-
+Continuous period during which you have completed your rings: Période continue pendant laquelle vous avez complété vos anneaux
+Number of days considered: Nombre de jours considérés
 #Alarm
 Simple alarm: Alarme simple
 Days: Jours
@@ -439,6 +440,9 @@ Filter by name: Filtrer par nom
 Movie title: Titre du film
 Select all: Tout sélectionner
 Deselect all: Tout désélectionner
+Add Date: Date d'ajout
+Release date: Date de sortie
+Update list: Mettre à jour la liste
 
 # Movies by name
 Movie Search Result: Résultat de la recherche
@@ -1209,7 +1213,13 @@ Writers' Production.she: Production des auteures
 Writing.he: Auteur
 Writing.she: Autrice
 Writing: Écriture
-
+  
+Assistant Makeup Artist.he: Assistant maquilleur
+Assistant Makeup Artist.she: Assistante maquilleuse
+Assistant Hairstylist.he: Assistant coiffeur
+Assistant Hairstylist.she: Assistante coiffeuse
+Hair Assistant.he: Assistant coiffeur
+Hair Assistant.she: Assistante coiffeuse
 
 # Last jobs added
 Finance.he: Finance
@@ -1283,6 +1293,7 @@ Compact: Affichage des épisodes en mode compact
 List: Affichage des épisodes en mode liste
 Size for roomy mode: Taille pour le mode spacieux
 #episodes
+More providers: Plus de plateformes de streaming
 Where did you watched it?: Où l'avez-vous vu ?
 Desktop: Ordinateur de bureau
 Desktop computer: Ordinateur de bureau

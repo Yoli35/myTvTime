@@ -142,7 +142,7 @@ class MovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function findUserMovies($userId, $offset = 0): array
+    public function findUserMovies($userId, $offset = 0, $sort = 'id', $order = 'DESC'): array
     {
         $sql = 'SELECT '
             . '  id, title, original_title, poster_path, release_date, movie_db_id, runtime, created_at '
@@ -153,7 +153,7 @@ class MovieRepository extends ServiceEntityRepository
             . 'WHERE '
             . '  t1.`user_id` = ' . $userId . ' '
             . 'ORDER BY '
-            . '  t0.`release_date` DESC '
+            . '  t0.' . $sort . ' ' . $order . ' '
             . 'LIMIT 20 '
             . 'OFFSET ' . $offset;
 

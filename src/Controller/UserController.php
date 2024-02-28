@@ -7,6 +7,7 @@ use App\Entity\MovieList;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\Type\ChangePasswordType;
+use App\Form\UserMovieSortType;
 use App\Form\UserType;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FriendRepository;
@@ -254,7 +255,30 @@ class UserController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $movies = $this->getUserMovies($user->getId(), 0);
+        $sortSettings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'user movie sort']);
+        if (!$sortSettings) {
+            $sortSettings = new Settings();
+            $sortSettings->setUser($user);
+            $sortSettings->setName('user movie sort');
+            $sortSettings->setData(['sort' => 'id', 'order' => 'DESC']);
+            $this->settingsRepository->save($sortSettings, true);
+        }
+        $sort = $sortSettings->getData()['sort'];
+        $order = $sortSettings->getData()['order'];
+
+        $form = $this->createForm(UserMovieSortType::class,
+            ['sort' => $sort, 'order' => $order],
+            ['method' => 'POST', 'csrf_protection' => false]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sort = $form->get('sort')->getData();
+            $order = $form->get('order')->getData();
+            $sortSettings->setData(['sort' => $sort, 'order' => $order]);
+            $this->settingsRepository->save($sortSettings, true);
+        }
+
+        $movies = $this->getUserMovies($user->getId(), 0, $sort, $order);
 
         $imageConfig = $this->imageConfiguration->getConfig();
 
@@ -288,6 +312,9 @@ class UserController extends AbstractController
 
         return $this->render('user/movies.html.twig', [
             'discovers' => $movies,
+            'form' => $form->createView(),
+            'sort' => $sort,
+            'order' => $order,
             'userMovies' => $this->movieController->getUserMovieIds(),
             'count' => count($items),
             'runtimeTotal' => $total,
@@ -307,7 +334,7 @@ class UserController extends AbstractController
     {
         $imageConfig = $this->imageConfiguration->getConfig();
         $userMovieIds = $this->movieController->getUserMovieIds();
-        $movies = $this->getUserMovies($request->query->get('id'), $request->query->get('offset'));
+        $movies = $this->getUserMovies($request->query->get('id'), $request->query->get('offset'), $request->query->get('sort'), $request->query->get('order'));
         $blocks = array_map(function ($movie) use ($imageConfig, $userMovieIds) {
             return $this->renderView('blocks/movie/_discover.html.twig', [
                 'discover' => $movie,
@@ -324,10 +351,10 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function getUserMovies($userId, $offset): array
+    public function getUserMovies($userId, $offset, $sort, $order): array
     {
         $movieRepository = $this->movieRepository;
-        $userMovies = $movieRepository->findUserMovies($userId, $offset);
+        $userMovies = $movieRepository->findUserMovies($userId, $offset, $sort, $order);
 
         $ids = array_map(function ($userMovie) {
             return $userMovie['id'];

@@ -913,8 +913,8 @@ main {
 }
 
 .backgroundImageOverlay {
-    -webkit-backdrop-filter: blur(32px) brightness(75%) saturate(85%);
-    backdrop-filter: blur(32px) brightness(75%) saturate(85%);
+    -webkit-backdrop-filter: blur(256px) brightness(75%) saturate(85%);
+    backdrop-filter: blur(256px) brightness(75%) saturate(85%);
     height: 100%;
     padding: 1rem;
     width: 100%;
@@ -1831,7 +1831,7 @@ nav.active {
 
     .wrapper {
         @include flex-row(start, start);
-        gap: 1rem;
+        gap: .5rem;
 
         .home-discover {
             width: 10rem;
@@ -2101,6 +2101,13 @@ nav.active {
     font-weight: 100;
     width: 100%;
 
+    .sort-form {
+        form {
+            display: flex;
+            gap: 1rem;
+        }
+    }
+
     .content {
         @include flex-row(stretch, center);
         flex-wrap: wrap;
@@ -2125,7 +2132,7 @@ nav.active {
 
 .home-discover {
     @include flex-col();
-    border-radius: .5rem;
+    border-radius: .25rem;
     font-size: .75rem;
     font-weight: 100;
     overflow: hidden;
@@ -2140,7 +2147,7 @@ nav.active {
 
         img {
             aspect-ratio: 2 / 3;
-            border-radius: .5rem;
+            border-radius: .25rem;
             object-fit: cover;
             width: 100%;
         }
