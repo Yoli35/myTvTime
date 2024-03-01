@@ -20,7 +20,7 @@
     <div class="time"></div>
     <div class="date"></div>
     <div class="hands">
-        <div class="hand second fluid" style="transform: translate(-50%, -100%) rotate(0deg)"></div>
+        <div class="hand second" style="transform: translate(-50%, -100%) rotate(0deg)"></div>
         <div class="hand minute" style="transform: translate(-50%, -100%) rotate(0deg)"></div>
         <div class="hand hour" style="transform: translate(-50%, -100%) rotate(0deg) "></div>
         <div class="center"></div>
@@ -45,8 +45,9 @@
 
         createClock();
         setDate();
+        setTimeout(() => {clock.classList.add('fade');}, 500);
         clockInterval = setInterval(setDate, 100);
-        setTimeout(() => {clock.classList.add('fade');}, 1000);
+        setTimeout(() => {secondHand.classList.add("fluid");}, 500);
 
         document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === 'visible') {
