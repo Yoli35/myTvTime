@@ -58,7 +58,7 @@ class ActivityDayRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function checkChallenge($activityId, $discipline, $value, $month, $start, $end): array
+    public function checkChallenge($activityId, $discipline, $value, $year, $month, $start, $end): array
     {
         if ($month) {
             $sql = "SELECT * "
@@ -66,6 +66,7 @@ class ActivityDayRepository extends ServiceEntityRepository
                 . "WHERE `activity_id`=" . $activityId . " "
                 . "AND `" . $discipline . "` >= " . $value . " "
                 . "AND MONTH(`day`) = " . $month . " "
+                . "AND YEAR(`day`) = " . $year . " "
                 . "ORDER BY day";
         } else {
             $sql = "SELECT * "
@@ -130,7 +131,7 @@ class ActivityDayRepository extends ServiceEntityRepository
             . 'MIN(ad.`stand_up_result`) as min_stand_up, MAX(ad.`stand_up_result`) as max_stand_up, AVG(ad.`stand_up_result`) as average_stand_up '
             . 'FROM `activity_day` ad '
             . 'INNER JOIN `activity` a ON a.id=ad.`activity_id` '
-            . 'WHERE MONTH(ad.`day`)=' . $month . ' '
+            . 'WHERE MONTH(ad.`day`)=' . $month . ' AND YEAR(ad.`day`)=YEAR(NOW()) '
             . '	AND DATE(ad.`day`)<DATE(NOW())'
             . '	AND a.`user_id`=' . $user->getId();
         $em = $this->registry->getManager();

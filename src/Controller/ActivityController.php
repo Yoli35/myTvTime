@@ -262,6 +262,7 @@ class ActivityController extends AbstractController
                 $startAt = $challenge->getStartAt();
                 $endAt = $challenge->getEndAt();
                 $month = 0;
+                $year = 0;
 
                 $startMonth = $startAt->format('m');
                 $endMonth = $endAt->format('m');
@@ -271,9 +272,10 @@ class ActivityController extends AbstractController
                     $theoreticalEndAtDay = $startAt->format('t');
                     if ($startDay == '1' && $endAtDay == $theoreticalEndAtDay) {
                         $month = $startMonth;
+                        $year = $startAt->format('Y');
                     }
                 }
-                $daysChallengeMet = $this->activityDayRepository->checkChallenge($activity->getId(), $discipline, $value, $month, $startAt->format('Y-m-d'), $endAt->format('Y-m-d'));
+                $daysChallengeMet = $this->activityDayRepository->checkChallenge($activity->getId(), $discipline, $value, $year, $month, $startAt->format('Y-m-d'), $endAt->format('Y-m-d'));
                 $challenge->setProgress(count($daysChallengeMet));
                 $challenge->setCompleted($challenge->getProgress() >= $goal);
                 $this->activityChallengeRepository->save($challenge, true);

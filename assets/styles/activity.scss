@@ -929,28 +929,31 @@
 
 .periods {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: .25rem;
+    width: 36rem;
+
+    h3, h4 {
+        width: 100%;
+    }
+
+    div {
+        border-radius: .25rem;
+        flex-grow: 1;
+        padding-block: .125rem;
+        padding-inline: 1rem;
+    }
 
     .move {
         background-color: var(--activity-move-fade);
-        border-radius: .25rem;
-        padding-inline: 1rem;
-        padding-block: .125rem;
     }
 
     .exercise {
         background-color: var(--activity-exercise-fade);
-        border-radius: .25rem;
-        padding-inline: 1rem;
-        padding-block: .125rem;
     }
 
     .stand-up {
         background-color: var(--activity-stand-up-fade);
-        border-radius: .25rem;
-        padding-inline: 1rem;
-        padding-block: .125rem;
     }
 }
 

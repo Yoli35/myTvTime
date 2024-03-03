@@ -412,7 +412,7 @@ export class Activity {
 
     drawRings(canvasId, progressMove, progressExercise, progressStandUp) {
         const canvas = document.getElementById(canvasId);
-        const context = canvas.getContext('2d');
+        const context = canvas.getContext('2d', {willReadFrequently: true});
         const thickness = 16;
         const scale = canvas.width / 128;
         const x = canvas.width / 2;
@@ -433,7 +433,7 @@ export class Activity {
         const canvas = document.getElementById(canvasId);
         const canvasParent = canvas.parentElement;
         const progressFrom = parseInt(canvasParent.getAttribute("data-" + ringName));
-        const context = canvas.getContext('2d');
+        const context = canvas.getContext('2d', {willReadFrequently: true});
         const thickness = 16;
         const scale = canvas.width / 128;
         const x = canvas.width / 2;
