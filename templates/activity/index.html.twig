@@ -71,7 +71,7 @@
                             {% set n = stats.currentMonth.number_of_days %}
                             <div>{{ 'Current month'|trans }} - {{ n }} {{ (n>1?'days':'day')|trans }}</div>
                             <div class="activity-stats">
-{#                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.currentMonth.number_of_days }}</span></div>#}
+                                {#                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.currentMonth.number_of_days }}</span></div> #}
                                 <div class="activity-stat total">{{ 'Total distance'|trans }}<span>{{ stats.currentMonth.total_distance }}</span>km</div>
                                 <div class="activity-stat average">{{ 'Average distance'|trans }}<span>{{ stats.currentMonth.average_distance|round(2) }}</span>km</div>
                                 <div class="activity-stat total">{{ 'Total steps'|trans }}<span>{{ stats.currentMonth.total_steps }}</span></div>
@@ -107,13 +107,12 @@
                     </div>
                     {% for year in years %}
                         {% for week in year %}
-                            {% if week.0.week == currentWeek %}
+                            {% if week.0.week == currentWeek and week.0.day|date("Y") == currentYear %}
                                 <div class="recent-activity">
                                     <h2>{{ 'Recent activity'|trans }} : {{ 'Week'|trans }} {{ currentWeek }}</h2>
                                     <div class="days">
                                         {% set tab = 1 %}
                                         {% for day in week %}
-                                            {#                                            <pre>{{ dump(day) }}</pre> #}
                                             <div class="day">
                                                 {% set date = day.day|format_date('full')|capitalize %}
                                                 <div class="date">{{ fixIfFirstDayOfTheMonth(date) }}</div>

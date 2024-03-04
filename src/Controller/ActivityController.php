@@ -145,7 +145,7 @@ class ActivityController extends AbstractController
 
         $periods = $this->periods($days);
 
-        dump(['days' => $days, 'periods' => $periods]);
+//        dump(['days' => $days, 'periods' => $periods]);
 
         return $this->render('activity/index.html.twig', [
             'activity' => $activity,
@@ -156,6 +156,7 @@ class ActivityController extends AbstractController
             'days' => $days,
             'years' => $years,
             'currentWeek' => $currentWeek,
+            'currentYear' => $currentYear,
             'breadcrumb' => $breadcrumb,
         ]);
     }
