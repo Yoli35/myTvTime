@@ -320,4 +320,17 @@ class SerieRepository extends ServiceEntityRepository
         $result = $resultSet->fetchAllAssociative();
         return $result[0]['count'];
     }
+
+    public function seriesByIdGreaterThan($minId): array
+    {
+        $sql = "SELECT s.`serie_id` as tmdb_id "
+            . "FROM `serie` s "
+            . "WHERE s.`id` > " . $minId . " "
+            . "ORDER BY s.`id` ASC";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
 }

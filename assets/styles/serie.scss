@@ -4299,6 +4299,10 @@
                         flex-wrap: wrap;
                         background-blend-mode: color;
 
+                        &:hover {
+                            background-color: var(--gradient-ardoise-80-alpha-50);
+                        }
+
                         .year {
                             @include flex-row(start, center);
                             font-weight: 300;
