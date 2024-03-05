@@ -230,7 +230,7 @@
                                         <div class="episode-viewing">
                                             {% if episode.viewing is defined %}
                                                 {% set viewed = episode.viewing.viewedAt %}
-                                                <div class="view" data-id="{{ episode.viewing.id }}">
+                                                <div class="view" data-id="{{ episode.viewing.id }}" data-episode-number="{{ episode.episode_number }}">
                                                     <div class="view-value">
                                                         {% if episode.viewing.viewedAt %}
                                                             <i class="fa-solid fa-check"></i>
@@ -447,7 +447,7 @@
                     const episodeView = i.classList.contains('fa-check') ? "1" : "0";
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
-                        let {episodeViewed, seasonCompleted, viewedEpisodeCount} = JSON.parse(this.responseText);
+                        let {episodeNumber, episodeViewed, seasonCompleted, viewedEpisodeCount} = JSON.parse(this.responseText);
                         const provider = view.querySelector('.view-provider');
                         const device = view.querySelector('.view-device');
                         if (episodeViewed) {
@@ -468,6 +468,8 @@
                         }
                         const viewingProgress = document.querySelector('.viewing-progress');
                         viewingProgress.querySelector("span").innerText = viewedEpisodeCount;
+
+                        voteGraph(episodeNumber, episodeViewed);
                     }
                     xhr.open("GET", url + episodeView, true);
                     xhr.send();
@@ -715,6 +717,20 @@
             '#9F5656',
             '#FFFFFF',
         ];
+
+        const colorVoteAlpha = [
+            '#39C0497F',
+            '#66BA457F',
+            '#83B8477F',
+            '#97B14E7F',
+            '#A5A7497F',
+            '#AB99497F',
+            '#AE8D4C7F',
+            '#AF784B7F',
+            '#AB664F7F',
+            '#9F56567F',
+            '#FFFFFF7F',
+        ];
         const episodes = JSON.parse('{{ episodesVotes|json_encode()|raw }}');
         const episodeCount = episodes.length;
         const graphicTypes = ['plot', 'bar'];
@@ -788,7 +804,7 @@
             voteGraph();
         }
 
-        function voteGraph() {
+        function voteGraph(episodeNumber = null, episodeViewed = null) {
             /**
              * @type {HTMLCanvasElement}
              */
@@ -796,8 +812,11 @@
             /**
              * @type {CanvasRenderingContext2D}
              */
-            const ctx = graph.getContext('2d');
+            const ctx = graph.getContext('2d', {willReadFrequently: true});
 
+            if (episodeNumber) {
+                episodes[episodeNumber - 1].viewed = !!episodeViewed;
+            }
             clearGraph(graph, ctx);
 
             if (graphicType === 'plot') {
@@ -955,6 +974,17 @@
                     ctx.lineTo(x + (radius + radialInc) * cos, y + (radius + radialInc) * sin);
                     ctx.stroke();
                 }
+            }
+
+            if (episode.viewed && !episode.vote) {
+                for (let i = 1; i <= 10; i++) {
+                    ctx.strokeStyle = colorVoteAlpha[10 - i];
+                    ctx.lineWidth = radialInc;
+                    ctx.beginPath();
+                    ctx.arc(x, y, i * radialInc, start, end);
+                    ctx.stroke();
+                }
+                // return;
             }
 
             if (!episode.vote) return;

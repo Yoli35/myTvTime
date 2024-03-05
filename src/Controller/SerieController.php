@@ -939,15 +939,15 @@ class SerieController extends AbstractController
         // Breadcrumb
         $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
 
-        dump([
+//        dump([
 //            'serie' => $serie,
 //            'env' => $_ENV['APP_ENV'],
 //            'season' => $season,
 //            'modifications' => $modifications,
 //            'watchProviders' => $watchProviders,
-            'episodes' => $episodes,
-            'seasonViewing' => $seasonViewing,
-        ]);
+//            'episodes' => $episodes,
+//            'seasonViewing' => $seasonViewing,
+//        ]);
 
         return $this->render('series/season.html.twig', [
             'serie' => $serie,
@@ -2587,7 +2587,7 @@ class SerieController extends AbstractController
             if (array_key_exists('viewing', $episode)) {
                 /** @var EpisodeViewing $episodeViewing */
                 $episodeViewing = $episode['viewing'];
-                $episodesVotes[] = ['number' => $episodeViewing->getEpisodeNumber(), 'vote' => $episodeViewing->getVote()];
+                $episodesVotes[] = ['number' => $episodeViewing->getEpisodeNumber(), 'vote' => $episodeViewing->getVote(), 'viewed' => (bool)$episodeViewing->getViewedAt()];
             }
         }
         return $episodesVotes;

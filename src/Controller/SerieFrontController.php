@@ -506,6 +506,7 @@ class SerieFrontController extends AbstractController
         $this->serieViewingRepository->save($serieViewing, true);
 
         return $this->json([
+            'episodeNumber' => $episodeViewing->getEpisodeNumber(),
             'episodeViewed' => $view,
             'seasonCompleted' => $seasonCompleted,
             'viewedEpisodeCount' => $viewedEpisodeCount,
