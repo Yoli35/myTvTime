@@ -2132,13 +2132,21 @@ class SerieController extends AbstractController
 //                    '' => 542 // filmfriend
             ];
             if ($dls) {
+                /*
+                 * directLink in database:
+                 *      url
+                 *      ou url|name|type (link, season)
+                 *      ou path
+                 *      ou path|name|type (dir, file)
+                 */
                 $dls = explode(',', $dls);
                 if ($dls && count($dls)) {
                     foreach ($dls as $dl) {
                         if ($dl && strlen($dl) > 0) {
                             if (str_contains($dl, '|')) {
                                 $dlArr = explode('|', $dl);
-                                $tv['directLink'][] = ['url' => $dlArr[0], 'logoPath' => null, 'name' => $dlArr[1], 'type' => $dlArr[2]];
+                                list($logoPath, $name) = $this->directLinkLogo($providersMatches, $watchProviderList, $dlArr[0], $dlArr[1]);
+                                $tv['directLink'][] = ['url' => $dlArr[0], 'logoPath' => $logoPath, 'name' => $name, 'type' => $dlArr[2]];
                                 continue;
                             }
                             // Est-ce que le lien pointe vers un fichier ?
@@ -2147,31 +2155,12 @@ class SerieController extends AbstractController
                                 $ext = pathinfo($dl, PATHINFO_EXTENSION);
                                 // Récupérer le nom de fichier
                                 $name = pathinfo($dl, PATHINFO_FILENAME);
-                                $tv['directLink'][] = ['url' => $dl, 'logoPath' => null, 'name' => $name, 'type' => 'file', 'ext' => $ext];
+                                list($logoPath, $name) = $this->directLinkLogo($providersMatches, $watchProviderList, $dl, $name);
+                                $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'file', 'ext' => $ext];
                             } else {
-                                $logoPath = null;
-                                $name = null;
-
-                                foreach ($providersMatches as $providerMatch => $providerId) {
-                                    if (str_contains($dl, $providerMatch)) {
-                                        $logoPath = $watchProviderList[$providerId]['logo_path'];
-                                        $name = $watchProviderList[$providerId]['provider_name'];
-                                        break;
-                                    }
-                                }
+                                list($logoPath, $name) = $this->directLinkLogo($providersMatches, $watchProviderList, $dl);
                                 $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'link'];
                             }
-                            $logoPath = null;
-                            $name = null;
-
-                            foreach ($providersMatches as $providerMatch => $providerId) {
-                                if (str_contains($dl, $providerMatch)) {
-                                    $logoPath = $watchProviderList[$providerId]['logo_path'];
-                                    $name = $watchProviderList[$providerId]['provider_name'];
-                                    break;
-                                }
-                            }
-                            $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'link'];
                         }
                     }
                 }
@@ -2187,36 +2176,29 @@ class SerieController extends AbstractController
                     dump($matches);
                     foreach ($matches as $match) {
                         $url = $match;
+                        $url = preg_replace('/&.*$/', '', $url);
 //                        dump($url);
-                        if (str_contains($url, "netflix")) {
-                            $url = preg_replace('/&.*$/', '', $url);
-                        }
-                        if (str_contains($url, "primevideo")) {
-                            $url = preg_replace('/&.*$/', '', $url);
-                        }
-                        if (str_contains($url, "disneyplus")) {
-                            $url = preg_replace('/&.*$/', '', $url);
-                        }
-                        if (str_contains($url, "youtube")) {
-                            $url = preg_replace('/&.*$/', '', $url);
-                        }
-                        if (str_contains($url, "viki")) {
-                            $url = preg_replace('/&.*$/', '', $url);
-                        }
-                        if (str_contains($url, "apple")) {
-                            $url = preg_replace('/&.*$/', '', $url);
-                        }
-
-                        $logoPath = null;
-                        $name = null;
-                        foreach ($providersMatches as $providerMatch => $providerId) {
-                            if (str_contains($match, $providerMatch)) {
-                                $logoPath = $watchProviderList[$providerId]['logo_path'];
-                                $name = $watchProviderList[$providerId]['provider_name'];
-                                break;
-                            }
-                        }
+//                        if (str_contains($url, "netflix")) {
+//                            $url = preg_replace('/&.*$/', '', $url);
+//                        }
+//                        if (str_contains($url, "primevideo")) {
+//                            $url = preg_replace('/&.*$/', '', $url);
+//                        }
+//                        if (str_contains($url, "disneyplus")) {
+//                            $url = preg_replace('/&.*$/', '', $url);
+//                        }
+//                        if (str_contains($url, "youtube")) {
+//                            $url = preg_replace('/&.*$/', '', $url);
+//                        }
+//                        if (str_contains($url, "viki")) {
+//                            $url = preg_replace('/&.*$/', '', $url);
+//                        }
+//                        if (str_contains($url, "apple")) {
+//                            $url = preg_replace('/&.*$/', '', $url);
+//                        }
+                        list($logoPath, $name) = $this->directLinkLogo($providersMatches, $watchProviderList, $url);
                         $tv['directLink'][] = ['url' => $url, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'link'];
+
                         if ($dls == null) {
                             $serie->setDirectLink($serie->getDirectLink() ? $serie->getDirectLink() . ',' : '' . $url);
                             $this->serieRepository->save($serie);
@@ -2227,7 +2209,7 @@ class SerieController extends AbstractController
                     }
                 }
             }
-            dump(['watch provider list' => $watchProviderList, 'direct link' => $tv['directLink']]);
+//            dump(['watch provider list' => $watchProviderList, 'direct link' => $tv['directLink']]);
             $foundUrls = [];
             $tv['directLink'] = array_filter($tv['directLink'], function ($dl) use (&$foundUrls) {
                 if (!in_array($dl['url'], $foundUrls)) {
@@ -2307,14 +2289,14 @@ class SerieController extends AbstractController
         }
         $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][5]);
 
-        dump([
-            'tv' => $tv,
+//        dump([
+//            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
 //            'credits' => $credits,
-        ]);
+//        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
@@ -2346,6 +2328,19 @@ class SerieController extends AbstractController
             'yggOriginal' => $yggOriginal,
             'imageConfig' => $imgConfig,
         ]);
+    }
+
+    public function directLinkLogo($providersMatches, $watchProviderList, $dl, $name = null): array
+    {
+        $logoPath = null;
+        foreach ($providersMatches as $providerMatch => $providerId) {
+            if (str_contains($dl, $providerMatch)) {
+                $logoPath = $watchProviderList[$providerId]['logo_path'];
+                if (!$name) $name = $watchProviderList[$providerId]['provider_name'];
+                break;
+            }
+        }
+        return [$logoPath, $name];
     }
 
     public function breadcrumb($from, $serie = null, $season = null, $episode = null, $country = 'FR'): array

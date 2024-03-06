@@ -38,6 +38,9 @@
                         {% if dl.type == 'dir' %}
                             <div class="link-pass" data-title="{{ 'Watch'|trans }} {{ dl.name }}">
                         {% endif %}
+                        {% if dl.type == 'season' %}
+                            <div class="link-pass" data-title="{{ 'Watch season'|trans }} {{ dl.name }}">
+                        {% endif %}
                         {% if dl.type == 'link' %}
                             <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">
                         {% endif %}
@@ -45,7 +48,7 @@
                             <div class="link-pass" data-title="{{ 'Play video'|trans }} “{{ dl.name }}”">
                         {% endif %}
                         <a href="{{ dl.url }}" target="_blank">
-                            {% if dl.type == 'link' %}
+                            {% if dl.type == 'link' or dl.type == 'season' %}
                                 {% if dl.logoPath %}
                                     <img src="{{ dl.logoPath }}" alt="{{ dl.name }}" loading="lazy">
                                 {% else %}
