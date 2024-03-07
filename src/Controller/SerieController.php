@@ -118,15 +118,11 @@ class SerieController extends AbstractController
 
         $imageConfig = $this->imageConfiguration->getConfig();
         $sqlResults = $this->serieRepository->userSeries($user->getId(), $request->getLocale(), $sort, $order, ($page - 1) * $perPage, $perPage);
-        $sqlResultIds = array_map(function ($result) {
-            return $result['id'];
-        }, $sqlResults);
+        $sqlResultIds = array_column($sqlResults, 'id');
         $sqlResultsNetworks = $this->serieRepository->userSeriesNetworks($sqlResultIds);
+        
         $sqlResults = array_map(function ($result) use ($sqlResultsNetworks, $imageConfig) {
-            $result['networks'] = array_filter($sqlResultsNetworks, function ($network) use ($result) {
-                return $network['serie_id'] == $result['id'];
-            });
-
+            $result['networks'] = $sqlResultsNetworks[$result['id']] ?? [];
             $this->savePoster($result['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
             $result['alternateOverviews'] = json_decode($result['alternateOverviews'], true);
             return $result;

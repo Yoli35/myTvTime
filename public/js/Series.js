@@ -9,7 +9,6 @@ export class Series {
         thisGlobal = this;
 
         this.app_series_index = globs.app_series_index;
-        this.app_series_new = globs.app_series_new;
         this.app_series_show = globs.app_series_show;
         this.app_series_search = globs.app_series_search;
         this.app_series_history = globs.app_series_history;
@@ -27,26 +26,26 @@ export class Series {
         this.removeDelay = 100;
         this.actionDelay = 10;
 
-        this.trans = {
-            "added": {
-                "fr": "Nouvelle série ajoutée",
-                "en": "New series added",
-                "de": "Neue Serie hinzugefügt",
-                "es": "Nueva serie agregada"
-            },
-            "updated": {
-                "fr": "Série mise à jour",
-                "en": "Serie updated",
-                "de": "Serie aktualisiert",
-                "es": "Serie actualizada"
-            },
-            "not found": {
-                "fr": "Série introuvable",
-                "en": "Serie not found",
-                "de": "Serie nicht gefunden",
-                "es": "Serie no encontrada"
-            },
-        }
+        // this.trans = {
+        //     "added": {
+        //         "fr": "Nouvelle série ajoutée",
+        //         "en": "New series added",
+        //         "de": "Neue Serie hinzugefügt",
+        //         "es": "Nueva serie agregada"
+        //     },
+        //     "updated": {
+        //         "fr": "Série mise à jour",
+        //         "en": "Serie updated",
+        //         "de": "Serie aktualisiert",
+        //         "es": "Serie actualizada"
+        //     },
+        //     "not found": {
+        //         "fr": "Série introuvable",
+        //         "en": "Serie not found",
+        //         "de": "Serie nicht gefunden",
+        //         "es": "Serie no encontrada"
+        //     },
+        // }
 
         this.init();
     }
@@ -58,8 +57,8 @@ export class Series {
         if (tools) {
             this.initHistory();
             this.initSettings();
-            this.initPreview();
-            this.newSerie();
+            // this.initPreview();
+            // this.newSerie();
 
             document.querySelector("#search-tmdb-series").addEventListener("click", () => {
                 this.searchSerie();
@@ -368,119 +367,119 @@ export class Series {
         })
     }
 
-    initPreview() {
+    // initPreview() {
+    //
+    //     const preview = document.querySelector(".new-series-preview");
+    //     const close = preview.querySelector(".close");
+    //
+    //     preview.addEventListener("click", this.dismissPreview);
+    //     close.addEventListener("click", this.dismissPreview);
+    // }
+    //
+    // dismissPreview() {
+    //     const preview = document.querySelector(".new-series-preview");
+    //     const message = preview.querySelector(".message").querySelector(".content");
+    //     const wrapper = preview.querySelector(".wrapper");
+    //
+    //     setTimeout(() => {
+    //         preview.classList.remove("visible");
+    //     }, 0);
+    //     wrapper.innerHTML = "";
+    //     message.innerHTML = "";
+    //     document.querySelector("#new_serie").focus();
+    // }
 
-        const preview = document.querySelector(".new-series-preview");
-        const close = preview.querySelector(".close");
-
-        preview.addEventListener("click", this.dismissPreview);
-        close.addEventListener("click", this.dismissPreview);
-    }
-
-    dismissPreview() {
-        const preview = document.querySelector(".new-series-preview");
-        const message = preview.querySelector(".message").querySelector(".content");
-        const wrapper = preview.querySelector(".wrapper");
-
-        setTimeout(() => {
-            preview.classList.remove("visible");
-        }, 0);
-        wrapper.innerHTML = "";
-        message.innerHTML = "";
-        document.querySelector("#new_serie").focus();
-    }
-
-    newSerie() {
-        if (document.querySelector("#new-series") == null) {
-            return;
-        }
-        document.querySelector("#new_serie").focus();
-        document.querySelector("#new_serie").addEventListener("paste", thisGlobal.addSerie);
-        document.querySelector("#add_serie").addEventListener("click", thisGlobal.addSerie);
-
-        document.querySelector("#new_serie").addEventListener("keyup", (event) => {
-            if (event.key === "Enter") {
-                thisGlobal.addSerie(event);
-            }
-        })
-    }
-
-    addSerie(evt) {
-        let value = "";
-
-        if (evt.type === "click" || evt.type === 'keyup') {
-            value = document.querySelector("#new_serie").value;
-        }
-        if (evt.type === "paste") {
-            value = evt.clipboardData.getData('text/plain');
-        }
-        // evt.preventDefault()
-
-        if (value.length) {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                let data = {
-                    'serie': '',
-                    'status': '',
-                    'response': '',
-                    'id': '',
-                    'card': {},
-                    'pagination': {}
-                };
-                if (this.response.slice(0, 1) === '<') {
-                    data = this.response;
-                } else {
-                    data = JSON.parse(this.response);
-                    if (data.status === 'Ok') {
-                        const preview = document.querySelector(".new-series-preview");
-                        const message = preview.querySelector(".message").querySelector(".content");
-                        const wrapper = preview.querySelector(".wrapper");
-
-                        wrapper.innerHTML = data.card.content;
-
-                        if (data.response === "New") {
-                            message.innerHTML = this.trans["added"][_locale];
-                        }
-                        if (data.response === "Update") {
-                            message.innerHTML = this.trans["updated"][_locale];
-                        }
-                        setTimeout(() => {
-                            preview.classList.add("visible");
-                        }, 0);
-
-                        /*
-                         * Si on est sur la première page avec le tri par "ordre d'ajout décroissant",
-                         * alors, on insère la nouvelle série au début
-                         */
-                        if (data.response === "New" && thisGlobal.current_page === 1 && thisGlobal.order_by === 'id' && thisGlobal.order === 'desc') {
-                            const wrapper = document.querySelector(".series").querySelector(".wrapper");
-                            const first = wrapper.firstElementChild;
-                            const last = wrapper.lastElementChild;
-                            const new_card = document.createRange().createContextualFragment(data.card.content);
-
-                            first.before(new_card);
-                            last.remove();
-                        }
-                        /*
-                         * Mise à jour des blocs Pagination
-                         */
-                        const tools = document.querySelectorAll(".series-tools");
-                        tools.forEach(tool => {
-                            let pagination = tool.querySelector(".pages");
-                            pagination.innerHTML = data.pagination.content;
-                        })
-                    }
-
-                    if (data.status === "Ko") {
-                        alert(thisGlobal.trans["not found"][_locale] + " (ID: " + data.id + ")");
-                    }
-                }
-                document.querySelector("#new_serie").value = "";
-            }
-            xhr.open("GET", thisGlobal.app_series_new + '?value=' + value + "&p=" + thisGlobal.current_page + "&pp=" + thisGlobal.per_page + "&ob=" + thisGlobal.order_by + "&o=" + thisGlobal.order);
-            xhr.send();
-        }
-    }
+    // newSerie() {
+    //     if (document.querySelector("#new-series") == null) {
+    //         return;
+    //     }
+    //     document.querySelector("#new_serie").focus();
+    //     document.querySelector("#new_serie").addEventListener("paste", thisGlobal.addSerie);
+    //     document.querySelector("#add_serie").addEventListener("click", thisGlobal.addSerie);
+    //
+    //     document.querySelector("#new_serie").addEventListener("keyup", (event) => {
+    //         if (event.key === "Enter") {
+    //             thisGlobal.addSerie(event);
+    //         }
+    //     })
+    // }
+    //
+    // addSerie(evt) {
+    //     let value = "";
+    //
+    //     if (evt.type === "click" || evt.type === 'keyup') {
+    //         value = document.querySelector("#new_serie").value;
+    //     }
+    //     if (evt.type === "paste") {
+    //         value = evt.clipboardData.getData('text/plain');
+    //     }
+    //     // evt.preventDefault()
+    //
+    //     if (value.length) {
+    //         const xhr = new XMLHttpRequest();
+    //         xhr.onload = function () {
+    //             let data = {
+    //                 'serie': '',
+    //                 'status': '',
+    //                 'response': '',
+    //                 'id': '',
+    //                 'card': {},
+    //                 'pagination': {}
+    //             };
+    //             if (this.response.slice(0, 1) === '<') {
+    //                 data = this.response;
+    //             } else {
+    //                 data = JSON.parse(this.response);
+    //                 if (data.status === 'Ok') {
+    //                     const preview = document.querySelector(".new-series-preview");
+    //                     const message = preview.querySelector(".message").querySelector(".content");
+    //                     const wrapper = preview.querySelector(".wrapper");
+    //
+    //                     wrapper.innerHTML = data.card.content;
+    //
+    //                     if (data.response === "New") {
+    //                         message.innerHTML = this.trans["added"][_locale];
+    //                     }
+    //                     if (data.response === "Update") {
+    //                         message.innerHTML = this.trans["updated"][_locale];
+    //                     }
+    //                     setTimeout(() => {
+    //                         preview.classList.add("visible");
+    //                     }, 0);
+    //
+    //                     /*
+    //                      * Si on est sur la première page avec le tri par "ordre d'ajout décroissant",
+    //                      * alors, on insère la nouvelle série au début
+    //                      */
+    //                     if (data.response === "New" && thisGlobal.current_page === 1 && thisGlobal.order_by === 'id' && thisGlobal.order === 'desc') {
+    //                         const wrapper = document.querySelector(".series").querySelector(".wrapper");
+    //                         const first = wrapper.firstElementChild;
+    //                         const last = wrapper.lastElementChild;
+    //                         const new_card = document.createRange().createContextualFragment(data.card.content);
+    //
+    //                         first.before(new_card);
+    //                         last.remove();
+    //                     }
+    //                     /*
+    //                      * Mise à jour des blocs Pagination
+    //                      */
+    //                     const tools = document.querySelectorAll(".series-tools");
+    //                     tools.forEach(tool => {
+    //                         let pagination = tool.querySelector(".pages");
+    //                         pagination.innerHTML = data.pagination.content;
+    //                     })
+    //                 }
+    //
+    //                 if (data.status === "Ko") {
+    //                     alert(thisGlobal.trans["not found"][_locale] + " (ID: " + data.id + ")");
+    //                 }
+    //             }
+    //             document.querySelector("#new_serie").value = "";
+    //         }
+    //         xhr.open("GET", thisGlobal.app_series_new + '?value=' + value + "&p=" + thisGlobal.current_page + "&pp=" + thisGlobal.per_page + "&ob=" + thisGlobal.order_by + "&o=" + thisGlobal.order);
+    //         xhr.send();
+    //     }
+    // }
 
     initHistory() {
         const historyMore = document.querySelector(".history-more");
@@ -518,6 +517,7 @@ export class Series {
                      * @property {number} 'vote'
                      * @property {string} 'viewed_at'
                      * @property {string} 'poster_path'
+                     * @var {Array<HistoryItem>} newItems
                      */
                     const newItems = data.history;
                     /** @param {HistoryItem} item */

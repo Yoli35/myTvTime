@@ -64,64 +64,15 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/serie.js"></script>
     <script>
-        const paths = [
-            "{{ path('app_series_render_translation_fields') }}",
-            "{{ path('app_series_render_translation_select') }}",
-            "{{ path('app_series_render_translation_save') }}",
-            "{{ path('app_series_new') }}",
-            "{{ path('app_series_show', {id:0})|slice(0, -1) }}",
-        ];
         let letterRatios = [];
 
         window.addEventListener("DOMContentLoaded", () => {
-
-            // initHeader();
             initPages();
-            initSerieStuff(paths);
             animateQuotes();
             document.querySelector("#serie_search_query").focus();
             document.querySelector(".header").classList.add("fade-bg");
-        })
-
-        function initHeader() {
-            const h1 = document.querySelector("h1");
-            let ticking = false;
-
-            let mask = document.createElement("div");
-            mask.classList.add("mask");
-            let cursor = document.createElement("div");
-            cursor.classList.add("cursor");
-            h1.appendChild(mask);
-            h1.appendChild(cursor);
-
-            setH1();
-            window.addEventListener('resize', setH1);
-
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    window.requestAnimationFrame(function () {
-                        setH1();
-                        ticking = false;
-                    });
-                }
-                ticking = true;
-            });
-
-        }
-
-        function setH1() {
-            const header = document.querySelector(".header");
-            const h1 = document.querySelector("h1");
-            let left, ratio, top;
-            ratio = (header.clientHeight - window.scrollY) / header.clientHeight;
-            left = (header.clientWidth - h1.clientWidth) / 2;
-            top = ((header.clientHeight + window.scrollY) - h1.clientHeight) / 2;
-            if (ratio < 0) ratio = 0;
-            if (ratio > 1) ratio = 1;
-            h1.setAttribute("style", "left: " + left.toString() + "px; top: " + top.toString() + "px; opacity: " + ratio + "; transform: scale(" + (1 + (5 * (1 - ratio))) + ")");
-        }
+        });
 
         let quoteInterval = [2000, 3000, 4000, 5000];
         let quoteIntervalId = [0, 0, 0, 0];

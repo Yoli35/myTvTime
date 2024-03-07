@@ -154,7 +154,17 @@ class SerieRepository extends ServiceEntityRepository
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAllAssociative();
+        $arr = $resultSet->fetchAllAssociative();
+        $networks = [];
+        foreach ($arr as $network) {
+            $serieId = $network['serie_id'];
+            if (!isset($networks[$serieId])) {
+                $networks[$serieId] = [];
+            }
+            $networks[$serieId][] = $network;
+        }
+
+        return $networks;
     }
 
     /**

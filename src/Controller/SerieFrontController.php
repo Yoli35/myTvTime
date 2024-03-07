@@ -73,50 +73,46 @@ class SerieFrontController extends AbstractController
     #[Route('/new', name: 'app_series_new', methods: ['GET'])]
     public function new(Request $request): Response
     {
-        $TMDBService = $this->TMDBService;
-        $serieRepository = $this->serieRepository;
-        $networkRepository = $this->networkRepository;
-        $imageConfiguration = $this->imageConfiguration;
-        $imgConfig = $imageConfiguration->getConfig();
-
         /** @var User $user */
         $user = $this->getUser();
-        $from = $request->query->get('from', self::MY_SERIES);
+//        $from = $request->query->get('from', self::MY_SERIES);
 
-        $value = $request->query->get("value");
-        $query = $request->query->get("query");
-        $year = $request->query->get("year");
-        $page = $request->query->getInt('p', 1);
-        $tv = ['name' => ''];
+        $serieId = $request->query->get("value");
+//        $query = $request->query->get("query");
+//        $year = $request->query->get("year");
+//        $page = $request->query->getInt('p', 1);
+//        $tv = ['name' => ''];
         $serieId = "";
         $status = "Ko";
-        $response = "Not found";
+//        $response = "Not found";
         $serie = null;
-        $card = null;
-        $pagination = null;
+//        $card = null;
 
-        if (is_numeric($value)) {
-            $serieId = $value;
-        } else {
-            if (preg_match("~(\d+)~", $value, $matches) == 1) {
-                $serieId = $matches[0];
-            }
-        }
+//        if (is_numeric($value)) {
+//            $serieId = $value;
+//        } else {
+//            if (preg_match("~(\d+)~", $value, $matches) == 1) {
+//                $serieId = $matches[0];
+//            }
+//        }
         if (strlen($serieId)) {
-            $standing = $TMDBService->getTv($serieId, $request->getLocale());
+            $standing = $this->TMDBService->getTv($serieId, $request->getLocale());
 
             if (strlen($standing)) {
                 $status = "Ok";
                 $tv = json_decode($standing, true);
 
-                $serie = $serieRepository->findOneBy(['serieId' => $serieId]);
+                $serie = $this->serieRepository->findOneBy(['serieId' => $serieId]);
 
                 if ($serie == null) {
                     $serie = new Serie();
-                    $response = "New";
-                } else {
-                    $response = "Update";
                 }
+//                if ($serie == null) {
+//                    $serie = new Serie();
+//                    $response = "New";
+//                } else {
+//                    $response = "Update";
+//                }
 
                 $serie->setBackdropPath($tv['backdrop_path']);
                 $serie->setEpisodeDurations($this->collectEpisodeDurations($tv));
@@ -136,7 +132,7 @@ class SerieFrontController extends AbstractController
                 $serie->setOriginCountry($tv['origin_country'] ?? []);
 
                 foreach ($tv['networks'] as $network) {
-                    $m2mNetwork = $networkRepository->findOneBy(['name' => $network['name']]);
+                    $m2mNetwork = $this->networkRepository->findOneBy(['name' => $network['name']]);
 
                     if ($m2mNetwork == null) {
                         $m2mNetwork = new Networks();
@@ -144,59 +140,57 @@ class SerieFrontController extends AbstractController
                         $m2mNetwork->setName($network['name']);
                         $m2mNetwork->setNetworkId($network['id']);
                         $m2mNetwork->setOriginCountry($network['origin_country']);
-                        $networkRepository->save($m2mNetwork, true);
+                        $this->networkRepository->save($m2mNetwork, true);
                     }
                     $serie->addNetwork($m2mNetwork);
                 }
                 $serie->addUser($user);
-                $serieRepository->save($serie, true);
+                $this->serieRepository->save($serie, true);
 
                 $this->getSeasonsAndEpisodes($tv, $serie);
 
                 $this->serieController->createSerieViewing($user, $tv, $serie);
 
                 if ($tv['backdrop_path']) $this->serieController->addSerieBackdrop($serie, $tv['backdrop_path']);
-                if ($tv['poster_path']) $this->serieController->addSeriePoster($serie, $tv['poster_path'], $imgConfig);
+                if ($tv['poster_path']) $this->serieController->addSeriePoster($serie, $tv['poster_path'], $this->imageConfiguration->getConfig());
                 if ($tv['backdrop_path'] || $tv['poster_path'])
-                    $serieRepository->save($serie, true);
-                /*
-                 */
-                if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
-                    $card = $this->render('blocks/series/_card-popular.html.twig', [
-                        'serie' => $tv,
-                        'pages' => [
-                            'page' => $page
-                        ],
-                        'from' => $from,
-                        'serieIds' => $this->serieController->mySerieIds($user),
-                        'imageConfig' => $imgConfig,
-                    ]);
-                }
+                    $this->serieRepository->save($serie, true);
 
-                if ($from === self::SEARCH) {
-                    $card = $this->render('blocks/series/_card-search.html.twig', [
-                        'serie' => $tv,
-                        'query' => $query ?: "",
-                        'year' => $year ?: "",
-                        'pages' => [
-                            'page' => $page
-                        ],
-                        'from' => $from,
-                        'serieIds' => $this->serieController->mySerieIds($user),
-                        'imageConfig' => $imgConfig,
-                    ]);
-                }
+//                if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
+//                    $card = $this->render('blocks/series/_card-popular.html.twig', [
+//                        'serie' => $tv,
+//                        'pages' => [
+//                            'page' => $page
+//                        ],
+//                        'from' => $from,
+//                        'serieIds' => $this->serieController->mySerieIds($user),
+//                        'imageConfig' => $this->imageConfiguration->getConfig(),
+//                    ]);
+//                }
+//
+//                if ($from === self::SEARCH) {
+//                    $card = $this->render('blocks/series/_card-search.html.twig', [
+//                        'serie' => $tv,
+//                        'query' => $query ?: "",
+//                        'year' => $year ?: "",
+//                        'pages' => [
+//                            'page' => $page
+//                        ],
+//                        'from' => $from,
+//                        'serieIds' => $this->serieController->mySerieIds($user),
+//                        'imageConfig' => $this->imageConfiguration->getConfig(),
+//                    ]);
+//                }
             }
         }
 
         return $this->json([
-            'serie' => $tv['name'],
+//            'serie' => $tv['name'],
             'status' => $status,
-            'response' => $response,
-            'id' => $serieId ?: $value,
-            'card' => $card,
+//            'response' => $response,
+            'id' => $serieId,
+//            'card' => $card,
             'userSerieId' => $serie?->getId(),
-            'pagination' => $pagination,
         ]);
     }
 

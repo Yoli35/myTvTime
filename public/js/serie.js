@@ -229,7 +229,7 @@ function renderTranslationSelect(content) {
 
 function addSerie(evt) {
     const addButton = evt.currentTarget;
-    const from = addButton.getAttribute("data-from");
+    // const from = addButton.getAttribute("data-from");
     let value = addButton.getAttribute("data-id");
 
     evt.preventDefault();
@@ -262,11 +262,11 @@ function addSerie(evt) {
                 window.location.href = _app_serie_show + data.userSerieId + evt.view.location.search;
             }
 
-            if (data.pagination) {
-                document.querySelectorAll(".pages").forEach(page => {
-                    page.innerHTML = data.pagination.content;
-                })
-            }
+            // if (data.pagination) {
+            //     document.querySelectorAll(".pages").forEach(page => {
+            //         page.innerHTML = data.pagination.content;
+            //     })
+            // }
 
             // if (from === "my_series") {
             //     if (data.card) {
@@ -274,18 +274,18 @@ function addSerie(evt) {
             //     }
             // }
 
-            if (from === "popular" || from === "top_rated" ||
-                from === "airing_today" || from === "on_the_air" ||
-                from === "latest" || from === "search") {
-                if (data.card) {
-                    let card = addButton.closest("div[data-type=\"card\"]");
-                    card.innerHTML = data.card.content;
-                }
-            }
+            // if (from === "popular" || from === "top_rated" ||
+            //     from === "airing_today" || from === "on_the_air" ||
+            //     from === "latest" || from === "search") {
+            //     if (data.card) {
+            //         let card = addButton.closest("div[data-type=\"card\"]");
+            //         card.innerHTML = data.card.content;
+            //     }
+            // }
 
         }
         // console.log({data});
     }
-    xhr.open("GET", _app_serie_new + '?value=' + value + "&from=serie" + "&from=" + from);
+    xhr.open("GET", _app_serie_new + '?value=' + value + "&from=serie"/* + "&from=" + from*/);
     xhr.send();
 }

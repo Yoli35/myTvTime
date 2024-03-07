@@ -638,12 +638,20 @@ Actor's Assistant.he: Assistant d'acteur
 Actor's Assistant.she: Assistante d'acteur
 Adaptation.he: Adaptation
 Adaptation.she: Adaptation
+Additional Director of Photography.he: Directeur de la photographie supplémentaire
+Additional Director of Photography.she: Directrice de la photographie supplémentaire
 Additional Music.he: Musique additionnelle
 Additional Music.she: Musique additionnelle
 Additional Photography.he: Photographie additionnelle
 Additional Photography.she: Photographie additionnelle
 Additional Script Supervisor.he: Superviseur du scénario additionnel
 Additional Script Supervisor.she: Superviseuse du scénario additionnel
+Additional Sound Re-Recording Mixer.he: Mixeur son supplémentaire
+Additional Sound Re-Recording Mixer.she: Mixeuse son supplémentaire
+Aerial Director of Photography.he: Directeur de la photographie aérienne
+Aerial Director of Photography.she: Directrice de la photographie aérienne
+Animal Coordinator.he: Coordinateur animalier
+Animal Coordinator.she: Coordinatrice animalière
 Animal Wrangler.he: Dresseur d'animaux
 Animal Wrangler.she: Dresseuse d'animaux
 Animation Supervisor.he: Superviseur animation
@@ -667,6 +675,8 @@ Assistant Accountant.he: Assistant comptable
 Assistant Accountant.she: Assistante comptable
 Assistant Art Director.he: Directeur artistique adjoint
 Assistant Art Director.she: Directrice artistique adjointe
+Assistant Camera.he: Assistant caméra
+Assistant Camera.she: Assistante caméra
 Assistant Costume Designer.he: Assistant costumier
 Assistant Costume Designer.she: Assistante costumière
 Assistant Director Trainee.he: Stagiaire assistant réalisateur
@@ -675,6 +685,10 @@ Assistant Director.he: Assistant réalisateur
 Assistant Director.she: Assistante réalisateur
 Assistant Editor.he: Rédacteur adjoint
 Assistant Editor.she: Rédactrice adjointe
+Assistant Hairstylist.he: Assistant coiffeur
+Assistant Hairstylist.she: Assistante coiffeuse
+Assistant Makeup Artist.he: Assistant maquilleur
+Assistant Makeup Artist.she: Assistante maquilleuse
 Assistant Production Coordinator.he: Assistant coordinateur de production
 Assistant Production Coordinator.she: Assistante coordinateur de production
 Assistant Production Design.he: Assistant directeur artistique
@@ -700,8 +714,12 @@ Boom Operator.he: Opérateur de perche
 Boom Operator.she: Opératrice de perche
 Business Affairs Coordinator.he: Coordinateur affaires commerciales
 Business Affairs Coordinator.she: Coordinatrice affaires commerciales
+CG Supervisor.he: Superviseur image de synthèse
+CG Supervisor.she: Superviseuse image de synthèse
 Camera Operator.he: Opérateur caméra
 Camera Operator.she: Opératrice caméra
+Camera Technician.he: Technicien caméra
+Camera Technician.she: Technicienne caméra
 Camera Trainee.he: Stagiaire caméra
 Camera Trainee.she: Stagiaire caméra
 Cast: Distribution des rôles
@@ -785,10 +803,16 @@ Dailies Manager.he: Responsable des quotidiens
 Dailies Manager.she: Responsable des quotidiens
 Dailies Operator.he: Opérateur des rushes
 Dailies Operator.she: Opératrice des rushes
+Data Wrangler.he: Data Wrangler
+Data Wrangler.she: Data Wrangler
 Development Manager.he: Directeur du développement
 Development Manager.she: Directrice du développement
+Development Producer.he: Producteur de développement
+Development Producer.she: Productrice de développement
 Dialect Coach.he: Coach en dialecte
 Dialect Coach.she: Coach en dialecte
+Dialogue Coach.he: Coach en dialogue
+Dialogue Coach.she: Coach en dialogue
 Dialogue Editor.he: Éditeur de dialogue
 Dialogue Editor.she: Éditrice de dialogue
 Digital Compositor.he: Compositeur numérique
@@ -806,10 +830,14 @@ Director.he: Réalisateur
 Director.she: Réalisatrice
 Dolly Grip.he: Dolly Grip
 Dolly Grip.she: Dolly Grip
+Drone Pilot.he: Pilote de drone
+Drone Pilot.she: Pilote de drone
 Editor.he: Rédacteur en chef
 Editor.she: Rédactrice en chef
 Editorial Staff.he: Personnel éditorial
 Editorial Staff.she: Personnel éditorial
+Electrician.he: Électricien
+Electrician.she: Électricienne
 Executive Assistant.he: Assistant de direction
 Executive Assistant.she: Assistante de direction
 Executive Consultant.he: Consultant exécutif
@@ -828,10 +856,16 @@ Extras Casting.he: Casting de figurants
 Extras Casting.she: Casting de figurants
 Fight Choreographer.he: Chorégraphe de combat
 Fight Choreographer.she: Chorégraphe de combat
+Finance.he: Finance
+Finance.she: Finance
 Finishing Producer.he: Producteur de finition
 Finishing Producer.she: Productrice de finition
 First Assistant "A" Camera.he: Premier assistant "A" Camera.he
 First Assistant "B" Camera.he: Premier assistant "B" Camera.he
+First Assistant Accountant.he: Premier assistant comptable
+First Assistant Accountant.she: Première assistante comptable
+First Assistant Camera.he: Premier assistant caméra
+First Assistant Camera.she: Première assistante caméra
 First Assistant Director.he: Premier assistant réalisateur
 First Assistant Director.she: Première assistante réalisateur
 First Assistant Hairstylist.he: Premier assistant coiffeur
@@ -867,6 +901,8 @@ Graphic Novel.she: Roman graphique
 Grip.he: Grip
 Grip.she: Grip
 Guest star: Invité vedette
+Hair Assistant.he: Assistant coiffeur
+Hair Assistant.she: Assistante coiffeuse
 Hair Department Head.he: Chef du département de coiffure
 Hair Department Head.she: Cheffe du département de coiffure
 Hair Designer.he: Coiffeur
@@ -885,6 +921,8 @@ Key Carpenter.he: Key Carpenter.he
 Key Carpenter.she: Key Carpenter.she
 Key Construction Grip.he: Key Construction Grip
 Key Construction Grip.she: Key Construction Grip
+Key Costumer.he: Costumier en chef
+Key Costumer.she: Costumière en chef
 Key Grip.he: Key Grip
 Key Grip.she: Key Grip
 Key Hair Stylist.he: Styliste en chef
@@ -945,12 +983,16 @@ Music Coordinator.he: Coordinateur musique
 Music Coordinator.she: Coordinatrice musique
 Music Editor.he: Éditeur de musique
 Music Editor.she: Éditrice de musique
+Music Producer.he: Producteur de musique
+Music Producer.she: Productrice de musique
 Music Supervisor.he: Superviseur musical
 Music Supervisor.she: Superviseuse musicale
 Music.he: Musique
 Music.she: Musique
 Novel.he: Nouvelle
 Novel.she: Nouvelle
+On Set Dresser.he: Dresseur sur le plateau
+On Set Dresser.she: Dresseuse sur le plateau
 Online Editor.he: Éditeur en ligne
 Online Editor.she: Éditrice en ligne
 Orchestrator.he: Orchestrateur
@@ -1007,8 +1049,11 @@ Production Design.he: Design de production
 Production Design.she: Design de production
 Production Designer.he: Concepteur de production
 Production Designer.she: Conceptrice de production
+Production Executive.he: Directeur de production
+Production Executive.she: Directrice de production
 Production Manager.he: Directeur de la production
 Production Manager.she: Directrice de la production
+Production Secretary.he: Secrétaire de production
 Production Sound Mixer.he: Mixeur son de production
 Production Sound Mixer.she: Mixeuse son de production
 Production Supervisor.he: Superviseur de la production
@@ -1018,6 +1063,8 @@ Production.she: Productrice
 Production: Production
 Project Manager.he: Chef de projet
 Project Manager.she: Cheffe de projet
+Prop Maker.he: Fabricant d'accessoires
+Prop Maker.she: Fabricante d'accessoires
 Property Builder.he: Constructeur immobilier
 Property Builder.she: Constructrice immobilier
 Property Buyer.he: Acheteur de biens immobiliers
@@ -1125,6 +1172,8 @@ Standby Art Director.he: Directeur artistique suppléant
 Standby Art Director.she: Directrice artistique suppléante
 Standby Painter.he: Peintre suppléant
 Standby Painter.she: Peintre suppléante
+Steadicam Operator.he: Opérateur Steadicam
+Steadicam Operator.she: Opératrice Steadicam
 Stereoscopic Supervisor.he: Superviseur stéréoscopie
 Stereoscopic Supervisor.she: Superviseuse stéréoscopie
 Still Photographer.he: Photographe de plateau
@@ -1161,6 +1210,7 @@ Theme Song Performance.he: Interprétation thème
 Theme Song Performance.she: Interprétation thème
 Third Assistant Director.he: Troisième assistant réalisateur
 Third Assistant Director.she: Troisième assistante réalisateur
+Title Designer.he: Concepteur de titres
 Trainee Production Coordinator.he: Coordinateur de production stagiaire
 Trainee Production Coordinator.she: Coordinatrice de production stagiaire
 Transportation Captain.he: Capitaine du transport
@@ -1183,6 +1233,8 @@ VFX Artist.he: Artiste VFX
 VFX Artist.she: Artiste VFX
 VFX Editor.he: Monteur VFX
 VFX Editor.she: Monteuse VFX
+VFX Production Coordinator.he: Coordinateur de production effets spéciaux
+VFX Production Coordinator.she: Coordinatrice de production effets spéciaux
 VFX Supervisor.he: Superviseur VFX
 VFX Supervisor.she: Superviseuse VFX
 Video Assist Operator.he: Opérateur assistance vidéo
@@ -1214,44 +1266,6 @@ Writers' Production.she: Production des auteures
 Writing.he: Auteur
 Writing.she: Autrice
 Writing: Écriture
-  
-Assistant Makeup Artist.he: Assistant maquilleur
-Assistant Makeup Artist.she: Assistante maquilleuse
-Assistant Hairstylist.he: Assistant coiffeur
-Assistant Hairstylist.she: Assistante coiffeuse
-Hair Assistant.he: Assistant coiffeur
-Hair Assistant.she: Assistante coiffeuse
-
-# Last jobs added
-Finance.he: Finance
-Finance.she: Finance
-Aerial Director of Photography.he: Directeur de la photographie aérienne
-Aerial Director of Photography.she: Directrice de la photographie aérienne
-Additional Director of Photography.he: Directeur de la photographie supplémentaire
-Additional Director of Photography.she: Directrice de la photographie supplémentaire
-Assistant Camera.he: Assistant caméra
-Assistant Camera.she: Assistante caméra
-Camera Technician.he: Technicien caméra
-Camera Technician.she: Technicienne caméra
-Development Producer.he: Producteur de développement
-Development Producer.she: Productrice de développement
-Music Producer.he: Producteur de musique
-Music Producer.she: Productrice de musique
-CG Supervisor.he: Superviseur image de synthèse
-CG Supervisor.she: Superviseuse image de synthèse
-VFX Production Coordinator.he: Coordinateur de production effets spéciaux
-VFX Production Coordinator.she: Coordinatrice de production effets spéciaux
-Title Designer.he: Concepteur de titres
-Production Executive.he: Directeur de production
-Production Executive.she: Directrice de production
-On Set Dresser.he: Dresseur sur le plateau
-On Set Dresser.she: Dresseuse sur le plateau
-Animal Coordinator.he: Coordinateur animalier
-Animal Coordinator.she: Coordinatrice animalière
-First Assistant Accountant.he: Premier assistant comptable
-First Assistant Accountant.she: Première assistante comptable
-Steadicam Operator.he: Opérateur Steadicam
-Steadicam Operator.she: Opératrice Steadicam
 
 # key facts
 Favorite: Série favorite
