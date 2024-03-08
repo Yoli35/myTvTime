@@ -120,7 +120,7 @@ class SerieController extends AbstractController
         $sqlResults = $this->serieRepository->userSeries($user->getId(), $request->getLocale(), $sort, $order, ($page - 1) * $perPage, $perPage);
         $sqlResultIds = array_column($sqlResults, 'id');
         $sqlResultsNetworks = $this->serieRepository->userSeriesNetworks($sqlResultIds);
-        
+
         $sqlResults = array_map(function ($result) use ($sqlResultsNetworks, $imageConfig) {
             $result['networks'] = $sqlResultsNetworks[$result['id']] ?? [];
             $this->savePoster($result['posterPath'], $imageConfig['url'] . $imageConfig['poster_sizes'][3]);
@@ -2476,7 +2476,7 @@ class SerieController extends AbstractController
         $localizedOverview = '';
         $localizedResult = 'No need to translate';
         if (!$this->seasonIsThereSomeOverviews($season)) {
-            $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, '', ['credits', 'watch/providers']);
+            $standing = $this->TMDBService->getTvSeason($id, $seasonNumber, ''/*, ['credits', 'watch/providers']*/);
             $internationalSeason = json_decode($standing, true);
             if ($this->seasonIsThereSomeOverviews($internationalSeason)) {
                 $internationalSeason['watch/providers'] = $season['watch/providers'];

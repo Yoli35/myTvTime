@@ -25,6 +25,7 @@
     "ramsey/uuid": "4.*",
     "symfony/apache-pack": "^1.0",
     "symfony/asset": "6.4.*",
+    "symfony/clock": "6.4.*",
     "symfony/console": "6.4.*",
     "symfony/dependency-injection": "6.4.*",
     "symfony/doctrine-messenger": "6.4.*",

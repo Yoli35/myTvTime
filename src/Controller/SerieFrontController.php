@@ -39,14 +39,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/{_locale}/series', requirements: ['_locale' => 'fr|en|de|es'])]
 class SerieFrontController extends AbstractController
 {
-    const MY_SERIES = 'my_series';
-    const POPULAR = 'popular';
-    const TOP_RATED = 'top_rated';
-    const AIRING_TODAY = 'airing_today';
-    const ON_THE_AIR = 'on_the_air';
-    const LATEST = 'latest';
-    const SEARCH = 'search';
-
     public function __construct(
         private readonly AlertRepository              $alertRepository,
         private readonly DateService                  $dateService,
@@ -75,26 +67,11 @@ class SerieFrontController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-//        $from = $request->query->get('from', self::MY_SERIES);
 
         $serieId = $request->query->get("value");
-//        $query = $request->query->get("query");
-//        $year = $request->query->get("year");
-//        $page = $request->query->getInt('p', 1);
-//        $tv = ['name' => ''];
-        $serieId = "";
         $status = "Ko";
-//        $response = "Not found";
         $serie = null;
-//        $card = null;
 
-//        if (is_numeric($value)) {
-//            $serieId = $value;
-//        } else {
-//            if (preg_match("~(\d+)~", $value, $matches) == 1) {
-//                $serieId = $matches[0];
-//            }
-//        }
         if (strlen($serieId)) {
             $standing = $this->TMDBService->getTv($serieId, $request->getLocale());
 
@@ -107,12 +84,6 @@ class SerieFrontController extends AbstractController
                 if ($serie == null) {
                     $serie = new Serie();
                 }
-//                if ($serie == null) {
-//                    $serie = new Serie();
-//                    $response = "New";
-//                } else {
-//                    $response = "Update";
-//                }
 
                 $serie->setBackdropPath($tv['backdrop_path']);
                 $serie->setEpisodeDurations($this->collectEpisodeDurations($tv));
@@ -155,41 +126,12 @@ class SerieFrontController extends AbstractController
                 if ($tv['poster_path']) $this->serieController->addSeriePoster($serie, $tv['poster_path'], $this->imageConfiguration->getConfig());
                 if ($tv['backdrop_path'] || $tv['poster_path'])
                     $this->serieRepository->save($serie, true);
-
-//                if ($from === self::POPULAR || $from === self::TOP_RATED || $from === self::AIRING_TODAY || $from === self::ON_THE_AIR || $from === self::LATEST) {
-//                    $card = $this->render('blocks/series/_card-popular.html.twig', [
-//                        'serie' => $tv,
-//                        'pages' => [
-//                            'page' => $page
-//                        ],
-//                        'from' => $from,
-//                        'serieIds' => $this->serieController->mySerieIds($user),
-//                        'imageConfig' => $this->imageConfiguration->getConfig(),
-//                    ]);
-//                }
-//
-//                if ($from === self::SEARCH) {
-//                    $card = $this->render('blocks/series/_card-search.html.twig', [
-//                        'serie' => $tv,
-//                        'query' => $query ?: "",
-//                        'year' => $year ?: "",
-//                        'pages' => [
-//                            'page' => $page
-//                        ],
-//                        'from' => $from,
-//                        'serieIds' => $this->serieController->mySerieIds($user),
-//                        'imageConfig' => $this->imageConfiguration->getConfig(),
-//                    ]);
-//                }
             }
         }
 
         return $this->json([
-//            'serie' => $tv['name'],
             'status' => $status,
-//            'response' => $response,
             'id' => $serieId,
-//            'card' => $card,
             'userSerieId' => $serie?->getId(),
         ]);
     }
@@ -626,7 +568,7 @@ class SerieFrontController extends AbstractController
     }
 
     #[Route('/alert/disable/{id}', name: 'app_series_alert_disable', methods: ['GET'])]
-    public function disableAlert(Request $request, int $id): Response
+    public function disableAlert(int $id): Response
     {
         $alert = $this->alertRepository->find($id);
         if ($alert) {
