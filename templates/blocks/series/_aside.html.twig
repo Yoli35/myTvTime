@@ -79,7 +79,7 @@
     </div>
     <div class="fact">
         <div class="fact-label">{{ 'Original language'|trans }}</div>
-        <div class="fact-content">{{ serie.original_language|language_name(locale) }}</div>
+        <div class="fact-content">{{ serie.original_language|language_name(locale)|capitalize }}</div>
     </div>
     <div class="fact">
         <div class="fact-label">{{ 'Original Country'|trans }}</div>
