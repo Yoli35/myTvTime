@@ -162,11 +162,11 @@ export class Youtube {
             const activeTag = tagList.querySelector(".tag-item.active");
             activeTag?.classList.remove("active");
             tagItems.forEach((tagItem) => {
-                const label = gThis.removeAccent(tagItem.innerText);
-                if (label.indexOf(value) === -1) {
-                    tagItem.classList.add("other");
+                const label = tagItem.getAttribute("data-value");
+                if (label.includes(value)) {
+                    tagItem.style.display = "block";
                 } else {
-                    tagItem.classList.remove("other");
+                    tagItem.style.display = "none";
                 }
             });
         });
@@ -220,6 +220,7 @@ export class Youtube {
             const tagItem = document.createElement("div");
             tagItem.classList.add("tag-item");
             tagItem.setAttribute("data-id", tag.id);
+            tagItem.setAttribute("data-value", gThis.removeAccent(tag.label));
             tagItem.innerText = tag.label;
             if (this.inputTagSelector === "#search-tag") {
                 tagItem.addEventListener("click", gThis.addSearchTag);
@@ -923,7 +924,7 @@ export class Youtube {
 
     setActiveTagItem(sibling) {
         const tagList = document.querySelector(".tag-list");
-        const visibleList = tagList.querySelectorAll("div.tag-item:not(.other)");
+        const visibleList = tagList.querySelectorAll("div.tag-item:not([style='display: none;'])");
         const tagItem = tagList.querySelector(".tag-item.active");
         let index, maxIndex = visibleList.length - 1;
 
