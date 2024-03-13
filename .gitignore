@@ -27,3 +27,4 @@ symfony.lock
 /composer.lock
 /yarn.lock
 /.idea/
+exportedSeries.json
