@@ -2189,10 +2189,12 @@ class SerieController extends AbstractController
 //                        if (str_contains($url, "viki")) {
 //                            $url = preg_replace('/&.*$/', '', $url);
 //                        }
-//                        if (str_contains($url, "apple")) {
-//                            $url = preg_replace('/&.*$/', '', $url);
-//                        }
-                        list($logoPath, $name) = $this->directLinkLogo($providersMatches, $watchProviderList, $url);
+                        if (str_contains($url, "apple")) {
+                            if (str_contains($url, "episode")) {
+                                $name = $this->translator->trans("Apple TV Plus, first episode");
+                            }
+                        }
+                        list($logoPath, $name) = $this->directLinkLogo($providersMatches, $watchProviderList, $url, $name ?? null);
                         $tv['directLink'][] = ['url' => $url, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'link'];
 
                         if ($dls == null) {
