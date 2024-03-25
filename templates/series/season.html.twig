@@ -261,13 +261,13 @@
                                                             <div class="provider other" data-id="-1" data-title="{{ 'More providers'|trans }}"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if episode.viewing.deviceType=='tablet' %}-device{% endif %}{% if viewed %} show{% endif %}" data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
+                                                    <div class="view-device {{ episode.viewing.deviceType ?? 'tv' }}{% if episode.viewing.deviceType=='tablet' or episode.viewing.deviceType=='desktop' %}-device{% endif %}{% if viewed %} show{% endif %}" data-device="{{ episode.viewing.deviceType ?? 'tv' }}">
                                                         <span>
                                                             {% if episode.viewing.deviceType is null %}?{% endif %}
                                                             {% if episode.viewing.deviceType == 'tv' %}TV{% endif %}
                                                         </span>
                                                         <div class="view-devices">
-                                                            <div class="device desktop" data-device="desktop" data-title="{{ 'Desktop computer'|trans }}"></div>
+                                                            <div class="device desktop-device" data-device="desktop" data-title="{{ 'Desktop computer'|trans }}"></div>
                                                             <div class="device laptop" data-device="laptop" data-title="{{ 'Laptop'|trans }}"></div>
                                                             <div class="device tablet-device" data-device="tablet" data-title="{{ 'Tablet'|trans }}"></div>
                                                             <div class="device phone" data-device="phone" data-title="{{ 'Mobile'|trans }}"></div>
@@ -531,7 +531,7 @@
                             if (result === 'success') {
                                 const newDeviceName = device;
                                 viewDevice.classList.remove(oldDeviceName);
-                                viewDevice.classList.add(newDeviceName === 'tablet' ? 'tablet-device' : newDeviceName);
+                                viewDevice.classList.add(newDeviceName === 'tablet' ? 'tablet-device' : (newDeviceName === 'desktop' ? 'desktop-device':newDeviceName));
                                 viewDevice.setAttribute('data-device', newDeviceName);
                                 if (newDeviceName === 'tv') {
                                     viewDevice.querySelector('span').innerText = 'TV';
