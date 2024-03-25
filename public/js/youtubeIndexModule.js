@@ -67,24 +67,24 @@ export class YoutubeIndexModule {
         document.addEventListener("visibilitychange", this.focusLink.bind(this));
         this.focusLink();
 
-        const seriesList = document.querySelectorAll('.video-series-item');
-        seriesList.forEach(series => {
-            const header = series.querySelector('.header');
-            header.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.loadSeries(series.getAttribute('data-id'));
-            });
-        });
-        const newList = document.querySelector('.new-list');
-        this.initNewListDialog();
-        newList.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            // ouvrir le dialogue new-list-dialog
-            document.querySelector('body').classList.add('frozen');
-            gThis.newListDialog.showModal();
-        });
+        // const seriesList = document.querySelectorAll('.video-series-item');
+        // seriesList.forEach(series => {
+        //     const header = series.querySelector('.header');
+        //     header.addEventListener('click', (e) => {
+        //         e.preventDefault();
+        //         e.stopPropagation();
+        //         this.loadSeries(series.getAttribute('data-id'));
+        //     });
+        // });
+        // const newList = document.querySelector('.new-list');
+        // this.initNewListDialog();
+        // newList.addEventListener('click', (e) => {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //     // ouvrir le dialogue new-list-dialog
+        //     document.querySelector('body').classList.add('frozen');
+        //     gThis.newListDialog.showModal();
+        // });
     }
 
     initNewListDialog() {

@@ -120,27 +120,27 @@
                 </div>
 
                 <div class="user-content">
-                    {% if list|length %}
-                        <div class="video-series">
-                            <div class="video-series-header">
-                                <div class="title">{{ 'Series'|trans }}</div>
-                                <div class="new-list"><i class="fa-solid fa-plus"></i></div>
-                            </div>
-                            <div class="video-series-list">
-                                {% for item in list %}
-                                    <div class="video-series-item" data-id="{{ item.id }}">
-                                        <div class="header">
-                                            <div class="title">{{ item.title }}</div>
-                                            <div class="count">
-                                                <div class="loading"></div>
-                                                <span></span></div>
-                                        </div>
-                                        <div class="videos"></div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}
+{#                    {% if list|length %}#}
+{#                        <div class="video-series">#}
+{#                            <div class="video-series-header">#}
+{#                                <div class="title">{{ 'Series'|trans }}</div>#}
+{#                                <div class="new-list"><i class="fa-solid fa-plus"></i></div>#}
+{#                            </div>#}
+{#                            <div class="video-series-list">#}
+{#                                {% for item in list %}#}
+{#                                    <div class="video-series-item" data-id="{{ item.id }}">#}
+{#                                        <div class="header">#}
+{#                                            <div class="title">{{ item.title }}</div>#}
+{#                                            <div class="count">#}
+{#                                                <div class="loading"></div>#}
+{#                                                <span></span></div>#}
+{#                                        </div>#}
+{#                                        <div class="videos"></div>#}
+{#                                    </div>#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    {% endif %}#}
                     <div id="result" class="result">
                         {% if videos|length %}
                             {% for video in videos %}
