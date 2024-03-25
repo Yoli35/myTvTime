@@ -1273,7 +1273,7 @@ $fa-font-path: "../webfonts";
 }
 
 @mixin devices($theme: "light") {
-    &.desktop {
+    &.desktop-device {
         background-image: url("../images/devices/device-desktop-#{$theme}.png");
 
         &.active, &:hover {

@@ -414,10 +414,18 @@ body {
         }
 
         .close {
+            align-items: center;
+            background-color: var(--gradient-ardoise-10);
+            border-radius: .125rem;
+            color: var(--gradient-ardoise-90);
             cursor: pointer;
+            display: flex;
+            height: 1rem;
+            justify-content: center;
             position: absolute;
             right: .5rem;
-            top: .25rem;
+            top: .5rem;
+            width: 1rem;
         }
 
         &.hide {
