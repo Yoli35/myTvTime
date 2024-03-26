@@ -406,7 +406,7 @@
             }
 
             .result {
-                @include flex-row(stretch, center);
+                @include flex-row(stretch, space-between);
                 flex-wrap: wrap;
                 //gap: .5em;
                 margin-inline: auto;

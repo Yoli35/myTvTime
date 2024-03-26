@@ -2266,11 +2266,11 @@ class SerieController extends AbstractController
             return $season;
         }, $tv['seasons']);
 
-        $ygg = str_replace(' ', '+', $tv['name']);
-        if (key_exists('localized_name', $tv) && $tv['localized_name'])
-            $yggOriginal = str_replace(' ', '+', $tv['localized_name']);
-        else
-            $yggOriginal = str_replace(' ', '+', $tv['original_name']);
+//        $ygg = str_replace(' ', '+', $tv['name']);
+//        if (key_exists('localized_name', $tv) && $tv['localized_name'])
+//            $yggOriginal = str_replace(' ', '+', $tv['localized_name']);
+//        else
+//            $yggOriginal = str_replace(' ', '+', $tv['original_name']);
 
         $addThisSeries = !$serieViewing;
 
@@ -2322,8 +2322,8 @@ class SerieController extends AbstractController
             'isTimeShifted' => $serieViewing?->isTimeShifted(),
             'nextEpisodeToWatch' => $nextEpisodeToWatch ?? null,
             'alert' => $alert,
-            'ygg' => $ygg,
-            'yggOriginal' => $yggOriginal,
+//            'ygg' => $ygg,
+//            'yggOriginal' => $yggOriginal,
             'imageConfig' => $imgConfig,
         ]);
     }

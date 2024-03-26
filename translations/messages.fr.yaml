@@ -611,6 +611,7 @@ Available to rent or buy: Location ou achat
 Available to buy: Disponible à l'achat
 Available to rent: Disponible à la location
 Watch now: Regarder maintenant
+Watch from: Regarder à partir du
 # cast / crew
 '"A" Camera Operator.he': Opérateur de caméra "A"
 '"A" Camera Operator.she': Opératrice de caméra "A"
@@ -806,6 +807,8 @@ Dailies Operator.he: Opérateur des rushes
 Dailies Operator.she: Opératrice des rushes
 Data Wrangler.he: Data Wrangler
 Data Wrangler.she: Data Wrangler
+Delegated Producer.he: Producteur délégué
+Delegated Producer.she: Productrice déléguée
 Development Manager.he: Directeur du développement
 Development Manager.she: Directrice du développement
 Development Producer.he: Producteur de développement

@@ -18,35 +18,44 @@
             </label>
         </div>
     </div>
-    {#    <div class="todos"> #}
-    {#        TODOS #}
-    {#        <div class="todo"> #}
-    {#            <div class="todo-text">Ajouter un switch pour masquer les épisodes et saisons à venir</div> #}
-    {#            <div class="todo-close"><i class="fa-solid fa-xmark"></i></div> #}
-    {#        </div> #}
-    {#    </div> #}
 {% endif %}
 <div class="key-facts">
     {% if user and serieId %}
         <h4>{{ 'Direct link'|trans }}</h4>
-        {#        <pre>{{ dump(serie.directLink) }}</pre> #}
         <div class="direct-link">
             {% if serie.directLink|length %}
-                <div class="label">{{ 'Watch now'|trans }}</div>
-                <div class="direct-link-list">
+                {% set now = "now"|format_datetime(pattern="Y-M-d") %}
+                {% set air = serie.first_air_date|format_datetime(pattern="Y-M-d") %}
+                {% if air <= now %}
+                    <div class="label">{{ 'Watch now'|trans }}</div>
+                {% else %}
+                    <div class="label">{{ 'Watch from'|trans }} {{ serie.first_air_date|format_date("long") }}</div>
+                {% endif %}
+                <div class="direct-link-list" data-now="{{ now }}" data-air="{{ serie.first_air_date }}">
                     {% for dl in serie.directLink %}
                         {% if dl.type == 'dir' %}
-                            <div class="link-pass" data-title="{{ 'Watch'|trans }} {{ dl.name }}">
+{#                            <div class="link-pass" data-title="{{ 'Watch'|trans }} {{ dl.name }}">#}
+                            {% set title = 'Watch'|trans ~ ' ' ~ dl.name %}
                         {% endif %}
                         {% if dl.type == 'season' %}
-                            <div class="link-pass" data-title="{{ 'Watch season'|trans }} {{ dl.name }}">
+{#                            <div class="link-pass" data-title="{{ 'Watch season'|trans }} {{ dl.name }}">#}
+                            {% set title = 'Watch season'|trans ~ ' ' ~ dl.name %}
                         {% endif %}
                         {% if dl.type == 'link' %}
-                            <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">
+{#                            <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">#}
+                            {% set title = 'Watch on'|trans ~ ' ' ~ dl.name %}
+                            {% if 'playlist' in dl.url %}
+                                {% set title = title ~ ' - ' ~ 'Playlist'|trans %}
+                            {% endif %}
+                            {% if 'search_query' in dl.url %}
+                                {% set title = title ~ ' - ' ~ 'Search page'|trans %}
+                            {% endif %}
                         {% endif %}
                         {% if dl.type == 'file' %}
-                            <div class="link-pass" data-title="{{ 'Play video'|trans }} “{{ dl.name }}”">
+{#                            <div class="link-pass" data-title="{{ 'Play video'|trans }} “{{ dl.name }}”">#}
+                            {% set title = 'Play video'|trans ~ ' “' ~ dl.name ~ '”' %}
                         {% endif %}
+                        <div class="link-pass" data-title="{{ title }}">
                         <a href="{{ dl.url }}" target="_blank">
                             {% if dl.type == 'link' or dl.type == 'season' %}
                                 {% if dl.logoPath %}
