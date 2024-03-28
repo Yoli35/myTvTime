@@ -26,27 +26,6 @@ export class Series {
         this.removeDelay = 100;
         this.actionDelay = 10;
 
-        // this.trans = {
-        //     "added": {
-        //         "fr": "Nouvelle série ajoutée",
-        //         "en": "New series added",
-        //         "de": "Neue Serie hinzugefügt",
-        //         "es": "Nueva serie agregada"
-        //     },
-        //     "updated": {
-        //         "fr": "Série mise à jour",
-        //         "en": "Serie updated",
-        //         "de": "Serie aktualisiert",
-        //         "es": "Serie actualizada"
-        //     },
-        //     "not found": {
-        //         "fr": "Série introuvable",
-        //         "en": "Serie not found",
-        //         "de": "Serie nicht gefunden",
-        //         "es": "Serie no encontrada"
-        //     },
-        // }
-
         this.init();
     }
 
@@ -573,6 +552,9 @@ export class Series {
 
                         historyWrapper.appendChild(a);
                     });
+                    const lastAdded = historyWrapper.lastElementChild;
+                    const height = lastAdded.clientHeight;
+                    historyWrapper.scrollTop += height;
                 }
             }
             if (historyItems.length < perPage) {

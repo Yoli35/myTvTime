@@ -721,6 +721,7 @@
                     gap: .25rem;
                     max-height: 30rem;
                     overflow-y: auto;
+                    scroll-behavior: smooth;
                     width: 100%;
 
                     .episode-history {
@@ -787,9 +788,18 @@
                 }
 
                 .history-more {
+                    background-color: var(--gradient-ardoise-80);
+                    border-radius: .25rem;
+                    color: var(--gradient-ardoise-10);
                     cursor: pointer;
                     margin-block-start: .5rem;
                     margin-inline-start: auto;
+                    padding: .25rem 1rem;
+
+                    &:hover {
+                        background-color: var(--gradient-orange-50);
+                        color: var(--gradient-orange-90);
+                    }
                 }
             }
 
