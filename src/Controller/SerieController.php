@@ -906,11 +906,14 @@ class SerieController extends AbstractController
         // Ajout de l'url des profils des acteurs et de l'équipe technique
         foreach ($credits['cast'] as $key => $cast) {
 //            dump($cast);
-            $credits['cast'][$key]['profile_path'] = $this->fullUrl('profile', 2, $cast['profile_path'], 'no_profile.png', $imgConfig);
+            $credits['cast'][$key]['profile_path'] = $this->fullUrl('profile', 2, $cast['profile_path'] ?? null, 'no_profile.png', $imgConfig);
         }
+        $credits['cast'] = array_filter($credits['cast'], function ($cast) {
+            return key_exists('id', $cast);
+        });
         if (key_exists('crew', $credits)) {
             foreach ($credits['crew'] as $key => $crew) {
-                $credits['crew'][$key]['profile_path'] = $this->fullUrl('profile', 2, $crew['profile_path'], 'no_profile.png', $imgConfig);
+                $credits['crew'][$key]['profile_path'] = $this->fullUrl('profile', 2, $crew['profile_path'] ?? null, 'no_profile.png', $imgConfig);
             }
         }
         // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
@@ -935,7 +938,7 @@ class SerieController extends AbstractController
         // Breadcrumb
         $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
 
-//        dump([
+        dump([
 //            'serie' => $serie,
 //            'env' => $_ENV['APP_ENV'],
 //            'season' => $season,
@@ -943,7 +946,8 @@ class SerieController extends AbstractController
 //            'watchProviders' => $watchProviders,
 //            'episodes' => $episodes,
 //            'seasonViewing' => $seasonViewing,
-//        ]);
+        'credits' => $credits,
+        ]);
 
         return $this->render('series/season.html.twig', [
             'serie' => $serie,
