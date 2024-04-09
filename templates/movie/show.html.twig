@@ -554,7 +554,7 @@
                         if (data.success) {
                             if (data.type === 'backdrop') {
                                 const backdrop = header.querySelector(".backdrop");
-                                backdrop.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'backdrop') + '" data-caption="' + data.caption + '"><div class="caption" loading="lazy">' + data.caption + '</div>';
+                                backdrop.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'backdrop') + '" data-caption="' + data.caption + '"><div class="caption">' + data.caption + '</div>';
                                 /**
                                  * @type {HTMLButtonElement} clearPreview
                                  */
@@ -586,7 +586,7 @@
                             }
                             if (data.type === 'poster') {
                                 const poster = header.querySelector(".poster");
-                                poster.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'poster') + '" data-caption="' + data.caption + '"><div class="caption" loading="lazy">' + data.caption + '</div>';
+                                poster.innerHTML = '<img src="' + data.path + '" alt="' + (data.caption ?? 'poster') + '" data-caption="' + data.caption + '"><div class="caption">' + data.caption + '</div>';
                                 /**
                                  * @type {HTMLButtonElement} clearPreview
                                  */

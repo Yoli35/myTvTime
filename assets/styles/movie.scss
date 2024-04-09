@@ -463,7 +463,7 @@
 
     .top {
         @include flex-col(unset, unset);
-        margin-top: 2em;
+        margin-top: 1em;
 
         .movie-detail {
             @include flex-col(unset, unset);
@@ -758,7 +758,8 @@
                     .list {
                         @include flex-row(flex-start, center);
                         flex-wrap: wrap;
-                        background-color: var(--gradient-ardoise-80-alpha-50);
+                        gap: .125em;
+                        background-color: var(--gradient-ardoise-10-alpha-20);
                         color: var(--gradient-ardoise-10);
                         border: 0;
                         border-radius: .5em;
@@ -771,7 +772,6 @@
                             color: var(--gradient-ardoise-20);
                             cursor: pointer;
                             padding: .25em .5em;
-                            margin: .25em;
 
                             &.selected {
                                 background-color: var(--gradient-orange-40);
