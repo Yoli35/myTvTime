@@ -15,7 +15,7 @@ class YoutubeVideoSeriesType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        dump($options);
+//        dump($options);
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Title',

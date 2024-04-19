@@ -178,7 +178,7 @@ class MovieController extends AbstractController
         'fr' => '/{_locale}/film/{id}',
         'en' => '/{_locale}/movie/{id}',
         'de' => '/{_locale}/filme/{id}',
-        'es' => '/{_locale}/película/{id}'
+        'es' => '/{_locale}/pelicula/{id}'
     ], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
     public function show(Request $request, $id): Response
     {
