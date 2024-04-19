@@ -16,6 +16,7 @@ use App\Repository\SettingsRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserYVideoRepository;
 use App\Repository\YoutubeChannelRepository;
+use App\Repository\YoutubePlaylistRepository;
 use App\Repository\YoutubeVideoRepository;
 use App\Repository\YoutubeVideoSeriesRepository;
 use App\Repository\YoutubeVideoTagRepository;
@@ -24,6 +25,9 @@ use DateInterval;
 use DateTimeImmutable;
 use Google\Exception;
 use Google\Service\YouTube\ChannelListResponse;
+use Google\Service\YouTube\PlaylistImageListResponse;
+use Google\Service\YouTube\PlaylistItemListResponse;
+use Google\Service\YouTube\PlaylistListResponse;
 use Google\Service\YouTube\VideoListResponse;
 use Google_Client;
 use Google_Service_YouTube;
@@ -53,6 +57,7 @@ class YoutubeController extends AbstractController
         private readonly UserRepository               $userRepository,
         private readonly UserYVideoRepository         $userYVideoRepository,
         private readonly YoutubeChannelRepository     $channelRepository,
+        private readonly YoutubePlaylistRepository    $playlistRepository,
         private readonly YoutubeVideoRepository       $videoRepository,
         private readonly YoutubeVideoSeriesRepository $videoSeriesRepository,
         private readonly YoutubeVideoTagRepository    $videoTagRepository,
@@ -115,7 +120,6 @@ class YoutubeController extends AbstractController
             'user_series' => $userSeries
         ]);
 
-
         return $this->render('youtube/index.html.twig', [
             'videos' => $this->getVideos($vids),
             'list' => $videoSeriesList,
@@ -132,6 +136,62 @@ class YoutubeController extends AbstractController
                 ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube'), 'separator' => '●'],
                 ['name' => $this->translator->trans('Youtube video search'), 'url' => $this->generateUrl('app_youtube_search')],
             ],
+        ]);
+    }
+
+    #[Route('/{_locale}/youtube/playlists', name: 'app_youtube_playlists', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function playlists(): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /** @var User $user */
+        $user = $this->getUser();
+        $playlists = $this->playlistRepository->findBy(['user' => $user], ['id' => 'DESC'], 20, 0);
+
+        $playlistList = array_map(function ($p) {
+            $playlistId = $p->getPlaylistId();
+            $playlist = $this->getPlaylist($playlistId);
+            return [
+                'id' => $p->getId(),
+                'playlistId' => $p->getPlaylistId(),
+                'playlistSnippet' => $playlist->getItems()[0]->getSnippet(),
+                'playListCount' => $playlist->getItems()[0]->getContentDetails()->getItemCount(),
+            ];
+        }, $playlists);
+
+        return $this->render('youtube/playlists.html.twig', [
+            'playlists' => $playlistList,
+        ]);
+    }
+
+    #[Route('/{_locale}/youtube/playlist/{id}', name: 'app_youtube_playlist', requirements: ['_locale' => 'fr|en|de|es'])]
+    public function playlist($id): Response
+    {
+        $playlist = $this->playlistRepository->findOneBy(['id' => $id]);
+        $playlistId = $playlist->getPlaylistId();
+
+        $playlist = $this->getPlaylist($playlistId);
+        $playlistItems = $this->getPlaylistItems($playlistId);
+
+        $videos = array_map(function ($video) {
+            $snippet = $video->getSnippet();
+            $videoId = $snippet->getResourceId()->getVideoId();
+            $videoItem = $this->getVideoSnippet($videoId)->getItems()[0];
+            return [
+                'videoId' => $videoId,
+                'videoSnippet' => $videoItem->getSnippet(),
+                'videoDuration' => $this->formatDuration($this->iso8601ToSeconds($videoItem->getContentDetails()->getDuration())),
+                'channelId' => $snippet->getVideoOwnerChannelId(),
+                'channelSnippet' => $this->getChannelSnippet($snippet->getVideoOwnerChannelId())->getItems()[0]->getSnippet(),
+            ];
+        }, $playlistItems->getItems());
+
+        return $this->render('youtube/playlist.html.twig', [
+            'playlist' => $playlist->getItems()[0],
+            'playlistSnippet' => $playlist->getItems()[0]->getSnippet(),
+            'playlistContentDetails' => $playlist->getItems()[0]->getContentDetails(),
+            'playListCount' => $playlist->getItems()[0]->getContentDetails()->getItemCount(),
+            'videoList' => $videos,
+            'playlistItems' => $playlistItems,
         ]);
     }
 
@@ -790,6 +850,16 @@ class YoutubeController extends AbstractController
     private function getChannelSnippet($channelId): ChannelListResponse
     {
         return $this->service_YouTube->channels->listChannels('snippet', ['id' => $channelId]);
+    }
+
+    private function getPlaylist($playlistId): PlaylistListResponse
+    {
+        return $this->service_YouTube->playlists->listPlaylists('contentDetails, snippet', ['id' => $playlistId]);
+    }
+
+    private function getPlaylistItems($playlistId): PlaylistItemListResponse
+    {
+        return $this->service_YouTube->playlistItems->listPlaylistItems('contentDetails,snippet', ['playlistId' => $playlistId, 'maxResults' => 50]);
     }
 
     private function iso8601ToSeconds($input): int

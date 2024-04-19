@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/styles/youtube.css">
+{% endblock %}
+
+{% block title %}myTvTime ▶ ︎Youtube ▶ ︎ {{ 'My Youtube Playlists'|trans }}{% endblock %}
+{% set user = app.user %}
+{% set locale = app.request.locale %}
+
+{% block body %}
+    <div class="scroll-watcher"></div>
+    <div class="container-fluid">
+
+        {{ include('blocks/_mainMenu.html.twig') }}
+
+        <div class="yt-header">
+            <div class="banner">
+                {{ include('blocks/_clock.html.twig') }}
+                <div class="title">{{ 'Playlists'|trans }}</div>
+                <div class="youtube" data-title="{{ 'Go to Youtube'|trans }}">
+                    <a href="https://www.youtube.com/" target="_blank">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+                <div class="search-on-yt" data-title="{{ 'Search on Youtube'|trans }}">
+                    <a href="https://www.youtube.com/results?search_query=" target="_blank">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </a>
+                </div>
+                <div class="history" data-title="{{ 'Your history on Youtube'|trans }}">
+                    <a href="https://www.youtube.com/feed/history" target="_blank">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="yt-videos">
+            {{ include('blocks/_nav.html.twig', {thisPage: 'My Youtube Playlists'|trans}) }}
+            <pre>{{ dump(playlists) }}</pre>
+        </div>
+
+        {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://flackr.github.io/scroll-timeline/dist/scroll-timeline.js"></script>
+{% endblock %}

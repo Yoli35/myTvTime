@@ -21,6 +21,16 @@
             width: calc(1.5rem + 4px);
         }
 
+        .title {
+            bottom: 4rem;
+            color: var(--gradient-ardoise-10);
+            font-size: clamp(1.5em, 5vw, 6em);
+            font-weight: 400;
+            left: 15rem;
+            padding: .25rem;
+            position: absolute;
+        }
+
         .search-on-yt {
             bottom: 3.5rem;
         }

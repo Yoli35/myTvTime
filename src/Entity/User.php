@@ -138,6 +138,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserYVideo::class)]
     private Collection $userYVideos;
 
+    /**
+     * @var Collection<int, YoutubePlaylist>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: YoutubePlaylist::class, orphanRemoval: true)]
+    private Collection $youtubePlaylists;
+
     public function __construct()
     {
         $this->alarms = new ArrayCollection();
@@ -155,6 +161,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userYVideos = new ArrayCollection();
         $this->youtubeVideoComments = new ArrayCollection();
         $this->youtubeVideos = new ArrayCollection();
+        $this->youtubePlaylists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -827,6 +834,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userYVideo->getUser() === $this) {
                 $userYVideo->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, YoutubePlaylist>
+     */
+    public function getYoutubePlaylists(): Collection
+    {
+        return $this->youtubePlaylists;
+    }
+
+    public function addYoutubePlaylist(YoutubePlaylist $youtubePlaylist): static
+    {
+        if (!$this->youtubePlaylists->contains($youtubePlaylist)) {
+            $this->youtubePlaylists->add($youtubePlaylist);
+            $youtubePlaylist->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeYoutubePlaylist(YoutubePlaylist $youtubePlaylist): static
+    {
+        if ($this->youtubePlaylists->removeElement($youtubePlaylist)) {
+            // set the owning side to null (unless already changed)
+            if ($youtubePlaylist->getUser() === $this) {
+                $youtubePlaylist->setUser(null);
             }
         }
 
