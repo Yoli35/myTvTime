@@ -1253,6 +1253,139 @@
     }
 }
 
+.yt-playlists {
+    @include flex-col(flex-start, center);
+    gap: 1em;
+    width: 100%;
+
+    .new-playlist {
+        display: flex;
+        width: 100%;
+
+        label {
+            align-items: center;
+            display: flex;
+            gap: 1em;
+            margin-inline: auto;
+
+            input {
+                background-color: var(--gradient-orange-50);
+                color: var(--gradient-ardoise-10);
+                width: 20rem;
+            }
+        }
+    }
+
+    .playlists {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: flex-start;
+        width: 100%;
+
+        .playlist {
+            align-items: center;
+            border-radius: .5rem;
+            display: flex;
+            gap: .5rem;
+            justify-content: flex-start;
+            overflow: hidden;
+            padding: .5rem;
+            position: relative;
+            width: 100%;
+
+            .backdrop {
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                filter: blur(64px);
+                inset: 0;
+                position: absolute;
+            }
+
+            .new-videos {
+                background-color: var(--gradient-orange-50);
+                border-radius: .25rem;
+                color: var(--gradient-orange-90);
+                font-weight: 600;
+                left: 1rem;
+                padding-block: .25rem;
+                padding-inline: 1rem;
+                position: absolute;
+                top: 1rem;
+                z-index: 2;
+            }
+
+            .thumbnail {
+                aspect-ratio: 16 / 9;
+                background-color: var(--gradient-ardoise-80);
+                border-radius: .25rem;
+                height: 13.5rem;
+                width: 24rem;
+                z-index: 1;
+
+                img {
+                    border-radius: .25rem;
+                    height: 100%;
+                    object-fit: cover;
+                    width: 100%;
+                }
+            }
+
+            .infos {
+                @include flex-col(flex-start, center);
+                gap: .5rem;
+                overflow-y: auto;
+                z-index: 1;
+
+                .title {
+                    background-color: var(--gradient-ardoise-75-alpha-25);
+                    border-radius: .25rem;
+                    color: var(--gradient-ardoise-10);
+                    display: flex;
+                    font-size: 1.5rem;
+                    font-weight: 400;
+                    gap: 1.5rem;
+                    padding-block: .25rem;
+                    padding-inline: .5rem;
+
+                    span {
+                        font-size: .875rem;
+                        font-weight: 100;
+                    }
+                }
+
+                .description, .nb-videos {
+                    background-color: var(--gradient-ardoise-75-alpha-25);
+                    border-radius: .25rem;
+                    color: var(--gradient-ardoise-10);
+                    font-size: 1rem;
+                    font-weight: 100;
+                    padding-block: .25rem;
+                    padding-inline: .5rem;
+                }
+
+                .description {
+                    max-height: 6rem;
+                    overflow-y: auto;
+                }
+
+                .nb-videos {
+                    &.new {
+                        background-color: var(--gradient-orange-50);
+                        color: var(--gradient-orange-90);
+                    }
+                }
+            }
+
+            &:hover {
+                background-color: var(--gradient-ardoise-70-alpha-50);
+            }
+        }
+    }
+}
+
 @media (max-width: 575.98px) {
     .yt-videos {
         .parameters {

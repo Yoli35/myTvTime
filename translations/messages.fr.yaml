@@ -1620,8 +1620,15 @@ Type: Type
 String: Chaîne de caractères
 Preview: Aperçu
 Playlists: Listes de lecture
-My Youtube Playlists: Mes listes de lecture Youtube
-My Youtube Playlist: Liste de lecture Youtube
+My Youtube playlists: Mes listes de lecture Youtube
+Youtube playlist: Liste de lecture Youtube
+New video: Nouvelle vidéo
+Details: Détails
+Watch on Youtube: Regarder sur Youtube
+New playlist: Nouvelle liste de lecture
+Enter or paste a playlist URL: Entrez ou collez une URL de liste de lecture
+Playlist added!: Liste de lecture ajoutée !
+Playlist already added!: Liste de lecture déjà ajoutée !
 
 #TikTok
 My TikTok Videos: Mes vidéos TikTok

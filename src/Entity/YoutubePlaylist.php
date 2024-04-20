@@ -20,6 +20,9 @@ class YoutubePlaylist
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $numberOfVideos = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class YoutubePlaylist
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getNumberOfVideos(): ?int
+    {
+        return $this->numberOfVideos;
+    }
+
+    public function setNumberOfVideos(?int $numberOfVideos): static
+    {
+        $this->numberOfVideos = $numberOfVideos;
 
         return $this;
     }

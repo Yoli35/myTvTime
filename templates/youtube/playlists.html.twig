@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="/styles/youtube.css">
 {% endblock %}
 
-{% block title %}myTvTime ▶ ︎Youtube ▶ ︎ {{ 'My Youtube Playlists'|trans }}{% endblock %}
+{% block title %}myTvTime ▶ ︎Youtube ▶ ︎ {{ 'My Youtube playlists'|trans }}{% endblock %}
 {% set user = app.user %}
 {% set locale = app.request.locale %}
 
@@ -36,15 +36,53 @@
             </div>
         </div>
 
-        <div class="yt-videos">
-            {{ include('blocks/_nav.html.twig', {thisPage: 'My Youtube Playlists'|trans}) }}
-            <pre>{{ dump(playlists) }}</pre>
+        <div class="yt-playlists">
+            {{ include('blocks/_nav.html.twig') }}
+            {#            <pre>{{ dump(playlists) }}</pre> #}
+            <div class="new-playlist">
+                <label for="new-playlist">{{ 'New playlist'|trans }}
+                    <input type="text" id="new-playlist" data-title="{{ 'Enter or paste a playlist URL'|trans }}">
+                    <button class="btn btn-primary">{{ 'Add'|trans }}</button>
+                </label>
+            </div>
+            <div class="playlists">
+                {% for p in playlists %}
+                    <div class="playlist">
+                        <div class="backdrop" style="background-image: url('{{ p.thumbnailUrl }}');"></div>
+                        {% if p.newVideos %}
+                            <div class="new-videos">{{ 'New videos!'|trans }}</div>
+                        {% endif %}
+                        <div class="thumbnail">
+                            <img src="{{ p.thumbnailUrl }}" alt="{{ p.snippet.title }}">
+                        </div>
+                        <div class="infos">
+                            <div class="title">
+                                {{ p.snippet.title }}
+                                <span>{{ p.snippet.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</span>
+                            </div>
+                            <div class="description">{{ p.snippet.description }}</div>
+                            <div class="nb-videos{% if p.newVideos %} new{% endif %}">{{ p.playListCount }} {{ 'videos'|trans }}</div>
+                            <div class="actions">
+                                <a href="https://www.youtube.com/playlist?list={{ p.playlistId }}" target="_blank" class="btn btn-primary">{{ 'Watch on Youtube'|trans }}</a>
+                                <a href="{{ path('app_youtube_playlist', {id: p.id}) }}" class="btn btn-primary">{{ 'Details'|trans }}</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}
+        <div id="global-data" style="display: none">
+            {
+            "userId": {{ app.user.id }}, "locale": "{{ locale }}",
+            "app_youtube_add_playlist": "{{ path('app_youtube_add_playlist') }}"
+            }
+        </div>
     </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script src="/js/youtubePlaylist.js" type="module"></script>
     <script src="https://flackr.github.io/scroll-timeline/dist/scroll-timeline.js"></script>
 {% endblock %}

@@ -44,12 +44,12 @@
                 </h1>
                 <h2 id="time-spend">{{ time2Human }}</h2>
                 <div class="parameters">
-                    <div class="title">{{ 'Add a Youtube video'|trans }}</div>
+{#                    <div class="title">{{ 'Add a Youtube video'|trans }}</div>#}
                     <div class="content minimise">
                         <div class="input">
                             <form>
                                 <div class="link">
-                                    <div>{{ 'Link'|trans }} :</div>
+                                    <div>{{ 'New video'|trans }} :</div>
                                     <label for="link">
                                         <input id="link" type="search" name="link" autofocus>
                                     </label>
@@ -58,7 +58,6 @@
                                     <label for="page">
                                         <input type="checkbox" id="page" name="page"{{ settings.page ? " checked": "" }}>
                                         {{ 'Go to the video page'|trans }}
-                                        {#                                        <div><i class="fa-solid fa-check"></i></div> #}
                                     </label>
                                 </div>
                                 <div class="sort">

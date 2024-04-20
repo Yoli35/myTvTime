@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\UserYVideo;
 use App\Entity\VideoSeriesMatch;
 use App\Entity\YoutubeChannel;
+use App\Entity\YoutubePlaylist;
 use App\Entity\YoutubeVideo;
 use App\Entity\YoutubeVideoSeries;
 use App\Entity\YoutubeVideoTag;
@@ -132,10 +133,7 @@ class YoutubeController extends AbstractController
             'justAdded' => false,
             'preview' => $preview,
             'from' => 'youtube',
-            'breadcrumb' => [
-                ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube'), 'separator' => '●'],
-                ['name' => $this->translator->trans('Youtube video search'), 'url' => $this->generateUrl('app_youtube_search')],
-            ],
+            'breadcrumb' => $this->youtubeBreadcrumb(),
         ]);
     }
 
@@ -150,16 +148,43 @@ class YoutubeController extends AbstractController
         $playlistList = array_map(function ($p) {
             $playlistId = $p->getPlaylistId();
             $playlist = $this->getPlaylist($playlistId);
+            $item = $playlist->getItems()[0];
+            $snippet = $item->getSnippet();
+            if ($snippet->getThumbnails()) {
+                $thumbnails = $snippet->getThumbnails();
+                $thumbnail = $thumbnails->getStandard() ?? $thumbnails->getHigh() ?? $thumbnails->getMedium() ?? $thumbnails->getDefault() ?? null;
+            } else {
+                $thumbnail = null;
+            }
+            $thumbnailUrl = $thumbnail ? $thumbnail->getUrl() : '/images/youtube/playlist_default.jpg';
+            $playlistCount = $item->getContentDetails()->getItemCount();
+            $newVideos = false;
+
+            if ($p->getNumberOfVideos() != $playlistCount) {
+                $p->setNumberOfVideos($playlistCount);
+                $this->playlistRepository->save($p, true);
+                $newVideos = true;
+            }
+
             return [
                 'id' => $p->getId(),
                 'playlistId' => $p->getPlaylistId(),
-                'playlistSnippet' => $playlist->getItems()[0]->getSnippet(),
-                'playListCount' => $playlist->getItems()[0]->getContentDetails()->getItemCount(),
+                'snippet' => $item->getSnippet(),
+                'thumbnailUrl' => $thumbnailUrl,
+                'playListCount' => $playlistCount,
+                'newVideos' => $newVideos,
             ];
         }, $playlists);
 
+        usort($playlistList, function ($a, $b) {
+            return $b['snippet']->getPublishedAt() <=> $a['snippet']->getPublishedAt();
+        });
+
+        dump(['playlists' => $playlistList]);
+
         return $this->render('youtube/playlists.html.twig', [
             'playlists' => $playlistList,
+            'breadcrumb' => $this->youtubeBreadcrumb(),
         ]);
     }
 
@@ -192,6 +217,7 @@ class YoutubeController extends AbstractController
             'playListCount' => $playlist->getItems()[0]->getContentDetails()->getItemCount(),
             'videoList' => $videos,
             'playlistItems' => $playlistItems,
+            'breadcrumb' => $this->youtubeBreadcrumb(),
         ]);
     }
 
@@ -211,67 +237,6 @@ class YoutubeController extends AbstractController
         return $this->json([
             'results' => $this->getVideos($vids),
         ]);
-    }
-
-    public function getVideos($vids): array
-    {
-        $videos = [];
-
-        foreach ($vids as $vid) {
-            $video = [];
-            $video['id'] = $vid['id'];
-            $video['thumbnailPath'] = $vid['thumbnailHighPath'];
-            $video['title'] = $vid['title'];
-            $video['contentDuration'] = $this->formatDuration($vid['contentDuration']);
-            $video['publishedAt'] = $vid['publishedAt'];
-            $video['channel'] = [];
-            $video['channel']['title'] = $vid['channelTitle'];
-            $video['channel']['customUrl'] = $vid['channelCustomUrl'];
-            $video['channel']['youtubeId'] = $vid['channelYoutubeId'];
-            $video['channel']['thumbnailDefaultUrl'] = $vid['channelThumbnailDefaultUrl'];
-
-            $video['tags'] = [];
-
-            $videos[] = $video;
-        }
-        $videoIds = array_map(fn($v) => $v['id'], $videos);
-        $tags = $this->videoTagRepository->findVideosTags($videoIds);
-
-        foreach ($videos as &$video) {
-            $video['tags'] = [];
-            foreach ($tags as $tag) {
-                if ($tag['videoId'] == $video['id']) {
-                    $video['tags'][] = $tag;
-                }
-            }
-            usort($video['tags'], function ($a, $b) {
-                return $a['label'] <=> $b['label'];
-            });
-        }
-        return $videos;
-    }
-
-    public function formatDuration(int $durationInSecond): string
-    {
-        $h = floor($durationInSecond / 3600);
-        $m = floor(($durationInSecond % 3600) / 60);
-        $s = $durationInSecond % 60;
-        $duration = "";
-        if ($h > 0) {
-            $duration .= $h . ":";
-        }
-        if ($m < 10) {
-            $m = "0" . $m;
-        }
-        $duration .= $m . ":";
-        if ($s < 10) {
-            $s = "0" . $s;
-        }
-        $duration .= $s;
-
-        //dump(['durationInSecond' => $durationInSecond, 'h' => $h, 'm' => $m, 's' => $s, 'duration' => $duration]);
-
-        return $duration;
     }
 
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -740,6 +705,41 @@ class YoutubeController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/youtube/add/playlist', name: 'app_youtube_add_playlist', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]
+    public function addPlaylist(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $locale = $request->getLocale();
+        $providedLink = $request->query->get('link');
+//        dump($providedLink);
+        if (strlen($providedLink) > 34) {
+            $providedLink = preg_replace("/https:\/\/www\.youtube\.com\/playlist\?list=(.+)/", "$1", $providedLink);
+        }
+
+        $ytPlaylist = $this->getPlaylist($providedLink);
+        $title = $ytPlaylist->getItems()[0]->getSnippet()->getTitle();
+
+        $playlist = $this->playlistRepository->findOneBy(['playlistId' => $providedLink]);
+        if ($playlist) {
+            $message = $title . ' - ' . $this->translator->trans("Playlist already added!");
+            $status = "warning";
+        } else {
+            $playlist = new YoutubePlaylist();
+            $playlist->setPlaylistId($providedLink);
+            $playlist->setUser($user);
+            $this->playlistRepository->save($playlist, true);
+            $message = $title . ' - ' . $this->translator->trans("Playlist added!");
+            $status = "success";
+        }
+        $this->addFlash($status, $message);
+
+        return $this->json([
+            'status' => $status,
+            'message' => $message,
+        ]);
+    }
+
     #[Route('/{_locale}/youtube/video/series/{id}', name: 'app_youtube_video_series', requirements: ['_locale' => 'fr|en|de|es'])]
     public function loadVideoSeries(Request $request, YoutubeVideoSeries $series): Response
     {
@@ -789,6 +789,76 @@ class YoutubeController extends AbstractController
         dump(['data' => $data, 'request query' => $request->query->get('data')]);
         $videos = $this->videoSeriesRepository->findVideosByFormat($user->getId(), $data['format'], $data['regex']);
         return $this->json(['videos' => $videos]);
+    }
+
+    public function youtubeBreadcrumb(): array
+    {
+        return [
+            ['name' => $this->translator->trans('My Youtube Videos'), 'url' => $this->generateUrl('app_youtube'), 'separator' => '•'],
+            ['name' => $this->translator->trans('My Youtube playlists'), 'url' => $this->generateUrl('app_youtube_playlists'), 'separator' => '•'],
+            ['name' => $this->translator->trans('Youtube video search'), 'url' => $this->generateUrl('app_youtube_search')],
+        ];
+    }
+
+    public function getVideos($vids): array
+    {
+        $videos = [];
+
+        foreach ($vids as $vid) {
+            $video = [];
+            $video['id'] = $vid['id'];
+            $video['thumbnailPath'] = $vid['thumbnailHighPath'];
+            $video['title'] = $vid['title'];
+            $video['contentDuration'] = $this->formatDuration($vid['contentDuration']);
+            $video['publishedAt'] = $vid['publishedAt'];
+            $video['channel'] = [];
+            $video['channel']['title'] = $vid['channelTitle'];
+            $video['channel']['customUrl'] = $vid['channelCustomUrl'];
+            $video['channel']['youtubeId'] = $vid['channelYoutubeId'];
+            $video['channel']['thumbnailDefaultUrl'] = $vid['channelThumbnailDefaultUrl'];
+
+            $video['tags'] = [];
+
+            $videos[] = $video;
+        }
+        $videoIds = array_map(fn($v) => $v['id'], $videos);
+        $tags = $this->videoTagRepository->findVideosTags($videoIds);
+
+        foreach ($videos as &$video) {
+            $video['tags'] = [];
+            foreach ($tags as $tag) {
+                if ($tag['videoId'] == $video['id']) {
+                    $video['tags'][] = $tag;
+                }
+            }
+            usort($video['tags'], function ($a, $b) {
+                return $a['label'] <=> $b['label'];
+            });
+        }
+        return $videos;
+    }
+
+    public function formatDuration(int $durationInSecond): string
+    {
+        $h = floor($durationInSecond / 3600);
+        $m = floor(($durationInSecond % 3600) / 60);
+        $s = $durationInSecond % 60;
+        $duration = "";
+        if ($h > 0) {
+            $duration .= $h . ":";
+        }
+        if ($m < 10) {
+            $m = "0" . $m;
+        }
+        $duration .= $m . ":";
+        if ($s < 10) {
+            $s = "0" . $s;
+        }
+        $duration .= $s;
+
+        //dump(['durationInSecond' => $durationInSecond, 'h' => $h, 'm' => $m, 's' => $s, 'duration' => $duration]);
+
+        return $duration;
     }
 
     public function newYVideo(User $user, YoutubeVideo $video): void

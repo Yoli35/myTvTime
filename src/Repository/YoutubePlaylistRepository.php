@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\YoutubePlaylist;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,33 +17,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class YoutubePlaylistRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, YoutubePlaylist::class);
     }
 
-    //    /**
-    //     * @return YoutubePlaylist[] Returns an array of YoutubePlaylist objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('y')
-    //            ->andWhere('y.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('y.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?YoutubePlaylist
-    //    {
-    //        return $this->createQueryBuilder('y')
-    //            ->andWhere('y.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function save($playlist, $flush = false): void
+    {
+        $this->entityManager->persist($playlist);
+        if ($flush) {
+            $this->entityManager->flush();
+        }
+    }
 }
