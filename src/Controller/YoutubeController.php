@@ -145,42 +145,82 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $playlists = $this->playlistRepository->findBy(['user' => $user], ['id' => 'DESC'], 20, 0);
 
-        $playlistList = array_map(function ($p) {
+        $playlistList = [];
+        foreach ($playlists as $p){
             $playlistId = $p->getPlaylistId();
-            $playlist = $this->getPlaylist($playlistId);
-            $item = $playlist->getItems()[0];
-            $snippet = $item->getSnippet();
-            if ($snippet->getThumbnails()) {
-                $thumbnails = $snippet->getThumbnails();
-                $thumbnail = $thumbnails->getStandard() ?? $thumbnails->getHigh() ?? $thumbnails->getMedium() ?? $thumbnails->getDefault() ?? null;
-            } else {
-                $thumbnail = null;
-            }
-            $thumbnailUrl = $thumbnail ? $thumbnail->getUrl() : '/images/youtube/playlist_default.jpg';
-            $playlistCount = $item->getContentDetails()->getItemCount();
-            $newVideos = false;
 
-            if ($p->getNumberOfVideos() != $playlistCount) {
-                $p->setNumberOfVideos($playlistCount);
+            $lastUpdateAt = $p->getLastUpdateAt();
+            $now = $this->dateService->getNowImmutable($user->getTimeZone() ?? 'UTC');
+            $performChecks = $lastUpdateAt == null || $lastUpdateAt->diff($now)->days > 1;
+//            dump([
+//                'lastUpdateAt' => $lastUpdateAt,
+//                'now' => $now,
+//                'performChecks' => $performChecks,
+//            ]);
+
+            if ($performChecks) {
+                $playlist = $this->getPlaylist($playlistId);
+                $item = $playlist->getItems()[0];
+                $snippet = $item->getSnippet();
+                if ($snippet->getThumbnails()) {
+                    $thumbnails = $snippet->getThumbnails();
+                    $thumbnail = $thumbnails->getStandard() ?? $thumbnails->getHigh() ?? $thumbnails->getMedium() ?? $thumbnails->getDefault() ?? null;
+                } else {
+                    $thumbnail = null;
+                }
+                $thumbnailUrl = $thumbnail ? $thumbnail->getUrl() : '/images/youtube/playlist_default.jpg';
+                $playlistCount = $item->getContentDetails()->getItemCount();
+                $newVideos = false;
+                if ($p->getNumberOfVideos() != $playlistCount) {
+                    $p->setNumberOfVideos($playlistCount);
+                    $newVideos = true;
+                }
+                if ($p->getTitle() != $snippet->getTitle()) {
+                    $p->setTitle($snippet->getTitle());
+                }
+                if ($p->getDescription() != $snippet->getDescription()) {
+                    $p->setDescription($snippet->getDescription());
+                }
+                if ($p->getThumbnailUrl() != $thumbnailUrl) {
+                    $p->setThumbnailUrl($thumbnailUrl);
+                }
+                $publishedAt = $this->dateService->newDateImmutable($snippet->getPublishedAt(), $user->getTimeZone() ?? 'UTC');
+                if ($p->getPublishedAt() != $publishedAt) {
+                    $p->setPublishedAt($publishedAt);
+                }
+
+                $p->setLastUpdateAt($now);
                 $this->playlistRepository->save($p, true);
-                $newVideos = true;
-            }
 
-            return [
+                $title = $snippet->getTitle();
+                $description = $snippet->getDescription();
+                $publishedAt = $snippet->getPublishedAt();
+            } else {
+                $title = $p->getTitle();
+                $description = $p->getDescription();
+                $thumbnailUrl = $p->getThumbnailUrl();
+                $playlistCount = $p->getNumberOfVideos();
+                $publishedAt = $p->getPublishedAt();
+                $newVideos = false;
+            }
+            $playlistList[] = [
                 'id' => $p->getId(),
                 'playlistId' => $p->getPlaylistId(),
-                'snippet' => $item->getSnippet(),
+                'title' => $title,
+                'description' => $description,
+                'publishedAt' => $publishedAt,
                 'thumbnailUrl' => $thumbnailUrl,
                 'playListCount' => $playlistCount,
                 'newVideos' => $newVideos,
+                'performChecks' => $performChecks,
             ];
-        }, $playlists);
+        }
 
         usort($playlistList, function ($a, $b) {
-            return $b['snippet']->getPublishedAt() <=> $a['snippet']->getPublishedAt();
+            return $b['publishedAt'] <=> $a['publishedAt'];
         });
 
-        dump(['playlists' => $playlistList]);
+//        dump(['playlists' => $playlistList]);
 
         return $this->render('youtube/playlists.html.twig', [
             'playlists' => $playlistList,

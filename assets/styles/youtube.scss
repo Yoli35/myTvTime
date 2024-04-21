@@ -1304,17 +1304,24 @@
                 position: absolute;
             }
 
-            .new-videos {
+            .new-videos, .update {
                 background-color: var(--gradient-orange-50);
                 border-radius: .25rem;
                 color: var(--gradient-orange-90);
                 font-weight: 600;
-                left: 1rem;
                 padding-block: .25rem;
                 padding-inline: 1rem;
                 position: absolute;
                 top: 1rem;
                 z-index: 2;
+            }
+
+            .new-videos {
+                left: 1rem
+            }
+
+            .update {
+                right: 1rem;
             }
 
             .thumbnail {
@@ -1381,6 +1388,22 @@
 
             &:hover {
                 background-color: var(--gradient-ardoise-70-alpha-50);
+            }
+        }
+    }
+}
+
+@media (max-width: 991.98px) {
+
+    .yt-playlists {
+        .playlists {
+            .playlist {
+                flex-direction: column;
+
+                .thumbnail {
+                    height: auto;
+                    width: 80vw;
+                }
             }
         }
     }

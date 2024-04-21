@@ -49,18 +49,21 @@
                 {% for p in playlists %}
                     <div class="playlist">
                         <div class="backdrop" style="background-image: url('{{ p.thumbnailUrl }}');"></div>
+                        {% if p.performChecks %}
+                            <div class="update">{{ 'Updated today'|trans }}</div>
+                        {% endif %}
                         {% if p.newVideos %}
                             <div class="new-videos">{{ 'New videos!'|trans }}</div>
                         {% endif %}
                         <div class="thumbnail">
-                            <img src="{{ p.thumbnailUrl }}" alt="{{ p.snippet.title }}">
+                            <img src="{{ p.thumbnailUrl }}" alt="{{ p.title }}">
                         </div>
                         <div class="infos">
                             <div class="title">
-                                {{ p.snippet.title }}
-                                <span>{{ p.snippet.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</span>
+                                {{ p.title }}
+                                <span>{{ p.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</span>
                             </div>
-                            <div class="description">{{ p.snippet.description }}</div>
+                            <div class="description">{{ p.description ?? 'No description'|trans }}</div>
                             <div class="nb-videos{% if p.newVideos %} new{% endif %}">{{ p.playListCount }} {{ 'videos'|trans }}</div>
                             <div class="actions">
                                 <a href="https://www.youtube.com/playlist?list={{ p.playlistId }}" target="_blank" class="btn btn-primary">{{ 'Watch on Youtube'|trans }}</a>
