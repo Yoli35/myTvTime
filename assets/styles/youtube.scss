@@ -1390,6 +1390,92 @@
                 background-color: var(--gradient-ardoise-70-alpha-50);
             }
         }
+
+        &.playlist-page {
+            align-items: flex-start;
+            flex-direction: row;
+            justify-content: center;
+
+            .playlist {
+                flex-direction: column;
+                flex-shrink: 0;
+                width: 25rem;
+            }
+
+            .videos {
+                background-color: var(--gradient-ardoise-80-alpha-50);
+                border-radius: .25rem;
+                display: flex;
+                flex-direction: column;
+                gap: .5rem;
+                padding: .5rem;
+
+                .video {
+                    align-items: center;
+                    border-radius: .25rem;
+                    display: flex;
+                    gap: .5rem;
+                    padding: .5rem;
+
+                    &.watched {
+                        background-color: var(--gradient-ardoise-70);
+                    }
+
+                    .thumbnail {
+                        aspect-ratio: 16 / 9;
+                        height: 6rem;
+                        position: relative;
+
+                        img {
+                            border-radius: .25rem;
+                            height: 100%;
+                            object-fit: cover;
+                            width: 100%;
+                        }
+
+                        .duration {
+                            background-color: var(--gradient-orange-0);
+                            border-radius: .125rem;
+                            bottom: .25rem;
+                            color: var(--gradient-orange-100);
+                            font-size: .75rem;
+                            font-weight: 400;
+                            line-height: 1.25em;
+                            padding: 0 .25rem;
+                            position: absolute;
+                            right: .25rem;
+                        }
+                    }
+
+                    .title, .published-at {
+                        font-size: .875rem;
+                        font-weight: 400;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+
+                    .channel {
+                        align-items: center;
+                        display: flex;
+                        gap: .25rem;
+
+                        img {
+                            border: 1px solid var(--gradient-ardoise-10);
+                            border-radius: 50%;
+                            height: 2rem;
+                            width: 2rem;
+                        }
+                    }
+                }
+            }
+
+            .dumpies {
+                background-color: var(--gradient-ardoise-80-alpha-50);
+                border-radius: .25rem;
+                display: none;
+            }
+        }
     }
 }
 
