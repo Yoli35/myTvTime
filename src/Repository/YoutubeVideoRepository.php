@@ -194,4 +194,19 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             ->executeQuery()
             ->fetchAllAssociative();
     }
+
+    public function isViewed(int $userId, string $link): array|null
+    {
+        $sql = "SELECT v.`id` as id, v.`added_at` as viewed_at "
+            . "FROM `youtube_video` v "
+            . "INNER JOIN `user_youtube_video` uv ON uv.`youtube_video_id`=v.`id` AND uv.`user_id`=$userId "
+            . "WHERE v.`link`='$link'";
+
+        $result = $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        return !$result ? null : $result;
+    }
 }

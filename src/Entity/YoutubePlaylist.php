@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\YoutubePlaylistRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,6 +40,17 @@ class YoutubePlaylist
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $lastUpdateAt = null;
+
+    /**
+     * @var Collection<int, YoutubePlaylistVideo>
+     */
+    #[ORM\OneToMany(mappedBy: 'playlist', targetEntity: YoutubePlaylistVideo::class, orphanRemoval: true)]
+    private Collection $youtubePlaylistVideos;
+
+    public function __construct()
+    {
+        $this->youtubePlaylistVideos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -136,6 +149,36 @@ class YoutubePlaylist
     public function setLastUpdateAt(?\DateTimeImmutable $lastUpdateAt): static
     {
         $this->lastUpdateAt = $lastUpdateAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, YoutubePlaylistVideo>
+     */
+    public function getYoutubePlaylistVideos(): Collection
+    {
+        return $this->youtubePlaylistVideos;
+    }
+
+    public function addYoutubePlaylistVideo(YoutubePlaylistVideo $youtubePlaylistVideo): static
+    {
+        if (!$this->youtubePlaylistVideos->contains($youtubePlaylistVideo)) {
+            $this->youtubePlaylistVideos->add($youtubePlaylistVideo);
+            $youtubePlaylistVideo->setPlaylist($this);
+        }
+
+        return $this;
+    }
+
+    public function removeYoutubePlaylistVideo(YoutubePlaylistVideo $youtubePlaylistVideo): static
+    {
+        if ($this->youtubePlaylistVideos->removeElement($youtubePlaylistVideo)) {
+            // set the owning side to null (unless already changed)
+            if ($youtubePlaylistVideo->getPlaylist() === $this) {
+                $youtubePlaylistVideo->setPlaylist(null);
+            }
+        }
 
         return $this;
     }

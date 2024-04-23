@@ -56,27 +56,35 @@
                             {{ playlist.title }}
                         </div>
                         <div class="published-at">{{ playlist.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
-                        <div class="description">{{ playlist.description ?? 'No description'|trans }}</div>
+                        {% if playlist.description %}
+                            <div class="description">{{ playlist.description|nl2br }}</div>
+                        {% endif %}
                         <div class="nb-videos{% if playlist.newVideos %} new{% endif %}">{{ playlist.playListCount }} {{ 'videos'|trans }}</div>
                         <div class="actions">
                             <a href="https://www.youtube.com/playlist?list={{ playlist.playlistId }}" target="_blank" class="btn btn-primary">{{ 'Watch on Youtube'|trans }}</a>
-                            <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}" class="btn btn-primary">{{ 'Details'|trans }}</a>
+                            <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}" class="btn btn-primary">{{ 'Reload'|trans }}</a>
                         </div>
                     </div>
                 </div>
                 <div class="videos">
                     {% for video in videoList %}
-                        <div class="video{% if video.dbVideo %} watched{% endif %}">
+                        <div class="video{% if video.youtubeVideoId %} watched{% endif %}">
                             <div class="thumbnail">
                                 <img src="{{ video.thumbnailUrl }}" alt="{{ video.title }}">
                                 <div class="duration">{{ video.duration }}</div>
                             </div>
                             <div class="infos">
                                 <div class="title">{{ video.title }}</div>
-                                <div class="published-at">{{ video.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
+                                <div class="published-at"><i class="fab fa-youtube"></i> {{ video.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
+                                {% if video.youtubeVideoViewedAt %}
+                                    <div class="viewed-at"><i class="fas fa-eye"></i> {{ video.youtubeVideoViewedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
+                                {% endif %}
                                 <div class="channel">
                                     <img src="{{ video.channelThumbnail }}" alt="{{ video.channelTitle }}">
                                     <div class="channel-title">{{ video.channelTitle }}</div>
+                                    {% if video.youtubeVideoId %}
+                                        <a href="{{ path('app_youtube_video', {id: video.youtubeVideoId}) }}"><i class="fas fa-arrow-right-long"></i></a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

@@ -8,6 +8,7 @@ use App\Entity\UserYVideo;
 use App\Entity\VideoSeriesMatch;
 use App\Entity\YoutubeChannel;
 use App\Entity\YoutubePlaylist;
+use App\Entity\YoutubePlaylistVideo;
 use App\Entity\YoutubeVideo;
 use App\Entity\YoutubeVideoSeries;
 use App\Entity\YoutubeVideoTag;
@@ -18,6 +19,7 @@ use App\Repository\UserRepository;
 use App\Repository\UserYVideoRepository;
 use App\Repository\YoutubeChannelRepository;
 use App\Repository\YoutubePlaylistRepository;
+use App\Repository\YoutubePlaylistVideoRepository;
 use App\Repository\YoutubeVideoRepository;
 use App\Repository\YoutubeVideoSeriesRepository;
 use App\Repository\YoutubeVideoTagRepository;
@@ -51,17 +53,18 @@ class YoutubeController extends AbstractController
      * @throws Exception
      */
     public function __construct(
-        private readonly DateService                  $dateService,
-        private readonly SerieViewingRepository       $serieViewingRepository,
-        private readonly SettingsRepository           $settingsRepository,
-        private readonly TranslatorInterface          $translator,
-        private readonly UserRepository               $userRepository,
-        private readonly UserYVideoRepository         $userYVideoRepository,
-        private readonly YoutubeChannelRepository     $channelRepository,
-        private readonly YoutubePlaylistRepository    $playlistRepository,
-        private readonly YoutubeVideoRepository       $videoRepository,
-        private readonly YoutubeVideoSeriesRepository $videoSeriesRepository,
-        private readonly YoutubeVideoTagRepository    $videoTagRepository,
+        private readonly DateService                    $dateService,
+        private readonly SerieViewingRepository         $serieViewingRepository,
+        private readonly SettingsRepository             $settingsRepository,
+        private readonly TranslatorInterface            $translator,
+        private readonly UserRepository                 $userRepository,
+        private readonly UserYVideoRepository           $userYVideoRepository,
+        private readonly YoutubeChannelRepository       $channelRepository,
+        private readonly YoutubePlaylistRepository      $playlistRepository,
+        private readonly YoutubePlaylistVideoRepository $playlistVideoRepository,
+        private readonly YoutubeVideoRepository         $videoRepository,
+        private readonly YoutubeVideoSeriesRepository   $videoSeriesRepository,
+        private readonly YoutubeVideoTagRepository      $videoTagRepository,
     )
     {
         $client = new Google_Client();
@@ -146,7 +149,7 @@ class YoutubeController extends AbstractController
         $playlists = $this->playlistRepository->findBy(['user' => $user], ['id' => 'DESC'], 20, 0);
 
         $playlistList = [];
-        foreach ($playlists as $p){
+        foreach ($playlists as $p) {
             $playlistList[] = $this->youtubePlaylistToPlaylist($user, $p);
         }
 
@@ -170,32 +173,46 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $playlist = $this->youtubePlaylistToPlaylist($user, $youtubePlaylist);
         $playlistItems = $this->getPlaylistItems($playlist['playlistId']);
+        $playlistVideos = $this->playlistVideoRepository->findBy(['playlist' => $youtubePlaylist]);
+        dump(['items' => $playlistItems->getItems(), 'videos' => $playlistVideos]);
 
-        $videos = array_map(function ($video) {
+        $videos = array_map(function ($video) use ($user, $youtubePlaylist, $playlistVideos) {
             $snippet = $video->getSnippet();
             $videoId = $snippet->getResourceId()->getVideoId();
-            $dbVideo = $this->videoRepository->findOneBy(['link' => $videoId]);
-            $videoSnippet = $this->getVideoSnippet($videoId);
-//            dump($videoSnippet);
-            if ($videoSnippet->getPageInfo()->getTotalResults() == 0) {
-                return null;
+
+            $playlistVideo = $this->getPlaylistVideo($videoId, $playlistVideos);
+            if (!$playlistVideo) {
+                $videoSnippet = $this->getVideoSnippet($videoId);
+                if ($videoSnippet->getPageInfo()->getTotalResults() == 0) {
+                    return null;
+                }
+                $videoItem = $this->getVideoSnippet($videoId)->getItems()[0];
+                $duration = $videoItem->getContentDetails()->getDuration();
+                $playlistVideo = new YoutubePlaylistVideo();
+                $playlistVideo->setPlaylist($youtubePlaylist);
+                $dbVideo = $this->videoRepository->isViewed($user->getId(), $videoId);
+                if ($dbVideo) {
+                    $playlistVideo->setYoutubeVideoId($dbVideo['id']);
+                    $playlistVideo->setYoutubeVideoViewedAt($this->dateService->newDateImmutable($dbVideo['viewed_at'], $user->getTimezone() ?? 'Europe/Paris'));
+                } else {
+                    $playlistVideo->setYoutubeVideoId(null);
+                    $playlistVideo->setYoutubeVideoViewedAt(null);
+                }
+                $playlistVideo->setLink($videoId);
+                $playlistVideo->setThumbnailUrl($video->getSnippet()->getThumbnails()->getMedium()->getUrl());
+                $playlistVideo->setTitle($video->getSnippet()->getTitle());
+                $playlistVideo->setDescription($video->getSnippet()->getDescription());
+                $playlistVideo->setDuration($this->formatDuration($this->iso8601ToSeconds($duration)));
+                $playlistVideo->setPublishedAt($this->dateService->newDateImmutable($snippet->getPublishedAt(), $user->getTimezone() ?? 'Europe/Paris'));
+                $playlistVideo->setChannelId($snippet->getVideoOwnerChannelId());
+                $channelSnippet = $this->getChannelSnippet($snippet->getVideoOwnerChannelId())->getItems()[0]->getSnippet();
+                $playlistVideo->setChannelThumbnail($channelSnippet->getThumbnails()->getDefault()->getUrl());
+                $playlistVideo->setChannelTitle($channelSnippet->getTitle());
+                $this->playlistVideoRepository->save($playlistVideo, true);
             }
-            $videoItem = $this->getVideoSnippet($videoId)->getItems()[0];
-            $channelSnippet = $this->getChannelSnippet($snippet->getVideoOwnerChannelId())->getItems()[0]->getSnippet();
-            return [
-                'dbVideo' => $dbVideo,
-                'id' => $videoId,
-                'videoSnippet' => $videoItem->getSnippet(),
-                'thumbnailUrl' => $videoItem->getSnippet()->getThumbnails()->getMedium()->getUrl(),
-                'title' => $snippet->getTitle(),
-                'description' => $snippet->getDescription(),
-                'duration' => $this->formatDuration($this->iso8601ToSeconds($videoItem->getContentDetails()->getDuration())),
-                'publishedAt' => $snippet->getPublishedAt(),
-                'channelId' => $snippet->getVideoOwnerChannelId(),
-                'channelThumbnail' => $channelSnippet->getThumbnails()->getDefault()->getUrl(),
-                'channelTitle' => $channelSnippet->getTitle(),
-            ];
+            return $playlistVideo;
         }, $playlistItems->getItems());
+
         $videos = array_filter($videos, function ($video) {
             return $video != null;
         });
@@ -555,11 +572,13 @@ class YoutubeController extends AbstractController
         if (strlen($providedLink) == 11) {
 //            dump($providedLink);
             $link = $this->videoRepository->findOneBy(['link' => $providedLink]);
+            $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
 
             // Si le lien n'a pas déjà été ajouté 12345678912
             if ($link == null) {
 
                 $videoListResponse = $this->getVideoSnippet($providedLink);
+                dump($videoListResponse);
                 $items = $videoListResponse->getItems();
                 $item = $items[0];
                 $snippet = $item['snippet'];
@@ -620,7 +639,7 @@ class YoutubeController extends AbstractController
                 $newVideo->setContentDimension($contentDetails['dimension']);
                 $newVideo->setContentDuration($this->iso8601ToSeconds($contentDetails['duration']));
                 $newVideo->setContentProjection($contentDetails['projection']);
-                $newVideo->setAddedAt($this->dateService->newDateImmutable('now', 'Europe/Paris'));
+                $newVideo->setAddedAt($now);
 
                 $newVideo->addUser($user);
                 $this->videoRepository->add($newVideo, true);
@@ -649,6 +668,17 @@ class YoutubeController extends AbstractController
             $subMessage = "<a href='/" . $locale . "/youtube/video/" . $justAdded . "'>🔗 ";
             $subMessage .= $this->translator->trans("Go to the video page to see it");
             $subMessage .= " 🔗</a>";
+        }
+
+        $videoInPlaylistVideos = $this->playlistVideoRepository->findBy(['link' => $providedLink]);
+        foreach ($videoInPlaylistVideos as $videoInPlaylistVideo) {
+            $playlist = $videoInPlaylistVideo->getPlaylist();
+            if ($playlist->getUser()->getId() === $user->getId()) {
+                $videoInPlaylistVideo->setYoutubeVideoId($justAdded);
+                $videoInPlaylistVideo->setYoutubeVideoViewedAt($now);
+                $this->playlistVideoRepository->save($videoInPlaylistVideo, true);
+                $message .= " Playlist " . $playlist->getTitle() . " updated!";
+            }
         }
 
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => "youtube"]);
@@ -849,6 +879,17 @@ class YoutubeController extends AbstractController
             'performChecks' => $performChecks,
         ];
 
+    }
+
+    public function getPlaylistVideo(string $videoId, array $playlistVideos): ?YoutubePlaylistVideo
+    {
+        /** @var YoutubePlaylistVideo $playlistVideo */
+        foreach ($playlistVideos as $playlistVideo) {
+            if ($playlistVideo->getLink() == $videoId) {
+                return $playlistVideo;
+            }
+        }
+        return null;
     }
 
     public function youtubeBreadcrumb(): array

@@ -1400,6 +1400,20 @@
                 flex-direction: column;
                 flex-shrink: 0;
                 width: 25rem;
+
+                .infos {
+                    .published-at {
+                        background-color: var(--gradient-ardoise-75-alpha-25);
+                        border-radius: .25rem;
+                        padding-block: .25rem;
+                        padding-inline: .5rem;
+                        width: 100%;
+                    }
+
+                    .description {
+                        max-height: unset;
+                    }
+                }
             }
 
             .videos {
@@ -1447,12 +1461,17 @@
                         }
                     }
 
-                    .title, .published-at {
+                    .title {
                         font-size: .875rem;
                         font-weight: 400;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
+                    }
+
+                    .viewed-at, .published-at {
+                        font-size: .875rem;
+                        font-weight: 100;
                     }
 
                     .channel {
@@ -1465,6 +1484,23 @@
                             border-radius: 50%;
                             height: 2rem;
                             width: 2rem;
+                        }
+
+                        a {
+                            align-items: center;
+                            color: var(--gradient-ardoise-10);
+                            border: 2px solid var(--gradient-ardoise-10);
+                            border-radius: 50%;
+                            display: flex;
+                            height: 2rem;
+                            justify-content: center;
+                            margin-inline-start: auto;
+                            width: 2rem;
+
+                            &:hover {
+                                background-color: var(--gradient-orange-50);
+                                color: var(--gradient-orange-90);
+                            }
                         }
                     }
                 }
