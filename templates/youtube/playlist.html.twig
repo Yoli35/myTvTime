@@ -37,7 +37,7 @@
         </div>
 
         <div class="yt-playlists">
-            {{ include('blocks/_nav.html.twig', {thisPage: 'My Youtube Playlists'|trans}) }}
+            {{ include('blocks/_nav.html.twig') }}
 
             <div class="playlists playlist-page">
                 <div class="playlist">
@@ -69,9 +69,15 @@
                 <div class="videos">
                     {% for video in videoList %}
                         <div class="video{% if video.youtubeVideoId %} watched{% endif %}">
-                            <div class="thumbnail">
-                                <img src="{{ video.thumbnailUrl }}" alt="{{ video.title }}">
-                                <div class="duration">{{ video.duration }}</div>
+                            <div class="video-stuff">
+                                <div class="thumbnail">
+                                    <img src="{{ video.thumbnailUrl }}" alt="{{ video.title }}">
+                                    <div class="duration">{{ video.duration }}</div>
+                                </div>
+                                <div class="stats">
+                                    <div>{{ video.viewCount > 1000000 ? ((video.viewCount/1000000)|round(1) ~ 'M') : (video.viewCount > 1000 ? ((video.viewCount/1000)|round(1) ~ 'k') : video.viewCount) }} {{ (video.viewCount > 1 ? 'views':'view')|trans }}</div>
+                                    <div><i class="fas fa-thumbs-up"></i> {{ video.likeCount > 1000000 ? ((video.likeCount/1000000)|round(1) ~ 'M') : (video.likeCount > 1000 ? ((video.likeCount/1000)|round(1) ~ 'k') : video.likeCount) }}</div>
+                                </div>
                             </div>
                             <div class="infos">
                                 <div class="title">{{ video.title }}</div>

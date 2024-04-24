@@ -52,6 +52,21 @@ class YoutubePlaylistVideo
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $channelTitle = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $viewCount = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $likeCount = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $favoriteCount = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $commentCount = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastUpdateAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -197,6 +212,66 @@ class YoutubePlaylistVideo
     public function setChannelTitle(?string $channelTitle): static
     {
         $this->channelTitle = $channelTitle;
+
+        return $this;
+    }
+
+    public function getViewCount(): ?int
+    {
+        return $this->viewCount;
+    }
+
+    public function setViewCount(?int $viewCount): static
+    {
+        $this->viewCount = $viewCount;
+
+        return $this;
+    }
+
+    public function getLikeCount(): ?int
+    {
+        return $this->likeCount;
+    }
+
+    public function setLikeCount(?int $likeCount): static
+    {
+        $this->likeCount = $likeCount;
+
+        return $this;
+    }
+
+    public function getFavoriteCount(): ?int
+    {
+        return $this->favoriteCount;
+    }
+
+    public function setFavoriteCount(?int $favoriteCount): static
+    {
+        $this->favoriteCount = $favoriteCount;
+
+        return $this;
+    }
+
+    public function getCommentCount(): ?int
+    {
+        return $this->commentCount;
+    }
+
+    public function setCommentCount(?int $commentCount): static
+    {
+        $this->commentCount = $commentCount;
+
+        return $this;
+    }
+
+    public function getLastUpdateAt(): ?\DateTimeImmutable
+    {
+        return $this->lastUpdateAt;
+    }
+
+    public function setLastUpdateAt(?\DateTimeImmutable $lastUpdateAt): static
+    {
+        $this->lastUpdateAt = $lastUpdateAt;
 
         return $this;
     }

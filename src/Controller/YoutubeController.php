@@ -181,14 +181,26 @@ class YoutubeController extends AbstractController
             $videoId = $snippet->getResourceId()->getVideoId();
 
             $playlistVideo = $this->getPlaylistVideo($videoId, $playlistVideos);
-            if (!$playlistVideo) {
+            $now = $this->dateService->newDateImmutable('now', $user->getTimezone() ?? 'Europe/Paris');
+            if ($playlistVideo) {
+                $lastUpdateAt = $playlistVideo->getLastUpdateAt();
+                if ($lastUpdateAt) {
+                    $performUpdate = $lastUpdateAt->diff($now)->days > 1;
+                } else {
+                    $performUpdate = true;
+                }
+            }
+            if (!$playlistVideo || $performUpdate) {
                 $videoSnippet = $this->getVideoSnippet($videoId);
                 if ($videoSnippet->getPageInfo()->getTotalResults() == 0) {
                     return null;
                 }
                 $videoItem = $this->getVideoSnippet($videoId)->getItems()[0];
                 $duration = $videoItem->getContentDetails()->getDuration();
-                $playlistVideo = new YoutubePlaylistVideo();
+                $statistics = $videoItem->getStatistics();
+
+                if (!$playlistVideo) $playlistVideo = new YoutubePlaylistVideo();
+
                 $playlistVideo->setPlaylist($youtubePlaylist);
                 $dbVideo = $this->videoRepository->isViewed($user->getId(), $videoId);
                 if ($dbVideo) {
@@ -204,10 +216,15 @@ class YoutubeController extends AbstractController
                 $playlistVideo->setDescription($video->getSnippet()->getDescription());
                 $playlistVideo->setDuration($this->formatDuration($this->iso8601ToSeconds($duration)));
                 $playlistVideo->setPublishedAt($this->dateService->newDateImmutable($snippet->getPublishedAt(), $user->getTimezone() ?? 'Europe/Paris'));
+                $playlistVideo->setViewCount($statistics->getViewCount());
+                $playlistVideo->setLikeCount($statistics->getLikeCount());
+                $playlistVideo->setFavoriteCount($statistics->getFavoriteCount());
+                $playlistVideo->setCommentCount($statistics->getCommentCount());
                 $playlistVideo->setChannelId($snippet->getVideoOwnerChannelId());
                 $channelSnippet = $this->getChannelSnippet($snippet->getVideoOwnerChannelId())->getItems()[0]->getSnippet();
                 $playlistVideo->setChannelThumbnail($channelSnippet->getThumbnails()->getDefault()->getUrl());
                 $playlistVideo->setChannelTitle($channelSnippet->getTitle());
+                $playlistVideo->setLastUpdateAt($now);
                 $this->playlistVideoRepository->save($playlistVideo, true);
             }
             return $playlistVideo;
@@ -1015,7 +1032,7 @@ class YoutubeController extends AbstractController
 
     private function getVideoSnippet($videoId): VideoListResponse
     {
-        return $this->service_YouTube->videos->listVideos('contentDetails, snippet', ['id' => $videoId]);
+        return $this->service_YouTube->videos->listVideos('contentDetails,snippet,statistics', ['id' => $videoId]);
     }
 
     private function getChannelSnippet($channelId): ChannelListResponse

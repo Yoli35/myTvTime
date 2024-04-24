@@ -1435,71 +1435,95 @@
                         background-color: var(--gradient-ardoise-70);
                     }
 
-                    .thumbnail {
-                        aspect-ratio: 16 / 9;
-                        height: 6rem;
-                        position: relative;
-
-                        img {
-                            border-radius: .25rem;
-                            height: 100%;
-                            object-fit: cover;
-                            width: 100%;
-                        }
-
-                        .duration {
-                            background-color: var(--gradient-orange-0);
-                            border-radius: .125rem;
-                            bottom: .25rem;
-                            color: var(--gradient-orange-100);
-                            font-size: .75rem;
-                            font-weight: 400;
-                            line-height: 1.25em;
-                            padding: 0 .25rem;
-                            position: absolute;
-                            right: .25rem;
-                        }
-                    }
-
-                    .title {
-                        font-size: .875rem;
-                        font-weight: 400;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                    }
-
-                    .viewed-at, .published-at {
-                        font-size: .875rem;
-                        font-weight: 100;
-                    }
-
-                    .channel {
-                        align-items: center;
+                    .video-stuff {
                         display: flex;
-                        gap: .25rem;
+                        flex-direction: column;
+                        gap: .5rem;
 
-                        img {
-                            border: 1px solid var(--gradient-ardoise-10);
-                            border-radius: 50%;
-                            height: 2rem;
-                            width: 2rem;
+                        .thumbnail {
+                            aspect-ratio: 16 / 9;
+                            height: 6rem;
+                            position: relative;
+
+                            img {
+                                border-radius: .25rem;
+                                height: 100%;
+                                object-fit: cover;
+                                width: 100%;
+                            }
+
+                            .duration {
+                                background-color: var(--gradient-orange-0);
+                                border-radius: .125rem;
+                                bottom: .25rem;
+                                color: var(--gradient-orange-100);
+                                font-size: .75rem;
+                                font-weight: 400;
+                                line-height: 1.25em;
+                                padding: 0 .25rem;
+                                position: absolute;
+                                right: .25rem;
+                            }
                         }
 
-                        a {
-                            align-items: center;
-                            color: var(--gradient-ardoise-10);
-                            border: 2px solid var(--gradient-ardoise-10);
-                            border-radius: 50%;
+                        .stats {
                             display: flex;
-                            height: 2rem;
-                            justify-content: center;
-                            margin-inline-start: auto;
-                            width: 2rem;
+                            font-size: .875rem;
+                            font-weight: 100;
+                            gap: .5rem;
 
-                            &:hover {
-                                background-color: var(--gradient-orange-50);
-                                color: var(--gradient-orange-90);
+                            div {
+                                background-color: var(--gradient-ardoise-90);
+                                border-radius: .25rem;
+                                color: var(--gradient-ardoise-10);
+                                padding-inline: .5rem;
+                            }
+                        }
+                    }
+
+                    .infos {
+                        flex-grow: 1;
+
+                        .title {
+                            font-size: .875rem;
+                            font-weight: 400;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+
+                        .viewed-at, .published-at {
+                            font-size: .875rem;
+                            font-weight: 100;
+                        }
+
+                        .channel {
+                            align-items: center;
+                            display: flex;
+                            gap: .25rem;
+
+                            img {
+                                border: 1px solid var(--gradient-ardoise-10);
+                                border-radius: 50%;
+                                height: 2rem;
+                                width: 2rem;
+                            }
+
+                            a {
+                                align-items: center;
+                                color: var(--gradient-ardoise-10);
+                                border: 2px solid var(--gradient-ardoise-10);
+                                border-radius: 50%;
+                                display: flex;
+                                height: 2rem;
+                                justify-content: center;
+                                margin-inline-start: auto;
+                                width: 2rem;
+
+                                &:hover {
+                                    background-color: var(--gradient-orange-50);
+                                    color: var(--gradient-orange-90);
+                                }
                             }
                         }
                     }
