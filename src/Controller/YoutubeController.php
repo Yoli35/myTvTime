@@ -552,6 +552,7 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $locale = $request->getLocale();
         $providedLink = $request->query->get('link');
+        $fromPlaylist = $request->query->get('playlist');
 //        dump($providedLink);
         $justAdded = 0;
         $userAlreadyLinked = false;
@@ -586,10 +587,11 @@ class YoutubeController extends AbstractController
             $providedLink = preg_replace("/https:\/\/www\.youtube\.com\/live\/([a-zA-Z0-9_-]+)(?>\?[a-zA-Z]+=.+)*/", "$1", $providedLink);
         }
 
+        $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
+
         if (strlen($providedLink) == 11) {
 //            dump($providedLink);
             $link = $this->videoRepository->findOneBy(['link' => $providedLink]);
-            $now = $this->dateService->newDateImmutable('now', 'Europe/Paris');
 
             // Si le lien n'a pas déjà été ajouté 12345678912
             if ($link == null) {
@@ -696,6 +698,15 @@ class YoutubeController extends AbstractController
                 $this->playlistVideoRepository->save($videoInPlaylistVideo, true);
                 $message .= " Playlist " . $playlist->getTitle() . " updated!";
             }
+        }
+
+        if ($fromPlaylist) {
+            return $this->json([
+                'status' => $status,
+                'message' => $message,
+                'subMessage' => $subMessage,
+                'videoId' => $justAdded,
+            ]);
         }
 
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => "youtube"]);

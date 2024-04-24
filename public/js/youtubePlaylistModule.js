@@ -6,8 +6,8 @@ export class YoutubePlaylistModule {
 
     constructor(globs) {
         gThis = this;
-        this.app_youtube_add_playlist = globs.app_youtube_add_playlist;
-        this.ytLink = document.getElementById('new-playlist');
+        this.app_youtube_video = globs.app_youtube_video;
+        this.app_youtube_add_video = globs.app_youtube_add_video;
         this.toolTips = new ToolTips();
         this.xhr = new XMLHttpRequest();
 
@@ -16,37 +16,44 @@ export class YoutubePlaylistModule {
     }
 
     initYoutube() {
-        this.ytLink.addEventListener("paste", (e) => {
-            const link = e.clipboardData.getData('text');
-            this.addVideo(link);
+        const addVideoDivs = document.querySelectorAll('.add-video');
+        addVideoDivs.forEach((addVideoDiv) => {
+            addVideoDiv.addEventListener('click', (e) => {
+                e.preventDefault();
+                const link = addVideoDiv.getAttribute('data-link');
+                gThis.addVideo(link, e.currentTarget);
+            });
         });
-        this.ytLink.addEventListener("keypress", this.pasteLinkWithKeyboard.bind(this));
-
-        document.addEventListener("visibilitychange", this.focusLink.bind(this));
-        this.focusLink();
     }
 
-    focusLink() {
-        if (document.visibilityState === 'visible') {
-            this.ytLink.focus();
-            this.ytLink.select();
-        }
-    }
-
-    pasteLinkWithKeyboard(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            if (this.ytLink.value.length >= 11) {
-                this.addVideo(this.ytLink.value);
-            }
-        }
-    }
-
-    addVideo(link) {
+    addVideo(link, addVideoDiv) {
         this.xhr.onload = function () {
-            window.location.reload();
+            let {status, message, subMessage, videoId} = JSON.parse(this.response);
+            const channelDiv = addVideoDiv.closest('.channel');
+            const aToVideo = document.createElement('a');
+            aToVideo.href = gThis.app_youtube_video + '?id=' + videoId;
+            aToVideo.innerHTML = '<i class="fas fa-arrow-right-long"></i>';
+            channelDiv.appendChild(aToVideo);
+            addVideoDiv.remove();
+            const videoDiv = channelDiv.closest('.video');
+            videoDiv.classList.add('watched');
+
+            const flashMessagesDiv = document.querySelector('.flash-messages');
+            const flashMessageDiv = document.createElement('div');
+            flashMessageDiv.classList.add('flash-message');
+            flashMessageDiv.classList.add('flash-message-' + status);
+            flashMessageDiv.innerHTML = message + '<br>' + subMessage;
+            flashMessagesDiv.appendChild(flashMessageDiv);
+            // <div class="close"><i class="fa-solid fa-xmark"></i></div>
+            const closeDiv = document.createElement('div');
+            closeDiv.classList.add('close');
+            closeDiv.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            closeDiv.addEventListener('click', () => {
+                flashMessageDiv.remove();
+            });
+            flashMessageDiv.appendChild(closeDiv);
         }
-        this.xhr.open("GET", this.app_youtube_add_playlist + '?link=' + link);
+        this.xhr.open("GET", this.app_youtube_add_video + '?playlist=1&link=' + link);
         this.xhr.send();
     }
 }

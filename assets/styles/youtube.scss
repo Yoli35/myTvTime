@@ -1509,11 +1509,12 @@
                                 width: 2rem;
                             }
 
-                            a {
+                            a, .add-video {
                                 align-items: center;
                                 color: var(--gradient-ardoise-10);
                                 border: 2px solid var(--gradient-ardoise-10);
                                 border-radius: 50%;
+                                cursor: pointer;
                                 display: flex;
                                 height: 2rem;
                                 justify-content: center;

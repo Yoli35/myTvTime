@@ -90,6 +90,8 @@
                                     <div class="channel-title">{{ video.channelTitle }}</div>
                                     {% if video.youtubeVideoId %}
                                         <a href="{{ path('app_youtube_video', {id: video.youtubeVideoId}) }}"><i class="fas fa-arrow-right-long"></i></a>
+                                    {% else %}
+                                        <div class="add-video" data-link="{{ video.link }}"><i class="fas fa-plus"></i></div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -105,9 +107,16 @@
         </div>
 
         {{ include('blocks/_pageFooter.html.twig') }}
+        <div id="global-data" style="display: none">
+            {
+            "app_youtube_video": "{{ path('app_youtube_video', {id: 0})|slice(0, -1) }}",
+            "app_youtube_add_video": "{{ path('app_youtube_add_video') }}"
+            }
+        </div>
     </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script src="/js/youtubePlaylist.js" type="module"></script>
     <script src="https://flackr.github.io/scroll-timeline/dist/scroll-timeline.js"></script>
 {% endblock %}
