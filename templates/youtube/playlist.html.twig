@@ -60,9 +60,10 @@
                             <div class="description">{{ playlist.description|nl2br }}</div>
                         {% endif %}
                         <div class="nb-videos{% if playlist.newVideos %} new{% endif %}">{{ playlist.playListCount }} {{ 'videos'|trans }}</div>
-                        <div class="actions">
-                            <a href="https://www.youtube.com/playlist?list={{ playlist.playlistId }}" target="_blank" class="btn btn-primary">{{ 'Watch on Youtube'|trans }}</a>
-                            <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}" class="btn btn-primary">{{ 'Reload'|trans }}</a>
+                        <div class="actions d-flex">
+                            <a href="https://www.youtube.com/playlist?list={{ playlist.playlistId }}" target="_blank" class="btn btn-primary" data-title="{{ 'Watch on Youtube'|trans }}"><i class="fab fa-youtube"></i></a>
+                            <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}" class="btn btn-primary" data-title="{{ 'Reload'|trans }}"><i class="fas fa-arrows-rotate"></i></a>
+                            <div id="copy-link" data-link="{{ playlist.playlistId }}" class="btn btn-primary" data-title="{{ 'Copy playlist ID'|trans }}"><i class="fas fa-copy"></i></div>
                         </div>
                     </div>
                 </div>
@@ -101,7 +102,6 @@
                 <div class="dumpies">
                     <pre>{{ dump(playlist) }}</pre>
                     <pre>{{ dump(videoList) }}</pre>
-                    <pre>{{ dump(playlistItems) }}</pre>
                 </div>
             </div>
         </div>

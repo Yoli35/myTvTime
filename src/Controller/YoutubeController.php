@@ -171,16 +171,54 @@ class YoutubeController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
+
         $playlist = $this->youtubePlaylistToPlaylist($user, $youtubePlaylist);
-        $playlistItems = $this->getPlaylistItems($playlist['playlistId']);
-        $playlistVideos = $this->playlistVideoRepository->findBy(['playlist' => $youtubePlaylist]);
-        dump(['items' => $playlistItems->getItems(), 'videos' => $playlistVideos]);
+        $playlistItems = $this->getPlaylistItems($playlist['playlistId'])->getItems();
 
-        $videos = array_map(function ($video) use ($user, $youtubePlaylist, $playlistVideos) {
-            $snippet = $video->getSnippet();
-            $videoId = $snippet->getResourceId()->getVideoId();
+        $dbVideos = $this->playlistVideoRepository->findBy(['playlist' => $youtubePlaylist]);
+        $dbChannels = $this->channelRepository->findBy(['youtubeId' => array_unique(array_map(function ($item) {
+            return $item->getSnippet()->getVideoOwnerChannelId();
+        }, $playlistItems))]);
+        if (!count($dbChannels)) {
+            $dbChannels = $this->createDbChannels(array_unique(array_map(function ($item) {
+                return $item->getSnippet()->getChannelId();
+            }, $playlistItems)));
+        }
 
-            $playlistVideo = $this->getPlaylistVideo($videoId, $playlistVideos);
+        $ytVideoIds = array_map(function ($video) {
+            return $video->getContentDetails()->getVideoId();
+        }, $playlistItems);
+        $ytVideos = array_map(function ($item) use ($dbVideos, $dbChannels) {
+            $videoId = $item->getId();
+            $snippet = $item->getSnippet();
+            return [
+                'videoId' => $videoId,
+                'snippet' => $snippet,
+                'contentDetails' => $item->getContentDetails(),
+                'statistics' => $item->getStatistics(),
+                'dbVideo' => $this->getPlaylistVideo($videoId, $dbVideos),
+                'dbChannel' => $this->getChannel($snippet->getChannelId(), $dbChannels),
+            ];
+        }, $this->getYoutubeVideo($ytVideoIds)->getItems());
+        dump($ytVideoIds, $ytVideos);
+//        $ytVideos = array_combine($ytVideoIds, $ytVideos);
+
+        dump([
+            'items' => $playlistItems,
+//            'videos' => $dbVideos,
+            'ytVideoIds' => $ytVideoIds,
+            'ytVideos' => $ytVideos,
+            'ytVideo 0' => current($ytVideos),
+            'dbChannels' => $dbChannels,
+        ]);
+
+        $videos = array_map(function ($ytVideo) use ($user, $youtubePlaylist, $dbChannels) {
+            $snippet = $ytVideo['snippet'];
+            $videoId = $ytVideo['videoId'];
+
+            $playlistVideo = $ytVideo['dbVideo'];
+            /** @var YoutubeChannel $dbChannel */
+            $dbChannel = $ytVideo['dbChannel'];
             $now = $this->dateService->newDateImmutable('now', $user->getTimezone() ?? 'Europe/Paris');
             if ($playlistVideo) {
                 $lastUpdateAt = $playlistVideo->getLastUpdateAt();
@@ -191,44 +229,43 @@ class YoutubeController extends AbstractController
                 }
             }
             if (!$playlistVideo || $performUpdate) {
-                $videoSnippet = $this->getVideoSnippet($videoId);
-                if ($videoSnippet->getPageInfo()->getTotalResults() == 0) {
+                if ($ytVideo['contentDetails'] == null) {
+                    dump('contentDetails is null');
                     return null;
                 }
-                $videoItem = $this->getVideoSnippet($videoId)->getItems()[0];
-                $duration = $videoItem->getContentDetails()->getDuration();
-                $statistics = $videoItem->getStatistics();
+                $duration = $ytVideo['contentDetails']->getDuration();
+                $statistics = $ytVideo['statistics'];
 
                 if (!$playlistVideo) $playlistVideo = new YoutubePlaylistVideo();
 
                 $playlistVideo->setPlaylist($youtubePlaylist);
-                $dbVideo = $this->videoRepository->isViewed($user->getId(), $videoId);
+                $dbVideo = $ytVideo['dbVideo'];
                 if ($dbVideo) {
-                    $playlistVideo->setYoutubeVideoId($dbVideo['id']);
-                    $playlistVideo->setYoutubeVideoViewedAt($this->dateService->newDateImmutable($dbVideo['viewed_at'], $user->getTimezone() ?? 'Europe/Paris'));
+                    $playlistVideo->setYoutubeVideoId($dbVideo->getYoutubeVideoId());
+                    $playlistVideo->setYoutubeVideoViewedAt($dbVideo->getYoutubeVideoViewedAt());
                 } else {
                     $playlistVideo->setYoutubeVideoId(null);
                     $playlistVideo->setYoutubeVideoViewedAt(null);
                 }
                 $playlistVideo->setLink($videoId);
-                $playlistVideo->setThumbnailUrl($video->getSnippet()->getThumbnails()->getMedium()->getUrl());
-                $playlistVideo->setTitle($video->getSnippet()->getTitle());
-                $playlistVideo->setDescription($video->getSnippet()->getDescription());
+                $playlistVideo->setThumbnailUrl($snippet->getThumbnails()->getMedium()->getUrl());
+                $playlistVideo->setTitle($snippet->getTitle());
+                $playlistVideo->setDescription($snippet->getDescription());
                 $playlistVideo->setDuration($this->formatDuration($this->iso8601ToSeconds($duration)));
                 $playlistVideo->setPublishedAt($this->dateService->newDateImmutable($snippet->getPublishedAt(), $user->getTimezone() ?? 'Europe/Paris'));
                 $playlistVideo->setViewCount($statistics->getViewCount());
                 $playlistVideo->setLikeCount($statistics->getLikeCount());
                 $playlistVideo->setFavoriteCount($statistics->getFavoriteCount());
                 $playlistVideo->setCommentCount($statistics->getCommentCount());
-                $playlistVideo->setChannelId($snippet->getVideoOwnerChannelId());
-                $channelSnippet = $this->getChannelSnippet($snippet->getVideoOwnerChannelId())->getItems()[0]->getSnippet();
-                $playlistVideo->setChannelThumbnail($channelSnippet->getThumbnails()->getDefault()->getUrl());
-                $playlistVideo->setChannelTitle($channelSnippet->getTitle());
+                $playlistVideo->setChannelId($dbChannel->getYoutubeId());
+                $playlistVideo->setChannelThumbnail($dbChannel->getThumbnailMediumUrl());
+                $playlistVideo->setChannelTitle($dbChannel->getTitle());
                 $playlistVideo->setLastUpdateAt($now);
-                $this->playlistVideoRepository->save($playlistVideo, true);
+                $this->playlistVideoRepository->save($playlistVideo);
             }
             return $playlistVideo;
-        }, $playlistItems->getItems());
+        }, $ytVideos);
+        $this->playlistVideoRepository->flush();
 
         $videos = array_filter($videos, function ($video) {
             return $video != null;
@@ -238,7 +275,6 @@ class YoutubeController extends AbstractController
         return $this->render('youtube/playlist.html.twig', [
             'playlist' => $playlist,
             'videoList' => $videos,
-            'playlistItems' => $playlistItems,
             'breadcrumb' => $this->youtubeBreadcrumb(),
         ]);
     }
@@ -596,45 +632,14 @@ class YoutubeController extends AbstractController
             // Si le lien n'a pas déjà été ajouté 12345678912
             if ($link == null) {
 
-                $videoListResponse = $this->getVideoSnippet($providedLink);
+                $videoListResponse = $this->getYoutubeVideo($providedLink);
                 dump($videoListResponse);
                 $items = $videoListResponse->getItems();
                 $item = $items[0];
                 $snippet = $item['snippet'];
 
-                $channel = $this->channelRepository->findOneBy(['youtubeId' => $snippet['channelId']]);
+                $channel = $this->getChannelFromId($snippet['channelId']);
 
-                $channelListResponse = $this->getChannelSnippet($snippet['channelId']);
-                $items = $channelListResponse->getItems();
-                $item = $items[0];
-                $snippet = $item['snippet'];
-                $thumbnails = (array)$snippet['thumbnails'];
-                $localized = $snippet['localized'];
-
-                if ($channel == null) {
-                    $channel = new YoutubeChannel();
-                }
-                //
-                // if channel already stored in db, it might have change everything
-                // so update all infos
-                //
-                $channel->setYoutubeId($item['id']);
-                $channel->setTitle($snippet['title']);
-                $channel->setDescription($snippet['description']);
-                $channel->setCustomUrl($snippet['customUrl']);
-                $channel->setPublishedAt(date_create_immutable($snippet['publishedAt']));
-                if (array_key_exists('default', $thumbnails) && $thumbnails['default']['url']) $channel->setThumbnailDefaultUrl($thumbnails['default']['url']);
-                if (array_key_exists('medium', $thumbnails) && $thumbnails['medium']['url']) $channel->setThumbnailMediumUrl($thumbnails['medium']['url']);
-                if (array_key_exists('high', $thumbnails) && $thumbnails['high']['url']) $channel->setThumbnailHighUrl($thumbnails['high']['url']);
-                $channel->setLocalizedDescription($localized['description']);
-                $channel->setLocalizedTitle($localized['title']);
-                $channel->setCountry($snippet['country']);
-
-                $this->channelRepository->add($channel, true);
-
-                $items = $videoListResponse->getItems();
-                $item = $items[0];
-                $snippet = $item['snippet'];
                 $thumbnails = (array)$snippet['thumbnails'];
                 $localized = $snippet['localized'];
                 $contentDetails = $item['contentDetails'];
@@ -909,15 +914,83 @@ class YoutubeController extends AbstractController
 
     }
 
-    public function getPlaylistVideo(string $videoId, array $playlistVideos): ?YoutubePlaylistVideo
+    public function getPlaylistVideo(string $videoId, array $dbVideos): ?YoutubePlaylistVideo
     {
         /** @var YoutubePlaylistVideo $playlistVideo */
-        foreach ($playlistVideos as $playlistVideo) {
-            if ($playlistVideo->getLink() == $videoId) {
-                return $playlistVideo;
+        foreach ($dbVideos as $dbVideo) {
+            if ($dbVideo->getLink() == $videoId) {
+                return $dbVideo;
             }
         }
         return null;
+    }
+
+    public function getChannel(string $chanelId, array $dbChannels): ?YoutubeChannel
+    {
+        foreach ($dbChannels as $dbChannel) {
+            if ($dbChannel->getYoutubeId() == $chanelId) {
+                return $dbChannel;
+            }
+        }
+        return $this->getChannelFromId($chanelId);
+    }
+
+    public function createDbChannels(array $channelIds): array
+    {
+        $dbChannels = [];
+        foreach ($channelIds as $channelId) {
+            $dbChannels[] = $this->getChannelFromId($channelId);
+        }
+        return $dbChannels;
+    }
+
+    public function getChannelFromId($channelId): YoutubeChannel
+    {
+        $channel = $this->channelRepository->findOneBy(['youtubeId' => $channelId]);
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $now = $this->dateService->getNowImmutable($user->getTimeZone() ?? 'Europe/Paris');
+        $lastUpdateAt = $channel?->getLastUpdateAt();
+        dump([
+            'channel' => $channel,
+            'lastUpdateAt' => $lastUpdateAt,
+            'now' => $now,
+        ]);
+        $performChecks = $lastUpdateAt == null || $lastUpdateAt->diff($now)->days > 1;
+
+        if ($performChecks) {
+            $channelListResponse = $this->getChannelSnippet($channelId);
+            $items = $channelListResponse->getItems();
+            $item = $items[0];
+            $snippet = $item['snippet'];
+            $thumbnails = (array)$snippet['thumbnails'];
+            $localized = $snippet['localized'];
+
+            if ($channel == null) {
+                $channel = new YoutubeChannel();
+            }
+            //
+            // if channel already stored in db, it might have change everything
+            // so update all infos
+            //
+            $channel->setYoutubeId($item['id']);
+            $channel->setTitle($snippet['title']);
+            $channel->setDescription($snippet['description']);
+            $channel->setCustomUrl($snippet['customUrl']);
+            $channel->setPublishedAt(date_create_immutable($snippet['publishedAt']));
+            if (array_key_exists('default', $thumbnails) && $thumbnails['default']['url']) $channel->setThumbnailDefaultUrl($thumbnails['default']['url']);
+            if (array_key_exists('medium', $thumbnails) && $thumbnails['medium']['url']) $channel->setThumbnailMediumUrl($thumbnails['medium']['url']);
+            if (array_key_exists('high', $thumbnails) && $thumbnails['high']['url']) $channel->setThumbnailHighUrl($thumbnails['high']['url']);
+            $channel->setLocalizedDescription($localized['description']);
+            $channel->setLocalizedTitle($localized['title']);
+            $channel->setCountry($snippet['country']);
+            $channel->setLastUpdateAt($now);
+
+            $this->channelRepository->add($channel, true);
+        }
+
+        return $channel;
     }
 
     public function youtubeBreadcrumb(): array
@@ -1028,7 +1101,7 @@ class YoutubeController extends AbstractController
         $preview_index = array_rand($previews);
         $preview = $previews[$preview_index];
 
-        $videoListResponse = $this->getVideoSnippet($preview);
+        $videoListResponse = $this->getYoutubeVideo($preview);
         $items = $videoListResponse->getItems();
         $item = $items[0];
         $snippet = $item['snippet'];
@@ -1041,8 +1114,11 @@ class YoutubeController extends AbstractController
         return ['link' => '', 'url' => '', 'title' => ''];
     }
 
-    private function getVideoSnippet($videoId): VideoListResponse
+    private function getYoutubeVideo(string|iterable $videoId): VideoListResponse
     {
+        if (is_iterable($videoId)) {
+            $videoId = implode(',', $videoId);
+        }
         return $this->service_YouTube->videos->listVideos('contentDetails,snippet,statistics', ['id' => $videoId]);
     }
 

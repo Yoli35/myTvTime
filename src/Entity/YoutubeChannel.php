@@ -47,6 +47,9 @@ class YoutubeChannel
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
     private ?string $country;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastUpdateAt = null;
+
     public function __toString(): string
     {
         return $this->title;
@@ -185,6 +188,18 @@ class YoutubeChannel
     public function setCountry(?string $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getLastUpdateAt(): ?\DateTimeImmutable
+    {
+        return $this->lastUpdateAt;
+    }
+
+    public function setLastUpdateAt(?\DateTimeImmutable $lastUpdateAt): static
+    {
+        $this->lastUpdateAt = $lastUpdateAt;
 
         return $this;
     }
