@@ -24,6 +24,28 @@ export class YoutubePlaylistModule {
                 gThis.addVideo(link, e.currentTarget);
             });
         });
+
+        const copyLinkDiv = document.querySelector('#copy-link');
+        copyLinkDiv.addEventListener('click', (e) => {
+            e.preventDefault();
+            const link = copyLinkDiv.getAttribute('data-link');
+            navigator.clipboard.writeText(link).then(() => {
+                const flashMessagesDiv = document.querySelector('.flash-messages');
+                const flashMessageDiv = document.createElement('div');
+                flashMessageDiv.classList.add('flash-message');
+                flashMessageDiv.classList.add('flash-message-success');
+                flashMessageDiv.innerHTML = 'Link copied to clipboard';
+                flashMessagesDiv.appendChild(flashMessageDiv);
+                // <div class="close"><i class="fa-solid fa-xmark"></i></div>
+                const closeDiv = document.createElement('div');
+                closeDiv.classList.add('close');
+                closeDiv.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                closeDiv.addEventListener('click', () => {
+                    flashMessageDiv.remove();
+                });
+                flashMessageDiv.appendChild(closeDiv);
+            });
+        });
     }
 
     addVideo(link, addVideoDiv) {
@@ -31,7 +53,7 @@ export class YoutubePlaylistModule {
             let {status, message, subMessage, videoId} = JSON.parse(this.response);
             const channelDiv = addVideoDiv.closest('.channel');
             const aToVideo = document.createElement('a');
-            aToVideo.href = gThis.app_youtube_video + '?id=' + videoId;
+            aToVideo.href = gThis.app_youtube_video + videoId;
             aToVideo.innerHTML = '<i class="fas fa-arrow-right-long"></i>';
             channelDiv.appendChild(aToVideo);
             addVideoDiv.remove();
