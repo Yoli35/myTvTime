@@ -551,8 +551,27 @@ class YoutubeController extends AbstractController
         $video->removeUserYVideo($yvideo);
         $this->userYVideoRepository->remove($yvideo, true);
         $this->userRepository->save($user, true);
+        $message = $this->translator->trans('Video deleted!');
+        $subMessage = $this->translator->trans('The video has been removed from your list of videos.');
 
-        return $this->json([$video->getTitle()]);
+        $youtubePlaylists = $user->getYoutubePlaylists();
+        foreach ($youtubePlaylists as $playlist) {
+            $playlistVideos = $playlist->getYoutubePlaylistVideos();
+            foreach ($playlistVideos as $playlistVideo) {
+                if ($playlistVideo->getLink() == $video->getLink()) {
+                    $playlistVideo->setYoutubeVideoId(null);
+                    $playlistVideo->setYoutubeVideoViewedAt(null);
+                    $this->playlistVideoRepository->save($playlistVideo, true);
+                    $subMessage .= " " . $this->translator->trans('The video has been removed from playlist “ ') . $playlist->getTitle() . " ”.";
+                }
+            }
+        }
+
+        return $this->json([
+            'status' => 'success',
+            'message' => $message,
+            'subMessage' => $subMessage,
+        ]);
     }
 
     #[Route('/{_locale}/youtube/video/list/delete/', name: 'app_youtube_video_list_delete', requirements: ['_locale' => 'fr|en|de|es'])]
@@ -709,7 +728,7 @@ class YoutubeController extends AbstractController
             return $this->json([
                 'status' => $status,
                 'message' => $message,
-                'subMessage' => $subMessage,
+                'subMessage' => '',
                 'videoId' => $justAdded,
             ]);
         }

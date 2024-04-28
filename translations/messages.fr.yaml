@@ -1637,6 +1637,8 @@ view: vue
 likes: j'aime
 like: j'aime
 Copy playlist ID: Copier l'ID de la liste de lecture
+The video has been removed from your list of videos.: La vidéo a été retirée de votre liste de vidéos.
+The video has been removed from playlist “ playlist_title ”.: La vidéo a été retirée de la liste de lecture “ playlist_title ”.
 
 #TikTok
 My TikTok Videos: Mes vidéos TikTok

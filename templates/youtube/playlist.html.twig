@@ -75,21 +75,26 @@
                                     <img src="{{ video.thumbnailUrl }}" alt="{{ video.title }}">
                                     <div class="duration">{{ video.duration }}</div>
                                 </div>
+                                <div class="infos">
+                                    <div class="title">{{ video.title }}</div>
+                                    <div class="published-at"><i class="fab fa-youtube"></i> {{ video.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
+                                    {% if video.youtubeVideoViewedAt %}
+                                        <div class="viewed-at"><i class="fas fa-eye"></i> {{ video.youtubeVideoViewedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="video-tools" data-id="{{ video.id }}" data-title="Id: {{ video.id }} / Youtube video id: {{ video.youtubeVideoId }}">
+                                <div class="channel">
+                                    <img src="{{ video.channelThumbnail }}" alt="{{ video.channelTitle }}">
+                                    <div class="channel-title">{{ video.channelTitle }}</div>
+                                </div>
                                 <div class="stats">
                                     <div>{{ video.viewCount > 1000000 ? ((video.viewCount/1000000)|round(1) ~ 'M') : (video.viewCount > 1000 ? ((video.viewCount/1000)|round(1) ~ 'k') : video.viewCount) }} {{ (video.viewCount > 1 ? 'views':'view')|trans }}</div>
                                     <div><i class="fas fa-thumbs-up"></i> {{ video.likeCount > 1000000 ? ((video.likeCount/1000000)|round(1) ~ 'M') : (video.likeCount > 1000 ? ((video.likeCount/1000)|round(1) ~ 'k') : video.likeCount) }}</div>
                                 </div>
-                            </div>
-                            <div class="infos">
-                                <div class="title">{{ video.title }}</div>
-                                <div class="published-at"><i class="fab fa-youtube"></i> {{ video.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
-                                {% if video.youtubeVideoViewedAt %}
-                                    <div class="viewed-at"><i class="fas fa-eye"></i> {{ video.youtubeVideoViewedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
-                                {% endif %}
-                                <div class="channel">
-                                    <img src="{{ video.channelThumbnail }}" alt="{{ video.channelTitle }}">
-                                    <div class="channel-title">{{ video.channelTitle }}</div>
+                                <div class="tools">
                                     {% if video.youtubeVideoId %}
+                                        <div class="remove-video" data-id="{{ video.youtubeVideoId }}" data-link="{{ video.link }}"><i class="fas fa-minus"></i></div>
                                         <a href="{{ path('app_youtube_video', {id: video.youtubeVideoId}) }}"><i class="fas fa-arrow-right-long"></i></a>
                                     {% else %}
                                         <div class="add-video" data-link="{{ video.link }}"><i class="fas fa-plus"></i></div>
@@ -110,7 +115,8 @@
         <div id="global-data" style="display: none">
             {
             "app_youtube_video": "{{ path('app_youtube_video', {id: 0})|slice(0, -1) }}",
-            "app_youtube_add_video": "{{ path('app_youtube_add_video') }}"
+            "app_youtube_add_video": "{{ path('app_youtube_add_video') }}",
+            "app_youtube_remove_video": "{{ path('app_youtube_video_delete', {id: 0})|slice(0, -1) }}"
             }
         </div>
     </div>

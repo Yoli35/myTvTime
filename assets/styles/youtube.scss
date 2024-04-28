@@ -1399,6 +1399,10 @@
             .playlist {
                 flex-direction: column;
                 flex-shrink: 0;
+                max-height: calc(100vh - 9rem);
+                overflow-y: auto;
+                position: sticky;
+                top: 6rem;
                 width: 25rem;
 
                 .infos {
@@ -1428,7 +1432,8 @@
                     align-items: center;
                     border-radius: .25rem;
                     display: flex;
-                    gap: .5rem;
+                    flex-direction: column;
+                    gap: .25rem;
                     padding: .5rem;
 
                     &.watched {
@@ -1437,8 +1442,8 @@
 
                     .video-stuff {
                         display: flex;
-                        flex-direction: column;
                         gap: .5rem;
+                        width: 100%;
 
                         .thumbnail {
                             aspect-ratio: 16 / 9;
@@ -1466,6 +1471,45 @@
                             }
                         }
 
+                        .infos {
+                            flex-grow: 1;
+
+                            .title {
+                                font-size: .875rem;
+                                font-weight: 400;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
+
+                            .viewed-at, .published-at {
+                                font-size: .875rem;
+                                font-weight: 100;
+                            }
+
+                        }
+                    }
+
+                    .video-tools {
+                        align-items: center;
+                        display: flex;
+                        gap: .5rem;
+                        justify-content: flex-start;
+                        width: 100%;
+
+                        .channel {
+                            align-items: center;
+                            display: flex;
+                            gap: .25rem;
+
+                            img {
+                                border: 1px solid var(--gradient-ardoise-10);
+                                border-radius: 50%;
+                                height: 1.75rem;
+                                width: 1.75rem;
+                            }
+                        }
+
                         .stats {
                             display: flex;
                             font-size: .875rem;
@@ -1479,47 +1523,23 @@
                                 padding-inline: .5rem;
                             }
                         }
-                    }
 
-                    .infos {
-                        flex-grow: 1;
-
-                        .title {
-                            font-size: .875rem;
-                            font-weight: 400;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-
-                        .viewed-at, .published-at {
-                            font-size: .875rem;
-                            font-weight: 100;
-                        }
-
-                        .channel {
-                            align-items: center;
+                        .tools {
                             display: flex;
-                            gap: .25rem;
+                            gap: .5rem;
+                            margin-inline-start: auto;
 
-                            img {
-                                border: 1px solid var(--gradient-ardoise-10);
-                                border-radius: 50%;
-                                height: 2rem;
-                                width: 2rem;
-                            }
-
-                            a, .add-video {
+                            a, .add-video, .remove-video {
                                 align-items: center;
                                 color: var(--gradient-ardoise-10);
                                 border: 2px solid var(--gradient-ardoise-10);
                                 border-radius: 50%;
                                 cursor: pointer;
                                 display: flex;
-                                height: 2rem;
+                                height: 1.75rem;
                                 justify-content: center;
                                 margin-inline-start: auto;
-                                width: 2rem;
+                                width: 1.75rem;
 
                                 &:hover {
                                     background-color: var(--gradient-orange-50);
