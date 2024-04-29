@@ -583,6 +583,8 @@ class YoutubeController extends AbstractController
 
         $list = explode(',', $request->query->get('list'));
         $count = count($list);
+        $videoInPlaylists = 0;
+        $youtubePlaylists = $user->getYoutubePlaylists();
 
         foreach ($list as $id) {
             $video = $this->videoRepository->find($id);
@@ -591,12 +593,25 @@ class YoutubeController extends AbstractController
             $user->removeUserYVideo($yvideo);
             $video->removeUserYVideo($yvideo);
             $this->userYVideoRepository->remove($yvideo);
+
+            foreach ($youtubePlaylists as $playlist) {
+                $playlistVideos = $playlist->getYoutubePlaylistVideos();
+                foreach ($playlistVideos as $playlistVideo) {
+                    if ($playlistVideo->getLink() == $video->getLink()) {
+                        $playlistVideo->setYoutubeVideoId(null);
+                        $playlistVideo->setYoutubeVideoViewedAt(null);
+                        $this->playlistVideoRepository->save($playlistVideo, true);
+                        $videoInPlaylists++;
+                    }
+                }
+            }
         }
         $this->userRepository->save($user, true);
 
         return $this->json([
             'success' => true,
             'message' => $count . " " . $this->translator->trans($count > 1 ? 'videos deleted!' : 'video deleted!'),
+            'subMessage' => $videoInPlaylists . " " . $this->translator->trans($videoInPlaylists > 1 ? 'videos have been removed from your playlists.' : 'video has been removed from your playlists.'),
         ]);
     }
 
