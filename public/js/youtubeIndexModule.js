@@ -12,8 +12,10 @@ export class YoutubeIndexModule {
         this.youtube_settings_save = globs.youtube_settings_save;
         this.app_youtube_video_series = globs.app_youtube_video_series;
         this.app_youtube_preview_video_series = globs.app_youtube_preview_video_series;
+        this.app_youtube_count_videos = globs.app_youtube_count_videos;
         this.userId = globs.userId;
         this.locale = globs.locale;
+        this.videoCount = globs.videoCount;
         this.toolTips = new ToolTips();
         this.xhr = new XMLHttpRequest();
         this.seeMore = document.getElementById('see-more');
@@ -66,6 +68,8 @@ export class YoutubeIndexModule {
 
         document.addEventListener("visibilitychange", this.focusLink.bind(this));
         this.focusLink();
+
+        setInterval(this.checkForNewVideos.bind(this), 600000); // 10 minutes
 
         // const seriesList = document.querySelectorAll('.video-series-item');
         // seriesList.forEach(series => {
@@ -190,6 +194,21 @@ export class YoutubeIndexModule {
             this.ytLink.focus();
             this.ytLink.select();
         }
+    }
+
+    checkForNewVideos() {
+        this.xhr.onload = function () {
+            const response = JSON.parse(this.response);
+            const count = response['count'];
+
+            if (gThis.videoCount !== count) {
+                gThis.videoCount = count;
+                gThis.ytReload.parentElement.classList.add("active");
+                gThis.ytReload.click();
+            }
+        }
+        this.xhr.open("GET", this.app_youtube_count_videos);
+        this.xhr.send();
     }
 
     pasteLinkWithKeyboard(e) {

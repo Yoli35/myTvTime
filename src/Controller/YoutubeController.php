@@ -879,6 +879,15 @@ class YoutubeController extends AbstractController
         return $this->json(['videos' => $videos]);
     }
 
+    #[Route('/{_locale}/youtube/count/videos', name: 'app_youtube_count_videos', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET'])]
+    public function checkForNewVideo(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $count = $this->userYVideoRepository->count(['user' => $user]);
+        return $this->json(['count' => $count]);
+    }
+
     public function youtubePlaylistToPlaylist(User $user, YoutubePlaylist $p): array
     {
         $playlistId = $p->getPlaylistId();
@@ -1112,7 +1121,8 @@ class YoutubeController extends AbstractController
     public function getVideosCount(User $user): int
     {
 //        return count($user->getYoutubeVideos());
-        return $this->videoRepository->getUserYTVideosCount($user->getId()) ?? 0;
+//        return $this->videoRepository->getUserYTVideosCount($user->getId()) ?? 0;
+        return $this->userYVideoRepository->count(['user' => $user]);
     }
 
     public function getTotalRuntime(User $user): int
