@@ -17,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class YoutubePlaylistRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, private EntityManagerInterface $entityManager)
+    public function __construct(private readonly ManagerRegistry $registry, private EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, YoutubePlaylist::class);
     }
@@ -28,5 +28,21 @@ class YoutubePlaylistRepository extends ServiceEntityRepository
         if ($flush) {
             $this->entityManager->flush();
         }
+    }
+
+    public function getPlaylist(int $userId, int $videoId): array
+    {
+        $sql = "SELECT yp.`id` as id, yp.`title` as title, yp.`thumbnail_url` as thumbnail_url "
+            ."FROM `youtube_video` v "
+            ."INNER JOIN `user_youtube_video` uv ON uv.`youtube_video_id`=v.`id` AND uv.`user_id`=$userId "
+            ."INNER JOIN `youtube_playlist` yp ON yp.`user_id`=$userId "
+            ."INNER JOIN `youtube_playlist_video` ypv ON ypv.`playlist_id`=yp.`id` AND ypv.`youtube_video_id`=v.`id` "
+            ."WHERE v.`id`=$videoId";
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
+
     }
 }

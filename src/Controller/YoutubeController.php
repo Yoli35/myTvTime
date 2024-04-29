@@ -300,6 +300,8 @@ class YoutubeController extends AbstractController
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]
     public function video(Request $request, YoutubeVideo $youtubeVideo): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
         $userAlreadyLinked = $request->query->get('user-already-linked');
 
         $tags = $this->videoTagRepository->findAllByLabel();
@@ -327,6 +329,7 @@ class YoutubeController extends AbstractController
                 'tagArr' => $tagArr,
                 'other_tags' => array_diff($tags, $youtubeVideo->getTags()->toArray()),
                 'userAlreadyLinked' => $userAlreadyLinked,
+                'playlists' => $this->playlistRepository->getPlaylist($user->getId(), $youtubeVideo->getId()),
             ]
         );
     }

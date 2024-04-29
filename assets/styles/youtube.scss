@@ -3,6 +3,10 @@
 @import "../fontawesome/scss/solid.scss";
 @import "../fontawesome/scss/brands.scss";
 
+.youtube-red {
+    color: #FF0000;
+}
+
 .yt-header {
     @include banner("../images/youtube.png");
     background-color: var(--gradient-ardoise-75-alpha-25);
@@ -818,14 +822,42 @@
             width: 40%;
         }
 
-        .qr-code {
+        .more-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
             padding: 1em 0 1em 1em;
             width: calc(20% - 1em);
 
-            img {
-                object-fit: cover;
-                width: 100%;
+            .playlist-link {
+                display: flex;
+                flex-direction: column;
+                gap: 1em;
+
+                img {
+                    aspect-ratio: 16 / 9;
+                    border-radius: .25em;
+                    object-fit: cover;
+                    width: 100%;
+                }
+
+                .title {
+                    color: var(--gradient-ardoise-10);
+                    font-size: 1.5em;
+                    font-weight: 400;
+                }
             }
+
+            .qr-code {
+                width: 100%;
+
+                img {
+                    border-radius: .25em;
+                    object-fit: cover;
+                    width: 100%;
+                }
+            }
+
         }
     }
 
