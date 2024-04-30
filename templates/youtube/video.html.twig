@@ -85,7 +85,7 @@
                             <div class="prev-next-videos">
                                 {% if previousVideo %}
                                     <div>
-                                        <h3 class="youtube-red">{{ 'Previous Video'|trans }}</h3>
+                                        <h4 class="youtube-red">{{ 'Previous video'|trans }}</h4>
                                         <div class="prev-video">
                                             <a href="{{ path('app_youtube_video', {id: previousVideo.id}) }}">
                                                 <img src="{{ previousVideo.thumbnailUrl }}" alt="{{ previousVideo.title }}">
@@ -96,7 +96,7 @@
                                 {% endif %}
                                 {% if nextVideo %}
                                     <div>
-                                        <h3 class="youtube-red">{{ 'Next Video'|trans }}</h3>
+                                        <h4 class="youtube-red">{{ 'Next video'|trans }}</h4>
                                         <div class="next-video">
                                             <a href="{{ path('app_youtube_video', {id: nextVideo.id}) }}">
                                                 <img src="{{ nextVideo.thumbnailUrl }}" alt="{{ nextVideo.title }}">
