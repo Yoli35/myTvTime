@@ -913,8 +913,9 @@ class YoutubeController extends AbstractController
 //                'performChecks' => $performChecks,
 //            ]);
 
-        if ($performChecks) {
+        if ($performChecks || $p->getChannelId() == null) {
             $playlist = $this->getPlaylist($playlistId);
+            dump(['playlist' => $playlist]);
             $item = $playlist->getItems()[0];
             $snippet = $item->getSnippet();
             if ($snippet->getThumbnails()) {
@@ -926,6 +927,12 @@ class YoutubeController extends AbstractController
             $thumbnailUrl = $thumbnail ? $thumbnail->getUrl() : '/images/youtube/playlist_default.jpg';
             $playlistCount = $item->getContentDetails()->getItemCount();
             $newVideos = false;
+            if ($p->getChannelId() != $snippet->getChannelId()) {
+                $p->setChannelId($snippet->getChannelId());
+            }
+            if ($p->getChannelTitle() != $snippet->getChannelTitle()) {
+                $p->setChannelTitle($snippet->getChannelTitle());
+            }
             if ($p->getNumberOfVideos() != $playlistCount) {
                 $p->setNumberOfVideos($playlistCount);
                 $newVideos = true;
@@ -948,10 +955,14 @@ class YoutubeController extends AbstractController
             $this->playlistRepository->save($p, true);
 
             $title = $snippet->getTitle();
+            $channelId = $p->getChannelId();
+            $channelTitle = $p->getChannelTitle();
             $description = $snippet->getDescription();
             $publishedAt = $snippet->getPublishedAt();
         } else {
             $title = $p->getTitle();
+            $channelId = $p->getChannelId();
+            $channelTitle = $p->getChannelTitle();
             $description = $p->getDescription();
             $thumbnailUrl = $p->getThumbnailUrl();
             $playlistCount = $p->getNumberOfVideos();
@@ -962,6 +973,8 @@ class YoutubeController extends AbstractController
             'id' => $p->getId(),
             'playlistId' => $p->getPlaylistId(),
             'title' => $title,
+            'channelId' => $channelId,
+            'channelTitle' => $channelTitle,
             'description' => $description,
             'publishedAt' => $publishedAt,
             'thumbnailUrl' => $thumbnailUrl,

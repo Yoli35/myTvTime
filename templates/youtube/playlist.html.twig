@@ -56,6 +56,9 @@
                             {{ playlist.title }}
                         </div>
                         <div class="published-at">{{ playlist.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</div>
+                        {% if playlist.channelId %}
+                            <a href="https://www.youtube.com/channel/{{ playlist.channelId }}" target="_blank" class="channel" data-title="{{ 'See channel'|trans }} « {{ playlist.channelTitle }} »">{{ playlist.channelTitle }}</a>
+                        {% endif %}
                         {% if playlist.description %}
                             <div class="description">{{ playlist.description|nl2br }}</div>
                         {% endif %}

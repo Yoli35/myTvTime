@@ -47,6 +47,12 @@ class YoutubePlaylist
     #[ORM\OneToMany(mappedBy: 'playlist', targetEntity: YoutubePlaylistVideo::class, orphanRemoval: true)]
     private Collection $youtubePlaylistVideos;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $channelId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $channelTitle = null;
+
     public function __construct()
     {
         $this->youtubePlaylistVideos = new ArrayCollection();
@@ -179,6 +185,30 @@ class YoutubePlaylist
                 $youtubePlaylistVideo->setPlaylist(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getChannelId(): ?string
+    {
+        return $this->channelId;
+    }
+
+    public function setChannelId(?string $channelId): static
+    {
+        $this->channelId = $channelId;
+
+        return $this;
+    }
+
+    public function getChannelTitle(): ?string
+    {
+        return $this->channelTitle;
+    }
+
+    public function setChannelTitle(?string $channelTitle): static
+    {
+        $this->channelTitle = $channelTitle;
 
         return $this;
     }
