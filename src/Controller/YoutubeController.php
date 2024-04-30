@@ -146,7 +146,7 @@ class YoutubeController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
-        $playlists = $this->playlistRepository->findBy(['user' => $user], ['id' => 'DESC'], 20, 0);
+        $playlists = $this->playlistRepository->findBy(['user' => $user], ['id' => 'DESC'], 40, 0);
 
         $playlistList = [];
         foreach ($playlists as $p) {
@@ -323,6 +323,16 @@ class YoutubeController extends AbstractController
         $description = nl2br($description);
 //        dump($youtubeVideo->getYoutubeVideoComments()->first());
 
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => "youtube"]);
+        $settings = $settings->getData();
+        $order = $settings['order'];
+        $sort = $settings['sort'];
+        $previousVideo = $this->videoRepository->getPreviousVideo($user->getId(), $youtubeVideo->getId(), $sort, $order);
+        $nextVideo = $this->videoRepository->getNextVideo($user->getId(), $youtubeVideo->getId(), $sort, $order);
+        if (count($previousVideo)) $previousVideo = $previousVideo[0]; else $previousVideo = null;
+        if (count($nextVideo)) $nextVideo = $nextVideo[0]; else $nextVideo = null;
+
+
         return $this->render('youtube/video.html.twig', [
                 'video' => $youtubeVideo,
                 'description' => $description,
@@ -330,6 +340,8 @@ class YoutubeController extends AbstractController
                 'other_tags' => array_diff($tags, $youtubeVideo->getTags()->toArray()),
                 'userAlreadyLinked' => $userAlreadyLinked,
                 'playlists' => $this->playlistRepository->getPlaylist($user->getId(), $youtubeVideo->getId()),
+                'previousVideo' => $previousVideo,
+                'nextVideo' => $nextVideo,
             ]
         );
     }

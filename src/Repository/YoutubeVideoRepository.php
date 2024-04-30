@@ -76,15 +76,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
 
     public function findAllWithChannelByDateSQL($userId, $sort = 'publishedAt', $order = 'DESC', $offset = 0, $limit = 20): array
     {
-        if ($sort == 'publishedAt') {
-            $sort = 'published_at';
-        }
-        if ($sort == 'addedAt') {
-            $sort = 'added_at';
-        }
-        if ($sort == 'contentDuration') {
-            $sort = 'content_duration';
-        }
+        $sort = $this->getSort($sort);
         $sql = "SELECT y.`id` as id, y.`thumbnail_high_path` as thumbnailHighPath, y.`title` as title, y.`content_duration` as contentDuration, y.`published_at` as publishedAt, "
             . "yc.`title` as channelTitle, yc.`custom_url` as channelCustomUrl, yc.`youtube_id` as channelYoutubeId, yc.`thumbnail_default_url` as channelThumbnailDefaultUrl "
             . "FROM `youtube_video` y "
@@ -99,6 +91,55 @@ class YoutubeVideoRepository extends ServiceEntityRepository
         $resultSet = $statement->executeQuery();
 
         return $resultSet->fetchAllAssociative();
+    }
+
+    public function getPreviousVideo($userId, $id, $sort = 'publishedAt', $order = 'DESC'): array
+    {
+        $sort = $this->getSort($sort);
+        $sql = "SELECT y.`id` as id, y.`thumbnail_medium_path` as thumbnailUrl, y.`title` as title, y.`content_duration` as contentDuration "
+            . "FROM `youtube_video` y "
+            . "INNER JOIN `user_yvideo` uyv ON uyv.`user_id`=$userId AND uyv.`video_id`=y.`id` "
+            . "WHERE y.id < $id AND uyv.`hidden`=0 "
+            . "ORDER BY y.`$sort` $order LIMIT 1";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getNextVideo($userId, $id, $sort = 'publishedAt', $order = 'DESC'): array
+    {
+        $sort = $this->getSort($sort);
+        $order = $order == 'DESC' ? 'ASC' : 'DESC';
+        $sql = "SELECT y.`id` as id, y.`thumbnail_medium_path` as thumbnailUrl, y.`title` as title, y.`content_duration` as contentDuration "
+            . "FROM `youtube_video` y "
+            . "INNER JOIN `user_yvideo` uyv ON uyv.`user_id`=$userId AND uyv.`video_id`=y.`id` "
+            . "WHERE y.id > $id AND uyv.`hidden`=0 "
+            . "ORDER BY y.`$sort` $order LIMIT 1";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getSort($sort): string
+    {
+        switch ($sort) {
+            case 'publishedAt':
+                $sort = 'published_at';
+                break;
+            case 'addedAt':
+                $sort = 'added_at';
+                break;
+            case 'contentDuration':
+                $sort = 'content_duration';
+                break;
+        }
+        return $sort;
     }
 
     public function getUserYTVideosRuntime($userId): int|null

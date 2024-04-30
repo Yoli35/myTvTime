@@ -829,6 +829,34 @@
             padding: 1em 0 1em 1em;
             width: calc(20% - 1em);
 
+            .prev-next-videos {
+                display: flex;
+                gap: .5em;
+                justify-content: center;
+                width: 100%;
+
+                .prev-video, .next-video {
+                    display: flex;
+                    flex-direction: column;
+                    width: calc(100% - .25rem);
+
+                    img {
+                        aspect-ratio: 16 / 9;
+                        border-radius: .25em;
+                        display: block;
+                        object-fit: cover;
+                        width: 100%
+                    }
+
+                    .title {
+                        color: var(--gradient-ardoise-10);
+                        font-size: .75em;
+                        font-weight: 400;
+                        padding: .25em;
+                    }
+                }
+            }
+
             .playlist-link {
                 display: flex;
                 flex-direction: column;

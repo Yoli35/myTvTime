@@ -81,6 +81,32 @@
                         </div>
                     {% endif %}
                     <div class="more-details">
+                        {% if previousVideo  or nextVideo %}
+                            <div class="prev-next-videos">
+                                {% if previousVideo %}
+                                    <div>
+                                        <h3 class="youtube-red">{{ 'Previous Video'|trans }}</h3>
+                                        <div class="prev-video">
+                                            <a href="{{ path('app_youtube_video', {id: previousVideo.id}) }}">
+                                                <img src="{{ previousVideo.thumbnailUrl }}" alt="{{ previousVideo.title }}">
+                                                <div class="title">{{ previousVideo.title }}</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if nextVideo %}
+                                    <div>
+                                        <h3 class="youtube-red">{{ 'Next Video'|trans }}</h3>
+                                        <div class="next-video">
+                                            <a href="{{ path('app_youtube_video', {id: nextVideo.id}) }}">
+                                                <img src="{{ nextVideo.thumbnailUrl }}" alt="{{ nextVideo.title }}">
+                                                <div class="title">{{ nextVideo.title }}</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                         {% if playlists|length %}
                             <h3 class="youtube-red">{{ 'Playlists Youtube'|trans }}</h3>
                         {% endif %}
