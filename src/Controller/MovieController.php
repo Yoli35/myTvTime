@@ -268,9 +268,11 @@ class MovieController extends AbstractController
         $movieLists = [];
         $movieListIds = [];
         $userMovieId = 0;
+        $movieVideos = null;
 
         if ($user) {
             $movieLists = $this->movieListRepository->findBy(['user' => $user], ['title' => 'ASC']);
+            /** @var Movie $userMovie */
             $userMovie = $this->movieRepository->findOneBy(['movieDbId' => $movieDetail['id']]);
             if ($userMovie) {
                 // On hydrate le film avec les données de l'API (mise à jour des données)
@@ -283,6 +285,8 @@ class MovieController extends AbstractController
                 $movieListIds = array_map(function ($movieList) {
                     return $movieList->getId();
                 }, $userMovie->getMovieLists()->toArray());
+
+                $movieVideos = $userMovie->getMovieVideos();
 //                dump([
 //                    'movieLists' => $movieLists,
 //                    'movieListIds' => $movieListIds,
@@ -356,6 +360,7 @@ class MovieController extends AbstractController
             'userMovieId' => $userMovieId,
             'movieLists' => $movieLists,
             'movieListIds' => $movieListIds,
+            'movieVideos' => $movieVideos,
             'images' => $images,
             'videos' => $videos,
             'user' => $user,

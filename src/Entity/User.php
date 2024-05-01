@@ -144,6 +144,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: YoutubePlaylist::class, orphanRemoval: true)]
     private Collection $youtubePlaylists;
 
+    /**
+     * @var Collection<int, MovieVideo>
+     */
+    #[ORM\ManyToMany(targetEntity: MovieVideo::class, mappedBy: 'users')]
+    private Collection $movieVideos;
+
     public function __construct()
     {
         $this->alarms = new ArrayCollection();
@@ -162,6 +168,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->youtubeVideoComments = new ArrayCollection();
         $this->youtubeVideos = new ArrayCollection();
         $this->youtubePlaylists = new ArrayCollection();
+        $this->movieVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -865,6 +872,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($youtubePlaylist->getUser() === $this) {
                 $youtubePlaylist->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MovieVideo>
+     */
+    public function getMovieVideos(): Collection
+    {
+        return $this->movieVideos;
+    }
+
+    public function addMovieVideo(MovieVideo $movieVideo): static
+    {
+        if (!$this->movieVideos->contains($movieVideo)) {
+            $this->movieVideos->add($movieVideo);
+            $movieVideo->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovieVideo(MovieVideo $movieVideo): static
+    {
+        if ($this->movieVideos->removeElement($movieVideo)) {
+            $movieVideo->removeUser($this);
         }
 
         return $this;

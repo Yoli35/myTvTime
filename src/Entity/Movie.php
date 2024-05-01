@@ -58,11 +58,18 @@ class Movie
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $overview_es = null;
 
+    /**
+     * @var Collection<int, MovieVideo>
+     */
+    #[ORM\OneToMany(mappedBy: 'movie', targetEntity: MovieVideo::class)]
+    private Collection $movieVideos;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->movieLists = new ArrayCollection();
+        $this->movieVideos = new ArrayCollection();
     }
 
     public function toArray(): array
@@ -275,6 +282,36 @@ class Movie
     public function setOverviewEs(?string $overview_es): self
     {
         $this->overview_es = $overview_es;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MovieVideo>
+     */
+    public function getMovieVideos(): Collection
+    {
+        return $this->movieVideos;
+    }
+
+    public function addMovieVideo(MovieVideo $movieVideo): static
+    {
+        if (!$this->movieVideos->contains($movieVideo)) {
+            $this->movieVideos->add($movieVideo);
+            $movieVideo->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovieVideo(MovieVideo $movieVideo): static
+    {
+        if ($this->movieVideos->removeElement($movieVideo)) {
+            // set the owning side to null (unless already changed)
+            if ($movieVideo->getMovie() === $this) {
+                $movieVideo->setMovie(null);
+            }
+        }
 
         return $this;
     }

@@ -128,6 +128,29 @@
     }
 }
 
+
+.user {
+    align-items: center;
+    display: flex;
+    gap: .25rem;
+
+    .thumbnail {
+        border: 1px solid var(--gradient-ardoise-30);
+        border-radius: 50%;
+        height: 1.25em;
+        width: 1.25em;
+
+        img {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+
+    .username {
+        font-weight: 300;
+    }
+}
+
 .nav-to-top {
     background-color: var(--gradient-green-40-alpha-50);
     background-image: url("../images/arrow-up-circle-outline.png");
@@ -957,80 +980,3 @@
 
     }
 }
-
-/*@media (prefers-color-scheme: dark) {
-
-    .user-account {
-        .details {
-            form {
-                box-shadow: 0 0 1em hsla(0, 0, 100%, .2), 0 0 3em hsla(0, 0, 100%, .15), 0 0 10em hsla(0, 0, 100%, .1);
-            }
-        }
-
-        .collections {
-            background-color: var(--gradient-ardoise-30);
-            color: var(--gradient-ardoise-90);
-
-            .collection {
-
-                .count {
-                    border: 2px solid var(--gradient-ardoise-90);
-                }
-
-                .label {
-                }
-            }
-        }
-    }
-
-    .user-movies {
-
-        .search {
-            background-color: var(--gradient-ardoise-30);
-
-            .result {
-                background-color: var(--gradient-ardoise-30);
-            }
-        }
-    }
-
-    .export-movies, .append-movies {
-        .overlay {
-            background-color: var(--gradient-ardoise-20);
-            border-color: var(--gradient-ardoise-50);
-            color: var(--gradient-ardoise-80);
-
-            .header {
-                .close {
-                    color: var(--gradient-ardoise-80);
-                }
-            }
-
-            .content {
-
-                .sample {
-                    background: rgb(68, 68, 68);
-                    background: linear-gradient(225deg, rgba(83, 66, 83, 1) 0%, rgba(68, 68, 68, 1) 100%);
-                    color: #5eead4;
-
-                    span.key {
-                        color: #f493f4;
-                    }
-
-                    span.value-alpha {
-                        color: #5bbf5b;
-                    }
-
-                    span.value-digit {
-                        color: #55b1fc;
-                    }
-
-                    i {
-                        color: #ffe4ab;
-                    }
-                }
-            }
-        }
-    }
-
-}*/

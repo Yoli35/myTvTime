@@ -158,6 +158,30 @@
                                 </div>
                             {% endif %}
                         </label>
+                        {% if movieVideos|length %}
+                            <div class="videos">
+                                {% for video in movieVideos %}
+                                    <h3>{{ video.title }}</h3>
+                                    <div class="contributors">
+                                        {{ 'Added by'|trans }}<div>&nbsp</div>
+                                        {% for u in video.users %}
+{#                                            <a href="{{ path('app_user', {id: u.id}) }}">{{ u.username }}</a>{% if not loop.last %}, {% endif %}#}
+                                            {% if not loop.last %}
+                                                {{ include('blocks/user/_user.html.twig', {user: u}) }}{% if loop.index < loop.length-1 %},&nbsp;{% endif %}
+                                            {% else %}
+                                                {% if not loop.first %}
+                                                    &nbsp;{{ 'and'|trans }}&nbsp;
+                                                {% endif %}
+                                                {{ include('blocks/user/_user.html.twig', {user: u}) }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="video">
+                                        {{ video.code|raw }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="part-2">
                         <div class="part-2L">

@@ -162,7 +162,7 @@ class UserController extends AbstractController
 
         foreach ($pendingRequests as $request) {
             $openLetter = ['a', 'e', 'é', 'h', 'i', 'o', 'u'];
-            $name = $request->getOwner()->getUsername() ?: $request->getOwner()->getEmail();
+            $name = $request->getOwner()->getUsername() ?? $request->getOwner()->getEmail();
             $firstLetter = strtolower($name)[0];
 
             $this->addFlash('friendship', $this->translator->trans("You have a friend request from") . " "
