@@ -410,6 +410,11 @@ class SerieFrontController extends AbstractController
             $view = 1;
         } else {
             $episodeViewing->setViewedAt(null);
+            if ($episodeViewing->getNumberOfView() > 1) {
+                $episodeViewing->setNumberOfView($episodeViewing->getNumberOfView() - 1);
+            } else {
+                $episodeViewing->setNumberOfView(NULL);
+            }
             $view = 0;
         }
         $this->episodeViewingRepository->save($episodeViewing, true);
