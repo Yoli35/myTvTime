@@ -1562,6 +1562,18 @@
                         justify-content: flex-start;
                         width: 100%;
 
+                        .number {
+                            align-items: center;
+                            background-color: var(--gradient-ardoise-10);
+                            border-radius: 50%;
+                            color: var(--gradient-ardoise-90);
+                            display: flex;
+                            font-weight: 600;
+                            height: 1.75rem;
+                            justify-content: center;
+                            width: 1.75rem;
+                        }
+
                         .channel {
                             align-items: center;
                             display: flex;

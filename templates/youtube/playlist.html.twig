@@ -87,6 +87,7 @@
                                 </div>
                             </div>
                             <div class="video-tools" data-id="{{ video.id }}" data-title="Id: {{ video.id }} / Youtube video id: {{ video.youtubeVideoId }}">
+                                <div class="number">{{ loop.index }}</div>
                                 <div class="channel">
                                     <img src="{{ video.channelThumbnail }}" alt="{{ video.channelTitle }}">
                                     <div class="channel-title">{{ video.channelTitle }}</div>
