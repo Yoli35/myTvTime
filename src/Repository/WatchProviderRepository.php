@@ -40,9 +40,22 @@ class WatchProviderRepository extends ServiceEntityRepository
         $sql = "SELECT wp.`provider_id` as id, wp.`provider_name` as name "
             . "FROM `watch_provider` wp ";
         if ($country) {
-            $sql .= "WHERE wp.`display_priorities` LIKE '%FR%' ";
+            $sql .= "WHERE wp.`display_priorities` LIKE '%$country%' ";
         }
         $sql .= "ORDER BY name";
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
+
+    public function getWatchProviderList($country): array
+    {
+        $sql = "SELECT wp.`provider_name` as provider_name, wp.`logo_path` as logo_path, wp.`provider_id` as provider_id "
+            . "FROM `watch_provider` wp "
+            . "WHERE wp.`display_priorities` LIKE '%$country%' "
+            . "ORDER BY wp.`provider_name` ";
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)

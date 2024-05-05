@@ -935,7 +935,7 @@ class SerieController extends AbstractController
         // Breadcrumb
         $breadcrumb = $this->breadcrumb($from, $serie, $season, null, $from == self::SERIES_FROM_COUNTRY ? $query : null);
 
-        dump([
+//        dump([
 //            'serie' => $serie,
 //            'env' => $_ENV['APP_ENV'],
 //            'season' => $season,
@@ -943,8 +943,8 @@ class SerieController extends AbstractController
 //            'watchProviders' => $watchProviders,
 //            'episodes' => $episodes,
 //            'seasonViewing' => $seasonViewing,
-        'credits' => $credits,
-        ]);
+//        'credits' => $credits,
+//        ]);
 
         return $this->render('series/season.html.twig', [
             'serie' => $serie,
@@ -2021,7 +2021,8 @@ class SerieController extends AbstractController
         if ($temp && array_key_exists($country, $temp['results'])) {
             $watchProviders = $temp['results'][$country];
             $providersFlatrate = $this->getProviders($watchProviders, 'flatrate', $imgConfig, []); // Providers FR (streaming)
-            $watchProviderList = $this->getRegionProvider($imgConfig, 1, $language . '_' . $country, $country); // Tous les providers FR
+            $watchProviderList = $this->getRegionProvider($imgConfig, 2, $language . '_' . $country, $country); // Tous les providers FR
+//            dump(['watchProviders' => $watchProviders, 'providersFlatrate' => $providersFlatrate, 'watchProviderList' => $watchProviderList]);
         } else {
             $watchProviders = null;
             $providersFlatrate = [];
@@ -2031,7 +2032,7 @@ class SerieController extends AbstractController
             if (!count($providersFlatrate)) {
                 $providersFlatrate = null;
             }
-            $watchProviderList = $this->getRegionProvider($imgConfig, 1, '', ''); // Tous les providers
+            $watchProviderList = $this->getRegionProvider($imgConfig, 2, '', ''); // Tous les providers
         }
 //        dump(['temp' => $temp, 'providersFlatrate' => $providersFlatrate, 'watchProviderList' => $watchProviderList]);
 
@@ -2155,6 +2156,7 @@ class SerieController extends AbstractController
                                 list($logoPath, $name) = $this->directLinkLogo($providersMatches, $watchProviderList, $dl, $name);
                                 $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'file', 'ext' => $ext];
                             } else {
+//                                dump(['providersMatches' => $providersMatches, 'watchProviderList' => $watchProviderList, 'dl' => $dl]);
                                 list($logoPath, $name) = $this->directLinkLogo($providersMatches, $watchProviderList, $dl);
                                 $tv['directLink'][] = ['url' => $dl, 'logoPath' => $logoPath, 'name' => $name, 'type' => 'link'];
                             }
@@ -2548,6 +2550,11 @@ class SerieController extends AbstractController
         }
         $allWatchProviders = json_decode($this->TMDBService->getTvWatchProviderList($language, $country), true);
         $allWatchProviders = $allWatchProviders['results'];
+
+        if (count($allWatchProviders) == 0) {
+            $allWatchProviders = $this->watchProviderRepository->getWatchProviderList($country);
+            dump($allWatchProviders);
+        }
         $allWatchProviders = array_map(function ($provider) use ($imageConfig) {
             $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_logo.png', $imageConfig);
             return $provider;
@@ -2658,10 +2665,14 @@ class SerieController extends AbstractController
         }
     }
 
-    public function getRegionProvider($imgConfig, $size = 1, $language = "fr_FR", $region = "FR"): array
+    public function getRegionProvider($imgConfig, $size = 1, $language = "fr-FR", $region = "FR"): array
     {
         $list = json_decode($this->TMDBService->getTvWatchProviderList($language, $region), true);
         $list = $list['results'];
+        if (count($list) == 0) {
+            $list = $this->watchProviderRepository->getWatchProviderList($region);
+            dump($list);
+        }
         $watchProviderList = [];
         foreach ($list as $provider) {
             $item = [];
