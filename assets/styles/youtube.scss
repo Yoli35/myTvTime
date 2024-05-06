@@ -1318,20 +1318,24 @@
     gap: 1em;
     width: 100%;
 
-    .new-playlist {
+    .playlists-tools {
         display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
         width: 100%;
 
-        label {
-            align-items: center;
-            display: flex;
-            gap: 1em;
-            margin-inline: auto;
+        .new-playlist, .filter {
+            label {
+                align-items: center;
+                display: flex;
+                gap: 1em;
+                margin-inline: auto;
 
-            input {
-                background-color: var(--gradient-orange-50);
-                color: var(--gradient-ardoise-10);
-                width: 20rem;
+                input {
+                    background-color: var(--gradient-orange-50);
+                    color: var(--gradient-ardoise-10);
+                    width: 20rem;
+                }
             }
         }
     }
@@ -1353,6 +1357,7 @@
             overflow: hidden;
             padding: .5rem;
             position: relative;
+            transition: height 500ms ease-in-out;
             width: 100%;
 
             .backdrop {
@@ -1406,7 +1411,7 @@
                 overflow-y: auto;
                 z-index: 1;
 
-                .title {
+                .title-date {
                     background-color: var(--gradient-ardoise-75-alpha-25);
                     border-radius: .25rem;
                     color: var(--gradient-ardoise-10);
@@ -1417,7 +1422,7 @@
                     padding-block: .25rem;
                     padding-inline: .5rem;
 
-                    span {
+                    .date {
                         font-size: .875rem;
                         font-weight: 100;
                     }

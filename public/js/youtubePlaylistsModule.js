@@ -8,6 +8,7 @@ export class YoutubePlaylistsModule {
         gThis = this;
         this.app_youtube_add_playlist = globs.app_youtube_add_playlist;
         this.ytLink = document.getElementById('new-playlist');
+        this.filter = document.getElementById('playlist-filter');
         this.toolTips = new ToolTips();
         this.xhr = new XMLHttpRequest();
 
@@ -21,6 +22,8 @@ export class YoutubePlaylistsModule {
             this.addVideo(link);
         });
         this.ytLink.addEventListener("keypress", this.pasteLinkWithKeyboard.bind(this));
+
+        this.filter.addEventListener("keyup", this.filterPlaylists.bind(this));
 
         document.addEventListener("visibilitychange", this.focusLink.bind(this));
         this.focusLink();
@@ -48,6 +51,19 @@ export class YoutubePlaylistsModule {
         }
         this.xhr.open("GET", this.app_youtube_add_playlist + '?link=' + link);
         this.xhr.send();
+    }
+
+    filterPlaylists() {
+        const filter = this.filter.value.toUpperCase();
+        const playlists = document.querySelectorAll('.playlist');
+        playlists.forEach((playlist) => {
+            const title = playlist.querySelector('.title');
+            if (title.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                playlist.style.display = "flex";
+            } else {
+                playlist.style.display = "none";
+            }
+        });
     }
 }
 

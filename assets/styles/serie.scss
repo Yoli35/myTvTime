@@ -2037,7 +2037,7 @@
                 .seasons, .episodes {
                     @include flex-col();
                     //background-color: var(--gradient-ardoise-80-alpha-50);
-                    gap: 1rem;
+                    gap: .25rem;
                     width: 100%;
 
                     .season-link {
@@ -2166,7 +2166,7 @@
                         .still {
                             //border-bottom: 0.5em solid var(--gradient-green-90);
                             //border-left: 0.5em solid var(--gradient-green-90);
-                            border-radius: 1rem 0 0 1rem;
+                            border-radius: .25rem 0 0 .25rem;
                             //border-right: none;
                             //border-top: 0.5em solid var(--gradient-green-90);
                             height: 100%;
@@ -2605,8 +2605,7 @@
                                 width: 10em;
 
                                 img {
-                                    border-radius: 1em;
-                                    height: 10em;
+                                    border-radius: .25em;
                                     width: 10em;
                                 }
 
@@ -4666,13 +4665,13 @@
                         }
 
                         .episode {
-                            border-radius: 1rem;
+                            border-radius: .5rem;
 
                             .still {
 
                                 img {
-                                    border-bottom-left-radius: .75rem;
-                                    border-top-left-radius: .75rem;
+                                    border-bottom-left-radius: .25rem;
+                                    border-top-left-radius: .25rem;
                                 }
                             }
 

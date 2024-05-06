@@ -39,11 +39,18 @@
         <div class="yt-playlists">
             {{ include('blocks/_nav.html.twig') }}
             {#            <pre>{{ dump(playlists) }}</pre> #}
-            <div class="new-playlist">
-                <label for="new-playlist">{{ 'New playlist'|trans }}
-                    <input type="text" id="new-playlist" data-title="{{ 'Enter or paste a playlist URL'|trans }}">
-                    <button class="btn btn-primary">{{ 'Add'|trans }}</button>
-                </label>
+            <div class="playlists-tools">
+                <div class="new-playlist">
+                    <label for="new-playlist" data-title="{{ 'Just paste a playlist link or type it and press Enter key'|trans }}">{{ 'New playlist'|trans }}
+                        <input type="text" id="new-playlist" data-title="{{ 'Enter or paste a playlist URL'|trans }}">
+                        <button class="btn btn-primary">{{ 'Add'|trans }}</button>
+                    </label>
+                </div>
+                <div class="filter">
+                    <label for="playlist-filter" data-title="{{ 'Filter by name'|trans }}">{{ 'Filter'|trans }}
+                        <input type="search" id="playlist-filter" placeholder="{{ 'Filter playlists'|trans }}">
+                    </label>
+                </div>
             </div>
             <div class="playlists">
                 {% for p in playlists %}
@@ -59,9 +66,13 @@
                             <img src="{{ p.thumbnailUrl }}" alt="{{ p.title }}">
                         </div>
                         <div class="infos">
-                            <div class="title">
-                                {{ p.title }}
-                                <span>{{ p.publishedAt|format_datetime('relative_full', 'short')|capitalize }}</span>
+                            <div class="title-date">
+                                <div class="title">
+                                    {{ p.title }}
+                                </div>
+                                <div class="date">
+                                    {{ p.publishedAt|format_datetime('relative_full', 'short')|capitalize }}
+                                </div>
                             </div>
                             <div class="description">{{ p.description ?? 'No description'|trans }}</div>
                             <div class="nb-videos{% if p.newVideos %} new{% endif %}">{{ p.playListCount }} {{ 'videos'|trans }}</div>
