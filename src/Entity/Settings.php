@@ -25,6 +25,13 @@ class Settings
     #[ORM\Column]
     private array $data = [];
 
+    public function __construct(User $user, string $name, array $data)
+    {
+        $this->user = $user;
+        $this->name = $name;
+        $this->data = $data;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -89,10 +89,7 @@ class YoutubeController extends AbstractController
 
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => "youtube"]);
         if ($settings == null) {
-            $settings = new Settings();
-            $settings->setUser($this->getUser());
-            $settings->setName("youtube");
-            $settings->setData(['sort' => 'addedAt', 'order' => 'DESC', 'page' => 1]);
+            $settings = new Settings($user, 'youtube', ['sort' => 'addedAt', 'order' => 'DESC', 'page' => 1]);
             $this->settingsRepository->save($settings, true);
         }
         $settings = $settings->getData();

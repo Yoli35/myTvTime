@@ -70,8 +70,7 @@ class UsersExtension extends AbstractExtension
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'settings']);
 
         if ($settings === null) {
-            $settings = new Settings();
-            $settings->setUser($user)->setName('settings')->setData(['saturation' => 18, 'theme' => 'light']);
+            $settings = new Settings($user, 'settings', ['saturation' => 18, 'theme' => 'light']);
             $this->settingsRepository->save($settings, true);
         }
 

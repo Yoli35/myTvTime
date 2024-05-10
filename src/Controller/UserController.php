@@ -257,10 +257,7 @@ class UserController extends AbstractController
 
         $sortSettings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'user movie sort']);
         if (!$sortSettings) {
-            $sortSettings = new Settings();
-            $sortSettings->setUser($user);
-            $sortSettings->setName('user movie sort');
-            $sortSettings->setData(['sort' => 'id', 'order' => 'DESC']);
+            $sortSettings = new Settings($user, 'user movie sort', ['sort' => 'id', 'order' => 'DESC']);
             $this->settingsRepository->save($sortSettings, true);
         }
         $sort = $sortSettings->getData()['sort'];
@@ -303,10 +300,7 @@ class UserController extends AbstractController
 
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
         if (!$settings) {
-            $settings = new Settings();
-            $settings->setUser($user);
-            $settings->setName('pinned collection');
-            $settings->setData([["pinned" => 0, "collection_id" => 0]]);
+            $settings = new Settings($user, 'pinned collection', [["pinned" => 0, "collection_id" => 0]]);
             $this->settingsRepository->save($settings, true);
         }
 
@@ -340,7 +334,7 @@ class UserController extends AbstractController
                 'discover' => $movie,
                 'title' => $movie['title'],
                 'poster' => $movie['poster_path'] ? $imageConfig['url'] . $imageConfig['poster_sizes'][3] . $movie['poster_path'] : null,
-                'id'=> $movie['movie_db_id'],
+                'id' => $movie['movie_db_id'],
                 'userMovies' => $userMovieIds,
                 'from' => 'app_personal_movies',
                 'more' => true,
@@ -359,7 +353,7 @@ class UserController extends AbstractController
         $ids = array_map(function ($userMovie) {
             return $userMovie['id'];
         }, $userMovies);
-        $movieLists =$this->movieRepository->userMovieGetMovieListsAll($ids, $userId);
+        $movieLists = $this->movieRepository->userMovieGetMovieListsAll($ids, $userId);
 
         return array_map(function ($userMovie) use ($movieLists) {
             $movie = $userMovie;
@@ -381,11 +375,11 @@ class UserController extends AbstractController
 
         $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
         if (!$settings) {
-            $settings = new Settings();
+            $settings = new Settings($user, 'pinned collection', [["pinned" => 1, "collection_id" => $id]]);
             $settings->setUser($user);
             $settings->setName('pinned collection');
-        }
-        $settings->setData([["pinned" => 1, "collection_id" => $id]]);
+        } else
+            $settings->setData([["pinned" => 1, "collection_id" => $id]]);
         $settingsRepository->save($settings, true);
 
         return $this->json([
@@ -401,11 +395,6 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         $settings = $settingsRepository->findOneBy(['user' => $user, 'name' => 'pinned collection']);
-        if (!$settings) {
-            $settings = new Settings();
-            $settings->setUser($user);
-            $settings->setName('pinned collection');
-        }
         $data = $settings->getData();
         $data[0]['pinned'] = $request->query->get('pin');
         $settings->setData($data);

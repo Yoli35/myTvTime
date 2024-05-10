@@ -369,11 +369,9 @@ class SerieFrontController extends AbstractController
         $settings = $this->settingsRepository->findOneBy(["user" => $user, "name" => $content["name"]]);
 
         if ($settings == null) {
-            $settings = new Settings();
-            $settings->setUser($user);
-            $settings->setName($content["name"]);
-        }
-        $settings->setData($content["data"]);
+            $settings = new Settings($user, $content["name"], $content['data']);
+        } else
+            $settings->setData($content["data"]);
         $this->settingsRepository->save($settings, true);
 
         return $this->json($this->translator->trans("The settings have been saved"));

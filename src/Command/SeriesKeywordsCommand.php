@@ -52,10 +52,8 @@ class SeriesKeywordsCommand extends Command
         $io->title('Collecting keywords from added series started at ' . $now->format('Y-m-d H:i:s'));
         $settings = $this->settingsRepository->findOneBy(['name' => 'series_keywords_last_update']);
         if (!$settings) {
-            $settings = new Settings();
-            $settings->setName('series_keywords_last_update');
-            $settings->setUser($this->userRepository->find(2)); // me
-            $settings->setData(['last_update' => $now, 'last_series_id' => 0]);
+            $user = $this->userRepository->find(2);
+            $settings = new Settings($user, 'series_keywords_last_update', ['last_update' => $now, 'last_series_id' => 0]);
             $this->entityManager->persist($settings);
             $this->entityManager->flush();
             $lastId = 0;
