@@ -446,13 +446,13 @@
                     }
 
                     .next, .later {
-                        background-color: var(--gradient-ardoise-50);
-                        color: var(--gradient-ardoise-80);
+                        background-color: var(--gradient-ardoise-80);
+                        color: var(--gradient-ardoise-10);
                     }
 
                     .in-production, .planned {
-                        background-color: var(--gradient-orange-50);
-                        color: var(--gradient-orange-10);
+                        background-color: var(--gradient-orange-40);
+                        color: var(--gradient-orange-90);
 
                         div {
                             font-size: 2rem;
@@ -461,8 +461,8 @@
                     }
 
                     .passed {
-                        background-color: var(--gradient-green-70);
-                        color: var(--gradient-green-90);
+                        background-color: var(--gradient-green-80);
+                        color: var(--gradient-green-10);
                     }
 
                     .add {

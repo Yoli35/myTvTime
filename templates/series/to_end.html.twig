@@ -37,6 +37,12 @@
                         <div class="pages desktop">
                             {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_series_to_end'}) }}
                         </div>
+                        <div class="series-filter">
+                            <label for="include-upcoming-episodes">
+                                <input type="checkbox" id="include-upcoming-episodes"{% if includeUpcomingEpisodes %} checked{% endif %}>
+                                {{ 'Include upcoming episodes'|trans }}
+                            </label>
+                        </div>
                     </div>
                 </div>
             </main>

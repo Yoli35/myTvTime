@@ -110,7 +110,7 @@ class SerieViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getSeriesToEndV2($userId, $locale, $perPage, $page): array
+    public function getSeriesToEndV2($userId, $locale, $perPage, $page, $includeUpcomingEpisodes): array
     {
         $sql = "SELECT "
             . "sv.`id` as id, sv.`viewed_episodes` as viewed_episodes, sv.`number_of_episodes` as number_of_episodes, "
@@ -133,8 +133,10 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='" . $locale . "' "
             . "WHERE sv.`user_id`=" . $userId . " "
             . "AND sv.`viewed_episodes` > 0 "
-            . "AND sv.`viewed_episodes` < s.`number_of_episodes` "
-            . "ORDER BY sv.`modified_at` DESC "
+            . "AND sv.`viewed_episodes` < s.`number_of_episodes` ";
+        if (!$includeUpcomingEpisodes)
+            $sql .= "AND epv.`air_date` <= NOW() ";
+        $sql .= "ORDER BY sv.`modified_at` DESC "
             . "LIMIT " . $perPage . " "
             . "OFFSET " . ($page - 1) * $perPage;
 
@@ -143,6 +145,28 @@ class SerieViewingRepository extends ServiceEntityRepository
         $resultSet = $statement->executeQuery();
 
         return $resultSet->fetchAllAssociative();
+    }
+
+    public function countSeriesToEndV2($userId, $includeUpcomingEpisodes): int
+    {
+        $sql = "SELECT "
+            . "COUNT(sv.`id`) as number "
+            . "FROM `serie_viewing` sv "
+            . "INNER JOIN `serie` s ON s.`id`=sv.`serie_id` "
+            . "LEFT JOIN `episode_viewing` epv ON epv.`id`=sv.`next_episode_to_watch_id` " /*" OR sv.`next_episode_to_watch_id`=NULL "*/
+            . "LEFT JOIN `season_viewing` sev ON sev.`id`=epv.`season_id` " /*"OR sv.`next_episode_to_watch_id`=NULL "*/
+            . "LEFT JOIN `favorite` f ON f.`user_id`=2 AND f.`type`='serie' AND f.`media_id`=s.`id` "
+            . "WHERE sv.`user_id`=" . $userId . " "
+            . "AND sv.`viewed_episodes` > 0 "
+            . "AND sv.`viewed_episodes` < s.`number_of_episodes` ";
+        if (!$includeUpcomingEpisodes)
+            $sql .= "AND epv.`air_date` <= NOW() ";
+
+        $em = $this->registry->getManager();
+        $statement = $em->getConnection()->prepare($sql);
+        $resultSet = $statement->executeQuery();
+
+        return $resultSet->fetchOne();
     }
 
     public function getEpisodesOfTheDay($userId, $today, $yesterday, $locale, $page, $perPage): array

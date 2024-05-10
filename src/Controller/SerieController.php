@@ -372,24 +372,34 @@ class SerieController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        /** @var User $user */
+        $user = $this->getUser();
         $page = $request->query->getInt('p', 1);
         $perPage = 10;
 
+        $settings = $this->settingsRepository->findOneBy(['user' => $this->getUser(), 'name' => 'series_to_end']);
+        if (!$settings) {
+            $settings = new Settings($user, 'series_to_end', ["includeUpcomingEpisodes" => 1]);
+            $this->settingsRepository->save($settings, true);
+        }
+        $includeUpcomingEpisodes = $settings->getData()['includeUpcomingEpisodes'];
+
         /** @var User $user */
         $user = $this->getUser();
-        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $request->getLocale(), $perPage, $page);
+        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $request->getLocale(), $perPage, $page, $includeUpcomingEpisodes);
 
         $locale = $request->getLocale();
         $imageConfig = $this->imageConfiguration->getConfig();
         $seriesToBeEnded = $this->seriesToBeToArray($results, $imageConfig, $locale);
 
-        $totalResults = $this->serieViewingRepository->countUserSeriesToEnd($user);
-
+        $totalResults = $this->serieViewingRepository->countSeriesToEndV2($user->getId(), $includeUpcomingEpisodes);
+        dump($totalResults);
 //        $nextEpisodesToWatch = $this->serieViewingRepository->getNextEpisodesToWatch($user);
 //        dump($nextEpisodesToWatch);
 
         return $this->render('series/to_end.html.twig', [
             'series' => $seriesToBeEnded,
+            'includeUpcomingEpisodes' => $includeUpcomingEpisodes,
             'pages' => [
                 'total_results' => $totalResults,
                 'page' => $page,
@@ -403,6 +413,65 @@ class SerieController extends AbstractController
             'breadcrumb' => $this->breadcrumb(self::MY_SERIES_TO_END),
             'from' => self::MY_SERIES_TO_END,
             'imageConfig' => $imageConfig,
+        ]);
+    }
+
+    #[Route('/to-end-settings', name: 'app_series_to_end_settings', methods: ['GET'])]
+    public function seriesToEndSettings(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $page = $request->query->getInt('p', 1);
+        $perPage = 10;
+
+        $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'series_to_end']);
+        if (!$settings) {
+            $settings = new Settings($user, 'series_to_end', ["includeUpcomingEpisodes" => 1]);
+        }
+        $includeUpcomingEpisodes = $request->query->getInt('iue', 1);
+        dump($request->query->all());
+        $settings->setData(['includeUpcomingEpisodes' => $includeUpcomingEpisodes]);
+        $this->settingsRepository->save($settings, true);
+
+        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $request->getLocale(), $perPage, $page, $includeUpcomingEpisodes);
+
+        $locale = $request->getLocale();
+        $imageConfig = $this->imageConfiguration->getConfig();
+        $seriesToBeEnded = $this->seriesToBeToArray($results, $imageConfig, $locale);
+
+        $totalResults = $this->serieViewingRepository->countSeriesToEndV2($user->getId(), $includeUpcomingEpisodes);
+
+        $pages = [
+            'total_results' => $totalResults,
+            'page' => $page,
+            'per_page' => $perPage,
+            'link_count' => self::LINK_COUNT,
+            'paginator' => $this->paginator($totalResults, $page, $perPage, self::LINK_COUNT),
+            'per_page_values' => self::PER_PAGE_ARRAY,
+        ];
+        $seriesBlocks = [];
+        foreach ($seriesToBeEnded as $serie) {
+            $seriesBlocks[] = [
+                'innerHTML' => $this->renderView('blocks/series/_card.html.twig', [
+                    'serie' => $serie,
+                    'pages' => $pages,
+                    'imageConfig' => $imageConfig,
+                    'from' => self::MY_SERIES_TO_END,
+                ]),
+                'id' => $serie['id'],
+            ];
+        }
+        $paginationBlock = $this->renderView('blocks/series/_pagination-v2.html.twig', [
+            'pages' => $pages,
+            'route' => 'app_series_to_end',
+        ]);
+
+        return $this->json([
+            'status' => 'success',
+            'blocks' => $seriesBlocks,
+            'pages' => $paginationBlock,
         ]);
     }
 
@@ -724,7 +793,8 @@ class SerieController extends AbstractController
         }
 
         $filters = $this->getTvFilters($data);
-        $filterString = /*"&page=" . $data['page'] .*/ "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
+        $filterString = /*"&page=" . $data['page'] .*/
+            "&sort_by=" . $data['sort_by'] . "." . $data['order_by'];
         foreach ($filters as $key => $value) {
             $filterString .= "&$key=$value";
         }
@@ -1660,10 +1730,7 @@ class SerieController extends AbstractController
             "switch_page" => true,
             "page" => 1,
         ];
-        $settings = new Settings();
-        $settings->setName('tv_filter');
-        $settings->setUser($user);
-        $settings->setData($data);
+        $settings = new Settings($user, 'tv_filter', $data);
         $this->settingsRepository->save($settings, true);
 
         return $data;
