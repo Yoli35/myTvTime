@@ -38,8 +38,25 @@
                             {{ include('blocks/series/_pagination-v2.html.twig', {route: 'app_series_to_end'}) }}
                         </div>
                         <div class="series-filter">
+                            <label for="series-sort">
+                                {{ 'Sort by'|trans }}:
+                                <select id="series-sort">
+                                    <option value="created_at"{% if settings.sort == 'created_at' %} selected{% endif %}>{{ 'Date added'|trans }}</option>
+                                    <option value="first_date_air"{% if settings.sort == 'first_date_air' %} selected{% endif %}>{{ 'First Air at'|trans }}</option>
+                                    <option value="modified_at"{% if settings.sort == 'modified_at' %} selected{% endif %}>{{ 'Last modified by user'|trans }}</option>
+                                    <option value="name"{% if settings.sort == 'name' %} selected{% endif %}>{{ 'Name'|trans }}</option>
+                                    <option value="progress"{% if settings.sort == 'progress' %} selected{% endif %}>{{ 'Progress'|trans }}</option>
+                                </select>
+                            </label>
+                            <label for="series-order">
+                                {{ 'Order by'|trans }}:
+                                <select id="series-order">
+                                    <option value="DESC"{% if settings.sort == 'DESC' %} selected{% endif %}>{{ 'Descending'|trans }}</option>
+                                    <option value="ASC"{% if settings.sort == 'ASC' %} selected{% endif %}>{{ 'Ascending'|trans }}</option>
+                                </select>
+                            </label>
                             <label for="include-upcoming-episodes">
-                                <input type="checkbox" id="include-upcoming-episodes"{% if includeUpcomingEpisodes %} checked{% endif %}>
+                                <input type="checkbox" id="include-upcoming-episodes"{% if settings.includeUpcomingEpisodes %} checked{% endif %}>
                                 {{ 'Include upcoming episodes'|trans }}
                             </label>
                         </div>

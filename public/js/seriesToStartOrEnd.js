@@ -17,31 +17,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
     /** @var {HTMLInputElement} */
     const includeUpcomingEpisodesFilter = document.querySelector("#include-upcoming-episodes");
-    includeUpcomingEpisodesFilter.addEventListener("change", () => {
-        const xhr = new XMLHttpRequest();
-        const value = includeUpcomingEpisodesFilter.checked ? 1 : 0;
-        const lang = document.querySelector("html").getAttribute("lang");
-        xhr.onload = function() {
-            /** @var {SeriesToEndResponse} */
-            const response = JSON.parse(this.response);
-            const wrapper = document.querySelector(".wrapper");
-            wrapper.replaceChildren();
-            const blocks = response.blocks;
-            blocks.forEach(block => {
-                const div = document.createElement("div");
-                div.innerHTML = block.innerHTML;
-                div.setAttribute("data-id", block.id);
-                wrapper.appendChild(div);
-            });
-            setBackgrounds(document.querySelectorAll(".serie"));
-            const pages = document.querySelectorAll(".pages");
-            pages.forEach(page => {
-                page.innerHTML = response.pages;
-            });
-        };
-        xhr.open("GET", "/"+lang+"/series/to-end-settings?iue=" + value);
-        xhr.send();
-    });
+    const sortSelect = document.querySelector("#series-sort");
+    const orderSelect = document.querySelector("#series-order");
+    includeUpcomingEpisodesFilter.addEventListener("change", reloadSeries);
+    sortSelect.addEventListener("change", reloadSeries);
+    orderSelect.addEventListener("change", reloadSeries);
 })
 
 function initHeader(from, globs) {
@@ -66,4 +46,37 @@ function setBackgrounds(series) {
             backdrop?.setAttribute("style", backdropStyle + "; background-color: " + "rgb(" + color.r + "," + color.g + "," + color.b + ");");
         }
     });
+}
+
+function reloadSeries()
+{
+    /** @var {HTMLInputElement} */
+    const includeUpcomingEpisodesFilter = document.querySelector("#include-upcoming-episodes");
+    const xhr = new XMLHttpRequest();
+    const value = includeUpcomingEpisodesFilter.checked ? 1 : 0;
+    const lang = document.querySelector("html").getAttribute("lang");
+    const sortSelect = document.querySelector("#series-sort");
+    const sort = sortSelect.options[sortSelect.selectedIndex].value;
+    const orderSelect = document.querySelector("#series-order");
+    const order = orderSelect.options[orderSelect.selectedIndex].value;
+    xhr.onload = function() {
+        /** @var {SeriesToEndResponse} */
+        const response = JSON.parse(this.response);
+        const wrapper = document.querySelector(".wrapper");
+        wrapper.replaceChildren();
+        const blocks = response.blocks;
+        blocks.forEach(block => {
+            const div = document.createElement("div");
+            div.innerHTML = block.innerHTML;
+            div.setAttribute("data-id", block.id);
+            wrapper.appendChild(div);
+        });
+        setBackgrounds(document.querySelectorAll(".serie"));
+        const pages = document.querySelectorAll(".pages");
+        pages.forEach(page => {
+            page.innerHTML = response.pages;
+        });
+    };
+    xhr.open("GET", "/"+lang+"/series/to-end-settings?iue=" + value + "&s=" + sort + "&o=" + order, true);
+    xhr.send();
 }

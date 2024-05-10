@@ -379,27 +379,30 @@ class SerieController extends AbstractController
 
         $settings = $this->settingsRepository->findOneBy(['user' => $this->getUser(), 'name' => 'series_to_end']);
         if (!$settings) {
-            $settings = new Settings($user, 'series_to_end', ["includeUpcomingEpisodes" => 1]);
+            $settings = new Settings($user, 'series_to_end', ["includeUpcomingEpisodes" => 1, "order" => 'DESC', "sort" => 'modified_at']);
             $this->settingsRepository->save($settings, true);
         }
         $includeUpcomingEpisodes = $settings->getData()['includeUpcomingEpisodes'];
+        $order = $settings->getData()['order'];
+        $sort = $settings->getData()['sort'];
 
         /** @var User $user */
         $user = $this->getUser();
-        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $request->getLocale(), $perPage, $page, $includeUpcomingEpisodes);
+        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $request->getLocale(), $perPage, $page, $includeUpcomingEpisodes, $sort, $order);
 
         $locale = $request->getLocale();
         $imageConfig = $this->imageConfiguration->getConfig();
         $seriesToBeEnded = $this->seriesToBeToArray($results, $imageConfig, $locale);
 
         $totalResults = $this->serieViewingRepository->countSeriesToEndV2($user->getId(), $includeUpcomingEpisodes);
-        dump($totalResults);
-//        $nextEpisodesToWatch = $this->serieViewingRepository->getNextEpisodesToWatch($user);
-//        dump($nextEpisodesToWatch);
 
         return $this->render('series/to_end.html.twig', [
             'series' => $seriesToBeEnded,
-            'includeUpcomingEpisodes' => $includeUpcomingEpisodes,
+            'settings' => [
+                'includeUpcomingEpisodes' => $includeUpcomingEpisodes,
+                'sort' => $sort,
+                'order' => $order,
+            ],
             'pages' => [
                 'total_results' => $totalResults,
                 'page' => $page,
@@ -423,19 +426,22 @@ class SerieController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $page = $request->query->getInt('p', 1);
+        $page = 1;// on reset l'affichage $request->query->getInt('p', 1);
         $perPage = 10;
+        $sort = $request->query->get('s', 'modified_at');
+        $order = $request->query->get('o', 'DESC');
+        $includeUpcomingEpisodes = $request->query->getInt('iue', 1);
+        dump(['includeUpcomingEpisodes' => $includeUpcomingEpisodes, 'order' => $order, 'sort' => $sort]);
 
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'series_to_end']);
         if (!$settings) {
-            $settings = new Settings($user, 'series_to_end', ["includeUpcomingEpisodes" => 1]);
+            $settings = new Settings($user, 'series_to_end', ["includeUpcomingEpisodes" => 1, "order" => $order, "sort" => $sort]);
         }
-        $includeUpcomingEpisodes = $request->query->getInt('iue', 1);
         dump($request->query->all());
-        $settings->setData(['includeUpcomingEpisodes' => $includeUpcomingEpisodes]);
+        $settings->setData(['includeUpcomingEpisodes' => $includeUpcomingEpisodes, 'order' => $order, 'sort' => $sort]);
         $this->settingsRepository->save($settings, true);
 
-        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $request->getLocale(), $perPage, $page, $includeUpcomingEpisodes);
+        $results = $this->serieViewingRepository->getSeriesToEndV2($user->getId(), $request->getLocale(), $perPage, $page, $includeUpcomingEpisodes, $sort, $order);
 
         $locale = $request->getLocale();
         $imageConfig = $this->imageConfiguration->getConfig();

@@ -110,8 +110,17 @@ class SerieViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getSeriesToEndV2($userId, $locale, $perPage, $page, $includeUpcomingEpisodes): array
+    public function getSeriesToEndV2($userId, $locale, $perPage, $page, $includeUpcomingEpisodes, $sort='modified_at', $order='DESC'): array
     {
+        $offset = ($page - 1) * $perPage;
+        $sort = in_array($sort, ['created_at', 'first_date_air', 'modified_at', 'name', 'progress']) ? $sort : 'modified_at';
+        $sort = match ($sort) {
+            'created_at' => 'sv.`created_at`',
+            'first_date_air' => 's.`first_date_air`',
+            'modified_at' => 'sv.`modified_at`',
+            'name' => 's.`name`',
+            'progress' => 'progress',
+        };
         $sql = "SELECT "
             . "sv.`id` as id, sv.`viewed_episodes` as viewed_episodes, sv.`number_of_episodes` as number_of_episodes, "
             . "sev.`season_number` as seasonNumber, epv.`episode_number` as episodeNumber, "
@@ -130,15 +139,15 @@ class SerieViewingRepository extends ServiceEntityRepository
             . "LEFT JOIN `episode_viewing` epv ON epv.`id`=sv.`next_episode_to_watch_id` " /*" OR sv.`next_episode_to_watch_id`=NULL "*/
             . "LEFT JOIN `season_viewing` sev ON sev.`id`=epv.`season_id` " /*"OR sv.`next_episode_to_watch_id`=NULL "*/
             . "LEFT JOIN `favorite` f ON f.`user_id`=2 AND f.`type`='serie' AND f.`media_id`=s.`id` "
-            . "LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='" . $locale . "' "
-            . "WHERE sv.`user_id`=" . $userId . " "
+            . "LEFT JOIN `serie_localized_name` sln ON sln.`serie_id`=s.`id` AND sln.`locale`='$locale' "
+            . "WHERE sv.`user_id`=$userId "
             . "AND sv.`viewed_episodes` > 0 "
             . "AND sv.`viewed_episodes` < s.`number_of_episodes` ";
         if (!$includeUpcomingEpisodes)
             $sql .= "AND epv.`air_date` <= NOW() ";
-        $sql .= "ORDER BY sv.`modified_at` DESC "
-            . "LIMIT " . $perPage . " "
-            . "OFFSET " . ($page - 1) * $perPage;
+        $sql .= "ORDER BY $sort $order "
+            . "LIMIT $perPage "
+            . "OFFSET $offset";
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

@@ -1059,6 +1059,21 @@
                     }
                 }
             }
+
+            .series-filter {
+                @include flex-col(flex-start, center);
+                background-color: var(--gradient-ardoise-80-alpha-50);
+                border-radius: 0;
+                color: var(--gradient-ardoise-10);
+                gap: .5rem;
+                margin-bottom: 1rem;
+                padding: .5rem;
+
+                label:has(select) {
+                    justify-content: space-between;
+                    width: 100%;
+                }
+            }
         }
     }
 }
@@ -4807,7 +4822,7 @@
                     }
                 }
 
-                .pages, .numbers, .search-serie, .add-serie {
+                .pages, .numbers, .search-serie, .add-serie, .series-filter {
                     border-radius: .5rem;
                     margin-bottom: 1rem;
                     //min-height: 4rem;
