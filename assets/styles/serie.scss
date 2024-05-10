@@ -4806,7 +4806,7 @@
 
                     &.desktop {
                         position: sticky;
-                        top: 6rem;
+                        top: 7rem;
                     }
                 }
 
@@ -4827,6 +4827,13 @@
                     margin-bottom: 1rem;
                     //min-height: 4rem;
                     padding: 1rem;
+                }
+
+                .series-filter {
+                    &.desktop {
+                        position: sticky;
+                        top: 14rem;
+                    }
                 }
 
                 .search-serie, .add-serie {
