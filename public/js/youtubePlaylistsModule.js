@@ -23,7 +23,7 @@ export class YoutubePlaylistsModule {
         });
         this.ytLink.addEventListener("keypress", this.pasteLinkWithKeyboard.bind(this));
 
-        this.filter.addEventListener("keyup", this.filterPlaylists.bind(this));
+        this.filter.addEventListener("input", this.filterPlaylists.bind(this));
 
         document.addEventListener("visibilitychange", this.focusLink.bind(this));
         this.focusLink();
@@ -56,6 +56,12 @@ export class YoutubePlaylistsModule {
     filterPlaylists() {
         const filter = this.filter.value.toUpperCase();
         const playlists = document.querySelectorAll('.playlist');
+        if (filter === '') {
+            playlists.forEach((playlist) => {
+                playlist.style.display = "flex";
+            });
+            return;
+        }
         playlists.forEach((playlist) => {
             const title = playlist.querySelector('.title');
             if (title.innerHTML.toUpperCase().indexOf(filter) > -1) {

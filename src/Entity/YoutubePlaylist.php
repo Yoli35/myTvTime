@@ -53,6 +53,9 @@ class YoutubePlaylist
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $channelTitle = null;
 
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $averageColor = null;
+
     public function __construct()
     {
         $this->youtubePlaylistVideos = new ArrayCollection();
@@ -209,6 +212,18 @@ class YoutubePlaylist
     public function setChannelTitle(?string $channelTitle): static
     {
         $this->channelTitle = $channelTitle;
+
+        return $this;
+    }
+
+    public function getAverageColor(): ?string
+    {
+        return $this->averageColor;
+    }
+
+    public function setAverageColor(?string $averageColor): static
+    {
+        $this->averageColor = $averageColor;
 
         return $this;
     }

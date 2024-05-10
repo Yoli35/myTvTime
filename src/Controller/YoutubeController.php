@@ -157,7 +157,7 @@ class YoutubeController extends AbstractController
             return $b['publishedAt'] <=> $a['publishedAt'];
         });
 
-//        dump(['playlists' => $playlistList]);
+        dump(['playlists' => $playlistList]);
 
         return $this->render('youtube/playlists.html.twig', [
             'playlists' => $playlistList,
@@ -913,7 +913,7 @@ class YoutubeController extends AbstractController
 //                'performChecks' => $performChecks,
 //            ]);
 
-        if ($performChecks || $p->getChannelId() == null) {
+        if ($performChecks || $p->getAverageColor() == null) {
             $playlist = $this->getPlaylist($playlistId);
             dump(['playlist' => $playlist]);
             $item = $playlist->getItems()[0];
@@ -950,6 +950,10 @@ class YoutubeController extends AbstractController
             if ($p->getPublishedAt() != $publishedAt) {
                 $p->setPublishedAt($publishedAt);
             }
+            $averageColor = $this->averageColor($thumbnailUrl, 16);
+            if ($p->getAverageColor() != $averageColor) {
+                $p->setAverageColor($averageColor);
+            }
 
             $p->setLastUpdateAt($now);
             $this->playlistRepository->save($p, true);
@@ -967,6 +971,7 @@ class YoutubeController extends AbstractController
             $thumbnailUrl = $p->getThumbnailUrl();
             $playlistCount = $p->getNumberOfVideos();
             $publishedAt = $p->getPublishedAt();
+            $averageColor = $p->getAverageColor();
             $newVideos = false;
         }
         return [
@@ -981,6 +986,7 @@ class YoutubeController extends AbstractController
             'playListCount' => $playlistCount,
             'newVideos' => $newVideos,
             'performChecks' => $performChecks,
+            'averageColor' => $averageColor,
         ];
 
     }
@@ -1254,6 +1260,30 @@ class YoutubeController extends AbstractController
         }
         return $runtimeString;
     }
+
+    private function averageColor(string $url, int $precision = 2): string
+    {
+        $img = imagecreatefromjpeg($url);
+        if (!$img) {
+            return 'rgb(0,0,0)';
+        }
+
+        $w = imagesx($img);
+        $h = imagesy($img);
+        $r = $g = $b = $n = 0;
+
+        for ($y = 0; $y < $h; $y += $precision) {
+            for ($x = 0; $x < $w; $x += $precision) {
+                $rgb = imagecolorat($img, $x, $y);
+                $r += $rgb >> 16;
+                $g += $rgb >> 8 & 255;
+                $b += $rgb & 255;
+                $n++;
+            }
+        }
+        return 'rgb(' . floor($r / $n) . ',' . floor($g / $n) . ',' . floor($b / $n) . ')';
+    }
+
 
     #[Route('/youtube/settings/save', name: 'youtube_settings_save', methods: ['GET'])]
     public function saveSettings(Request $request): Response
