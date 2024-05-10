@@ -170,27 +170,25 @@
                                             {% endif %}
                                         </div>
                                         <div class="infos">
+
+                                            {% if episode.viewing is defined and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/' %}
+                                                {% if episode.viewing.substituteName is not null %}
+                                                    <h3>{{ episode.viewing.substituteName }}</h3>
+                                                {% endif %}
+                                            {% else %}
+                                                <h3>{{ episode.name }}</h3>
+                                            {% endif %}
+
                                             <h4>
                                                 {{ 'Episode'|trans }} {{ episode.episode_number }}
-                                                {% if episode.viewing is defined and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/' %}
-                                                    {% if episode.viewing.substituteName is not null %}
-                                                        {{ episode.viewing.substituteName }}
-                                                        {#                                                    {% else %} #}
-                                                        {#                                                        {{ episode.name }} ({{ 'TBA'|trans }}) #}
-                                                    {% endif %}
-                                                {% else %}
-                                                    {{ episode.name }}
-                                                {% endif %}
                                             </h4>
-                                            {#                                            <pre>{{ dump(past) }}</pre> #}
                                             {% if episode.viewing is defined
                                                 and past
                                                 and episode.name matches '/[EÉ]pisod[eio]+\\s\\d+/'
                                                 and episode.viewing.substituteName is null %}
                                                 <div class="substituteName">
                                                     <label>
-                                                        {{ 'Substitute name'|trans }} :
-                                                        <input type="text" id="substitute_name_{{ episode.viewing.id }}" data-id="{{ episode.viewing.id }}">
+                                                        <input type="text" id="substitute_name_{{ episode.viewing.id }}" data-id="{{ episode.viewing.id }}" placeholder="{{ 'Substitute name'|trans }}…">
                                                     </label>
                                                     <button class="btn btn-primary btn-sm" data-id="{{ episode.viewing.id }}">{{ 'Apply'|trans }}</button>
                                                 </div>
@@ -531,7 +529,7 @@
                             if (result === 'success') {
                                 const newDeviceName = device;
                                 viewDevice.classList.remove(oldDeviceName);
-                                viewDevice.classList.add(newDeviceName === 'tablet' ? 'tablet-device' : (newDeviceName === 'desktop' ? 'desktop-device':newDeviceName));
+                                viewDevice.classList.add(newDeviceName === 'tablet' ? 'tablet-device' : (newDeviceName === 'desktop' ? 'desktop-device' : newDeviceName));
                                 viewDevice.setAttribute('data-device', newDeviceName);
                                 if (newDeviceName === 'tv') {
                                     viewDevice.querySelector('span').innerText = 'TV';
