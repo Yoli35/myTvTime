@@ -1810,30 +1810,6 @@ nav.active {
     }
 }
 
-/*@media (prefers-color-scheme: dark) {
-
-    .home-footer {
-        background-color: var(--gradient-ardoise-30-alpha-50);
-        color: var(--gradient-ardoise-80);
-
-        a {
-            color: var(--gradient-ardoise-80);
-
-            &:hover {
-                color: var(--gradient-orange-60);
-            }
-
-            &:visited {
-                color: var(--gradient-ardoise-80);
-            }
-
-            &:focus {
-                color: var(--gradient-orange-60);
-            }
-        }
-    }
-}*/
-
 .home-list {
     @include flex-100(start, start);
     overflow-x: scroll;
@@ -1919,15 +1895,15 @@ nav.active {
 .genres {
     @include flex-row(center, flex-start);
     flex-wrap: wrap;
+    gap: .25rem;
     margin-bottom: 2rem;
     padding-left: 1.25rem;
 
     .genre {
         border: .125rem solid var(--gradient-ardoise-50);
-        border-radius: 1rem;
+        border-radius: .25rem;
         cursor: pointer;
-        margin: .25rem;
-        padding: 0 .5rem;
+        padding-inline: .5rem;
     }
 
     .active {

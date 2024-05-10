@@ -57,22 +57,23 @@
     --header-height: 33vw;
 
     @include flex-100(flex-start, flex-start);
-    gap: 1rem;
+    gap: .5rem;
     height: var(--header-height);
+    margin-block-start: .5rem;
     opacity: 0;
     overflow: auto;
     position: relative;
     transform: translate(0, -100%);
 
     .poster {
-        border-radius: 1rem;
+        border-radius: .5rem;
         flex-shrink: 0;
         height: var(--header-height);
         position: relative;
         width: 22vw;
 
         img {
-            border-radius: 1rem;
+            border-radius: .5rem;
             height: 100%;
             width: auto;
         }
@@ -88,7 +89,7 @@
     }
 
     .backdrop {
-        border-radius: 1rem;
+        border-radius: .5rem;
         flex-grow: 1;
         height: var(--header-height);
         overflow-y: auto;
@@ -250,95 +251,53 @@
         }
     }
 
-    .posters {
+    .additional-images {
         background-color: var(--gradient-ardoise-10-alpha-50);
-        border-radius: .5rem;
+        border-radius: .25rem;
         display: flex;
         flex-direction: column;
         gap: .25rem;
-        left: 15vw;
         max-height: calc(100% - 6rem);
         opacity: 0;
         overflow-y: auto;
-        padding: 1rem;
+        padding: .25rem;
         position: absolute;
         top: 1rem;
         transition: opacity 300ms ease-in-out;
 
-        .posters-item {
-            position: relative;
+        &.backdrop-item {
+            left: 23.5vw;
 
             img {
-                border: 2px solid var(--gradient-ardoise-80-alpha-50);
-                border-radius: .5rem;
-                cursor: pointer;
-                height: 6rem;
-                object-fit: cover;
-                width: 4rem;
-
-                &:hover {
-                    border: 2px solid var(--gradient-orange-50);
-                }
-            }
-
-            .set-poster {
-                align-items: center;
-                background-color: var(--gradient-ardoise-20);
-                border-radius: .25rem;
-                border: 1px solid var(--gradient-ardoise-80);
-                bottom: .25rem;
-                color: var(--gradient-ardoise-80);
-                cursor: grab;
-                display: none;
-                height: 2rem;
-                justify-content: center;
-                left: .25rem;
-                position: absolute;
-                transform: rotate(180deg);
-                width: 2rem;
-                z-index: 30;
-            }
-
-            &:hover {
-                .set-poster {
-                    display: flex;
-                }
+                height: 4rem;
+                width: 6rem;
             }
         }
-    }
 
-    .backdrops {
-        background-color: var(--gradient-ardoise-10-alpha-50);
-        border-radius: .5rem;
-        display: flex;
-        flex-direction: column;
-        gap: .25rem;
-        left: 24vw;
-        max-height: calc(100% - 6rem);
-        opacity: 0;
-        overflow-y: auto;
-        padding: 1rem;
-        position: absolute;
-        top: 1rem;
-        transition: opacity 300ms ease-in-out;
+        &.poster-item {
+            left: 15.5vw;
 
-        .backdrops-item {
+            img {
+                height: 6rem;
+                width: 4rem;
+            }
+        }
+
+        .additional-item {
             position: relative;
 
             img {
                 border: 2px solid var(--gradient-ardoise-80-alpha-50);
-                border-radius: .5rem;
+                border-radius: .25rem;
                 cursor: pointer;
-                height: 4rem;
                 object-fit: cover;
-                width: 6rem;
 
                 &:hover {
                     border: 2px solid var(--gradient-orange-50);
                 }
             }
 
-            .set-backdrop {
+            .set-item {
                 align-items: center;
                 background-color: var(--gradient-ardoise-20);
                 border: 1px solid var(--gradient-ardoise-80);
@@ -356,7 +315,7 @@
             }
 
             &:hover {
-                .set-backdrop {
+                .set-item {
                     display: flex;
                 }
             }
@@ -364,7 +323,7 @@
     }
 
     &:hover {
-        .contribution, .backdrops, .posters, .user, .ygg {
+        .contribution, .additional-images, .user, .ygg {
             opacity: 1;
         }
     }
@@ -538,9 +497,13 @@
                     a {
                         color: var(--gradient-ardoise-10);
                         height: 100%;
-                        padding: .25em 1em;
                         text-decoration: none;
                         width: 100%;
+                    }
+
+                    &:hover {
+                        background-color: var(--gradient-orange-50);
+                        color: var(--gradient-ardoise-10);
                     }
                 }
             }
@@ -613,7 +576,8 @@
             .overview {
                 @include flex-col(flex-start, flex-start);
                 margin-block: 1rem;
-                margin-inline: 1.25rem;
+                padding-inline: 1rem;
+                width: 100%;
 
                 .the-overview {
 
@@ -629,8 +593,8 @@
                 }
 
                 .overview-textarea {
-                    @include flex-row(flex-start, flex-start);
-                    gap: .5rem;
+                    @include flex-col(flex-start, flex-start);
+                    gap: .25rem;
                     height: 0;
                     overflow: hidden;
                     transition: height 300ms ease-in-out, padding 300ms ease-in-out;
@@ -646,15 +610,20 @@
                     }
 
                     textarea {
-                        border: none;
-                        border-radius: .5rem;
+                        background-color: var(--gradient-ardoise-80-alpha-50);
+                        border-radius: .25rem;
                         height: 100%;
                         width: 100%;
+
+                        &:focus {
+                            outline-offset: -4px;
+                        }
                     }
 
                     .overview-buttons {
-                        @include flex-col(safe, flex-start);
-                        gap: .5rem;
+                        @include flex-row(center, flex-end);
+                        gap: .25rem;
+                        width: 100%;
                     }
                 }
 
@@ -828,26 +797,25 @@
     .cast, .crew {
         @include flex-row();
         background-color: var(--gradient-ardoise-70-alpha-50);
-        border-radius: 1em;
+        border-radius: .5em;
         font-family: 'Montserrat', sans-serif;
         font-weight: 400;
+        padding: .5em;
         width: 100%;
 
         .content {
-            @include flex-row(center, flex-start);
+            @include flex-row();
             flex-wrap: wrap;
-            margin: 0 auto;
+            gap: .25em;
             max-height: 14em;
-            min-height: 14em;
             overflow-y: scroll;
 
             .actor, .member {
                 @include flex-col(center, unset);
                 background-color: var(--gradient-ardoise-80);
-                border-radius: .5em;
+                border-radius: .25em;
                 cursor: grab;
                 height: 12.5em;
-                margin: .5em .5em;
                 width: 7em;
 
                 .profile {
@@ -855,7 +823,7 @@
                     background-position: center center;
                     background-repeat: no-repeat;
                     background-size: cover;
-                    border-radius: .5em .5em 0 0;
+                    border-radius: .25em .25em 0 0;
                     height: 10em;
                     overflow: hidden;
                     transition: border-radius .25s, height .25s;

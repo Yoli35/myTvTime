@@ -37,21 +37,21 @@
                 <div class="caption">{% if movie.backdrop_caption %}<span>{{ movie.backdrop_caption }}</span>{% endif %}</div>
             </div>
             {% if backdrops|length %}
-                <div class="backdrops">
+                <div class="additional-images backdrop-item">
                     {% for b in backdrops %}
-                        <div class="backdrops-item">
+                        <div class="additional-item">
                             <img src="{{ b.path }}" alt="{{ b.caption ?? ('backdrop'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ b.caption }}" data-id="{{ b.id }}" loading="lazy">
-                            <div class="set-backdrop"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                            <div class="set-item"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
                         </div>
                     {% endfor %}
                 </div>
             {% endif %}
             {% if posters|length %}
-                <div class="posters">
+                <div class="additional-images poster-item">
                     {% for p in posters %}
-                        <div class="posters-item">
-                            <img src="{{ p.path }}" alt="{{ p.caption ?? ('backdrop'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ p.caption }}" data-id="{{ p.id }}" loading="lazy">
-                            <div class="set-poster"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                        <div class="additional-item">
+                            <img src="{{ p.path }}" alt="{{ p.caption ?? ('poster'|trans ~ ' ' ~ loop.index) }}" data-caption="{{ p.caption }}" data-id="{{ p.id }}" loading="lazy">
+                            <div class="set-item"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
                         </div>
                     {% endfor %}
                 </div>
@@ -151,9 +151,9 @@
                                 <div class="overview-textarea">
                                     <textarea name="overview" id="overview" placeholder="{{ 'Add an overview'|trans }} ...">{{ movie.overview|trim }}</textarea>
                                     <div class="overview-buttons">
-                                        <button class="btn btn-primary btn-sm" id="overview-save">{{ 'Save'|trans }}</button>
-                                        <button class="btn btn-warning btn-sm" id="overview-cancel">{{ 'Cancel'|trans }}</button>
                                         <button class="btn btn-danger btn-sm" id="overview-delete">{{ 'Delete'|trans }}</button>
+                                        <button class="btn btn-warning btn-sm" id="overview-cancel">{{ 'Cancel'|trans }}</button>
+                                        <button class="btn btn-primary btn-sm" id="overview-save">{{ 'Save'|trans }}</button>
                                     </div>
                                 </div>
                             {% endif %}
@@ -163,9 +163,9 @@
                                 {% for video in movieVideos %}
                                     <h3>{{ video.title }}</h3>
                                     <div class="contributors">
-                                        {{ 'Added by'|trans }}<div>&nbsp</div>
+                                        {{ 'Added by'|trans }}
+                                        <div>&nbsp</div>
                                         {% for u in video.users %}
-{#                                            <a href="{{ path('app_user', {id: u.id}) }}">{{ u.username }}</a>{% if not loop.last %}, {% endif %}#}
                                             {% if not loop.last %}
                                                 {{ include('blocks/user/_user.html.twig', {user: u}) }}{% if loop.index < loop.length-1 %},&nbsp;{% endif %}
                                             {% else %}
@@ -202,10 +202,12 @@
                                     {{ 'Revenue'|trans }} : {{ movie.revenue }}$
                                 </div>
                             {% endif %}
-                            <div class="infos">
-                                <div>{{ 'Average Vote'|trans }} : {{ movie.vote_average }}</div>
-                                <div>{{ 'Vote Count'|trans }} : {{ movie.vote_count }}</div>
-                            </div>
+                            {% if movie.vote_count %}
+                                <div class="info">
+                                    <div>{{ 'Average Vote'|trans }} : {{ movie.vote_average }}</div>
+                                    <div>{{ 'Vote Count'|trans }} : {{ movie.vote_count }}</div>
+                                </div>
+                            {% endif %}
                             {% if movie.homepage | length %}
                                 <div class="info">
                                     {{ 'Home Page'|trans }} :
