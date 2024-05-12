@@ -264,7 +264,8 @@ export class YoutubeIndexModule {
                 // Ajouter la durée
                 let duration = document.createElement("div");
                 duration.setAttribute("class", "duration");
-                duration.appendChild(document.createTextNode(gThis.duration2Time(result['contentDuration'])));
+                duration.appendChild(document.createTextNode(result['contentDuration']));
+                // duration.appendChild(document.createTextNode(gThis.duration2Time(result['contentDuration'])));
                 thumbnail.appendChild(img);
                 thumbnail.appendChild(duration);
                 if (result['tags'].length) {
