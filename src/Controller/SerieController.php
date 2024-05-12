@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Breadcrumb\BreadcrumbBuilder;
 use App\Entity\Alert;
 use App\Entity\Cast;
+use App\Entity\Episode;
 use App\Entity\EpisodeViewing;
 use App\Entity\Favorite;
 use App\Entity\Networks;
+use App\Entity\Season;
 use App\Entity\SeasonViewing;
 use App\Entity\Serie;
 use App\Entity\SerieBackdrop;
@@ -21,8 +23,10 @@ use App\Form\SerieSearchType;
 use App\Form\TvFilterType;
 use App\Repository\AlertRepository;
 use App\Repository\CastRepository;
+use App\Repository\EpisodeRepository;
 use App\Repository\EpisodeViewingRepository;
 use App\Repository\FavoriteRepository;
+use App\Repository\SeasonRepository;
 use App\Repository\SeasonViewingRepository;
 use App\Repository\SerieAlternateOverviewRepository;
 use App\Repository\SerieBackdropRepository;
@@ -78,12 +82,14 @@ class SerieController extends AbstractController
         private readonly DateService                      $dateService,
         private readonly DeeplTranslator                  $deeplTranslator,
         private readonly EpisodeViewingRepository         $episodeViewingRepository,
+        private readonly EpisodeRepository                $episodeRepository,
         private readonly FavoriteRepository               $favoriteRepository,
         private readonly ImageConfiguration               $imageConfiguration,
+        private readonly SeasonRepository                 $seasonRepository,
         private readonly SeasonViewingRepository          $seasonViewingRepository,
         private readonly SerieAlternateOverviewRepository $serieAlternateOverviewRepository,
-        private readonly SerieCastRepository              $serieCastRepository,
         private readonly SerieBackdropRepository          $serieBackdropRepository,
+        private readonly SerieCastRepository              $serieCastRepository,
         private readonly SeriePosterRepository            $seriePosterRepository,
         private readonly SerieRepository                  $serieRepository,
         private readonly SerieViewingRepository           $serieViewingRepository,
@@ -879,7 +885,83 @@ class SerieController extends AbstractController
                 'imageConfig' => $this->imageConfiguration->getConfig(),
             ]);
         }
+        $this->getSeasonsAndEpisodes($tv, $serie);
         return $this->showSeriesPage($request, $tv, $page, $from, $serie->getId(), $serie, $query, $year);
+    }
+
+    public function getSeasonsAndEpisodes($tvSeries, $series): void
+    {
+        $numberOfSeasons = $tvSeries['number_of_seasons'];
+
+        for ($seasonNumber = 1; $seasonNumber <= $numberOfSeasons; $seasonNumber++) {
+            $this->getSeasonAndEpisodes($series, $seasonNumber);
+        }
+    }
+
+
+    public function getSeasonAndEpisodes($series, $seasonNumber): void
+    {
+        $tvSeason = json_decode($this->TMDBService->getTvSeason($series->getSerieId(), $seasonNumber, "fr"), true);
+
+        $season = $this->seasonRepository->findOneBy(['series' => $series, 'seasonNumber' => $seasonNumber]);
+
+        if (!$season) {
+            $season = new Season();
+        }
+        $season->set_Id($tvSeason['_id']);
+        $season->setAirDate($this->dateService->newDateImmutable($tvSeason['air_date'], 'Europe/Paris'));
+        $season->setName($tvSeason['name']);
+        $season->setOverview($tvSeason['overview']);
+        $season->setPosterPath($tvSeason['poster_path']);
+        $season->setSeasonNumber($seasonNumber);
+        $season->setSeries($series);
+        $season->setTmdbId($tvSeason['id']);
+        $this->seasonRepository->save($season, true);
+
+        $tvEpisodes = $tvSeason['episodes'];
+        $season = $this->seasonRepository->findOneBy(['series' => $series, 'seasonNumber' => $seasonNumber]);
+        foreach ($tvEpisodes as $tvEpisode) {
+            $this->seasonAndEpisode($series, $season, $tvEpisode);
+        }
+        $this->episodeRepository->flush();
+//        for ($i = 1; $i <= $episodeCount; $i++) {
+//            $tvEpisode = $tvEpisodes[$i - 1];
+//            $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $i]);
+//            if (!$episode) {
+//                $episode = new Episode();
+//            }
+//            $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
+//            $episode->setEpisodeNumber($tvEpisode['episode_number']);
+//            $episode->setName($tvEpisode['name']);
+//            $episode->setOverview($tvEpisode['overview']);
+//            $episode->setRuntime($tvEpisode['runtime']);
+//            $episode->setSeason($season);
+//            $episode->setSeasonNumber($tvEpisode['season_number']);
+//            $episode->setSeries($series);
+//            $episode->setStillPath($tvEpisode['still_path']);
+//            $episode->setTmdbId($tvEpisode['id']);
+//            $this->episodeRepository->save($episode, $i === $episodeCount);
+//        }
+    }
+
+    public function seasonAndEpisode(Serie $series, Season $season, array $tvEpisode): void
+    {
+        $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $tvEpisode['episode_number']]);
+        if ($episode) {
+            return;
+        }
+        $episode = new Episode();
+        $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
+        $episode->setEpisodeNumber($tvEpisode['episode_number']);
+        $episode->setName($tvEpisode['name']);
+        $episode->setOverview($tvEpisode['overview']);
+        $episode->setRuntime($tvEpisode['runtime']);
+        $episode->setSeason($season);
+        $episode->setSeasonNumber($tvEpisode['season_number']);
+        $episode->setSeries($series);
+        $episode->setStillPath($tvEpisode['still_path']);
+        $episode->setTmdbId($tvEpisode['id']);
+        $this->episodeRepository->save($episode);
     }
 
     #[Route('/tmdb/{id}', name: 'app_series_tmdb', methods: ['GET'])]
@@ -1827,12 +1909,14 @@ class SerieController extends AbstractController
         foreach ($tv['seasons'] as $s) {
             if ($s['season_number']) { // 21/12/2022 : plus d'épisodes spéciaux
                 $airDate = $s['air_date'] ? $this->dateService->newDateImmutable($s['air_date'], $user->getTimezone(), true) : null;
-                $season = new SeasonViewing($airDate, $s['season_number'], $s['episode_count'], false);
+                $seasonNumber = $s['season_number'];
+                $episodeCount = $s['episode_count'];
+                $season = new SeasonViewing($airDate, $seasonNumber, $episodeCount, false);
                 $viewing->addSeason($season);
                 $this->seasonViewingRepository->save($season, true);
 
-                for ($i = 1; $i <= $season->getEpisodeCount(); $i++) {
-                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $s['season_number'], $i, 'fr');
+                for ($i = 1; $i <= $episodeCount; $i++) {
+                    $standing = $this->TMDBService->getTvEpisode($tv['id'], $seasonNumber, $i, 'fr');
                     $tmdbEpisode = json_decode($standing, true);
                     $episode = new EpisodeViewing($i, $season, $tmdbEpisode ? $tmdbEpisode['air_date'] : null);
                     $season->addEpisode($episode);
@@ -2657,11 +2741,16 @@ class SerieController extends AbstractController
     public function seasonEpisodeVotes(array $episodes): array
     {
         $episodesVotes = [];
+        dump($episodes);
         foreach ($episodes as $episode) {
             if (array_key_exists('viewing', $episode)) {
-                /** @var EpisodeViewing $episodeViewing */
-                $episodeViewing = $episode['viewing'];
-                $episodesVotes[] = ['number' => $episodeViewing->getEpisodeNumber(), 'vote' => $episodeViewing->getVote(), 'viewed' => (bool)$episodeViewing->getViewedAt()];
+                if ($episode['viewing'] == null) {
+                    $episodesVotes[] = ['number' => 0, 'vote' => 0, 'viewed' => false];
+                } else {
+                    /** @var EpisodeViewing $episodeViewing */
+                    $episodeViewing = $episode['viewing'];
+                    $episodesVotes[] = ['number' => $episodeViewing->getEpisodeNumber(), 'vote' => $episodeViewing->getVote(), 'viewed' => (bool)$episodeViewing->getViewedAt()];
+                }
             }
         }
         return $episodesVotes;

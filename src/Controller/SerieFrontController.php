@@ -11,6 +11,7 @@ use App\Entity\Season;
 use App\Entity\Serie;
 use App\Entity\SerieAlternateOverview;
 use App\Entity\SerieLocalizedName;
+use App\Entity\SerieViewing;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Repository\AlertRepository;
@@ -748,24 +749,48 @@ class SerieFrontController extends AbstractController
 
         $tvEpisodes = $tvSeason['episodes'];
         $episodeCount = count($tvEpisodes);
-        for ($i = 1; $i <= $episodeCount; $i++) {
-            $tvEpisode = $tvEpisodes[$i - 1];
-            $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $i]);
-            if (!$episode) {
-                $episode = new Episode();
-            }
-            $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
-            $episode->setEpisodeNumber($tvEpisode['episode_number']);
-            $episode->setName($tvEpisode['name']);
-            $episode->setOverview($tvEpisode['overview']);
-            $episode->setRuntime($tvEpisode['runtime']);
-            $episode->setSeason($season);
-            $episode->setSeasonNumber($tvEpisode['season_number']);
-            $episode->setSeries($series);
-            $episode->setStillPath($tvEpisode['still_path']);
-            $episode->setTmdbId($tvEpisode['id']);
-            $this->episodeRepository->save($episode, $i === $episodeCount);
+        foreach ($tvEpisodes as $tvEpisode) {
+            $this->seasonAndEpisode($series, $seasonNumber, $tvEpisode);
         }
+        $this->episodeRepository->flush();
+//        for ($i = 1; $i <= $episodeCount; $i++) {
+//            $tvEpisode = $tvEpisodes[$i - 1];
+//            $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $i]);
+//            if (!$episode) {
+//                $episode = new Episode();
+//            }
+//            $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
+//            $episode->setEpisodeNumber($tvEpisode['episode_number']);
+//            $episode->setName($tvEpisode['name']);
+//            $episode->setOverview($tvEpisode['overview']);
+//            $episode->setRuntime($tvEpisode['runtime']);
+//            $episode->setSeason($season);
+//            $episode->setSeasonNumber($tvEpisode['season_number']);
+//            $episode->setSeries($series);
+//            $episode->setStillPath($tvEpisode['still_path']);
+//            $episode->setTmdbId($tvEpisode['id']);
+//            $this->episodeRepository->save($episode, $i === $episodeCount);
+//        }
+    }
+
+    public function seasonAndEpisode(Serie $series, Season $season, array $tvEpisode): void
+    {
+        $episode = $this->episodeRepository->findOneBy(['series' => $series, 'season' => $season, 'episodeNumber' => $tvEpisode['episode_number']]);
+        if ($episode) {
+            return;
+        }
+        $episode = new Episode();
+        $episode->setAirDate($this->dateService->newDateImmutable($tvEpisode['air_date'], 'Europe/Paris'));
+        $episode->setEpisodeNumber($tvEpisode['episode_number']);
+        $episode->setName($tvEpisode['name']);
+        $episode->setOverview($tvEpisode['overview']);
+        $episode->setRuntime($tvEpisode['runtime']);
+        $episode->setSeason($season);
+        $episode->setSeasonNumber($tvEpisode['season_number']);
+        $episode->setSeries($series);
+        $episode->setStillPath($tvEpisode['still_path']);
+        $episode->setTmdbId($tvEpisode['id']);
+        $this->episodeRepository->save($episode);
     }
 
     public function collectEpisodeDurations($tv): array

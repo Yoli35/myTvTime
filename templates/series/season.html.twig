@@ -220,11 +220,11 @@
                                                 </div>
                                             {% endif %}
                                         </div>
-                                        <div class="abstract">
-                                            {% if episode.overview|length %}
+                                        {% if episode.overview|length %}
+                                            <div class="abstract">
                                                 <div class="info">{{ episode.overview }}</div>
-                                            {% endif %}
-                                        </div>
+                                            </div>
+                                        {% endif %}
                                         <div class="episode-viewing">
                                             {% if episode.viewing is defined %}
                                                 {% set viewed = episode.viewing.viewedAt %}
@@ -370,7 +370,14 @@
                 if (result === "ok") {
                     const infos = input.closest(".infos");
                     const h4 = infos.querySelector("h4");
-                    h4.innerHTML += ' ' + substituteName;
+                    let h3 = infos.querySelector("h3");
+                    if (!h3) {
+                        h3 = document.createElement("h3");
+                        infos.insertBefore(h3, h4);
+                    } else {
+                        h3 = infos.querySelector("h3");
+                    }
+                    h3.innerHTML = substituteName;
                     const still = infos.parentElement.querySelector(".still");
                     const episodeName = still.querySelector(".episode-name");
                     episodeName.innerHTML = substituteName;

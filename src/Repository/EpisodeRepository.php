@@ -29,6 +29,11 @@ class EpisodeRepository extends ServiceEntityRepository
         return $episode;
     }
 
+    public function flush(): void
+    {
+        $this->_em->flush();
+    }
+
 //    /**
 //     * @return Episode[] Returns an array of Episode objects
 //     */
