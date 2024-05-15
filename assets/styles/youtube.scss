@@ -1498,6 +1498,10 @@
                 gap: .5rem;
                 padding: .5rem;
 
+                &.invert {
+                    flex-direction: column-reverse;
+                }
+
                 .video {
                     align-items: center;
                     border-radius: .25rem;

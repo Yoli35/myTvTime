@@ -67,6 +67,7 @@
                             <a href="https://www.youtube.com/playlist?list={{ playlist.playlistId }}" target="_blank" class="btn btn-primary" data-title="{{ 'Watch on Youtube'|trans }}"><i class="fab fa-youtube"></i></a>
                             <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}" class="btn btn-primary" data-title="{{ 'Reload'|trans }}"><i class="fas fa-arrows-rotate"></i></a>
                             <div id="copy-link" data-link="{{ playlist.playlistId }}" class="btn btn-primary" data-title="{{ 'Copy playlist ID'|trans }}"><i class="fas fa-copy"></i></div>
+                            <div id="sort-list" class="btn btn-primary" data-title="{{ 'Toggle videos order'|trans }}"><i class="fas fa-sort"></i></div>
                         </div>
                     </div>
                 </div>

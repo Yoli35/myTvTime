@@ -34,6 +34,13 @@ export class YoutubePlaylistModule {
                 gThis.flashMessage('success', 'Link copied to clipboard!', '');
             });
         });
+
+        const toggleSortListDiv = document.querySelector('#sort-list');
+        toggleSortListDiv.addEventListener('click', (e) => {
+            e.preventDefault();
+            const videos = document.querySelector('.videos');
+            videos.classList.toggle('invert');
+        });
     }
 
     setAddListener(e) {
