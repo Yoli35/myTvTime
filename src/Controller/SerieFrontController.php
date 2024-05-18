@@ -748,9 +748,9 @@ class SerieFrontController extends AbstractController
         $this->seasonRepository->save($season, true);
 
         $tvEpisodes = $tvSeason['episodes'];
-        $episodeCount = count($tvEpisodes);
+        $season = $this->seasonRepository->findOneBy(['series' => $series, 'seasonNumber' => $seasonNumber]);
         foreach ($tvEpisodes as $tvEpisode) {
-            $this->seasonAndEpisode($series, $seasonNumber, $tvEpisode);
+            $this->seasonAndEpisode($series, $season, $tvEpisode);
         }
         $this->episodeRepository->flush();
 //        for ($i = 1; $i <= $episodeCount; $i++) {
