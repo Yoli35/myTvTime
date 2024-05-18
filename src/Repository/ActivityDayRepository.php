@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Activity;
 use App\Entity\ActivityDay;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -17,7 +18,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ActivityDayRepository extends ServiceEntityRepository
 {
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(
+        private readonly ManagerRegistry        $registry,
+    )
     {
         parent::__construct($registry, ActivityDay::class);
     }
@@ -45,17 +48,18 @@ class ActivityDayRepository extends ServiceEntityRepository
         }
     }
 
-    public function getActivityDays(int $activityId, int $offset = 0, int $limit = 999999): array
+    public function getActivityMaximums(Activity $activity): array
     {
-        $qb = $this->createQueryBuilder('ad');
-        $qb->select('ad')
-            ->where('ad.activity = :activityId')
-            ->setParameter('activityId', $activityId)
-            ->orderBy('ad.day', 'DESC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
+        $sql = "SELECT "
+            . "MAX(`distance`) as max_distance, "
+            . "MAX(`exercise_result`) as max_exercise, "
+            . "MAX(`move_result`) as max_move, "
+            . "MAX(`stand_up_result`) as max_stand_up, "
+            . "MAX(`steps`) as max_steps "
+            . "FROM `activity_day` "
+            . "WHERE `activity_id`=" . $activity->getId();
 
-        return $qb->getQuery()->getResult();
+        return $this->getResultSet($sql);
     }
 
     public function checkChallenge($activityId, $discipline, $value, $year, $month, $start, $end): array
@@ -77,12 +81,8 @@ class ActivityDayRepository extends ServiceEntityRepository
                 . "AND `day` <= '" . $end . "' "
                 . "ORDER BY day";
         }
-//        dump($sql);
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAllAssociative();
+        return $this->getResultSet($sql);
     }
 
     public function getMonthRingCount($activityId, $month): array
@@ -97,12 +97,8 @@ class ActivityDayRepository extends ServiceEntityRepository
             . "   `activity_id`=" . $activityId . " "
             . "AND "
             . "    MONTH(`day`) = " . $month;
-//        dump($sql);
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAllAssociative();
+        return $this->getResultSet($sql);
     }
 
     public function getWeekCount($activityId, $discipline, $week): array
@@ -113,12 +109,8 @@ class ActivityDayRepository extends ServiceEntityRepository
             . "AND `" . $discipline . "` > 0 "
             . "AND WEEK(`day`) = " . $week . " "
             . "ORDER BY day";
-//        dump($sql);
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAllAssociative();
+        return $this->getResultSet($sql);
     }
 
     public function getCurrentMonthStats(User $user, int $month): array
@@ -134,11 +126,8 @@ class ActivityDayRepository extends ServiceEntityRepository
             . 'WHERE MONTH(ad.`day`)=' . $month . ' AND YEAR(ad.`day`)=YEAR(NOW()) '
             . '	AND DATE(ad.`day`)<DATE(NOW())'
             . '	AND a.`user_id`=' . $user->getId();
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
 
-        return $resultSet->fetchAllAssociative();
+        return $this->getResultSet($sql);
     }
 
     public function getLast30DaysStats(User $user): array
@@ -149,13 +138,19 @@ class ActivityDayRepository extends ServiceEntityRepository
             . 'SUM(ad.`exercise_result`) as total_exercise, AVG(ad.`exercise_result`) as average_exercise, '
             . 'SUM(ad.`move_result`) as total_move, AVG(ad.`move_result`) as average_move, '
             . 'MIN(ad.`stand_up_result`) as min_stand_up, MAX(ad.`stand_up_result`) as max_stand_up, AVG(ad.`stand_up_result`) as average_stand_up, '
-		    . 'DATE_SUB(DATE(NOW()), INTERVAL 1 DAY) as end, '
-		    . 'DATE_SUB(DATE(NOW()), INTERVAL 1 MONTH) as start '
+            . 'DATE_SUB(DATE(NOW()), INTERVAL 1 DAY) as end, '
+            . 'DATE_SUB(DATE(NOW()), INTERVAL 1 MONTH) as start '
             . 'FROM `activity_day` ad '
             . 'INNER JOIN `activity` a ON a.id=ad.`activity_id` '
             . 'WHERE DATE(ad.`day`)>=DATE_SUB(DATE(NOW()), INTERVAL 1 MONTH) '
             . '	AND DATE(ad.`day`)<DATE(NOW())'
             . '	AND a.`user_id`=' . $user->getId();
+
+            return $this->getResultSet($sql);
+    }
+
+    private function getResultSet($sql): array
+    {
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();

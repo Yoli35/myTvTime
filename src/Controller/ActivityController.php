@@ -140,6 +140,9 @@ class ActivityController extends AbstractController
         $goals['standUp'] = $activity->getStandUpGoals()->toArray();
         $goals['standUp'][count($goals['standUp']) - 1]->setEnd($now);
 
+        $activityDays = $this->activityDayRepository->findBy(['activity' => $activity], ['day' => 'ASC']);
+        $activityMaximums = $this->activityDayRepository->getActivityMaximums($activity);
+
         $breadcrumb = [
             ['name' => $this->translator->trans('Home'), 'url' => $this->generateUrl('app_home')],
             ['name' => $this->translator->trans('Activity'), 'url' => $this->generateUrl('app_activity_index')],
@@ -156,7 +159,8 @@ class ActivityController extends AbstractController
             'periods' => $periods,
             'goals' => $goals,
             'days' => $days,
-            'activityDays' => $this->activityDayRepository->findBy(['activity' => $activity], ['day' => 'ASC']),
+            'activityDays' => $activityDays,
+            'activityMaximums' => $activityMaximums[0],
             'years' => $years,
             'currentWeek' => $currentWeek,
             'currentYear' => $currentYear,

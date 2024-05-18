@@ -109,7 +109,7 @@
                         <div class="graph">
                             <div class="wrapper move">
                                 {% for d in activityDays %}
-                                    <div class="item move" style="height: {{ d.moveResult * 80 / 1660 }}px" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.moveResult }}KCal"></div>
+                                    <div class="item move" style="height: {{ d.moveResult * 80 / activityMaximums.max_move }}px" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.moveResult }}KCal"></div>
                                 {% endfor %}
                             </div>
                         </div>
@@ -129,7 +129,25 @@
                         <div class="graph">
                             <div class="wrapper exercise">
                                 {% for d in activityDays %}
-                                    <div class="item exercise" style="height: {{ d.exerciseResult * 80 / 433 }}px" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.exerciseResult }} {{ 'minutes'|trans }}"></div>
+                                    <div class="item exercise" style="height: {{ d.exerciseResult * 80 / activityMaximums.max_exercise }}px" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.exerciseResult }} {{ 'minutes'|trans }}"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-numbers">
+                        <div class="graph">
+                            <div class="wrapper steps">
+                                {% for d in activityDays %}
+                                    <div class="item steps" style="height: {{ d.steps * 80 / activityMaximums.max_steps }}px" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.steps }} {{ 'steps'|trans }}"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-numbers">
+                        <div class="graph">
+                            <div class="wrapper distance">
+                                {% for d in activityDays %}
+                                    <div class="item distance" style="height: {{ d.distance * 80 / activityMaximums.max_distance }}px" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.steps }} {{ 'km'|trans }}"></div>
                                 {% endfor %}
                             </div>
                         </div>

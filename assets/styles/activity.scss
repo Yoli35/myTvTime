@@ -1012,7 +1012,7 @@
                 background-color: var(--activity-move-fade);
             }
 
-            &.exercise {
+            &.exercise, &.steps, &.distance {
                 background-color: var(--activity-exercise-fade);
             }
 
@@ -1028,6 +1028,10 @@
 
                 &.exercise {
                     background-color: var(--activity-exercise);
+                }
+
+                &.steps, &.distance {
+                    background-color: var(--activity-steps);
                 }
             }
         }
