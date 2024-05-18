@@ -197,17 +197,17 @@ class YoutubeController extends AbstractController
                 'dbChannel' => $this->getChannel($snippet->getChannelId(), $dbChannels),
             ];
         }, $this->getYoutubeVideo($ytVideoIds)->getItems());
-        dump($ytVideoIds, $ytVideos);
+//        dump($ytVideoIds, $ytVideos);
 //        $ytVideos = array_combine($ytVideoIds, $ytVideos);
 
-        dump([
-            'items' => $playlistItems,
+//        dump([
+//            'items' => $playlistItems,
 //            'videos' => $dbVideos,
-            'ytVideoIds' => $ytVideoIds,
-            'ytVideos' => $ytVideos,
-            'ytVideo 0' => current($ytVideos),
-            'dbChannels' => $dbChannels,
-        ]);
+//            'ytVideoIds' => $ytVideoIds,
+//            'ytVideos' => $ytVideos,
+//            'ytVideo 0' => current($ytVideos),
+//            'dbChannels' => $dbChannels,
+//        ]);
 
         $videos = array_map(function ($ytVideo) use ($user, $youtubePlaylist, $dbChannels) {
             $snippet = $ytVideo['snippet'];
@@ -1280,7 +1280,6 @@ class YoutubeController extends AbstractController
         }
         return 'rgb(' . floor($r / $n) . ',' . floor($g / $n) . ',' . floor($b / $n) . ')';
     }
-
 
     #[Route('/youtube/settings/save', name: 'youtube_settings_save', methods: ['GET'])]
     public function saveSettings(Request $request): Response

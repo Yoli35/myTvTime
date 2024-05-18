@@ -105,6 +105,35 @@
                             </div>
                         </div>
                     </div>
+                    <div class="activity-numbers">
+                        <div class="graph">
+                            <div class="wrapper move">
+                                {% for d in activityDays %}
+                                    <div class="item move" style="height: {{ d.moveResult * 80 / 1660 }}px" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.moveResult }}KCal"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+{#                        <div class="value-types">#}
+{#                            <label for="select-value-type">{{ 'Select a data type'|trans }}#}
+{#                                <select id="select-value-type">#}
+{#                                    <option value="move" selected>{{ 'Move'|trans }}</option>#}
+{#                                    <option value="steps">{{ 'Steps'|trans }}</option>#}
+{#                                    <option value="distance">{{ 'Distance'|trans }}</option>#}
+{#                                    <option value="exercise">{{ 'Exercise'|trans }}</option>#}
+{#                                    <option value="stand-up">{{ 'Stand up'|trans }}</option>#}
+{#                                </select>#}
+{#                            </label>#}
+{#                        </div>#}
+                    </div>
+                    <div class="activity-numbers">
+                        <div class="graph">
+                            <div class="wrapper exercise">
+                                {% for d in activityDays %}
+                                    <div class="item exercise" style="height: {{ d.exerciseResult * 80 / 433 }}px" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.exerciseResult }} {{ 'minutes'|trans }}"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                     {% for year in years %}
                         {% for week in year %}
                             {% if week.0.week == currentWeek and week.0.day|date("Y") == currentYear %}

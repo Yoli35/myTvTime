@@ -959,9 +959,11 @@
 }
 
 .activity-numbers {
+    align-items: center;
     display: flex;
     gap: .5rem;
     margin-block-start: 1rem;
+    max-width: 100%;
 
     .current-month, .last-month {
         .activity-stats {
@@ -991,6 +993,49 @@
                 }
             }
         }
+    }
+
+    .graph {
+        display: flex;
+        overflow-x: auto;
+        padding: .5rem;
+
+        .wrapper {
+            align-items: flex-end;
+            border-radius: .25rem;
+            display: flex;
+            gap: .0625rem;
+            height: 5.5rem;
+            padding: .25rem;
+
+            &.move {
+                background-color: var(--activity-move-fade);
+            }
+
+            &.exercise {
+                background-color: var(--activity-exercise-fade);
+            }
+
+            .item {
+                background-color: var(--gradient-ardoise-80);
+                border-radius: .125rem;
+                flex-grow: 1;
+                min-width: .25rem;
+
+                &.move {
+                    background-color: var(--activity-move);
+                }
+
+                &.exercise {
+                    background-color: var(--activity-exercise);
+                }
+            }
+        }
+    }
+
+    .value-types {
+        flex-grow: 1;
+        flex-shrink: 0;
     }
 }
 

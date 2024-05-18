@@ -64,7 +64,8 @@ class ActivityController extends AbstractController
         $monthCount = $arr[0];
 //        dump($monthCount);
 
-        $days = $this->activityDayRepository->getActivityDays($activity->getId());
+//        $days = $this->activityDayRepository->getActivityDays($activity->getId());
+        $days = $this->activityDayRepository->findBy(['activity' => $activity], ['day' => 'DESC']);
         $dayCount = count($days);
 
         if (!$dayCount) {
@@ -80,7 +81,8 @@ class ActivityController extends AbstractController
         $missingDayIsToday = $results['missing day is today'];
 
         if ($missingDayCount) {
-            $days = $this->activityDayRepository->getActivityDays($activity->getId());
+//            $days = $this->activityDayRepository->getActivityDays($activity->getId());
+            $days = $this->activityDayRepository->findBy(['activity' => $activity], ['day' => 'DESC']);
             $dayCount = count($days);
             if ($missingDayIsToday) {
                 $this->addFlash("success", $this->translator->trans("Hello, today is added to your activity"));
@@ -100,7 +102,7 @@ class ActivityController extends AbstractController
         }
 
         $yearIndex = count($years) - 1;
-        $weekIndex = $days[$dayCount-1]->getWeek();
+        $weekIndex = $days[$dayCount - 1]->getWeek();
 //        dump([
 //            'days' => $days,
 //            'day count' => $dayCount,
@@ -154,6 +156,7 @@ class ActivityController extends AbstractController
             'periods' => $periods,
             'goals' => $goals,
             'days' => $days,
+            'activityDays' => $this->activityDayRepository->findBy(['activity' => $activity], ['day' => 'ASC']),
             'years' => $years,
             'currentWeek' => $currentWeek,
             'currentYear' => $currentYear,
@@ -181,38 +184,37 @@ class ActivityController extends AbstractController
                 $dayCount--;
                 $dayIndex++;
                 continue;
-            } else {
-                if (!$moveBreak) {
-                    $moveResult = $day->isMoveRingCompleted();
-                    if ($moveResult) {
-                        $moveCount++;
-                    } else {
-                        $moveBreak = true;
-                    }
+            }
+            if (!$moveBreak) {
+                $moveResult = $day->isMoveRingCompleted();
+                if ($moveResult) {
+                    $moveCount++;
+                } else {
+                    $moveBreak = true;
                 }
-                if (!$exerciseBreak) {
-                    $exerciseResult = $day->isExerciseRingCompleted();
-                    if ($exerciseResult) {
-                        $exerciseCount++;
-                    } else {
-                        $exerciseBreak = true;
-                    }
+            }
+            if (!$exerciseBreak) {
+                $exerciseResult = $day->isExerciseRingCompleted();
+                if ($exerciseResult) {
+                    $exerciseCount++;
+                } else {
+                    $exerciseBreak = true;
                 }
-                if (!$standUpBreak) {
-                    $standUpResult = $day->isStandUpRingCompleted();
-                    if ($standUpResult) {
-                        $standUpCount++;
-                    } else {
-                        $standUpBreak = true;
-                    }
+            }
+            if (!$standUpBreak) {
+                $standUpResult = $day->isStandUpRingCompleted();
+                if ($standUpResult) {
+                    $standUpCount++;
+                } else {
+                    $standUpBreak = true;
                 }
-                if ($moveBreak && $exerciseBreak && $standUpBreak) {
-                    break;
-                }
+            }
+            if ($moveBreak && $exerciseBreak && $standUpBreak) {
+                break;
             }
         }
 
-        return ['dayCount'=>$dayCount, 'move' => $moveCount, 'exercise' => $exerciseCount, 'standUp' => $standUpCount];
+        return ['dayCount' => $dayCount, 'move' => $moveCount, 'exercise' => $exerciseCount, 'standUp' => $standUpCount];
     }
 
     public function checkForMissingDays(Activity $activity, array $days, $now): array
