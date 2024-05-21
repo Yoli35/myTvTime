@@ -1336,6 +1336,11 @@
                     color: var(--gradient-ardoise-10);
                     width: 20rem;
                 }
+
+                input::placeholder {
+                    color: var(--gradient-orange-80);
+                    font-weight: 300;
+                }
             }
         }
     }

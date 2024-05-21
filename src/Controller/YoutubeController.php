@@ -282,16 +282,28 @@ class YoutubeController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $userId = $request->query->get('id');
+        $user = $this->userRepository->find($userId);
+        $locale = $request->getLocale();
         $sort = $request->query->get('sort');
         $order = $request->query->get('order');
         $offset = $request->query->get('offset', 0);
         $limit = $request->query->get('limit', 20);
+        $doReload = $request->query->get('dr', false);
         /** @var YoutubeVideo [] $vids */
         $vids = $this->videoRepository->findAllWithChannelByDateSQL($userId, $sort, $order, $offset, $limit);
 
-        return $this->json([
-            'results' => $this->getVideos($vids),
-        ]);
+        $arr['results'] = $this->getVideos($vids);
+
+        if ($doReload) {
+            $totalRuntime = $this->getTotalRuntime($user);
+            $firstView = $this->getFirstView($user)->format($locale == 'en' ? 'Y-d-m' : 'd/m/Y');
+            $videoCount = $this->getVideosCount($user);
+            $arr['h1innerText'] = $videoCount . ' ' . $this->translator->trans('videos') . ' ' . $this->translator->trans('since') . ' ' . $firstView;
+            $arr['videoCount'] = $videoCount;
+            $arr['time2Human'] = $this->getTime2human($totalRuntime);
+        }
+
+        return $this->json($arr);
     }
 
     #[Route('/{_locale}/youtube/video/{id}', name: 'app_youtube_video', requirements: ['_locale' => 'fr|en|de|es'])]

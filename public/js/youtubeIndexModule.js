@@ -27,7 +27,7 @@ export class YoutubeIndexModule {
         this.ytReload = document.getElementById('reload');
         this.moreButton = document.getElementById('more');
         this.searchOnYt = document.querySelector('.search-on-yt');
-        this.newListDialog = document.querySelector('#new-list-dialog');
+        // this.newListDialog = document.querySelector('#new-list-dialog');
         this.totalResults = 0;
         this.txt = {
             'episode': {'fr': 'Épisode', 'en': 'Episode', 'de': 'Episode', 'es': 'Episodio'},
@@ -91,8 +91,9 @@ export class YoutubeIndexModule {
         // });
     }
 
+    /*
     initNewListDialog() {
-        /** @type {HTMLDialogElement} */
+        /!** @type {HTMLDialogElement} *!/
         const dialog = gThis.newListDialog;
         const matches = dialog.querySelectorAll('.match-item');
 
@@ -150,7 +151,6 @@ export class YoutubeIndexModule {
             gThis.xhr.send();
         });
     }
-
     toggleMatch(match) {
         const input = match.querySelector('input[type=checkbox]');
         const settings = match.querySelector('.match-item-settings');
@@ -188,6 +188,7 @@ export class YoutubeIndexModule {
             // type.setAttribute('disabled', 'disabled');
         }
     }
+*/
 
     focusLink() {
         if (document.visibilityState === 'visible') {
@@ -320,6 +321,16 @@ export class YoutubeIndexModule {
 
                 gThis.videoList.insertBefore(newResult, gThis.seeMore);
             }
+            if (doReload) {
+                const h1 = document.getElementById('h1');
+                const h2 = document.getElementById('time-spend');
+                const videoCount = response['videoCount'];
+                const h1innerText = response['h1innerText'];
+                const time2Human = response['time2Human'];
+                h1.setAttribute("data-total-results", videoCount);
+                h1.innerHTML = h1innerText;
+                h2.innerText = time2Human;
+            }
             //
             // If everything is displayed, we make the 'See more results' button disappear
             //
@@ -328,10 +339,8 @@ export class YoutubeIndexModule {
             }
         }
 
-        if (doReload)
-            this.xhr.open("GET", this.app_youtube_more + '?id=' + this.userId + '&sort=' + sort + '&order=' + order + '&limit=' + current_results);
-        else
-            this.xhr.open("GET", this.app_youtube_more + '?id=' + this.userId + '&sort=' + sort + '&order=' + order + '&offset=' + current_results);
+        const url = this.app_youtube_more + '?id=' + this.userId + '&sort=' + sort + '&order=' + order + (doReload ? '&dr=1&limit=' : '&offset') + current_results
+        this.xhr.open("GET", url);
         this.xhr.send();
     }
 
@@ -414,6 +423,7 @@ export class YoutubeIndexModule {
         gThis.xhr.send();
     }
 
+   /*
     loadSeries(id) {
         const series = document.querySelector('.video-series-item[data-id="' + id + '"]');
         if (series.classList.contains('loaded')) {
@@ -474,7 +484,7 @@ export class YoutubeIndexModule {
         gThis.xhr.open("GET", this.app_youtube_video_series + id);
         gThis.xhr.send();
     }
-
+*/
     showStatus(response) {
         const status = response['status'];
         const message = '<strong>' + response['message'] + '</strong><br>' + response['subMessage'];
@@ -513,6 +523,7 @@ export class YoutubeIndexModule {
         return newTagButton;
     }
 
+    /*
     duration2Time(duration) {
 
         let time;
@@ -533,5 +544,6 @@ export class YoutubeIndexModule {
 
         return time;
     }
+    */
 }
 
