@@ -109,5 +109,10 @@ export class WatchProvidersModule {
                 watchProvider.classList.add("hidden");
             }
         });
+        const hiddenProviders = dialog.querySelectorAll('.watch-provider.hidden');
+        if (watchProviders.length - hiddenProviders.length === 1) {
+            const watchProvider = dialog.querySelector('.watch-provider:not(.hidden)');
+            watchProvider.querySelector('input').checked = true;
+        }
     }
 }
