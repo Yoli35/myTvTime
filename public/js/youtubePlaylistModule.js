@@ -119,6 +119,10 @@ export class YoutubePlaylistModule {
             flashMessageDiv.remove();
         });
         flashMessageDiv.appendChild(closeDiv);
+
+        setTimeout(() => {
+            flashMessageDiv.remove();
+        }, 30000);
     }
 }
 
