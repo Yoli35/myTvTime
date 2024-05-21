@@ -1538,7 +1538,7 @@ nav.active {
         backdrop-filter: blur(6px);
         -webkit-backdrop-filter: blur(6px);
         background-color: var(--gradient-ardoise-90-alpha-50);
-        border-radius: 1rem;
+        border-radius: .5rem;
         height: 200px;
         position: relative;
         width: 200px;
@@ -1579,7 +1579,7 @@ nav.active {
             color: var(--gradient-ardoise-20);
             font-family: "red hat light", monospace;
             font-size: 1rem;
-            font-weight: 300;
+            font-weight: 600;
             left: 50%;
             position: absolute;
             top: 50%;
@@ -1672,7 +1672,7 @@ nav.active {
 
     .hands {
         border: 1px solid var(--gradient-ardoise-50);
-        border-radius: 1rem;
+        border-radius: .5rem;
         height: 100%;
         inset: 0;
         position: absolute;
