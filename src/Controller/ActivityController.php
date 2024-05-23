@@ -48,7 +48,7 @@ class ActivityController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $now = $this->dateService->getNow("UTC", true);
+        $now = $this->dateService->getNow($user->getTimezone() ?? "UTC", true);
         $dayOfTheWeek = $now->format('N');
 
         $activity = $user->getActivity();
