@@ -267,11 +267,14 @@ class YoutubeController extends AbstractController
         $videos = array_filter($videos, function ($video) {
             return $video != null;
         });
+        $tagArr = $this->videoTagRepository->getTags();
         dump($videos);
+
 
         return $this->render('youtube/playlist.html.twig', [
             'playlist' => $playlist,
             'videoList' => $videos,
+            'tagArr' => $tagArr,
             'breadcrumb' => $this->youtubeBreadcrumb(),
         ]);
     }
@@ -313,10 +316,9 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $userAlreadyLinked = $request->query->get('user-already-linked');
 
-        $tags = $this->videoTagRepository->findAllByLabel();
-        $tagArr = array_map(function ($tag) {
-            return ['id' => $tag['id'], 'label' => $tag['label'], 'selected' => false];
-        }, $this->videoTagRepository->getTags());
+//        $tags = $this->videoTagRepository->findBy([], ['label' => 'ASC']);
+        $tagArr = $this->videoTagRepository->getTags();
+
         $description = preg_replace(
             [
                 '/(https:\/\/\S+)/',
@@ -346,7 +348,7 @@ class YoutubeController extends AbstractController
                 'video' => $youtubeVideo,
                 'description' => $description,
                 'tagArr' => $tagArr,
-                'other_tags' => array_diff($tags, $youtubeVideo->getTags()->toArray()),
+//                'other_tags' => array_diff($tags, $youtubeVideo->getTags()->toArray()),
                 'userAlreadyLinked' => $userAlreadyLinked,
                 'playlists' => $this->playlistRepository->getPlaylist($user->getId(), $youtubeVideo->getId()),
                 'previousVideo' => $previousVideo,
@@ -1272,6 +1274,9 @@ class YoutubeController extends AbstractController
 
     private function averageColor(string $url, int $precision = 2): string
     {
+        if (!@getimagesize($url)) {
+            return 'rgb(0,0,0)';
+        }
         $img = imagecreatefromjpeg($url);
         if (!$img) {
             return 'rgb(0,0,0)';

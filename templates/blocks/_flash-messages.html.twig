@@ -27,7 +27,9 @@
                     <div class="infos">
                         <div>
                             {{ message.name }}
-                            {% if message.original_name %} | {{ message.original_name }}{% endif %}
+                            {% if message.original_name %}
+                                {% if message.original_name != message.name %} | {{ message.original_name }}{% endif %}
+                            {% endif %}
                             {% if message.localized_name %} | {{ message.localized_name }}{% endif %}
                         </div>
                         <div>{{ 'Episode'|trans }} {{ 'S%02dE%02d'|format(message.alert_season_number, message.alert_episode_number) }}</div>

@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\YoutubeVideoTag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr;
+//use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,12 +17,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class YoutubeVideoTagRepository extends ServiceEntityRepository
 {
-    private ManagerRegistry $registry;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, YoutubeVideoTag::class);
-        $this->registry = $registry;
     }
 
     public function add(YoutubeVideoTag $entity, bool $flush = false): void
@@ -43,9 +41,9 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
-     */
+//    /**
+//     * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
+//     */
 //    public function findByLabel($query): array
 //    {
 //        return $this->createQueryBuilder('y')
@@ -57,19 +55,19 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
 //            ->getResult();
 //    }
 
-    /**
-     * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
-     */
-    public function findAllByLabel(): array
-    {
-        return $this->createQueryBuilder('y')
-            ->orderBy('y.label', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
+//    /**
+//     * @return YoutubeVideoTag[] Returns an array of YoutubeVideoTag objects
+//     */
+//    public function findAllSortByLabel(): array
+//    {
+//        return $this->createQueryBuilder('y')
+//            ->orderBy('y.label', 'ASC')
+//            ->getQuery()
+//            ->getResult();
+//    }
 
     public function getTags(): array{
-        $sql = "SELECT `id`, `label` "
+        $sql = "SELECT `id` as id, `label` as label, false as selected "
             . "FROM `youtube_video_tag` "
             . "ORDER BY `label`";
 
@@ -80,13 +78,13 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function findAllByVideoId($videoId): array
-    {
-        return $this->createQueryBuilder('yt')
-            ->innerJoin('yt.ytVideos', 'yv', Expr\Join::WITH, 'yv.id=' . $videoId)
-            ->getQuery()
-            ->getResult();
-    }
+//    public function findAllByVideoId($videoId): array
+//    {
+//        return $this->createQueryBuilder('yt')
+//            ->innerJoin('yt.ytVideos', 'yv', Expr\Join::WITH, 'yv.id=' . $videoId)
+//            ->getQuery()
+//            ->getResult();
+//    }
 
     public function findVideosTags($videoIds): array
     {
@@ -102,6 +100,7 @@ class YoutubeVideoTagRepository extends ServiceEntityRepository
 
         return $resultSet->fetchAllAssociative();
     }
+
 //    public function findOneBySomeField($value): ?YoutubeVideoTag
 //    {
 //        return $this->createQueryBuilder('y')

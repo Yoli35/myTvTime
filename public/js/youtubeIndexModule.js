@@ -229,13 +229,13 @@ export class YoutubeIndexModule {
         e.stopPropagation();
 
         const h1 = document.getElementById('h1');
-        const videos = document.querySelectorAll('.yt-video');
+        const ytResults = document.querySelectorAll('.yt-result');
         const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
         const sort = document.querySelector("#sort").value;
         const order = document.querySelector("#order").value;
 
         this.totalResults = parseInt(h1.getAttribute('data-total-results'));
-        let current_results = videos.length;
+        let current_results = ytResults.length;
 
         this.xhr.onload = function () {
             const response = JSON.parse(this.response);
@@ -243,8 +243,8 @@ export class YoutubeIndexModule {
             const count = results.length;
 
             if (doReload) {
-                videos.forEach(video => {
-                    video.closest('.yt-result').remove();
+                ytResults.forEach(ytResult => {
+                    ytResult.remove();
                 });
                 reload.classList.remove('active');
             }
@@ -339,7 +339,7 @@ export class YoutubeIndexModule {
             }
         }
 
-        const url = this.app_youtube_more + '?id=' + this.userId + '&sort=' + sort + '&order=' + order + (doReload ? '&dr=1&limit=' : '&offset') + current_results
+        const url = this.app_youtube_more + '?id=' + this.userId + '&sort=' + sort + '&order=' + order + (doReload ? '&dr=1&limit=' : '&offset=') + current_results
         this.xhr.open("GET", url);
         this.xhr.send();
     }

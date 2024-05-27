@@ -112,11 +112,11 @@
                         {% endif %}
                         {% for playlist in playlists %}
                             <div class="playlist-link">
-                                <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}">
+                                <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}#{{ video.id }}">
                                     <img src="{{ playlist.thumbnail_url }}" alt="{{ playlist.title }}">
                                 </a>
                                 <div class="title">
-                                    <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}">{{ playlist.title }}</a>
+                                    <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}#{{ video.id }}">{{ playlist.title }}</a>
                                 </div>
                             </div>
                         {% endfor %}

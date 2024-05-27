@@ -63,7 +63,7 @@
                             <div class="description">{{ playlist.description|nl2br }}</div>
                         {% endif %}
                         <div class="nb-videos{% if playlist.newVideos %} new{% endif %}">{{ playlist.playListCount }} {{ 'videos'|trans }}</div>
-                        <div class="actions d-flex">
+                        <div class="actions d-flex m-auto">
                             <a href="https://www.youtube.com/playlist?list={{ playlist.playlistId }}" target="_blank" class="btn btn-primary" data-title="{{ 'Watch on Youtube'|trans }}"><i class="fab fa-youtube"></i></a>
                             <a href="{{ path('app_youtube_playlist', {id: playlist.id}) }}" class="btn btn-primary" data-title="{{ 'Reload'|trans }}"><i class="fas fa-arrows-rotate"></i></a>
                             <div id="copy-link" data-link="{{ playlist.playlistId }}" class="btn btn-primary" data-title="{{ 'Copy playlist ID'|trans }}"><i class="fas fa-copy"></i></div>
@@ -72,8 +72,22 @@
                     </div>
                 </div>
                 <div class="videos">
+                    <div class="tags">
+                        <div class="add-tag">
+                            <div class="tags-field">
+                                <label for="new-tag">{{ 'Tags'|trans }}</label>
+                                <input id="new-tag" type="search" name="tag_query" list="other-tags" autocomplete="off" autofocus>
+                            </div>
+                        </div>
+{#                        {% for tag in playlist.tags %}#}
+{#                            <div class="tag">#}
+{#                                #{{ tag }}#}
+{#                                <div class="close" data-id="{{ tag.id }}"><i class="fas fa-times"></i></div>#}
+{#                            </div>#}
+{#                        {% endfor %}#}
+                    </div>
                     {% for video in videoList %}
-                        <div class="video{% if video.youtubeVideoId %} watched{% endif %}">
+                        <div class="video{% if video.youtubeVideoId %} watched{% endif %}"{% if video.youtubeVideoId %} id="{{ video.youtubeVideoId }}"{% endif %}>
                             <div class="video-stuff">
                                 <div class="thumbnail">
                                     <img src="{{ video.thumbnailUrl }}" alt="{{ video.title }}">
@@ -121,7 +135,8 @@
             {
             "app_youtube_video": "{{ path('app_youtube_video', {id: 0})|slice(0, -1) }}",
             "app_youtube_add_video": "{{ path('app_youtube_add_video') }}",
-            "app_youtube_remove_video": "{{ path('app_youtube_video_delete', {id: 0})|slice(0, -1) }}"
+            "app_youtube_remove_video": "{{ path('app_youtube_video_delete', {id: 0})|slice(0, -1) }}",
+            "tags": {{ tagArr|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
             }
         </div>
     </div>
