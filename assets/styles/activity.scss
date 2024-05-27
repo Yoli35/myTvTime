@@ -149,6 +149,10 @@
             }
         }
 
+        details {
+            width: 100%;
+        }
+
         .form {
             background-color: var(--gradient-ardoise-60-alpha-50);
             border-radius: .25em;
@@ -1011,6 +1015,11 @@
             gap: .0625rem;
             height: 2.5rem;
             padding: .25rem;
+            transition: height 300ms ease-in-out;
+
+            &:hover {
+                height: 5rem;
+            }
 
             &.move {
                 background-color: var(--activity-move-fade);
@@ -1018,6 +1027,10 @@
 
             &.exercise, &.steps, &.distance {
                 background-color: var(--activity-exercise-fade);
+            }
+
+            &.stand-up {
+                background-color: var(--activity-stand-up-fade);
             }
 
             .item-wrapper {
@@ -1047,6 +1060,10 @@
 
                     &.steps, &.distance {
                         background-color: var(--activity-steps);
+                    }
+
+                    &.stand-up {
+                        background-color: var(--activity-stand-up);
                     }
                 }
             }

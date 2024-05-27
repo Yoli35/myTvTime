@@ -59,107 +59,116 @@
                             <a href="{{ path('app_activity_edit', {id: activity.id}) }}">{{ 'Goals'|trans }}</a>
                         </button>
                     </div>
-                    <div class="periods">
-                        <h3>{{ 'Continuous period during which you have completed your rings'|trans }}</h3>
-                        <h4>{{ 'Number of days considered'|trans }} {{ periods.dayCount }}</h4>
-                        <div class="move">{{ 'Move'|trans }} {{ periods.move }} {{ (periods.move > 1 ? 'days':'day')|trans }}</div>
-                        <div class="exercise">{{ 'Exercise'|trans }} {{ periods.exercise }} {{ (periods.exercise > 1 ? 'days':'day')|trans }}</div>
-                        <div class="stand-up">{{ 'Stand up'|trans }} {{ periods.standUp }} {{ (periods.standUp > 1 ? 'days':'day')|trans }}</div>
-                    </div>
-                    <div class="activity-numbers">
-                        <div class="current-month">
-                            {% set n = stats.currentMonth.number_of_days %}
-                            <div>{{ 'Current month'|trans }} - {{ n }} {{ (n>1?'days':'day')|trans }}</div>
-                            <div class="activity-stats">
-                                {#                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.currentMonth.number_of_days }}</span></div> #}
-                                <div class="activity-stat total">{{ 'Total distance'|trans }}<span>{{ stats.currentMonth.total_distance }}</span>km</div>
-                                <div class="activity-stat average">{{ 'Average distance'|trans }}<span>{{ stats.currentMonth.average_distance|round(2) }}</span>km</div>
-                                <div class="activity-stat total">{{ 'Total steps'|trans }}<span>{{ stats.currentMonth.total_steps }}</span></div>
-                                <div class="activity-stat average">{{ 'Average steps'|trans }}<span>{{ stats.currentMonth.average_steps|round(0, 'floor') }}</span></div>
-                                <div class="activity-stat average">{{ 'Average step length'|trans }}<span>{{ (1000 * stats.currentMonth.total_distance / stats.currentMonth.total_steps)|round(2) }}</span>m</div>
-                                <div class="activity-stat total">{{ 'Total exercise'|trans }}<span>{{ stats.currentMonth.total_exercise }}</span>{{ 'minutes'|trans }}</div>
-                                <div class="activity-stat average">{{ 'Average exercise'|trans }}<span>{{ stats.currentMonth.average_exercise|round(1) }}</span>{{ 'minutes'|trans }}</div>
-                                <div class="activity-stat total">{{ 'Total move'|trans }}<span>{{ stats.currentMonth.total_move }}</span>KCal</div>
-                                <div class="activity-stat average">{{ 'Average move'|trans }}<span>{{ stats.currentMonth.average_move|round(2) }}</span>KCal</div>
-                                <div class="activity-stat">{{ 'Min stand up'|trans }}<span>{{ stats.currentMonth.min_stand_up }}</span>{{ 'h'|trans }}</div>
-                                <div class="activity-stat">{{ 'Max stand up'|trans }}<span>{{ stats.currentMonth.max_stand_up }}</span>{{ 'h'|trans }}</div>
-                                <div class="activity-stat average">{{ 'Average stand up'|trans }}<span>{{ stats.currentMonth.average_stand_up|round(1,'floor') }}</span>{{ 'h'|trans }}</div>
+                    <details>
+                        <summary>{{ 'Rings'|trans }}</summary>
+                        <div class="periods">
+                            <h3>{{ 'Continuous period during which you have completed your rings'|trans }}</h3>
+                            <h4>{{ 'Number of days considered'|trans }} {{ periods.dayCount }}</h4>
+                            <div class="move">{{ 'Move'|trans }} {{ periods.move }} {{ (periods.move > 1 ? 'days':'day')|trans }}</div>
+                            <div class="exercise">{{ 'Exercise'|trans }} {{ periods.exercise }} {{ (periods.exercise > 1 ? 'days':'day')|trans }}</div>
+                            <div class="stand-up">{{ 'Stand up'|trans }} {{ periods.standUp }} {{ (periods.standUp > 1 ? 'days':'day')|trans }}</div>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>{{ 'Activity numbers'|trans }}</summary>
+                        <div class="activity-numbers">
+                            <div class="current-month">
+                                {% set n = stats.currentMonth.number_of_days %}
+                                <div>{{ 'Current month'|trans }} - {{ n }} {{ (n>1?'days':'day')|trans }}</div>
+                                <div class="activity-stats">
+                                    {#                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.currentMonth.number_of_days }}</span></div> #}
+                                    <div class="activity-stat total">{{ 'Total distance'|trans }}<span>{{ stats.currentMonth.total_distance }}</span>km</div>
+                                    <div class="activity-stat average">{{ 'Average distance'|trans }}<span>{{ stats.currentMonth.average_distance|round(2) }}</span>km</div>
+                                    <div class="activity-stat total">{{ 'Total steps'|trans }}<span>{{ stats.currentMonth.total_steps }}</span></div>
+                                    <div class="activity-stat average">{{ 'Average steps'|trans }}<span>{{ stats.currentMonth.average_steps|round(0, 'floor') }}</span></div>
+                                    <div class="activity-stat average">{{ 'Average step length'|trans }}<span>{{ (1000 * stats.currentMonth.total_distance / stats.currentMonth.total_steps)|round(2) }}</span>m</div>
+                                    <div class="activity-stat total">{{ 'Total exercise'|trans }}<span>{{ stats.currentMonth.total_exercise }}</span>{{ 'minutes'|trans }}</div>
+                                    <div class="activity-stat average">{{ 'Average exercise'|trans }}<span>{{ stats.currentMonth.average_exercise|round(1) }}</span>{{ 'minutes'|trans }}</div>
+                                    <div class="activity-stat total">{{ 'Total move'|trans }}<span>{{ stats.currentMonth.total_move }}</span>KCal</div>
+                                    <div class="activity-stat average">{{ 'Average move'|trans }}<span>{{ stats.currentMonth.average_move|round(2) }}</span>KCal</div>
+                                    <div class="activity-stat">{{ 'Min stand up'|trans }}<span>{{ stats.currentMonth.min_stand_up }}</span>{{ 'h'|trans }}</div>
+                                    <div class="activity-stat">{{ 'Max stand up'|trans }}<span>{{ stats.currentMonth.max_stand_up }}</span>{{ 'h'|trans }}</div>
+                                    <div class="activity-stat average">{{ 'Average stand up'|trans }}<span>{{ stats.currentMonth.average_stand_up|round(1,'floor') }}</span>{{ 'h'|trans }}</div>
+                                </div>
+                            </div>
+                            <div class="last-month">
+                                <div>{{ 'Last number_of_days days'|trans({'number_of_days': stats.lastMonth.number_of_days}) }} - {{ 'Start'|trans }} {{ stats.lastMonth.start|format_date('medium') }} - {{ 'End'|trans }} {{ stats.lastMonth.end|format_date('medium') }}</div>
+                                <div class="activity-stats">
+                                    {#                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.lastMonth.number_of_days }}</span></div> #}
+                                    <div class="activity-stat total">{{ 'Total distance'|trans }}<span>{{ stats.lastMonth.total_distance }}</span>km</div>
+                                    <div class="activity-stat average">{{ 'Average distance'|trans }}<span>{{ stats.lastMonth.average_distance|round(2) }}</span>km</div>
+                                    <div class="activity-stat total">{{ 'Total steps'|trans }}<span>{{ stats.lastMonth.total_steps }}</span></div>
+                                    <div class="activity-stat average">{{ 'Average steps'|trans }}<span>{{ stats.lastMonth.average_steps|round(0, 'floor') }}</span></div>
+                                    <div class="activity-stat average">{{ 'Average step length'|trans }}<span>{{ (1000 * stats.lastMonth.total_distance / stats.lastMonth.total_steps)|round(2) }}</span>m</div>
+                                    <div class="activity-stat total">{{ 'Total exercise'|trans }}<span>{{ stats.lastMonth.total_exercise }}</span>{{ 'minutes'|trans }}</div>
+                                    <div class="activity-stat average">{{ 'Average exercise'|trans }}<span>{{ stats.lastMonth.average_exercise|round(1) }}</span>{{ 'minutes'|trans }}</div>
+                                    <div class="activity-stat total">{{ 'Total move'|trans }}<span>{{ stats.lastMonth.total_move }}</span>KCal</div>
+                                    <div class="activity-stat average">{{ 'Average move'|trans }}<span>{{ stats.lastMonth.average_move|round(2) }}</span>KCal</div>
+                                    <div class="activity-stat">{{ 'Min stand up'|trans }}<span>{{ stats.lastMonth.min_stand_up }}</span>{{ 'h'|trans }}</div>
+                                    <div class="activity-stat">{{ 'Max stand up'|trans }}<span>{{ stats.lastMonth.max_stand_up }}</span>{{ 'h'|trans }}</div>
+                                    <div class="activity-stat average">{{ 'Average stand up'|trans }}<span>{{ stats.lastMonth.average_stand_up|round(1,'floor') }}</span>{{ 'h'|trans }}</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="last-month">
-                            <div>{{ 'Last number_of_days days'|trans({'number_of_days': stats.lastMonth.number_of_days}) }} - {{ 'Start'|trans }} {{ stats.lastMonth.start|format_date('medium') }} - {{ 'End'|trans }} {{ stats.lastMonth.end|format_date('medium') }}</div>
-                            <div class="activity-stats">
-                                {#                                <div class="activity-stat">{{ 'Number of days'|trans }}<span>{{ stats.lastMonth.number_of_days }}</span></div> #}
-                                <div class="activity-stat total">{{ 'Total distance'|trans }}<span>{{ stats.lastMonth.total_distance }}</span>km</div>
-                                <div class="activity-stat average">{{ 'Average distance'|trans }}<span>{{ stats.lastMonth.average_distance|round(2) }}</span>km</div>
-                                <div class="activity-stat total">{{ 'Total steps'|trans }}<span>{{ stats.lastMonth.total_steps }}</span></div>
-                                <div class="activity-stat average">{{ 'Average steps'|trans }}<span>{{ stats.lastMonth.average_steps|round(0, 'floor') }}</span></div>
-                                <div class="activity-stat average">{{ 'Average step length'|trans }}<span>{{ (1000 * stats.lastMonth.total_distance / stats.lastMonth.total_steps)|round(2) }}</span>m</div>
-                                <div class="activity-stat total">{{ 'Total exercise'|trans }}<span>{{ stats.lastMonth.total_exercise }}</span>{{ 'minutes'|trans }}</div>
-                                <div class="activity-stat average">{{ 'Average exercise'|trans }}<span>{{ stats.lastMonth.average_exercise|round(1) }}</span>{{ 'minutes'|trans }}</div>
-                                <div class="activity-stat total">{{ 'Total move'|trans }}<span>{{ stats.lastMonth.total_move }}</span>KCal</div>
-                                <div class="activity-stat average">{{ 'Average move'|trans }}<span>{{ stats.lastMonth.average_move|round(2) }}</span>KCal</div>
-                                <div class="activity-stat">{{ 'Min stand up'|trans }}<span>{{ stats.lastMonth.min_stand_up }}</span>{{ 'h'|trans }}</div>
-                                <div class="activity-stat">{{ 'Max stand up'|trans }}<span>{{ stats.lastMonth.max_stand_up }}</span>{{ 'h'|trans }}</div>
-                                <div class="activity-stat average">{{ 'Average stand up'|trans }}<span>{{ stats.lastMonth.average_stand_up|round(1,'floor') }}</span>{{ 'h'|trans }}</div>
+                    </details>
+                    <details>
+                        <summary>{{ 'Activity graphs'|trans }}</summary>
+                        <div class="activity-numbers">
+                            <div class="graph">
+                                <div class="wrapper move">
+                                    {% for d in activityDays %}
+                                        <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.moveResult }}KCal">
+                                            <div class="item move" style="height: {{ d.moveResult * 100 / activityMaximums.max_move }}%"></div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="activity-numbers">
-                        <div class="graph">
-                            <div class="wrapper move">
-                                {% for d in activityDays %}
-                                    <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.moveResult }}KCal">
-                                        <div class="item move" style="height: {{ d.moveResult * 100 / activityMaximums.max_move }}%"></div>
-                                    </div>
-                                {% endfor %}
+                        <div class="activity-numbers">
+                            <div class="graph">
+                                <div class="wrapper exercise">
+                                    {% for d in activityDays %}
+                                        <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.exerciseResult }} {{ 'minutes'|trans }}">
+                                            <div class="item exercise" style="height: {{ d.exerciseResult * 100 / activityMaximums.max_exercise }}%"></div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
-                        {#                        <div class="value-types"> #}
-                        {#                            <label for="select-value-type">{{ 'Select a data type'|trans }} #}
-                        {#                                <select id="select-value-type"> #}
-                        {#                                    <option value="move" selected>{{ 'Move'|trans }}</option> #}
-                        {#                                    <option value="steps">{{ 'Steps'|trans }}</option> #}
-                        {#                                    <option value="distance">{{ 'Distance'|trans }}</option> #}
-                        {#                                    <option value="exercise">{{ 'Exercise'|trans }}</option> #}
-                        {#                                    <option value="stand-up">{{ 'Stand up'|trans }}</option> #}
-                        {#                                </select> #}
-                        {#                            </label> #}
-                        {#                        </div> #}
-                    </div>
-                    <div class="activity-numbers">
-                        <div class="graph">
-                            <div class="wrapper exercise">
-                                {% for d in activityDays %}
-                                    <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.exerciseResult }} {{ 'minutes'|trans }}">
-                                        <div class="item exercise" style="height: {{ d.exerciseResult * 100 / activityMaximums.max_exercise }}%"></div>
-                                    </div>
-                                {% endfor %}
+                        <div class="activity-numbers">
+                            <div class="graph">
+                                <div class="wrapper steps">
+                                    {% for d in activityDays %}
+                                        <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.steps }} {{ 'steps'|trans }}">
+                                            <div class="item steps" style="height: {{ d.steps * 100 / activityMaximums.max_steps }}%"></div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="activity-numbers">
-                        <div class="graph">
-                            <div class="wrapper steps">
-                                {% for d in activityDays %}
-                                    <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.steps }} {{ 'steps'|trans }}">
-                                        <div class="item steps" style="height: {{ d.steps * 100 / activityMaximums.max_steps }}%"></div>
-                                    </div>
-                                {% endfor %}
+                        <div class="activity-numbers">
+                            <div class="graph">
+                                <div class="wrapper distance">
+                                    {% for d in activityDays %}
+                                        <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.distance }} {{ 'km'|trans }}">
+                                            <div class="item distance" style="height: {{ d.distance * 100 / activityMaximums.max_distance }}%"></div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="activity-numbers">
-                        <div class="graph">
-                            <div class="wrapper distance">
-                                {% for d in activityDays %}
-                                    <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.distance }} {{ 'km'|trans }}">
-                                        <div class="item distance" style="height: {{ d.distance * 100 / activityMaximums.max_distance }}%"></div>
-                                    </div>
-                                {% endfor %}
+                        <div class="activity-numbers">
+                            <div class="graph">
+                                <div class="wrapper stand-up">
+                                    {% for d in activityDays %}
+                                        <div class="item-wrapper" data-title="{{ d.day|format_date('relative_full')|capitalize }}<br>{{ d.standUpResult }} / 24">
+                                            <div class="item stand-up" style="height: {{ d.standUpResult * 100 / activityMaximums.max_stand_up }}%"></div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </details>
                     {% for year in years %}
                         {% for week in year %}
                             {% if week.0.week == currentWeek and week.0.day|date("Y") == currentYear %}
