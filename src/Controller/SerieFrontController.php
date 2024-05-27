@@ -333,10 +333,16 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/render/translation/save', name: 'app_series_render_translation_save', methods: ['GET'])]
+    #[Route('/render/translation/save', name: 'app_series_render_translation_save', methods: ['POST'])]
     public function translationSave(Request $request): Response
     {
-        $translations = json_decode($request->query->get('t'), true);
+//        $translations = json_decode($request->query->get('t'), true);
+        $data = json_decode($request->getContent(), true);
+        $translations = $data['translations'];
+        dump([
+            'data' => $data,
+            'translations' => $translations,
+        ]);
         $n = count($translations);
 
         $filename = '../translations/tags.' . $translations[0][1] . '.yaml';
@@ -348,7 +354,8 @@ class SerieFrontController extends AbstractController
         }
         fclose($res);
 
-        return $this->json(["result" => ($n - 1) . " ligne" . (($n - 1) > 1 ? "s" : "") . " ajoutée" . (($n - 1) > 1 ? "s" : "") . " au fichier « tags." . $translations[0][1] . ".yaml »."]);
+        $n--;
+        return $this->json(["result" => $n . " ligne" . ($n > 1 ? "s" : "") . " ajoutée" . ($n > 1 ? "s" : "") . " au fichier « tags." . $translations[0][1] . ".yaml »."]);
     }
 
     #[Route('/quote', name: 'app_series_get_quote', methods: ['GET'])]

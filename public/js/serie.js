@@ -103,13 +103,28 @@ function getTranslations(modal) {
 }
 
 function saveTranslations(translations) {
-
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        console.log(JSON.parse(this.response));
-    }
-    xhr.open("GET", _app_serie_render_translation_save + "?t=" + JSON.stringify(translations));
-    xhr.send();
+    console.log({translations});
+    console.log(JSON.stringify(translations));
+    // const xhr = new XMLHttpRequest();
+    // xhr.onload = function () {
+    //     console.log(JSON.parse(this.response));
+    // }
+    // xhr.open("GET", _app_serie_render_translation_save + "?t=" + JSON.stringify(translations));
+    // xhr.send();
+    fetch(_app_serie_render_translation_save, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            translations: translations
+        })
+    }).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+        console.log(data);
+    });
 }
 
 function opening(back, modal) {
