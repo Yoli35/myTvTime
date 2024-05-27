@@ -282,7 +282,7 @@ body {
                 a {
                     img {
                         border-radius: .5rem 0 0 .5rem;
-                        height: 10rem;
+                        height: 6rem;
                         object-fit: cover;
                         width: 10rem;
                         display: block;
@@ -332,10 +332,9 @@ body {
             .infos {
                 @include flex-col(flex-start, center);
                 flex-grow: 1;
-                gap: .5rem;
                 height: 100%;
-                padding: 1rem;
-                width: 22rem;
+                padding-inline-end: 1rem;
+                position: relative;
 
                 .silence {
                     align-items: center;
@@ -344,11 +343,14 @@ body {
                     background-color: var(--gradient-ardoise-80);
                     border: 1px solid var(--gradient-ardoise-60);
                     border-radius: 50%;
+                    bottom: .5rem;
                     color: var(--gradient-ardoise-10);
                     cursor: pointer;
                     justify-content: center;
                     margin-left: auto;
                     padding: .25rem;
+                    position: absolute;
+                    right: .5rem;
 
                     &:hover {
                         background-color: var(--gradient-ardoise-70);

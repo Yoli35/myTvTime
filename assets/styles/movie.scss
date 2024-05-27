@@ -430,15 +430,15 @@
             border-radius: .5rem;
             flex-shrink: 0;
             flex-wrap: wrap;
+            font-size: clamp(12px, 1.5vw, 32px);
+            line-height: 1.2em;
             padding: 1em;
             width: 100%;
 
             .title {
-                font-size: 2em;
-                //font-size: clamp(1rem, 3vw + 1rem, 3rem);
+                font-size: 3em;
                 font-weight: bold;
                 margin-right: auto;
-                padding: .5em;
             }
 
             .watch-providers {
@@ -451,25 +451,25 @@
 
                 .provider-list {
                     @include flex-row(center, start);
-                    gap: .5rem;
+                    gap: .5em;
                     overflow-x: auto;
 
                     .provider {
                         @include flex-col(center, center);
                         background-color: var(--gradient-ardoise-70-alpha-50);
-                        border-radius: .5rem;
+                        border-radius: .5em;
                         //flex-shrink: 0;
                         flex-shrink: 0;
-                        padding: 0.125rem .5rem .5rem .5rem;
+                        padding: 0.125em .5em .5rm .5em;
 
                         .logo {
                             border-radius: .25em;
                             overflow: hidden;
 
                             img {
-                                height: 3rem;
+                                height: 3em;
                                 object-fit: cover;
-                                width: 3rem;
+                                width: 3em;
                             }
                         }
 
@@ -575,8 +575,8 @@
 
             .overview {
                 @include flex-col(flex-start, flex-start);
-                margin-block: 1rem;
-                padding-inline: 1rem;
+                margin-block: 1em;
+                padding-inline: 1em;
                 width: 100%;
 
                 .the-overview {
@@ -588,13 +588,13 @@
                     border: 2px solid var(--mtt-body-color);
                     border-radius: 50%;
                     cursor: pointer;
-                    margin-bottom: .5rem;
+                    margin-bottom: .5em;
                     width: 20px;
                 }
 
                 .overview-textarea {
                     @include flex-col(flex-start, flex-start);
-                    gap: .25rem;
+                    gap: .25em;
                     height: 0;
                     overflow: hidden;
                     transition: height 300ms ease-in-out, padding 300ms ease-in-out;
@@ -602,16 +602,16 @@
                     width: 100%;
 
                     &.open {
-                        height: 10rem;
+                        height: 10em;
 
                         textarea {
-                            padding: .5rem;
+                            padding: .5em;
                         }
                     }
 
                     textarea {
                         background-color: var(--gradient-ardoise-80-alpha-50);
-                        border-radius: .25rem;
+                        border-radius: .25em;
                         height: 100%;
                         width: 100%;
 
@@ -622,7 +622,7 @@
 
                     .overview-buttons {
                         @include flex-row(center, flex-end);
-                        gap: .25rem;
+                        gap: .25em;
                         width: 100%;
                     }
                 }
@@ -663,7 +663,7 @@
             }
 
             .productions {
-                padding: 20px 0 0 20px;
+                padding: 1.25em 0 0 1.25em;
 
                 > div {
                     @include flex-row(flex-start, unset);
@@ -686,7 +686,7 @@
 
         .movie-user {
             @include flex-col(flex-start, flex-start);
-            gap: 1rem;
+            gap: 1em;
 
             .favorite {
                 @include flex-col();

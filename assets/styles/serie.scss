@@ -1982,7 +1982,7 @@
                     .list {
                         @include flex-row(stretch, flex-start);
                         gap: .5rem;
-                        //margin-inline: auto;
+                        margin-inline: auto;
                         overflow-x: auto;
 
                         a {
@@ -2255,12 +2255,12 @@
 
                             .viewed-at {
                                 background-color: var(--gradient-green-60);
-                                border-radius: .25rem;
-                                padding-block: .0625rem;
-                                padding-inline: .5rem;
+                                border-radius: .125rem;
+                                padding-block: .0625em;
+                                padding-inline: .5em;
                                 position: absolute;
                                 right: .25rem;
-                                top: 1.75rem;
+                                top: 2.25em;
                             }
                         }
 
