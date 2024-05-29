@@ -264,13 +264,45 @@ export class YoutubePlaylistModule {
         flashMessageDiv.innerHTML = message + (subMessage.length ? ('<br>' + subMessage) : '');
         flashMessagesDiv.appendChild(flashMessageDiv);
 
-        const closeDiv = document.createElement('div');
+        /*const closeDiv = document.createElement('div');
         closeDiv.classList.add('close');
         closeDiv.innerHTML = '<i class="fa-solid fa-xmark"></i>';
         closeDiv.addEventListener('click', () => {
             flashMessageDiv.remove();
         });
-        flashMessageDiv.appendChild(closeDiv);
+        flashMessageDiv.appendChild(closeDiv);*/
+
+        // <div class="closure-countdown">
+        //     <div>
+        //         <i class="fa-solid fa-xmark"></i>
+        //     </div>
+        //     <div class="circle-start"></div>
+        //     <div class="circle-end"></div>
+        // </div>
+        const closureCountdownDiv = document.createElement('div');
+        closureCountdownDiv.classList.add('closure-countdown');
+        const div1 = document.createElement('div');
+        div1.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        closureCountdownDiv.appendChild(div1);
+        const div2 = document.createElement('div');
+        div2.classList.add('circle-start');
+        closureCountdownDiv.appendChild(div2);
+        const div3 = document.createElement('div');
+        div3.classList.add('circle-end');
+        closureCountdownDiv.appendChild(div3);
+        flashMessageDiv.appendChild(closureCountdownDiv);
+
+        const closure = flashMessageDiv.querySelector('.closure-countdown');
+        const start = new Date();
+        const i = setInterval(() => {
+            const now = new Date();
+            const progress = 360 * (1 - ((now - start) / 30000) % 1);
+            closure.style.backgroundImage = `conic-gradient(var(--clr) 0deg, var(--clr) ${progress}deg, var(--cd) ${progress}deg, var(--cd) 360deg)`;
+        }, 100);
+        setTimeout(() => {
+            clearInterval(i);
+            closure.style.backgroundImage = 'none';
+        }, 30000);
 
         setTimeout(() => {
             flashMessageDiv.remove();
