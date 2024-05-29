@@ -445,11 +445,67 @@ body {
         color: var(--gradient-orange-90);
         cursor: pointer;
         display: flex;
-        font-size: 3rem;
-        height: 3rem;
+        font-size: 2rem;
+        height: 2rem;
         justify-content: center;
         margin-left: auto;
-        width: 3rem;
+        width: 2rem;
+    }
+}
+
+.closure-countdown {
+    --clr: var(--gradient-ardoise-10);
+    --bg: var(--gradient-ardoise-90);
+    --cd: var(--gradient-orange-70);
+
+    align-items: center;
+    border-radius: 50%;
+    color: var(--clr);
+    display: flex;
+    height: 1.5rem;
+    justify-content: center;
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+    width: 1.5rem;
+
+    div {
+        align-items: center;
+        background-color: var(--bg);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        height: 1.25rem;
+        position: relative;
+        width: 1.25rem;
+    }
+
+    .circle-start, .circle-end {
+        background-color: var(--clr);
+        border-radius: 50%;
+        box-shadow: 0 0 .125rem var(--clr), 0 0 .25rem var(--clr);
+        height: .25rem;
+        position: absolute;
+        left: .625rem;
+        top: .625rem;
+        width: .25rem;
+    }
+
+    .circle-start {
+        transform: rotate(0deg) translateY(-.6875rem);
+    }
+
+    .circle-end {
+        animation: countdown-end 30s linear infinite;
+    }
+
+    @keyframes countdown-end {
+        from {
+            transform: rotate(360deg) translateY(-.6875rem);
+        }
+        to {
+            transform: rotate(0deg) translateY(-.6875rem);
+        }
     }
 }
 
@@ -735,7 +791,7 @@ main {
 #search-dialog::backdrop,
 #set-visibility-dialog::backdrop,
 #watch-provider-dialog::backdrop {
-    background-color: #000000af;//var(--dialog-backdrop);
+    background-color: #000000af; //var(--dialog-backdrop);
 }
 
 #multi-people-dialog {

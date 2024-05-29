@@ -2,7 +2,9 @@ window.addEventListener("DOMContentLoaded", () => {
     const flashes = document.querySelectorAll(".flash-message");
 
     flashes.forEach(flash => {
-        flash.querySelector(".close").addEventListener("click", () => {
+
+        countdown(flash);
+        flash.querySelector(".closure-countdown").addEventListener("click", () => {
             closeFlash(flash);
         });
         flash.querySelector(".flash-accept")?.addEventListener("click", (e) => {
@@ -44,7 +46,7 @@ window.addEventListener("DOMContentLoaded", () => {
             xhr.open("GET", "/fr/series/alert/disable/" + id);
             xhr.send();
         });
-        setTimeout(()=>{
+        setTimeout(() => {
             closeFlash(flash);
         }, 30000);
     });
@@ -58,11 +60,26 @@ window.addEventListener("DOMContentLoaded", () => {
         flashMessagesDiv.removeChild(flashCloseAllDiv);
     });
 
+    function countdown(flash) {
+        /** @type {HTMLElement} */
+        const closure = flash.querySelector('.closure-countdown');
+        const start = new Date();
+        const i = setInterval(() => {
+            const now = new Date();
+            const progress = 360 * (1 - ((now - start) / 30000) % 1);
+            closure.style.backgroundImage = `conic-gradient(var(--clr) 0deg, var(--clr) ${progress}deg, var(--cd) ${progress}deg, var(--cd) 360deg)`;
+        }, 100);
+        setTimeout(() => {
+            clearInterval(i);
+            closure.style.backgroundImage = 'none';
+        }, 30000);
+    }
+
     function closeFlash(flash) {
-        setTimeout(()=>{
+        setTimeout(() => {
             flash.classList.add("hide");
         }, 0);
-        setTimeout(()=>{
+        setTimeout(() => {
             flash.classList.add("d-none");
             flash.parentElement.removeChild(flash);
 

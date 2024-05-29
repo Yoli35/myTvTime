@@ -38,7 +38,14 @@
                 {% else %}
                     {{ message|raw }}
                 {% endif %}
-                <div class="close"><i class="fa-solid fa-xmark"></i></div>
+                {#                <div class="close"><i class="fa-solid fa-xmark"></i></div> #}
+                <div class="closure-countdown">
+                    <div>
+                        <i class="fa-solid fa-xmark"></i>
+                    </div>
+                    <div class="circle-start"></div>
+                    <div class="circle-end"></div>
+                </div>
             </div>
         {% endfor %}
     {% endfor %}
