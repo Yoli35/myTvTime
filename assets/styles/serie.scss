@@ -2179,11 +2179,8 @@
                         width: 100%;
 
                         .still {
-                            //border-bottom: 0.5em solid var(--gradient-green-90);
-                            //border-left: 0.5em solid var(--gradient-green-90);
                             border-radius: .25rem 0 0 .25rem;
-                            //border-right: none;
-                            //border-top: 0.5em solid var(--gradient-green-90);
+                            flex-shrink: 0;
                             height: 100%;
                             position: relative;
                             width: 15em;
@@ -2288,7 +2285,8 @@
 
                         .infos {
                             @include flex-col(flex-start, flex-start);
-                            flex: 1;
+                            flex-grow: 1;
+                            flex-shrink: 0;
                             height: 100%;
                             padding: .5em;
                             //width: calc(100% - 30em);
@@ -2344,6 +2342,7 @@
                             border-left: 0.25em solid var(--gradient-ardoise-90);
                             border-radius: 0 1em 1em 0;
                             display: flex;
+                            flex-shrink: 0;
                             height: 100%;
                             width: 15em;
 

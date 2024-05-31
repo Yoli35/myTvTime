@@ -1827,7 +1827,7 @@ nav.active {
     background-color: var(--gradient-ardoise-80);
     color: var(--gradient-ardoise-10);
     gap: 1rem;
-    margin: auto 0 1rem 0;
+    margin-block-start: auto;
     padding-block: 1rem;
     width: 100%;
 
