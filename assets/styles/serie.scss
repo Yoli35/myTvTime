@@ -3973,7 +3973,7 @@
                     object-fit: cover;
                     opacity: 0;
                     transition: opacity 300ms ease-in-out;
-                    width: clamp(360px, 75vw, 1000px);
+                    width: clamp(360px, 75vw, 2000px);
 
                     &.show {
                         opacity: 1;
