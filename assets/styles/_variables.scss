@@ -866,8 +866,8 @@ $fa-font-path: "../webfonts";
 
 @mixin dialog($backdropColor: var(--gradient-ardoise-30-alpha-50)) {
     background-color: $backdropColor;
-    height: 100vh;
-    max-height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
     max-width: 100vw;
     opacity: 0;
     transition: opacity 300ms ease-in-out;
@@ -884,8 +884,8 @@ $fa-font-path: "../webfonts";
 
 @mixin dialog2($width: 20em, $backdropColor: var(--gradient-ardoise-30-alpha-50)) {
     background-color: $backdropColor;
-    height: 100vh;
-    max-height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
     max-width: 100vw;
     opacity: 0;
     transition: opacity 300ms ease-in-out;
@@ -905,7 +905,7 @@ $fa-font-path: "../webfonts";
         border-radius: 1em;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 0, 0, 0.25);
         color: var(--gradient-ardoise-20);
-        margin: calc(50vh - 6em) auto;
+        margin: calc(50dvh - 6em) auto;
         width: $width;
 
         .header {
@@ -959,8 +959,8 @@ $fa-font-path: "../webfonts";
 
 @mixin dialog3($width: 50%, $backdropColor: var(--gradient-ardoise-30-alpha-50)) {
     background-color: $backdropColor;
-    height: 100vh;
-    max-height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
     max-width: 100vw;
     opacity: 0;
     padding: 0;
@@ -982,8 +982,8 @@ $fa-font-path: "../webfonts";
         border-radius: 1em;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 0, 0, 0.25);
         color: var(--gradient-ardoise-20);
-        height: 90vh;
-        margin: 5vh auto;
+        height: 90dvh;
+        margin: 5dvh auto;
         width: $width;
 
         .header {
@@ -1010,7 +1010,7 @@ $fa-font-path: "../webfonts";
 
         .content {
             @include flex-col(flex-start, flex-start);
-            height: calc(90vh - 7.5em);
+            height: calc(90dvh - 7.5em);
             overflow: scroll;
             margin: 2em;
             width: calc(100% - 4em);
@@ -1231,8 +1231,8 @@ $fa-font-path: "../webfonts";
                     width: 100%;
 
                     .quarter {
-                        border-left: 1px solid var(--gradient-ardoise-60);
-                        color: var(--gradient-ardoise-60);
+                        border-left: 1px solid var(--gradient-ardoise-30);
+                        color: var(--gradient-ardoise-30);
                         height: 2em;
                         flex: 1;
                         padding-left: .25em;

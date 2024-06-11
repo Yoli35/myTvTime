@@ -1469,7 +1469,7 @@
             .playlist {
                 flex-direction: column;
                 flex-shrink: 0;
-                max-height: calc(100vh - 9rem);
+                max-height: calc(100dvh - 9rem);
                 overflow-y: auto;
                 position: sticky;
                 top: 6rem;

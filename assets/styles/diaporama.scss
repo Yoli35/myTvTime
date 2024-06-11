@@ -29,7 +29,7 @@
 
             img {
                 border: 1em solid var(--gradient-ardoise-20);
-                max-height: 95vh;
+                max-height: 95dvh;
                 max-width: 90vw;
                 object-fit: cover;
                 opacity: 0;
@@ -62,8 +62,8 @@
                 img {
                     border: .25em solid var(--gradient-grey-20);
                     cursor: pointer;
-                    max-height: 4vh;
-                    max-width: 4vh;
+                    max-height: 4dvh;
+                    max-width: 4dvh;
                     object-fit: cover;
                     opacity: 1;
                 }

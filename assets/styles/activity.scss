@@ -599,14 +599,13 @@
 
         .week {
             @include flex-col(start, start);
-            gap: 1rem;
             width: 100%;
 
             .days {
                 @include flex-row(stretch, space-evenly);
                 background-color: var(--gradient-ardoise-60-alpha-50);
                 border-radius: .25em;
-                height: 14.5em;
+                height: 16.25em;
                 overflow: hidden;
                 padding: 1em;
                 width: 100%;
@@ -646,20 +645,24 @@
                             border-radius: .25em;
                             font-weight: 400;
                             gap: .5em;
-                            padding: .5em 1em;
+                            padding: .25em 1em;
 
                             .value {
-                                &:nth-child(1) {
-                                    color: var(--activity-move);
+                                span {
+                                    font-variant-caps: small-caps;
                                 }
+                            }
 
-                                &:nth-child(2) {
-                                    color: var(--activity-exercise);
-                                }
+                            .value.move {
+                                color: var(--activity-move);
+                            }
 
-                                &:nth-child(3) {
-                                    color: var(--activity-stand-up);
-                                }
+                            .value.exercise {
+                                color: var(--activity-exercise);
+                            }
+
+                            .value.stand-up {
+                                color: var(--activity-stand-up);
                             }
                         }
                     }
@@ -1316,125 +1319,3 @@
         }
     }
 }
-
-/*
-@media (prefers-color-scheme: light) {
-
-    .activity {
-        .header {
-            //color: var(--gradient-ardoise-30);
-
-            .animated-h1 {
-                color: var(--gradient-ardoise-10);
-            }
-
-            .clock {
-                .face {
-                    .number {
-                        color: var(--gradient-ardoise-90);
-                    }
-
-                    .unit {
-                        background-color: var(--gradient-ardoise-90);
-                    }
-                }
-
-                .username, .time {
-                    color: var(--gradient-ardoise-90);
-                }
-
-                .date {
-                    background-color: transparent;
-                    color: var(--gradient-ardoise-90);
-                }
-
-                .hands {
-                    border: 1px solid var(--gradient-ardoise-100);
-                }
-            }
-        }
-
-        main {
-            .recent-activity {
-                .days {
-                    color: var(--gradient-ardoise-10);
-
-                    .day {
-                        background-color: var(--gradient-ardoise-80);
-
-                        &:hover {
-                            background-color: var(--gradient-ardoise-60);
-                            color: var(--gradient-ardoise-90);
-
-                            .activity-of-the-day {
-                                .stand-up {
-                                    .block-body {
-                                        .details {
-                                            .wrapper {
-                                                .graduations {
-                                                    .quarter {
-                                                        border-left: 1px solid var(--gradient-ardoise-90);
-                                                        color: var(--gradient-ardoise-90);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        .activity-of-the-day {
-                            .move, .exercise, .stand-up {
-                                background-color: var(--gradient-grey-40-alpha-20);
-                            }
-
-                            .move {
-                                .block-body {
-                                    .details {
-                                        .detail:nth-child(2) {
-                                            background-color: var(--gradient-grey-40-alpha-20);
-                                        }
-                                    }
-                                }
-                            }
-
-                            .stand-up {
-                                .block-body {
-                                    .details {
-                                        .wrapper {
-                                            .graduations {
-                                                .quarter {
-                                                    border-left: 1px solid var(--gradient-ardoise-90);
-                                                    color: var(--gradient-ardoise-90);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            .week {
-                .days {
-                    background-color: var(--gradient-ardoise-80);
-
-                    &:hover {
-                        background-color: var(--gradient-ardoise-60);
-                    }
-                }
-            }
-        }
-    }
-
-    #activity-dialog {
-        background-color: var(--gradient-ardoise-90-alpha-80);
-
-        &::backdrop {
-            background-color: #000000af;
-        }
-    }
-}*/

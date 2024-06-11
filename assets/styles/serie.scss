@@ -1927,7 +1927,7 @@
         article {
             @include flex-col(flex-start, flex-start);
             gap: 1rem;
-            min-height: 50vh;
+            min-height: 50dvh;
             width: 100%;
 
             section {
@@ -2183,14 +2183,14 @@
                             flex-shrink: 0;
                             height: 100%;
                             position: relative;
-                            width: 15em;
+                            width: 20em;
                             z-index: 0;
 
                             img {
                                 border-radius: 0;
                                 height: 100%;
                                 object-fit: cover;
-                                width: 15em;
+                                width: 100%;
                             }
 
                             .episode-number {
@@ -2344,7 +2344,7 @@
                             display: flex;
                             flex-shrink: 0;
                             height: 100%;
-                            width: 15em;
+                            width: 10em;
 
                             .view, .vote {
                                 display: flex;
@@ -2833,7 +2833,7 @@
             background-color: var(--gradient-ardoise-80-alpha-50);
             border-radius: .5rem;
             color: var(--gradient-ardoise-10);
-            //min-height: 50vh;
+            //min-height: 50dvh;
             padding-block-end: 1rem;
             padding-inline: 1rem;
             width: 100%;
@@ -3200,7 +3200,7 @@
             }
 
             .watch-provider-list {
-                max-height: calc(80vh - 10rem);
+                max-height: calc(80dvh - 10rem);
                 overflow-y: scroll;
                 padding-inline: 10px;
                 width: 100%;
@@ -3408,7 +3408,7 @@
     @include dialog2(50rem);
 
     .overlay {
-        margin: calc(50vh - 15rem) auto;
+        margin: calc(50dvh - 15rem) auto;
 
         .content {
 
@@ -3510,7 +3510,7 @@
         border-radius: 50%;
         gap: 1rem;
         height: 12rem;
-        margin: calc(50vh - 5rem) auto;
+        margin: calc(50dvh - 5rem) auto;
         width: 12rem;
 
         .dot {
@@ -3549,7 +3549,7 @@
         border-radius: 50%;
         gap: 1rem;
         height: 12rem;
-        margin: calc(50vh - 5rem) auto;
+        margin: calc(50dvh - 5rem) auto;
         width: 12rem;
         animation: global-turn 3s infinite ease-in-out;
 
@@ -4168,7 +4168,7 @@
 
 .person {
     @include flex-100(stretch, start);
-    min-height: 50vh;
+    min-height: 50dvh;
 
     &:has(.error) {
         align-items: center;
@@ -4182,7 +4182,7 @@
         background-color: var(--gradient-ardoise-80-alpha-50);
         border-radius: 1rem;
         color: var(--gradient-ardoise-20);
-        min-height: 80vh;
+        min-height: 80dvh;
         width: 18rem;
 
         .profile {
