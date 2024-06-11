@@ -12,9 +12,13 @@
             </div>
             <div class="date">{{ day.day|format_date('short')|capitalize }}</div>
             <div class="values">
-                <div class="value">{{ day.moveResult }}</div>
-                <div class="value">{{ day.exerciseResult }}</div>
-                <div class="value">{{ day.standUpResult }}</div>
+                <div class="value move">{{ day.moveResult }} <span>kcal</span></div>
+                <div class="value exercise">{{ day.exerciseResult }} <span>min</span></div>
+                <div class="value stand-up">{{ day.standUpResult }} <span>up</span></div>
+            </div>
+            <div class="values">
+                <div class="value exercise">{{ day.steps }} <span>{{ 'steps'|trans }}</span></div>
+                <div class="value exercise">{{ day.distance }} <span>km</span></div>
             </div>
             <div id="day-{{ day.id }}-values" style="display: none">
                 {
