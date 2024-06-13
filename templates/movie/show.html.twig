@@ -341,7 +341,7 @@
                                         </div>
                                     </a>
                                 {% else %}
-                                    {{ 'No link'|trans }}
+                                    <div id="no-link">{{ 'No link'|trans }}</div>
                                 {% endfor %}
                             </div>
                         </div>
@@ -782,6 +782,10 @@
                         name.value = "";
                         url.value = "";
                         provider.value = "0";
+                        const noLink = document.querySelector("#no-link");
+                        if (noLink) {
+                            noLink.remove();
+                        }
                     }
                 }
                 xhr.open("POST", form.action);
