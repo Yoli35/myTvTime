@@ -179,6 +179,7 @@
     .series {
         @include flex-col();
         flex-direction: column-reverse;
+        margin-block-start: .5rem;
 
         .wrapper {
             @include flex-col(flex-start, flex-start);
@@ -493,16 +494,12 @@
                         inset: 0;
                         position: absolute;
                         transition: border 100ms ease-in-out;
-
-                        &:hover {
-                            border: .25rem solid var(--gradient-ardoise-10);
-                            //outline-offset: -.25rem;
-                        }
                     }
 
                     &:hover {
-                        //animation: wobble 200ms;
-                        //scale: 1.02;
+                        .front {
+                            border: .25rem solid var(--gradient-orange-50);
+                        }
                     }
 
                     @keyframes wobble {
@@ -2750,7 +2747,6 @@
 
                     > div {
                         @include flex-100();
-                        background-color: var(--gradient-ardoise-40-alpha-50);
                         border-radius: .5rem;
                         flex-wrap: wrap;
                         gap: 1rem;
@@ -4595,8 +4591,9 @@
 
                         .network-list {
                             @include flex-row();
+                            gap: .5rem;
                             position: absolute;
-                            right: -.5rem;
+                            right: -.25rem;
                             top: 0;
 
                             .network-item {
@@ -4643,6 +4640,31 @@
                                     .network-name {
                                         display: flex;
                                     }
+                                }
+                            }
+                        }
+
+                        .network-list-back {
+                            @include flex-row();
+                            position: absolute;
+                            right: -.5rem;
+                            top: 0;
+
+                            .network-item-back {
+                                @include flex-row();
+                                border: .5rem solid transparent;
+                                border-radius: 50%;
+                                height: 4.5rem;
+                                margin-top: -1.25rem;
+                                width: 4.5rem;
+                                z-index: -1;
+                            }
+                        }
+
+                        &:hover {
+                            .network-list-back {
+                                .network-item-back {
+                                    border-color: var(--gradient-orange-50);
                                 }
                             }
                         }

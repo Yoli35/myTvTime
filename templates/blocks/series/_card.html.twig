@@ -19,6 +19,11 @@
             <div>{{ serie.overview }}</div>
         </div>
         {% if serie.networks|length %}
+            <div class="network-list-back">
+                {% for network in serie.networks %}
+                    <div class="network-item-back"></div>
+                {% endfor %}
+            </div>
             <div class="network-list">
                 {% for network in serie.networks %}
                     <div class="network-item">
