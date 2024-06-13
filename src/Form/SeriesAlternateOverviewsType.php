@@ -14,7 +14,7 @@ class SeriesAlternateOverviewsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        dump($options);
+//        dump($options);
         $builder
             ->add('overview')
             ->add('locale', LanguageType::class, [

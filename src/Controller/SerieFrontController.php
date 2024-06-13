@@ -11,7 +11,6 @@ use App\Entity\Season;
 use App\Entity\Serie;
 use App\Entity\SerieAlternateOverview;
 use App\Entity\SerieLocalizedName;
-use App\Entity\SerieViewing;
 use App\Entity\Settings;
 use App\Entity\User;
 use App\Repository\AlertRepository;
@@ -295,7 +294,7 @@ class SerieFrontController extends AbstractController
     }
 
     #[Route('/overview/{id}', name: 'app_series_get_overview', methods: 'GET')]
-    public function getOverview(Request $request, $id, TMDBService $service, TranslatorInterface $translator): Response
+    public function getOverview(Request $request, int $id, TMDBService $service, TranslatorInterface $translator): Response
     {
         $type = $request->query->get("type");
         $content = null;
@@ -339,10 +338,10 @@ class SerieFrontController extends AbstractController
 //        $translations = json_decode($request->query->get('t'), true);
         $data = json_decode($request->getContent(), true);
         $translations = $data['translations'];
-        dump([
-            'data' => $data,
-            'translations' => $translations,
-        ]);
+//        dump([
+//            'data' => $data,
+//            'translations' => $translations,
+//        ]);
         $n = count($translations);
 
         $filename = '../translations/tags.' . $translations[0][1] . '.yaml';
@@ -499,7 +498,7 @@ class SerieFrontController extends AbstractController
     }
 
     #[Route('/settings/set/{settings}', name: 'app_set_settings', methods: ['GET'])]
-    public function setSettings($settings): Response
+    public function setSettings(string $settings): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $settings = json_decode($settings, true);
@@ -715,7 +714,7 @@ class SerieFrontController extends AbstractController
         ]);
     }
 
-    public function getSeasonsAndEpisodes($tvSeries, $series): void
+    public function getSeasonsAndEpisodes(array $tvSeries, Serie $series): void
     {
         $numberOfSeasons = $tvSeries['number_of_seasons'];
 
@@ -724,7 +723,7 @@ class SerieFrontController extends AbstractController
         }
     }
 
-    public function getLastSeasonAndEpisodes($tvSeries, $series): void
+    public function getLastSeasonAndEpisodes(array $tvSeries, Serie $series): void
     {
         $seasons = $tvSeries['seasons'];
         $lastSeason = $seasons[count($seasons) - 1];
@@ -735,7 +734,7 @@ class SerieFrontController extends AbstractController
         $this->getSeasonAndEpisodes($series, $seasonNumber);
     }
 
-    public function getSeasonAndEpisodes($series, $seasonNumber): void
+    public function getSeasonAndEpisodes(Serie $series, int $seasonNumber): void
     {
         $tvSeason = json_decode($this->TMDBService->getTvSeason($series->getSerieId(), $seasonNumber, "fr"), true);
 
@@ -800,7 +799,7 @@ class SerieFrontController extends AbstractController
         $this->episodeRepository->save($episode);
     }
 
-    public function collectEpisodeDurations($tv): array
+    public function collectEpisodeDurations(array $tv): array
     {
         $tmdb = $this->TMDBService;
         $id = $tv['id'];
@@ -825,7 +824,7 @@ class SerieFrontController extends AbstractController
         return $durations;
     }
 
-    public function episodeDuration($serieId, $seasonNumber, $episodeNumber): ?int
+    public function episodeDuration(int $serieId, int $seasonNumber, int $episodeNumber): ?int
     {
         $episode = json_decode($this->TMDBService->getTvEpisode($serieId, $seasonNumber, $episodeNumber, 'fr'), true);
         return $episode['runtime'];

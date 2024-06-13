@@ -154,7 +154,7 @@ class YoutubeController extends AbstractController
             return $b['publishedAt'] <=> $a['publishedAt'];
         });
 
-        dump(['playlists' => $playlistList]);
+//        dump(['playlists' => $playlistList]);
 
         return $this->render('youtube/playlists.html.twig', [
             'playlists' => $playlistList,
@@ -227,7 +227,7 @@ class YoutubeController extends AbstractController
             }
             if (!$playlistVideo || $performUpdate) {
                 if ($ytVideo['contentDetails'] == null) {
-                    dump('contentDetails is null');
+//                    dump('contentDetails is null');
                     return null;
                 }
                 $duration = $ytVideo['contentDetails']->getDuration();
@@ -268,7 +268,7 @@ class YoutubeController extends AbstractController
             return $video != null;
         });
         $tagArr = $this->videoTagRepository->getTags();
-        dump($videos);
+//        dump($videos);
 
 
         return $this->render('youtube/playlist.html.twig', [
@@ -693,7 +693,7 @@ class YoutubeController extends AbstractController
             if ($link == null) {
 
                 $videoListResponse = $this->getYoutubeVideo($providedLink);
-                dump($videoListResponse);
+//                dump($videoListResponse);
                 $items = $videoListResponse->getItems();
                 $item = $items[0];
                 $snippet = $item['snippet'];
@@ -887,7 +887,7 @@ class YoutubeController extends AbstractController
             }
             return $v;
         }, $videos);
-        dump($videos);
+//        dump($videos);
         return $this->json(['videos' => $videos]);
     }
 
@@ -897,7 +897,7 @@ class YoutubeController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $data = json_decode($request->query->get('data'), true);
-        dump(['data' => $data, 'request query' => $request->query->get('data')]);
+//        dump(['data' => $data, 'request query' => $request->query->get('data')]);
         $videos = $this->videoSeriesRepository->findVideosByFormat($user->getId(), $data['format'], $data['regex']);
         return $this->json(['videos' => $videos]);
     }
@@ -926,7 +926,7 @@ class YoutubeController extends AbstractController
 
         if ($performChecks || $p->getAverageColor() == null) {
             $playlist = $this->getPlaylist($playlistId);
-            dump(['playlist' => $playlist]);
+//            dump(['playlist' => $playlist]);
             $item = $playlist->getItems()[0];
             $snippet = $item->getSnippet();
             if ($snippet->getThumbnails()) {
@@ -1040,11 +1040,11 @@ class YoutubeController extends AbstractController
         $user = $this->getUser();
         $now = $this->dateService->getNowImmutable($user->getTimeZone() ?? 'Europe/Paris');
         $lastUpdateAt = $channel?->getLastUpdateAt();
-        dump([
-            'channel' => $channel,
-            'lastUpdateAt' => $lastUpdateAt,
-            'now' => $now,
-        ]);
+//        dump([
+//            'channel' => $channel,
+//            'lastUpdateAt' => $lastUpdateAt,
+//            'now' => $now,
+//        ]);
         $performChecks = $lastUpdateAt == null || $lastUpdateAt->diff($now)->days > 1;
 
         if ($performChecks) {

@@ -144,7 +144,7 @@ class SerieController extends AbstractController
         $history = $this->getHistory($user, $request->getLocale());
         $sevenDaysCount = $this->episodeViewingRepository->sevenDaysEpisodeUserHistory($user->getId(), ($this->dateService->getNow('UTC')->sub(new DateInterval("P7D")))->format('Y-m-d H:i:s'));
 
-        dump($series);
+//        dump($series);
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'numbers' => $numbers,
@@ -298,7 +298,7 @@ class SerieController extends AbstractController
                 'today_offset' => $i - $day_of_the_week,
             ];
         }
-        dump($episodesOfTheWeek);
+//        dump($episodesOfTheWeek);
         $seriesToWatch = $this->serieViewingRepository->getSeriesToWatch($user->getId(), $user->getPreferredLanguage() ?? $request->getLocale(), 40, 1);
         $seriesToWatch = array_filter($seriesToWatch, function ($serie) use ($seriesOfTheWeekIds) {
             return !in_array($serie['serie_id'], $seriesOfTheWeekIds);
@@ -437,13 +437,13 @@ class SerieController extends AbstractController
         $sort = $request->query->get('s', 'modified_at');
         $order = $request->query->get('o', 'DESC');
         $includeUpcomingEpisodes = $request->query->getInt('iue', 1);
-        dump(['includeUpcomingEpisodes' => $includeUpcomingEpisodes, 'order' => $order, 'sort' => $sort]);
+//        dump(['includeUpcomingEpisodes' => $includeUpcomingEpisodes, 'order' => $order, 'sort' => $sort]);
 
         $settings = $this->settingsRepository->findOneBy(['user' => $user, 'name' => 'series_to_end']);
         if (!$settings) {
             $settings = new Settings($user, 'series_to_end', ["includeUpcomingEpisodes" => 1, "order" => $order, "sort" => $sort]);
         }
-        dump($request->query->all());
+//        dump($request->query->all());
         $settings->setData(['includeUpcomingEpisodes' => $includeUpcomingEpisodes, 'order' => $order, 'sort' => $sort]);
         $this->settingsRepository->save($settings, true);
 
@@ -747,7 +747,7 @@ class SerieController extends AbstractController
         $page = $request->query->getInt('p', 1);
         $locale = $request->getLocale();
 
-        $standing = $this->TMDBService->getSeries(self::TOP_RATED, $page, $locale, $user->getTimezone());
+        $standing = $this->TMDBService->getSeries(self::TOP_RATED, $page, $locale, $user?->getTimezone() ?? 'Europe/Paris');
         $series = json_decode($standing, true);
         $imageConfig = $this->imageConfiguration->getConfig();
 
@@ -810,14 +810,14 @@ class SerieController extends AbstractController
         foreach ($filters as $key => $value) {
             $filterString .= "&$key=$value";
         }
-        dump([
-            '$filters' => $filters,
-            '$filterString' => $filterString,
-        ]);
+//        dump([
+//            '$filters' => $filters,
+//            '$filterString' => $filterString,
+//        ]);
         $standing = $this->TMDBService->getFilterTv($filterString);
-        dump($standing);
+//        dump($standing);
         $series = json_decode($standing, true);
-        dump($series);
+//        dump($series);
         $totalResults = $series['total_results'];
         $totalPages = $series['total_pages'];
         $imageConfig = $this->imageConfiguration->getConfig();
@@ -1137,11 +1137,11 @@ class SerieController extends AbstractController
         $serieAlternateOverview = $this->serieAlternateOverviewRepository->findOneBy(['series' => $serie]);
         $watchProviders = $this->watchProviderRepository->getWatchProviders($user->getCountry());
         $watchProviders = array_combine(array_column($watchProviders, 'name'), array_column($watchProviders, 'id'));
-        dump([
-            'serie' => $serie,
-            'serieAlternateOverview' => $serieAlternateOverview,
-            'watchProviders' => $watchProviders,
-        ]);
+//        dump([
+//            'serie' => $serie,
+//            'serieAlternateOverview' => $serieAlternateOverview,
+//            'watchProviders' => $watchProviders,
+//        ]);
         $form = $this->createForm(SeriesAlternateOverviewsType::class, $serieAlternateOverview, [
             'allow_extra_fields' => true,
             'overviews' => $serieAlternateOverview?->getOverviews(),
@@ -2329,7 +2329,7 @@ class SerieController extends AbstractController
                 }, array_unique($matches[1]));
 
                 if (count($matches)) {
-                    dump($matches);
+//                    dump($matches);
                     foreach ($matches as $match) {
                         $url = $match;
                         $url = preg_replace('/&.*$/', '', $url);
@@ -2710,7 +2710,7 @@ class SerieController extends AbstractController
 
         if (count($allWatchProviders) == 0) {
             $allWatchProviders = $this->watchProviderRepository->getWatchProviderList($country);
-            dump($allWatchProviders);
+//            dump($allWatchProviders);
         }
         $allWatchProviders = array_map(function ($provider) use ($imageConfig) {
             $provider['logo_path'] = $this->fullUrl('logo', 1, $provider['logo_path'], 'no_logo.png', $imageConfig);
@@ -2741,7 +2741,7 @@ class SerieController extends AbstractController
     public function seasonEpisodeVotes(array $episodes): array
     {
         $episodesVotes = [];
-        dump($episodes);
+//        dump($episodes);
         foreach ($episodes as $episode) {
             if (array_key_exists('viewing', $episode)) {
                 if ($episode['viewing'] == null) {
@@ -2833,7 +2833,7 @@ class SerieController extends AbstractController
         $list = $list['results'];
         if (count($list) == 0) {
             $list = $this->watchProviderRepository->getWatchProviderList($region);
-            dump($list);
+//            dump($list);
         }
         $watchProviderList = [];
         foreach ($list as $provider) {

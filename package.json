@@ -36,6 +36,7 @@
         "highlight.js": "^11.7.0",
         "ol": "^8.1.0",
         "react-hook-form": "^7.44.3",
+        "update-browserslist-db": "^1.0.16",
         "webpack": "^5.72",
         "webpack-cli": "^5.0.1"
     }

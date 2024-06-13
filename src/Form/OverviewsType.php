@@ -16,7 +16,7 @@ class OverviewsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        dump($options);
+//        dump($options);
         $builder
             ->add('type', ChoiceType::class, [
                 'attr' => ['class' => 'w100'],

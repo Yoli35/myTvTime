@@ -40,10 +40,10 @@ class YoutubeVideoSeriesRepository extends ServiceEntityRepository
         $format = $series->getFormat();
         $matches = $series->getMatches();
 
-        dump([
-            'series' => $series,
-            'matches' => $matches,
-        ]);
+//        dump([
+//            'series' => $series,
+//            'matches' => $matches,
+//        ]);
 
         $sql = "SELECT yv.`id` as id, yv.`link` as link, yv.`title` as title, "
             . "yv.thumbnail_high_path as thumbnailHighPath, yv.published_at as publishedAt, "
@@ -77,9 +77,9 @@ class YoutubeVideoSeriesRepository extends ServiceEntityRepository
                 . "ORDER BY yv.published_at ASC";
         }
 
-        dump([
-            'sql' => $sql,
-        ]);
+//        dump([
+//            'sql' => $sql,
+//        ]);
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
@@ -119,9 +119,9 @@ class YoutubeVideoSeriesRepository extends ServiceEntityRepository
                 . "ORDER BY yv.published_at ASC";
         }
 
-        dump([
-            'sql' => $sql,
-        ]);
+//        dump([
+//            'sql' => $sql,
+//        ]);
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)
