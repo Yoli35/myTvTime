@@ -719,7 +719,7 @@
                 }
             }
 
-            .movie-collection {
+            .movie-collection, .movie-links {
                 @include flex-col(flex-start, flex-start);
                 transition: opacity 300ms ease-in-out;
                 width: 100%;
@@ -766,6 +766,110 @@
                                 font-weight: 400;
                             }
                         }
+                    }
+                }
+            }
+
+            .movie-links {
+                .field {
+                    .list {
+                        gap: .5rem;
+
+                        a {
+                            .link {
+                                align-items: center;
+                                display: flex;
+                                flex-direction: column;
+                                gap: .5em;
+                                justify-content: center;
+
+                                img {
+                                    border-radius: .25em;
+                                    height: 5em;
+                                    width: 5em;
+                                }
+
+                                .name {
+                                    background-color: var(--gradient-orange-50);
+                                    border-radius: .25rem;
+                                    padding-inline: .5rem;
+                                    color: var(--gradient-ardoise-0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .movie-links-form {
+                display: flex;
+                flex-direction: column;
+                gap: .5em;
+                margin-block-start: 1em;
+                width: 100%;
+
+                .label {
+                    color: var(--gradient-ardoise-10);
+                    font-weight: 100;
+                    text-transform: uppercase;
+                }
+
+                form {
+                    background-color: var(--gradient-ardoise-10-alpha-20);
+                    border-radius: .5em;
+                    color: var(--gradient-ardoise-10);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1em;
+                    padding: 1em;
+                    width: 100%;
+
+                    .form-row {
+                        label {
+                            align-items: center;
+                            display: flex;
+                            flex-grow: 1;
+                            gap: 1rem;
+                            width: 100%;
+
+                            input {
+                                flex-grow: 1;
+                            }
+
+                            &:has(select) {
+                                span {
+                                    white-space: nowrap;
+                                }
+
+                                select {
+                                    flex-grow: 1;
+                                }
+                            }
+                        }
+
+                        .logo {
+                            background-color: var(--gradient-orange-50);
+                            color: var(--gradient-ardoise-0);
+                            height: 1.5em;
+                            width: 1.5em;
+
+                            img {
+                                border-radius: .125rem;
+                                height: 1.5em;
+                                width: 1.5em;
+                            }
+                        }
+                    }
+
+                    .add-a-link {
+                        background-color: var(--gradient-orange-50);
+                        border-radius: .25rem;
+                        border: 1px solid var(--gradient-orange-90);
+                        color: var(--gradient-orange-90);
+                        display: flex;
+                        gap: .5rem;
+                        margin-inline-start: auto;
+                        padding-inline: .5rem;
                     }
                 }
             }
@@ -863,6 +967,7 @@
     .images {
         @include images-tmdb;
     }
+
 }
 
 @media (min-width: 991.98px) {

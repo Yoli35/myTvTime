@@ -451,61 +451,68 @@ Release date: Date de sortie
 Update list: Mettre à jour la liste
 
 # Movies by name
+Enter a movie name: Entrer le nom d'un film
 Movie Search Result: Résultat de la recherche
 Movies Search Result: Résultat de la recherche
-Enter a movie name: Entrer le nom d'un film
 Select a Year: Sélectionner une année
 
 # Movies by genre
 Movies by genre: Films par genre
 
 # Movies by Year
+Month: Mois
 Movies by Year: Films par année
 Year: Année
-Month: Mois
 
 # Movie Detail
+Add a link to watch the movie: Ajouter un lien pour regarder le film
+Add a name: Ajouter un nom
 Add a new backdrop: Ajouter un nouveau fond d'écran
 Add a new poster: Ajouter une nouvelle affiche
-No backdrop: Pas de fond d'écran
-Drop media: Glisser-déposer une image
-Upload: Télécharger
-backdrop: fond d'écran
-poster: affiche
+Add an overview: Ajouter un résumé
+Average Vote: Moyenne
+Casting: Distribution
 Choose this backdrop: Choisir ce fond d'écran
+Created by: Crée par
+Crew: Équipe technique
+Digital: Digitale
 Drag and drop a file or click to browse: Glisser-déposer un fichier ou cliquer pour parcourir
+Drop media: Glisser-déposer une image
+Edit later: Modifier plus tard
+Edit the overview: Modifier le résumé
+Enter a name: Entrez un nom
+Home Page: Site web
+Hour: heure
+Hours: heures
+IMDB Page: Le film sur Imdb
+Minute: minute
+Minutes: minutes
+No backdrop: Pas de fond d'écran
+No link: Pas de lien
 Original Title: Titre original
 Overview: Résumé
-Add an overview: Ajouter un résumé
-Edit the overview: Modifier le résumé
-Edit later: Modifier plus tard
-Release Date: Date de sortie
-Release Dates: Dates de sortie
-Runtime: Durée
-Revenue: Revenus
-Average Vote: Moyenne
-Vote Count: Nombre de vote
-Home Page: Site web
-Visit the official Movie Website: Visiter le site officiel du film
-Visit the Movie Page on IMDB: Visiter la page du film sur IMDB
-IMDB Page: Le film sur Imdb
+Paste the link here: Coller le lien ici
 Personal IMDB Page: Page IMDB
+Physical: Physique
+Premiere: Première
 Production Companies: Compagnies de production
 Production Countries: Pays de production
-Crew: Équipe technique
-Casting: Distribution
 Recommendations: Recommendations
-Hour: heure
-Minute: minute
-Hours: heures
-Minutes: minutes
-Premiere: Première
+Release Date: Date de sortie
+Release Dates: Dates de sortie
+Revenue: Revenus
+Runtime: Durée
+Select a provider: Sélectionner un fournisseur
+TV: Télévision
 Theatrical (limited): Sortie en salle (limité)
 Theatrical: Sortie en salle
-Digital: Digitale
-Physical: Physique
-TV: Télévision
-Created by: Crée par
+Upload: Télécharger
+Visit the Movie Page on IMDB: Visiter la page du film sur IMDB
+Visit the official Movie Website: Visiter le site officiel du film
+Vote Count: Nombre de vote
+Where to watch: Où regarder
+backdrop: fond d'écran
+poster: affiche
 
 # Movie Lists
 Movie lists: Listes de films

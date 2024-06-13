@@ -46,6 +46,9 @@ class Movie
     #[ORM\ManyToMany(targetEntity: MovieList::class, mappedBy: 'movies')]
     private Collection $movieLists;
 
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $links = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $overview_fr = null;
 
@@ -83,6 +86,7 @@ class Movie
             'movieDbId' => $this->getMovieDbId(),
             'runtime' => $this->getRuntime(),
             'createdAt' => $this->getCreatedAt(),
+            'links' => $this->getLinks(),
             'overview_fr' => $this->getOverviewFr(),
             'overview_en' => $this->getOverviewEn(),
             'overview_de' => $this->getOverviewDe(),
@@ -314,5 +318,15 @@ class Movie
         }
 
         return $this;
+    }
+
+    public function getLinks(): ?array
+    {
+        return $this->links;
+    }
+
+    public function setLinks(?array $links): void
+    {
+        $this->links = $links;
     }
 }

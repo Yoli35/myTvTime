@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\DTO\MovieDirectLink;
+use App\DTO\MovieProvider;
 use App\Entity\Contribution;
 use App\Entity\Favorite;
 use App\Entity\Rating;
@@ -182,7 +184,6 @@ class MovieController extends AbstractController
     ], name: 'app_movie', requirements: ['_locale' => 'fr|en|de|es'])]
     public function show(Request $request, $id): Response
     {
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
         $imageConfig = $this->imageConfiguration->getConfig();
@@ -256,9 +257,21 @@ class MovieController extends AbstractController
                     $watchProviders = null;
             }
         }
-//        dump([
-//            'watchProviders' => $watchProviders,
-//        ]);
+        $language = $user?->getPreferredLanguage() ?? $locale;
+        $region = $user?->getCountry() ?? 'FR';
+        $mps = json_decode($this->tmdbService->getMovieWatchProviderList($language, $region), true);
+        $mps = $mps['results'];
+        $movieProviders = [];
+        usort($mps, function ($a, $b) {
+            return $a['provider_name'] <=> $b['provider_name'];
+        });
+        foreach ($mps as $mp) {
+            $movieProviders[$mp['provider_id']] = new MovieProvider($mp['display_priorities'], $mp['display_priority'], $mp['logo_path'], $mp['provider_name'], $mp['provider_id']);
+        }
+        dump([
+            'watchProviders' => $watchProviders,
+            'movieProviders' => $movieProviders,
+        ]);
 
         $standing = $this->tmdbService->getMovieReleaseDates($id);
         $releaseDates = json_decode($standing, true);
@@ -291,6 +304,10 @@ class MovieController extends AbstractController
 //                    'movieLists' => $movieLists,
 //                    'movieListIds' => $movieListIds,
 //                ]);
+                dump($userMovie);
+                $movieDetail['links'] = array_map(function ($link) use ($movieProviders) {
+                    return new MovieDirectLink($link[0], $link[1], $movieProviders[$link[2]]);
+                }, $userMovie->getLinks() ?? []);
             }
         }
 
@@ -344,6 +361,7 @@ class MovieController extends AbstractController
 
         return $this->render('movie/show.html.twig', [
             'movie' => $movieDetail,
+            'providers' => $movieProviders,
             'backdropForm' => $backdropForm->createView(),
             'backdrops' => $backdrops,
             'posterForm' => $posterForm->createView(),
@@ -743,6 +761,26 @@ class MovieController extends AbstractController
         $rating = $this->ratingRepository->findOneBy(['user' => $user, 'movie' => $movie]);
 
         return $this->json(['rating' => $rating ? $rating->getValue() : 0]);
+    }
+
+    #[Route('/movie/add/link', name: 'app_movie_add_link', methods: 'POST')]
+    public function addALink(Request $request): Response
+    {
+        // Récupérer les données du formulaire
+        $data = json_decode($request->getContent(), true);
+
+        $name = $data['movie-link-name'];
+        $url = $data['movie-link-url'];
+        $provider = $data['movie-link-provider'];
+        $movieId = $data['movie-link-movie'];
+
+        $movie = $this->movieRepository->find($movieId);
+        $links = $movie->getLinks() ?? [];
+        $links[] = [$name, $url, $provider];
+        $movie->setLinks($links);
+        $this->movieRepository->save($movie, true);
+
+        return $this->json(['success' => true]);
     }
 
     public function breadcrumb($from, $movie = null, $movieCollection = null, $movieCollectionItem = null, $fromParams = []): array

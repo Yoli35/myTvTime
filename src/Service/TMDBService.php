@@ -203,23 +203,22 @@ class TMDBService
         }
     }
 
-//    public function getMovieCredits($movieId, $locale): ?string
-//    {
-//        $noCredits = json_encode(["id" => $movieId, "cast" => [], "crew" => []]);
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/movie/' . $movieId . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return $noCredits;
-//            }
-//        } catch (Throwable) {
-//            return $noCredits;
-//        }
-//    }
+    public function getMovieWatchProviderList($language = 'fr-FR', $region = 'FR'): ?string
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://api.themoviedb.org/3/watch/providers/movie?language=' . $language . ($region ? '&watch_region=' . $region : '') . '&api_key=' . $this->api_key,
+            );
+            try {
+                return $response->getContent();
+            } catch (Throwable) {
+                return "";
+            }
+        } catch (Throwable) {
+            return "";
+        }
+    }
 
     public function getTv($showId, $locale, $details = null): ?string
     {
@@ -242,10 +241,6 @@ class TMDBService
         }
     }
 
-    /**
-     * @param string $filterString
-     * @return string|null
-     */
     public function getFilterTv(string $filterString): ?string
     {
         try {
@@ -262,40 +257,6 @@ class TMDBService
             return 'Request : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
         }
     }
-
-//    public function getTvCredits($tvId, $locale): ?string
-//    {
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/tv/' . $tvId . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return 'Response : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
-//            }
-//        } catch (Throwable) {
-//            return 'Request : ' . $exception->getMessage() . ' - code : ' . $exception->getCode();
-//        }
-//    }
-//
-//    public function getTvKeywords($tvId, $locale): ?string
-//    {
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/tv/' . $tvId . '/keywords?api_key=' . $this->api_key . '&language=' . $locale,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return "";
-//            }
-//        } catch (Throwable) {
-//            return "";
-//        }
-//    }
 
     public function getTvWatchProviders($tvId): ?string
     {
@@ -314,7 +275,7 @@ class TMDBService
         }
     }
 
-    public function getTvWatchProviderList($language = 'fr-FR', $region = null): ?string
+    public function getTvWatchProviderList($language = 'fr-FR', $region = 'FR'): ?string
     {
         try {
             $response = $this->client->request(
@@ -347,23 +308,6 @@ class TMDBService
             return "";
         }
     }
-
-//    public function getTvSimilar($tvId): ?string
-//    {
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/tv/' . $tvId . '/similar?api_key=' . $this->api_key,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return "";
-//            }
-//        } catch (Throwable) {
-//            return "";
-//        }
-//    }
 
     public function search($page, $query, $year, $locale): ?string
     {
@@ -398,23 +342,6 @@ class TMDBService
             return "";
         }
     }
-
-//    public function getLatest($locale): ?string
-//    {
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/tv/latest?api_key=' . $this->api_key . '&language=' . $locale,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return "";
-//            }
-//        } catch (Throwable) {
-//            return "";
-//        }
-//    }
 
     public function getSeries($kind, $page, $locale, $timezone = null): ?string
     {
@@ -453,23 +380,6 @@ class TMDBService
             return "";
         }
     }
-
-//    public function getTvSeasonCredits($tvId, $seasonNumber, $locale): ?string
-//    {
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/tv/' . $tvId . '/season/' . $seasonNumber . '/credits?api_key=' . $this->api_key . '&language=' . $locale,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return "";
-//            }
-//        } catch (Throwable) {
-//            return "";
-//        }
-//    }
 
     public function getTvEpisode($tvId, $seasonNumber, $episodeNumber, $locale, $details = null): ?string
     {
@@ -510,58 +420,6 @@ class TMDBService
         }
     }
 
-//    public function getMovieImages($id, $locale): ?string
-//    {
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/movie/' . $id . '/images?api_key=' . $this->api_key . '&language=' . $locale,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return "";
-//            }
-//        } catch (Throwable) {
-//            return "";
-//        }
-//    }
-//
-//    public function getTvImages($tvId, $locale): ?string
-//    {
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/tv/' . $tvId . '/images?api_key=' . $this->api_key . '&language=' . $locale,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return "";
-//            }
-//        } catch (Throwable) {
-//            return "";
-//        }
-//    }
-//
-//    public function getMovieRecommendations($movieId, $locale): ?string
-//    {
-//        $zeroRecommandations = json_encode(["page" => 1, "results" => [], "total_pages" => 0, "total_results" => 40]);
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/movie/' . $movieId . '/recommendations?api_key=' . $this->api_key . '&language=' . $locale . '&page=1' . $locale,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return $zeroRecommandations;
-//            }
-//        } catch (Throwable) {
-//            return $zeroRecommandations;
-//        }
-//    }
-
     public function getMovieReleaseDates($movieId): ?string
     {
         $noReleaseDates = json_encode(["id" => $movieId, "results" => []]);
@@ -597,24 +455,6 @@ class TMDBService
             return $noCountries;
         }
     }
-
-//    public function getWatchProviders($movieId): ?string
-//    {
-//        $noWatchProviders = json_encode([]);
-//        try {
-//            $response = $this->client->request(
-//                'GET',
-//                'https://api.themoviedb.org/3/movie/' . $movieId . '/watch/providers?api_key=' . $this->api_key,
-//            );
-//            try {
-//                return $response->getContent();
-//            } catch (Throwable) {
-//                return $noWatchProviders;
-//            }
-//        } catch (Throwable) {
-//            return $noWatchProviders;
-//        }
-//    }
 
     public function getPopularPeople($locale): ?string
     {

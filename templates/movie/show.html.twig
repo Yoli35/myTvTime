@@ -328,6 +328,60 @@
                             </div>
                         </div>
                     {% endif %}
+
+                    <div class="movie-links">
+                        <div class="label">{{ 'Where to watch'|trans }}</div>
+                        <div class="field">
+                            <div class="list" data-movie="{{ movie.id }}">
+                                {% for link in movie.links %}
+                                    <a href="{{ link.linkPath }}" target="_blank" rel="noopener">
+                                        <div class="link">
+                                            <img src="{{ imageConfig.url }}{{ imageConfig.logo_sizes.2 }}{{ link.provider.logoPath }}" alt="{{ link.provider.providerName }}" loading="lazy">
+                                            <div class="name">{{ link.name }}</div>
+                                        </div>
+                                    </a>
+                                {% else %}
+                                    {{ 'No link'|trans }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="movie-links-form">
+                        <div class="label">{{ 'Add a link to watch the movie'|trans }}</div>
+                        <form action="{{ path('app_movie_add_link') }}" id="add-a-movie-link">
+                            {# Set a name #}
+                            <div class="form-row">
+                                <label for="movie-link-name">{{ 'Add a name'|trans }}
+                                    <input type="text" name="movie-link-name" id="movie-link-name" placeholder="{{ 'Enter a name'|trans }}">
+                                </label>
+                            </div>
+                            {# Paste a link #}
+                            <div class="form-row">
+                                <label for="movie-link-url">{{ 'Add a link'|trans }}
+                                    <input type="text" name="movie-link-url" id="movie-link-url" placeholder="{{ 'Paste the link here'|trans }}">
+                                </label>
+                            </div>
+                            {# Select movie provider #}
+                            <div class="form-row">
+                                <label for="movie-link-provider"><span>{{ 'Select a provider'|trans }}</span>
+                                    <select name="movie-link-provider" id="movie-link-provider">
+                                        <option value="0">{{ 'Select a provider'|trans }}</option>
+                                        {% for p in providers %}
+                                            <option value="{{ p.providerId }}">{{ p.providerName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
+                            {# Submit the form #}
+                            <div class="form-row">
+                                <button type="submit" class="add-a-link">
+                                    <span><i class="fa-solid fa-plus"></i></span>
+                                    <span>{{ 'Add a link'|trans }}</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -442,6 +496,18 @@
             {% endif %}
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
+    </div>
+    <div class="globs" style="display: none">
+        {
+        "providers": {
+        {% for provider in providers %}
+            "{{ provider.providerId }}": {
+            "name": "{{ provider.providerName }}",
+            "logoPath": "{{ provider.logoPath }}"
+            }{% if not loop.last %},{% endif %}
+        {% endfor %}
+        }
+        }
     </div>
 {% endblock %}
 {% block javascripts %}
@@ -661,6 +727,67 @@
             const setPosters = header.querySelector(".posters")?.querySelectorAll(".set-poster");
             setPosters?.forEach((setPoster) => {
                 setPoster.addEventListener("click", changePoster);
+            });
+
+            /** @type {HTMLFormElement} form */
+            const form = document.querySelector("#add-a-movie-link");
+            const providers = JSON.parse(document.querySelector(".globs").textContent).providers;
+            form.addEventListener("submit", (evt) => {
+                evt.preventDefault();
+                // const formData = new FormData();
+                /** @type {HTMLInputElement} name */
+                const name = form.querySelector("#movie-link-name");
+                /** @type {HTMLInputElement} url */
+                const url = form.querySelector("#movie-link-url");
+                /** @type {HTMLSelectElement} provider */
+                const provider = form.querySelector("#movie-link-provider");
+                // formData.append("movie-link-name", name.value);
+                // formData.append("movie-link-url", url.value);
+                // formData.append("movie-link-provider", provider.value);
+                // console.log({formData});
+                const data = {
+                    "movie-link-name": name.value,
+                    "movie-link-url": url.value,
+                    "movie-link-provider": provider.value,
+                    "movie-link-movie": movieId
+                };
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    let data = {"success": true, "linkPath": "https://www.google.com", "logoPath": "/images/default/no_poster_dark.png", "name": "Google"};
+                    data = JSON.parse(this.response);
+                    console.log({data});
+                    if (data.success) {
+                        const list = document.querySelector(".movie-links").querySelector(".list");
+                        const link = document.createElement("a");
+                        const providerId = parseInt(provider.value);
+                        link.href = url.value;
+                        link.target = "_blank";
+                        link.rel = "noopener";
+                        const div = document.createElement("div");
+                        div.classList.add("link");
+                        const icon = document.createElement("div");
+                        icon.classList.add("icon");
+                        const img = document.createElement("img");
+                        img.src = "{{ imageConfig.url }}" + "{{ imageConfig.logo_sizes.2 }}" + providers[providerId].logoPath;
+                        img.alt = providers[providerId].name;
+                        img.loading = "lazy";
+                        icon.appendChild(img);
+                        div.appendChild(icon);
+                        const nameDiv = document.createElement("div");
+                        nameDiv.classList.add("name");
+                        nameDiv.innerHTML = name.value;
+                        div.appendChild(nameDiv);
+                        link.appendChild(div);
+                        list.appendChild(link);
+                        name.value = "";
+                        url.value = "";
+                        provider.value = "0";
+                    }
+                }
+                xhr.open("POST", form.action);
+                // xhr.send(formData);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.send(JSON.stringify(data));
             });
 
             function changeBackdrop(evt) {
