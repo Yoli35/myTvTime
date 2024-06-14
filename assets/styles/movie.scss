@@ -808,6 +808,14 @@
                 margin-block-start: 1em;
                 width: 100%;
 
+                &.hide {
+                    opacity: 0;
+                }
+
+                &.d-none {
+                    display: none;
+                }
+
                 .label {
                     color: var(--gradient-ardoise-10);
                     font-weight: 100;

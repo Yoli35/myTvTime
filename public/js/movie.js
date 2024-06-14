@@ -202,18 +202,21 @@ function addMovie(badge) {
 
     const id = badge.getAttribute("id");
     const collections = document.querySelector(".movie-collection");
+    const movieLinks = document.querySelector(".movie-links");
+    const movieLinksForm = document.querySelector(".movie-links-form");
+    const divToShow = [collections, movieLinks, movieLinksForm];
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
 
         badge.classList.add("yes");
-        if (collections) {
-            setTimeout(() => {
-                collections.classList.remove("hide");
-            }, 0);
-            setTimeout(() => {
-                collections.classList.remove("d-none");
-            }, 300);
-        }
+        divToShow.forEach(div => {
+            if (div) {
+                div.classList.remove("d-none");
+                setTimeout(() => {
+                    div.classList.remove("hide");
+                }, 0);
+            }
+        });
         let r = getMovieRating(badge);
         addNotification(txt.movie.add[_loc], "success");
         if (r) addNotification(txt.movie.rating[_loc], "info");
@@ -225,18 +228,23 @@ function addMovie(badge) {
 function removeMovie(badge) {
     const id = badge.getAttribute("id");
     const collections = document.querySelector(".movie-collection");
+    const movieLinks = document.querySelector(".movie-links");
+    const movieLinksForm = document.querySelector(".movie-links-form");
+    const divToHide = [collections, movieLinks, movieLinksForm];
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
 
         badge.classList.remove("yes");
-        if (collections) {
-            setTimeout(() => {
-                collections.classList.add("hide");
-            }, 0);
-            setTimeout(() => {
-                collections.classList.add("d-none");
-            }, 300);
-        }
+        divToHide.forEach(div => {
+            if (div) {
+                setTimeout(() => {
+                    div.classList.add("hide");
+                }, 0);
+                setTimeout(() => {
+                    div.classList.add("d-none");
+                }, 300);
+            }
+        });
         terminateRating(badge);
         addNotification(txt.movie.remove[_loc], "info");
     }

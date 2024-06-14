@@ -72,7 +72,7 @@
             </div>
             {{ include('blocks/movie/_rating.html.twig', {id: movie.id, seen: hasBeenSeen}) }}
             <div class="ygg">
-                <a href="https://www5.yggtorrent.fi/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" target="_blank">
+                <a href="{{ ygg }}" target="_blank">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                 </a>
             </div>
@@ -303,7 +303,7 @@
                     </div>
                 </div>
                 <div class="movie-user">
-                    {% if userMovieId > 0 %}
+                    {% if hasBeenSeen %}
                         <div class="favorite" data-user="{{ user.id }}" data-media="{{ userMovieId }}">
                             <div class="control">
                                 {{ 'Add to favorites'|trans|upper }}
@@ -329,7 +329,7 @@
                         </div>
                     {% endif %}
 
-                    <div class="movie-links">
+                    <div class="movie-links{% if hasBeenSeen == false %} d-none hide{% endif %}">
                         <div class="label">{{ 'Where to watch'|trans }}</div>
                         <div class="field">
                             <div class="list" data-movie="{{ movie.id }}">
@@ -347,7 +347,7 @@
                         </div>
                     </div>
 
-                    <div class="movie-links-form">
+                    <div class="movie-links-form{% if hasBeenSeen == false %} d-none hide{% endif %}">
                         <div class="label">{{ 'Add a link to watch the movie'|trans }}</div>
                         <form action="{{ path('app_movie_add_link') }}" id="add-a-movie-link">
                             {# Set a name #}

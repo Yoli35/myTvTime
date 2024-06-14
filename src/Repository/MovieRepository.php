@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,7 +20,7 @@ class MovieRepository extends ServiceEntityRepository
 {
     private ManagerRegistry $registry;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry,private readonly EntityManagerInterface $em)
     {
         parent::__construct($registry, Movie::class);
         $this->registry = $registry;
@@ -131,15 +132,16 @@ class MovieRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function isInUserMovies($userId, $movieId): array
+    public function isInUserMovies($userId, $movieId): int
     {
-        $sql = 'SELECT * FROM `user_movie` t1 WHERE t1.`movie_id`=' . $movieId . ' AND t1.`user_id`=' . $userId;
+        $sql = "SELECT COUNT(*) FROM `user_movie` t1 WHERE t1.`movie_id`=$movieId AND t1.`user_id`=$userId";
 
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-
-        return $resultSet->fetchAllAssociative();
+//        $em = $this->registry->getManager();
+//        $statement = $em->getConnection()->prepare($sql);
+//        $resultSet = $statement->executeQuery();
+//
+//        return $resultSet->fetchOne();
+        return $this->em->getConnection()->prepare($sql)->executeQuery()->fetchOne();
     }
 
     public function findUserMovies($userId, $offset = 0, $sort = 'id', $order = 'DESC'): array
