@@ -1259,7 +1259,7 @@ nav.active {
 .nav-breadcrumb {
     --bs-breadcrumb-divider: '°';
     @include flex-row(center, start);
-    background-color: var(--gradient-ardoise-75-alpha-25);
+    background-color: var(--gradient-grey-75-alpha-40);
     border-radius: .5rem;
     color: var(--gradient-ardoise-10);
     //height: 3rem;
@@ -1271,7 +1271,7 @@ nav.active {
     -webkit-backdrop-filter: blur(3px);
 
     &:hover {
-        background-color: var(--gradient-ardoise-75);
+        background-color: var(--gradient-grey-75);
     }
 
     a {
