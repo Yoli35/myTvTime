@@ -207,7 +207,7 @@ class MovieController extends AbstractController
 //        ]);
 
         $locale = $request->getLocale();
-        $standing = $this->tmdbService->getMovie($id, $locale, ['videos,images,credits,recommendations,watch/providers']);
+        $standing = $this->tmdbService->getMovie($id, $locale, ['videos,images,credits,recommendations,watch/providers,release_dates']);
         $movieDetail = json_decode($standing, true);
         $recommendations = $movieDetail['recommendations']['results'];
         $credits = $movieDetail['credits'];
@@ -216,6 +216,7 @@ class MovieController extends AbstractController
         $videos = $movieDetail['videos']['results'];
         $images = $movieDetail['images'];
         $watchProviders = $movieDetail['watch/providers']['results'];
+        $releaseDates = $movieDetail['release_dates']['results'];
 
         $standing = $this->tmdbService->getCountries($locale, $user?->getCountry());
         $countries = json_decode($standing, true);
@@ -236,12 +237,9 @@ class MovieController extends AbstractController
         }
 
         if ($watchProviders) {
-            if ($user && $user->getCountry()) {
-                $country = $user->getCountry();
-            } else {
-                $arr = ['fr' => 'FR', 'en' => 'US', 'de' => 'DE', 'es' => 'ES'];
-                $country = $arr[$locale];
-            }
+            $arr = ['fr' => 'FR', 'en' => 'US', 'de' => 'DE', 'es' => 'ES'];
+            $country = $user?->getCountry() ?? $arr[$locale];
+
             if (key_exists($country, $watchProviders)) {
                 $watchProvidersTemp[0] = $watchProviders[$country];
                 $watchProviders = $watchProvidersTemp;
@@ -273,15 +271,19 @@ class MovieController extends AbstractController
             'movieProviders' => $movieProviders,
         ]);
 
-        $standing = $this->tmdbService->getMovieReleaseDates($id);
-        $releaseDates = json_decode($standing, true);
-        $releaseDates = $this->getLocaleDates($user, $releaseDates['results'], $countries, $locale);
+//        $standing = $this->tmdbService->getMovieReleaseDates($id);
+//        $releaseDates = json_decode($standing, true);
+        $releaseDates = $this->getLocaleDates($user, $releaseDates, $countries, $locale);
 
+        $movieDetail['links'] = [];
         $hasBeenSeen = false;//$this->hasBeenSeen($id, $userMovieRepository);
         $movieLists = [];
         $movieListIds = [];
         $userMovieId = 0;
         $movieVideos = null;
+
+        $movie = $this->movieRepository->findOneBy(['movieDbId' => $id]);
+        $addedMovie = $movie ? $this->movieRepository->isInUserMovies($user->getId(), $movie->getId()) : false;
 
         if ($user) {
             $movieLists = $this->movieListRepository->findBy(['user' => $user], ['title' => 'ASC']);
@@ -292,7 +294,7 @@ class MovieController extends AbstractController
                 $userMovie = $this->hydrateMovie($userMovie, $movieDetail);
                 $this->movieRepository->save($userMovie, true);
 
-                $hasBeenSeen = count($this->movieRepository->isInUserMovies($user->getId(), $userMovie->getId()));
+                $hasBeenSeen = $addedMovie;
 
                 $userMovieId = $userMovie->getId();
                 $movieListIds = array_map(function ($movieList) {
@@ -300,10 +302,10 @@ class MovieController extends AbstractController
                 }, $userMovie->getMovieLists()->toArray());
 
                 $movieVideos = $userMovie->getMovieVideos();
-//                dump([
-//                    'movieLists' => $movieLists,
-//                    'movieListIds' => $movieListIds,
-//                ]);
+                dump([
+                    'movieLists' => $movieLists,
+                    'movieListIds' => $movieListIds,
+                ]);
                 dump($userMovie);
                 $movieDetail['links'] = array_map(function ($link) use ($movieProviders) {
                     return new MovieDirectLink($link[0], $link[1], $movieProviders[$link[2]]);
@@ -315,8 +317,10 @@ class MovieController extends AbstractController
             $movieDetail['release_date'] = "";
         }
 
-        $ygg = str_replace(' ', '+', $movieDetail['title']);
-        $ygg = str_replace('\'', '+', $ygg);
+        $ygg = str_replace([' ', '\''], '+', $movieDetail['title']);
+        $ygg = str_replace([':', '(', ')'], '', $ygg);
+        $ygg = "https://www.ygg.re/engine/search?name=$ygg&do=search&order=desc&sort=publish_date";
+        dump($ygg);
 
         $overviewWasEmpty = false;
 
@@ -847,10 +851,10 @@ class MovieController extends AbstractController
             $locales = [$locale => [$user->getCountry()]];
         } else {
             $locales = [
-                'fr' => ['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
-                'en' => ['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'],
-                'de' => ['AT', 'BE', 'CH', 'DE', 'LI', 'LU'],
-                'es' => ['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']
+                'fr' => ['FR'],//['BE', 'BF', 'BJ', 'CA', 'CD', 'CG', 'CH', 'CI', 'FR', 'GA', 'GN', 'LU', 'MC', 'ML', 'NE', 'SN', 'TG'],
+                'en' => ['GB'],//['AU', 'CA', 'GB', 'IE', 'MT', 'NZ', 'SG', 'US'],
+                'de' => ['DE'],//['AT', 'BE', 'CH', 'DE', 'LI', 'LU'],
+                'es' => ['ES']//['AR', 'CL', 'CR', 'CU', 'ES', 'HN', 'NI', 'PR', 'SV', 'VE']
             ];
         }
 //        dump(['locales' => $locales, 'locale' => $locale, 'user' => $user, 'dates' => $dates, 'countries' => $countries]);
