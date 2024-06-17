@@ -67,7 +67,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const i = setInterval(() => {
             const now = new Date();
             const progress = 360 * (1 - ((now - start) / 30000) % 1);
-            closure.style.backgroundImage = `conic-gradient(var(--clr) 0deg, var(--clr) ${progress}deg, var(--cd) ${progress}deg, var(--cd) 360deg)`;
+            closure.style.backgroundImage = 'conic-gradient(var(--clr) 0deg, var(--clr) ${progress}deg, var(--cd) ${progress}deg, var(--cd) 360deg)';
         }, 100);
         setTimeout(() => {
             clearInterval(i);
@@ -76,8 +76,9 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     function closeFlash(flash) {
+        const hideClasses = ["hide-scale", "hide-to-left", "hide-to-right", "hide-to-top", "hide-to-bottom"];
         setTimeout(() => {
-            flash.classList.add("hide");
+            flash.classList.add(hideClasses[Math.floor(Math.random() * hideClasses.length)]);
         }, 0);
         setTimeout(() => {
             flash.classList.add("d-none");

@@ -431,8 +431,28 @@ body {
             width: 1rem;
         }
 
-        &.hide {
+        &.hide-scale {
             transform: scale(0);
+            opacity: 0;
+        }
+
+        &.hide-to-left {
+            transform: translateX(-500%);
+            opacity: 0;
+        }
+
+        &.hide-to-right {
+            transform: translateX(500%);
+            opacity: 0;
+        }
+
+        &.hide-to-top {
+            transform: translateY(-500%);
+            opacity: 0;
+        }
+
+        &.hide-to-bottom {
+            transform: translateY(500%);
             opacity: 0;
         }
     }
@@ -2384,143 +2404,6 @@ nav.active {
     }
 }
 
-/*@media (prefers-color-scheme: dark) {
-
-    :root {
-        --bs-body-bg: var(--gradient-ardoise-20);
-        --bs-body-color: var(--gradient-ardoise-90);
-    }
-
-    body {
-        background-image: var(--gradient-dark);
-    }
-
-    a, .nav-link {
-        color: var(--gradient-ardoise-80);
-
-        &:hover {
-            color: var(--gradient-orange-60);
-        }
-
-        &:visited {
-            color: var(--gradient-ardoise-80);
-        }
-
-        &:focus {
-            color: var(--gradient-orange-60);
-        }
-    }
-
-    .container,
-    .container-fluid {
-        background-color: transparent;
-    }
-
-    .dropdown-menu {
-        color: var(--gradient-ardoise-80);
-        background-color: var(--gradient-ardoise-30);
-    }
-
-    .dropdown-item-text {
-        color: var(--gradient-ardoise-80);
-    }
-
-    h1, h2, {
-        color: var(--gradient-ardoise-80);
-
-        a {
-            color: var(--gradient-ardoise-80);
-        }
-    }
-
-    .nav-breadcrumb {
-        .breadcrumb {
-            .bracket {
-                color: var(--gradient-ardoise-80);
-            }
-        }
-    }
-
-    .home-header {
-        background-color: var(--gradient-ardoise-25-alpha-25);
-
-        .home-header-bg {
-            background-image: url("../images/mytvtime-dark.png");
-        }
-
-        &:hover {
-            background-color: var(--gradient-ardoise-25);
-        }
-    }
-
-    .genres {
-        .genre {
-            border: .125rem solid var(--gradient-ardoise-50);
-        }
-
-        .active {
-            background-color: var(--gradient-ardoise-90);
-            border-color: var(--gradient-ardoise-70);
-            color: var(--gradient-ardoise-10);
-        }
-    }
-
-    .home-discover {
-        a {
-            .title, .date {
-                color: var(--gradient-ardoise-80);
-            }
-        }
-    }
-
-    .home-discovers {
-        .footer-infos {
-            div {
-                color: var(--gradient-ardoise-80);
-            }
-        }
-    }
-
-    .episode {
-        .detail {
-            .guests {
-                .guest {
-                    .profile {
-                        background-image: url("../images/profile_dark.jpg");
-                    }
-                }
-            }
-        }
-    }
-
-    .modal-content {
-        background-color: var(--gradient-ardoise-20);
-    }
-
-    .modal-header {
-        border-bottom: 1px solid var(--gradient-ardoise-30);
-    }
-
-    .show-code {
-        .overlay {
-            background-color: var(--gradient-ardoise-20);
-            border: 1px solid var(--gradient-ardoise-50);
-            color: var(--gradient-ardoise-80);
-
-            .header {
-                .close {
-                    color: var(--gradient-ardoise-80);
-                }
-            }
-        }
-    }
-
-    .home-footer {
-        background-color: var(--gradient-ardoise-30-alpha-50);
-        color: var(--gradient-ardoise-80);
-    }
-}*/
-
 .login, .register {
     @include flex-row();
     background: var(--mtt-body-bg);
@@ -2623,66 +2506,3 @@ nav.active {
         }
     }
 }
-
-/*@media (prefers-color-scheme: dark) {
-    .login, .register {
-        .login-dialog, .register-dialog {
-            background-color: var(--gradient-ardoise-30);
-            border-color: var(--gradient-ardoise-0);
-            color: var(--gradient-ardoise-90);
-
-            .header {
-                background-color: var(--gradient-ardoise-20);
-                border-bottom-color: var(--gradient-ardoise-40);
-            }
-
-            .body {
-                border-bottom-color: var(--gradient-ardoise-40);
-
-                .control {
-                    > div {
-                        label {
-                            color: var(--gradient-ardoise-80);
-                        }
-
-                        input {
-                            background-color: var(--gradient-ardoise-30);
-                            border-color: var(--gradient-ardoise-60);
-                            color: var(--gradient-ardoise-90);
-                        }
-                    }
-                }
-
-                .checkbox {
-                    > div {
-                        label {
-                            color: var(--gradient-ardoise-80);
-                        }
-                    }
-                }
-
-                .input {
-                    label {
-                        color: var(--gradient-ardoise-80);
-                    }
-
-                    input {
-                        background-color: var(--gradient-ardoise-30);
-                        border-color: var(--gradient-ardoise-60);
-                        color: var(--gradient-ardoise-90);
-                    }
-                }
-            }
-
-            .footer {
-                background-color: var(--gradient-ardoise-20);
-
-                .btn {
-                    background-color: var(--gradient-ardoise-40);
-                    border: 1px solid var(--gradient-ardoise-50);
-                    color: var(--gradient-ardoise-90);
-                }
-            }
-        }
-    }
-}*/
