@@ -5,29 +5,28 @@
     background-image: var(--gradient-light);
     color: var(--gradient-ardoise-20);
     display: flex;
-    flex-direction: column;
-    flex: 1;
     gap: 1rem;
     justify-content: center;
     padding: 1rem;
 
     .cv-infos {
         align-items: center;
-        background-color: var(--gradient-ardoise-30);
+        background-color: var(--gradient-yellow-50);
         border-radius: .5rem;
         color: var(--gradient-ardoise-90);
         display: flex;
         flex-direction: column;
         gap: 1rem;
         justify-content: flex-start;
+        max-width: 25vw;
         padding: 1rem;
 
         .avatar {
-            border: 2px solid var(--gradient-ardoise-25);
+            aspect-ratio: 1 / 1;
             border-radius: 50%;
-            height: 10rem;
+            border: 2px solid var(--gradient-ardoise-25);
             pointer-events: none;
-            width: 10rem;
+            width: 75%;
 
             img {
                 border-radius: 50%;
@@ -36,108 +35,143 @@
             }
         }
 
-        h2 {
-            text-align: center;
-            width: 100%;
-
-            span {
-                white-space: nowrap;
-            }
-        }
-
-        .address {
+        .infos {
+            align-items: center;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 0 1rem;
-            width: 100%;
-
-            .address-item {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                width: 100%;
-            }
-        }
-
-        .telephone {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-        }
-
-        .links {
-            display: flex;
-            flex-direction: row;
+            font-size: 1.375rem;
+            font-weight: 300;
             gap: 1rem;
             justify-content: center;
+            width: 100%;
 
-            .link {
-                display: flex;
-                flex-direction: row;
-                gap: 1rem;
-                justify-content: center;
+            h2 {
+                text-align: center;
             }
 
-            .link {
-                a {
-                    color: var(--gradient-ardoise-90);
-                    text-decoration: none;
+            .name {
+                font-size: 1.5rem;
+                font-weight: bold;
+
+                em {
+                    font-variant-caps: small-caps;
+                    font-style: normal;
                 }
+            }
+
+            .details {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                gap: .125rem;
+                justify-content: center;
+                width: 100%;
             }
         }
     }
 
     .cv-exp {
         align-items: flex-start;
-        background-color: var(--gradient-ardoise-90);
+        background-color: var(--gradient-yellow-80);
         border-radius: .5rem;
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         flex: 1;
         gap: 1rem;
-        justify-content: center;
+        justify-content: flex-start;
         padding: 1rem;
 
-        h1 {
-            text-align: center;
-            width: 100%;
-        }
-
-        .column {
-            align-items: center;
+        .block {
+            align-items: flex-start;
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            min-width: 30rem;
-            width: calc(50% - .5rem);
+            justify-content: flex-start;
+            margin-block-end: 1rem;
+            transform-origin: 50% 50%;
+            transition: all .5s ease-in-out;
+            transition-behavior: allow-discrete;
+            width: 100%;
 
-            .cv-block {
-                background-color: var(--gradient-ardoise-70);
-                border-radius: .5rem;
-                padding: 1rem;
+            .title {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
+            .exp {
+                display: flex;
+                font-weight: 300;
+                gap: .5rem;
+
+                .date {
+                    font-size: 1.125rem;
+                    font-weight: 600;
+                    width: 8vw;
+                }
+            }
+
+            .details {
+                align-items: flex-start;
+                display: flex;
+                gap: .5rem;
+                justify-content: flex-start;
                 width: 100%;
 
-                .cv-date {
+                .tab {
+                    flex-shrink: 0;
+                    width: 8vw;
+                }
+
+                .column {
                     align-items: flex-start;
                     display: flex;
-                    flex-direction: row;
-                    font-weight: bold;
-                    gap: 1rem;
+                    flex-direction: column;
+                    gap: .125rem;
                     justify-content: flex-start;
-                    padding: 1rem;
                     width: 100%;
-                }
 
-                .cv-item {
-                    margin-left: 2rem;
+                    &:first-child {
+                        flex-shrink: 0;
+                        width: 8vw;
+                    }
 
-                    a, a:visited {
-                        color: var(--gradient-ardoise-20);
-                        font-weight: bold;
-                        text-decoration: none;
+                    &:nth-child(2) {
+                        flex-shrink: 2;
                     }
                 }
+
+                .date {
+                    font-size: 1.125rem;
+                    font-weight: bold;
+                }
+
+                .company {
+                    font-size: 1.125rem;
+                    font-weight: bold;
+                }
+
+                .location {
+                    font-size: 1.125rem;
+                    font-weight: bold;
+                }
+
+                .description {
+                    font-size: 1.125rem;
+                    font-weight: 300;
+                }
+            }
+
+            &:hover {
+                -webkit-backdrop-filter: blur(1rem);
+                backdrop-filter: blur(1rem);
+                background-color: var(--gradient-yellow-50-alpha-50);
+                border-radius: 1rem;
+                border: 0.25rem solid var(--gradient-ardoise-60-alpha-50);
+                font-weight: 600;
+                max-width: 60vw;
+                padding-block: 1rem;
+                padding-inline: 2rem;
+                transform: scale(1.5);
             }
         }
     }

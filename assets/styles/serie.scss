@@ -1213,20 +1213,18 @@
                 flex-shrink: 0;
                 margin-inline: auto;
                 position: unset;
-                width: 20rem;
                 z-index: 0;
 
                 .poster {
-                    height: 30rem;
-                    //min-width: 20rem;
+                    height: 40vw;
                     position: relative;
                     z-index: 0;
 
                     > img {
+                        aspect-ratio: 78 / 117;
                         border-radius: .5rem;
-                        height: 30rem;
+                        height: 40vw;
                         object-fit: cover;
-                        min-width: 20rem;
                     }
 
                     .watch-providers {
@@ -3256,6 +3254,27 @@
             menu {
                 margin-block-start: 1rem;
                 width: 100%;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .serie-page {
+        .header {
+            .series-details {
+                flex-direction: column;
+                flex-wrap: nowrap;
+
+                .posters {
+                    .poster {
+                        height: 40vh;
+
+                        img {
+                            height: 40vh;
+                        }
+                    }
+                }
             }
         }
     }

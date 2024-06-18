@@ -66,6 +66,7 @@
             </div>
             <a href="{{ path('app_contact', {from: route|slice(4), params: route_params|serialize(format = 'json', context = [])}) }}">{{ 'Contact'|trans }}</a>
             <a href="{{ path('app_rgpd') }}">{{ 'Confidentiality policy'|trans }}</a>
+            <a href="{{ path('app_cv') }}">{{ 'My cv'|trans }}</a>
             {% if user %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_admin_dashboard_index') }}">{{ 'Another action'|trans }}</a>

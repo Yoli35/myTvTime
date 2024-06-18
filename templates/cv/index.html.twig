@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'My cv'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+
+        {{ include('blocks/_mainMenu.html.twig') }}
+
+        <div class="cv">
+            <div class="cv-infos">
+                <div class="avatar">
+                    <img src="/images/users/avatars/c8212b23-2cbc-4f77-9811-1ac66e0cb2bd.png" alt="avatar">
+                </div>
+                <div class="infos">
+                    <div class="name">Olivier <em>Jean-Marie</em></div>
+                    <div class="details">
+                        <div>44200 Nantes</div>
+                        <div>06 20 05 07 05</div>
+                        <div>ojm16@free.fr</div>
+                    </div>
+                    <h2>Projet professionnel</h2>
+                    <div class="details">
+                        <div>Développeur</div>
+                        <div>Php Symfony</div>
+                    </div>
+                    <h2>Qualités professionnelles</h2>
+                    <div class="details">
+                        <div>Autonome</div>
+                        <div>Curieux</div>
+                        <div>Pragmatique</div>
+                        <div>Rigoureux</div>
+                    </div>
+                    <h2>Loisirs et intérêts</h2>
+                    <div class="details">
+                        <div>Environnement,</div>
+                        <div>Espaces verts,</div>
+                        <div>randonnée,</div>
+                        <div>séries</div>
+                    </div>
+                </div>
+            </div>
+            <div class="cv-exp">
+                <h1>Développeur Php Symfony</h1>
+
+                <div class="block">
+                    <div class="title">Compétences techniques</div>
+                    <div class="details">
+                        <div class="column">
+                            <div>Languages</div>
+                            <div>Framework/IDE</div>
+                            <div>Bbb/Vcs</div>
+                        </div>
+                        <div class="column">
+                            <div>PHP 8, HTML, CSS, JavaScript, PL/SQL</div>
+                            <div>Symfony 6 & 7 / PhpStorm</div>
+                            <div>mySql / Git</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <div class="title">Projet personnel - https://mytvtime.fr</div>
+                    <div class="exp"><div class="date">Depuis 2022</div>Symfony, Javascript, sass, API YouTube, The Movie DB, Deepl</div>
+                    <div class="details">
+                        <div class="column">
+                            <div>Site</div>
+                            <div>Github</div>
+                        </div>
+                        <div class="column">
+                            <div><a href="https://mytvtime.fr" target="_blank">https://mytvtime.fr</a></div>
+                            <div>Symfony 6.4.8</div>
+                            <div>Symfony 7.1.1</div>
+                        </div>
+                        <div class="column">
+                            <div>&nbsp;</div>
+                            <div><a href="https://github.com/Yoli35/myTvTime" target="_blank">myTvTime</a></div>
+                            <div><a href="https://github.com/Yoli35/mytvtime2.0" target="_blank">mytvtime2.0</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <div class="title">Expériences IT</div>
+                    <div class="exp"><div class="date">2018</div>CDD Développeur Symfony chez Oréades, Nantes</div>
+                    <div class="details"><div class="tab">&nbsp;</div>Création et intégration de sites faisant appel à une API ou possédant un backoffice développés en Php (Symfony 3 et 4) et jQuery</div>
+                    <div class="exp"><div class="date">2017</div>Stage Shoot’n’Go - Christophe Lablancherie, Nantes</div>
+                    <div class="details"><div class="tab">&nbsp;</div>Plateforme de service spécialisée dans le cosplay<br>Conception du modèle de données, de l’interface (mockup et intégration)<br>Développement Symfony 3 avec appel à l’API de Shoot’n’Go</div>
+                    <div class="exp"><div class="date">2017</div>Projets informatiques développés à l’ENI École Informatique, Nantes</div>
+                    <div class="details"><div class="tab">&nbsp;</div>Développement d’une application de gestion pour clinique vétérinaire sous C# et SQL Server : application client-serveur de type client « lourd »<br>Analyse, conception et développement d’une application QCM avec Java EE et SQL Server : définition de tests et d’outils de passage des tests</div>
+                    <div class="exp"><div class="date">2006 / 2009</div>Auto entrepreneur : création de sites Internet, Rennes</div>
+                    <div class="details"><div class="tab">&nbsp;</div>Sites vitrines / blogs avec PHP, HTML, CSS, JavaScript, MySQL</div>
+                    <div class="exp"><div class="date">1999 / 2001</div>Développeur Mac chez Mikros Image, Levallois-Perret</div>
+                    <div class="details"><div class="tab">&nbsp;</div>Développement C d’applications, d’utilitaires et de plugins pour After Effects</div>
+                    <div class="exp"><div class="date">1996 / 1999</div>Infogérance France Télécom - Gestionnaire des changements, Paris</div>
+                    <div class="details"><div class="tab">&nbsp;</div>Base de données Access, VBA. Thomson<br>Responsable déploiement et déménagement, Médiatec<br>Responsable soutien aux utilisateurs matériel et logiciel, Médiatec</div>
+                    <div class="exp"><div class="date">1994 / 1995</div>Développeur Mac pour France 2, Deus, Paris</div>
+                    <div class="details"><div class="tab">&nbsp;</div>Développement en C d’une application de génération de carte pour le bulletin météo de France 2 avec import automatique de données de Météo France</div>
+                    <div class="exp"><div class="date">1991 / 1992</div>Développeur Cobol, ESN HN Services, Paris</div>
+                    <div class="details"><div class="tab">&nbsp;</div>Mission développeur Cobol chez Paribas<br>Développement en C d’un émulateur de session grand système sur PC</div>
+                </div>
+
+                <div class="block">
+                    <div class="title">Expérience professionnelle autre</div>
+                    <div class="exp"><div class="date">2004 / 2013</div>Barman à l’Anathème Café, Rennes</div>
+                </div>
+
+                <div class="block">
+                    <div class="title">Formations</div>
+                    <div class="exp"><div class="date">2016 / 2017</div>Formation Concepteur Développeur Informatique (Bac+4) ENI École Informatique – Nantes</div>
+                    <div class="exp"><div class="date">1987 / 1989</div>BTS Informatique – Grenoble</div>
+                </div>
+            </div>
+        </div>
+
+        {{ include('blocks/_pageFooter.html.twig') }}
+
+    </div>
+{% endblock %}
