@@ -7,6 +7,7 @@
     display: flex;
     gap: 1rem;
     justify-content: center;
+    margin-block-start: 2rem;
     padding: 1rem;
 
     .cv-infos {
@@ -167,11 +168,34 @@
                 background-color: var(--gradient-yellow-50-alpha-50);
                 border-radius: 1rem;
                 border: 0.25rem solid var(--gradient-ardoise-60-alpha-50);
-                font-weight: 600;
+                /*font-weight: 600;*/
                 max-width: 60vw;
                 padding-block: 1rem;
                 padding-inline: 2rem;
                 transform: scale(1.5);
+
+                .title {
+                    font-size: 1.75rem;
+                    font-weight: 600;
+                }
+
+                .exp {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+
+                    .date {
+                        font-size: 1.25rem;
+                        font-weight: 600;
+                    }
+                }
+
+                .details {
+                    .column {
+                        &:first-child {
+                            font-weight: 600;
+                        }
+                    }
+                }
             }
         }
     }
