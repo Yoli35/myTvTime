@@ -264,18 +264,18 @@
                             <div class="add" data-id="{{ serie.id }}">{{ 'Add'|trans }}</div>
                         {% endif %}
                     {% endif %}
-{#                    <div class="ygg">#}
-{#                        <a href="https://ygg.to/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date"#}
-{#                           target="_blank">#}
-{#                            <div></div>#}
-{#                        </a>#}
-{#                    </div>#}
-{#                    <div class="ygg-original">#}
-{#                        <a href="https://ygg.to/engine/search?name={{ yggOriginal }}&do=search&order=desc&sort=publish_date"#}
-{#                           target="_blank">#}
-{#                            <div></div>#}
-{#                        </a>#}
-{#                    </div>#}
+                    {#                    <div class="ygg"> #}
+                    {#                        <a href="https://ygg.to/engine/search?name={{ ygg }}&do=search&order=desc&sort=publish_date" #}
+                    {#                           target="_blank"> #}
+                    {#                            <div></div> #}
+                    {#                        </a> #}
+                    {#                    </div> #}
+                    {#                    <div class="ygg-original"> #}
+                    {#                        <a href="https://ygg.to/engine/search?name={{ yggOriginal }}&do=search&order=desc&sort=publish_date" #}
+                    {#                           target="_blank"> #}
+                    {#                            <div></div> #}
+                    {#                        </a> #}
+                    {#                    </div> #}
                     <div class="tmdb">
                         <a href="https://www.themoviedb.org/tv/{{ serie.id }}" target="_blank" rel="noopener">
                             <div></div>
@@ -344,10 +344,10 @@
                             {% endfor %}
                         </div>
                     </section>
-                    {% if credits %}
-                        {{ include('blocks/series/_cast.html.twig', {from: from, media: "tv", id: serie.id}) }}
-                        {{ include('blocks/series/_crew.html.twig', {from: from, media: "tv", id: serie.id}) }}
-                    {% endif %}
+
+                    {{ include('blocks/series/_cast.html.twig', {cast: sortedCast, from: from, media: "tv", id: serie.id}) }}
+                    {{ include('blocks/series/_crew.html.twig', {crew: sortedCrew, from: from, media: "tv", id: serie.id}) }}
+
                     {% if images.backdrops|length or images.logos|length or images.posters|length %}
                         <section>
                             <div class="images">

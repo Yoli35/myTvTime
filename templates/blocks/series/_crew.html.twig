@@ -1,19 +1,19 @@
-{% if credits.crew %}
-    {% if credits.crew|length %}
+{% if crew %}
+    {% if crew|length %}
         <section>
             <div class="cast">
-                <h4>{{ 'Crew'|trans }} ({{ credits.crew|length }})</h4>
+                <h4>{{ 'Crew'|trans }} ({{ crew|length }})</h4>
                 <div class="list">
-                    {% for people in credits.crew %}
+                    {% for people in crew %}
                         <a href="{{ path('app_people', {id: people.id}) }}{% if from is defined and media is defined and id is defined %}{% if media=="tv" %}?from={{ from }}&media=tv&id={{ id }}{% if season is defined %}&season={{ season.season_number }}{% endif %}{% endif %}{% endif %}">
                             <div class="people">
                                 <div class="profile">
                                     {% if people.profile_path %}
-                                        {% if imageConfig is defined %}
-                                            <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}" loading="lazy">
-                                        {% else %}
-                                            <img src="{{ people.profile_path }}" alt="{{ people.name }}" loading="lazy">
-                                        {% endif %}
+                                        {#                                        {% if imageConfig is defined %} #}
+                                        <img src="{{ imageConfig.url ~ imageConfig.profile_sizes.2 ~ people.profile_path }}" alt="{{ people.name }}" loading="lazy">
+                                        {#                                        {% else %} #}
+                                        {#                                            <img src="{{ people.profile_path }}" alt="{{ people.name }}" loading="lazy"> #}
+                                        {#                                        {% endif %} #}
                                     {% else %}
                                         <img src="/images/default/no_avatar.png" alt="{{ people.name }}" loading="lazy">
                                     {% endif %}

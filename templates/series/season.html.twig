@@ -305,10 +305,10 @@
                             {% endfor %}
                         </div>
                     </section>
-                    {% if credits %}
-                        {{ include('blocks/series/_cast.html.twig', {from: parameters.from, query: parameters.query, media: "tv", id: serie.id}) }}
-                        {{ include('blocks/series/_crew.html.twig', {from: parameters.from, query: parameters.query, media: "tv", id: serie.id}) }}
-                    {% endif %}
+
+                    {{ include('blocks/series/_cast.html.twig', {cast: sortedCast, from: parameters.from, query: parameters.query, media: "tv", id: serie.id}) }}
+                    {{ include('blocks/series/_crew.html.twig', {crew: sortedCrew, from: parameters.from, query: parameters.query, media: "tv", id: serie.id}) }}
+
                 </article>
             </main>
             {{ include('blocks/series/_watchProviders.html.twig') }}

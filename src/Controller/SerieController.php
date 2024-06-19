@@ -1058,19 +1058,10 @@ class SerieController extends AbstractController
                 }
             }
         }
-        // Ajout de l'url des profils des acteurs et de l'équipe technique
-        foreach ($credits['cast'] as $key => $cast) {
-//            dump($cast);
-            $credits['cast'][$key]['profile_path'] = $this->fullUrl('profile', 2, $cast['profile_path'] ?? null, 'no_profile.png', $imgConfig);
-        }
-        $credits['cast'] = array_filter($credits['cast'], function ($cast) {
-            return key_exists('id', $cast);
-        });
-        if (key_exists('crew', $credits)) {
-            foreach ($credits['crew'] as $key => $crew) {
-                $credits['crew'][$key]['profile_path'] = $this->fullUrl('profile', 2, $crew['profile_path'] ?? null, 'no_profile.png', $imgConfig);
-            }
-        }
+
+        $sorteCast = $this->sortByProfileAndOrder($credits['cast']);
+        $sortedCrew = $this->sortByProfileAndOrder($credits['crew']);
+
         // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
         if ($serie['userSerieViewing']) {
             // Infos de la saison
@@ -1101,7 +1092,9 @@ class SerieController extends AbstractController
 //            'watchProviders' => $watchProviders,
 //            'episodes' => $episodes,
 //            'seasonViewing' => $seasonViewing,
-//        'credits' => $credits,
+//            'credits' => $credits,
+//            'sortedCast' => $sorteCast,
+//            'sortedCrew' => $sortedCrew,
 //        ]);
 
         return $this->render('series/season.html.twig', [
@@ -1111,6 +1104,8 @@ class SerieController extends AbstractController
             'episodes' => $episodes,
             'episodesVotes' => $episodesVotes ?? null,
             'credits' => $credits,
+            'sortedCast' => $sorteCast,
+            'sortedCrew' => $sortedCrew,
             'watchProviders' => $watchProviders['seasonWatchProviders'],
             'allWatchProviders' => $watchProviders['allWatchProviders'],
             'seasonsCookie' => $seasonsCookie,
@@ -1124,6 +1119,7 @@ class SerieController extends AbstractController
                 'year' => $year,
                 "backId" => $backId
             ],
+            'imageConfig' => $imgConfig,
         ]);
     }
 
@@ -2426,12 +2422,6 @@ class SerieController extends AbstractController
             return $season;
         }, $tv['seasons']);
 
-//        $ygg = str_replace(' ', '+', $tv['name']);
-//        if (key_exists('localized_name', $tv) && $tv['localized_name'])
-//            $yggOriginal = str_replace(' ', '+', $tv['localized_name']);
-//        else
-//            $yggOriginal = str_replace(' ', '+', $tv['original_name']);
-
         $addThisSeries = !$serieViewing;
 
         $alert = $serieViewing ? $this->alertRepository->findOneBy(['user' => $this->getUser(), 'serieViewingId' => $serieViewing->getId()]) : null;
@@ -2447,6 +2437,9 @@ class SerieController extends AbstractController
         }
         $this->savePoster($tv['poster_path'], $imgConfig['url'] . $imgConfig['poster_sizes'][5]);
 
+        $sortedCast = $this->sortByProfileAndOrder($credits['cast']);
+        $sortedCrew = $this->sortByProfileAndOrder($credits['crew']);
+
 //        dump([
 //            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
@@ -2454,13 +2447,16 @@ class SerieController extends AbstractController
 //            'watchProviderList' => $watchProviderList,
 //            'breadcrumb' => $breadcrumb,
 //            'credits' => $credits,
+//            'sortedCast' => $sortedCast,
+//            'sortedCrew' => $sortedCrew,
 //        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
             'addThisSeries' => $addThisSeries,
             'currentYear' => $this->dateService->newDate('now', $user ? $user->getTimezone() : 'Europe/Paris', true)->format('Y'),
-            'credits' => $credits,
+            'sortedCast' => $sortedCast,
+            'sortedCrew' => $sortedCrew,
             'keywords' => $keywords,
             'missingTranslations' => $missingTranslations,
             'watchProviders' => $watchProviders,
@@ -2482,10 +2478,38 @@ class SerieController extends AbstractController
             'isTimeShifted' => $serieViewing?->isTimeShifted(),
             'nextEpisodeToWatch' => $nextEpisodeToWatch ?? null,
             'alert' => $alert,
-//            'ygg' => $ygg,
-//            'yggOriginal' => $yggOriginal,
             'imageConfig' => $imgConfig,
         ]);
+    }
+
+    public function sortByProfileAndOrder(array $arr): array
+    {
+        // Certains profils n'ont pas d'id
+        $arr = array_filter($arr, function ($item) {
+            return key_exists('id', $item);
+        });
+        $arr = array_values($arr);
+
+        // On trie les acteurs et les membres de l'équipe avec puis sans photo, ensuite par ordre
+        $sortedWithProfile = array_filter($arr, function ($item) {
+            return $item['profile_path'] !== null;
+        });
+        $sortedWithoutProfile = array_filter($arr, function ($item) {
+            return $item['profile_path'] === null;
+        });
+        usort($sortedWithProfile, function ($a, $b) {
+            if (!key_exists('order', $a) || !key_exists('order', $b)) {
+                return 0;
+            }
+            return $a['order'] <=> $b['order'];
+        });
+        usort($sortedWithoutProfile, function ($a, $b) {
+            if (!key_exists('order', $a) || !key_exists('order', $b)) {
+                return 0;
+            }
+            return $a['order'] <=> $b['order'];
+        });
+        return array_merge($sortedWithProfile, $sortedWithoutProfile);
     }
 
     public function directLinkLogo($providersMatches, $watchProviderList, $dl, $name = null): array
