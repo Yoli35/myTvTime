@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\SerieViewing;
 use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\AlertRepository;
@@ -46,6 +45,8 @@ class EventController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
         $user = $this->getUser();
+        $locale = $request->getLocale();
+        $imageConfig = $this->imageConfiguration->getConfig();
 
         $events = $this->eventRepository->findBy(['user' => $user, 'visible' => true], ['date' => 'DESC']);
         $now = $this->dateService->getNow($user->getTimezone());
@@ -58,39 +59,61 @@ class EventController extends AbstractController
 
         $imgConfig = $this->imageConfiguration->getConfig();
         $watchProviderList = $this->serieController->getRegionProvider($imgConfig, 3, '', '');
-        $alerts = $this->alertRepository->findBy(['user' => $user], ['date' => 'DESC']);
-        $alerts = array_map(function ($alert) use ($watchProviderList, $now) {
-            $serieViewing = $this->serieViewingRepository->find($alert->getSerieViewingId());
+        $alerts = $this->alertRepository->getAlerts($user->getId(), $locale);
 
-            $airDate = $this->dateService->newDateImmutable($alert->getDate()->format("Y-m-d H:i:s"), 'Europe/Paris');
-            if ($serieViewing->isTimeShifted()) {
+        $serieViewingIds = array_column($this->serieViewingRepository->userSeriesIds($user->getId()), 'id');
+        foreach ($alerts as $alert) {
+            if (!in_array($alert['serieViewingId'], $serieViewingIds)) {
+                $message = $alert->getMessage() . '.';
+                $this->alertRepository->remove($alert, true);
+                array_splice($alerts, array_search($alert, $alerts), 1);
+                $this->addFlash('danger', $message . '<br>' . $this->translator->trans('The alert has been deleted because you may have removed the series.'));
+            }
+        }
+
+        $alerts = array_map(function ($alert) use ($user, $watchProviderList, $now, $imageConfig) {
+            $airDate = $this->dateService->newDateImmutable($alert['date'], 'Europe/Paris');
+            if ($alert['timeShifted']) {
                 $airDate = $airDate->add(new DateInterval('P1D'));
             }
 
             $diff = date_diff($now, $airDate);
 
-            $provider = $alert->getProviderId() ? $watchProviderList[$alert->getProviderId()] : null;
+            $provider = $alert['providerId'] ? $watchProviderList[$alert['providerId']] : null;
+            $message = $alert['message'];
             if ($provider) {
-                $message = $alert->getMessage() . ' ' . $this->translator->trans('on') . ' ' . $provider['provider_name'] . '.';
+                $message .= ' ' . $this->translator->trans('on') . ' ' . $provider['provider_name'] . '.';
             } else {
-                $message = $alert->getMessage() . '.';
+                $message .= '.';
             }
-
+            if (!$alert['posterPath'] && $alert['banner']) {
+                $root = $this->getParameter('kernel.project_dir');
+                if (!file_exists($root . "/public/images/series/banners" . $alert['banner'])) {
+                    dump([
+                        'url' => $imageConfig['url'] . $imageConfig['backdrop_sizes'][2] . $alert['banner'],
+                        'local' => $root . "/public/images/series/banners" . $alert['banner']
+                    ]);
+                    $this->serieController->saveImageFromUrl(
+                        $imageConfig['url'] . $imageConfig['backdrop_sizes'][2] . $alert['banner'],
+                        $root . "/public/images/series/banners" . $alert['banner']
+                    );
+                }
+            }
             return [
-                'id' => $serieViewing->getSerie()->getId(),
+                'id' => $alert['serieId'],
                 'type' => 'alert',
                 'past' => $diff->invert,
 
-                'banner' => $serieViewing->getSerie()->getBackdropPath(),
-                'createdAt' => $alert->getCreatedAt(),
+                'banner' => $alert['banner'],
+                'createdAt' => $alert['createdAt'],
                 'date' => $airDate,
                 'description' => '',
                 'images' => [],
-                'name' => $serieViewing->getSerie()->getName(),
+                'name' => $alert['name'] . ' ' . $alert['localizedName'] ?? '',
                 'subheading' => $message,
-                'thumbnail' => $serieViewing->getSerie()->getPosterPath(),
+                'thumbnail' => $alert['posterPath'],
                 'updatedAt' => null,
-                'user' => $alert->getUser(),
+                'user' => $user,
                 'visible' => true,
                 'watchProvider' => $provider,
             ];
@@ -198,6 +221,13 @@ class EventController extends AbstractController
     #[Route('/delete/{id}', name: 'app_event_delete', methods: ['GET'])]
     public function delete(Event $event): JsonResponse
     {
+        $this->deleteEvent($event);
+
+        return $this->json(['status' => 200]);
+    }
+
+    private function deleteEvent($event): void
+    {
         if ($event->getThumbnail()) {
             $this->fileUploader->removeFile($event->getThumbnail(), 'event_thumbnail');
         }
@@ -206,8 +236,6 @@ class EventController extends AbstractController
         }
         // TODO : Supprimer les images associées
         $this->eventRepository->remove($event, true);
-
-        return $this->json(['status' => 200]);
     }
 
     #[Route('/show/{id}', name: 'app_event_show', methods: ['GET'])]

@@ -433,4 +433,16 @@ class SerieViewingRepository extends ServiceEntityRepository
         $resultSet = $statement->executeQuery();
         return $resultSet->fetchAllAssociative();
     }
+
+    public function userSeriesIds($userId): array
+    {
+        $sql = "SELECT id "
+            . "FROM `serie_viewing` sv "
+            . "WHERE sv.`user_id`=" . $userId;
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace App\Repository;
 
@@ -56,6 +56,32 @@ class AlertRepository extends ServiceEntityRepository
             . "LEFT JOIN `episode` ep ON ep.`season_id`=se.`id` AND ep.`episode_number`=a.`episode_number` "
             . "LEFT JOIN `watch_provider` wp ON wp.`provider_id` = a.`provider_id` "
             . "WHERE a.`user_id`=" . $userId . " AND a.`activated`=1 AND ( (sv.`time_shifted`=0 AND DATE(a.`date`)=DATE(NOW()) ) OR( sv.`time_shifted`=1 AND DATE(a.`date`)=DATE_SUB(DATE(NOW()), INTERVAL 1 DAY)) )";
+
+        return $this->registry->getManager()
+            ->getConnection()->prepare($sql)
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
+
+    public function getAlerts(int $userID, string $locale): array
+    {
+        $sql = "SELECT a.date          as date,
+                       s.id            as id,
+                       s.backdrop_path as banner,
+                       a.created_at    as createdAt,
+                       sln.name        as localizedName,
+                       a.message       as message,   
+                       s.name          as name,
+                       s.poster_path   as posterPath,
+                       a.provider_id   as providerId,
+                       s.id            as serieId,
+                       sv.id           as serieViewingId,
+                       sv.time_shifted as timeShifted
+                FROM alert a
+                         LEFT JOIN serie_viewing sv ON sv.id = a.serie_viewing_id
+                         LEFT JOIN serie s ON s.id = sv.serie_id
+                         LEFT JOIN serie_localized_name sln ON s.id = sln.serie_id AND sln.locale = '$locale'
+                WHERE a.user_id = $userID";
 
         return $this->registry->getManager()
             ->getConnection()->prepare($sql)

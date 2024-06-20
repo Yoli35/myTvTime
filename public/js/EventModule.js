@@ -10,6 +10,8 @@ export class EventModule {
         this.start = Date.now();
         this.locale = locale;
 
+        this.averageColor = new AverageColor(16);
+
         thisGlobal = this;
 
         this.countdownValues = globs.countdownValues;
@@ -28,8 +30,51 @@ export class EventModule {
     init(route) {
         new AnimatedHeader();
         if (route === "event_index") {
+            const filterSeriesButton = document.querySelector("#filter-series");
+            const filterEventsButton = document.querySelector("#filter-events");
+            const layoutListButton = document.querySelector("#layout-list");
+            const layoutGridButton = document.querySelector("#layout-grid");
+            const events = document.querySelectorAll("a:has(.event[data-type='event'])");
+            const alerts = document.querySelectorAll("a:has(.event[data-type='alert'])");
             this.initTools();
-            document.querySelector(".add-event").addEventListener("click", this.addNewEvent);
+            document.querySelector("#create-event").addEventListener("click", this.addNewEvent);
+
+            document.querySelector("#filter-series").addEventListener("click", ()=>{
+                filterSeriesButton.classList.toggle("active");
+                const active = filterSeriesButton.classList.contains("active");
+                if (active) {
+                    alerts.forEach(alert => {
+                        alert.style.display = "flex";
+                    });
+                } else {
+                    alerts.forEach(alert => {
+                        alert.style.display = "none";
+                    });
+                }
+            });
+            document.querySelector("#filter-events").addEventListener("click", ()=>{
+                filterEventsButton.classList.toggle("active");
+                const active = filterEventsButton.classList.contains("active");
+                if (active) {
+                    events.forEach(event => {
+                        event.style.display = "flex";
+                    });
+                } else {
+                    events.forEach(event => {
+                        event.style.display = "none";
+                    });
+                }
+            });
+            document.querySelector("#layout-list").addEventListener("click", ()=>{
+                document.querySelector(".events").classList.remove("roomy");
+                layoutListButton.classList.add("active");
+                layoutGridButton.classList.remove("active");
+            });
+            document.querySelector("#layout-grid").addEventListener("click", ()=>{
+                document.querySelector(".events").classList.add("roomy");
+                layoutListButton.classList.remove("active");
+                layoutGridButton.classList.add("active");
+            });
         }
         if (route === "event_edit") {
             document.querySelector("#event_save").innerHTML = this.save_button;
@@ -304,7 +349,7 @@ export class EventModule {
             const poster = event.querySelector(imageContainerSelector);
             const img = poster.querySelector("img");
             if (img) {
-                const averageColor = new AverageColor();
+                const averageColor = this.averageColor;
                 const color = averageColor.getColor(img);
                 let destination = event;
                 if (route === "event_show") {
