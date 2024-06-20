@@ -67,7 +67,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const i = setInterval(() => {
             const now = new Date();
             const progress = 360 * (1 - ((now - start) / 30000) % 1);
-            closure.style.backgroundImage = 'conic-gradient(var(--clr) 0deg, var(--clr) ${progress}deg, var(--cd) ${progress}deg, var(--cd) 360deg)';
+            closure.style.backgroundImage = 'conic-gradient(var(--clr) 0deg, var(--clr) ' + progress + 'deg, var(--cd) ' + progress + 'deg, var(--cd) 360deg)';
         }, 100);
         setTimeout(() => {
             clearInterval(i);
