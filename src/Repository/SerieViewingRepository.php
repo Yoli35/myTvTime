@@ -178,22 +178,31 @@ class SerieViewingRepository extends ServiceEntityRepository
         return $resultSet->fetchOne();
     }
 
-    public function getEpisodesOfTheDay($userId, $today, $yesterday, $locale, $page, $perPage): array
+    public function getEpisodesOfTheDay($userId, $date, $locale): array
     {
-        $sql = "SELECT `serie_viewing`.`serie_id`, `serie`.`name`, `serie`.`poster_path`, `episode_viewing`.`episode_number`, `season_viewing`.`season_number`, "
-            . "`season_viewing`.`episode_count`, `episode_viewing`.`viewed_at` IS NOT NULL AS viewed, `favorite`.`id` IS NOT NULL AS favorite, `serie_localized_name`.`name` as localized_name "
-            . "FROM `serie_viewing` "
-            . "INNER JOIN `serie` ON `serie`.`id`=`serie_viewing`.`serie_id` "
-            . "INNER JOIN `season_viewing` ON `season_viewing`.`serie_viewing_id` = `serie_viewing`.`id` "
-            . "INNER JOIN `episode_viewing` ON `episode_viewing`.`season_id` = `season_viewing`.`id` "
-            . "LEFT JOIN `favorite` ON `favorite`.`user_id`=" . $userId . " AND `favorite`.`type`='serie' AND `favorite`.`media_id`=`serie`.`id` "
-            . "LEFT JOIN `serie_localized_name` ON `serie_localized_name`.`serie_id`=`serie`.`id` AND `serie_localized_name`.`locale`= '" . $locale . "' "
-            . "WHERE `serie_viewing`.`user_id`= " . $userId . " "
-            . "    AND `season_viewing`.`season_number`>0 "
-//            . "    AND `season_viewing`.`season_completed`=0 "
-            . "    AND ((`episode_viewing`.`air_date` = '" . $today . "' AND `serie_viewing`.`time_shifted` = 0) OR (`episode_viewing`.`air_date` = '" . $yesterday . "' AND `serie_viewing`.`time_shifted` = 1)) "
-            . "ORDER BY `episode_viewing`.`air_date` DESC "
-            . "LIMIT " . $perPage . " OFFSET " . ($page - 1) * $perPage;
+        $sql = "SELECT `serie_viewing`.`serie_id`                as serie_id,
+                       `serie`.`name`                            as name,
+                       `serie`.`poster_path`                     as poster_path,
+                       `episode_viewing`.`episode_number`        as episode_number,
+                       `season_viewing`.`season_number`          as season_number,
+                       `season_viewing`.`episode_count`          as episode_count,
+                       `episode_viewing`.`viewed_at` IS NOT NULL as viewed,
+                       `favorite`.`id` IS NOT NULL               as favorite,
+                       `serie_localized_name`.`name`             as localized_name
+                FROM `serie_viewing`
+                         INNER JOIN `serie` ON `serie`.`id` = `serie_viewing`.`serie_id`
+                         INNER JOIN `season_viewing` ON `season_viewing`.`serie_viewing_id` = `serie_viewing`.`id`
+                         INNER JOIN `episode_viewing` ON `episode_viewing`.`season_id` = `season_viewing`.`id`
+                         LEFT JOIN `favorite` ON `favorite`.`user_id`=$userId AND `favorite`.`type` = 'serie' AND `favorite`.`media_id` = `serie`.`id`
+                         LEFT JOIN `serie_localized_name` ON `serie_localized_name`.`serie_id` = `serie`.`id` AND `serie_localized_name`.`locale` = '$locale'
+                WHERE `serie_viewing`.`user_id`=$userId
+                  AND `season_viewing`.`season_number` > 0
+                  AND (
+                    (`serie_viewing`.`time_shifted` = 0 AND `episode_viewing`.`air_date` = DATE('$date'))
+                        OR (`serie_viewing`.`time_shifted` > 0 AND `episode_viewing`.`air_date` = DATE_SUB(DATE('$date'), INTERVAL `serie_viewing`.`time_shifted` DAY))
+                        OR (`serie_viewing`.`time_shifted` < 0 AND `episode_viewing`.`air_date` = DATE_ADD(DATE('$date'), INTERVAL ABS(`serie_viewing`.`time_shifted`) DAY))
+                    )
+                ORDER BY `episode_viewing`.`air_date` DESC";
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);

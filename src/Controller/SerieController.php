@@ -1403,18 +1403,11 @@ class SerieController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $today = $date->format('Y-m-d');
-        $yesterday = $date->sub(new DateInterval('P1D'))->format('Y-m-d');
-
         $locale = $user->getPreferredLanguage() ?? $this->getParameter('locale');
 
-        $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $yesterday, $locale, 1, 20);
-        /*        dump([
-                    'today' => $today,
-                    'yesterday' => $yesterday,
-                    'episodes of the day' => $episodesOfTheDay
-                ]);*/
-        $episodesOfTheDayBySeries = [];
+        $episodesOfTheDay = $this->serieViewingRepository->getEpisodesOfTheDay($user->getId(), $today, $locale);
 
+        $episodesOfTheDayBySeries = [];
         foreach ($episodesOfTheDay as $episode) {
             $found = false;
             foreach ($episodesOfTheDayBySeries as &$ep) {

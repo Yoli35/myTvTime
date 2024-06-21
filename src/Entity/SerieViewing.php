@@ -38,8 +38,8 @@ class SerieViewing
     #[ORM\Column(nullable: true)]
     private ?bool $serieCompleted = null;
 
-    #[ORM\Column]
-    private ?bool $timeShifted = null;
+    #[ORM\Column(options: ['default' => 0])]
+    private int $timeShifted = 0;
 
     #[ORM\OneToMany(mappedBy: 'serieViewing', targetEntity: SeasonViewing::class, cascade: ['persist', 'remove'])]
     private Collection $seasons;
@@ -225,12 +225,12 @@ class SerieViewing
         $this->numberOfSeasons = $numberOfSeasons;
     }
 
-    public function isTimeShifted(): ?bool
+    public function isTimeShifted(): int
     {
         return $this->timeShifted;
     }
 
-    public function setTimeShifted(bool $timeShifted): self
+    public function setTimeShifted(int $timeShifted): self
     {
         $this->timeShifted = $timeShifted;
 
