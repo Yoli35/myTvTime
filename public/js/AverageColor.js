@@ -4,7 +4,8 @@ export class AverageColor {
         this.blockSize = blockSize;
         this.defaultRGB = {r: 0, g: 0, b: 0, lightness: 0};
         this.canvas = document.createElement("canvas");
-        this.context = this.canvas.getContext && this.canvas.getContext("2d");
+        this.context = this.canvas?.getContext('2d', {willReadFrequently: true});
+        // this.context = this.canvas.getContext && this.canvas.getContext("2d");
     }
     getColor(img, square = false) {
         let imageData, width, height,
