@@ -12,7 +12,11 @@
                          data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
                             {% if episodeViewing.airDate %}
                                 {% if shift %}
-                                    data-air-date="{{ episodeViewing.airDate|date_modify("+1 day")|format_date('long') }}"
+                                    {% if shift > 0 %}
+                                        data-air-date="{{ episodeViewing.airDate|date_modify("+"~shift~" day")|format_date('long') }}"
+                                    {% else %}
+                                        data-air-date="{{ episodeViewing.airDate|date_modify(shift~" day")|format_date('long') }}"
+                                    {% endif %}
                                 {% else %}
                                     data-air-date="{{ episodeViewing.airDate|format_date('long') }}"
                                 {% endif %}
@@ -38,9 +42,14 @@
                     {% set air = episodeViewing.airDate %}
                     {% if air %}
                         {% if shift %}
-                            {% set air = air|date_modify("+1 day") %}
+                            {% if shift > 0 %}
+                                {% set air = air|date_modify("+"~shift~" day") %}
+                            {% else %}
+                                {% set air = air|date_modify(shift~" day") %}
+                            {% endif %}
+                        {% else %}
+                            {% set air = air|date('Y-m-d') %}
                         {% endif %}
-                        {% set air = air|date('Y-m-d') %}
                     {% endif %}
                     {% if episodeViewing.episodeNumber <= season.episode_count and (air and air <= now) %}
                         {% set episode = episodes[episodeViewing.episodeNumber-1] %}
@@ -54,11 +63,7 @@
                              data-number="{{ episodeViewing.episodeNumber }}"
                              data-viewed="{{ episodeViewing.viewedAt?1:0 }}"
                                 {% if episode.air_date %}
-                                    {% if shift %}
-                                        data-air-date="{{ episode.air_date|date_modify("+1 day")|format_date('long') }}"
-                                    {% else %}
-                                        data-air-date="{{ episode.air_date|format_date('long') }}"
-                                    {% endif %}
+                                    data-air-date="{{ episode.air_date|format_date('long') }}"
                                 {% else %}
                                     data-air-date="{{ 'No date yet'|trans }}"
                                 {% endif %}

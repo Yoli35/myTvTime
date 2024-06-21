@@ -225,7 +225,7 @@ class SerieViewing
         $this->numberOfSeasons = $numberOfSeasons;
     }
 
-    public function isTimeShifted(): int
+    public function getTimeShifted(): int
     {
         return $this->timeShifted;
     }

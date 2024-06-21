@@ -1032,12 +1032,19 @@ class SerieController extends AbstractController
 
         // Les épisodes (the movie db), l'ajustement de la date (J+1 ?) et leurs affiches (still)
         $episodes = [];
-        $isShifted = $serie['userSerieViewing'] && $serie['userSerieViewing']->isTimeShifted();
+        /** @var SerieViewing $serieViewing */
+        $serieViewing = $serie['userSerieViewing'];
+        $shift = $serieViewing?->getTimeShifted();
         foreach ($season['episodes'] as $episode) {
-            if ($isShifted) {
+            if ($shift) {
                 if ($episode['air_date']) {
-                    $airDate = $this->dateService->newDate($episode['air_date'], $user->getTimezone())?->modify('+1 day')->format('Y-m-d');
-                    $episode['air_date'] = $airDate;
+                    $airDate = $this->dateService->newDateImmutable($episode['air_date'], 'Europe/Paris');
+                    if ($shift > 0) {
+                        $airDate = $airDate->modify('+' . $shift . ' day');
+                    } else {
+                        $airDate = $airDate->modify($shift . ' day');
+                    }
+                    $episode['air_date'] = $airDate->format('Y-m-d');
                 }
             }
             $episode['still_path'] = $this->fullUrl('still', 3, $episode['still_path'], 'no_poster.png', $imgConfig);
@@ -1058,23 +1065,24 @@ class SerieController extends AbstractController
                 }
             }
         }
+        dump($episodes);
 
         $sorteCast = $this->sortByProfileAndOrder($credits['cast']);
         $sortedCrew = $this->sortByProfileAndOrder($credits['crew']);
 
         // Les détails liés à l'utilisateur/spectateur (série, saison, épisodes)
-        if ($serie['userSerieViewing']) {
+        if ($serieViewing) {
             // Infos de la saison
-            $seasonViewing = $this->getSeasonViewing($serie['userSerieViewing'], $seasonNumber);
+            $seasonViewing = $this->getSeasonViewing($serieViewing, $seasonNumber);
             // Infos des épisodes
-            $episodes = array_map(function ($episode) use ($seasonViewing, $isShifted) {
+            $episodes = array_map(function ($episode) use ($seasonViewing, $shift) {
                 $episodeViewing = $this->getEpisodeViewing($seasonViewing, $episode['episode_number']);
                 $episode['viewing'] = $episodeViewing;
                 return $episode;
             }, $episodes);
 
             $episodesVotes = $this->seasonEpisodeVotes($episodes);
-            list($episodes, $modifications) = $this->seasonCheckEpisodeDates($user, $episodes, $isShifted);
+//            list($episodes, $modifications) = $this->seasonCheckEpisodeDates($user, $episodes, $shift);
         } else {
             $seasonViewing = null;
         }
@@ -1242,8 +1250,12 @@ class SerieController extends AbstractController
         if ($serie['airDate']) {
             $date = $this->dateService->newDateImmutable($serie['airDate'], $user->getTimezone());
 
-            if ($serie['isTimeShifted']) {
-                $date = $date->modify('+1 day');
+            $shift = $serie['timeShifted'];
+            if ($shift) {
+                if ($shift > 0)
+                    $date = $date->modify('+' . $shift . ' day');
+                else
+                    $date = $date->modify($shift . ' day');
             }
             $episodeDiff = date_diff($now, $date);
             if ($episodeDiff->days == 0) {
@@ -1630,10 +1642,10 @@ class SerieController extends AbstractController
         } else {
             $serie['serieCompleted'] = false;
         }
-        if (key_exists('time_shifted', $result) && $result['time_shifted']) {
-            $serie['isTimeShifted'] = true;
+        if (key_exists('time_shifted', $result)) {
+            $serie['timeShifted'] = $result['time_shifted'];
         } else {
-            $serie['isTimeShifted'] = false;
+            $serie['timeShifted'] = 0;
         }
         if (key_exists('airDate', $result)) {
             $serie['airDate'] = $result['airDate'];
@@ -2395,25 +2407,46 @@ class SerieController extends AbstractController
                 $seasonWithAView = $season;
                 $seasonViewing = $serieViewing->getSeasonByNumber($season['season_number']);
                 $seasonWithAView['seasonViewing'] = $seasonViewing;
-                if ($serieViewing->isTimeShifted()) {
+
+                $shift = $serieViewing->getTimeShifted();
+                if ($shift) {
                     $airDate = $this->dateService->newDate($season['air_date'], $user->getTimezone(), true);
-                    $airDate = $airDate->modify('+1 day');
+                    if ($shift > 0) {
+                        $airDate = $airDate->modify('+' . $shift . 'day');
+                    } else {
+                        $airDate = $airDate->modify($shift . 'day');
+                    }
                     $seasonWithAView['air_date'] = $airDate->format('Y-m-d');
                 }
                 $seasonsWithAView[] = $seasonWithAView;
             }
+            dump(['seasonsWithAView' => $seasonsWithAView]);
             $tv['seasons'] = $seasonsWithAView;
         } else {
             $tv['seriePosters'] = [];
             $tv['serieBackdrops'] = [];
         }
 
-        $tv['seasons'] = array_map(function ($season) use ($tv, $locale) {
+        $tv['seasons'] = array_map(function ($season) use ($user, $tv, $serieViewing, $locale) {
             $standing = $this->TMDBService->getTvSeason($tv['id'], $season['season_number'], $locale);
             $seasonTMDB = json_decode($standing, true);
             $season['episodes'] = $seasonTMDB['episodes'];
+
+            if ($season['season_number'] > 0 && $serieViewing && $shift = $serieViewing->getTimeShifted()) {
+                foreach ($season['episodes'] as $key => $episode) {
+                    if ($episode['air_date'] == null) continue;
+                    $airDate = $this->dateService->newDate($episode['air_date'], $user->getTimezone(), true);
+                    if ($shift > 0) {
+                        $airDate = $airDate->modify('+' . $shift . 'day');
+                    } else {
+                        $airDate = $airDate->modify($shift . 'day');
+                    }
+                    $season['episodes'][$key]['air_date'] = $airDate->format('Y-m-d');
+                }
+            }
             return $season;
         }, $tv['seasons']);
+        dump(['tv seasons' => $tv['seasons']]);
 
         $addThisSeries = !$serieViewing;
 
@@ -2468,7 +2501,7 @@ class SerieController extends AbstractController
             'user' => $user,
             'whatsNew' => $whatsNew,
             'viewedEpisodes' => $serieViewing?->getViewedEpisodes(),
-            'isTimeShifted' => $serieViewing?->isTimeShifted(),
+            'isTimeShifted' => $serieViewing?->getTimeShifted(),
             'nextEpisodeToWatch' => $nextEpisodeToWatch ?? null,
             'alert' => $alert,
             'imageConfig' => $imgConfig,
@@ -2773,7 +2806,7 @@ class SerieController extends AbstractController
         return $episodesVotes;
     }
 
-    public function seasonCheckEpisodeDates(User $user, array $episodes, bool $isShifted): array
+    public function seasonCheckEpisodeDates(User $user, array $episodes, int $shift): array
     {
         $modifications = [];
         $newEpisodes = [];
@@ -2781,23 +2814,9 @@ class SerieController extends AbstractController
             if (array_key_exists('viewing', $episode)) {
                 /** @var EpisodeViewing $episodeViewing */
                 $episodeViewing = $episode['viewing'];
-                if ($episode['air_date']) {
-                    // La date de diffusion peut changer par rapport au calendrier initial de la série / saison
-                    $airDate = $this->dateService->newDateImmutable($episode['air_date'], $user->getTimezone(), true)->modify($isShifted ? "-1 day" : "0 day");
-                    if ($episodeViewing->getAirDate()?->format('Y-m-d') != $airDate->format('Y-m-d')) {
-                        $modifications[] = [
-                            'episode' => $episode['episode_number'],
-                            'episode air date' => $episode['air_date'],
-                            'airDate' => $airDate,
-                            'viewing air date' => $episodeViewing->getAirDate(),
-                        ];
-                        $episodeViewing->setAirDate($airDate);
-                        $this->episodeViewingRepository->save($episodeViewing, true);
-                    }
-                } else {
-                    if ($episodeViewing->getAirDate()) {
-                        $episode['air_date'] = $episodeViewing->getAirDate()->format('Y-m-d');
-                    }
+                dump($episode);
+                if (!$episode['air_date'] && $episodeViewing->getAirDate()) {
+                    $episode['air_date'] = $episodeViewing->getAirDate()->format('Y-m-d');
                 }
             }
             $newEpisodes[] = $episode;
@@ -2955,8 +2974,11 @@ class SerieController extends AbstractController
             $airDate = $lastNotViewedEpisode->getAirDate();
 
             if ($airDate) {
-                if ($serieViewing->isTimeShifted()) {
-                    $airDate = $airDate->modify('+1 day');
+                if ($shift = $serieViewing->getTimeShifted()) {
+                    if ($shift > 0)
+                        $airDate = $airDate->modify('+' . $shift . 'day');
+                    else
+                        $airDate = $airDate->modify($shift . 'day');
                 }
                 $airDate = $this->dateService->newDateImmutable($airDate->format('Y-m-d'), $user->getTimezone(), true);
 
@@ -2990,8 +3012,11 @@ class SerieController extends AbstractController
             }
 
             $airDate = $this->dateService->newDateImmutable($tmdbEpisode['air_date'], $user->getTimezone(), true);
-            if ($serieViewing->isTimeShifted()) {
-                $airDate = $airDate->modify('+1 day');
+            if ($shift = $serieViewing->getTimeShifted()) {
+                if ($shift > 0)
+                    $airDate = $airDate->modify('+' . $shift . ' day');
+                else
+                    $airDate = $airDate->modify($shift . ' day');
             }
             $lastNotViewedEpisode->setAirDate($airDate);
             $this->episodeViewingRepository->save($lastNotViewedEpisode, true);
@@ -3379,7 +3404,7 @@ class SerieController extends AbstractController
                     'episode_count' => $seasonViewing->getEpisodeCount(),
                     'view' => $this->render('blocks/series/_season_viewing.html.twig', [
                         'season' => $s,
-                        'shift' => $serieViewing->isTimeShifted(),
+                        'shift' => $serieViewing->getTimeShifted(),
                         'locale' => $locale,
                         'globalIndex' => $globalIndex,
                     ])

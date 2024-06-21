@@ -117,7 +117,7 @@ class SerieRepository extends ServiceEntityRepository
             . "s.`number_of_episodes` as numberOfEpisodes, s.`number_of_seasons` as numberOfSeasons, "
             . "sv.`viewed_episodes` as viewedEpisodes, (sv.`viewed_episodes` / s.`number_of_episodes`) as progress, "
             . "sv.`serie_completed` as serieCompleted, "
-            . "sv.time_shifted as isTimeShifted, "
+            . "sv.time_shifted as timeShifted, "
             . "epv.air_date as airDate, "
             . "s.`original_name` as originalName, s.`origin_country` as originCountry, s.`episode_durations` as episodeDurations, "
             . "s.`upcoming_date_year` as upcomingDateYear, s.`upcoming_date_month` as upcomingDateMonth, "
