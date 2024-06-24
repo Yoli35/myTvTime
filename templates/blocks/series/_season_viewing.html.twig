@@ -37,6 +37,7 @@
                     </div>
                 {% endfor %}
             {% else %}
+                {% set displayedEpisodeCount = 0 %}
                 {% for episodeViewing in seasonViewing.episodes %}
                     {% set now = 'now'|date('Y-m-d') %}
                     {% set air = episodeViewing.airDate %}
@@ -47,9 +48,8 @@
                             {% else %}
                                 {% set air = air|date_modify(shift~" day") %}
                             {% endif %}
-                        {% else %}
-                            {% set air = air|date('Y-m-d') %}
                         {% endif %}
+                        {% set air = air|date('Y-m-d') %}
                     {% endif %}
                     {% if episodeViewing.episodeNumber <= season.episode_count and (air and air <= now) %}
                         {% set episode = episodes[episodeViewing.episodeNumber-1] %}
@@ -79,8 +79,17 @@
                             {% endif %}
                             {% set globalIndex = globalIndex + 1 %}
                         </div>
+                        {% set displayedEpisodeCount = displayedEpisodeCount + 1 %}
                     {% endif %}
                 {% endfor %}
+                {% if displayedEpisodeCount == 0 %}
+                    {% set episode = episodes[0] %}
+                    {% if episode.air_date %}
+                        <div class="soon">{{ 'Next episode:'|trans }} {{ episode.air_date|format_date('relative_full') }}</div>
+                    {% else %}
+                        <div class="no-episodes">{{ 'No episodes yet'|trans }}</div>
+                    {% endif %}
+                {% endif %}
             {% endif %}
         </div>
     {% endif %}

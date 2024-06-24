@@ -11,7 +11,7 @@
     </div>
     <div class="timeShifted" data-user="{{ user.id }}" data-media="{{ serieId }}">
         <div class="control">
-            {{ 'Airing D+1'|trans }}
+            {{ 'Airing D+'|trans }}{{ isTimeShifted|default(0) }}
             <label class="switch">
                 <input type="checkbox" {% if isTimeShifted %} checked{% endif %}/>
                 <span></span>

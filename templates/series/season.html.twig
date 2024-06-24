@@ -142,7 +142,7 @@
                         <div class="episodes {{ seasonsCookie.layout }}">
                             {% for episode in episodes %}
                                 {% set now = 'now'|date("Y-m-d") %}
-                                {% set upcoming = episode.air_date > now %}
+                                {% set upcoming = episode.air_date is null or episode.air_date > now %}
                                 {% set past = episode.air_date <= now %}
                                 {% if not upcoming %}
                                     <div class="episode">
