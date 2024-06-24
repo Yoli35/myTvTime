@@ -75,15 +75,6 @@
                             {% endif %}
                             <div class="arrow"></div>
                         </div>
-                        {% if serie.seriePosters|length > 1 %}
-                            <div class="poster-list">
-                                {% for seriePoster in serie.seriePosters %}
-                                    <div class="poster-item">
-                                        <img src="{{ "/images/series/posters" ~ seriePoster.posterPath }}" alt="{{ serie.name }}" loading="lazy">
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
                     </div>
                     <div class="infos">
                         <h1>
@@ -237,6 +228,18 @@
                                         {% for serieBackdrop in serie.serieBackdrops %}
                                             <div class="backdrop-item">
                                                 <img src="{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serieBackdrop.backdropPath }}" alt="{{ serie.name }}" loading="lazy">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if serie.seriePosters|length > 1 %}
+                                <div class="poster-list-wrapper">
+                                    {{ 'Posters'|trans }}
+                                    <div class="poster-list">
+                                        {% for seriePoster in serie.seriePosters %}
+                                            <div class="poster-item">
+                                                <img src="{{ "/images/series/posters" ~ seriePoster.posterPath }}" alt="{{ serie.name }}" loading="lazy">
                                             </div>
                                         {% endfor %}
                                     </div>

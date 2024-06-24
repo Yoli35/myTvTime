@@ -1290,28 +1290,6 @@
                         }
                     }
                 }
-
-                .poster-list {
-                    @include flex-row();
-                    gap: 1rem;
-                    height: 6rem;
-                    width: 20rem;
-
-                    .poster-item {
-                        border: 1px solid var(--gradient-ardoise-20);
-                        border-radius: .25rem;
-                        cursor: pointer;
-                        height: 4.5rem;
-                        width: 3rem;
-
-                        img {
-                            border-radius: .25rem;
-                            height: 100%;
-                            object-fit: cover;
-                            width: 100%;
-                        }
-                    }
-                }
             }
 
             .infos {
@@ -1488,11 +1466,11 @@
                     }
 
                     .overview {
-                        font-size: 1rem;
+                        font-size: clamp(1rem, 1.5vw, 2rem);
                         font-weight: 100;
-                        line-height: 1.25rem;
-                        max-height: 10rem;
-                        overflow: auto;
+                        line-height: 1.1em;
+                        /* max-height: 10rem; */
+                        /* overflow: auto; */
                         width: 100%;
                     }
 
@@ -1579,11 +1557,11 @@
                         }
                     }
 
-                    .backdrop-list-wrapper {
+                    .backdrop-list-wrapper, .poster-list-wrapper {
                         @include flex-col(flex-start, center);
                         gap: .5rem;
 
-                        .backdrop-list {
+                        .backdrop-list, .poster-list {
                             @include flex-row();
                             flex-wrap: wrap;
                             gap: 1rem;
@@ -1599,6 +1577,20 @@
                                     height: auto;
                                     object-fit: cover;
                                     width: 100%;
+                                }
+                            }
+
+                            .poster-item {
+                                border: 1px solid var(--gradient-ardoise-20);
+                                border-radius: .25rem;
+                                cursor: pointer;
+                                height: 6rem;
+
+                                img {
+                                    border-radius: .25rem;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    width: auto;
                                 }
                             }
                         }
