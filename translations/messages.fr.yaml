@@ -578,6 +578,8 @@ votes: votes
 No date yet: Pas encore de date
 No provider yet: Pas encore de fournisseur en streaming annoncé
 Start typing...: Commencez à taper...
+"Next episode:": "Prochain épisode :"
+No episode yet: Pas encore d'épisode
 
 # descriptions
 Time spent watching my series: Temps passé à regarder mes séries
@@ -1300,7 +1302,7 @@ Writing: Écriture
 # key facts
 Favorite: Série favorite
 Add to favorites: Ajouter aux favoris
-Airing D+1: Diffusion J+1
+Airing D+: Diffusion J+
 Successfully added to favorites: Ajouté aux favoris avec succès
 Successfully removed from favorites: Retiré des favoris avec succès
 Key facts: Faits principaux
