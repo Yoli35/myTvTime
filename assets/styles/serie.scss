@@ -1904,8 +1904,11 @@
     }
 
     main {
-        @include flex-col(flex-start, flex-start);
+        align-items:flex-start;
+        display: flex;
+        flex-direction: column-reverse;
         gap: 1rem;
+        justify-content: flex-start;
 
         h4 {
             margin-top: .5rem;
@@ -2799,12 +2802,6 @@
         }
 
         .desktop {
-            display: none;
-        }
-
-        .tablet {
-            display: flex;
-
             .key-facts {
                 align-items: center;
                 display: flex;
@@ -4746,10 +4743,6 @@
 
             .desktop {
                 display: flex;
-            }
-
-            .tablet {
-                display: none;
             }
 
             aside {
