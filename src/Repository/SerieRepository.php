@@ -220,17 +220,19 @@ class SerieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @param $userId
-     * @return array [] Returns an array of Serie partial objects (fields: id, serieId)
-     */
-    public function findMySerieIds($userId): array
+    public function findMySerieIds(int $userId, string $locale = 'fr'): array
     {
-        return $this->createQueryBuilder('s')
-            ->innerJoin('s.users', 'u', Expr\Join::WITH, 'u.id=' . $userId)
-            ->select("s.id", "s.serieId")
-            ->getQuery()
-            ->getResult();
+        $sql = "SELECT
+                    s.`id` as id,
+                    s.`serie_id` as seriesId,
+                    sv.`viewed_episodes` as viewedEpisodes,
+                    sv.`modified_at` as modifiedAt,
+                    IFNULL(sln.`name`, s.`name`) as name
+                FROM `serie` s
+                    INNER JOIN `serie_viewing` sv ON sv.`user_id`=$userId AND sv.`serie_id`=s.`id`
+                    LEFT JOIN serie_localized_name sln ON sln.`serie_id`=s.`id` AND sln.`locale`='$locale'";
+
+        return $this->getAll($sql);
     }
 
     public function numbers($userId): array
@@ -257,10 +259,7 @@ class SerieRepository extends ServiceEntityRepository
     {
         $sql = "SELECT count(*) as count "
             . "FROM `serie`";
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-        $result = $resultSet->fetchAllAssociative();
+        $result = $this->getAll($sql);
         return $result['count'];
     }
 
@@ -272,10 +271,7 @@ class SerieRepository extends ServiceEntityRepository
             . "ORDER BY t0.`first_date_air` DESC "
             . "LIMIT " . $limit . " OFFSET " . $offset;
 
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-        return $resultSet->fetchAllAssociative();
+        return $this->getAll($sql);
     }
 
     public function getCountries($userId): array
@@ -286,10 +282,7 @@ class SerieRepository extends ServiceEntityRepository
             . "GROUP BY s.`origin_country` "
             . "ORDER BY s.`origin_country` ASC";
 
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-        return $resultSet->fetchAllAssociative();
+        return $this->getAll($sql);
     }
 
     public function getSeriesFromCountry($userId, $countryCode, $offset, $limit): array
@@ -310,10 +303,7 @@ class SerieRepository extends ServiceEntityRepository
             . 'ORDER BY s.`first_date_air` DESC '
             . 'LIMIT ' . $limit . ' OFFSET ' . $offset;
 
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-        return $resultSet->fetchAllAssociative();
+        return $this->getAll($sql);
     }
 
     public function seriesFromCountryCount($userId, $countryCode): int
@@ -324,10 +314,7 @@ class SerieRepository extends ServiceEntityRepository
             . 'INNER JOIN `serie_viewing` sv ON sv.`serie_id`=s.`id` AND sv.`user_id`=' . $userId . ' '
             . 'WHERE s.`origin_country` LIKE "%' . $countryCode . '%" ';
 
-        $em = $this->registry->getManager();
-        $statement = $em->getConnection()->prepare($sql);
-        $resultSet = $statement->executeQuery();
-        $result = $resultSet->fetchAllAssociative();
+        $result = $this->getAll($sql);
         return $result[0]['count'];
     }
 
@@ -338,6 +325,11 @@ class SerieRepository extends ServiceEntityRepository
             . "WHERE s.`id` > " . $minId . " "
             . "ORDER BY s.`id` ASC";
 
+        return $this->getAll($sql);
+    }
+
+    public function getAll($sql): array
+    {
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
         $resultSet = $statement->executeQuery();

@@ -1191,11 +1191,11 @@
     pointer-events: none;
     position: absolute;
     top: -4em;
-    transition: opacity .125s;
     z-index: 10000;
 
     &.show {
         opacity: 1;
+        transition: opacity 250ms ease-in-out .125s;
     }
 
     &.masked {
@@ -1217,6 +1217,14 @@
         color: var(--gradient-ardoise-20);
         padding: .5em 1em;
         z-index: 2;
+
+        &:has(img) {
+            flex-direction: column;
+        }
+
+        img {
+            border-radius: .25em;
+        }
     }
 
     .tail {

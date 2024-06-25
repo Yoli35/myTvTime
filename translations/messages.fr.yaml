@@ -346,6 +346,7 @@ creator.she: Créatrice
 serie: Série
 series: Séries
 Start to watch: Commencer à regarder
+Last watch at: Vu la dernière fois le
 Direct link: Lien direct
 Add a link: Ajouter un lien
 Watch on: Regarder sur
@@ -1302,7 +1303,7 @@ Writing: Écriture
 # key facts
 Favorite: Série favorite
 Add to favorites: Ajouter aux favoris
-Airing D+: Diffusion J+
+Staggered broadcasting: Diffusion décalée
 Successfully added to favorites: Ajouté aux favoris avec succès
 Successfully removed from favorites: Retiré des favoris avec succès
 Key facts: Faits principaux

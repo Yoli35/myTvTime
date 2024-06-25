@@ -1,4 +1,9 @@
+let gThis = null;
 export class ToolTips {
+    constructor() {
+        gThis = this;
+    }
+
     init(element = null, className = null) {
         // <div className="tool-tips">
         //     <div className="body"></div>
@@ -41,13 +46,25 @@ export class ToolTips {
         if (tooltips.classList.contains("show")) {
             return;
         }
-        const text = evt.currentTarget.getAttribute("data-title");
+        const currentTarget = evt.currentTarget;
+        const text = currentTarget.getAttribute("data-title");
+        const img = currentTarget.querySelector("img");
         const body = tooltips.querySelector(".body");
-        body.innerHTML = text;
+        if (!img) {
+            body.innerHTML = text;
+        } else {
+            const imgClone = img.cloneNode(true);
+            body.innerHTML = "";
+            body.appendChild(imgClone);
+            const p = document.createElement("p");
+            p.innerHTML = text;
+            body.appendChild(p);
+        }
 
-        const width = body.offsetWidth;
-        tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
+        // const width = body.offsetWidth;
+        // tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
 
+        gThis.move(evt);
         tooltips.classList.add("show");
     }
 
@@ -61,24 +78,32 @@ export class ToolTips {
         const tooltips = document.querySelector(".tool-tips");
         const tail = tooltips.querySelector(".tail");
         const body = tooltips.querySelector(".body");
+        const img = body.querySelector("img");
         const width = body.offsetWidth;
+        const height = body.offsetHeight - 48;
+        const fromTopViewport = evt.clientY;
         const windowWidth = window.innerWidth;
+
+        if (img) img.style.maxHeight = (fromTopViewport - 64) + "px";
 
         const left = evt.pageX - (width / 2);
         if (left < 0) {
-            tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2) + (left * -1)) + "px " + evt.pageY + "px;");
+            let style = "translate: " + (evt.pageX - (width / 2) + (left * -1)) + "px " + (evt.pageY - Math.min(height, fromTopViewport)) + "px;";
+            tooltips.setAttribute("style", style);
             tail.setAttribute("style", "translate: " + left + "px -.55em");
             return;
         }
 
         const right = evt.pageX + (width / 2);
         if (right > windowWidth) {
-            tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2) - (right - windowWidth)) + "px " + evt.pageY + "px;");
+            let style = "translate: " + (evt.pageX - (width / 2) - (right - windowWidth)) + "px " + (evt.pageY - Math.min(height, fromTopViewport)) + "px;";
+            tooltips.setAttribute("style", style);
             tail.setAttribute("style", "translate: " + (right - windowWidth) + "px -.55em;");
             return;
         }
 
-        tooltips.setAttribute("style", "translate: " + (evt.pageX - (width / 2)) + "px " + evt.pageY + "px;");
+        let style = "translate: " + (evt.pageX - (width / 2)) + "px " + (evt.pageY - Math.min(height, fromTopViewport)) + "px;";
+        tooltips.setAttribute("style", style);
         tail.setAttribute("style", "translate: 0 -.55em");
     }
 }

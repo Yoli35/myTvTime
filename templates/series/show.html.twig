@@ -403,38 +403,46 @@
                             </section>
                         {% endif %}
                     {% endif %}
-
-                    {% if similar.results|length %}
-                        <section>
-                            <div class="label">{{ 'Similar Series'|trans }}</div>
-                            <div class="similar">
-                                {% for serie in similar.results %}
-                                    <a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?p={{ page }}&from={{ from }}" title="{{ serie.name }}">
-                                        <div class="poster">
-                                            {% if serie.poster_path|length %}
-                                                <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}" loading="lazy">
-                                            {% else %}
-                                                <img src="/images/default/no_poster.png" alt="{{ serie.name }}" loading="lazy">
-                                                <div class="name">{{ serie.name }}</div>
-                                            {% endif %}
-                                            {% if serieIds|length %}
-                                                {% if serie.id in serieIds %}
-                                                    <div class="seen"><i class="fa-solid fa-eye"></i></div>
-                                                {% else %}
-                                                    <div class="add" data-id="{{ serie.id }}"><i class="fa-solid fa-circle-plus"></i></div>
-                                                {% endif %}
-                                            {% endif %}
-                                        </div>
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        </section>
-                    {% endif %}
                 </article>
-                <aside class="desktop">
+                <aside>
                     {{ include('blocks/series/_aside.html.twig', {block: 'desktop'}) }}
                 </aside>
             </main>
+            <footer>
+                {% if similar.results|length %}
+                    <section>
+                        <div class="label">{{ 'Similar Series'|trans }}</div>
+                        <div class="similar">
+                            {% for serie in similar.results %}
+                                <a href="{{ path('app_series_tmdb', {'id': serie.id}) }}?p={{ page }}&from={{ from }}"
+                                    {% if serie.id in seriesIds.ids %}
+                                        {% if seriesIds.infos[serie.id].viewedEpisodes==0 %}
+                                            data-title="{{ 'Start to watch'|trans }}&nbsp;<strong>{{ seriesIds.infos[serie.id].name }}</strong>"
+                                        {% else %}
+                                            data-title="<strong>{{ seriesIds.infos[serie.id].name }}</strong><br><span>{{ 'Last watch at'|trans }} {{ seriesIds.infos[serie.id].modifiedAt|format_datetime() }}</span>"
+                                        {% endif %}
+                                    {% else %}
+                                        data-title="<strong>{{ serie.name }}</strong>"
+                                    {% endif %}>
+                                    <div class="poster">
+                                        {% if serie.poster_path|length %}
+                                            <img src="{{ imageConfig.url ~ imageConfig.poster_sizes.3 ~ serie.poster_path }}" alt="{{ serie.name }}" loading="lazy">
+                                        {% else %}
+                                            <img src="/images/default/no_poster.png" alt="{{ serie.name }}" loading="lazy">
+                                            <div class="name">{{ serie.name }}</div>
+                                        {% endif %}
+                                        {% if serie.id in seriesIds.ids %}
+                                            <div class="seen{% if seriesIds.infos[serie.id].viewedEpisodes==0 %} start{% endif %}">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endif %}
+            </footer>
             <div class="translationModalBack">
                 <div class="translationModal">
                     <div class="trans-header">

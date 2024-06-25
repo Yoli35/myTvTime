@@ -2466,7 +2466,15 @@ class SerieController extends AbstractController
         $sortedCast = $this->sortByProfileAndOrder($credits['cast']);
         $sortedCrew = $this->sortByProfileAndOrder($credits['crew']);
 
-//        dump([
+        $arr = $this->mySerieIds($user, true);
+        $seriesIds = $arr['seriesIds'];
+        $infos = $arr['infos'];
+        $userSeriesInfos = [];
+        foreach ($infos as $info) {
+            $userSeriesInfos[$info['seriesId']] = $info;
+        }
+
+        dump([
 //            'tv' => $tv,
 //            'watchProviders' => $watchProviders,
 //            'providersFlatrate' => $providersFlatrate,
@@ -2475,7 +2483,11 @@ class SerieController extends AbstractController
 //            'credits' => $credits,
 //            'sortedCast' => $sortedCast,
 //            'sortedCrew' => $sortedCrew,
-//        ]);
+//            'user' => $user,
+//            'serieIds' => $seriesIds,
+            'infos' => $infos,
+            'userSeriesInfos' => $userSeriesInfos,
+        ]);
         return $this->render('series/show.html.twig', [
             'serie' => $tv,
             'serieId' => $serie?->getId(),
@@ -2489,7 +2501,7 @@ class SerieController extends AbstractController
             'providersFlatrate' => $providersFlatrate,
             'watchProviderList' => $watchProviderList,
             'similar' => $similar,
-            'serieIds' => $this->mySerieIds($user),
+            'seriesIds' => ['ids' => $seriesIds, 'infos' => $userSeriesInfos],
             'images' => $images,
             'locale' => $locale,
             'page' => $page,
@@ -2814,7 +2826,6 @@ class SerieController extends AbstractController
             if (array_key_exists('viewing', $episode)) {
                 /** @var EpisodeViewing $episodeViewing */
                 $episodeViewing = $episode['viewing'];
-                dump($episode);
                 if (!$episode['air_date'] && $episodeViewing->getAirDate()) {
                     $episode['air_date'] = $episodeViewing->getAirDate()->format('Y-m-d');
                 }
@@ -3571,12 +3582,15 @@ class SerieController extends AbstractController
         }
     }
 
-    public function mySerieIds(User|null $user): array
+    public function mySerieIds(?User $user, bool $userInfos = false): array
     {
         if ($user == null) {
             return [];
         }
         $arr = $this->serieRepository->findMySerieIds($user->getId());
-        return array_column($arr, 'serie_id');
+        if ($userInfos) {
+            return ['seriesIds' => array_column($arr, 'seriesId'), 'infos' => $arr];
+        }
+        return array_column($arr, 'seriesId');
     }
 }

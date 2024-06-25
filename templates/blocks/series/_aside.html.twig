@@ -11,7 +11,13 @@
     </div>
     <div class="timeShifted" data-user="{{ user.id }}" data-media="{{ serieId }}">
         <div class="control">
-            {{ 'Airing D+'|trans }}{{ isTimeShifted|default(0) }}
+            {{ 'Staggered broadcasting'|trans }} ({{ isTimeShifted|default(0) }} {{ (isTimeShifted>1?'days':'day')|trans }})
+            <div class="edit-timeShifted">
+                <label class="input">
+                    <input type="number" min="0" max="365" value="{{ isTimeShifted|default(0) }}" data-user="{{ user.id }}" data-media="{{ serieId }}">
+                </label>
+                <button class="btn btn-primary btn-sm" data-user="{{ user.id }}" data-media="{{ serieId }}">{{ 'Save'|trans }}</button>
+            </div>
             <label class="switch">
                 <input type="checkbox" {% if isTimeShifted %} checked{% endif %}/>
                 <span></span>
@@ -19,9 +25,7 @@
         </div>
     </div>
 {% endif %}
-<div class="key-facts">
     {% if user and serieId %}
-        <h4>{{ 'Direct link'|trans }}</h4>
         <div class="direct-link">
             {% if serie.directLink|length %}
                 {% set now = "now"|format_datetime(pattern="Y-M-d") %}
@@ -34,15 +38,15 @@
                 <div class="direct-link-list" data-now="{{ now }}" data-air="{{ serie.first_air_date }}">
                     {% for dl in serie.directLink %}
                         {% if dl.type == 'dir' %}
-{#                            <div class="link-pass" data-title="{{ 'Watch'|trans }} {{ dl.name }}">#}
+                            {#                            <div class="link-pass" data-title="{{ 'Watch'|trans }} {{ dl.name }}"> #}
                             {% set title = 'Watch'|trans ~ ' ' ~ dl.name %}
                         {% endif %}
                         {% if dl.type == 'season' %}
-{#                            <div class="link-pass" data-title="{{ 'Watch season'|trans }} {{ dl.name }}">#}
+                            {#                            <div class="link-pass" data-title="{{ 'Watch season'|trans }} {{ dl.name }}"> #}
                             {% set title = 'Watch season'|trans ~ ' ' ~ dl.name %}
                         {% endif %}
                         {% if dl.type == 'link' %}
-{#                            <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}">#}
+                            {#                            <div class="link-pass" data-title="{{ 'Watch on'|trans }} {{ dl.name }}{% if 'playlist' in dl.url %} - {{ 'Playlist'|trans }}{% endif %}{% if 'search_query' in dl.url %} - {{ 'Search page'|trans }}{% endif %}"> #}
                             {% set title = 'Watch on'|trans ~ ' ' ~ dl.name %}
                             {% if 'playlist' in dl.url %}
                                 {% set title = title ~ ' - ' ~ 'Playlist'|trans %}
@@ -52,26 +56,26 @@
                             {% endif %}
                         {% endif %}
                         {% if dl.type == 'file' %}
-{#                            <div class="link-pass" data-title="{{ 'Play video'|trans }} “{{ dl.name }}”">#}
+                            {#                            <div class="link-pass" data-title="{{ 'Play video'|trans }} “{{ dl.name }}”"> #}
                             {% set title = 'Play video'|trans ~ ' “' ~ dl.name ~ '”' %}
                         {% endif %}
                         <div class="link-pass" data-title="{{ title }}">
-                        <a href="{{ dl.url }}" target="_blank">
-                            {% if dl.type == 'link' or dl.type == 'season' %}
-                                {% if dl.logoPath %}
-                                    <img src="{{ dl.logoPath }}" alt="{{ dl.name }}" loading="lazy">
-                                {% else %}
-                                    <i class="fa-solid fa-circle-arrow-right"></i>
+                            <a href="{{ dl.url }}" target="_blank">
+                                {% if dl.type == 'link' or dl.type == 'season' %}
+                                    {% if dl.logoPath %}
+                                        <img src="{{ dl.logoPath }}" alt="{{ dl.name }}" loading="lazy">
+                                    {% else %}
+                                        <i class="fa-solid fa-circle-arrow-right"></i>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            {% if dl.type == 'file' %}
-                                <span>{{ dl.ext }}</span>
-                            {% endif %}
-                            {% if dl.type == 'dir' %}
-                                <i class="fa-solid fa-folder"></i>
-                            {% endif %}
-                        </a>
-                        <div class="link-tool" id="edit-direct-link-{{ block }}"><i class="fa-solid fa-pen" data-title="{{ 'Edit url'|trans }}"></i></div>
+                                {% if dl.type == 'file' %}
+                                    <span>{{ dl.ext }}</span>
+                                {% endif %}
+                                {% if dl.type == 'dir' %}
+                                    <i class="fa-solid fa-folder"></i>
+                                {% endif %}
+                            </a>
+                            <div class="link-tool" id="edit-direct-link-{{ block }}"><i class="fa-solid fa-pen" data-title="{{ 'Edit url'|trans }}"></i></div>
                         </div>
                     {% endfor %}
                 </div>
@@ -81,7 +85,7 @@
             {% endif %}
         </div>
     {% endif %}
-    <h4>{{ 'Key facts'|trans }}</h4>
+<div class="key-facts">
     <div class="fact">
         <div class="fact-label">{{ 'Original name'|trans }}</div>
         <div class="fact-content">{{ serie.original_name }}</div>
