@@ -180,6 +180,7 @@ body {
     background-color: var(--gradient-orange-50);
     scale: 0 1;
     animation: scroll-watcher linear;
+    //noinspection CssInvalidFunction
     animation-timeline: scroll();
     transform-origin: left;
 }
