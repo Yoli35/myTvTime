@@ -7,6 +7,12 @@
     color: #FF0000;
 }
 
+@property --timer-value {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 360deg;
+}
+
 .yt-header {
     @include banner("../images/youtube.png");
     background-color: var(--gradient-ardoise-75-alpha-25);
@@ -15,6 +21,8 @@
     margin-top: 1em;
 
     .banner {
+        --timer-position: 0%;
+
         .history, .search-on-yt, .youtube {
             @include flex-row();
             border: 2px solid var(--gradient-ardoise-10);
@@ -41,6 +49,44 @@
 
         .youtube {
             bottom: 6rem;
+        }
+
+        .timer {
+            align-items: center;
+            animation: timer 600s linear infinite;
+            background: conic-gradient(
+                            hsla(0, 0, 0, 0) 0deg,
+                            hsla(0, 0, 0, 0) var(--timer-value),
+                            hsla(0, 100%, 100%, 1) var(--timer-value),
+                            hsla(0, 100%, 100%, 1) 100deg);
+            border-radius: 50%;
+            bottom: 8.5rem;
+            display: flex;
+            height: 1.75rem;
+            justify-content: center;
+            position: absolute;
+            right: 1rem;
+            width: 1.75rem;
+
+            .timer-content {
+                align-items: center;
+                background-color: var(--gradient-ardoise-90);
+                border-radius: 50%;
+                display: flex;
+                height: 1.5rem;
+                justify-content: center;
+                width: 1.5rem;
+            }
+        }
+
+        @keyframes timer {
+            0% {
+                --timer-value: 360deg;
+            }
+
+            100% {
+                --timer-value: 0deg;
+            }
         }
     }
 }
