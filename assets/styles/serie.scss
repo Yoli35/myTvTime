@@ -2824,6 +2824,10 @@
                     opacity: 0;
                     padding: 0 1rem;
                     transition: all 125ms ease-in-out;
+
+                    input {
+                        width:6rem;
+                    }
                 }
 
                 &:hover {
