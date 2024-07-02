@@ -319,6 +319,7 @@ class YoutubeController extends AbstractController
 //        $tags = $this->videoTagRepository->findBy([], ['label' => 'ASC']);
         $tagArr = $this->videoTagRepository->getTags();
 
+        /** @noinspection HtmlUnknownTarget */
         $description = preg_replace(
             [
                 '/(https:\/\/\S+)/',
@@ -1203,24 +1204,36 @@ class YoutubeController extends AbstractController
         return ['link' => '', 'url' => '', 'title' => ''];
     }
 
+    /**
+     * @throws \Google\Service\Exception
+     */
     private function getYoutubeVideo(string|iterable $videoId): VideoListResponse
     {
         if (is_iterable($videoId)) {
-            $videoId = implode(',', $videoId);
+            $videoId = implode(",", $videoId);
         }
         return $this->service_YouTube->videos->listVideos('contentDetails,snippet,statistics', ['id' => $videoId]);
     }
 
+    /**
+     * @throws \Google\Service\Exception
+     */
     private function getChannelSnippet($channelId): ChannelListResponse
     {
         return $this->service_YouTube->channels->listChannels('snippet', ['id' => $channelId]);
     }
 
+    /**
+     * @throws \Google\Service\Exception
+     */
     private function getPlaylist($playlistId): PlaylistListResponse
     {
         return $this->service_YouTube->playlists->listPlaylists('contentDetails, snippet', ['id' => $playlistId]);
     }
 
+    /**
+     * @throws \Google\Service\Exception
+     */
     private function getPlaylistItems($playlistId): PlaylistItemListResponse
     {
         return $this->service_YouTube->playlistItems->listPlaylistItems('contentDetails,snippet', ['playlistId' => $playlistId, 'maxResults' => 50]);
