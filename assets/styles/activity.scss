@@ -150,7 +150,29 @@
         }
 
         details {
+            margin-block-start: 1em;
             width: 100%;
+
+            summary {
+                background-color: var(--gradient-ardoise-60-alpha-50);
+                border: 1px solid var(--gradient-ardoise-10);
+                border-radius: .25em;
+                cursor: pointer;
+                list-style: none;
+                padding-block: .25em;
+                padding-inline: 1rem;
+                transition: 300ms ease-in-out;
+
+                &::-webkit-details-marker {
+                    display: none
+                }
+            }
+        }
+
+        details[open] {
+            summary {
+                background-color: var(--gradient-orange-50);
+            }
         }
 
         .form {
@@ -939,7 +961,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: .25rem;
-    width: 36rem;
 
     h3, h4 {
         width: 100%;
