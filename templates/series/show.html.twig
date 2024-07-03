@@ -22,7 +22,7 @@
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid backgroundImageOverlay">
         {{ include('blocks/_nav.html.twig') }}
-        <div class="serie-page">
+        <div class="serie-page{% if serieId %} user-series{% endif %}">
             <div class="header">
                 {% if serie.backdrop_path|length %}
                     <div class="backdrop" style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ serie.backdrop_path }}')"></div>
@@ -589,14 +589,8 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {% if serieId %}
-        <script src="/js/addOverview.js" type="module"></script>
-        <script src="/js/directLink.js" type="module"></script>
-        <script src="/js/localize.js" type="module"></script>
-    {% endif %}
-    <script src="/js/serie.js"></script>
-    <script src="/js/diaporama.js"></script>
-    <script src="/js/seriesShow.js" type="module"></script>
+    <script src="{{ asset('/js/vanilla/series.js') }}"></script>
+    <script src="{{ asset('/js/vanilla/diaporama.js') }}"></script>
     <script>
         const paths = [
             "{{ path('app_series_render_translation_fields') }}",

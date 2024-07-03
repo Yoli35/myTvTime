@@ -8,7 +8,7 @@
     gap: 1rem;
     justify-content: center;
     margin-block-start: 2rem;
-    padding: 1rem;
+    padding-block: 1rem;
 
     .cv-infos {
         align-items: center;
@@ -47,6 +47,8 @@
             width: 100%;
 
             h2 {
+                font-size: 1.5rem;
+                margin-block-start: 2rem;
                 text-align: center;
             }
 
@@ -105,14 +107,16 @@
                 gap: .5rem;
 
                 .date {
+                    flex-shrink: 0;
                     font-size: 1.125rem;
                     font-weight: 600;
-                    width: 8vw;
+                    width: 10vw;
                 }
             }
 
             .details {
                 align-items: flex-start;
+                container: cv-details / inline-size;
                 display: flex;
                 gap: .5rem;
                 justify-content: flex-start;
@@ -120,7 +124,20 @@
 
                 .tab {
                     flex-shrink: 0;
-                    width: 8vw;
+                    width: 10vw;
+                }
+
+                &:has(.row) {
+                    flex-direction: column;
+                }
+
+                .row {
+                    align-items: flex-start;
+                    display: flex;
+                    flex-direction: row;
+                    gap: .5rem;
+                    justify-content: flex-start;
+                    width: 100%;
                 }
 
                 .column {
@@ -132,8 +149,7 @@
                     width: 100%;
 
                     &:first-child {
-                        flex-shrink: 0;
-                        width: 8vw;
+                        width: 10vw;
                     }
 
                     &:nth-child(2) {
@@ -162,13 +178,13 @@
                 }
             }
 
-            &:hover {
+           /* &:hover {
                 -webkit-backdrop-filter: blur(1rem);
                 backdrop-filter: blur(1rem);
                 background-color: var(--gradient-yellow-50-alpha-50);
                 border-radius: 1rem;
                 border: 0.25rem solid var(--gradient-ardoise-60-alpha-50);
-                /*font-weight: 600;*/
+                !*font-weight: 600;*!
                 max-width: 60vw;
                 padding-block: 1rem;
                 padding-inline: 2rem;
@@ -193,6 +209,34 @@
                     .column {
                         &:first-child {
                             font-weight: 600;
+                        }
+                    }
+                }
+            }*/
+
+            @container cv-details (width < 50rem) {
+                .row {
+                    flex-wrap: wrap;
+
+                    .column {
+                        &:empty {
+                            height: 1.5rem;
+                            width: 10rem;
+                        }
+
+                        &:first-child {
+                            width: 10rem;
+                        }
+
+                        &:nth-child(2),
+                        &:nth-child(3) {
+                            margin-inline-start: auto;
+                            min-width: 10rem;
+                            width: auto;
+                        }
+
+                        &:nth-child(3) {
+                            align-items: flex-end;
                         }
                     }
                 }

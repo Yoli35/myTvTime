@@ -57,7 +57,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/movie.js"></script>
+    <script src="{{ asset('/js/vanilla/movie.js') }}"></script>
     <script>
         const paths = [
             "{{ path('app_movie_add') }}",

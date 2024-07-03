@@ -11,9 +11,6 @@
         {{ include('blocks/_nav.html.twig', {user: app.user}) }}
 
         <div class="today-series">
-            {#            <div class="header"> #}
-            {#                <div class="country">{{ countryCode }}</div> #}
-            {#            </div> #}
             <main>
                 <div class="wrapper">
                     {#
@@ -84,45 +81,4 @@
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        let myCanvas, palettes;
-        window.addEventListener("DOMContentLoaded", () => {
-            const nothing = document.querySelector('.nothing');
-            if (nothing) {
-                doSomethingElse();
-            }
-
-            function doSomethingElse() {
-                const imageFilenames = document.querySelector('.image-filenames');
-                const images = JSON.parse(imageFilenames.textContent.replace(/".DS_Store",/g, ''));
-                const somethingElse = document.querySelector('.something-else');
-                const img = document.createElement('img');
-                let lastImageIndex = Math.floor(Math.random() * images.filenames.length);
-                img.src = "/images/series/today/" + images.filenames[lastImageIndex];
-                somethingElse.appendChild(img);
-                img.onload = () => {
-                    somethingElse.querySelector("img").classList.add('show');
-                };
-                setInterval(() => {
-                    somethingElse.querySelector("img").classList.remove('show');
-                    setTimeout(() => {
-                        let imageIndex = Math.floor(Math.random() * images.filenames.length);
-                        while (imageIndex === lastImageIndex) {
-                            imageIndex = Math.floor(Math.random() * images.filenames.length);
-                        }
-                        lastImageIndex = imageIndex;
-                        let img = somethingElse.querySelector("img")
-                        img.src = "/images/series/today/" + images.filenames[imageIndex];
-                        img.onload = () => {
-                            img.classList.add('show');
-                        };
-                    }, 300);
-                }, 5000);
-            }
-        });
-
-    </script>
 {% endblock %}

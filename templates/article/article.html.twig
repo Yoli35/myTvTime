@@ -140,7 +140,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/diaporama.js"></script>
+    <script src="{{ asset('/js/vanilla/diaporama.js') }}"></script>
     <script>
         let path = "{{ path('app_blog_article_add_answer', {cid: 0}) }}";
         const _app_blog_article_add_answer = path.substring(0, path.length - 1);

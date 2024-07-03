@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 {% set user = app.user %}
 {% block title %}{{ 'Activity'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/activity.scss') }}">
+{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
@@ -369,13 +373,21 @@
                                 </div>
                             {% else %}
                                 <div class="week">
-                                    <h2>{{ 'Activity of week'|trans }} {{ week.0.week }}</h2>
-                                    <div class="days">
-                                        {% for day in week|reverse %}
-                                            {{ include("blocks/activity/_day.html.twig") }}
-                                        {% endfor %}
-                                    </div>
-         {#                           <div class="graphs">
+                                    <details>
+                                        <summary>{{ 'Week'|trans }} {{ week.0.week }}</summary>
+                                        <div class="days">
+                                            {% for day in week|reverse %}
+                                                {{ include("blocks/activity/_day.html.twig") }}
+                                            {% endfor %}
+                                        </div>
+                                    </details>
+                                    {#                                    <h2>{{ 'Activity of week'|trans }} {{ week.0.week }}</h2> #}
+                                    {#                                    <div class="days"> #}
+                                    {#                                        {% for day in week|reverse %} #}
+                                    {#                                            {{ include("blocks/activity/_day.html.twig") }} #}
+                                    {#                                        {% endfor %} #}
+                                    {#                                    </div> #}
+                                    {#                           <div class="graphs">
                                         {% set moveMax = 0 %}
                                         {% set stepsMax = 0 %}
                                         {% set distanceMax = 0 %}
@@ -438,7 +450,7 @@
                                                 </div>
                                             {% endfor %}
                                         </div>
-                                    </div>#}
+                                    </div> #}
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -507,11 +519,5 @@
                 </form>
             </div>
         </dialog>
-    {% endif %}
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    {% if activity %}
-        <script src="/js/activityIndex.js" type="module"></script>
     {% endif %}
 {% endblock %}

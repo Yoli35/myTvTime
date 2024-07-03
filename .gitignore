@@ -7,13 +7,6 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-###> symfony/webpack-encore-bundle ###
-/node_modules/
-/public/build/
-npm-debug.log
-yarn-error.log
-###< symfony/webpack-encore-bundle ###
 symfony.lock
 
 ###> liip/imagine-bundle ###
@@ -28,3 +21,8 @@ symfony.lock
 /yarn.lock
 /.idea/
 exportedSeries.json
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###

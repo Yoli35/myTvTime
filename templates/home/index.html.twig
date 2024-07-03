@@ -59,13 +59,5 @@
             {% endfor %}
         </main>
         {{ include('blocks/_pageFooter.html.twig') }}
-
     </div>
-
-    {#    {{ show_source_code(_self) }} #}
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    {#    <script src="/js/source.js"></script> #}
-    <script src="/js/home.js" type="module"></script>
 {% endblock %}

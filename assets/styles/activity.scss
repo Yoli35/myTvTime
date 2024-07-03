@@ -623,6 +623,18 @@
             @include flex-col(start, start);
             width: 100%;
 
+            /*details {
+                display: none;
+
+                &:hover {
+                    display: block;
+                }
+            }
+
+            details[open] {
+                display: block;
+            }*/
+
             .days {
                 @include flex-row(stretch, space-evenly);
                 background-color: var(--gradient-ardoise-60-alpha-50);

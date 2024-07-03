@@ -6,7 +6,7 @@ $fa-font-path: "../webfonts";
     --button-border-radius: .25em;
 
     --gradient-saturation: 18%;
-    --saturation: calc(var(--gradient-saturation) / 2);
+    --saturation: calc(var(--gradient-saturation) / 2) * 1%;
 
     --mtt-body-bg: hsl(202, var(--saturation), var(--percent-95));
     --mtt-body-bg-gradiant: hsl(202, 0%, var(--percent-93));

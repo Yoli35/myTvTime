@@ -3,7 +3,6 @@
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid">
         {{ include('blocks/_nav.html.twig', {thisPage:('People'|trans)}) }}
-        {#        {{ include('blocks/source/_button.html.twig') }} #}
         <main>
             <div class="person">
                 <div class="left-column">
@@ -241,13 +240,11 @@
         </main>
         <footer>{{ include('blocks/_pageFooter.html.twig') }}</footer>
     </div>
-
-    {#    {{ show_source_code(_self) }} #}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     {#    <script src="/js/source.js"></script> #}
-    <script src="/js/diaporama.js"></script>
+    <script src="{{ asset('/js/vanilla/diaporama.js') }}"></script>
     <script>
         const _app_series_get_overview = "{{ path('app_series_get_overview', {id: 0}) }}";
         const imgUrl = "{{ imageConfig.url ~ imageConfig.profile_sizes.2 }}";

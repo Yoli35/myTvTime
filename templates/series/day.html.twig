@@ -15,12 +15,10 @@
                 <div class="date"{% if backdrop %} style="background-image: url('{{ imageConfig.url ~ imageConfig.backdrop_sizes.3 ~ backdrop }}')"{% endif %}>{{ date|date("d/m/Y", "Europe/Paris") }}</div>
             </div>
             {% set date = date|format_date('full', timezone="Europe/Paris")|capitalize|slice(0,-5) %}
-            {#            {{ include('blocks/_nav.html.twig', {user: app.user, thisPage:'New episodes'|trans}) }} #}
             <main>
                 <div class="time-travel">
                     <a href="{{ path('app_series_today', {d: prev, m: -1}) }}">
                         <div class="jump" title="{{ 'Previous month'|trans }}"><i class="fa-solid fa-chevron-left"></i><i class="fa-solid fa-chevron-left"></i><i class="fa-solid fa-chevron-left"></i></div>
-                        {#                        <div class="jump" title="{{ 'Previous month'|trans }}">{{ 'time.previous.month'|trans }}</div> #}
                     </a>
                     <a href="{{ path('app_series_today', {d: prev, w: -1}) }}">
                         <div class="jump" title="{{ 'Previous week'|trans }}"><i class="fa-solid fa-chevron-left"></i><i class="fa-solid fa-chevron-left"></i></div>
@@ -33,15 +31,12 @@
 
                     <a href="{{ path('app_series_today', {d: next+1}) }}">
                         <div class="jump" title="{{ 'Next day'|trans }}"><i class="fa-solid fa-chevron-right"></i></div>
-                        {#                        <div class="jump" title="{{ 'Next day'|trans }}">{{ 'time.next.day'|trans }}</div> #}
                     </a>
                     <a href="{{ path('app_series_today', {d: next, w: 1}) }}">
                         <div class="jump" title="{{ 'Next week'|trans }}"><i class="fa-solid fa-chevron-right"></i><i class="fa-solid fa-chevron-right"></i></div>
-                        {#                        <div class="jump" title="{{ 'Next week'|trans }}">{{ 'time.next.week'|trans }}</div> #}
                     </a>
                     <a href="{{ path('app_series_today', {d: next, m: 1}) }}">
                         <div class="jump" title="{{ 'Next month'|trans }}"><i class="fa-solid fa-chevron-right"></i><i class="fa-solid fa-chevron-right"></i><i class="fa-solid fa-chevron-right"></i></div>
-                        {#                        <div class="jump" title="{{ 'Next month'|trans }}">{{ 'time.next.month'|trans }}</div> #}
                     </a>
                 </div>
                 {% if todayAirings %}
@@ -81,7 +76,7 @@
         </div>
         {{ include('blocks/_pageFooter.html.twig') }}
     </div>
-{#    <pre>{{ dump() }}</pre>#}
+    {#    <pre>{{ dump() }}</pre> #}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

@@ -17,7 +17,7 @@
     {{ include('blocks/_mainMenu.html.twig') }}
     <div class="container-fluid backgroundImageOverlay">
         {{ include('blocks/_nav.html.twig') }}
-        <div class="serie-page">
+        <div class="season-page">
             <div class="header">
                 <div class="backdrop" style="background-image: url('{{ serie.backdropPath }}')"></div>
                 <div class="series-details">
@@ -323,7 +323,6 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/watch-providers.js" type="module"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             initSubstituteName();

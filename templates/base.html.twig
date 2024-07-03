@@ -20,11 +20,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {% block stylesheets %}
-        {{ encore_entry_link_tags('app') }}
+        <link rel="stylesheet" href="{{ asset('styles/activity.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/alarm.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/article.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/chat.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/cv.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/devices.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/diaporama.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/event.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/form.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/localisation.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/logs.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/movie-list.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/movie.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/search.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/serie.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/user.scss') }}">
+        <link rel="stylesheet" href="{{ asset('styles/youtube.scss') }}">
     {% endblock %}
 
     {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
 <body>
@@ -39,7 +56,6 @@
 {% include "blocks/_multiSearch.html.twig" %}
 {% include "blocks/_multiPeopleSearch.html.twig" %}
 <div id="globs-settings" style="display: none">{ "app_set_settings": "{{ path('app_set_settings', {settings: 'foo'}) }}" }</div>
-<script src="/js/search.js" type="module"></script>
-{% include "_accept.html.twig" %}
+{% include "blocks/_accept.html.twig" %}
 </body>
 </html>

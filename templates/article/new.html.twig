@@ -26,7 +26,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/article.js"></script>
+    <script src="{{ asset('/js/vanilla/article.js') }}"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             initHeader();

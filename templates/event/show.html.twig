@@ -65,8 +65,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="/js/eventIndex.js" type="module"></script>
-    <script src="/js/diaporama.js"></script>
+    <script src="{{ asset('/js/vanilla/diaporama.js') }}"></script>
     <script>
         window.addEventListener("DOMContentLoaded", () => {
 

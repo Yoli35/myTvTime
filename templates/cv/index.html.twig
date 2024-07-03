@@ -38,6 +38,13 @@
                         <div>randonnée,</div>
                         <div>séries</div>
                     </div>
+                    {% if app.environment is same as 'dev' %}
+                        <div class="details">
+                            <a href="{{ path('app_cv_dev') }}?t={{ "now"|date("U") }}">
+                                <button class="btn btn-primary"><i class="fas fa-arrows-rotate"></i>&nbsp;{{ 'My cv'|trans }}</button>
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="cv-exp">
@@ -46,15 +53,29 @@
                 <div class="block">
                     <div class="title">Compétences techniques</div>
                     <div class="details">
-                        <div class="column">
-                            <div>Languages</div>
-                            <div>Framework/IDE</div>
-                            <div>Bbb/Vcs</div>
+                        <div class="row">
+                            <div class="column">
+                                <div>Languages</div>
+                            </div>
+                            <div class="column">
+                                <div>PHP 8, HTML, CSS, JavaScript, PL/SQL</div>
+                            </div>
                         </div>
-                        <div class="column">
-                            <div>PHP 8, HTML, CSS, JavaScript, PL/SQL</div>
-                            <div>Symfony 6 & 7 / PhpStorm</div>
-                            <div>mySql / Git</div>
+                        <div class="row">
+                            <div class="column">
+                                <div>Framework/IDE</div>
+                            </div>
+                            <div class="column">
+                                <div>Symfony 6 & 7 / PhpStorm</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div>Bbb/Vcs</div>
+                            </div>
+                            <div class="column">
+                                <div>mySql / Git</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,19 +87,34 @@
                         Symfony, Javascript, sass, API YouTube, The Movie DB, Deepl
                     </div>
                     <div class="details">
-                        <div class="column">
-                            <div>Site</div>
-                            <div>Github</div>
+                        <div class="row">
+                            <div class="column">
+                                <div>Site</div>
+                            </div>
+                            <div class="column">
+                                <div><a href="https://mytvtime.fr" target="_blank">https://mytvtime.fr</a></div>
+                            </div>
+                            <div class="column"></div>
                         </div>
-                        <div class="column">
-                            <div><a href="https://mytvtime.fr" target="_blank">https://mytvtime.fr</a></div>
-                            <div>Symfony 6.4.8</div>
-                            <div>Symfony 7.1.1</div>
+                        <div class="row">
+                            <div class="column">
+                                <div>Github</div>
+                            </div>
+                            <div class="column">
+                                <div>Symfony 6.4.9</div>
+                            </div>
+                            <div class="column">
+                                <div><a href="https://github.com/Yoli35/myTvTime" target="_blank">myTvTime</a></div>
+                            </div>
                         </div>
-                        <div class="column">
-                            <div>&nbsp;</div>
-                            <div><a href="https://github.com/Yoli35/myTvTime" target="_blank">myTvTime</a></div>
-                            <div><a href="https://github.com/Yoli35/mytvtime2.0" target="_blank">mytvtime2.0</a></div>
+                        <div class="row">
+                            <div class="column"></div>
+                            <div class="column">
+                                <div>Symfony 7.1.2</div>
+                            </div>
+                            <div class="column">
+                                <div><a href="https://github.com/Yoli35/mytvtime2.0" target="_blank">mytvtime2.0</a></div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -15,4 +15,12 @@ class CvController extends AbstractController
             'controller_name' => 'CvController',
         ]);
     }
+
+    #[Route('/cv/dev', name: 'app_cv_dev')]
+    public function indexDev(): Response
+    {
+        return $this->render('cv/index.html.twig', [
+            'controller_name' => 'CvController',
+        ]);
+    }
 }

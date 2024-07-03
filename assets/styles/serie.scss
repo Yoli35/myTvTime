@@ -1175,7 +1175,7 @@
     }
 }
 
-.serie-page {
+.serie-page, .season-page {
     .header {
         @include flex-col();
         background-color: var(--gradient-ardoise-80-alpha-50);
@@ -3303,8 +3303,8 @@
     }
 }
 
-@media (max-width: 1024px) {
-    .serie-page {
+@media (max-width: 1024px) and (orientation: portrait) {
+    .serie-page, .season-page {
         .header {
             .series-details {
                 flex-direction: column;
@@ -3312,10 +3312,11 @@
 
                 .posters {
                     .poster {
-                        height: 40vh;
+                        height: unset;
 
                         img {
-                            height: 40vh;
+                            height: auto;
+                            width: 80vw;
                         }
                     }
                 }
@@ -3447,7 +3448,7 @@
 }
 
 @media (min-width: 1024px) {
-    .serie-page {
+    .serie-page, .season-page {
         .header {
             align-items: flex-start;
             flex-direction: row;
@@ -4746,7 +4747,7 @@
 }
 
 @media (min-width: 1200px) {
-    .serie-page {
+    .serie-page, .season-page {
         main {
             flex-direction: row;
             width: 100%;
