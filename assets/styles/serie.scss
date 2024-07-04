@@ -1,4 +1,5 @@
-@import "variables";
+@import "_variables.scss";
+@import "_mixins.scss";
 
 .my-series, .series-search {
     --serie-lg-height: 15rem;
@@ -7,7 +8,6 @@
     --serie-md-poster-width: 6.65625rem;
 
     @include flex-col(flex-start, center);
-    //padding-top: 1rem;
 
     .header {
         --quote-opacity: 1;
@@ -46,7 +46,6 @@
             @include flex-100(center, flex-end);
             font-size: 1.1rem;
             font-weight: 100;
-            //line-height: 1rem;
             opacity: var(--quote-opacity);
             position: absolute;
             text-align: right;
@@ -183,7 +182,6 @@
 
         .wrapper {
             @include flex-col(flex-start, flex-start);
-            //font-size: .75rem;
             font-weight: 100;
             gap: 1rem;
 
@@ -208,7 +206,6 @@
                     border-radius: 0;
                     height: var(--serie-lg-height);
                     margin-bottom: 1rem;
-                    //overflow: hidden;
                     position: relative;
                     transition: scale 300ms ease-in-out;
                     width: 100%;
@@ -329,11 +326,6 @@
 
                     .status {
                         @include flex-row();
-                        //border-radius: .5rem;
-                        //border: 2px solid;
-                        //right: 4rem;
-                        //top: -.75rem;
-                        //z-index: 10;
                         background-color: var(--gradient-green-40-alpha-50);
                         bottom: 0;
                         border-radius: 0 0 .5rem 0;
@@ -438,7 +430,6 @@
                     .today, .tomorrow, .after-tomorrow {
                         background-color: var(--gradient-green-60);
                         color: var(--gradient-green-100);
-                        //isolation: isolate;
                     }
 
                     .this-week {
@@ -981,8 +972,6 @@
                                     .interval {
                                         @include flex-100();
                                         height: 1rem;
-                                        //position: relative;
-                                        //width: 100%;
 
                                         .bar {
                                             background: var(--gradient-ardoise-20);
@@ -991,7 +980,6 @@
                                             height: 5px;
                                             left: 0;
                                             position: relative;
-                                            //position: absolute;
                                             top: calc(.5rem - 2px);
                                             width: 100%;
 
@@ -1002,7 +990,6 @@
                                                 height: 7px;
                                                 left: 0;
                                                 position: relative;
-                                                //position: absolute;
                                                 top: -1px;
                                                 width: 100%;
                                             }
@@ -1014,7 +1001,6 @@
                                                 height: 1rem;
                                                 left: 0;
                                                 position: relative;
-                                                //position: absolute;
                                                 transition: scale .2s ease-in-out;
                                                 width: 1rem;
 
@@ -1263,7 +1249,6 @@
                                 @include flex-col();
                                 font-weight: 100;
                                 height: 4rem;
-                                //margin-left: 1rem;
                                 width: 16rem;
 
                                 a {
@@ -1296,10 +1281,7 @@
                 @include flex-col(start, center);
                 color: var(--mmt-body-color);
                 flex-grow: 1;
-                //min-height: 30rem;
-                //padding: 1rem;
                 position: relative;
-                //width: 100%;
                 z-index: 0;
 
                 h1 {
@@ -1640,7 +1622,6 @@
                             cursor: pointer;
                             height: 100%;
                             position: relative;
-                            //width: 3.5rem;
 
                             &:hover {
                                 .next-episode-provider-list {
@@ -1749,10 +1730,8 @@
                         color: var(--gradient-orange-10);
                         font-size: 1.25rem;
                         font-weight: 400;
-                        //leading-trim: both;
                         margin: 0 .5rem;
                         padding: .25rem 1rem;
-                        //text-edge: cap alphabetic;
                     }
                 }
 
@@ -1794,7 +1773,7 @@
 
                 .graph-container {
                     align-items: center;
-                    background-color: #000; //var(--gradient-ardoise-100);
+                    background-color: #1c1c1c7f;
                     border-radius: .5rem;
                     display: flex;
                     height: 14rem;
@@ -1962,7 +1941,6 @@
 
                 .cast {
                     @include flex-col(flex-start, flex-start);
-                    //background-color: var(--gradient-ardoise-80-alpha-50);
                     border-radius: .5rem;
                     overflow-x: auto;
                     padding: 0 1rem 1rem 1rem;
@@ -2020,7 +1998,6 @@
                                     padding-inline: .25rem;
                                     position: absolute;
                                     transition: opacity 300ms ease-in-out;
-                                    //width: 100%;
 
                                     div {
                                         text-align: center;
@@ -2040,7 +2017,6 @@
 
                 .seasons, .episodes {
                     @include flex-col();
-                    //background-color: var(--gradient-ardoise-80-alpha-50);
                     gap: .25rem;
                     width: 100%;
 
@@ -2118,7 +2094,6 @@
                                                 border-radius: .25rem;
                                                 color: var(--gradient-ardoise-20);
                                                 height: 2rem;
-                                                //margin: 0 .5rem;
                                                 overflow: hidden;
                                                 transition: all 125ms ease-in-out;
                                                 width: 2rem;
@@ -2131,7 +2106,6 @@
                                                 &:hover {
                                                     border-color: var(--gradient-orange-50);
                                                     border-radius: 50%;
-                                                    //font-size: 1.5rem;
                                                     margin: 0;
                                                 }
 
@@ -2190,7 +2164,6 @@
                                 bottom: .5em;
                                 color: var(--gradient-ardoise-10);
                                 display: none;
-                                //font-size: 2em;
                                 font-weight: bold;
                                 height: 3em;
                                 justify-content: center;
@@ -2278,7 +2251,6 @@
                             flex-shrink: 0;
                             height: 100%;
                             padding: .5em;
-                            //width: calc(100% - 30em);
 
                             h3 {
                                 background-color: var(--gradient-orange-40);
@@ -2871,7 +2843,6 @@
                         color: var(--gradient-ardoise-20);
                         flex-shrink: 0;
                         height: 3rem;
-                        //margin-inline-start: auto;
                         padding: .25rem .5rem;
                         position: relative;
                         transition: all 125ms ease-in-out;
@@ -2979,8 +2950,6 @@
 
                         .network-detail {
                             font-weight: 100;
-                            //margin-bottom: .25rem;
-                            //padding-left: .5rem;
 
                             .frame {
                                 background-color: var(--gradient-ardoise-10);
@@ -3051,7 +3020,6 @@
     footer {
         .similar {
             @include flex-100(start, start);
-            //flex-wrap: wrap;
             gap: .5rem;
             margin-block-end: 1rem;
             overflow-x: auto;
@@ -3169,7 +3137,6 @@
                         .translation {
                             @include flex-col(flex-start, flex-start);
                             margin: .5rem 1rem;
-                            //width: calc(100% - 4rem);
 
                             label {
                                 font-weight: 100;
@@ -3278,10 +3245,6 @@
                                 outline: .25rem solid var(--gradient-orange-50);
                             }
                         }
-                    }
-
-                    &:hover {
-                        //background-color: var(--gradient-ardoise-30-alpha-50);
                     }
 
                     .logo {
@@ -3455,10 +3418,6 @@
 
             .series-details {
                 flex-wrap: nowrap;
-
-                .infos {
-                    //width: calc(100% - 20rem);
-                }
             }
         }
     }
@@ -3900,8 +3859,6 @@
 
                         .new-season, .finale, .status {
                             background-color: var(--gradient-ardoise-10-alpha-80);
-                            //border: 2px solid var(--gradient-orange-100);
-                            //border-radius: .5rem .5rem 0 0;
                             color: var(--gradient-ardoise-100);
                             font-size: 1.25rem;
                             font-weight: 400;
@@ -4586,12 +4543,6 @@
         background-color: var(--gradient-ardoise-80);
         margin: 1rem 0;
         padding: .5rem;
-        //
-        //input {
-        //    appearance: unset;
-        //    border: 1px solid var(--gradient-ardoise-40);
-        //    padding: .5rem;
-        //}
     }
 }
 
@@ -4828,7 +4779,6 @@
     }
 
     .my-series, .series-search {
-        //--serie-lg-height: 15rem;
         .header {
             height: 25rem;
 
@@ -4862,8 +4812,6 @@
 
             .series-tools {
                 margin-left: 1rem;
-                //position: sticky;
-                //top: 4rem;
                 width: 30%;
 
                 &.mobile {
@@ -4905,7 +4853,6 @@
                 .pages, .numbers, .search-serie, .add-serie, .series-filter {
                     border-radius: .5rem;
                     margin-bottom: 1rem;
-                    //min-height: 4rem;
                     padding: 1rem;
                 }
 

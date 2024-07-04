@@ -1,7 +1,5 @@
-@import "variables";
-@import "../fontawesome/scss/fontawesome.scss";
-@import "../fontawesome/scss/solid.scss";
-@import "../fontawesome/scss/brands.scss";
+@import "_variables.scss";
+@import "_mixins.scss";
 
 .pointer {
     cursor: pointer;

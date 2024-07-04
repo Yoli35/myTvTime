@@ -88,4 +88,19 @@ return [
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
+    '@symfony/stimulus-bundle' => [
+        'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
+    ],
+    '@symfony/ux-dropzone' => [
+        'path' => './vendor/symfony/ux-dropzone/assets/dist/controller.js',
+    ],
+    'typed.js' => [
+        'version' => '2.1.0',
+    ],
+    './styles/app.scss' => [
+        'path' => './assets/styles/app.scss',
+    ],
+    'mixins' => [
+        'path' => './assets/styles/_mixins.scss',
+    ],
 ];

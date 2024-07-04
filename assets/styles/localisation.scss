@@ -1,4 +1,5 @@
-@import "variables";
+@import "_variables.scss";
+@import "_mixins.scss";
 
 .localisation-header {
     @include flex-row(flex-start, center);

@@ -1,0 +1,17 @@
+{
+  "name": "mytvtime",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yoli35/myTvTime.git"
+  },
+  "private": true,
+  "dependencies": {
+    "@symfony/stimulus-bridge": "^3.2.2"
+  }
+}

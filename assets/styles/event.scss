@@ -1,4 +1,5 @@
-@import "variables";
+@import "_variables.scss";
+@import "_mixins.scss";
 
 .my-events, .my-event {
     --event-height: 10rem;

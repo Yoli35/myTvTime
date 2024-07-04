@@ -1,8 +1,6 @@
 import {AnimatedHeader} from "AnimatedHeader";
-import {ToolTips} from "ToolTips";
 
 let thisGlobal;
-let toolTips;
 
 export class Activity {
 
@@ -41,9 +39,6 @@ export class Activity {
         this.initStandUp(document);
         this.initInputs();
         this.initWeeks();
-
-        toolTips = new ToolTips();
-        toolTips.init();
     }
 
     setProgressAll(circles) {

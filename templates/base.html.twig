@@ -6,12 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}myTvTime{% endblock %}</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/apple-touch-icon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/safari-pinned-tab.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/favicon.ico.png') }}">
     <link rel="manifest" href="/site.webmanifest?v=2">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg?v=2" color="#5bbad5">
-    <link rel="shortcut icon" href="/favicon.ico?v=2">
     <meta name="theme-color" content="#212a30" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f0ecea" media="(prefers-color-scheme: light)">
     <meta name="description" content="{% block description %}My Tv Time{% endblock %}">
@@ -19,30 +19,10 @@
     <meta name="author" content="Olivier Jean-Marie">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('styles/activity.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/alarm.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/article.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/chat.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/cv.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/devices.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/diaporama.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/event.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/form.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/localisation.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/logs.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/movie-list.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/movie.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/search.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/serie.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/user.scss') }}">
-        <link rel="stylesheet" href="{{ asset('styles/youtube.scss') }}">
+    {% block importmap %}
+        {{ importmap('app') }}
     {% endblock %}
 
-    {% block javascripts %}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
-    {% endblock %}
 </head>
 <body>
 {% include 'blocks/_topMenu.html.twig' %}
