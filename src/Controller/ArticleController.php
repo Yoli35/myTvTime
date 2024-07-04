@@ -162,16 +162,11 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/{_locale}/blog/edit/{id}', name: 'app_blog_edit', requirements: ['_locale' => 'fr|en|de|es'], methods: ['GET', 'POST'])]
-    public function edit(Request $request, int $id, Article $article): Response
+    public function edit(Request $request, Article $article): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->logService->log($request, $this->getUser());
         /** @var User $user */
         $user = $this->getUser();
-
-//        if ($article == null) {
-//            $article = $this->articleRepository->find($id);
-//        }
 
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);

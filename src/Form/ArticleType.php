@@ -23,7 +23,7 @@ class ArticleType extends AbstractType
             ])
             ->add('isPublished', CheckboxType::class, [
                 'label' => 'Publish this article',
-                'label_attr' => ['class' => 'switch'],
+                'label_attr' => ['class' => 'switcher-with-label'],
                 'required' => false,
             ])
             ->add('abstract', TextType::class, [

@@ -2,19 +2,26 @@
 @import "_mixins.scss";
 
 .blog {
-    @include flex-col(flex-start, center);
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding-top: 1em;
 
-    .header {
-        @include animated-header("../images/blog-header.jpg");
-
+    .animated-header {
         .animated-h1, h1 {
             color: var(--gradient-ardoise-90);
+        }
+
+        .backdrop {
+            background-image: url("../images/blog-header.jpg");
         }
     }
 
     .nothing {
-        @include flex-100();
+        align-items: center;
+        display: flex;
+        justify-content: center;
         margin: 4em 0;
 
         .to-show {
@@ -28,14 +35,20 @@
     }
 
     .body {
-        @include flex-100(flex-start, flex-start);
+        align-items: flex-start;
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
         gap: 1em;
 
         .articles {
             width: 75%;
 
             .article-preview {
-                @include flex-col();
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
                 background-color: var(--gradient-ardoise-80-alpha-50);
                 border-radius: 1em;
                 margin-bottom: 1em;
@@ -55,7 +68,10 @@
                 }
 
                 .apercu {
-                    @include flex-100(center, flex-start);
+                    align-items: center;
+                    display: flex;
+                    justify-content: flex-start;
+                    width: 100%;
                     padding: 1em;
 
                     .thumbnail {
@@ -72,7 +88,10 @@
                     }
 
                     .presentation {
-                        @include flex-col(flex-start, center);
+                        align-items: flex-start;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
                         flex: 1;
                         margin-left: 1em;
                         position: relative;
@@ -84,7 +103,29 @@
                         }
 
                         .tools {
-                            @include crud-tools(1em, 2em);
+                            /*@include crud-tools(1em, 2em);*/
+                            align-items: center;
+                            background-color: var(--gradient-grey-20-alpha-50);
+                            border-radius: .5rem;
+                            display: flex;
+                            gap: 1rem;
+                            height: 2rem;
+                            justify-content: center;
+                            opacity: 0;
+                            position: absolute;
+                            right: 1rem;
+                            top: 2rem;
+                            transition: opacity 300ms ease-in-out;
+                            width: 6rem;
+                            z-index: 10;
+
+                            i {
+                                cursor: pointer;
+                            }
+
+                            &.visible {
+                                opacity: 1;
+                            }
                         }
                     }
                 }
@@ -92,7 +133,10 @@
         }
 
         .article {
-            @include flex-col();
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             background-color: var(--gradient-ardoise-80-alpha-50);
             border-radius: 1em;
             flex: 1;
@@ -134,10 +178,16 @@
             }
 
             .wrapper {
-                @include flex-100(center, flex-start);
+                align-items: center;
+                display: flex;
+                justify-content: flex-start;
+                width: 100%;
 
                 .presentation {
-                    @include flex-col(flex-start, center);
+                    align-items: flex-start;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
                     flex: 1;
                     margin: 0 auto;
                     max-width: 48em;
@@ -195,8 +245,32 @@
                     }
 
                     .tools {
-                        @include crud-tools(1em, 2em);
+                        /*@include crud-tools(1em, 2em);*/
+
+                        align-items: center;
+                        background-color: var(--gradient-grey-20-alpha-50);
+                        border-radius: .5rem;
+                        display: flex;
+                        gap: 1rem;
+                        height: 2rem;
+                        justify-content: center;
+                        opacity: 0;
+                        position: absolute;
+                        right: 1rem;
+                        top: 2rem;
+                        transition: opacity 300ms ease-in-out;
+                        width: 6rem;
+                        z-index: 10;
+
+                        i {
+                            cursor: pointer;
+                        }
+
+                        &.visible {
+                            opacity: 1;
+                        }
                     }
+
                 }
             }
 
@@ -212,12 +286,21 @@
                 }
 
                 .user {
-                    @include flex-row(center, flex-start);
+                    align-items: center;
+                    display: flex;
+                    justify-content: flex-start;
                     margin-bottom: .5em;
 
                     img {
-                        @include rounded-avatar(2em);
+                        /*@include rounded-avatar(2em);*/
                         border: 2px solid var(--gradient-ardoise-90);
+                        background-image: url("../images/no_avatar.png");
+                        background-position: center center;
+                        background-size: cover;
+                        border-radius: 50%;
+                        height: 2rem;
+                        object-fit: cover;
+                        width: 2rem;
                     }
 
                     .name {
@@ -239,19 +322,31 @@
                 }
 
                 .comment {
-                    @include flex-col(flex-start, flex-start);
+                    align-items: flex-start;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
                     background-color: var(--gradient-ardoise-90);
                     border-radius: .5em;
                     margin-bottom: 1em;
                     padding: 1em;
 
                     .user {
-                        @include flex-row(center, flex-start);
+                        align-items: center;
+                        display: flex;
+                        justify-content: flex-start;
                         font-size: .875em;
 
                         img {
-                            @include rounded-avatar(2em);
+                            /*@include rounded-avatar(2em);*/
                             border: 2px solid var(--gradient-ardoise-90);
+                            background-image: url("../images/no_avatar.png");
+                            background-position: center center;
+                            background-size: cover;
+                            border-radius: 50%;
+                            height: 2rem;
+                            object-fit: cover;
+                            width: 2rem;
                         }
 
                         .name {
@@ -260,7 +355,10 @@
                         }
 
                         .dates {
-                            @include flex-100(center, flex-start);
+                            align-items: center;
+                            display: flex;
+                            justify-content: flex-start;
+                            width: 100%;
                             color: var(--gradient-ardoise-20);
                             margin-left: 1em;
 
@@ -295,17 +393,28 @@
                     }
 
                     .react {
-                        //padding-left: 2em;
+                    / / padding-left: 2 em;
                         width: 100%;
 
                         .answer {
-                            @include flex-100();
+                            align-items: center;
+                            display: flex;
+                            justify-content: center;
 
                             .user {
-                                @include flex-row(center, flex-start);
+                                align-items: center;
+                                display: flex;
+                                justify-content: flex-start;
 
                                 img {
-                                    @include rounded-avatar(1.5em);
+                                    /*@include rounded-avatar(1.5em);*/
+                                    background-image: url("../images/no_avatar.png");
+                                    background-position: center center;
+                                    background-size: cover;
+                                    border-radius: 50%;
+                                    height: 2rem;
+                                    object-fit: cover;
+                                    width: 2rem;
                                 }
 
                                 .name {
@@ -356,7 +465,10 @@
         .article-preview,
         .article {
             .title-author {
-                @include flex-col(start, start);
+                align-items: start;
+                display: flex;
+                flex-direction: column;
+                justify-content: start;
 
                 .title {
                     color: var(--gradient-ardoise-20);
@@ -369,13 +481,16 @@
                     color: var(--gradient-ardoise-40);
                     flex: 1;
                     font-size: 1em;
-                    //margin-left: auto;
-                    //text-align: right;
+                / / margin-left: auto;
+                / / text-align: right;
                 }
             }
 
             .dates {
-                @include flex-100(center, flex-start);
+                align-items: center;
+                display: flex;
+                justify-content: flex-start;
+                width: 100%;
 
                 .date {
                     color: var(--gradient-ardoise-40);
@@ -399,10 +514,21 @@
         }
 
         .form {
-            @include flex-100();
+            align-items: center;
+            background-color: var(--gradient-ardoise-90);
+            border-radius: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            margin: 1em;
+            padding: 1em;
+            width: calc(100% - 2rem);
 
             form {
-                @include mtt-form();
+                display: flex;
+                flex-direction: column;
+                gap: 1em;
+                width: 100%;
 
                 .field {
                     .add-an-image {
@@ -422,7 +548,6 @@
             }
 
             .switch {
-                @include switcher-with-label(11em, var(--gradient-green-30), var(--gradient-ardoise-60));
                 margin-left: unset;
             }
 
@@ -433,7 +558,9 @@
         border-bottom: unset;
 
         .thumbnail {
-            @include flex-100();
+            align-items: center;
+            display: flex;
+            justify-content: center;
             height: 100%;
         }
 
@@ -464,12 +591,18 @@
             }
 
             .save {
-                @include flex-100(center, flex-end);
+                align-items: center;
+                display: flex;
+                justify-content: flex-end;
+                width: 100%;
             }
         }
 
         .back-delete {
-            @include flex-100(center, flex-end)
+            align-items: center;
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
         }
 
         .preview {
@@ -490,7 +623,9 @@
     }
 
     .show {
-        @include flex-100(center, center);
+        align-items: center;
+        justify-content: center;
+        width: 100%;
         background-color: transparent;
         display: none;
         inset: 0;
@@ -543,8 +678,8 @@
 
 @media (min-width: 1199.98px) {
     .blog {
-        //margin: 0 calc(50% - 32em);
-        //max-width: 64em;
+    / / margin: 0 calc(50 % - 32 em);
+    / / max-width: 64 em;
 
         .image-article {
             .form {

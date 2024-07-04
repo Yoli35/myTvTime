@@ -7,7 +7,7 @@
         </label>
     </div>
     <div class="form-row">
-        <label for="{{ form.isPublished.vars.id }}" class="{{ form.isPublished.vars.required ? 'required' }} switch">
+        <label for="{{ form.isPublished.vars.id }}" class="{{ form.isPublished.vars.required ? 'required ' }}switch switcher-with-label">
             <div>{{ form.isPublished.vars.label|trans }}</div>
             {{ form_widget(form.isPublished) }}
             <span></span>

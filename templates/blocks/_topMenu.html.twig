@@ -1,4 +1,3 @@
-{# {% set route = app.request.attributes.get('_route') %} #}
 {% set parameters = app.request.query %}
 {% set route_params = app.request.attributes.get('_route_params') %}
 
@@ -9,15 +8,26 @@
     <a href="{{ path('app_series_popular') }}" class="top-item">{{ 'Series'|trans }}</a>
     <a href="{{ path('app_contact', {from: route|slice(4), params: route_params|serialize(format = 'json', context = [])}) }}" class="top-item">{{ 'Contact'|trans }}</a>
     <div class="d-flex-1">
-        <div id="multi-search" class="top-item"><i class="fa-solid fa-magnifying-glass"></i></div>
-        <div id="multi-people" class="top-item"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+        <div id="multi-search" class="top-item">
+            {{ ux_icon('fa6-solid:magnifying-glass', {height: '18px', width: '18px'}) }}
+        </div>
+        <div id="multi-people" class="top-item">
+            {{ ux_icon('fa6-solid:magnifying-glass-plus', {height: '18px', width: '18px'}) }}
+        </div>
         {% if user %}
-            <div id="settings" class="top-item"><i class="fa-solid fa-sliders"></i></div>
+            <div id="settings" class="top-item">
+                {{ ux_icon('fa6-solid:sliders', {height: '18px', width: '18px'}) }}
+            </div>
         {% endif %}
-        <div id="localisation" class="top-item"><a href="{{ path('app_open_layers') }}"><i class="fa-solid fa-map"></i></a></div>
+        <div id="localisation" class="top-item">
+            <a href="{{ path('app_open_layers') }}">
+                {{ ux_icon('fa6-solid:map-location-dot', {height: '18px', width: '18px'}) }}
+            </a>
+        </div>
         {% if user %}
-            <div id="alarms" class="top-item"><i class="fa-solid fa-clock"></i></div>
+            <div id="alarms" class="top-item">
+                {{ ux_icon('fa6-solid:clock', {height: '18px', width: '18px'}) }}
+            </div>
         {% endif %}
-        {#        {{ dump(user) }} #}
     </div>
 </nav>

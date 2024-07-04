@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="alarm-name">{{ alarm.name }}</div>
-                <div class="alarm-switch">
+                <div class="switcher alarm-switch">
                     <label class="switch">
                         <input type="checkbox" id="alarm-switch-{{ alarm.id }}" name="alarm-switch-{{ alarm.id }}" {% if alarm.active %} checked{% endif %}/>
                         <span></span>

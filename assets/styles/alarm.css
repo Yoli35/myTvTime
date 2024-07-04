@@ -1,5 +1,4 @@
 @import "_variables.scss";
-@import "_mixins.scss";
 
 #alarms {
     cursor: pointer;
@@ -23,16 +22,21 @@
     }
 
     .alarms {
-        @include flex-col(flex-start, center);
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
         gap: .125rem;
+        justify-content: center;
         margin-block-end: 1rem;
 
         .alarm {
-            @include flex-row();
+            align-items: center;
             background-color: var(--gradient-ardoise-20);
             border: 2px solid transparent;
             border-radius: .25rem;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
             min-width: 20rem;
             padding-block: .25rem;
             padding-inline: .5rem;
@@ -47,7 +51,9 @@
             }
 
             .alarm-data {
-                @include flex-col(flex-start, flex-start);
+                align-items: flex-start;
+                display: flex;
+                justify-content: flex-start;
 
                 .alarm-time {
                     font-size: 2.5rem;
@@ -56,28 +62,35 @@
                 }
 
                 .alarm-recurrence {
-                    @include flex-row();
+                    align-items: center;
+                    display: flex;
                     font-size: .75rem;
                     font-weight: 300;
                     gap: .5rem;
                     height: 1.125rem;
+                    justify-content: center;
                     line-height: 1em;
 
                     .alarm-recurrence-days {
-                        @include flex-row(center, center);
+                        align-items: center;
                         background-color: var(--gradient-orange-40);
                         border-radius: .25em;
                         color: var(--gradient-orange-90);
+                        display: flex;
+                        justify-content: center;
                         padding: .25em .5em;
                     }
                 }
             }
 
             .alarm-name {
-                @include flex-col(flex-end, center);
+                align-items: flex-end;
+                display: flex;
+                flex-direction: column;
                 flex-grow: 1;
                 font-size: 1.25rem;
                 font-weight: 300;
+                justify-content: center;
                 line-height: 1.1em;
                 margin-inline-end: .5rem;
                 margin-inline-start: .5rem;
@@ -85,9 +98,16 @@
             }
 
             .alarm-switch {
-                @include switcher(var(--gradient-orange-40), var(--gradient-orange-90));
                 flex-shrink: 0;
                 margin-right: unset;
+
+                input + span {
+                    background-color: var(--gradient-ardoise-50);
+                }
+
+                input:checked + span {
+                    background-color: var(--gradient-orange-40);
+                }
             }
         }
 
@@ -154,9 +174,11 @@
 
             .alarm-recurrence {
                 .alarm-tab-bar {
-                    @include flex-row(center, flex-start);
+                    align-items: center;
                     border-bottom: 2px solid var(--gradient-orange-40);
+                    display: flex;
                     gap: .5rem;
+                    justify-content: flex-start;
                     margin-block: .5rem;
 
                     .alarm-tab-name {
@@ -187,9 +209,11 @@
                 }
 
                 .days-of-week {
-                    @include flex-row(center, center);
+                    align-items: center;
+                    display: flex;
                     flex-wrap: wrap;
                     gap: .75rem;
+                    justify-content: center;
                     margin-block: .5rem;
                 }
 
@@ -207,8 +231,10 @@
             }
 
             .alarm-validation {
-                @include flex-row(center, flex-end);
+                align-items: center;
+                display: flex;
                 gap: .5rem;
+                justify-content: flex-end;
                 margin-block-start: .5rem;
             }
         }

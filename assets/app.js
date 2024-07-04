@@ -1,7 +1,7 @@
 import './styles/app.scss';
 import './styles/activity.css';
-import './styles/alarm.scss';
-import './styles/article.scss';
+import './styles/alarm.css';
+import './styles/article.css';
 import './styles/chat.scss';
 import './styles/cv.scss';
 import './styles/diaporama.scss';
