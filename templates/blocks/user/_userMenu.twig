@@ -8,39 +8,54 @@
         <div class="menu-items">
             <div class="menu-item">
                 <a href="{{ path('app_personal_profile') }}">
-                    <div class="icon"><i class="fa-solid fa-user"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-user"></i>#}
+                        {{ ux_icon('fa6-solid:user', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My Account'|trans }}</div>
                 </a>
             </div>
 {#            <div class="menu-item">#}
 {#                <a href="{{ path('app_personal_list') }}">#}
-{#                    <div class="icon"><i class="fa-solid fa-children"></i></div>#}
+{#                    <div class="icon"><i class="fa6-solid fa-children"></i></div>#}
 {#                    <div>{{ 'People search'|trans }}</div>#}
 {#                </a>#}
 {#            </div>#}
             <div class="menu-item separator"></div>
             <div class="menu-item">
                 <a href="{{ path('app_activity_index') }}">
-                    <div class="icon"><i class="fa-solid fa-person-walking"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-person-walking"></i>#}
+                        {{ ux_icon('fa6-solid:person-walking', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'Activity'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_event') }}">
-                    <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-calendar-days"></i>#}
+                        {{ ux_icon('fa6-solid:calendar-days', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My Events'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item separator"></div>
             <div class="menu-item">
                 <a href="{{ path('app_personal_movies') }}">
-                    <div class="icon"><i class="fa-sharp fa-solid fa-film"></i></div>
+                    <div class="icon">
+{#                        <i class="fa-sharp fa6-solid fa-film"></i>#}
+                        {{ ux_icon('fa6-solid:film', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My Movies'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item menu-item-collections">
                 <a href="{{ path('app_movie_list_index') }}">
-                    <div class="icon"><i class="fa-solid fa-clapperboard"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-clapperboard"></i>#}
+                        {{ ux_icon('fa6-solid:clapperboard', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My Movie lists'|trans }}</div>
                 </a>
                 {% set movieLists = userMovieLists(user) %}
@@ -56,7 +71,10 @@
                     {% endfor %}
                     <div class="menu-item">
                         <a href="{{ path('app_movie_list_new') }}">
-                            <div class="icon"><i class="fa-solid fa-plus"></i></div>
+                            <div class="icon">
+{#                                <i class="fa6-solid fa-plus"></i>#}
+                                {{ ux_icon('fa6-solid:plus', {height: '18px', width: '18px'}) }}
+                            </div>
                             <div>{{ 'Add list'|trans }}</div>
                         </a>
                     </div>
@@ -65,74 +83,110 @@
             <div class="menu-item separator"></div>
             <div class="menu-item">
                 <a href="{{ path('app_series_index') }}">
-                    <div class="icon"><i class="fa-solid fa-tv"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-tv"></i>#}
+                        {{ ux_icon('fa6-solid:tv', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My series'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_series_today') }}">
-                    <div class="icon"><i class="fa-solid fa-calendar-day"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-calendar-day"></i>#}
+                        {{ ux_icon('fa6-solid:calendar-day', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My series airing today'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_series_this_week') }}">
-                    <div class="icon"><i class="fa-solid fa-calendar-day"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-calendar-day"></i>#}
+                        {{ ux_icon('fa6-solid:calendar-day', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'Episodes of the week'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_series_to_start') }}">
-                    <div class="icon"><i class="fa-solid fa-play"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-play"></i>#}
+                        {{ ux_icon('fa6-solid:play', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My series to start'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_series_to_end') }}">
-                    <div class="icon"><i class="fa-solid fa-forward-step"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-forward-step"></i>#}
+                        {{ ux_icon('fa6-solid:forward-step', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My series to end'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_series_upcoming_episodes') }}">
-                    <div class="icon"><i class="fa-solid fa-hand-point-right"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-hand-point-right"></i>#}
+                        {{ ux_icon('fa6-solid:hand-point-right', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'Upcoming episodes'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_series_upcoming_series') }}">
-                    <div class="icon"><i class="fa-solid fa-hand-point-right"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-hand-point-right"></i>#}
+                        {{ ux_icon('fa6-solid:hand-point-right', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'Upcoming series'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_series_from_country', {countryCode: user.country ?? 'US'}) }}">
-                    <div class="icon"><i class="fa-solid fa-flag"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-flag"></i>#}
+                        {{ ux_icon('fa6-solid:flag', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'Series by country of origin'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_series_filter') }}">
-                    <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-magnifying-glass"></i>#}
+                        {{ ux_icon('fa6-solid:magnifying-glass', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'Series advanced search'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item separator"></div>
             <div class="menu-item">
                 <a href="{{ path('app_youtube') }}">
-                    <div class="icon"><i class="fa-brands fa-youtube"></i></div>
+                    <div class="icon">
+{#                        <i class="fa-brands fa-youtube"></i>#}
+                        {{ ux_icon('fa-brands:youtube', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My Youtube Videos'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_youtube_search') }}">
-                    <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-magnifying-glass"></i>#}
+                        {{ ux_icon('fa6-solid:magnifying-glass', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'Youtube video search'|trans }}</div>
                 </a>
             </div>
             <div class="menu-item">
                 <a href="{{ path('app_youtube_playlists') }}">
-                    <div class="icon"><i class="fa-solid fa-list"></i></div>
+                    <div class="icon">
+{#                        <i class="fa6-solid fa-list"></i>#}
+                        {{ ux_icon('fa6-solid:list', {height: '18px', width: '18px'}) }}
+                    </div>
                     <div>{{ 'My Youtube playlists'|trans }}</div>
                 </a>
             </div>

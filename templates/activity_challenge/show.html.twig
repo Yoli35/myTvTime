@@ -19,21 +19,31 @@
             <main>
                 <div class="challenge-tools">
                     <a href="{{ path('app_activity_challenge_index') }}">
-                        <div class="challenge-tool" data-title="{{ 'Back to challenges'|trans }}"><i class="fa-solid fa-list"></i></div>
+                        <div class="challenge-tool" data-title="{{ 'Back to challenges'|trans }}">
+                            {{ ux_icon('fa6-solid:list', {height: '18px', width: '18px'}) }}
+                        </div>
                     </a>
                     <a href="{{ path('app_activity_challenge_edit', {'id': challenge.id}) }}?from=show">
-                        <div class="challenge-tool" data-title="{{ 'Edit challenge'|trans }}"><i class="fa-solid fa-edit"></i></div>
+                        <div class="challenge-tool" data-title="{{ 'Edit challenge'|trans }}">
+                            {{ ux_icon('fa6-solid:pen', {height: '18px', width: '18px'}) }}
+                        </div>
                     </a>
                     <a href="{{ path('app_activity_challenge_new') }}?from=show&id={{ challenge.id }}">
-                        <div class="challenge-tool" data-title="{{ 'New challenge'|trans }}"><i class="fa-solid fa-plus"></i></div>
+                        <div class="challenge-tool" data-title="{{ 'New challenge'|trans }}">
+                            {{ ux_icon('fa6-solid:plus', {height: '18px', width: '18px'}) }}
+                        </div>
                     </a>
                     <a href="{{ path('app_activity_challenge_delete', {'id': challenge.id}) }}">
-                        <div class="challenge-tool" data-title="{{ 'Delete challenge'|trans }}"><i class="fa-solid fa-trash"></i></div>
+                        <div class="challenge-tool" data-title="{{ 'Delete challenge'|trans }}">
+                            {{ ux_icon('fa6-solid:trash', {height: '18px', width: '18px'}) }}
+                        </div>
                     </a>
                 </div>
                 <div class="challenge-show">
                     {% if challenge.completed %}
-                        <div class="challenge-completed"><i class="fa-solid fa-crown"></i></div>
+                        <div class="challenge-completed">
+                            {{ ux_icon('fa6-solid:crown', {height: '80px', width: '80px'}) }}
+                        </div>
                     {% endif %}
                     <div class="challenge-show-info">{{ 'Name'|trans }} : {{ challenge.name }}</div>
                     <div class="challenge-show-info">{{ challenge.challenge|trans({'%value%': challenge.value}) }}</div>

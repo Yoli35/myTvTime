@@ -19,7 +19,9 @@
             <main>
                 <div class="challenge-tools">
                     <a href="{{ path('app_activity_challenge_new') }}?from=index">
-                        <div class="challenge-tool" data-title="{{ 'New challenge'|trans }}"><i class="fa-solid fa-plus"></i></div>
+                        <div class="challenge-tool" data-title="{{ 'New challenge'|trans }}">
+                            {{ ux_icon('fa6-solid:plus', {height: '18px', width: '18px'}) }}
+                        </div>
                     </a>
                 </div>
 
@@ -69,10 +71,14 @@
                             <td>
                                 <div class="challenge-tools">
                                     <a href="{{ path('app_activity_challenge_show', {'id': challenge.id}) }}">
-                                        <div class="challenge-tool" data-title="{{ 'Show challenge'|trans }}"><i class="fa-solid fa-eye"></i></div>
+                                        <div class="challenge-tool" data-title="{{ 'Show challenge'|trans }}">
+                                            {{ ux_icon('fa6-solid:eye', {height: '18px', width: '18px'}) }}
+                                        </div>
                                     </a>
                                     <a href="{{ path('app_activity_challenge_edit', {'id': challenge.id}) }}?from=index">
-                                        <div class="challenge-tool" data-title="{{ 'Edit challenge'|trans }}"><i class="fa-solid fa-edit"></i></div>
+                                        <div class="challenge-tool" data-title="{{ 'Edit challenge'|trans }}">
+                                            {{ ux_icon('fa6-solid:pen', {height: '18px', width: '18px'}) }}
+                                        </div>
                                     </a>
                                 </div>
                             </td>

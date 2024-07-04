@@ -19,19 +19,20 @@
             <main>
                 <div class="challenge-tools">
                     <a href="{{ path('app_activity_challenge_index') }}">
-                        <div class="challenge-tool" data-title="{{ 'Back to challenges'|trans }}"><i class="fa-solid fa-list"></i></div>
+                        <div class="challenge-tool" data-title="{{ 'Back to challenges'|trans }}">
+                            {{ ux_icon('fa6-solid:list', {height: '18px', width: '18px'}) }}
+                        </div>
                     </a>
                 </div>
                 <div class="challenge-show new">
-                    <div class="challenge-action"><i class="fa-solid fa-plus"></i></div>
+                    <div class="challenge-action">
+{#                        <i class="fa-solid fa-plus"></i>#}
+                        {{ ux_icon('fa6-solid:plus', {style: 'height: 5vw; width: 5vw;'}) }}
+                    </div>
                     {{ include('activity_challenge/_form.html.twig', {'button_label': 'New'}) }}
                 </div>
             </main>
             {{ include('blocks/_pageFooter.html.twig') }}
         </div>
     </div>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script src="/js/activityChallengeIndex.js" type="module"></script>
 {% endblock %}

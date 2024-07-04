@@ -268,6 +268,21 @@
     "symfony/asset": {
         "version": "v6.0.3"
     },
+    "symfony/asset-mapper": {
+        "version": "6.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.4",
+            "ref": "6c28c471640cc2c6e60812ebcb961c526ef8997f"
+        },
+        "files": [
+            "assets/app.js",
+            "assets/styles/app.css",
+            "config/packages/asset_mapper.yaml",
+            "importmap.php"
+        ]
+    },
     "symfony/cache": {
         "version": "v6.0.3"
     },
@@ -596,6 +611,18 @@
     "symfony/ux-dropzone": {
         "version": "v2.3.0"
     },
+    "symfony/ux-icons": {
+        "version": "2.18",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.17",
+            "ref": "803a3bbd5893f9584969ab8670290cdfb6a0a5b5"
+        },
+        "files": [
+            "assets/icons/symfony.svg"
+        ]
+    },
     "symfony/ux-typed": {
         "version": "v2.9.0"
     },
@@ -659,6 +686,9 @@
     },
     "symfony/yaml": {
         "version": "v6.0.3"
+    },
+    "symfonycasts/sass-bundle": {
+        "version": "v0.7.0"
     },
     "symfonycasts/verify-email-bundle": {
         "version": "v1.10.0"

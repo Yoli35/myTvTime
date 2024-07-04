@@ -1,10 +1,6 @@
 {% extends 'base.html.twig' %}
 {% set user = app.user %}
 {% block title %}{{ 'Activity'|trans }}{% endblock %}
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('styles/activity.scss') }}">
-{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
@@ -34,7 +30,10 @@
                                             {% for challenge in challenges.inProgress %}
                                                 <div class="challenge">
                                                     <a href="{{ path('app_activity_challenge_show', {id: challenge.id}) }}">
-                                                        {% if challenge.completed %}<i class="fa-solid fa-crown"></i> {% endif %}{{ challenge.name }} ({{ challenge.progress }} / {{ challenge.goal }})
+                                                        {% if challenge.completed %}
+                                                            {{ ux_icon('fa6-solid:crown', {height: '18px', width: '18px'}) }}
+                                                        {% endif %}
+                                                        {{ challenge.name }} ({{ challenge.progress }} / {{ challenge.goal }})
                                                     </a>
                                                 </div>
                                             {% endfor %}
@@ -50,7 +49,10 @@
                                             {% for challenge in challenges.completed %}
                                                 <div class="challenge" data-title="{{ challenge.progress }} / {{ challenge.goal }}">
                                                     <a href="{{ path('app_activity_challenge_show', {id: challenge.id}) }}">
-                                                        {% if challenge.completed %}<i class="fa-solid fa-crown"></i> {% endif %}{{ challenge.name }}
+                                                        {% if challenge.completed %}
+                                                            {{ ux_icon('fa6-solid:crown', {height: '18px', width: '18px'}) }}
+                                                        {% endif %}
+                                                        {{ challenge.name }}
                                                     </a>
                                                 </div>
                                             {% endfor %}
@@ -205,7 +207,7 @@
                                                                 <div>x{{ timesMove }}</div>
                                                             </div>
                                                             <div class="completed{% if day.isMoveRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}">
-                                                                <i class="fa-solid fa-circle-check"></i>
+                                                                {{ ux_icon('fa6-solid:circle-check', {height: '18px', width: '18px'}) }}
                                                             </div>
                                                         </div>
                                                         <div class="block-body">
@@ -272,13 +274,12 @@
                                                     <div class="exercise">
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Exercise'|trans }}</div>
-                                                            <div class="doubled{% if percentExercise >= 200 %} visible{% endif %}"
-                                                                 title="{{ 'goal'|trans }}">
+                                                            <div class="doubled{% if percentExercise >= 200 %} visible{% endif %}" title="{{ 'goal'|trans }}">
                                                                 <div>x{{ timesExercise }}</div>
                                                             </div>
-                                                            <div class="completed{% if day.isExerciseRingCompleted %} visible{% endif %}"
-                                                                 title="{{ 'goal'|trans }}"><i
-                                                                        class="fa-solid fa-circle-check"></i></div>
+                                                            <div class="completed{% if day.isExerciseRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}">
+                                                                {{ ux_icon('fa6-solid:circle-check', {height: '18px', width: '18px'}) }}
+                                                            </div>
                                                         </div>
                                                         <div class="block-body">
                                                             {% set goal = activity.exerciseGoal %}
@@ -299,18 +300,17 @@
                                                             </div>
                                                             <div class="details">
                                                                 <div class="detail">
-                                                                    <div class="result" data-id="{{ activity.id }}"
-                                                                         data-day="{{ day.id }}"
-                                                                         data-title="{{ 'Click me to edit'|trans }}"
-                                                                         tabindex="{{ tab }}">{% set tab = tab + 1 %}
+                                                                    <div class="result" data-id="{{ activity.id }}" data-day="{{ day.id }}" data-title="{{ 'Click me to edit'|trans }}" tabindex="{{ tab }}">
+                                                                        {% set tab = tab + 1 %}
                                                                         <span class="value">{{ day.exerciseResult }}</span>
                                                                         <span class="unit">{{ day.exerciseResult>1?'minutes'|trans:'minute'|trans }}</span>
-                                                                        <label><input type="number"
-                                                                                      name="exerciseResult"
-                                                                                      value="{{ day.exerciseResult }}"/></label>
+                                                                        <label>
+                                                                            <input type="number" name="exerciseResult" value="{{ day.exerciseResult }}"/>
+                                                                        </label>
                                                                     </div>
                                                                     <div class="goal" data-title="{{ 'Click the goals button to modify'|trans }}">
-                                                                        /&nbsp;{{ goal }} {{ 'minutes'|trans }}</div>
+                                                                        /&nbsp;{{ goal }} {{ 'minutes'|trans }}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -318,13 +318,12 @@
                                                     <div class="stand-up">
                                                         <div class="block-header">
                                                             <div class="title">{{ 'Stand up'|trans }}</div>
-                                                            <div class="doubled{% if percentStandUp >= 200 %} visible{% endif %}"
-                                                                 title="{{ 'goal'|trans }}">
+                                                            <div class="doubled{% if percentStandUp >= 200 %} visible{% endif %}" title="{{ 'goal'|trans }}">
                                                                 <div>x{{ (timesStandUp) }}</div>
                                                             </div>
-                                                            <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}"
-                                                                 title="{{ 'goal'|trans }}"><i
-                                                                        class="fa-solid fa-circle-check"></i></div>
+                                                            <div class="completed{% if day.isStandUpRingCompleted %} visible{% endif %}" title="{{ 'goal'|trans }}">
+                                                                {{ ux_icon('fa6-solid:circle-check', {height: '18px', width: '18px'}) }}
+                                                            </div>
                                                         </div>
                                                         <div class="block-body">
                                                             {% set goal = activity.standUpGoal %}
@@ -352,8 +351,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="wrapper">
-                                                                    <div class="hours" data-id="{{ activity.id }}"
-                                                                         data-day="{{ day.id }}">
+                                                                    <div class="hours" data-id="{{ activity.id }}" data-day="{{ day.id }}">
                                                                         {{ include('blocks/activity/_standUp.html.twig', {ups: day.standUp}) }}
                                                                     </div>
                                                                     <div class="graduations">
@@ -381,76 +379,6 @@
                                             {% endfor %}
                                         </div>
                                     </details>
-                                    {#                                    <h2>{{ 'Activity of week'|trans }} {{ week.0.week }}</h2> #}
-                                    {#                                    <div class="days"> #}
-                                    {#                                        {% for day in week|reverse %} #}
-                                    {#                                            {{ include("blocks/activity/_day.html.twig") }} #}
-                                    {#                                        {% endfor %} #}
-                                    {#                                    </div> #}
-                                    {#                           <div class="graphs">
-                                        {% set moveMax = 0 %}
-                                        {% set stepsMax = 0 %}
-                                        {% set distanceMax = 0 %}
-                                        {% set exerciseMax = 0 %}
-                                        {% set standUpMax = 0 %}
-                                        {% for day in week|reverse %}
-                                            {% set moveMax = moveMax > (day ? day.moveResult : 0) ? moveMax : (day ? day.moveResult : 0) %}
-                                            {% set stepsMax = stepsMax > (day ? day.steps : 0) ? stepsMax : (day ? day.steps : 0) %}
-                                            {% set distanceMax = distanceMax > (day ? day.distance : 0) ? distanceMax : (day ? day.distance : 0) %}
-                                            {% set exerciseMax = exerciseMax > (day ? day.exerciseResult : 0) ? exerciseMax : (day ? day.exerciseResult : 0) %}
-                                            {% set standUpMax = standUpMax > (day ? day.standUpResult : 0) ? standUpMax : (day ? day.standUpResult : 0) %}
-                                        {% endfor %}
-                                        <div class="graph">
-                                            {% for day in week|reverse %}
-                                                {% set height = day ? day.moveResult : 0 %}
-                                                {% if height %}
-                                                    {% set height = height / moveMax * 100 %}
-                                                {% endif %}
-                                                <div class="bar bar-move" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="graph">
-                                            {% for day in week|reverse %}
-                                                {% set height = day ? day.steps : 0 %}
-                                                {% if height %}
-                                                    {% set height = height / stepsMax * 100 %}
-                                                {% endif %}
-                                                <div class="bar bar-steps" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="graph">
-                                            {% for day in week|reverse %}
-                                                {% set height = day ? day.distance : 0 %}
-                                                {% if height %}
-                                                    {% set height = height / distanceMax * 100 %}
-                                                {% endif %}
-                                                <div class="bar bar-distance" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="graph">
-                                            {% for day in week|reverse %}
-                                                {% set height = day ? day.exerciseResult : 0 %}
-                                                {% if height %}
-                                                    {% set height = height / exerciseMax * 100 %}
-                                                {% endif %}
-                                                <div class="bar bar-exercise" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="graph">
-                                            {% for day in week|reverse %}
-                                                {% set height = day ? day.standUpResult : 0 %}
-                                                {% if height %}
-                                                    {% set height = height / standUpMax * 100 %}
-                                                {% endif %}
-                                                <div class="bar bar-stand-up" style="height: {{ height }}px; background-position-y: -{{ 100 - height|round(0, 'ceil') }}px">
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div> #}
                                 </div>
                             {% endif %}
                         {% endfor %}
