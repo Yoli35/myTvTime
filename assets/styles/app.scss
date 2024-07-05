@@ -473,13 +473,22 @@ body {
     }
 }
 
+@property --progress {
+    syntax: '<percentage>'; /* its type */
+    inherits: false;
+    initial-value: 100%; /* the initial value */
+}
+
 .closure-countdown {
     --clr: var(--gradient-ardoise-10);
     --bg: var(--gradient-ardoise-90);
     --cd: var(--gradient-orange-70);
 
     align-items: center;
+    animation: countdown-progress 30s linear infinite;
     border-radius: 50%;
+    background: conic-gradient(var(--clr) var(--progress), var(--cd) var(--progress));
+    //background-color: var(--bg);
     color: var(--clr);
     display: flex;
     height: 1.5rem;
@@ -525,6 +534,15 @@ body {
         }
         to {
             transform: rotate(0deg) translateY(-.6875rem);
+        }
+    }
+
+    @keyframes countdown-progress {
+        from {
+            --progress: 100%;
+        }
+        to {
+            --progress: 0%;
         }
     }
 }
