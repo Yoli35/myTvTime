@@ -1,5 +1,5 @@
-@import "_variables.scss";
-@import "_mixins.scss";
+@import "./_variables.scss";
+@import "./_mixins.scss";
 
 @font-face {
     font-family: "clock Font";
@@ -479,6 +479,7 @@ body {
     initial-value: 100%; /* the initial value */
 }
 
+//noinspection CssInvalidFunction
 .closure-countdown {
     --clr: var(--gradient-ardoise-10);
     --bg: var(--gradient-ardoise-90);
@@ -488,7 +489,6 @@ body {
     animation: countdown-progress 30s linear infinite;
     border-radius: 50%;
     background: conic-gradient(var(--clr) var(--progress), var(--cd) var(--progress));
-    //background-color: var(--bg);
     color: var(--clr);
     display: flex;
     height: 1.5rem;
@@ -649,12 +649,12 @@ body {
                 content: "";
                 cursor: pointer;
                 display: inline-block;
-                height: 1em;
+                height: 1rem;
                 left: 0;
                 position: absolute;
                 top: 0;
                 transition: all .2s ease-in-out;
-                width: 1em;
+                width: 1rem;
             }
         }
 

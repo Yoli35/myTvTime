@@ -33,7 +33,10 @@
                             {% if message.localized_name %} | {{ message.localized_name }}{% endif %}
                         </div>
                         <div>{{ 'Episode'|trans }} {{ 'S%02dE%02d'|format(message.alert_season_number, message.alert_episode_number) }}</div>
-                        <div class="silence" id="disable-this-alert" data-id="{{ message.alert_id }}" data-title="{{ 'Disable the alert for this episode'|trans }}"><i class="fa-regular fa-bell-slash"></i></div>
+                        <div class="silence" id="disable-this-alert" data-id="{{ message.alert_id }}" data-title="{{ 'Disable the alert for this episode'|trans }}">
+{#                            <i class="fa-regular fa-bell-slash"></i>#}
+                            {{ ux_icon('fa6-regular:bell-slash', {height: '18px', width: '18px'}) }}
+                        </div>
                     </div>
                 {% else %}
                     {{ message|raw }}
@@ -41,7 +44,7 @@
                 {#                <div class="close"><i class="fa-solid fa-xmark"></i></div> #}
                 <div class="closure-countdown">
                     <div>
-                        <i class="fa-solid fa-xmark"></i>
+                        {{ ux_icon('fa6-solid:xmark', {height: '18px', width: '18px'}) }}
                     </div>
                     <div class="circle-start"></div>
                     <div class="circle-end"></div>
@@ -51,7 +54,8 @@
     {% endfor %}
     {% if count > 1 %}
         <div class="flash-close-all" id="close-all-alerts" data-title="{{ 'Close count alerts'|trans({'count': count}) }}">
-            <i class="fa-solid fa-circle-xmark"></i>
+{#            <i class="fa-solid fa-circle-xmark"></i>#}
+            {{ ux_icon('fa6-solid:circle-xmark', {height: '24px', width: '24px'}) }}
         </div>
     {% endif %}
 </div>

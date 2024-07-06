@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/favicon-32x32.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/safari-pinned-tab.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/favicon.ico.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon.ico.png') }}">
     <link rel="manifest" href="/site.webmanifest?v=2">
     <meta name="theme-color" content="#212a30" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f0ecea" media="(prefers-color-scheme: light)">
@@ -19,8 +19,11 @@
     <meta name="author" content="Olivier Jean-Marie">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {% block importmap %}
-        {{ importmap('app') }}
+    {% block javascripts %}
+        {% block importmap %}
+            {{ importmap('app') }}
+        {% endblock %}
+{#        <script src="{{ asset('js/app.js') }}"></script>#}
     {% endblock %}
 
 </head>

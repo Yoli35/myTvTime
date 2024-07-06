@@ -11,7 +11,7 @@
             {{ include('blocks/_nav.html.twig', {thisPage: 'Contact'|trans}) }}
 
             <div class="details">
-                {{ form_start(form) }}
+                {{ form_start(form, {'class': 'form-mtt-form'}) }}
                 <div class="form-row">
                     <div class="field">
                         <label for="{{ form.username.vars.id }}" class="{{ form.username.vars.required ? 'required' }}">

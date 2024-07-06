@@ -1,22 +1,22 @@
 {# {{ dump(form.with_genres) }} #}
-{%  set layout=getFormFilterLayout() %}
+{% set layout=getFormFilterLayout() %}
 {{ form_start(form) }}
 <div class="form-row">
     {#    Tools   #}
     <div class="form-group ml-auto">
-        <i class="fa-solid fa-upload" id="reset-form" data-title="{{ 'Load last form settings'|trans }}"></i>
-        <i class="fa-solid fa-download" id="save-form" data-title="{{ 'Save form settings'|trans }}"></i>
+        {{ ux_icon('fa6-solid:upload', {height: '18px', width: '18px', 'id': 'reset-form', 'data-title': 'Load last form settings'|trans, 'aria-hidden': false}) }}
+        {{ ux_icon('fa6-solid:download', {height: '18px', width: '18px', 'id': 'save-form', 'data-title': 'Save form settings'|trans, 'aria-hidden': false}) }}
         {% if layout=='open' %}
-            <i class="fa-solid fa-circle-arrow-up" id="toggle-view" data-title="{{ 'Toggle form settings'|trans }}"></i>
+            {{ ux_icon('fa6-solid:circle-up', {height: '18px', width: '18px', 'id': 'toggle-view', 'data-title': 'Toggle form settings'|trans, 'aria-hidden': false}) }}
         {% else %}
-            <i class="fa-solid fa-circle-arrow-down" id="toggle-view" data-title="{{ 'Toggle form settings'|trans }}"></i>
+            {{ ux_icon('fa6-solid:circle-down', {height: '18px', width: '18px', 'id': 'toggle-view', 'data-title': 'Toggle form settings'|trans, 'aria-hidden': false}) }}
         {% endif %}
     </div>
 </div>
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    With status   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_status) }}">
                 <input type="checkbox" {{ form.switch_with_status.vars.checked ? 'checked':'' }} name="{{ field_name(form.switch_with_status) }}" id="{{ field_name(form.switch_with_status) }}"/>
                 <span></span>
@@ -31,7 +31,7 @@
     </div>
     {#    With type   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_type) }}">
                 <input type="checkbox" {{ form.switch_with_type.vars.checked ? 'checked':'' }} name="{{ field_name(form.switch_with_type) }}" id="{{ field_name(form.switch_with_type) }}"/>
                 <span></span>
@@ -48,7 +48,7 @@
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    Watch region   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_watch_region) }}">
                 <input type="checkbox" {{ form.switch_watch_region.vars.checked ? 'checked':'' }} name="{{ field_name(form.switch_watch_region) }}" id="{{ field_name(form.switch_watch_region) }}"/>
                 <span></span>
@@ -68,7 +68,7 @@
     </div>
     {#    With watch monetization types   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_watch_monetization_types) }}">
                 <input type="checkbox" {{ form.switch_with_watch_monetization_types.vars.checked ? 'checked':'' }} name="{{ field_name(form.switch_with_watch_monetization_types) }}" id="{{ field_name(form.switch_with_watch_monetization_types) }}"/>
                 <span></span>
@@ -83,7 +83,7 @@
     </div>
     {#    With watch providers   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_watch_providers) }}">
                 <input type="checkbox" {{ form.switch_with_watch_providers.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_watch_providers) }}" id="{{ field_name(form.switch_with_watch_providers) }}"/>
                 <span></span>
@@ -106,7 +106,7 @@
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    Language   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_language) }}">
                 <input type="checkbox" {{ form.switch_language.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_language) }}" id="{{ field_name(form.switch_language) }}"/>
                 <span></span>
@@ -126,7 +126,7 @@
     </div>
     {#    Timezone   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_timezone) }}">
                 <input type="checkbox" {{ form.switch_timezone.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_timezone) }}" id="{{ field_name(form.switch_timezone) }}"/>
                 <span></span>
@@ -148,7 +148,7 @@
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    With origin country   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_origin_country) }}">
                 <input type="checkbox" {{ form.switch_with_origin_country.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_origin_country) }}" id="{{ field_name(form.switch_with_origin_country) }}"/>
                 <span></span>
@@ -168,7 +168,7 @@
     </div>
     {#    With original language   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_original_language) }}">
                 <input type="checkbox" {{ form.switch_with_original_language.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_original_language) }}" id="{{ field_name(form.switch_with_original_language) }}"/>
                 <span></span>
@@ -190,7 +190,7 @@
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {#    With genres   #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_genres) }}">
                 <input type="checkbox" {{ form.switch_with_genres.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_genres) }}" id="{{ field_name(form.switch_with_genres) }}"/>
                 <span></span>
@@ -204,7 +204,7 @@
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {# First air date year #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_first_air_date_year) }}">
                 <input type="checkbox" {{ form.switch_first_air_date_year.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_first_air_date_year) }}" id="{{ field_name(form.switch_first_air_date_year) }}"/>
                 <span></span>
@@ -216,7 +216,7 @@
     </div>
     {# First air date (greater than or equal) #}
     <div class="form-group" data-title="{{ 'After this date. Enabling this field without filling it in is equivalent to "After now".'|trans }}">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_first_air_date_gte) }}">
                 <input type="checkbox" {{ form.switch_first_air_date_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_first_air_date_gte) }}" id="{{ field_name(form.switch_first_air_date_gte) }}"/>
                 <span></span>
@@ -228,7 +228,7 @@
     </div>
     {# First air date (less than or equal) #}
     <div class="form-group" data-title="{{ 'Before this date. Enabling this field without filling it in is equivalent to "Before now".'|trans }}">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_first_air_date_lte) }}">
                 <input type="checkbox" {{ form.switch_first_air_date_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_first_air_date_lte) }}" id="{{ field_name(form.switch_first_air_date_lte) }}"/>
                 <span></span>
@@ -240,7 +240,7 @@
     </div>
     {# No date #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_include_null_first_air_date) }}">
                 <input type="checkbox" {{ form.switch_include_null_first_air_date.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_include_null_first_air_date) }}" id="{{ field_name(form.switch_include_null_first_air_date) }}"/>
                 <span></span>
@@ -249,7 +249,7 @@
         <div class="form-field">
             <div class="checkbox">
                 <label for="{{ field_name(form.include_null_first_air_date) }}">
-                    <div class="form-switch">
+                    <div class="switcher form-switch">
                         <input type="checkbox" {{ form.include_null_first_air_date.vars.checked ? 'checked':'' }}
                                id="{{ field_name(form.include_null_first_air_date) }}"
                                value="{{ field_value(form.include_null_first_air_date) }}"
@@ -265,7 +265,7 @@
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {# Average vote (greater than or equal) #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_vote_average_gte) }}">
                 <input type="checkbox" {{ form.switch_vote_average_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_vote_average_gte) }}" id="{{ field_name(form.switch_vote_average_gte) }}"/>
                 <span></span>
@@ -277,7 +277,7 @@
     </div>
     {# Average vote (less than or equal) #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_vote_average_lte) }}">
                 <input type="checkbox" {{ form.switch_vote_average_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_vote_average_lte) }}" id="{{ field_name(form.switch_vote_average_lte) }}"/>
                 <span></span>
@@ -289,7 +289,7 @@
     </div>
     {# Count vote (greater than or equal) #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_vote_count_gte) }}">
                 <input type="checkbox" {{ form.switch_vote_count_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_vote_count_gte) }}" id="{{ field_name(form.switch_vote_count_gte) }}"/>
                 <span></span>
@@ -301,7 +301,7 @@
     </div>
     {# Count vote (less than or equal) #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_vote_count_lte) }}">
                 <input type="checkbox" {{ form.switch_vote_count_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_vote_count_lte) }}" id="{{ field_name(form.switch_vote_count_lte) }}"/>
                 <span></span>
@@ -315,7 +315,7 @@
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {# Runtime (greater than or equal) #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_runtime_gte) }}">
                 <input type="checkbox" {{ form.switch_with_runtime_gte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_runtime_gte) }}" id="{{ field_name(form.switch_with_runtime_gte) }}"/>
                 <span></span>
@@ -327,7 +327,7 @@
     </div>
     {# Runtime (less than or equal) #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_with_runtime_lte) }}">
                 <input type="checkbox" {{ form.switch_with_runtime_lte.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_with_runtime_lte) }}" id="{{ field_name(form.switch_with_runtime_lte) }}"/>
                 <span></span>
@@ -341,7 +341,7 @@
 <div class="form-row{% if layout=='collapse' %} d-none{% endif %}">
     {# Miscellaneous #}
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_screened_theatrically) }}">
                 <input type="checkbox" {{ form.switch_screened_theatrically.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_screened_theatrically) }}" id="{{ field_name(form.switch_screened_theatrically) }}"/>
                 <span></span>
@@ -350,7 +350,7 @@
         <div class="form-field">
             <div class="checkbox">
                 <label for="{{ field_name(form.screened_theatrically) }}">
-                    <div class="form-switch">
+                    <div class="switcher form-switch">
                         <input type="checkbox" {{ form.screened_theatrically.vars.checked ? 'checked':'' }}
                                id="{{ field_name(form.screened_theatrically) }}"
                                value="{{ field_value(form.screened_theatrically) }}"
@@ -363,7 +363,7 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="form-switch">
+        <div class="switcher form-switch">
             <label for="{{ field_name(form.switch_include_adult) }}">
                 <input type="checkbox" {{ form.switch_include_adult.vars.checked ? 'checked' : '' }} name="{{ field_name(form.switch_include_adult) }}" id="{{ field_name(form.switch_include_adult) }}"/>
                 <span></span>
@@ -372,7 +372,7 @@
         <div class="form-field">
             <div class="checkbox">
                 <label for="{{ field_name(form.include_adult) }}">
-                    <div class="form-switch">
+                    <div class="switcher form-switch">
                         <input type="checkbox" {{ form.include_adult.vars.checked ? 'checked':'' }}
                                id="{{ field_name(form.include_adult) }}"
                                value="{{ field_value(form.include_adult) }}"

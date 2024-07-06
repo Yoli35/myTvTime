@@ -14,7 +14,7 @@ export class MovieListModule {
     constructor() {
         thisGlobal = this;
         this.locale = document.querySelector("html").getAttribute("lang");
-        this.confirmDialog = document.querySelector("dialog[class=confirm-deletion]");
+        this.confirmDialog = document.querySelector("dialog[id=confirm-deletion]");
 
         this.initTools(this.confirmDialog);
         this.initLayout();

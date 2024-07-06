@@ -1,5 +1,5 @@
 <div class="form">
-    {{ form_start(form) }}
+    {{ form_start(form, {'class': 'form-mtt-form'}) }}
     <div class="form-row">
         <label for="{{ form.name.vars.id }}" class="{{ form.name.vars.required ? 'required' }}">
             <div>{{ form.name.vars.label|trans }}</div>

@@ -229,7 +229,7 @@ export class EventModule {
     }
 
     initTools() {
-        const dialog = document.querySelector(".confirm-deletion");
+        const dialog = document.querySelector("#confirm-deletion");
         const tools = document.querySelectorAll(".tools");
         const events = document.querySelectorAll(".event");
 

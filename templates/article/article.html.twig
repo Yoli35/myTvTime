@@ -120,7 +120,7 @@
 
     </div>
 
-    <dialog class="confirm-deletion">
+    <dialog class="form-dialog2">
         <div class="overlay">
             <div class="header">
                 {{ 'Delete this article?'|trans }}
@@ -152,7 +152,7 @@
             // document.querySelector(".edit-article").addEventListener("click", editArticle);
             document.querySelector(".delete-article").addEventListener("click", deleteArticle);
 
-            const dialog = document.querySelector(".confirm-deletion");
+            const dialog = document.querySelector("#confirm-deletion");
             confirmDialog = dialog;
             dialog.querySelector(".delete-done").addEventListener("click", () => {
                 closeDialog(dialog, true);

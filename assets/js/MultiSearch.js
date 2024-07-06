@@ -166,7 +166,7 @@ export class MultiSearch {
                 const url = dialog2.querySelector("input[name=imgUrl]").value;
                 list.innerHTML = "";
                 results.forEach(result => {
-                    /** @var {{"adult": bool,"gender": number,"id": number,"known_for_department": string,"name": string,"original_name": string,"popularity": number,"profile_path": string,"known_for": string}} result */
+                    /** @var {{"adult": boolean,"gender": number,"id": number,"known_for_department": string,"name": string,"original_name": string,"popularity": number,"profile_path": string,"known_for": string}} result */
                     /** @var {HTMLElement} list */
                     const item = document.createElement("div");
                     item.classList.add("people-item");

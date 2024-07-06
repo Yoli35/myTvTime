@@ -1,5 +1,4 @@
-@import "_variables.scss";
-@import "_mixins.scss";
+@import "./_variables.scss";
 
 .blog {
     align-items: flex-start;
@@ -670,13 +669,13 @@
     }
 }
 
-@media (min-width: 767.98px) {
+@media (min-width: 768px) {
 }
 
-@media (min-width: 991.98px) {
+@media (min-width: 992px) {
 }
 
-@media (min-width: 1199.98px) {
+@media (min-width: 1200px) {
     .blog {
     / / margin: 0 calc(50 % - 32 em);
     / / max-width: 64 em;
@@ -700,5 +699,5 @@
     }
 }
 
-@media (min-width: 1399.98px) {
+@media (min-width: 1400px) {
 }

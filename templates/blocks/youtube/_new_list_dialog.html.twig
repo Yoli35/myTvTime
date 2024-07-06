@@ -45,7 +45,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="{{ field_name(form.regex) }}">
-                    <div class="form-switch">
+                    <div class="switcher form-switch">
                         <input type="checkbox" {{ form.regex.vars.checked ? 'checked':'' }} name="{{ field_name(form.regex) }}" id="{{ form.regex.vars.id }}" value="{{ form.regex.vars.value }}"/>
                         <span></span>
                     </div>
@@ -61,7 +61,7 @@
                     {% for match in form.matchesCollection %}
                         <div class="match-item" data-index="{{ loop.index0 }}">
                             <label class="match-item-index">
-                                <div class="form-switch">
+                                <div class="switcher form-switch">
                                     <input type="checkbox" {{ match.active.vars.checked ? 'checked':'' }} name="{{ field_name(match.active) }}" id="{{ match.active.vars.id }}"/>
                                     <span></span>
                                 </div>

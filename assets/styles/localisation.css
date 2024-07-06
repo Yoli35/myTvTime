@@ -1,0 +1,24 @@
+@import "./_variables.scss";
+
+.localisation-header {
+    align-items: flex-start;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-block-end: 1rem;
+}
+
+.localisation {
+    .infos {
+        font-size: 1.5rem;
+        font-weight: 300;
+        margin-block-end: 1rem;
+    }
+
+    .map {
+        border: 4px dashed var(--gradient-ardoise-40);
+        border-radius: .25rem;
+        height: 50dvh;
+        width: 100%;
+    }
+}

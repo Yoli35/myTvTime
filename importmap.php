@@ -100,7 +100,13 @@ return [
     './styles/app.scss' => [
         'path' => './assets/styles/app.scss',
     ],
-    'mixins' => [
+    '_variables.scss' => [
+        'path' => './assets/styles/_variables.scss',
+    ],
+    '_mixins.scss' => [
         'path' => './assets/styles/_mixins.scss',
+    ],
+    '@symfony/stimulus-bridge' => [
+        'version' => '3.2.2',
     ],
 ];

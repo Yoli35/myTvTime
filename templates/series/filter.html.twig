@@ -14,7 +14,7 @@
             {% for choice in choices %}
                 <div class="checkbox">
                     <label for="tv_filter_with_genres_{{ loop.index0 }}">
-                        <div class="form-switch">
+                        <div class="switcher form-switch">
                             <input type="checkbox" {{ choice.value in data ? 'checked':'' }}
                                    value="{{ choice.value }}"
                                    id="tv_filter_with_genres_{{ loop.index0 }}"

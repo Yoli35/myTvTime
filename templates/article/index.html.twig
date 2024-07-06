@@ -47,7 +47,7 @@
         {{ include('blocks/_pageFooter.html.twig') }}
 
     </div>
-    <dialog class="confirm-deletion">
+    <dialog id="confirm-deletion" class="form-dialog2">
         <div class="overlay">
             <div class="header">
                 {{ 'Delete this article?'|trans }}
@@ -75,7 +75,7 @@
 
         window.addEventListener("DOMContentLoaded", () => {
 
-            confirmDialog = document.querySelector(".confirm-deletion");
+            confirmDialog = document.querySelector("#confirm-deletion");
             initHeader();
             initTools(confirmDialog);
             setTimeout(() => {

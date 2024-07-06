@@ -1,5 +1,5 @@
-@import "_variables.scss";
-@import "_mixins.scss";
+@import "./_variables.scss";
+@import "./_mixins.scss";
 
 .my-series, .series-search {
     --serie-lg-height: 15rem;
@@ -3423,11 +3423,11 @@
     }
 }
 
-.viewed-episode {
-    @include dialog2(50rem);
-
+/*.viewed-episode {*/
+.dialog2 {
     .overlay {
         margin: calc(50dvh - 15rem) auto;
+        width: 50rem;
 
         .content {
 
