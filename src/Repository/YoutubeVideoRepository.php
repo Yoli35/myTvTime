@@ -77,14 +77,22 @@ class YoutubeVideoRepository extends ServiceEntityRepository
     public function findAllWithChannelByDateSQL($userId, $sort = 'publishedAt', $order = 'DESC', $offset = 0, $limit = 20): array
     {
         $sort = $this->getSort($sort);
-        $sql = "SELECT y.`id` as id, y.`thumbnail_high_path` as thumbnailHighPath, y.`title` as title, y.`content_duration` as contentDuration, y.`published_at` as publishedAt, "
-            . "yc.`title` as channelTitle, yc.`custom_url` as channelCustomUrl, yc.`youtube_id` as channelYoutubeId, yc.`thumbnail_default_url` as channelThumbnailDefaultUrl "
-            . "FROM `youtube_video` y "
-            . "INNER JOIN `user_yvideo` uyv ON uyv.`user_id`=" . $userId . " AND uyv.`video_id`=y.`id` "
-            . "LEFT JOIN `youtube_channel` yc ON yc.`id`=y.`channel_id` "
-            . "WHERE uyv.`hidden`=0 "
-            . "ORDER BY y.`" . $sort . "` " . $order . " "
-            . "LIMIT " . $limit . " OFFSET " . $offset;
+        $sql = "SELECT 
+                    y.`id` as id, 
+                    y.`thumbnail_high_path` as thumbnailHighPath, 
+                    y.`title` as title, 
+                    y.`content_duration` as contentDuration, 
+                    y.`published_at` as publishedAt, 
+                    yc.`title` as channelTitle, 
+                    yc.`custom_url` as channelCustomUrl, 
+                    yc.`youtube_id` as channelYoutubeId, 
+                    yc.`thumbnail_default_url` as channelThumbnailDefaultUrl 
+                FROM `youtube_video` y 
+                    INNER JOIN `user_yvideo` uyv ON uyv.`user_id`=$userId AND uyv.`video_id`=y.`id` 
+                    LEFT JOIN `youtube_channel` yc ON yc.`id`=y.`channel_id` 
+                WHERE uyv.`hidden`=0 
+                ORDER BY y.`$sort` $order 
+                LIMIT $limit OFFSET $offset";
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
@@ -216,7 +224,7 @@ class YoutubeVideoRepository extends ServiceEntityRepository
             . "FROM `youtube_video` yv "
             . "INNER JOIN `user_youtube_video` uyv ON uyv.`youtube_video_id`=yv.`id` "
             . "INNER JOIN `user` u ON u.id=uyv.`user_id` "
-            . "WHERE `user_id`=2";
+            . "WHERE `user_id`=$userId";
 
         $em = $this->registry->getManager();
         $statement = $em->getConnection()->prepare($sql);
