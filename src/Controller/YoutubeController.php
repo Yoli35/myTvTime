@@ -823,6 +823,7 @@ class YoutubeController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $locale = $request->getLocale();
+        // https://www.youtube.com/playlist?list=PLsxepgkpcQg8r9qmTBYGrumt7YRgKjKuy
         $providedLink = $request->query->get('link');
 //        dump($providedLink);
         if (strlen($providedLink) > 34) {
@@ -832,7 +833,7 @@ class YoutubeController extends AbstractController
         $ytPlaylist = $this->getPlaylist($providedLink);
         $title = $ytPlaylist->getItems()[0]->getSnippet()->getTitle();
 
-        $playlist = $this->playlistRepository->findOneBy(['playlistId' => $providedLink]);
+        $playlist = $this->playlistRepository->findOneBy(['playlistId' => $providedLink, 'user' => $user]);
         if ($playlist) {
             $message = $title . ' - ' . $this->translator->trans("Playlist already added!");
             $status = "warning";
