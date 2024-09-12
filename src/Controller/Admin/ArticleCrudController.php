@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Article;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -77,7 +78,7 @@ class ArticleCrudController extends AbstractCrudController
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         /** @var Article $entityInstance */
-        $entityInstance->setUpdatedAt(new DateTimeImmutable());
+        $entityInstance->setUpdatedAt(new DateTime());
 
         $entityManager->persist($entityInstance);
         $entityManager->flush();

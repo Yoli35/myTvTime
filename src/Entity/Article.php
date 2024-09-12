@@ -145,11 +145,11 @@ class Article
                 '#\n#'
             ],
             [
-                '<img src="http://localhost:3200/images/articles/images/$1" class="$2" style="$3" alt="$1">',
-                '<img src="http://localhost:3200/images/articles/images/$1" class="$2" alt="$1">',
-                '<img src="http://localhost:3200/images/articles/images/$1" style="$2" alt="$1">',
-                '<br>',
-                '<br>'
+                `<img src="http://localhost:3200/images/articles/images/$1" class="$2" style="$3" alt="$1">`,
+                `<img src="http://localhost:3200/images/articles/images/$1" class="$2" alt="$1">`,
+                `<img src="http://localhost:3200/images/articles/images/$1" style="$2" alt="$1">`,
+                `<br>`,
+                `<br>`
             ],
             $this->getContent());
 

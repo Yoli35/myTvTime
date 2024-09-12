@@ -14,7 +14,6 @@ use App\Repository\ArticleImageRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
 use App\Service\FileUploader;
-use App\Service\LogService;
 use DateTime;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,20 +25,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    public function __construct(private readonly LogService             $logService,
-                                private readonly ArticleRepository      $articleRepository,
+    public function __construct(private readonly ArticleRepository      $articleRepository,
                                 private readonly ArticleImageRepository $imageRepository,
                                 private readonly FileUploader           $fileUploader)
     {
     }
 
     #[Route('/{_locale}/blog', name: 'app_blog', requirements: ['_locale' => 'fr|en|de|es'])]
-    public function index(Request $request): Response
+    public function index(): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
-//        $this->logService->log($request, $this->getUser());
         $articles = $this->articleRepository->findByPublishedAtDesc();
 
         return $this->render('article/index.html.twig', [
@@ -51,7 +48,6 @@ class ArticleController extends AbstractController
     #[Route('/{_locale}/blog/article/{id}', name: 'app_blog_article', requirements: ['_locale' => 'fr|en|de|es'])]
     public function article(Request $request, $id, CommentRepository $commentRepository): Response
     {
-//        $this->logService->log($request, $this->getUser());
         $article = $this->articleRepository->find($id);
 
         $content = preg_replace(
@@ -61,9 +57,9 @@ class ArticleController extends AbstractController
                 '#{"path": "(.*?)", "style": "(.*?)"}#'
             ],
             [
-                '<img src="/images/articles/images/$1" class="$2" style="$3" alt="$1">',
-                '<img src="/images/articles/images/$1" class="$2" alt="$1">',
-                '<img src="/images/articles/images/$1" style="$2" alt="$1">'
+                `<img src="/images/articles/images/$1" class="$2" style="$3" alt="$1">`,
+                `<img src="/images/articles/images/$1" class="$2" alt="$1">`,
+                `<img src="/images/articles/images/$1" style="$2" alt="$1">`
             ],
             $article->getContent());
 
